@@ -287,7 +287,7 @@ const ReferralLabel = styled.span`
 
 const HorizontalLine = styled.hr`
     width: 100%;
-    border-top: 1.5px solid #64d9fe33;
+    border-top: 1.5px solid ${(props) => props.theme.background.secondary};
     border-bottom: none;
     border-right: none;
     border-left: none;
@@ -295,7 +295,7 @@ const HorizontalLine = styled.hr`
 `;
 const HorizontalDashedLine = styled.hr`
     width: 100%;
-    border-top: 1.5px dashed #64d9fe33;
+    border-top: 1.5px dashed ${(props) => props.theme.background.secondary};
     border-bottom: none;
     border-right: none;
     border-left: none;

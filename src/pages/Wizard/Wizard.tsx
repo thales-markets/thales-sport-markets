@@ -72,8 +72,8 @@ const WizardTitle = styled(FlexDivStart)`
 
 const HorizontalLine = styled.hr`
     width: 100%;
-    border: 1.5px solid #5f6180;
-    background: #5f6180;
+    border: 1.5px solid #${(props) => props.theme.borderColor.primary};
+    background: ${(props) => props.theme.background.tertiary};
     border-radius: 3px;
 `;
 

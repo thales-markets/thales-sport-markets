@@ -778,7 +778,7 @@ const BurgerFiltersContainer = styled(FlexDivColumn)`
     width: 100%;
     height: 100%;
     overflow: auto;
-    background: #303656;
+    background: ${(props) => props.theme.background.secondary};
     display: flex;
     z-index: 1000;
     @media (max-width: 1300px) {

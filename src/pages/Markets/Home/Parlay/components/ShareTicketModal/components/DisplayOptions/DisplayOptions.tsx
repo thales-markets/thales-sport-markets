@@ -63,7 +63,7 @@ const DisplayOptions: React.FC<DisplayOptionsProps> = ({
                 active={isSimpleView}
                 disabled={isDisabled}
                 dotSize="18px"
-                dotBackground="#ffffff"
+                dotBackground={theme.input.background.primary}
                 handleClick={onOptionToggleViewClickHandler}
             />
             <Option>

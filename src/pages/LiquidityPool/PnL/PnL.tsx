@@ -22,6 +22,8 @@ import {
 import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'utils/formatters/number';
 import { LiquidityPoolPnlType } from 'enums/liquidityPool';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type PnlProps = {
     lifetimePnl: number;
@@ -31,6 +33,7 @@ type PnlProps = {
 
 const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [liquidityPoolPnls, setLiquidityPoolPnls] = useState<LiquidityPoolPnls>([]);
@@ -74,7 +77,12 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
 
         return (
             <svg height="8" width="8" overflow="visible">
-                <circle cx={cx} cy={cy} r="4" fill={value === 0 ? '#8884d8' : value > 0 ? Colors.GREEN : Colors.RED} />
+                <circle
+                    cx={cx}
+                    cy={cy}
+                    r="4"
+                    fill={value === 0 ? theme.chart.primary : value > 0 ? theme.status.win : theme.status.loss}
+                />
             </svg>
         );
     };
@@ -91,7 +99,13 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
                     <LifetimePnlContainer>
                         <LifetimePnlLabel>{t('liquidity-pool.pnl.lifetime-pnl')}:</LifetimePnlLabel>
                         <LifetimePnl
-                            color={lifetimePnl === 0 ? Colors.WHITE : lifetimePnl > 0 ? Colors.GREEN : Colors.RED}
+                            color={
+                                lifetimePnl === 0
+                                    ? theme.status.open
+                                    : lifetimePnl > 0
+                                    ? theme.status.win
+                                    : theme.status.loss
+                            }
                         >
                             {formatPercentageWithSign(lifetimePnl)}
                         </LifetimePnl>
@@ -102,12 +116,12 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
                 <ChartContainer>
                     <ResponsiveContainer width="100%" height="100%">
                         <Chart data={liquidityPoolPnls}>
-                            <CartesianGrid strokeDasharray="2 2" strokeWidth={0.5} stroke="#5F6180" />
+                            <CartesianGrid strokeDasharray="2 2" strokeWidth={0.5} stroke={theme.textColor.secondary} />
                             <XAxis
                                 dataKey="round"
                                 tickLine={false}
                                 axisLine={false}
-                                tick={{ fill: '#5F6180' }}
+                                tick={{ fill: theme.textColor.secondary }}
                                 style={{
                                     fontSize: '13px',
                                 }}
@@ -118,7 +132,7 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
                                 }}
                                 tickLine={false}
                                 axisLine={false}
-                                tick={{ fill: '#5F6180' }}
+                                tick={{ fill: theme.textColor.secondary }}
                                 style={{
                                     fontSize: '13px',
                                 }}
@@ -126,7 +140,7 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
                             />
                             <Tooltip
                                 content={<CustomTooltip />}
-                                cursor={{ fill: '#5F6180', fillOpacity: '0.3' }}
+                                cursor={{ fill: theme.textColor.secondary, fillOpacity: '0.3' }}
                                 wrapperStyle={{ outline: 'none' }}
                             />
                             {type === LiquidityPoolPnlType.PNL_PER_ROUND ? (
@@ -142,7 +156,7 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
                                 <Line
                                     type="monotone"
                                     dataKey="cumulativePnl"
-                                    stroke="#8884d8"
+                                    stroke={theme.chart.primary}
                                     strokeWidth={2}
                                     dot={<CustomizedDot />}
                                 />
@@ -173,8 +187,8 @@ const TooltipContainer = styled(FlexDivColumnCentered)`
     border-radius: 3px;
     z-index: 999;
     padding: 2px 10px;
-    background: #f6f6fe;
-    color: #303656;
+    background: ${(props) => props.theme.input.background.primary};
+    color: ${(props) => props.theme.textColor.tertiary};
 `;
 
 const TooltipAmount = styled(FlexDivColumn)`
@@ -188,7 +202,7 @@ const Header = styled(FlexDivRow)<{ noData?: boolean }>`
 `;
 
 const Title = styled.span`
-    color: #5f6180;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 const LifetimePnlContainer = styled(FlexDivRow)`
@@ -204,10 +218,10 @@ const LifetimePnl = styled.span<{ color: string }>`
 `;
 
 const NoData = styled(FlexDivCentered)`
-    border: 2px dotted #5f6180;
+    border: 2px dotted ${(props) => props.theme.textColor.secondary};
     margin-bottom: 10px;
     height: 200px;
-    color: #5f6180;
+    color: ${(props) => props.theme.textColor.secondary};
     padding: 10px;
     text-align: center;
 `;

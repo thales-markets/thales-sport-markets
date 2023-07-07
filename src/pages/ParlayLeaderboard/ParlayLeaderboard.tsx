@@ -475,7 +475,7 @@ const Title = styled.p`
     line-height: 150%;
     text-align: justify;
     letter-spacing: 0.025em;
-    color: #eeeee4;
+    color: ${(props) => props.theme.textColor.primary};
     margin: 10px 0;
 `;
 
@@ -487,7 +487,7 @@ const Description = styled.p`
     line-height: 150%;
     text-align: justify;
     letter-spacing: 0.025em;
-    color: #eeeee4;
+    color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 10px;
 `;
 
@@ -499,7 +499,7 @@ const Warning = styled.p`
     line-height: 150%;
     text-align: justify;
     letter-spacing: 0.025em;
-    color: #ffcc00;
+    color: ${(props) => props.theme.warning.textColor.primary};
     margin-bottom: 10px;
 `;
 
@@ -512,7 +512,7 @@ const TableText = styled.p`
     text-align: center;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #eeeee4;
+    color: ${(props) => props.theme.textColor.primary};
     @media (max-width: 600px) {
         font-size: 12px;
     }

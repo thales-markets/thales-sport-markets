@@ -125,7 +125,7 @@ export const TimeRemainingGraphicContainer = styled(FlexDivStart)`
     position: relative;
     width: 565px;
     height: 14px;
-    background: #303656;
+    background:  ${(props) => props.theme.background.secondary}
     border-radius: 15px;
     margin-bottom: 10px;
     @media (max-width: 767px) {
@@ -294,16 +294,16 @@ export const PaginationWrapper = styled(TablePagination)`
     display: flex;
     width: 100%;
     height: auto;
-    color: #f6f6fe !important;
+    color: ${(props) => props.theme.textColor.primary} !important;
     .MuiToolbar-root {
         padding: 0;
         display: flex;
         .MuiSelect-icon {
-            color: #f6f6fe;
+            color: ${(props) => props.theme.textColor.primary};
         }
     }
     .MuiIconButton-root.Mui-disabled {
-        color: #5f6180;
+        color: ${(props) => props.theme.textColor.secondary};
     }
     .MuiTablePagination-toolbar > .MuiTablePagination-caption:last-of-type {
         display: block;

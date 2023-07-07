@@ -185,7 +185,7 @@ const ButtonDiv = styled.div`
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
-    border: 1px solid #64d9fe;
+    border: 1px solid ${(props) => props.theme.borderColor.quaternary};
     border-radius: 30px;
     font-family: 'Sansation';
     font-style: normal;

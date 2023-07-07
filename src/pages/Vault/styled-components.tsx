@@ -254,6 +254,6 @@ export const ToggleContainer = styled(FlexDiv)`
     margin-bottom: 20px;
     width: 100%;
     text-transform: uppercase;
-    border-bottom: 2px solid #5f6180;
+    border-bottom: 2px solid ${(props) => props.theme.borderColor.primary};
     padding-bottom: 20px;
 `;

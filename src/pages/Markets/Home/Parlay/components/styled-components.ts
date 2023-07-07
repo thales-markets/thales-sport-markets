@@ -19,7 +19,7 @@ export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
     line-height: 27px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
     ${(props) => (props.alignRight ? `margin-left: auto;` : '')}
     @media (max-width: 950px) {
         line-height: 24px;
@@ -105,7 +105,7 @@ export const AmountToBuyMultiInfoLabel = styled.span<{ alignRight?: boolean }>`
     line-height: 27px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
     ${(props) => (props.alignRight ? `margin-left: auto;` : '')}
     @media (max-width: 950px) {
         line-height: 24px;
@@ -118,7 +118,7 @@ export const AmountToBuyMultiPayoutLabel = styled.span<{ alignRight?: boolean }>
     line-height: 27px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
     margin-left: auto;
 `;
 

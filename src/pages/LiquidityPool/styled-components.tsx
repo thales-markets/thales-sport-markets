@@ -327,9 +327,9 @@ export const GetStakeThalesIcon = styled.i`
 `;
 
 export const TextLink = styled.a`
-    color: #91bced;
+    color: ${(props) => props.theme.link.textColor.primary};
     &:hover {
-        color: #00f9ff;
+        text-decoration: underline;
     }
 `;
 

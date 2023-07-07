@@ -98,7 +98,7 @@ export default {
     },
     shadow: {
         navBar: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
-        toggle: '0px 0px 40px #64d9fe',
+        toggle: `0px 0px 40px ${Colors.BLUE}`,
         notification: '0px 0px 20px rgba(63, 177, 213, 0.96)',
         positionWinner: '0px 0px 15px -7px rgba(63,209,255,1)',
         winner: '0px 0px 33px -7px rgba(63,209,255,1)',
@@ -117,5 +117,8 @@ export default {
         primary: Colors.GRAY,
         secondary: Colors.GRAY_SECOND,
         tertiary: Colors.GRAY_RESOLVED,
+    },
+    chart: {
+        primary: Colors.PURPLE,
     },
 };

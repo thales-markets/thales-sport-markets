@@ -226,7 +226,7 @@ const Banner = styled.div<{ image: string; defaultImage: string; mobileImage: st
     height: 150px;
     background-image: ${(props) => `url(${props.image}), url(${props.defaultImage})`};
     background-position: center;
-    border: 2px solid #5f6180;
+    border: 2px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 14px;
     @media (max-width: ${MOBILE_MAX_WIDTH}) {
         background-image: ${(props) => `url(${props.mobileImage}), url(${props.mobileDefaultImage})`};
@@ -255,7 +255,7 @@ const MobileVoucherColumn = styled(FlexDivColumnCentered)`
 const MobileVoucherInfoRow = styled(FlexDivCentered)`
     gap: 80px;
     width: 90%;
-    border-top: 1px solid #5f6180;
+    border-top: 1px solid ${(props) => props.theme.borderColor.primary};
     margin-top: 10px;
     padding-top: 10px;
 `;
@@ -337,13 +337,13 @@ const NumberText = styled(Text)`
     font-weight: 800;
     font-size: 40px;
     line-height: 40px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const TimeLabel = styled(Text)`
     font-weight: 700;
     font-size: 16px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
     margin-left: 2px;
 `;
 
@@ -352,14 +352,14 @@ const ClaimText = styled(Text)`
     font-weight: 700;
     line-height: 19px;
     letter-spacing: 0.025em;
-    color: #303656;
+    color: ${(props) => props.theme.textColor.tertiary};
 `;
 
 const Link = styled.a`
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.link.textColor.primary};
 `;
 
 const EmptyContainer = styled(FlexDivRowCentered)`
@@ -383,7 +383,7 @@ const EmptyTitle = styled.span`
     text-align: center;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export default Voucher;

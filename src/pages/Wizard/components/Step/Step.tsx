@@ -183,14 +183,14 @@ const StepNumberSection = styled(FlexDivCentered)`
 
 const StepDescriptionSection = styled(FlexDivColumn)<{ isActive: boolean; isDisabled?: boolean }>`
     width: 60%;
-    color: ${(props) => (props.isActive ? '#ffffff' : '#5F6180')};
+    color: ${(props) => (props.isActive ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
 `;
 
 const StepActionSection = styled(FlexDivCentered)<{ isActive: boolean; isDisabled?: boolean }>`
     width: 30%;
     text-align: center;
-    color: ${(props) => (props.isActive ? '#3FD1FF' : '#5f6180')};
+    color: ${(props) => (props.isActive ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     @media (max-width: 950px) {
         width: 100%;
         text-align: start;
@@ -226,8 +226,8 @@ const StepNumberWrapper = styled.div<{ isActive: boolean; isDisabled?: boolean }
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    ${(props) => (props.isActive ? 'border: 2px solid #3FD1FF;' : '')}
-    ${(props) => (props.isActive ? '' : 'background: #5f6180;')}
+    ${(props) => (props.isActive ? `border: 2px solid ${props.theme.borderColor.quaternary};` : '')}
+    ${(props) => (props.isActive ? '' : `background: ${props.theme.background.tertiary};`)}
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
 `;
 
@@ -250,8 +250,8 @@ const StepActionIconWrapper = styled.div<{ isActive: boolean; pulsate?: boolean 
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        ${(props) => (props.isActive ? 'border: 2px solid #3FD1FF;' : '')}
-        ${(props) => (props.isActive ? '' : 'background: #5f6180;')}
+        ${(props) => (props.isActive ? `border: 2px solid ${props.theme.borderColor.quaternary};` : '')}
+        ${(props) => (props.isActive ? '' : `background: ${props.theme.background.tertiary};`)}
     }
 
     @keyframes pulsing {

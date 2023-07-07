@@ -121,7 +121,7 @@ const TitleWrapper = styled.div`
     align-items: center;
     justify-content: center;
     margin: 0 10px;
-    border-bottom: 2px solid #5f6180;
+    border-bottom: 2px solid ${(props) => props.theme.borderColor.primary};
     height: 50px;
 `;
 
@@ -168,7 +168,7 @@ const Value = styled.span`
     font-size: 20px;
     line-height: 23px;
     text-align: center;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 const PostLabel = styled.span`
     font-family: 'Roboto';

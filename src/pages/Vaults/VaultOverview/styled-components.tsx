@@ -82,7 +82,7 @@ export const VaultInfoContainer = styled(FlexDivColumn)`
     span {
         font-size: 20px;
         font-weight: 600;
-        color: #3fd1ff;
+        color: ${(props) => props.theme.textColor.quaternary};
     }
     margin-top: 10px;
     white-space: nowrap;
@@ -117,7 +117,7 @@ export const NewBadge = styled.div`
     position: relative;
     background-color: #3cb55b;
     border-radius: 5px;
-    color: #f6f6fe;
+    color: ${(props) => props.theme.textColor.primary}
     display: inline-block;
     font-size: 12px;
     line-height: 12px;

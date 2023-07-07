@@ -584,8 +584,8 @@ const Vault: React.FC<VaultProps> = (props) => {
                                     }}
                                     active={selectedTab === VaultTab.WITHDRAW}
                                     dotSize="18px"
-                                    dotBackground="#303656"
-                                    dotBorder="3px solid #3FD1FF"
+                                    dotBackground={theme.background.secondary}
+                                    dotBorder={`3px solid ${theme.borderColor.quaternary}`}
                                     handleClick={() => {
                                         setSelectedTab(
                                             selectedTab === VaultTab.DEPOSIT ? VaultTab.WITHDRAW : VaultTab.DEPOSIT
