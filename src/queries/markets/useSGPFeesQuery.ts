@@ -1,11 +1,11 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { SGPContractData, SGPItem } from 'types/markets';
 import networkConnector from 'utils/networkConnector';
 import { convertSGPContractDataToSGPItemType } from 'utils/combinedMarkets';
 
-const useSGPFeesQuery = (networkId: NetworkId, options?: UseQueryOptions<SGPItem[] | undefined>) => {
+const useSGPFeesQuery = (networkId: Network, options?: UseQueryOptions<SGPItem[] | undefined>) => {
     return useQuery<SGPItem[] | undefined>(
         QUERY_KEYS.SGPFees(networkId),
         async () => {

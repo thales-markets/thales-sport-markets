@@ -1,13 +1,8 @@
 export enum Network {
-    Mainnet = 1,
-    Ropsten = 3,
-    Rinkeby = 4,
     Goerli = 5,
-    'Mainnet-Ovm' = 10,
+    OptimismMainnet = 10,
     Kovan = 42,
-    'Kovan-Ovm' = 69,
-    'POLYGON-MAINNET' = 137,
-    'Goerli-Ovm' = 420,
-    'Arbitrum' = 42161,
-    'POLYGON-MUMBAI' = 80001,
+    OptimismKovan = 69,
+    OptimismGoerli = 420,
+    ArbitrumOne = 42161,
 }

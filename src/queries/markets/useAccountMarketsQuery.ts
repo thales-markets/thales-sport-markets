@@ -4,7 +4,7 @@ import { PositionName } from 'enums/markets';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { PositionBalance, SportMarketInfo } from 'types/markets';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 
 export type AccountPositionProfile = {
@@ -20,7 +20,7 @@ export type AccountPositionProfile = {
 
 const useAccountMarketsQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<AccountPositionProfile[]>
 ) => {
     return useQuery<AccountPositionProfile[]>(

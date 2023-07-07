@@ -2,14 +2,14 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { VaultData } from 'types/vault';
 import { isParlayVault } from 'constants/vault';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useVaultDataQuery = (
     vaultAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<VaultData | undefined>
 ) => {
     return useQuery<VaultData | undefined>(

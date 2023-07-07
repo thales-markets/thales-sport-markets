@@ -2,14 +2,14 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { OvertimeVoucher, OvertimeVouchers } from 'types/tokens';
 import thalesData from 'thales-data';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useOvertimeVoucherQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<OvertimeVoucher | undefined>
 ) => {
     return useQuery<OvertimeVoucher | undefined>(

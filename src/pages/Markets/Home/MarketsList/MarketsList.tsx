@@ -13,7 +13,7 @@ import Tooltip from 'components/Tooltip';
 import { Trans, useTranslation } from 'react-i18next';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
-import { NetworkIdByName } from 'constants/network';
+import { Network } from 'enums/network';
 import { TAGS_FLAGS } from 'enums/tags';
 
 type MarketsList = {
@@ -68,7 +68,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                     }}
                                     values={{
                                         rewards:
-                                            networkId !== NetworkIdByName.ArbitrumOne
+                                            networkId !== Network.ArbitrumOne
                                                 ? INCENTIVIZED_LEAGUE.opRewards
                                                 : INCENTIVIZED_LEAGUE.thalesRewards,
                                     }}
@@ -77,7 +77,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                             component={
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
@@ -96,7 +96,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                     }}
                                     values={{
                                         rewards:
-                                            networkId !== NetworkIdByName.ArbitrumOne
+                                            networkId !== Network.ArbitrumOne
                                                 ? INCENTIVIZED_GRAND_SLAM.opRewards
                                                 : INCENTIVIZED_GRAND_SLAM.arbRewards,
                                     }}
@@ -105,7 +105,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                             component={
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>

@@ -13,7 +13,7 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { getDefaultNetworkName, getNetworkKeyByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 
 type FundModalProps = {
@@ -27,7 +27,7 @@ enum Provider {
     LAYER_SWAP,
 }
 
-const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) => {
+const getProviderUrl = (provider: Provider | undefined, networkId: Network) => {
     const networkParam = getNetworkKeyByNetworkId(networkId);
     switch (provider) {
         case Provider.BANXA:

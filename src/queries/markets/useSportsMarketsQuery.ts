@@ -10,7 +10,7 @@ import { groupBy, orderBy, uniqBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { CombinedMarketsContractData, SGPItem, SportMarketInfo, SportMarkets } from 'types/markets';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
@@ -43,7 +43,7 @@ const groupMarkets = (allMarkets: SportMarkets) => {
     return childrenOf('null', groupedMarkets);
 };
 
-const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean, networkId: NetworkId) => {
+const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolean, networkId: Network) => {
     const mappedMarkets = [] as SportMarkets;
 
     let oddsFromContract: undefined | Array<any>;
@@ -185,7 +185,7 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
 // TODO - there is a problem when return type is SportMarkets (some problem with SGP mapping and query is stuck in fetching), keep logic with typeof marketsCache for now
 const useSportMarketsQuery = (
     globalFilter: GlobalFiltersEnum,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<typeof marketsCache>
 ) => {
     return useQuery<typeof marketsCache>(

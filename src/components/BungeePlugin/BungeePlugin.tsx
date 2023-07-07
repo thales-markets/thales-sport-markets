@@ -9,8 +9,8 @@ import styled from 'styled-components';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
-import { NetworkId } from 'types/network';
 import { Network } from 'enums/network';
+import { mainnet } from 'wagmi';
 
 type CustomizationProps = {
     width?: number;
@@ -27,7 +27,7 @@ type CustomizationProps = {
     outline?: string;
 };
 
-const SUPPORTED_DESTINATION_NETWORKS = [Network['Mainnet-Ovm'], Network.Arbitrum];
+const SUPPORTED_DESTINATION_NETWORKS = [Network.OptimismMainnet, Network.ArbitrumOne];
 
 const BungeePlugin: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -39,7 +39,7 @@ const BungeePlugin: React.FC = () => {
         console.error('Bungee API_KEY not found!');
     }
 
-    const defaultSourceNetwork = Network.Mainnet;
+    const defaultSourceNetwork = mainnet.id;
 
     const destinationNetworks = SUPPORTED_DESTINATION_NETWORKS.includes(networkId)
         ? SUPPORTED_DESTINATION_NETWORKS.filter((id: number) => id === networkId)
@@ -55,7 +55,7 @@ const BungeePlugin: React.FC = () => {
             token.chainId === defaultDestNetwork &&
             token.symbol ===
                 COLLATERAL_INDEX_TO_COLLATERAL[
-                    getDefaultCollateralIndexForNetworkId(defaultDestNetwork as NetworkId)
+                    getDefaultCollateralIndexForNetworkId(defaultDestNetwork as Network)
                 ].toUpperCase() // SUSD is symbol on Bungee instead of sUSD
     )[0]?.address;
 

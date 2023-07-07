@@ -25,6 +25,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { merge } from 'lodash';
+import { Network } from 'enums/network';
 
 dotenv.config();
 
@@ -39,13 +40,13 @@ type RpcProvider = {
 };
 
 const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
-    10: {
+    [Network.OptimismMainnet]: {
         ankr: 'optimism',
         chainnode: 'optimism-mainnet',
         blast: 'optimism-mainnet',
     },
-    420: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
-    42161: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
+    [Network.OptimismGoerli]: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
+    [Network.ArbitrumOne]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
 };
 
 const STALL_TIMEOUT = 2000;

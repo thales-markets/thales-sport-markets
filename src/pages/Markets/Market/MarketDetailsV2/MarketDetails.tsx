@@ -21,7 +21,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { NetworkIdByName } from 'constants/network';
+import { Network } from 'enums/network';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import Web3 from 'web3';
@@ -126,7 +126,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards:
-                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                networkId !== Network.ArbitrumOne
                                                     ? INCENTIVIZED_LEAGUE.opRewards
                                                     : INCENTIVIZED_LEAGUE.thalesRewards,
                                         }}
@@ -135,7 +135,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 component={
                                     <IncentivizedLeague>
                                         <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -158,7 +158,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards:
-                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                networkId !== Network.ArbitrumOne
                                                     ? INCENTIVIZED_GRAND_SLAM.opRewards
                                                     : INCENTIVIZED_GRAND_SLAM.arbRewards,
                                         }}
@@ -167,7 +167,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 component={
                                     <IncentivizedLeague>
                                         <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>

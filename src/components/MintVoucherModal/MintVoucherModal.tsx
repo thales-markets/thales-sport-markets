@@ -20,7 +20,7 @@ import Checkbox from 'components/fields/Checkbox';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { LINKS } from 'constants/links';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { refetchBalances } from 'utils/queryConnector';
 import TextInput from '../fields/TextInput/TextInput';
@@ -29,7 +29,7 @@ type MintVoucherModalProps = {
     onClose: () => void;
 };
 
-const getVoucherOptions = (networkId: NetworkId): Array<{ value: number; label: string }> => {
+const getVoucherOptions = (networkId: Network): Array<{ value: number; label: string }> => {
     const collateral = getDefaultColleteralForNetwork(networkId);
     return [
         { value: 5, label: `5 ${collateral}` },

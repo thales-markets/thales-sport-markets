@@ -77,7 +77,7 @@ import useParlayLiquidityPoolDataQuery from 'queries/liquidityPool/useParlayLiqu
 import Button from 'components/Button';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
-import { NetworkIdByName } from 'constants/network';
+import { Network } from 'enums/network';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -896,7 +896,7 @@ const LiquidityPool: React.FC = () => {
                                 target="_blank"
                                 rel="noreferrer"
                                 href={
-                                    networkId !== NetworkIdByName.ArbitrumOne
+                                    networkId !== Network.ArbitrumOne
                                         ? LINKS.UniswapBuyThalesOp
                                         : LINKS.UniswapBuyThalesArbitrum
                                 }

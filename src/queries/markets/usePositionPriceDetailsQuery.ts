@@ -3,7 +3,7 @@ import { AMMPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { getCollateralAddress, getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { isMultiCollateralSupportedForNetwork } from 'utils/network';
 import { ethers } from 'ethers';
@@ -15,7 +15,7 @@ const usePositionPriceDetailsQuery = (
     position: Position,
     amount: number,
     stableIndex: number,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<AMMPosition>
 ) => {
     return useQuery<AMMPosition>(

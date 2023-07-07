@@ -1,11 +1,11 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { ReferralTransaction } from 'types/referral';
 import thalesData from 'thales-data';
 
 const useReferralTransactionsQuery = (
-    networkId: NetworkId,
+    networkId: Network,
     referrer?: string,
     options?: UseQueryOptions<ReferralTransaction[] | null>
 ) => {

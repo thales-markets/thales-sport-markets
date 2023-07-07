@@ -1,13 +1,13 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { VaultTrades, VaultTrade } from 'types/vault';
 import { getEtherscanTxLink } from 'utils/etherscan';
 import { convertFinalResultToResultType } from 'utils/markets';
 import { VaultTradeStatus } from 'enums/vault';
 
-const useVaultTradesQuery = (vaultAddress: string, networkId: NetworkId, options?: UseQueryOptions<VaultTrades>) => {
+const useVaultTradesQuery = (vaultAddress: string, networkId: Network, options?: UseQueryOptions<VaultTrades>) => {
     return useQuery<VaultTrades>(
         QUERY_KEYS.Vault.Trades(vaultAddress, networkId),
         async () => {

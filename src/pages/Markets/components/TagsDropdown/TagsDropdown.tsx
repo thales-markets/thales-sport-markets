@@ -15,7 +15,7 @@ import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg'
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
 import { TAGS_FLAGS } from 'enums/tags';
-import { NetworkIdByName } from 'constants/network';
+import { Network } from 'enums/network';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -134,7 +134,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         }}
                                                         values={{
                                                             rewards:
-                                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                                networkId !== Network.ArbitrumOne
                                                                     ? INCENTIVIZED_LEAGUE.opRewards
                                                                     : INCENTIVIZED_LEAGUE.thalesRewards,
                                                         }}
@@ -142,7 +142,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 }
                                                 component={
                                                     <IncentivizedLeague>
-                                                        {networkId !== NetworkIdByName.ArbitrumOne ? (
+                                                        {networkId !== Network.ArbitrumOne ? (
                                                             <OPLogo />
                                                         ) : (
                                                             <ThalesLogo />
@@ -169,7 +169,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         }}
                                                         values={{
                                                             rewards:
-                                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                                networkId !== Network.ArbitrumOne
                                                                     ? INCENTIVIZED_GRAND_SLAM.opRewards
                                                                     : INCENTIVIZED_GRAND_SLAM.arbRewards,
                                                         }}
@@ -177,7 +177,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 }
                                                 component={
                                                     <IncentivizedLeague>
-                                                        {networkId !== NetworkIdByName.ArbitrumOne ? (
+                                                        {networkId !== Network.ArbitrumOne ? (
                                                             <OPLogo />
                                                         ) : (
                                                             <ArbitrumLogo />

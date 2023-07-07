@@ -1,7 +1,7 @@
 import { COLLATERALS_INDEX } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { getCollateralAddress } from './collaterals';
 import { isMultiCollateralSupportedForNetwork } from './network';
 import { Position } from 'enums/markets';
@@ -10,7 +10,7 @@ export const getParlayAMMTransaction: any = (
     isVoucherSelected: boolean,
     voucherId: number,
     stableIndex: COLLATERALS_INDEX,
-    networkId: NetworkId,
+    networkId: Network,
     parlayMarketsAMMContract: ethers.Contract,
     overtimeVoucherContract: ethers.Contract,
     marketsAddresses: string[],
@@ -76,7 +76,7 @@ export const getParlayAMMTransaction: any = (
 
 export const getParlayMarketsAMMQuoteMethod: any = (
     stableIndex: COLLATERALS_INDEX,
-    networkId: NetworkId,
+    networkId: Network,
     parlayMarketsAMMContract: ethers.Contract,
     marketsAddresses: string[],
     selectedPositions: Position[],

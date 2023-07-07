@@ -45,7 +45,7 @@ import {
 import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import i18n from 'i18n';
 import { OddsType } from 'enums/markets';
-import { NetworkIdByName } from 'constants/network';
+import { Network } from 'enums/network';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -93,7 +93,7 @@ const ParlayLeaderboard: React.FC = () => {
     }, [searchText, parlays]);
 
     const rewards =
-        networkId !== NetworkIdByName.ArbitrumOne
+        networkId !== Network.ArbitrumOne
             ? period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
                 ? PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10
                 : PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20
@@ -101,7 +101,7 @@ const ParlayLeaderboard: React.FC = () => {
             ? PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10
             : PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
 
-    const rewardsAmount = networkId !== NetworkIdByName.ArbitrumOne ? '2,500 OP' : '2,500 ARB';
+    const rewardsAmount = networkId !== Network.ArbitrumOne ? '2,500 OP' : '2,500 ARB';
 
     const stickyRow = useMemo(() => {
         const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
@@ -115,7 +115,7 @@ const ParlayLeaderboard: React.FC = () => {
                                 overlay={
                                     <>
                                         {rewards[data.rank - 1]}{' '}
-                                        {networkId !== NetworkIdByName.ArbitrumOne
+                                        {networkId !== Network.ArbitrumOne
                                             ? 'OP'
                                             : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
                                             ? 'ARB'
@@ -128,7 +128,7 @@ const ParlayLeaderboard: React.FC = () => {
                                             style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
                                             color="rgb(95, 97, 128)"
                                             className={`icon ${
-                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                networkId !== Network.ArbitrumOne
                                                     ? 'icon--op-rewards'
                                                     : 'icon--thales-rewards'
                                             }`}
@@ -246,7 +246,7 @@ const ParlayLeaderboard: React.FC = () => {
                                     overlay={
                                         <>
                                             {rewards[cellProps.cell.value - 1]}{' '}
-                                            {networkId !== NetworkIdByName.ArbitrumOne
+                                            {networkId !== Network.ArbitrumOne
                                                 ? 'OP'
                                                 : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
                                                 ? 'ARB'
@@ -259,7 +259,7 @@ const ParlayLeaderboard: React.FC = () => {
                                                 style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
                                                 color="rgb(95, 97, 128)"
                                                 className={`icon ${
-                                                    networkId !== NetworkIdByName.ArbitrumOne
+                                                    networkId !== Network.ArbitrumOne
                                                         ? 'icon--op-rewards'
                                                         : 'icon--thales-rewards'
                                                 }`}

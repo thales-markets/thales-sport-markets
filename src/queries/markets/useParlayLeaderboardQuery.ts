@@ -1,12 +1,12 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { ParlayMarketWithRank } from 'types/markets';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { generalConfig } from 'config/general';
 import axios from 'axios';
 
 export const useParlayLeaderboardQuery = (
-    networkId: NetworkId,
+    networkId: Network,
     period: number,
     options?: UseQueryOptions<ParlayMarketWithRank[]>
 ) => {

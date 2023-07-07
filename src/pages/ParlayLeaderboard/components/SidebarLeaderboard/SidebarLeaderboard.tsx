@@ -27,7 +27,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
-import { NetworkIdByName } from 'constants/network';
+import { Network } from 'enums/network';
 import { buildHref } from 'utils/routes';
 import {
     ArrowIcon,
@@ -69,7 +69,7 @@ const SidebarLeaderboard: React.FC = () => {
     }, [query.isSuccess, query.data]);
 
     const rewards =
-        networkId !== NetworkIdByName.ArbitrumOne
+        networkId !== Network.ArbitrumOne
             ? PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10
             : PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10;
 
@@ -130,7 +130,7 @@ const SidebarLeaderboard: React.FC = () => {
                                         <ColumnWrapper>
                                             <DataLabel>
                                                 {rewards[parlay.rank - 1]}
-                                                {networkId !== NetworkIdByName.ArbitrumOne ? (
+                                                {networkId !== Network.ArbitrumOne ? (
                                                     <OPLogoWrapper />
                                                 ) : (
                                                     <ArbitrumLogoWrapper />

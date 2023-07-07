@@ -14,7 +14,7 @@ import { formatCurrency } from 'utils/formatters/number';
 import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { NETWORK_SWITCHER_SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
 import { useSwitchNetwork } from 'wagmi';
 
@@ -96,7 +96,9 @@ const WalletInfo: React.FC = () => {
                                 <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
                                     <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)}>
                                         <NetworkIcon
-                                            className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
+                                            className={`icon ${
+                                                networkId === Network.ArbitrumOne ? 'icon--arb' : 'icon--op'
+                                            }`}
                                         />
                                         {!hideNetworkSwitcher && <DownIcon className={`icon icon--arrow-down`} />}
                                     </NetworkIconWrapper>
@@ -139,7 +141,7 @@ const WalletInfo: React.FC = () => {
                                                             // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
                                                             dispatch(
                                                                 switchToNetworkId({
-                                                                    networkId: network.networkId as NetworkId,
+                                                                    networkId: network.networkId as Network,
                                                                 })
                                                             );
                                                         }

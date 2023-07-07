@@ -2,11 +2,11 @@ import networkConnector from 'utils/networkConnector';
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { COLLATERALS_INDEX, STABLE_DECIMALS } from 'constants/currency';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 
 const useMultipleCollateralBalanceQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<any>
 ) => {
     return useQuery<any>(

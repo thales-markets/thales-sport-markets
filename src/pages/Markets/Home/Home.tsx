@@ -40,7 +40,7 @@ import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { CSSProperties } from 'styled-components';
 import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
-import { NetworkIdByName } from 'constants/network';
+import { Network } from 'enums/network';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -677,7 +677,7 @@ const Home: React.FC = () => {
                 </MainContainer>
                 {/* RIGHT PART */}
                 <SidebarContainer maxWidth={320}>
-                    {[NetworkIdByName.OptimismMainnet, NetworkIdByName.ArbitrumOne].includes(networkId) && <GetUsd />}
+                    {[Network.OptimismMainnet, Network.ArbitrumOne].includes(networkId) && <GetUsd />}
                     <Suspense fallback={<Loader />}>
                         <Parlay />
                     </Suspense>

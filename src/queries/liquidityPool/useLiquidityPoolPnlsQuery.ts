@@ -1,12 +1,12 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { LiquidityPoolPnls, LiquidityPoolType } from 'types/liquidityPool';
 import { orderBy } from 'lodash';
 
 const useLiquidityPoolPnlsQuery = (
-    networkId: NetworkId,
+    networkId: Network,
     liquidityPoolType: LiquidityPoolType,
     options?: UseQueryOptions<LiquidityPoolPnls>
 ) => {
