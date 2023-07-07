@@ -21,14 +21,20 @@ type NumericInputProps = {
     currencyLabel?: string;
     tooltip?: string;
     onMaxButton?: any;
+    balance?: string;
+    isBalanceLoading?: boolean;
     info?: string;
     inputPadding?: string;
     margin?: string;
     inputFontSize?: string;
+    inputFontWeight?: string;
+    inputTextAlign?: string;
     width?: string;
     height?: string;
     enableCurrencyComponentOnly?: boolean;
     validationPlacement?: string;
+    borderColor?: string;
+    containerWidth?: string;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];
@@ -47,14 +53,20 @@ const NumericInput: React.FC<NumericInputProps> = ({
     currencyLabel,
     tooltip,
     onMaxButton,
+    balance,
+    isBalanceLoading,
     info,
     inputPadding,
     margin,
     inputFontSize,
+    inputFontWeight,
+    inputTextAlign,
     width,
     height,
     enableCurrencyComponentOnly,
     validationPlacement,
+    borderColor,
+    containerWidth,
     ...rest
 }) => {
     const { t } = useTranslation();
@@ -74,13 +86,14 @@ const NumericInput: React.FC<NumericInputProps> = ({
     };
 
     return (
-        <FieldContainer margin={margin}>
+        <FieldContainer margin={margin} width={containerWidth}>
             {label && (
                 <FieldLabel>
                     {label}
                     {tooltip && <Tooltip overlay={tooltip} />}:
                 </FieldLabel>
             )}
+            {balance && <BalanceContainer>{isBalanceLoading ? '-' : balance}</BalanceContainer>}
             {info && (
                 <InfoWrapper>
                     <InfoText>{info}</InfoText>
@@ -111,11 +124,14 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     title=""
                     padding={inputPadding}
                     fontSize={inputFontSize}
+                    fontWeight={inputFontWeight}
+                    textAlign={inputTextAlign}
                     width={width}
                     height={height}
+                    borderColor={borderColor}
                 />
             </ValidationTooltip>
-            <RightContainer>
+            <RightContainer height={height}>
                 {onMaxButton && (
                     <MaxButton disabled={disabled} onClick={onMaxButton}>
                         {t('markets.market-details.max')}
@@ -127,10 +143,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     </CurrencyLabel>
                 )}
                 {currencyComponent && (
-                    <CurrencyComponentContainer
-                        className={disabled && !enableCurrencyComponentOnly ? 'disabled' : ''}
-                        hasSeparator={onMaxButton}
-                    >
+                    <CurrencyComponentContainer className={disabled && !enableCurrencyComponentOnly ? 'disabled' : ''}>
                         {currencyComponent}
                     </CurrencyComponentContainer>
                 )}
@@ -140,13 +153,15 @@ const NumericInput: React.FC<NumericInputProps> = ({
 };
 
 const StyledInput = styled(Input)<{ padding?: string }>`
-    padding: ${(props) => props.padding || '5px 120px 5px 10px'};
+    padding: ${(props) => props.padding || '5px 100px 5px 10px'};
 `;
 
-const RightContainer = styled(FlexDivCentered)`
+const RightContainer = styled(FlexDivCentered)<{ height?: string }>`
     position: absolute;
     right: 0;
-    bottom: 4px;
+    bottom: 0;
+    height: ${(props) => props.height || '30px'};
+    padding-right: 10px;
 `;
 
 const CurrencyLabel = styled.label`
@@ -154,10 +169,8 @@ const CurrencyLabel = styled.label`
     line-height: 20px;
     color: ${(props) => props.theme.input.textColor.primary};
     padding-left: 8px;
-    padding-right: 10px;
     pointer-events: none;
     &.disabled {
-        opacity: 0.4;
         cursor: default;
     }
 `;
@@ -198,15 +211,24 @@ const ValidationTooltip = styled((props) => <MuiTooltip classes={{ popper: props
         }
         width: 13px;
         height: 10px;
-        bottom: ${(props) => (props.placement === 'top' ? '-3px' : '0px')} !important;
-        top: ${(props) => (props.placement === 'top' ? '0px' : '-3px')} !important;
+        bottom: ${(props) => (props.placement === 'top' ? '-3px' : 'auto')} !important;
+        top: ${(props) => (props.placement === 'top' ? 'auto' : '-3px')} !important;
     }
 `;
 
-const CurrencyComponentContainer = styled(FlexDivCentered)<{ hasSeparator?: boolean }>`
-    ${(props) => (props.hasSeparator ? `border-left: 2px solid ${props.theme.input.borderColor.primary};` : '')}
+const BalanceContainer = styled(FlexDivCentered)`
+    position: absolute;
+    right: 0;
+    bottom: 36px;
+    font-weight: normal;
+    font-size: 13px;
     line-height: 15px;
-    padding-right: 2px;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const CurrencyComponentContainer = styled(FlexDivCentered)`
+    line-height: 15px;
     &.disabled {
         opacity: 0.4;
         cursor: default;

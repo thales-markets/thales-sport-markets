@@ -39,7 +39,6 @@ import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyContainer,
-    AmountToBuyInput,
     InfoContainer,
     InfoLabel,
     InfoTooltip,
@@ -49,16 +48,19 @@ import {
     RowContainer,
     RowSummary,
     ShareWrapper,
-    SubmitButton,
     SummaryLabel,
     SummaryValue,
     TwitterIcon,
-    ValidationTooltip,
     XButton,
+    defaultButtonProps,
 } from '../styled-components';
 import { isSGPInParlayMarkets } from 'utils/combinedMarkets';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import { OddsType } from 'enums/markets';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
+import Button from 'components/Button';
+import NumericInput from 'components/fields/NumericInput';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -76,6 +78,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
+    const theme: ThemeInterface = useTheme();
 
     const dispatch = useDispatch();
 
@@ -446,32 +449,32 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const getSubmitButton = () => {
         if (isAMMPaused) {
             return (
-                <SubmitButton disabled={submitDisabled}>
+                <Button disabled={submitDisabled} {...defaultButtonProps}>
                     {t('markets.parlay.validation.amm-contract-paused')}
-                </SubmitButton>
+                </Button>
             );
         }
 
         if (!isWalletConnected) {
             return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
+                <Button onClick={() => openConnectModal?.()} {...defaultButtonProps}>
                     {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
+                </Button>
             );
         }
         // Show Approve only on valid input buy amount
         if (!hasAllowance && usdAmountValue && Number(usdAmountValue) >= minUsdAmountValue) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)}>
+                <Button disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
                     {t('common.wallet.approve')}
-                </SubmitButton>
+                </Button>
             );
         }
 
         return (
-            <SubmitButton disabled={submitDisabled} onClick={async () => handleSubmit()}>
+            <Button disabled={submitDisabled} onClick={async () => handleSubmit()} {...defaultButtonProps}>
                 {t(`common.buy-side`)}
-            </SubmitButton>
+            </Button>
         );
     };
 
@@ -724,26 +727,24 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
-                <ValidationTooltip
-                    open={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
-                    title={tooltipTextUsdAmount}
-                    placement={'top'}
-                    arrow={true}
-                >
-                    <AmountToBuyContainer>
-                        <AmountToBuyInput
-                            name="usdAmount"
-                            type="number"
-                            value={usdAmountValue}
-                            onChange={(e) => {
-                                if (Number(countDecimals(Number(e.target.value))) > 2) {
-                                    return;
-                                }
-                                setUsdAmount(e.target.value);
-                            }}
-                        />
-                    </AmountToBuyContainer>
-                </ValidationTooltip>
+                <AmountToBuyContainer>
+                    <NumericInput
+                        value={usdAmountValue}
+                        onChange={(e) => {
+                            if (Number(countDecimals(Number(e.target.value))) > 2) {
+                                return;
+                            }
+                            setUsdAmount(e.target.value);
+                        }}
+                        showValidation={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
+                        validationMessage={tooltipTextUsdAmount}
+                        inputFontSize="18px"
+                        inputFontWeight="700"
+                        inputTextAlign="center"
+                        inputPadding="5px 10px"
+                        borderColor={theme.input.borderColor.tertiary}
+                    />
+                </AmountToBuyContainer>
             </InputContainer>
             <InfoContainer>
                 <InfoWrapper>

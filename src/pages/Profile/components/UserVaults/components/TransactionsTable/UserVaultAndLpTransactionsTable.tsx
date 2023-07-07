@@ -138,7 +138,7 @@ const Title = styled.p`
     font-weight: 700;
     font-size: 16px;
     line-height: 19px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const TableHeaderStyle: React.CSSProperties = {

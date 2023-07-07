@@ -52,9 +52,12 @@ import {
     Title,
     TitleLabel,
 } from './styled-components';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 const SidebarLeaderboard: React.FC = () => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const selectedOddsType = useSelector(getOddsType);
@@ -170,7 +173,7 @@ const SidebarLeaderboard: React.FC = () => {
                                                             key={'ExpandedRow' + marketIndex}
                                                         >
                                                             <ParlayRowMatch>
-                                                                {getPositionStatus(position)}
+                                                                {getPositionStatus(position, theme)}
                                                                 <ParlayRowTeam
                                                                     title={
                                                                         position.market.homeTeam +

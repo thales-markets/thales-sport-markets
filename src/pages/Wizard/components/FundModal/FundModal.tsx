@@ -185,7 +185,7 @@ const ButtonDiv = styled.div`
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
-    border: 1px solid #64d9fe;
+    border: 1px solid ${(props) => props.theme.borderColor.quaternary};
     border-radius: 30px;
     font-family: 'Sansation';
     font-style: normal;
@@ -193,7 +193,7 @@ const ButtonDiv = styled.div`
     font-size: 12.5px;
     line-height: 14px;
     cursor: pointer;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     background-color: transparent;
     padding: 5px 0px;
 `;
@@ -227,7 +227,7 @@ const YourAddressLabel = styled.span`
     font-weight: 400;
     font-size: 15px;
     line-height: 18px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     text-transform: capitalize;
     margin-top: 3px;
 `;

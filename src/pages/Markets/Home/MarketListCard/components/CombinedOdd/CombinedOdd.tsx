@@ -14,13 +14,14 @@ import {
     hasBonus,
 } from 'utils/markets';
 import { getCombinedPositionName, isSpecificCombinedPositionAddedToParlay } from 'utils/combinedMarkets';
-import { getOddsType } from '../../../../../../redux/modules/ui';
+import { getOddsType } from 'redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { MAIN_COLORS } from 'constants/ui';
 import { getIsMobile } from 'redux/modules/app';
 import { toast } from 'react-toastify';
 import { oddToastOptions } from 'config/toast';
 import { Position } from 'enums/markets';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type CombinedMarketOddsProps = {
     markets: SportMarketInfo[];
@@ -33,6 +34,7 @@ type CombinedMarketOddsProps = {
 const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, odd, bonus, isShownInSecondRow }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const { trackEvent } = useMatomo();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
@@ -100,15 +102,19 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
                     ? {
                           text: getFormattedBonus(bonus),
                           textStyle: {
-                              color: MAIN_COLORS.BONUS,
-                              backgroundColor: isShownInSecondRow ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
+                              color: theme.status.win,
+                              backgroundColor: isShownInSecondRow
+                                  ? theme.oddsContainerBackground.secondary
+                                  : theme.oddsContainerBackground.primary,
                           },
                       }
                     : {
                           text: spreadAndTotalText,
                           textStyle: {
                               top: '-9px',
-                              backgroundColor: isShownInSecondRow ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
+                              backgroundColor: isShownInSecondRow
+                                  ? theme.oddsContainerBackground.secondary
+                                  : theme.oddsContainerBackground.primary,
                           },
                       }
             }

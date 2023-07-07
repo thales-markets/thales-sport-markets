@@ -11,7 +11,7 @@ import {
     SPORTS_TAGS_MAP,
     SPORT_PERIODS_MAP,
 } from 'constants/tags';
-import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
+import { GAME_STATUS } from 'constants/ui';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
@@ -74,6 +74,8 @@ import {
     Wrapper,
 } from './styled-components';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -88,6 +90,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 }) => {
     const language = i18n.language;
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -265,7 +268,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
             <StatusContainer>
                 {isPendingResolution && !isMobile ? (
                     isEnetpulseSport || isJsonOddsSport ? (
-                        <Status color={STATUS_COLOR.STARTED}>{t('markets.market-card.pending')}</Status>
+                        <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
                     ) : (
                         <FlexDivRow>
                             {liveResultInfo?.status != GAME_STATUS.FINAL &&

@@ -84,7 +84,7 @@ export const RoundEndContainer = styled(FlexDivColumn)`
     span {
         font-size: 30px;
         font-weight: 600;
-        color: #3fd1ff;
+        color: ${(props) => props.theme.textColor.quaternary};
         line-height: 34px;
     }
     @media (max-width: 1199px) {
@@ -102,7 +102,7 @@ export const RoundEndLabel = styled.p``;
 export const RoundEnd = styled.p`
     font-weight: 600;
     font-size: 25px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
     line-height: 25px;
 `;
 
@@ -116,7 +116,7 @@ export const RoundInfoLabel = styled.p``;
 export const RoundInfo = styled.p`
     font-size: 20px;
     font-weight: 600;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
     line-height: 20px;
 `;
 
@@ -178,9 +178,9 @@ export const ContentInfo = styled.p`
 `;
 
 export const WarningContentInfo = styled(ContentInfo)`
-    color: #ffcc00;
+    color: ${(props) => props.theme.warning.textColor.primary};
     i {
-        color: #ffcc00;
+        color: ${(props) => props.theme.warning.textColor.primary};
     }
 `;
 
@@ -292,7 +292,7 @@ export const LiquidityPoolReturnlabel = styled(LiquidityPoolInfoLabel)`
 
 export const LiquidityPoolReturnInfo = styled(LiquidityPoolReturnlabel)`
     font-weight: 600;
-    color: ${(props) => props.theme.winnerColors.primary};
+    color: ${(props) => props.theme.status.win};
     font-size: 16px;
 `;
 
@@ -327,9 +327,9 @@ export const GetStakeThalesIcon = styled.i`
 `;
 
 export const TextLink = styled.a`
-    color: #91bced;
+    color: ${(props) => props.theme.link.textColor.primary};
     &:hover {
-        color: #00f9ff;
+        text-decoration: underline;
     }
 `;
 
@@ -416,7 +416,7 @@ export const SliderRange = styled.div`
     font-size: 13px;
     line-height: 13px;
     letter-spacing: 0.4px;
-    color: #5fc694;
+    color: ${(props) => props.theme.status.win};
     &.disabled {
         opacity: 0.4;
         cursor: default;

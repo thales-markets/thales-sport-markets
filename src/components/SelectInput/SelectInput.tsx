@@ -23,7 +23,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
             width: '100%',
             color: state.selectProps.menuColor,
             backgroundColor: theme.background.secondary,
-            border: `1px solid ${theme.borderColor.tertiary}`,
+            border: `1px solid ${theme.button.borderColor.tertiary}`,
             marginTop: 5,
             borderRadius: 10,
         }),
@@ -37,7 +37,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
         control: (provided: any, state: any) => ({
             ...provided,
             backgroundColor: theme.background.secondary,
-            borderColor: theme.borderColor.tertiary,
+            borderColor: theme.button.borderColor.tertiary,
             color: theme.textColor.primary,
             borderRadius: '10px',
             width: width,

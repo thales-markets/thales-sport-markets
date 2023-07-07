@@ -567,8 +567,8 @@ const LiquidityPool: React.FC = () => {
                     }}
                     active={isParlayLP}
                     dotSize="20px"
-                    dotBackground="#303656"
-                    dotBorder="3px solid #3FD1FF"
+                    dotBackground={theme.background.secondary}
+                    dotBorder={`3px solid ${theme.borderColor.quaternary}`}
                     handleClick={() => {
                         searchQuery.set('pool-type', !isParlayLP ? 'parlay' : 'single');
                         history.push({ search: searchQuery.toString() });
@@ -631,8 +631,8 @@ const LiquidityPool: React.FC = () => {
                                 }}
                                 active={selectedTab === LiquidityPoolTab.WITHDRAW}
                                 dotSize="14px"
-                                dotBackground="#303656"
-                                dotBorder="3px solid #3FD1FF"
+                                dotBackground={theme.background.secondary}
+                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
                                 handleClick={() => {
                                     setSelectedTab(
                                         selectedTab === LiquidityPoolTab.DEPOSIT

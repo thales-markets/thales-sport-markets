@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivEnd } from 'styles/common';
 
-export const FieldContainer = styled(FlexDivColumn)<{ margin?: string }>`
+export const FieldContainer = styled(FlexDivColumn)<{ margin?: string; width?: string }>`
     flex: initial;
     position: relative;
     margin: ${(props) => props.margin || '0 0 5px 0'};
-    width: 100%;
+    width: ${(props) => props.width || '100%'};
 `;
 
 export const FieldLabel = styled.label`
@@ -17,9 +17,16 @@ export const FieldLabel = styled.label`
     text-transform: uppercase;
 `;
 
-export const Input = styled.input<{ fontSize?: string; width?: string; height?: string }>`
+export const Input = styled.input<{
+    fontSize?: string;
+    fontWeight?: string;
+    textAlign?: string;
+    width?: string;
+    height?: string;
+    borderColor?: string;
+}>`
     background: ${(props) => props.theme.input.background.primary};
-    border: 2px solid ${(props) => props.theme.input.borderColor.primary};
+    border: 2px solid ${(props) => props.borderColor || props.theme.input.borderColor.primary};
     box-sizing: border-box;
     mix-blend-mode: normal;
     border-radius: 5px;
@@ -28,8 +35,9 @@ export const Input = styled.input<{ fontSize?: string; width?: string; height?: 
     padding: 5px 10px;
     outline: 0;
     font-style: normal;
-    font-weight: normal;
+    font-weight: ${(props) => props.fontWeight || '400'};
     font-size: ${(props) => props.fontSize || '15px'};
+    text-align: ${(props) => props.textAlign || 'start'};
     line-height: 18px;
     color: ${(props) => props.theme.input.textColor.primary};
     text-overflow: ellipsis;

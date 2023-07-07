@@ -115,9 +115,9 @@ const Description = styled.div`
     }
     a {
         cursor: pointer;
-        color: #91bced;
-        &:hover {
-            color: #00f9ff;
+        color: ${(props) => props.theme.link.textColor.primary};
+        :hover {
+            text-decoration: underline;
         }
     }
 `;

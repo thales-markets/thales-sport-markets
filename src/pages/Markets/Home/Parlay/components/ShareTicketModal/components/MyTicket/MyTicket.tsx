@@ -179,7 +179,7 @@ const Header = styled.span<{ isParlay: boolean }>`
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.175em;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.isParlay ? 'white-space: nowrap;' : '')};
     ${(props) => (props.isParlay ? 'margin-top: 3px' : '')};
     @media (max-width: 950px) {
@@ -197,7 +197,7 @@ const ParlayLabel = styled.span`
     letter-spacing: 0.3em;
     font-weight: 300;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     padding-left: 8px;
     opacity: 0.8;
     @media (max-width: 950px) {
@@ -222,7 +222,7 @@ const PayoutLabel = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     line-height: ${(props) => (props.isResolved ? '32' : '18')}px;
     font-weight: 200;
     padding: 0 5px;
-    color: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')};
 `;
 
@@ -230,14 +230,14 @@ const Square = styled.div<{ isLost?: boolean; isResolved?: boolean }>`
     width: ${(props) => (props.isResolved ? '10' : '8')}px;
     height: ${(props) => (props.isResolved ? '10' : '8')}px;
     transform: rotate(-45deg);
-    background: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    background: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
 `;
 
 const PayoutValue = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     font-size: ${(props) => (props.isResolved ? '35' : '30')}px;
     line-height: ${(props) => (props.isResolved ? '37' : '32')}px;
     font-weight: 800;
-    color: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')}
 `;
 
@@ -258,7 +258,7 @@ const InfoWrapper = styled(FlexDivRow)`
     line-height: 18px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     width: 100%;
     padding: 5px 5px 0 5px;
 `;
@@ -280,14 +280,14 @@ const ReferralLabel = styled.span`
     font-size: 10px;
     line-height: 12px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-top: 3px;
     white-space: nowrap;
 `;
 
 const HorizontalLine = styled.hr`
     width: 100%;
-    border-top: 1.5px solid #64d9fe33;
+    border-top: 1.5px solid ${(props) => props.theme.background.secondary};
     border-bottom: none;
     border-right: none;
     border-left: none;
@@ -295,7 +295,7 @@ const HorizontalLine = styled.hr`
 `;
 const HorizontalDashedLine = styled.hr`
     width: 100%;
-    border-top: 1.5px dashed #64d9fe33;
+    border-top: 1.5px dashed ${(props) => props.theme.background.secondary};
     border-bottom: none;
     border-right: none;
     border-left: none;

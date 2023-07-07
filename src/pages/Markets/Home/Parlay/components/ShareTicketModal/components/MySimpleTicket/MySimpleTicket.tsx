@@ -97,7 +97,7 @@ const Header = styled.span`
     line-height: 15px;
     text-align: center;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 10px;
     letter-spacing: 0.08em;
     white-space: nowrap;
@@ -118,7 +118,7 @@ const ParlayLabel = styled.span`
     line-height: 29px;
     font-weight: 200;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     padding-left: 5px;
     opacity: 0.8;
 `;
@@ -135,7 +135,7 @@ const PayoutLabel = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     line-height: ${(props) => (props.isResolved ? '32' : '25')}px;
     font-weight: 300;
     padding: 0 5px;
-    color: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')};
     @media (max-width: 950px) {
         font-size: ${(props) => (props.isResolved ? '32' : '20')}px;
@@ -147,14 +147,14 @@ const Square = styled.div<{ isLost?: boolean; isResolved?: boolean }>`
     width: ${(props) => (props.isResolved ? '10' : '9')}px;
     height: ${(props) => (props.isResolved ? '10' : '9')}px;
     transform: rotate(-45deg);
-    background: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    background: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
 `;
 
 const PayoutValue = styled.span<{ isLost?: boolean }>`
     font-size: 35px;
     line-height: 37px;
     font-weight: 800;
-    color: ${(props) => (props.isLost ? '#ca4c53' : '#5fc694')};
+    color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? 'text-decoration: line-through 2px solid #ca4c53;' : '')}
 `;
 
@@ -165,7 +165,7 @@ const ReferralLabel = styled.span`
     font-size: 11px;
     line-height: 13px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-top: 5px;
     white-space: nowrap;
     text-align: center;

@@ -63,7 +63,7 @@ const DisplayOptions: React.FC<DisplayOptionsProps> = ({
                 active={isSimpleView}
                 disabled={isDisabled}
                 dotSize="18px"
-                dotBackground="#ffffff"
+                dotBackground={theme.input.background.primary}
                 handleClick={onOptionToggleViewClickHandler}
             />
             <Option>
@@ -105,7 +105,7 @@ const Container = styled(FlexDivColumnCentered)`
     font-size: 18px;
     line-height: 25px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     @media (max-width: 950px) {
         width: 100%;
         bottom: -132px;

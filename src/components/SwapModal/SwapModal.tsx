@@ -5,7 +5,6 @@ import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import SwapNumericInput from 'components/fields/SwapNumericInput';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { AVAILABLE_TOKENS, ONE_INCH_API_URL, OP_ETH, QUOTE_SUFFIX, SWAP_SUFFIX } from 'constants/tokens';
@@ -23,6 +22,7 @@ import useInterval from 'hooks/useInterval';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
 import { getDefaultCollateralIndexForNetworkId, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import NumericInput from 'components/fields/NumericInput';
 
 type SwapModalProps = {
     onClose: () => void;
@@ -37,6 +37,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
     const [amount, setAmount] = useState<number | string>('');
     const [outputAmount, setOutputAmount] = useState<number | string>('');
 
+    const availableTokens = AVAILABLE_TOKENS.filter((token: Token) => token.chainId === networkId);
     const defaultSelectedToken = AVAILABLE_TOKENS.filter(
         (token: Token) =>
             token.chainId === networkId &&
@@ -174,30 +175,37 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
         <Modal title={t('common.swap.title')} onClose={onClose} shouldCloseOnOverlayClick={false}>
             <Container>
                 <InputContainer>
-                    <TokenDropdown selectedToken={sourceToken} onSelect={() => {}} readOnly disabled />
-                    <SwapNumericInput
+                    <NumericInput
                         value={amount}
                         label={t('common.swap.from-label')}
-                        balanceLabel={t('common.swap.balance-label', {
+                        balance={t('common.swap.balance-label', {
                             amount: formatCurrencyWithPrecision(tokenBalance),
                         })}
                         disabled={isSubmitting}
-                        onChange={(_, value) => setAmount(value)}
-                        autoFocus
+                        onChange={(_: any, value: any) => setAmount(value)}
+                        currencyLabel={sourceToken.symbol}
                     />
                 </InputContainer>
                 <InputContainer>
-                    <TokenDropdown selectedToken={selectedToken} disabled={isSubmitting} onSelect={setSelectedToken} />
-                    <SwapNumericInput
+                    <NumericInput
                         value={outputAmount}
                         label={t('common.swap.to-label')}
-                        balanceLabel={t('common.swap.balance-label', {
+                        balance={t('common.swap.balance-label', {
                             amount: formatCurrencyWithPrecision(paymentTokenBalance),
                         })}
-                        disabled={isSubmitting}
-                        readOnly={true}
                         onChange={() => {}}
-                        isGettingQuote={isGettingQuote}
+                        disabled={true}
+                        currencyLabel={availableTokens.length === 1 ? availableTokens[0].symbol : undefined}
+                        currencyComponent={
+                            availableTokens.length > 1 ? (
+                                <TokenDropdown
+                                    selectedToken={selectedToken}
+                                    disabled={isSubmitting}
+                                    onSelect={setSelectedToken}
+                                />
+                            ) : undefined
+                        }
+                        enableCurrencyComponentOnly
                     />
                 </InputContainer>
                 <ButtonContainer>{getSubmitButton()}</ButtonContainer>
@@ -216,6 +224,7 @@ const Container = styled(FlexDivColumnCentered)`
 
 const InputContainer = styled(FlexDivCentered)`
     position: relative;
+    margin: 10px 0;
 `;
 
 const ButtonContainer = styled(FlexDivCentered)`

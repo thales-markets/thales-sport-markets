@@ -125,7 +125,7 @@ export const TimeRemainingGraphicContainer = styled(FlexDivStart)`
     position: relative;
     width: 565px;
     height: 14px;
-    background: #303656;
+    background:  ${(props) => props.theme.background.secondary}
     border-radius: 15px;
     margin-bottom: 10px;
     @media (max-width: 767px) {
@@ -199,28 +199,6 @@ export const FinishedInfoMessage = styled(Description)`
     line-height: 22px;
 `;
 
-export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
-    background: ${(props) =>
-        props.isNavigation
-            ? 'linear-gradient(88.84deg, #5fc694 19.98%, #1ca6b9 117.56%)'
-            : 'linear-gradient(88.84deg, #2FC9DD 19.98%, #1CA6B9 117.56%);'};
-    border-radius: 8px;
-    margin: 20px 20px;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 23px;
-    color: #1a1c2b;
-    width: 252px;
-    border: none;
-    padding: 7px;
-    cursor: pointer;
-    text-transform: uppercase;
-    &:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-`;
-
 export const ButtonContainer = styled(FlexDivCentered)<{ mobileDirection?: string }>`
     @media (max-width: 675px) {
         flex-direction: ${(props) => props.mobileDirection || 'column'};
@@ -256,7 +234,7 @@ export const TwitterImage = styled.img`
     border-radius: 50%;
     height: 30px;
     width: 30px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-right: 6px;
     @media (max-width: 767px) {
         height: 25px;
@@ -316,16 +294,16 @@ export const PaginationWrapper = styled(TablePagination)`
     display: flex;
     width: 100%;
     height: auto;
-    color: #f6f6fe !important;
+    color: ${(props) => props.theme.textColor.primary} !important;
     .MuiToolbar-root {
         padding: 0;
         display: flex;
         .MuiSelect-icon {
-            color: #f6f6fe;
+            color: ${(props) => props.theme.textColor.primary};
         }
     }
     .MuiIconButton-root.Mui-disabled {
-        color: #5f6180;
+        color: ${(props) => props.theme.textColor.secondary};
     }
     .MuiTablePagination-toolbar > .MuiTablePagination-caption:last-of-type {
         display: block;
@@ -415,3 +393,7 @@ export const PeriodContainer = styled(FlexDivStart)`
         margin-bottom: 10px;
     }
 `;
+
+export const defaultButtonProps = {
+    margin: '20px 10px',
+};

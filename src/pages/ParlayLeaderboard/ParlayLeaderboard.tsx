@@ -46,10 +46,13 @@ import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/compo
 import i18n from 'i18n';
 import { OddsType } from 'enums/markets';
 import { Network } from 'enums/network';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
     const language = i18n.language;
+    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -151,11 +154,11 @@ const ParlayLeaderboard: React.FC = () => {
                     />
                 </StickyContrainer>
                 <ExpandedContainer hide={!expandStickyRow}>
-                    {getExpandedRow(data, selectedOddsType, language)}
+                    {getExpandedRow(data, selectedOddsType, language, theme)}
                 </ExpandedContainer>
             </StickyRow>
         );
-    }, [parlays, rewards, networkId, period, selectedOddsType, expandStickyRow, language, walletAddress]);
+    }, [parlays, rewards, networkId, period, selectedOddsType, expandStickyRow, language, walletAddress, theme]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -346,6 +349,7 @@ const ParlayLeaderboard: React.FC = () => {
                         parlayWithoutCombinedMarkets,
                         selectedOddsType,
                         language,
+                        theme,
                         combinedMarkets
                     );
 
@@ -386,17 +390,17 @@ const ParlayLeaderboard: React.FC = () => {
     );
 };
 
-export const getPositionStatus = (position: PositionData) => {
+export const getPositionStatus = (position: PositionData, theme: ThemeInterface) => {
     if (position.market.isResolved) {
         if (
             convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
         ) {
-            return <StatusIcon color="#5FC694" className={`icon icon--win`} />;
+            return <StatusIcon color={theme.status.win} className={`icon icon--win`} />;
         } else {
-            return <StatusIcon color="#E26A78" className={`icon icon--lost`} />;
+            return <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />;
         }
     } else {
-        return <StatusIcon color="#FFFFFF" className={`icon icon--open`} />;
+        return <StatusIcon color={theme.status.open} className={`icon icon--open`} />;
     }
 };
 
@@ -414,13 +418,18 @@ export const getOpacity = (position: PositionData) => {
     }
 };
 
-const getExpandedRow = (parlay: ParlayMarketWithRank, selectedOddsType: OddsType, language: string) => {
+const getExpandedRow = (
+    parlay: ParlayMarketWithRank,
+    selectedOddsType: OddsType,
+    language: string,
+    theme: ThemeInterface
+) => {
     const modifiedParlay = syncPositionsAndMarketsPerContractOrderInParlay(parlay);
 
     const combinedMarkets = extractCombinedMarketsFromParlayMarketType(modifiedParlay);
     const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(modifiedParlay);
 
-    const toRender = getParlayRow(parlayWithoutCombinedMarkets, selectedOddsType, language, combinedMarkets);
+    const toRender = getParlayRow(parlayWithoutCombinedMarkets, selectedOddsType, language, theme, combinedMarkets);
 
     return (
         <ExpandedRowWrapper>
@@ -466,7 +475,7 @@ const Title = styled.p`
     line-height: 150%;
     text-align: justify;
     letter-spacing: 0.025em;
-    color: #eeeee4;
+    color: ${(props) => props.theme.textColor.primary};
     margin: 10px 0;
 `;
 
@@ -478,7 +487,7 @@ const Description = styled.p`
     line-height: 150%;
     text-align: justify;
     letter-spacing: 0.025em;
-    color: #eeeee4;
+    color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 10px;
 `;
 
@@ -490,7 +499,7 @@ const Warning = styled.p`
     line-height: 150%;
     text-align: justify;
     letter-spacing: 0.025em;
-    color: #ffcc00;
+    color: ${(props) => props.theme.warning.textColor.primary};
     margin-bottom: 10px;
 `;
 
@@ -503,7 +512,7 @@ const TableText = styled.p`
     text-align: center;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #eeeee4;
+    color: ${(props) => props.theme.textColor.primary};
     @media (max-width: 600px) {
         font-size: 12px;
     }
