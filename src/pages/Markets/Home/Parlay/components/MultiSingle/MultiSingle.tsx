@@ -61,6 +61,7 @@ import MatchInfo from '../MatchInfo';
 import styled from 'styled-components';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
+import { getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -245,7 +246,9 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         const fetchData = async () => {
             setIsRecalculating(true);
 
-            const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
+            const divider = isVoucherSelected
+                ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
+                : Number(`1e${getDecimalsByStableCoinIndex(selectedStableIndex)}`);
             const { sportsAMMContract, signer } = networkConnector;
             const tokenAndBonusArr = [] as MultiSingleTokenQuoteAndBonus[];
             const isFetchingRecords = isFetching;
@@ -373,6 +376,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         isFetching,
         isMultiCollateralSupported,
         networkId,
+        isVoucherSelected,
     ]);
 
     const availablePerPositionMultiQuery = useAvailablePerPositionMultiQuery(markets, {
@@ -736,7 +740,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                                     open={
                                         inputRefVisible && !!tooltipTextUsdAmount[market.address] && !openApprovalModal
                                     }
-                                    title={tooltipTextUsdAmount[market.address]}
+                                    title={tooltipTextUsdAmount[market.address] || ''}
                                     placement={'top'}
                                     arrow={true}
                                 >
