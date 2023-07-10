@@ -92,7 +92,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
     const noLiquidityPoolMyTransactions = liquidityPoolMyTransactions.length === 0;
 
     return (
-        <Container>
+        <Container data-matomo-category="liquidity-pool" data-matomo-action="interaction-with-transaction-tables">
             <Header>
                 <TabContainer>
                     {tabContent.map((tab, index) => (
