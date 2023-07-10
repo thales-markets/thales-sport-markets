@@ -120,7 +120,7 @@ const WalletInfo: React.FC = () => {
                                                                     // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
                                                                     dispatch(
                                                                         switchToNetworkId({
-                                                                            networkId: network.networkId as NetworkId,
+                                                                            networkId: network.networkId as Network,
                                                                         })
                                                                     );
                                                                 } catch (switchError: any) {
@@ -149,7 +149,7 @@ const WalletInfo: React.FC = () => {
                                                                 // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
                                                                 dispatch(
                                                                     switchToNetworkId({
-                                                                        networkId: network.networkId as NetworkId,
+                                                                        networkId: network.networkId as Network,
                                                                     })
                                                                 );
                                                             }

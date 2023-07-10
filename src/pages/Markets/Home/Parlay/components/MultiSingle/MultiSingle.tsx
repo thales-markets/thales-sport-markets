@@ -758,7 +758,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                                     showValidation={
                                         inputRefVisible && !!tooltipTextUsdAmount[market.address] && !openApprovalModal
                                     }
-                                    validationMessage={tooltipTextUsdAmount[market.address]}
+                                    validationMessage={tooltipTextUsdAmount[market.address] || ''}
                                     inputFontSize="13px"
                                     inputFontWeight="700"
                                     inputTextAlign="center"
