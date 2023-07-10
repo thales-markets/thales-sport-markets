@@ -32,6 +32,8 @@ import {
     Separator,
     Wrapper,
 } from './styled-components';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type NavMenuProps = {
     visibility?: boolean | null;
@@ -41,6 +43,7 @@ type NavMenuProps = {
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
+    const theme: ThemeInterface = useTheme();
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -71,7 +74,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                                     data-matomo-action={item.name}
                                 >
                                     {isWalletConnected ? (
-                                        <ProfileIconWidget avatarSize={25} iconColor={'#FFFFFF'} />
+                                        <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
                                     ) : (
                                         <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     )}
@@ -136,18 +139,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    <MintVoucher
-                        style={{ width: '100%' }}
-                        buttonStyle={{
-                            width: '100%',
-                            background: '#303656',
-                            borderRadius: 3,
-                            border: `1.5px solid #3FD1FF`,
-                            color: '#3FD1FF',
-                            fontSize: 14,
-                            lineHeight: '16px',
-                        }}
-                    />
+                    <MintVoucher style={{ width: '100%' }} />
                 </FooterContainer>
             </Wrapper>
         </OutsideClickHandler>

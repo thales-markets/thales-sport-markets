@@ -84,7 +84,8 @@
             "batch-transaction-single-failure": "Транзакция была отклонена или не удалась.",
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
-            "single-amm-paused": "АММ приостановлено"
+            "single-amm-paused": "АММ приостановлено",
+            "invalid-amount-max": "Сумма не может превышать {{max}}"
         },
         "time-remaining": {
             "ended": "ended",

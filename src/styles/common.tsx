@@ -41,14 +41,26 @@ export const FlexDivColumnCentered = styled(FlexDivColumn)`
 export const Colors = {
     GRAY: '#303656',
     GRAY_LIGHT: '#5F6180',
-    LIGHT_GRAY: '#303656',
     GRAY_DARK: '#1A1C2B',
+
+    // specific shades for odds background display
+    GRAY_SECOND: '#242842',
+    GRAY_RESOLVED: 'rgb(36,41,64, 0.5)',
+    GRAY_GRADIENT_1: '#23273e',
+    GRAY_GRADIENT_2: '#2f3454',
+    GRAY_GRADIENT_3: '#2c3250',
+
     WHITE: '#FFFFFF',
+
     GREEN: '#5FC694',
+
     BLUE: '#3FD1FF',
-    LIGHT_BLUE: '#64D9FE',
+
     RED: '#e26a78',
-    YELLOW: '#FAC439',
+
+    ORANGE: '#FAC439',
+
+    PURPLE: '#8884d8',
 };
 
 export const QuizQuestionDifficultyMap = ['#4673BD', '#50CE99', '#F4CF73', '#FA9E2F', '#C3244A'];

@@ -1,6 +1,6 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { generalConfig } from 'config/general';
 import axios from 'axios';
 
@@ -9,7 +9,7 @@ export type Banner = {
     image: string;
 };
 
-export const useBannersQuery = (networkId: NetworkId, options?: UseQueryOptions<Banner[]>) => {
+export const useBannersQuery = (networkId: Network, options?: UseQueryOptions<Banner[]>) => {
     return useQuery<Banner[]>(
         QUERY_KEYS.Banners(networkId),
         async () => {

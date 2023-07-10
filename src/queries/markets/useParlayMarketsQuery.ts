@@ -3,12 +3,12 @@ import { ENETPULSE_SPORTS, GOLF_TOURNAMENT_WINNER_TAG, JSON_ODDS_SPORTS, SPORTS_
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { ParlayMarket } from 'types/markets';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 
 export const useParlayMarketsQuery = (
     account: string,
-    networkId: NetworkId,
+    networkId: Network,
     minTimestamp?: number,
     maxTimestamp?: number,
     options?: UseQueryOptions<ParlayMarket[] | undefined>

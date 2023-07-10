@@ -1,4 +1,3 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
@@ -10,7 +9,8 @@ export const Wrapper = styled(FlexDivColumn)<{
     display: ${(props) => (props.hideGame ? 'none' : '')};
     border-radius: 5px;
     margin-bottom: 8px;
-    background-color: ${(props) => (props.isResolved ? 'rgb(36,41,64, 0.5)' : MAIN_COLORS.LIGHT_GRAY)};
+    background-color: ${(props) =>
+        props.isResolved ? props.theme.oddsContainerBackground.tertiary : props.theme.oddsContainerBackground.primary};
     @media (max-width: 575px) {
         margin-bottom: 5px;
     }
@@ -25,7 +25,7 @@ export const MainContainer = styled(FlexDivRow)`
 `;
 
 export const SecondRowContainer = styled(MainContainer)<{ mobilePaddingRight: number }>`
-    background-color: ${MAIN_COLORS.GRAY};
+    background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
     flex-wrap: wrap;
     justify-content: flex-start;
     border-radius: 0 0 5px 5px;
@@ -131,7 +131,7 @@ export const TotalMarkets = styled.span`
     text-align: center;
     align-items: center;
     justify-content: center;
-    background: #5f6180;
+    background: ${(props) => props.theme.background.tertiary};
     border-radius: 50%;
     margin-right: 6px;
 `;

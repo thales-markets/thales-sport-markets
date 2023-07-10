@@ -1,4 +1,3 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 
@@ -7,7 +6,7 @@ export const Wrapper = styled(FlexDivRow)`
     align-items: center;
     justify-content: space-between;
     padding: 6px;
-    border: 1px solid ${MAIN_COLORS.BORDERS.GRAY};
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 5px;
     margin: 10px 0px;
 `;
@@ -31,7 +30,7 @@ export const ItemWrapper = styled.div`
 `;
 
 export const Item = styled.span<{ selected: boolean }>`
-    color: ${(props) => (props?.selected ? `${MAIN_COLORS.TEXT.BLUE}` : `${MAIN_COLORS.TEXT.DARK_GRAY}`)};
+    color: ${(props) => (props?.selected ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -49,15 +48,15 @@ export const NotificationCount = styled.div`
     justify-content: center;
     height: 14px;
     width: 14px;
-    background-color: ${MAIN_COLORS.BACKGROUNDS.BLUE};
-    box-shadow: ${MAIN_COLORS.SHADOWS.NOTIFICATION};
+    background-color: ${(props) => props.theme.background.quaternary};
+    box-shadow: ${(props) => props.theme.shadow.notification};
     @media (max-width: 768px) {
         right: -5px;
     }
 `;
 
 export const Count = styled.span`
-    color: ${MAIN_COLORS.DARK_GRAY};
+    color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 800;
     font-size: 10px;
 `;

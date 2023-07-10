@@ -1,3 +1,5 @@
+import { Network } from 'enums/network';
+
 const OP_SUSD = {
     address: '0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9',
     decimals: 18,
@@ -48,7 +50,7 @@ const ARB_USDC = {
     decimals: 6,
     symbol: 'USDC',
     name: 'USD Coin',
-    chainId: 42161,
+    chainId: Network.ArbitrumOne,
     logoURI: 'https://tokens.1inch.io/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png',
 };
 

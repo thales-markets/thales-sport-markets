@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { LiquidityPoolReturn, LiquidityPoolType } from 'types/liquidityPool';
 import { orderBy } from 'lodash';
 
@@ -9,7 +9,7 @@ const APR_FREQUENCY = 52;
 const arrToApy = (arr: number) => (1 + arr) ** APR_FREQUENCY - 1;
 
 const useLiquidityPoolReturnQuery = (
-    networkId: NetworkId,
+    networkId: Network,
     liquidityPoolType: LiquidityPoolType,
     options?: UseQueryOptions<LiquidityPoolReturn | undefined>
 ) => {

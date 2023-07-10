@@ -1,5 +1,4 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
-import { GlobalFiltersEnum } from 'constants/markets';
 import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import React, { useEffect, useCallback, useState } from 'react';
@@ -34,6 +33,9 @@ import Toggle from 'components/Toggle';
 import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
 import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
 import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
+import { GlobalFiltersEnum } from 'enums/markets';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type ParylayProps = {
     onBuySuccess?: () => void;
@@ -47,6 +49,7 @@ type CombinedMarketsData = {
 
 const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -165,8 +168,8 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                         active={isMultiSingleBet}
                         disabled={multiSingleStore.length === 0}
                         dotSize="18px"
-                        dotBackground="#303656"
-                        dotBorder="3px solid #3FD1FF"
+                        dotBackground={theme.background.secondary}
+                        dotBorder={`3px solid ${theme.borderColor.quaternary}`}
                         handleClick={onToggleTypeClickHandler}
                     />
                     {isMultiSingleBet && multiSingleStore.length ? (
@@ -286,15 +289,15 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     text-align: center;
     padding: ${(props) => (props.outOfLiquidity ? '5px' : '5px 0px')};
     ${(props) => (props.outOfLiquidity ? 'background: rgba(26, 28, 43, 0.5);' : '')}
-    ${(props) => (props.outOfLiquidity ? 'border: 2px solid #e26a78;' : '')}
+    ${(props) => (props.outOfLiquidity ? `border: 2px solid ${props.theme.status.loss};` : '')}
     ${(props) => (props.outOfLiquidity ? 'border-radius: 2px;' : '')}
 `;
 
 const HorizontalLine = styled.hr`
     width: 100%;
-    border: 1px solid #5f6180;
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 2px;
-    background: #5f6180;
+    background: ${(props) => props.theme.background.tertiary};
 `;
 
 const Empty = styled(FlexDivColumn)`
@@ -309,7 +312,7 @@ const EmptyLabel = styled.span`
     line-height: 38px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const EmptyDesc = styled.span`
@@ -320,7 +323,7 @@ const EmptyDesc = styled.span`
     font-size: 14px;
     line-height: 14px;
     letter-spacing: 0.025em;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export default Parlay;

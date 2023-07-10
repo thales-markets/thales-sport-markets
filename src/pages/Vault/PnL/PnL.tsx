@@ -10,6 +10,8 @@ import useVaultPnlsQuery from 'queries/vault/useVaultPnlsQuery';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'utils/formatters/number';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type PnlProps = {
     vaultAddress: string;
@@ -18,6 +20,7 @@ type PnlProps = {
 
 const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [vaultPnls, setVaultPnls] = useState<VaultPnls>([]);
@@ -53,7 +56,15 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
                 <Title>{t(`vault.pnl.title`)}</Title>
                 <LifetimePnlContainer>
                     <LifetimePnlLabel>{t('vault.pnl.lifetime-pnl')}:</LifetimePnlLabel>
-                    <LifetimePnl color={lifetimePnl === 0 ? Colors.WHITE : lifetimePnl > 0 ? Colors.GREEN : Colors.RED}>
+                    <LifetimePnl
+                        color={
+                            lifetimePnl === 0
+                                ? theme.status.open
+                                : lifetimePnl > 0
+                                ? theme.status.win
+                                : theme.status.loss
+                        }
+                    >
                         {formatPercentageWithSign(lifetimePnl)}
                     </LifetimePnl>
                 </LifetimePnlContainer>
@@ -62,12 +73,12 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
                 <ChartContainer>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={vaultPnls}>
-                            <CartesianGrid strokeDasharray="2 2" strokeWidth={0.5} stroke="#5F6180" />
+                            <CartesianGrid strokeDasharray="2 2" strokeWidth={0.5} stroke={theme.textColor.secondary} />
                             <XAxis
                                 dataKey="round"
                                 tickLine={false}
                                 axisLine={false}
-                                tick={{ fill: '#5F6180' }}
+                                tick={{ fill: theme.textColor.secondary }}
                                 style={{
                                     fontSize: '15px',
                                 }}
@@ -78,7 +89,7 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
                                 }}
                                 tickLine={false}
                                 axisLine={false}
-                                tick={{ fill: '#5F6180' }}
+                                tick={{ fill: theme.textColor.secondary }}
                                 style={{
                                     fontSize: '15px',
                                 }}
@@ -86,7 +97,7 @@ const PnL: React.FC<PnlProps> = ({ vaultAddress, lifetimePnl }) => {
                             />
                             <Tooltip
                                 content={<CustomTooltip />}
-                                cursor={{ fill: '#5F6180', fillOpacity: '0.3' }}
+                                cursor={{ fill: theme.textColor.secondary, fillOpacity: '0.3' }}
                                 wrapperStyle={{ outline: 'none' }}
                             />
                             <Bar dataKey="pnl" radius={[4, 4, 0, 0]} maxBarSize={60}>
@@ -120,8 +131,8 @@ const TooltipContainer = styled(FlexDivColumnCentered)`
     border-radius: 3px;
     z-index: 999;
     padding: 2px 12px;
-    background: #f6f6fe;
-    color: #303656;
+    background: ${(props) => props.theme.input.background.primary};
+    color: ${(props) => props.theme.textColor.tertiary};
 `;
 
 const TooltipAmount = styled(FlexDivColumn)`
@@ -135,7 +146,7 @@ const Header = styled(FlexDivRow)<{ noData?: boolean }>`
 `;
 
 const Title = styled.span`
-    color: #5f6180;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 const LifetimePnlContainer = styled(FlexDivRow)`
@@ -151,10 +162,10 @@ const LifetimePnl = styled.p<{ color: string }>`
 `;
 
 const NoData = styled(FlexDivCentered)`
-    border: 2px dotted #5f6180;
+    border: 2px dotted ${(props) => props.theme.textColor.secondary};
     margin-bottom: 10px;
     height: 200px;
-    color: #5f6180;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 export default PnL;

@@ -13,8 +13,10 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { getDefaultNetworkName, getNetworkKeyByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type FundModalProps = {
     onClose: () => void;
@@ -27,7 +29,7 @@ enum Provider {
     LAYER_SWAP,
 }
 
-const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) => {
+const getProviderUrl = (provider: Provider | undefined, networkId: Network) => {
     const networkParam = getNetworkKeyByNetworkId(networkId);
     switch (provider) {
         case Provider.BANXA:
@@ -47,6 +49,7 @@ const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) =>
 };
 
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
+    const theme: ThemeInterface = useTheme();
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -140,7 +143,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 >
                     <IFrameWrapper
                         height={iframeProvider === Provider.MT_PELERIN ? 588 : 635}
-                        background={iframeProvider === Provider.MT_PELERIN ? '#ffffff' : ''}
+                        background={iframeProvider === Provider.MT_PELERIN ? theme.input.background.primary : ''}
                     >
                         {iframeLoader && <SimpleLoader />}
                         <IFrame src={getProviderUrl(iframeProvider, networkId)} onLoad={() => setIframeLoader(false)} />
@@ -185,7 +188,7 @@ const ButtonDiv = styled.div`
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
-    border: 1px solid #64d9fe;
+    border: 1px solid ${(props) => props.theme.borderColor.quaternary};
     border-radius: 30px;
     font-family: 'Sansation';
     font-style: normal;
@@ -193,7 +196,7 @@ const ButtonDiv = styled.div`
     font-size: 12.5px;
     line-height: 14px;
     cursor: pointer;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     background-color: transparent;
     padding: 5px 0px;
 `;
@@ -227,7 +230,7 @@ const YourAddressLabel = styled.span`
     font-weight: 400;
     font-size: 15px;
     line-height: 18px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     text-transform: capitalize;
     margin-top: 3px;
 `;

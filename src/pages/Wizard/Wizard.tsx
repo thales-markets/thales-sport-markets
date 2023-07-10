@@ -8,13 +8,7 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivStart } from 'styles/common';
 import YouTubeVideo from '../../components/YouTubeVideo';
 import Step from './components/Step';
-
-export enum WizardStep {
-    CONNECT_METAMASK,
-    FUND,
-    EXCHANGE,
-    TRADE,
-}
+import { WizardStep } from 'enums/wizard';
 
 const Wizard: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -67,7 +61,7 @@ const WizardTitle = styled(FlexDivStart)`
     font-weight: 600;
     font-size: 20px;
     line-height: 24px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-top: 20px;
     margin-bottom: 40px;
     margin-left: 10%;
@@ -78,8 +72,8 @@ const WizardTitle = styled(FlexDivStart)`
 
 const HorizontalLine = styled.hr`
     width: 100%;
-    border: 1.5px solid #5f6180;
-    background: #5f6180;
+    border: 1.5px solid ${(props) => props.theme.borderColor.primary};
+    background: ${(props) => props.theme.background.tertiary};
     border-radius: 3px;
 `;
 

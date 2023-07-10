@@ -1,9 +1,8 @@
+import { Network } from 'enums/network';
 import { ethers } from 'ethers';
 
-export type NetworkId = 5 | 10 | 42 | 420 | 42161;
-
 export type NetworkSettings = {
-    networkId?: NetworkId;
+    networkId?: Network;
     signer?: ethers.Signer;
     provider?: ethers.providers.Provider;
 };

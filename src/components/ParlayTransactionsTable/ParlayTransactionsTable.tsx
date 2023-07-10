@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { ParlayMarket, PositionData, SportMarketInfo } from 'types/markets';
 import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
@@ -27,10 +27,11 @@ import {
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
-import { CollateralByNetworkId } from 'utils/network';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
 import SPAAnchor from 'components/SPAAnchor';
+import { CollateralByNetworkId } from 'constants/network';
+import { ThemeInterface } from 'types/ui';
 
 const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?: string }> = ({
     parlayTx,
@@ -38,6 +39,7 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
 }) => {
     const { t } = useTranslation();
     const language = i18n.language;
+    const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -58,7 +60,10 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
     return (
         <>
             <Table
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...TableHeaderStyle,
+                    color: theme.textColor.secondary,
+                }}
                 tableRowCellStyles={TableRowStyle}
                 columnsDeps={[networkId]}
                 columns={[
@@ -125,12 +130,12 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
                         sortable: false,
                         Cell: (cellProps: any) => {
                             if (cellProps.row.original.won || isParlayClaimable(cellProps.row.original)) {
-                                return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
+                                return <StatusWrapper color={theme.status.win}>WON </StatusWrapper>;
                             } else {
                                 return isParlayOpen(cellProps.row.original) ? (
-                                    <StatusWrapper color="#FFFFFF">OPEN</StatusWrapper>
+                                    <StatusWrapper color={theme.status.open}>OPEN</StatusWrapper>
                                 ) : (
-                                    <StatusWrapper color="#E26A78">LOSS</StatusWrapper>
+                                    <StatusWrapper color={theme.status.loss}>LOSS</StatusWrapper>
                                 );
                             }
                         },
@@ -173,7 +178,7 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
                                     )}
                                 >
                                     <ParlayRowText style={{ cursor: 'pointer' }}>
-                                        {getPositionStatus(position)}
+                                        {getPositionStatus(position, theme)}
                                         <ParlayRowTeam
                                             title={position.market.homeTeam + ' vs ' + position.market.awayTeam}
                                         >
@@ -239,15 +244,15 @@ const getMarketWinStatus = (position: PositionData) =>
         ? convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
         : undefined; // open or canceled
 
-const getPositionStatus = (position: PositionData) => {
+const getPositionStatus = (position: PositionData, theme: ThemeInterface) => {
     const winStatus = getMarketWinStatus(position);
 
     return winStatus === undefined ? (
-        <StatusIcon color="#FFFFFF" className={`icon icon--open`} />
+        <StatusIcon color={theme.status.open} className={`icon icon--open`} />
     ) : winStatus ? (
-        <StatusIcon color="#5FC694" className={`icon icon--win`} />
+        <StatusIcon color={theme.status.win} className={`icon icon--win`} />
     ) : (
-        <StatusIcon color="#E26A78" className={`icon icon--lost`} />
+        <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />
     );
 };
 
@@ -295,7 +300,7 @@ const TableText = styled.span`
 const StatusWrapper = styled.div`
     width: 62px;
     height: 25px;
-    border: 2px solid ${(props) => props.color || 'white'};
+    border: 2px solid ${(props) => props.color || props.theme.status.open};
     border-radius: 5px;
     font-family: 'Roboto';
     font-style: normal;
@@ -305,7 +310,7 @@ const StatusWrapper = styled.div`
     text-align: justify;
     text-transform: uppercase;
     text-align: center;
-    color: ${(props) => props.color || 'white'};
+    color: ${(props) => props.color || props.theme.status.open};
     padding-top: 3px;
 `;
 
@@ -347,7 +352,6 @@ const TableHeaderStyle: React.CSSProperties = {
     lineHeight: '12px',
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
 };
 
@@ -375,7 +379,7 @@ const ExpandedRowWrapper = styled.div`
     @media (max-width: 400px) {
         padding: 0;
     }
-    border-bottom: 2px dotted rgb(95, 97, 128);
+    border-bottom: 2px dotted ${(props) => props.theme.borderColor.primary};
 `;
 
 const ParlayRow = styled(FlexDivRowCentered)`

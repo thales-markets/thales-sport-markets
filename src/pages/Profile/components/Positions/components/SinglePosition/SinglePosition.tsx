@@ -11,7 +11,7 @@ import {
     SPORTS_TAGS_MAP,
     SPORT_PERIODS_MAP,
 } from 'constants/tags';
-import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
+import { GAME_STATUS } from 'constants/ui';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
@@ -46,7 +46,6 @@ import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import {
-    ClaimButton,
     ClaimContainer,
     ClaimLabel,
     ClaimValue,
@@ -74,6 +73,9 @@ import {
     Wrapper,
 } from './styled-components';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
+import Button from 'components/Button';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -88,6 +90,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 }) => {
     const language = i18n.language;
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -265,7 +268,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
             <StatusContainer>
                 {isPendingResolution && !isMobile ? (
                     isEnetpulseSport || isJsonOddsSport ? (
-                        <Status color={STATUS_COLOR.STARTED}>{t('markets.market-card.pending')}</Status>
+                        <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
                     ) : (
                         <FlexDivRow>
                             {liveResultInfo?.status != GAME_STATUS.FINAL &&
@@ -348,16 +351,20 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         {isMobile ? (
                             <ClaimContainer>
                                 <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
-                                <ClaimButton
-                                    claimable={true}
+                                <Button
                                     onClick={(e: any) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         claimReward();
                                     }}
+                                    backgroundColor={theme.button.background.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    padding="2px 5px"
+                                    fontSize="9px"
+                                    height="19px"
                                 >
                                     {t('profile.card.claim')}
-                                </ClaimButton>
+                                </Button>
                             </ClaimContainer>
                         ) : (
                             <>
@@ -365,16 +372,18 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                     <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
                                     <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
                                 </ColumnDirectionInfo>
-                                <ClaimButton
-                                    claimable={true}
+                                <Button
                                     onClick={(e: any) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         claimReward();
                                     }}
+                                    backgroundColor={theme.button.background.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    padding="3px 15px"
                                 >
                                     {t('profile.card.claim')}
-                                </ClaimButton>
+                                </Button>
                             </>
                         )}
                     </>

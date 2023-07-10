@@ -4,7 +4,7 @@ import { ReactComponent as sUSDIcon } from 'assets/currencies/sUSD.svg';
 import { ReactComponent as DAIIcon } from 'assets/currencies/DAI.svg';
 import { ReactComponent as USDCIcon } from 'assets/currencies/USDC.svg';
 import { ReactComponent as USDTIcon } from 'assets/currencies/USDT.svg';
-import { StablecoinKey } from 'utils/collaterals';
+import { StablecoinKey } from 'types/tokens';
 
 export const CURRENCY_MAP = {
     sUSD: 'sUSD',
@@ -29,6 +29,7 @@ export const currencyKeyToAssetIconMap = {
     [CRYPTO_CURRENCY_MAP.USDT]: USDTIcon,
 };
 
+// TODO: this will be deleted when define collaterals by network
 export enum COLLATERALS_INDEX {
     'sUSD' = 0,
     'DAI' = 1,

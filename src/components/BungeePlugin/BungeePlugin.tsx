@@ -5,11 +5,14 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
-import { getDefaultCollateralIndexForNetworkId, Network } from 'utils/network';
+import styled, { useTheme } from 'styled-components';
+import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
+import { mainnet } from 'wagmi';
+import { ThemeInterface } from 'types/ui';
+import { hexToRGB } from 'utils/style';
 
 type CustomizationProps = {
     width?: number;
@@ -26,9 +29,10 @@ type CustomizationProps = {
     outline?: string;
 };
 
-const SUPPORTED_DESTINATION_NETWORKS = [Network['Mainnet-Ovm'], Network.Arbitrum];
+const SUPPORTED_DESTINATION_NETWORKS = [Network.OptimismMainnet, Network.ArbitrumOne];
 
 const BungeePlugin: React.FC = () => {
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -38,7 +42,7 @@ const BungeePlugin: React.FC = () => {
         console.error('Bungee API_KEY not found!');
     }
 
-    const defaultSourceNetwork = Network.Mainnet;
+    const defaultSourceNetwork = mainnet.id;
 
     const destinationNetworks = SUPPORTED_DESTINATION_NETWORKS.includes(networkId)
         ? SUPPORTED_DESTINATION_NETWORKS.filter((id: number) => id === networkId)
@@ -54,7 +58,7 @@ const BungeePlugin: React.FC = () => {
             token.chainId === defaultDestNetwork &&
             token.symbol ===
                 COLLATERAL_INDEX_TO_COLLATERAL[
-                    getDefaultCollateralIndexForNetworkId(defaultDestNetwork as NetworkId)
+                    getDefaultCollateralIndexForNetworkId(defaultDestNetwork as Network)
                 ].toUpperCase() // SUSD is symbol on Bungee instead of sUSD
     )[0]?.address;
 
@@ -62,15 +66,15 @@ const BungeePlugin: React.FC = () => {
     const customize: CustomizationProps = {
         width: isMobile ? 360 : 386, // 360 is min-width
         responsiveWidth: false,
-        accent: 'rgb(95,97,128)', // button
-        onAccent: 'rgb(255,255,255)', // button text
-        primary: 'rgb(26,28,43)', // background
-        secondary: 'rgb(81,84,111)', // main button wrapper
-        text: 'rgb(255,255,255)',
-        secondaryText: 'rgb(255,255,255)',
-        interactive: 'rgb(26,28,43)', // dropdown
-        onInteractive: 'rgb(255,255,255)', // dropdown text
-        outline: 'rgb(95,97,128)',
+        accent: hexToRGB(theme.button.background.primary), // button
+        onAccent: hexToRGB(theme.button.textColor.secondary), // button text
+        primary: hexToRGB(theme.background.primary), // background
+        secondary: hexToRGB(theme.button.background.tertiary), // main button wrapper
+        text: hexToRGB(theme.textColor.primary),
+        secondaryText: hexToRGB(theme.textColor.primary),
+        interactive: hexToRGB(theme.background.primary), // dropdown
+        onInteractive: hexToRGB(theme.textColor.primary), // dropdown text
+        outline: hexToRGB(theme.button.background.primary),
     };
 
     return (
@@ -97,7 +101,7 @@ const BungeeWrapper = styled.div`
     width: 386px;
     height: 463px;
     margin: auto;
-    background: #1a1c2b;
+    background: ${(props) => props.theme.background.primary};
     border-radius: 15px;
     outline: none;
     @media (max-width: 950px) {

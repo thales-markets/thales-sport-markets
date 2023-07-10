@@ -3,8 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE, OddsType } from 'constants/markets';
-import { Position } from 'constants/options';
+import { APPROVAL_BUFFER, COLLATERALS, MAX_USD_SLIPPAGE } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
@@ -44,23 +43,25 @@ import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyContainer,
-    AmountToBuyInput,
     InfoContainer,
     InfoLabel,
     InfoValue,
     InfoWrapper,
     InputContainer,
-    MaxButton,
     RowContainer,
     RowSummary,
     ShareWrapper,
-    SubmitButton,
     SummaryLabel,
     SummaryValue,
     TwitterIcon,
-    ValidationTooltip,
+    defaultButtonProps,
 } from '../styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
+import { OddsType, Position } from 'enums/markets';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
+import Button from 'components/Button';
+import NumericInput from 'components/fields/NumericInput';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -72,6 +73,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
+    const theme: ThemeInterface = useTheme();
 
     const dispatch = useDispatch();
 
@@ -95,7 +97,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [maxUsdAmount, setMaxUsdAmount] = useState(0);
     const [availableUsdAmount, setAvailableUsdAmount] = useState(0);
-    const [isFetching, setIsFetching] = useState(false);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState('');
@@ -228,7 +229,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
     useEffect(() => {
         const getMaxUsdAmount = async () => {
-            setIsFetching(true);
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
@@ -249,12 +249,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                         const calculatedMaxAmount = paymentTokenBalance * MAX_USD_SLIPPAGE;
                         setMaxUsdAmount(floorNumberToDecimals(calculatedMaxAmount));
                     }
-                    setIsFetching(false);
                     return;
                 }
                 setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * MAX_USD_SLIPPAGE));
             }
-            setIsFetching(false);
         };
         getMaxUsdAmount();
     }, [
@@ -533,7 +531,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             return;
         }
 
-        setSubmitDisabled(!paymentTokenBalance || Number(usdAmountValue) > paymentTokenBalance);
+        setSubmitDisabled(!paymentTokenBalance || Number(usdAmountValue) > Number(paymentTokenBalance));
     }, [
         usdAmountValue,
         isBuying,
@@ -547,29 +545,33 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
     const getSubmitButton = () => {
         if (isAMMPaused) {
-            return <SubmitButton disabled={submitDisabled}>{t('common.errors.single-amm-paused')}</SubmitButton>;
+            return (
+                <Button disabled={submitDisabled} {...defaultButtonProps}>
+                    {t('common.errors.single-amm-paused')}
+                </Button>
+            );
         }
 
         if (!isWalletConnected) {
             return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
+                <Button onClick={() => openConnectModal?.()} {...defaultButtonProps}>
                     {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
+                </Button>
             );
         }
         // Show Approve only on valid input buy amount
         if (!hasAllowance && usdAmountValue && tokenAmount >= MIN_TOKEN_AMOUNT) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)}>
+                <Button disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
                     {t('common.wallet.approve')}
-                </SubmitButton>
+                </Button>
             );
         }
 
         return (
-            <SubmitButton disabled={submitDisabled} onClick={async () => handleSubmit()}>
+            <Button disabled={submitDisabled} onClick={async () => handleSubmit()} {...defaultButtonProps}>
                 {t(`common.buy-side`)}
-            </SubmitButton>
+            </Button>
         );
     };
 
@@ -609,13 +611,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= Number(paymentTokenBalance));
     const hideProfit =
         ammPosition.quote <= 0 ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= paymentTokenBalance);
+        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= Number(paymentTokenBalance));
 
     const profitPercentage = (tokenAmount - ammPosition.quote) / ammPosition.quote;
 
@@ -663,29 +665,25 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
-                <ValidationTooltip
-                    open={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
-                    title={tooltipTextUsdAmount}
-                    placement={'top'}
-                    arrow={true}
-                >
-                    <AmountToBuyContainer>
-                        <AmountToBuyInput
-                            name="usdAmount"
-                            type="number"
-                            value={usdAmountValue}
-                            onChange={(e) => {
-                                if (countDecimals(Number(e.target.value)) > 2) {
-                                    return;
-                                }
-                                setUsdAmount(e.target.value);
-                            }}
-                        />
-                        <MaxButton disabled={isFetching} onClick={() => setUsdAmount(maxUsdAmount)}>
-                            {t('markets.market-details.max')}
-                        </MaxButton>
-                    </AmountToBuyContainer>
-                </ValidationTooltip>
+                <AmountToBuyContainer>
+                    <NumericInput
+                        value={usdAmountValue}
+                        onChange={(e) => {
+                            if (Number(countDecimals(Number(e.target.value))) > 2) {
+                                return;
+                            }
+                            setUsdAmount(e.target.value);
+                        }}
+                        onMaxButton={() => setUsdAmount(maxUsdAmount)}
+                        showValidation={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
+                        validationMessage={tooltipTextUsdAmount}
+                        inputFontSize="18px"
+                        inputFontWeight="700"
+                        inputTextAlign="center"
+                        inputPadding="5px 10px"
+                        borderColor={theme.input.borderColor.tertiary}
+                    />
+                </AmountToBuyContainer>
             </InputContainer>
             <InfoContainer>
                 <InfoWrapper>

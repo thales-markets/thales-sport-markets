@@ -7,8 +7,8 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { OvertimeVoucher } from 'types/tokens';
-import { getCollateralIndexByCollateralKey, getStableIcon, StablecoinKey } from 'utils/collaterals';
+import { OvertimeVoucher, StablecoinKey } from 'types/tokens';
+import { getCollateralIndexByCollateralKey, getStableIcon } from 'utils/collaterals';
 import { formatCurrency } from 'utils/formatters/number';
 import { isMultiCollateralSupportedForNetwork } from 'utils/network';
 
@@ -152,7 +152,7 @@ const CollateralBalance = styled.span<{ selected?: boolean }>`
     font-weight: 400;
     font-size: 10px;
     line-height: 150%;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
 `;
 

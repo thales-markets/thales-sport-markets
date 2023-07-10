@@ -13,8 +13,6 @@ import {
     SportMarketInfo,
     SportMarkets,
 } from 'types/markets';
-import { POSITION_TO_ODDS_OBJECT_PROPERTY_NAME, Position } from 'constants/options';
-import { BetType } from 'constants/tags';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPositionType,
@@ -22,12 +20,13 @@ import {
 } from './markets';
 import {
     COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS,
-    ContractSGPOrder,
+    POSITION_TO_ODDS_OBJECT_PROPERTY_NAME,
     SGPCombinationsFromContractOrderMapping,
 } from 'constants/markets';
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from './formatters/ethers';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import localStore from './localStore';
+import { BetType, ContractSGPOrder, Position } from 'enums/markets';
 
 export const isSpecificCombinedPositionAddedToParlay = (
     parlayData: ParlaysMarketPosition[],

@@ -1,5 +1,3 @@
-import { Position } from 'constants/options';
-import { DoubleChanceMarketType } from 'constants/tags';
 import useAvailablePerDoubleChancePositionQuery from 'queries/markets/useAvailablePerDoubleChancePositionQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -7,6 +5,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { AvailablePerDoubleChancePosition, DoubleChanceMarketsInfo, SportMarketInfo } from 'types/markets';
 import PositionDetails from '../PositionDetails';
+import { DoubleChanceMarketType, Position } from 'enums/markets';
 
 const defaultAvailablePerDoubleChancePosition: AvailablePerDoubleChancePosition = {
     [DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE]: {

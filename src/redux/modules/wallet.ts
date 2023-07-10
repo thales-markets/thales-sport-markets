@@ -1,17 +1,17 @@
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { getAddress } from 'utils/formatters/ethers';
-import { NetworkNameById } from 'utils/network';
 import { RootState } from 'redux/rootReducer';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
+import { NetworkNameById } from 'constants/network';
 
 const sliceName = 'wallet';
 
 type WalletSliceState = {
     walletAddress: string | null;
-    networkId: NetworkId;
+    networkId: Network;
     networkName: string;
-    switchToNetworkId: NetworkId; // used to trigger manually network switch in App.js
+    switchToNetworkId: Network; // used to trigger manually network switch in App.js
 };
 
 const initialState: WalletSliceState = {
@@ -38,7 +38,7 @@ const walletDetailsSlice = createSlice({
         updateNetworkSettings: (
             state,
             action: PayloadAction<{
-                networkId: NetworkId;
+                networkId: Network;
             }>
         ) => {
             const { networkId } = action.payload;
@@ -49,7 +49,7 @@ const walletDetailsSlice = createSlice({
         switchToNetworkId: (
             state,
             action: PayloadAction<{
-                networkId: NetworkId;
+                networkId: Network;
             }>
         ) => {
             state.switchToNetworkId = action.payload.networkId;

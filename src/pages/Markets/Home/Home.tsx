@@ -5,7 +5,6 @@ import Loader from 'components/Loader';
 import Logo from 'components/Logo';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
-import { GlobalFiltersEnum, SportFilterEnum } from 'constants/markets';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
@@ -26,7 +25,6 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { addHoursToCurrentDate } from 'utils/formatters/date';
-import { NetworkIdByName } from 'utils/network';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
 import FilterTagsMobile from '../components/FilterTagsMobile';
@@ -38,6 +36,11 @@ import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
 import { setSGPFees } from 'redux/modules/parlay';
 import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
 import Checkbox from '../../../components/fields/Checkbox/Checkbox';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
+import { CSSProperties } from 'styled-components';
+import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import { Network } from 'enums/network';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -65,6 +68,7 @@ type AllMarkets = {
 const Home: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -361,7 +365,7 @@ const Home: React.FC = () => {
                     setShowBurger(false);
                 }}
                 shouldCloseOnOverlayClick={false}
-                style={customModalStyles}
+                style={getCustomModalStyles(theme)}
             >
                 <BurgerFiltersContainer>
                     <LogoContainer>
@@ -473,10 +477,19 @@ const Home: React.FC = () => {
                             isMobile={isMobile}
                         />
                     </GlobalFiltersContainer>
-                    <ApplyFiltersButton onClick={() => setShowBurger(false)}>
+                    <Button
+                        onClick={() => setShowBurger(false)}
+                        width="180px"
+                        height="43px"
+                        fontSize="16px"
+                        padding="5px 10px"
+                        backgroundColor={theme.button.background.quaternary}
+                        borderColor={theme.button.borderColor.secondary}
+                        additionalStyles={additionalApplyFiltersButtonStyle}
+                    >
                         {t('market.apply-filters')}
                         <ArrowIcon className={`icon icon--arrow-up`} />
-                    </ApplyFiltersButton>
+                    </Button>
                 </BurgerFiltersContainer>
             </ReactModal>
 
@@ -643,7 +656,16 @@ const Home: React.FC = () => {
                                         {t('market.no-markets-found')}{' '}
                                         {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
                                     </NoMarketsLabel>
-                                    <Button onClick={resetFilters}>{t('market.view-all-markets')}</Button>
+                                    <Button
+                                        onClick={resetFilters}
+                                        backgroundColor={theme.button.background.tertiary}
+                                        textColor={theme.button.textColor.quaternary}
+                                        borderColor={theme.button.borderColor.secondary}
+                                        fontWeight="400"
+                                        fontSize="15px"
+                                    >
+                                        {t('market.view-all-markets')}
+                                    </Button>
                                 </NoMarketsContainer>
                             ) : (
                                 <Suspense fallback={<Loader />}>
@@ -655,7 +677,7 @@ const Home: React.FC = () => {
                 </MainContainer>
                 {/* RIGHT PART */}
                 <SidebarContainer maxWidth={320}>
-                    {[NetworkIdByName.OptimismMainnet, NetworkIdByName.ArbitrumOne].includes(networkId) && <GetUsd />}
+                    {[Network.OptimismMainnet, Network.ArbitrumOne].includes(networkId) && <GetUsd />}
                     <Suspense fallback={<Loader />}>
                         <Parlay />
                     </Suspense>
@@ -736,9 +758,6 @@ const NoMarketsContainer = styled(FlexDivColumnCentered)`
     font-weight: bold;
     font-size: 28px;
     line-height: 100%;
-    button {
-        padding-top: 1px;
-    }
 `;
 
 const NoMarketsLabel = styled.span`
@@ -759,7 +778,7 @@ const BurgerFiltersContainer = styled(FlexDivColumn)`
     width: 100%;
     height: 100%;
     overflow: auto;
-    background: #303656;
+    background: ${(props) => props.theme.background.secondary};
     display: flex;
     z-index: 1000;
     @media (max-width: 1300px) {
@@ -780,24 +799,6 @@ const LogoContainer = styled.div`
     text-align: center;
 `;
 
-const ApplyFiltersButton = styled(Button)`
-    align-self: center;
-    height: 43px;
-    width: 180px;
-    margin-right: 5px;
-    position: fixed;
-    background: ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.background.primary};
-    border: none;
-    border-radius: 40px;
-    font-weight: 800;
-    font-size: 16px;
-    line-height: 210%;
-    letter-spacing: 0.035em;
-    text-transform: uppercase;
-    bottom: 3%;
-`;
-
 const ArrowIcon = styled.i`
     font-size: 30px;
     margin-right: -10px;
@@ -805,7 +806,7 @@ const ArrowIcon = styled.i`
     writing-mode: vertical-lr;
 `;
 
-const customModalStyles = {
+const getCustomModalStyles = (theme: ThemeInterface) => ({
     content: {
         top: '0',
         overflow: 'auto',
@@ -820,9 +821,16 @@ const customModalStyles = {
         height: '100vh',
     },
     overlay: {
-        backgroundColor: '#303656',
+        backgroundColor: theme.background.secondary,
         zIndex: '1000',
     },
+});
+
+const additionalApplyFiltersButtonStyle: CSSProperties = {
+    alignSelf: 'center',
+    borderRadius: '40px',
+    bottom: '3%',
+    position: 'fixed',
 };
 
 const CheckboxContainer = styled.div<{ isMobile: boolean }>`

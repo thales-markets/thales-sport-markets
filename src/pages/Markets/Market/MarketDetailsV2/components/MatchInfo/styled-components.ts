@@ -1,4 +1,3 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivRow, FlexDivColumn, FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 
@@ -25,11 +24,11 @@ export const ParticipantsContainer = styled(FlexDivRow)`
 `;
 
 export const ParticipantLogoContainer = styled.div<{ awayTeam?: boolean; isWinner: boolean; isDraw: boolean }>`
-    border: 2.5px solid #5f6180;
+    border: 2.5px solid ${(props) => props.theme.borderColor.primary};
     margin-left: ${(props) => (props.awayTeam ? '-1vw' : '0')};
-    background-color: ${MAIN_COLORS.DARK_GRAY};
-    border-color: ${(props) => (props.isWinner ? MAIN_COLORS.BORDERS.LIGHT_BLUE : MAIN_COLORS.BORDERS.GRAY)};
-    box-shadow: ${(props) => (props.isWinner || props.isDraw ? MAIN_COLORS.SHADOWS.WINNER : '')};
+    background-color: ${(props) => props.theme.background.primary};
+    border-color: ${(props) => (props.isWinner ? props.theme.borderColor.quaternary : props.theme.borderColor.primary)};
+    box-shadow: ${(props) => (props.isWinner || props.isDraw ? props.theme.shadow.winner : '')};
     z-index: ${(props) => (props.isWinner ? '1' : '')};
     width: 100px;
     height: 100px;

@@ -92,7 +92,7 @@ const Checkmark = styled.span<{ checked: boolean }>`
     left: 0;
     height: 24px;
     width: 24px;
-    border: 4px solid ${(props) => (props.checked ? '#5fc694' : '#5F6180')};
+    border: 4px solid ${(props) => (props.checked ? props.theme.borderColor.tertiary : props.theme.borderColor.primary)};
     background-color: transparent;
     border-radius: 50%;
     margin-top: 0px;
@@ -105,7 +105,7 @@ const Checkmark = styled.span<{ checked: boolean }>`
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background: #5fc694;
+        background: ${(props) => props.theme.button.background.primary};
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);

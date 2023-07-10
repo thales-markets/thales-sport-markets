@@ -10,7 +10,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
 import { VaultTrades, VaultTrade, VaultUserTransactions, VaultUserTransaction } from 'types/vault';
 import SelectInput from 'components/SelectInput';
-import { isParlayVault, VaultTradeStatus, VaultTransaction } from 'constants/vault';
+import { isParlayVault } from 'constants/vault';
 import { formatCurrency, formatPercentageWithSign } from 'utils/formatters/number';
 import useVaultUserTransactionsQuery from 'queries/vault/useVaultUserTransactionsQuery';
 import UserTransactionsTable from '../UserTransactionsTable';
@@ -19,6 +19,7 @@ import ParlayTransactionsTable from 'components/ParlayTransactionsTable/ParlayTr
 import TradesTable from '../TradesTable';
 import { ParlayMarketWithRound } from 'types/markets';
 import { isParlayClaimable, isParlayOpen } from 'utils/markets';
+import { VaultTradeStatus, VaultTransaction } from 'enums/vault';
 
 type TransactionsProps = {
     vaultAddress: string;
@@ -280,23 +281,6 @@ const Tab = styled(FlexDivCentered)<{ isActive: boolean; index: number }>`
 
 const TableContainer = styled(FlexDivColumn)`
     overflow: auto;
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #04045a;
-        border-radius: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-        border-radius: 15px;
-        background: #355dff;
-    }
-    ::-webkit-scrollbar-thumb:active {
-        background: #44e1e2;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: rgb(67, 116, 255);
-    }
     @media (max-width: 767px) {
         width: 700px;
     }
