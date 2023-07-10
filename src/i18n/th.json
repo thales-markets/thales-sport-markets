@@ -84,7 +84,8 @@
             "batch-transaction-single-failure": "ธุรกรรมถูกปฏิเสธหรือล้มเหลว",
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
-            "single-amm-paused": "AMM หยุดชั่วคราว"
+            "single-amm-paused": "AMM หยุดชั่วคราว",
+            "invalid-amount-max": "จำนวนเงินต้องไม่เกิน {{max}}"
         },
         "time-remaining": {
             "ended": "เสร็จสิ้น",

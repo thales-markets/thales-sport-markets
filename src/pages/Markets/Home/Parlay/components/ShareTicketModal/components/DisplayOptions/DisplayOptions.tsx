@@ -5,9 +5,10 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { TwitterIcon } from '../../../styled-components';
+import { ThemeInterface } from 'types/ui';
 
 export type DisplayOptionsType = {
     isSimpleView: boolean;
@@ -27,6 +28,7 @@ const DisplayOptions: React.FC<DisplayOptionsProps> = ({
     onShare,
 }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const theme: ThemeInterface = useTheme();
 
     const [isSimpleView, setIsSimpleView] = useState(defaultDisplayOptions.isSimpleView);
 
@@ -61,14 +63,29 @@ const DisplayOptions: React.FC<DisplayOptionsProps> = ({
                 active={isSimpleView}
                 disabled={isDisabled}
                 dotSize="18px"
-                dotBackground="#ffffff"
+                dotBackground={theme.input.background.primary}
                 handleClick={onOptionToggleViewClickHandler}
             />
             <Option>
-                <ShareButton disabled={isDisabled} onClick={onShareClickHandler}>
+                <Button
+                    disabled={isDisabled}
+                    onClick={onShareClickHandler}
+                    backgroundColor={
+                        isMobile
+                            ? 'linear-gradient(88.08deg, #3ca8ca 0.6%, #1748b1 101.56%)'
+                            : theme.button.background.quaternary
+                    }
+                    borderColor={isMobile ? 'transparent' : theme.button.borderColor.secondary}
+                    textColor={isMobile ? theme.button.textColor.secondary : theme.button.textColor.primary}
+                    width="100%"
+                    margin={isMobile ? '10px 0 0 0' : '20px 0 0 0'}
+                    fontSize="20px"
+                    padding={isMobile ? '0px 30px' : '3px 30px'}
+                    additionalStyles={isMobile ? additionalMobileButtonStyle : undefined}
+                >
                     {t('markets.parlay.share-ticket.share')}
                     {isMobile && <TwitterIcon disabled={isDisabled} fontSize={'27px'} padding={'0 0 0 10px'} />}
-                </ShareButton>
+                </Button>
             </Option>
         </Container>
     );
@@ -88,7 +105,7 @@ const Container = styled(FlexDivColumnCentered)`
     font-size: 18px;
     line-height: 25px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     @media (max-width: 950px) {
         width: 100%;
         bottom: -132px;
@@ -110,22 +127,8 @@ const Option = styled(FlexDivRowCentered)`
     padding: 0 5px;
 `;
 
-const ShareButton = styled(Button)`
-    width: 100%;
-    margin-top: 20px;
-    background: #3fd1ff;
-    color: #04045a;
-    height: 34px;
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 23px;
-    @media (max-width: 950px) {
-        margin-top: 10px;
-        background: linear-gradient(88.08deg, #3ca8ca 0.6%, #1748b1 101.56%);
-        color: #ffffff;
-        border: none;
-    }
-`;
+const additionalMobileButtonStyle: CSSProperties = {
+    border: 'none',
+};
 
 export default DisplayOptions;

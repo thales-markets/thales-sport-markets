@@ -1,8 +1,7 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled, { css, keyframes } from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow, FlexDiv, FlexDivColumn } from 'styles/common';
 
-const WrapperAnimation = keyframes`
+const WrapperAnimation = (props: any) => keyframes`
     0% {
         visibility: none;
         top: -70vh;
@@ -10,20 +9,20 @@ const WrapperAnimation = keyframes`
     100% {
         visibility: visible;
         right: 0px;
-        -webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};
-        -moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};
-        box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};
+        -webkit-box-shadow: ${props.theme.shadow.navBar};
+        -moz-box-shadow: ${props.theme.shadow.navBar};
+        box-shadow: ${props.theme.shadow.navBar};
         width: 100%;
     }
 `;
 
-const WrapperAnimationClose = keyframes`
+const WrapperAnimationClose = (props: any) => keyframes`
     0% {
         visibility: visible;
         top: 0vh;
-        -webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};
-        -moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};
-        box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};
+        -webkit-box-shadow: ${props.theme.shadow.navBar};
+        -moz-box-shadow: ${props.theme.shadow.navBar};
+        box-shadow: ${props.theme.shadow.navBar};
     }
     100% {
         visibility: none;
@@ -32,11 +31,11 @@ const WrapperAnimationClose = keyframes`
 `;
 
 const animationOpen = css`
-    animation: ${WrapperAnimation} 0.3s linear;
+    animation: ${(props) => WrapperAnimation(props)} 0.3s linear;
 `;
 
 const animationClose = css`
-    animation: ${WrapperAnimationClose} 0.3s linear;
+    animation: ${(props) => WrapperAnimationClose(props)} 0.3s linear;
 `;
 
 export const Wrapper = styled.div<{ show?: boolean | null }>`
@@ -49,15 +48,15 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     top: 0;
     left: 0;
     right: 0;
-    ${(_props) => (_props?.show == true ? 'top: 0;' : '')}
-    ${(_props) => (_props?.show == false || _props?.show == null ? 'top: -640px;' : '')}
-    ${(_props) => _props?.show === true && animationOpen};
+    ${(props) => (props.show == true ? 'top: 0;' : '')}
+    ${(props) => (props.show == false || props.show == null ? 'top: -640px;' : '')}
+    ${(props) => props.show === true && animationOpen};
     ${({ show }) => show === false && animationClose};
-    background-color: ${(props) => props.theme.nav.background};
+    background-color: ${(props) => props.theme.background.secondary};
     justify-content: space-between;
     z-index: 200;
-    ${(_props) => (_props?.show == true ? `-webkit-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')}
-    ${(_props) => (_props?.show == true ? `-moz-box-shadow: ${MAIN_COLORS.SHADOWS.NAV_BAR};` : '')}
+    ${(props) => (props.show == true ? `-webkit-box-shadow: ${props.theme.shadow.navBar};` : '')}
+    ${(props) => (props.show == true ? `-moz-box-shadow: ${props.theme.shadow.navBar};` : '')}
     padding: 20px 10px;
     border-radius: 0px 0px 25px 25px;
 `;
@@ -76,18 +75,18 @@ export const ItemContainer = styled.div<{ active?: boolean }>`
     margin-top: 15px;
     cursor: pointer;
     padding: 0px 5px;
-    ${(props) => (props.active ? `color: ${props.theme.nav.text.primary};` : '')}
+    ${(props) => (props.active ? `color: ${props.theme.textColor.quaternary};` : '')}
     :hover {
         i {
-            color: ${(props) => props.theme.nav.text.primary}!important;
+            color: ${(props) => props.theme.textColor.quaternary}!important;
         }
-        color: ${(props) => props.theme.nav.text.primary} !important;
+        color: ${(props) => props.theme.textColor.quaternary} !important;
     }
 `;
 
 export const NavLabel = styled.span<{ active?: boolean }>`
     font-size: 16px;
-    font-weight: ${(_props) => (_props?.active ? '600' : '400')};
+    font-weight: ${(props) => (props.active ? '600' : '400')};
     line-height: 120%;
     text-transform: uppercase;
 `;
@@ -95,7 +94,7 @@ export const NavLabel = styled.span<{ active?: boolean }>`
 export const NavIcon = styled.i<{ active?: boolean }>`
     font-size: 25px;
     margin-right: 10px;
-    color: ${(_props) => (_props?.active ? `${_props.theme.nav.text.primary}` : `${_props.theme.nav.text.secondary}`)};
+    color: ${(props) => (props.active ? `${props.theme.textColor.quaternary}` : `${props.theme.textColor.primary}`)};
 `;
 
 export const FooterContainer = styled(FlexDivColumn)`
@@ -112,13 +111,13 @@ export const Network = styled(FlexDivRow)`
 
 export const NetworkIcon = styled.i`
     font-size: 20px;
-    color: ${(props) => props.theme.nav.text.primary};
+    color: ${(props) => props.theme.textColor.quaternary};
     margin-right: 5px;
 `;
 
 export const NetworkName = styled.span`
     font-size: 12px;
-    color: ${(props) => props.theme.nav.text.secondary};
+    color: ${(props) => props.theme.textColor.primary};
     font-weight: 600;
 `;
 

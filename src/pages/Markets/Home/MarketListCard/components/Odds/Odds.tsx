@@ -1,6 +1,4 @@
-import { Position } from 'constants/options';
-import { BetType, BetTypeNameMap, DoubleChanceMarketType } from 'constants/tags';
-import { STATUS_COLOR } from 'constants/ui';
+import { BetTypeNameMap } from 'constants/tags';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DoubleChanceMarketsInfo, SportMarketInfo } from 'types/markets';
@@ -8,6 +6,9 @@ import { getSpreadTotalText, getVisibilityOfDrawOption, isGolf, isMotosport } fr
 import { Status } from '../MatchStatus/MatchStatus';
 import Odd from '../Odd';
 import { Container, OddsContainer, Title } from './styled-components';
+import { BetType, DoubleChanceMarketType, Position } from 'enums/markets';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type OddsProps = {
     market: SportMarketInfo;
@@ -17,6 +18,7 @@ type OddsProps = {
 
 const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecondRow }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameResolved = market.isResolved || market.isCanceled;
@@ -53,7 +55,7 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
                 {spreadTotalText && ` ${spreadTotalText}`}
             </Title>
             {noOdds ? (
-                <Status color={STATUS_COLOR.COMING_SOON}>{t('markets.market-card.coming-soon')}</Status>
+                <Status color={theme.status.comingSoon}>{t('markets.market-card.coming-soon')}</Status>
             ) : (
                 <OddsContainer>
                     {mappedDoubleChanceMarkets ? (

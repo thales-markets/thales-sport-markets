@@ -2,13 +2,13 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { MarketTransaction, MarketTransactions } from 'types/markets';
-import { NetworkId } from 'types/network';
-import { Position } from 'constants/options';
+import { Network } from 'enums/network';
 import { SPORTS_TAGS_MAP, ENETPULSE_SPORTS, GOLF_TOURNAMENT_WINNER_TAG, JSON_ODDS_SPORTS } from 'constants/tags';
+import { Position } from 'enums/markets';
 
 const useUserTransactionsQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<MarketTransactions>
 ) => {
     return useQuery<MarketTransactions>(

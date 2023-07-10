@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { ParlayVaultTrade } from 'types/vault';
 import { updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 import { ParlayMarketWithRound, SportMarketInfo } from 'types/markets';
@@ -10,7 +10,7 @@ import { ENETPULSE_SPORTS } from 'constants/tags';
 
 const useParlayVaultTradesQuery = (
     vaultAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<ParlayMarketWithRound[]>
 ) => {
     return useQuery<ParlayMarketWithRound[]>(

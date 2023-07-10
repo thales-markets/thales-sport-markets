@@ -1,10 +1,9 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     position: relative;
-    background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    background-color: ${(props) => props.theme.background.secondary};
     padding: 6px 10px;
     border-radius: 5px;
     @media (max-width: 575px) {
@@ -35,7 +34,7 @@ export const ContentRow = styled(FlexDivRow)`
 
 export const Arrow = styled.i`
     font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     position: absolute;
     top: 4px;
     right: 5px;

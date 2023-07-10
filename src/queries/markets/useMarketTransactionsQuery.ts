@@ -2,11 +2,11 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { MarketTransactions } from 'types/markets';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 
 const useMarketTransactionsQuery = (
     marketAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     account?: string,
     options?: UseQueryOptions<MarketTransactions | undefined>
 ) => {

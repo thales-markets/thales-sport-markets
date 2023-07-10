@@ -11,10 +11,10 @@ import i18n from 'i18n';
 import { formatCurrency } from 'utils/formatters/number';
 import SPAAnchor from 'components/SPAAnchor';
 import { VaultTrade, VaultTrades } from 'types/vault';
-import { VaultTradeStatus } from 'constants/vault';
 import { Colors } from 'styles/common';
 import PositionSymbol from 'components/PositionSymbol';
 import { getOddTooltipText, getParentMarketAddress, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import { VaultTradeStatus } from 'enums/vault';
 
 type TradesTableProps = {
     transactions: VaultTrades;

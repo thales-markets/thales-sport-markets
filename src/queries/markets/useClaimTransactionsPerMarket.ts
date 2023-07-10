@@ -2,11 +2,11 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ClaimTransaction, ClaimTransactions } from 'types/markets';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 
 const useClaimTransactionsPerMarket = (
     marketAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<ClaimTransactions | undefined>
 ) => {
     const KEEPER_BOT_CALLER_ADDRESS = '0x3292e6583dfa145fc25cfe3a74d8f66846683633';

@@ -7,7 +7,6 @@ import Search from 'components/Search';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
-import { MAIN_COLORS } from 'constants/ui';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 import React, { useState } from 'react';
@@ -24,6 +23,8 @@ import styled from 'styled-components';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 const PULSING_COUNT = 10;
 
@@ -52,6 +53,7 @@ const DappHeader: React.FC = () => {
 
     const dispatch = useDispatch();
     const location = useLocation();
+    const theme: ThemeInterface = useTheme();
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -91,7 +93,15 @@ const DappHeader: React.FC = () => {
                     <RightContainer>
                         {location.pathname !== ROUTES.Wizard && (
                             <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.Wizard)}>
-                                <Button fontSize={12.5}>{t('markets.nav-menu.labels.get-started')}</Button>
+                                <Button
+                                    backgroundColor={theme.button.background.tertiary}
+                                    textColor={theme.button.textColor.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    fontWeight="400"
+                                    fontSize="12.5px"
+                                >
+                                    {t('markets.nav-menu.labels.get-started')}
+                                </Button>
                             </SPAAnchor>
                         )}
                         <WalletInfo />
@@ -153,8 +163,13 @@ const DappHeader: React.FC = () => {
                     {location.pathname !== ROUTES.Wizard && (
                         <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
                             <Button
-                                style={{ width: '100%', marginTop: '10px', padding: '7px', background: '#303656' }}
-                                fontSize={14}
+                                backgroundColor={theme.button.background.secondary}
+                                textColor={theme.button.textColor.quaternary}
+                                borderColor={theme.button.borderColor.secondary}
+                                fontWeight="400"
+                                height="24px"
+                                width="100%"
+                                margin="10px 0 0 0"
                             >
                                 {t('markets.nav-menu.labels.get-started')}
                             </Button>
@@ -280,12 +295,12 @@ const NotificationCount = styled.div`
     justify-content: center;
     height: 16px;
     width: 16px;
-    background-color: ${MAIN_COLORS.BACKGROUNDS.BLUE};
-    box-shadow: ${MAIN_COLORS.SHADOWS.NOTIFICATION};
+    background-color: ${(props) => props.theme.background.quaternary};
+    box-shadow: ${(props) => props.theme.shadow.notification};
 `;
 
 const Count = styled.span`
-    color: ${MAIN_COLORS.DARK_GRAY};
+    color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 800;
     font-size: 12px;
 `;

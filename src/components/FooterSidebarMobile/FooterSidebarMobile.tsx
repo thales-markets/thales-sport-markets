@@ -15,7 +15,7 @@ import {
 import ConnectWalletButtonMobile from 'components/ConnectWalletButtonMobile';
 import { t } from 'i18next';
 import { FlexDivCentered } from 'styles/common';
-import { OddsType, ODDS_TYPES } from 'constants/markets';
+import { ODDS_TYPES } from 'constants/markets';
 import { setOddsType } from 'redux/modules/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -23,6 +23,7 @@ import { getParlay } from 'redux/modules/parlay';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
+import { OddsType } from 'enums/markets';
 
 type FooterSidebarMobileProps = {
     setParlayMobileVisibility: (value: boolean) => void;

@@ -3,10 +3,10 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ParlayAmmData } from 'types/markets';
 import networkConnector from 'utils/networkConnector';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
-const useParlayAmmDataQuery = (networkId: NetworkId, options?: UseQueryOptions<ParlayAmmData | undefined>) => {
+const useParlayAmmDataQuery = (networkId: Network, options?: UseQueryOptions<ParlayAmmData | undefined>) => {
     return useQuery<ParlayAmmData | undefined>(
         QUERY_KEYS.ParlayAmmData(networkId),
         async () => {

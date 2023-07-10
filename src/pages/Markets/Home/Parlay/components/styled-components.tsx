@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Tooltip, withStyles } from '@material-ui/core';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
+import MuiTooltip from '@material-ui/core/Tooltip';
 
 export const RowSummary = styled.div<{ columnDirection?: boolean }>`
     display: flex;
@@ -19,7 +19,7 @@ export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
     line-height: 27px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
     ${(props) => (props.alignRight ? `margin-left: auto;` : '')}
     @media (max-width: 950px) {
         line-height: 24px;
@@ -32,7 +32,7 @@ export const SummaryValue = styled.span<{ isInfo?: boolean; isCurrency?: boolean
     line-height: 12px;
     letter-spacing: 0.025em;
     display: ${(props) => (props.isHidden ? 'none' : '')};
-    color: ${(props) => (props.isInfo || props.isCurrency ? '#5fc694' : '#ffffff')};
+    color: ${(props) => (props.isInfo || props.isCurrency ? props.theme.status.win : props.theme.textColor.primary)};
     margin-left: ${(props) => (props.isInfo ? 'auto' : '5px')};
 `;
 
@@ -50,81 +50,46 @@ export const InfoLabel = styled.span<{ marginLeft?: number }>`
     font-weight: 300;
     font-size: 10px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.marginLeft ? `margin-left: ${props.marginLeft}px;` : '')}
 `;
 
 export const InfoValue = styled.span`
     font-weight: 700;
     font-size: 10px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-left: 4px;
 `;
 
 export const InputContainer = styled(FlexDiv)``;
 
-export const ValidationTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        width: '296px',
-        marginBottom: '7px',
-        backgroundColor: '#23273D',
-        color: '#E26A78',
-        border: '1.5px solid #E26A78',
-        borderRadius: '2px',
-        fontSize: '10px',
-        fontWeight: 600,
-        textTransform: 'uppercase',
-    },
-    arrow: {
-        '&:before': {
-            border: '1.5px solid #E26A78',
-            backgroundColor: '#23273D',
-            boxSizing: 'border-box',
-        },
-        width: '13px',
-        height: '10px',
-        bottom: '-3px !important',
-    },
-}))(Tooltip);
-
-export const InfoTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        marginBottom: '7px',
-        backgroundColor: '#303656',
-        color: '#FAC439',
-        border: '1.5px solid #FAC439',
-        borderRadius: '2px',
-        fontSize: '9px',
-        lineHeight: '12px',
-        textTransform: 'uppercase',
-    },
-    arrow: {
-        '&:before': {
-            border: '1.5px solid #FAC439',
-            backgroundColor: '#303656',
-            boxSizing: 'border-box',
-        },
-        width: '11px',
-        height: '8px',
-        bottom: '-2px !important',
-    },
-}))(Tooltip);
+export const InfoTooltip = styled((props) => <MuiTooltip classes={{ popper: props.className }} {...props} />)`
+    & .MuiTooltip-tooltip {
+        min-width: 100%;
+        margin-bottom: 7px;
+        background-color: ${(props) => props.theme.warning.background.primary};
+        color: ${(props) => props.theme.warning.textColor.primary};
+        border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
+        border-radius: 2px;
+        font-size: 9px;
+        line-height: 12px;
+        text-transform: uppercase;
+    }
+    & .MuiTooltip-arrow {
+        &:before {
+            border: 1.5px solid ${(props) => props.theme.warning.borderColor.primary};
+            background-color: ${(props) => props.theme.warning.background.primary};
+            box-sizing: border-box;
+        }
+        width: 11px;
+        height: 8px;
+        bottom: -2px !important;
+    }
+`;
 
 export const AmountToBuyContainer = styled.div`
     position: relative;
-`;
-
-export const AmountToBuyInput = styled.input`
-    width: 296px;
-    margin-bottom: 5px;
-    border: 3px solid #3accfa;
-    border-radius: 5px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 18px;
-    outline: none;
+    width: 100%;
 `;
 
 export const AmountToBuyMultiContainer = styled.div`
@@ -134,25 +99,13 @@ export const AmountToBuyMultiContainer = styled.div`
     align-items: flex-end;
 `;
 
-export const AmountToBuyMultiInput = styled.input`
-    width: 80px;
-    margin-left: 2px;
-    margin-bottom: 5px;
-    border: 2px solid #3accfa;
-    border-radius: 3px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 13px;
-    outline: none;
-`;
-
 export const AmountToBuyMultiInfoLabel = styled.span<{ alignRight?: boolean }>`
     font-weight: 400;
     font-size: 11px;
     line-height: 27px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
     ${(props) => (props.alignRight ? `margin-left: auto;` : '')}
     @media (max-width: 950px) {
         line-height: 24px;
@@ -165,7 +118,7 @@ export const AmountToBuyMultiPayoutLabel = styled.span<{ alignRight?: boolean }>
     line-height: 27px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
     margin-left: auto;
 `;
 
@@ -175,39 +128,8 @@ export const AmountToBuyMultiPayoutValue = styled.span<{ isInfo?: boolean; isCur
     line-height: 27px;
     letter-spacing: 0.025em;
     display: ${(props) => (props.isHidden ? 'none' : '')};
-    color: ${(props) => (props.isInfo || props.isCurrency ? '#5fc694' : '#ffffff')};
+    color: ${(props) => (props.isInfo || props.isCurrency ? props.theme.status.win : props.theme.textColor.primary)};
     margin-left: 5px;
-`;
-
-export const MaxButton = styled.button`
-    background: #3accfa;
-    font-size: 10px;
-    line-height: 12px;
-    position: absolute;
-    top: 6px;
-    right: 5px;
-    border: none;
-    cursor: pointer;
-`;
-
-export const SubmitButton = styled.button`
-    margin-top: 10px;
-    background: #5fc694;
-    border-radius: 5px;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 17px;
-    letter-spacing: 0.025em;
-    color: #1c1f2f;
-    width: 100%;
-    border: none;
-    padding: 7px;
-    cursor: pointer;
-    text-transform: uppercase;
-    &:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-    }
 `;
 
 export const BalanceWrapper = styled.div`
@@ -221,7 +143,7 @@ export const BalanceLabel = styled.span<{ marginLeft?: string; bold?: boolean; o
     line-height: 27px;
     letter-spacing: 0.025em;
     ${(props) => (props.originalText ? '' : 'text-transform: uppercase;')}
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.marginLeft ? `margin-left: ${props.marginLeft};` : '')}
     font-weight: ${(props) => (props.bold ? '700' : '400')};
     @media (max-width: 950px) {
@@ -234,7 +156,7 @@ export const BalanceValue = styled.span`
     font-size: 11px;
     line-height: 27px;
     letter-spacing: 0.025em;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-left: 5px;
     @media (max-width: 950px) {
         line-height: 24px;
@@ -244,7 +166,7 @@ export const BalanceValue = styled.span`
 export const XButton = styled.i<{ margin?: string }>`
     font-size: 15px;
     font-weight: 700;
-    color: #ca4c53;
+    color: ${(props) => props.theme.status.loss};
     cursor: pointer;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
     &:hover {
@@ -258,7 +180,7 @@ export const ShareWrapper = styled(FlexDivCentered)`
 
 export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
     font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
-    color: ${(props) => (props.color ? props.color : ' #ffffff')};
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.primary)};
     cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
@@ -267,3 +189,9 @@ export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; pad
         content: '\\005C';
     }
 `;
+
+export const defaultButtonProps = {
+    width: '100%',
+    margin: '10px 0 0 0',
+    padding: '5px 30px',
+};

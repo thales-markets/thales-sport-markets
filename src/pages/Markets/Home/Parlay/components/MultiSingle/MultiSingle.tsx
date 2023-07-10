@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, COLLATERALS, OddsType } from 'constants/markets';
+import { APPROVAL_BUFFER, COLLATERALS } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useAvailablePerPositionMultiQuery from 'queries/markets/useAvailablePerPositionMultiQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -39,7 +39,6 @@ import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyMultiContainer,
     AmountToBuyMultiInfoLabel,
-    AmountToBuyMultiInput,
     AmountToBuyMultiPayoutLabel,
     AmountToBuyMultiPayoutValue,
     InfoContainer,
@@ -49,18 +48,22 @@ import {
     RowContainer,
     RowSummary,
     ShareWrapper,
-    SubmitButton,
     SummaryLabel,
     SummaryValue,
     TwitterIcon,
-    ValidationTooltip,
     XButton,
+    defaultButtonProps,
 } from '../styled-components';
 import { ListContainer } from 'pages/Profile/components/Positions/styled-components';
 import MatchInfo from '../MatchInfo';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
+import { getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { OddsType } from 'enums/markets';
+import Button from 'components/Button';
+import NumericInput from 'components/fields/NumericInput';
+import { ThemeInterface } from 'types/ui';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -71,6 +74,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
+    const theme: ThemeInterface = useTheme();
 
     const dispatch = useDispatch();
 
@@ -245,7 +249,9 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         const fetchData = async () => {
             setIsRecalculating(true);
 
-            const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
+            const divider = isVoucherSelected
+                ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
+                : Number(`1e${getDecimalsByStableCoinIndex(selectedStableIndex)}`);
             const { sportsAMMContract, signer } = networkConnector;
             const tokenAndBonusArr = [] as MultiSingleTokenQuoteAndBonus[];
             const isFetchingRecords = isFetching;
@@ -373,6 +379,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         isFetching,
         isMultiCollateralSupported,
         networkId,
+        isVoucherSelected,
     ]);
 
     const availablePerPositionMultiQuery = useAvailablePerPositionMultiQuery(markets, {
@@ -587,29 +594,33 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
     const getSubmitButton = () => {
         if (isAMMPaused) {
-            return <SubmitButton disabled={submitDisabled}>{t('common.errors.single-amm-paused')}</SubmitButton>;
+            return (
+                <Button disabled={submitDisabled} {...defaultButtonProps}>
+                    {t('common.errors.single-amm-paused')}
+                </Button>
+            );
         }
 
         if (!isWalletConnected) {
             return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
+                <Button onClick={() => openConnectModal?.()} {...defaultButtonProps}>
                     {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
+                </Button>
             );
         }
 
         if (!hasAllowance) {
             return (
-                <SubmitButton disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)}>
+                <Button disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
                     {t('common.wallet.approve')}
-                </SubmitButton>
+                </Button>
             );
         }
 
         return (
-            <SubmitButton disabled={submitDisabled} onClick={async () => handleSubmit()}>
+            <Button disabled={submitDisabled} onClick={async () => handleSubmit()} {...defaultButtonProps}>
                 {t(`common.buy-side`)}
-            </SubmitButton>
+            </Button>
         );
     };
 
@@ -732,30 +743,32 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                             </RowMarket>
                             <AmountToBuyMultiContainer ref={inputRef}>
                                 <AmountToBuyMultiInfoLabel>{t('markets.parlay.buy-in')}:</AmountToBuyMultiInfoLabel>{' '}
-                                <ValidationTooltip
-                                    open={
+                                <NumericInput
+                                    key={`${index}-${market.address}-ms-amount`}
+                                    value={
+                                        multiSingleAmounts.find((m) => market.address === m.sportMarketAddress)
+                                            ?.amountToBuy || ''
+                                    }
+                                    onChange={(e) => {
+                                        if (Number(countDecimals(Number(e.target.value))) > 2) {
+                                            return;
+                                        }
+                                        setMultiSingleUsd(market, Number(e.target.value));
+                                    }}
+                                    showValidation={
                                         inputRefVisible && !!tooltipTextUsdAmount[market.address] && !openApprovalModal
                                     }
-                                    title={tooltipTextUsdAmount[market.address]}
-                                    placement={'top'}
-                                    arrow={true}
-                                >
-                                    <AmountToBuyMultiInput
-                                        key={`${index}-${market.address}-ms-amount`}
-                                        name="usdAmount"
-                                        type="number"
-                                        value={
-                                            multiSingleAmounts.find((m) => market.address === m.sportMarketAddress)
-                                                ?.amountToBuy || ''
-                                        }
-                                        onChange={(e) => {
-                                            if (countDecimals(Number(e.target.value)) > 2) {
-                                                return;
-                                            }
-                                            setMultiSingleUsd(market, Number(e.target.value));
-                                        }}
-                                    />
-                                </ValidationTooltip>
+                                    validationMessage={tooltipTextUsdAmount[market.address] || ''}
+                                    inputFontSize="13px"
+                                    inputFontWeight="700"
+                                    inputTextAlign="center"
+                                    inputPadding="2px 0px"
+                                    width="80px"
+                                    height="21px"
+                                    margin="0 0 5px 2px"
+                                    containerWidth="auto"
+                                    borderColor={theme.input.borderColor.tertiary}
+                                />
                                 <AmountToBuyMultiPayoutLabel>{t('markets.parlay.payout')}:</AmountToBuyMultiPayoutLabel>{' '}
                                 <AmountToBuyMultiPayoutValue isInfo={true}>
                                     {isFetching[market.address] ||
@@ -872,7 +885,7 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     text-align: center;
     padding: ${(props) => (props.outOfLiquidity ? '5px' : '5px 0px')};
     ${(props) => (props.outOfLiquidity ? 'background: rgba(26, 28, 43, 0.5);' : '')}
-    ${(props) => (props.outOfLiquidity ? 'border: 2px solid #e26a78;' : '')}
+    ${(props) => (props.outOfLiquidity ? `border: 2px solid ${props.theme.status.loss};` : '')}
     ${(props) => (props.outOfLiquidity ? 'border-radius: 2px;' : '')}
 `;
 

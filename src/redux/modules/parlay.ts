@@ -1,6 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { COLLATERALS_INDEX } from 'constants/currency';
-import { ParlayErrorCode } from 'constants/markets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition, SGPItem } from 'types/markets';
 import localStore from 'utils/localStore';
@@ -8,6 +7,7 @@ import { RootState } from '../rootReducer';
 import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { GOLF_TAGS } from 'constants/tags';
+import { ParlayErrorCode } from 'enums/markets';
 
 const sliceName = 'parlay';
 
@@ -26,7 +26,7 @@ const getDefaultPayment = (): ParlayPayment => {
     return {
         selectedStableIndex:
             lsSelectedStable !== undefined ? (lsSelectedStable as COLLATERALS_INDEX) : COLLATERALS_INDEX.sUSD,
-        isVoucherSelected: false,
+        isVoucherSelected: undefined,
         amountToBuy: '',
     };
 };

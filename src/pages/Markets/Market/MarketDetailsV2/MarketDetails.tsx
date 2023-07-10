@@ -5,8 +5,8 @@ import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import ROUTES from 'constants/routes';
-import { BetType, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
-import { GAME_STATUS, MAIN_COLORS } from 'constants/ui';
+import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { GAME_STATUS } from 'constants/ui';
 import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -18,10 +18,10 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { NetworkIdByName } from 'utils/network';
+import { Network } from 'enums/network';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import Web3 from 'web3';
@@ -29,6 +29,8 @@ import Transactions from '../Transactions';
 import CombinedPositions from './components/CombinedPositions';
 import MatchInfo from './components/MatchInfo';
 import Positions from './components/Positions';
+import { BetType } from 'enums/markets';
+import { ThemeInterface } from 'types/ui';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -36,6 +38,7 @@ type MarketDetailsPropType = {
 
 const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -125,7 +128,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards:
-                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                networkId !== Network.ArbitrumOne
                                                     ? INCENTIVIZED_LEAGUE.opRewards
                                                     : INCENTIVIZED_LEAGUE.thalesRewards,
                                         }}
@@ -134,7 +137,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 component={
                                     <IncentivizedLeague>
                                         <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -157,7 +160,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards:
-                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                networkId !== Network.ArbitrumOne
                                                     ? INCENTIVIZED_GRAND_SLAM.opRewards
                                                     : INCENTIVIZED_GRAND_SLAM.arbRewards,
                                         }}
@@ -166,7 +169,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 component={
                                     <IncentivizedLeague>
                                         <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -174,7 +177,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                 </HeaderWrapper>
                 <MatchInfo market={market} liveResultInfo={liveResultInfo} isEnetpulseSport={isEnetpulseSport} />
                 {showStatus && (
-                    <Status backgroundColor={isGameCancelled ? MAIN_COLORS.BACKGROUNDS.RED : MAIN_COLORS.LIGHT_GRAY}>
+                    <Status backgroundColor={isGameCancelled ? theme.status.canceled : theme.background.secondary}>
                         {isPendingResolution ? (
                             !isEnetpulseSport && !isJsonOddsSport ? (
                                 <ResultContainer>
@@ -379,14 +382,14 @@ const IncentivizedTitle = styled.span`
 const Status = styled(FlexDivCentered)<{ backgroundColor?: string }>`
     width: 100%;
     border-radius: 15px;
-    background-color: ${(props) => props.backgroundColor || MAIN_COLORS.LIGHT_GRAY};
+    background-color: ${(props) => props.backgroundColor || props.theme.background.secondary};
     padding: 10px 50px;
     margin-bottom: 7px;
     font-weight: 600;
     font-size: 21px;
     line-height: 110%;
     text-transform: uppercase;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const ResultContainer = styled(FlexDivColumnCentered)`
@@ -402,7 +405,7 @@ const InfoLabel = styled.label`
     }
 
     &.red {
-        color: #e26a78;
+        color: ${(props) => props.theme.status.loss};
     }
 
     &.football {
@@ -412,7 +415,7 @@ const InfoLabel = styled.label`
     }
 
     &.blink {
-        color: #e26a78;
+        color: ${(props) => props.theme.status.loss};
         font-weight: 700;
         animation: blinker 1.5s step-start infinite;
     }

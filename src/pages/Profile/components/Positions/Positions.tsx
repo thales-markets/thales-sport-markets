@@ -1,12 +1,9 @@
 import React, { useMemo, useState } from 'react';
-
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Trans, useTranslation } from 'react-i18next';
-
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
 import useAccountMarketsQuery, { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { ParlayMarket } from 'types/markets';
@@ -21,7 +18,6 @@ import {
     EmptySubtitle,
     EmptyTitle,
     ListContainer,
-    ClaimAllButton,
     ClaimAllContainer,
 } from './styled-components';
 import { isParlayClaimable, isParlayOpen, isSportMarketExpired } from 'utils/markets';
@@ -40,9 +36,14 @@ import ShareTicketModal, {
     ShareTicketModalProps,
 } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { ethers } from 'ethers';
+import Button from 'components/Button';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
+import { getIsMobile } from 'redux/modules/app';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
@@ -59,6 +60,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
@@ -291,16 +293,20 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                             {parlayMarketsByStatus.claimable.length || accountPositionsByStatus.claimable.length ? (
                                 <>
                                     <ClaimAllContainer>
-                                        <ClaimAllButton
-                                            claimable={true}
+                                        <Button
                                             onClick={(e: any) => {
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 claimAllRewards();
                                             }}
+                                            backgroundColor={theme.button.background.quaternary}
+                                            borderColor={theme.button.borderColor.secondary}
+                                            padding={isMobile ? '2px 5px' : '3px 15px'}
+                                            fontSize={isMobile ? '9px' : undefined}
+                                            height={isMobile ? '19px' : undefined}
                                         >
                                             {t('profile.card.claim-all')}
-                                        </ClaimAllButton>
+                                        </Button>
                                     </ClaimAllContainer>
                                     {accountPositionsByStatus.claimable.map((singleMarket, index) => {
                                         return (

@@ -1,22 +1,11 @@
 import { NavMenuItem, ThemeInterface } from 'types/ui';
 import darkTheme from 'styles/themes/dark';
 import ROUTES from './routes';
-
-export enum Theme {
-    DARK,
-}
+import { Theme } from 'enums/ui';
+import { Network } from 'enums/network';
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
-};
-
-export const STATUS_COLOR = {
-    CLAIMABLE: '#3FD1FF',
-    STARTED: '#E26A78',
-    FINISHED: '#FFFFFF',
-    CANCELED: '#E26A78',
-    COMING_SOON: '#FAC439',
-    PAUSED: '#E26A78',
 };
 
 export const GAME_STATUS = {
@@ -25,48 +14,13 @@ export const GAME_STATUS = {
     HALF_TIME: 'STATUS_HALFTIME',
 };
 
-export const MAIN_COLORS = {
-    LIGHT_GRAY: '#303656',
-    GRAY: '#242842',
-    DARK_GRAY: '#1A1C2B',
-    DISABLED_GRAY: '#303656',
-    LIGHT_BLUE: '#3FD1FF',
-    DIVIDER_COLOR: '#5F6180',
-    BONUS: '#5FC694',
-    BACKGROUNDS: {
-        RED: '#BC515E',
-        BLUE: '#3FD1FF',
-    },
-    BORDERS: {
-        GRAY: '#5f6180',
-        LIGHT_BLUE: '#3FD1FF',
-        BLUE: '#64D9FE',
-        WHITE: '#FFFFFF',
-    },
-    SHADOWS: {
-        WINNER: '0px 0px 33px -7px rgba(63,209,255,1)',
-        POSITION_WINNER: '0px 0px 15px -7px rgba(63,209,255,1)',
-        DRAW: '0px 0px 33px -7px rgba(63,209,255,1)',
-        POSITION_HOVER: '0px 0px 39px -16px rgba(64,210,255,1)',
-        NAV_BAR: '-64px 0px 38px 3px rgba(0,0,0,0.41)',
-        NOTIFICATION: '0px 0px 20px rgba(63, 177, 213, 0.96)',
-    },
-    TEXT: {
-        BLUE: '#64D9FE',
-        WHITE: '#FFFFFF',
-        POTENTIAL_PROFIT: '#5FC694',
-        DARK_GRAY: '#5F6180',
-        CANCELED: '#E26A78',
-    },
-};
-
 export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
     {
         i18label: 'markets.nav-menu.items.profile',
         iconClass: 'icon icon--profile',
         name: 'profile',
         route: ROUTES.Profile,
-        supportedNetworks: [10, 420, 42161],
+        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
     },
 ];
 
@@ -76,21 +30,21 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--logo',
         name: 'markets',
         route: ROUTES.Markets.Home,
-        supportedNetworks: [10, 420, 42161],
+        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
     },
     {
         i18label: 'markets.nav-menu.items.vaults',
         iconClass: 'icon icon--vaults',
         name: 'vaults',
         route: ROUTES.Vaults,
-        supportedNetworks: [10, 420, 42161],
+        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
     },
     {
         i18label: 'markets.nav-menu.items.liquidity-pool',
         iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',
         route: ROUTES.LiquidityPool,
-        supportedNetworks: [10, 420, 42161],
+        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
     },
 ];
 
@@ -100,14 +54,14 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--competition',
         name: 'parlay-competition',
         route: ROUTES.Leaderboard,
-        supportedNetworks: [10, 420, 42161],
+        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
     },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',
         iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
         route: ROUTES.Referral,
-        supportedNetworks: [10, 420, 42161],
+        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
     },
 ];
 
@@ -117,7 +71,7 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--trivia',
         name: 'sports-trivia',
         route: ROUTES.Quiz,
-        supportedNetworks: [10, 420],
+        supportedNetworks: [10, Network.OptimismGoerli],
     },
 ];
 

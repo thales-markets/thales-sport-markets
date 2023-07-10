@@ -1,6 +1,5 @@
 import { COLLATERALS_INDEX } from 'constants/currency';
-import { BetType, DoubleChanceMarketType } from 'constants/tags';
-import { Position, PositionName } from '../constants/options';
+import { BetType, DoubleChanceMarketType, Position, PositionName } from 'enums/markets';
 
 export type SportMarketInfo = {
     id: string;
@@ -119,10 +118,12 @@ export type ParlayMarketWithQuotes = ParlayMarket & { quotes: number[] };
 export type ParlayMarketWithRank = ParlayMarket & { rank: number; numberOfPositions: number };
 export type ParlayMarketWithRound = ParlayMarket & { round: number };
 
+// TODO: there are also enums Position and PositionName
+type PositionNameType = 'HOME' | 'AWAY' | 'DRAW';
 export type PositionData = {
     id: string;
     market: SportMarketInfo;
-    side: PositionName;
+    side: PositionNameType;
     claimable: boolean;
 };
 
@@ -144,12 +145,6 @@ export type SportsMap = Record<number, string>;
 
 export type SportsTagsMap = Record<string, number[]>;
 
-export enum PositionType {
-    home = 'home',
-    away = 'away',
-    draw = 'draw',
-}
-
 export type CombinedMarketsPositionName =
     | '1&O'
     | '1&U'
@@ -166,7 +161,7 @@ export type CombinedMarketsPositionName =
 type AccountPositionGraph = {
     id: string;
     market: SportMarketInfo;
-    side: PositionType;
+    side: PositionName;
     claimable: boolean;
 };
 

@@ -4,7 +4,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
-import { SortDirection } from 'constants/markets';
+import { SortDirection } from 'enums/markets';
 
 type CSSPropertiesWithMedia = { cssProperties: CSSProperties } & { mediaMaxWidth: string };
 

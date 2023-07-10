@@ -1,7 +1,5 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import Button from 'components/Button';
 
 export const Container = styled(FlexDivColumn)`
     width: 100%;
@@ -24,7 +22,7 @@ export const CategoryLabel = styled.span`
     font-weight: 700;
     font-size: 14px;
     line-height: 110%;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     text-transform: uppercase;
     cursor: pointer;
     @media (max-width: 768px) {
@@ -34,7 +32,7 @@ export const CategoryLabel = styled.span`
 
 export const CategoryIcon = styled.i`
     font-size: 24px;
-    color: ${MAIN_COLORS.TEXT.DARK_GRAY};
+    color: ${(props) => props.theme.textColor.secondary};
     margin-right: 20px;
     @media (max-width: 768px) {
         font-size: 15px;
@@ -43,7 +41,7 @@ export const CategoryIcon = styled.i`
 
 export const Arrow = styled.i`
     font-size: 18px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     margin-left: 15px;
     @media (max-width: 768px) {
         font-size: 10px;
@@ -75,14 +73,14 @@ export const EmptyContainer = styled(FlexDivRowCentered)`
 export const EmptyTitle = styled.span`
     font-family: 'Nunito';
     font-weight: bold;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
     text-transform: uppercase;
     font-size: 16px;
     letter-spacing: 0.025em;
 `;
 export const EmptySubtitle = styled.span`
     font-family: 'Nunito';
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
     font-size: 12px;
     width: 180px;
     letter-spacing: 0.025em;
@@ -145,7 +143,7 @@ export const ClubName = styled.span<{
     font-weight: 300;
     font-size: 12px;
     text-transform: uppercase;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     margin-right: 5px;
     margin-left: ${(props) => (props?.isOneSided ? `25px` : '')};
     word-wrap: normal;
@@ -211,7 +209,7 @@ export const ExternalLinkContainer = styled.div`
 
 export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-external' })`
     font-size: 20px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     position: absolute;
     right: 15px;
     cursor: pointer;
@@ -219,48 +217,10 @@ export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-e
 
 export const ExternalLink = styled.a``;
 
-export const ClaimButton = styled(Button)<{ claimable?: boolean }>`
-    background: ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.textColor.tertiary};
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.025em;
-    padding: 1px 15px 1px 15px;
-    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
-    @media (max-width: 768px) {
-        position: initial;
-        font-size: 9px;
-        padding: 2px 5px;
-        min-height: 12px;
-    }
-`;
-
-export const ClaimAllButton = styled(Button)<{ claimable?: boolean }>`
-    background: ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.textColor.tertiary};
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.025em;
-    padding: 1px 15px 1px 15px;
-    visibility: ${(props) => (!props.claimable ? 'hidden' : '')};
-    @media (max-width: 768px) {
-        position: initial;
-        font-size: 9px;
-        padding: 2px 5px;
-        min-height: 12px;
-    }
-`;
-
 export const Label = styled.span<{ canceled?: boolean }>`
     font-weight: 400;
     font-size: 12px;
-    color: ${(props) => (props?.canceled ? `${MAIN_COLORS.TEXT.CANCELED}` : `${MAIN_COLORS.TEXT.WHITE}`)};
+    color: ${(props) => (props?.canceled ? props.theme.status.canceled : props.theme.textColor.primary)};
     text-transform: uppercase;
     margin-right: 3px;
     @media (max-width: 768px) {
@@ -271,7 +231,7 @@ export const Label = styled.span<{ canceled?: boolean }>`
 
 export const ClaimLabel = styled(Label)`
     font-weight: 900;
-    color: ${MAIN_COLORS.TEXT.BLUE};
+    color: ${(props) => props.theme.textColor.quaternary};
     text-transform: uppercase;
     @media (max-width: 768px) {
         font-size: 10px;

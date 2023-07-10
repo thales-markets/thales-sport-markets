@@ -78,7 +78,7 @@ const Input = styled.input<{ width?: number; isMobile: boolean }>`
         color: ${(props) => props.theme.textColor.secondary};
     }
     &:focus {
-        border: 1px solid #3fd1ff !important;
+        border: 1px solid ${(props) => props.theme.borderColor.quaternary} !important;
     }
 `;
 

@@ -35,9 +35,12 @@ import overtimeVoucherIcon from 'assets/images/overtime-voucher.svg';
 import Tooltip from 'components/Tooltip';
 import OvertimeVoucherPopup from 'components/OvertimeVoucherPopup';
 import SPAAnchor from 'components/SPAAnchor';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const [searchText, setSearchText] = useState<string>('');
     const [isInitialQueryLoad, setIsInitialQueryLoad] = useState<boolean>(true);
     const [leaderboard, setLeaderboard] = useState<LeaderboardList>([]);
@@ -145,7 +148,10 @@ const Leaderboard: React.FC = () => {
                             minHeight: isSmallScreen ? 34 : isMobile ? 40 : 48,
                             borderBottom: '2px dotted rgba(255, 255, 255, 0.3)',
                         }}
-                        tableRowHeadStyles={{ borderBottom: '2px solid rgba(255, 255, 255, 0.3)', color: '#5F6180' }}
+                        tableRowHeadStyles={{
+                            borderBottom: '2px solid rgba(255, 255, 255, 0.3)',
+                            color: theme.textColor.secondary,
+                        }}
                         columns={[
                             {
                                 Header: <>{isMobile ? '#' : t('quiz.leaderboard.table.rank-col')}</>,

@@ -1,6 +1,6 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import networkConnector from 'utils/networkConnector';
 
 type FavoriteTeamData = {
@@ -8,7 +8,7 @@ type FavoriteTeamData = {
     favoriteTeam: number;
 };
 
-const useFavoriteTeamDataQuery = (walletAddress: string, networkId: NetworkId, options?: UseQueryOptions<any>) => {
+const useFavoriteTeamDataQuery = (walletAddress: string, networkId: Network, options?: UseQueryOptions<any>) => {
     return useQuery<FavoriteTeamData>(
         QUERY_KEYS.FavoriteTeam(walletAddress, networkId),
         async () => {

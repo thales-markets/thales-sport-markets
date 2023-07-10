@@ -7,7 +7,7 @@ import {
     SPORTS_TAGS_MAP,
     SPORT_PERIODS_MAP,
 } from 'constants/tags';
-import { GAME_STATUS, STATUS_COLOR } from 'constants/ui';
+import { GAME_STATUS } from 'constants/ui';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -32,8 +32,11 @@ import {
 } from '../../../SinglePosition/styled-components';
 import { ParlayStatus, Wrapper } from './styled-components';
 import { getCombinedPositionName } from 'utils/combinedMarkets';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ combinedMarket }) => {
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
@@ -150,7 +153,7 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
                 />
                 {isPendingResolution && !isMobile ? (
                     isEnetpulseSport ? (
-                        <Status color={STATUS_COLOR.STARTED}>{t('markets.market-card.pending')}</Status>
+                        <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
                     ) : (
                         <FlexDivRow>
                             {liveResultInfo?.status != GAME_STATUS.FINAL &&

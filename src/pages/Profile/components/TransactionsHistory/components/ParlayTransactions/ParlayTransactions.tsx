@@ -40,9 +40,7 @@ import { useTranslation } from 'react-i18next';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { Position } from 'constants/options';
 import { ethers } from 'ethers';
-import { CollateralByNetworkId } from 'utils/network';
 import { buildMarketLink } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
 import i18n from 'i18n';
@@ -52,11 +50,15 @@ import {
     isCombinedMarketWinner,
     removeCombinedMarketsFromParlayMarketType,
 } from 'utils/combinedMarkets';
-import { OddsType } from 'constants/markets';
+import { OddsType, Position } from 'enums/markets';
+import { CollateralByNetworkId } from 'constants/network';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
     const language = i18n.language;
+    const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -173,7 +175,10 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     return (
         <>
             <Table
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...TableHeaderStyle,
+                    color: theme.textColor.secondary,
+                }}
                 tableRowCellStyles={TableRowStyle}
                 columnsDeps={[networkId]}
                 columns={[
@@ -248,12 +253,12 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         sortable: false,
                         Cell: (cellProps: any) => {
                             if (isParlayWon(cellProps.row.original)) {
-                                return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
+                                return <StatusWrapper color={theme.status.win}>WON </StatusWrapper>;
                             } else {
                                 return isParlayOpen(cellProps.row.original) ? (
-                                    <StatusWrapper color="#FFFFFF">OPEN</StatusWrapper>
+                                    <StatusWrapper color={theme.status.open}>OPEN</StatusWrapper>
                                 ) : (
-                                    <StatusWrapper color="#E26A78">LOSS</StatusWrapper>
+                                    <StatusWrapper color={theme.status.loss}>LOSS</StatusWrapper>
                                 );
                             }
                         },
@@ -280,6 +285,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         parlayWithoutCombinedMarkets,
                         selectedOddsType,
                         language,
+                        theme,
                         combinedMarkets
                     );
 
@@ -324,24 +330,24 @@ const getMarketWinStatus = (position: PositionData) =>
         ? convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
         : undefined; // open or canceled
 
-const getPositionStatus = (position: PositionData) => {
+const getPositionStatus = (position: PositionData, theme: ThemeInterface) => {
     const winStatus = getMarketWinStatus(position);
 
     return winStatus === undefined ? (
-        <StatusIcon color="#FFFFFF" className={`icon icon--open`} />
+        <StatusIcon color={theme.status.open} className={`icon icon--open`} />
     ) : winStatus ? (
-        <StatusIcon color="#5FC694" className={`icon icon--win`} />
+        <StatusIcon color={theme.status.win} className={`icon icon--win`} />
     ) : (
-        <StatusIcon color="#E26A78" className={`icon icon--lost`} />
+        <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />
     );
 };
 
-const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket) => {
+const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket, theme: ThemeInterface) => {
     const isOpen = combinedMarket.markets[0].isOpen || combinedMarket.markets[1].isOpen;
-    if (isOpen) return <StatusIcon color="#FFFFFF" className={`icon icon--open`} />;
+    if (isOpen) return <StatusIcon color={theme.status.open} className={`icon icon--open`} />;
     if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions))
-        return <StatusIcon color="#5FC694" className={`icon icon--win`} />;
-    return <StatusIcon color="#E26A78" className={`icon icon--lost`} />;
+        return <StatusIcon color={theme.status.win} className={`icon icon--win`} />;
+    return <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />;
 };
 
 const getOpacity = (position: PositionData) => {
@@ -382,6 +388,7 @@ export const getParlayRow = (
     data: ParlayMarketWithQuotes,
     selectedOddsType: OddsType,
     language: string,
+    theme: ThemeInterface,
     combinedMarkets?: CombinedMarket[]
 ) => {
     const render: any = [];
@@ -395,7 +402,7 @@ export const getParlayRow = (
             const homeTeam = combinedMarket.markets[0].homeTeam;
             const awayTeam = combinedMarket.markets[1].awayTeam;
 
-            const positionStatus = getPositionStatusForCombinedMarket(combinedMarket);
+            const positionStatus = getPositionStatusForCombinedMarket(combinedMarket, theme);
 
             const tooltipText = getCombinedOddTooltipText(combinedMarket.markets, combinedMarket.positions);
 
@@ -430,7 +437,7 @@ export const getParlayRow = (
                                 ? {
                                       text: spreadAndTotalText,
                                       textStyle: {
-                                          backgroundColor: '#1A1C2B',
+                                          backgroundColor: theme.background.primary,
                                           fontSize: '10px',
                                           top: '-9px',
                                           left: '10px',
@@ -463,7 +470,7 @@ export const getParlayRow = (
                     )}
                 >
                     <ParlayRowText style={{ cursor: 'pointer' }}>
-                        {getPositionStatus(position)}
+                        {getPositionStatus(position, theme)}
                         <ParlayRowTeam
                             title={
                                 position.market.isOneSideMarket
@@ -492,7 +499,7 @@ export const getParlayRow = (
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {
-                                      backgroundColor: '#1A1C2B',
+                                      backgroundColor: theme.background.primary,
                                       fontSize: '10px',
                                       top: '-9px',
                                       left: '10px',
@@ -526,7 +533,7 @@ const TableText = styled.span`
 const StatusWrapper = styled.div`
     width: 62px;
     height: 25px;
-    border: 2px solid ${(props) => props.color || 'white'};
+    border: 2px solid ${(props) => props.color || props.theme.status.open};
     border-radius: 5px;
     font-family: 'Roboto';
     font-style: normal;
@@ -536,7 +543,7 @@ const StatusWrapper = styled.div`
     text-align: justify;
     text-transform: uppercase;
     text-align: center;
-    color: ${(props) => props.color || 'white'};
+    color: ${(props) => props.color || props.theme.status.open};
     padding-top: 3px;
 `;
 
@@ -578,7 +585,6 @@ const TableHeaderStyle: React.CSSProperties = {
     lineHeight: '12px',
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
 };
 
@@ -604,7 +610,7 @@ const ExpandedRowWrapper = styled.div`
     @media (max-width: 400px) {
         padding: 0;
     }
-    border-bottom: 2px dotted rgb(95, 97, 128);
+    border-bottom: 2px dotted ${(props) => props.theme.borderColor.primary};
 `;
 
 const ParlayRow = styled(FlexDivRowCentered)`

@@ -1,10 +1,10 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { Position } from '../../constants/options';
 import { AvailablePerPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { convertPriceImpactToBonus } from 'utils/markets';
+import { Position } from 'enums/markets';
 
 const useAvailablePerPositionQuery = (
     marketAddress: string,

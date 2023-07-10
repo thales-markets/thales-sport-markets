@@ -7,6 +7,7 @@ import networkConnector from 'utils/networkConnector';
 import Web3 from 'web3';
 import marketContract from 'utils/contracts/sportsMarketContract';
 import { SPORTS_TAGS_MAP } from 'constants/tags';
+import { Network } from 'enums/network';
 
 const useEnetpulseAdditionalDataQuery = (
     marketId: string,
@@ -25,7 +26,7 @@ const useEnetpulseAdditionalDataQuery = (
                 const events = Object.values(JSON.parse(await response.text()).events);
 
                 let gameIdString = '';
-                if (marketId.length == 42) {
+                if (marketId.length == Network.Kovan) {
                     // marketId represents market address in types ParlayMarket and AccountPositionProfile
                     const contract = new ethers.Contract(marketId, marketContract.abi, networkConnector.provider);
 

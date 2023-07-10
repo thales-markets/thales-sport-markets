@@ -2,12 +2,12 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ParlayMarket, PositionBalance } from 'types/markets';
 import thalesData from 'thales-data';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { isParlayClaimable, isSportMarketExpired } from 'utils/markets';
 
 const useClaimablePositionCountQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<number | null>
 ) => {
     return useQuery<number | null>(

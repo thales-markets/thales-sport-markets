@@ -1,9 +1,9 @@
-import { Position } from 'constants/options';
 import QUERY_KEYS from 'constants/queryKeys';
+import { Position } from 'enums/markets';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { MarketTransaction, ParlayMarket, WinningInfo } from 'types/markets';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
@@ -11,7 +11,7 @@ import {
     updateTotalQuoteAndAmountFromContract,
 } from 'utils/markets';
 
-const useWinningInfoQuery = (walletAddress: string, networkId: NetworkId, options?: UseQueryOptions<WinningInfo>) => {
+const useWinningInfoQuery = (walletAddress: string, networkId: Network, options?: UseQueryOptions<WinningInfo>) => {
     return useQuery<WinningInfo>(
         QUERY_KEYS.WinningInfo(walletAddress, networkId),
         async () => {
