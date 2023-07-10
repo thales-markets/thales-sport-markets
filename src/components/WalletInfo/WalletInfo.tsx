@@ -115,6 +115,14 @@ const WalletInfo: React.FC = () => {
                                                                         method: 'wallet_switchEthereumChain',
                                                                         params: [{ chainId: network.chainId }],
                                                                     });
+                                                                    switchNetwork?.(network.networkId);
+                                                                    // Trigger App.js init
+                                                                    // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
+                                                                    dispatch(
+                                                                        switchToNetworkId({
+                                                                            networkId: network.networkId as NetworkId,
+                                                                        })
+                                                                    );
                                                                 } catch (switchError: any) {
                                                                     if (switchError.code === 4902) {
                                                                         try {
@@ -135,15 +143,16 @@ const WalletInfo: React.FC = () => {
                                                                         }
                                                                     }
                                                                 }
+                                                            } else {
+                                                                switchNetwork?.(network.networkId);
+                                                                // Trigger App.js init
+                                                                // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
+                                                                dispatch(
+                                                                    switchToNetworkId({
+                                                                        networkId: network.networkId as NetworkId,
+                                                                    })
+                                                                );
                                                             }
-                                                            switchNetwork?.(network.networkId);
-                                                            // Trigger App.js init
-                                                            // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
-                                                            dispatch(
-                                                                switchToNetworkId({
-                                                                    networkId: network.networkId as Network,
-                                                                })
-                                                            );
                                                         }
 
                                                         setDropDownOpen(false);

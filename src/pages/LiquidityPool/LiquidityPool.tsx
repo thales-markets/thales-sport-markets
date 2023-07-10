@@ -556,7 +556,10 @@ const LiquidityPool: React.FC = () => {
 
     return (
         <Wrapper>
-            <ToggleContainer>
+            <ToggleContainer
+                data-matomo-category="liquidity-pool"
+                data-matomo-action={isParlayLP ? 'switch-to-parlay' : 'switch-to-single'}
+            >
                 <Toggle
                     label={{
                         firstLabel: t('liquidity-pool.single-lp'),

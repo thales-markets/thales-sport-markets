@@ -59,6 +59,7 @@ import MatchInfo from '../MatchInfo';
 import styled, { useTheme } from 'styled-components';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
+import { getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { OddsType } from 'enums/markets';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
@@ -248,7 +249,9 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         const fetchData = async () => {
             setIsRecalculating(true);
 
-            const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
+            const divider = isVoucherSelected
+                ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
+                : Number(`1e${getDecimalsByStableCoinIndex(selectedStableIndex)}`);
             const { sportsAMMContract, signer } = networkConnector;
             const tokenAndBonusArr = [] as MultiSingleTokenQuoteAndBonus[];
             const isFetchingRecords = isFetching;
@@ -376,6 +379,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         isFetching,
         isMultiCollateralSupported,
         networkId,
+        isVoucherSelected,
     ]);
 
     const availablePerPositionMultiQuery = useAvailablePerPositionMultiQuery(markets, {

@@ -76,6 +76,8 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(false)}
+                                    data-matomo-category="navigation-menu-mobile"
+                                    data-matomo-action={item.name}
                                 >
                                     {isWalletConnected ? (
                                         <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
@@ -96,6 +98,8 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(false)}
+                                    data-matomo-category="navigation-menu-mobile"
+                                    data-matomo-action={item.name}
                                 >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
@@ -112,6 +116,8 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(false)}
+                                    data-matomo-category="navigation-menu-mobile"
+                                    data-matomo-action={item.name}
                                 >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
@@ -128,6 +134,8 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(false)}
+                                    data-matomo-category="navigation-menu-mobile"
+                                    data-matomo-action={item.name}
                                 >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>

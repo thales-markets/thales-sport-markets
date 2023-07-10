@@ -53,24 +53,13 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                         <CollateralName selected={isVoucherSelected} uppercase={true}>
                             {t('common.voucher.voucher')}
                         </CollateralName>
-                        <CollateralIcon active={isVoucherSelected}>
-                            <OvertimeVoucherIcon
+                        <CollateralIcon>
+                            <StyledOvertimeVoucherIcon
                                 onClick={() => {
                                     setIsVoucherSelected(true);
                                     onChangeCollateral(0);
                                 }}
-                                style={{
-                                    ...(isVoucherSelected
-                                        ? {
-                                              opacity: '1',
-                                          }
-                                        : {
-                                              opacity: '0.5',
-                                          }),
-                                    marginRight: 7,
-                                    width: '25px',
-                                    height: '25px',
-                                }}
+                                $isActive={isVoucherSelected}
                             />
                         </CollateralIcon>
                         <CollateralBalance selected={isVoucherSelected}>
@@ -90,7 +79,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                 <CollateralName selected={selectedItem == index && !isVoucherSelected}>
                                     {item}
                                 </CollateralName>
-                                <CollateralIcon active={selectedItem == index} key={index}>
+                                <CollateralIcon key={index}>
                                     <AssetIcon
                                         key={index}
                                         onClick={() => {
@@ -98,13 +87,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                             onChangeCollateral(index);
                                         }}
                                         style={{
-                                            ...(selectedItem == index && !isVoucherSelected
-                                                ? {
-                                                      opacity: '1',
-                                                  }
-                                                : {
-                                                      opacity: '0.5',
-                                                  }),
+                                            opacity: selectedItem == index && !isVoucherSelected ? '1' : '0.5',
                                             marginRight: 7,
                                             width: '25px',
                                             height: '25px',
@@ -150,11 +133,10 @@ const CollateralName = styled.span<{ selected?: boolean; uppercase?: boolean }>`
     ${(props) => (props?.uppercase ? `text-transform: uppercase;` : '')};
 `;
 
-const CollateralIcon = styled.div<{ active?: boolean }>`
+const CollateralIcon = styled.div`
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    box-shadow: ${(props) => (props?.active ? 'var(--shadow)' : '')};
     cursor: pointer;
     margin-bottom: 5px;
 `;
@@ -172,6 +154,13 @@ const CollateralBalance = styled.span<{ selected?: boolean }>`
     line-height: 150%;
     color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props?.selected ? `opacity: 1;` : `opacity: 0.5`)};
+`;
+
+const StyledOvertimeVoucherIcon = styled(OvertimeVoucherIcon)<{ $isActive: boolean }>`
+    margin-right: 7px;
+    width: 25px;
+    height: 25px;
+    opacity: ${(props) => (props.$isActive ? '1' : '0.5')};
 `;
 
 export default CollateralSelector;

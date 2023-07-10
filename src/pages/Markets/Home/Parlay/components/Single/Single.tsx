@@ -232,9 +232,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
-                const divider = isMultiCollateralSupported
-                    ? Number('1e' + getDecimalsByStableCoinIndex(selectedStableIndex))
-                    : Number(`1e${getDefaultDecimalsForNetwork(networkId)}`);
+                const divider = isVoucherSelected
+                    ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
+                    : Number(`1e${getDecimalsByStableCoinIndex(selectedStableIndex)}`);
                 const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
 
                 const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
@@ -263,7 +263,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         market.position,
         availablePerPosition,
         fetchAmmQuote,
-        isMultiCollateralSupported,
+        isVoucherSelected,
         networkId,
     ]);
 
@@ -271,7 +271,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
     useDebouncedEffect(() => {
         const fetchData = async () => {
-            const divider = selectedStableIndex == 0 || selectedStableIndex == 1 ? 1e18 : 1e6;
+            const divider = isVoucherSelected
+                ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
+                : Number(`1e${getDecimalsByStableCoinIndex(selectedStableIndex)}`);
+
             const { sportsAMMContract, signer } = networkConnector;
             if (signer && sportsAMMContract) {
                 const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);

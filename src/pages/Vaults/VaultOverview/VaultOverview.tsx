@@ -63,7 +63,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
     }, [vaultDataQuery.isSuccess, vaultDataQuery.data, lastValidVaultData]);
 
     return (
-        <SpaContainer>
+        <SpaContainer data-matomo-category="vaults" data-matomo-action={vaultId}>
             <SPAAnchor href={buildVaultLink(vaultId, language)}>
                 <FlexDivColumn style={{ height: '100%' }}>
                     <VaultContainer>
