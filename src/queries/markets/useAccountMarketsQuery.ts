@@ -24,7 +24,7 @@ const useAccountMarketsQuery = (
     options?: UseQueryOptions<AccountPositionProfile[]>
 ) => {
     return useQuery<AccountPositionProfile[]>(
-        QUERY_KEYS.AccountPositionsProfile(walletAddress, networkId),
+        QUERY_KEYS.AccountPositions(walletAddress, networkId),
         async () => {
             try {
                 const positionBalances: PositionBalance[] = await thalesData.sportMarkets.positionBalances({

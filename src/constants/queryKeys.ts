@@ -1,18 +1,13 @@
 import { Network } from 'enums/network';
-import { MultiSingleAmounts, ParlaysMarket } from 'types/markets';
 import { LiquidityPoolType } from 'types/liquidityPool';
 import { GlobalFiltersEnum, Position } from 'enums/markets';
 
 const QUERY_KEYS = {
-    Rewards: (networkId: Network, period: number) => ['rewards', networkId, period],
-    Markets: (networkId: Network) => ['markets', networkId],
     ParlayMarkets: (networkId: Network, account: string) => ['parlayMarkets', networkId, account],
     ParlayLeaderboard: (networkId: Network, period: number) => ['parlayLeaderboard', period, networkId],
     SportMarkets: (globalFilter: GlobalFiltersEnum, networkId: Network) => ['sportMarkets', globalFilter, networkId],
-    SportMarketsNew: (networkId: Network) => ['sportMarketsNew', networkId],
-    SportMarket: (address: string, networkId: Network) => ['sportMarketQuery', address, networkId],
+    SportMarket: (address: string, networkId: Network) => ['sportMarket', address, networkId],
     ParlayAmmData: (networkId: Network) => ['parlayAmmData', networkId],
-    Market: (marketAddress: string, networkId: Network) => ['market', marketAddress, networkId],
     LiveResult: (marketId: string) => ['liveResult', marketId],
     EnetpulseLiveResult: (marketId: string, gameDate: string, sportTag: number) => [
         'enetpulseLiveResult',
@@ -21,7 +16,6 @@ const QUERY_KEYS = {
         sportTag,
     ],
     JsonOddsData: (marketId: string, sportTag: number) => ['jsonOddsData', marketId, sportTag],
-    ChildMarkets: (marketAddress: string, networkId: Network) => ['childMarkets', marketAddress, networkId],
     PositionDetails: (
         marketAddress: string,
         position: Position,
@@ -29,12 +23,6 @@ const QUERY_KEYS = {
         stableIndex: number,
         networkId: Network
     ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
-    MultiplePositionDetails: (
-        markets: ParlaysMarket[],
-        amounts: MultiSingleAmounts[],
-        stableIndex: number,
-        networkId: Network
-    ) => ['multiplePositionDetails', markets, amounts, stableIndex, networkId],
     AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
     AvailablePerPositionMulti: (marketAddresses: string) => ['availablePerPositionMulti', marketAddresses],
     AvailablePerDoubleChancePosition: (marketAddress: string) => ['availablePerDoubleChancePosition', marketAddress],
@@ -49,19 +37,8 @@ const QUERY_KEYS = {
     UserTransactions: (walletAddress: string, networkId: Network) => ['user', 'transactions', walletAddress, networkId],
     WinningInfo: (walletAddress: string, networkId: Network) => ['user', 'winningInfo', walletAddress, networkId],
     ClaimTx: (market: string, networkId: Network) => ['claim', 'transactions', market, networkId],
-    ClaimableCount: (walletAddress: string, networkId: Network) => [
-        'claimable',
-        'count',
-        'notification',
-        walletAddress,
-        networkId,
-    ],
-    AccountPositions: (walletAddress: string, networkId: Network) => ['positions', walletAddress, networkId],
-    AccountPositionsProfile: (walletAddress: string, networkId: Network) => [
-        'accountPosition',
-        walletAddress,
-        networkId,
-    ],
+    ClaimableCount: (walletAddress: string, networkId: Network) => ['claimable', 'count', walletAddress, networkId],
+    AccountPositions: (walletAddress: string, networkId: Network) => ['accountPosition', walletAddress, networkId],
     ReferralTransaction: (walletAddress: string, networkId: Network) => [
         'referralTransaction',
         walletAddress,
@@ -112,10 +89,8 @@ const QUERY_KEYS = {
     },
     Quiz: {
         Leaderboard: () => ['quiz', 'leaderboard'],
-        Tweet: () => ['quiz', 'tweet'],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
-    Zebro: (networkId: Network) => ['zebro', networkId],
     Vault: {
         Data: (vaultAddress: string, networkId: Network) => [vaultAddress, 'data', networkId],
         UserData: (vaultAddress: string, walletAddress: string, networkId: Network) => [
