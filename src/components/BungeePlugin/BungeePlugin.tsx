@@ -10,9 +10,10 @@ import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
 import { Network } from 'enums/network';
-import { mainnet } from 'wagmi';
+import { mainnet, useNetwork } from 'wagmi';
 import { ThemeInterface } from 'types/ui';
 import { hexToRGB } from 'utils/style';
+import { ethers } from 'ethers';
 
 type CustomizationProps = {
     width?: number;
@@ -32,6 +33,7 @@ type CustomizationProps = {
 const SUPPORTED_DESTINATION_NETWORKS = [Network.OptimismMainnet, Network.ArbitrumOne];
 
 const BungeePlugin: React.FC = () => {
+    const { chain } = useNetwork();
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -80,7 +82,11 @@ const BungeePlugin: React.FC = () => {
     return (
         <BungeeWrapper>
             <Bridge
-                provider={networkConnector.signer?.provider}
+                provider={
+                    chain?.id === mainnet.id
+                        ? new ethers.providers.Web3Provider(window.ethereum as any, 'any') // mainnet is not supported network, so read provider from browser wallet
+                        : networkConnector.signer?.provider
+                }
                 API_KEY={apiKey}
                 sourceNetworks={SOURCE_NETWORK_IDS}
                 defaultSourceNetwork={defaultSourceNetwork}
