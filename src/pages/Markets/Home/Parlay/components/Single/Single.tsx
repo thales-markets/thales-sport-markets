@@ -519,7 +519,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     ethers.utils.parseEther('0.02'),
                     { gasLimit: getMaxGasLimitForNetwork(networkId) }
                 );
-
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
