@@ -2,9 +2,7 @@ import { Network } from 'enums/network';
 
 const liquidityPoolContract = {
     addresses: {
-        [Network.Goerli]: '',
         [Network.OptimismMainnet]: '0x842e89b7a7eF8Ce099540b3613264C933cE0eBa5',
-        [Network.Kovan]: '',
         [Network.OptimismGoerli]: '0xdd0879AB819287637f33A29d1ee91d5a76c890Af',
         [Network.ArbitrumOne]: '0x8e9018b48456202aA9bb3E485192B8475822B874',
     },

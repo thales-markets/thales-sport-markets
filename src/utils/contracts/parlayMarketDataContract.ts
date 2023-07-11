@@ -2,9 +2,7 @@ import { Network } from 'enums/network';
 
 const parlayMarketDataContract = {
     addresses: {
-        [Network.Goerli]: '',
         [Network.OptimismMainnet]: '0x3bD77B8FE52242797C29Df251418873Ae34F0641',
-        [Network.Kovan]: '',
         [Network.OptimismGoerli]: '0x54822552F51cd15c09bF360958A8e417989a925b',
         [Network.ArbitrumOne]: '0xff9d1B34f369CAf91c6b69761e2A06f78ed3cd9d',
     },
