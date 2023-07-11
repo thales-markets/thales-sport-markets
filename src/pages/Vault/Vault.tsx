@@ -288,7 +288,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     txHash = txResult.transactionHash;
                 }
             }
-            if (txHash) {
+            if (txHash && txHash !== null) {
                 toast.update(id, getSuccessToastOptions(t('vault.button.deposit-confirmation-message')));
                 setAmount('');
                 refetchVaultData(vaultAddress, walletAddress, networkId);
@@ -328,7 +328,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     txHash = txResult.transactionHash;
                 }
             }
-            if (txHash) {
+            if (txHash && txHash !== null) {
                 toast.update(id, getSuccessToastOptions(t('vault.button.request-withdrawal-confirmation-message')));
                 setAmount('');
                 refetchVaultData(vaultAddress, walletAddress, networkId);
@@ -363,7 +363,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     txHash = txResult.transactionHash;
                 }
             }
-            if (txHash) {
+            if (txHash && txHash !== null) {
                 toast.update(id, getSuccessToastOptions(t('vault.button.close-round-confirmation-message')));
                 refetchVaultData(vaultAddress, walletAddress, networkId);
             }

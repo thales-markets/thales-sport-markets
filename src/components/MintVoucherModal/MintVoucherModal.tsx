@@ -155,7 +155,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                     txHash = txResult.transactionHash;
                 }
             }
-            if (txHash) {
+            if (txHash && txHash !== null) {
                 toast.update(
                     id,
                     getSuccessToastOptions(
@@ -205,7 +205,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                     txHash = txResult.transactionHash;
                 }
             }
-            if (txHash) {
+            if (txHash && txHash !== null) {
                 toast.update(id, getSuccessToastOptions(t('common.voucher.modal.button.confirmation-message')));
                 setAmount(-1);
                 setIsAnotherWallet(false);

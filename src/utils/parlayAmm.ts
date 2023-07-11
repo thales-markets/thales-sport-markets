@@ -74,6 +74,71 @@ export const getParlayAMMTransaction: any = (
           );
 };
 
+export const getParlayAMMEtherspotTransactionInfo: any = (
+    isVoucherSelected: boolean,
+    voucherId: number,
+    stableIndex: COLLATERALS_INDEX,
+    networkId: Network,
+    marketsAddresses: string[],
+    selectedPositions: Position[],
+    sUSDPaid: BigNumber,
+    expectedPayout: BigNumber,
+    referral?: string | null,
+    additionalSlippage?: BigNumber
+): { methodName: string; data: ReadonlyArray<any> } => {
+    const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
+    const collateralAddress = getCollateralAddress(isNonSusdCollateral, networkId, stableIndex);
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+    const mappedSelectedPositions = selectedPositions.map((position) => Number(position));
+
+    if (isVoucherSelected) {
+        return {
+            methodName: 'buyFromParlayAMMWithVoucher',
+            data: [marketsAddresses, mappedSelectedPositions, sUSDPaid, additionalSlippage, expectedPayout, voucherId],
+        };
+    }
+
+    if (isMultiCollateralSupported && isNonSusdCollateral && collateralAddress) {
+        return {
+            methodName: 'buyFromParlayWithDifferentCollateralAndReferrer',
+            data: [
+                marketsAddresses,
+                mappedSelectedPositions,
+                sUSDPaid,
+                additionalSlippage,
+                expectedPayout,
+                collateralAddress,
+                referral || ZERO_ADDRESS,
+            ],
+        };
+    }
+
+    return referral
+        ? {
+              methodName: 'buyFromParlayWithReferrer',
+              data: [
+                  marketsAddresses,
+                  mappedSelectedPositions,
+                  sUSDPaid,
+                  additionalSlippage,
+                  expectedPayout,
+                  ZERO_ADDRESS,
+                  referral,
+              ],
+          }
+        : {
+              methodName: 'buyFromParlay',
+              data: [
+                  marketsAddresses,
+                  mappedSelectedPositions,
+                  sUSDPaid,
+                  additionalSlippage,
+                  expectedPayout,
+                  ZERO_ADDRESS,
+              ],
+          };
+};
+
 export const getParlayMarketsAMMQuoteMethod: any = (
     stableIndex: COLLATERALS_INDEX,
     networkId: Network,

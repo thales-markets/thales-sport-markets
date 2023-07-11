@@ -102,7 +102,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                     txHash = txResult.transactionHash;
                 }
             }
-            if (txHash) {
+            if (txHash && txHash !== null) {
                 refetchAfterVoucherClaim(walletAddress, networkId);
                 toast.update(id, getSuccessToastOptions(t('profile.messages.voucher-claim-success')));
             }

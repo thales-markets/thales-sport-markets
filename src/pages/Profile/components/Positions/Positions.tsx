@@ -1,7 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsSocialLogin,
+    getIsWalletConnected,
+    getNetworkId,
+    getPrimeSdk,
+    getWalletAddress,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
@@ -40,6 +46,7 @@ import Button from 'components/Button';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getIsMobile } from 'redux/modules/app';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -61,6 +68,8 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
@@ -174,98 +183,114 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
 
     const claimAllRewards = async () => {
-        const { signer, parlayMarketsAMMContract } = networkConnector;
-        if (signer) {
-            const transactions: any = [];
+        const transactions: any = [];
 
-            if (accountPositionsByStatus.claimable.length) {
-                accountPositionsByStatus.claimable.forEach(async (position) => {
-                    transactions.push(
-                        new Promise(async (resolve, reject) => {
+        if (accountPositionsByStatus.claimable.length) {
+            accountPositionsByStatus.claimable.forEach(async (position) => {
+                transactions.push(
+                    new Promise(async (resolve, reject) => {
+                        const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+                        try {
+                            const { signer, provider } = networkConnector;
                             const contract = new ethers.Contract(
                                 position.market.address,
                                 sportsMarketContract.abi,
-                                signer
+                                provider
                             );
-                            contract.connect(signer);
-                            const id = toast.loading(t('market.toast-message.transaction-pending'));
-                            try {
-                                const tx = await contract.exerciseOptions({
+
+                            let txHash;
+                            if (isSocialLogin) {
+                                txHash = await executeEtherspotTransaction(
+                                    primeSdk,
+                                    networkId,
+                                    contract,
+                                    'exerciseOptions'
+                                );
+                            } else if (signer) {
+                                const contractWithSigner = contract.connect(signer);
+
+                                const tx = await contractWithSigner.exerciseOptions({
                                     gasLimit: getMaxGasLimitForNetwork(networkId),
                                 });
                                 const txResult = await tx.wait();
 
                                 if (txResult && txResult.transactionHash) {
-                                    resolve(
-                                        toast.update(
-                                            id,
-                                            getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
-                                        )
-                                    );
-                                } else {
-                                    reject(
-                                        toast.update(
-                                            id,
-                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                        )
-                                    );
+                                    txHash = txResult.transactionHash;
                                 }
-                            } catch (e) {
+                            }
+
+                            if (txHash && txHash !== null) {
+                                resolve(
+                                    toast.update(
+                                        id,
+                                        getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
+                                    )
+                                );
+                            } else {
                                 reject(
                                     toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')))
                                 );
-                                console.log(e);
                             }
-                        })
-                    );
-                });
-            }
+                        } catch (e) {
+                            reject(toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again'))));
+                            console.log(e);
+                        }
+                    })
+                );
+            });
+        }
 
-            if (parlayMarketsByStatus.claimable.length) {
-                if (parlayMarketsAMMContract) {
-                    parlayMarketsByStatus.claimable.forEach(async (market) => {
-                        transactions.push(
-                            new Promise(async (resolve, reject) => {
-                                const id = toast.loading(t('market.toast-message.transaction-pending'));
+        if (parlayMarketsByStatus.claimable.length) {
+            parlayMarketsByStatus.claimable.forEach(async (market) => {
+                transactions.push(
+                    new Promise(async (resolve, reject) => {
+                        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-                                try {
-                                    const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
+                        try {
+                            const { parlayMarketsAMMContract, signer } = networkConnector;
 
-                                    const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(market.id, {
-                                        gasLimit: getMaxGasLimitForNetwork(networkId),
-                                    });
-                                    const txResult = await tx.wait();
+                            let txHash;
+                            if (isSocialLogin) {
+                                txHash = await executeEtherspotTransaction(
+                                    primeSdk,
+                                    networkId,
+                                    parlayMarketsAMMContract,
+                                    'exerciseParlay',
+                                    [market.id]
+                                );
+                            } else if (signer && parlayMarketsAMMContract) {
+                                const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
-                                    if (txResult && txResult.transactionHash) {
-                                        resolve(
-                                            toast.update(
-                                                id,
-                                                getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
-                                            )
-                                        );
-                                    } else {
-                                        reject(
-                                            toast.update(
-                                                id,
-                                                getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                            )
-                                        );
-                                    }
-                                } catch (e) {
-                                    reject(
-                                        toast.update(
-                                            id,
-                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                        )
-                                    );
-                                    console.log(e);
+                                const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(market.id, {
+                                    gasLimit: getMaxGasLimitForNetwork(networkId),
+                                });
+                                const txResult = await tx.wait();
+
+                                if (txResult && txResult.transactionHash) {
+                                    txHash = txResult.transactionHash;
                                 }
-                            })
-                        );
-                    });
-                }
-            }
+                            }
 
+                            if (txHash && txHash !== null) {
+                                resolve(
+                                    toast.update(
+                                        id,
+                                        getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
+                                    )
+                                );
+                            } else {
+                                reject(
+                                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')))
+                                );
+                            }
+                        } catch (e) {
+                            reject(toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again'))));
+                            console.log(e);
+                        }
+                    })
+                );
+            });
             Promise.all(transactions).catch((e) => console.log(e));
         }
     };

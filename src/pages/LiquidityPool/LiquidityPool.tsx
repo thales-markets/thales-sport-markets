@@ -381,7 +381,7 @@ const LiquidityPool: React.FC = () => {
                     txHash = txResult.transactionHash;
                 }
             }
-            if (txHash) {
+            if (txHash && txHash !== null) {
                 toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
                 setAmount('');
                 refetchLiquidityPoolData(walletAddress, networkId, 'single');
@@ -428,7 +428,7 @@ const LiquidityPool: React.FC = () => {
                     txHash = txResult.transactionHash;
                 }
             }
-            if (txHash) {
+            if (txHash && txHash !== null) {
                 toast.update(
                     id,
                     getSuccessToastOptions(t('liquidity-pool.button.request-withdrawal-confirmation-message'))

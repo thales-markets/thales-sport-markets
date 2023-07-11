@@ -15,7 +15,13 @@ import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import { removeAll, setPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsSocialLogin,
+    getIsWalletConnected,
+    getNetworkId,
+    getPrimeSdk,
+    getWalletAddress,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlayPayment, ParlaysMarket } from 'types/markets';
@@ -31,7 +37,11 @@ import {
 import { formatMarketOdds, getBonus } from 'utils/markets';
 import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
+import {
+    getParlayAMMEtherspotTransactionInfo,
+    getParlayAMMTransaction,
+    getParlayMarketsAMMQuoteMethod,
+} from 'utils/parlayAmm';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import Payment from '../Payment';
@@ -61,6 +71,7 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -86,6 +97,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
     const selectedOddsType = useSelector(getOddsType);
 
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
@@ -302,20 +315,25 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { parlayMarketsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (parlayMarketsAMMContract && signer) {
-            setIsAllowing(true);
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            try {
-                let collateralContractWithSigner: ethers.Contract | undefined;
+        setIsAllowing(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-                if (selectedStableIndex !== 0 && multipleCollateral && multipleCollateral[selectedStableIndex]) {
-                    collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
-                } else {
-                    collateralContractWithSigner = sUSDContract?.connect(signer);
-                }
+        try {
+            const { parlayMarketsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+            const addressToApprove = parlayMarketsAMMContract?.address;
+            const collateralContract =
+                selectedStableIndex !== 0 && multipleCollateral && multipleCollateral[selectedStableIndex]
+                    ? multipleCollateral[selectedStableIndex]
+                    : sUSDContract;
 
-                const addressToApprove = parlayMarketsAMMContract.address;
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, collateralContract, 'approve', [
+                    addressToApprove,
+                    approveAmount,
+                ]);
+            } else if (parlayMarketsAMMContract && signer) {
+                const collateralContractWithSigner: ethers.Contract | undefined = collateralContract?.connect(signer);
 
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
@@ -324,39 +342,63 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log(e);
-                setIsAllowing(false);
             }
+            if (txHash && txHash !== null) {
+                toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+            }
+        } catch (e) {
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log(e);
         }
+        setIsAllowing(false);
     };
 
     const handleSubmit = async () => {
-        const { parlayMarketsAMMContract, overtimeVoucherContract, signer } = networkConnector;
-        if (parlayMarketsAMMContract && overtimeVoucherContract && signer) {
-            setIsBuying(true);
-            const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
-            const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
+        setIsBuying(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
+        try {
+            const referralId =
+                walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
+                    ? getReferralId()
+                    : null;
+            const marketsAddresses = markets.map((market) => market.address);
+            const selectedPositions = markets.map((market) => market.position);
+            const susdPaid = ethers.utils.parseUnits(
+                roundNumberToDecimals(Number(usdAmountValue)).toString(),
+                getDefaultDecimalsForNetwork(networkId)
+            );
+            const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
+            const additionalSlippage = ethers.utils.parseEther('0.02');
 
-            try {
-                const referralId =
-                    walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
-                        ? getReferralId()
-                        : null;
-                const marketsAddresses = markets.map((market) => market.address);
-                const selectedPositions = markets.map((market) => market.position);
-                const susdPaid = ethers.utils.parseUnits(
-                    roundNumberToDecimals(Number(usdAmountValue)).toString(),
-                    getDefaultDecimalsForNetwork(networkId)
+            const { parlayMarketsAMMContract, overtimeVoucherContract, signer } = networkConnector;
+
+            let txHash;
+            if (isSocialLogin) {
+                const etherspotTransactionInfo = getParlayAMMEtherspotTransactionInfo(
+                    isVoucherSelected,
+                    overtimeVoucher ? overtimeVoucher.id : 0,
+                    selectedStableIndex,
+                    networkId,
+                    marketsAddresses,
+                    selectedPositions,
+                    susdPaid,
+                    expectedPayout,
+                    referralId,
+                    additionalSlippage
                 );
-                const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
-                const additionalSlippage = ethers.utils.parseEther('0.02');
+                txHash = await executeEtherspotTransaction(
+                    primeSdk,
+                    networkId,
+                    isVoucherSelected ? overtimeVoucherContract : parlayMarketsAMMContract,
+                    etherspotTransactionInfo.methodName,
+                    etherspotTransactionInfo.data
+                );
+            } else if (parlayMarketsAMMContract && overtimeVoucherContract && signer) {
+                const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
+                const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
 
                 const tx = await getParlayAMMTransaction(
                     isVoucherSelected,
@@ -379,33 +421,35 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    if (hasParlayCombinedMarkets) {
-                        trackEvent({
-                            category: 'parlay',
-                            action: 'parlay-has-combined-position',
-                            value: Number(usdAmountValue),
-                        });
-                    }
-
+                    txHash = txResult.transactionHash;
+                }
+            }
+            if (txHash && txHash !== null) {
+                if (hasParlayCombinedMarkets) {
                     trackEvent({
                         category: 'parlay',
-                        action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
+                        action: 'parlay-has-combined-position',
                         value: Number(usdAmountValue),
                     });
-                    refetchBalances(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
-                    setIsBuying(false);
-                    setUsdAmount('');
-                    dispatch(removeAll());
-                    onBuySuccess && onBuySuccess();
                 }
-            } catch (e) {
-                setIsBuying(false);
+
+                trackEvent({
+                    category: 'parlay',
+                    action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
+                    value: Number(usdAmountValue),
+                });
                 refetchBalances(walletAddress, networkId);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log('Error ', e);
+                toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
+                setUsdAmount('');
+                dispatch(removeAll());
+                onBuySuccess && onBuySuccess();
             }
+        } catch (e) {
+            refetchBalances(walletAddress, networkId);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log('Error ', e);
         }
+        setIsBuying(false);
     };
 
     useEffect(() => {

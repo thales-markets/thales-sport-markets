@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsSocialLogin, getNetworkId, getPrimeSdk, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { ParlayMarket, ParlaysMarket } from 'types/markets';
 import { getEtherscanTxLink } from 'utils/etherscan';
@@ -60,6 +60,7 @@ import { Position } from 'enums/markets';
 import Button from 'components/Button/Button';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;
@@ -76,11 +77,11 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
     const [showDetails, setShowDetails] = useState<boolean>(false);
 
     const selectedOddsType = useSelector(getOddsType);
-
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const parlay = syncPositionsAndMarketsPerContractOrderInParlay(parlayMarket);
 
@@ -91,9 +92,20 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
 
     const claimParlay = async (parlayAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
-        const { parlayMarketsAMMContract, signer } = networkConnector;
-        if (signer && parlayMarketsAMMContract) {
-            try {
+
+        try {
+            const { parlayMarketsAMMContract, signer } = networkConnector;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(
+                    primeSdk,
+                    networkId,
+                    parlayMarketsAMMContract,
+                    'exerciseParlay',
+                    [parlayAddress]
+                );
+            } else if (signer && parlayMarketsAMMContract) {
                 const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
                 const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress, {
@@ -102,16 +114,19 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
-                    if (setShareTicketModalData && setShowShareTicketModal) {
-                        setShareTicketModalData(shareParlayData);
-                        setShowShareTicketModal(true);
-                    }
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log(e);
             }
+            if (txHash && txHash !== null) {
+                toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                if (setShareTicketModalData && setShowShareTicketModal) {
+                    setShareTicketModalData(shareParlayData);
+                    setShowShareTicketModal(true);
+                }
+            }
+        } catch (e) {
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log(e);
         }
     };
 

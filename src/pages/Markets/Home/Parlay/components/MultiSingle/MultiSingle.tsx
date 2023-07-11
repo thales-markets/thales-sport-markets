@@ -14,11 +14,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import { removeAll, setPayment, setMultiSingle, removeFromParlay, getMultiSingle } from 'redux/modules/parlay';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsSocialLogin,
+    getIsWalletConnected,
+    getNetworkId,
+    getPrimeSdk,
+    getWalletAddress,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlayPayment, ParlaysMarket } from 'types/markets';
-import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
+import {
+    getAMMSportsEtherspotTransactionInfo,
+    getAMMSportsTransaction,
+    getAmountForApproval,
+    getSportsAMMQuoteMethod,
+} from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
@@ -64,6 +75,7 @@ import { OddsType } from 'enums/markets';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { ThemeInterface } from 'types/ui';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -82,6 +94,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
     const multiSingleAmounts = useSelector(getMultiSingle);
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -440,25 +454,28 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (sportsAMMContract && signer) {
-            setIsAllowing(true);
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            try {
-                let collateralContractWithSigner: ethers.Contract | undefined;
+        setIsAllowing(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-                if (
-                    selectedStableIndex !== 0 &&
-                    multipleCollateral &&
-                    multipleCollateral[selectedStableIndex] &&
-                    isMultiCollateralSupported
-                ) {
-                    collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
-                } else {
-                    collateralContractWithSigner = sUSDContract?.connect(signer);
-                }
+        try {
+            const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+            const addressToApprove = sportsAMMContract?.address;
+            const collateralContract =
+                selectedStableIndex !== 0 &&
+                multipleCollateral &&
+                multipleCollateral[selectedStableIndex] &&
+                isMultiCollateralSupported
+                    ? multipleCollateral[selectedStableIndex]
+                    : sUSDContract;
 
-                const addressToApprove = sportsAMMContract.address;
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, collateralContract, 'approve', [
+                    addressToApprove,
+                    approveAmount,
+                ]);
+            } else if (sportsAMMContract && signer) {
+                const collateralContractWithSigner: ethers.Contract | undefined = collateralContract?.connect(signer);
 
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
@@ -467,44 +484,68 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log(e);
-                setIsAllowing(false);
             }
+
+            if (txHash && txHash !== null) {
+                toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+            }
+        } catch (e) {
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log(e);
         }
+        setIsAllowing(false);
     };
 
     const handleSubmit = async () => {
-        const { sportsAMMContract, overtimeVoucherContract, signer } = networkConnector;
-        if (sportsAMMContract && overtimeVoucherContract && signer) {
-            setIsBuying(true);
-            const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
-            const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
+        setIsBuying(true);
+        const transactions: any = [];
 
-            const transactions: any = [];
+        markets.forEach(async (market: ParlaysMarket) => {
+            const marketAddress = market.address;
+            const selectedPosition = market.position;
+            const singleTokenBonus = tokenAndBonus.find((t) => t.sportMarketAddress === marketAddress);
+            const tokenAmount = singleTokenBonus !== undefined ? singleTokenBonus.tokenAmount : 0.0;
+            const ammQuote = (await fetchAmmQuote(tokenAmount, market)) ?? 0;
+            const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
+            const referralId =
+                walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
+                    ? getReferralId()
+                    : null;
 
-            markets.forEach(async (market: ParlaysMarket) => {
-                const marketAddress = market.address;
-                const selectedPosition = market.position;
-                const singleTokenBonus = tokenAndBonus.find((t) => t.sportMarketAddress === marketAddress);
+            transactions.push(
+                new Promise(async (resolve, reject) => {
+                    const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-                const tokenAmount = singleTokenBonus !== undefined ? singleTokenBonus.tokenAmount : 0.0;
-                const ammQuote = (await fetchAmmQuote(tokenAmount, market)) ?? 0;
-                const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
+                    try {
+                        const { sportsAMMContract, overtimeVoucherContract, signer } = networkConnector;
 
-                transactions.push(
-                    new Promise(async (resolve, reject) => {
-                        const id = toast.loading(t('market.toast-message.transaction-pending'));
+                        let txHash;
+                        if (isSocialLogin) {
+                            const etherspotTransactionInfo = getAMMSportsEtherspotTransactionInfo(
+                                isVoucherSelected,
+                                overtimeVoucher ? overtimeVoucher.id : 0,
+                                selectedStableIndex,
+                                networkId,
+                                marketAddress,
+                                selectedPosition,
+                                parsedAmount,
+                                ammQuote,
+                                referralId,
+                                ethers.utils.parseEther('0.02')
+                            );
+                            txHash = await executeEtherspotTransaction(
+                                primeSdk,
+                                networkId,
+                                isVoucherSelected ? overtimeVoucherContract : sportsAMMContract,
+                                etherspotTransactionInfo.methodName,
+                                etherspotTransactionInfo.data
+                            );
+                        } else if (sportsAMMContract && overtimeVoucherContract && signer) {
+                            const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+                            const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
 
-                        try {
-                            const referralId =
-                                walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
-                                    ? getReferralId()
-                                    : null;
                             const tx = await getAMMSportsTransaction(
                                 isVoucherSelected,
                                 overtimeVoucher ? overtimeVoucher.id : 0,
@@ -520,41 +561,41 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                                 ethers.utils.parseEther('0.02'),
                                 { gasLimit: getMaxGasLimitForNetwork(networkId) }
                             );
-
                             const txResult = await tx.wait();
 
                             if (txResult && txResult.transactionHash) {
-                                resolve(
-                                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
-                                );
-                                trackEvent({
-                                    category: 'parlay-multi-single',
-                                    action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
-                                    value: Number(calculatedTotalBuyIn),
-                                });
-                                dispatch(removeFromParlay(marketAddress));
-                                refetchBalances(walletAddress, networkId);
-                            } else {
-                                reject(
-                                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')))
-                                );
+                                txHash = txResult.transactionHash;
                             }
-                        } catch (e) {
+                        }
+
+                        if (txHash && txHash !== null) {
+                            resolve(toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success'))));
+                            trackEvent({
+                                category: 'parlay-multi-single',
+                                action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
+                                value: Number(calculatedTotalBuyIn),
+                            });
+                            dispatch(removeFromParlay(marketAddress));
+                            refetchBalances(walletAddress, networkId);
+                        } else {
                             reject(toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again'))));
                         }
-                    })
-                );
+                    } catch (e) {
+                        reject(toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again'))));
+                    }
+                })
+            );
+        });
+
+        await Promise.all(transactions)
+            .then(() => {
+                setUsdAmountValue('');
+            })
+            .catch((e) => {
+                console.log(e);
             });
 
-            await Promise.all(transactions)
-                .then(() => {
-                    setIsBuying(false);
-                    setUsdAmountValue('');
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
-        }
+        setIsBuying(false);
     };
 
     const MIN_TOKEN_AMOUNT = 1;
