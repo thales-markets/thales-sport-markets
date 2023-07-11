@@ -300,7 +300,7 @@ export const TAGS_LIST: Tags = [
         label: 'Golf head-to-head',
         logoClass: 'icon-league league--pga',
         favourite: false,
-        hidden: true,
+        hidden: false,
         priority: 1001,
     },
     {
