@@ -3,11 +3,11 @@ import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import { ADAPTER_EVENTS, CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base';
 import { PrimeSdk, Web3WalletProvider } from '@etherspot/prime-sdk';
 import Web3 from 'web3';
-import { SubmitButton } from '../../../pages/Markets/Home/Parlay/components/styled-components';
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { Web3AuthNoModal } from '@web3auth/no-modal';
 import { useDispatch } from 'react-redux';
 import { updateIsSocialLogin, updatePrimeSdk, updateWallet } from 'redux/modules/wallet';
+import Button from 'components/Button';
 
 const clientId = 'BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk'; // get from https://dashboard.web3auth.io
 
@@ -159,8 +159,8 @@ const Etherspot: React.FC = () => {
 
     return (
         <>
-            {!loggedIn && <SubmitButton onClick={login}>Login with Google</SubmitButton>}
-            {loggedIn && <SubmitButton onClick={logout}>Logout</SubmitButton>}
+            {!loggedIn && <Button onClick={login}>Login with Google</Button>}
+            {loggedIn && <Button onClick={logout}>Logout</Button>}
         </>
     );
 };
