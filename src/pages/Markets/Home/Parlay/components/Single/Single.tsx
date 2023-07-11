@@ -27,7 +27,12 @@ import {
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AMMPosition, AvailablePerPosition, ParlayPayment, ParlaysMarket } from 'types/markets';
-import { getAMMSportsTransaction, getAmountForApproval, getSportsAMMQuoteMethod } from 'utils/amm';
+import {
+    getAMMSportsEtherspotTransactionInfo,
+    getAMMSportsTransaction,
+    getAmountForApproval,
+    getSportsAMMQuoteMethod,
+} from 'utils/amm';
 import { getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
@@ -68,8 +73,10 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
-import sportsAMMContract from 'utils/contracts/sportsAMMContract';
-import sUSDContract from 'utils/contracts/sUSDContract';
+import sUSDContractRaw from 'utils/contracts/sUSDContract';
+import sportsAMMContractRaw from 'utils/contracts/sportsAMMContract';
+import overtimeVoucherContractRaw from 'utils/contracts/overtimeVoucherContract';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -416,79 +423,20 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         isSocialLogin,
     ]);
 
-    function toJSON(op: any): Promise<any> {
-        return ethers.utils.resolveProperties(op).then((userOp: any) =>
-            Object.keys(userOp)
-                .map((key) => {
-                    let val = (userOp as any)[key];
-                    if (typeof val !== 'string' || !val.startsWith('0x')) {
-                        val = ethers.utils.hexValue(val);
-                    }
-                    return [key, val];
-                })
-                .reduce(
-                    (set, [k, v]) => ({
-                        ...set,
-                        [k]: v,
-                    }),
-                    {}
-                )
-        );
-    }
-
-    async function printOp(op: any): Promise<string> {
-        return toJSON(op).then((userOp) => JSON.stringify(userOp, null, 2));
-    }
-
-    const handleAllowanceWithSocialLogin = async (approveAmount: BigNumber) => {
-        if (primeSdk !== null) {
-            const provider = new ethers.providers.JsonRpcProvider('https://optimism-bundler.etherspot.io/');
-            // get erc20 Contract Interface
-            const erc20Instance = new ethers.Contract(sUSDContract.addresses[networkId], sUSDContract.abi, provider);
-
-            // get transferFrom encoded data
-            const { sportsAMMContract } = networkConnector;
-            const transactionData = erc20Instance.interface.encodeFunctionData('approve', [
-                sportsAMMContract?.address || '',
-                approveAmount,
-            ]);
-
-            // clear the transaction batch
-            await primeSdk.clearUserOpsFromBatch();
-
-            // add transactions to the batch
-            const userOpsBatch = await primeSdk.addUserOpsToBatch({
-                to: sUSDContract.addresses[networkId],
-                data: transactionData,
-            });
-            console.log('transactions: ', userOpsBatch);
-
-            // sign transactions added to the batch
-            const op = await primeSdk.sign();
-            console.log(`Signed UserOp: ${await printOp(op)}`);
-
-            // sending to the bundler...
-            const uoHash = await primeSdk.send(op);
-            console.log(`UserOpHash: ${uoHash}`);
-
-            // get transaction hash...
-            console.log('Waiting for transaction...');
-            const txHash = await primeSdk.getUserOpReceipt(uoHash);
-            console.log('\x1b[33m%s\x1b[0m', `Transaction hash: ${txHash}`);
-        }
-    };
-
     const handleAllowance = async (approveAmount: BigNumber) => {
-        if (isSocialLogin) {
-            await handleAllowanceWithSocialLogin(approveAmount);
-            return;
-        }
+        setIsAllowing(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (sportsAMMContract && signer) {
-            setIsAllowing(true);
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            try {
+        try {
+            const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, sUSDContractRaw, 'approve', [
+                    sportsAMMContract?.address || '',
+                    approveAmount,
+                ]);
+            } else if (sportsAMMContract && signer) {
                 let collateralContractWithSigner: ethers.Contract | undefined;
 
                 if (
@@ -511,87 +459,59 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    setIsAllowing(false);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log(e);
-                setIsAllowing(false);
             }
+
+            if (txHash && txHash !== null) {
+                toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+            }
+        } catch (e) {
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log(e);
         }
-    };
-
-    const handleSubmitWithSocialLogin = async () => {
-        if (primeSdk !== null) {
-            const provider = new ethers.providers.JsonRpcProvider('https://optimism-bundler.etherspot.io/');
-            // get erc20 Contract Interface
-            const erc20Instance = new ethers.Contract(
-                sportsAMMContract.addresses[networkId],
-                sportsAMMContract.abi,
-                provider
-            );
-
-            const ammQuote = await fetchAmmQuote(tokenAmount || 1);
-            const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
-            // get transferFrom encoded data
-            const transactionData = erc20Instance.interface.encodeFunctionData('buyFromAMM', [
-                market.address,
-                Number(market.position),
-                parsedAmount,
-                ammQuote,
-                ethers.utils.parseEther('0.02'),
-            ]);
-
-            // clear the transaction batch
-            await primeSdk.clearUserOpsFromBatch();
-
-            // add transactions to the batch
-            const userOpsBatch = await primeSdk.addUserOpsToBatch({
-                to: sportsAMMContract.addresses[networkId],
-                data: transactionData,
-            });
-            console.log('transactions: ', userOpsBatch);
-
-            // sign transactions added to the batch
-            const op = await primeSdk.sign();
-            console.log(`Signed UserOp: ${await printOp(op)}`);
-
-            // getting gas estimated...
-            const totalGasEstimated = await primeSdk.totalGasEstimated(op);
-            console.log(`Total gas estimated: ${totalGasEstimated}`);
-
-            // sending to the bundler...
-            const uoHash = await primeSdk.send(op);
-            console.log(`UserOpHash: ${uoHash}`);
-
-            // get transaction hash...
-            console.log('Waiting for transaction...');
-            const txHash = await primeSdk.getUserOpReceipt(uoHash);
-            console.log('\x1b[33m%s\x1b[0m', `Transaction hash: ${txHash}`);
-        }
+        setIsAllowing(false);
     };
 
     const handleSubmit = async () => {
-        if (isSocialLogin) {
-            await handleSubmitWithSocialLogin();
-            return;
-        }
+        setIsBuying(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-        const { sportsAMMContract, overtimeVoucherContract, signer } = networkConnector;
-        if (sportsAMMContract && overtimeVoucherContract && signer) {
-            setIsBuying(true);
-            const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
-            const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
+        try {
             const ammQuote = await fetchAmmQuote(tokenAmount || 1);
             const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
+            const referralId =
+                walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
+                    ? getReferralId()
+                    : null;
 
-            try {
-                const referralId =
-                    walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
-                        ? getReferralId()
-                        : null;
+            const { sportsAMMContract, overtimeVoucherContract, signer } = networkConnector;
+
+            let txHash;
+            if (isSocialLogin) {
+                const etherspotTransactionInfo = getAMMSportsEtherspotTransactionInfo(
+                    isVoucherSelected,
+                    overtimeVoucher ? overtimeVoucher.id : 0,
+                    selectedStableIndex,
+                    networkId,
+                    market.address,
+                    market.position,
+                    parsedAmount,
+                    ammQuote,
+                    referralId,
+                    ethers.utils.parseEther('0.02')
+                );
+                txHash = await executeEtherspotTransaction(
+                    primeSdk,
+                    networkId,
+                    isVoucherSelected ? overtimeVoucherContractRaw : sportsAMMContractRaw,
+                    etherspotTransactionInfo.methodName,
+                    etherspotTransactionInfo.data
+                );
+            } else if (sportsAMMContract && overtimeVoucherContract && signer) {
+                const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+                const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
+
                 const tx = await getAMMSportsTransaction(
                     isVoucherSelected,
                     overtimeVoucher ? overtimeVoucher.id : 0,
@@ -611,27 +531,29 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    refetchBalances(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
-                    setIsBuying(false);
-                    setUsdAmount('');
-                    setTokenAmount(0);
-                    dispatch(removeAll());
-                    onBuySuccess && onBuySuccess();
-
-                    trackEvent({
-                        category: 'parlay-single',
-                        action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
-                        value: Number(formatCurrency(ammPosition.quote, 3, true)),
-                    });
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                setIsBuying(false);
-                refetchBalances(walletAddress, networkId);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log('Error ', e);
             }
+            if (txHash && txHash !== null) {
+                refetchBalances(walletAddress, networkId);
+                toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
+                setUsdAmount('');
+                setTokenAmount(0);
+                dispatch(removeAll());
+                onBuySuccess && onBuySuccess();
+
+                trackEvent({
+                    category: 'parlay-single',
+                    action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
+                    value: Number(formatCurrency(ammPosition.quote, 3, true)),
+                });
+            }
+        } catch (e) {
+            refetchBalances(walletAddress, networkId);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log('Error ', e);
         }
+        setIsBuying(false);
     };
 
     const MIN_TOKEN_AMOUNT = 1;

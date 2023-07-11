@@ -63,6 +63,54 @@ export const getAMMSportsTransaction: any = (
           );
 };
 
+export const getAMMSportsEtherspotTransactionInfo: any = (
+    isVoucherSelected: boolean,
+    voucherId: number,
+    stableIndex: number,
+    networkId: Network,
+    marketAddress: string,
+    selectedPosition: Position,
+    parsedAmount: BigNumber,
+    ammQuote: any,
+    referral?: string | null,
+    additionalSlippage?: BigNumber
+): { methodName: string; data: ReadonlyArray<any> } => {
+    const collateralAddress = getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
+    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+
+    if (isVoucherSelected) {
+        return {
+            methodName: 'buyFromAMMWithVoucher',
+            data: [marketAddress, Number(selectedPosition), parsedAmount, voucherId],
+        };
+    }
+
+    if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
+        return {
+            methodName: 'buyFromAMMWithDifferentCollateralAndReferrer',
+            data: [
+                marketAddress,
+                Number(selectedPosition),
+                parsedAmount,
+                ammQuote,
+                additionalSlippage,
+                collateralAddress,
+                referral || ZERO_ADDRESS,
+            ],
+        };
+    }
+
+    return referral
+        ? {
+              methodName: 'buyFromAMMWithReferrer',
+              data: [marketAddress, Number(selectedPosition), parsedAmount, ammQuote, additionalSlippage, referral],
+          }
+        : {
+              methodName: 'buyFromAMM',
+              data: [marketAddress, Number(selectedPosition), parsedAmount, ammQuote, additionalSlippage],
+          };
+};
+
 export const getSportsAMMQuoteMethod: any = (
     stableIndex: number,
     networkId: Network,
