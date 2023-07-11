@@ -2,9 +2,7 @@ import { Network } from 'enums/network';
 
 const paymentTokenContract = {
     addresses: {
-        [Network.Goerli]: '0x2851715A8d25e176413A77b495762435D5dDBd0d', // eUSD
         [Network.OptimismMainnet]: '0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9',
-        [Network.OptimismKovan]: '0x762838253a45a9106cc859ec99df31df48fcf735',
         [Network.OptimismGoerli]: '0xE1ceaa829525a08C1d39A5CEBe4b42aF58d77198',
         [Network.ArbitrumOne]: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
     },

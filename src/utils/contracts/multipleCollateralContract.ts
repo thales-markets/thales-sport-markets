@@ -602,10 +602,7 @@ const abi = [
 const multipleCollateral = {
     sUSD: {
         addresses: {
-            [Network.Goerli]: '0x2851715A8d25e176413A77b495762435D5dDBd0d', // eUSD
             [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9', // sUSD
-            [Network.Kovan]: '0x5d7e13023a6f2245D7Af1eaE97dFF2EF1057F5b9',
-            [Network.OptimismKovan]: '',
             [Network.OptimismGoerli]: '0xE1ceaa829525a08C1d39A5CEBe4b42aF58d77198',
             [Network.ArbitrumOne]: '',
         },
@@ -613,10 +610,7 @@ const multipleCollateral = {
     },
     DAI: {
         addresses: {
-            [Network.Goerli]: '0x11fe4b6ae13d2a6055c8d9cf65c55bac32b5d844',
             [Network.OptimismMainnet]: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
-            [Network.Kovan]: '',
-            [Network.OptimismKovan]: '',
             [Network.OptimismGoerli]: '',
             [Network.ArbitrumOne]: '',
         },
@@ -624,10 +618,7 @@ const multipleCollateral = {
     },
     USDC: {
         addresses: {
-            [Network.Goerli]: '0x07865c6e87b9f70255377e024ace6630c1eaa37f',
             [Network.OptimismMainnet]: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
-            [Network.Kovan]: '',
-            [Network.OptimismKovan]: '',
             [Network.OptimismGoerli]: '',
             [Network.ArbitrumOne]: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
         },
@@ -635,10 +626,7 @@ const multipleCollateral = {
     },
     USDT: {
         addresses: {
-            [Network.Goerli]: '',
             [Network.OptimismMainnet]: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
-            [Network.Kovan]: '',
-            [Network.OptimismKovan]: '',
             [Network.OptimismGoerli]: '',
             [Network.ArbitrumOne]: '',
         },

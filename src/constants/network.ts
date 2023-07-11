@@ -3,19 +3,13 @@ import { Network } from 'enums/network';
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const NetworkNameById: Record<Network, string> = {
-    [Network.Goerli]: 'goerli',
     [Network.OptimismMainnet]: 'optimism mainnet',
-    [Network.Kovan]: 'kovan',
-    [Network.OptimismKovan]: 'optimism kovan',
     [Network.OptimismGoerli]: 'optimism goerli',
     [Network.ArbitrumOne]: 'ARBITRUM ONE',
 };
 
 export const CollateralByNetworkId: Record<Network, string> = {
-    [Network.Goerli]: 'sUSD',
     [Network.OptimismMainnet]: 'sUSD',
-    [Network.Kovan]: 'sUSD',
-    [Network.OptimismKovan]: 'sUSD',
     [Network.OptimismGoerli]: 'sUSD',
     [Network.ArbitrumOne]: 'USDC',
 };
@@ -66,17 +60,6 @@ export const SUPPORTED_NETWORKS_DESCRIPTIONS: Record<number, OptimismNetwork> = 
         chainName: 'Optimism',
         rpcUrls: ['https://mainnet.optimism.io'],
         blockExplorerUrls: ['https://optimistic.etherscan.io/'],
-        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
-        nativeCurrency: {
-            symbol: 'ETH',
-            decimals: 18,
-        },
-    },
-    [Network.OptimismKovan]: {
-        chainId: '0x45',
-        chainName: 'Optimism Kovan',
-        rpcUrls: ['https://kovan.optimism.io'],
-        blockExplorerUrls: ['https://kovan-optimistic.etherscan.io/'],
         iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
         nativeCurrency: {
             symbol: 'ETH',

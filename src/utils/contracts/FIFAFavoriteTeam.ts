@@ -2,10 +2,7 @@ import { Network } from 'enums/network';
 
 export const FIFAFavoriteTeam = {
     addresses: {
-        [Network.Goerli]: '',
         [Network.OptimismMainnet]: '0x0a47d5F27149270d45D74abD45FA30E567aB9b7D',
-        [Network.Kovan]: '',
-        [Network.OptimismKovan]: '',
         [Network.OptimismGoerli]: '0xD66eE2D0F8810304402F6bE0E57E7C0a261b54A3',
         [Network.ArbitrumOne]: '',
     },
