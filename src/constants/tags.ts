@@ -335,6 +335,30 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 116,
     },
+    {
+        id: 9042,
+        label: 'UEFA Champions League Qualification',
+        logoClass: 'icon-league league--ucl',
+        favourite: false,
+        hidden: false,
+        priority: 111,
+    },
+    {
+        id: 19216,
+        label: 'UEFA Conference League qualification',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 118,
+    },
+    {
+        id: 9076,
+        label: 'FIFA World Cup Women',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 119,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -378,6 +402,9 @@ export const SPORTS_MAP: SportsMap = {
     18806: 'Soccer',
     18821: 'Soccer',
     9288: 'Soccer',
+    9042: 'Soccer',
+    19216: 'Soccer',
+    9076: 'Soccer',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -428,6 +455,9 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
         18806,
         18821,
         9288,
+        9042,
+        19216,
+        9076,
     ],
     MMA: [9007, 18196],
     Motosport: [9445, 9497],
@@ -456,6 +486,9 @@ export const ENETPULSE_SPORTS = [
     18806,
     18821,
     9288,
+    9042,
+    19216,
+    9076,
 ];
 
 export const JSON_ODDS_SPORTS = [109021, 109121];
@@ -463,7 +496,7 @@ export const JSON_ODDS_SPORTS = [109021, 109121];
 export const FIFA_WC_TAG = 9018;
 export const FIFA_WC_U20_TAG = 9296;
 export const IIHF_WC_TAG = 9033;
-export const UEFA_TAGS = [9016, 9017, 18806, 18821, 9288];
+export const UEFA_TAGS = [9016, 9017, 18806, 18821, 9288, 9042, 19216, 9076];
 export const MOTOSPORT_TAGS = [9445, 9497];
 export const GOLF_TAGS = [109021, 109121];
 export const GOLF_TOURNAMENT_WINNER_TAG = 109121;
@@ -516,6 +549,9 @@ export const SCORING_MAP: SportsMap = {
     18806: 'goals',
     18821: 'goals',
     9288: 'goals',
+    9042: 'goals',
+    19216: 'goals',
+    9076: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -559,6 +595,9 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     18806: 'regular',
     18821: 'regular',
     9288: 'regular',
+    9042: 'regular',
+    19216: 'regular',
+    9076: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -600,4 +639,7 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     18806: 'half',
     18821: 'half',
     9288: 'half',
+    9042: 'half',
+    19216: 'half',
+    9076: 'half',
 };
