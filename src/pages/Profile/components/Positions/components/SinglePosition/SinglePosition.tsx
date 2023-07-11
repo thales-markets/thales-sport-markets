@@ -23,7 +23,13 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsSocialLogin,
+    getIsWalletConnected,
+    getNetworkId,
+    getPrimeSdk,
+    getWalletAddress,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { ParlaysMarket, SportMarketLiveResult } from 'types/markets';
@@ -76,6 +82,7 @@ import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -96,6 +103,8 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnect = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
@@ -181,28 +190,36 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
 
     const claimReward = async () => {
-        const { signer } = networkConnector;
-        if (signer) {
-            const contract = new ethers.Contract(position.market.address, sportsMarketContract.abi, signer);
-            contract.connect(signer);
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            try {
-                const tx = await contract.exerciseOptions({
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+        try {
+            const { provider, signer } = networkConnector;
+            const contract = new ethers.Contract(position.market.address, sportsMarketContract.abi, provider);
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, contract, 'exerciseOptions');
+            } else if (signer) {
+                const contractWithSigner = contract.connect(signer);
+                const tx = await contractWithSigner.exerciseOptions({
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
-                    if (setShareTicketModalData && setShowShareTicketModal && !isCanceled) {
-                        setShareTicketModalData(shareTicketData);
-                        setShowShareTicketModal(true);
-                    }
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log(e);
             }
+            if (txHash && txHash !== null) {
+                toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                if (setShareTicketModalData && setShowShareTicketModal && !isCanceled) {
+                    setShareTicketModalData(shareTicketData);
+                    setShowShareTicketModal(true);
+                }
+            }
+        } catch (e) {
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log(e);
         }
     };
 

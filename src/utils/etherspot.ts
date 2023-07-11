@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { Contract, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import { PrimeSdk } from '@etherspot/prime-sdk';
 
@@ -11,18 +11,17 @@ export const EtherspotProviderByNetworkId: Record<Network, string> = {
 export const executeEtherspotTransaction = async (
     primeSdk: PrimeSdk | null,
     networkId: Network,
-    contract: any,
+    contract: Contract | undefined,
     methodName: string,
     data?: ReadonlyArray<any>
 ): Promise<string | null> => {
-    if (primeSdk === null) return null;
+    if (primeSdk === null || !contract) return null;
 
     const provider = new ethers.providers.JsonRpcProvider(EtherspotProviderByNetworkId[networkId]);
-    const contractAddress = contract.addresses[networkId];
-    const contractAbi = contract.abi;
+    const contractAddress = contract.address;
 
     // get contract interface
-    const contractInstance = new ethers.Contract(contractAddress, contractAbi, provider);
+    const contractInstance = contract.connect(provider);
 
     // get method encoded data
     const transactionData = contractInstance.interface.encodeFunctionData(methodName, data);

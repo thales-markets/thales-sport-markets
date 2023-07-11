@@ -73,9 +73,6 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
-import sUSDContractRaw from 'utils/contracts/sUSDContract';
-import sportsAMMContractRaw from 'utils/contracts/sportsAMMContract';
-import overtimeVoucherContractRaw from 'utils/contracts/overtimeVoucherContract';
 import { executeEtherspotTransaction } from 'utils/etherspot';
 
 type SingleProps = {
@@ -429,27 +426,22 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
         try {
             const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+            const collateralContract =
+                selectedStableIndex !== 0 &&
+                multipleCollateral &&
+                multipleCollateral[selectedStableIndex] &&
+                isMultiCollateralSupported
+                    ? multipleCollateral[selectedStableIndex]
+                    : sUSDContract;
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, sUSDContractRaw, 'approve', [
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, collateralContract, 'approve', [
                     sportsAMMContract?.address || '',
                     approveAmount,
                 ]);
             } else if (sportsAMMContract && signer) {
-                let collateralContractWithSigner: ethers.Contract | undefined;
-
-                if (
-                    selectedStableIndex !== 0 &&
-                    multipleCollateral &&
-                    multipleCollateral[selectedStableIndex] &&
-                    isMultiCollateralSupported
-                ) {
-                    collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
-                } else {
-                    collateralContractWithSigner = sUSDContract?.connect(signer);
-                }
-
+                const collateralContractWithSigner: ethers.Contract | undefined = collateralContract?.connect(signer);
                 const addressToApprove = sportsAMMContract.address;
 
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
@@ -504,7 +496,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                 txHash = await executeEtherspotTransaction(
                     primeSdk,
                     networkId,
-                    isVoucherSelected ? overtimeVoucherContractRaw : sportsAMMContractRaw,
+                    isVoucherSelected ? overtimeVoucherContract : sportsAMMContract,
                     etherspotTransactionInfo.methodName,
                     etherspotTransactionInfo.data
                 );
