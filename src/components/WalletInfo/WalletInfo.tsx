@@ -14,20 +14,22 @@ import { formatCurrency } from 'utils/formatters/number';
 import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { NETWORK_SWITCHER_SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
+import { useSwitchNetwork } from 'wagmi';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const { switchNetwork } = useSwitchNetwork();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const [dropDownOpen, setDropDownOpen] = useState(false);
-    const dispatch = useDispatch();
-
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
+    const [dropDownOpen, setDropDownOpen] = useState(false);
 
     const stableCointBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -94,7 +96,9 @@ const WalletInfo: React.FC = () => {
                                 <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
                                     <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)}>
                                         <NetworkIcon
-                                            className={`icon ${networkId === 42161 ? 'icon--arb' : 'icon--op'}`}
+                                            className={`icon ${
+                                                networkId === Network.ArbitrumOne ? 'icon--arb' : 'icon--op'
+                                            }`}
                                         />
                                         {!hideNetworkSwitcher && <DownIcon className={`icon icon--arrow-down`} />}
                                     </NetworkIconWrapper>
@@ -111,6 +115,14 @@ const WalletInfo: React.FC = () => {
                                                                         method: 'wallet_switchEthereumChain',
                                                                         params: [{ chainId: network.chainId }],
                                                                     });
+                                                                    switchNetwork?.(network.networkId);
+                                                                    // Trigger App.js init
+                                                                    // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
+                                                                    dispatch(
+                                                                        switchToNetworkId({
+                                                                            networkId: network.networkId as Network,
+                                                                        })
+                                                                    );
                                                                 } catch (switchError: any) {
                                                                     if (switchError.code === 4902) {
                                                                         try {
@@ -131,14 +143,16 @@ const WalletInfo: React.FC = () => {
                                                                         }
                                                                     }
                                                                 }
+                                                            } else {
+                                                                switchNetwork?.(network.networkId);
+                                                                // Trigger App.js init
+                                                                // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
+                                                                dispatch(
+                                                                    switchToNetworkId({
+                                                                        networkId: network.networkId as Network,
+                                                                    })
+                                                                );
                                                             }
-                                                            // Trigger App.js init
-                                                            // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
-                                                            dispatch(
-                                                                switchToNetworkId({
-                                                                    networkId: network.networkId as NetworkId,
-                                                                })
-                                                            );
                                                         }
 
                                                         setDropDownOpen(false);
@@ -179,7 +193,7 @@ const Container = styled(FlexDivCentered)`
 const Wrapper = styled.div`
     display: flex;
     border-radius: 20px;
-    border: 2px solid #39caf8;
+    border: 2px solid ${(props) => props.theme.borderColor.quaternary};
     min-width: 160px;
     height: 28px;
     justify-content: space-between;
@@ -214,7 +228,7 @@ const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?:
 `;
 
 const WalletBalanceInfo = styled.div`
-    border-left: 2px solid #39caf7;
+    border-left: 2px solid ${(props) => props.theme.borderColor.quaternary};
     padding-left: 7px;
     padding-right: 6px;
     height: 70%;
@@ -223,7 +237,7 @@ const WalletBalanceInfo = styled.div`
 `;
 
 const NetworkIconWrapper = styled.div`
-    background: #39caf7;
+    background: ${(props) => props.theme.background.quaternary};
     height: 28px;
     border-radius: 20px;
     display: flex;
@@ -242,7 +256,7 @@ const Text = styled.span`
     font-weight: 800;
     font-size: 10.8px;
     line-height: 12px;
-    color: #39caf7;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const VoucherText = styled(Text)`
@@ -263,13 +277,13 @@ const NetworkText = styled.span`
     font-size: 10.8px;
     line-height: 13px;
     cursor: pointer;
-    color: #1a1c2b;
+    color: ${(props) => props.theme.button.textColor.primary};
     text-align: left;
 `;
 
 const NetworkIcon = styled.i`
     font-size: 24px;
-    color: #1a1c2b;
+    color: ${(props) => props.theme.button.textColor.primary};
     &.icon--arb {
         position: relative;
         left: -2px;
@@ -277,7 +291,7 @@ const NetworkIcon = styled.i`
 `;
 const DownIcon = styled.i`
     font-size: 12px;
-    color: #1a1c2b;
+    color: ${(props) => props.theme.button.textColor.primary};
 `;
 
 const NetworkDropDown = styled.div`
@@ -288,7 +302,7 @@ const NetworkDropDown = styled.div`
     display: flex;
     flex-direction: column;
     border-radius: 20px;
-    background: #39caf8;
+    background: ${(props) => props.theme.background.quaternary};
     width: 100%;
     min-width: 160px;
     padding: 10px;
@@ -308,7 +322,7 @@ const NetworkWrapper = styled.div`
 
 const NetworkSelectedIndicator = styled.div`
     position: absolute;
-    background: #1a1c2b;
+    background: ${(props) => props.theme.background.primary};
     border-radius: 20px;
     width: 6px;
     height: 6px;

@@ -36,6 +36,8 @@ import {
     WalletWrapper,
     Wrapper,
 } from './styled-components';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type NavMenuMobileProps = {
     visibility?: boolean | null;
@@ -45,6 +47,7 @@ type NavMenuMobileProps = {
 const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVisibility }) => {
     const { t } = useTranslation();
     const location = useLocation();
+    const theme: ThemeInterface = useTheme();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -73,9 +76,11 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(false)}
+                                    data-matomo-category="navigation-menu-mobile"
+                                    data-matomo-action={item.name}
                                 >
                                     {isWalletConnected ? (
-                                        <ProfileIconWidget avatarSize={25} iconColor={'#FFFFFF'} />
+                                        <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
                                     ) : (
                                         <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     )}
@@ -93,6 +98,8 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(false)}
+                                    data-matomo-category="navigation-menu-mobile"
+                                    data-matomo-action={item.name}
                                 >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
@@ -109,6 +116,8 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(false)}
+                                    data-matomo-category="navigation-menu-mobile"
+                                    data-matomo-action={item.name}
                                 >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
@@ -125,6 +134,8 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(false)}
+                                    data-matomo-category="navigation-menu-mobile"
+                                    data-matomo-action={item.name}
                                 >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
@@ -134,18 +145,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    <MintVoucher
-                        style={{ margin: '20px auto 0px auto', width: 205 }}
-                        buttonStyle={{
-                            width: '100%',
-                            background: '#303656',
-                            borderRadius: 3,
-                            border: `1.5px solid #3FD1FF`,
-                            color: '#3FD1FF',
-                            fontSize: 14,
-                            lineHeight: '16px',
-                        }}
-                    />
+                    <MintVoucher style={{ margin: '20px auto 0px auto', width: 205 }} />
                     <LogoContainer>
                         <Logo />
                         <CloseIcon onClick={() => setNavMenuVisibility(false)} />

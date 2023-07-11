@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'redux/rootReducer';
 
-export type AppSliceState = {
+type AppSliceState = {
     isReady: boolean;
     isMobile: boolean;
 };
@@ -11,7 +11,7 @@ const initialState: AppSliceState = {
     isMobile: false,
 };
 
-export const appSlice = createSlice({
+const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
@@ -24,7 +24,7 @@ export const appSlice = createSlice({
     },
 });
 
-export const getAppState = (state: RootState) => state.app;
+const getAppState = (state: RootState) => state.app;
 export const getIsAppReady = (state: RootState) => getAppState(state).isReady;
 export const getIsMobile = (state: RootState) => getAppState(state).isMobile;
 

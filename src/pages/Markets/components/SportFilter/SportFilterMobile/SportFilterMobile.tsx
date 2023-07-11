@@ -1,5 +1,5 @@
-import { SportFilterEnum } from 'constants/markets';
 import { SPORTS_TAGS_MAP } from 'constants/tags';
+import { SportFilterEnum } from 'enums/markets';
 import { DIRECTION_HORIZONTAL } from 'hammerjs';
 import React, { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';

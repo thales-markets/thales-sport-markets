@@ -1,10 +1,12 @@
-export const sportsAMMContract = {
+import { Network } from 'enums/network';
+
+const sportsAMMContract = {
     addresses: {
-        5: '0x707075f0B619acF5A614Efb54FA8aC9B2FB55188',
-        10: '0x170a5714112daEfF20E798B6e92e25B86Ea603C1',
-        42: '0x2d6455eE8615B8B5EA5CBc33c06E8376d70762A1',
-        420: '0x7465c5d60d3d095443CF9991Da03304A30D42Eae',
-        42161: '0xae56177e405929c95E5d4b04C0C87E428cB6432B',
+        [Network.Goerli]: '0x707075f0B619acF5A614Efb54FA8aC9B2FB55188',
+        [Network.OptimismMainnet]: '0x170a5714112daEfF20E798B6e92e25B86Ea603C1',
+        [Network.Kovan]: '0x2d6455eE8615B8B5EA5CBc33c06E8376d70762A1',
+        [Network.OptimismGoerli]: '0x7465c5d60d3d095443CF9991Da03304A30D42Eae',
+        [Network.ArbitrumOne]: '0xae56177e405929c95E5d4b04C0C87E428cB6432B',
     },
     abi: [
         {

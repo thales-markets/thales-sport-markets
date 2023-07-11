@@ -1,9 +1,11 @@
-export const overtimeVoucherContract = {
+import { Network } from 'enums/network';
+
+const overtimeVoucherContract = {
     addresses: {
-        5: '0xef4e90b909C0a5919AE049Ea18C997FdA09Ab66c',
-        10: '0x4393F1470317Da64e277b29D96e5bf203f28eFbE',
-        420: '0x9483eFf448042c366a4297dB465FaE108d2e6ea6',
-        42161: '0x9Ee26dcb9A3F1104B37A5dCc8573c8b144c7ce42',
+        [Network.Goerli]: '0xef4e90b909C0a5919AE049Ea18C997FdA09Ab66c',
+        [Network.OptimismMainnet]: '0x4393F1470317Da64e277b29D96e5bf203f28eFbE',
+        [Network.OptimismGoerli]: '0x9483eFf448042c366a4297dB465FaE108d2e6ea6',
+        [Network.ArbitrumOne]: '0x9Ee26dcb9A3F1104B37A5dCc8573c8b144c7ce42',
     },
     abi: [
         {

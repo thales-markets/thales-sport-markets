@@ -1,18 +1,18 @@
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { getAddress } from 'utils/formatters/ethers';
-import { NetworkNameById } from 'utils/network';
 import { RootState } from 'redux/rootReducer';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
+import { NetworkNameById } from 'constants/network';
 import { PrimeSdk } from '@etherspot/prime-sdk';
 
 const sliceName = 'wallet';
 
-export type WalletSliceState = {
+type WalletSliceState = {
     walletAddress: string | null;
-    networkId: NetworkId;
+    networkId: Network;
     networkName: string;
-    switchToNetworkId: NetworkId; // used to trigger manually network switch in App.js
+    switchToNetworkId: Network; // used to trigger manually network switch in App.js
     isSocialLogin: boolean;
     primeSdk: PrimeSdk | null;
 };
@@ -26,13 +26,10 @@ const initialState: WalletSliceState = {
     primeSdk: null,
 };
 
-export const walletDetailsSlice = createSlice({
+const walletDetailsSlice = createSlice({
     name: sliceName,
     initialState,
     reducers: {
-        resetWallet: () => {
-            return initialState;
-        },
         updateWallet: (state, action: PayloadAction<Partial<WalletSliceState>>) => {
             const { payload } = action;
             const newState = {
@@ -46,7 +43,7 @@ export const walletDetailsSlice = createSlice({
         updateNetworkSettings: (
             state,
             action: PayloadAction<{
-                networkId: NetworkId;
+                networkId: Network;
             }>
         ) => {
             const { networkId } = action.payload;
@@ -57,7 +54,7 @@ export const walletDetailsSlice = createSlice({
         switchToNetworkId: (
             state,
             action: PayloadAction<{
-                networkId: NetworkId;
+                networkId: Network;
             }>
         ) => {
             state.switchToNetworkId = action.payload.networkId;
@@ -71,24 +68,17 @@ export const walletDetailsSlice = createSlice({
     },
 });
 
-export const getWalletState = (state: RootState) => state[sliceName];
+const getWalletState = (state: RootState) => state[sliceName];
 export const getNetworkId = (state: RootState) => getWalletState(state).networkId;
-export const getNetworkName = (state: RootState) => getWalletState(state).networkName;
-export const getNetwork = (state: RootState) => ({
-    networkId: getNetworkId(state),
-    networkName: getNetworkName(state),
-});
 export const getSwitchToNetworkId = (state: RootState) => getWalletState(state).switchToNetworkId;
 export const getWalletAddress = (state: RootState) => getWalletState(state).walletAddress;
 export const getIsWalletConnected = createSelector(getWalletAddress, (walletAddress) => walletAddress != null);
-export const getWalletInfo = (state: RootState) => getWalletState(state);
 export const getIsSocialLogin = (state: RootState) => getWalletState(state).isSocialLogin;
 export const getPrimeSdk = (state: RootState) => getWalletState(state).primeSdk;
 
 export const {
     updateNetworkSettings,
     switchToNetworkId,
-    resetWallet,
     updateWallet,
     updateIsSocialLogin,
     updatePrimeSdk,

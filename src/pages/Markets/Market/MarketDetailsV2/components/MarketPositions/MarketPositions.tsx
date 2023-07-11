@@ -1,4 +1,3 @@
-import { Position } from 'constants/options';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -7,6 +6,7 @@ import { RootState } from 'redux/rootReducer';
 import { AvailablePerPosition, SportMarketInfo } from 'types/markets';
 import { getVisibilityOfDrawOption } from 'utils/markets';
 import PositionDetails from '../PositionDetails';
+import { Position } from 'enums/markets';
 
 const defaultAvailablePerPosition: AvailablePerPosition = {
     [Position.HOME]: {

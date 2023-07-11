@@ -1,11 +1,10 @@
-import { MAIN_COLORS } from 'constants/ui';
 import styled from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
 import { Label } from '../../styled-components';
 
 export const Container = styled(FlexDivColumnNative)`
     align-items: center;
-    background-color: ${MAIN_COLORS.LIGHT_GRAY};
+    background-color: ${(props) => props.theme.background.secondary};
     border-radius: 4px;
     padding: 12px 10px;
     width: 100%;
@@ -70,14 +69,9 @@ export const Value = styled(TicketId)`
     }
 `;
 
-export const NumberOfGames = styled(Label)`
-    font-weight: 700;
-    text-transform: none;
-`;
-
 export const WinLabel = styled(Label)`
     font-weight: 900;
-    color: ${MAIN_COLORS.TEXT.POTENTIAL_PROFIT};
+    color: ${(props) => props.theme.status.win};
     text-transform: uppercase;
 `;
 
@@ -87,7 +81,7 @@ export const WinValue = styled(WinLabel)`
 
 export const ArrowIcon = styled.i`
     font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     margin-right: 10px;
     margin-left: 10px;
     @media (max-width: 768px) {
@@ -95,15 +89,6 @@ export const ArrowIcon = styled.i`
         margin-left: 5px;
         font-size: 9px;
     }
-`;
-
-export const ArrowIconFooter = styled.i`
-    cursor: pointer;
-    font-size: 12px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
-    margin-right: 10px;
-    position: absolute;
-    left: 10px;
 `;
 
 export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean }>`
@@ -116,8 +101,8 @@ export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean
 export const Divider = styled.div`
     height: 1px;
     border: none;
-    background-color: ${MAIN_COLORS.DIVIDER_COLOR};
-    color: ${MAIN_COLORS.DIVIDER_COLOR};
+    background-color: ${(props) => props.theme.background.tertiary};
+    color: ${(props) => props.theme.textColor.secondary};
     width: 100%;
     margin-top: 8px;
     margin-bottom: 10px;

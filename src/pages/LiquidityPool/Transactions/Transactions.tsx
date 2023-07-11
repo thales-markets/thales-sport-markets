@@ -11,7 +11,7 @@ import { LiquidityPoolUserTransactions, LiquidityPoolUserTransaction, LiquidityP
 import SelectInput from 'components/SelectInput';
 import useLiquidityPoolUserTransactionsQuery from 'queries/liquidityPool/useLiquidityPoolUserTransactionsQuery';
 import UserTransactionsTable from '../UserTransactionsTable';
-import { LiquidityPoolTransaction } from 'constants/liquidityPool';
+import { LiquidityPoolTransaction } from 'enums/liquidityPool';
 
 type TransactionsProps = {
     currentRound: number;
@@ -92,7 +92,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
     const noLiquidityPoolMyTransactions = liquidityPoolMyTransactions.length === 0;
 
     return (
-        <Container>
+        <Container data-matomo-category="liquidity-pool" data-matomo-action="interaction-with-transaction-tables">
             <Header>
                 <TabContainer>
                     {tabContent.map((tab, index) => (
@@ -193,7 +193,7 @@ const Tab = styled(FlexDivCentered)<{ isActive: boolean; index: number }>`
     user-select: none;
     margin-left: 0px;
     margin-right: 40px;
-    color: #3b4472;
+    color: ${(props) => props.theme.textColor.secondary};
     &.selected {
         transition: 0.2s;
         color: ${(props) => props.theme.textColor.primary};
@@ -211,29 +211,12 @@ const Tab = styled(FlexDivCentered)<{ isActive: boolean; index: number }>`
 
 const TableContainer = styled(FlexDivColumn)`
     overflow: auto;
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #04045a;
-        border-radius: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-        border-radius: 15px;
-        background: #355dff;
-    }
-    ::-webkit-scrollbar-thumb:active {
-        background: #44e1e2;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: rgb(67, 116, 255);
-    }
     @media (max-width: 767px) {
         width: 700px;
     }
 `;
 
-export const SelectContainer = styled.div`
+const SelectContainer = styled.div`
     width: 230px;
 `;
 

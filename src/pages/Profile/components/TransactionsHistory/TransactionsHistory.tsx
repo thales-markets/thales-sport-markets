@@ -48,7 +48,7 @@ const Label = styled(CategoryLabel)`
     font-size: 10px;
     line-height: 12px;
     text-transform: uppercase;
-    color: #5f6180;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 const Wrapper = styled(CategoryContainer)<{ active: boolean }>`
@@ -57,7 +57,7 @@ const Wrapper = styled(CategoryContainer)<{ active: boolean }>`
     margin: 10px 0 !important;
     ${Icon},
     ${Label} {
-        color: ${(props) => (props.active ? 'white' : '#5f6180')};
+        color: ${(props) => (props.active ? props.theme.textColor.primary : props.theme.textColor.secondary)};
     }
 `;
 

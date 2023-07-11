@@ -1,14 +1,14 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import networkConnector from 'utils/networkConnector';
 
-export type AMMContractsPausedData = {
+type AMMContractsPausedData = {
     parlayAMM: boolean;
     singleAMM: boolean;
 };
 
-const useAMMContractsPausedQuery = (networkId: NetworkId, options?: UseQueryOptions<AMMContractsPausedData>) => {
+const useAMMContractsPausedQuery = (networkId: Network, options?: UseQueryOptions<AMMContractsPausedData>) => {
     return useQuery<AMMContractsPausedData>(
         QUERY_KEYS.CheckPausedAMM(networkId),
         async () => {

@@ -1,10 +1,12 @@
-export const sportPositionalMarketDataContract = {
+import { Network } from 'enums/network';
+
+const sportPositionalMarketDataContract = {
     addresses: {
-        5: '0xC7D8c34048D8bf6eB24FC76c7A61F47754990c81',
-        10: '0xd8Bc9D6840C701bFAd5E7cf98CAdC2ee637c0701',
-        42: '0x05C370827A21E491953BD0b8B1ce3290584aC486',
-        420: '0x202209397e2A26dc3243bD4bF46480C1f6661032',
-        42161: '0x503e7F2C19384Ff68B445E21850fDC61f34434e6',
+        [Network.Goerli]: '0xC7D8c34048D8bf6eB24FC76c7A61F47754990c81',
+        [Network.OptimismMainnet]: '0xd8Bc9D6840C701bFAd5E7cf98CAdC2ee637c0701',
+        [Network.Kovan]: '0x05C370827A21E491953BD0b8B1ce3290584aC486',
+        [Network.OptimismGoerli]: '0x202209397e2A26dc3243bD4bF46480C1f6661032',
+        [Network.ArbitrumOne]: '0x503e7F2C19384Ff68B445E21850fDC61f34434e6',
     },
     abi: [
         {

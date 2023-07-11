@@ -1,12 +1,12 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { VaultUserTransactions } from 'types/vault';
 
 const useVaultUserTransactionsQuery = (
     vaultAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<VaultUserTransactions>
 ) => {
     return useQuery<VaultUserTransactions>(

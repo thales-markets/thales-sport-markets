@@ -93,7 +93,8 @@
             "batch-transaction-single-failure": "交易被拒绝或失败。",
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
-            "single-amm-paused": "AMM 已暂停"
+            "single-amm-paused": "AMM 已暂停",
+            "invalid-amount-max": "金额不能高于{{max}}"
         },
         "time-remaining": {
             "ended": "ended",

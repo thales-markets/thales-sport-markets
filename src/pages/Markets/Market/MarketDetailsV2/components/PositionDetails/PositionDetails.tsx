@@ -1,7 +1,6 @@
 import Tooltip from 'components/Tooltip';
 import { oddToastOptions } from 'config/toast';
 import { MIN_LIQUIDITY } from 'constants/markets';
-import { Position } from 'constants/options';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,6 +34,7 @@ import {
     TooltipFooterInfoLabel,
     TooltipBonusText,
 } from './styled-components';
+import { Position } from 'enums/markets';
 
 type PositionDetailsProps = {
     market: SportMarketInfo;

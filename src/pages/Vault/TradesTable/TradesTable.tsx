@@ -11,10 +11,10 @@ import i18n from 'i18n';
 import { formatCurrency } from 'utils/formatters/number';
 import SPAAnchor from 'components/SPAAnchor';
 import { VaultTrade, VaultTrades } from 'types/vault';
-import { VaultTradeStatus } from 'constants/vault';
 import { Colors } from 'styles/common';
 import PositionSymbol from 'components/PositionSymbol';
 import { getOddTooltipText, getParentMarketAddress, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import { VaultTradeStatus } from 'enums/vault';
 
 type TradesTableProps = {
     transactions: VaultTrades;
@@ -22,7 +22,7 @@ type TradesTableProps = {
     isLoading: boolean;
 };
 
-export const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
+const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
     const language = i18n.language;
     // @ts-ignore

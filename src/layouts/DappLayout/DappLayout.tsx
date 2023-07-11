@@ -16,12 +16,11 @@ import { getReferralId, setReferralId } from 'utils/referral';
 import { useLocation } from 'react-router-dom';
 import i18n from 'i18n';
 import { setTheme } from 'redux/modules/ui';
-import { Theme } from 'constants/ui';
-import ROUTES from 'constants/routes';
 import { generalConfig } from 'config/general';
 import axios from 'axios';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import { isAndroid, isMetamask, isMobile } from 'utils/device';
+import { Theme } from 'enums/ui';
 import Etherspot from './Etherspot';
 
 const DappLayout: React.FC = ({ children }) => {
@@ -90,11 +89,8 @@ const DappLayout: React.FC = ({ children }) => {
     }, [networkId, i18n.language, walletAddress]);
 
     useEffect(() => {
-        if (![ROUTES.MintWorldCupNFT, ROUTES.MarchMadness].includes(location.pathname)) {
-            dispatch(setTheme(Theme.DARK));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location.pathname]);
+        dispatch(setTheme(Theme.DARK));
+    }, [dispatch]);
 
     useEffect(() => {
         const checkMetamaskBrowser = async () => {

@@ -28,6 +28,8 @@ import SimpleLoader from 'components/SimpleLoader';
 import TimeRemaining from 'components/TimeRemaining';
 import { Colors, FlexDivColumn } from 'styles/common';
 import useVaultDataQuery from 'queries/vault/useVaultDataQuery';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type VaultOverviewProps = {
     vaultId: string;
@@ -36,6 +38,7 @@ type VaultOverviewProps = {
 const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
     const { t } = useTranslation();
     const language = i18n.language;
+    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const [lastValidVaultData, setLastValidVaultData] = useState<VaultData | undefined>(undefined);
@@ -60,7 +63,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
     }, [vaultDataQuery.isSuccess, vaultDataQuery.data, lastValidVaultData]);
 
     return (
-        <SpaContainer>
+        <SpaContainer data-matomo-category="vaults" data-matomo-action={vaultId}>
             <SPAAnchor href={buildVaultLink(vaultId, language)}>
                 <FlexDivColumn style={{ height: '100%' }}>
                     <VaultContainer>
@@ -111,7 +114,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                                     </VaultInfoContainer>
                                     <VaultInfoContainer>
                                         <VaultInfoLabel>{t('vault.round-end-label')}:</VaultInfoLabel>
-                                        <VaultInfo color="#3fd1ff">
+                                        <VaultInfo color={theme.textColor.quaternary}>
                                             {vaultData.isRoundEnded ? (
                                                 t('vault.round-ended-label')
                                             ) : (

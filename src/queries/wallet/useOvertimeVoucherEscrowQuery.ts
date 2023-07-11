@@ -1,6 +1,6 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
@@ -12,7 +12,7 @@ type OvertimeVoucherEscrowData = {
     hoursLeftToClaim: number;
 };
 
-const useOvertimeVoucherEscrowQuery = (walletAddress: string, networkId: NetworkId, options?: UseQueryOptions<any>) => {
+const useOvertimeVoucherEscrowQuery = (walletAddress: string, networkId: Network, options?: UseQueryOptions<any>) => {
     return useQuery<OvertimeVoucherEscrowData>(
         QUERY_KEYS.Wallet.OvertimeVoucherEscrow(walletAddress, networkId),
         async () => {

@@ -1,42 +1,43 @@
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 
-export const EtherscanNetworkNameById: Record<NetworkId, string> = {
-    10: 'optimistic',
-    42: 'kovan',
-    5: 'goerli',
-    420: 'goerli-optimism',
-    42161: '',
+const EtherscanNetworkNameById: Record<Network, string> = {
+    [Network.Goerli]: 'goerli',
+    [Network.OptimismMainnet]: 'optimistic',
+    [Network.Kovan]: 'kovan',
+    [Network.OptimismKovan]: '',
+    [Network.OptimismGoerli]: 'goerli-optimism',
+    [Network.ArbitrumOne]: '',
 };
 
-const getEtherscanBaseURL = (networkId: NetworkId) => {
+const getEtherscanBaseURL = (networkId: Network) => {
     const network = EtherscanNetworkNameById[networkId];
 
-    if (networkId === 42161) {
+    if (networkId === Network.ArbitrumOne) {
         return 'https://arbiscan.io/';
     }
 
     return `https://${network?.toLowerCase()}.etherscan.io`;
 };
 
-export const getEtherscanTxLink = (networkId: NetworkId, txId: string) => {
+export const getEtherscanTxLink = (networkId: Network, txId: string) => {
     const baseURL = getEtherscanBaseURL(networkId);
 
     return `${baseURL}/tx/${txId}`;
 };
 
-export const getEtherscanAddressLink = (networkId: NetworkId, address: string) => {
+export const getEtherscanAddressLink = (networkId: Network, address: string) => {
     const baseURL = getEtherscanBaseURL(networkId);
 
     return `${baseURL}/address/${address}`;
 };
 
-export const getEtherscanBlockLink = (networkId: NetworkId, block: string) => {
+export const getEtherscanBlockLink = (networkId: Network, block: string) => {
     const baseURL = getEtherscanBaseURL(networkId);
 
     return `${baseURL}/block/${block}`;
 };
 
-export const getEtherscanTokenLink = (networkId: NetworkId, address: string) => {
+export const getEtherscanTokenLink = (networkId: Network, address: string) => {
     const baseURL = getEtherscanBaseURL(networkId);
 
     return `${baseURL}/token/${address}`;

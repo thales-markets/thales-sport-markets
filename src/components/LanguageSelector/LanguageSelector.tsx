@@ -1,5 +1,6 @@
+import { SupportedLanguages } from 'enums/languages';
 import i18n from 'i18n';
-import { DEFAULT_LANGUAGE, LanguageNameMap, SupportedLanguages } from 'i18n/config';
+import { DEFAULT_LANGUAGE, LanguageNameMap } from 'i18n/config';
 import React, { useEffect, useState } from 'react';
 import Flag from 'react-flagpack';
 import { withTranslation } from 'react-i18next';
@@ -12,7 +13,7 @@ type LanguageSelectorProps = {
     isBurger?: boolean;
 };
 
-export const LanguageSelectorV2: React.FC<LanguageSelectorProps> = ({ isBurger }) => {
+const LanguageSelector: React.FC<LanguageSelectorProps> = ({ isBurger }) => {
     const [languageDropdownIsOpen, setLanguageDropdownIsOpen] = useState(false);
     const setDropdownIsOpen = (isOpen: boolean) => {
         if (!isOpen && !languageDropdownIsOpen) {
@@ -177,4 +178,4 @@ const LanguageFlag = (language: SupportedLanguages | any) => {
     }
 };
 
-export default withTranslation()(LanguageSelectorV2);
+export default withTranslation()(LanguageSelector);

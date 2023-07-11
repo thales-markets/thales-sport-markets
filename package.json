@@ -11,7 +11,7 @@
         "@metamask/detect-provider": "^1.2.0",
         "@rainbow-me/rainbowkit": "^0.12.16",
         "@reduxjs/toolkit": "^1.7.2",
-        "@socket.tech/plugin": "^1.0.8",
+        "@socket.tech/plugin": "^1.0.15",
         "@web3auth/base": "^6.1.1",
         "@web3auth/ethereum-provider": "^6.1.1",
         "@web3auth/no-modal": "^6.1.1",

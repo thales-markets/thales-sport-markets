@@ -3,8 +3,8 @@ import { AvailablePerDoubleChancePosition, SportMarketInfo } from '../../types/m
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
-import { DoubleChanceMarketType } from 'constants/tags';
 import { convertPriceImpactToBonus } from 'utils/markets';
+import { DoubleChanceMarketType } from 'enums/markets';
 
 const useAvailablePerDoubleChancePositionQuery = (
     markets: SportMarketInfo[],
