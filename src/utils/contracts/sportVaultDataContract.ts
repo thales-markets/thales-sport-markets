@@ -2,9 +2,7 @@ import { Network } from 'enums/network';
 
 const sportVaultDataContract = {
     addresses: {
-        [Network.Goerli]: '',
         [Network.OptimismMainnet]: '0x741AD22a9444D1B5e6606a3587EfFA5b8995321c',
-        [Network.Kovan]: '',
         [Network.OptimismGoerli]: '',
         [Network.ArbitrumOne]: '0x4830853AC480A7ee1a86E1B4Fa909f0665858f01',
     },
