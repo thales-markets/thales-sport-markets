@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsSocialLogin, getNetworkId, getPrimeSdk, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import {
@@ -32,12 +32,15 @@ import { refetchAfterVoucherClaim } from 'utils/queryConnector';
 import { LINKS } from 'constants/links';
 import { generalConfig } from 'config/general';
 import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const [isClaimable, setIsClaimable] = useState(false);
     const [isClaiming, setIsClaiming] = useState(false);
@@ -72,28 +75,43 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
         if (isClaiming) {
             return;
         }
-        const { overtimeVoucherEscrowContract, signer } = networkConnector;
-        if (overtimeVoucherEscrowContract && signer) {
-            const overtimeVoucherEscrowContractWithSigner = overtimeVoucherEscrowContract.connect(signer);
-            setIsClaiming(true);
-            const id = toast.loading(t('profile.messages.transaction-pending'));
-            try {
+
+        setIsClaiming(true);
+        const id = toast.loading(t('profile.messages.transaction-pending'));
+
+        try {
+            const { overtimeVoucherEscrowContract, signer } = networkConnector;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(
+                    primeSdk,
+                    networkId,
+                    overtimeVoucherEscrowContract,
+                    'claimVoucher'
+                );
+            } else if (overtimeVoucherEscrowContract && signer) {
+                const overtimeVoucherEscrowContractWithSigner = overtimeVoucherEscrowContract.connect(signer);
+
                 const tx = await overtimeVoucherEscrowContractWithSigner.claimVoucher({
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
+
                 if (txResult && txResult.transactionHash) {
-                    refetchAfterVoucherClaim(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('profile.messages.voucher-claim-success')));
-                    setIsClaiming(false);
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsClaiming(false);
-                console.log('Error ', e);
             }
+            if (txHash) {
+                refetchAfterVoucherClaim(walletAddress, networkId);
+                toast.update(id, getSuccessToastOptions(t('profile.messages.voucher-claim-success')));
+            }
+        } catch (e) {
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log('Error ', e);
         }
-    }, [networkId, t, isClaiming, walletAddress]);
+        setIsClaiming(false);
+    }, [networkId, t, isClaiming, walletAddress, isSocialLogin, primeSdk]);
 
     useEffect(() => {
         setIsClaimable(!!overtimeVoucherEscrowData?.isClaimable);

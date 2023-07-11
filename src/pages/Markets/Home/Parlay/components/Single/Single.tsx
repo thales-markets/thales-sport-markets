@@ -426,6 +426,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
         try {
             const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+            const addressToApprove = sportsAMMContract?.address;
             const collateralContract =
                 selectedStableIndex !== 0 &&
                 multipleCollateral &&
@@ -437,12 +438,11 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             let txHash;
             if (isSocialLogin) {
                 txHash = await executeEtherspotTransaction(primeSdk, networkId, collateralContract, 'approve', [
-                    sportsAMMContract?.address || '',
+                    addressToApprove,
                     approveAmount,
                 ]);
             } else if (sportsAMMContract && signer) {
                 const collateralContractWithSigner: ethers.Contract | undefined = collateralContract?.connect(signer);
-                const addressToApprove = sportsAMMContract.address;
 
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),

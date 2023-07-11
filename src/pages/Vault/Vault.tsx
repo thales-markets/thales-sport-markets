@@ -37,7 +37,13 @@ import {
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsSocialLogin,
+    getIsWalletConnected,
+    getNetworkId,
+    getPrimeSdk,
+    getWalletAddress,
+} from 'redux/modules/wallet';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { isParlayVault, VAULT_MAP } from 'constants/vault';
 import NumericInput from 'components/fields/NumericInput';
@@ -69,6 +75,7 @@ import Button from 'components/Button';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { VaultTab } from 'enums/vault';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -81,6 +88,9 @@ const Vault: React.FC<VaultProps> = (props) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
+
     const [amount, setAmount] = useState<number | string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [hasAllowance, setAllowance] = useState<boolean>(false);
@@ -207,12 +217,18 @@ const Vault: React.FC<VaultProps> = (props) => {
     }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, vaultAddress, networkId]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, sUSDContract } = networkConnector;
-        if (signer && sUSDContract) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsAllowing(true);
+        setIsAllowing(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-            try {
+        try {
+            const { signer, sUSDContract } = networkConnector;
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, sUSDContract, 'approve', [
+                    vaultAddress,
+                    approveAmount,
+                ]);
+            } else if (signer && sUSDContract) {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
                 const tx = (await sUSDContractWithSigner.approve(vaultAddress, approveAmount, {
@@ -222,107 +238,140 @@ const Vault: React.FC<VaultProps> = (props) => {
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(
-                        id,
-                        getSuccessToastOptions(
-                            t('market.toast-message.approve-success', {
-                                token: getDefaultColleteralForNetwork(networkId),
-                            })
-                        )
-                    );
-                    setIsAllowing(false);
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsAllowing(false);
             }
+
+            if (txHash && txHash !== null) {
+                toast.update(
+                    id,
+                    getSuccessToastOptions(
+                        t('market.toast-message.approve-success', {
+                            token: getDefaultColleteralForNetwork(networkId),
+                        })
+                    )
+                );
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsAllowing(false);
     };
 
     const handleDeposit = async () => {
-        const { signer } = networkConnector;
-        if (signer) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
-                const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
+        setIsSubmitting(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-                const parsedAmount = ethers.utils.parseUnits(
-                    Number(amount).toString(),
-                    getDefaultDecimalsForNetwork(networkId)
-                );
+        try {
+            const parsedAmount = ethers.utils.parseUnits(
+                Number(amount).toString(),
+                getDefaultDecimalsForNetwork(networkId)
+            );
 
+            const { provider, signer } = networkConnector;
+            const sportVaultContract = new ethers.Contract(vaultAddress, vaultContract.abi, provider);
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, sportVaultContract, 'deposit', [
+                    parsedAmount,
+                ]);
+            } else if (signer) {
+                const sportVaultContractWithSigner = sportVaultContract.connect(signer);
                 const tx = await sportVaultContractWithSigner.deposit(parsedAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 
-                if (txResult && txResult.events) {
-                    toast.update(id, getSuccessToastOptions(t('vault.button.deposit-confirmation-message')));
-                    setAmount('');
-                    setIsSubmitting(false);
-                    refetchVaultData(vaultAddress, walletAddress, networkId);
+                if (txResult && txResult.transactionHash) {
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+            if (txHash) {
+                toast.update(id, getSuccessToastOptions(t('vault.button.deposit-confirmation-message')));
+                setAmount('');
+                refetchVaultData(vaultAddress, walletAddress, networkId);
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsSubmitting(false);
     };
 
     const handleWithdrawalRequest = async () => {
-        const { signer } = networkConnector;
-        if (signer) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
-                const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
+        setIsSubmitting(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+        try {
+            const { provider, signer } = networkConnector;
+            const sportVaultContract = new ethers.Contract(vaultAddress, vaultContract.abi, provider);
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(
+                    primeSdk,
+                    networkId,
+                    sportVaultContract,
+                    'withdrawalRequest'
+                );
+            } else if (signer) {
+                const sportVaultContractWithSigner = sportVaultContract.connect(signer);
 
                 const tx = await sportVaultContractWithSigner.withdrawalRequest({
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 
-                if (txResult && txResult.events) {
-                    toast.update(id, getSuccessToastOptions(t('vault.button.request-withdrawal-confirmation-message')));
-                    setAmount('');
-                    setIsSubmitting(false);
-                    refetchVaultData(vaultAddress, walletAddress, networkId);
+                if (txResult && txResult.transactionHash) {
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+            if (txHash) {
+                toast.update(id, getSuccessToastOptions(t('vault.button.request-withdrawal-confirmation-message')));
+                setAmount('');
+                refetchVaultData(vaultAddress, walletAddress, networkId);
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsSubmitting(false);
     };
 
     const closeRound = async () => {
-        const { signer } = networkConnector;
-        if (signer) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
-                const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
+        setIsSubmitting(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+        try {
+            const { provider, signer } = networkConnector;
+            const sportVaultContract = new ethers.Contract(vaultAddress, vaultContract.abi, provider);
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, sportVaultContract, 'closeRound');
+            } else if (signer) {
+                const sportVaultContractWithSigner = sportVaultContract.connect(signer);
 
                 const tx = await sportVaultContractWithSigner.closeRound({
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 
-                if (txResult && txResult.events) {
-                    toast.update(id, getSuccessToastOptions(t('vault.button.close-round-confirmation-message')));
-                    setIsSubmitting(false);
-                    refetchVaultData(vaultAddress, walletAddress, networkId);
+                if (txResult && txResult.transactionHash) {
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+            if (txHash) {
+                toast.update(id, getSuccessToastOptions(t('vault.button.close-round-confirmation-message')));
+                refetchVaultData(vaultAddress, walletAddress, networkId);
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsSubmitting(false);
     };
 
     const getDepositSubmitButton = () => {

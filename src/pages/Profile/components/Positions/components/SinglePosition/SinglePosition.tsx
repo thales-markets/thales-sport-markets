@@ -201,6 +201,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 txHash = await executeEtherspotTransaction(primeSdk, networkId, contract, 'exerciseOptions');
             } else if (signer) {
                 const contractWithSigner = contract.connect(signer);
+
                 const tx = await contractWithSigner.exerciseOptions({
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 });

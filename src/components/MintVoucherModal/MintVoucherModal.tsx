@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsSocialLogin,
+    getIsWalletConnected,
+    getNetworkId,
+    getPrimeSdk,
+    getWalletAddress,
+} from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Button from 'components/Button';
@@ -24,6 +30,7 @@ import { Network } from 'enums/network';
 import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { refetchBalances } from 'utils/queryConnector';
 import TextInput from '../fields/TextInput/TextInput';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 type MintVoucherModalProps = {
     onClose: () => void;
@@ -49,6 +56,9 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
+
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
@@ -119,13 +129,20 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, sUSDContract, overtimeVoucherContract } = networkConnector;
-        if (signer && sUSDContract && overtimeVoucherContract) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsAllowing(true);
+        setIsAllowing(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-            try {
-                const addressToApprove = overtimeVoucherContract.address;
+        try {
+            const { signer, sUSDContract, overtimeVoucherContract } = networkConnector;
+            const addressToApprove = overtimeVoucherContract?.address;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, sUSDContract, 'approve', [
+                    addressToApprove,
+                    approveAmount,
+                ]);
+            } else if (signer && sUSDContract && overtimeVoucherContract) {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
                 const tx = (await sUSDContractWithSigner.approve(addressToApprove, approveAmount, {
@@ -135,35 +152,45 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(
-                        id,
-                        getSuccessToastOptions(
-                            t('market.toast-message.approve-success', {
-                                token: getDefaultColleteralForNetwork(networkId),
-                            })
-                        )
-                    );
-                    setIsAllowing(false);
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsAllowing(false);
             }
+            if (txHash) {
+                toast.update(
+                    id,
+                    getSuccessToastOptions(
+                        t('market.toast-message.approve-success', {
+                            token: getDefaultColleteralForNetwork(networkId),
+                        })
+                    )
+                );
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsAllowing(false);
     };
 
     const handleSubmit = async () => {
-        const { overtimeVoucherContract, signer } = networkConnector;
-        if (overtimeVoucherContract && signer) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
+        setIsSubmitting(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+        try {
+            const parsedAmount = ethers.utils.parseUnits(
+                Number(amount).toString(),
+                getDefaultDecimalsForNetwork(networkId)
+            );
+            const { overtimeVoucherContract, signer } = networkConnector;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(primeSdk, networkId, overtimeVoucherContract, 'mint', [
+                    isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),
+                    parsedAmount,
+                ]);
+            } else if (overtimeVoucherContract && signer) {
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
-                const parsedAmount = ethers.utils.parseUnits(
-                    Number(amount).toString(),
-                    getDefaultDecimalsForNetwork(networkId)
-                );
 
                 const tx = await overtimeVoucherContractWithSigner.mint(
                     isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),
@@ -174,23 +201,25 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                 );
                 const txResult = await tx.wait();
 
-                if (txResult && txResult.events) {
-                    toast.update(id, getSuccessToastOptions(t('common.voucher.modal.button.confirmation-message')));
-                    setAmount(-1);
-                    setIsAnotherWallet(false);
-                    setRecipient('');
-                    setIsSubmitting(false);
-                    setTimeout(() => {
-                        refetchBalances(walletAddress, networkId);
-                    }, 2000);
-                    onClose();
+                if (txResult && txResult.transactionHash) {
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+            if (txHash) {
+                toast.update(id, getSuccessToastOptions(t('common.voucher.modal.button.confirmation-message')));
+                setAmount(-1);
+                setIsAnotherWallet(false);
+                setRecipient('');
+                setTimeout(() => {
+                    refetchBalances(walletAddress, networkId);
+                }, 2000);
+                onClose();
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsSubmitting(false);
     };
 
     const getSubmitButton = () => {
