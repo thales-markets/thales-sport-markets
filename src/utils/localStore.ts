@@ -1,10 +1,10 @@
-export const set = (key: string, value: any) => {
+const set = (key: string, value: any) => {
     if (typeof window !== 'undefined') {
         window.localStorage.setItem(key, JSON.stringify(value));
     }
 };
 
-export function get<T>(key: string): T | undefined {
+function get<T>(key: string): T | undefined {
     if (typeof window !== 'undefined') {
         const item = window.localStorage.getItem(key);
         try {

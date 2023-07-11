@@ -2,13 +2,13 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
 import { bigNumberFormmaterWithDecimals, bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
 import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 
 const useLiquidityPoolUserDataQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<UserLiquidityPoolData | undefined>
 ) => {
     return useQuery<UserLiquidityPoolData | undefined>(

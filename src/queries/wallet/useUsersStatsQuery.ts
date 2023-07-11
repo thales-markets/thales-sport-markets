@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import thalesData from 'thales-data';
 
 type User = {
@@ -10,7 +10,7 @@ type User = {
     trades: number;
 };
 
-const useUsersStatsQuery = (walletAddress: string, networkId: NetworkId, options?: UseQueryOptions<User[]>) => {
+const useUsersStatsQuery = (walletAddress: string, networkId: Network, options?: UseQueryOptions<User[]>) => {
     return useQuery<User[]>(
         QUERY_KEYS.Wallet.Stats(networkId, walletAddress),
         async () => {

@@ -1,4 +1,4 @@
-import { BetType, BetTypeNameMap } from 'constants/tags';
+import { BetTypeNameMap } from 'constants/tags';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
@@ -6,6 +6,7 @@ import { isGolf, isMotosport } from 'utils/markets';
 import DoubleChanceMarketPositions from '../DoubleChanceMarketPositions';
 import MarketPositions from '../MarketPositions';
 import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
+import { BetType } from 'enums/markets';
 
 type PositionsProps = {
     markets: SportMarketInfo[];

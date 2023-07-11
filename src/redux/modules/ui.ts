@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { Theme } from 'constants/ui';
+import { ThemeMap } from 'constants/ui';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
-import { OddsType } from '../../constants/markets';
 import { TAGS_LIST } from 'constants/tags';
 import { Tags } from 'types/markets';
 import { uniqBy } from 'lodash';
+import { OddsType } from 'enums/markets';
+import { Theme } from 'enums/ui';
 
 const sliceName = 'ui';
 
@@ -15,9 +16,9 @@ const getDefaultOddsType = (): OddsType => {
     return (oddsType !== undefined ? oddsType : OddsType.Decimal) as OddsType;
 };
 
-const getDefaultTheme = (): Theme => {
+export const getDefaultTheme = (): Theme => {
     const lsTheme = localStore.get(LOCAL_STORAGE_KEYS.UI_THEME);
-    return (lsTheme !== undefined ? lsTheme : Theme.DARK) as Theme;
+    return (lsTheme !== undefined && ThemeMap[lsTheme as Theme] !== undefined ? lsTheme : Theme.DARK) as Theme;
 };
 
 const getDefaultStopPulsing = (): boolean => {
@@ -44,7 +45,7 @@ const initialState: UISliceState = {
     favouriteLeagues: getDefaultFavouriteLeagues(),
 };
 
-export const uiSlice = createSlice({
+const uiSlice = createSlice({
     name: sliceName,
     initialState,
     reducers: {
@@ -69,7 +70,7 @@ export const uiSlice = createSlice({
 
 export const { setTheme, setOddsType, setStopPulsing, setFavouriteLeagues } = uiSlice.actions;
 
-export const getUIState = (state: RootState) => state[sliceName];
+const getUIState = (state: RootState) => state[sliceName];
 export const getTheme = (state: RootState) => getUIState(state).theme;
 export const getOddsType = (state: RootState) => getUIState(state).oddsType;
 export const getStopPulsing = (state: RootState) => getUIState(state).stopPulsing;

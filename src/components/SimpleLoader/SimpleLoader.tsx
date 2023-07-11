@@ -1,16 +1,20 @@
 import React from 'react';
 import { Oval } from 'react-loader-spinner';
 import styled from 'styled-components';
+import { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
+import { ThemeInterface } from 'types/ui';
 
 const SimpleLoader: React.FC = () => {
+    const theme: ThemeInterface = useTheme();
+
     return (
         <Wrapper>
             <Oval
-                color="#3FD1FF"
+                color={theme.textColor.quaternary}
                 height={60}
                 width={60}
-                secondaryColor="#f6f6fe"
+                secondaryColor={theme.textColor.primary}
                 ariaLabel="loading-indicator"
                 strokeWidth={2}
             />

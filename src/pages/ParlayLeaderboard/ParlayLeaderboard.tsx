@@ -4,7 +4,6 @@ import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import {
-    OddsType,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
     PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS,
@@ -16,7 +15,6 @@ import {
 import { t } from 'i18next';
 import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
-import { AddressLink } from 'pages/Rewards/styled-components';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -39,7 +37,6 @@ import {
     formatMarketOdds,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
-import { NetworkIdByName } from 'utils/network';
 import TimeRemaining from 'components/TimeRemaining';
 import {
     extractCombinedMarketsFromParlayMarketType,
@@ -47,10 +44,15 @@ import {
 } from 'utils/combinedMarkets';
 import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import i18n from 'i18n';
+import { OddsType } from 'enums/markets';
+import { Network } from 'enums/network';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
     const language = i18n.language;
+    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -94,7 +96,7 @@ const ParlayLeaderboard: React.FC = () => {
     }, [searchText, parlays]);
 
     const rewards =
-        networkId !== NetworkIdByName.ArbitrumOne
+        networkId !== Network.ArbitrumOne
             ? period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
                 ? PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10
                 : PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20
@@ -102,7 +104,7 @@ const ParlayLeaderboard: React.FC = () => {
             ? PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10
             : PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
 
-    const rewardsAmount = networkId !== NetworkIdByName.ArbitrumOne ? '2,500 OP' : '2,500 ARB';
+    const rewardsAmount = networkId !== Network.ArbitrumOne ? '2,500 OP' : '2,500 ARB';
 
     const stickyRow = useMemo(() => {
         const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
@@ -116,7 +118,7 @@ const ParlayLeaderboard: React.FC = () => {
                                 overlay={
                                     <>
                                         {rewards[data.rank - 1]}{' '}
-                                        {networkId !== NetworkIdByName.ArbitrumOne
+                                        {networkId !== Network.ArbitrumOne
                                             ? 'OP'
                                             : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
                                             ? 'ARB'
@@ -127,9 +129,9 @@ const ParlayLeaderboard: React.FC = () => {
                                     <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                         <StatusIcon
                                             style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
-                                            color="rgb(95, 97, 128)"
+                                            color={theme.background.tertiary}
                                             className={`icon ${
-                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                networkId !== Network.ArbitrumOne
                                                     ? 'icon--op-rewards'
                                                     : 'icon--thales-rewards'
                                             }`}
@@ -152,11 +154,11 @@ const ParlayLeaderboard: React.FC = () => {
                     />
                 </StickyContrainer>
                 <ExpandedContainer hide={!expandStickyRow}>
-                    {getExpandedRow(data, selectedOddsType, language)}
+                    {getExpandedRow(data, selectedOddsType, language, theme)}
                 </ExpandedContainer>
             </StickyRow>
         );
-    }, [parlays, rewards, networkId, period, selectedOddsType, expandStickyRow, language, walletAddress]);
+    }, [parlays, rewards, networkId, period, selectedOddsType, expandStickyRow, language, walletAddress, theme]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -226,7 +228,6 @@ const ParlayLeaderboard: React.FC = () => {
                         text={searchText}
                         customPlaceholder={t('rewards.search-placeholder')}
                         handleChange={(e) => setSearchText(e)}
-                        customStyle={{ border: '1px solid #fffff' }}
                         width={200}
                     />
                 </LeaderboardHeader>
@@ -234,7 +235,10 @@ const ParlayLeaderboard: React.FC = () => {
             <Table
                 data={parlaysData}
                 tableRowHeadStyles={{ width: '100%' }}
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...TableHeaderStyle,
+                    color: theme.textColor.secondary,
+                }}
                 tableRowCellStyles={TableRowStyle}
                 columnsDeps={[rewards]}
                 columns={[
@@ -247,7 +251,7 @@ const ParlayLeaderboard: React.FC = () => {
                                     overlay={
                                         <>
                                             {rewards[cellProps.cell.value - 1]}{' '}
-                                            {networkId !== NetworkIdByName.ArbitrumOne
+                                            {networkId !== Network.ArbitrumOne
                                                 ? 'OP'
                                                 : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
                                                 ? 'ARB'
@@ -258,9 +262,9 @@ const ParlayLeaderboard: React.FC = () => {
                                         <FlexDivRowCentered style={{ position: 'relative', width: 14 }}>
                                             <StatusIcon
                                                 style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
-                                                color="rgb(95, 97, 128)"
+                                                color={theme.background.tertiary}
                                                 className={`icon ${
-                                                    networkId !== NetworkIdByName.ArbitrumOne
+                                                    networkId !== Network.ArbitrumOne
                                                         ? 'icon--op-rewards'
                                                         : 'icon--thales-rewards'
                                                 }`}
@@ -347,6 +351,7 @@ const ParlayLeaderboard: React.FC = () => {
                         parlayWithoutCombinedMarkets,
                         selectedOddsType,
                         language,
+                        theme,
                         combinedMarkets
                     );
 
@@ -387,17 +392,17 @@ const ParlayLeaderboard: React.FC = () => {
     );
 };
 
-export const getPositionStatus = (position: PositionData) => {
+export const getPositionStatus = (position: PositionData, theme: ThemeInterface) => {
     if (position.market.isResolved) {
         if (
             convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
         ) {
-            return <StatusIcon color="#5FC694" className={`icon icon--win`} />;
+            return <StatusIcon color={theme.status.win} className={`icon icon--win`} />;
         } else {
-            return <StatusIcon color="#E26A78" className={`icon icon--lost`} />;
+            return <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />;
         }
     } else {
-        return <StatusIcon color="#FFFFFF" className={`icon icon--open`} />;
+        return <StatusIcon color={theme.status.open} className={`icon icon--open`} />;
     }
 };
 
@@ -415,13 +420,18 @@ export const getOpacity = (position: PositionData) => {
     }
 };
 
-const getExpandedRow = (parlay: ParlayMarketWithRank, selectedOddsType: OddsType, language: string) => {
+const getExpandedRow = (
+    parlay: ParlayMarketWithRank,
+    selectedOddsType: OddsType,
+    language: string,
+    theme: ThemeInterface
+) => {
     const modifiedParlay = syncPositionsAndMarketsPerContractOrderInParlay(parlay);
 
     const combinedMarkets = extractCombinedMarketsFromParlayMarketType(modifiedParlay);
     const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(modifiedParlay);
 
-    const toRender = getParlayRow(parlayWithoutCombinedMarkets, selectedOddsType, language, combinedMarkets);
+    const toRender = getParlayRow(parlayWithoutCombinedMarkets, selectedOddsType, language, theme, combinedMarkets);
 
     return (
         <ExpandedRowWrapper>
@@ -467,7 +477,7 @@ const Title = styled.p`
     line-height: 150%;
     text-align: justify;
     letter-spacing: 0.025em;
-    color: #eeeee4;
+    color: ${(props) => props.theme.textColor.primary};
     margin: 10px 0;
 `;
 
@@ -479,7 +489,7 @@ const Description = styled.p`
     line-height: 150%;
     text-align: justify;
     letter-spacing: 0.025em;
-    color: #eeeee4;
+    color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 10px;
 `;
 
@@ -491,7 +501,7 @@ const Warning = styled.p`
     line-height: 150%;
     text-align: justify;
     letter-spacing: 0.025em;
-    color: #ffcc00;
+    color: ${(props) => props.theme.warning.textColor.primary};
     margin-bottom: 10px;
 `;
 
@@ -504,7 +514,7 @@ const TableText = styled.p`
     text-align: center;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #eeeee4;
+    color: ${(props) => props.theme.textColor.primary};
     @media (max-width: 600px) {
         font-size: 12px;
     }
@@ -516,12 +526,12 @@ const quoteSort = (oddsType: OddsType) => (rowA: any, rowB: any) => {
         : rowB.original.totalQuote - rowA.original.totalQuote;
 };
 
-export const StatusIcon = styled.i`
+const StatusIcon = styled.i`
     font-size: 12px;
     font-weight: 700;
     margin-right: 4px;
     &::before {
-        color: ${(props) => props.color || 'white'};
+        color: ${(props) => props.color || props.theme.status.open};
     }
 `;
 
@@ -564,7 +574,6 @@ const TableHeaderStyle: React.CSSProperties = {
     lineHeight: '12px',
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
 };
 
@@ -578,7 +587,7 @@ const ExpandedRowWrapper = styled.div`
     justify-content: space-evenly;
     padding-left: 60px;
     padding-right: 60px;
-    border-bottom: 2px dotted rgb(95, 97, 128);
+    border-bottom: 2px dotted ${(props) => props.theme.borderColor.primary};
     @media (max-width: 600px) {
         flex-direction: column;
         padding-left: 10px;
@@ -610,7 +619,7 @@ const StickyRow = styled.div`
     display: flex;
     flex-direction: column;
     padding: 10px;
-    border: 1px solid #ffffff;
+    border: 1px solid ${(props) => props.theme.borderColor.secondary};
     border-radius: 7px;
 `;
 
@@ -680,8 +689,15 @@ const PeriodEndLabel = styled.span`
     margin-right: 6px;
 `;
 
-export const BoldContent = styled.span`
+const BoldContent = styled.span`
     font-weight: 600;
+`;
+
+const AddressLink = styled.a`
+    color: ${(props) => props.theme.textColor.primary};
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export default ParlayLeaderboard;

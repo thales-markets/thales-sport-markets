@@ -1,4 +1,6 @@
-export const OP_SUSD = {
+import { Network } from 'enums/network';
+
+const OP_SUSD = {
     address: '0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9',
     decimals: 18,
     symbol: 'sUSD',
@@ -16,7 +18,7 @@ export const OP_ETH = {
     logoURI: 'https://tokens.1inch.io/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.png',
 };
 
-export const OP_DAI = {
+const OP_DAI = {
     address: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
     decimals: 18,
     symbol: 'DAI',
@@ -25,7 +27,7 @@ export const OP_DAI = {
     logoURI: 'https://tokens.1inch.io/0x6b175474e89094c44da98b954eedeac495271d0f.png',
 };
 
-export const OP_USDC = {
+const OP_USDC = {
     address: '0x7f5c764cbc14f9669b88837ca1490cca17c31607',
     decimals: 6,
     symbol: 'USDC',
@@ -34,7 +36,7 @@ export const OP_USDC = {
     logoURI: 'https://tokens.1inch.io/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png',
 };
 
-export const OP_USDT = {
+const OP_USDT = {
     address: '0x94b008aa00579c1307b0ef2c499ad98a8ce58e58',
     decimals: 6,
     symbol: 'USDT',
@@ -43,18 +45,17 @@ export const OP_USDT = {
     logoURI: 'https://tokens.1inch.io/0xdac17f958d2ee523a2206206994597c13d831ec7.png',
 };
 
-export const ARB_USDC = {
+const ARB_USDC = {
     address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
     decimals: 6,
     symbol: 'USDC',
     name: 'USD Coin',
-    chainId: 42161,
+    chainId: Network.ArbitrumOne,
     logoURI: 'https://tokens.1inch.io/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png',
 };
 
 export const AVAILABLE_TOKENS = [OP_SUSD, OP_DAI, OP_USDC, OP_USDT, ARB_USDC];
 
 export const ONE_INCH_API_URL = 'https://api.1inch.io/v5.0/';
-export const APPROVE_SPENDER_SUFFIX = '/approve/spender';
 export const QUOTE_SUFFIX = '/quote';
 export const SWAP_SUFFIX = '/swap';

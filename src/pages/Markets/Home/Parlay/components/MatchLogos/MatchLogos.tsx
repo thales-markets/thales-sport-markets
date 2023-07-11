@@ -1,5 +1,5 @@
-import { Position } from 'constants/options';
 import { FIFA_WC_TAG, FIFA_WC_U20_TAG } from 'constants/tags';
+import { Position } from 'enums/markets';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';

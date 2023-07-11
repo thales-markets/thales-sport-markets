@@ -12,13 +12,18 @@ import { generalConfig } from 'config/general';
 import { buildReffererLink } from 'utils/routes';
 import { useTranslation } from 'react-i18next';
 import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
+import TextInput from 'components/fields/TextInput';
+import Button from 'components/Button';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type RefferalModalProps = {
     onClose: () => void;
 };
 
-export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
+const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const [reffererID, setReffererID] = useState('');
     const [savedReffererID, setSavedReffererID] = useState('');
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
@@ -68,19 +73,22 @@ export const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
             <Container>
                 <Description>{t('common.referral.modal.description')}</Description>
                 <FlexDivRowCentered>
-                    <StyledInput value={reffererID} onChange={(e) => setReffererID(e.target.value)} />
-                    <SubmitButton disabled={!reffererID || savedReffererID === reffererID} onClick={onSubmit}>
-                        {t('common.referral.modal.submit-button')}
-                    </SubmitButton>
-                </FlexDivRowCentered>
-                <FlexDivCentered style={{ marginTop: '30px' }}>
-                    <CopyToClipboardButton
-                        onClick={referralClickHandler}
-                        disabled={!savedReffererID}
-                        customDisabled={!savedReffererID}
+                    <TextInput value={reffererID} onChange={(e: any) => setReffererID(e.target.value)} margin="0" />
+                    <Button
+                        disabled={!reffererID || savedReffererID === reffererID}
+                        height="30px"
+                        margin="0 0 0 10px"
+                        backgroundColor={theme.button.background.quaternary}
+                        borderColor={theme.button.borderColor.secondary}
+                        onClick={onSubmit}
                     >
+                        {t('common.referral.modal.submit-button')}
+                    </Button>
+                </FlexDivRowCentered>
+                <FlexDivCentered>
+                    <Button onClick={referralClickHandler} margin="30px 0 0 0" disabled={!savedReffererID}>
                         {t('common.referral.modal.copy-button')}
-                    </CopyToClipboardButton>
+                    </Button>
                 </FlexDivCentered>
             </Container>
         </Modal>
@@ -107,68 +115,10 @@ const Description = styled.div`
     }
     a {
         cursor: pointer;
-        color: #91bced;
-        &:hover {
-            color: #00f9ff;
+        color: ${(props) => props.theme.link.textColor.primary};
+        :hover {
+            text-decoration: underline;
         }
-    }
-`;
-
-const StyledInput = styled.input`
-    background: #ffffff;
-    border-radius: 5px;
-    border: 2px solid #1a1c2b;
-    color: #1a1c2b;
-    width: 300px;
-    height: 34px;
-    padding-left: 10px;
-    padding-right: 60px;
-    font-size: 18px;
-    outline: none;
-    @media (max-width: 575px) {
-        width: 250px;
-    }
-`;
-
-const SubmitButton = styled.button`
-    background: linear-gradient(88.84deg, #2fc9dd 19.98%, #1ca6b9 117.56%);
-    border-radius: 8px;
-    margin: 0 20px;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 23px;
-    color: #1a1c2b;
-    width: 252px;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    text-transform: uppercase;
-    &:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-`;
-
-const CopyToClipboardButton = styled.button<{ customDisabled?: boolean }>`
-    background: ${(props) => props.theme.button.background.tertiary};
-    border: 2px solid ${(props) => props.theme.button.borderColor.secondary};
-    color: ${(props) => props.theme.button.textColor.quaternary};
-    border-radius: 5px;
-    padding: 1px 20px 0px 20px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12.5px;
-    text-align: center;
-    outline: none;
-    text-transform: none;
-    cursor: pointer;
-    min-height: 28px;
-    width: fit-content;
-    white-space: nowrap;
-    opacity: ${(props) => (props.customDisabled ? '0.4' : '1')};
-    &:hover {
-        cursor: ${(props) => (props.customDisabled ? 'default' : 'pointer')};
-        opacity: ${(props) => (props.customDisabled ? '0.4' : '0.8')};
     }
 `;
 

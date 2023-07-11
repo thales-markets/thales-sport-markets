@@ -1,4 +1,4 @@
-export const sportsMarketContract = {
+const sportsMarketContract = {
     abi: [
         { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
         {

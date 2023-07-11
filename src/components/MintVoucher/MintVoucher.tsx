@@ -7,14 +7,16 @@ import { FlexDivCentered } from 'styles/common';
 import { useTranslation } from 'react-i18next';
 import Button from 'components/Button';
 import MintVoucherModal from 'components/MintVoucherModal';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type MintVoucherProps = {
     style?: React.CSSProperties;
-    buttonStyle?: React.CSSProperties;
 };
 
-const MintVoucher: React.FC<MintVoucherProps> = ({ style, buttonStyle }) => {
+const MintVoucher: React.FC<MintVoucherProps> = ({ style }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const [openMintVoucherModal, setOpenMintVoucherModal] = useState<boolean>(false);
 
@@ -22,7 +24,14 @@ const MintVoucher: React.FC<MintVoucherProps> = ({ style, buttonStyle }) => {
         <>
             {isWalletConnected && (
                 <Container style={style}>
-                    <Button style={buttonStyle} onClick={() => setOpenMintVoucherModal(true)} fontSize={12.5}>
+                    <Button
+                        onClick={() => setOpenMintVoucherModal(true)}
+                        backgroundColor={theme.button.background.secondary}
+                        textColor={theme.button.textColor.quaternary}
+                        borderColor={theme.button.borderColor.secondary}
+                        fontWeight="400"
+                        width="100%"
+                    >
                         {t('common.voucher.mint-voucher')}
                     </Button>
                     {openMintVoucherModal && <MintVoucherModal onClose={() => setOpenMintVoucherModal(false)} />}

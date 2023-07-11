@@ -44,6 +44,7 @@ const Container = styled.label`
     font-style: normal;
     font-size: 18px;
     line-height: 20px;
+    text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
     -webkit-user-select: none;
     -moz-user-select: none;

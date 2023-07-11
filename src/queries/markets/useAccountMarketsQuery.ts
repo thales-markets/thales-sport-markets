@@ -1,9 +1,10 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { ENETPULSE_SPORTS, GOLF_TOURNAMENT_WINNER_TAG, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
+import { PositionName } from 'enums/markets';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
-import { PositionBalance, PositionType, SportMarketInfo } from 'types/markets';
-import { NetworkId } from 'types/network';
+import { PositionBalance, SportMarketInfo } from 'types/markets';
+import { Network } from 'enums/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 
 export type AccountPositionProfile = {
@@ -14,16 +15,16 @@ export type AccountPositionProfile = {
     claimable: boolean;
     open: boolean;
     market: SportMarketInfo;
-    side: PositionType;
+    side: PositionName;
 };
 
 const useAccountMarketsQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<AccountPositionProfile[]>
 ) => {
     return useQuery<AccountPositionProfile[]>(
-        QUERY_KEYS.AccountPositionsProfile(walletAddress, networkId),
+        QUERY_KEYS.AccountPositions(walletAddress, networkId),
         async () => {
             try {
                 const positionBalances: PositionBalance[] = await thalesData.sportMarkets.positionBalances({

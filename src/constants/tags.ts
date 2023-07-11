@@ -1,3 +1,4 @@
+import { BetType } from 'enums/markets';
 import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
@@ -334,6 +335,30 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 116,
     },
+    {
+        id: 9042,
+        label: 'UEFA Champions League Qualification',
+        logoClass: 'icon-league league--ucl',
+        favourite: false,
+        hidden: false,
+        priority: 111,
+    },
+    {
+        id: 19216,
+        label: 'UEFA Conference League qualification',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 118,
+    },
+    {
+        id: 9076,
+        label: 'FIFA World Cup Women',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 119,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -377,6 +402,9 @@ export const SPORTS_MAP: SportsMap = {
     18806: 'Soccer',
     18821: 'Soccer',
     9288: 'Soccer',
+    9042: 'Soccer',
+    19216: 'Soccer',
+    9076: 'Soccer',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -427,6 +455,9 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
         18806,
         18821,
         9288,
+        9042,
+        19216,
+        9076,
     ],
     MMA: [9007, 18196],
     Motosport: [9445, 9497],
@@ -435,46 +466,6 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Cricket: [9020, 9021],
     Golf: [109021, 109121],
 };
-
-export enum TAGS_FLAGS {
-    NCAA_FOOTBALL = 9001,
-    NFL = 9002,
-    MLB = 9003,
-    NBA = 9004,
-    NCAA_BASKETBALL = 9005,
-    NHL = 9006,
-    UFC = 9007,
-    WNBA = 9008,
-    MLS = 9010,
-    EPL = 9011,
-    LIGUE_ONE = 9012,
-    BUNDESLIGA = 9013,
-    LA_LIGA = 9014,
-    SERIE_A = 9015,
-    UEFA_CL = 9016,
-    UEFA_EL = 9017,
-    J1_LEAGUE = 9019,
-    FORMULA1 = 9445,
-    MOTOGP = 9497,
-    CSGO = 18977,
-    DOTA2 = 18983,
-    LOL = 19138,
-    IPL = 9020,
-    EUROLEAGUE = 9399,
-    BOXING = 18196,
-    EREDIVISIE = 9057,
-    PRIMEIRA_LIGA = 9061,
-    COPA_LIBERTADORES = 9045,
-    IIHF_WORLD_CHAMPIONSHIP = 9033,
-    FIFA_WORLD_CUP_U20 = 9296,
-    T20_BLAST = 9021,
-    UEFA_EURO_QUALIFICATIONS = 9050,
-    GOLF_H2H = 109021,
-    GOLF_WINNER = 109121,
-    UEFA_NATIONS_LEAGUE = 18806,
-    CONCACAF_NATIONS_LEAGUE = 18821,
-    UEFA_EURO_U21 = 9288,
-}
 
 export const ENETPULSE_SPORTS = [
     9153,
@@ -495,27 +486,20 @@ export const ENETPULSE_SPORTS = [
     18806,
     18821,
     9288,
+    9042,
+    19216,
+    9076,
 ];
 
 export const JSON_ODDS_SPORTS = [109021, 109121];
 
-export const MLS_TAG = 9010;
 export const FIFA_WC_TAG = 9018;
 export const FIFA_WC_U20_TAG = 9296;
 export const IIHF_WC_TAG = 9033;
-export const UEFA_TAGS = [9016, 9017, 18806, 18821, 9288];
+export const UEFA_TAGS = [9016, 9017, 18806, 18821, 9288, 9042, 19216, 9076];
 export const MOTOSPORT_TAGS = [9445, 9497];
 export const GOLF_TAGS = [109021, 109121];
 export const GOLF_TOURNAMENT_WINNER_TAG = 109121;
-
-export const PERSON_COMPETITIONS = [9007, 9445, 9497, 9153, 9156, 109021];
-
-export enum BetType {
-    WINNER = 0,
-    SPREAD = 10001,
-    TOTAL = 10002,
-    DOUBLE_CHANCE = 10003,
-}
 
 export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.WINNER]: 'winner',
@@ -523,17 +507,6 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.TOTAL]: 'total',
     [BetType.DOUBLE_CHANCE]: 'double-chance',
 };
-
-export const MARKETS_COMBINATION: Array<BetType>[] = [
-    [0, 10002],
-    [10001, 10002],
-];
-
-export enum DoubleChanceMarketType {
-    HOME_TEAM_NOT_TO_LOSE = 'HomeTeamNotToLose',
-    NO_DRAW = 'NoDraw',
-    AWAY_TEAM_NOT_TO_LOSE = 'AwayTeamNotToLose',
-}
 
 export const SCORING_MAP: SportsMap = {
     9001: 'points',
@@ -576,6 +549,9 @@ export const SCORING_MAP: SportsMap = {
     18806: 'goals',
     18821: 'goals',
     9288: 'goals',
+    9042: 'goals',
+    19216: 'goals',
+    9076: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -619,6 +595,9 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     18806: 'regular',
     18821: 'regular',
     9288: 'regular',
+    9042: 'regular',
+    19216: 'regular',
+    9076: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -660,4 +639,7 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     18806: 'half',
     18821: 'half',
     9288: 'half',
+    9042: 'half',
+    19216: 'half',
+    9076: 'half',
 };

@@ -5,15 +5,13 @@ import {
     STABLE_DECIMALS,
 } from 'constants/currency';
 import { COLLATERALS } from 'constants/markets';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
-import { Network } from './network';
-
-export type StablecoinKey = 'sUSD' | 'USDC' | 'USDT' | 'DAI';
+import { StablecoinKey } from 'types/tokens';
 
 export const getStableIcon = (currencyKey: StablecoinKey) => currencyKeyToAssetIconMap[currencyKey];
 
-export const getCollateralAddress = (isNonsUSDCollateral: boolean, networkId: NetworkId, stableIndex?: number) => {
+export const getCollateralAddress = (isNonsUSDCollateral: boolean, networkId: Network, stableIndex?: number) => {
     const collateralKey = COLLATERALS[stableIndex ? stableIndex : 0]
         ? COLLATERALS[stableIndex ? stableIndex : 0]
         : 'sUSD';
@@ -32,13 +30,13 @@ export const getDecimalsByStableCoinIndex = (stableIndex: number) => {
     return STABLE_DECIMALS[collateralKey];
 };
 
-export const getDefaultColleteralForNetwork = (networkId: NetworkId) => {
-    if (networkId == Network.Arbitrum) return CRYPTO_CURRENCY_MAP.USDC;
+export const getDefaultColleteralForNetwork = (networkId: Network) => {
+    if (networkId == Network.ArbitrumOne) return CRYPTO_CURRENCY_MAP.USDC;
     return CRYPTO_CURRENCY_MAP.sUSD;
 };
 
-export const getDefaultDecimalsForNetwork = (networkId: NetworkId) => {
-    if (networkId == Network.Arbitrum) return STABLE_DECIMALS['USDC'];
+export const getDefaultDecimalsForNetwork = (networkId: Network) => {
+    if (networkId == Network.ArbitrumOne) return STABLE_DECIMALS['USDC'];
     return STABLE_DECIMALS['sUSD'];
 };
 

@@ -1,5 +1,4 @@
 import Tooltip from 'components/Tooltip';
-import { TAGS_FLAGS } from 'constants/tags';
 import React from 'react';
 import Flag from 'react-flagpack';
 import { Trans } from 'react-i18next';
@@ -15,7 +14,8 @@ import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-wh
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
-import { NetworkIdByName } from 'utils/network';
+import { TAGS_FLAGS } from 'enums/tags';
+import { Network } from 'enums/network';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -134,7 +134,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         }}
                                                         values={{
                                                             rewards:
-                                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                                networkId !== Network.ArbitrumOne
                                                                     ? INCENTIVIZED_LEAGUE.opRewards
                                                                     : INCENTIVIZED_LEAGUE.thalesRewards,
                                                         }}
@@ -142,7 +142,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 }
                                                 component={
                                                     <IncentivizedLeague>
-                                                        {networkId !== NetworkIdByName.ArbitrumOne ? (
+                                                        {networkId !== Network.ArbitrumOne ? (
                                                             <OPLogo />
                                                         ) : (
                                                             <ThalesLogo />
@@ -169,7 +169,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         }}
                                                         values={{
                                                             rewards:
-                                                                networkId !== NetworkIdByName.ArbitrumOne
+                                                                networkId !== Network.ArbitrumOne
                                                                     ? INCENTIVIZED_GRAND_SLAM.opRewards
                                                                     : INCENTIVIZED_GRAND_SLAM.arbRewards,
                                                         }}
@@ -177,7 +177,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 }
                                                 component={
                                                     <IncentivizedLeague>
-                                                        {networkId !== NetworkIdByName.ArbitrumOne ? (
+                                                        {networkId !== Network.ArbitrumOne ? (
                                                             <OPLogo />
                                                         ) : (
                                                             <ArbitrumLogo />
@@ -300,7 +300,7 @@ const StarIcon = styled.i<{ isMobile: boolean }>`
     margin-left: ${(props) => (props.isMobile ? '35px' : '5px')};
     &.selected,
     &:hover {
-        color: #fac439;
+        color: ${(props) => props.theme.button.textColor.tertiary};
     }
 `;
 

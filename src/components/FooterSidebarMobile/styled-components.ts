@@ -49,18 +49,6 @@ export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number }>`
     }
 `;
 
-export const ParlayButton = styled.button`
-    width: 33px;
-    height: 33px;
-    background: ${(props) => props.theme.background.primary};
-    border-radius: 50px;
-    border: none;
-    color: #94c5f2;
-    font-weight: 800;
-    line-height: 31px;
-    font-size: 27px;
-`;
-
 export const DropdownContainer = styled.div`
     position: absolute;
     width: 180px;
@@ -70,8 +58,8 @@ export const DropdownContainer = styled.div`
 `;
 
 export const DropDown = styled(FlexDivColumn)`
-    border: 1px solid ${(props) => props.theme.input.borderColor.secondary};
-    background: #252940;
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    background: ${(props) => props.theme.background.secondary};
     color: white;
     border-radius: 5px;
     position: absolute;
@@ -84,7 +72,7 @@ export const DropDownItem = styled(FlexDiv)`
     padding: 7px 10px 9px 10px;
     cursor: pointer;
     &:hover {
-        background: #5f6180;
+        background: ${(props) => props.theme.background.tertiary};
         border-radius: 5px;
     }
 `;

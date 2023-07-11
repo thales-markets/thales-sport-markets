@@ -1,21 +1,22 @@
-export const GWEI_UNIT = 1000000000;
+import { Network } from 'enums/network';
+
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-export type NetworkMapper = Record<number, number>;
-
-export const L1_TO_L2_NETWORK_MAPPER: NetworkMapper = {
-    1: 10,
-    42: 69,
+export const NetworkNameById: Record<Network, string> = {
+    [Network.OptimismMainnet]: 'optimism mainnet',
+    [Network.OptimismGoerli]: 'optimism goerli',
+    [Network.ArbitrumOne]: 'ARBITRUM ONE',
 };
 
-export const L2_TO_L1_NETWORK_MAPPER: NetworkMapper = {
-    10: 1,
-    69: 42,
+export const CollateralByNetworkId: Record<Network, string> = {
+    [Network.OptimismMainnet]: 'sUSD',
+    [Network.OptimismGoerli]: 'sUSD',
+    [Network.ArbitrumOne]: 'USDC',
 };
 
 export const SUPPORTED_NETWORKS = [
     {
-        chainId: 10,
+        chainId: Network.OptimismMainnet,
         chainName: 'Optimism Mainnet',
         shortChainName: 'Optimism',
         chainKey: 'optimism_mainnet',
@@ -23,7 +24,7 @@ export const SUPPORTED_NETWORKS = [
         isMultiCollateralSupported: true,
     },
     {
-        chainId: 42161,
+        chainId: Network.ArbitrumOne,
         chainName: 'Arbitrum One',
         shortChainName: 'Arbitrum',
         chainKey: 'arbitrum_mainnet',
@@ -31,7 +32,7 @@ export const SUPPORTED_NETWORKS = [
         isMultiCollateralSupported: false,
     },
     {
-        chainId: 420,
+        chainId: Network.OptimismGoerli,
         chainName: 'Optimism Goerli Testnet',
         shortChainName: 'Optimism Goerli Testnet',
         chainKey: 'optimism_mainnet',
@@ -40,7 +41,7 @@ export const SUPPORTED_NETWORKS = [
     },
 ];
 
-export type OptimismNetwork = {
+type OptimismNetwork = {
     chainId: string;
     chainName: string;
     rpcUrls: string[];
@@ -54,7 +55,7 @@ export type OptimismNetwork = {
 };
 
 export const SUPPORTED_NETWORKS_DESCRIPTIONS: Record<number, OptimismNetwork> = {
-    10: {
+    [Network.OptimismMainnet]: {
         chainId: '0xA',
         chainName: 'Optimism',
         rpcUrls: ['https://mainnet.optimism.io'],
@@ -65,18 +66,7 @@ export const SUPPORTED_NETWORKS_DESCRIPTIONS: Record<number, OptimismNetwork> = 
             decimals: 18,
         },
     },
-    69: {
-        chainId: '0x45',
-        chainName: 'Optimism Kovan',
-        rpcUrls: ['https://kovan.optimism.io'],
-        blockExplorerUrls: ['https://kovan-optimistic.etherscan.io/'],
-        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
-        nativeCurrency: {
-            symbol: 'ETH',
-            decimals: 18,
-        },
-    },
-    420: {
+    [Network.OptimismGoerli]: {
         chainId: '0x420',
         chainName: 'Optimism Goerli',
         rpcUrls: ['https://goerli.optimism.io/'],
@@ -87,7 +77,7 @@ export const SUPPORTED_NETWORKS_DESCRIPTIONS: Record<number, OptimismNetwork> = 
             decimals: 18,
         },
     },
-    42161: {
+    [Network.ArbitrumOne]: {
         chainId: '0xA4B1',
         chainName: 'Arbitrum One',
         rpcUrls: ['https://arb1.arbitrum.io/rpc'],
@@ -100,23 +90,7 @@ export const SUPPORTED_NETWORKS_DESCRIPTIONS: Record<number, OptimismNetwork> = 
     },
 };
 
-export const OPTIMISM_OPTIONS = [
-    {
-        label: 'optimism.optimistic-gateway',
-        link: 'https://gateway.optimism.io/',
-    },
-    {
-        label: 'optimism.optimistic-etherscan',
-        link: 'https://optimistic.etherscan.io/',
-    },
-    {
-        label: 'optimism.learn-more',
-        link: 'https://www.optimism.io/',
-    },
-];
-
 export const MAX_GAS_LIMIT = 29000000;
-export const MAX_GAS_LIMIT_ARB = 20000000;
 
 export const NETWORK_SWITCHER_SUPPORTED_NETWORKS = [
     {
@@ -128,7 +102,7 @@ export const NETWORK_SWITCHER_SUPPORTED_NETWORKS = [
         iconClassName: 'icon icon--op',
     },
     {
-        networkId: 42161,
+        networkId: Network.ArbitrumOne,
         chainId: '0xa4b1',
         chainName: 'Arbitrum One',
         shortChainName: 'Arbitrum',

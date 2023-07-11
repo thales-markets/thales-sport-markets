@@ -9,6 +9,8 @@ import { formatMarketOdds, getCombinedOddTooltipText, getFormattedBonus, getSpre
 import { getCombinedPositionName } from 'utils/combinedMarkets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type MatchInfoCominedMarketProps = {
     combinedMarket: CombinedParlayMarket;
@@ -24,6 +26,7 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
     customStyle,
 }) => {
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
     const market = combinedMarket.markets[0];
 
@@ -70,7 +73,9 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
                         ? {
                               text: spreadTotalText,
                               textStyle: {
-                                  backgroundColor: customStyle ? '#23273e' : '#2f3454',
+                                  backgroundColor: customStyle
+                                      ? theme.oddsGradiendBackground.primary
+                                      : theme.oddsGradiendBackground.secondary,
                                   top: '-9px',
                               },
                           }
@@ -117,14 +122,14 @@ const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
     font-size: ${(props) => (props.fontSize ? props.fontSize : '10px')};
     line-height: ${(props) => (props.lineHeight ? props.lineHeight : '11px')};
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Bonus = styled.div`
     min-width: 28px;
     font-size: 12px;
     font-weight: 600;
-    color: #5fc694;
+    color: ${(props) => props.theme.status.win};
     margin-right: 4px;
 `;
 
@@ -132,13 +137,13 @@ const Icon = styled.i`
     font-size: 12px;
 `;
 const Correct = styled(Icon)`
-    color: #339d6a;
+    color: ${(props) => props.theme.status.win};
 `;
 const Wrong = styled(Icon)`
-    color: #ca4c53;
+    color: ${(props) => props.theme.status.loss};
 `;
 const Canceled = styled(Icon)`
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 const Empty = styled(Icon)`
     visibility: hidden;

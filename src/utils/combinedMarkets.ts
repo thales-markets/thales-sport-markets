@@ -13,9 +13,6 @@ import {
     SportMarketInfo,
     SportMarkets,
 } from 'types/markets';
-import { POSITION_TO_ODDS_OBJECT_PROPERTY_NAME, Position } from 'constants/options';
-import { BetType, MARKETS_COMBINATION, SPORTS_TAGS_MAP } from 'constants/tags';
-import { isEqual } from 'lodash';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPositionType,
@@ -23,12 +20,13 @@ import {
 } from './markets';
 import {
     COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS,
-    ContractSGPOrder,
+    POSITION_TO_ODDS_OBJECT_PROPERTY_NAME,
     SGPCombinationsFromContractOrderMapping,
 } from 'constants/markets';
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from './formatters/ethers';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import localStore from './localStore';
+import { BetType, ContractSGPOrder, Position } from 'enums/markets';
 
 export const isSpecificCombinedPositionAddedToParlay = (
     parlayData: ParlaysMarketPosition[],
@@ -72,24 +70,7 @@ export const isSpecificCombinedPositionAddedToParlay = (
     return false;
 };
 
-export const isAllowedToCombineMarketsForTagId = (tags: number[]): boolean => {
-    let isAllowed = false;
-
-    tags.forEach((tag) => {
-        if (
-            SPORTS_TAGS_MAP.Football.includes(Number(tag)) ||
-            SPORTS_TAGS_MAP.Basketball.includes(Number(tag)) ||
-            SPORTS_TAGS_MAP.Soccer.includes(Number(tag)) ||
-            SPORTS_TAGS_MAP.Hockey.includes(Number(tag))
-        ) {
-            isAllowed = true;
-        }
-    });
-
-    return isAllowed;
-};
-
-export const isMarketCombinationInSGP = (markets: SportMarketInfo[]): SGPItem | undefined => {
+const isMarketCombinationInSGP = (markets: SportMarketInfo[]): SGPItem | undefined => {
     const COMBINED_MARKETS_SGP = localStore.get(LOCAL_STORAGE_KEYS.SGP_FEES) as SGPItem[];
 
     if (!COMBINED_MARKETS_SGP) return undefined;
@@ -105,7 +86,7 @@ export const isMarketCombinationInSGP = (markets: SportMarketInfo[]): SGPItem | 
     return;
 };
 
-export const calculateCombinedMarketOdds = (markets: SportMarketInfo[], positions: Position[]) => {
+const calculateCombinedMarketOdds = (markets: SportMarketInfo[], positions: Position[]) => {
     const firstPositionOdds = markets[0][POSITION_TO_ODDS_OBJECT_PROPERTY_NAME[positions[0]]];
     const secondPositionOdds = markets[1][POSITION_TO_ODDS_OBJECT_PROPERTY_NAME[positions[1]]];
 
@@ -120,7 +101,7 @@ export const calculateCombinedMarketOdds = (markets: SportMarketInfo[], position
     return firstPositionOdds * secondPositionOdds;
 };
 
-export const calculateCombinedMarketOddBasedOnHistoryOdds = (odds: number[], markets: SportMarketInfo[]) => {
+const calculateCombinedMarketOddBasedOnHistoryOdds = (odds: number[], markets: SportMarketInfo[]) => {
     const firstPositionOdd = odds[0];
     const secondPositionOdd = odds[1];
 
@@ -157,57 +138,6 @@ export const getCombinedPositionName = (
     return null;
 };
 
-export const getAllCombinationsForTwoMarkets = (markets: SportMarketInfo[]): CombinedMarket[] => {
-    if (!isEqual(markets[0].tags, markets[1].tags)) return [];
-
-    const marketsCombinations: CombinedMarket[] = [];
-
-    [0, 1, 2].forEach((firstPosition) => {
-        [0, 1, 2].forEach((secondPosition) => {
-            const combinationOdds = calculateCombinedMarketOdds(markets, [firstPosition, secondPosition]);
-            const positionName = getCombinedPositionName(markets, [firstPosition, secondPosition]);
-
-            if (!combinationOdds) return;
-
-            marketsCombinations.push({
-                markets: markets,
-                positions: [firstPosition, secondPosition],
-                totalOdd: combinationOdds,
-                totalBonus: 0,
-                positionName: positionName ? positionName : '',
-            });
-        });
-    });
-
-    return marketsCombinations;
-};
-
-export const getAllCombinedMarketsForParentMarket = (parentMarket: SportMarketInfo) => {
-    const allCombinedMarkets: CombinedMarket[] = [];
-
-    if (!isAllowedToCombineMarketsForTagId(parentMarket.tags)) return [];
-
-    MARKETS_COMBINATION.forEach((combination) => {
-        const firstMarket =
-            parentMarket.betType == combination[0]
-                ? parentMarket
-                : parentMarket.childMarkets.find((childMarket) => childMarket.betType == combination[0]);
-
-        if (!firstMarket) return;
-
-        const secondMarket = parentMarket.childMarkets.find((childMarket) => childMarket.betType == combination[1]);
-
-        if (firstMarket && secondMarket) {
-            const markets = getAllCombinationsForTwoMarkets([firstMarket, secondMarket]);
-            if (markets.length) {
-                allCombinedMarkets.push(...markets);
-            }
-        }
-    });
-
-    return allCombinedMarkets;
-};
-
 export const getCombinedMarketsFromParlayData = (parlayData: ParlaysMarketPosition[]): ParlaysMarketPosition[] => {
     const combinedMarkets = [];
 
@@ -223,10 +153,7 @@ export const getCombinedMarketsFromParlayData = (parlayData: ParlaysMarketPositi
     return [];
 };
 
-export const isTwoSportMarketsFromSameParent = (
-    firstMarket: SportMarketInfo,
-    secondMarket: SportMarketInfo
-): boolean => {
+const isTwoSportMarketsFromSameParent = (firstMarket: SportMarketInfo, secondMarket: SportMarketInfo): boolean => {
     if (firstMarket.gameId && secondMarket.gameId) return firstMarket.gameId == secondMarket.gameId;
     if (!firstMarket.parentMarket && secondMarket.parentMarket)
         return firstMarket.address.toLowerCase() == secondMarket.parentMarket.toLowerCase();
@@ -234,13 +161,6 @@ export const isTwoSportMarketsFromSameParent = (
         return secondMarket.address.toLowerCase() == firstMarket.parentMarket.toLowerCase();
     if (firstMarket.parentMarket && secondMarket.parentMarket)
         return firstMarket.parentMarket.toLowerCase() == secondMarket.parentMarket.toLowerCase();
-    return false;
-};
-
-export const isCombinedMarketsInParlayData = (parlayData: ParlaysMarketPosition[]): boolean => {
-    const markets = getCombinedMarketsFromParlayData(parlayData);
-
-    if (markets.length > 0) return true;
     return false;
 };
 
@@ -421,7 +341,7 @@ export const isCombinedMarketWinner = (markets: SportMarketInfo[], positions: Po
     return false;
 };
 
-export const processCombinedOddsFromContract = (
+const processCombinedOddsFromContract = (
     data: CombinedMarketContractData,
     market: SportMarketInfo
 ): CombinedMarket[] | false => {

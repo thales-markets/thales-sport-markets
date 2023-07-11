@@ -20,15 +20,14 @@ import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { useAccount, useProvider, useSigner, useDisconnect, useNetwork } from 'wagmi';
+import { useAccount, useProvider, useSigner, useDisconnect, useNetwork, mainnet } from 'wagmi';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import BannerCarousel from 'components/BannerCarousel';
 import { isMobile } from 'utils/device';
 import Profile from 'pages/Profile';
 import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
-import MarchMadness from 'pages/MarchMadness';
-import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
+import { buildHref } from 'utils/routes';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -151,7 +150,8 @@ const App = () => {
     }, [dispatch, address]);
 
     useEffect(() => {
-        if (chain?.unsupported) {
+        // only Wizard page requires mainnet because of Bridge functionality
+        if (chain?.unsupported && !(chain?.id === mainnet.id && location.pathname === buildHref(ROUTES.Wizard))) {
             disconnect();
         }
     }, [disconnect, chain]);
@@ -238,13 +238,6 @@ const App = () => {
                                 <Route exact path={ROUTES.QuizLeaderboard}>
                                     <DappLayout>
                                         <QuizLeaderboard />
-                                    </DappLayout>
-                                </Route>
-                            )}
-                            {isMarchMadnessAvailableForNetworkId(networkId) && (
-                                <Route exact path={ROUTES.MarchMadness}>
-                                    <DappLayout>
-                                        <MarchMadness />
                                     </DappLayout>
                                 </Route>
                             )}

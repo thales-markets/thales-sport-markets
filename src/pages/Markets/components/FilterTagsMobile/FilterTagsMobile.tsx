@@ -1,4 +1,4 @@
-import { GlobalFiltersEnum, SportFilterEnum } from 'constants/markets';
+import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';

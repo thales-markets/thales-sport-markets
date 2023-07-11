@@ -1,13 +1,24 @@
 import { Currency } from '@socket.tech/plugin';
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
+import { mainnet, bsc, aurora, avalanche, fantom, polygon, gnosis, optimism, arbitrum } from 'wagmi/chains';
 
-export interface TokenListOutput {
+interface TokenListOutput {
     success: boolean;
     result: Currency[];
 }
 
-export const SOURCE_NETWORK_IDS = [1, 10, 56, 100, 137, 250, 43114, 42161, 1313161554];
+export const SOURCE_NETWORK_IDS = [
+    mainnet.id,
+    optimism.id,
+    bsc.id,
+    gnosis.id,
+    polygon.id,
+    fantom.id,
+    avalanche.id,
+    arbitrum.id,
+    aurora.id,
+];
 
 // Check docs on: https://docs.socket.tech/socket-api/versioning
 const baseUrl = 'https://api.socket.tech/v2/token-lists/from-token-list';

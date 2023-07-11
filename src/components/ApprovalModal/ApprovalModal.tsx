@@ -23,7 +23,7 @@ type ApprovalModalProps = {
     onClose: () => void;
 };
 
-export const ApprovalModal: React.FC<ApprovalModalProps> = ({
+const ApprovalModal: React.FC<ApprovalModalProps> = ({
     defaultAmount,
     collateralIndex,
     tokenSymbol,
@@ -80,7 +80,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
             title={t('common.enable-wallet-access.approve-label', { currencyKey: tokenSymbol })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
-            customStyle={{ overlay: { zIndex: 2000 } }}
+            customStyle={{ overlay: { zIndex: 201 } }}
         >
             <Container>
                 <CheckboxContainer>
@@ -109,7 +109,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
 };
 
 const Container = styled(FlexDivColumnCentered)`
-    width: 450px;
+    width: 350px;
     @media (max-width: 575px) {
         width: auto;
     }
@@ -120,40 +120,18 @@ const ButtonContainer = styled(FlexDivCentered)`
 `;
 
 const CheckboxContainer = styled(FlexDivCentered)`
-    margin: 40px 0 5px 0;
-    label {
-        font-size: 25px;
-        line-height: 52px;
-        padding-left: 32px;
-        font-weight: bold;
-        @media (max-width: 575px) {
-            font-size: 20px;
-        }
-    }
-    span {
-        :after {
-            height: 14px;
-            width: 5px;
-            left: 5px;
-            top: -1px;
-            border-width: 0 3px 3px 0;
-        }
-        height: 25px;
-        width: 25px;
-        border-radius: 5px;
-        margin-top: 12px;
-        border: 3px solid ${(props) => props.theme.borderColor.secondary};
-    }
+    margin: 30px 0 5px 0;
 `;
 
 const OrText = styled(FlexDivCentered)`
     font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
+    font-size: 17px;
     line-height: 100%;
     text-align: center;
+    text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 15px;
 `;
 
 export default ApprovalModal;
