@@ -2,8 +2,8 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, COLLATERALS } from 'constants/markets';
+import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
+import { APPROVAL_BUFFER } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -19,9 +19,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlayPayment, ParlaysMarket } from 'types/markets';
-import { getAmountForApproval } from 'utils/amm';
-import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter, stableCoinParser } from 'utils/formatters/ethers';
 import {
     countDecimals,
     formatCurrencyWithSign,
@@ -61,6 +59,8 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
+import { getCollateral } from 'utils/collaterals';
+import { StablecoinKey } from 'types/tokens';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -88,10 +88,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
 
-    const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
-        parlayPayment.selectedStableIndex
-    );
-
+    const [selectedStableIndex, setSelectedStableIndex] = useState(parlayPayment.selectedStableIndex);
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [minUsdAmountValue, setMinUsdAmountValue] = useState<number>(0);
@@ -120,7 +117,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     });
 
     // Due to conversion from non sUSD to sUSD user needs 2% more funds in wallet
-    const COLLATERAL_CONVERSION_MULTIPLIER = selectedStableIndex !== COLLATERALS_INDEX.sUSD ? 1.02 : 1;
+    const COLLATERAL_CONVERSION_MULTIPLIER =
+        getCollateral(networkId, selectedStableIndex) !== (CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey) ? 1.02 : 1;
 
     const hasParlayCombinedMarkets = isSGPInParlayMarkets(markets);
 
@@ -183,10 +181,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             return overtimeVoucher.remainingAmount;
         }
         if (multipleStableBalances.data && multipleStableBalances.isSuccess) {
-            return multipleStableBalances.data[COLLATERALS[selectedStableIndex]];
+            return multipleStableBalances.data[getCollateral(networkId, selectedStableIndex)];
         }
         return 0;
     }, [
+        networkId,
         multipleStableBalances.data,
         multipleStableBalances.isSuccess,
         selectedStableIndex,
@@ -224,10 +223,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     susdAmountForQuote < minUsdAmountValue
                         ? minUsdAmountValue // deafult value for qoute info
                         : susdAmountForQuote;
-                const susdPaid = ethers.utils.parseUnits(
-                    roundNumberToDecimals(minUsdAmount).toString(),
-                    getDefaultDecimalsForNetwork(networkId)
-                );
+                const susdPaid = stableCoinParser(roundNumberToDecimals(minUsdAmount).toString(), networkId);
                 try {
                     const parlayAmmQuote = await getParlayMarketsAMMQuoteMethod(
                         selectedStableIndex,
@@ -260,19 +256,19 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
         const { parlayMarketsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (parlayMarketsAMMContract && signer) {
             let collateralContractWithSigner: ethers.Contract | undefined;
-
-            if (selectedStableIndex !== COLLATERALS_INDEX.sUSD && multipleCollateral) {
-                collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
+            const collateral = getCollateral(networkId, selectedStableIndex);
+            if (selectedStableIndex !== 0 && multipleCollateral) {
+                collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
             } else {
                 collateralContractWithSigner = sUSDContract?.connect(signer);
             }
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = getAmountForApproval(
-                        selectedStableIndex,
+                    const parsedTicketPrice = stableCoinParser(
                         Number(usdAmountValue).toString(),
-                        networkId
+                        networkId,
+                        getCollateral(networkId, selectedStableIndex)
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
@@ -308,9 +304,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 let collateralContractWithSigner: ethers.Contract | undefined;
-
-                if (selectedStableIndex !== 0 && multipleCollateral && multipleCollateral[selectedStableIndex]) {
-                    collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
+                const collateral = getCollateral(networkId, selectedStableIndex);
+                if (selectedStableIndex !== 0 && multipleCollateral && multipleCollateral[collateral]) {
+                    collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
                 } else {
                     collateralContractWithSigner = sUSDContract?.connect(signer);
                 }
@@ -351,10 +347,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         : null;
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
-                const susdPaid = ethers.utils.parseUnits(
-                    roundNumberToDecimals(Number(usdAmountValue)).toString(),
-                    getDefaultDecimalsForNetwork(networkId)
-                );
+                const susdPaid = stableCoinParser(roundNumberToDecimals(Number(usdAmountValue)).toString(), networkId);
                 const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
                 const additionalSlippage = ethers.utils.parseEther('0.02');
 
@@ -389,7 +382,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
                     trackEvent({
                         category: 'parlay',
-                        action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
+                        action: `buy-with-${getCollateral(networkId, selectedStableIndex)}`,
                         value: Number(usdAmountValue),
                     });
                     refetchBalances(walletAddress, networkId);
@@ -568,12 +561,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     if (hasParlayCombinedMarkets) {
                         const marketsAddresses = markets.map((market) => market.address);
                         const selectedPositions = markets.map((market) => market.position);
-                        const susdPaid = ethers.utils.parseUnits(
+                        const susdPaid = stableCoinParser(
                             roundNumberToDecimals(
                                 Number(usdAmountValue) ? Number(usdAmountValue) : minUsdAmountValue
                             ).toString(),
-                            getDefaultDecimalsForNetwork(networkId)
+                            networkId
                         );
+
                         const newSkewData = await parlayMarketsAMMContract?.calculateSkewImpact(
                             marketsAddresses,
                             selectedPositions,
@@ -805,7 +799,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
                     defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * APPROVAL_BUFFER}
                     collateralIndex={selectedStableIndex}
-                    tokenSymbol={COLLATERALS[selectedStableIndex]}
+                    tokenSymbol={getCollateral(networkId, selectedStableIndex)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}

@@ -1,6 +1,5 @@
 import { useAccountModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import SwapModal from 'components/SwapModal';
-import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
 import ROUTES from 'constants/routes';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
@@ -10,10 +9,11 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getDefaultCollateralIndexForNetworkId, getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
+import { getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import FundModal from '../FundModal';
 import { WizardStep } from 'enums/wizard';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 type StepProps = {
     stepNumber: number;
@@ -68,10 +68,10 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 transKey += '.trade';
                 break;
         }
-        const collateralName = COLLATERAL_INDEX_TO_COLLATERAL[getDefaultCollateralIndexForNetworkId(networkId)];
+
         return t(transKey, {
             network: getNetworkNameByNetworkId(networkId, true) || getDefaultNetworkName(true),
-            collateral: collateralName,
+            collateral: getDefaultCollateral(networkId),
         });
     }, [stepType, networkId]);
 

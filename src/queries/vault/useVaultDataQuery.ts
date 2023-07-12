@@ -5,7 +5,7 @@ import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
 import { VaultData } from 'types/vault';
 import { isParlayVault } from 'constants/vault';
-import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const useVaultDataQuery = (
     vaultAddress: string,

@@ -1,10 +1,12 @@
-import { COLLATERALS_INDEX } from 'constants/currency';
+import { STABLE_DECIMALS } from 'constants/currency';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
 import { MAX_GAS_LIMIT, NetworkNameById, SUPPORTED_NETWORKS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import { getNavItemFromRoute } from './ui';
-import { getLastSavedOrDefaultStableIndex } from 'redux/modules/parlay';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import localStore from './localStore';
+import { getCollaterals } from './collaterals';
 
 export const hasEthereumInjected = () => !!window.ethereum;
 
@@ -47,6 +49,11 @@ export const getNetworkNameByNetworkId = (networkId: Network, shortName = false)
     return shortName ? network?.shortChainName : network?.chainName;
 };
 
+export const getDefaultDecimalsForNetwork = (networkId: Network) => {
+    if (networkId == Network.ArbitrumOne) return STABLE_DECIMALS.USDC;
+    return STABLE_DECIMALS.sUSD;
+};
+
 export const getDefaultNetworkName = (shortName = false): string => {
     // find should always return Object for default network ID
     const network = SUPPORTED_NETWORKS.find((item) => item.chainId === DEFAULT_NETWORK_ID) || SUPPORTED_NETWORKS[0];
@@ -64,21 +71,14 @@ export const isRouteAvailableForNetwork = (route: string, networkId: Network): b
     return false;
 };
 
-export const getDefaultCollateralIndexForNetworkId = (networkId: Network) => {
-    return networkId == Network.ArbitrumOne ? COLLATERALS_INDEX.USDC : getLastSavedOrDefaultStableIndex();
+export const getDefaultCollateralIndexForNetworkId = (networkId: Network): number => {
+    const lsSelectedStableIndex = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
+    return networkId === Network.ArbitrumOne ? 0 : (lsSelectedStableIndex as number) || 0;
 };
 
-export const isMultiCollateralSupportedForNetwork = (networkId: Network) => {
-    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId && item.isMultiCollateralSupported);
-    if (network) return true;
-    return false;
-};
+export const isMultiCollateralSupportedForNetwork = (networkId: Network) => getCollaterals(networkId).length > 1;
 
 export const getMaxGasLimitForNetwork = (networkId: Network) => {
     if (networkId == Network.ArbitrumOne) return undefined;
     return MAX_GAS_LIMIT;
-};
-
-export const delay = (interval: number) => {
-    return new Promise((resolve) => setTimeout(resolve, interval));
 };

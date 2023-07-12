@@ -4,7 +4,7 @@ import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
 import { UserVaultData } from 'types/vault';
-import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { getDefaultDecimalsForNetwork } from 'utils/network';
 import { isParlayVault } from 'constants/vault';
 
 const useUserVaultDataQuery = (

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivEnd } from 'styles/common';
+import { FlexDivColumn } from 'styles/common';
 
 export const FieldContainer = styled(FlexDivColumn)<{ margin?: string; width?: string }>`
     flex: initial;
@@ -56,13 +56,4 @@ export const Input = styled.input<{
     &.error {
         border: 2px solid ${(props) => props.theme.error.borderColor.primary};
     }
-`;
-
-export const FieldNote = styled(FlexDivEnd)`
-    font-style: normal;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 16px;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-top: 4px;
 `;
