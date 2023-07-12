@@ -53,7 +53,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, getMaxGasLimitForNetwork, delay } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -65,7 +65,6 @@ import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDat
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
 import { LINKS } from 'constants/links';
 import MaxAllowanceTooltip from './components/MaxAllowanceTooltip';
-import { getDefaultDecimalsForNetwork, getDefaultColleteralForNetwork } from 'utils/collaterals';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { FlexDivRow } from 'styles/common';
 import RadioButton from 'components/fields/RadioButton/RadioButton';
@@ -77,6 +76,9 @@ import Button from 'components/Button';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import { Network } from 'enums/network';
+import { delay } from 'utils/timer';
+import { getDefaultCollateral } from 'utils/collaterals';
+import { stableCoinParser } from 'utils/formatters/ethers';
 import { executeEtherspotTransaction } from '../../utils/etherspot';
 
 const LiquidityPool: React.FC = () => {
@@ -119,7 +121,7 @@ const LiquidityPool: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const collateral = getDefaultColleteralForNetwork(networkId);
+    const collateral = getDefaultCollateral(networkId);
 
     const { openConnectModal } = useConnectModal();
 
@@ -279,10 +281,7 @@ const LiquidityPool: React.FC = () => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = ethers.utils.parseUnits(
-                        Number(amount).toString(),
-                        getDefaultDecimalsForNetwork(networkId)
-                    );
+                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -351,10 +350,7 @@ const LiquidityPool: React.FC = () => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
 
         try {
-            const parsedAmount = ethers.utils.parseUnits(
-                Number(amount).toString(),
-                getDefaultDecimalsForNetwork(networkId)
-            );
+            const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
             const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
             const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;

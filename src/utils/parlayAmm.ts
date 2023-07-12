@@ -1,15 +1,16 @@
-import { COLLATERALS_INDEX } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
-import { getCollateralAddress } from './collaterals';
+import { getCollateral, getCollateralAddress } from './collaterals';
 import { isMultiCollateralSupportedForNetwork } from './network';
 import { Position } from 'enums/markets';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { StablecoinKey } from 'types/tokens';
 
 export const getParlayAMMTransaction: any = (
     isVoucherSelected: boolean,
     voucherId: number,
-    stableIndex: COLLATERALS_INDEX,
+    stableIndex: number,
     networkId: Network,
     parlayMarketsAMMContract: ethers.Contract,
     overtimeVoucherContract: ethers.Contract,
@@ -23,8 +24,8 @@ export const getParlayAMMTransaction: any = (
         gasLimit: number | null;
     }
 ): Promise<ethers.ContractTransaction> => {
-    const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
-    const collateralAddress = getCollateralAddress(isNonSusdCollateral, networkId, stableIndex);
+    const isNonSusdCollateral = getCollateral(networkId, stableIndex) !== (CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey);
+    const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isVoucherSelected) {
@@ -77,7 +78,7 @@ export const getParlayAMMTransaction: any = (
 export const getParlayAMMEtherspotTransactionInfo: any = (
     isVoucherSelected: boolean,
     voucherId: number,
-    stableIndex: COLLATERALS_INDEX,
+    stableIndex: number,
     networkId: Network,
     marketsAddresses: string[],
     selectedPositions: Position[],
@@ -86,8 +87,8 @@ export const getParlayAMMEtherspotTransactionInfo: any = (
     referral?: string | null,
     additionalSlippage?: BigNumber
 ): { methodName: string; data: ReadonlyArray<any> } => {
-    const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
-    const collateralAddress = getCollateralAddress(isNonSusdCollateral, networkId, stableIndex);
+    const isNonSusdCollateral = getCollateral(networkId, stableIndex) !== (CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey);
+    const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
     const mappedSelectedPositions = selectedPositions.map((position) => Number(position));
 
@@ -140,15 +141,15 @@ export const getParlayAMMEtherspotTransactionInfo: any = (
 };
 
 export const getParlayMarketsAMMQuoteMethod: any = (
-    stableIndex: COLLATERALS_INDEX,
+    stableIndex: number,
     networkId: Network,
     parlayMarketsAMMContract: ethers.Contract,
     marketsAddresses: string[],
     selectedPositions: Position[],
     sUSDPaid: BigNumber
 ) => {
-    const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
-    const collateralAddress = getCollateralAddress(isNonSusdCollateral, networkId, stableIndex);
+    const isNonSusdCollateral = getCollateral(networkId, stableIndex) !== (CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey);
+    const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isMultiCollateralSupported && isNonSusdCollateral && collateralAddress) {

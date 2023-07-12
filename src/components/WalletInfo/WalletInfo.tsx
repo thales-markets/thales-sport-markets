@@ -11,12 +11,12 @@ import { hasEthereumInjected } from 'utils/network';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import { formatCurrency } from 'utils/formatters/number';
-import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { Network } from 'enums/network';
 import { NETWORK_SWITCHER_SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
 import { useSwitchNetwork } from 'wagmi';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -85,12 +85,12 @@ const WalletInfo: React.FC = () => {
                                         <WalletBalanceInfo>
                                             <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
                                             <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                            <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
+                                            <Currency>{getDefaultCollateral(networkId)}</Currency>
                                         </WalletBalanceInfo>
                                     ) : (
                                         <WalletBalanceInfo>
                                             <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                            <Currency>{getDefaultColleteralForNetwork(networkId)}</Currency>
+                                            <Currency>{getDefaultCollateral(networkId)}</Currency>
                                         </WalletBalanceInfo>
                                     ))}
                                 <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>

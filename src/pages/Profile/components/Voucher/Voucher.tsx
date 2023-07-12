@@ -21,7 +21,6 @@ import zebraLogo from 'assets/images/voucher/voucher-zebra-logo.svg';
 import overtimeLogo from 'assets/images/overtime-logo.svg';
 import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';
 import { getIsAppReady } from 'redux/modules/app';
-import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 import SimpleLoader from 'components/SimpleLoader';
 import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
@@ -32,6 +31,7 @@ import { refetchAfterVoucherClaim } from 'utils/queryConnector';
 import { LINKS } from 'constants/links';
 import { generalConfig } from 'config/general';
 import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
+import { getDefaultCollateral } from 'utils/collaterals';
 import { executeEtherspotTransaction } from 'utils/etherspot';
 
 const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
@@ -151,7 +151,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                 </VoucherBox>
                                 <VoucherBox width="118px" backgroundImage={voucherAmountBox} isColumn={true}>
                                     <NumberText>{overtimeVoucherEscrowData?.voucherAmount}</NumberText>
-                                    <Text>{getDefaultColleteralForNetwork(networkId)}</Text>
+                                    <Text>{getDefaultCollateral(networkId)}</Text>
                                 </VoucherBox>
                                 <VoucherBox width="142px" backgroundImage={voucherTimeBox} isColumn={true}>
                                     <TextCenter>
@@ -188,7 +188,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                     <MobileVoucherInfoRow>
                                         <FlexDivColumnNative>
                                             <NumberText>{overtimeVoucherEscrowData?.voucherAmount}</NumberText>
-                                            <Text>{getDefaultColleteralForNetwork(networkId)}</Text>
+                                            <Text>{getDefaultCollateral(networkId)}</Text>
                                         </FlexDivColumnNative>
                                         <FlexDivColumnNative>
                                             <TextCenter>

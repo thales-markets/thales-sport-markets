@@ -2,8 +2,8 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { COLLATERALS_INDEX, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, COLLATERALS } from 'constants/markets';
+import { USD_SIGN } from 'constants/currency';
+import { APPROVAL_BUFFER } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useAvailablePerPositionMultiQuery from 'queries/markets/useAvailablePerPositionMultiQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -18,12 +18,7 @@ import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress 
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlayPayment, ParlaysMarket } from 'types/markets';
-import {
-    getAMMSportsEtherspotTransactionInfo,
-    getAMMSportsTransaction,
-    getAmountForApproval,
-    getSportsAMMQuoteMethod,
-} from 'utils/amm';
+import { getAMMSportsEtherspotTransactionInfo, getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     countDecimals,
@@ -33,7 +28,12 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import { checkAllowance, getMaxGasLimitForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import {
+    checkAllowance,
+    getDefaultDecimalsForNetwork,
+    getMaxGasLimitForNetwork,
+    isMultiCollateralSupportedForNetwork,
+} from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -62,9 +62,9 @@ import {
 import { ListContainer } from 'pages/Profile/components/Positions/styled-components';
 import MatchInfo from '../MatchInfo';
 import styled, { useTheme } from 'styled-components';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter, stableCoinParser } from 'utils/formatters/ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
-import { getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { getCollateral, getStablecoinDecimals } from 'utils/collaterals';
 import { OddsType } from 'enums/markets';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
@@ -95,9 +95,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     const [hasAllowance, setHasAllowance] = useState(false);
     const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
-    const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
-        parlayPayment.selectedStableIndex
-    );
+    const [selectedStableIndex, setSelectedStableIndex] = useState(parlayPayment.selectedStableIndex);
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [totalBonusPercentageDec, setTotalBonusPercentageDec] = useState(0);
     const [bonusCurrency, setBonusCurrency] = useState(0);
@@ -181,10 +179,11 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
             return overtimeVoucher.remainingAmount;
         }
         if (multipleStableBalances.data && multipleStableBalances.isSuccess) {
-            return multipleStableBalances.data[COLLATERALS[selectedStableIndex]];
+            return multipleStableBalances.data[getCollateral(networkId, selectedStableIndex)];
         }
         return 0;
     }, [
+        networkId,
         multipleStableBalances.data,
         multipleStableBalances.isSuccess,
         selectedStableIndex,
@@ -222,11 +221,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                     parsedAmount
                 );
 
-                if (isMultiCollateralSupported && selectedStableIndex !== COLLATERALS_INDEX.sUSD) {
-                    return ammQuote[0];
-                }
-
-                return ammQuote;
+                return isMultiCollateralSupported && selectedStableIndex !== 0 ? ammQuote[0] : ammQuote;
             }
         },
         [isMultiCollateralSupported, networkId, selectedStableIndex]
@@ -258,7 +253,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
             const divider = isVoucherSelected
                 ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
-                : Number(`1e${getDecimalsByStableCoinIndex(selectedStableIndex)}`);
+                : Number(`1e${getStablecoinDecimals(networkId, selectedStableIndex)}`);
             const { sportsAMMContract, signer } = networkConnector;
             const tokenAndBonusArr = [] as MultiSingleTokenQuoteAndBonus[];
             const isFetchingRecords = isFetching;
@@ -404,18 +399,19 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         if (sportsAMMContract && signer) {
             let collateralContractWithSigner: ethers.Contract | undefined;
 
+            const collateral = getCollateral(networkId, selectedStableIndex);
             if (selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported) {
-                collateralContractWithSigner = multipleCollateral[selectedStableIndex]?.connect(signer);
+                collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
             } else {
                 collateralContractWithSigner = sUSDContract?.connect(signer);
             }
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = getAmountForApproval(
-                        selectedStableIndex,
+                    const parsedTicketPrice = stableCoinParser(
                         Number(calculatedTotalBuyIn).toString(),
-                        networkId
+                        networkId,
+                        getCollateral(networkId, selectedStableIndex)
                     );
                     await checkAllowance(
                         parsedTicketPrice,
@@ -453,12 +449,14 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         try {
             const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
             const addressToApprove = sportsAMMContract?.address;
+
+            const collateral = getCollateral(networkId, selectedStableIndex);
             const collateralContract =
                 selectedStableIndex !== 0 &&
                 multipleCollateral &&
-                multipleCollateral[selectedStableIndex] &&
+                multipleCollateral[collateral] &&
                 isMultiCollateralSupported
-                    ? multipleCollateral[selectedStableIndex]
+                    ? multipleCollateral[collateral]
                     : sUSDContract;
 
             let txHash;
@@ -579,7 +577,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                                 );
                                 trackEvent({
                                     category: 'parlay-multi-single',
-                                    action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
+                                    action: `buy-with-${getCollateral(networkId, selectedStableIndex)}`,
                                     value: Number(calculatedTotalBuyIn),
                                 });
                                 dispatch(removeFromParlay(marketAddress));
@@ -615,7 +613,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     trackEvent({
                         category: 'parlay-multi-single',
-                        action: `buy-with-${COLLATERALS[selectedStableIndex]}`,
+                        action: `buy-with-${getCollateral(networkId, selectedStableIndex)}`,
                         value: Number(calculatedTotalBuyIn),
                     });
                     markets.forEach(async (market: ParlaysMarket) => {
@@ -950,7 +948,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
                     defaultAmount={Number(calculatedTotalBuyIn) + Number(calculatedTotalBuyIn) * APPROVAL_BUFFER}
                     collateralIndex={selectedStableIndex}
-                    tokenSymbol={COLLATERALS[selectedStableIndex]}
+                    tokenSymbol={getCollateral(networkId, selectedStableIndex)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}

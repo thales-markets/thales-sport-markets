@@ -62,13 +62,14 @@ import { RouteComponentProps } from 'react-router-dom';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
-import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { refetchVaultData } from 'utils/queryConnector';
 import { NewBadge } from 'pages/Vaults/VaultOverview/styled-components';
 import Button from 'components/Button';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { VaultTab } from 'enums/vault';
+import { stableCoinParser } from 'utils/formatters/ethers';
+import { getDefaultCollateral } from 'utils/collaterals';
 import { executeEtherspotTransaction } from 'utils/etherspot';
 
 type VaultProps = RouteComponentProps<{
@@ -188,10 +189,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = ethers.utils.parseUnits(
-                        Number(amount).toString(),
-                        getDefaultDecimalsForNetwork(networkId)
-                    );
+                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -240,7 +238,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     id,
                     getSuccessToastOptions(
                         t('market.toast-message.approve-success', {
-                            token: getDefaultColleteralForNetwork(networkId),
+                            token: getDefaultCollateral(networkId),
                         })
                     )
                 );
@@ -257,10 +255,7 @@ const Vault: React.FC<VaultProps> = (props) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
 
         try {
-            const parsedAmount = ethers.utils.parseUnits(
-                Number(amount).toString(),
-                getDefaultDecimalsForNetwork(networkId)
-            );
+            const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
             const { provider, signer } = networkConnector;
             const sportVaultContract = new ethers.Contract(vaultAddress, vaultContract.abi, provider);
@@ -375,10 +370,10 @@ const Vault: React.FC<VaultProps> = (props) => {
                 <Button disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
                         ? t('common.enable-wallet-access.approve-label', {
-                              currencyKey: getDefaultColleteralForNetwork(networkId),
+                              currencyKey: getDefaultCollateral(networkId),
                           })
                         : t('common.enable-wallet-access.approve-progress-label', {
-                              currencyKey: getDefaultColleteralForNetwork(networkId),
+                              currencyKey: getDefaultCollateral(networkId),
                           })}
                 </Button>
             );
@@ -653,7 +648,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                                             disabled={isDepositAmountInputDisabled}
                                             onChange={(_, value) => setAmount(value)}
                                             placeholder={t('vault.deposit-amount-placeholder')}
-                                            currencyLabel={getDefaultColleteralForNetwork(networkId)}
+                                            currencyLabel={getDefaultCollateral(networkId)}
                                             showValidation={insufficientBalance || exceededVaultCap || invalidAmount}
                                             validationMessage={t(
                                                 `${
@@ -859,7 +854,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}
-                    tokenSymbol={getDefaultColleteralForNetwork(networkId)}
+                    tokenSymbol={getDefaultCollateral(networkId)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}

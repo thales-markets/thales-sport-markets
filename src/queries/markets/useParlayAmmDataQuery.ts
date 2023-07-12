@@ -4,7 +4,7 @@ import { ParlayAmmData } from 'types/markets';
 import networkConnector from 'utils/networkConnector';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { Network } from 'enums/network';
-import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const useParlayAmmDataQuery = (networkId: Network, options?: UseQueryOptions<ParlayAmmData | undefined>) => {
     return useQuery<ParlayAmmData | undefined>(

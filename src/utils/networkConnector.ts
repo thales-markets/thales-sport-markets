@@ -16,6 +16,7 @@ import parlayMarketDataContract from 'utils/contracts/parlayMarketDataContract';
 import parlayAMMLiquidityPoolContract from 'utils/contracts/parlayAMMLiquidityPoolContract';
 import parlayAMMLiquidityPoolDataContract from 'utils/contracts/parlayAMMLiquidityPoolDataContract';
 import { Network } from 'enums/network';
+import { StablecoinKey } from 'types/tokens';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -23,7 +24,7 @@ type NetworkConnector = {
     signer: Signer | undefined;
     setNetworkSettings: (networkSettings: NetworkSettings) => void;
     paymentTokenContract?: ethers.Contract;
-    multipleCollateral?: Array<ethers.Contract | undefined>;
+    multipleCollateral?: Record<StablecoinKey, ethers.Contract | undefined>;
     marketManagerContract?: ethers.Contract;
     marketDataContract?: ethers.Contract;
     sportPositionalMarketDataContract?: ethers.Contract;
@@ -68,12 +69,12 @@ const networkConnector: NetworkConnector = {
             networkSettings
         );
 
-        this.multipleCollateral = [
-            initializeContract(multipleCollateral['sUSD'], networkSettings),
-            initializeContract(multipleCollateral['DAI'], networkSettings),
-            initializeContract(multipleCollateral['USDC'], networkSettings),
-            initializeContract(multipleCollateral['USDT'], networkSettings),
-        ];
+        this.multipleCollateral = {
+            sUSD: initializeContract(multipleCollateral.sUSD, networkSettings),
+            DAI: initializeContract(multipleCollateral.DAI, networkSettings),
+            USDC: initializeContract(multipleCollateral.USDC, networkSettings),
+            USDT: initializeContract(multipleCollateral.USDT, networkSettings),
+        };
     },
 };
 
