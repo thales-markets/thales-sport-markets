@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
-import { ADAPTER_EVENTS, CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base';
+import { ADAPTER_EVENTS, WALLET_ADAPTERS } from '@web3auth/base';
 import { PrimeSdk, Web3WalletProvider } from '@etherspot/prime-sdk';
 import Web3 from 'web3';
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { Web3AuthNoModal } from '@web3auth/no-modal';
-import { useDispatch } from 'react-redux';
-import { updateIsSocialLogin, updateWallet } from 'redux/modules/wallet';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSwitchToNetworkId, updateIsSocialLogin, updateWallet } from 'redux/modules/wallet';
 import Button from 'components/Button';
 import etherspotConnector from 'utils/etherspotConnector';
+import { ETHERSPOT_SUPPORTED_NETWORKS } from 'constants/etherspot';
+import { Network } from 'enums/network';
 
 const clientId = 'BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk'; // get from https://dashboard.web3auth.io
 
 const Etherspot: React.FC = () => {
     const dispatch = useDispatch();
+    const switchedToNetworkId = useSelector(getSwitchToNetworkId);
+
     const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
     // const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -21,22 +25,13 @@ const Etherspot: React.FC = () => {
     useEffect(() => {
         const init = async () => {
             try {
-                const chainConfig = {
-                    chainNamespace: CHAIN_NAMESPACES.EIP155,
-                    chainId: '0xa', // Please use 0x1 for Mainnet
-                    rpcTarget: 'https://rpc.ankr.com/optimism',
-                    displayName: 'Optimism Mainnet',
-                    blockExplorer: 'https://optimistic.etherscan.io/',
-                    ticker: 'ETH',
-                    tickerName: 'Ethereum',
-                };
-
-                // ETH_Goerli
+                const chainConfig = ETHERSPOT_SUPPORTED_NETWORKS[switchedToNetworkId];
 
                 const web3AuthInstance = new Web3AuthNoModal({
-                    clientId, // created in the Web3Auth Dashboard as described above
+                    clientId,
                     chainConfig,
                 });
+
                 setWeb3auth(web3AuthInstance);
 
                 const privateKeyProvider = new EthereumPrivateKeyProvider({
@@ -71,6 +66,11 @@ const Etherspot: React.FC = () => {
                 await web3AuthInstance.init();
 
                 if (web3AuthInstance.connected) {
+                    await web3AuthInstance.addChain(
+                        switchedToNetworkId === Network.OptimismMainnet
+                            ? ETHERSPOT_SUPPORTED_NETWORKS[Network.ArbitrumOne]
+                            : ETHERSPOT_SUPPORTED_NETWORKS[Network.OptimismMainnet]
+                    );
                     const web3authProvider = web3AuthInstance.provider;
                     const web3 = new Web3(web3authProvider as any);
 
@@ -78,7 +78,7 @@ const Etherspot: React.FC = () => {
                     // Refresh the web3 Injectable to validate the provider
                     await web3provider.refresh();
                     const etherspotPrimeSdk = new PrimeSdk(web3provider, {
-                        chainId: 10,
+                        chainId: switchedToNetworkId,
                     });
                     const address = await etherspotPrimeSdk.getCounterFactualAddress();
 
@@ -95,12 +95,47 @@ const Etherspot: React.FC = () => {
         init();
     }, [dispatch]);
 
+    useEffect(() => {
+        const switchChain = async () => {
+            if (web3auth !== null) {
+                await web3auth.switchChain({
+                    chainId:
+                        switchedToNetworkId === Network.OptimismMainnet
+                            ? ETHERSPOT_SUPPORTED_NETWORKS[Network.OptimismMainnet].chainId
+                            : ETHERSPOT_SUPPORTED_NETWORKS[Network.ArbitrumOne].chainId,
+                });
+
+                if (web3auth.connected) {
+                    const web3authProvider = web3auth.provider;
+                    const web3 = new Web3(web3authProvider as any);
+
+                    const web3provider = new Web3WalletProvider(web3.currentProvider as any);
+                    // Refresh the web3 Injectable to validate the provider
+                    await web3provider.refresh();
+                    const etherspotPrimeSdk = new PrimeSdk(web3provider, {
+                        chainId: switchedToNetworkId,
+                    });
+
+                    etherspotConnector.setPrimeSdk(etherspotPrimeSdk);
+                    console.log(etherspotPrimeSdk);
+                }
+            }
+        };
+
+        switchChain();
+    }, [switchedToNetworkId]);
+
     const login = async () => {
         let web3authProvider;
         try {
             if (web3auth !== null) {
                 // login_hint is optional parameter which accepts any string and can be set to null
                 web3authProvider = await web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, { loginProvider: 'google' });
+                await web3auth.addChain(
+                    switchedToNetworkId === Network.OptimismMainnet
+                        ? ETHERSPOT_SUPPORTED_NETWORKS[Network.ArbitrumOne]
+                        : ETHERSPOT_SUPPORTED_NETWORKS[Network.OptimismMainnet]
+                );
             }
         } catch (e) {
             console.log(`Failed to login! Reason: ${e instanceof Error && e?.message ? e.message : 'unknown'}.`);
@@ -127,7 +162,7 @@ const Etherspot: React.FC = () => {
         // console.log(test, web3provider);
 
         const etherspotPrimeSdk = new PrimeSdk(web3provider, {
-            chainId: 10,
+            chainId: switchedToNetworkId,
         });
         const address = await etherspotPrimeSdk.getCounterFactualAddress();
 
@@ -138,6 +173,8 @@ const Etherspot: React.FC = () => {
 
         console.log(address);
     };
+
+    console.log(web3auth);
 
     const logout = async () => {
         try {
@@ -155,8 +192,6 @@ const Etherspot: React.FC = () => {
             console.log(e);
         }
     };
-
-    console.log('loggedIn', loggedIn);
 
     return (
         <>

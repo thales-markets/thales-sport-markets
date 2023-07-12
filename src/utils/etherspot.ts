@@ -1,12 +1,7 @@
 import { Contract, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import etherspotConnector from './etherspotConnector';
-
-export const EtherspotProviderByNetworkId: Record<Network, string> = {
-    [Network.OptimismMainnet]: 'https://optimism-bundler.etherspot.io/',
-    [Network.OptimismGoerli]: '',
-    [Network.ArbitrumOne]: 'https://arbitrum-bundler.etherspot.io/',
-};
+import { EtherspotProviderByNetworkId } from 'constants/etherspot';
 
 export const executeEtherspotTransaction = async (
     networkId: Network,
