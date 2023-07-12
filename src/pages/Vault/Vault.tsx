@@ -234,10 +234,10 @@ const Vault: React.FC<VaultProps> = (props) => {
                 const tx = (await sUSDContractWithSigner.approve(vaultAddress, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
+                    setOpenApprovalModal(false);
                     txHash = txResult.transactionHash;
                 }
             }

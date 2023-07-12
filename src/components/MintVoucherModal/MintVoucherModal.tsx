@@ -148,7 +148,6 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                 const tx = (await sUSDContractWithSigner.approve(addressToApprove, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
@@ -156,6 +155,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                 }
             }
             if (txHash && txHash !== null) {
+                setOpenApprovalModal(false);
                 toast.update(
                     id,
                     getSuccessToastOptions(

@@ -338,7 +338,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
@@ -346,6 +345,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                 }
             }
             if (txHash && txHash !== null) {
+                setOpenApprovalModal(false);
                 toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
             }
         } catch (e) {

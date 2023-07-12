@@ -480,10 +480,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
+                    setOpenApprovalModal(false);
                     txHash = txResult.transactionHash;
                 }
             }
