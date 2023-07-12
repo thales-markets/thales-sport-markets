@@ -445,35 +445,33 @@ const LiquidityPool: React.FC = () => {
                 const canCloseCurrentRound = await lpContractWithSigner?.canCloseCurrentRound();
                 const roundClosingPrepared = await lpContractWithSigner?.roundClosingPrepared();
 
-                let getUsersCountInCurrentRound = await lpContractWithSigner?.getUsersCountInCurrentRound();
+                let usersCountInCurrentRound = await lpContractWithSigner?.getUsersCountInCurrentRound();
                 let usersProcessedInRound = await lpContractWithSigner?.usersProcessedInRound();
                 if (canCloseCurrentRound) {
                     try {
                         if (!roundClosingPrepared) {
-                            const tx = await lpContractWithSigner.prepareRoundClosing({
-                                type: 2,
-                            });
+                            const tx = await lpContractWithSigner.prepareRoundClosing();
                             await tx.wait().then(() => {
-                                console.log('prepareRoundClosing closed');
+                                console.log('Round closing prepared');
                             });
                             await delay(1000 * 2);
                         }
 
-                        while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
-                            const tx = await lpContractWithSigner.processRoundClosingBatch(100, {
-                                type: 2,
-                            });
+                        console.log(`Users processed in round ${usersProcessedInRound}/${usersCountInCurrentRound}`);
+                        while (usersProcessedInRound < usersCountInCurrentRound) {
+                            const tx = await lpContractWithSigner.processRoundClosingBatch(100);
                             await tx.wait().then(() => {
-                                console.log('Round closed');
+                                console.log('Round closing batch processed');
                             });
                             await delay(1000 * 2);
-                            getUsersCountInCurrentRound = await lpContractWithSigner.getUsersCountInCurrentRound();
+                            usersCountInCurrentRound = await lpContractWithSigner.getUsersCountInCurrentRound();
                             usersProcessedInRound = await lpContractWithSigner.usersProcessedInRound();
+                            console.log(
+                                `Users processed in round ${usersProcessedInRound}/${usersCountInCurrentRound}`
+                            );
                         }
 
-                        const tx = await lpContractWithSigner.closeRound({
-                            type: 2,
-                        });
+                        const tx = await lpContractWithSigner.closeRound();
                         await tx.wait().then(() => {
                             console.log('Round closed');
                         });

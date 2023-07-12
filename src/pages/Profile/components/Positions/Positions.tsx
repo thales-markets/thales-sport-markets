@@ -40,7 +40,7 @@ import Button from 'components/Button';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getIsMobile } from 'redux/modules/app';
-import { executeEtherspotTransaction } from 'utils/etherspot';
+import { executeEtherspotBatchTransaction } from 'utils/etherspot';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -177,108 +177,137 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
     const claimAllRewards = async () => {
         const transactions: any = [];
+        const data: any = [];
+        const methodNames: string[] = [];
+        const contracts: any = [];
 
         if (accountPositionsByStatus.claimable.length) {
-            accountPositionsByStatus.claimable.forEach(async (position) => {
-                transactions.push(
-                    new Promise(async (resolve, reject) => {
-                        const id = toast.loading(t('market.toast-message.transaction-pending'));
+            for (let index = 0; index < accountPositionsByStatus.claimable.length; index++) {
+                const position = accountPositionsByStatus.claimable[index];
+                const { signer, provider } = networkConnector;
+                const contract = new ethers.Contract(position.market.address, sportsMarketContract.abi, provider);
 
-                        try {
-                            const { signer, provider } = networkConnector;
-                            const contract = new ethers.Contract(
-                                position.market.address,
-                                sportsMarketContract.abi,
-                                provider
-                            );
+                if (isSocialLogin) {
+                    data.push([]);
+                    methodNames.push('exerciseOptions');
+                    contracts.push(contract);
+                } else {
+                    transactions.push(
+                        new Promise(async (resolve, reject) => {
+                            const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-                            let txHash;
-                            if (isSocialLogin) {
-                                txHash = await executeEtherspotTransaction(networkId, contract, 'exerciseOptions');
-                            } else if (signer) {
-                                const contractWithSigner = contract.connect(signer);
+                            try {
+                                let txHash;
+                                if (signer) {
+                                    const contractWithSigner = contract.connect(signer);
 
-                                const tx = await contractWithSigner.exerciseOptions({
-                                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                                });
-                                const txResult = await tx.wait();
+                                    const tx = await contractWithSigner.exerciseOptions({
+                                        gasLimit: getMaxGasLimitForNetwork(networkId),
+                                    });
+                                    const txResult = await tx.wait();
 
-                                if (txResult && txResult.transactionHash) {
-                                    txHash = txResult.transactionHash;
+                                    if (txResult && txResult.transactionHash) {
+                                        txHash = txResult.transactionHash;
+                                    }
                                 }
-                            }
 
-                            if (txHash && txHash !== null) {
-                                resolve(
-                                    toast.update(
-                                        id,
-                                        getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
-                                    )
-                                );
-                            } else {
+                                if (txHash && txHash !== null) {
+                                    resolve(
+                                        toast.update(
+                                            id,
+                                            getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
+                                        )
+                                    );
+                                } else {
+                                    reject(
+                                        toast.update(
+                                            id,
+                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                        )
+                                    );
+                                }
+                            } catch (e) {
                                 reject(
                                     toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')))
                                 );
+                                console.log(e);
                             }
-                        } catch (e) {
-                            reject(toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again'))));
-                            console.log(e);
-                        }
-                    })
-                );
-            });
+                        })
+                    );
+                }
+            }
         }
 
         if (parlayMarketsByStatus.claimable.length) {
-            parlayMarketsByStatus.claimable.forEach(async (market) => {
-                transactions.push(
-                    new Promise(async (resolve, reject) => {
-                        const id = toast.loading(t('market.toast-message.transaction-pending'));
+            for (let index = 0; index < parlayMarketsByStatus.claimable.length; index++) {
+                const market = parlayMarketsByStatus.claimable[index];
+                const { parlayMarketsAMMContract, signer } = networkConnector;
 
-                        try {
-                            const { parlayMarketsAMMContract, signer } = networkConnector;
+                if (isSocialLogin) {
+                    data.push([market.id]);
+                    methodNames.push('exerciseParlay');
+                    contracts.push(parlayMarketsAMMContract);
+                } else {
+                    transactions.push(
+                        new Promise(async (resolve, reject) => {
+                            const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-                            let txHash;
-                            if (isSocialLogin) {
-                                txHash = await executeEtherspotTransaction(
-                                    networkId,
-                                    parlayMarketsAMMContract,
-                                    'exerciseParlay',
-                                    [market.id]
-                                );
-                            } else if (signer && parlayMarketsAMMContract) {
-                                const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
+                            try {
+                                let txHash;
+                                if (signer && parlayMarketsAMMContract) {
+                                    const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
-                                const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(market.id, {
-                                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                                });
-                                const txResult = await tx.wait();
+                                    const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(market.id, {
+                                        gasLimit: getMaxGasLimitForNetwork(networkId),
+                                    });
+                                    const txResult = await tx.wait();
 
-                                if (txResult && txResult.transactionHash) {
-                                    txHash = txResult.transactionHash;
+                                    if (txResult && txResult.transactionHash) {
+                                        txHash = txResult.transactionHash;
+                                    }
                                 }
-                            }
 
-                            if (txHash && txHash !== null) {
-                                resolve(
-                                    toast.update(
-                                        id,
-                                        getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
-                                    )
-                                );
-                            } else {
+                                if (txHash && txHash !== null) {
+                                    resolve(
+                                        toast.update(
+                                            id,
+                                            getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
+                                        )
+                                    );
+                                } else {
+                                    reject(
+                                        toast.update(
+                                            id,
+                                            getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                        )
+                                    );
+                                }
+                            } catch (e) {
                                 reject(
                                     toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')))
                                 );
+                                console.log(e);
                             }
-                        } catch (e) {
-                            reject(toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again'))));
-                            console.log(e);
-                        }
-                    })
-                );
-            });
-            Promise.all(transactions).catch((e) => console.log(e));
+                        })
+                    );
+                }
+            }
+
+            if (isSocialLogin) {
+                const id = toast.loading(t('market.toast-message.transaction-pending'));
+                try {
+                    const txHash = await executeEtherspotBatchTransaction(networkId, contracts, methodNames, data);
+
+                    if (txHash && txHash !== null) {
+                        toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
+                    }
+                } catch (e) {
+                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                    console.log(e);
+                }
+            } else {
+                Promise.all(transactions).catch((e) => console.log(e));
+            }
         }
     };
 

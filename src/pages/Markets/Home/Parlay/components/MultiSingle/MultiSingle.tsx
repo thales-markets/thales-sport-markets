@@ -492,6 +492,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     const handleSubmit = async () => {
         setIsBuying(true);
         const transactions: any = [];
+        const data: any = [];
         let methodName = '';
 
         for (let index = 0; index < markets.length; index++) {
@@ -521,7 +522,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                     ethers.utils.parseEther('0.02')
                 );
                 methodName = etherspotTransactionInfo.methodName;
-                transactions.push(etherspotTransactionInfo.data);
+                data.push(etherspotTransactionInfo.data);
             } else {
                 transactions.push(
                     new Promise(async (resolve, reject) => {
@@ -588,9 +589,9 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
                 const txHash = await executeEtherspotBatchTransaction(
                     networkId,
-                    Array(transactions.length).fill(isVoucherSelected ? overtimeVoucherContract : sportsAMMContract),
-                    Array(transactions.length).fill(methodName),
-                    transactions
+                    Array(data.length).fill(isVoucherSelected ? overtimeVoucherContract : sportsAMMContract),
+                    Array(data.length).fill(methodName),
+                    data
                 );
 
                 if (txHash && txHash !== null) {
