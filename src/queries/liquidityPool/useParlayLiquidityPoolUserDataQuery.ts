@@ -4,7 +4,7 @@ import { bigNumberFormmaterWithDecimals, bigNumberFormatter } from 'utils/format
 import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
-import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const useParlayLiquidityPoolUserDataQuery = (
     walletAddress: string,

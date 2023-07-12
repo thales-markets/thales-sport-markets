@@ -1,5 +1,4 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { COLLATERALS_INDEX } from 'constants/currency';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition, SGPItem } from 'types/markets';
 import localStore from 'utils/localStore';
@@ -21,11 +20,10 @@ const getDefaultParlay = (): ParlaysMarketPosition[] => {
 };
 
 const getDefaultPayment = (): ParlayPayment => {
-    const lsSelectedStable = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
+    const lsSelectedStableIndex = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
 
     return {
-        selectedStableIndex:
-            lsSelectedStable !== undefined ? (lsSelectedStable as COLLATERALS_INDEX) : COLLATERALS_INDEX.sUSD,
+        selectedStableIndex: lsSelectedStableIndex !== undefined ? (lsSelectedStableIndex as number) : 0,
         isVoucherSelected: undefined,
         amountToBuy: '',
     };
@@ -283,7 +281,7 @@ const parlaySlice = createSlice({
             }
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
-        setPaymentSelectedStableIndex: (state, action: PayloadAction<COLLATERALS_INDEX>) => {
+        setPaymentSelectedStableIndex: (state, action: PayloadAction<number>) => {
             state.payment = { ...state.payment, selectedStableIndex: action.payload };
         },
         resetParlayError: (state) => {
@@ -295,12 +293,6 @@ const parlaySlice = createSlice({
         },
     },
 });
-
-export const getLastSavedOrDefaultStableIndex = (): COLLATERALS_INDEX => {
-    const lsSelectedStable = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
-
-    return lsSelectedStable !== undefined ? (lsSelectedStable as COLLATERALS_INDEX) : COLLATERALS_INDEX.sUSD;
-};
 
 export const {
     updateParlay,

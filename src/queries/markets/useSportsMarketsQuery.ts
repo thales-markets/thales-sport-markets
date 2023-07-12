@@ -15,11 +15,11 @@ import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 import { convertPriceImpactToBonus, getMarketAddressesFromSportMarketArray } from 'utils/markets';
-import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { filterMarketsByTagsArray, insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
 import localStore from 'utils/localStore';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { BetType, GlobalFiltersEnum } from 'enums/markets';
+import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const BATCH_SIZE = 100;
 const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 5;

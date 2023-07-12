@@ -1,12 +1,10 @@
 import { Bridge } from '@socket.tech/plugin';
-import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
 import { Network } from 'enums/network';
@@ -14,6 +12,7 @@ import { mainnet, useNetwork } from 'wagmi';
 import { ThemeInterface } from 'types/ui';
 import { hexToRGB } from 'utils/style';
 import { ethers } from 'ethers';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 type CustomizationProps = {
     width?: number;
@@ -58,10 +57,7 @@ const BungeePlugin: React.FC = () => {
     const defaultDestinationToken = allTokens.filter(
         (token) =>
             token.chainId === defaultDestNetwork &&
-            token.symbol ===
-                COLLATERAL_INDEX_TO_COLLATERAL[
-                    getDefaultCollateralIndexForNetworkId(defaultDestNetwork as Network)
-                ].toUpperCase() // SUSD is symbol on Bungee instead of sUSD
+            token.symbol === getDefaultCollateral(defaultDestNetwork as Network).toUpperCase() // SUSD is symbol on Bungee instead of sUSD
     )[0]?.address;
 
     // All colors should stricktly be in RGB format

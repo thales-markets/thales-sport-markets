@@ -6,7 +6,7 @@ import { Network } from 'enums/network';
 import networkConnector from 'utils/networkConnector';
 import { insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
 import { getMarketAddressesFromSportMarketArray } from 'utils/markets';
-import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { getDefaultDecimalsForNetwork } from 'utils/network';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { ENETPULSE_SPORTS, GOLF_TOURNAMENT_WINNER_TAG, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
 
