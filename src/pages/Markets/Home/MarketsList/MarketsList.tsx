@@ -15,6 +15,7 @@ import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets'
 import { getNetworkId } from 'redux/modules/wallet';
 import { Network } from 'enums/network';
 import { TAGS_FLAGS } from 'enums/tags';
+import { orderBy } from 'lodash';
 
 type MarketsList = {
     markets: SportMarkets;
@@ -182,7 +183,7 @@ const LeagueFlag = (tagId: number | any) => {
 
 const sortWinnerMarkets = (markets: SportMarkets, leagueId: number) => {
     if (leagueId == GOLF_TOURNAMENT_WINNER_TAG || MOTOSPORT_TAGS.includes(leagueId)) {
-        return markets.sort((a, b) => b.homeOdds - a.homeOdds);
+        return orderBy(markets, ['maturityDate', 'homeOdds'], ['asc', 'desc']);
     }
     return markets;
 };
