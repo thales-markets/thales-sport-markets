@@ -494,20 +494,20 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         const transactions: any = [];
         let methodName = '';
 
-        if (isSocialLogin) {
-            for (let index = 0; index < markets.length; index++) {
-                const market = markets[index];
-                const marketAddress = market.address;
-                const selectedPosition = market.position;
-                const singleTokenBonus = tokenAndBonus.find((t) => t.sportMarketAddress === marketAddress);
-                const tokenAmount = singleTokenBonus !== undefined ? singleTokenBonus.tokenAmount : 0.0;
-                const ammQuote = (await fetchAmmQuote(tokenAmount, market)) ?? 0;
-                const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
-                const referralId =
-                    walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
-                        ? getReferralId()
-                        : null;
+        for (let index = 0; index < markets.length; index++) {
+            const market = markets[index];
+            const marketAddress = market.address;
+            const selectedPosition = market.position;
+            const singleTokenBonus = tokenAndBonus.find((t) => t.sportMarketAddress === marketAddress);
+            const tokenAmount = singleTokenBonus !== undefined ? singleTokenBonus.tokenAmount : 0.0;
+            const ammQuote = (await fetchAmmQuote(tokenAmount, market)) ?? 0;
+            const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
+            const referralId =
+                walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
+                    ? getReferralId()
+                    : null;
 
+            if (isSocialLogin) {
                 const etherspotTransactionInfo = getAMMSportsEtherspotTransactionInfo(
                     isVoucherSelected,
                     overtimeVoucher ? overtimeVoucher.id : 0,
@@ -521,22 +521,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                     ethers.utils.parseEther('0.02')
                 );
                 methodName = etherspotTransactionInfo.methodName;
-                console.log(methodName, etherspotTransactionInfo.data);
                 transactions.push(etherspotTransactionInfo.data);
-            }
-        } else {
-            markets.forEach(async (market: ParlaysMarket) => {
-                const marketAddress = market.address;
-                const selectedPosition = market.position;
-                const singleTokenBonus = tokenAndBonus.find((t) => t.sportMarketAddress === marketAddress);
-                const tokenAmount = singleTokenBonus !== undefined ? singleTokenBonus.tokenAmount : 0.0;
-                const ammQuote = (await fetchAmmQuote(tokenAmount, market)) ?? 0;
-                const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
-                const referralId =
-                    walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
-                        ? getReferralId()
-                        : null;
-
+            } else {
                 transactions.push(
                     new Promise(async (resolve, reject) => {
                         const id = toast.loading(t('market.toast-message.transaction-pending'));
@@ -592,10 +578,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                         }
                     })
                 );
-            });
+            }
         }
-
-        console.log(await Promise.all(transactions), transactions.length);
 
         if (isSocialLogin) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));

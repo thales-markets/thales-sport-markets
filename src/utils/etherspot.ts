@@ -63,8 +63,6 @@ export const executeEtherspotBatchTransaction = async (
 
     const provider = new ethers.providers.JsonRpcProvider(EtherspotProviderByNetworkId[networkId]);
 
-    console.log(contracts, methodNames, data);
-
     // clear the transaction batch
     await primeSdk.clearUserOpsFromBatch();
 
