@@ -2,7 +2,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
+import { USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
@@ -59,8 +59,7 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
-import { getCollateral } from 'utils/collaterals';
-import { StablecoinKey } from 'types/tokens';
+import { getCollateral, getDefaultCollateral } from 'utils/collaterals';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -118,7 +117,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     // Due to conversion from non sUSD to sUSD user needs 2% more funds in wallet
     const COLLATERAL_CONVERSION_MULTIPLIER =
-        getCollateral(networkId, selectedStableIndex) !== (CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey) ? 1.02 : 1;
+        !isVoucherSelected && getCollateral(networkId, selectedStableIndex) !== getDefaultCollateral(networkId)
+            ? 1.02
+            : 1;
 
     const hasParlayCombinedMarkets = isSGPInParlayMarkets(markets);
 
