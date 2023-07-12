@@ -37,13 +37,7 @@ import {
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import {
-    getIsSocialLogin,
-    getIsWalletConnected,
-    getNetworkId,
-    getPrimeSdk,
-    getWalletAddress,
-} from 'redux/modules/wallet';
+import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { isParlayVault, VAULT_MAP } from 'constants/vault';
 import NumericInput from 'components/fields/NumericInput';
@@ -89,7 +83,6 @@ const Vault: React.FC<VaultProps> = (props) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
-    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const [amount, setAmount] = useState<number | string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -224,7 +217,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             const { signer, sUSDContract } = networkConnector;
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, sUSDContract, 'approve', [
+                txHash = await executeEtherspotTransaction(networkId, sUSDContract, 'approve', [
                     vaultAddress,
                     approveAmount,
                 ]);
@@ -274,9 +267,7 @@ const Vault: React.FC<VaultProps> = (props) => {
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, sportVaultContract, 'deposit', [
-                    parsedAmount,
-                ]);
+                txHash = await executeEtherspotTransaction(networkId, sportVaultContract, 'deposit', [parsedAmount]);
             } else if (signer) {
                 const sportVaultContractWithSigner = sportVaultContract.connect(signer);
                 const tx = await sportVaultContractWithSigner.deposit(parsedAmount, {
@@ -310,12 +301,7 @@ const Vault: React.FC<VaultProps> = (props) => {
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(
-                    primeSdk,
-                    networkId,
-                    sportVaultContract,
-                    'withdrawalRequest'
-                );
+                txHash = await executeEtherspotTransaction(networkId, sportVaultContract, 'withdrawalRequest');
             } else if (signer) {
                 const sportVaultContractWithSigner = sportVaultContract.connect(signer);
 
@@ -350,7 +336,7 @@ const Vault: React.FC<VaultProps> = (props) => {
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, sportVaultContract, 'closeRound');
+                txHash = await executeEtherspotTransaction(networkId, sportVaultContract, 'closeRound');
             } else if (signer) {
                 const sportVaultContractWithSigner = sportVaultContract.connect(signer);
 

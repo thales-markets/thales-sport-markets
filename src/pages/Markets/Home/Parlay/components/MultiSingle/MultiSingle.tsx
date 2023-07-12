@@ -14,13 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import { removeAll, setPayment, setMultiSingle, removeFromParlay, getMultiSingle } from 'redux/modules/parlay';
-import {
-    getIsSocialLogin,
-    getIsWalletConnected,
-    getNetworkId,
-    getPrimeSdk,
-    getWalletAddress,
-} from 'redux/modules/wallet';
+import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlayPayment, ParlaysMarket } from 'types/markets';
@@ -95,7 +89,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
-    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
     const multiSingleAmounts = useSelector(getMultiSingle);
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -470,7 +463,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, collateralContract, 'approve', [
+                txHash = await executeEtherspotTransaction(networkId, collateralContract, 'approve', [
                     addressToApprove,
                     approveAmount,
                 ]);
@@ -536,7 +529,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                                 ethers.utils.parseEther('0.02')
                             );
                             txHash = await executeEtherspotTransaction(
-                                primeSdk,
                                 networkId,
                                 isVoucherSelected ? overtimeVoucherContract : sportsAMMContract,
                                 etherspotTransactionInfo.methodName,

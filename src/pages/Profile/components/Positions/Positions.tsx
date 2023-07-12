@@ -1,13 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import {
-    getIsSocialLogin,
-    getIsWalletConnected,
-    getNetworkId,
-    getPrimeSdk,
-    getWalletAddress,
-} from 'redux/modules/wallet';
+import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
@@ -69,7 +63,6 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
-    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
@@ -201,12 +194,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
                             let txHash;
                             if (isSocialLogin) {
-                                txHash = await executeEtherspotTransaction(
-                                    primeSdk,
-                                    networkId,
-                                    contract,
-                                    'exerciseOptions'
-                                );
+                                txHash = await executeEtherspotTransaction(networkId, contract, 'exerciseOptions');
                             } else if (signer) {
                                 const contractWithSigner = contract.connect(signer);
 
@@ -253,7 +241,6 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                             let txHash;
                             if (isSocialLogin) {
                                 txHash = await executeEtherspotTransaction(
-                                    primeSdk,
                                     networkId,
                                     parlayMarketsAMMContract,
                                     'exerciseParlay',

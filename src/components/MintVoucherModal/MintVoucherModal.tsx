@@ -2,13 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import {
-    getIsSocialLogin,
-    getIsWalletConnected,
-    getNetworkId,
-    getPrimeSdk,
-    getWalletAddress,
-} from 'redux/modules/wallet';
+import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Button from 'components/Button';
@@ -57,7 +51,6 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
-    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
@@ -138,7 +131,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, sUSDContract, 'approve', [
+                txHash = await executeEtherspotTransaction(networkId, sUSDContract, 'approve', [
                     addressToApprove,
                     approveAmount,
                 ]);
@@ -185,7 +178,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, overtimeVoucherContract, 'mint', [
+                txHash = await executeEtherspotTransaction(networkId, overtimeVoucherContract, 'mint', [
                     isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),
                     parsedAmount,
                 ]);

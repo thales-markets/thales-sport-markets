@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsSocialLogin, getNetworkId, getPrimeSdk, getWalletAddress } from 'redux/modules/wallet';
+import { getIsSocialLogin, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { ParlayMarket, ParlaysMarket } from 'types/markets';
 import { getEtherscanTxLink } from 'utils/etherscan';
@@ -81,7 +81,6 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
-    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const parlay = syncPositionsAndMarketsPerContractOrderInParlay(parlayMarket);
 
@@ -98,13 +97,9 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(
-                    primeSdk,
-                    networkId,
-                    parlayMarketsAMMContract,
-                    'exerciseParlay',
-                    [parlayAddress]
-                );
+                txHash = await executeEtherspotTransaction(networkId, parlayMarketsAMMContract, 'exerciseParlay', [
+                    parlayAddress,
+                ]);
             } else if (signer && parlayMarketsAMMContract) {
                 const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 

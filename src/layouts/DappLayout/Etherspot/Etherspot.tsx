@@ -6,8 +6,9 @@ import Web3 from 'web3';
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { Web3AuthNoModal } from '@web3auth/no-modal';
 import { useDispatch } from 'react-redux';
-import { updateIsSocialLogin, updatePrimeSdk, updateWallet } from 'redux/modules/wallet';
+import { updateIsSocialLogin, updateWallet } from 'redux/modules/wallet';
 import Button from 'components/Button';
+import etherspotConnector from 'utils/etherspotConnector';
 
 const clientId = 'BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk'; // get from https://dashboard.web3auth.io
 
@@ -81,7 +82,7 @@ const Etherspot: React.FC = () => {
                     });
                     const address = await etherspotPrimeSdk.getCounterFactualAddress();
 
-                    dispatch(updatePrimeSdk(etherspotPrimeSdk));
+                    etherspotConnector.setPrimeSdk(etherspotPrimeSdk);
                     dispatch(updateWallet({ walletAddress: address }));
                     dispatch(updateIsSocialLogin(true));
                     setLoggedIn(true);
@@ -130,7 +131,7 @@ const Etherspot: React.FC = () => {
         });
         const address = await etherspotPrimeSdk.getCounterFactualAddress();
 
-        dispatch(updatePrimeSdk(etherspotPrimeSdk));
+        etherspotConnector.setPrimeSdk(etherspotPrimeSdk);
         dispatch(updateWallet({ walletAddress: address }));
         dispatch(updateIsSocialLogin(true));
         setLoggedIn(true);
@@ -147,7 +148,7 @@ const Etherspot: React.FC = () => {
             await web3auth.logout();
 
             setLoggedIn(false);
-            dispatch(updatePrimeSdk(null));
+            etherspotConnector.setPrimeSdk(null);
             dispatch(updateWallet({ walletAddress: null }));
             dispatch(updateIsSocialLogin(false));
         } catch (e) {

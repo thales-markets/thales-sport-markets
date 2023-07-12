@@ -4,7 +4,6 @@ import { RootState } from 'redux/rootReducer';
 import { Network } from 'enums/network';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
 import { NetworkNameById } from 'constants/network';
-import { PrimeSdk } from '@etherspot/prime-sdk';
 
 const sliceName = 'wallet';
 
@@ -14,7 +13,6 @@ type WalletSliceState = {
     networkName: string;
     switchToNetworkId: Network; // used to trigger manually network switch in App.js
     isSocialLogin: boolean;
-    primeSdk: PrimeSdk | null;
 };
 
 const initialState: WalletSliceState = {
@@ -23,7 +21,6 @@ const initialState: WalletSliceState = {
     networkName: NetworkNameById[DEFAULT_NETWORK_ID],
     switchToNetworkId: DEFAULT_NETWORK_ID,
     isSocialLogin: false,
-    primeSdk: null,
 };
 
 const walletDetailsSlice = createSlice({
@@ -62,9 +59,6 @@ const walletDetailsSlice = createSlice({
         updateIsSocialLogin: (state, action: PayloadAction<boolean>) => {
             state.isSocialLogin = action.payload;
         },
-        updatePrimeSdk: (state, action: PayloadAction<PrimeSdk | null>) => {
-            state.primeSdk = action.payload;
-        },
     },
 });
 
@@ -74,14 +68,12 @@ export const getSwitchToNetworkId = (state: RootState) => getWalletState(state).
 export const getWalletAddress = (state: RootState) => getWalletState(state).walletAddress;
 export const getIsWalletConnected = createSelector(getWalletAddress, (walletAddress) => walletAddress != null);
 export const getIsSocialLogin = (state: RootState) => getWalletState(state).isSocialLogin;
-export const getPrimeSdk = (state: RootState) => getWalletState(state).primeSdk;
 
 export const {
     updateNetworkSettings,
     switchToNetworkId,
     updateWallet,
     updateIsSocialLogin,
-    updatePrimeSdk,
 } = walletDetailsSlice.actions;
 
 export default walletDetailsSlice.reducer;

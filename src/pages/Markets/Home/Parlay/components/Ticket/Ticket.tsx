@@ -15,13 +15,7 @@ import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import { removeAll, setPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import {
-    getIsSocialLogin,
-    getIsWalletConnected,
-    getNetworkId,
-    getPrimeSdk,
-    getWalletAddress,
-} from 'redux/modules/wallet';
+import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlayPayment, ParlaysMarket } from 'types/markets';
@@ -98,7 +92,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
-    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
     const selectedOddsType = useSelector(getOddsType);
 
     const [selectedStableIndex, setSelectedStableIndex] = useState<COLLATERALS_INDEX>(
@@ -328,7 +321,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, collateralContract, 'approve', [
+                txHash = await executeEtherspotTransaction(networkId, collateralContract, 'approve', [
                     addressToApprove,
                     approveAmount,
                 ]);
@@ -390,7 +383,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     additionalSlippage
                 );
                 txHash = await executeEtherspotTransaction(
-                    primeSdk,
                     networkId,
                     isVoucherSelected ? overtimeVoucherContract : parlayMarketsAMMContract,
                     etherspotTransactionInfo.methodName,

@@ -23,13 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import {
-    getIsSocialLogin,
-    getIsWalletConnected,
-    getNetworkId,
-    getPrimeSdk,
-    getWalletAddress,
-} from 'redux/modules/wallet';
+import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { ParlaysMarket, SportMarketLiveResult } from 'types/markets';
@@ -104,7 +98,6 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnect = useSelector((state: RootState) => getIsWalletConnected(state));
     const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
-    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
@@ -198,7 +191,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, contract, 'exerciseOptions');
+                txHash = await executeEtherspotTransaction(networkId, contract, 'exerciseOptions');
             } else if (signer) {
                 const contractWithSigner = contract.connect(signer);
 

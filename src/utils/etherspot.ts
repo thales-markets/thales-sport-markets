@@ -1,6 +1,6 @@
 import { Contract, ethers } from 'ethers';
 import { Network } from 'enums/network';
-import { PrimeSdk } from '@etherspot/prime-sdk';
+import etherspotConnector from './etherspotConnector';
 
 export const EtherspotProviderByNetworkId: Record<Network, string> = {
     [Network.OptimismMainnet]: 'https://optimism-bundler.etherspot.io/',
@@ -9,13 +9,13 @@ export const EtherspotProviderByNetworkId: Record<Network, string> = {
 };
 
 export const executeEtherspotTransaction = async (
-    primeSdk: PrimeSdk | null,
     networkId: Network,
     contract: Contract | undefined,
     methodName: string,
     data?: ReadonlyArray<any>
 ): Promise<string | null> => {
-    if (primeSdk === null || !contract) return null;
+    const primeSdk = etherspotConnector.primeSdk;
+    if (!primeSdk || primeSdk === null || !contract) return null;
 
     const provider = new ethers.providers.JsonRpcProvider(EtherspotProviderByNetworkId[networkId]);
     const contractAddress = contract.address;

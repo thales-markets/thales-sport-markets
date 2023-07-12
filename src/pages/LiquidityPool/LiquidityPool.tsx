@@ -40,13 +40,7 @@ import {
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import {
-    getIsSocialLogin,
-    getIsWalletConnected,
-    getNetworkId,
-    getPrimeSdk,
-    getWalletAddress,
-} from 'redux/modules/wallet';
+import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
 import NumericInput from 'components/fields/NumericInput';
@@ -93,7 +87,6 @@ const LiquidityPool: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
-    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const [amount, setAmount] = useState<number | string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -318,7 +311,7 @@ const LiquidityPool: React.FC = () => {
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, sUSDContract, 'approve', [
+                txHash = await executeEtherspotTransaction(networkId, sUSDContract, 'approve', [
                     addressToApprove,
                     approveAmount,
                 ]);
@@ -368,7 +361,7 @@ const LiquidityPool: React.FC = () => {
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(primeSdk, networkId, lpContract, 'deposit', [parsedAmount]);
+                txHash = await executeEtherspotTransaction(networkId, lpContract, 'deposit', [parsedAmount]);
             } else if (signer && lpContract) {
                 const liquidityPoolContractWithSigner = lpContract.connect(signer);
 
@@ -406,7 +399,6 @@ const LiquidityPool: React.FC = () => {
             let txHash;
             if (isSocialLogin) {
                 txHash = await executeEtherspotTransaction(
-                    primeSdk,
                     networkId,
                     lpContract,
                     withdrawAll ? 'withdrawalRequest' : 'partialWithdrawalRequest',

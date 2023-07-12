@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsSocialLogin, getNetworkId, getPrimeSdk, getWalletAddress } from 'redux/modules/wallet';
+import { getIsSocialLogin, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import {
@@ -40,7 +40,6 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
-    const primeSdk = useSelector((state: RootState) => getPrimeSdk(state));
 
     const [isClaimable, setIsClaimable] = useState(false);
     const [isClaiming, setIsClaiming] = useState(false);
@@ -84,12 +83,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
             let txHash;
             if (isSocialLogin) {
-                txHash = await executeEtherspotTransaction(
-                    primeSdk,
-                    networkId,
-                    overtimeVoucherEscrowContract,
-                    'claimVoucher'
-                );
+                txHash = await executeEtherspotTransaction(networkId, overtimeVoucherEscrowContract, 'claimVoucher');
             } else if (overtimeVoucherEscrowContract && signer) {
                 const overtimeVoucherEscrowContractWithSigner = overtimeVoucherEscrowContract.connect(signer);
 
@@ -111,7 +105,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
             console.log('Error ', e);
         }
         setIsClaiming(false);
-    }, [networkId, t, isClaiming, walletAddress, isSocialLogin, primeSdk]);
+    }, [networkId, t, isClaiming, walletAddress, isSocialLogin]);
 
     useEffect(() => {
         setIsClaimable(!!overtimeVoucherEscrowData?.isClaimable);
