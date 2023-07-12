@@ -277,8 +277,7 @@
         "race-starts": "Rennen beginnt",
         "back": "Der Rücken",
         "apply-filters": "Filter anwenden",
-        "incentivized-market": "INCENTIVISIERTER MARKT",
-        "f1-market": "{{driver}} gewinnt {{race}}"
+        "incentivized-market": "INCENTIVISIERTER MARKT"
     },
     "markets": {
         "market-card": {
@@ -369,16 +368,12 @@
             "available": "Verfügbar",
             "total-quote": "Gesamtangebot",
             "pay-with": "Bezahlen mit",
-            "buy-amount": "Betrag zu kaufen",
             "potential-profit": "Möglicher Gewinn",
             "skew": "Schräg",
             "validation": {
                 "title": "Parlay-Validierung",
-                "max-markets": "Maximal 4 Märkte in Parlay",
                 "min-amount": "Minimale Menge ist {{min}}",
-                "max-quote": "Das maximale Zitat ist {{value}}",
                 "amount-exceeded": "Der Betrag hat den auf AMM verfügbaren Betrag überschritten",
-                "min-quote": "Minimales Zitat ist {{value}}",
                 "availability": "Geringe Verfügbarkeit für Marktposition",
                 "no-funds": "Bitte stellen Sie sicher, dass Ihr Portemonnaie über genügend Guthaben verfügt",
                 "risk-per-comb": "Risiko pro Kombination überschritten",
@@ -387,7 +382,6 @@
                 "same-team": "Dasselbe Team kann nicht mehr als einmal in einem Parlay sein",
                 "team-in-parlay": "{{team}} ist bereits in Parlay. Dasselbe Team kann nicht mehr als einmal zu einem Parlay hinzugefügt werden.",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
-                "max-payout": "Die maximal unterstützte Auszahlung beträgt {{max}}",
                 "max-profit": "Der maximal unterstützte Gewinn beträgt {{max}}",
                 "max-teams": "Maximal {{max}} Märkte in Parlay",
                 "no-funds-multi-collateral": "Bitte stellen Sie sicher, dass Ihr Guthaben ausreichend ist ({{percentage}} % mehr des Buy-in-Betrags)",
@@ -400,7 +394,6 @@
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
             "empty-title": "Keine Positionen",
-            "fee": "Gesamtgebühr",
             "parlay-fee": "Parlay-Gebühr",
             "safebox-fee": "SafeBox-Gebühr",
             "positions": "Positionen",
@@ -798,7 +791,6 @@
         "sidebar": {
             "title-parlay": "Kombiwette",
             "title-leaderboard": "Rangliste",
-            "player": "Spieler",
             "quote": "Angebot",
             "paid": "Ausgezahlt",
             "won": "Gewonnen",
@@ -846,7 +838,6 @@
             "bridge": "Zur Optimism-Brücke wechseln",
             "exchange": "Von der Börse senden",
             "copy-address": "Adresse kopieren",
-            "coppied": "Kopiert!",
             "address": "QR-Code Ihrer Adresse",
             "copied": "Kopiert!"
         }

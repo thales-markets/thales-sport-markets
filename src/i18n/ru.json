@@ -221,7 +221,6 @@
                 "hockey": "Hockey",
                 "tennis": "Tennis",
                 "football": "Football",
-                "ufc": "MMA",
                 "baseball": "Baseball",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
@@ -272,17 +271,13 @@
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
-            "no-funds": "Please ensure your wallet has enough funds",
-            "min-amount": "Минимальная сумма: {{min}}",
-            "max-quote": "Максимальная котировка: {{value}}",
-            "min-quote": "Минимальная котировка: {{value}}"
+            "no-funds": "Please ensure your wallet has enough funds"
         },
         "match-time": "Время матча",
         "race-starts": "Старт гонки",
         "back": "Назад",
         "apply-filters": "Применить фильтры",
-        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК",
-        "f1-market": "{{driver}} выигрывает {{race}}"
+        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК"
     },
     "markets": {
         "market-card": {
@@ -374,15 +369,11 @@
             "total-quote": "Общая котировка",
             "pay-with": "Платить с помощью",
             "potential-profit": "Потенциальная прибыль",
-            "buy-amount": "Сумма покупки",
             "available": "Доступный",
             "validation": {
                 "title": "Экспресс-проверка",
-                "max-markets": "Максимум 4 рынка в Parlay",
                 "min-amount": "Минимальная сумма: {{min}}",
                 "availability": "Низкая доступность для рынка",
-                "min-quote": "Минимальная котировка: {{value}}",
-                "max-quote": "Максимальная котировка: {{value}}",
                 "no-funds": "Убедитесь, что в вашем кошельке достаточно средств",
                 "amount-exceeded": "Сумма превысила доступную сумму на AMM",
                 "not-supported": "Не поддерживается ошибка проверки {{error}}",
@@ -391,18 +382,15 @@
                 "team-in-parlay": "{{team}} уже находится в Parlay. Одна и та же команда не может быть добавлена в экспресс более одного раза.",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
                 "same-team": "Одна и та же команда не может участвовать в переговорах более одного раза.",
-                "max-payout": "Максимальная поддерживаемая выплата: {{max}}",
                 "max-profit": "Максимальная поддерживаемая прибыль составляет {{max}}",
                 "max-teams": "Максимум {{max}} рынков в Parlay",
                 "no-funds-multi-collateral": "Убедитесь, что в вашем кошельке достаточно средств (на {{percentage}}% больше суммы бай-ина)",
-                "same-race-drivers": "Поддерживается только один гонщик на гонку. Невозможно добавить {{addedDriver}}, поскольку {{existingDriver}} уже находится в Parlay",
                 "max-number-of-markets-with-combined-markets": "Максимальное количество рынков в Parlay: {{max}}. Один комбинированный рынок считается двумя обычными рынками.",
                 "max-combined-markets": "Максимальное количество комбинированных рынков в Parlay составляет {{max}}.",
                 "amm-contract-paused": "Экспресс AMM приостановлен",
                 "unique-players": "Нельзя дважды добавить одного и того же участника в экспресс. {{existingParticipant}} уже находится в Parlay",
                 "same-event-participant": "Поддерживается только один участник на событие. Невозможно добавить {{addedParticipant}}, поскольку {{existingParticipant}} уже находится в Parlay"
             },
-            "fee": "Общая плата",
             "empty-title": "Нет позиций",
             "empty-description": "Добавьте позицию, выберите рынок и сделайте свой выбор.",
             "payout": "Всего получено",
@@ -538,10 +526,7 @@
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
         "finish-messages": {
             "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
-            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
-            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
-            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
+            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants."
         },
         "difficulty-label": "Difficulty",
         "difficulty": {
@@ -805,7 +790,6 @@
         "info3": "*1 winning parlay eligible per wallet",
         "sidebar": {
             "total-amount": "Общее количество",
-            "player": "Игрок",
             "won": "Выиграл",
             "paid": "Оплаченный",
             "total-quote": "Общая котировка",
@@ -854,7 +838,6 @@
             "bridge": "Bridge to optimism  ",
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
-            "coppied": "Coppied!",
             "address": "Your address QR code",
             "copied": "Скопировано!"
         }

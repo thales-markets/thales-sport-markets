@@ -221,7 +221,6 @@
                 "hockey": "冰球",
                 "tennis": "网球",
                 "football": "橄榄球",
-                "ufc": "终极格斗",
                 "baseball": "棒球",
                 "formula1": "一级方程式赛车",
                 "motogp": "世界摩托车锦标赛",
@@ -272,17 +271,13 @@
         "tooltip": {
             "amount-exceeded": "金额超过AMM的余额。",
             "minimal-amount": "最小数量为1",
-            "no-funds": "请确认您的钱包有足够余额",
-            "min-amount": "最低金额为 {{min}}",
-            "max-quote": "最大报价为 {{value}}",
-            "min-quote": "最小报价是 {{value}}"
+            "no-funds": "请确认您的钱包有足够余额"
         },
         "match-time": "比赛时间",
         "race-starts": "比赛开始",
         "back": "后退",
         "apply-filters": "应用过滤器",
-        "incentivized-market": "激励市场",
-        "f1-market": "{{driver}} 赢得 {{race}}"
+        "incentivized-market": "激励市场"
     },
     "markets": {
         "market-card": {
@@ -373,25 +368,20 @@
             "total-quote": "总报价",
             "skew": "偏斜",
             "pay-with": "使用。。。支付",
-            "buy-amount": "购买金额",
             "potential-profit": "潜在利润",
             "available": "可用的",
             "validation": {
                 "title": "过关投注验证",
-                "max-markets": "Parlay 中最多 4 个盘口",
                 "amount-exceeded": "金额超过 AMM 上可用的金额",
                 "min-amount": "最低金额为 {{min}}",
                 "no-funds": "请确保您的钱包有足够的资金",
                 "availability": "市场地位的低可用性",
-                "min-quote": "最小报价是 {{value}}",
-                "max-quote": "最大报价为 {{value}}",
                 "not-supported": "不支持验证错误 {{error}}",
                 "risk-per-comb": "超出每个组合的风险",
                 "single-min-amount": "最低金额为 {{min}}",
                 "same-team": "同一支球队不能在 Parlay 中超过一次",
                 "team-in-parlay": "{{team}} 已经在 Parlay 中。同一支球队不能多次加入过关。",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
-                "max-payout": "支持的最大支出为 {{max}}",
                 "max-teams": "Parlay 中的最大 {{max}} 个盘口",
                 "max-profit": "最大支持利润为 {{max}}",
                 "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）",
@@ -403,7 +393,6 @@
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
-            "fee": "总费用",
             "empty-title": "没有职位",
             "positions": "职位",
             "safebox-fee": "保险箱费用",
@@ -802,7 +791,6 @@
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
-            "player": "Player",
             "quote": "Quote",
             "paid": "Paid",
             "won": "Won",
@@ -850,7 +838,6 @@
             "bridge": "Bridge to optimism  ",
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
-            "coppied": "Coppied!",
             "address": "Your address QR code",
             "copied": "已复制！"
         }

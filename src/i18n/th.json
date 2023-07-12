@@ -277,8 +277,7 @@
         "race-starts": "เริ่มการแข่งขัน",
         "back": "กลับ",
         "apply-filters": "ใช้ตัวกรอง",
-        "incentivized-market": "ตลาดที่มีแรงจูงใจ",
-        "f1-market": "{{driver}} ชนะ {{race}}"
+        "incentivized-market": "ตลาดที่มีแรงจูงใจ"
     },
     "markets": {
         "market-card": {
@@ -368,11 +367,8 @@
         "discounted-per": "ลดราคาตาม",
         "parlay": {
             "validation": {
-                "max-markets": "สูงสุด 4 ตลาดใน Parlay",
                 "title": "การตรวจสอบความถูกต้องของพาร์เลย์",
-                "min-quote": "ราคาต่ำสุดคือ {{value}}",
                 "amount-exceeded": "จำนวนเงินเกินจำนวนที่มีอยู่ใน AMM",
-                "max-quote": "ราคาสูงสุดคือ {{value}}",
                 "min-amount": "จำนวนเงินขั้นต่ำคือ {{min}}",
                 "availability": "ความพร้อมใช้งานต่ำสำหรับตำแหน่งทางการตลาด",
                 "no-funds": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมีเงินเพียงพอ",
@@ -382,7 +378,6 @@
                 "same-team": "ทีมเดียวกันไม่สามารถอยู่ในพาร์เลย์ได้มากกว่าหนึ่งครั้ง",
                 "team-in-parlay": "{{team}} อยู่ในพาร์เลย์แล้ว ไม่สามารถเพิ่มทีมเดียวกันในพาร์เลย์ได้มากกว่าหนึ่งครั้ง",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
-                "max-payout": "การจ่ายเงินที่รองรับสูงสุดคือ {{max}}",
                 "max-profit": "กำไรที่รองรับสูงสุดคือ {{max}}",
                 "max-teams": "สูงสุด {{max}} ตลาดใน Parlay",
                 "no-funds-multi-collateral": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมีเงินเพียงพอ (เพิ่มขึ้น {{percentage}}% ของจำนวนเงินที่ซื้อเข้า)",
@@ -396,7 +391,6 @@
             "payout": "การจ่ายเงิน",
             "parlay-fee": "ค่าพาร์เลย์",
             "empty-description": "เพิ่มตำแหน่ง เลือกตลาด และทำการเลือกของคุณ",
-            "buy-amount": "จำนวนเงินที่จะซื้อ",
             "safebox-fee": "ค่าธรรมเนียมตู้เซฟ",
             "positions": "ตำแหน่ง",
             "pay-with": "ชำระเงินด้วย",
@@ -797,7 +791,6 @@
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
-            "player": "Player",
             "quote": "Quote",
             "paid": "Paid",
             "won": "Won",
@@ -845,7 +838,6 @@
             "bridge": "Bridge to optimism  ",
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
-            "coppied": "Coppied!",
             "address": "Your address QR code",
             "copied": "คัดลอก!"
         }

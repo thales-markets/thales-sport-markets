@@ -271,17 +271,13 @@
         "tooltip": {
             "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
             "minimal-amount": "Cantidad minima es 1",
-            "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes",
-            "min-amount": "La cantidad mínima es {{min}}",
-            "max-quote": "La cotización máxima es {{value}}",
-            "min-quote": "La cotización mínima es {{value}}"
+            "no-funds": "Por favor asegurese que su billetera tenga fondos suficientes"
         },
         "match-time": "tiempo de partido",
         "race-starts": "Comienza la carrera",
         "back": "atrás",
         "apply-filters": "Aplicar filtros",
-        "incentivized-market": "MERCADO INCENTIVIZADO",
-        "f1-market": "{{driver}} gana {{race}}"
+        "incentivized-market": "MERCADO INCENTIVIZADO"
     },
     "markets": {
         "market-card": {
@@ -371,18 +367,14 @@
         "parlay": {
             "pay-with": "Pagar con",
             "total-quote": "Cotización total",
-            "buy-amount": "cantidad a comprar",
             "available": "Disponible",
             "skew": "Sesgar",
             "potential-profit": "Beneficio potencial",
             "validation": {
                 "title": "Validación combinada",
-                "max-markets": "Máximo 4 mercados en Parlay",
                 "min-amount": "La cantidad mínima es {{min}}",
                 "no-funds": "Asegúrese de que su billetera tenga fondos suficientes",
                 "amount-exceeded": "La cantidad excedió la cantidad disponible en AMM",
-                "max-quote": "La cotización máxima es {{value}}",
-                "min-quote": "La cotización mínima es {{value}}",
                 "availability": "Baja disponibilidad para la posición de los mercados",
                 "not-supported": "Error de validación no compatible {{error}}",
                 "risk-per-comb": "Riesgo por combinación excedido",
@@ -390,7 +382,6 @@
                 "same-team": "Un mismo equipo no puede estar en un Parlay más de una vez",
                 "team-in-parlay": "{{team}} ya está en Parlay. El mismo equipo no se puede agregar a un Parlay más de una vez.",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
-                "max-payout": "El pago máximo admitido es {{max}}",
                 "max-profit": "La ganancia máxima admitida es {{max}}",
                 "max-teams": "Máximo de {{max}} mercados en Parlay",
                 "no-funds-multi-collateral": "Asegúrese de que su billetera tenga fondos suficientes ({{percentage}}% más del monto de la entrada)",
@@ -400,7 +391,6 @@
                 "unique-players": "No se puede agregar el mismo participante dos veces en parlay. {{existingParticipant}} ya está en Parlay",
                 "same-event-participant": "Solo se admite un participante por evento. No se puede agregar {{addedParticipant}} porque {{existingParticipant}} ya está en Parlay"
             },
-            "fee": "Costo total",
             "payout": "Total recibido",
             "empty-title": "Sin posiciones",
             "empty-description": "Agregue una posición, elija un mercado y haga su selección.",
@@ -801,7 +791,6 @@
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
-            "player": "Player",
             "quote": "Quote",
             "paid": "Paid",
             "won": "Won",
@@ -849,7 +838,6 @@
             "bridge": "Bridge to optimism  ",
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
-            "coppied": "Coppied!",
             "address": "Your address QR code",
             "copied": "¡Copiado!"
         }
