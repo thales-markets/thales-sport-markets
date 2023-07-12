@@ -157,7 +157,7 @@ const LeftIcon = styled.i<{ disabled?: boolean }>`
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0041';
-        color: ${(props) => props.theme.button.textColor.primary};
+        color: ${(props) => props.theme.textColor.secondary};
         opacity: ${(props) => (props?.disabled ? '0.3' : '')};
         cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     }
@@ -170,7 +170,7 @@ const RightIcon = styled.i<{ disabled?: boolean }>`
     &:before {
         font-family: ExoticIcons !important;
         content: '\\004B';
-        color: ${(props) => props.theme.button.textColor.primary};
+        color: ${(props) => props.theme.textColor.secondary};
         opacity: ${(props) => (props?.disabled ? '0.3' : '')};
         cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     }
