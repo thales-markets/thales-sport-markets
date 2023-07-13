@@ -1,11 +1,9 @@
 import { ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
-import { getCollateral, getCollateralAddress } from './collaterals';
+import { getCollateral, getCollateralAddress, getDefaultCollateral } from './collaterals';
 import { isMultiCollateralSupportedForNetwork } from './network';
 import { Position } from 'enums/markets';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
-import { StablecoinKey } from 'types/tokens';
 
 export const getParlayAMMTransaction: any = (
     isVoucherSelected: boolean,
@@ -24,7 +22,7 @@ export const getParlayAMMTransaction: any = (
         gasLimit: number | null;
     }
 ): Promise<ethers.ContractTransaction> => {
-    const isNonSusdCollateral = getCollateral(networkId, stableIndex) !== (CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey);
+    const isNonDefaultCollateral = getCollateral(networkId, stableIndex) !== getDefaultCollateral(networkId);
     const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
@@ -40,7 +38,7 @@ export const getParlayAMMTransaction: any = (
         );
     }
 
-    if (isMultiCollateralSupported && isNonSusdCollateral && collateralAddress) {
+    if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
         return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
             marketsAddresses,
             selectedPositions,
@@ -83,11 +81,11 @@ export const getParlayMarketsAMMQuoteMethod: any = (
     selectedPositions: Position[],
     sUSDPaid: BigNumber
 ) => {
-    const isNonSusdCollateral = getCollateral(networkId, stableIndex) !== (CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey);
+    const isNonDefaultCollateral = getCollateral(networkId, stableIndex) !== getDefaultCollateral(networkId);
     const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
-    if (isMultiCollateralSupported && isNonSusdCollateral && collateralAddress) {
+    if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
         return parlayMarketsAMMContract.buyQuoteFromParlayWithDifferentCollateral(
             marketsAddresses,
             selectedPositions,
