@@ -292,22 +292,22 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                     );
                 }
             }
+        }
 
-            if (isSocialLogin) {
-                const id = toast.loading(t('market.toast-message.transaction-pending'));
-                try {
-                    const txHash = await executeEtherspotBatchTransaction(networkId, contracts, methodNames, data);
+        if (isSocialLogin) {
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
+            try {
+                const txHash = await executeEtherspotBatchTransaction(networkId, contracts, methodNames, data);
 
-                    if (txHash && txHash !== null) {
-                        toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
-                    }
-                } catch (e) {
-                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                    console.log(e);
+                if (txHash && txHash !== null) {
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                 }
-            } else {
-                Promise.all(transactions).catch((e) => console.log(e));
+            } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
             }
+        } else {
+            Promise.all(transactions).catch((e) => console.log(e));
         }
     };
 

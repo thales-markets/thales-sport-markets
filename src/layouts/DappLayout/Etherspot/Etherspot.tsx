@@ -93,6 +93,7 @@ const Etherspot: React.FC = () => {
         };
 
         init();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
     useEffect(() => {
@@ -117,12 +118,12 @@ const Etherspot: React.FC = () => {
                     });
 
                     etherspotConnector.setPrimeSdk(etherspotPrimeSdk);
-                    console.log(etherspotPrimeSdk);
                 }
             }
         };
 
         switchChain();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [switchedToNetworkId]);
 
     const login = async () => {
@@ -173,8 +174,6 @@ const Etherspot: React.FC = () => {
 
         console.log(address);
     };
-
-    console.log(web3auth);
 
     const logout = async () => {
         try {
