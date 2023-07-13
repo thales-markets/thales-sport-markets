@@ -12,7 +12,7 @@ import etherspotConnector from 'utils/etherspotConnector';
 import { ETHERSPOT_SUPPORTED_NETWORKS } from 'constants/etherspot';
 import { Network } from 'enums/network';
 
-const clientId = 'BPbeATRQUTSPycHk069mx_IEcSRwwFrz_nxFR9orr0T5SUWuU-XJDoiCvzlZrAO4NCko30STowqlCW4Cs9lAGeM'; // get from https://dashboard.web3auth.io
+const clientId = 'BBEZhb4nC3zyLMM9GaVpJte1-6bC7bN01eMnESKd-y3FnfDqk5ACjRh2x1L16LM67EkiYX593kwUS6oh2f83d_M'; // get from https://dashboard.web3auth.io
 
 const Etherspot: React.FC = () => {
     const dispatch = useDispatch();
