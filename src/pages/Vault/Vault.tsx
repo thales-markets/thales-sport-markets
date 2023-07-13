@@ -184,18 +184,12 @@ const Vault: React.FC<VaultProps> = (props) => {
         isSubmitting || isWithdrawalRequested || isMaximumAmountOfUsersReached || vaultPaused || isVaultCapReached;
 
     useEffect(() => {
-        const { signer, sUSDContract } = networkConnector;
-        if (signer && sUSDContract) {
-            const sUSDContractWithSigner = sUSDContract.connect(signer);
+        const { sUSDContract } = networkConnector;
+        if (sUSDContract) {
             const getAllowance = async () => {
                 try {
                     const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        sUSDContractWithSigner,
-                        walletAddress,
-                        vaultAddress
-                    );
+                    const allowance = await checkAllowance(parsedAmount, sUSDContract, walletAddress, vaultAddress);
                     setAllowance(allowance);
                 } catch (e) {
                     console.log(e);

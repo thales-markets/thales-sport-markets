@@ -395,16 +395,13 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     }, [availablePerPositionMultiQuery.isSuccess, availablePerPositionMultiQuery.data]);
 
     useEffect(() => {
-        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (sportsAMMContract && signer) {
-            let collateralContractWithSigner: ethers.Contract | undefined;
-
+        const { sportsAMMContract, sUSDContract, multipleCollateral } = networkConnector;
+        if (sportsAMMContract) {
             const collateral = getCollateral(networkId, selectedStableIndex);
-            if (selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported) {
-                collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
-            } else {
-                collateralContractWithSigner = sUSDContract?.connect(signer);
-            }
+            const collateralContract: ethers.Contract | undefined =
+                selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported
+                    ? multipleCollateral[collateral]
+                    : sUSDContract;
 
             const getAllowance = async () => {
                 try {
@@ -415,7 +412,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                     );
                     await checkAllowance(
                         parsedTicketPrice,
-                        collateralContractWithSigner,
+                        collateralContract,
                         walletAddress,
                         sportsAMMContract.address
                     ).then((a) => {

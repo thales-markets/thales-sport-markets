@@ -47,6 +47,46 @@ export const executeEtherspotTransaction = async (
     return txHash;
 };
 
+export const getEtherspotTransactionGasEstimated = async (
+    networkId: Network,
+    contract: Contract | undefined,
+    methodName: string,
+    data?: ReadonlyArray<any>
+): Promise<number | null> => {
+    const primeSdk = etherspotConnector.primeSdk;
+    if (!primeSdk || primeSdk === null || !contract) return null;
+
+    const provider = new ethers.providers.JsonRpcProvider(EtherspotProviderByNetworkId[networkId]);
+    const contractAddress = contract.address;
+
+    // get contract interface
+    const contractInstance = contract.connect(provider);
+
+    // get method encoded data
+    const transactionData = contractInstance.interface.encodeFunctionData(methodName, data);
+
+    // clear the transaction batch
+    await primeSdk.clearUserOpsFromBatch();
+
+    // add transactions to the batch
+    const userOpsBatch = await primeSdk.addUserOpsToBatch({
+        to: contractAddress,
+        data: transactionData,
+    });
+    console.log('transactions: ', userOpsBatch);
+
+    // sign transactions added to the batch
+    const op = await primeSdk.sign();
+    console.log(`Signed UserOp: ${await printOp(op)}`);
+
+    // getting gas estimated...
+    const totalGasEstimated = await primeSdk.totalGasEstimated(op);
+    console.log(`maxPriorityFeePerGas: ${Number(op.maxPriorityFeePerGas)}`);
+    console.log(`Gas estimated (gwei): ${Number(totalGasEstimated)}`);
+
+    return Number(totalGasEstimated) * Number(op.maxPriorityFeePerGas);
+};
+
 export const executeEtherspotBatchTransaction = async (
     networkId: Network,
     contracts: (Contract | undefined)[],

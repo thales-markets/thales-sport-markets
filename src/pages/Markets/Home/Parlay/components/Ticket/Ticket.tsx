@@ -259,16 +259,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     );
 
     useEffect(() => {
-        const { parlayMarketsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (parlayMarketsAMMContract && signer) {
-            let collateralContractWithSigner: ethers.Contract | undefined;
-
+        const { parlayMarketsAMMContract, sUSDContract, multipleCollateral } = networkConnector;
+        if (parlayMarketsAMMContract) {
             const collateral = getCollateral(networkId, selectedStableIndex);
-            if (selectedStableIndex !== 0 && multipleCollateral) {
-                collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
-            } else {
-                collateralContractWithSigner = sUSDContract?.connect(signer);
-            }
+            const collateralContract: ethers.Contract | undefined =
+                selectedStableIndex !== 0 && multipleCollateral ? multipleCollateral[collateral] : sUSDContract;
 
             const getAllowance = async () => {
                 try {
@@ -279,7 +274,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
-                        collateralContractWithSigner,
+                        collateralContract,
                         walletAddress,
                         parlayMarketsAMMContract.address
                     );

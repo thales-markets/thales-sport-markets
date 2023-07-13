@@ -25,7 +25,7 @@ import { refetchBalances } from 'utils/queryConnector';
 import TextInput from '../fields/TextInput/TextInput';
 import { stableCoinParser } from 'utils/formatters/ethers';
 import { getDefaultCollateral } from 'utils/collaterals';
-import { executeEtherspotTransaction } from 'utils/etherspot';
+import { executeEtherspotTransaction, getEtherspotTransactionGasEstimated } from 'utils/etherspot';
 
 type MintVoucherModalProps = {
     onClose: () => void;
@@ -58,6 +58,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
+    const [gasFee, setGasFee] = useState<number | null>(null);
 
     const { openConnectModal } = useConnectModal();
 
@@ -82,7 +83,8 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
         insufficientBalance ||
         isSubmitting ||
         !isRecipientEntered ||
-        !isRecipientValid;
+        !isRecipientValid ||
+        !hasAllowance;
 
     const paymentTokenBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -95,19 +97,14 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
 
     useEffect(() => {
-        const { signer, sUSDContract, overtimeVoucherContract } = networkConnector;
-        if (signer && sUSDContract && overtimeVoucherContract) {
+        const { sUSDContract, overtimeVoucherContract } = networkConnector;
+        if (sUSDContract && overtimeVoucherContract) {
             const addressToApprove = overtimeVoucherContract.address;
-            const sUSDContractWithSigner = sUSDContract.connect(signer);
+
             const getAllowance = async () => {
                 try {
                     const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        sUSDContractWithSigner,
-                        walletAddress,
-                        addressToApprove
-                    );
+                    const allowance = await checkAllowance(parsedAmount, sUSDContract, walletAddress, addressToApprove);
                     setAllowance(allowance);
                 } catch (e) {
                     console.log(e);
@@ -118,6 +115,30 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
             }
         }
     }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId]);
+
+    useEffect(() => {
+        const fetchGasEstimated = async () => {
+            try {
+                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                const { overtimeVoucherContract } = networkConnector;
+
+                const gasEstimated = await getEtherspotTransactionGasEstimated(
+                    networkId,
+                    overtimeVoucherContract,
+                    'mint',
+                    [isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress), parsedAmount]
+                );
+                setGasFee(gasEstimated);
+            } catch (e) {
+                console.log(e);
+                setGasFee(null);
+            }
+        };
+        if (isButtonDisabled || !isSocialLogin) return;
+        fetchGasEstimated();
+    }, [isButtonDisabled, amount, hasAllowance, networkId, recipient, walletAddress, isSocialLogin, isAnotherWallet]);
+
+    console.log('gasFee', gasFee);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         setIsAllowing(true);

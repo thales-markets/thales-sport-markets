@@ -273,18 +273,16 @@ const LiquidityPool: React.FC = () => {
         isLiquidityPoolCapReached;
 
     useEffect(() => {
-        const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
-
+        const { sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
         const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
 
-        if (signer && sUSDContract && lpContract) {
-            const sUSDContractWithSigner = sUSDContract.connect(signer);
+        if (sUSDContract && lpContract) {
             const getAllowance = async () => {
                 try {
                     const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
-                        sUSDContractWithSigner,
+                        sUSDContract,
                         walletAddress,
                         lpContract.address
                     );
