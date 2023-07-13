@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
+import { OPENLOGIN_NETWORK, OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import { ADAPTER_EVENTS, WALLET_ADAPTERS } from '@web3auth/base';
 import { PrimeSdk, Web3WalletProvider } from '@etherspot/prime-sdk';
 import Web3 from 'web3';
@@ -12,7 +12,7 @@ import etherspotConnector from 'utils/etherspotConnector';
 import { ETHERSPOT_SUPPORTED_NETWORKS } from 'constants/etherspot';
 import { Network } from 'enums/network';
 
-const clientId = 'BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfpzCiunHRrMui8TIwQPXdkQ8Yxuk'; // get from https://dashboard.web3auth.io
+const clientId = 'BPbeATRQUTSPycHk069mx_IEcSRwwFrz_nxFR9orr0T5SUWuU-XJDoiCvzlZrAO4NCko30STowqlCW4Cs9lAGeM'; // get from https://dashboard.web3auth.io
 
 const Etherspot: React.FC = () => {
     const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const Etherspot: React.FC = () => {
                 const openLoginAdapter = new OpenloginAdapter({
                     privateKeyProvider,
                     adapterSettings: {
-                        network: 'mainnet',
+                        network: OPENLOGIN_NETWORK.MAINNET,
                         clientId,
                     },
                     loginSettings: {
