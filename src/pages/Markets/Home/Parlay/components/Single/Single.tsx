@@ -68,7 +68,7 @@ import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { getCollateral, getStablecoinDecimals } from 'utils/collaterals';
 import { stableCoinParser } from 'utils/formatters/ethers';
-import { executeEtherspotTransaction } from 'utils/etherspot';
+import { executeEtherspotTransaction, getEtherspotTransactionGasEstimated } from 'utils/etherspot';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -131,6 +131,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         payout: 0,
         onClose: () => {},
     });
+    const [gasFee, setGasFee] = useState<number | null>(null);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -410,6 +411,50 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         networkId,
         isSocialLogin,
     ]);
+
+    useEffect(() => {
+        const fetchGasEstimated = async () => {
+            try {
+                const ammQuote = await fetchAmmQuote(tokenAmount || 1);
+                const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
+                const referralId =
+                    walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
+                        ? getReferralId()
+                        : null;
+
+                const { sportsAMMContract, overtimeVoucherContract } = networkConnector;
+
+                const etherspotTransactionInfo = getAMMSportsEtherspotTransactionInfo(
+                    isVoucherSelected,
+                    overtimeVoucher ? overtimeVoucher.id : 0,
+                    selectedStableIndex,
+                    networkId,
+                    market.address,
+                    market.position,
+                    parsedAmount,
+                    ammQuote,
+                    referralId,
+                    ethers.utils.parseEther('0.02')
+                );
+
+                const gasEstimated = await getEtherspotTransactionGasEstimated(
+                    networkId,
+                    isVoucherSelected ? overtimeVoucherContract : sportsAMMContract,
+                    etherspotTransactionInfo.methodName,
+                    etherspotTransactionInfo.data
+                );
+                setGasFee(gasEstimated);
+            } catch (e) {
+                console.log(e);
+                setGasFee(null);
+            }
+        };
+        if (submitDisabled || !isSocialLogin) return;
+        fetchGasEstimated();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [submitDisabled, tokenAmount, hasAllowance, networkId, walletAddress, isSocialLogin]);
+
+    console.log(gasFee);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         setIsAllowing(true);
