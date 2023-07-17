@@ -70,6 +70,7 @@ import { ThemeInterface } from 'types/ui';
 import { VaultTab } from 'enums/vault';
 import { stableCoinParser } from 'utils/formatters/ethers';
 import { getDefaultCollateral } from 'utils/collaterals';
+import { navigateTo } from 'utils/routes';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -93,8 +94,14 @@ const Vault: React.FC<VaultProps> = (props) => {
     const [lastValidUserVaultData, setLastValidUserVaultData] = useState<UserVaultData | undefined>(undefined);
 
     const { params } = props.match;
-    const vaultId = params && params.vaultId ? params.vaultId : '';
-    const vaultAddress = !!VAULT_MAP[vaultId] ? VAULT_MAP[vaultId].addresses[networkId] : undefined;
+    const vaultId = params && params.vaultId && !!VAULT_MAP[params.vaultId] ? params.vaultId : '';
+    const vaultAddress = !!vaultId ? VAULT_MAP[vaultId].addresses[networkId] : undefined;
+
+    useEffect(() => {
+        if (!vaultAddress) {
+            navigateTo(ROUTES.Vaults);
+        }
+    }, []);
 
     const { openConnectModal } = useConnectModal();
 
