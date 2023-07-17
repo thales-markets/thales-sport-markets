@@ -5,6 +5,7 @@ import { ReactComponent as DAIIcon } from 'assets/currencies/DAI.svg';
 import { ReactComponent as USDCIcon } from 'assets/currencies/USDC.svg';
 import { ReactComponent as USDTIcon } from 'assets/currencies/USDT.svg';
 import { StablecoinKey } from 'types/tokens';
+import { Network } from 'enums/network';
 
 export const CURRENCY_MAP = {
     sUSD: 'sUSD',
@@ -29,15 +30,21 @@ export const currencyKeyToAssetIconMap = {
     [CRYPTO_CURRENCY_MAP.USDT]: USDTIcon,
 };
 
-// TODO: this will be deleted when define collaterals by network
-export enum COLLATERALS_INDEX {
-    'sUSD' = 0,
-    'DAI' = 1,
-    'USDC' = 2,
-    'USDT' = 3,
-}
-
-export const COLLATERAL_INDEX_TO_COLLATERAL: StablecoinKey[] = ['sUSD', 'DAI', 'USDC', 'USDT'];
+export const COLLATERALS: Record<Network, StablecoinKey[]> = {
+    [Network.OptimismMainnet]: [
+        CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey,
+        CRYPTO_CURRENCY_MAP.DAI as StablecoinKey,
+        CRYPTO_CURRENCY_MAP.USDC as StablecoinKey,
+        CRYPTO_CURRENCY_MAP.USDT as StablecoinKey,
+    ],
+    [Network.OptimismGoerli]: [
+        CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey,
+        CRYPTO_CURRENCY_MAP.DAI as StablecoinKey,
+        CRYPTO_CURRENCY_MAP.USDC as StablecoinKey,
+        CRYPTO_CURRENCY_MAP.USDT as StablecoinKey,
+    ],
+    [Network.ArbitrumOne]: [CRYPTO_CURRENCY_MAP.USDC as StablecoinKey],
+};
 
 export const STABLE_DECIMALS = {
     sUSD: 18,

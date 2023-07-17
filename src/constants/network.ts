@@ -21,7 +21,6 @@ export const SUPPORTED_NETWORKS = [
         shortChainName: 'Optimism',
         chainKey: 'optimism_mainnet',
         iconClassName: 'icon icon--op',
-        isMultiCollateralSupported: true,
     },
     {
         chainId: Network.ArbitrumOne,
@@ -29,7 +28,6 @@ export const SUPPORTED_NETWORKS = [
         shortChainName: 'Arbitrum',
         chainKey: 'arbitrum_mainnet',
         iconClassName: 'icon icon--arb',
-        isMultiCollateralSupported: false,
     },
     {
         chainId: Network.OptimismGoerli,
@@ -37,7 +35,6 @@ export const SUPPORTED_NETWORKS = [
         shortChainName: 'Optimism Goerli Testnet',
         chainKey: 'optimism_mainnet',
         iconClassName: 'icon icon--op',
-        isMultiCollateralSupported: true,
     },
 ];
 

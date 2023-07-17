@@ -1,12 +1,4 @@
 import { BetType, ContractSGPOrder, OddsType, Position } from 'enums/markets';
-import { CRYPTO_CURRENCY_MAP } from './currency';
-
-export const COLLATERALS = [
-    CRYPTO_CURRENCY_MAP.sUSD,
-    CRYPTO_CURRENCY_MAP.DAI,
-    CRYPTO_CURRENCY_MAP.USDC,
-    CRYPTO_CURRENCY_MAP.USDT,
-];
 
 export const ODDS_TYPES = [OddsType.AMM, OddsType.Decimal, OddsType.American];
 

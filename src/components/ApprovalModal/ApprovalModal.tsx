@@ -4,15 +4,15 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { BigNumber, ethers } from 'ethers';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter, stableCoinParser } from 'utils/formatters/ethers';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
-import { getAmountForApproval } from 'utils/amm';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { getCollateral } from 'utils/collaterals';
 
 type ApprovalModalProps = {
     defaultAmount: number | string;
@@ -44,10 +44,10 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const isAmountEntered = Number(amount) > 0;
     const isButtonDisabled = !isWalletConnected || isAllowing || (!approveAll && (!isAmountEntered || !isAmountValid));
 
-    const amountConverted = getAmountForApproval(
-        collateralIndex ? collateralIndex : 0,
+    const amountConverted = stableCoinParser(
         Number(amount).toString(),
-        networkId
+        networkId,
+        getCollateral(networkId, collateralIndex || 0)
     );
 
     const getSubmitButton = () => {
