@@ -101,7 +101,7 @@ const Vault: React.FC<VaultProps> = (props) => {
         if (!vaultAddress) {
             navigateTo(ROUTES.Vaults);
         }
-    }, []);
+    }, [vaultAddress]);
 
     const { openConnectModal } = useConnectModal();
 
