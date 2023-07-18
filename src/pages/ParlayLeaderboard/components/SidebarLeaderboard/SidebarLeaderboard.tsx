@@ -19,6 +19,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { PositionData } from 'types/markets';
+import { formatCurrency } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
     convertPositionNameToPositionType,
@@ -132,7 +133,7 @@ const SidebarLeaderboard: React.FC = () => {
                                         </ColumnWrapper>
                                         <ColumnWrapper>
                                             <DataLabel>
-                                                {rewards[parlay.rank - 1]}
+                                                {formatCurrency(rewards[parlay.rank - 1], 0)}
                                                 {networkId !== Network.ArbitrumOne ? (
                                                     <OPLogoWrapper />
                                                 ) : (
