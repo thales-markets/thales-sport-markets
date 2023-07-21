@@ -14,12 +14,14 @@ The UI is available on [overtimemarkets.xyz](https://overtimemarkets.xyz).
 -   React Query
 -   react-i18next
 -   styled-components
+-   Material UI
 -   Recharts
 
 ## Ethereum stack
 
 -   `ethers.js` v5 - Ethereum wallet implementation.
 -   `RainbowKit` and `wagmi` - for ethereum wallet connectivity.
+-   [thales-data](https://github.com/thales-markets/thales-data) - for historical data (powered by [TheGraph](https://thegraph.com/))
 
 ## Development
 
@@ -38,6 +40,7 @@ Then, open `.env.local` and add the missing environment variables:
 -   `REACT_APP_CHAINNODE_PROJECT_ID` - Chainnodes project id (get it from [chainnodes.org](https://app.chainnodes.org/)).
 -   `REACT_APP_IPFS_DEPLOYMENT` - Is dApp in the mode for deployment on IPFS. Set to `false`.
 -   `REACT_APP_BUNGEE_API_KEY` - Bungee API key.
+-   `REACT_APP_WALLET_CONNECT_PROJECT_ID` - WalletConnect project id (get it from [WalletConnect Cloud](https://cloud.walletconnect.com/)).
 
 ### Set up Google Translate API
 
