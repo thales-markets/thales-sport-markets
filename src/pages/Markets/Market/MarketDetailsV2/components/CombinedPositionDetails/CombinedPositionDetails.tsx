@@ -66,7 +66,7 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
     const isGamePaused = markets[0].isPaused && !isGameResolved;
     const isGameOpen = !markets[0].isResolved && !markets[0].isCanceled && !markets[0].isPaused && !isGameStarted;
 
-    const noLiquidity = !!availablePerPosition && availablePerPosition < MIN_LIQUIDITY;
+    const noLiquidity = availablePerPosition !== undefined && availablePerPosition < MIN_LIQUIDITY;
     const noOdd = !totalOdd || totalOdd == 0;
     const disabledPosition = noOdd || noLiquidity || !isGameOpen;
 
