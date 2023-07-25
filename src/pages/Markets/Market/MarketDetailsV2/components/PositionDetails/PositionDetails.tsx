@@ -66,7 +66,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const isGamePaused = market.isPaused && !isGameResolved;
     const isGameOpen = !market.isResolved && !market.isCanceled && !market.isPaused && !isGameStarted;
 
-    const noLiquidity = !!availablePerPosition.available && availablePerPosition.available < MIN_LIQUIDITY;
+    const noLiquidity = availablePerPosition.available !== undefined && availablePerPosition.available < MIN_LIQUIDITY;
     const noOdd = !odd || odd == 0;
     const disabledPosition = noOdd || noLiquidity || !isGameOpen;
 
