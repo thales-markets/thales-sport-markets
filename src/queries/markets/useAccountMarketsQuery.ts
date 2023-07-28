@@ -30,13 +30,10 @@ const useAccountMarketsQuery = (
                 const positionBalances: PositionBalance[] = await thalesData.sportMarkets.positionBalances({
                     account: walletAddress,
                     network: networkId,
+                    isClaimed: false,
                 });
 
-                const onlyNonZeroPositions: PositionBalance[] = positionBalances.filter(
-                    (positionBalance) => positionBalance.amount > 0
-                );
-
-                const positions: AccountPositionProfile[] = onlyNonZeroPositions.map((position) => {
+                const positions: AccountPositionProfile[] = positionBalances.map((position) => {
                     const isOneSideMarket =
                         (SPORTS_TAGS_MAP['Motosport'].includes(Number(position.position.market.tags[0])) &&
                             ENETPULSE_SPORTS.includes(Number(position.position.market.tags[0]))) ||
