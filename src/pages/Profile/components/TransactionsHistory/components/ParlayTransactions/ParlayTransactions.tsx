@@ -2,44 +2,63 @@ import PositionSymbol from 'components/PositionSymbol';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { ParlaysMarket, PositionData, SportMarketInfo } from 'types/markets';
+import {
+    CombinedMarket,
+    ParlayMarket,
+    ParlayMarketWithQuotes,
+    ParlaysMarket,
+    PositionData,
+    SportMarketInfo,
+} from 'types/markets';
 import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
-import { truncateAddress } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName, truncateAddress } from 'utils/formatters/string';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
     formatMarketOdds,
+    getCombinedOddTooltipText,
     getOddTooltipText,
     getParentMarketAddress,
+    getSpreadAndTotalTextForCombinedMarket,
     getSpreadTotalText,
     getSymbolText,
     isParlayOpen,
     isParlayWon,
+    syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { Position } from 'constants/options';
 import { ethers } from 'ethers';
-import { CollateralByNetworkId } from 'utils/network';
 import { buildMarketLink } from 'utils/routes';
 import SPAAnchor from 'components/SPAAnchor';
 import i18n from 'i18n';
+import {
+    extractCombinedMarketsFromParlayMarketType,
+    getCombinedPositionName,
+    isCombinedMarketWinner,
+    removeCombinedMarketsFromParlayMarketType,
+} from 'utils/combinedMarkets';
+import { OddsType, Position } from 'enums/markets';
+import { CollateralByNetworkId } from 'constants/network';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
     const language = i18n.language;
+    const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -66,19 +85,31 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
             enabled: isWalletConnected,
         }
     );
-    let parlayTx = parlaysTxQuery.isSuccess ? parlaysTxQuery.data : [];
 
-    if (searchText && !isSearchTextWalletAddress) {
-        parlayTx = parlayTx?.filter((item) => {
-            const marketWithSearchTextIncluded = item.sportMarkets.find(
-                (item) =>
-                    item.homeTeam?.toLowerCase().includes(searchText.toLowerCase()) ||
-                    item.awayTeam?.toLowerCase().includes(searchText.toLowerCase())
-            );
+    const parlayTx = useMemo(() => {
+        let _parlayTx;
 
-            if (marketWithSearchTextIncluded) return item;
-        });
-    }
+        if (parlaysTxQuery.data && parlaysTxQuery.isSuccess) {
+            _parlayTx = parlaysTxQuery.data ? parlaysTxQuery.data : [];
+        }
+
+        if (_parlayTx) {
+            if (searchText && !isSearchTextWalletAddress) {
+                _parlayTx = _parlayTx?.filter((item) => {
+                    const marketWithSearchTextIncluded = item.sportMarkets.find(
+                        (item) =>
+                            item.homeTeam?.toLowerCase().includes(searchText.toLowerCase()) ||
+                            item.awayTeam?.toLowerCase().includes(searchText.toLowerCase())
+                    );
+
+                    if (marketWithSearchTextIncluded) return item;
+                });
+            }
+            _parlayTx = parlaysTxQuery.data;
+        }
+
+        return _parlayTx;
+    }, [parlaysTxQuery.data, parlaysTxQuery.isSuccess, searchText, isSearchTextWalletAddress]);
 
     const onTwitterIconClick = (data: any) => {
         const sportMarkets: SportMarketInfo[] = data.sportMarkets;
@@ -144,7 +175,10 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
     return (
         <>
             <Table
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...TableHeaderStyle,
+                    color: theme.textColor.secondary,
+                }}
                 tableRowCellStyles={TableRowStyle}
                 columnsDeps={[networkId]}
                 columns={[
@@ -176,9 +210,17 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         accessor: 'positions',
                         sortable: false,
                         Cell: (cellProps: any) => {
+                            const parlay = syncPositionsAndMarketsPerContractOrderInParlay(
+                                cellProps.row.original as ParlayMarket
+                            );
+                            const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
+                            const numberOfMarketsModifiedWithCombinedPositions =
+                                combinedMarkets.length > 0
+                                    ? parlay.sportMarkets.length - combinedMarkets.length
+                                    : parlay.sportMarkets.length;
                             return (
                                 <FlexCenter>
-                                    <TableText>{cellProps.cell.value.length}</TableText>
+                                    <TableText>{numberOfMarketsModifiedWithCombinedPositions}</TableText>
                                 </FlexCenter>
                             );
                         },
@@ -211,12 +253,12 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         sortable: false,
                         Cell: (cellProps: any) => {
                             if (isParlayWon(cellProps.row.original)) {
-                                return <StatusWrapper color="#5FC694">WON </StatusWrapper>;
+                                return <StatusWrapper color={theme.status.win}>WON </StatusWrapper>;
                             } else {
                                 return isParlayOpen(cellProps.row.original) ? (
-                                    <StatusWrapper color="#FFFFFF">OPEN</StatusWrapper>
+                                    <StatusWrapper color={theme.status.open}>OPEN</StatusWrapper>
                                 ) : (
-                                    <StatusWrapper color="#E26A78">LOSS</StatusWrapper>
+                                    <StatusWrapper color={theme.status.loss}>LOSS</StatusWrapper>
                                 );
                             }
                         },
@@ -234,70 +276,18 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                 data={parlayTx ?? []}
                 noResultsMessage={t('profile.messages.no-transactions')}
                 expandedRow={(row) => {
-                    const toRender = row.original.sportMarketsFromContract.map((address: string, index: number) => {
-                        const position = row.original.positions.find(
-                            (position: any) => position.market.address == address
-                        );
-                        const market = row.original.sportMarkets.find(
-                            (market: SportMarketInfo) => market.address == address
-                        );
-                        const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+                    const parlay = syncPositionsAndMarketsPerContractOrderInParlay(row.original as ParlayMarket);
 
-                        const quote = market?.isCanceled
-                            ? 1
-                            : row.original.marketQuotes
-                            ? row.original.marketQuotes[index]
-                            : 0;
+                    const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
+                    const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlay);
 
-                        const symbolText = getSymbolText(positionEnum, position.market);
-                        const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
-
-                        return (
-                            <ParlayRow style={{ opacity: getOpacity(position) }} key={index}>
-                                <SPAAnchor
-                                    href={buildMarketLink(
-                                        getParentMarketAddress(position.market.parentMarket, position.market.address),
-                                        language
-                                    )}
-                                >
-                                    <ParlayRowText style={{ cursor: 'pointer' }}>
-                                        {getPositionStatus(position)}
-                                        <ParlayRowTeam
-                                            title={position.market.homeTeam + ' vs ' + position.market.awayTeam}
-                                        >
-                                            {position.market.homeTeam + ' vs ' + position.market.awayTeam}
-                                        </ParlayRowTeam>
-                                    </ParlayRowText>
-                                </SPAAnchor>
-                                <PositionSymbol
-                                    symbolAdditionalText={{
-                                        text: formatMarketOdds(selectedOddsType, quote),
-                                        textStyle: {
-                                            fontSize: '10.5px',
-                                            marginLeft: '10px',
-                                        },
-                                    }}
-                                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
-                                    symbolText={symbolText}
-                                    symbolUpperText={
-                                        spreadTotalText
-                                            ? {
-                                                  text: spreadTotalText,
-                                                  textStyle: {
-                                                      backgroundColor: '#1A1C2B',
-                                                      fontSize: '10px',
-                                                      top: '-9px',
-                                                      left: '10px',
-                                                  },
-                                              }
-                                            : undefined
-                                    }
-                                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
-                                />
-                                <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
-                            </ParlayRow>
-                        );
-                    });
+                    const toRender = getParlayRow(
+                        parlayWithoutCombinedMarkets,
+                        selectedOddsType,
+                        language,
+                        theme,
+                        combinedMarkets
+                    );
 
                     return (
                         <ExpandedRowWrapper>
@@ -340,16 +330,24 @@ const getMarketWinStatus = (position: PositionData) =>
         ? convertPositionNameToPosition(position.side) === convertFinalResultToResultType(position.market.finalResult)
         : undefined; // open or canceled
 
-const getPositionStatus = (position: PositionData) => {
+const getPositionStatus = (position: PositionData, theme: ThemeInterface) => {
     const winStatus = getMarketWinStatus(position);
 
     return winStatus === undefined ? (
-        <StatusIcon color="#FFFFFF" className={`icon icon--open`} />
+        <StatusIcon color={theme.status.open} className={`icon icon--open`} />
     ) : winStatus ? (
-        <StatusIcon color="#5FC694" className={`icon icon--win`} />
+        <StatusIcon color={theme.status.win} className={`icon icon--win`} />
     ) : (
-        <StatusIcon color="#E26A78" className={`icon icon--lost`} />
+        <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />
     );
+};
+
+const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket, theme: ThemeInterface) => {
+    const isOpen = combinedMarket.markets[0].isOpen || combinedMarket.markets[1].isOpen;
+    if (isOpen) return <StatusIcon color={theme.status.open} className={`icon icon--open`} />;
+    if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions))
+        return <StatusIcon color={theme.status.win} className={`icon icon--win`} />;
+    return <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />;
 };
 
 const getOpacity = (position: PositionData) => {
@@ -366,10 +364,16 @@ const getOpacity = (position: PositionData) => {
     }
 };
 
-const getParlayItemStatus = (market: SportMarketInfo) => {
+const getOpacityForCombinedMarket = (combinedMarket: CombinedMarket) => {
+    if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions)) return 1;
+    if (combinedMarket.markets[0].isResolved && combinedMarket.markets[1].isResolved) return 0.5;
+    return 1;
+};
+
+const getParlayItemStatus = (market: SportMarketInfo, isCombinedMarket?: boolean) => {
     if (market.isCanceled) return t('profile.card.canceled');
     if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
-    return formatDateWithTime(Number(market.maturityDate) * 1000);
+    return formatDateWithTime(!isCombinedMarket ? Number(market.maturityDate) * 1000 : Number(market.maturityDate));
 };
 
 const StatusIcon = styled.i`
@@ -379,6 +383,139 @@ const StatusIcon = styled.i`
         color: ${(props) => props.color || 'white'};
     }
 `;
+
+export const getParlayRow = (
+    data: ParlayMarketWithQuotes,
+    selectedOddsType: OddsType,
+    language: string,
+    theme: ThemeInterface,
+    combinedMarkets?: CombinedMarket[]
+) => {
+    const render: any = [];
+
+    if (combinedMarkets?.length) {
+        combinedMarkets.forEach((combinedMarket, index) => {
+            const opacity = getOpacityForCombinedMarket(combinedMarket);
+            const odd = formatMarketOdds(selectedOddsType, combinedMarket.totalOdd);
+            const symbolText = getCombinedPositionName(combinedMarket.markets, combinedMarket.positions);
+
+            const homeTeam = combinedMarket.markets[0].homeTeam;
+            const awayTeam = combinedMarket.markets[1].awayTeam;
+
+            const positionStatus = getPositionStatusForCombinedMarket(combinedMarket, theme);
+
+            const tooltipText = getCombinedOddTooltipText(combinedMarket.markets, combinedMarket.positions);
+
+            const spreadAndTotalValues = getSpreadAndTotalTextForCombinedMarket(
+                combinedMarket.markets,
+                combinedMarket.positions
+            );
+            const spreadAndTotalText = `${spreadAndTotalValues.spread ? spreadAndTotalValues.spread + '/' : ''}${
+                spreadAndTotalValues.total ? spreadAndTotalValues.total : ''
+            }`;
+
+            render.push(
+                <ParlayRow style={{ opacity: opacity }} key={`$cm-${index}`}>
+                    <ParlayRowText style={{ cursor: 'pointer' }}>
+                        {positionStatus}
+                        <ParlayRowTeam title={homeTeam + ' vs ' + awayTeam}>
+                            {homeTeam + ' vs ' + awayTeam}
+                        </ParlayRowTeam>
+                    </ParlayRowText>
+                    <PositionSymbol
+                        symbolAdditionalText={{
+                            text: odd,
+                            textStyle: {
+                                fontSize: '10.5px',
+                                marginLeft: '10px',
+                            },
+                        }}
+                        additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                        symbolText={symbolText ? symbolText : ''}
+                        symbolUpperText={
+                            spreadAndTotalText
+                                ? {
+                                      text: spreadAndTotalText,
+                                      textStyle: {
+                                          backgroundColor: theme.background.primary,
+                                          fontSize: '10px',
+                                          top: '-9px',
+                                          left: '10px',
+                                      },
+                                  }
+                                : undefined
+                        }
+                        tooltip={<>{tooltipText}</>}
+                    />
+                    <QuoteText>{getParlayItemStatus(combinedMarket.markets[0], true)}</QuoteText>
+                </ParlayRow>
+            );
+        });
+    }
+
+    if (!data.sportMarkets?.length) return render;
+
+    data.positions.forEach((position, index) => {
+        const quote = data.sportMarkets[index]?.isCanceled ? 1 : data.marketQuotes ? data.marketQuotes[index] : 0;
+        const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
+
+        const symbolText = getSymbolText(positionEnum, position.market);
+        const spreadTotalText = getSpreadTotalText(position.market, positionEnum);
+        render.push(
+            <ParlayRow style={{ opacity: getOpacity(position) }} key={`m-${index}`}>
+                <SPAAnchor
+                    href={buildMarketLink(
+                        getParentMarketAddress(position.market.parentMarket, position.market.address),
+                        language
+                    )}
+                >
+                    <ParlayRowText style={{ cursor: 'pointer' }}>
+                        {getPositionStatus(position, theme)}
+                        <ParlayRowTeam
+                            title={
+                                position.market.isOneSideMarket
+                                    ? fixOneSideMarketCompetitorName(position.market.homeTeam)
+                                    : position.market.homeTeam + ' vs ' + position.market.awayTeam
+                            }
+                        >
+                            {position.market.isOneSideMarket
+                                ? fixOneSideMarketCompetitorName(position.market.homeTeam)
+                                : position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                        </ParlayRowTeam>
+                    </ParlayRowText>
+                </SPAAnchor>
+                <PositionSymbol
+                    symbolAdditionalText={{
+                        text: formatMarketOdds(selectedOddsType, quote),
+                        textStyle: {
+                            fontSize: '10.5px',
+                            marginLeft: '10px',
+                        },
+                    }}
+                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                    symbolText={symbolText}
+                    symbolUpperText={
+                        spreadTotalText
+                            ? {
+                                  text: spreadTotalText,
+                                  textStyle: {
+                                      backgroundColor: theme.background.primary,
+                                      fontSize: '10px',
+                                      top: '-9px',
+                                      left: '10px',
+                                  },
+                              }
+                            : undefined
+                    }
+                    tooltip={<>{getOddTooltipText(positionEnum, position.market)}</>}
+                />
+                <QuoteText>{getParlayItemStatus(position.market)}</QuoteText>
+            </ParlayRow>
+        );
+    });
+
+    return render;
+};
 
 const TableText = styled.span`
     font-family: 'Roboto';
@@ -396,7 +533,7 @@ const TableText = styled.span`
 const StatusWrapper = styled.div`
     width: 62px;
     height: 25px;
-    border: 2px solid ${(props) => props.color || 'white'};
+    border: 2px solid ${(props) => props.color || props.theme.status.open};
     border-radius: 5px;
     font-family: 'Roboto';
     font-style: normal;
@@ -406,7 +543,7 @@ const StatusWrapper = styled.div`
     text-align: justify;
     text-transform: uppercase;
     text-align: center;
-    color: ${(props) => props.color || 'white'};
+    color: ${(props) => props.color || props.theme.status.open};
     padding-top: 3px;
 `;
 
@@ -448,7 +585,6 @@ const TableHeaderStyle: React.CSSProperties = {
     lineHeight: '12px',
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
 };
 
@@ -474,7 +610,7 @@ const ExpandedRowWrapper = styled.div`
     @media (max-width: 400px) {
         padding: 0;
     }
-    border-bottom: 2px dotted rgb(95, 97, 128);
+    border-bottom: 2px dotted ${(props) => props.theme.borderColor.primary};
 `;
 
 const ParlayRow = styled(FlexDivRowCentered)`

@@ -1,4 +1,4 @@
-import { VaultTradeStatus } from 'constants/vault';
+import { VaultTradeStatus } from 'enums/vault';
 import { ParlayMarket, SportMarketInfo } from './markets';
 
 export type VaultData = {
@@ -69,7 +69,7 @@ export type ParlayVaultTrade = {
 
 export type VaultTrades = VaultTrade[];
 
-export type VaultPnlPerRound = {
+type VaultPnlPerRound = {
     round: number | string;
     pnl: number;
 };

@@ -2,12 +2,13 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { MarketTransaction, MarketTransactions } from 'types/markets';
-import { NetworkId } from 'types/network';
-import { Position } from 'constants/options';
+import { Network } from 'enums/network';
+import { SPORTS_TAGS_MAP, ENETPULSE_SPORTS, GOLF_TOURNAMENT_WINNER_TAG, JSON_ODDS_SPORTS } from 'constants/tags';
+import { Position } from 'enums/markets';
 
 const useUserTransactionsQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<MarketTransactions>
 ) => {
     return useQuery<MarketTransactions>(
@@ -18,7 +19,16 @@ const useUserTransactionsQuery = (
                     account: walletAddress,
                     network: networkId,
                 });
-                return marketTransactions.map((tx: MarketTransaction) => ({ ...tx, position: Position[tx.position] }));
+
+                return marketTransactions.map((tx: MarketTransaction) => {
+                    const isOneSideMarket =
+                        (SPORTS_TAGS_MAP['Motosport'].includes(Number(tx.wholeMarket.tags[0])) &&
+                            ENETPULSE_SPORTS.includes(Number(tx.wholeMarket.tags[0]))) ||
+                        (Number(tx.wholeMarket.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG &&
+                            JSON_ODDS_SPORTS.includes(Number(tx.wholeMarket.tags[0])));
+                    tx.wholeMarket.isOneSideMarket = isOneSideMarket;
+                    return { ...tx, position: Position[tx.position] };
+                });
             } catch (e) {
                 console.log(e);
                 return [];

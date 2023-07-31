@@ -2,12 +2,12 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ParlayMarket, PositionBalance } from 'types/markets';
 import thalesData from 'thales-data';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { isParlayClaimable, isSportMarketExpired } from 'utils/markets';
 
 const useClaimablePositionCountQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<number | null>
 ) => {
     return useQuery<number | null>(
@@ -19,7 +19,8 @@ const useClaimablePositionCountQuery = (
                 const positionBalances: PositionBalance[] = thalesData.sportMarkets.positionBalances({
                     account: walletAddress,
                     network: networkId,
-                    onlyClaimable: true,
+                    isClaimable: true,
+                    isClaimed: false,
                 });
 
                 const parlayMarkets = thalesData.sportMarkets.parlayMarkets({
@@ -29,9 +30,8 @@ const useClaimablePositionCountQuery = (
 
                 const [positionBalanceData, parlayMarketsData] = await Promise.all([positionBalances, parlayMarkets]);
 
-                const onlyNonZeroPositions: PositionBalance[] = positionBalanceData.filter(
-                    (positionBalance) =>
-                        positionBalance.amount > 0 && !isSportMarketExpired(positionBalance.position.market)
+                const onlyNonExpiredPositions: PositionBalance[] = positionBalanceData.filter(
+                    (positionBalance) => !isSportMarketExpired(positionBalance.position.market)
                 );
 
                 const onlyClaimableParlays = parlayMarketsData.filter((parlayMarket: ParlayMarket) => {
@@ -40,7 +40,7 @@ const useClaimablePositionCountQuery = (
                     }
                 });
 
-                return Number(onlyNonZeroPositions.length + onlyClaimableParlays.length);
+                return Number(onlyNonExpiredPositions.length + onlyClaimableParlays.length);
             } catch (e) {
                 console.log(e);
                 return null;

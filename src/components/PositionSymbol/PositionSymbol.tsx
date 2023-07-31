@@ -1,5 +1,4 @@
 import Tooltip from 'components/Tooltip';
-import { MAIN_COLORS } from 'constants/ui';
 import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
@@ -23,6 +22,7 @@ type SymbolProps = {
     additionalStyle?: CSSProperties;
     glow?: boolean;
     flexDirection?: string;
+    justifyContent?: string;
     onClick?: () => void;
 };
 
@@ -37,6 +37,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     additionalStyle,
     glow,
     flexDirection,
+    justifyContent,
     onClick,
 }) => {
     const notClickable = !onClick;
@@ -60,7 +61,7 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     );
 
     return (
-        <Wrapper flexDirection={flexDirection}>
+        <Wrapper flexDirection={flexDirection} justifyContent={justifyContent}>
             {tooltip ? <Tooltip overlay={tooltip} component={getSymbol()} /> : getSymbol()}
             {symbolAdditionalText && (
                 <BottomText style={symbolAdditionalText.textStyle} flexDirection={flexDirection} color={symbolColor}>
@@ -74,9 +75,10 @@ const PositionSymbol: React.FC<SymbolProps> = ({
     );
 };
 
-const Wrapper = styled(FlexDivColumn)<{ flexDirection?: string }>`
+const Wrapper = styled(FlexDivColumn)<{ flexDirection?: string; justifyContent?: string }>`
     align-items: center;
     flex-direction: ${(props) => (props.flexDirection ? props.flexDirection : 'row')};
+    ${(props) => (props.justifyContent ? `justify-content: ${props.justifyContent};` : '')};
     font-size: 12px;
 `;
 
@@ -92,23 +94,25 @@ const Symbol = styled(FlexDivCentered)<{
     width: 30px;
     height: 30px;
     border-radius: 60%;
-    color: ${(props) => (props.selected ? MAIN_COLORS.TEXT.BLUE : props.color || MAIN_COLORS.TEXT.WHITE)};
+    color: ${(props) =>
+        props.selected ? props.theme.textColor.quaternary : props.color || props.theme.textColor.primary};
     cursor: ${(props) => (props.disabled || props.notClickable ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? 0.4 : 1)};
     border: ${(props) =>
         `3px solid ${
             props.glow
-                ? props.color || MAIN_COLORS.BORDERS.WHITE
+                ? props.color || props.theme.textColor.secondary
                 : props.selected
-                ? MAIN_COLORS.BORDERS.BLUE
-                : MAIN_COLORS.BORDERS.GRAY
+                ? props.theme.borderColor.quaternary
+                : props.theme.borderColor.primary
         }`};
-    box-shadow: ${(props) => (props.glow ? `0 0 6px 2px ${props.color || MAIN_COLORS.BORDERS.WHITE}` : '')};
+    box-shadow: ${(props) => (props.glow ? `0 0 6px 2px ${props.color || props.theme.borderColor.secondary}` : '')};
     margin: ${(props) => (props.flexDirection === 'column' ? '0 9px' : '0 0')};
     @media (hover: hover) {
         :hover {
-            border-color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
-            color: ${(props) => (props.disabled || props.notClickable ? '' : MAIN_COLORS.BORDERS.BLUE)};
+            border-color: ${(props) =>
+                props.disabled || props.notClickable ? '' : props.theme.borderColor.quaternary};
+            color: ${(props) => (props.disabled || props.notClickable ? '' : props.theme.borderColor.quaternary)};
         }
     }
     @media (max-width: 575px) {
@@ -122,17 +126,17 @@ const BottomText = styled.span<{
 }>`
     margin-top: ${(props) => (props.flexDirection === 'column' ? 2 : 0)}px;
     margin-right: ${(props) => (props.flexDirection === 'column' ? 0 : 10)}px;
-    color: ${(props) => props.color || MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.color || props.theme.textColor.primary};
 `;
 
 const UpperText = styled(FlexDivCentered)`
     position: absolute;
     top: -7px;
     left: 15px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
+    color: ${(props) => props.theme.textColor.primary};
     border-radius: 60%;
     font-weight: 700;
-    background: ${MAIN_COLORS.LIGHT_GRAY};
+    background: ${(props) => props.theme.background.secondary};
     padding: 2px;
     font-size: 11px;
     @media (max-width: 575px) {

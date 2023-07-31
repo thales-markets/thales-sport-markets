@@ -1,18 +1,19 @@
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 
 export const SpaContainer = styled(FlexDivColumn)`
     border-radius: 15px;
     :not(:last-child) {
         margin-right: 25px;
     }
-    background: linear-gradient(180deg, #2b2f4a 0%, rgba(43, 47, 74, 0) 100%);
+    background: linear-gradient(180deg, #2b2f4a 0%, #24273d 100%);
     :hover {
         background: linear-gradient(180deg, #2b2f4a 0%, #333a69 100%);
     }
     cursor: pointer;
     @media (max-width: 767px) {
         width: 100%;
+        align-self: center;
         :not(:last-child) {
             margin-right: 0;
             margin-bottom: 20px;
@@ -22,6 +23,7 @@ export const SpaContainer = styled(FlexDivColumn)`
     a {
         height: 100%;
     }
+    max-width: 400px;
 `;
 
 export const VaultContainer = styled(FlexDivColumn)`
@@ -38,22 +40,21 @@ export const VaultContainer = styled(FlexDivColumn)`
 
 export const VaultTopWrapper = styled(FlexDivColumn)``;
 
-export const VaultBottomWrapper = styled(FlexDivColumn)`
+export const VaultBottomWrapper = styled(FlexDivRowCentered)`
     align-self: center;
     flex: initial;
     margin-top: 10px;
+    width: 100%;
 `;
 
 export const VaultTitle = styled.span`
     font-style: normal;
     font-weight: 600;
-    font-size: 22px;
-    line-height: 25px;
+    font-size: 20px;
+    line-height: 22px;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     width: 100%;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #5f6180;
     text-align: center;
 `;
 
@@ -66,26 +67,25 @@ export const VaultSectionTitle = styled.span`
 `;
 
 export const VaultSectionDescription = styled.span`
-    text-align: justify;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
 `;
 
 export const LoaderContainer = styled(FlexDivCentered)`
     position: relative;
-    min-height: 250px;
+    min-height: 105px;
     width: 100%;
 `;
 
 export const VaultInfoContainer = styled(FlexDivColumn)`
-    align-items: center;
     font-size: 18px;
     span {
         font-size: 20px;
         font-weight: 600;
-        color: #3fd1ff;
+        color: ${(props) => props.theme.textColor.quaternary};
     }
     margin-top: 10px;
+    white-space: nowrap;
 `;
 
 export const VaultInfoLabel = styled.p``;
@@ -111,4 +111,17 @@ export const VaultSectionIcon = styled.i`
     margin-right: 8px;
     top: -2px;
     position: relative;
+`;
+
+export const NewBadge = styled.div`
+    position: relative;
+    background-color: ${(props) => props.theme.button.background.primary};
+    border-radius: 5px;
+    color: ${(props) => props.theme.textColor.primary};
+    display: inline-block;
+    font-size: 12px;
+    line-height: 12px;
+    padding: 4px 5px 3px 5px;
+    margin-left: 5px;
+    top: -12px;
 `;

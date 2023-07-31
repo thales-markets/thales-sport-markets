@@ -112,3 +112,42 @@
 .league--euroleague:before {
     content: '\0064';
 }
+
+.league--portugal:before {
+    content: '\0056';
+}
+
+.league--copa-libertadores:before {
+    content: '\0058';
+}
+
+.league--copa-eredivisie:before {
+    content: '\0067';
+}
+
+.league--iihf:before {
+    content: '\0065';
+}
+
+.league--fifa-world-cup-u20:before {
+    content: '\0069';
+}
+
+.league--t20:before {
+    content: '\005D';
+}
+
+.league--uefa-nations:before {
+    content: '\006A';
+}
+.league--concacaf-nations:before {
+    content: '\006B';
+}
+
+.league--wta:before {
+    content: '\0068';
+}
+
+.league--pga:before {
+    content: '\0069';
+}

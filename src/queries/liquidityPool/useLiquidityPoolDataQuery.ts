@@ -2,11 +2,11 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
 import { bigNumberFormmaterWithDecimals, bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { LiquidityPoolData } from 'types/liquidityPool';
-import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { getDefaultDecimalsForNetwork } from 'utils/network';
 
-const useLiquidityPoolDataQuery = (networkId: NetworkId, options?: UseQueryOptions<LiquidityPoolData | undefined>) => {
+const useLiquidityPoolDataQuery = (networkId: Network, options?: UseQueryOptions<LiquidityPoolData | undefined>) => {
     return useQuery<LiquidityPoolData | undefined>(
         QUERY_KEYS.LiquidityPool.Data(networkId),
         async () => {

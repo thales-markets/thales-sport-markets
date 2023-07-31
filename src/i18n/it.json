@@ -81,7 +81,11 @@
             "user-rejected-tx": "User rejected transaction",
             "enter-address": "Enter address",
             "invalid-address": "Invalid address",
-            "batch-transaction-single-failure": "Una transazione è stata rifiutata o fallita."
+            "batch-transaction-single-failure": "Una transazione è stata rifiutata o fallita.",
+            "enter-percentage": "Enter percentage",
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
+            "single-amm-paused": "AMM In pausa",
+            "invalid-amount-max": "L'importo non può essere superiore a {{max}}"
         },
         "time-remaining": {
             "ended": "ended",
@@ -148,7 +152,9 @@
         "no": "NO",
         "mls-tooltip": "I risultati dei mercati MLS si basano sui risultati della regolamentazione, se dovessero andare agli straordinari il risultato della regolamentazione è quello in cui il mercato deciderà.",
         "fifa-tooltip": "I risultati dei mercati della Coppa del Mondo FIFA si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale si risolverà il mercato.",
-        "tennis-tooltip": "In caso di walkover, la partita sarà considerata annullata. In caso di ritiro/squalifica durante la partita, verrà considerata come una vittoria per il giocatore che avanza al turno successivo"
+        "tennis-tooltip": "In caso di walkover, la partita sarà considerata annullata. In caso di ritiro/squalifica durante la partita, verrà considerata come una vittoria per il giocatore che avanza al turno successivo",
+        "iihf-tooltip": "I risultati dei mercati del campionato mondiale IIHF si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale il mercato si risolverà.",
+        "football-tooltip": "I risultati dei mercati si basano sui risultati della regolamentazione, se dovessero andare oltre il tempo il risultato della regolamentazione è quello in cui si risolverà il mercato."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -215,7 +221,6 @@
                 "hockey": "Hockey",
                 "tennis": "Tennis",
                 "football": "Football",
-                "ufc": "MMA",
                 "baseball": "Baseball",
                 "formula1": "Formula 1",
                 "motogp": "MotoGP",
@@ -223,7 +228,10 @@
                 "motosport": "Motosport",
                 "favourites": "Preferiti",
                 "esports": "Esport",
-                "cricket": "Cricket"
+                "cricket": "Cricket",
+                "boxing": "Boxe",
+                "mma": "MMA",
+                "golf": "Golf"
             },
             "all": "All",
             "datepicker": {
@@ -231,7 +239,8 @@
             },
             "mobile-tags": {
                 "search": "Ricerca"
-            }
+            },
+            "show-active": "Mostra solo gli sport attivi"
         },
         "back-to-markets": "Back to markets",
         "back-to-market": "Back to market",
@@ -262,10 +271,7 @@
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
             "minimal-amount": "Minimal amount is 1",
-            "no-funds": "Please ensure your wallet has enough funds",
-            "min-amount": "L'importo minimo è {{min}}",
-            "max-quote": "La quotazione massima è {{value}}",
-            "min-quote": "La citazione minima è {{value}}"
+            "no-funds": "Please ensure your wallet has enough funds"
         },
         "match-time": "Tempo di partita",
         "race-starts": "La corsa inizia",
@@ -293,12 +299,14 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance"
+                "double-chance": "Double chance",
+                "combined-positions": "Posizioni combinate"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
-                    "points": "points"
+                    "points": "points",
+                    "sets": "imposta"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -318,7 +326,10 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
-                "bonus": "{{bonus}} added bonus on win!"
+                "bonus": "{{bonus}} added bonus on win!",
+                "and": "E",
+                "race-winner": "{{team}} vincerà la gara {{matchResolve}}",
+                "tournament-winner": "{{team}} vincerà il torneo {{matchResolve}}"
             },
             "starts-in": "Inizia tra",
             "period": "Periodo",
@@ -327,7 +338,9 @@
             "quarter": "Trimestre",
             "round": "Girare",
             "half-time": "Metà tempo",
-            "total-markets": "Total markets"
+            "total-markets": "Total markets",
+            "race-winner": "Vincitore",
+            "no-win": "Ora in"
         },
         "market-details": {
             "price": "Price",
@@ -354,32 +367,31 @@
         "parlay": {
             "potential-profit": "Potenziale profitto",
             "skew": "Storto",
-            "buy-amount": "Importo da acquistare",
             "pay-with": "Paga con",
             "total-quote": "Citazione totale",
             "available": "A disposizione",
             "validation": {
                 "title": "Convalida Parlay",
-                "max-markets": "Massimo 4 mercati a Parlay",
                 "min-amount": "L'importo minimo è {{min}}",
                 "amount-exceeded": "L'importo ha superato l'importo disponibile su AMM",
-                "max-quote": "La quotazione massima è {{value}}",
                 "availability": "Bassa disponibilità per posizione sui mercati",
                 "no-funds": "Assicurati che il tuo portafoglio abbia fondi sufficienti",
-                "min-quote": "La citazione minima è {{value}}",
                 "risk-per-comb": "Rischio per combinazione superato",
                 "not-supported": "Errore di convalida non supportato {{error}}",
                 "single-min-amount": "L'importo minimo è {{min}}",
                 "same-team": "La stessa squadra non può essere in un Parlay più di una volta",
                 "team-in-parlay": "{{team}} è già a Parlay. La stessa squadra non può essere aggiunta a un Parlay più di una volta.",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
-                "max-payout": "Il pagamento massimo supportato è {{max}}",
                 "max-teams": "Massimo {{max}} mercati a Parlay",
                 "max-profit": "Il profitto massimo supportato è {{max}}",
-                "no-funds-multi-collateral": "Assicurati che il tuo portafoglio abbia fondi sufficienti ({{percentage}}% in più dell'importo del buy-in)"
+                "no-funds-multi-collateral": "Assicurati che il tuo portafoglio abbia fondi sufficienti ({{percentage}}% in più dell'importo del buy-in)",
+                "max-combined-markets": "Il numero massimo di mercati combinati in Parlay è {{max}}.",
+                "max-number-of-markets-with-combined-markets": "Il numero massimo di mercati in Parlay è {{max}}. Un singolo mercato combinato conta come due mercati regolari.",
+                "amm-contract-paused": "Parlay AMM Pausa",
+                "unique-players": "Impossibile aggiungere lo stesso partecipante due volte in parlay. {{existingParticipant}} è già in Parlay",
+                "same-event-participant": "È supportato un solo partecipante per evento. Impossibile aggiungere {{addedParticipant}} perché {{existingParticipant}} è già in Parlay"
             },
             "empty-title": "Nessuna posizione",
-            "fee": "Tariffa totale",
             "payout": "Totale ricevuto",
             "empty-description": "Aggiungi posizione, scegli un mercato e fai la tua selezione.",
             "parlay-fee": "Tariffa Parlay",
@@ -441,7 +453,8 @@
             }
         },
         "incentivized-markets": "MERCATI INCENTIVATI",
-        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip-tennis": "Il Roland Garros sarà incentivato, dato che il torneo inizierà il 29 maggio. I mercati saranno potenziati con {{rewards}} fino alla fine del torneo il 12 giugno. I premi verranno distribuiti in base al tuo volume guidato attraverso questi mercati. Puoi monitorare l'assegnazione dei tuoi premi sulla nostra <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -513,10 +526,7 @@
         "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
         "finish-messages": {
             "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants.",
-            "not-quilfied-for-rewards": "You are missing {{points}} {{pointsLabel}} to get into the TOP {{numberOfRewards}} and qualify for rewards. Try again and improve your score.",
-            "quilfied-for-rewards": "You are currently in the TOP {{numberOfRewards}} and qualified for rewards. Try again to get a better rank and higher rewards.",
-            "quilfied-for-rewards-first": "You are currently leading the leaderboard! Try again to get a better score and secure your spot."
+            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants."
         },
         "difficulty-label": "Difficulty",
         "difficulty": {
@@ -618,60 +628,11 @@
         "claim-voucher": "Richiedi il buono",
         "left-to-claim": "Lasciato a reclamare",
         "voucher-info": "Ma affinché tu veda donde nasce tutto questo errore di coloro che accusano il piacere e lodano il dolore, aprirò tutta la questione e spiegherò le stesse cose che furono dette da quello scopritore della verità e, per così dire, l'artefice della una vita felice.",
-        "voucher-title": "Richiedi buoni straordinari"
-    },
-    "mint-world-cup-nft": {
-        "second-option": "La seconda opzione per metterti nella lista consentita è completare i seguenti passaggi:",
-        "choose-nft": "Conia il tuo Zebro NFT",
-        "success-mint": "Coniato con successo",
-        "tag-3-friends": "Nello stesso tweet, commenta il tuo indirizzo ETH e tagga 3 amici",
-        "no": "No",
-        "already-minted": "Hai già coniato il tuo NFT",
-        "go-to-twitter": "Vai su Twitter",
-        "not-eligible-text": "Il tuo portafoglio non è ancora idoneo per coniare uno Zebro NFT!",
-        "follow": "Segui Mercati straordinari su Twitter",
-        "are-you-sure": "Sei sicuro di voler coniare questo NFT? Puoi coniare SOLO UN NFT per portafoglio.",
-        "stake-thales": "Palo THALES",
-        "retweet": "Ritwitta questo tweet",
-        "mint-nft-button": "Menta questa Zebra!",
-        "stake-10-thales": "Per poter coniare uno Zebro NFT, devi avere almeno 10 THALES puntati.",
-        "zebro-campaign": "Zebro FIFA",
-        "eligible-text-2": "Conia uno Zebro della tua squadra nazionale preferita e avrai diritto a 50.000 OP e 30.000 premi bonus THALES!",
-        "incentives": "INCENTIVI",
-        "yes-mint": "Sì, NFT nuovo",
-        "get-thales": "Prendi THALES",
-        "minting-is-free": "Il conio è gratuito, puoi coniare solo un NFT per portafoglio. Questo NFT non è trasferibile.",
-        "eligible-text": "Ehi, ora puoi coniare la tua squadra preferita Zebro NFT.",
-        "eligible-text-1": "La collezione Zebro NFT viene utilizzata come voce per la campagna di Overtime FIFA World Cup.",
-        "mint-this-zebro": "Menta questa Zebra!",
-        "leaderboard-title": "Classifica",
-        "leaderboard": {
-            "home-country-multiplier-text": "Se la tua partita di Coppa del Mondo coinvolge la stessa squadra nazionale del tuo Zebro, riceverai un aumento dei premi del +10%.",
-            "four-game-parlay": "+20% se si tratta di un parlay a 4 giochi",
-            "three-game-parlay": "+15% se si tratta di un parlay a 3 giochi",
-            "underdog-multiplier-text": "Se la tua posizione in una partita di Coppa del Mondo ha un prezzo inferiore a 0,3 (le quote sono superiori a 1:3,33), otterrai un aumento dei premi del 10%.",
-            "two-game-parlay": "+10% se si tratta di un parlay a 2 giochi",
-            "parlay-boost": "Spinta Parlay:",
-            "parlay-boost-text": "Se la tua partita della Coppa del Mondo è in un biglietto Parlay, otterrai una spinta di:",
-            "underdog-multiplier": "Moltiplicatore perdente:",
-            "home-country-multiplier": "Moltiplicatore NFT del Paese di origine:",
-            "reward-calculations": "I calcoli delle ricompense verranno calcolati proporzionalmente in base al volume con un aumento del volume massimo del 40% aggiuntivo se vengono soddisfatte le seguenti condizioni:",
-            "nft": "NFT",
-            "country": "Paese",
-            "owner": "Proprietario",
-            "search-placeholder": "CERCA INDIRIZZO PORTAFOGLIO",
-            "rewards": "Ricompense",
-            "volume": "Volume",
-            "base-volume": "Base",
-            "bonus-volume": "Bonus",
-            "player": "Giocatore",
-            "wash-trading": "*La squadra degli straordinari si riserva il diritto di squalificare i commercianti di lavaggio dalla campagna"
-        },
-        "zebro-wct-collection": "La collezione Zebro WC NFT",
-        "zebro-wct-collection-text": "fa parte di una campagna incentivata per rappresentare il tuo paese preferito durante la Coppa del Mondo e avere diritto a una quota di 50.000 token OP e 30.000 token THALES, insieme a moltiplicatori esclusivi per parlay e partite individuali.",
-        "go-to-leaderboard": "Vai alla classifica",
-        "congrats": "Congratulazioni! Hai coniato con successo lo Zebro NFT!",
-        "get-your-nft": "Pagina di menta"
+        "voucher-title": "Richiedi buoni straordinari",
+        "parlay-lp-title": "Piscina di liquidità Parlay",
+        "single-lp-title": "Unico pool di liquidità",
+        "go-to-single-lp": "Vai a LP singolo",
+        "go-to-parlay-lp": "Vai a Parlay LP"
     },
     "referral": {
         "nav-items": {
@@ -710,17 +671,22 @@
         "discount-vault": {
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>",
             "title": "Cassaforte scontata",
-            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>"
+            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p>"
         },
         "degen-discount-vault": {
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato.</p>",
-            "description": "<p>Acquista posizioni a qualsiasi quota disponibile per uno sconto superiore a {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "description": "<p>Acquista posizioni a qualsiasi quota disponibile per uno sconto superiore a {{discount}}.</p>",
             "title": "Degen Discount Vault"
         },
         "safu-discount-vault": {
             "title": "Colonna Sconto Vault",
-            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con qualsiasi sconto.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con qualsiasi sconto.</p>",
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>"
+        },
+        "upsettoor-vault": {
+            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>",
+            "title": "Upsettoor Vault",
+            "description": "<p>Acquista posizioni con quote inferiori a {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p>"
         },
         "tabs": {
             "withdraw": "Ritirare",
@@ -794,22 +760,31 @@
             "name": "Nome"
         },
         "parlay-discount-vault": {
-            "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p><p> Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
+            "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p>",
             "title": "Cassaforte scontata di Parlay",
             "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso per un singolo biglietto parlay per round, diversificando così il rischio in più biglietti parlay che hanno uno sconto maggiore di {{odds}}.</p>"
         },
+        "gamified-staking-message": "<p>Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
         "LP": {
-            "title": "LP"
+            "title": "LP",
+            "single-lp": "LP singolo",
+            "parlay-lp": "Parlay LP"
         },
-        "variables-parlay": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li><li> Durata round: {{roundLength}} giorni</li></ul>"
+        "variables-parlay": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li><li> Durata round: {{roundLength}} giorni</li></ul>",
+        "single-lp": {
+            "title": "LP singolo"
+        },
+        "parlay-lp": {
+            "title": "Parlay LP"
+        }
     },
     "parlay-leaderboard": {
-        "title": "Classifica degli incentivi Parlay",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
-        "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
+        "title": "Parlay Incentives Leaderboard",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays with minimum 3 games on a <bold>bi-weekly basis</bold>. The tickets will be ranked based on a total quote, followed by the number of positions on the parlays.",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 10 parlays every 2 weeks</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
-        "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
+        "info": "If multiple parlays have the same total quote and the number of positions the following will be used as tie-breakers in respective order:",
         "info1": "- The amount paid",
         "info2": "- Actual total quote (gotten by multiplying positions individually)",
         "info3": "*1 winning parlay eligible per wallet",
@@ -817,7 +792,6 @@
             "paid": "Pagato",
             "won": "Ha vinto",
             "quote": "Citazione",
-            "player": "Giocatore",
             "total-quote": "Citazione totale",
             "title-leaderboard": "Classifica",
             "total-amount": "Importo totale",
@@ -864,131 +838,13 @@
             "bridge": "Bridge to optimism  ",
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
-            "coppied": "Coppied!",
             "address": "Your address QR code",
             "copied": "Copiato!"
         }
     },
-    "march-madness": {
-        "tabs": {
-            "home": "Casa",
-            "leaderboard": "Classifica",
-            "brackets": "Parentesi"
-        },
-        "back-to-markets": "Torniamo ai mercati",
-        "brackets": {
-            "team-2": "Squadra 2",
-            "team-1": "Squadra 1",
-            "submit-text": "Staffa di finitura",
-            "submit-modify": "Aggiorna staffa",
-            "submit": "Staffa di finitura",
-            "modal": {
-                "button-minting": "Conio...",
-                "button-mint": "Come NFT",
-                "finish-text-1": "Ben fatto!",
-                "update-text": "Hai già coniato il tuo NFT!",
-                "button-updating": "In aggiornamento...",
-                "finish-text-2": "Ora puoi coniare il tuo NFT!",
-                "button-update": "Aggiorna staffa"
-            },
-            "stats": {
-                "rank": "Rango",
-                "status": "Stato",
-                "incomplete": "Incompleto",
-                "my-stats": "Le mie statistiche",
-                "my-total-score": "Il mio punteggio totale",
-                "complete": "Completare",
-                "place": "Posto",
-                "bonus": "Bonus",
-                "points": "Punti",
-                "rank-volume": "Classifica per volume",
-                "rank-games": "Classifica per giochi indovinati"
-            },
-            "round-4": "Finale 4",
-            "round-5": "Finale",
-            "round-2": "Dolce 16",
-            "round-1": "2° giro",
-            "round-3": "Élite 8",
-            "round-0": "1° giro",
-            "modal-mint": {
-                "button-minting": "Conio...",
-                "finish-text-1": "Ben fatto!",
-                "button-updating": "In aggiornamento...",
-                "finish-text-2": "Ora puoi coniare il tuo NFT!",
-                "button-update": "Aggiorna staffa",
-                "update-text": "Hai già coniato il tuo NFT!",
-                "button-mint": "Come NFT",
-                "finish-text-2-success": "Hai appena coniato la tua parentesi March Madness!",
-                "finish-text-3-success": "Vai ai <marketsLink>mercati NCAAB</marketsLink> e inizia a guadagnare premi!",
-                "update-text-2": "Abbiamo salvato la previsione della tua parentesi, per favore aggiorna la tua parentesi ora!",
-                "finish-info": "*Il tabellone March Madness NFT è un NFT straordinario che consente ai titolari di partecipare alla campagna Overtime March Madness creando il proprio girone del torneo di previsione.",
-                "update-text-1": "Ben fatto!",
-                "finish-text-1-success": "Congratulazioni!",
-                "update-text-2-success": "La tua fascia NFT di March Madness è stata aggiornata!"
-            },
-            "modal-share": {
-                "header": "Le mie ultime 4 scelte",
-                "user-selection": "Ho scelto il {{team}} per tagliare le reti a Houston!",
-                "share": "Condividere"
-            },
-            "share": "Condividi questa parentesi"
-        },
-        "regions": {
-            "south": "Sud",
-            "west": "ovest",
-            "east": "Est",
-            "midwest": "Midwest"
-        },
-        "home": {
-            "text-2e": "Risultato del round di 4 previsto correttamente: bonus del 10%.",
-            "time-info": "Hai {{days}} GIORNI RIMASTI PER fare una previsione",
-            "text-2": "Un modo alternativo per calcolare il bonus sarebbe quello di basarlo sul round, poiché più avanti nella fase di eliminazione di un gioco è più difficile è prevedere il risultato (poiché devi indovinare correttamente anche tutti i giochi precedenti), quindi forse :",
-            "text-2b": "Esito dei sedicesimi di finale previsto correttamente: bonus del 2%.",
-            "text-2d": "Esito degli ottavi di finale previsto correttamente: bonus del 7%.",
-            "text-2f": "Risultato finale del gioco previsto correttamente: bonus del 20%.",
-            "text-2a": "Risultato del round di 64 previsto correttamente: 1% di bonus",
-            "text-2g": "Bonus massimo qui: 32*1+16*2+8*4+4*7+2*10+20=164%",
-            "text-2c": "Esito degli ottavi di finale previsto correttamente: bonus del 4%.",
-            "title": "Benvenuti al torneo March Madness",
-            "button-create": "Crea parentesi",
-            "button-connect": "Collega il portafoglio",
-            "text-1": "March Madness è un evento NCAAB in cui 68 squadre competono in un girone eliminatorio per il campionato. L'evento inizia il 14 marzo in cui 8 squadre competono per gli ultimi 4 posti nei 64 gironi della fase a eliminazione diretta. Il conio inizia il 12 marzo e dura fino al 16 marzo, quando inizia l'evento principale.",
-            "text-3b": "Quattro finali - 10%",
-            "text-3c": "Elite Otto - 7%",
-            "text-3e": "Secondo turno - 2%",
-            "text-3f": "Primo round - 1%",
-            "text-3a": "Campionato - 20%",
-            "text-4": "Il <bold>secondo pool</bold> sarà diviso tra i detentori della fascia più accurata con un benchmark di volume di 10 sUSD sui giochi March Madness. I titolari che soddisfano il requisito di volume possono tenere traccia della loro posizione nella classifica della fascia migliore in cui i vincitori si divideranno un montepremi di 3.000 OP.",
-            "text-3d": "Dolce 16 - 4%",
-            "text-5": "Maggiori dettagli nel nostro <mediumLink>Post del blog medio</mediumLink>.",
-            "text-3": "Per il <bold>Primo pool</bold>, 10.000 OP saranno divisi tra tutti i volumi guidati attraverso i giochi March Madness, inclusi tutti i tipi di mercato e parlay con almeno un gioco NCAAB. I possessori della fascia March Madness NFT possono beneficiare di un aumento del trading. Ogni gioco corretto è idoneo per un potenziamento a più livelli, con un massimo del 164%."
-        },
-        "mobile-message": "La pagina è disponibile solo su schermi più grandi. Si prega di utilizzare la versione desktop!",
-        "leaderboard": {
-            "base-volume": "Base",
-            "owner": "Proprietario",
-            "volume": "Volume",
-            "player": "Giocatore",
-            "address": "Indirizzo",
-            "search-placeholder": "CERCA INDIRIZZO PORTAFOGLIO",
-            "rank": "Rango",
-            "bonus-volume": "Bonus",
-            "no-data": "Nessun dato attualmente disponibile",
-            "rewards": "Premi",
-            "guessed-games": "Giochi indovinati",
-            "tooltip-bonus-volume-table": "Volume del bonus calcolato in base alle selezioni del tuo girone",
-            "tooltip-base-volume-table": "Volume guidato dalle partite di basket NCAA",
-            "tooltip-correct-correct-table": "Numero di partite indovinate correttamente nel tuo girone",
-            "tooltip-rewards-correct-table": "3.000 OP (10.000 THALES su Arbitrum) saranno divisi tra i primi 10",
-            "tooltip-rewards-volume-table": "10.000 OP (30.000 THALES su Arbitrum) saranno divisi in base al volume pro-rata",
-            "my-rewards": "Le mie ricompense",
-            "by-guessed-correctly": "Indovinato correttamente"
-        },
-        "test-info": "Ora è aperta la fase di test con le squadre campione, il 12 marzo si aprono le selezioni 2023!"
-    },
     "liquidity-pool": {
         "title": "Provide Liquidity",
-        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
+        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you.  The minimum amount to be withdrawn is set to 10%</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
@@ -1003,13 +859,16 @@
         "max-allowance-label": "Max allowance",
         "your-thales-staked-label": "Your THALES staked",
         "allowance-multiplier-label": "Allowance multiplier",
-        "withdrawal-request-label": "Withdrawal request: {{amount}}",
+        "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
+        "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
         "deposit-amount-placeholder": "Enter amount",
         "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "Nothing to withdraw.",
-        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-message": "You can request a full/partial withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "full-withdrawal-requested-message": "You requested to withdraw a full balance of <bold>{{amount}}</bold><tooltip />.",
+        "partial-withdrawal-requested-message": "You requested to withdraw {{percentage}} of the balance (<bold>{{amount}}</bold><tooltip />).",
+        "withdrawal-requested-message": "Your funds will be sent to you automatically at the end of the round when the round closes.",
         "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
         "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
         "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
@@ -1018,7 +877,10 @@
         "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
-        "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
+        "full-withdrawal-label": "Full withdrawal",
+        "partial-withdrawal-label": "Partial withdrawal",
+        "percentage-placeholder": "Enter percentage",
+        "withdrawal-amount-label": "Withdrawal amount: <bold>{{amount}}</bold>",
         "tabs": {
             "deposit": "Deposit",
             "withdraw": "Withdraw"
@@ -1060,6 +922,15 @@
                 "withdrawalRequest": "Withdrawal Request",
                 "claim": "Withdrawal Claim"
             }
-        }
+        },
+        "return": {
+            "title": "Ritorno",
+            "apy": "APY previsto basato su APR",
+            "apr": "APR previsto basato su ARR",
+            "arr": "Rendimento tondo medio (ARR)"
+        },
+        "parlay-lp": "Parlay LP",
+        "description-parlay": "<h1>Descrizione</h1><p> La fornitura di liquidità prevede che gli utenti depositino collaterale in stablecoin in un pool di liquidità basato su contratto intelligente per il trading straordinario. La garanzia depositata viene utilizzata per facilitare il trading su Parlay AMM di Overtime.</p><p> Per essere in grado di fornire liquidità dovrai fare staking su THALES. Non c&#39;è un limite massimo per portafoglio e puoi depositare un massimo di 1 {{currency}} per {{thalesStakedAmount}} THALES puntato fino a riempire il pool di liquidità.</p><p> Alla fine di ogni round, la quota proporzionale del PnL di quel round verrà aggiunta al tuo saldo depositato.</p><p> Se desideri prelevare, puoi segnalarlo in qualsiasi momento durante il round in corso, e alla fine del round ti viene inviato l&#39;importo che hai segnalato per il prelievo (comprensivo del PnL di quel round). L&#39;importo minimo da prelevare è fissato al 10%</p><p> Se decidi di annullare lo staking di THALES mentre fornisci liquidità, tieni presente che dovrai prima segnalare un prelievo dal pool di liquidità.</p><p> Fornire liquidità ti espone a vari rischi, tra cui potenziali perdite dovute agli utenti che vincono nel trading e rischi per la sicurezza dei contratti intelligenti. Assicurati di aver compreso questi rischi prima di depositare.</p><p><tipLink> SUGGERIMENTO-142</tipLink> ha maggiori dettagli sull&#39;implementazione tecnica della fornitura di liquidità per gli straordinari.</p>",
+        "single-lp": "LP singolo"
     }
 }

@@ -1,4 +1,4 @@
-import { TAGS_FLAGS, TAGS_LIST } from 'constants/tags';
+import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_LIST } from 'constants/tags';
 import React, { useState } from 'react';
 import Flag from 'react-flagpack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,11 +8,14 @@ import { SportMarkets, TagInfo } from 'types/markets';
 import MarketListCard from '../MarketListCard';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import Tooltip from 'components/Tooltip';
 import { Trans, useTranslation } from 'react-i18next';
-import { INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
-import { NetworkIdByName } from 'utils/network';
+import { Network } from 'enums/network';
+import { TAGS_FLAGS } from 'enums/tags';
+import { orderBy } from 'lodash';
 
 type MarketsList = {
     markets: SportMarkets;
@@ -29,6 +32,8 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     const networkId = useSelector(getNetworkId);
     const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
     const isFavourite = favouriteLeague && favouriteLeague.favourite;
+
+    const sortedMarkets = sortWinnerMarkets(markets, league);
 
     return (
         <>
@@ -64,7 +69,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                     }}
                                     values={{
                                         rewards:
-                                            networkId !== NetworkIdByName.ArbitrumOne
+                                            networkId !== Network.ArbitrumOne
                                                 ? INCENTIVIZED_LEAGUE.opRewards
                                                 : INCENTIVIZED_LEAGUE.thalesRewards,
                                     }}
@@ -73,7 +78,35 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                             component={
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== NetworkIdByName.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                </IncentivizedLeague>
+                            }
+                        ></Tooltip>
+                    )}
+                {INCENTIVIZED_GRAND_SLAM.ids.includes(Number(league)) &&
+                    new Date() > INCENTIVIZED_GRAND_SLAM.startDate &&
+                    new Date() < INCENTIVIZED_GRAND_SLAM.endDate && (
+                        <Tooltip
+                            overlay={
+                                <Trans
+                                    i18nKey="markets.incentivized-tooltip-tennis"
+                                    components={{
+                                        detailsLink: (
+                                            <a href={INCENTIVIZED_GRAND_SLAM.link} target="_blank" rel="noreferrer" />
+                                        ),
+                                    }}
+                                    values={{
+                                        rewards:
+                                            networkId !== Network.ArbitrumOne
+                                                ? INCENTIVIZED_GRAND_SLAM.opRewards
+                                                : INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                    }}
+                                />
+                            }
+                            component={
+                                <IncentivizedLeague>
+                                    <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
+                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
@@ -85,9 +118,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                 let newFavouriteFlag;
                                 favourite.favourite ? (newFavouriteFlag = false) : (newFavouriteFlag = true);
                                 return {
-                                    id: favourite.id,
-                                    label: favourite.label,
-                                    logo: favourite.logo,
+                                    ...favourite,
                                     favourite: newFavouriteFlag,
                                 };
                             }
@@ -99,7 +130,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                 />
             </LeagueCard>
             <GamesContainer hidden={hideLeague}>
-                {markets.map((market: any, index: number) => (
+                {sortedMarkets.map((market: any, index: number) => (
                     <MarketListCard language={language} market={market} key={index + 'list'} />
                 ))}
             </GamesContainer>
@@ -139,9 +170,22 @@ const LeagueFlag = (tagId: number | any) => {
             return <Flag size="l" code="JP" />;
         case TAGS_FLAGS.IPL:
             return <Flag size="l" code="IN" />;
+        case TAGS_FLAGS.EREDIVISIE:
+            return <Flag size="l" code="NL" />;
+        case TAGS_FLAGS.PRIMEIRA_LIGA:
+            return <Flag size="l" code="PT" />;
+        case TAGS_FLAGS.T20_BLAST:
+            return <Flag size="l" code="GB-UKM" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
     }
+};
+
+const sortWinnerMarkets = (markets: SportMarkets, leagueId: number) => {
+    if (leagueId == GOLF_TOURNAMENT_WINNER_TAG || MOTOSPORT_TAGS.includes(leagueId)) {
+        return orderBy(markets, ['maturityDate', 'homeOdds'], ['asc', 'desc']);
+    }
+    return markets;
 };
 
 const LeagueCard = styled.div`
@@ -217,7 +261,7 @@ const StarIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &.selected,
     &:hover {
-        color: #fac439;
+        color: ${(props) => props.theme.button.textColor.tertiary};
     }
 `;
 

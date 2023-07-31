@@ -1,4 +1,4 @@
-import { Tooltip, withStyles } from '@material-ui/core';
+import { Slider } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -50,6 +50,25 @@ export const ContentContainer = styled(FlexDivColumn)`
     }
 `;
 
+export const MainContentContainer = styled(ContentContainer)`
+    padding: 10px 10px 10px 10px;
+    :first-child {
+        padding-right: 0;
+    }
+    :last-child {
+        padding-left: 0;
+    }
+    @media (max-width: 767px) {
+        padding: 10px 5px 10px 5px;
+        :first-child {
+            padding-right: 5px;
+        }
+        :last-child {
+            padding-left: 5px;
+        }
+    }
+`;
+
 export const MainContainer = styled(Container)`
     width: 100%;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
@@ -65,7 +84,7 @@ export const RoundEndContainer = styled(FlexDivColumn)`
     span {
         font-size: 30px;
         font-weight: 600;
-        color: #3fd1ff;
+        color: ${(props) => props.theme.textColor.quaternary};
         line-height: 34px;
     }
     @media (max-width: 1199px) {
@@ -83,7 +102,7 @@ export const RoundEndLabel = styled.p``;
 export const RoundEnd = styled.p`
     font-weight: 600;
     font-size: 25px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
     line-height: 25px;
 `;
 
@@ -97,7 +116,7 @@ export const RoundInfoLabel = styled.p``;
 export const RoundInfo = styled.p`
     font-size: 20px;
     font-weight: 600;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
     line-height: 20px;
 `;
 
@@ -159,7 +178,10 @@ export const ContentInfo = styled.p`
 `;
 
 export const WarningContentInfo = styled(ContentInfo)`
-    color: #ffcc00;
+    color: ${(props) => props.theme.warning.textColor.primary};
+    i {
+        color: ${(props) => props.theme.warning.textColor.primary};
+    }
 `;
 
 export const BoldContent = styled.span`
@@ -190,7 +212,7 @@ export const LiquidityPoolFilledGraphicContainer = styled(FlexDivStart)`
     position: relative;
     width: 100%;
     height: 14px;
-    background: #3b4472;
+    background: ${(props) => props.theme.background.tertiary};
     border-radius: 9px;
     margin-top: 10px;
 `;
@@ -207,32 +229,14 @@ export const LiquidityPoolFilledGraphicPercentage = styled(FlexDivStart)<{ width
     border-radius: 9px;
 `;
 
-export const SubmitButton = styled.button`
-    background: #36e5d0;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 20px;
-    color: #1a1c2b;
-    width: 100%;
-    border: none;
-    padding: 3px;
-    cursor: pointer;
-    text-transform: uppercase;
-    &:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-`;
-
 export const ExternalButton = styled.a`
-    background: #64d9fe;
+    background: ${(props) => props.theme.button.background.quaternary};
     margin-top: 5px;
     border-radius: 5px;
     font-size: 16px;
     font-weight: 700;
     line-height: 20px;
-    color: #1a1c2b;
+    color: ${(props) => props.theme.button.textColor.primary};
     width: 100%;
     border: none;
     padding: 3px;
@@ -242,61 +246,9 @@ export const ExternalButton = styled.a`
     height: 26px;
 `;
 
-export const CloseRoundButton = styled(SubmitButton)`
-    margin: 0;
-    width: auto;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 14px;
-    top: -3px;
-    position: relative;
-    background: #64d9fe;
-`;
-
 export const ButtonContainer = styled(FlexDivColumnCentered)`
     width: 100%;
 `;
-
-export const InputContainer = styled(FlexDivColumnCentered)`
-    margin-bottom: 5px;
-    width: 100%;
-    div {
-        margin-bottom: 0px;
-        width: 100%;
-    }
-    input {
-        background: ${(props) => props.theme.input.background.primary};
-        border-radius: 5px;
-        border: 2px solid ${(props) => props.theme.input.background.primary};
-        color: ${(props) => props.theme.input.textColor.primary};
-        width: 100%;
-        height: 26px;
-        padding: 12px 50px 10px 10px;
-        font-size: 14px;
-        outline: none;
-        &::placeholder {
-            color: ${(props) => props.theme.textColor.secondary};
-        }
-        &:focus {
-            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
-        }
-    }
-    .currency-label {
-        padding: 1px 10px 10px 0;
-        font-size: 14px;
-    }
-`;
-
-export const ValidationTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        width: '100%',
-        margin: '1px',
-        backgroundColor: '#FDB7B7',
-        color: '#F30101',
-        fontSize: '12px',
-    },
-}))(Tooltip);
 
 export const LoaderContainer = styled(FlexDivCentered)`
     position: relative;
@@ -332,6 +284,16 @@ export const LiquidityPoolInfoLabel = styled.span`
     width: 122px;
 `;
 
+export const LiquidityPoolReturnlabel = styled(LiquidityPoolInfoLabel)`
+    width: initial;
+`;
+
+export const LiquidityPoolReturnInfo = styled(LiquidityPoolReturnlabel)`
+    font-weight: 600;
+    color: ${(props) => props.theme.status.win};
+    font-size: 16px;
+`;
+
 export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: string; widthPercentage: number }>`
     width: ${(props) => 200 * props.widthPercentage}px;
     height: 14px;
@@ -363,9 +325,9 @@ export const GetStakeThalesIcon = styled.i`
 `;
 
 export const TextLink = styled.a`
-    color: #91bced;
+    color: ${(props) => props.theme.link.textColor.primary};
     &:hover {
-        color: #00f9ff;
+        text-decoration: underline;
     }
 `;
 
@@ -375,4 +337,104 @@ export const TipLink: React.FC<{ href: string }> = ({ children, href }) => {
             {children}
         </TextLink>
     );
+};
+
+export const RadioButtonContainer = styled(FlexDivColumnCentered)`
+    align-items: center;
+    label {
+        padding-left: 26px;
+        font-size: 16px;
+        line-height: 20px;
+        min-height: 24px;
+        text-transform: uppercase;
+        margin-bottom: 0px;
+        :first-child {
+            margin-bottom: 4px;
+        }
+    }
+    .checkmark {
+        height: 18px;
+        width: 18px;
+        border-width: 3px;
+        :after {
+            left: 2px;
+            top: 2px;
+            width: 8px;
+            height: 8px;
+        }
+    }
+`;
+
+export const SliderContainer = styled.div`
+    position: relative;
+    width: 100%;
+    padding: 0 5px;
+    margin-bottom: 10px;
+`;
+
+export const StyledSlider = styled((props) => (
+    <Slider
+        classes={{ root: props.className, thumb: props.className, track: props.className, rail: props.className }}
+        {...props}
+    />
+))`
+    &.MuiSlider-root {
+        color: ${(props) => props.theme.status.win};
+        padding: 6px 0 10px 0;
+
+        &.Mui-disabled {
+            color: ${(props) => props.theme.status.win};
+            opacity: 0.5;
+        }
+    }
+
+    &.MuiSlider-thumb {
+        width: 14px;
+        height: 14px;
+        margin-top: -2px;
+        background: ${(props) => props.theme.textColor.primary};
+        boxShadow: 0px 1px 4px rgba(202, 202, 241, 0.5),
+        &:focus, &:hover: {
+            boxShadow: 0px 1px 4px rgba(202, 202, 241, 0.5),
+        },
+
+        &:focus,
+        &:hover {
+            box-shadow: none;
+        }
+
+        &.Mui-disabled {
+            width: 14px;
+            height: 14px;
+            margin-top: -2px;
+            margin-left: -6px;
+            box-shadow: none;
+            outline: 0;
+        }
+    }
+
+    &.MuiSlider-track {
+        height: 10px;
+        border-radius: 10px;
+    }
+
+    &.MuiSlider-rail {
+        height: 10px;
+        border-radius: 10px;
+    }
+`;
+
+export const SliderRange = styled.div`
+    font-size: 13px;
+    line-height: 13px;
+    letter-spacing: 0.4px;
+    color: ${(props) => props.theme.status.win};
+    &.disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+`;
+
+export const defaultButtonProps = {
+    width: '100%',
 };

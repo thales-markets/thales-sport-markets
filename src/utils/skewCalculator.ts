@@ -4,7 +4,7 @@
  * @param {number} basePrice - price of 1 token for selected position without skew impact
  * @return - net price impact on total liquidity level (difference between price with max avg skew and base price)
  */
-export const netPriceImpactAtMaxBuyVolume = (maxsUSDToSpend: number, liquidity: number, basePrice: number) =>
+const netPriceImpactAtMaxBuyVolume = (maxsUSDToSpend: number, liquidity: number, basePrice: number) =>
     maxsUSDToSpend / liquidity - basePrice;
 
 /**
@@ -13,11 +13,8 @@ export const netPriceImpactAtMaxBuyVolume = (maxsUSDToSpend: number, liquidity: 
  * @param {number} netPriceImpactAtMaxBuyVolume - net price impact on total liquidity level
  * @return - net price impact for amount user wants to spend on selected position
  */
-export const netPriceImpactForXsUSD = (
-    usdToSpend: number,
-    maxsUSDToSpend: number,
-    netPriceImpactAtMaxBuyVolume: number
-) => (usdToSpend / maxsUSDToSpend) * netPriceImpactAtMaxBuyVolume;
+const netPriceImpactForXsUSD = (usdToSpend: number, maxsUSDToSpend: number, netPriceImpactAtMaxBuyVolume: number) =>
+    (usdToSpend / maxsUSDToSpend) * netPriceImpactAtMaxBuyVolume;
 
 /**
  * @param {number} usdToSpend - amount of sUSD user wants to spend on buying selected position
@@ -25,7 +22,7 @@ export const netPriceImpactForXsUSD = (
  * @param {number} netPriceImpactForXsUSD - net price impact for amount user wants to spend on selected position
  * @return - amount of positional tokens to be received for amount of sUSD user wants to spend, per price with calculated price impact
  */
-export const amountOfOptionsForXsUSD = (usdToSpend: number, basePrice: number, netPriceImpactForXsUSD: number) =>
+const amountOfOptionsForXsUSD = (usdToSpend: number, basePrice: number, netPriceImpactForXsUSD: number) =>
     usdToSpend / (basePrice + netPriceImpactForXsUSD);
 
 /**
@@ -35,7 +32,7 @@ export const amountOfOptionsForXsUSD = (usdToSpend: number, basePrice: number, n
  * @param {number} liquidity - number of tokens available for position
  * @return - amount of positional tokens to be received for amount of sUSD user wants to spend, when AMM balance of token is 0
  */
-export const calculateAmountOfTokensForXsUSD = (
+const calculateAmountOfTokensForXsUSD = (
     usdToSpend: number,
     basePrice: number,
     maxsUSDToSpend: number,
@@ -54,7 +51,7 @@ export const calculateAmountOfTokensForXsUSD = (
  * @param {number} ammBalanceOfToken - number of tokens available for position not impacted by skew
  * @return - amount of positional tokens to be received for amount of sUSD user wants to spend, when AMM balance of token is greater than 0
  */
-export const calculateAmountOfTokensForXsUSDOnOppositeSide = (
+const calculateAmountOfTokensForXsUSDOnOppositeSide = (
     usdToSpend: number,
     basePrice: number,
     maxsUSDToSpend: number,

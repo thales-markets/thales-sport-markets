@@ -1,4 +1,4 @@
-export const sportsVaultContract = {
+const sportsVaultContract = {
     abi: [
         {
             anonymous: false,

@@ -5,31 +5,33 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
-import { getNetworkId, updateNetworkSettings, updateWallet, getIsWalletConnected } from 'redux/modules/wallet';
+import {
+    getNetworkId,
+    updateNetworkSettings,
+    switchToNetworkId,
+    updateWallet,
+    getSwitchToNetworkId,
+} from 'redux/modules/wallet';
 import queryConnector from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import networkConnector from 'utils/networkConnector';
-import { hasEthereumInjected, isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
+import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import ROUTES from 'constants/routes';
 import Theme from 'layouts/Theme';
 import DappLayout from 'layouts/DappLayout';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { useAccount, useProvider, useSigner, useClient, useDisconnect } from 'wagmi';
+import { useAccount, useProvider, useSigner, useDisconnect, useNetwork, mainnet } from 'wagmi';
 import LandingPageLayout from 'layouts/LandingPageLayout';
-import { ethers } from 'ethers';
 import BannerCarousel from 'components/BannerCarousel';
 import { isMobile } from 'utils/device';
 import Profile from 'pages/Profile';
 import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
-import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import MarchMadness from 'pages/MarchMadness';
-import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
+import { buildHref } from 'utils/routes';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
-const Rewards = lazy(() => import('pages/Rewards'));
 const Quiz = lazy(() => import('pages/Quiz'));
 const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 const Vaults = lazy(() => import('pages/Vaults'));
@@ -41,13 +43,13 @@ const App = () => {
     const dispatch = useDispatch();
     const { trackPageView, trackEvent } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
-    const isWalletConnected = useSelector((state) => getIsWalletConnected(state));
+    const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
 
-    const provider = useProvider(!hasEthereumInjected() && { chainId: networkId }); // for incognito mode set chainId from dApp
     const { address } = useAccount();
+    const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
     const { data: signer } = useSigner();
-    const client = useClient();
     const { disconnect } = useDisconnect();
+    const { chain } = useNetwork();
 
     queryConnector.setQueryClient();
 
@@ -88,51 +90,25 @@ const App = () => {
 
     useEffect(() => {
         const init = async () => {
-            let providerNetworkId = address && (await provider.getNetwork()).chainId;
-            let mmChainId = undefined;
-
-            if (!providerNetworkId) {
-                // can't use wagmi when wallet is not connected
-                if (hasEthereumInjected()) {
-                    mmChainId = parseInt(await window.ethereum.request({ method: 'eth_chainId' }), 16);
-                    if (isNetworkSupported(mmChainId)) {
-                        providerNetworkId = mmChainId;
-                    } else {
-                        providerNetworkId = DEFAULT_NETWORK_ID;
-                        disconnect();
-                    }
-                } else {
-                    // without MM, for incognito mode
-                    providerNetworkId = networkId;
-                }
-            }
             try {
-                // when switching network will throw Error: underlying network changed and then ignore network update
-                signer && signer.provider && (await signer.provider.getNetwork()).chainId;
-
-                // can't use wagmi provider when wallet exists in browser but locked, then use MM network if supported
-                const selectedProvider =
-                    !address && hasEthereumInjected() && isNetworkSupported(mmChainId)
-                        ? new ethers.providers.Web3Provider(window.ethereum, 'any')
-                        : provider;
+                const chainIdFromProvider = (await provider.getNetwork()).chainId;
+                const providerNetworkId = !!address ? chainIdFromProvider : switchedToNetworkId;
 
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
-                    provider: selectedProvider,
+                    provider,
                     signer,
                 });
 
                 dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
                 dispatch(setAppReady());
             } catch (e) {
-                if (!e.toString().includes('Error: underlying network changed')) {
-                    dispatch(setAppReady());
-                    console.log(e);
-                }
+                dispatch(setAppReady());
+                console.log(e);
             }
         };
         init();
-    }, [dispatch, provider, signer, networkId, disconnect, address]);
+    }, [dispatch, provider, signer, switchedToNetworkId, address]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
@@ -161,30 +137,24 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        const autoConnect = async () => {
-            // TD-1083: There is a known issue with MetaMask extension, where a "disconnect" event is emitted
-            // when you switch from MetaMask's default networks to custom networks.
-            await client.autoConnect();
-        };
-
         if (window.ethereum) {
-            window.ethereum.on('chainChanged', (chainIdHex) => {
-                const chainId = parseInt(chainIdHex, 16);
-                if (!address) {
-                    // when wallet exists in browser but locked and changing network from MM update networkId manually
-                    const supportedNetworkId = isNetworkSupported(chainId) ? chainId : DEFAULT_NETWORK_ID;
-                    dispatch(updateNetworkSettings({ networkId: supportedNetworkId }));
-                }
-                if (isNetworkSupported(chainId)) {
-                    if (window.ethereum.isMetaMask && !isWalletConnected) {
-                        autoConnect();
-                    }
-                } else {
-                    disconnect();
+            window.ethereum.on('chainChanged', (chainIdParam) => {
+                const chainId = Number.isInteger(chainIdParam) ? chainIdParam : parseInt(chainIdParam, 16);
+
+                if (!address && isNetworkSupported(chainId)) {
+                    // when wallet disconnected reflect network change from browser wallet to dApp
+                    dispatch(switchToNetworkId({ networkId: chainId }));
                 }
             });
         }
-    }, [client, isWalletConnected, dispatch, disconnect, provider, signer, address]);
+    }, [dispatch, address]);
+
+    useEffect(() => {
+        // only Wizard page requires mainnet because of Bridge functionality
+        if (chain?.unsupported && !(chain?.id === mainnet.id && location.pathname === buildHref(ROUTES.Wizard))) {
+            disconnect();
+        }
+    }, [disconnect, chain]);
 
     useEffect(() => {
         trackPageView();
@@ -215,13 +185,6 @@ const App = () => {
                                 <Route exact path={ROUTES.Leaderboard}>
                                     <DappLayout>
                                         <ParlayLeaderboard />
-                                    </DappLayout>
-                                </Route>
-                            )}
-                            {isRouteAvailableForNetwork(ROUTES.Rewards, networkId) && (
-                                <Route exact path={ROUTES.Rewards}>
-                                    <DappLayout>
-                                        <Rewards />
                                     </DappLayout>
                                 </Route>
                             )}
@@ -275,13 +238,6 @@ const App = () => {
                                 <Route exact path={ROUTES.QuizLeaderboard}>
                                     <DappLayout>
                                         <QuizLeaderboard />
-                                    </DappLayout>
-                                </Route>
-                            )}
-                            {isMarchMadnessAvailableForNetworkId(networkId) && (
-                                <Route exact path={ROUTES.MarchMadness}>
-                                    <DappLayout>
-                                        <MarchMadness />
                                     </DappLayout>
                                 </Route>
                             )}

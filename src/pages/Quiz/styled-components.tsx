@@ -1,4 +1,4 @@
-import { TablePagination, Tooltip, withStyles } from '@material-ui/core';
+import { TablePagination } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -88,7 +88,7 @@ export const LeaderboardTitleContainer = styled(FlexDivStart)`
     justify-content: center;
 `;
 
-export const Description = styled.p`
+const Description = styled.p`
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -109,9 +109,9 @@ export const Copy = styled.div`
     }
     a {
         cursor: pointer;
-        color: #91bced;
-        &:hover {
-            color: #00f9ff;
+        color: ${(props) => props.theme.link.textColor.primary};
+        :hover {
+            text-decoration: underline;
         }
     }
 `;
@@ -125,7 +125,7 @@ export const TimeRemainingGraphicContainer = styled(FlexDivStart)`
     position: relative;
     width: 565px;
     height: 14px;
-    background: #303656;
+    background:  ${(props) => props.theme.background.secondary}
     border-radius: 15px;
     margin-bottom: 10px;
     @media (max-width: 767px) {
@@ -199,28 +199,6 @@ export const FinishedInfoMessage = styled(Description)`
     line-height: 22px;
 `;
 
-export const SubmitButton = styled.button<{ isNavigation?: boolean }>`
-    background: ${(props) =>
-        props.isNavigation
-            ? 'linear-gradient(88.84deg, #5fc694 19.98%, #1ca6b9 117.56%)'
-            : 'linear-gradient(88.84deg, #2FC9DD 19.98%, #1CA6B9 117.56%);'};
-    border-radius: 8px;
-    margin: 20px 20px;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 23px;
-    color: #1a1c2b;
-    width: 252px;
-    border: none;
-    padding: 7px;
-    cursor: pointer;
-    text-transform: uppercase;
-    &:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-`;
-
 export const ButtonContainer = styled(FlexDivCentered)<{ mobileDirection?: string }>`
     @media (max-width: 675px) {
         flex-direction: ${(props) => props.mobileDirection || 'column'};
@@ -241,33 +219,6 @@ export const InputContainer = styled(FlexDivColumnCentered)`
     margin-bottom: 10px;
 `;
 
-export const InputLabel = styled.p`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    margin-bottom: 6px;
-    color: ${(props) => props.theme.textColor.primary};
-`;
-
-export const Input = styled.input`
-    background: ${(props) => props.theme.input.background.primary};
-    border-radius: 5px;
-    border: 2px solid ${(props) => props.theme.borderColor.tertiary};
-    color: ${(props) => props.theme.input.textColor.primary};
-    width: 300px;
-    height: 34px;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-size: 18px;
-    outline: none;
-    &::placeholder {
-        color: ${(props) => props.theme.textColor.secondary};
-    }
-    &:focus {
-        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
-    }
-`;
-
 export const Link = styled.a`
     color: ${(props) => props.theme.textColor.primary};
     &:hover {
@@ -283,7 +234,7 @@ export const TwitterImage = styled.img`
     border-radius: 50%;
     height: 30px;
     width: 30px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin-right: 6px;
     @media (max-width: 767px) {
         height: 25px;
@@ -311,7 +262,7 @@ export const QuestionIndicatorContainer = styled(FlexDivStart)`
 
 export const QuestionIndicator = styled(FlexDivCentered)<{ isPassed: boolean }>`
     border-radius: 50%;
-    background: ${(props) => (props.isPassed ? '#2fc9dd' : '#303656')};
+    background: ${(props) => (props.isPassed ? props.theme.background.quaternary : props.theme.background.secondary)};
     width: 24px;
     height: 24px;
     :not(:last-child) {
@@ -332,31 +283,6 @@ export const Footer = styled(FlexDivColumn)`
     align-items: center;
 `;
 
-export const ValidationTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        width: '300px',
-        marginBottom: '7px',
-        backgroundColor: '#303656',
-        color: '#E26A78',
-        border: '1.5px solid #E26A78',
-        borderRadius: '2px',
-        fontSize: '12px',
-        fontWeight: 600,
-        textTransform: 'uppercase',
-    },
-    arrow: {
-        '&:before': {
-            border: '1.5px solid #E26A78',
-            backgroundColor: '#303656',
-            boxSizing: 'border-box',
-        },
-        width: '13px',
-        height: '10px',
-        bottom: '-2px !important',
-    },
-}))(Tooltip);
-
 export const LoaderContainer = styled(FlexDivCentered)`
     position: relative;
     min-height: 298px;
@@ -368,16 +294,16 @@ export const PaginationWrapper = styled(TablePagination)`
     display: flex;
     width: 100%;
     height: auto;
-    color: #f6f6fe !important;
+    color: ${(props) => props.theme.textColor.primary} !important;
     .MuiToolbar-root {
         padding: 0;
         display: flex;
         .MuiSelect-icon {
-            color: #f6f6fe;
+            color: ${(props) => props.theme.textColor.primary};
         }
     }
     .MuiIconButton-root.Mui-disabled {
-        color: #5f6180;
+        color: ${(props) => props.theme.textColor.secondary};
     }
     .MuiTablePagination-toolbar > .MuiTablePagination-caption:last-of-type {
         display: block;
@@ -393,10 +319,10 @@ export const PaginationWrapper = styled(TablePagination)`
     }
 `;
 
-export const TextLink = styled.a`
-    color: #91bced;
-    &:hover {
-        color: #00f9ff;
+const TextLink = styled.a`
+    color: ${(props) => props.theme.link.textColor.primary};
+    :hover {
+        text-decoration: underline;
     }
 `;
 
@@ -467,3 +393,7 @@ export const PeriodContainer = styled(FlexDivStart)`
         margin-bottom: 10px;
     }
 `;
+
+export const defaultButtonProps = {
+    margin: '20px 10px',
+};

@@ -20,17 +20,18 @@ import Checkbox from 'components/fields/Checkbox';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { LINKS } from 'constants/links';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { Tooltip, withStyles } from '@material-ui/core';
-import { NetworkId } from 'types/network';
-import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { Network } from 'enums/network';
 import { refetchBalances } from 'utils/queryConnector';
+import TextInput from '../fields/TextInput/TextInput';
+import { stableCoinParser } from 'utils/formatters/ethers';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 type MintVoucherModalProps = {
     onClose: () => void;
 };
 
-const getVoucherOptions = (networkId: NetworkId): Array<{ value: number; label: string }> => {
-    const collateral = getDefaultColleteralForNetwork(networkId);
+const getVoucherOptions = (networkId: Network): Array<{ value: number; label: string }> => {
+    const collateral = getDefaultCollateral(networkId);
     return [
         { value: 5, label: `5 ${collateral}` },
         { value: 10, label: `10 ${collateral}` },
@@ -43,7 +44,7 @@ const getVoucherOptions = (networkId: NetworkId): Array<{ value: number; label: 
     ];
 };
 
-export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
+const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -97,10 +98,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = ethers.utils.parseUnits(
-                        Number(amount).toString(),
-                        getDefaultDecimalsForNetwork(networkId)
-                    );
+                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -139,7 +137,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                         id,
                         getSuccessToastOptions(
                             t('market.toast-message.approve-success', {
-                                token: getDefaultColleteralForNetwork(networkId),
+                                token: getDefaultCollateral(networkId),
                             })
                         )
                     );
@@ -160,10 +158,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             setIsSubmitting(true);
             try {
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
-                const parsedAmount = ethers.utils.parseUnits(
-                    Number(amount).toString(),
-                    getDefaultDecimalsForNetwork(networkId)
-                );
+                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
                 const tx = await overtimeVoucherContractWithSigner.mint(
                     isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),
@@ -195,47 +190,45 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
-            return (
-                <ModalButton onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</ModalButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         if (insufficientBalance) {
-            return <ModalButton disabled={true}>{t(`common.errors.insufficient-balance`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.insufficient-balance`)}</Button>;
         }
         if (!isAmountEntered) {
-            return <ModalButton disabled={true}>{t(`common.errors.enter-amount`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
         }
         if (!isRecipientValid) {
-            return <ModalButton disabled={true}>{t(`common.errors.invalid-address`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.invalid-address`)}</Button>;
         }
         if (!isRecipientEntered) {
-            return <ModalButton disabled={true}>{t(`common.errors.enter-address`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.enter-address`)}</Button>;
         }
         if (!hasAllowance) {
             return (
-                <ModalButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
+                <Button disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
                         ? t('common.enable-wallet-access.approve-label', {
-                              currencyKey: getDefaultColleteralForNetwork(networkId),
+                              currencyKey: getDefaultCollateral(networkId),
                           })
                         : t('common.enable-wallet-access.approve-progress-label', {
-                              currencyKey: getDefaultColleteralForNetwork(networkId),
+                              currencyKey: getDefaultCollateral(networkId),
                           })}
-                </ModalButton>
+                </Button>
             );
         }
         return (
-            <ModalButton disabled={isButtonDisabled} onClick={handleSubmit}>
+            <Button disabled={isButtonDisabled} onClick={handleSubmit}>
                 {!isSubmitting
                     ? t('common.voucher.modal.button.mint-label')
                     : t('common.voucher.modal.button.mint-progress-label')}
-            </ModalButton>
+            </Button>
         );
     };
 
     return (
         <Modal
-            title={t('common.voucher.modal.title', { currencyKey: getDefaultColleteralForNetwork(networkId) })}
+            title={t('common.voucher.modal.title', { currencyKey: getDefaultCollateral(networkId) })}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
             customStyle={{ overlay: { zIndex: 200 } }}
@@ -273,23 +266,17 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
                 </CheckboxContainer>
                 {isAnotherWallet && (
                     <InputContainer>
-                        <InputLabel>{t('common.voucher.modal.recipient-wallet-label')}:</InputLabel>
-                        <ValidationTooltip
-                            open={!isRecipientValid}
-                            title={t('common.errors.invalid-address') as string}
-                            placement={'top'}
-                            arrow={true}
-                        >
-                            <Input
-                                type="text"
-                                disabled={isAllowing || isSubmitting}
-                                placeholder={t('common.voucher.modal.recipient-wallet-placeholder')}
-                                value={recipient}
-                                onChange={(event) => {
-                                    setRecipient(event.target.value);
-                                }}
-                            />
-                        </ValidationTooltip>
+                        <TextInput
+                            label={t('common.voucher.modal.recipient-wallet-label')}
+                            disabled={isAllowing || isSubmitting}
+                            placeholder={t('common.voucher.modal.recipient-wallet-placeholder')}
+                            value={recipient}
+                            onChange={(event: any) => {
+                                setRecipient(event.target.value);
+                            }}
+                            showValidation={!isRecipientValid}
+                            validationMessage={t('common.errors.invalid-address')}
+                        />
                     </InputContainer>
                 )}
                 <ButtonContainer>{getSubmitButton()}</ButtonContainer>
@@ -297,7 +284,7 @@ export const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) =
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}
-                    tokenSymbol={getDefaultColleteralForNetwork(networkId)}
+                    tokenSymbol={getDefaultCollateral(networkId)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}
@@ -327,25 +314,18 @@ const Description = styled.div`
     }
     a {
         cursor: pointer;
-        color: #91bced;
-        &:hover {
-            color: #00f9ff;
+        color: ${(props) => props.theme.link.textColor.primary};
+        :hover {
+            text-decoration: underline;
         }
-    }
-`;
-
-const TextLink = styled.a`
-    color: #91bced;
-    &:hover {
-        color: #00f9ff;
     }
 `;
 
 const DescriptionLink: React.FC<{ href: string }> = ({ children, href }) => {
     return (
-        <TextLink target="_blank" rel="noreferrer" href={href}>
+        <a target="_blank" rel="noreferrer" href={href}>
             {children}
-        </TextLink>
+        </a>
     );
 };
 
@@ -373,57 +353,6 @@ const InputLabel = styled.p`
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-const Input = styled.input`
-    background: ${(props) => props.theme.input.background.primary};
-    border-radius: 5px;
-    border: 2px solid ${(props) => props.theme.borderColor.primary};
-    color: ${(props) => props.theme.input.textColor.primary};
-    width: 100%;
-    height: 34px;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-size: 15px;
-    outline: none;
-    &::placeholder {
-        color: ${(props) => props.theme.textColor.secondary};
-    }
-    &:focus {
-        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
-    }
-    &:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-`;
-
-const ValidationTooltip = withStyles(() => ({
-    tooltip: {
-        minWidth: '100%',
-        width: '400px',
-        maxWidth: '400px',
-        marginBottom: '7px',
-        backgroundColor: '#303656',
-        color: '#E26A78',
-        border: '1.5px solid #E26A78',
-        borderRadius: '2px',
-        fontSize: '12px',
-        fontWeight: 600,
-        textTransform: 'uppercase',
-    },
-    arrow: {
-        '&:before': {
-            border: '1.5px solid #E26A78',
-            backgroundColor: '#303656',
-            boxSizing: 'border-box',
-        },
-        width: '13px',
-        height: '10px',
-        bottom: '-2px !important',
-    },
-}))(Tooltip);
-
 const ButtonContainer = styled(FlexDivCentered)``;
-
-const ModalButton = styled(Button)``;
 
 export default MintVoucherModal;

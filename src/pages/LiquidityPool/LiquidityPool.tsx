@@ -1,17 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import ROUTES from 'constants/routes';
-import { buildHref } from 'utils/routes';
 import {
     Container,
     Title,
-    SubmitButton,
     ButtonContainer,
-    ValidationTooltip,
-    InputContainer,
     Wrapper,
     ToggleContainer,
-    // Description,
     LiquidityPoolFilledGraphicContainer,
     LiquidityPoolFilledGraphicPercentage,
     LiquidityPoolFilledText,
@@ -20,14 +14,13 @@ import {
     ContentInfo,
     BoldContent,
     WarningContentInfo,
-    CloseRoundButton,
+    ExternalButton,
     LoaderContainer,
     RoundEndContainer,
     RoundEndLabel,
     RoundEnd,
     ContentContainer,
     MainContainer,
-    ExternalButton,
     LiquidityPoolInfoContainer,
     LiquidityPoolInfoGraphic,
     LiquidityPoolInfoLabel,
@@ -38,25 +31,29 @@ import {
     Description,
     GetStakeThalesIcon,
     TipLink,
+    SliderContainer,
+    SliderRange,
+    StyledSlider,
+    RadioButtonContainer,
+    MainContentContainer,
+    defaultButtonProps,
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import SPAAnchor from 'components/SPAAnchor';
-import { Info } from 'pages/Markets/Home/Home';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { LiquidityPoolPnlType, LiquidityPoolTab } from 'constants/liquidityPool';
+import { LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserLiquidityPoolData, LiquidityPoolData } from 'types/liquidityPool';
-import { formatCurrencyWithSign, formatPercentage, formatCurrency } from 'utils/formatters/number';
+import { formatCurrencyWithSign, formatPercentage } from 'utils/formatters/number';
 import { USD_SIGN } from 'constants/currency';
 import TimeRemaining from 'components/TimeRemaining';
 import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, NetworkIdByName, getMaxGasLimitForNetwork } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -68,11 +65,24 @@ import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDat
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
 import { LINKS } from 'constants/links';
 import MaxAllowanceTooltip from './components/MaxAllowanceTooltip';
-import { getDefaultDecimalsForNetwork, getDefaultColleteralForNetwork } from 'utils/collaterals';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
+import { FlexDivRow } from 'styles/common';
+import RadioButton from 'components/fields/RadioButton/RadioButton';
+import Return from './Return';
+import { history } from 'utils/routes';
+import useParlayLiquidityPoolUserDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolUserDataQuery';
+import useParlayLiquidityPoolDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolDataQuery';
+import Button from 'components/Button';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
+import { Network } from 'enums/network';
+import { delay } from 'utils/timer';
+import { getDefaultCollateral } from 'utils/collaterals';
+import { stableCoinParser } from 'utils/formatters/ethers';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -90,7 +100,25 @@ const LiquidityPool: React.FC = () => {
     const [lastValidUserLiquidityPoolData, setLastValidUserLiquidityPoolData] = useState<
         UserLiquidityPoolData | undefined
     >(undefined);
-    const collateral = getDefaultColleteralForNetwork(networkId);
+    const [withdrawAll, setWithdrawAll] = useState<boolean>(true);
+    const [withdrawalPercentage, setWithdrawalPercentage] = useState<number | string>(10);
+    const [isWithdrawalPercentageValid, setIsWithdrawalPercentageValid] = useState<boolean>(true);
+    const [withdrawalAmount, setWithdrawalAmount] = useState<number>(0);
+
+    const [isParlayLP, setIsParlayLP] = useState<boolean>(false);
+
+    const searchQuery = new URLSearchParams(location.search);
+
+    useEffect(() => {
+        if (searchQuery.get('pool-type') == 'parlay') {
+            setIsParlayLP(true);
+        } else if (searchQuery.get('pool-type') == 'single') {
+            setIsParlayLP(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const collateral = getDefaultCollateral(networkId);
 
     const { openConnectModal } = useConnectModal();
 
@@ -105,42 +133,94 @@ const LiquidityPool: React.FC = () => {
     }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
 
     const liquidityPoolDataQuery = useLiquidityPoolDataQuery(networkId, {
-        enabled: isAppReady,
+        enabled: isAppReady && !isParlayLP,
+    });
+
+    const parlayLiquidityPoolDataQuery = useParlayLiquidityPoolDataQuery(networkId, {
+        enabled: isAppReady && isParlayLP,
     });
 
     useEffect(() => {
-        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
+        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data && !isParlayLP) {
             setLastValidLiquidityPoolData(liquidityPoolDataQuery.data);
         }
-    }, [liquidityPoolDataQuery.isSuccess, liquidityPoolDataQuery.data]);
+        if (parlayLiquidityPoolDataQuery.isSuccess && parlayLiquidityPoolDataQuery.data && isParlayLP) {
+            setLastValidLiquidityPoolData(parlayLiquidityPoolDataQuery.data);
+        }
+    }, [
+        liquidityPoolDataQuery.isSuccess,
+        liquidityPoolDataQuery.data,
+        isParlayLP,
+        parlayLiquidityPoolDataQuery.isSuccess,
+        parlayLiquidityPoolDataQuery.data,
+    ]);
 
     const liquidityPoolData: LiquidityPoolData | undefined = useMemo(() => {
-        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
+        if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data && !isParlayLP) {
             return liquidityPoolDataQuery.data;
         }
+        if (parlayLiquidityPoolDataQuery.isSuccess && parlayLiquidityPoolDataQuery.data && isParlayLP) {
+            return parlayLiquidityPoolDataQuery.data;
+        }
         return lastValidLiquidityPoolData;
-    }, [liquidityPoolDataQuery.isSuccess, liquidityPoolDataQuery.data, lastValidLiquidityPoolData]);
+    }, [
+        liquidityPoolDataQuery.isSuccess,
+        liquidityPoolDataQuery.data,
+        isParlayLP,
+        parlayLiquidityPoolDataQuery.isSuccess,
+        parlayLiquidityPoolDataQuery.data,
+        lastValidLiquidityPoolData,
+    ]);
 
     const userLiquidityPoolDataQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
+        enabled: isAppReady && isWalletConnected && !isParlayLP,
+    });
+
+    const userParlayLiquidityPoolDataQuery = useParlayLiquidityPoolUserDataQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected && isParlayLP,
     });
 
     useEffect(() => {
-        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data) {
+        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data && !isParlayLP) {
             setLastValidUserLiquidityPoolData(userLiquidityPoolDataQuery.data);
         }
-    }, [userLiquidityPoolDataQuery.isSuccess, userLiquidityPoolDataQuery.data]);
+
+        if (userParlayLiquidityPoolDataQuery.isSuccess && userParlayLiquidityPoolDataQuery.data && isParlayLP) {
+            setLastValidUserLiquidityPoolData(userParlayLiquidityPoolDataQuery.data);
+        }
+    }, [
+        userLiquidityPoolDataQuery.isSuccess,
+        userLiquidityPoolDataQuery.data,
+        isParlayLP,
+        userParlayLiquidityPoolDataQuery.isSuccess,
+        userParlayLiquidityPoolDataQuery.data,
+    ]);
 
     const userLiquidityPoolData: UserLiquidityPoolData | undefined = useMemo(() => {
-        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data) {
+        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data && !isParlayLP) {
             return userLiquidityPoolDataQuery.data;
         }
+        if (userParlayLiquidityPoolDataQuery.isSuccess && userParlayLiquidityPoolDataQuery.data && isParlayLP) {
+            return userParlayLiquidityPoolDataQuery.data;
+        }
         return lastValidUserLiquidityPoolData;
-    }, [userLiquidityPoolDataQuery.isSuccess, userLiquidityPoolDataQuery.data, lastValidUserLiquidityPoolData]);
+    }, [
+        userLiquidityPoolDataQuery.isSuccess,
+        userLiquidityPoolDataQuery.data,
+        isParlayLP,
+        userParlayLiquidityPoolDataQuery.isSuccess,
+        userParlayLiquidityPoolDataQuery.data,
+        lastValidUserLiquidityPoolData,
+    ]);
 
     const isAmountEntered = Number(amount) > 0;
     const invalidAmount =
-        liquidityPoolData && Number(liquidityPoolData.minDepositAmount) > Number(amount) && isAmountEntered;
+        liquidityPoolData &&
+        Number(liquidityPoolData.minDepositAmount) > Number(amount) &&
+        userLiquidityPoolData &&
+        !userLiquidityPoolData.hasDepositForCurrentRound &&
+        !userLiquidityPoolData.hasDepositForNextRound &&
+        isAmountEntered;
     const insufficientBalance =
         (Number(paymentTokenBalance) < Number(amount) || Number(paymentTokenBalance) === 0) && isWalletConnected;
 
@@ -159,20 +239,15 @@ const LiquidityPool: React.FC = () => {
 
     const isWithdrawalRequested = userLiquidityPoolData && userLiquidityPoolData.isWithdrawalRequested;
     const nothingToWithdraw = userLiquidityPoolData && userLiquidityPoolData.balanceCurrentRound === 0;
-    const isMoreStakedThalesNeededToWithdraw =
-        userLiquidityPoolData &&
-        userLiquidityPoolData.neededStakedThalesToWithdraw > userLiquidityPoolData.stakedThales;
-    const stakedThalesNeededToWithdraw = userLiquidityPoolData
-        ? userLiquidityPoolData.neededStakedThalesToWithdraw - userLiquidityPoolData.stakedThales
-        : 0;
 
     const isRequestWithdrawalButtonDisabled =
         !isWalletConnected ||
         isSubmitting ||
         nothingToWithdraw ||
-        isMoreStakedThalesNeededToWithdraw ||
         (userLiquidityPoolData && userLiquidityPoolData.hasDepositForNextRound) ||
         liquidityPoolPaused;
+
+    const isPartialWithdrawalDisabled = isRequestWithdrawalButtonDisabled || withdrawAll;
 
     const isDepositButtonDisabled =
         !isWalletConnected ||
@@ -195,20 +270,20 @@ const LiquidityPool: React.FC = () => {
         isLiquidityPoolCapReached;
 
     useEffect(() => {
-        const { signer, sUSDContract, liquidityPoolContract } = networkConnector;
-        if (signer && sUSDContract && liquidityPoolContract) {
+        const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+
+        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+        if (signer && sUSDContract && lpContract) {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = ethers.utils.parseUnits(
-                        Number(amount).toString(),
-                        getDefaultDecimalsForNetwork(networkId)
-                    );
+                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
                         walletAddress,
-                        liquidityPoolContract.address
+                        lpContract.address
                     );
                     setAllowance(allowance);
                 } catch (e) {
@@ -219,18 +294,21 @@ const LiquidityPool: React.FC = () => {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId]);
+    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId, isParlayLP]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, sUSDContract, liquidityPoolContract } = networkConnector;
-        if (signer && sUSDContract && liquidityPoolContract) {
+        const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+
+        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+        if (signer && sUSDContract && lpContract) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsAllowing(true);
 
             try {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
-                const tx = (await sUSDContractWithSigner.approve(liquidityPoolContract.address, approveAmount, {
+                const tx = (await sUSDContractWithSigner.approve(lpContract.address, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
@@ -252,16 +330,16 @@ const LiquidityPool: React.FC = () => {
     };
 
     const handleDeposit = async () => {
-        const { signer, liquidityPoolContract } = networkConnector;
-        if (signer && liquidityPoolContract) {
+        const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+
+        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+        if (signer && lpContract) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsSubmitting(true);
             try {
-                const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
-                const parsedAmount = ethers.utils.parseUnits(
-                    Number(amount).toString(),
-                    getDefaultDecimalsForNetwork(networkId)
-                );
+                const liquidityPoolContractWithSigner = lpContract.connect(signer);
+                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
                 const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
@@ -272,7 +350,7 @@ const LiquidityPool: React.FC = () => {
                     toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId);
+                    refetchLiquidityPoolData(walletAddress, networkId, 'single');
                 }
             } catch (e) {
                 console.log(e);
@@ -283,16 +361,24 @@ const LiquidityPool: React.FC = () => {
     };
 
     const handleWithdrawalRequest = async () => {
-        const { signer, liquidityPoolContract } = networkConnector;
-        if (signer && liquidityPoolContract) {
+        const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+
+        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+        if (signer && lpContract) {
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsSubmitting(true);
             try {
-                const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
+                const liquidityPoolContractWithSigner = lpContract.connect(signer);
+                const parsedPercentage = ethers.utils.parseEther((Number(withdrawalPercentage) / 100).toString());
 
-                const tx = await liquidityPoolContractWithSigner.withdrawalRequest({
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
+                const tx = withdrawAll
+                    ? await liquidityPoolContractWithSigner.withdrawalRequest({
+                          gasLimit: getMaxGasLimitForNetwork(networkId),
+                      })
+                    : await liquidityPoolContractWithSigner.partialWithdrawalRequest(parsedPercentage, {
+                          gasLimit: getMaxGasLimitForNetwork(networkId),
+                      });
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {
@@ -302,7 +388,7 @@ const LiquidityPool: React.FC = () => {
                     );
                     setAmount('');
                     setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId);
+                    refetchLiquidityPoolData(walletAddress, networkId, isParlayLP ? 'parlay' : 'single');
                 }
             } catch (e) {
                 console.log(e);
@@ -313,80 +399,126 @@ const LiquidityPool: React.FC = () => {
     };
 
     const closeRound = async () => {
-        const { signer, liquidityPoolContract } = networkConnector;
-        if (signer && liquidityPoolContract) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
-                const liquidityPoolContractWithSigner = liquidityPoolContract.connect(signer);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+        setIsSubmitting(true);
+        try {
+            const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
 
-                const tx = await liquidityPoolContractWithSigner.closeRound({
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
-                const txResult = await tx.wait();
+            const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
 
-                if (txResult && txResult.events) {
-                    toast.update(
-                        id,
-                        getSuccessToastOptions(t('liquidity-pool.button.close-round-confirmation-message'))
-                    );
-                    setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId);
+            if (signer && lpContract) {
+                const lpContractWithSigner = lpContract.connect(signer);
+
+                const canCloseCurrentRound = await lpContractWithSigner?.canCloseCurrentRound();
+                const roundClosingPrepared = await lpContractWithSigner?.roundClosingPrepared();
+
+                let getUsersCountInCurrentRound = await lpContractWithSigner?.getUsersCountInCurrentRound();
+                let usersProcessedInRound = await lpContractWithSigner?.usersProcessedInRound();
+                if (canCloseCurrentRound) {
+                    try {
+                        if (!roundClosingPrepared) {
+                            const tx = await lpContractWithSigner.prepareRoundClosing({
+                                type: 2,
+                            });
+                            await tx.wait().then(() => {
+                                console.log('prepareRoundClosing closed');
+                            });
+                            await delay(1000 * 2);
+                        }
+
+                        while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
+                            const tx = await lpContractWithSigner.processRoundClosingBatch(100, {
+                                type: 2,
+                            });
+                            await tx.wait().then(() => {
+                                console.log('Round closed');
+                            });
+                            await delay(1000 * 2);
+                            getUsersCountInCurrentRound = await lpContractWithSigner.getUsersCountInCurrentRound();
+                            usersProcessedInRound = await lpContractWithSigner.usersProcessedInRound();
+                        }
+
+                        const tx = await lpContractWithSigner.closeRound({
+                            type: 2,
+                        });
+                        await tx.wait().then(() => {
+                            console.log('Round closed');
+                        });
+
+                        toast.update(
+                            id,
+                            getSuccessToastOptions(t('liquidity-pool.button.close-round-confirmation-message'))
+                        );
+                        setIsSubmitting(false);
+                        refetchLiquidityPoolData(walletAddress, networkId, 'parlay');
+                        refetchLiquidityPoolData(walletAddress, networkId, 'single');
+                    } catch (e) {
+                        toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                        setIsSubmitting(false);
+                        console.log(e);
+                    }
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+        } catch (e) {
+            console.log('E ', e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            setIsSubmitting(false);
         }
     };
 
     const getDepositSubmitButton = () => {
         if (!isWalletConnected) {
             return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
+                <Button {...defaultButtonProps} onClick={() => openConnectModal?.()}>
                     {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
+                </Button>
             );
         }
         if (insufficientBalance) {
-            return <SubmitButton disabled={true}>{t(`common.errors.insufficient-balance`)}</SubmitButton>;
+            return (
+                <Button {...defaultButtonProps} disabled={true}>
+                    {t(`common.errors.insufficient-balance`)}
+                </Button>
+            );
         }
         if (!isAmountEntered) {
-            return <SubmitButton disabled={true}>{t(`common.errors.enter-amount`)}</SubmitButton>;
+            return (
+                <Button {...defaultButtonProps} disabled={true}>
+                    {t(`common.errors.enter-amount`)}
+                </Button>
+            );
         }
         if (!hasAllowance) {
             return (
-                <SubmitButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
+                <Button {...defaultButtonProps} disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
                         ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
                         : t('common.enable-wallet-access.approve-progress-label', {
                               currencyKey: collateral,
                           })}
-                </SubmitButton>
+                </Button>
             );
         }
         return (
-            <SubmitButton disabled={isDepositButtonDisabled} onClick={handleDeposit}>
+            <Button {...defaultButtonProps} disabled={isDepositButtonDisabled} onClick={handleDeposit}>
                 {!isSubmitting
                     ? t('liquidity-pool.button.deposit-label')
                     : t('liquidity-pool.button.deposit-progress-label')}
-            </SubmitButton>
+            </Button>
         );
     };
 
-    const getWithdrawSubmitButton = () => {
+    const getWithdrawButton = () => {
         if (!isWalletConnected) {
-            return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         return (
-            <SubmitButton disabled={isRequestWithdrawalButtonDisabled} onClick={handleWithdrawalRequest}>
+            <Button
+                disabled={isRequestWithdrawalButtonDisabled || !isWithdrawalPercentageValid}
+                onClick={handleWithdrawalRequest}
+            >
                 {t('liquidity-pool.button.request-withdrawal-label')}
-            </SubmitButton>
+            </Button>
         );
     };
 
@@ -400,18 +532,49 @@ const LiquidityPool: React.FC = () => {
         setAmount(Math.trunc(userLiquidityPoolData ? userLiquidityPoolData.availableToDeposit * 100 : 0) / 100);
     };
 
+    useEffect(
+        () =>
+            setIsWithdrawalPercentageValid(
+                (Number(withdrawalPercentage) <= 90 && Number(withdrawalPercentage) >= 10) || withdrawAll
+            ),
+        [withdrawalPercentage, withdrawAll]
+    );
+
+    useEffect(() => {
+        if (userLiquidityPoolData) {
+            setWithdrawalAmount(
+                withdrawAll
+                    ? userLiquidityPoolData.balanceCurrentRound
+                    : (userLiquidityPoolData.balanceCurrentRound * Number(withdrawalPercentage)) / 100
+            );
+        }
+    }, [withdrawalPercentage, withdrawAll, userLiquidityPoolData]);
+
     return (
         <Wrapper>
-            {networkId !== NetworkIdByName.ArbitrumOne && (
-                <Info>
-                    <Trans
-                        i18nKey="rewards.op-rewards-banner-message"
-                        components={{
-                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                        }}
-                    />
-                </Info>
-            )}
+            <ToggleContainer
+                data-matomo-category="liquidity-pool"
+                data-matomo-action={isParlayLP ? 'switch-to-parlay' : 'switch-to-single'}
+            >
+                <Toggle
+                    label={{
+                        firstLabel: t('liquidity-pool.single-lp'),
+                        secondLabel: t('liquidity-pool.parlay-lp'),
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                    }}
+                    active={isParlayLP}
+                    dotSize="20px"
+                    dotBackground={theme.background.secondary}
+                    dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                    handleClick={() => {
+                        searchQuery.set('pool-type', !isParlayLP ? 'parlay' : 'single');
+                        history.push({ search: searchQuery.toString() });
+                        setIsParlayLP(!isParlayLP);
+                    }}
+                    margin={'15px 0px 5px 0px'}
+                />
+            </ToggleContainer>
             <Title>{t('liquidity-pool.title')}</Title>
             {liquidityPoolData && (
                 <Container>
@@ -435,9 +598,17 @@ const LiquidityPool: React.FC = () => {
                                             />
                                         )}{' '}
                                         {liquidityPoolData.canCloseCurrentRound && (
-                                            <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
+                                            <Button
+                                                disabled={isSubmitting}
+                                                onClick={closeRound}
+                                                fontSize="12px"
+                                                margin="5px 0 0 0"
+                                                height="24px"
+                                                backgroundColor={theme.button.background.quaternary}
+                                                borderColor={theme.button.borderColor.secondary}
+                                            >
                                                 {t('liquidity-pool.button.close-round-label')}
-                                            </CloseRoundButton>
+                                            </Button>
                                         )}
                                     </RoundEnd>
                                 </RoundEndContainer>
@@ -454,12 +625,12 @@ const LiquidityPool: React.FC = () => {
                                 label={{
                                     firstLabel: t(`liquidity-pool.tabs.${LiquidityPoolTab.DEPOSIT}`),
                                     secondLabel: t(`liquidity-pool.tabs.${LiquidityPoolTab.WITHDRAW}`),
-                                    fontSize: '18px',
+                                    fontSize: '14px',
                                 }}
                                 active={selectedTab === LiquidityPoolTab.WITHDRAW}
-                                dotSize="18px"
-                                dotBackground="#303656"
-                                dotBorder="3px solid #3FD1FF"
+                                dotSize="14px"
+                                dotBackground={theme.background.secondary}
+                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
                                 handleClick={() => {
                                     setSelectedTab(
                                         selectedTab === LiquidityPoolTab.DEPOSIT
@@ -486,44 +657,38 @@ const LiquidityPool: React.FC = () => {
                                         <Trans i18nKey="liquidity-pool.deposit-max-amount-of-users-warning" />
                                     </WarningContentInfo>
                                 )}
-                                <InputContainer>
-                                    <ValidationTooltip
-                                        open={
-                                            insufficientBalance ||
-                                            exceededLiquidityPoolCap ||
-                                            exceededMaxAllowance ||
-                                            invalidAmount
+                                <NumericInput
+                                    value={amount}
+                                    disabled={isDepositAmountInputDisabled}
+                                    onChange={(_, value) => setAmount(value)}
+                                    placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                                    currencyLabel={collateral}
+                                    onMaxButton={setMaxAmount}
+                                    showValidation={
+                                        insufficientBalance ||
+                                        exceededLiquidityPoolCap ||
+                                        exceededMaxAllowance ||
+                                        invalidAmount
+                                    }
+                                    validationMessage={t(
+                                        `${
+                                            insufficientBalance
+                                                ? 'common.errors.insufficient-balance'
+                                                : exceededLiquidityPoolCap
+                                                ? 'liquidity-pool.deposit-liquidity-pool-cap-error'
+                                                : exceededMaxAllowance
+                                                ? 'liquidity-pool.deposit-staked-thales-error'
+                                                : 'liquidity-pool.deposit-min-amount-error'
+                                        }`,
+                                        {
+                                            amount: formatCurrencyWithSign(
+                                                USD_SIGN,
+                                                liquidityPoolData.minDepositAmount
+                                            ),
                                         }
-                                        title={
-                                            t(
-                                                `${
-                                                    insufficientBalance
-                                                        ? 'common.errors.insufficient-balance'
-                                                        : exceededLiquidityPoolCap
-                                                        ? 'liquidity-pool.deposit-liquidity-pool-cap-error'
-                                                        : exceededMaxAllowance
-                                                        ? 'liquidity-pool.deposit-staked-thales-error'
-                                                        : 'liquidity-pool.deposit-min-amount-error'
-                                                }`,
-                                                {
-                                                    amount: formatCurrencyWithSign(
-                                                        USD_SIGN,
-                                                        liquidityPoolData.minDepositAmount
-                                                    ),
-                                                }
-                                            ) as string
-                                        }
-                                    >
-                                        <NumericInput
-                                            value={amount}
-                                            disabled={isDepositAmountInputDisabled}
-                                            onChange={(_, value) => setAmount(value)}
-                                            placeholder={t('liquidity-pool.deposit-amount-placeholder')}
-                                            currencyLabel={collateral}
-                                            onMaxButton={setMaxAmount}
-                                        />
-                                    </ValidationTooltip>
-                                </InputContainer>
+                                    )}
+                                    validationPlacement="bottom"
+                                />
                                 {getDepositSubmitButton()}
                             </>
                         )}
@@ -551,17 +716,6 @@ const LiquidityPool: React.FC = () => {
                                                             <WarningContentInfo>
                                                                 <Trans i18nKey="liquidity-pool.withdrawal-deposit-warning" />
                                                             </WarningContentInfo>
-                                                        ) : isMoreStakedThalesNeededToWithdraw ? (
-                                                            <WarningContentInfo>
-                                                                <Trans
-                                                                    i18nKey="liquidity-pool.withdrawal-staked-thales-warning"
-                                                                    values={{
-                                                                        amount: formatCurrency(
-                                                                            stakedThalesNeededToWithdraw
-                                                                        ),
-                                                                    }}
-                                                                />
-                                                            </WarningContentInfo>
                                                         ) : (
                                                             <>
                                                                 <ContentInfo>
@@ -588,13 +742,106 @@ const LiquidityPool: React.FC = () => {
                                                                 <ContentInfo>
                                                                     <Trans i18nKey="liquidity-pool.withdrawal-message" />
                                                                 </ContentInfo>
+                                                                <RadioButtonContainer>
+                                                                    <RadioButton
+                                                                        checked={withdrawAll}
+                                                                        value={'true'}
+                                                                        onChange={() => setWithdrawAll(true)}
+                                                                        label={t(
+                                                                            `liquidity-pool.full-withdrawal-label`
+                                                                        )}
+                                                                    />
+                                                                    <RadioButton
+                                                                        checked={!withdrawAll}
+                                                                        value={'false'}
+                                                                        onChange={() => setWithdrawAll(false)}
+                                                                        label={t(
+                                                                            `liquidity-pool.partial-withdrawal-label`
+                                                                        )}
+                                                                    />
+                                                                </RadioButtonContainer>
+                                                                <NumericInput
+                                                                    value={withdrawalPercentage}
+                                                                    disabled={isPartialWithdrawalDisabled}
+                                                                    onChange={(_, value) =>
+                                                                        setWithdrawalPercentage(value)
+                                                                    }
+                                                                    placeholder={t(
+                                                                        'liquidity-pool.percentage-placeholder'
+                                                                    )}
+                                                                    currencyLabel="%"
+                                                                    step="1"
+                                                                    showValidation={!isWithdrawalPercentageValid}
+                                                                    validationMessage={
+                                                                        t(
+                                                                            Number(withdrawalPercentage) == 0
+                                                                                ? 'common.errors.enter-percentage'
+                                                                                : 'common.errors.invalid-percentage-range',
+                                                                            { min: 10, max: 90 }
+                                                                        ) as string
+                                                                    }
+                                                                    validationPlacement="bottom"
+                                                                />
+                                                                <SliderContainer>
+                                                                    <StyledSlider
+                                                                        value={Number(withdrawalPercentage)}
+                                                                        step={1}
+                                                                        max={90}
+                                                                        min={10}
+                                                                        onChange={(_: any, value: any) =>
+                                                                            setWithdrawalPercentage(Number(value))
+                                                                        }
+                                                                        disabled={isPartialWithdrawalDisabled}
+                                                                    />
+                                                                    <FlexDivRow>
+                                                                        <SliderRange
+                                                                            className={
+                                                                                isPartialWithdrawalDisabled
+                                                                                    ? 'disabled'
+                                                                                    : ''
+                                                                            }
+                                                                        >
+                                                                            10%
+                                                                        </SliderRange>
+                                                                        <SliderRange
+                                                                            className={
+                                                                                isPartialWithdrawalDisabled
+                                                                                    ? 'disabled'
+                                                                                    : ''
+                                                                            }
+                                                                        >
+                                                                            90%
+                                                                        </SliderRange>
+                                                                    </FlexDivRow>
+                                                                </SliderContainer>
+                                                                <ContentInfo>
+                                                                    <Trans
+                                                                        i18nKey="liquidity-pool.withdrawal-amount-label"
+                                                                        components={{
+                                                                            bold: <BoldContent />,
+                                                                        }}
+                                                                        values={{
+                                                                            amount: formatCurrencyWithSign(
+                                                                                USD_SIGN,
+                                                                                withdrawalAmount
+                                                                            ),
+                                                                        }}
+                                                                    />
+                                                                    <Tooltip
+                                                                        overlay={t(
+                                                                            `liquidity-pool.estimated-amount-tooltip`
+                                                                        )}
+                                                                        iconFontSize={14}
+                                                                        marginLeft={2}
+                                                                    />
+                                                                </ContentInfo>
                                                             </>
                                                         )}
                                                     </>
                                                 )}
                                             </>
                                         )}
-                                        {getWithdrawSubmitButton()}
+                                        {getWithdrawButton()}
                                     </>
                                 )}
                                 {liquidityPoolData &&
@@ -603,7 +850,11 @@ const LiquidityPool: React.FC = () => {
                                         <>
                                             <ContentInfo>
                                                 <Trans
-                                                    i18nKey="liquidity-pool.withdrawal-requested-message"
+                                                    i18nKey={`liquidity-pool.${
+                                                        userLiquidityPoolData.isPartialWithdrawalRequested
+                                                            ? 'partial'
+                                                            : 'full'
+                                                    }-withdrawal-requested-message`}
                                                     components={{
                                                         bold: <BoldContent />,
                                                         tooltip: (
@@ -617,10 +868,16 @@ const LiquidityPool: React.FC = () => {
                                                     values={{
                                                         amount: formatCurrencyWithSign(
                                                             USD_SIGN,
-                                                            userLiquidityPoolData.balanceCurrentRound
+                                                            userLiquidityPoolData.withdrawalAmount
+                                                        ),
+                                                        percentage: formatPercentage(
+                                                            userLiquidityPoolData.withdrawalShare
                                                         ),
                                                     }}
                                                 />
+                                            </ContentInfo>
+                                            <ContentInfo>
+                                                <Trans i18nKey="liquidity-pool.withdrawal-requested-message" />
                                             </ContentInfo>
                                         </>
                                     )}
@@ -633,7 +890,7 @@ const LiquidityPool: React.FC = () => {
                                 target="_blank"
                                 rel="noreferrer"
                                 href={
-                                    networkId !== NetworkIdByName.ArbitrumOne
+                                    networkId !== Network.ArbitrumOne
                                         ? LINKS.UniswapBuyThalesOp
                                         : LINKS.UniswapBuyThalesArbitrum
                                 }
@@ -653,11 +910,11 @@ const LiquidityPool: React.FC = () => {
                 <CopyContainer>
                     <Description>
                         <Trans
-                            i18nKey={`liquidity-pool.description`}
+                            i18nKey={isParlayLP ? 'liquidity-pool.description-parlay' : 'liquidity-pool.description'}
                             components={{
                                 h1: <h1 />,
                                 p: <p />,
-                                tipLink: <TipLink href={LINKS.ThalesTip99} />,
+                                tipLink: <TipLink href={isParlayLP ? LINKS.ThalesTip142 : LINKS.ThalesTip99} />,
                             }}
                             values={{
                                 thalesStakedAmount: 1 / liquidityPoolData.stakedThalesMultiplier,
@@ -699,7 +956,7 @@ const LiquidityPool: React.FC = () => {
                     </LoaderContainer>
                 ) : (
                     <>
-                        <ContentContainer>
+                        <MainContentContainer>
                             {liquidityPoolData && (
                                 <>
                                     <LiquidityPoolInfoTitle>
@@ -776,7 +1033,7 @@ const LiquidityPool: React.FC = () => {
                                         )}
                                         {userLiquidityPoolData &&
                                             userLiquidityPoolData.balanceCurrentRound > 0 &&
-                                            !isWithdrawalRequested && (
+                                            userLiquidityPoolData.balanceTotal > 0 && (
                                                 <Tooltip
                                                     overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
                                                     iconFontSize={14}
@@ -816,43 +1073,60 @@ const LiquidityPool: React.FC = () => {
                                 {isWithdrawalRequested && (
                                     <WarningContentInfo>
                                         <Trans
-                                            i18nKey="liquidity-pool.withdrawal-request-label"
+                                            i18nKey={`liquidity-pool.${
+                                                userLiquidityPoolData.isPartialWithdrawalRequested ? 'partial' : 'full'
+                                            }-withdrawal-request-label`}
+                                            components={{
+                                                tooltip: (
+                                                    <Tooltip
+                                                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                                                        iconFontSize={14}
+                                                        marginLeft={2}
+                                                    />
+                                                ),
+                                            }}
                                             values={{
                                                 amount: formatCurrencyWithSign(
                                                     USD_SIGN,
-                                                    userLiquidityPoolData.balanceCurrentRound
+                                                    userLiquidityPoolData ? userLiquidityPoolData.withdrawalAmount : 0
+                                                ),
+                                                percentage: formatPercentage(
+                                                    userLiquidityPoolData ? userLiquidityPoolData.withdrawalShare : 0
                                                 ),
                                             }}
-                                        />
-                                        <Tooltip
-                                            overlay={t(`vault.estimated-amount-tooltip`)}
-                                            iconFontSize={14}
-                                            marginLeft={2}
                                         />
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                        </ContentContainer>
-                        <ContentContainer>
+                            <Return liquidityPoolType={isParlayLP ? 'parlay' : 'single'} />
+                        </MainContentContainer>
+                        <MainContentContainer>
                             {liquidityPoolData && (
                                 <PnL
                                     lifetimePnl={liquidityPoolData.lifetimePnl}
                                     type={LiquidityPoolPnlType.PNL_PER_ROUND}
+                                    liquidityPoolType={isParlayLP ? 'parlay' : 'single'}
                                 />
                             )}
-                        </ContentContainer>
-                        <ContentContainer>
+                        </MainContentContainer>
+                        <MainContentContainer>
                             {liquidityPoolData && (
                                 <PnL
                                     lifetimePnl={liquidityPoolData.lifetimePnl}
                                     type={LiquidityPoolPnlType.CUMULATIVE_PNL}
+                                    liquidityPoolType={isParlayLP ? 'parlay' : 'single'}
                                 />
                             )}
-                        </ContentContainer>
+                        </MainContentContainer>
                     </>
                 )}
             </MainContainer>
-            {liquidityPoolData && <Transactions currentRound={liquidityPoolData.round} />}
+            {liquidityPoolData && (
+                <Transactions
+                    currentRound={liquidityPoolData.round}
+                    liquidityPoolType={isParlayLP ? 'parlay' : 'single'}
+                />
+            )}
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}

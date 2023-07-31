@@ -82,13 +82,6 @@ export const Section = styled(FlexDivColumn)`
     }
 `;
 
-export const ZebraLogo = styled.img`
-    height: 110px;
-    @media (max-width: 750px) {
-        height: 80px;
-    }
-`;
-
 export const Zebro = styled.img`
     position: absolute;
     &.baseball {

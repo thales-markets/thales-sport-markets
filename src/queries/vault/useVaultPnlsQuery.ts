@@ -1,11 +1,11 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { VaultPnls } from 'types/vault';
 import { orderBy } from 'lodash';
 
-const useVaultPnlsQuery = (vaultAddress: string, networkId: NetworkId, options?: UseQueryOptions<VaultPnls>) => {
+const useVaultPnlsQuery = (vaultAddress: string, networkId: Network, options?: UseQueryOptions<VaultPnls>) => {
     return useQuery<VaultPnls>(
         QUERY_KEYS.Vault.PnL(vaultAddress, networkId),
         async () => {

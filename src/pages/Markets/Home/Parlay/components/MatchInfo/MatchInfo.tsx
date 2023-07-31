@@ -16,6 +16,9 @@ import {
 } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type MatchInfoProps = {
     market: ParlaysMarket;
@@ -26,23 +29,25 @@ type MatchInfoProps = {
 
 const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
 
     const symbolText = getSymbolText(market.position, market);
     const spreadTotalText = getSpreadTotalText(market, market.position);
 
     const bonus = getBonus(market);
-
     return (
         <>
             <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
             <MatchLabel>
                 <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                    {market.homeTeam}
+                    {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
                 </ClubName>
-                <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                    {market.awayTeam}
-                </ClubName>
+                {!market.isOneSideMarket && (
+                    <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
+                        {market.awayTeam}
+                    </ClubName>
+                )}
             </MatchLabel>
             <PositionSymbol
                 symbolAdditionalText={{
@@ -59,13 +64,16 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         ? {
                               text: spreadTotalText,
                               textStyle: {
-                                  backgroundColor: customStyle ? '#23273e' : '#2f3454',
+                                  backgroundColor: customStyle
+                                      ? theme.oddsGradiendBackground.primary
+                                      : theme.oddsGradiendBackground.secondary,
                                   top: '-9px',
                               },
                           }
                         : undefined
                 }
-                tooltip={<>{getOddTooltipText(market.position, market)}</>}
+                tooltip={!readOnly && <>{getOddTooltipText(market.position, market)}</>}
+                additionalStyle={market.isOneSideMarket ? { fontSize: 10 } : {}}
             />
             {!readOnly && <Bonus>{bonus > 0 ? getFormattedBonus(bonus) : ''}</Bonus>}
             {readOnly ? (
@@ -106,14 +114,14 @@ const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
     font-size: ${(props) => (props.fontSize ? props.fontSize : '10px')};
     line-height: ${(props) => (props.lineHeight ? props.lineHeight : '11px')};
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Bonus = styled.div`
     min-width: 28px;
     font-size: 12px;
     font-weight: 600;
-    color: #5fc694;
+    color: ${(props) => props.theme.status.win};
     margin-right: 4px;
 `;
 
@@ -121,13 +129,13 @@ const Icon = styled.i`
     font-size: 12px;
 `;
 const Correct = styled(Icon)`
-    color: #339d6a;
+    color: ${(props) => props.theme.status.win};
 `;
 const Wrong = styled(Icon)`
-    color: #ca4c53;
+    color: ${(props) => props.theme.status.loss};
 `;
 const Canceled = styled(Icon)`
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 const Empty = styled(Icon)`
     visibility: hidden;

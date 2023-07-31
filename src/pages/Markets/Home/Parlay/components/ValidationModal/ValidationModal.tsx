@@ -1,7 +1,7 @@
 import checkmarkAnimationData from 'assets/lotties/green-checkmark.json';
 import crossmarkAnimationData from 'assets/lotties/red-checkmark.json';
 import Modal from 'components/Modal';
-import { ParlayErrorCode } from 'constants/markets';
+import { ParlayErrorCode } from 'enums/markets';
 import useInterval from 'hooks/useInterval';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import React, { createRef, CSSProperties, useRef } from 'react';
@@ -9,7 +9,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParlayError, resetParlayError, getParlaySize } from 'redux/modules/parlay';
 import styled from 'styled-components';
+import { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { ThemeInterface } from 'types/ui';
 
 type ValidationModalProps = {
     onClose: () => void;
@@ -18,9 +20,10 @@ type ValidationModalProps = {
 const DELAY_ANIMATION_PLAY = 200;
 const ANIMATION_TIME = 1200;
 
-export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
+const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
 
     const parlayError = useSelector(getParlayError);
     const parlaySize = useSelector(getParlaySize);
@@ -75,7 +78,7 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => 
             <Container>
                 {parlayError.code === ParlayErrorCode.MAX_MATCHES && (
                     <>
-                        <ErrorMessage color={'#72c69b'}>
+                        <ErrorMessage color={theme.status.win}>
                             {t('markets.parlay.validation.max-teams', { max: parlayError.data })}
                         </ErrorMessage>
                         {getMaxMatchesAnimation()}
@@ -89,6 +92,33 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => 
                 {parlayError.code === ParlayErrorCode.MAX_DOUBLE_CHANCES && (
                     <ErrorMessage>
                         {t('markets.parlay.validation.max-double-chances', { max: parlayError.data })}
+                    </ErrorMessage>
+                )}
+                {parlayError.code === ParlayErrorCode.MAX_COMBINED_MARKETS && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.max-combined-markets', { max: parlayError.data })}
+                    </ErrorMessage>
+                )}
+                {parlayError.code === ParlayErrorCode.MAX_NUMBER_OF_MARKETS_WITH_COMBINED_MARKETS && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.max-number-of-markets-with-combined-markets', {
+                            max: parlayError.data,
+                        })}
+                    </ErrorMessage>
+                )}
+                {parlayError.code === ParlayErrorCode.SAME_EVENT_PARTICIPANT && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.same-event-participant', {
+                            existingParticipant: parlayError.data.split('/')[0],
+                            addedParticipant: parlayError.data.split('/')[1],
+                        })}
+                    </ErrorMessage>
+                )}
+                {parlayError.code === ParlayErrorCode.UNIQUE_TOURNAMENT_PLAYERS && (
+                    <ErrorMessage>
+                        {t('markets.parlay.validation.unique-players', {
+                            existingParticipant: parlayError.data,
+                        })}
                     </ErrorMessage>
                 )}
             </Container>
@@ -110,7 +140,7 @@ const ErrorMessage = styled.p<{ color?: string }>`
     font-style: normal;
     font-size: 15px;
     line-height: 22px;
-    color: ${(props) => (props.color ? props.color : '#ffffff')};
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.primary)};
     text-transform: uppercase;
 `;
 

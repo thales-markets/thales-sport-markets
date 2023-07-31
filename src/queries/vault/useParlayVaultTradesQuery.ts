@@ -1,15 +1,16 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { ParlayVaultTrade } from 'types/vault';
 import { updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 import { ParlayMarketWithRound, SportMarketInfo } from 'types/markets';
-import { fixApexName, fixDuplicatedTeamName } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName, fixDuplicatedTeamName } from 'utils/formatters/string';
+import { ENETPULSE_SPORTS } from 'constants/tags';
 
 const useParlayVaultTradesQuery = (
     vaultAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<ParlayMarketWithRound[]>
 ) => {
     return useQuery<ParlayMarketWithRound[]>(
@@ -27,14 +28,15 @@ const useParlayVaultTradesQuery = (
                             ...wholeMarket,
                             round,
                             sportMarkets: wholeMarket.sportMarkets.map((market: SportMarketInfo) => {
+                                const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.tags[0]));
                                 return {
                                     ...market,
-                                    homeTeam: market.isApex
-                                        ? fixApexName(market.homeTeam)
-                                        : fixDuplicatedTeamName(market.homeTeam),
-                                    awayTeam: market.isApex
-                                        ? fixApexName(market.awayTeam)
-                                        : fixDuplicatedTeamName(market.awayTeam),
+                                    homeTeam: market.isOneSideMarket
+                                        ? fixOneSideMarketCompetitorName(market.homeTeam)
+                                        : fixDuplicatedTeamName(market.homeTeam, isEnetpulseSport),
+                                    awayTeam: market.isOneSideMarket
+                                        ? fixOneSideMarketCompetitorName(market.awayTeam)
+                                        : fixDuplicatedTeamName(market.awayTeam, isEnetpulseSport),
                                 };
                             }),
                         };

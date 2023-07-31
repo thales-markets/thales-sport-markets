@@ -13,8 +13,10 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { getDefaultNetworkName, getNetworkKeyByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type FundModalProps = {
     onClose: () => void;
@@ -27,11 +29,11 @@ enum Provider {
     LAYER_SWAP,
 }
 
-const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) => {
+const getProviderUrl = (provider: Provider | undefined, networkId: Network) => {
     const networkParam = getNetworkKeyByNetworkId(networkId);
     switch (provider) {
         case Provider.BANXA:
-            return `https://thalesmarket.banxa.com/iframe?code=x68QxHYZ2hQU0rccKDgDSeUO7QonDXsY&coinType=ETH&fiatType=EUR&blockchain=OPTIMISM`;
+            return `https://thalesmarket.banxa.com/?coinType=ETH&fiatType=EUR&blockchain=OPTIMISM`;
         case Provider.MT_PELERIN:
             const baseUrl = 'https://widget.mtpelerin.com/';
             const queryParams = `?type=popup&lang=en&primary=%235F6180&net=${networkParam}&bsc=EUR&bdc=ETH&crys=ETH`;
@@ -47,6 +49,7 @@ const getProviderUrl = (provider: Provider | undefined, networkId: NetworkId) =>
 };
 
 const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
+    const theme: ThemeInterface = useTheme();
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -138,7 +141,10 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                         container: { paddingLeft: '10px', paddingRight: '10px' },
                     }}
                 >
-                    <IFrameWrapper height={iframeProvider === Provider.MT_PELERIN ? 588 : 635}>
+                    <IFrameWrapper
+                        height={iframeProvider === Provider.MT_PELERIN ? 588 : 635}
+                        background={iframeProvider === Provider.MT_PELERIN ? theme.input.background.primary : ''}
+                    >
                         {iframeLoader && <SimpleLoader />}
                         <IFrame src={getProviderUrl(iframeProvider, networkId)} onLoad={() => setIframeLoader(false)} />
                     </IFrameWrapper>
@@ -182,7 +188,7 @@ const ButtonDiv = styled.div`
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
-    border: 1px solid #64d9fe;
+    border: 1px solid ${(props) => props.theme.borderColor.quaternary};
     border-radius: 30px;
     font-family: 'Sansation';
     font-style: normal;
@@ -190,7 +196,7 @@ const ButtonDiv = styled.div`
     font-size: 12.5px;
     line-height: 14px;
     cursor: pointer;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     background-color: transparent;
     padding: 5px 0px;
 `;
@@ -224,18 +230,18 @@ const YourAddressLabel = styled.span`
     font-weight: 400;
     font-size: 15px;
     line-height: 18px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     text-transform: capitalize;
     margin-top: 3px;
 `;
 
 const Link = styled.a``;
 
-const IFrameWrapper = styled.div<{ height?: number }>`
+const IFrameWrapper = styled.div<{ height?: number; background?: string }>`
     width: 530px;
     height: ${(props) => (props.height ? props.height : '635')}px;
     margin: auto;
-    background: white;
+    ${(props) => (props.background ? `background: ${props.background};` : '')}
     margin-top: 10px;
     border-radius: 15px;
     outline: none;

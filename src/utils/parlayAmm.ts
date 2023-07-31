@@ -1,16 +1,15 @@
-import { COLLATERALS_INDEX } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
-import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
-import { NetworkId } from 'types/network';
-import { getCollateralAddress } from './collaterals';
+import { Network } from 'enums/network';
+import { getCollateral, getCollateralAddress, getDefaultCollateral } from './collaterals';
 import { isMultiCollateralSupportedForNetwork } from './network';
+import { Position } from 'enums/markets';
 
 export const getParlayAMMTransaction: any = (
     isVoucherSelected: boolean,
     voucherId: number,
-    stableIndex: COLLATERALS_INDEX,
-    networkId: NetworkId,
+    stableIndex: number,
+    networkId: Network,
     parlayMarketsAMMContract: ethers.Contract,
     overtimeVoucherContract: ethers.Contract,
     marketsAddresses: string[],
@@ -23,8 +22,8 @@ export const getParlayAMMTransaction: any = (
         gasLimit: number | null;
     }
 ): Promise<ethers.ContractTransaction> => {
-    const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
-    const collateralAddress = getCollateralAddress(isNonSusdCollateral, networkId, stableIndex);
+    const isNonDefaultCollateral = getCollateral(networkId, stableIndex) !== getDefaultCollateral(networkId);
+    const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isVoucherSelected) {
@@ -39,7 +38,7 @@ export const getParlayAMMTransaction: any = (
         );
     }
 
-    if (isMultiCollateralSupported && isNonSusdCollateral && collateralAddress) {
+    if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
         return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
             marketsAddresses,
             selectedPositions,
@@ -75,18 +74,18 @@ export const getParlayAMMTransaction: any = (
 };
 
 export const getParlayMarketsAMMQuoteMethod: any = (
-    stableIndex: COLLATERALS_INDEX,
-    networkId: NetworkId,
+    stableIndex: number,
+    networkId: Network,
     parlayMarketsAMMContract: ethers.Contract,
     marketsAddresses: string[],
     selectedPositions: Position[],
     sUSDPaid: BigNumber
 ) => {
-    const isNonSusdCollateral = stableIndex !== COLLATERALS_INDEX.sUSD;
-    const collateralAddress = getCollateralAddress(isNonSusdCollateral, networkId, stableIndex);
+    const isNonDefaultCollateral = getCollateral(networkId, stableIndex) !== getDefaultCollateral(networkId);
+    const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
-    if (isMultiCollateralSupported && isNonSusdCollateral && collateralAddress) {
+    if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
         return parlayMarketsAMMContract.buyQuoteFromParlayWithDifferentCollateral(
             marketsAddresses,
             selectedPositions,

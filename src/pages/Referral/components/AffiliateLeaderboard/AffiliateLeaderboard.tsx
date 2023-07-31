@@ -10,8 +10,10 @@ import { formatDateWithTime } from 'utils/formatters/date';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { TableHeaderStyleMobile } from '../TradersTable/TradersTable';
+import { TableHeaderStyle, TableHeaderStyleMobile } from '../TradersTable/TradersTable';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type AffiliateLeaderboardProps = {
     referrers: Referrer[] | [];
@@ -20,6 +22,7 @@ type AffiliateLeaderboardProps = {
 
 const AffiliateLeaderboard: React.FC<AffiliateLeaderboardProps> = ({ referrers, isLoading }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const noResultsMessage = t('referral.no-result');
 
@@ -79,7 +82,10 @@ const AffiliateLeaderboard: React.FC<AffiliateLeaderboardProps> = ({ referrers, 
                 rowsPerPage={rowsPerPage}
                 currentPage={page}
                 noResultsMessage={noResultsMessage}
-                tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...(isMobile ? TableHeaderStyleMobile : TableHeaderStyle),
+                    color: theme.textColor.secondary,
+                }}
                 tableRowStyles={{ minHeight: '50px', fontSize: '12px' }}
             />
             <PaginationWrapper
@@ -93,17 +99,6 @@ const AffiliateLeaderboard: React.FC<AffiliateLeaderboardProps> = ({ referrers, 
             />
         </>
     );
-};
-
-const TableHeaderStyle: React.CSSProperties = {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '12px',
-    lineHeight: '12px',
-    textTransform: 'uppercase',
-    color: '#5F6180',
-    justifyContent: 'flex-start',
 };
 
 export default AffiliateLeaderboard;

@@ -3,15 +3,10 @@ import format from 'date-fns/format';
 
 export const formatTxTimestamp = (timestamp: number | Date) => format(timestamp, 'MMM d, yy | HH:mm');
 
-export const toJSTimestamp = (timestamp: number) => timestamp * 1000;
-
 export const formatShortDate = (date: Date | number) => format(date, 'MMM d, yyyy');
 export const formatShortDateWithTime = (date: Date | number) => format(date, 'MMM d, yyyy | HH:mm');
 
 export const formatDateWithTime = (date: Date | number) => format(date, 'dd MMM HH:mm');
-export const formatShortDateNoYear = (date: Date | number) => format(date, 'MMM d');
-export const formatDayOfWeek = (date: Date | number) => format(date, 'EEE');
-export const formatTimeOfDate = (date: Date | number) => format(date, 'HH:mm');
 
 export const formattedDuration = (
     duration: Duration,
@@ -84,25 +79,6 @@ export const formattedDurationFull = (
     return (firstTwo ? formatted.slice(0, 2) : formatted).join(delimiter);
 };
 
-export const convertUTCToLocalDate = (date: Date) => {
-    return new Date(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
-        date.getUTCHours(),
-        date.getUTCMinutes()
-    );
-};
-
-export const convertLocalToUTCDate = (date: Date) => {
-    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes()));
-};
-
-export const setDateTimeToUtcNoon = (date: Date) => {
-    date.setUTCHours(12, 0, 0, 0);
-    return date;
-};
-
 export const addHoursToCurrentDate = (numberOfHours: number, setToEOD?: boolean) => {
     const newDateFilter = new Date();
     if (setToEOD) {
@@ -116,16 +92,4 @@ export const addHoursToCurrentDate = (numberOfHours: number, setToEOD?: boolean)
 
 export const addDaysToEnteredTimestamp = (numberOfDays: number, timestamp: number) => {
     return new Date().setTime(new Date(timestamp).getTime() + numberOfDays * 24 * 60 * 60 * 1000);
-};
-
-export const addMonthsToUTCDate = (date: Date, months: number) => {
-    return new Date(
-        Date.UTC(
-            date.getUTCFullYear(),
-            date.getUTCMonth() + months,
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes()
-        )
-    );
 };

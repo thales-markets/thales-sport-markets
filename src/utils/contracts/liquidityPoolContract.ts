@@ -1,10 +1,10 @@
-export const liquidityPoolContract = {
+import { Network } from 'enums/network';
+
+const liquidityPoolContract = {
     addresses: {
-        5: '',
-        10: '0x842e89b7a7eF8Ce099540b3613264C933cE0eBa5',
-        42: '',
-        420: '0xdd0879AB819287637f33A29d1ee91d5a76c890Af',
-        42161: '0x8e9018b48456202aA9bb3E485192B8475822B874',
+        [Network.OptimismMainnet]: '0x842e89b7a7eF8Ce099540b3613264C933cE0eBa5',
+        [Network.OptimismGoerli]: '0xdd0879AB819287637f33A29d1ee91d5a76c890Af',
+        [Network.ArbitrumOne]: '0x8e9018b48456202aA9bb3E485192B8475822B874',
     },
     abi: [
         {
@@ -14,6 +14,15 @@ export const liquidityPoolContract = {
                 { indexed: false, internalType: 'bool', name: '_flag', type: 'bool' },
             ],
             name: 'AddedIntoWhitelist',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: '_whitelistAddress', type: 'address' },
+                { indexed: false, internalType: 'bool', name: '_flag', type: 'bool' },
+            ],
+            name: 'AddedIntoWhitelistStaker',
             type: 'event',
         },
         {
@@ -99,10 +108,37 @@ export const liquidityPoolContract = {
         {
             anonymous: false,
             inputs: [
+                { indexed: false, internalType: 'uint256', name: 'round', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: 'batchSize', type: 'uint256' },
+            ],
+            name: 'RoundClosingBatchProcessed',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'uint256', name: 'round', type: 'uint256' }],
+            name: 'RoundClosingPrepared',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'uint256', name: 'roundLength', type: 'uint256' }],
+            name: 'RoundLengthChanged',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
                 { indexed: false, internalType: 'uint256', name: '_round', type: 'uint256' },
                 { indexed: false, internalType: 'address', name: 'roundPool', type: 'address' },
             ],
             name: 'RoundPoolCreated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'bool', name: 'flagToSet', type: 'bool' }],
+            name: 'SetOnlyWhitelistedStakersAllowed',
             type: 'event',
         },
         {
@@ -164,11 +200,10 @@ export const liquidityPoolContract = {
         {
             inputs: [
                 { internalType: 'address', name: 'market', type: 'address' },
-                { internalType: 'uint256', name: 'sUSDAmount', type: 'uint256' },
-                { internalType: 'enum ISportsAMM.Position', name: 'position', type: 'uint8' },
+                { internalType: 'uint256', name: 'amountToMint', type: 'uint256' },
             ],
             name: 'commitTrade',
-            outputs: [{ internalType: 'address', name: 'liquidityPoolRound', type: 'address' }],
+            outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
         },
@@ -256,7 +291,7 @@ export const liquidityPoolContract = {
                 { internalType: 'enum ISportsAMM.Position', name: 'position', type: 'uint8' },
             ],
             name: 'getOptionsForBuy',
-            outputs: [{ internalType: 'address', name: 'liquidityPoolRound', type: 'address' }],
+            outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
         },
@@ -267,7 +302,7 @@ export const liquidityPoolContract = {
                 { internalType: 'address', name: 'position', type: 'address' },
             ],
             name: 'getOptionsForBuyByAddress',
-            outputs: [{ internalType: 'address', name: 'liquidityPoolRound', type: 'address' }],
+            outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
         },
@@ -279,16 +314,30 @@ export const liquidityPoolContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256', name: 'round', type: 'uint256' }],
+            inputs: [{ internalType: 'uint256', name: '_round', type: 'uint256' }],
             name: 'getRoundEndTime',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256', name: 'round', type: 'uint256' }],
+            inputs: [{ internalType: 'uint256', name: '_round', type: 'uint256' }],
             name: 'getRoundStartTime',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'getUsersCountInCurrentRound',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'hasMarketsReadyToBeExercised',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -304,6 +353,7 @@ export const liquidityPoolContract = {
                         { internalType: 'uint256', name: '_maxAllowedDeposit', type: 'uint256' },
                         { internalType: 'uint256', name: '_minDepositAmount', type: 'uint256' },
                         { internalType: 'uint256', name: '_maxAllowedUsers', type: 'uint256' },
+                        { internalType: 'bool', name: '_needsTransformingCollateral', type: 'bool' },
                     ],
                     internalType: 'struct SportAMMLiquidityPool.InitParams',
                     name: 'params',
@@ -321,6 +371,23 @@ export const liquidityPoolContract = {
                 { internalType: 'address', name: '', type: 'address' },
             ],
             name: 'isTradingMarketInARound',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: 'user', type: 'address' }],
+            name: 'isUserLPing',
+            outputs: [{ internalType: 'bool', name: 'isUserInLP', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: '', type: 'uint256' },
+                { internalType: 'address', name: '', type: 'address' },
+            ],
+            name: 'marketAlreadyExercisedInRound',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
@@ -347,6 +414,13 @@ export const liquidityPoolContract = {
             type: 'function',
         },
         {
+            inputs: [],
+            name: 'needsTransformingCollateral',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: '_owner', type: 'address' }],
             name: 'nominateNewOwner',
             outputs: [],
@@ -362,9 +436,23 @@ export const liquidityPoolContract = {
         },
         {
             inputs: [],
+            name: 'onlyWhitelistedStakersAllowed',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'owner',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'uint256', name: 'share', type: 'uint256' }],
+            name: 'partialWithdrawalRequest',
+            outputs: [],
+            stateMutability: 'nonpayable',
             type: 'function',
         },
         {
@@ -381,6 +469,14 @@ export const liquidityPoolContract = {
             stateMutability: 'view',
             type: 'function',
         },
+        { inputs: [], name: 'prepareRoundClosing', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+        {
+            inputs: [{ internalType: 'uint256', name: 'batchSize', type: 'uint256' }],
+            name: 'processRoundClosingBatch',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
         {
             inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             name: 'profitAndLossPerRound',
@@ -392,6 +488,13 @@ export const liquidityPoolContract = {
             inputs: [],
             name: 'round',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'roundClosingPrepared',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -445,6 +548,13 @@ export const liquidityPoolContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'bool', name: 'flagToSet', type: 'bool' }],
+            name: 'setOnlyWhitelistedStakersAllowed',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: '_owner', type: 'address' }],
             name: 'setOwner',
             outputs: [],
@@ -452,8 +562,22 @@ export const liquidityPoolContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'bool', name: '_setPausing', type: 'bool' }],
+            name: 'setPaused',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: '_poolRoundMastercopy', type: 'address' }],
             name: 'setPoolRoundMastercopy',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'uint256', name: '_roundLength', type: 'uint256' }],
+            name: 'setRoundLength',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -485,6 +609,16 @@ export const liquidityPoolContract = {
                 { internalType: 'bool', name: '_flag', type: 'bool' },
             ],
             name: 'setWhitelistedAddresses',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address[]', name: '_whitelistedAddresses', type: 'address[]' },
+                { internalType: 'bool', name: '_flag', type: 'bool' },
+            ],
+            name: 'setWhitelistedStakerAddresses',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -570,8 +704,22 @@ export const liquidityPoolContract = {
             type: 'function',
         },
         {
+            inputs: [],
+            name: 'usersProcessedInRound',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: '', type: 'address' }],
             name: 'whitelistedDeposits',
+            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'whitelistedStakers',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
             type: 'function',
@@ -581,6 +729,13 @@ export const liquidityPoolContract = {
             inputs: [{ internalType: 'address', name: '', type: 'address' }],
             name: 'withdrawalRequested',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'withdrawalShare',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
         },

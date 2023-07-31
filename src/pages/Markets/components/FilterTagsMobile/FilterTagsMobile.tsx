@@ -1,4 +1,4 @@
-import { GlobalFiltersEnum, SportFilterEnum } from 'constants/markets';
+import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -100,7 +100,7 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
             {sportFilter != SportFilterEnum.All && (
                 <FilterTagContainer>
                     <FilterTagLabel>
-                        {sportFilter}
+                        {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
                         <ClearButton
                             onClick={() => {
                                 setSportFilter(SportFilterEnum.All);

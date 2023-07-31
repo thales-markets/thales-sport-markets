@@ -1,5 +1,5 @@
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import styled from 'styled-components';
 import {
     FlexDiv,
@@ -32,7 +32,7 @@ export const Title = styled(FlexDiv)`
     margin: 10px 0 15px 0;
     flex-direction: column;
     &:hover {
-        color: #3fd1ff;
+        color: ${(props) => props.theme.textColor.quaternary};
         cursor: pointer;
     }
 `;
@@ -47,7 +47,7 @@ export const TitleLabel = styled.span<{ isBold?: boolean }>`
 `;
 
 export const HeaderRow = styled(FlexDivRow)`
-    border-top: 1px solid #5f6180;
+    border-top: 1px solid ${(props) => props.theme.borderColor.primary};
     padding-top: 5px;
     justify-content: space-around;
     margin-bottom: 5px;
@@ -58,8 +58,8 @@ export const LeaderboardRow = styled(FlexDivRow)`
     align-items: center;
     cursor: pointer;
     &.first {
-        border-top: 2px solid #5f6180;
-        border-bottom: 2px solid #5f6180;
+        border-top: 2px solid ${(props) => props.theme.borderColor.primary};
+        border-bottom: 2px solid ${(props) => props.theme.borderColor.primary};
     }
 `;
 
@@ -141,9 +141,9 @@ export const OPLogoWrapper = styled(OPLogo)`
     margin-left: 5px;
 `;
 
-export const ThalesLogoWrapper = styled(ThalesLogo)`
-    width: 15px;
-    height: 15px;
+export const ArbitrumLogoWrapper = styled(ArbitrumLogo)`
+    width: 17px;
+    height: 17px;
     margin-left: 5px;
 `;
 

@@ -1,6 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
-import { countries } from 'pages/MintWorldCupNFT/countries';
+import { countries } from 'constants/worldCup';
 import useFavoriteTeamDataQuery from 'queries/favoriteTeam/useFavoriteTeamDataQuery';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';

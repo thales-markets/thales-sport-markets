@@ -1,21 +1,21 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { Position } from '../../constants/options';
 import { AMMPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
-import { NetworkId } from 'types/network';
-import { getCollateralAddress, getDecimalsByStableCoinIndex, getDefaultDecimalsForNetwork } from 'utils/collaterals';
-import { isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { Network } from 'enums/network';
+import { getCollateralAddress, getStablecoinDecimals } from 'utils/collaterals';
+import { getDefaultDecimalsForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import { ethers } from 'ethers';
 import { ZERO_ADDRESS } from 'constants/network';
+import { Position } from 'enums/markets';
 
 const usePositionPriceDetailsQuery = (
     marketAddress: string,
     position: Position,
     amount: number,
     stableIndex: number,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<AMMPosition>
 ) => {
     return useQuery<AMMPosition>(
@@ -27,7 +27,7 @@ const usePositionPriceDetailsQuery = (
                 const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
 
-                const collateralAddress = isMultiCollateral && getCollateralAddress(true, networkId, stableIndex);
+                const collateralAddress = isMultiCollateral && getCollateralAddress(networkId, stableIndex);
                 const positionDetails = await sportPositionalMarketDataContract?.getPositionDetails(
                     marketAddress,
                     position,
@@ -40,7 +40,7 @@ const usePositionPriceDetailsQuery = (
                     quote: bigNumberFormmaterWithDecimals(
                         isMultiCollateral ? positionDetails.quoteDifferentCollateral : positionDetails.quote,
                         isMultiCollateral
-                            ? getDecimalsByStableCoinIndex(stableIndex)
+                            ? getStablecoinDecimals(networkId, stableIndex)
                             : getDefaultDecimalsForNetwork(networkId)
                     ),
                     priceImpact: bigNumberFormatter(positionDetails.priceImpact),

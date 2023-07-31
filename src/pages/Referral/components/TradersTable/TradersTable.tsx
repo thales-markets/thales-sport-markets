@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type TradersTableProps = {
     referredTraders: ReferredTrader[] | [];
@@ -19,6 +21,7 @@ type TradersTableProps = {
 
 const TradersTable: React.FC<TradersTableProps> = ({ referredTraders, isLoading }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const noResultsMessage = t('referral.no-result');
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -76,7 +79,10 @@ const TradersTable: React.FC<TradersTableProps> = ({ referredTraders, isLoading 
                 data={referredTraders}
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
-                tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...(isMobile ? TableHeaderStyleMobile : TableHeaderStyle),
+                    color: theme.textColor.secondary,
+                }}
                 tableRowStyles={{ minHeight: '50px', fontSize: '12px' }}
                 rowsPerPage={rowsPerPage}
                 currentPage={page}
@@ -94,14 +100,13 @@ const TradersTable: React.FC<TradersTableProps> = ({ referredTraders, isLoading 
     );
 };
 
-const TableHeaderStyle: React.CSSProperties = {
+export const TableHeaderStyle: React.CSSProperties = {
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 600,
     fontSize: '12px',
     lineHeight: '12px',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'flex-start',
 };
 
@@ -112,7 +117,6 @@ export const TableHeaderStyleMobile: React.CSSProperties = {
     fontSize: '9px',
     lineHeight: '12px',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'flex-start',
 };
 

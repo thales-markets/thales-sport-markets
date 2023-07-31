@@ -1,27 +1,14 @@
 import Loader from 'components/Loader';
 import DappFooter from 'layouts/DappLayout/DappFooter';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { setTheme } from 'redux/modules/ui';
-import { Theme } from 'constants/ui';
-import ROUTES from 'constants/routes';
 
 const LandingPageLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const dispatch = useDispatch();
-    const location = useLocation();
-
-    useEffect(() => {
-        if (location.pathname !== ROUTES.MintWorldCupNFT) {
-            dispatch(setTheme(Theme.DARK));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location.pathname]);
 
     return (
         <>
@@ -51,7 +38,7 @@ const Wrapper = styled(FlexDivColumn)`
     min-height: 100vh;
     margin: auto;
     max-width: 1220px;
-    padding: 40px 20px;
+    padding: 30px 20px;
     align-items: center;
 `;
 

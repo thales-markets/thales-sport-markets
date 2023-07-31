@@ -1,9 +1,8 @@
 import PositionSymbol from 'components/PositionSymbol';
-import { Position } from 'constants/options';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
+import { getParlay, removeCombinedMarketFromParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import {
     formatMarketOdds,
@@ -13,12 +12,15 @@ import {
     getSymbolText,
     hasBonus,
 } from 'utils/markets';
-import { getOddsType } from '../../../../../../redux/modules/ui';
+import { isMarketPartOfCombinedMarketFromParlayData } from 'utils/combinedMarkets';
+import { getOddsType } from 'redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { MAIN_COLORS } from 'constants/ui';
 import { getIsMobile } from 'redux/modules/app';
 import { toast } from 'react-toastify';
 import { oddToastOptions } from 'config/toast';
+import { Position } from 'enums/markets';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type OddProps = {
     market: SportMarketInfo;
@@ -31,16 +33,23 @@ type OddProps = {
 const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecondRow }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const { trackEvent } = useMatomo();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
+
+    const isMarketPartOfCombinedMarket = isMarketPartOfCombinedMarketFromParlayData(parlay, market);
+
+    const parentMarketAddress = market.parentMarket !== null ? market.parentMarket : market.address;
+    const isParentMarketAddressInParlayData = parlay.filter((data) => data.parentMarket == parentMarketAddress);
+
     const isAddedToParlay =
         addedToParlay &&
         addedToParlay.position == position &&
-        addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType;
-
+        addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType &&
+        !isMarketPartOfCombinedMarket;
     const noOdd = !odd || odd == 0;
     const showBonus = hasBonus(bonus) && !noOdd;
 
@@ -48,6 +57,9 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
 
     const onClick = () => {
         if (noOdd) return;
+        if (isParentMarketAddressInParlayData) {
+            dispatch(removeCombinedMarketFromParlay(parentMarketAddress));
+        }
         if (isAddedToParlay) {
             dispatch(removeFromParlay(market.address));
         } else {
@@ -62,7 +74,10 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
                 position: position,
                 homeTeam: market.homeTeam || '',
                 awayTeam: market.awayTeam || '',
+                tags: market.tags,
                 doubleChanceMarketType: market.doubleChanceMarketType,
+                isOneSideMarket: market.isOneSideMarket,
+                tag: market.tags[0],
             };
             dispatch(updateParlay(parlayMarket));
             if (isMobile) {
@@ -82,8 +97,10 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
                     ? {
                           text: getFormattedBonus(bonus),
                           textStyle: {
-                              color: MAIN_COLORS.BONUS,
-                              backgroundColor: isShownInSecondRow ? MAIN_COLORS.GRAY : MAIN_COLORS.LIGHT_GRAY,
+                              color: theme.status.win,
+                              backgroundColor: isShownInSecondRow
+                                  ? theme.oddsContainerBackground.secondary
+                                  : theme.oddsContainerBackground.primary,
                           },
                       }
                     : undefined
@@ -91,6 +108,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
             disabled={noOdd}
             flexDirection="column"
             symbolText={getSymbolText(position, market)}
+            additionalStyle={market.isOneSideMarket ? { fontSize: 11 } : {}}
             onClick={onClick}
             selected={isAddedToParlay}
             tooltip={!isMobile && <>{oddTooltipText}</>}

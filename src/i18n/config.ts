@@ -6,6 +6,7 @@ import deTranslation from './de.json';
 // import ruTranslation from './ru.json';
 import esTranslation from './es.json';
 import thTranslation from './th.json';
+import { SupportedLanguages } from 'enums/languages';
 
 export const resources = {
     en: { translation: enTranslation },
@@ -17,17 +18,6 @@ export const resources = {
     es: { translation: esTranslation },
     th: { translation: thTranslation },
 };
-
-export enum SupportedLanguages {
-    ENGLISH = 'en',
-    CHINESE = 'cn',
-    FRENCH = 'fr',
-    GERMAN = 'de',
-    // ITALIAN = 'it',
-    // RUSSIAN = 'ru',
-    SPANISH = 'es',
-    THAI = 'th',
-}
 
 export const LanguageNameMap = {
     [SupportedLanguages.ENGLISH]: 'English',

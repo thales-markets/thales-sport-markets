@@ -1,4 +1,5 @@
-import { Position } from 'constants/options';
+import { FIFA_WC_TAG, FIFA_WC_U20_TAG } from 'constants/tags';
+import { Position } from 'enums/markets';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
@@ -21,22 +22,28 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighl
     }, [market.homeTeam, market.awayTeam, market.tags]);
 
     return (
-        <Container isFlag={market.tags[0] == 9018} width={width} padding={padding}>
+        <Container
+            isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
+            width={width}
+            padding={padding}
+        >
             <ClubLogo
                 alt="Home team logo"
                 src={homeLogoSrc}
-                isFlag={market.tags[0] == 9018}
+                isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                 isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
                 onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
             />
-            <ClubLogo
-                awayTeam={true}
-                alt="Away team logo"
-                src={awayLogoSrc}
-                isFlag={market.tags[0] == 9018}
-                isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.HOME}
-                onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
-            />
+            {!market.isOneSideMarket && (
+                <ClubLogo
+                    awayTeam={true}
+                    alt="Away team logo"
+                    src={awayLogoSrc}
+                    isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
+                    isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.HOME}
+                    onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
+                />
+            )}
         </Container>
     );
 };

@@ -1,13 +1,13 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { LiquidityPoolUserTransactions, VaultsAndLiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { VAULT_MAP } from 'constants/vault';
 import { VaultUserTransactions } from 'types/vault';
 
 const useUserVaultAndLpTransactions = (
-    networkId: NetworkId,
+    networkId: Network,
     walletAddress: string,
     options?: UseQueryOptions<VaultsAndLiquidityPoolUserTransactions>
 ) => {
@@ -41,7 +41,7 @@ const useUserVaultAndLpTransactions = (
 
                 vaultTx.push(
                     ...liquidityPoolUserTransactions.map((tx) => {
-                        return { name: 'LP', ...tx };
+                        return { name: tx.liquidityPoolType == 'parlay' ? 'parlay-lp' : 'single-lp', ...tx };
                     })
                 );
 

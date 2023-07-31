@@ -1,12 +1,12 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from 'utils/networkConnector';
-import { NetworkId } from 'types/network';
-import { getDefaultDecimalsForNetwork } from 'utils/collaterals';
+import { Network } from 'enums/network';
+import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const useSUSDWalletBalance = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<number | undefined>
 ) => {
     return useQuery<number | undefined>(

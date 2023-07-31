@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="180px" height="180px" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
+    <title>czech_republic</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="flags" transform="translate(-1530.000000, -1530.000000)">
+            <g id="czech_republic" transform="translate(1530.000000, 1530.000000)">
+                <path d="M27.7636174,24.9872556 C10.6541665,41.3705002 0,64.4410424 0,90 C0,115.558958 10.6541665,138.6295 27.7636174,155.012744 L100,90 L27.7636174,24.9872556 L27.7636174,24.9872556 L27.7636174,24.9872556 L27.7636174,24.9872556 L27.7636174,24.9872556 Z" id="blue" fill="#227FBB"></path>
+                <path d="M179.994507,90 C179.994507,139.70563 139.70138,180 89.9972841,180 C65.8526967,180 43.9288077,170.491772 27.7655126,155.015321 L100.002529,90 L179.994507,90 L179.994507,90 L179.994507,90 L179.994507,90 L179.994507,90 Z" id="red" fill="#E94B35"></path>
+                <path d="M179.994446,90 C179.994446,40.2943701 139.701319,0 89.9972231,0 C65.8526357,0 43.9287467,9.5082279 27.7654516,24.9846789 L27.7654516,24.9846789 L100.002468,90 L179.994446,90 L179.994446,90 L179.994446,90 L179.994446,90 L179.994446,90 Z" id="white" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

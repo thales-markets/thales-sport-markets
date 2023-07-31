@@ -1,4 +1,3 @@
-import { MAIN_COLORS } from 'constants/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -40,17 +39,17 @@ const Wrapper = styled.div`
 `;
 
 const Input = styled.input`
-    border: 1px solid ${MAIN_COLORS.LIGHT_GRAY};
+    border: 1px solid ${(props) => props.theme.background.secondary};
     border-radius: 5px;
     padding: 5px 50px 5px 30px;
-    color: ${MAIN_COLORS.TEXT.WHITE};
-    background: ${MAIN_COLORS.DARK_GRAY};
+    color: ${(props) => props.theme.textColor.primary};
+    background: ${(props) => props.theme.background.primary};
     outline: none;
     &::placeholder {
-        color: ${MAIN_COLORS.LIGHT_GRAY};
+        color: ${(props) => props.theme.textColor.tertiary};
     }
     &:focus {
-        border: 1px solid ${MAIN_COLORS.LIGHT_BLUE} !important;
+        border: 1px solid ${(props) => props.theme.borderColor.quaternary} !important;
     }
     @media (max-width: 575px) {
         width: 100%;

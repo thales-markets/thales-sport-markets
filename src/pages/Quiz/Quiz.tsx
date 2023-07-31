@@ -9,12 +9,10 @@ import {
     QuizContainer,
     Title,
     Question,
-    SubmitButton,
     FinishedInfo,
     FinishedInfoContainer,
     FinishedInfoLabel,
     ButtonContainer,
-    Input,
     TimeRemainingText,
     TimeRemainingGraphicContainer,
     TimeRemainingGraphicPercentage,
@@ -22,12 +20,10 @@ import {
     QuestionIndicator,
     CurrentQuestion,
     Footer,
-    ValidationTooltip,
     LoaderContainer,
     QuestionIndicatorContainer,
     QuizFirstNextContainer,
     QuizSecondNextContainer,
-    InputLabel,
     InputContainer,
     QuizLink,
     Copy,
@@ -37,6 +33,7 @@ import {
     DifficultyLabel,
     DifficultyInfo,
     Wrapper,
+    defaultButtonProps,
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
@@ -82,12 +79,16 @@ import HelpUsImprove from './HelpUsImprove';
 import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
-import { Info } from 'pages/Markets/Home/Home';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import TextInput from 'components/fields/TextInput';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
+import Button from 'components/Button';
 
 const Quiz: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isQuizStarted = useSelector((state: RootState) => getIsQuizStarted(state));
@@ -214,18 +215,20 @@ const Quiz: React.FC = () => {
     const getSubmitButton = () => {
         if (!isWalletConnected && !isQuizFinished) {
             return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
+                <Button onClick={() => openConnectModal?.()} {...defaultButtonProps}>
                     {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
+                </Button>
             );
         }
 
         if (isQuizFinished) {
             return (
                 <>
-                    <SubmitButton onClick={handleNewQuiz}>{t('quiz.button.try-again-label')}</SubmitButton>
+                    <Button onClick={handleNewQuiz} {...defaultButtonProps}>
+                        {t('quiz.button.try-again-label')}
+                    </Button>
                     <SPAAnchor href={buildHref(ROUTES.QuizLeaderboard)}>
-                        <SubmitButton onClick={() => {}}>{t('quiz.button.see-leaderboard-label')}</SubmitButton>
+                        <Button onClick={() => {}}>{t('quiz.button.see-leaderboard-label')}</Button>
                     </SPAAnchor>
                 </>
             );
@@ -235,28 +238,46 @@ const Quiz: React.FC = () => {
             return (
                 <>
                     {currentQuestionIndex > 0 && (
-                        <SubmitButton onClick={handlePreviousQuestion} isNavigation disabled={isSubmitting}>
+                        <Button
+                            onClick={handlePreviousQuestion}
+                            disabled={isSubmitting}
+                            backgroundColor={theme.button.background.quaternary}
+                            borderColor={theme.button.borderColor.secondary}
+                            {...defaultButtonProps}
+                        >
                             {t('quiz.button.previous-question-label')}
-                        </SubmitButton>
+                        </Button>
                     )}
                     {currentQuestionIndex < NUMBER_OF_QUESTIONS - 1 && (
-                        <SubmitButton onClick={handleNextQuestion} isNavigation disabled={isSubmitting}>
+                        <Button
+                            onClick={handleNextQuestion}
+                            disabled={isSubmitting}
+                            backgroundColor={theme.button.background.quaternary}
+                            borderColor={theme.button.borderColor.secondary}
+                            {...defaultButtonProps}
+                        >
                             {t('quiz.button.next-question-label')}
-                        </SubmitButton>
+                        </Button>
                     )}
                     {currentQuestionIndex == NUMBER_OF_QUESTIONS - 1 && (
-                        <SubmitButton onClick={() => handleFinishQuiz(true)} isNavigation disabled={isSubmitting}>
+                        <Button
+                            onClick={() => handleFinishQuiz(true)}
+                            disabled={isSubmitting}
+                            backgroundColor={theme.button.background.quaternary}
+                            borderColor={theme.button.borderColor.secondary}
+                            {...defaultButtonProps}
+                        >
                             {t('quiz.button.finish-quiz-label')}
-                        </SubmitButton>
+                        </Button>
                     )}
                 </>
             );
         }
 
         return (
-            <SubmitButton disabled={isStartQuizDisabled} onClick={handleStartQuiz}>
+            <Button disabled={isStartQuizDisabled} onClick={handleStartQuiz} {...defaultButtonProps}>
                 {t('quiz.button.start-quiz-label')}
-            </SubmitButton>
+            </Button>
         );
     };
 
@@ -273,14 +294,6 @@ const Quiz: React.FC = () => {
 
     return (
         <Wrapper>
-            <Info>
-                <Trans
-                    i18nKey="rewards.op-rewards-banner-message"
-                    components={{
-                        bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                    }}
-                />
-            </Info>
             <BackToLink link={buildHref(ROUTES.Markets.Home)} text={t('market.back-to-markets')} />
             <Container>
                 {isQuizInProgress && (
@@ -318,33 +331,26 @@ const Quiz: React.FC = () => {
                                         />
                                     </Copy>
                                     <InputContainer>
-                                        <InputLabel>{t('quiz.twitter-handle-label')}:</InputLabel>
-                                        <ValidationTooltip
-                                            open={!isTwitterValid}
-                                            title={t('quiz.twitter-handle-validation') as string}
-                                            placement={'top'}
-                                            arrow={true}
-                                        >
-                                            <Input
-                                                type="text"
-                                                placeholder={t('quiz.twitter-handle-placeholder')}
-                                                value={twitter}
-                                                onChange={(event) => {
-                                                    setIsTwitterValid(true);
-                                                    dispatch(setTwitter(event.target.value));
-                                                }}
-                                            />
-                                        </ValidationTooltip>
+                                        <TextInput
+                                            placeholder={t('quiz.twitter-handle-placeholder')}
+                                            value={twitter}
+                                            onChange={(event: any) => {
+                                                setIsTwitterValid(true);
+                                                dispatch(setTwitter(event.target.value));
+                                            }}
+                                            label={t('quiz.twitter-handle-label')}
+                                            showValidation={!isTwitterValid}
+                                            validationMessage={t('quiz.twitter-handle-validation')}
+                                        />
                                     </InputContainer>
                                     <InputContainer>
-                                        <InputLabel>{t('quiz.discord-label')}:</InputLabel>
-                                        <Input
-                                            type="text"
+                                        <TextInput
                                             placeholder={t('quiz.discord-placeholder')}
                                             value={discord}
-                                            onChange={(event) => {
+                                            onChange={(event: any) => {
                                                 dispatch(setDiscord(event.target.value));
                                             }}
+                                            label={t('quiz.discord-label')}
                                         />
                                     </InputContainer>
                                     <ButtonContainer>{getSubmitButton()}</ButtonContainer>

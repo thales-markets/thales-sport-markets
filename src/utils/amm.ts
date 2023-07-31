@@ -1,16 +1,15 @@
-import { COLLATERAL_INDEX_TO_COLLATERAL, STABLE_DECIMALS } from 'constants/currency';
 import { ZERO_ADDRESS } from 'constants/network';
-import { Position } from 'constants/options';
 import { BigNumber, ethers } from 'ethers';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { getCollateralAddress } from './collaterals';
-import { isMultiCollateralSupportedForNetwork, NetworkIdByName } from './network';
+import { isMultiCollateralSupportedForNetwork } from './network';
+import { Position } from 'enums/markets';
 
 export const getAMMSportsTransaction: any = (
     isVoucherSelected: boolean,
     voucherId: number,
     stableIndex: number,
-    networkId: NetworkId,
+    networkId: Network,
     sportsAMMContract: ethers.Contract,
     overtimeVoucherContract: ethers.Contract,
     marketAddress: string,
@@ -23,7 +22,7 @@ export const getAMMSportsTransaction: any = (
         gasLimit: number | null;
     }
 ): Promise<ethers.ContractTransaction> => {
-    const collateralAddress = getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
+    const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isVoucherSelected) {
@@ -65,13 +64,13 @@ export const getAMMSportsTransaction: any = (
 
 export const getSportsAMMQuoteMethod: any = (
     stableIndex: number,
-    networkId: NetworkId,
+    networkId: Network,
     sportsAMMContract: ethers.Contract,
     marketAddress: string,
     selectedPosition: Position,
     parsedAmount: BigNumber
 ) => {
-    const collateralAddress = getCollateralAddress(stableIndex ? stableIndex !== 0 : false, networkId, stableIndex);
+    const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
@@ -84,18 +83,4 @@ export const getSportsAMMQuoteMethod: any = (
     } else {
         return sportsAMMContract.buyFromAmmQuote(marketAddress, selectedPosition, parsedAmount);
     }
-};
-
-export const getAmountForApproval = (stableIndex: number, amountToApprove: string, networkId: NetworkId) => {
-    let collateralDecimals = 18;
-    if (networkId === NetworkIdByName.ArbitrumOne) {
-        collateralDecimals = 6;
-    } else {
-        const stable = (COLLATERAL_INDEX_TO_COLLATERAL as any)[stableIndex];
-
-        if ((STABLE_DECIMALS as any)[stable]) {
-            collateralDecimals = (STABLE_DECIMALS as any)[stable];
-        }
-    }
-    return ethers.utils.parseUnits(amountToApprove, collateralDecimals);
 };

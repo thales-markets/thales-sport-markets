@@ -21,7 +21,6 @@ import zebraLogo from 'assets/images/voucher/voucher-zebra-logo.svg';
 import overtimeLogo from 'assets/images/overtime-logo.svg';
 import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';
 import { getIsAppReady } from 'redux/modules/app';
-import { getDefaultColleteralForNetwork } from 'utils/collaterals';
 import SimpleLoader from 'components/SimpleLoader';
 import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
@@ -32,6 +31,7 @@ import { refetchAfterVoucherClaim } from 'utils/queryConnector';
 import { LINKS } from 'constants/links';
 import { generalConfig } from 'config/general';
 import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -139,7 +139,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                 </VoucherBox>
                                 <VoucherBox width="118px" backgroundImage={voucherAmountBox} isColumn={true}>
                                     <NumberText>{overtimeVoucherEscrowData?.voucherAmount}</NumberText>
-                                    <Text>{getDefaultColleteralForNetwork(networkId)}</Text>
+                                    <Text>{getDefaultCollateral(networkId)}</Text>
                                 </VoucherBox>
                                 <VoucherBox width="142px" backgroundImage={voucherTimeBox} isColumn={true}>
                                     <TextCenter>
@@ -176,7 +176,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                     <MobileVoucherInfoRow>
                                         <FlexDivColumnNative>
                                             <NumberText>{overtimeVoucherEscrowData?.voucherAmount}</NumberText>
-                                            <Text>{getDefaultColleteralForNetwork(networkId)}</Text>
+                                            <Text>{getDefaultCollateral(networkId)}</Text>
                                         </FlexDivColumnNative>
                                         <FlexDivColumnNative>
                                             <TextCenter>
@@ -226,7 +226,7 @@ const Banner = styled.div<{ image: string; defaultImage: string; mobileImage: st
     height: 150px;
     background-image: ${(props) => `url(${props.image}), url(${props.defaultImage})`};
     background-position: center;
-    border: 2px solid #5f6180;
+    border: 2px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 14px;
     @media (max-width: ${MOBILE_MAX_WIDTH}) {
         background-image: ${(props) => `url(${props.mobileImage}), url(${props.mobileDefaultImage})`};
@@ -255,7 +255,7 @@ const MobileVoucherColumn = styled(FlexDivColumnCentered)`
 const MobileVoucherInfoRow = styled(FlexDivCentered)`
     gap: 80px;
     width: 90%;
-    border-top: 1px solid #5f6180;
+    border-top: 1px solid ${(props) => props.theme.borderColor.primary};
     margin-top: 10px;
     padding-top: 10px;
 `;
@@ -308,7 +308,7 @@ const InfoText = styled.p`
     font-size: 14px;
     line-height: 16px;
     text-align: justify;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Text = styled.span<{ isUppercase?: boolean }>`
@@ -316,7 +316,7 @@ const Text = styled.span<{ isUppercase?: boolean }>`
     font-weight: 300;
     font-size: 14px;
     line-height: 16px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     text-align: center;
     text-transform: ${(props) => (props.isUppercase ? 'uppercase' : 'none')};
 `;
@@ -337,13 +337,13 @@ const NumberText = styled(Text)`
     font-weight: 800;
     font-size: 40px;
     line-height: 40px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const TimeLabel = styled(Text)`
     font-weight: 700;
     font-size: 16px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
     margin-left: 2px;
 `;
 
@@ -352,14 +352,14 @@ const ClaimText = styled(Text)`
     font-weight: 700;
     line-height: 19px;
     letter-spacing: 0.025em;
-    color: #303656;
+    color: ${(props) => props.theme.textColor.tertiary};
 `;
 
 const Link = styled.a`
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.link.textColor.primary};
 `;
 
 const EmptyContainer = styled(FlexDivRowCentered)`
@@ -383,7 +383,7 @@ const EmptyTitle = styled.span`
     text-align: center;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export default Voucher;

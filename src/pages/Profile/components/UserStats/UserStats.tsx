@@ -9,7 +9,6 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { WinningInfo } from 'types/markets';
 import { UserVaultsData } from 'types/vault';
-import { getAreVaultsSupportedForNetworkId } from 'utils/network';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
@@ -26,14 +25,12 @@ const UserStats: React.FC = () => {
         : { highestWin: 0, lifetimeWins: 0 };
 
     const userVaultsDataQuery = useUserVaultsDataQuery(walletAddress.toLowerCase(), networkId, {
-        enabled: isWalletConnected && getAreVaultsSupportedForNetworkId(networkId),
+        enabled: isWalletConnected,
     });
 
     const vaultsData = userVaultsDataQuery.isSuccess
         ? (userVaultsDataQuery.data as UserVaultsData)
         : { balanceTotal: 0 };
-
-    const areVaultsSupported = getAreVaultsSupportedForNetworkId(networkId);
 
     return (
         <Wrapper>
@@ -59,16 +56,12 @@ const UserStats: React.FC = () => {
                     <Label>{t('profile.stats.lifetime-wins')}</Label>
                     <Value>{!user ? 0 : winningInfo.lifetimeWins}</Value>
                 </Section>
-                {areVaultsSupported && (
-                    <>
-                        <Separator />
-                        <Section>
-                            <Label>{t('profile.stats.in-vaults')}</Label>
-                            <Value>{!user ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
-                            <CurrencyLabel>USD</CurrencyLabel>
-                        </Section>
-                    </>
-                )}
+                <Separator />
+                <Section>
+                    <Label>{t('profile.stats.in-vaults')}</Label>
+                    <Value>{!user ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
+                    <CurrencyLabel>USD</CurrencyLabel>
+                </Section>
             </SectionWrapper>
         </Wrapper>
     );
@@ -77,7 +70,7 @@ const UserStats: React.FC = () => {
 const Wrapper = styled.div`
     margin-top: 30px;
     display: flex;
-    background: #303656;
+    background: ${(props) => props.theme.background.secondary};
     border-radius: 5px;
     width: 100%;
     flex-wrap: wrap;
@@ -111,7 +104,7 @@ const Label = styled.span`
     font-size: 11px;
     line-height: 11px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
     margin: 10px 0px 5px 0px;
 `;
 
@@ -119,7 +112,7 @@ const Separator = styled.div`
     width: 2px;
     height: 56px;
     margin-top: 8px;
-    background: ${(props) => props.theme.button.background.secondary};
+    background: ${(props) => props.theme.background.tertiary};
     border-radius: 5px;
     @media (max-width: 600px) {
         &.mobile-hide {
@@ -135,7 +128,7 @@ const CurrencyLabel = styled.span`
     font-size: 12px;
     line-height: 12px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Value = styled.span`
@@ -145,7 +138,7 @@ const Value = styled.span`
     font-size: 19px;
     line-height: 23px;
     text-transform: uppercase;
-    color: #3fd1ff;
+    color: ${(props) => props.theme.textColor.quaternary};
     text-align: right;
 `;
 

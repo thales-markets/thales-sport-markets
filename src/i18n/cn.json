@@ -90,7 +90,11 @@
             "user-rejected-tx": "用户拒绝交易",
             "enter-address": "Enter address",
             "invalid-address": "Invalid address",
-            "batch-transaction-single-failure": "交易被拒绝或失败。"
+            "batch-transaction-single-failure": "交易被拒绝或失败。",
+            "enter-percentage": "Enter percentage",
+            "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
+            "single-amm-paused": "AMM 已暂停",
+            "invalid-amount-max": "金额不能高于{{max}}"
         },
         "time-remaining": {
             "ended": "ended",
@@ -148,7 +152,9 @@
         "yes": "YES",
         "no": "NO",
         "fifa-tooltip": "FIFA世界杯的盘口结果以规则结果为准，如果他们进入加时赛，规则结果将由盘口决定。",
-        "tennis-tooltip": "如果出现超车，比赛将被视为取消。如果在比赛中退赛/取消资格，将被视为晋级下一轮的球员获胜"
+        "tennis-tooltip": "如果出现超车，比赛将被视为取消。如果在比赛中退赛/取消资格，将被视为晋级下一轮的球员获胜",
+        "iihf-tooltip": "IIHF世界锦标赛的盘口结果是基于监管结果，如果他们进入加时赛，监管结果将由市场决定。",
+        "football-tooltip": "市场结果以监管结果为准，如果超时，监管结果由市场决定。"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -215,7 +221,6 @@
                 "hockey": "冰球",
                 "tennis": "网球",
                 "football": "橄榄球",
-                "ufc": "终极格斗",
                 "baseball": "棒球",
                 "formula1": "一级方程式赛车",
                 "motogp": "世界摩托车锦标赛",
@@ -223,7 +228,10 @@
                 "motosport": "摩托车运动",
                 "favourites": "收藏夹",
                 "esports": "电子竞技",
-                "cricket": "蟋蟀"
+                "cricket": "蟋蟀",
+                "mma": "格斗运动",
+                "boxing": "拳击",
+                "golf": "高尔夫球"
             },
             "all": "所有",
             "datepicker": {
@@ -231,7 +239,8 @@
             },
             "mobile-tags": {
                 "search": "搜索"
-            }
+            },
+            "show-active": "仅显示活跃的运动"
         },
         "back-to-markets": "查看其他比赛",
         "back-to-market": "返回市场页面",
@@ -262,10 +271,7 @@
         "tooltip": {
             "amount-exceeded": "金额超过AMM的余额。",
             "minimal-amount": "最小数量为1",
-            "no-funds": "请确认您的钱包有足够余额",
-            "min-amount": "最低金额为 {{min}}",
-            "max-quote": "最大报价为 {{value}}",
-            "min-quote": "最小报价是 {{value}}"
+            "no-funds": "请确认您的钱包有足够余额"
         },
         "match-time": "比赛时间",
         "race-starts": "比赛开始",
@@ -293,12 +299,14 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance"
+                "double-chance": "Double chance",
+                "combined-positions": "合并职位"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
-                    "points": "points"
+                    "points": "points",
+                    "sets": "套"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -318,7 +326,10 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
-                "bonus": "{{bonus}} added bonus on win!"
+                "bonus": "{{bonus}} added bonus on win!",
+                "and": "和",
+                "race-winner": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "tournament-winner": "{{team}} 将赢得比赛 {{matchResolve}}"
             },
             "starts-in": "开始于",
             "period": "时期",
@@ -327,7 +338,9 @@
             "half": "一半",
             "inning": "局",
             "half-time": "半场",
-            "total-markets": "Total markets"
+            "total-markets": "Total markets",
+            "no-win": "没有赢",
+            "race-winner": "优胜者"
         },
         "market-details": {
             "price": "价格",
@@ -355,32 +368,31 @@
             "total-quote": "总报价",
             "skew": "偏斜",
             "pay-with": "使用。。。支付",
-            "buy-amount": "购买金额",
             "potential-profit": "潜在利润",
             "available": "可用的",
             "validation": {
                 "title": "过关投注验证",
-                "max-markets": "Parlay 中最多 4 个盘口",
                 "amount-exceeded": "金额超过 AMM 上可用的金额",
                 "min-amount": "最低金额为 {{min}}",
                 "no-funds": "请确保您的钱包有足够的资金",
                 "availability": "市场地位的低可用性",
-                "min-quote": "最小报价是 {{value}}",
-                "max-quote": "最大报价为 {{value}}",
                 "not-supported": "不支持验证错误 {{error}}",
                 "risk-per-comb": "超出每个组合的风险",
                 "single-min-amount": "最低金额为 {{min}}",
                 "same-team": "同一支球队不能在 Parlay 中超过一次",
                 "team-in-parlay": "{{team}} 已经在 Parlay 中。同一支球队不能多次加入过关。",
                 "max-double-chances": "The maximum number of double chance markets in Parlay is {{max}}.",
-                "max-payout": "支持的最大支出为 {{max}}",
                 "max-teams": "Parlay 中的最大 {{max}} 个盘口",
                 "max-profit": "最大支持利润为 {{max}}",
-                "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）"
+                "no-funds-multi-collateral": "请确保您的钱包有足够的资金（买入金额的 {{percentage}}%）",
+                "max-number-of-markets-with-combined-markets": "Parlay 中的最大市场数量为 {{max}}。一个组合市场算作两个常规市场。",
+                "max-combined-markets": "Parlay 中组合市场的最大数量为 {{max}}。",
+                "amm-contract-paused": "连本带利 AMM 已暂停",
+                "unique-players": "不能在连赢中添加同一参与者两次。 {{existingParticipant}} 已加入连本带利",
+                "same-event-participant": "每个活动仅支持一名参与者。无法添加 {{addedParticipant}}，因为 {{existingParticipant}} 已在连本带利中"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
-            "fee": "总费用",
             "empty-title": "没有职位",
             "positions": "职位",
             "safebox-fee": "保险箱费用",
@@ -441,7 +453,8 @@
             }
         },
         "incentivized-markets": "激励市场",
-        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip-tennis": "温网将受到激励，因为比赛将于 7 月 3 日开始。市场将通过 {{rewards}} 得到提振，直至 7 月 16 日锦标赛结束。奖励将根据您在这些市场上的交易量进行分配。您可以在我们的<detailsLink>Dune Dashboard</detailsLink>上跟踪您的奖励分配。"
     },
     "rewards": {
         "header": "奖励",
@@ -615,60 +628,11 @@
         "claim-voucher": "索取凭证",
         "claiming-voucher": "声称...",
         "left-to-claim": "留下索赔",
-        "voucher-title": "索取加班券"
-    },
-    "mint-world-cup-nft": {
-        "get-thales": "获得泰雷兹",
-        "go-to-twitter": "去推特",
-        "already-minted": "你已经铸造了你的 NFT",
-        "retweet": "转发这条推文",
-        "second-option": "让您加入许可名单的第二个选项是完成以下步骤：",
-        "minting-is-free": "铸造是免费的，每个钱包只能铸造一个 NFT。此 NFT 不可转让。",
-        "eligible-text-1": "Zebro NFT 系列被用作世界杯加时赛的参赛作品。",
-        "follow": "在 Twitter 上关注加班市场",
-        "incentives": "激励措施",
-        "stake-thales": "股份 THALES",
-        "tag-3-friends": "在同一条推文中，评论您的 ETH 地址并标记 3 个朋友",
-        "not-eligible-text": "您的钱包还没有资格铸造 Zebro NFT！",
-        "stake-10-thales": "为了能够铸造一个 Zebro NFT，您需要至少有 10 个 THALES 质押。",
-        "eligible-text-2": "铸造您最喜欢的国家队的斑马，并有资格获得 50,000 OP 和 30,000 THALES 奖金奖励！",
-        "mint-nft-button": "铸造这只斑马！",
-        "zebro-campaign": "斑马国际足联运动",
-        "eligible-text": "嘿，你现在可以铸造你最喜欢的团队 Zebro NFT。",
-        "no": "不",
-        "are-you-sure": "你确定要铸造这个 NFT 吗？每个钱包只能铸造一个 NFT。",
-        "choose-nft": "铸造你的 Zebro NFT",
-        "success-mint": "成功铸造",
-        "yes-mint": "是的，薄荷 NFT",
-        "mint-this-zebro": "铸造这只斑马！",
-        "leaderboard-title": "排行榜",
-        "leaderboard": {
-            "three-game-parlay": "+15% 如果是 3 场过关投注",
-            "two-game-parlay": "+10% 如果是 2 场过关投注",
-            "reward-calculations": "如果满足以下条件，奖励计算将根据交易量按比例计算，最大额外增加 40% 的交易量：",
-            "underdog-multiplier": "失败者乘数：",
-            "home-country-multiplier": "本国 NFT 乘数：",
-            "four-game-parlay": "+20% 如果是 4 场过关投注",
-            "underdog-multiplier-text": "如果您的世界杯比赛位置价格低于 0.3（赔率高于 1:3.33），您将获得 10% 的奖励提升。",
-            "parlay-boost": "过关提升：",
-            "parlay-boost-text": "如果您的世界杯比赛使用过关投注，您将获得以下好处：",
-            "home-country-multiplier-text": "如果您的世界杯比赛涉及与您的 Zebro 相同的国家队，您将获得 +10% 奖励提升",
-            "country": "国家",
-            "owner": "所有者",
-            "search-placeholder": "搜索钱包地址",
-            "nft": "NFT",
-            "volume": "体积",
-            "rewards": "奖励",
-            "base-volume": "根据",
-            "bonus-volume": "奖金",
-            "player": "播放器",
-            "wash-trading": "*加班团队有权取消清洗交易员参加活动的资格"
-        },
-        "zebro-wct-collection": "Zebro WC NFT 系列",
-        "zebro-wct-collection-text": "是在世界杯期间代表您最喜欢的国家的激励活动的一部分，并有资格分享 50,000 OP 代币和 30,000 THALES 代币，以及用于过关投注和个人比赛的独家乘数。",
-        "go-to-leaderboard": "前往排行榜",
-        "congrats": "恭喜！您已经成功铸造了 Zebro NFT！",
-        "get-your-nft": "薄荷页"
+        "voucher-title": "索取加班券",
+        "go-to-parlay-lp": "前往 Parlay LP",
+        "go-to-single-lp": "前往单曲唱片",
+        "parlay-lp-title": "连本带利流动资金池",
+        "single-lp-title": "单一流动性池"
     },
     "referral": {
         "generate-link": "生成链接",
@@ -706,18 +670,23 @@
     "vault": {
         "discount-vault": {
             "title": "折扣金库",
-            "description": "<p>买入超过{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>所有进入本轮的存款都将计入交易量的激励。</p>",
+            "description": "<p>买入超过{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>",
             "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。 此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
         },
         "degen-discount-vault": {
             "title": "激进折扣金库",
-            "description": "<p>买入超过{{discount}}折扣的任何赔率头寸。</p><p>所有进入本轮的存款都将计入交易量的激励。</p>",
+            "description": "<p>买入超过{{discount}}折扣的任何赔率头寸。</p>",
             "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场。</p>"
         },
         "safu-discount-vault": {
             "title": "保守折扣金库",
-            "description": "<p>买入超过{{odds}}赔率且有任何折扣的仓位。</p><p>所有进入本轮的存款都将计入交易量的激励。</p>",
+            "description": "<p>买入超过{{odds}}赔率且有任何折扣的仓位。</p>",
             "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。此外,{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
+        },
+        "upsettoor-vault": {
+            "title": "Upsettoor Vault",
+            "description": "<p>购买赔率低于{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>",
+            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。 此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
         },
         "variables": "<p>金库参数</p><ul><li>金库利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏度影响：{{skewImpactLimit}}</li><li>单一市场投入上限：{{allocationLimitsPerMarketPerRound}}</li><li>存款上限：{{maxAllowedDeposit}}</li><li>金库最大用户：{{maxAllowedUsers}}</li><li>Minimum amount on a single trade：{{minTradeAmount}}</li><li>Minimum deposit：{{minDepositAmount}}</li><li>本轮时间: {{roundLength}} 天</li></ul>",
         "back-to-vaults": "返回金库选择页面",
@@ -792,28 +761,36 @@
         },
         "parlay-discount-vault": {
             "title": "Parlay 折扣金库",
-            "description": "<p>购买 parlay 彩票，其中彩票中的每个单独位置至少有 {{discount}} 折扣。</p><p>进入一轮的所有存款都计入游戏化的质押量。</p>",
+            "description": "<p>购买 parlay 彩票，其中彩票中的每个单独位置至少有 {{discount}} 折扣。</p>",
             "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，每轮最多可以将 {{allocationLimitsPerMarketPerRound}} 花在一张连赢彩票上，从而将风险分散到折扣大于 {{odds}} 的多张连赢彩票上。</p>"
         },
+        "gamified-staking-message": "<p>进入一轮的所有存款都计入游戏化的质押量。</p>",
         "LP": {
-            "title": "唱片"
+            "title": "唱片",
+            "parlay-lp": "连本带利LP",
+            "single-lp": "单张唱片"
         },
-        "variables-parlay": "<p>变量：</p><ul><li>利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏斜影响：{{skewImpactLimit}}</li><li>单个 parlay 的最大分配：{{allocationLimitsPerMarketPerRound}}</li><li>最大总存款：{{maxAllowedDeposit}}</li><li>保险库中的最大用户数：{{maxAllowedUsers}}</li><li>单笔交易的最低金额：{{minTradeAmount}}</li><li>最低存款：{{minDepositAmount}}</li><li>回合持续时间：{{roundLength}} 天</li></ul>"
+        "variables-parlay": "<p>变量：</p><ul><li>利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏斜影响：{{skewImpactLimit}}</li><li>单个 parlay 的最大分配：{{allocationLimitsPerMarketPerRound}}</li><li>最大总存款：{{maxAllowedDeposit}}</li><li>保险库中的最大用户数：{{maxAllowedUsers}}</li><li>单笔交易的最低金额：{{minTradeAmount}}</li><li>最低存款：{{minDepositAmount}}</li><li>回合持续时间：{{roundLength}} 天</li></ul>",
+        "single-lp": {
+            "title": "单张唱片"
+        },
+        "parlay-lp": {
+            "title": "连本带利LP"
+        }
     },
     "parlay-leaderboard": {
-        "title": "Parlay 奖励排行榜",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
-        "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
+        "title": "Parlay Incentives Leaderboard",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays with minimum 3 games on a <bold>bi-weekly basis</bold>. The tickets will be ranked based on a total quote, followed by the number of positions on the parlays.",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 10 parlays every 2 weeks</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
-        "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
+        "info": "If multiple parlays have the same total quote and the number of positions the following will be used as tie-breakers in respective order:",
         "info1": "- The amount paid",
         "info2": "- Actual total quote (gotten by multiplying positions individually)",
         "info3": "*1 winning parlay eligible per wallet",
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
-            "player": "Player",
             "quote": "Quote",
             "paid": "Paid",
             "won": "Won",
@@ -861,131 +838,13 @@
             "bridge": "Bridge to optimism  ",
             "exchange": "Send from exchange",
             "copy-address": "Copy address",
-            "coppied": "Coppied!",
             "address": "Your address QR code",
             "copied": "已复制！"
         }
     },
-    "march-madness": {
-        "tabs": {
-            "leaderboard": "排行榜",
-            "home": "家",
-            "brackets": "括号"
-        },
-        "back-to-markets": "回到市场",
-        "brackets": {
-            "team-2": "团队 2",
-            "team-1": "团队 1",
-            "submit-text": "完成括号",
-            "submit": "完成括号",
-            "submit-modify": "更新支架",
-            "modal": {
-                "finish-text-1": "做得好！",
-                "button-minting": "铸币...",
-                "button-mint": "喜欢NFT",
-                "button-update": "更新支架",
-                "update-text": "你已经铸造了你的 NFT！",
-                "button-updating": "更新中...",
-                "finish-text-2": "现在你可以铸造你的 NFT 了！"
-            },
-            "stats": {
-                "rank": "秩",
-                "incomplete": "不完整",
-                "my-stats": "我的数据",
-                "complete": "完全的",
-                "status": "地位",
-                "bonus": "奖金",
-                "place": "地方",
-                "my-total-score": "我的总分",
-                "points": "积分",
-                "rank-volume": "按体积排名",
-                "rank-games": "按猜的游戏排名"
-            },
-            "round-1": "第二轮",
-            "round-5": "最终的",
-            "round-2": "甜蜜 16",
-            "round-0": "第一轮",
-            "round-3": "精英8",
-            "round-4": "决赛 4",
-            "modal-mint": {
-                "finish-text-1": "做得好！",
-                "button-updating": "更新中...",
-                "update-text": "你已经铸造了你的 NFT！",
-                "button-minting": "铸币...",
-                "finish-text-2": "现在你可以铸造你的 NFT 了！",
-                "button-update": "更新支架",
-                "button-mint": "喜欢NFT",
-                "finish-text-1-success": "恭喜！",
-                "update-text-1": "做得很好！",
-                "finish-text-2-success": "您刚刚铸造了您的 March Madness 支架！",
-                "update-text-2": "我们保存了您的括号预测，请立即更新您的括号！",
-                "finish-text-3-success": "前往 <marketsLink>NCAAB 市场</marketsLink> 并开始赚取奖励！",
-                "finish-info": "*March Madness 支架 NFT 是一种 Overtime NFT，它允许持有者通过创建自己的预测锦标赛支架来参与 Overtime March Madness 活动。",
-                "update-text-2-success": "您的 March Madness 支架 NFT 已更新！"
-            },
-            "modal-share": {
-                "share": "分享",
-                "user-selection": "我选择了 {{team}} 在休斯敦削减网络！",
-                "header": "我最后的 4 个选择"
-            },
-            "share": "分享这个支架"
-        },
-        "regions": {
-            "west": "西方",
-            "east": "东方",
-            "midwest": "中西部",
-            "south": "南"
-        },
-        "home": {
-            "time-info": "您还有 {{days}} 天时间进行预测",
-            "button-connect": "连接钱包",
-            "text-1": "March Madness 是一项 NCAAB 赛事，有 68 支球队以淘汰赛形式争夺冠军。该赛事于 3 月 14 日开始，8 支球队将在 64 场淘汰赛阶段争夺最后 4 个名额。铸造从 3 月 12 日开始，一直持续到 3 月 16 日主赛事开始。",
-            "title": "欢迎来到疯狂三月锦标赛",
-            "text-2": "计算奖金的另一种方法是将其基于回合，因为进入淘汰阶段的比赛越难预测结果（因为您也必须正确猜测所有之前的比赛），所以也许:",
-            "text-2b": "正确预测 32 轮比赛结果：2% 奖金",
-            "text-2f": "正确预测最终游戏结果：20% 奖金",
-            "text-2a": "正确预测 64 轮比赛结果：1% 奖金",
-            "text-2e": "正确预测第 4 轮比赛结果：10% 奖金",
-            "text-2d": "正确预测 8 轮比赛结果：7% 奖金",
-            "text-2c": "正确预测 16 强比赛结果：4% 奖金",
-            "button-create": "创建支架",
-            "text-2g": "这里的最大加成：32*1+16*2+8*4+4*7+2*10+20=164%",
-            "text-3f": "第一轮 - 1%",
-            "text-3": "对于<bold>第一池</bold>，10,000 OP 将分配给通过 March Madness 游戏驱动的所有数量，包括所有市场类型和与至少一个 NCAAB 游戏的连赢。 March Madness 支架 NFT 的持有者有资格获得交易提升。每个正确的游戏都有资格获得分层提升，最高可达 164%。",
-            "text-3d": "甜 16 - 4%",
-            "text-3a": "冠军 - 20%",
-            "text-3e": "第二轮 - 2%",
-            "text-5": "更多详细信息，请参阅我们的 <mediumLink>Medium 博客文章</mediumLink>。",
-            "text-3b": "四强 - 10%",
-            "text-4": "<bold>第二个池子</bold> 将在 March Madness 游戏中以 10 sUSD 交易量为基准的最准确支架的持有者之间分配。满足数量要求的持有者可以跟踪他们在最佳组别排行榜中的位置，获胜者将在其中瓜分 3,000 OP 奖励池。",
-            "text-3c": "精英八强 - 7%"
-        },
-        "mobile-message": "页面仅在更大的屏幕上可用。请使用桌面版！",
-        "leaderboard": {
-            "address": "地址",
-            "rewards": "奖励",
-            "base-volume": "根据",
-            "volume": "体积",
-            "owner": "所有者",
-            "bonus-volume": "奖金",
-            "player": "播放器",
-            "search-placeholder": "搜索钱包地址",
-            "rank": "秩",
-            "guessed-games": "猜谜游戏",
-            "no-data": "目前没有可用数据",
-            "tooltip-base-volume-table": "通过 NCAA 篮球比赛推动销量",
-            "tooltip-bonus-volume-table": "根据您的括号选择计算的奖金量",
-            "tooltip-correct-correct-table": "在您的括号中正确猜出的游戏数量",
-            "tooltip-rewards-correct-table": "3,000 OP (10,000 THALES on Arbitrum) 将分配给前 10 名",
-            "tooltip-rewards-volume-table": "10,000 OP (30,000 THALES on Arbitrum) 将按比例分配",
-            "by-guessed-correctly": "猜对了",
-            "my-rewards": "我的奖励"
-        },
-        "test-info": "测试阶段现已开放样本团队，2023 年选择将于 3 月 12 日开放！"
-    },
     "liquidity-pool": {
         "title": "Provide Liquidity",
-        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round your balance (inclusive of that round's PnL) is sent to you. To withdraw, you need to have at least {{thalesStakedAmount}} THALES staked per each {{currency}} you are withdrawing.</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
+        "description": "<h1>Description</h1><p>Liquidity providing involves users depositing stablecoin collateral into a smart contract-based liquidity pool for Overtime trading. The collateral deposited is used to facilitate trading on Overtime's AMM.</p><p>To be able to provide liquidity you'll need to be staking THALES. There's no maximum cap per wallet and you may deposit a maximum of 1 {{currency}} per {{thalesStakedAmount}} THALES staked until the liquidity pool is filled.</p><p>At the end of each round, the proportional share of that round's PnL will be added to your deposited balance.</p><p>If you wish to withdraw, you can signal that at any time during the ongoing round, and at the end of the round the amount you signaled for withdrawal (inclusive of that round's PnL) is sent to you.  The minimum amount to be withdrawn is set to 10%</p><p>If you decide to unstake THALES while providing liquidity, please be aware that you'll need to signal a withdrawal from the liquidity pool first.</p><p>Providing liquidity exposes you to various risks including potential losses due to users winning in trading as well as smart contract security risks. Please make sure you understand these risks before depositing.</p><p><tipLink>TIP-99</tipLink> has more details on the technical implementation of Overtime liquidity providing.</p>",
         "variables": "<h1>Variables</h1><ul><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the pool: {{maxAllowedUsers}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
         "liquidity-pool-not-started-message": "The liquidity pool has not started",
         "liquidity-pool-paused-message": "The liquidity pool is paused",
@@ -1000,13 +859,16 @@
         "max-allowance-label": "Max allowance",
         "your-thales-staked-label": "Your THALES staked",
         "allowance-multiplier-label": "Allowance multiplier",
-        "withdrawal-request-label": "Withdrawal request: {{amount}}",
+        "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
+        "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
         "deposit-amount-placeholder": "Enter amount",
         "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "Nothing to withdraw.",
-        "withdrawal-message": "You can request a withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
-        "withdrawal-requested-message": "You requested to withdraw <bold>{{amount}}</bold><tooltip />. Your funds will be sent to you automatically at the end of the round when the round closes.",
+        "withdrawal-message": "You can request a full/partial withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
+        "full-withdrawal-requested-message": "You requested to withdraw a full balance of <bold>{{amount}}</bold><tooltip />.",
+        "partial-withdrawal-requested-message": "You requested to withdraw {{percentage}} of the balance (<bold>{{amount}}</bold><tooltip />).",
+        "withdrawal-requested-message": "Your funds will be sent to you automatically at the end of the round when the round closes.",
         "first-deposit-withdrawal-message": "You deposited for the next round and you can withdraw these funds at the end of the next round.",
         "deposit-withdrawal-warning": "Withdrawal is requested, you cannot deposit.",
         "deposit-max-amount-of-users-warning": "Maximum number of users in the liquidity pool is reached, you cannot deposit.",
@@ -1015,7 +877,10 @@
         "deposit-staked-thales-error": "Deposit amount exceeds max allowance, stake more THALES to deposit",
         "deposit-min-amount-error": "The minimum amount for the deposit is {{amount}}",
         "withdrawal-deposit-warning": "You cannot withdraw as you already deposited for the next round.",
-        "withdrawal-staked-thales-warning": "You cannot withdraw as you need more staked THALES to withdraw. Stake {{amount}} THALES more to enable withdrawal.",
+        "full-withdrawal-label": "Full withdrawal",
+        "partial-withdrawal-label": "Partial withdrawal",
+        "percentage-placeholder": "Enter percentage",
+        "withdrawal-amount-label": "Withdrawal amount: <bold>{{amount}}</bold>",
         "tabs": {
             "deposit": "Deposit",
             "withdraw": "Withdraw"
@@ -1057,6 +922,15 @@
                 "withdrawalRequest": "Withdrawal Request",
                 "claim": "Withdrawal Claim"
             }
-        }
+        },
+        "return": {
+            "title": "返回",
+            "arr": "平均回合回报率（ARR）",
+            "apy": "基于 APR 的预计 APY",
+            "apr": "基于 ARR 的预计 APR"
+        },
+        "single-lp": "单张唱片",
+        "description-parlay": "<h1>描述</h1><p>流动性提供涉及用户将稳定币抵押品存入基于智能合约的流动性池中以进行加班交易。存入的抵押品用于促进 Overtime 的 Parlay AMM 上的交易。</p><p>为了能够提供流动性，您需要质押泰雷兹。每个钱包没有最高限额，每质押 {{thalesStakedAmount}} THALES 最多可存入 1 {{currency}}，直至流动资金池填满。</p><p>每轮结束时，该轮盈亏的比例份额将添加到您的存入余额中。</p><p>如果您希望提款，您可以在正在进行的回合中随时发出信号，并在该回合结束时，您发出的提款金额（包括该轮的盈亏）将发送给您。最低提款金额设定为10%</p><p>如果您决定在提供流动性的同时解除泰雷兹质押，请注意，您需要首先发出从流动性池中提款的信号。</p><p>提供流动性会让您面临各种风险，包括用户在交易中获胜造成的潜在损失以及智能合约安全风险。请确保您在存款前了解这些风险。</p><p><tipLink> TIP-142</tipLink>有关加班流动性提供的技术实施的更多详细信息。</p>",
+        "parlay-lp": "连本带利LP"
     }
 }

@@ -1,9 +1,9 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery } from 'react-query';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import networkConnector from 'utils/networkConnector';
 
-const useMarketDurationQuery = (networkId: NetworkId) => {
+const useMarketDurationQuery = (networkId: Network) => {
     return useQuery(QUERY_KEYS.MarketDuration(networkId), async () => {
         const sportMarketManagerContract = networkConnector.sportMarketManagerContract;
 

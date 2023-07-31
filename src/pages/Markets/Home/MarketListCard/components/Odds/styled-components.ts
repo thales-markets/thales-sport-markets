@@ -4,7 +4,7 @@ import { FlexDivRow, FlexDivColumn } from 'styles/common';
 export const Container = styled(FlexDivColumn)`
     padding: 0 9px;
     :not(:last-of-type) {
-        border-right: 3px solid #5f6180;
+        border-right: 3px solid ${(props) => props.theme.borderColor.primary};
     }
     :last-of-type {
         padding: 0;
@@ -38,4 +38,8 @@ export const Title = styled.span`
 
 export const OddsContainer = styled(FlexDivRow)`
     align-items: center;
+`;
+
+export const CombinedOddsContainer = styled(FlexDivRow)`
+    align-items: flex-start;
 `;

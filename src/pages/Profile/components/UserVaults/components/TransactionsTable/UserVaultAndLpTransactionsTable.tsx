@@ -11,9 +11,12 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { VaultsAndLiquidityPoolUserTransaction, VaultsAndLiquidityPoolUserTransactions } from 'types/liquidityPool';
 import styled from 'styled-components';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
-export const UserVaultAndLpTransactionsTable: React.FC = () => {
+const UserVaultAndLpTransactionsTable: React.FC = () => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const txQuery = useUserVaultAndLpTransactions(networkId, walletAddress, {
@@ -31,7 +34,10 @@ export const UserVaultAndLpTransactionsTable: React.FC = () => {
         <Wrapper>
             <Title>{t('markets.nav-menu.items.history')}</Title>
             <Table
-                tableHeadCellStyles={TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...TableHeaderStyle,
+                    color: theme.textColor.secondary,
+                }}
                 tableRowCellStyles={TableRowStyle}
                 columns={[
                     {
@@ -138,7 +144,7 @@ const Title = styled.p`
     font-weight: 700;
     font-size: 16px;
     line-height: 19px;
-    color: #ffffff;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const TableHeaderStyle: React.CSSProperties = {
@@ -149,7 +155,6 @@ const TableHeaderStyle: React.CSSProperties = {
     lineHeight: '14px',
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
 };
 

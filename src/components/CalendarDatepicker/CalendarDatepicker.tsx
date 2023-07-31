@@ -86,7 +86,7 @@ const DatePickerContainer = styled.div`
 
     .react-datepicker__day-names {
         color: ${(props) => props.theme.textColor.primary} !important;
-        border-top: 2px solid #5f6180;
+        border-top: 2px solid ${(props) => props.theme.borderColor.primary};
         margin-top: 10px;
         border-bottom: none !important;
     }

@@ -3,7 +3,7 @@ import QUERY_KEYS from '../../constants/queryKeys';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { BALANCE_THRESHOLD } from 'constants/wallet';
 import networkConnector from 'utils/networkConnector';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { Token } from 'types/tokens';
 import { ethers } from 'ethers';
 import tokenContract from 'utils/contracts/paymentTokenContract';
@@ -11,7 +11,7 @@ import tokenContract from 'utils/contracts/paymentTokenContract';
 const useTokenBalanceQuery = (
     token: Token,
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<number | undefined>
 ) => {
     return useQuery<number | undefined>(

@@ -6,10 +6,7 @@ import { buildHref } from 'utils/routes';
 import {
     Container,
     Title,
-    SubmitButton,
     ButtonContainer,
-    ValidationTooltip,
-    InputLabel,
     InputContainer,
     Wrapper,
     ToggleContainer,
@@ -26,7 +23,6 @@ import {
     ContentInfo,
     BoldContent,
     WarningContentInfo,
-    CloseRoundButton,
     LeftLoaderContainer,
     RightLoaderContainer,
     RoundEndContainer,
@@ -42,10 +38,8 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import SPAAnchor from 'components/SPAAnchor';
-import { Info } from 'pages/Markets/Home/Home';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { isParlayVault, VaultTab, VAULT_MAP } from 'constants/vault';
+import { isParlayVault, VAULT_MAP } from 'constants/vault';
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserVaultData, VaultData } from 'types/vault';
@@ -58,7 +52,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, getMaxGasLimitForNetwork, NetworkIdByName } from 'utils/network';
+import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -68,8 +62,15 @@ import { RouteComponentProps } from 'react-router-dom';
 import vaultContract from 'utils/contracts/sportVaultContract';
 import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
-import { getDefaultColleteralForNetwork, getDefaultDecimalsForNetwork } from 'utils/collaterals';
 import { refetchVaultData } from 'utils/queryConnector';
+import { NewBadge } from 'pages/Vaults/VaultOverview/styled-components';
+import Button from 'components/Button';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
+import { VaultTab } from 'enums/vault';
+import { stableCoinParser } from 'utils/formatters/ethers';
+import { getDefaultCollateral } from 'utils/collaterals';
+import { navigateTo } from 'utils/routes';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -77,6 +78,7 @@ type VaultProps = RouteComponentProps<{
 
 const Vault: React.FC<VaultProps> = (props) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -92,8 +94,14 @@ const Vault: React.FC<VaultProps> = (props) => {
     const [lastValidUserVaultData, setLastValidUserVaultData] = useState<UserVaultData | undefined>(undefined);
 
     const { params } = props.match;
-    const vaultId = params && params.vaultId ? params.vaultId : '';
-    const vaultAddress = !!VAULT_MAP[vaultId] ? VAULT_MAP[vaultId].addresses[networkId] : undefined;
+    const vaultId = params && params.vaultId && !!VAULT_MAP[params.vaultId] ? params.vaultId : '';
+    const vaultAddress = !!vaultId ? VAULT_MAP[vaultId].addresses[networkId] : undefined;
+
+    useEffect(() => {
+        if (!vaultAddress) {
+            navigateTo(ROUTES.Vaults);
+        }
+    }, [vaultAddress]);
 
     const { openConnectModal } = useConnectModal();
 
@@ -185,10 +193,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = ethers.utils.parseUnits(
-                        Number(amount).toString(),
-                        getDefaultDecimalsForNetwork(networkId)
-                    );
+                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -226,7 +231,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                         id,
                         getSuccessToastOptions(
                             t('market.toast-message.approve-success', {
-                                token: getDefaultColleteralForNetwork(networkId),
+                                token: getDefaultCollateral(networkId),
                             })
                         )
                     );
@@ -248,10 +253,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             try {
                 const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
 
-                const parsedAmount = ethers.utils.parseUnits(
-                    Number(amount).toString(),
-                    getDefaultDecimalsForNetwork(networkId)
-                );
+                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
                 const tx = await sportVaultContractWithSigner.deposit(parsedAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
@@ -327,65 +329,47 @@ const Vault: React.FC<VaultProps> = (props) => {
 
     const getDepositSubmitButton = () => {
         if (!isWalletConnected) {
-            return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         if (insufficientBalance) {
-            return <SubmitButton disabled={true}>{t(`common.errors.insufficient-balance`)}</SubmitButton>;
+            return <Button disabled={true}>{t(`common.errors.insufficient-balance`)}</Button>;
         }
         if (!isAmountEntered) {
-            return <SubmitButton disabled={true}>{t(`common.errors.enter-amount`)}</SubmitButton>;
+            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
         }
         if (!hasAllowance) {
             return (
-                <SubmitButton disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
+                <Button disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
                     {!isAllowing
                         ? t('common.enable-wallet-access.approve-label', {
-                              currencyKey: getDefaultColleteralForNetwork(networkId),
+                              currencyKey: getDefaultCollateral(networkId),
                           })
                         : t('common.enable-wallet-access.approve-progress-label', {
-                              currencyKey: getDefaultColleteralForNetwork(networkId),
+                              currencyKey: getDefaultCollateral(networkId),
                           })}
-                </SubmitButton>
+                </Button>
             );
         }
         return (
-            <SubmitButton disabled={isDepositButtonDisabled} onClick={handleDeposit}>
+            <Button disabled={isDepositButtonDisabled} onClick={handleDeposit}>
                 {!isSubmitting ? t('vault.button.deposit-label') : t('vault.button.deposit-progress-label')}
-            </SubmitButton>
+            </Button>
         );
     };
 
-    const getWithdrawSubmitButton = () => {
+    const getWithdrawButton = () => {
         if (!isWalletConnected) {
-            return (
-                <SubmitButton onClick={() => openConnectModal?.()}>
-                    {t('common.wallet.connect-your-wallet')}
-                </SubmitButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         return (
-            <SubmitButton disabled={isRequestWithdrawalButtonDisabled} onClick={handleWithdrawalRequest}>
+            <Button disabled={isRequestWithdrawalButtonDisabled} onClick={handleWithdrawalRequest}>
                 {t('vault.button.request-withdrawal-label')}
-            </SubmitButton>
+            </Button>
         );
     };
 
     return (
         <Wrapper>
-            {networkId !== NetworkIdByName.ArbitrumOne && (
-                <Info>
-                    <Trans
-                        i18nKey="rewards.op-rewards-banner-message"
-                        components={{
-                            bold: <SPAAnchor href={buildHref(ROUTES.Rewards)} />,
-                        }}
-                    />
-                </Info>
-            )}
             <BackToLink link={buildHref(ROUTES.Vaults)} text={t('vault.back-to-vaults')} />
             {vaultData && (
                 <>
@@ -405,9 +389,17 @@ const Vault: React.FC<VaultProps> = (props) => {
                                             <TimeRemaining end={vaultData.roundEndTime} fontSize={20} showFullCounter />
                                         )}{' '}
                                         {vaultData.canCloseCurrentRound && (
-                                            <CloseRoundButton disabled={isSubmitting} onClick={closeRound}>
+                                            <Button
+                                                disabled={isSubmitting}
+                                                onClick={closeRound}
+                                                fontSize="12px"
+                                                margin="5px 0 0 0"
+                                                height="24px"
+                                                backgroundColor={theme.button.background.quaternary}
+                                                borderColor={theme.button.borderColor.secondary}
+                                            >
                                                 {t('vault.button.close-round-label')}
-                                            </CloseRoundButton>
+                                            </Button>
                                         )}
                                     </RoundEnd>
                                 </RoundEndContainer>
@@ -449,6 +441,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                     <Title>
                         <TitleVaultIcon className={`icon icon--${vaultId}`} />
                         {t(`vault.${vaultId}.title`)}
+                        {vaultData && vaultData.round === 1 && <NewBadge>NEW</NewBadge>}
                     </Title>
                     {!vaultData ? (
                         <LeftLoaderContainer>
@@ -463,8 +456,19 @@ const Vault: React.FC<VaultProps> = (props) => {
                                         p: <p />,
                                     }}
                                     values={{
-                                        odds: formatPercentage(vaultData.priceLowerLimit, 0),
+                                        odds: formatPercentage(
+                                            vaultId === 'upsettoor-vault'
+                                                ? vaultData.priceUpperLimit
+                                                : vaultData.priceLowerLimit,
+                                            0
+                                        ),
                                         discount: formatPercentage(Math.abs(vaultData.skewImpactLimit), 0),
+                                    }}
+                                />
+                                <Trans
+                                    i18nKey={`vault.gamified-staking-message`}
+                                    components={{
+                                        p: <p />,
                                     }}
                                 />
                                 <Trans
@@ -582,8 +586,8 @@ const Vault: React.FC<VaultProps> = (props) => {
                                     }}
                                     active={selectedTab === VaultTab.WITHDRAW}
                                     dotSize="18px"
-                                    dotBackground="#303656"
-                                    dotBorder="3px solid #3FD1FF"
+                                    dotBackground={theme.background.secondary}
+                                    dotBorder={`3px solid ${theme.borderColor.quaternary}`}
                                     handleClick={() => {
                                         setSelectedTab(
                                             selectedTab === VaultTab.DEPOSIT ? VaultTab.WITHDRAW : VaultTab.DEPOSIT
@@ -610,35 +614,31 @@ const Vault: React.FC<VaultProps> = (props) => {
                                         </WarningContentInfo>
                                     )}
                                     <InputContainer>
-                                        <InputLabel>{t('vault.deposit-amount-label')}:</InputLabel>
-                                        <ValidationTooltip
-                                            open={insufficientBalance || exceededVaultCap || invalidAmount}
-                                            title={
-                                                t(
-                                                    `${
-                                                        insufficientBalance
-                                                            ? 'common.errors.insufficient-balance'
-                                                            : exceededVaultCap
-                                                            ? 'vault.deposit-vault-cap-error'
-                                                            : 'vault.deposit-min-amount-error'
-                                                    }`,
-                                                    {
-                                                        amount: formatCurrencyWithSign(
-                                                            USD_SIGN,
-                                                            vaultData.minDepositAmount
-                                                        ),
-                                                    }
-                                                ) as string
-                                            }
-                                        >
-                                            <NumericInput
-                                                value={amount}
-                                                disabled={isDepositAmountInputDisabled}
-                                                onChange={(_, value) => setAmount(value)}
-                                                placeholder={t('vault.deposit-amount-placeholder')}
-                                                currencyLabel={getDefaultColleteralForNetwork(networkId)}
-                                            />
-                                        </ValidationTooltip>
+                                        <NumericInput
+                                            value={amount}
+                                            label={t('vault.deposit-amount-label')}
+                                            disabled={isDepositAmountInputDisabled}
+                                            onChange={(_, value) => setAmount(value)}
+                                            placeholder={t('vault.deposit-amount-placeholder')}
+                                            currencyLabel={getDefaultCollateral(networkId)}
+                                            showValidation={insufficientBalance || exceededVaultCap || invalidAmount}
+                                            validationMessage={t(
+                                                `${
+                                                    insufficientBalance
+                                                        ? 'common.errors.insufficient-balance'
+                                                        : exceededVaultCap
+                                                        ? 'vault.deposit-vault-cap-error'
+                                                        : 'vault.deposit-min-amount-error'
+                                                }`,
+                                                {
+                                                    amount: formatCurrencyWithSign(
+                                                        USD_SIGN,
+                                                        vaultData.minDepositAmount
+                                                    ),
+                                                }
+                                            )}
+                                            validationPlacement="bottom"
+                                        />
                                     </InputContainer>
                                     {vaultData && (
                                         <>
@@ -764,7 +764,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                                                     )}
                                                 </>
                                             )}
-                                            <ButtonContainer>{getWithdrawSubmitButton()}</ButtonContainer>
+                                            <ButtonContainer>{getWithdrawButton()}</ButtonContainer>
                                         </>
                                     )}
                                     {vaultData && userVaultData && userVaultData.isWithdrawalRequested && (
@@ -826,7 +826,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}
-                    tokenSymbol={getDefaultColleteralForNetwork(networkId)}
+                    tokenSymbol={getDefaultCollateral(networkId)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}

@@ -1,6 +1,5 @@
 import { useAccountModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import SwapModal from 'components/SwapModal';
-import { COLLATERAL_INDEX_TO_COLLATERAL } from 'constants/currency';
 import ROUTES from 'constants/routes';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
@@ -10,10 +9,11 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getDefaultCollateralIndexForNetworkId, getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
+import { getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import { WizardStep } from '../../Wizard';
 import FundModal from '../FundModal';
+import { WizardStep } from 'enums/wizard';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 type StepProps = {
     stepNumber: number;
@@ -68,10 +68,10 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 transKey += '.trade';
                 break;
         }
-        const collateralName = COLLATERAL_INDEX_TO_COLLATERAL[getDefaultCollateralIndexForNetworkId(networkId)];
+
         return t(transKey, {
             network: getNetworkNameByNetworkId(networkId, true) || getDefaultNetworkName(true),
-            collateral: collateralName,
+            collateral: getDefaultCollateral(networkId),
         });
     }, [stepType, networkId]);
 
@@ -183,14 +183,14 @@ const StepNumberSection = styled(FlexDivCentered)`
 
 const StepDescriptionSection = styled(FlexDivColumn)<{ isActive: boolean; isDisabled?: boolean }>`
     width: 60%;
-    color: ${(props) => (props.isActive ? '#ffffff' : '#5F6180')};
+    color: ${(props) => (props.isActive ? props.theme.textColor.primary : props.theme.textColor.secondary)};
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
 `;
 
 const StepActionSection = styled(FlexDivCentered)<{ isActive: boolean; isDisabled?: boolean }>`
     width: 30%;
     text-align: center;
-    color: ${(props) => (props.isActive ? '#3FD1FF' : '#5f6180')};
+    color: ${(props) => (props.isActive ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     @media (max-width: 950px) {
         width: 100%;
         text-align: start;
@@ -226,8 +226,8 @@ const StepNumberWrapper = styled.div<{ isActive: boolean; isDisabled?: boolean }
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    ${(props) => (props.isActive ? 'border: 2px solid #3FD1FF;' : '')}
-    ${(props) => (props.isActive ? '' : 'background: #5f6180;')}
+    ${(props) => (props.isActive ? `border: 2px solid ${props.theme.borderColor.quaternary};` : '')}
+    ${(props) => (props.isActive ? '' : `background: ${props.theme.background.tertiary};`)}
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
 `;
 
@@ -236,7 +236,8 @@ const StepNumber = styled.span<{ isActive: boolean }>`
     font-size: 29px;
     line-height: 43px;
     text-transform: uppercase;
-    color: ${(props) => (props.isActive ? '#ffffff' : '#1a1c2b')};
+    color: ${(props) =>
+        props.isActive ? props.theme.button.textColor.secondary : props.theme.button.textColor.primary};
 `;
 
 const StepActionIconWrapper = styled.div<{ isActive: boolean; pulsate?: boolean }>`
@@ -250,8 +251,8 @@ const StepActionIconWrapper = styled.div<{ isActive: boolean; pulsate?: boolean 
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        ${(props) => (props.isActive ? 'border: 2px solid #3FD1FF;' : '')}
-        ${(props) => (props.isActive ? '' : 'background: #5f6180;')}
+        ${(props) => (props.isActive ? `border: 2px solid ${props.theme.borderColor.quaternary};` : '')}
+        ${(props) => (props.isActive ? '' : `background: ${props.theme.background.tertiary};`)}
     }
 
     @keyframes pulsing {
@@ -276,7 +277,7 @@ const StepActionIcon = styled.i<{ isDisabled?: boolean }>`
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
     @media (max-width: 950px) {
         padding-bottom: 0;
-        color: #ffffff;
+        color: ${(props) => props.theme.textColor.primary};
         font-size: 30px;
     }
 `;

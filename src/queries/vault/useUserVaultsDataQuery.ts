@@ -1,14 +1,15 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
-import { NetworkId } from 'types/network';
+import { Network } from 'enums/network';
 import { UserVaultsData } from 'types/vault';
 import { VAULT_MAP, isParlayVault } from 'constants/vault';
+import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const useUserVaultsDataQuery = (
     walletAddress: string,
-    networkId: NetworkId,
+    networkId: Network,
     options?: UseQueryOptions<UserVaultsData | undefined>
 ) => {
     return useQuery<UserVaultsData | undefined>(
@@ -34,8 +35,14 @@ const useUserVaultsDataQuery = (
 
                         userVaultData.balanceTotal += contractUserVaultData.withdrawalRequested
                             ? 0
-                            : bigNumberFormatter(contractUserVaultData.balanceCurrentRound) +
-                              bigNumberFormatter(contractUserVaultData.balanceNextRound);
+                            : bigNumberFormmaterWithDecimals(
+                                  contractUserVaultData.balanceCurrentRound,
+                                  getDefaultDecimalsForNetwork(networkId)
+                              ) +
+                              bigNumberFormmaterWithDecimals(
+                                  contractUserVaultData.balanceNextRound,
+                                  getDefaultDecimalsForNetwork(networkId)
+                              );
                     }
                 } catch (e) {
                     console.log(e);

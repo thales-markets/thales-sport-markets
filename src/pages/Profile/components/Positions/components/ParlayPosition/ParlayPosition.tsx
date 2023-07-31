@@ -1,6 +1,5 @@
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import { Position } from 'constants/options';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +18,7 @@ import {
     convertPositionNameToPositionType,
     formatMarketOdds,
     isParlayClaimable,
+    syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterClaim } from 'utils/queryConnector';
@@ -49,9 +49,17 @@ import {
     ExternalLinkArrow,
     ExternalLinkContainer,
     Label,
-    ClaimButton,
 } from '../../styled-components';
 import { getMaxGasLimitForNetwork } from 'utils/network';
+import {
+    extractCombinedMarketsFromParlayMarketType,
+    removeCombinedMarketsFromParlayMarketType,
+} from 'utils/combinedMarkets';
+import ParlayCombinedItem from './components/ParlayCombinedItem';
+import { Position } from 'enums/markets';
+import Button from 'components/Button/Button';
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;
@@ -64,6 +72,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
     setShareTicketModalData,
     setShowShareTicketModal,
 }) => {
+    const theme: ThemeInterface = useTheme();
     const [showDetails, setShowDetails] = useState<boolean>(false);
 
     const selectedOddsType = useSelector(getOddsType);
@@ -72,6 +81,13 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+
+    const parlay = syncPositionsAndMarketsPerContractOrderInParlay(parlayMarket);
+
+    const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
+    const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlay);
+
+    const NUMBER_OF_GAMES = parlayMarket.sportMarkets.length - combinedMarkets.length;
 
     const claimParlay = async (parlayAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
@@ -144,7 +160,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 </TicketIdContainer>
                 <InfoContainer>
                     <Label>{t('profile.card.number-of-games')}:</Label>
-                    <Value>{parlayMarket.sportMarkets?.length}</Value>
+                    <Value>{NUMBER_OF_GAMES}</Value>
                 </InfoContainer>
                 <InfoContainerColumn>
                     <Label>{t('profile.card.ticket-paid')}:</Label>
@@ -173,29 +189,35 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 {isMobile && isClaimable && (
                     <ClaimContainer>
                         <ClaimValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</ClaimValue>
-                        <ClaimButton
-                            claimable={true}
+                        <Button
                             onClick={(e: any) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 claimParlay(parlayMarket.id);
                             }}
+                            backgroundColor={theme.button.background.quaternary}
+                            borderColor={theme.button.borderColor.secondary}
+                            padding="2px 5px"
+                            fontSize="9px"
+                            height="19px"
                         >
                             {t('profile.card.claim')}
-                        </ClaimButton>
+                        </Button>
                     </ClaimContainer>
                 )}
                 {isClaimable && !isMobile && (
-                    <ClaimButton
-                        claimable={true}
+                    <Button
                         onClick={(e: any) => {
                             e.preventDefault();
                             e.stopPropagation();
                             claimParlay(parlayMarket.id);
                         }}
+                        backgroundColor={theme.button.background.quaternary}
+                        borderColor={theme.button.borderColor.secondary}
+                        padding="3px 15px"
                     >
                         {t('profile.card.claim')}
-                    </ClaimButton>
+                    </Button>
                 )}
                 {!isClaimable && (
                     <ExternalLink href={getEtherscanTxLink(networkId, parlayMarket.txHash)} target={'_blank'}>
@@ -208,24 +230,30 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             <CollapsableContainer show={showDetails}>
                 <Divider />
                 <ParlayDetailContainer>
-                    {parlayMarket.sportMarketsFromContract.map((address, index) => {
-                        const sportMarket = parlayMarket.sportMarkets.find(
-                            (market) => market.address.toLowerCase() == address.toLowerCase()
-                        );
-                        const position = parlayMarket.positions.find(
-                            (position) => position.market.address == sportMarket?.address
-                        );
-                        if (sportMarket && position) {
+                    {combinedMarkets &&
+                        combinedMarkets.map((combinedMarket, index) => {
+                            return (
+                                <ParlayCombinedItem
+                                    combinedMarket={combinedMarket}
+                                    key={`${index}-combined-item-${combinedMarket.markets[0].address}-${combinedMarket.markets[1].address}`}
+                                />
+                            );
+                        })}
+                    {parlayWithoutCombinedMarkets &&
+                        parlayWithoutCombinedMarkets.sportMarkets.map((market, index) => {
                             return (
                                 <ParlayItem
-                                    market={sportMarket}
-                                    position={position}
-                                    quote={parlayMarket.marketQuotes ? parlayMarket.marketQuotes[index] : 0}
+                                    market={market}
+                                    position={parlayWithoutCombinedMarkets.positions[index]}
+                                    quote={
+                                        parlayWithoutCombinedMarkets.marketQuotes
+                                            ? parlayWithoutCombinedMarkets.marketQuotes[index]
+                                            : 0
+                                    }
                                     key={index}
                                 />
                             );
-                        }
-                    })}
+                        })}
                 </ParlayDetailContainer>
                 <CollapseFooterContainer>
                     <TotalQuoteContainer>

@@ -1,8 +1,6 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
-import { GlobalFiltersEnum } from 'constants/markets';
 import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
-import useSportMarketsQueryNew from 'queries/markets/useSportsMarketsQueryNew';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -11,19 +9,19 @@ import {
     getParlayPayment,
     getHasParlayError,
     setParlaySize,
-    removeFromParlay,
     resetParlayError,
     setPayment,
-    getMultiSingle,
     setPaymentSelectedStableIndex,
     getIsMultiSingle,
     setIsMultiSingle,
+    getMultiSingle,
+    removeAll,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { MultiSingleAmounts, ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { CombinedParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
 import Payment from './components/Payment';
@@ -31,14 +29,27 @@ import Single from './components/Single';
 import MultiSingle from './components/MultiSingle';
 import Ticket from './components/Ticket';
 import ValidationModal from './components/ValidationModal';
-import Toggle from 'components/Toggle/Toggle';
+import Toggle from 'components/Toggle';
+import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
+import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
+import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
+import { GlobalFiltersEnum } from 'enums/markets';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type ParylayProps = {
     onBuySuccess?: () => void;
 };
 
+type CombinedMarketsData = {
+    combinedMarkets: CombinedParlayMarket[];
+    parlaysWithoutCombinedMarkets: ParlaysMarket[];
+    isCombinedMarketsInParlay: boolean;
+};
+
 const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const dispatch = useDispatch();
+    const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -46,18 +57,23 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const parlay = useSelector(getParlay);
     const parlayPayment = useSelector(getParlayPayment);
     const isMultiSingleBet = useSelector(getIsMultiSingle);
-    const multiSingleStore = useSelector(getMultiSingle);
     const hasParlayError = useSelector(getHasParlayError);
+    const multiSingleStore = useSelector(getMultiSingle);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
+    const [combinedMarketsData, setCombinedMarketsData] = useState<CombinedMarketsData>({
+        combinedMarkets: [],
+        parlaysWithoutCombinedMarkets: [],
+        isCombinedMarketsInParlay: false,
+    });
+
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
-    const [multiSingleAmounts, setMultiSingleAmounts] = useState<MultiSingleAmounts[]>([]);
 
     const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
         enabled: isAppReady,
     });
 
-    const sportMarketsQuery = useSportMarketsQueryNew(networkId, {
+    const sportMarketsQuery = useSportMarketsQuery(GlobalFiltersEnum.OpenMarkets, networkId, {
         enabled: isAppReady,
     });
 
@@ -106,13 +122,32 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                         return market.address !== parlayMarket.sportMarketAddress;
                     });
                 });
-                notOpenedMarkets.forEach((market) => dispatch(removeFromParlay(market.sportMarketAddress)));
+
+                if (notOpenedMarkets.length > 0) dispatch(removeAll());
+            }
+
+            if (parlayMarkets.length) {
+                const combinedMarketsFromParlay = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
+                const parlaysWithoutCombinedMarkets = removeCombinedMarketFromParlayMarkets(parlayMarkets);
+
+                if (combinedMarketsFromParlay.length > 0) {
+                    setCombinedMarketsData({
+                        isCombinedMarketsInParlay: true,
+                        combinedMarkets: combinedMarketsFromParlay,
+                        parlaysWithoutCombinedMarkets,
+                    });
+                } else {
+                    setCombinedMarketsData({
+                        isCombinedMarketsInParlay: false,
+                        combinedMarkets: [],
+                        parlaysWithoutCombinedMarkets: [],
+                    });
+                }
             }
 
             setParlayMarkets(parlayMarkets);
-            setMultiSingleAmounts(multiSingleStore);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch, multiSingleStore]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetParlayError()), [dispatch]);
 
@@ -131,31 +166,57 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                             secondLabel: t('markets.parlay.toggle-parlay.multi-single'),
                         }}
                         active={isMultiSingleBet}
-                        disabled={parlayMarkets.length === 1}
+                        disabled={multiSingleStore.length === 0}
                         dotSize="18px"
-                        dotBackground="#303656"
-                        dotBorder="3px solid #3FD1FF"
+                        dotBackground={theme.background.secondary}
+                        dotBorder={`3px solid ${theme.borderColor.quaternary}`}
                         handleClick={onToggleTypeClickHandler}
                     />
-                    {isMultiSingleBet && parlayMarkets.length > 1 ? (
+                    {isMultiSingleBet && multiSingleStore.length ? (
                         <>
                             <MultiSingle
-                                markets={parlayMarkets}
+                                markets={
+                                    combinedMarketsData.parlaysWithoutCombinedMarkets.length
+                                        ? combinedMarketsData.parlaysWithoutCombinedMarkets
+                                        : parlayMarkets
+                                }
                                 parlayPayment={parlayPayment}
-                                multiSingleAmounts={multiSingleAmounts}
                             />
                         </>
                     ) : (
                         <>
                             <ListContainer>
-                                {parlayMarkets.map((market, index) => {
-                                    const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                                    return (
-                                        <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                            <MatchInfo market={market} isHighlighted={true} />
-                                        </RowMarket>
-                                    );
-                                })}
+                                {combinedMarketsData?.isCombinedMarketsInParlay &&
+                                    combinedMarketsData.parlaysWithoutCombinedMarkets.length > 0 &&
+                                    combinedMarketsData.parlaysWithoutCombinedMarkets.map((market, index) => {
+                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                        return (
+                                            <RowMarket key={`${index}-non-combined`} outOfLiquidity={outOfLiquidity}>
+                                                <MatchInfo market={market} isHighlighted={true} />
+                                            </RowMarket>
+                                        );
+                                    })}
+                                {combinedMarketsData?.isCombinedMarketsInParlay &&
+                                    combinedMarketsData.combinedMarkets.map((market, index) => {
+                                        return (
+                                            <RowMarket key={index + 'combined'} outOfLiquidity={false}>
+                                                <MatchInfoOfCombinedMarket
+                                                    combinedMarket={market}
+                                                    isHighlighted={true}
+                                                />
+                                            </RowMarket>
+                                        );
+                                    })}
+                                {!combinedMarketsData?.isCombinedMarketsInParlay &&
+                                    parlayMarkets.length &&
+                                    parlayMarkets.map((market, index) => {
+                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                        return (
+                                            <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
+                                                <MatchInfo market={market} isHighlighted={true} />
+                                            </RowMarket>
+                                        );
+                                    })}
                             </ListContainer>
                             <HorizontalLine />
                             {parlayMarkets.length === 1 ? (
@@ -228,15 +289,15 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     text-align: center;
     padding: ${(props) => (props.outOfLiquidity ? '5px' : '5px 0px')};
     ${(props) => (props.outOfLiquidity ? 'background: rgba(26, 28, 43, 0.5);' : '')}
-    ${(props) => (props.outOfLiquidity ? 'border: 2px solid #e26a78;' : '')}
+    ${(props) => (props.outOfLiquidity ? `border: 2px solid ${props.theme.status.loss};` : '')}
     ${(props) => (props.outOfLiquidity ? 'border-radius: 2px;' : '')}
 `;
 
 const HorizontalLine = styled.hr`
     width: 100%;
-    border: 1px solid #5f6180;
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 2px;
-    background: #5f6180;
+    background: ${(props) => props.theme.background.tertiary};
 `;
 
 const Empty = styled(FlexDivColumn)`
@@ -251,7 +312,7 @@ const EmptyLabel = styled.span`
     line-height: 38px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const EmptyDesc = styled.span`
@@ -262,7 +323,7 @@ const EmptyDesc = styled.span`
     font-size: 14px;
     line-height: 14px;
     letter-spacing: 0.025em;
-    color: #64d9fe;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export default Parlay;

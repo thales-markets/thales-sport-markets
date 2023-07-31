@@ -4,15 +4,15 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { BigNumber, ethers } from 'ethers';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter, stableCoinParser } from 'utils/formatters/ethers';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
-import { getAmountForApproval } from 'utils/amm';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { getCollateral } from 'utils/collaterals';
 
 type ApprovalModalProps = {
     defaultAmount: number | string;
@@ -23,7 +23,7 @@ type ApprovalModalProps = {
     onClose: () => void;
 };
 
-export const ApprovalModal: React.FC<ApprovalModalProps> = ({
+const ApprovalModal: React.FC<ApprovalModalProps> = ({
     defaultAmount,
     collateralIndex,
     tokenSymbol,
@@ -44,23 +44,21 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const isAmountEntered = Number(amount) > 0;
     const isButtonDisabled = !isWalletConnected || isAllowing || (!approveAll && (!isAmountEntered || !isAmountValid));
 
-    const amountConverted = getAmountForApproval(
-        collateralIndex ? collateralIndex : 0,
+    const amountConverted = stableCoinParser(
         Number(amount).toString(),
-        networkId
+        networkId,
+        getCollateral(networkId, collateralIndex || 0)
     );
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
-            return (
-                <ModalButton onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</ModalButton>
-            );
+            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
         }
         if (!approveAll && !isAmountEntered) {
-            return <ModalButton disabled={true}>{t(`common.errors.enter-amount`)}</ModalButton>;
+            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
         }
         return (
-            <ModalButton
+            <Button
                 disabled={isButtonDisabled}
                 onClick={() => onSubmit(approveAll ? ethers.constants.MaxUint256 : amountConverted)}
             >
@@ -69,7 +67,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
                     : t('common.enable-wallet-access.approve-progress-label', {
                           currencyKey: tokenSymbol,
                       })}
-            </ModalButton>
+            </Button>
         );
     };
 
@@ -111,7 +109,7 @@ export const ApprovalModal: React.FC<ApprovalModalProps> = ({
 };
 
 const Container = styled(FlexDivColumnCentered)`
-    width: 450px;
+    width: 350px;
     @media (max-width: 575px) {
         width: auto;
     }
@@ -121,40 +119,19 @@ const ButtonContainer = styled(FlexDivCentered)`
     margin: 30px 0 10px 0;
 `;
 
-const ModalButton = styled(Button)``;
-
 const CheckboxContainer = styled(FlexDivCentered)`
-    margin: 40px 0 5px 0;
-    label {
-        font-size: 25px;
-        line-height: 52px;
-        padding-left: 32px;
-        font-weight: bold;
-    }
-    span {
-        :after {
-            height: 14px;
-            width: 5px;
-            left: 5px;
-            top: -1px;
-            border-width: 0 3px 3px 0;
-        }
-        height: 25px;
-        width: 25px;
-        border-radius: 5px;
-        margin-top: 12px;
-        border: 3px solid ${(props) => props.theme.borderColor.secondary};
-    }
+    margin: 30px 0 5px 0;
 `;
 
 const OrText = styled(FlexDivCentered)`
     font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
+    font-size: 17px;
     line-height: 100%;
     text-align: center;
+    text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 15px;
 `;
 
 export default ApprovalModal;

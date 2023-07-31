@@ -1,10 +1,10 @@
 import React, { useMemo, DependencyList, CSSProperties, useEffect, useState } from 'react';
-import { useTable, useSortBy, Column, Row, usePagination } from 'react-table';
+import { useTable, useSortBy, Column, Row, Cell, usePagination } from 'react-table';
 import SimpleLoader from 'components/SimpleLoader';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
-import { SortDirection } from 'constants/markets';
+import { SortDirection } from 'enums/markets';
 
 type CSSPropertiesWithMedia = { cssProperties: CSSProperties } & { mediaMaxWidth: string };
 
@@ -21,6 +21,7 @@ type TableProps = {
     columnsDeps?: DependencyList;
     options?: any;
     onTableRowClick?: (row: Row<any>) => void;
+    onTableCellClick?: (row: Row<any>, cell: Cell<any>) => void;
     isLoading?: boolean;
     noResultsMessage?: React.ReactNode;
     tableRowHeadStyles?: CSSProperties;
@@ -42,6 +43,7 @@ const Table: React.FC<TableProps> = ({
     options = {},
     noResultsMessage = null,
     onTableRowClick = undefined,
+    onTableCellClick = undefined,
     isLoading = false,
     tableRowHeadStyles = {},
     tableRowStyles = {},
@@ -162,17 +164,24 @@ const Table: React.FC<TableProps> = ({
                                             cursorPointer={!!onTableRowClick}
                                             onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
                                         >
-                                            {row.cells.map((cell, cellIndex: any) => (
-                                                <TableCell
-                                                    style={tableRowCellStyles}
-                                                    {...cell.getCellProps()}
-                                                    key={cellIndex}
-                                                    width={cell.column.width}
-                                                    id={cell.column.id}
-                                                >
-                                                    {cell.render('Cell')}
-                                                </TableCell>
-                                            ))}
+                                            {row.cells.map((cell, cellIndex: any) => {
+                                                return (
+                                                    <TableCell
+                                                        style={tableRowCellStyles}
+                                                        {...cell.getCellProps()}
+                                                        key={cellIndex}
+                                                        width={cell.column.width}
+                                                        id={cell.column.id}
+                                                        onClick={
+                                                            onTableCellClick
+                                                                ? () => onTableCellClick(row, cell)
+                                                                : undefined
+                                                        }
+                                                    >
+                                                        {cell.render('Cell')}
+                                                    </TableCell>
+                                                );
+                                            })}
                                         </TableRow>
                                     )}
                                 </ExpandableRow>

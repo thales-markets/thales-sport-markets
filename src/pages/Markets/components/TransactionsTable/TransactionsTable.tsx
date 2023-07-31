@@ -11,6 +11,8 @@ import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
 import { getOddTooltipText, getSpreadTotalText, getSymbolText } from 'utils/markets';
 import PositionSymbol from 'components/PositionSymbol';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 
 type TransactionsTableProps = {
     transactions: MarketTransactions;
@@ -18,8 +20,9 @@ type TransactionsTableProps = {
     isLoading: boolean;
 };
 
-export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
+const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noResultsMessage, isLoading }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     return (
         <>
@@ -52,7 +55,7 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                                 cellProps.cell.value,
                                 cellProps.cell.row.original.wholeMarket
                             );
-
+                            const isOneSideMarket = cellProps.cell.row.original.wholeMarket.isOneSideMarket;
                             const spreadTotalText = getSpreadTotalText(
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
@@ -60,13 +63,18 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                             return symbolText ? (
                                 <PositionSymbol
                                     symbolText={symbolText}
-                                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
+                                    additionalStyle={{
+                                        width: 23,
+                                        height: 23,
+                                        fontSize: isOneSideMarket ? 8.5 : 10.5,
+                                        borderWidth: 2,
+                                    }}
                                     symbolUpperText={
                                         spreadTotalText
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {
-                                                      backgroundColor: '#1A1C2B',
+                                                      backgroundColor: theme.background.primary,
                                                       fontSize: '10px',
                                                       top: '-8px',
                                                       left: '13px',
@@ -123,7 +131,10 @@ export const TransactionsTable: FC<TransactionsTableProps> = memo(({ transaction
                 data={transactions}
                 isLoading={isLoading}
                 noResultsMessage={noResultsMessage}
-                tableHeadCellStyles={isMobile ? TableHeaderStyleMobile : TableHeaderStyle}
+                tableHeadCellStyles={{
+                    ...(isMobile ? TableHeaderStyleMobile : TableHeaderStyle),
+                    color: theme.textColor.secondary,
+                }}
                 tableRowStyles={{ fontSize: '12px' }}
             />
         </>
@@ -137,7 +148,6 @@ const TableHeaderStyle: React.CSSProperties = {
     fontSize: '12px',
     lineHeight: '12px',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'flex-start',
 };
 
@@ -148,7 +158,6 @@ const TableHeaderStyleMobile: React.CSSProperties = {
     fontSize: '10px',
     lineHeight: '12px',
     textTransform: 'uppercase',
-    color: '#5F6180',
     justifyContent: 'center',
 };
 

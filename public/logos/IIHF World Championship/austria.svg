@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="180px" height="180px" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
+    <title>austria</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="flags" transform="translate(-990.000000, -450.000000)">
+            <g id="austria" transform="translate(990.000000, 450.000000)">
+                <path d="M174.873467,120 L5.12100983,120 C17.475726,154.955772 50.8118738,180 89.9972382,180 C129.182603,180 162.51875,154.955772 174.873463,120 L174.873467,120 L174.873467,120 Z" id="red" fill="#E94B35"></path>
+                <path d="M5.12100983,120 L174.873467,120 C178.189905,110.616633 179.994476,100.519063 179.994476,90 C179.994476,79.480937 178.189905,69.3833673 174.873463,59.9999996 L5.12100983,60 C1.80457108,69.3833673 0,79.480937 0,90 C0,100.519063 1.80457108,110.616633 5.12101363,120 L5.12100983,120 L5.12100983,120 Z" id="white" fill="#FFFFFF"></path>
+                <path d="M5.12100983,60 L174.873467,60 C162.51875,25.0442275 129.182603,0 89.9972382,0 C50.8118738,0 17.475726,25.0442275 5.12101363,59.9999996 L5.12100983,60 L5.12100983,60 Z" id="red" fill="#E94B35"></path>
+            </g>
+        </g>
+    </g>
+</svg>

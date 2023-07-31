@@ -1,5 +1,5 @@
-import { SportFilterEnum } from 'constants/markets';
 import { SPORTS_TAGS_MAP } from 'constants/tags';
+import { SportFilterEnum } from 'enums/markets';
 import { DIRECTION_HORIZONTAL } from 'hammerjs';
 import React, { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -157,7 +157,7 @@ const LeftIcon = styled.i<{ disabled?: boolean }>`
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0041';
-        color: ${(props) => props.theme.button.textColor.primary};
+        color: ${(props) => props.theme.textColor.secondary};
         opacity: ${(props) => (props?.disabled ? '0.3' : '')};
         cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     }
@@ -170,7 +170,7 @@ const RightIcon = styled.i<{ disabled?: boolean }>`
     &:before {
         font-family: ExoticIcons !important;
         content: '\\004B';
-        color: ${(props) => props.theme.button.textColor.primary};
+        color: ${(props) => props.theme.textColor.secondary};
         opacity: ${(props) => (props?.disabled ? '0.3' : '')};
         cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     }

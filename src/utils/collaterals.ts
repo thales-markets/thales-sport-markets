@@ -1,48 +1,22 @@
-import {
-    COLLATERAL_INDEX_TO_COLLATERAL,
-    CRYPTO_CURRENCY_MAP,
-    currencyKeyToAssetIconMap,
-    STABLE_DECIMALS,
-} from 'constants/currency';
-import { COLLATERALS } from 'constants/markets';
-import { NetworkId } from 'types/network';
+import { STABLE_DECIMALS, currencyKeyToAssetIconMap } from 'constants/currency';
+import { COLLATERALS } from 'constants/currency';
+import { Network } from 'enums/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
-import { Network } from './network';
-
-export type StablecoinKey = 'sUSD' | 'USDC' | 'USDT' | 'DAI';
+import { StablecoinKey } from 'types/tokens';
 
 export const getStableIcon = (currencyKey: StablecoinKey) => currencyKeyToAssetIconMap[currencyKey];
 
-export const getCollateralAddress = (isNonsUSDCollateral: boolean, networkId: NetworkId, stableIndex?: number) => {
-    const collateralKey = COLLATERALS[stableIndex ? stableIndex : 0]
-        ? COLLATERALS[stableIndex ? stableIndex : 0]
-        : 'sUSD';
+export const getDefaultCollateral = (networkId: Network) => COLLATERALS[networkId][0];
 
-    if (isNonsUSDCollateral) {
-        return multipleCollateral
-            ? multipleCollateral[collateralKey as StablecoinKey]?.addresses[networkId]
-            : undefined;
-    }
+export const getCollateral = (networkId: Network, index: number) => COLLATERALS[networkId][index];
 
-    return undefined;
-};
+export const getCollaterals = (networkId: Network) => COLLATERALS[networkId];
 
-export const getDecimalsByStableCoinIndex = (stableIndex: number) => {
-    const collateralKey = COLLATERAL_INDEX_TO_COLLATERAL[stableIndex];
-    return STABLE_DECIMALS[collateralKey];
-};
+export const getCollateralIndex = (networkId: Network, currencyKey: StablecoinKey) =>
+    COLLATERALS[networkId].indexOf(currencyKey);
 
-export const getDefaultColleteralForNetwork = (networkId: NetworkId) => {
-    if (networkId == Network.Arbitrum) return CRYPTO_CURRENCY_MAP.USDC;
-    return CRYPTO_CURRENCY_MAP.sUSD;
-};
+export const getCollateralAddress = (networkId: Network, stableIndex: number) =>
+    multipleCollateral[getCollateral(networkId, stableIndex)]?.addresses[networkId];
 
-export const getDefaultDecimalsForNetwork = (networkId: NetworkId) => {
-    if (networkId == Network.Arbitrum) return STABLE_DECIMALS['USDC'];
-    return STABLE_DECIMALS['sUSD'];
-};
-
-export const getCollateralIndexByCollateralKey = (collateralKey: StablecoinKey) => {
-    const index = COLLATERALS.indexOf(collateralKey);
-    return index ? index : 0;
-};
+export const getStablecoinDecimals = (networkId: Network, stableIndex: number) =>
+    STABLE_DECIMALS[getCollateral(networkId, stableIndex)];

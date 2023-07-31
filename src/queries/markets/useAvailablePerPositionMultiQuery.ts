@@ -1,23 +1,21 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { Position } from '../../constants/options';
 import { AvailablePerPosition, ParlaysMarket } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { convertPriceImpactToBonus } from 'utils/markets';
+import { Position } from 'enums/markets';
 
 const useAvailablePerPositionMultiQuery = (
     marketAddresses: ParlaysMarket[],
     options?: UseQueryOptions<Record<string, AvailablePerPosition> | undefined>
 ) => {
     return useQuery<Record<string, AvailablePerPosition> | undefined>(
-        QUERY_KEYS.AvailablePerPositionMulti(marketAddresses),
+        QUERY_KEYS.AvailablePerPositionMulti(marketAddresses.map((market) => market.address).join('-')),
         async () => {
             const map = {} as Record<string, AvailablePerPosition>;
-
             for (let i = 0; i < marketAddresses.length; i++) {
                 const address = marketAddresses[i].address;
-
                 try {
                     const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
 
