@@ -133,3 +133,5 @@ export const POSITION_TO_ODDS_OBJECT_PROPERTY_NAME: Record<Position, 'homeOdds' 
     1: 'awayOdds',
     2: 'drawOdds',
 };
+
+export const PARLAY_MAXIMUM_QUOTE = 0.01449275;

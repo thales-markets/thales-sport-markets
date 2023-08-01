@@ -27,6 +27,7 @@ import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import { BetType, DoubleChanceMarketType, OddsType, Position } from 'enums/markets';
+import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 
@@ -208,62 +209,33 @@ export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 
 export const isGolf = (tag: number) => GOLF_TAGS.includes(tag);
 
-export const isParlayWon = (parlayMarket: ParlayMarket) => {
-    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved || market?.isCanceled);
-    const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
-
-    return (
-        (resolvedMarkets &&
-            resolvedMarkets?.length === claimablePositions?.length &&
-            resolvedMarkets?.length === parlayMarket.sportMarkets.length) ||
-        parlayMarket.won
+export const isParlayWon = (parlayMarket: ParlayMarket) =>
+    parlayMarket.positions.every(
+        (position) =>
+            convertPositionNameToPosition(position.side) ===
+                convertFinalResultToResultType(position.market.finalResult) || position.market.isCanceled
     );
-};
+
+export const isParlayLost = (parlayMarket: ParlayMarket) =>
+    parlayMarket.positions.some(
+        (position) =>
+            convertPositionNameToPosition(position.side) !==
+                convertFinalResultToResultType(position.market.finalResult) && position.market.isResolved
+    );
 
 export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
-    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved || market?.isCanceled);
-    const claimablePositions = parlayMarket.positions.filter((position) => position.claimable);
-
-    if (parlayMarket.claimed) return false;
-
-    const lastGameStartsPlusExpirationPeriod = addDaysToEnteredTimestamp(
+    const lastGameStartsExpiryDate = addDaysToEnteredTimestamp(
         EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS,
         parlayMarket.lastGameStarts
     );
+    const isMarketExpired = lastGameStartsExpiryDate < new Date().getTime();
 
-    if (lastGameStartsPlusExpirationPeriod < new Date().getTime()) {
-        return false;
-    }
-
-    if (
-        resolvedMarkets?.length == claimablePositions?.length &&
-        resolvedMarkets?.length == parlayMarket.sportMarkets.length &&
-        !parlayMarket.claimed
-    ) {
-        return true;
-    }
-
-    return false;
+    return isParlayWon(parlayMarket) && !isMarketExpired && !parlayMarket.claimed;
 };
 
 export const isParlayOpen = (parlayMarket: ParlayMarket) => {
-    const resolvedMarkets = parlayMarket.sportMarkets.filter((market) => market?.isResolved);
-    const resolvedAndClaimable = parlayMarket.positions.filter(
-        (position) => position.claimable && (position.market.isResolved || position.market.isCanceled)
-    );
-
-    if (resolvedMarkets?.length == 0) return true;
-
-    if (resolvedMarkets?.length !== resolvedAndClaimable?.length) return false;
-    if (resolvedMarkets?.length === parlayMarket.sportMarkets.length) return false;
-
-    return true;
-};
-
-const isCanceledMarketInParlay = (parlayMarket: ParlayMarket) => {
-    const canceledMarket = parlayMarket.sportMarkets.filter((market) => market?.isCanceled);
-    if (canceledMarket) return true;
-    return false;
+    const parlayHasOpenMarkets = parlayMarket.positions.some((position) => position.market.isOpen);
+    return parlayHasOpenMarkets && !isParlayLost(parlayMarket);
 };
 
 export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
@@ -272,45 +244,39 @@ export const isSportMarketExpired = (sportMarket: SportMarketInfo) => {
         new Date(sportMarket.maturityDate).getTime()
     );
 
-    if (maturyDatePlusExpirationPeriod < new Date().getTime()) {
-        return true;
-    }
-
-    return false;
+    return maturyDatePlusExpirationPeriod < new Date().getTime();
 };
 
 export const updateTotalQuoteAndAmountFromContract = (
     parlayMarkets: ParlayMarket[] | ParlayMarketWithRound[]
 ): ParlayMarket[] | ParlayMarketWithRound[] => {
     const modifiedParlays = parlayMarkets.map((parlay) => {
-        if (isCanceledMarketInParlay(parlay)) {
-            const canceledQuotes = getCanceledGamesPreviousQuotes(parlay);
-            let totalQuote = parlay.totalQuote;
-            canceledQuotes.forEach((quote) => {
-                totalQuote /= quote;
-            });
-            return {
-                ...parlay,
-                totalQuote,
-                totalAmount: totalQuote ? parlay.sUSDAfterFees / totalQuote : 0,
-            };
-        } else {
-            return parlay;
-        }
+        let totalQuote = parlay.totalQuote;
+        let totalAmount = parlay.totalAmount;
+
+        let realQuote = 1;
+        parlay.marketQuotes.map((quote) => {
+            realQuote = realQuote * quote;
+        });
+
+        parlay.sportMarketsFromContract.forEach((address, index) => {
+            const market = parlay.sportMarkets.find((market) => market.address === address);
+
+            if (market && market.isCanceled) {
+                realQuote = realQuote / parlay.marketQuotes[index];
+                const maximumQuote = PARLAY_MAXIMUM_QUOTE;
+                totalQuote = realQuote < maximumQuote ? maximumQuote : realQuote;
+                totalAmount = totalAmount * parlay.marketQuotes[index];
+            }
+        });
+
+        return {
+            ...parlay,
+            totalQuote,
+            totalAmount,
+        };
     });
     return modifiedParlays;
-};
-
-const getCanceledGamesPreviousQuotes = (parlay: ParlayMarket): number[] => {
-    const quotes: number[] = [];
-    parlay.sportMarketsFromContract.forEach((marketAddress, index) => {
-        const market = parlay.sportMarkets.find((market) => market.address == marketAddress);
-        if (market?.isCanceled && parlay.marketQuotes) {
-            quotes.push(parlay.marketQuotes[index]);
-        }
-    });
-
-    return quotes;
 };
 
 export const getBonus = (market: ParlaysMarket): number => {
