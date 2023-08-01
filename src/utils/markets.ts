@@ -1,11 +1,9 @@
 import {
-    ENETPULSE_SPORTS,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
     GOLF_TAGS,
     GOLF_TOURNAMENT_WINNER_TAG,
     IIHF_WC_TAG,
-    JSON_ODDS_SPORTS,
     MATCH_RESOLVE_MAP,
     MOTOSPORT_TAGS,
     SCORING_MAP,
@@ -518,11 +516,7 @@ export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: Pa
     parlayMarket.sportMarketsFromContract.forEach((address, index) => {
         const _position = parlayMarket.positions.find((position) => position.market.address == address);
         const _market = parlayMarket.sportMarkets.find((market) => market.address == address);
-        const isOneSideMarket =
-            (SPORTS_TAGS_MAP['Motosport'].includes(Number(_market?.tags[0])) &&
-                ENETPULSE_SPORTS.includes(Number(_market?.tags[0]))) ||
-            (Number(_market?.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG &&
-                JSON_ODDS_SPORTS.includes(Number(_market?.tags[0])));
+        const isOneSideMarket = getIsOneSideMarket(Number(_market?.tags[0]));
 
         _position ? (_position.market.isOneSideMarket = isOneSideMarket) : '';
 
@@ -562,3 +556,6 @@ export const isParentMarketSameForSportMarkets = (
 export const getMarketAddressesFromSportMarketArray = (markets: SportMarketInfo[]): string[] => {
     return markets.map((market) => market.address);
 };
+
+export const getIsOneSideMarket = (tag: number) =>
+    SPORTS_TAGS_MAP['Motosport'].includes(Number(tag)) || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
