@@ -125,8 +125,8 @@ export const getSpreadAndTotalTextForCombinedMarket = (
         spread: '',
     };
 
-    const totalMarket = markets.find((_market) => _market.betType == BetType.TOTAL);
-    const spreadMarket = markets.findIndex((_market) => _market.betType == BetType.SPREAD);
+    const totalMarket = markets.find((market) => market.betType == BetType.TOTAL);
+    const spreadMarket = markets.findIndex((market) => market.betType == BetType.SPREAD);
 
     if (totalMarket) result.total = (getTotalText(totalMarket) ? getTotalText(totalMarket) : '') as string;
     if (spreadMarket !== -1)
@@ -473,31 +473,32 @@ export const getCombinedOddTooltipText = (markets: SportMarketInfo[], positions:
 export const convertPriceImpactToBonus = (priceImpact: number): number => -((priceImpact / (1 + priceImpact)) * 100);
 
 export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: ParlayMarket): ParlayMarketWithQuotes => {
-    const _parlayMarket: ParlayMarketWithQuotes = { ...parlayMarket, quotes: [] };
+    const syncedParlayMarket: ParlayMarketWithQuotes = { ...parlayMarket, quotes: [] };
 
-    const _positions: PositionData[] = [];
-    const _markets: SportMarketInfo[] = [];
-    const _quotes: number[] = [];
+    const positions: PositionData[] = [];
+    const markets: SportMarketInfo[] = [];
+    const quotes: number[] = [];
 
     parlayMarket.sportMarketsFromContract.forEach((address, index) => {
-        const _position = parlayMarket.positions.find((position) => position.market.address == address);
-        const _market = parlayMarket.sportMarkets.find((market) => market.address == address);
-        const isOneSideMarket = getIsOneSideMarket(Number(_market?.tags[0]));
+        const position = parlayMarket.positions.find((position) => position.market.address == address);
+        const market = parlayMarket.sportMarkets.find((market) => market.address == address);
 
-        _position ? (_position.market.isOneSideMarket = isOneSideMarket) : '';
+        if (position && market) {
+            position.market.isOneSideMarket = getIsOneSideMarket(Number(market.tags[0]));
 
-        _position ? _positions.push(_position) : '';
-        _market ? _markets.push(_market) : '';
+            positions.push(position);
+            markets.push(market);
 
-        const _quote = _market?.isCanceled ? 1 : parlayMarket.marketQuotes ? parlayMarket.marketQuotes[index] : 0;
-        _quotes.push(_quote);
+            const quote = market.isCanceled ? 1 : parlayMarket.marketQuotes[index];
+            quotes.push(quote);
+        }
     });
 
-    _parlayMarket.sportMarkets = _markets;
-    _parlayMarket.positions = _positions;
-    _parlayMarket.quotes = _quotes;
+    syncedParlayMarket.sportMarkets = markets;
+    syncedParlayMarket.positions = positions;
+    syncedParlayMarket.quotes = quotes;
 
-    return _parlayMarket;
+    return syncedParlayMarket;
 };
 
 export const isParentMarketSameForSportMarkets = (
