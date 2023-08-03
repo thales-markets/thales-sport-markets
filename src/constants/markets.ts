@@ -102,9 +102,9 @@ export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20 = [
     50,
 ];
 
-export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10 = [625, 437.5, 312.5, 250, 212.5, 175, 150, 125, 112.5, 100];
+export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10 = [250, 175, 125, 100, 85, 70, 60, 50, 45, 40];
 
-export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10 = [625, 437.5, 312.5, 250, 212.5, 175, 150, 125, 112.5, 100];
+export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10 = [250, 175, 125, 100, 85, 70, 60, 50, 45, 40];
 
 export const ENETPULSE_ROUNDS: Record<number, string> = {
     [0]: '',
@@ -133,3 +133,5 @@ export const POSITION_TO_ODDS_OBJECT_PROPERTY_NAME: Record<Position, 'homeOdds' 
     1: 'awayOdds',
     2: 'drawOdds',
 };
+
+export const PARLAY_MAXIMUM_QUOTE = 0.01449275;
