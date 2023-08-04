@@ -1,11 +1,5 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import {
-    ENETPULSE_SPORTS,
-    GOLF_TOURNAMENT_WINNER_TAG,
-    JSON_ODDS_SPORTS,
-    SPORTS_MAP,
-    SPORTS_TAGS_MAP,
-} from 'constants/tags';
+import { ENETPULSE_SPORTS, SPORTS_MAP } from 'constants/tags';
 import { groupBy, orderBy, uniqBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
@@ -14,7 +8,7 @@ import { Network } from 'enums/network';
 import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
-import { convertPriceImpactToBonus, getMarketAddressesFromSportMarketArray } from 'utils/markets';
+import { convertPriceImpactToBonus, getIsOneSideMarket, getMarketAddressesFromSportMarketArray } from 'utils/markets';
 import { filterMarketsByTagsArray, insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
 import localStore from 'utils/localStore';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -80,10 +74,7 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
         market.homeTeam = fixDuplicatedTeamName(market.homeTeam, isEnetpulseSport);
         market.awayTeam = fixDuplicatedTeamName(market.awayTeam, isEnetpulseSport);
         market.sport = SPORTS_MAP[market.tags[0]];
-        market.isOneSideMarket =
-            (SPORTS_TAGS_MAP['Motosport'].includes(Number(market.tags[0])) &&
-                ENETPULSE_SPORTS.includes(Number(market.tags[0]))) ||
-            (Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG && JSON_ODDS_SPORTS.includes(Number(market.tags[0])));
+        market.isOneSideMarket = getIsOneSideMarket(Number(market.tags[0]));
         if (mapOnlyOpenedMarkets) {
             if (oddsFromContract) {
                 const oddsItem = oddsFromContract.find(
