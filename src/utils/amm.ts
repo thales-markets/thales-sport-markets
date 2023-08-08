@@ -26,14 +26,17 @@ export const getAMMSportsTransaction: any = async (
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isVoucherSelected) {
-        const estimation = await overtimeVoucherContract.estimateGas.buyFromAMMWithVoucher(
-            marketAddress,
-            selectedPosition,
-            parsedAmount,
-            voucherId
-        );
+        if (networkId === Network.OptimismMainnet) {
+            const estimation = await overtimeVoucherContract.estimateGas.buyFromAMMWithVoucher(
+                marketAddress,
+                selectedPosition,
+                parsedAmount,
+                voucherId
+            );
 
-        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+        }
+
         return overtimeVoucherContract?.buyFromAMMWithVoucher(
             marketAddress,
             selectedPosition,
@@ -44,17 +47,20 @@ export const getAMMSportsTransaction: any = async (
     }
 
     if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
-        const estimation = await sportsAMMContract?.estimateGas.buyFromAMMWithDifferentCollateralAndReferrer(
-            marketAddress,
-            selectedPosition,
-            parsedAmount,
-            ammQuote,
-            additionalSlippage,
-            collateralAddress,
-            referral || ZERO_ADDRESS
-        );
+        if (networkId === Network.OptimismMainnet) {
+            const estimation = await sportsAMMContract?.estimateGas.buyFromAMMWithDifferentCollateralAndReferrer(
+                marketAddress,
+                selectedPosition,
+                parsedAmount,
+                ammQuote,
+                additionalSlippage,
+                collateralAddress,
+                referral || ZERO_ADDRESS
+            );
 
-        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+        }
+
         return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
             marketAddress,
             selectedPosition,
@@ -67,24 +73,26 @@ export const getAMMSportsTransaction: any = async (
         );
     }
 
-    const estimation = (await referral)
-        ? sportsAMMContract?.estimateGas.buyFromAMMWithReferrer(
-              marketAddress,
-              selectedPosition,
-              parsedAmount,
-              ammQuote,
-              additionalSlippage,
-              referral
-          )
-        : sportsAMMContract?.estimateGas.buyFromAMM(
-              marketAddress,
-              selectedPosition,
-              parsedAmount,
-              ammQuote,
-              additionalSlippage
-          );
+    if (networkId === Network.OptimismMainnet) {
+        const estimation = referral
+            ? await sportsAMMContract?.estimateGas.buyFromAMMWithReferrer(
+                  marketAddress,
+                  selectedPosition,
+                  parsedAmount,
+                  ammQuote,
+                  additionalSlippage,
+                  referral
+              )
+            : await sportsAMMContract?.estimateGas.buyFromAMM(
+                  marketAddress,
+                  selectedPosition,
+                  parsedAmount,
+                  ammQuote,
+                  additionalSlippage
+              );
 
-    finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+    }
 
     return referral
         ? sportsAMMContract?.buyFromAMMWithReferrer(
@@ -94,10 +102,10 @@ export const getAMMSportsTransaction: any = async (
               ammQuote,
               additionalSlippage,
               referral,
-              { gasLimit: estimation }
+              { gasLimit: finalEstimation }
           )
         : sportsAMMContract?.buyFromAMM(marketAddress, selectedPosition, parsedAmount, ammQuote, additionalSlippage, {
-              gasLimit: estimation,
+              gasLimit: finalEstimation,
           });
 };
 

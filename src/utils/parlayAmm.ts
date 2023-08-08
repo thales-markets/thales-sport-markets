@@ -27,16 +27,19 @@ export const getParlayAMMTransaction: any = async (
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isVoucherSelected) {
-        const estimation = await overtimeVoucherContract?.estimateGas.buyFromParlayAMMWithVoucher(
-            marketsAddresses,
-            selectedPositions,
-            sUSDPaid,
-            additionalSlippage,
-            expectedPayout,
-            voucherId
-        );
+        if (networkId === Network.OptimismMainnet) {
+            const estimation = await overtimeVoucherContract?.estimateGas.buyFromParlayAMMWithVoucher(
+                marketsAddresses,
+                selectedPositions,
+                sUSDPaid,
+                additionalSlippage,
+                expectedPayout,
+                voucherId
+            );
 
-        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+        }
+
         return overtimeVoucherContract?.buyFromParlayAMMWithVoucher(
             marketsAddresses,
             selectedPositions,
@@ -49,21 +52,19 @@ export const getParlayAMMTransaction: any = async (
     }
 
     if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
-        console.log('try');
+        if (networkId === Network.OptimismMainnet) {
+            const estimation = await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithDifferentCollateralAndReferrer(
+                marketsAddresses,
+                selectedPositions,
+                sUSDPaid,
+                additionalSlippage,
+                expectedPayout,
+                collateralAddress,
+                referral || ZERO_ADDRESS
+            );
 
-        const estimation = await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithDifferentCollateralAndReferrer(
-            marketsAddresses,
-            selectedPositions,
-            sUSDPaid,
-            additionalSlippage,
-            expectedPayout,
-            collateralAddress,
-            referral || ZERO_ADDRESS
-        );
-
-        console.log('estimation: ', estimation);
-
-        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+        }
 
         return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
             marketsAddresses,
@@ -77,26 +78,28 @@ export const getParlayAMMTransaction: any = async (
         );
     }
 
-    const estimation = referral
-        ? await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithReferrer(
-              marketsAddresses,
-              selectedPositions,
-              sUSDPaid,
-              additionalSlippage,
-              expectedPayout,
-              ZERO_ADDRESS,
-              referral
-          )
-        : await parlayMarketsAMMContract?.estimateGas.buyFromParlay(
-              marketsAddresses,
-              selectedPositions,
-              sUSDPaid,
-              additionalSlippage,
-              expectedPayout,
-              ZERO_ADDRESS
-          );
+    if (networkId === Network.OptimismMainnet) {
+        const estimation = referral
+            ? await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithReferrer(
+                  marketsAddresses,
+                  selectedPositions,
+                  sUSDPaid,
+                  additionalSlippage,
+                  expectedPayout,
+                  ZERO_ADDRESS,
+                  referral
+              )
+            : await parlayMarketsAMMContract?.estimateGas.buyFromParlay(
+                  marketsAddresses,
+                  selectedPositions,
+                  sUSDPaid,
+                  additionalSlippage,
+                  expectedPayout,
+                  ZERO_ADDRESS
+              );
 
-    finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+    }
 
     return referral
         ? parlayMarketsAMMContract?.buyFromParlayWithReferrer(
