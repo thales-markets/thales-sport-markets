@@ -77,8 +77,8 @@ export const getParlayAMMTransaction: any = async (
         );
     }
 
-    const estimation = (await referral)
-        ? parlayMarketsAMMContract?.estimateGas.buyFromParlayWithReferrer(
+    const estimation = referral
+        ? await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithReferrer(
               marketsAddresses,
               selectedPositions,
               sUSDPaid,
@@ -87,7 +87,7 @@ export const getParlayAMMTransaction: any = async (
               ZERO_ADDRESS,
               referral
           )
-        : parlayMarketsAMMContract?.estimateGas.buyFromParlay(
+        : await parlayMarketsAMMContract?.estimateGas.buyFromParlay(
               marketsAddresses,
               selectedPositions,
               sUSDPaid,
