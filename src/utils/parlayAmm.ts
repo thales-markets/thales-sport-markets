@@ -1,11 +1,9 @@
-import { ZERO_ADDRESS } from 'constants/network';
+import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import { getCollateral, getCollateralAddress, getDefaultCollateral } from './collaterals';
 import { isMultiCollateralSupportedForNetwork } from './network';
 import { Position } from 'enums/markets';
-
-const GAS_ESTIMATION_BUFFER = 1.2; // Adding 20% on gas estimation as a buffer. Used only on Optimism
 
 export const getParlayAMMTransaction: any = async (
     isVoucherSelected: boolean,
