@@ -220,7 +220,9 @@ export const isParlayLost = (parlayMarket: ParlayMarket) =>
     parlayMarket.positions.some(
         (position) =>
             convertPositionNameToPosition(position.side) !==
-                convertFinalResultToResultType(position.market.finalResult) && position.market.isResolved
+                convertFinalResultToResultType(position.market.finalResult) &&
+            position.market.isResolved &&
+            !position.market.isCanceled
     );
 
 export const isParlayClaimable = (parlayMarket: ParlayMarket) => {
