@@ -97,6 +97,12 @@
     min-width: 50px;
     word-break: break-word;
 }
+.rc-tooltip-inner a {
+    color: #3fd1ff;
+}
+.rc-tooltip-inner a:hover {
+    text-decoration: underline;
+}
 .rc-tooltip-arrow {
     position: absolute;
     width: 0;
