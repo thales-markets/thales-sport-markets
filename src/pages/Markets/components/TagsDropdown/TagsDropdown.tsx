@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -145,7 +144,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         {networkId !== Network.ArbitrumOne ? (
                                                             <OPLogo />
                                                         ) : (
-                                                            <ThalesLogo />
+                                                            <ArbitrumLogo />
                                                         )}
                                                     </IncentivizedLeague>
                                                 }
