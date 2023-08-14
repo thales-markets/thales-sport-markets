@@ -12,12 +12,14 @@ export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, B
 };
 
 export const INCENTIVIZED_LEAGUE = {
-    ids: [9004, 9006],
-    startDate: new Date(Date.UTC(2023, 3, 11, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 5, 30, 23, 59, 59)),
-    link: 'https://dune.com/leifu/overtime-nhl-and-nba-playoff-campaign-11-apr-2023',
-    opRewards: '20,000 OP',
-    thalesRewards: '40,000 THALES',
+    ids: [9011],
+    startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 4, 16, 23, 59, 59)),
+    link:
+        'https://medium.com/@OvertimeMarkets.xyz/get-ready-for-the-big-leagues-season-overtimes-biggest-reward-program-to-date-2d3949a06338',
+    opRewards: '30,000 OP',
+    arbRewards: '30, 000 ARB',
+    thalesRewards: '30,000 THALES',
 };
 
 export const INCENTIVIZED_GRAND_SLAM = {
