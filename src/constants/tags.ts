@@ -367,6 +367,14 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 117,
     },
+    {
+        id: 9409,
+        label: 'FIBA World Cup',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 303,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -414,6 +422,7 @@ export const SPORTS_MAP: SportsMap = {
     19216: 'Soccer',
     9076: 'Soccer',
     9073: 'Soccer',
+    9409: 'Basketball',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -438,12 +447,13 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     9021,
     109021,
     109121,
+    9409,
 ];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
     Football: [9001, 9002],
     Baseball: [9003],
-    Basketball: [9004, 9005, 9008, 9399],
+    Basketball: [9004, 9005, 9008, 9399, 9409],
     Hockey: [9006, 9033],
     Soccer: [
         9010,
@@ -500,6 +510,7 @@ export const ENETPULSE_SPORTS = [
     19216,
     9076,
     9073,
+    9409,
 ];
 
 export const JSON_ODDS_SPORTS = [109021, 109121];
@@ -564,6 +575,7 @@ export const SCORING_MAP: SportsMap = {
     19216: 'goals',
     9076: 'goals',
     9073: 'goals',
+    9409: 'points',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -611,6 +623,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     19216: 'regular',
     9076: 'regular',
     9073: 'regular',
+    9409: 'overtime',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -656,4 +669,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     19216: 'half',
     9076: 'half',
     9073: 'half',
+    9409: 'quarter',
 };
