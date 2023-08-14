@@ -1,11 +1,11 @@
-import { ZERO_ADDRESS } from 'constants/network';
+import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import { getCollateral, getCollateralAddress, getDefaultCollateral } from './collaterals';
 import { isMultiCollateralSupportedForNetwork } from './network';
 import { Position } from 'enums/markets';
 
-export const getParlayAMMTransaction: any = (
+export const getParlayAMMTransaction: any = async (
     isVoucherSelected: boolean,
     voucherId: number,
     stableIndex: number,
@@ -17,16 +17,27 @@ export const getParlayAMMTransaction: any = (
     sUSDPaid: BigNumber,
     expectedPayout: BigNumber,
     referral?: string | null,
-    additionalSlippage?: BigNumber,
-    providerOptions?: {
-        gasLimit: number | null;
-    }
+    additionalSlippage?: BigNumber
 ): Promise<ethers.ContractTransaction> => {
+    let finalEstimation = null;
     const isNonDefaultCollateral = getCollateral(networkId, stableIndex) !== getDefaultCollateral(networkId);
     const collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
 
     if (isVoucherSelected) {
+        if (networkId === Network.OptimismMainnet) {
+            const estimation = await overtimeVoucherContract?.estimateGas.buyFromParlayAMMWithVoucher(
+                marketsAddresses,
+                selectedPositions,
+                sUSDPaid,
+                additionalSlippage,
+                expectedPayout,
+                voucherId
+            );
+
+            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+        }
+
         return overtimeVoucherContract?.buyFromParlayAMMWithVoucher(
             marketsAddresses,
             selectedPositions,
@@ -34,11 +45,25 @@ export const getParlayAMMTransaction: any = (
             additionalSlippage,
             expectedPayout,
             voucherId,
-            providerOptions
+            { gasLimit: finalEstimation }
         );
     }
 
     if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
+        if (networkId === Network.OptimismMainnet) {
+            const estimation = await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithDifferentCollateralAndReferrer(
+                marketsAddresses,
+                selectedPositions,
+                sUSDPaid,
+                additionalSlippage,
+                expectedPayout,
+                collateralAddress,
+                referral || ZERO_ADDRESS
+            );
+
+            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+        }
+
         return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
             marketsAddresses,
             selectedPositions,
@@ -47,8 +72,31 @@ export const getParlayAMMTransaction: any = (
             expectedPayout,
             collateralAddress,
             referral || ZERO_ADDRESS,
-            providerOptions
+            { gasLimit: finalEstimation }
         );
+    }
+
+    if (networkId === Network.OptimismMainnet) {
+        const estimation = referral
+            ? await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithReferrer(
+                  marketsAddresses,
+                  selectedPositions,
+                  sUSDPaid,
+                  additionalSlippage,
+                  expectedPayout,
+                  ZERO_ADDRESS,
+                  referral
+              )
+            : await parlayMarketsAMMContract?.estimateGas.buyFromParlay(
+                  marketsAddresses,
+                  selectedPositions,
+                  sUSDPaid,
+                  additionalSlippage,
+                  expectedPayout,
+                  ZERO_ADDRESS
+              );
+
+        finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
     }
 
     return referral
@@ -60,7 +108,7 @@ export const getParlayAMMTransaction: any = (
               expectedPayout,
               ZERO_ADDRESS,
               referral,
-              providerOptions
+              { gasLimit: finalEstimation }
           )
         : parlayMarketsAMMContract?.buyFromParlay(
               marketsAddresses,
@@ -69,7 +117,7 @@ export const getParlayAMMTransaction: any = (
               additionalSlippage,
               expectedPayout,
               ZERO_ADDRESS,
-              providerOptions
+              { gasLimit: finalEstimation }
           );
 };
 
