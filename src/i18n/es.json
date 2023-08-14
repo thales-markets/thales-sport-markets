@@ -453,7 +453,7 @@
             }
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
-        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-tennis": "Wimbledon será incentivado, ya que el torneo comienza el 3 de julio. Los mercados se potenciarán con {{rewards}} hasta el final del torneo el 16 de julio. Las recompensas se distribuirán en función de su volumen impulsado a través de estos mercados. Puede realizar un seguimiento de la asignación de sus recompensas en nuestro <detailsLink>Dune Dashboard</detailsLink>."
     },
     "rewards": {

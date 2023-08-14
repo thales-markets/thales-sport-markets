@@ -1,6 +1,5 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
@@ -137,7 +136,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 component={
                                     <IncentivizedLeague>
                                         <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>

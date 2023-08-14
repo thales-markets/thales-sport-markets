@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { SportMarkets, TagInfo } from 'types/markets';
 import MarketListCard from '../MarketListCard';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import Tooltip from 'components/Tooltip';
 import { Trans, useTranslation } from 'react-i18next';
@@ -78,7 +77,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                             component={
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
