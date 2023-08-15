@@ -176,9 +176,9 @@ const LeagueFlag = (tagId: number | any) => {
         case TAGS_FLAGS.T20_BLAST:
             return <Flag size="l" code="GB-UKM" />;
         case TAGS_FLAGS.SAUDI_PROFESSIONAL_LEAGUE:
-            return <Flag size="m" code="SA" />;
+            return <Flag size="l" code="SA" />;
         case TAGS_FLAGS.BRAZIL_1:
-            return <Flag size="m" code="BR" />;
+            return <Flag size="l" code="BR" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
     }
