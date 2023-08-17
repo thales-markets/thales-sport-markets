@@ -58,6 +58,7 @@ export const getSymbolText = (
                 case BetType.SPREAD:
                     return 'H1';
                 case BetType.TOTAL:
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
                     return 'O';
                 case BetType.DOUBLE_CHANCE:
                     switch (market.doubleChanceMarketType) {
@@ -78,6 +79,7 @@ export const getSymbolText = (
                 case BetType.SPREAD:
                     return 'H2';
                 case BetType.TOTAL:
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
                     return 'U';
                 default:
                     return '2';
@@ -97,6 +99,8 @@ export const getSpreadTotalText = (market: SportMarketInfo | MarketData, positio
                 : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread)) / 100}`;
         case BetType.TOTAL:
             return `${Number(market.total) / 100}`;
+        case BetType.PLAYER_PROPS_STRIKEOUTS:
+            return `${Number(market.playerPropsLine)}`;
         default:
             return undefined;
     }
@@ -191,7 +195,8 @@ export const getPositionOdds = (market: ParlaysMarket) => {
 
 export const getVisibilityOfDrawOption = (tags: Array<number>, betType: BetType) => {
     const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(Number(element)));
-    if (tag || betType === BetType.TOTAL || betType === BetType.SPREAD) return false;
+    if (tag || betType === BetType.TOTAL || betType === BetType.SPREAD || betType === BetType.PLAYER_PROPS_STRIKEOUTS)
+        return false;
     return true;
 };
 

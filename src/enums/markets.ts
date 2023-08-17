@@ -62,6 +62,7 @@ export enum BetType {
     SPREAD = 10001,
     TOTAL = 10002,
     DOUBLE_CHANCE = 10003,
+    PLAYER_PROPS_STRIKEOUTS = 11019,
 }
 
 export enum ParlayErrorCode {

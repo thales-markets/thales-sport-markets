@@ -378,7 +378,8 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "Combined positions"
+                "combined-positions": "Combined positions",
+                "strikeouts": "Player props"
             },
             "odd-tooltip": {
                 "scoring": {

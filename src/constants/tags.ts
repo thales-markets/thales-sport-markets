@@ -528,6 +528,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.SPREAD]: 'spread',
     [BetType.TOTAL]: 'total',
     [BetType.DOUBLE_CHANCE]: 'double-chance',
+    [BetType.PLAYER_PROPS_STRIKEOUTS]: 'strikeouts',
 };
 
 export const SCORING_MAP: SportsMap = {
