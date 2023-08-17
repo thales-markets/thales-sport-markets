@@ -111,6 +111,21 @@ export const getTotalText = (market: SportMarketInfo) => {
     return undefined;
 };
 
+export const getMarketName = (market: SportMarketInfo | MarketData, position?: Position) => {
+    if (market.isOneSideMarket) return fixOneSideMarketCompetitorName(market.homeTeam);
+    switch (Number(market.betType)) {
+        case BetType.WINNER:
+        case BetType.SPREAD:
+        case BetType.TOTAL:
+        case BetType.DOUBLE_CHANCE:
+            return position === Position.HOME ? market.homeTeam : market.awayTeam;
+        case BetType.PLAYER_PROPS_STRIKEOUTS:
+            return market.playerName;
+        default:
+            return undefined;
+    }
+};
+
 const getSpreadText = (market: SportMarketInfo, position: Position) => {
     if (market.betType == BetType.SPREAD) {
         return position === Position.HOME
