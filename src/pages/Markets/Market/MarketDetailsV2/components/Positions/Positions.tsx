@@ -54,7 +54,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
                     ) : (
                         markets.map((market) => {
                             return (
-                                <>
+                                <div key={market.address}>
                                     {market.betType === BetType.PLAYER_PROPS_STRIKEOUTS && (
                                         <PropsTextContainer>
                                             <PropsText>{`${market.playerName} (${
@@ -62,10 +62,10 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
                                             })`}</PropsText>
                                         </PropsTextContainer>
                                     )}
-                                    <ContentRow key={market.address}>
+                                    <ContentRow>
                                         <MarketPositions market={market} />
                                     </ContentRow>
-                                </>
+                                </div>
                             );
                         })
                     )}

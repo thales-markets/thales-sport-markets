@@ -21,11 +21,15 @@ import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import {
     Arrow,
+    ArrowRight,
     ClubLogo,
     MainContainer,
     MatchInfoConatiner,
     MatchTimeLabel,
     OddsWrapper,
+    PlayerPropsBubble,
+    PlayerPropsContainer,
+    PlayerPropsText,
     Result,
     ResultLabel,
     ResultWrapper,
@@ -85,8 +89,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const MAX_NUMBER_OF_MARKETS_COUNT = MAX_NUMBER_OF_MARKETS;
 
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
-    const spreadTotalMarkets = market.childMarkets.filter((market) => market.betType !== BetType.DOUBLE_CHANCE);
-    const hasChildMarkets = doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0;
+    const spreadTotalMarkets = market.childMarkets.filter(
+        (market) => market.betType === BetType.SPREAD || market.betType === BetType.TOTAL
+    );
+    const playerPropsMarkets = market.childMarkets.filter(
+        (market) => market.betType === BetType.PLAYER_PROPS_STRIKEOUTS
+    );
+
+    const hasChildMarkets =
+        doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0 || playerPropsMarkets.length > 0;
     const isMaxNumberOfChildMarkets =
         market.childMarkets.length === MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT ||
         market.childMarkets.length + combinedMarketPositions.length >= MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT;
@@ -97,6 +108,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         showSecondRowOnDesktop && !isMobile && !doubleChanceMarkets.length && combinedMarketPositions.length > 0;
 
     const hasCombinedMarkets = market.combinedMarketsData ? true : false;
+    const hasPlayerPropsMarkets = playerPropsMarkets.length > 0;
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
@@ -342,6 +354,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <CombinedMarketsOdds market={market} isShownInSecondRow />
                             )}
                         </OddsWrapper>
+                        {hasPlayerPropsMarkets && (
+                            <SPAAnchor href={buildMarketLink(market.address, language)}>
+                                <PlayerPropsContainer>
+                                    <ArrowRight className={'icon icon--arrow'}></ArrowRight>
+                                    <PlayerPropsText>{t(`markets.market-card.see-more-markets`)}</PlayerPropsText>
+                                    <PlayerPropsBubble>{playerPropsMarkets.length}</PlayerPropsBubble>
+                                </PlayerPropsContainer>
+                            </SPAAnchor>
+                        )}
                     </SecondRowContainer>
                     {isMobile && hasCombinedMarkets && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>

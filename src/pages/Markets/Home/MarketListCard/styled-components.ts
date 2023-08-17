@@ -25,6 +25,7 @@ export const MainContainer = styled(FlexDivRow)`
 `;
 
 export const SecondRowContainer = styled(MainContainer)<{ mobilePaddingRight: number }>`
+    position: relative;
     background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -149,6 +150,53 @@ export const Arrow = styled.i`
     cursor: pointer;
 `;
 
+export const ArrowRight = styled.i`
+    font-size: 11px;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
 export const OddsWrapper = styled(FlexDivRow)`
     position: relative;
+`;
+
+export const PlayerPropsText = styled.span`
+    color: ${(props) => props.theme.textColor.quaternary};
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-transform: uppercase;
+`;
+
+export const PlayerPropsContainer = styled.div`
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+    align-items: center;
+    bottom: 6px;
+    right: 10px;
+    cursor: pointer;
+    &:hover {
+        ${PlayerPropsText} {
+            text-decoration: underline;
+        }
+    }
+`;
+
+export const PlayerPropsBubble = styled.span`
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    padding: 2px;
+    background: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.background.primary};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
 `;

@@ -412,7 +412,8 @@
             },
             "total-markets": "Total markets",
             "race-winner": "Winner",
-            "no-win": "No win"
+            "no-win": "No win",
+            "see-more-markets": "see player props markets"
         },
         "market-details": {
             "price": "Price",
