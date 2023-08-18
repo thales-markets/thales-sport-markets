@@ -361,6 +361,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                             translationKey = '';
                     }
                     break;
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
+                    translationKey = 'player-props.strikeouts-over';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -377,6 +380,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.TOTAL:
                     translationKey = 'total.under';
                     break;
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
+                    translationKey = 'player-props.strikeouts-under';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -390,11 +396,11 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
             break;
     }
     return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, {
-        team,
+        team: market.playerName === null ? team : market.playerName,
         team2,
         spread,
         total,
-        scoring,
+        scoring: market.playerName === null ? scoring : market.playerPropsLine,
         matchResolve,
     });
 };
