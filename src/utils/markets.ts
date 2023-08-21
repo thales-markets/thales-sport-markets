@@ -512,6 +512,7 @@ export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: Pa
         const market = parlayMarket.sportMarkets.find((market) => market.address == address);
 
         if (position && market) {
+            position.market = market;
             position.market.isOneSideMarket = getIsOneSideMarket(Number(market.tags[0]));
 
             positions.push(position);

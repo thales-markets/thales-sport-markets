@@ -372,7 +372,12 @@ const getOpacityForCombinedMarket = (combinedMarket: CombinedMarket) => {
 
 const getParlayItemStatus = (market: SportMarketInfo, isCombinedMarket?: boolean) => {
     if (market.isCanceled) return t('profile.card.canceled');
-    if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
+    if (market.isResolved) {
+        if (market.playerName !== null) {
+            return market.playerPropsScore;
+        }
+        return `${market.homeScore} : ${market.awayScore}`;
+    }
     return formatDateWithTime(!isCombinedMarket ? Number(market.maturityDate) * 1000 : Number(market.maturityDate));
 };
 
@@ -418,9 +423,7 @@ export const getParlayRow = (
                 <ParlayRow style={{ opacity: opacity }} key={`$cm-${index}`}>
                     <ParlayRowText style={{ cursor: 'pointer' }}>
                         {positionStatus}
-                        <ParlayRowTeam title={homeTeam + ' vs ' + awayTeam}>
-                            {homeTeam + ' vs ' + awayTeam}
-                        </ParlayRowTeam>
+                        <ParlayRowTeam>{homeTeam + ' vs ' + awayTeam}</ParlayRowTeam>
                     </ParlayRowText>
                     <PositionSymbol
                         symbolAdditionalText={{
@@ -471,16 +474,12 @@ export const getParlayRow = (
                 >
                     <ParlayRowText style={{ cursor: 'pointer' }}>
                         {getPositionStatus(position, theme)}
-                        <ParlayRowTeam
-                            title={
-                                position.market.isOneSideMarket
-                                    ? fixOneSideMarketCompetitorName(position.market.homeTeam)
-                                    : position.market.homeTeam + ' vs ' + position.market.awayTeam
-                            }
-                        >
+                        <ParlayRowTeam>
                             {position.market.isOneSideMarket
                                 ? fixOneSideMarketCompetitorName(position.market.homeTeam)
-                                : position.market.homeTeam + ' vs ' + position.market.awayTeam}
+                                : position.market.playerName === null
+                                ? position.market.homeTeam + ' vs ' + position.market.awayTeam
+                                : position.market.playerName}
                         </ParlayRowTeam>
                     </ParlayRowText>
                 </SPAAnchor>
