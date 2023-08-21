@@ -65,6 +65,7 @@ import {
     ColumnDirectionInfo,
     MatchPeriodContainer,
     MatchPeriodLabel,
+    PlayerIcon,
     PositionContainer,
     ResultContainer,
     ScoreContainer,
@@ -234,15 +235,22 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
         <Wrapper>
             <MatchInfo>
                 <MatchLogo>
-                    <ClubLogo
-                        alt={position.market.homeTeam}
-                        src={homeLogoSrc}
-                        isFlag={position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG}
-                        losingTeam={false}
-                        onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
-                        customMobileSize={'30px'}
-                    />
-                    {!position.market.isOneSideMarket && (
+                    {position.market.playerName === null ? (
+                        <ClubLogo
+                            alt={position.market.homeTeam}
+                            src={homeLogoSrc}
+                            isFlag={
+                                position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG
+                            }
+                            losingTeam={false}
+                            onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
+                            customMobileSize={'30px'}
+                        />
+                    ) : (
+                        <PlayerIcon className="icon icon--profile" />
+                    )}
+
+                    {!position.market.isOneSideMarket && position.market.playerName === null && (
                         <ClubLogo
                             awayTeam={true}
                             alt={position.market.awayTeam}
@@ -258,11 +266,15 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 </MatchLogo>
                 <MatchLabel>
                     <ClubName>
-                        {position.market.isOneSideMarket
-                            ? fixOneSideMarketCompetitorName(position.market.homeTeam)
-                            : position.market.homeTeam}
+                        {position.market.playerName === null
+                            ? position.market.isOneSideMarket
+                                ? fixOneSideMarketCompetitorName(position.market.homeTeam)
+                                : position.market.homeTeam
+                            : position.market.playerName}
                     </ClubName>
-                    {!position.market.isOneSideMarket && <ClubName>{position.market.awayTeam}</ClubName>}
+                    {!position.market.isOneSideMarket && position.market.playerName === null && (
+                        <ClubName>{position.market.awayTeam}</ClubName>
+                    )}
                 </MatchLabel>
             </MatchInfo>
             <StatusContainer>

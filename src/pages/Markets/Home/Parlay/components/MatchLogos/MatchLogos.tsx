@@ -75,6 +75,7 @@ const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean; isHighlighte
 const PlayerIcon = styled.i`
     font-size: 28px;
     color: ${(props) => props.theme.textColor.secondary};
+    margin-left: 10px;
 `;
 
 export default MatchLogos;
