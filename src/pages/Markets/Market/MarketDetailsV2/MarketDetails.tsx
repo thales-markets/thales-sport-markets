@@ -48,7 +48,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         totalMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.TOTAL),
         doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.DOUBLE_CHANCE),
         playerPropsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_STRIKEOUTS
+            (childMarket) =>
+                childMarket.betType === BetType.PLAYER_PROPS_STRIKEOUTS ||
+                childMarket.betType === BetType.PLAYER_PROPS_HOMERUNS
         ),
     };
 

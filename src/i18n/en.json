@@ -410,7 +410,9 @@
                 },
                 "player-props": {
                     "strikeouts-over": "{{team}} will have more strikeouts than {{scoring}}",
-                    "strikeouts-under": "{{team}} will have less strikeouts than {{scoring}}"
+                    "strikeouts-under": "{{team}} will have less strikeouts than {{scoring}}",
+                    "home-runs-over": "{{team}} will have more home runs than {{scoring}}",
+                    "home-runs-under": "{{team}} will have less home runs than {{scoring}}"
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },

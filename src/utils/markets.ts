@@ -59,6 +59,7 @@ export const getSymbolText = (
                     return 'H1';
                 case BetType.TOTAL:
                 case BetType.PLAYER_PROPS_STRIKEOUTS:
+                case BetType.PLAYER_PROPS_HOMERUNS:
                     return 'O';
                 case BetType.DOUBLE_CHANCE:
                     switch (market.doubleChanceMarketType) {
@@ -80,6 +81,7 @@ export const getSymbolText = (
                     return 'H2';
                 case BetType.TOTAL:
                 case BetType.PLAYER_PROPS_STRIKEOUTS:
+                case BetType.PLAYER_PROPS_HOMERUNS:
                     return 'U';
                 default:
                     return '2';
@@ -100,6 +102,7 @@ export const getSpreadTotalText = (market: SportMarketInfo | MarketData, positio
         case BetType.TOTAL:
             return `${Number(market.total) / 100}`;
         case BetType.PLAYER_PROPS_STRIKEOUTS:
+        case BetType.PLAYER_PROPS_HOMERUNS:
             return `${Number(market.playerPropsLine)}`;
         default:
             return undefined;
@@ -120,6 +123,7 @@ export const getMarketName = (market: SportMarketInfo | MarketData, position?: P
         case BetType.DOUBLE_CHANCE:
             return position === Position.HOME ? market.homeTeam : market.awayTeam;
         case BetType.PLAYER_PROPS_STRIKEOUTS:
+        case BetType.PLAYER_PROPS_HOMERUNS:
             return market.playerName;
         default:
             return undefined;
@@ -210,7 +214,13 @@ export const getPositionOdds = (market: ParlaysMarket) => {
 
 export const getVisibilityOfDrawOption = (tags: Array<number>, betType: BetType) => {
     const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(Number(element)));
-    if (tag || betType === BetType.TOTAL || betType === BetType.SPREAD || betType === BetType.PLAYER_PROPS_STRIKEOUTS)
+    if (
+        tag ||
+        betType === BetType.TOTAL ||
+        betType === BetType.SPREAD ||
+        betType === BetType.PLAYER_PROPS_STRIKEOUTS ||
+        betType === BetType.PLAYER_PROPS_HOMERUNS
+    )
         return false;
     return true;
 };
@@ -364,6 +374,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.PLAYER_PROPS_STRIKEOUTS:
                     translationKey = 'player-props.strikeouts-over';
                     break;
+                case BetType.PLAYER_PROPS_HOMERUNS:
+                    translationKey = 'player-props.home-runs-over';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -382,6 +395,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_STRIKEOUTS:
                     translationKey = 'player-props.strikeouts-under';
+                    break;
+                case BetType.PLAYER_PROPS_HOMERUNS:
+                    translationKey = 'player-props.home-runs-under';
                     break;
                 default:
                     translationKey = market.isOneSideMarket

@@ -93,7 +93,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         (market) => market.betType === BetType.SPREAD || market.betType === BetType.TOTAL
     );
     const playerPropsMarkets = market.childMarkets.filter(
-        (market) => market.betType === BetType.PLAYER_PROPS_STRIKEOUTS
+        (market) =>
+            market.betType === BetType.PLAYER_PROPS_STRIKEOUTS || market.betType === BetType.PLAYER_PROPS_HOMERUNS
     );
 
     const hasChildMarkets =
