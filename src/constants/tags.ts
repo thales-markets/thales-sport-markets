@@ -375,6 +375,22 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 303,
     },
+    {
+        id: 9536,
+        label: 'Saudi Professional League',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 109,
+    },
+    {
+        id: 9268,
+        label: 'Serie A',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 109,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -423,6 +439,8 @@ export const SPORTS_MAP: SportsMap = {
     9076: 'Soccer',
     9073: 'Soccer',
     9409: 'Basketball',
+    9536: 'Soccer',
+    9268: 'Soccer',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -478,6 +496,8 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
         19216,
         9076,
         9073,
+        9536,
+        9268,
     ],
     MMA: [9007, 18196],
     Motosport: [9445, 9497],
@@ -511,6 +531,8 @@ export const ENETPULSE_SPORTS = [
     9076,
     9073,
     9409,
+    9536,
+    9268,
 ];
 
 export const JSON_ODDS_SPORTS = [109021, 109121];
@@ -578,6 +600,8 @@ export const SCORING_MAP: SportsMap = {
     9076: 'goals',
     9073: 'goals',
     9409: 'points',
+    9536: 'goals',
+    9268: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -626,6 +650,8 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9076: 'regular',
     9073: 'regular',
     9409: 'overtime',
+    9536: 'regular',
+    9268: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -672,4 +698,6 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9076: 'half',
     9073: 'half',
     9409: 'quarter',
+    9536: 'half',
+    9268: 'half',
 };
