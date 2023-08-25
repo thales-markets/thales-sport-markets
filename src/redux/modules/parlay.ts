@@ -7,6 +7,7 @@ import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { GOLF_TAGS } from 'constants/tags';
 import { ParlayErrorCode } from 'enums/markets';
+import { canPlayerBeAddedToParlay } from 'utils/markets';
 
 const sliceName = 'parlay';
 
@@ -166,6 +167,18 @@ const parlaySlice = createSlice({
                         });
                         state.parlay.push(action.payload);
                     }
+                } else {
+                    state.error.code = ParlayErrorCode.MAX_MATCHES;
+                    state.error.data = state.parlaySize.toString();
+                }
+            } else if (action.payload.playerId && canPlayerBeAddedToParlay(state.parlay, action.payload)) {
+                if (state.parlay.length < state.parlaySize) {
+                    state.multiSingle.push({
+                        sportMarketAddress: action.payload.sportMarketAddress,
+                        parentMarketAddress: action.payload.parentMarket,
+                        amountToBuy: 0,
+                    });
+                    state.parlay.push(action.payload);
                 } else {
                     state.error.code = ParlayErrorCode.MAX_MATCHES;
                     state.error.data = state.parlaySize.toString();

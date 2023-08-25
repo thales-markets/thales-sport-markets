@@ -20,6 +20,7 @@ import {
     ParlayMarketWithQuotes,
     ParlayMarketWithRound,
     ParlaysMarket,
+    ParlaysMarketPosition,
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
@@ -571,3 +572,19 @@ export const getMarketAddressesFromSportMarketArray = (markets: SportMarketInfo[
 
 export const getIsOneSideMarket = (tag: number) =>
     SPORTS_TAGS_MAP['Motosport'].includes(Number(tag)) || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
+
+export const canPlayerBeAddedToParlay = (parlayPositions: ParlaysMarketPosition[], position: ParlaysMarketPosition) => {
+    let canBeAdded = true;
+    parlayPositions.map((parlayPosition) => {
+        if (parlayPosition.parentMarket === position.parentMarket) {
+            if (parlayPosition.playerId === null) {
+                canBeAdded = false;
+            }
+
+            if (parlayPosition.sportMarketAddress === position.sportMarketAddress) {
+                canBeAdded = false;
+            }
+        }
+    });
+    return canBeAdded;
+};

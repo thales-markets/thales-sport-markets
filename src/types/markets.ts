@@ -223,6 +223,8 @@ export type ParlaysMarketPosition = {
     doubleChanceMarketType: DoubleChanceMarketType | null;
     isOneSideMarket?: boolean;
     tag?: number;
+    playerId?: number;
+    playerPropsType?: number;
 };
 
 export type ParlaysMarket = SportMarketInfo & {
