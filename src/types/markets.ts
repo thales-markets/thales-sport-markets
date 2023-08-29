@@ -212,6 +212,13 @@ export type ParlaysMarketPosition = {
     tag?: number;
 };
 
+export type CombinedMarketPosition = {
+    markets: ParlaysMarketPosition[];
+    totalOdd: number;
+    totalBonus?: number;
+    positionName: CombinedMarketsPositionName;
+};
+
 export type ParlaysMarket = SportMarketInfo & {
     position: Position;
     winning?: boolean;

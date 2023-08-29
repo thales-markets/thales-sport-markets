@@ -1,6 +1,7 @@
 import {
     CombinedMarket,
     CombinedMarketContractData,
+    CombinedMarketPosition,
     CombinedMarketsContractData,
     CombinedMarketsPositionName,
     CombinedParlayMarket,
@@ -26,7 +27,7 @@ import {
 import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from './formatters/ethers';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import localStore from './localStore';
-import { BetType, ContractSGPOrder, Position } from 'enums/markets';
+import { BetType, CombinedPositionsMatchingCode, ContractSGPOrder, Position } from 'enums/markets';
 
 export const isSpecificCombinedPositionAddedToParlay = (
     parlayData: ParlaysMarketPosition[],
@@ -428,4 +429,36 @@ export const convertSGPContractDataToSGPItemType = (sgpContractData: SGPContract
 export const filterMarketsByTagsArray = (sportMarkets: SportMarkets, tags: number[]): SportMarkets => {
     if (!tags.length) return sportMarkets;
     return sportMarkets.filter((market) => market.tags.findIndex((tag) => tags.includes(Number(tag))) !== -1);
+};
+
+export const compareCombinedPositionsFromParlayData = (
+    combinedPositions: CombinedMarketPosition,
+    combinedPositionsParlay: CombinedMarketPosition
+) => {
+    if (JSON.stringify(combinedPositions) == JSON.stringify(combinedPositionsParlay))
+        return CombinedPositionsMatchingCode.SAME_POSITIONS;
+    if (combinedPositions.markets.length !== combinedPositionsParlay.markets.length)
+        return CombinedPositionsMatchingCode.NOTHING_COMMON;
+
+    let numberOfEqualMarketsNotPositions = 0;
+    combinedPositions.markets.forEach((market) => {
+        combinedPositionsParlay.markets.forEach((_market) => {
+            if (
+                market.sportMarketAddress == _market.sportMarketAddress &&
+                market.parentMarket == _market.parentMarket
+            ) {
+                if (market.position !== _market.position) {
+                    numberOfEqualMarketsNotPositions++;
+                }
+            }
+        });
+    });
+
+    if (
+        combinedPositions.markets.length == combinedPositionsParlay.markets.length &&
+        combinedPositions.markets.length == numberOfEqualMarketsNotPositions
+    )
+        return CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS;
+
+    return CombinedPositionsMatchingCode.NOTHING_COMMON;
 };

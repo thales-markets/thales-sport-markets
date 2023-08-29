@@ -1,12 +1,18 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition, SGPItem } from 'types/markets';
+import {
+    CombinedMarketPosition,
+    MultiSingleAmounts,
+    ParlayPayment,
+    ParlaysMarketPosition,
+    SGPItem,
+} from 'types/markets';
 import localStore from 'utils/localStore';
 import { RootState } from '../rootReducer';
-import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
+import { compareCombinedPositionsFromParlayData, getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { GOLF_TAGS } from 'constants/tags';
-import { ParlayErrorCode } from 'enums/markets';
+import { CombinedPositionsMatchingCode, ParlayErrorCode } from 'enums/markets';
 
 const sliceName = 'parlay';
 
@@ -17,6 +23,11 @@ const MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY = 10;
 const getDefaultParlay = (): ParlaysMarketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
     return lsParlay !== undefined ? (lsParlay as ParlaysMarketPosition[]) : [];
+};
+
+const getDefaultCombinedPositions = (): CombinedMarketPosition[] => {
+    const combinedPositions = localStore.get(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS);
+    return combinedPositions !== undefined ? (combinedPositions as CombinedMarketPosition[]) : [];
 };
 
 const getDefaultPayment = (): ParlayPayment => {
@@ -53,6 +64,7 @@ const getDefaultError = () => {
 
 type ParlaySliceState = {
     parlay: ParlaysMarketPosition[];
+    combinedPositions: CombinedMarketPosition[];
     parlaySize: number;
     payment: ParlayPayment;
     multiSingle: MultiSingleAmounts[];
@@ -63,6 +75,7 @@ type ParlaySliceState = {
 
 const initialState: ParlaySliceState = {
     parlay: getDefaultParlay(),
+    combinedPositions: getDefaultCombinedPositions(),
     parlaySize: DEFAULT_MAX_NUMBER_OF_MATCHES,
     payment: getDefaultPayment(),
     multiSingle: getDefaultMultiSingle(),
@@ -210,6 +223,29 @@ const parlaySlice = createSlice({
             state.parlay.push(...action.payload);
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
         },
+        updateCombinedPositions: (state, action: PayloadAction<CombinedMarketPosition>) => {
+            const existingCombinedPositions = state.combinedPositions;
+
+            if (state.combinedPositions.length == 4) {
+                state.error.code = ParlayErrorCode.MAX_COMBINED_MARKETS;
+                state.error.data = MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY.toString();
+                return;
+            }
+
+            if (existingCombinedPositions.length > 0) {
+                existingCombinedPositions.forEach((positions: CombinedMarketPosition, index: number) => {
+                    const comparePositions = compareCombinedPositionsFromParlayData(action.payload, positions);
+                    if (comparePositions == CombinedPositionsMatchingCode.SAME_POSITIONS) return;
+                    if (comparePositions == CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS) {
+                        delete existingCombinedPositions[index];
+                        existingCombinedPositions[index] = action.payload;
+                        return;
+                    }
+                });
+            }
+
+            existingCombinedPositions.push(action.payload);
+        },
         setParlaySize: (state, action: PayloadAction<number>) => {
             state.parlaySize = action.payload;
         },
@@ -297,6 +333,7 @@ const parlaySlice = createSlice({
 export const {
     updateParlay,
     updateParlayWithMultiplePositions,
+    updateCombinedPositions,
     setParlaySize,
     removeFromParlay,
     removeCombinedMarketFromParlay,
@@ -312,6 +349,7 @@ export const {
 const getParlayState = (state: RootState) => state[sliceName];
 export const getParlay = (state: RootState) => getParlayState(state).parlay;
 export const getMultiSingle = (state: RootState) => getParlayState(state).multiSingle;
+export const getCombinedPositions = (state: RootState) => getParlayState(state).combinedPositions;
 export const getIsMultiSingle = (state: RootState) => getParlayState(state).isMultiSingle;
 export const getParlaySize = (state: RootState) => getParlayState(state).parlaySize;
 export const getParlayPayment = (state: RootState) => getParlayState(state).payment;
