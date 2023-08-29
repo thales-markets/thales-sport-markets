@@ -236,15 +236,19 @@ const parlaySlice = createSlice({
                 existingCombinedPositions.forEach((positions: CombinedMarketPosition, index: number) => {
                     const comparePositions = compareCombinedPositionsFromParlayData(action.payload, positions);
                     if (comparePositions == CombinedPositionsMatchingCode.SAME_POSITIONS) return;
-                    if (comparePositions == CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS) {
+                    if (
+                        comparePositions == CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS ||
+                        comparePositions == CombinedPositionsMatchingCode.SAME_PARENT_MARKET
+                    ) {
                         delete existingCombinedPositions[index];
                         existingCombinedPositions[index] = action.payload;
-                        return;
                     }
                 });
+            } else {
+                existingCombinedPositions.push(action.payload);
             }
 
-            existingCombinedPositions.push(action.payload);
+            localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, existingCombinedPositions);
         },
         setParlaySize: (state, action: PayloadAction<number>) => {
             state.parlaySize = action.payload;

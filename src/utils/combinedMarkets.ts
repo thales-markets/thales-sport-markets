@@ -437,8 +437,6 @@ export const compareCombinedPositionsFromParlayData = (
 ) => {
     if (JSON.stringify(combinedPositions) == JSON.stringify(combinedPositionsParlay))
         return CombinedPositionsMatchingCode.SAME_POSITIONS;
-    if (combinedPositions.markets.length !== combinedPositionsParlay.markets.length)
-        return CombinedPositionsMatchingCode.NOTHING_COMMON;
 
     let numberOfEqualMarketsNotPositions = 0;
     combinedPositions.markets.forEach((market) => {
@@ -460,5 +458,6 @@ export const compareCombinedPositionsFromParlayData = (
     )
         return CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS;
 
+    if (numberOfEqualMarketsNotPositions > 0) return CombinedPositionsMatchingCode.SAME_PARENT_MARKET;
     return CombinedPositionsMatchingCode.NOTHING_COMMON;
 };

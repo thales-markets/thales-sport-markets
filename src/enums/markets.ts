@@ -80,4 +80,5 @@ export enum CombinedPositionsMatchingCode {
     SAME_MARKET_ADDRESSES_NOT_POSITIONS = 2,
     SAME_POSITIONS_DIFFERENT_ODDS = 3,
     NOTHING_COMMON = 4,
+    SAME_PARENT_MARKET = 5,
 }
