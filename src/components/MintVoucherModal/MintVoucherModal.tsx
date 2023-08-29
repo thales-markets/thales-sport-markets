@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Button from 'components/Button';
@@ -25,6 +25,7 @@ import { refetchBalances } from 'utils/queryConnector';
 import TextInput from '../fields/TextInput/TextInput';
 import { stableCoinParser } from 'utils/formatters/ethers';
 import { getDefaultCollateral } from 'utils/collaterals';
+import { executeEtherspotTransaction, getEtherspotTransactionGasEstimated } from 'utils/etherspot';
 
 type MintVoucherModalProps = {
     onClose: () => void;
@@ -50,11 +51,14 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+
     const [hasAllowance, setAllowance] = useState<boolean>(false);
     const [isAllowing, setIsAllowing] = useState<boolean>(false);
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
+    const [gasFee, setGasFee] = useState<number | null>(null);
 
     const { openConnectModal } = useConnectModal();
 
@@ -79,7 +83,8 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
         insufficientBalance ||
         isSubmitting ||
         !isRecipientEntered ||
-        !isRecipientValid;
+        !isRecipientValid ||
+        !hasAllowance;
 
     const paymentTokenBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -92,19 +97,14 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
 
     useEffect(() => {
-        const { signer, sUSDContract, overtimeVoucherContract } = networkConnector;
-        if (signer && sUSDContract && overtimeVoucherContract) {
+        const { sUSDContract, overtimeVoucherContract } = networkConnector;
+        if (sUSDContract && overtimeVoucherContract) {
             const addressToApprove = overtimeVoucherContract.address;
-            const sUSDContractWithSigner = sUSDContract.connect(signer);
+
             const getAllowance = async () => {
                 try {
                     const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        sUSDContractWithSigner,
-                        walletAddress,
-                        addressToApprove
-                    );
+                    const allowance = await checkAllowance(parsedAmount, sUSDContract, walletAddress, addressToApprove);
                     setAllowance(allowance);
                 } catch (e) {
                     console.log(e);
@@ -116,49 +116,90 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
         }
     }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId]);
 
-    const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, sUSDContract, overtimeVoucherContract } = networkConnector;
-        if (signer && sUSDContract && overtimeVoucherContract) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsAllowing(true);
-
+    useEffect(() => {
+        const fetchGasEstimated = async () => {
             try {
-                const addressToApprove = overtimeVoucherContract.address;
+                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                const { overtimeVoucherContract } = networkConnector;
+
+                const gasEstimated = await getEtherspotTransactionGasEstimated(
+                    networkId,
+                    overtimeVoucherContract,
+                    'mint',
+                    [isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress), parsedAmount]
+                );
+                setGasFee(gasEstimated);
+            } catch (e) {
+                console.log(e);
+                setGasFee(null);
+            }
+        };
+        if (isButtonDisabled || !isSocialLogin) return;
+        fetchGasEstimated();
+    }, [isButtonDisabled, amount, hasAllowance, networkId, recipient, walletAddress, isSocialLogin, isAnotherWallet]);
+
+    console.log('gasFee', gasFee);
+
+    const handleAllowance = async (approveAmount: BigNumber) => {
+        setIsAllowing(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+        try {
+            const { signer, sUSDContract, overtimeVoucherContract } = networkConnector;
+            const addressToApprove = overtimeVoucherContract?.address;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(networkId, sUSDContract, 'approve', [
+                    addressToApprove,
+                    approveAmount,
+                ]);
+            } else if (signer && sUSDContract && overtimeVoucherContract) {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
                 const tx = (await sUSDContractWithSigner.approve(addressToApprove, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(
-                        id,
-                        getSuccessToastOptions(
-                            t('market.toast-message.approve-success', {
-                                token: getDefaultCollateral(networkId),
-                            })
-                        )
-                    );
-                    setIsAllowing(false);
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsAllowing(false);
             }
+            if (txHash && txHash !== null) {
+                setOpenApprovalModal(false);
+                toast.update(
+                    id,
+                    getSuccessToastOptions(
+                        t('market.toast-message.approve-success', {
+                            token: getDefaultCollateral(networkId),
+                        })
+                    )
+                );
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsAllowing(false);
     };
 
     const handleSubmit = async () => {
-        const { overtimeVoucherContract, signer } = networkConnector;
-        if (overtimeVoucherContract && signer) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
+        setIsSubmitting(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+        try {
+            const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+            const { overtimeVoucherContract, signer } = networkConnector;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(networkId, overtimeVoucherContract, 'mint', [
+                    isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),
+                    parsedAmount,
+                ]);
+            } else if (overtimeVoucherContract && signer) {
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
-                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
                 const tx = await overtimeVoucherContractWithSigner.mint(
                     isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),
@@ -169,23 +210,25 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                 );
                 const txResult = await tx.wait();
 
-                if (txResult && txResult.events) {
-                    toast.update(id, getSuccessToastOptions(t('common.voucher.modal.button.confirmation-message')));
-                    setAmount(-1);
-                    setIsAnotherWallet(false);
-                    setRecipient('');
-                    setIsSubmitting(false);
-                    setTimeout(() => {
-                        refetchBalances(walletAddress, networkId);
-                    }, 2000);
-                    onClose();
+                if (txResult && txResult.transactionHash) {
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+            if (txHash && txHash !== null) {
+                toast.update(id, getSuccessToastOptions(t('common.voucher.modal.button.confirmation-message')));
+                setAmount(-1);
+                setIsAnotherWallet(false);
+                setRecipient('');
+                setTimeout(() => {
+                    refetchBalances(walletAddress, networkId);
+                }, 2000);
+                onClose();
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsSubmitting(false);
     };
 
     const getSubmitButton = () => {

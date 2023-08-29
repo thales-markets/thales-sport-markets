@@ -40,7 +40,7 @@ import {
 } from './styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsSocialLogin, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
 import NumericInput from 'components/fields/NumericInput';
@@ -79,6 +79,7 @@ import { Network } from 'enums/network';
 import { delay } from 'utils/timer';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { stableCoinParser } from 'utils/formatters/ethers';
+import { executeEtherspotTransaction } from '../../utils/etherspot';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -87,6 +88,8 @@ const LiquidityPool: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
+
     const [amount, setAmount] = useState<number | string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [hasAllowance, setAllowance] = useState<boolean>(false);
@@ -270,18 +273,16 @@ const LiquidityPool: React.FC = () => {
         isLiquidityPoolCapReached;
 
     useEffect(() => {
-        const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
-
+        const { sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
         const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
 
-        if (signer && sUSDContract && lpContract) {
-            const sUSDContractWithSigner = sUSDContract.connect(signer);
+        if (sUSDContract && lpContract) {
             const getAllowance = async () => {
                 try {
                     const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
-                        sUSDContractWithSigner,
+                        sUSDContract,
                         walletAddress,
                         lpContract.address
                     );
@@ -297,80 +298,108 @@ const LiquidityPool: React.FC = () => {
     }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId, isParlayLP]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+        setIsAllowing(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+        try {
+            const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+            const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+            const addressToApprove = lpContract?.address;
 
-        if (signer && sUSDContract && lpContract) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsAllowing(true);
-
-            try {
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(networkId, sUSDContract, 'approve', [
+                    addressToApprove,
+                    approveAmount,
+                ]);
+            } else if (signer && sUSDContract && lpContract) {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
-                const tx = (await sUSDContractWithSigner.approve(lpContract.address, approveAmount, {
+                const tx = (await sUSDContractWithSigner.approve(addressToApprove, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    toast.update(
-                        id,
-                        getSuccessToastOptions(t('market.toast-message.approve-success', { token: collateral }))
-                    );
-                    setIsAllowing(false);
+                    setOpenApprovalModal(false);
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsAllowing(false);
             }
+
+            if (txHash && txHash !== null) {
+                toast.update(
+                    id,
+                    getSuccessToastOptions(
+                        t('market.toast-message.approve-success', {
+                            token: collateral,
+                        })
+                    )
+                );
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsAllowing(false);
     };
 
     const handleDeposit = async () => {
-        const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+        setIsSubmitting(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+        try {
+            const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
-        if (signer && lpContract) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
+            const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+            const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(networkId, lpContract, 'deposit', [parsedAmount]);
+            } else if (signer && lpContract) {
                 const liquidityPoolContractWithSigner = lpContract.connect(signer);
-                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
                 const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
 
-                if (txResult && txResult.events) {
-                    toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
-                    setAmount('');
-                    setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId, 'single');
+                if (txResult && txResult.transactionHash) {
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+            if (txHash && txHash !== null) {
+                toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
+                setAmount('');
+                refetchLiquidityPoolData(walletAddress, networkId, 'single');
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsSubmitting(false);
     };
 
     const handleWithdrawalRequest = async () => {
-        const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+        setIsSubmitting(true);
+        const id = toast.loading(t('market.toast-message.transaction-pending'));
 
-        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+        try {
+            const parsedPercentage = ethers.utils.parseEther((Number(withdrawalPercentage) / 100).toString());
 
-        if (signer && lpContract) {
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            setIsSubmitting(true);
-            try {
+            const { signer, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+            const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(
+                    networkId,
+                    lpContract,
+                    withdrawAll ? 'withdrawalRequest' : 'partialWithdrawalRequest',
+                    withdrawAll ? undefined : [parsedPercentage]
+                );
+            } else if (signer && lpContract) {
                 const liquidityPoolContractWithSigner = lpContract.connect(signer);
-                const parsedPercentage = ethers.utils.parseEther((Number(withdrawalPercentage) / 100).toString());
 
                 const tx = withdrawAll
                     ? await liquidityPoolContractWithSigner.withdrawalRequest({
@@ -381,21 +410,23 @@ const LiquidityPool: React.FC = () => {
                       });
                 const txResult = await tx.wait();
 
-                if (txResult && txResult.events) {
-                    toast.update(
-                        id,
-                        getSuccessToastOptions(t('liquidity-pool.button.request-withdrawal-confirmation-message'))
-                    );
-                    setAmount('');
-                    setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId, isParlayLP ? 'parlay' : 'single');
+                if (txResult && txResult.transactionHash) {
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                console.log(e);
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsSubmitting(false);
             }
+            if (txHash && txHash !== null) {
+                toast.update(
+                    id,
+                    getSuccessToastOptions(t('liquidity-pool.button.request-withdrawal-confirmation-message'))
+                );
+                setAmount('');
+                refetchLiquidityPoolData(walletAddress, networkId, isParlayLP ? 'parlay' : 'single');
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
         }
+        setIsSubmitting(false);
     };
 
     const closeRound = async () => {
@@ -412,35 +443,33 @@ const LiquidityPool: React.FC = () => {
                 const canCloseCurrentRound = await lpContractWithSigner?.canCloseCurrentRound();
                 const roundClosingPrepared = await lpContractWithSigner?.roundClosingPrepared();
 
-                let getUsersCountInCurrentRound = await lpContractWithSigner?.getUsersCountInCurrentRound();
+                let usersCountInCurrentRound = await lpContractWithSigner?.getUsersCountInCurrentRound();
                 let usersProcessedInRound = await lpContractWithSigner?.usersProcessedInRound();
                 if (canCloseCurrentRound) {
                     try {
                         if (!roundClosingPrepared) {
-                            const tx = await lpContractWithSigner.prepareRoundClosing({
-                                type: 2,
-                            });
+                            const tx = await lpContractWithSigner.prepareRoundClosing();
                             await tx.wait().then(() => {
-                                console.log('prepareRoundClosing closed');
+                                console.log('Round closing prepared');
                             });
                             await delay(1000 * 2);
                         }
 
-                        while (usersProcessedInRound.toString() < getUsersCountInCurrentRound.toString()) {
-                            const tx = await lpContractWithSigner.processRoundClosingBatch(100, {
-                                type: 2,
-                            });
+                        console.log(`Users processed in round ${usersProcessedInRound}/${usersCountInCurrentRound}`);
+                        while (usersProcessedInRound < usersCountInCurrentRound) {
+                            const tx = await lpContractWithSigner.processRoundClosingBatch(100);
                             await tx.wait().then(() => {
-                                console.log('Round closed');
+                                console.log('Round closing batch processed');
                             });
                             await delay(1000 * 2);
-                            getUsersCountInCurrentRound = await lpContractWithSigner.getUsersCountInCurrentRound();
+                            usersCountInCurrentRound = await lpContractWithSigner.getUsersCountInCurrentRound();
                             usersProcessedInRound = await lpContractWithSigner.usersProcessedInRound();
+                            console.log(
+                                `Users processed in round ${usersProcessedInRound}/${usersCountInCurrentRound}`
+                            );
                         }
 
-                        const tx = await lpContractWithSigner.closeRound({
-                            type: 2,
-                        });
+                        const tx = await lpContractWithSigner.closeRound();
                         await tx.wait().then(() => {
                             console.log('Round closed');
                         });

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsSocialLogin, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import {
@@ -32,12 +32,14 @@ import { LINKS } from 'constants/links';
 import { generalConfig } from 'config/general';
 import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
 import { getDefaultCollateral } from 'utils/collaterals';
+import { executeEtherspotTransaction } from 'utils/etherspot';
 
 const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isSocialLogin = useSelector((state: RootState) => getIsSocialLogin(state));
 
     const [isClaimable, setIsClaimable] = useState(false);
     const [isClaiming, setIsClaiming] = useState(false);
@@ -72,28 +74,38 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
         if (isClaiming) {
             return;
         }
-        const { overtimeVoucherEscrowContract, signer } = networkConnector;
-        if (overtimeVoucherEscrowContract && signer) {
-            const overtimeVoucherEscrowContractWithSigner = overtimeVoucherEscrowContract.connect(signer);
-            setIsClaiming(true);
-            const id = toast.loading(t('profile.messages.transaction-pending'));
-            try {
+
+        setIsClaiming(true);
+        const id = toast.loading(t('profile.messages.transaction-pending'));
+
+        try {
+            const { overtimeVoucherEscrowContract, signer } = networkConnector;
+
+            let txHash;
+            if (isSocialLogin) {
+                txHash = await executeEtherspotTransaction(networkId, overtimeVoucherEscrowContract, 'claimVoucher');
+            } else if (overtimeVoucherEscrowContract && signer) {
+                const overtimeVoucherEscrowContractWithSigner = overtimeVoucherEscrowContract.connect(signer);
+
                 const tx = await overtimeVoucherEscrowContractWithSigner.claimVoucher({
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 });
                 const txResult = await tx.wait();
+
                 if (txResult && txResult.transactionHash) {
-                    refetchAfterVoucherClaim(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('profile.messages.voucher-claim-success')));
-                    setIsClaiming(false);
+                    txHash = txResult.transactionHash;
                 }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                setIsClaiming(false);
-                console.log('Error ', e);
             }
+            if (txHash && txHash !== null) {
+                refetchAfterVoucherClaim(walletAddress, networkId);
+                toast.update(id, getSuccessToastOptions(t('profile.messages.voucher-claim-success')));
+            }
+        } catch (e) {
+            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            console.log('Error ', e);
         }
-    }, [networkId, t, isClaiming, walletAddress]);
+        setIsClaiming(false);
+    }, [networkId, t, isClaiming, walletAddress, isSocialLogin]);
 
     useEffect(() => {
         setIsClaimable(!!overtimeVoucherEscrowData?.isClaimable);

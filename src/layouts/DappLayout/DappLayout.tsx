@@ -21,6 +21,7 @@ import axios from 'axios';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import { isAndroid, isMetamask, isMobile } from 'utils/device';
 import { Theme } from 'enums/ui';
+import Etherspot from './Etherspot';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -108,6 +109,7 @@ const DappLayout: React.FC = ({ children }) => {
             {isAppReady ? (
                 <Background>
                     <Wrapper>
+                        <Etherspot />
                         <DappHeader />
                         {children}
                         <DappFooter />
