@@ -395,10 +395,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     susdPaid,
                     expectedPayout,
                     referralId,
-                    additionalSlippage,
-                    {
-                        gasLimit: getMaxGasLimitForNetwork(networkId),
-                    }
+                    additionalSlippage
                 );
 
                 const txResult = await tx.wait();

@@ -545,8 +545,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                                     parsedAmount,
                                     ammQuote,
                                     referralId,
-                                    ethers.utils.parseEther('0.02'),
-                                    { gasLimit: getMaxGasLimitForNetwork(networkId) }
+                                    ethers.utils.parseEther('0.02')
                                 );
                                 const txResult = await tx.wait();
 
