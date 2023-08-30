@@ -108,6 +108,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         doubleChanceMarketType: market.doubleChanceMarketType,
                         isOneSideMarket: market.isOneSideMarket,
                         tag: market.tags[0],
+                        playerId: market.playerId ?? undefined,
+                        playerPropsType: market.playerPropsType ?? undefined,
                     };
                     dispatch(updateParlay(parlayMarket));
                     if (isMobile) {

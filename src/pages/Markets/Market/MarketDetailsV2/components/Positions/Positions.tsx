@@ -7,6 +7,7 @@ import DoubleChanceMarketPositions from '../DoubleChanceMarketPositions';
 import MarketPositions from '../MarketPositions';
 import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
 import { BetType } from 'enums/markets';
+import styled from 'styled-components';
 
 type PositionsProps = {
     markets: SportMarketInfo[];
@@ -53,9 +54,19 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
                     ) : (
                         markets.map((market) => {
                             return (
-                                <ContentRow key={market.address}>
-                                    <MarketPositions market={market} />
-                                </ContentRow>
+                                <div key={market.address}>
+                                    {(market.betType === BetType.PLAYER_PROPS_STRIKEOUTS ||
+                                        market.betType === BetType.PLAYER_PROPS_HOMERUNS) && (
+                                        <PropsTextContainer>
+                                            <PropsText>{`${market.playerName} (${
+                                                BetTypeNameMap[market.betType as BetType]
+                                            })`}</PropsText>
+                                        </PropsTextContainer>
+                                    )}
+                                    <ContentRow>
+                                        <MarketPositions market={market} />
+                                    </ContentRow>
+                                </div>
                             );
                         })
                     )}
@@ -66,5 +77,21 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         <></>
     );
 };
+
+const PropsTextContainer = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+    margin-top: 4px;
+`;
+
+const PropsText = styled.span`
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 300;
+    text-transform: capitalize;
+`;
 
 export default Positions;

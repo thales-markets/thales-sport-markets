@@ -9,6 +9,7 @@ import {
     formatMarketOdds,
     getBonus,
     getFormattedBonus,
+    getMarketName,
     getOddTooltipText,
     getPositionOdds,
     getSpreadTotalText,
@@ -16,7 +17,6 @@ import {
 } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 
@@ -34,16 +34,17 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
 
     const symbolText = getSymbolText(market.position, market);
     const spreadTotalText = getSpreadTotalText(market, market.position);
-
     const bonus = getBonus(market);
+    const marketName = getMarketName(market, market.position);
+
     return (
         <>
             <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
             <MatchLabel>
                 <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                    {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
+                    {marketName}
                 </ClubName>
-                {!market.isOneSideMarket && (
+                {!market.isOneSideMarket && market.playerName === null && (
                     <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
                         {market.awayTeam}
                     </ClubName>

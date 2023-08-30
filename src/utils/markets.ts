@@ -20,6 +20,7 @@ import {
     ParlayMarketWithQuotes,
     ParlayMarketWithRound,
     ParlaysMarket,
+    ParlaysMarketPosition,
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
@@ -58,6 +59,8 @@ export const getSymbolText = (
                 case BetType.SPREAD:
                     return 'H1';
                 case BetType.TOTAL:
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
+                case BetType.PLAYER_PROPS_HOMERUNS:
                     return 'O';
                 case BetType.DOUBLE_CHANCE:
                     switch (market.doubleChanceMarketType) {
@@ -78,6 +81,8 @@ export const getSymbolText = (
                 case BetType.SPREAD:
                     return 'H2';
                 case BetType.TOTAL:
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
+                case BetType.PLAYER_PROPS_HOMERUNS:
                     return 'U';
                 default:
                     return '2';
@@ -97,6 +102,9 @@ export const getSpreadTotalText = (market: SportMarketInfo | MarketData, positio
                 : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread)) / 100}`;
         case BetType.TOTAL:
             return `${Number(market.total) / 100}`;
+        case BetType.PLAYER_PROPS_STRIKEOUTS:
+        case BetType.PLAYER_PROPS_HOMERUNS:
+            return `${Number(market.playerPropsLine)}`;
         default:
             return undefined;
     }
@@ -105,6 +113,22 @@ export const getSpreadTotalText = (market: SportMarketInfo | MarketData, positio
 export const getTotalText = (market: SportMarketInfo) => {
     if (market.betType == BetType.TOTAL) return `${Number(market.total) / 100}`;
     return undefined;
+};
+
+export const getMarketName = (market: SportMarketInfo | MarketData, position?: Position) => {
+    if (market.isOneSideMarket) return fixOneSideMarketCompetitorName(market.homeTeam);
+    switch (Number(market.betType)) {
+        case BetType.WINNER:
+        case BetType.SPREAD:
+        case BetType.TOTAL:
+        case BetType.DOUBLE_CHANCE:
+            return position === Position.HOME ? market.homeTeam : market.awayTeam;
+        case BetType.PLAYER_PROPS_STRIKEOUTS:
+        case BetType.PLAYER_PROPS_HOMERUNS:
+            return market.playerName;
+        default:
+            return undefined;
+    }
 };
 
 const getSpreadText = (market: SportMarketInfo, position: Position) => {
@@ -191,7 +215,14 @@ export const getPositionOdds = (market: ParlaysMarket) => {
 
 export const getVisibilityOfDrawOption = (tags: Array<number>, betType: BetType) => {
     const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(Number(element)));
-    if (tag || betType === BetType.TOTAL || betType === BetType.SPREAD) return false;
+    if (
+        tag ||
+        betType === BetType.TOTAL ||
+        betType === BetType.SPREAD ||
+        betType === BetType.PLAYER_PROPS_STRIKEOUTS ||
+        betType === BetType.PLAYER_PROPS_HOMERUNS
+    )
+        return false;
     return true;
 };
 
@@ -341,6 +372,12 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                             translationKey = '';
                     }
                     break;
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
+                    translationKey = 'player-props.strikeouts-over';
+                    break;
+                case BetType.PLAYER_PROPS_HOMERUNS:
+                    translationKey = 'player-props.home-runs-over';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -357,6 +394,12 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.TOTAL:
                     translationKey = 'total.under';
                     break;
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
+                    translationKey = 'player-props.strikeouts-under';
+                    break;
+                case BetType.PLAYER_PROPS_HOMERUNS:
+                    translationKey = 'player-props.home-runs-under';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -370,11 +413,11 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
             break;
     }
     return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, {
-        team,
+        team: market.playerName === null ? team : market.playerName,
         team2,
         spread,
         total,
-        scoring,
+        scoring: market.playerName === null ? scoring : market.playerPropsLine,
         matchResolve,
     });
 };
@@ -486,6 +529,7 @@ export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: Pa
         const market = parlayMarket.sportMarkets.find((market) => market.address == address);
 
         if (position && market) {
+            position.market = market;
             position.market.isOneSideMarket = getIsOneSideMarket(Number(market.tags[0]));
 
             positions.push(position);
@@ -528,3 +572,19 @@ export const getMarketAddressesFromSportMarketArray = (markets: SportMarketInfo[
 
 export const getIsOneSideMarket = (tag: number) =>
     SPORTS_TAGS_MAP['Motosport'].includes(Number(tag)) || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
+
+export const canPlayerBeAddedToParlay = (parlayPositions: ParlaysMarketPosition[], position: ParlaysMarketPosition) => {
+    let canBeAdded = true;
+    parlayPositions.map((parlayPosition) => {
+        if (parlayPosition.parentMarket === position.parentMarket) {
+            if (parlayPosition.playerId === null) {
+                canBeAdded = false;
+            }
+
+            if (parlayPosition.sportMarketAddress === position.sportMarketAddress) {
+                canBeAdded = false;
+            }
+        }
+    });
+    return canBeAdded;
+};

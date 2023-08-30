@@ -378,7 +378,8 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "Combined positions"
+                "combined-positions": "Combined positions",
+                "strikeouts": "Player props"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -407,11 +408,18 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
+                "player-props": {
+                    "strikeouts-over": "{{team}} will have more strikeouts than {{scoring}}",
+                    "strikeouts-under": "{{team}} will have less strikeouts than {{scoring}}",
+                    "home-runs-over": "{{team}} will have more home runs than {{scoring}}",
+                    "home-runs-under": "{{team}} will have less home runs than {{scoring}}"
+                },
                 "bonus": "{{bonus}} added bonus on win!"
             },
             "total-markets": "Total markets",
             "race-winner": "Winner",
-            "no-win": "No win"
+            "no-win": "No win",
+            "see-more-markets": "see player props markets"
         },
         "market-details": {
             "price": "Price",

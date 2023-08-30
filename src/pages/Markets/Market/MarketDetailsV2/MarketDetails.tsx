@@ -47,6 +47,11 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         spreadMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.SPREAD),
         totalMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.TOTAL),
         doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.DOUBLE_CHANCE),
+        playerPropsMarkets: market.childMarkets.filter(
+            (childMarket) =>
+                childMarket.betType === BetType.PLAYER_PROPS_STRIKEOUTS ||
+                childMarket.betType === BetType.PLAYER_PROPS_HOMERUNS
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -297,6 +302,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions markets={childMarkets.totalMarkets} betType={BetType.TOTAL} showOdds={showAMM} />
                     )}
                     {combinedMarkets.length > 0 && <CombinedPositions combinedMarkets={combinedMarkets} />}
+                    {childMarkets.playerPropsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.playerPropsMarkets}
+                            betType={BetType.PLAYER_PROPS_STRIKEOUTS}
+                            showOdds={showAMM}
+                        />
+                    )}
                 </>
                 <Transactions market={market} />
             </MainContainer>
