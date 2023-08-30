@@ -2,8 +2,8 @@ import PositionSymbol from 'components/PositionSymbol';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getParlay, removeCombinedMarketFromParlay, updateParlayWithMultiplePositions } from 'redux/modules/parlay';
-import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
+import { getCombinedPositions, removeCombinedPosition, updateCombinedPositions } from 'redux/modules/parlay';
+import { CombinedMarketPosition, SportMarketInfo } from 'types/markets';
 import {
     formatMarketOdds,
     getCombinedOddTooltipText,
@@ -13,13 +13,13 @@ import {
     getSymbolText,
     hasBonus,
 } from 'utils/markets';
-import { getCombinedPositionName, isSpecificCombinedPositionAddedToParlay } from 'utils/combinedMarkets';
+import { compareCombinedPositionsFromParlayData, getCombinedPositionName } from 'utils/combinedMarkets';
 import { getOddsType } from 'redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { getIsMobile } from 'redux/modules/app';
 import { toast } from 'react-toastify';
 import { oddToastOptions } from 'config/toast';
-import { Position } from 'enums/markets';
+import { CombinedPositionsMatchingCode, Position } from 'enums/markets';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 
@@ -38,9 +38,7 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
     const { trackEvent } = useMatomo();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
-    const parlay = useSelector(getParlay);
-
-    const isAddedToParlay = isSpecificCombinedPositionAddedToParlay(parlay, markets, positions);
+    const combinedPositions = useSelector(getCombinedPositions);
 
     const combinedMarketPositionSymbol = getCombinedPositionName(markets, positions);
 
@@ -51,7 +49,30 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
 
     const parentMarketAddress = markets[0].parentMarket !== null ? markets[0].parentMarket : markets[1].parentMarket;
 
-    const isParentMarketAddressInParlayData = parlay.filter((market) => market.parentMarket == parentMarketAddress);
+    const combinedPosition: CombinedMarketPosition = {
+        markets: markets.map((market, index) => {
+            return {
+                parentMarket: getParentMarketAddress(market.parentMarket, market.address),
+                sportMarketAddress: market.address,
+                position: positions[index],
+                homeTeam: market.homeTeam || '',
+                awayTeam: market.awayTeam || '',
+                doubleChanceMarketType: null,
+                tags: market.tags,
+            };
+        }),
+        totalOdd: odd ? odd : 0,
+        totalBonus: bonus,
+        positionName: combinedMarketPositionSymbol || '',
+    };
+
+    const isAddedToParlay = combinedPositions.find(
+        (item) =>
+            compareCombinedPositionsFromParlayData(item, combinedPosition) ==
+            CombinedPositionsMatchingCode.SAME_POSITIONS
+    )
+        ? true
+        : false;
 
     const spreadAndTotalValues = getSpreadAndTotalTextForCombinedMarket(markets, positions);
     const spreadAndTotalText = `${spreadAndTotalValues.spread ? spreadAndTotalValues.spread + '/' : ''}${
@@ -59,32 +80,18 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
     }`;
 
     const onClick = () => {
+        console.log('Click event');
         if (noOdd) return;
-        if (isParentMarketAddressInParlayData) {
-            dispatch(removeCombinedMarketFromParlay(parentMarketAddress));
-        }
         if (isAddedToParlay) {
-            dispatch(removeCombinedMarketFromParlay(parentMarketAddress));
+            dispatch(removeCombinedPosition(parentMarketAddress));
         } else {
             trackEvent({
                 category: 'position',
                 action: 'combined',
                 value: showBonus ? Number(bonus) : 0,
             });
-            const parlayMarkets: ParlaysMarketPosition[] = [];
 
-            markets.forEach((market, index) => {
-                return parlayMarkets.push({
-                    parentMarket: getParentMarketAddress(market.parentMarket, market.address),
-                    sportMarketAddress: market.address,
-                    position: positions[index],
-                    homeTeam: market.homeTeam || '',
-                    awayTeam: market.awayTeam || '',
-                    doubleChanceMarketType: null,
-                    tags: market.tags,
-                });
-            });
-            dispatch(updateParlayWithMultiplePositions(parlayMarkets));
+            dispatch(updateCombinedPositions(combinedPosition));
             if (isMobile) {
                 toast(oddTooltipText, oddToastOptions);
             }

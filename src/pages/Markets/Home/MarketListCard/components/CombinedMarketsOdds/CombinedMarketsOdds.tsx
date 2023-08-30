@@ -33,7 +33,7 @@ const CombinedMarketsOdds: React.FC<CombinedOddsProps> = ({ market, isShownInSec
                         combinedMarketPositions.map((combinedPosition, index) => {
                             return (
                                 <CombinedOdd
-                                    key={`combined-odds-${index}-${market.address}-${combinedPosition.positions[0]}-${combinedPosition.positions[1]}`}
+                                    key={`combined-odds-${index}-${combinedPosition.markets[0].address}-${combinedPosition.positions[0]}-${combinedPosition.markets[0].address}-${combinedPosition.positions[1]}`}
                                     markets={combinedPosition.markets}
                                     positions={combinedPosition.positions}
                                     odd={combinedPosition.totalOdd}
