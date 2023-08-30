@@ -226,29 +226,45 @@ const parlaySlice = createSlice({
         updateCombinedPositions: (state, action: PayloadAction<CombinedMarketPosition>) => {
             const existingCombinedPositions = state.combinedPositions;
 
-            if (state.combinedPositions.length == 4) {
-                state.error.code = ParlayErrorCode.MAX_COMBINED_MARKETS;
-                state.error.data = MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY.toString();
-                return;
-            }
+            let matchingCode: CombinedPositionsMatchingCode = CombinedPositionsMatchingCode.NOTHING_COMMON;
 
             if (existingCombinedPositions.length > 0) {
-                existingCombinedPositions.forEach((positions: CombinedMarketPosition, index: number) => {
-                    const comparePositions = compareCombinedPositionsFromParlayData(action.payload, positions);
-                    if (comparePositions == CombinedPositionsMatchingCode.SAME_POSITIONS) return;
+                existingCombinedPositions.every((positions: CombinedMarketPosition, index: number) => {
+                    const comparePositions = compareCombinedPositionsFromParlayData(positions, action.payload);
+                    matchingCode = comparePositions;
+                    if (comparePositions == CombinedPositionsMatchingCode.SAME_POSITIONS) {
+                        return false;
+                    }
                     if (
                         comparePositions == CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS ||
                         comparePositions == CombinedPositionsMatchingCode.SAME_PARENT_MARKET
                     ) {
                         delete existingCombinedPositions[index];
                         existingCombinedPositions[index] = action.payload;
+                        return false;
                     }
+                    return true;
                 });
-            } else {
+            }
+
+            if (existingCombinedPositions.length == 0 || matchingCode == CombinedPositionsMatchingCode.NOTHING_COMMON) {
                 existingCombinedPositions.push(action.payload);
             }
 
+            if (state.combinedPositions.length * 2 + state.parlay.length > 10) {
+                state.error.code = ParlayErrorCode.MAX_COMBINED_MARKETS;
+                state.error.data = MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY.toString();
+                return;
+            }
+
             localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, existingCombinedPositions);
+        },
+        removeCombinedPosition: (state, action: PayloadAction<string>) => {
+            state.combinedPositions = state.combinedPositions.filter((positions) =>
+                positions.markets.find((market) => market.parentMarket == action.payload) ? true : false
+            );
+
+            localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, state.combinedPositions);
         },
         setParlaySize: (state, action: PayloadAction<number>) => {
             state.parlaySize = action.payload;
@@ -338,6 +354,7 @@ export const {
     updateParlay,
     updateParlayWithMultiplePositions,
     updateCombinedPositions,
+    removeCombinedPosition,
     setParlaySize,
     removeFromParlay,
     removeCombinedMarketFromParlay,
