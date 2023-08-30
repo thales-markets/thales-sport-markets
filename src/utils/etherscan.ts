@@ -4,6 +4,7 @@ const EtherscanNetworkNameById: Record<Network, string> = {
     [Network.OptimismMainnet]: 'optimistic',
     [Network.OptimismGoerli]: 'goerli-optimism',
     [Network.ArbitrumOne]: '',
+    [Network.Base]: '',
 };
 
 const getEtherscanBaseURL = (networkId: Network) => {
@@ -11,6 +12,9 @@ const getEtherscanBaseURL = (networkId: Network) => {
 
     if (networkId === Network.ArbitrumOne) {
         return 'https://arbiscan.io/';
+    }
+    if (networkId === Network.Base) {
+        return 'https://basescan.org';
     }
 
     return `https://${network?.toLowerCase()}.etherscan.io`;

@@ -26,9 +26,9 @@ import ShareTicketModal, {
 } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { ParlaysMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { CollateralByNetworkId } from 'constants/network';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -192,7 +192,7 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                 <TableColumnClickable>
                                     <TableText>
                                         {formatCurrencyWithKey(
-                                            CollateralByNetworkId[networkId],
+                                            getDefaultCollateral(networkId),
                                             cellProps.cell.value,
                                             2
                                         )}

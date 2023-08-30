@@ -29,7 +29,7 @@ type CustomizationProps = {
     outline?: string;
 };
 
-const SUPPORTED_DESTINATION_NETWORKS = [Network.OptimismMainnet, Network.ArbitrumOne];
+const SUPPORTED_DESTINATION_NETWORKS = [Network.OptimismMainnet, Network.ArbitrumOne, Network.Base];
 
 const BungeePlugin: React.FC = () => {
     const { chain } = useNetwork();

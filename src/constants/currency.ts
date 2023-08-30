@@ -44,6 +44,7 @@ export const COLLATERALS: Record<Network, StablecoinKey[]> = {
         CRYPTO_CURRENCY_MAP.USDT as StablecoinKey,
     ],
     [Network.ArbitrumOne]: [CRYPTO_CURRENCY_MAP.USDC as StablecoinKey],
+    [Network.Base]: [CRYPTO_CURRENCY_MAP.USDC as StablecoinKey],
 };
 
 export const STABLE_DECIMALS = {

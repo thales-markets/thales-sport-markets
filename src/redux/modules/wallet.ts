@@ -2,8 +2,7 @@ import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { getAddress } from 'utils/formatters/ethers';
 import { RootState } from 'redux/rootReducer';
 import { Network } from 'enums/network';
-import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { NetworkNameById } from 'constants/network';
+import { DEFAULT_NETWORK } from 'constants/network';
 
 const sliceName = 'wallet';
 
@@ -16,9 +15,9 @@ type WalletSliceState = {
 
 const initialState: WalletSliceState = {
     walletAddress: null,
-    networkId: DEFAULT_NETWORK_ID,
-    networkName: NetworkNameById[DEFAULT_NETWORK_ID],
-    switchToNetworkId: DEFAULT_NETWORK_ID,
+    networkId: DEFAULT_NETWORK.networkId,
+    networkName: DEFAULT_NETWORK.name,
+    switchToNetworkId: DEFAULT_NETWORK.networkId,
 };
 
 const walletDetailsSlice = createSlice({
@@ -39,12 +38,13 @@ const walletDetailsSlice = createSlice({
             state,
             action: PayloadAction<{
                 networkId: Network;
+                networkName: string;
             }>
         ) => {
-            const { networkId } = action.payload;
+            const { networkId, networkName } = action.payload;
 
             state.networkId = networkId;
-            state.networkName = NetworkNameById[networkId]?.toLowerCase();
+            state.networkName = networkName;
         },
         switchToNetworkId: (
             state,

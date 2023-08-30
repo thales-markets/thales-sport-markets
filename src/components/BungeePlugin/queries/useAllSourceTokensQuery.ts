@@ -2,6 +2,7 @@ import { Currency } from '@socket.tech/plugin';
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { mainnet, bsc, aurora, avalanche, fantom, polygon, gnosis, optimism, arbitrum } from 'wagmi/chains';
+import { base } from 'constants/network';
 
 interface TokenListOutput {
     success: boolean;
@@ -18,6 +19,7 @@ export const SOURCE_NETWORK_IDS = [
     avalanche.id,
     arbitrum.id,
     aurora.id,
+    base.id,
 ];
 
 // Check docs on: https://docs.socket.tech/socket-api/versioning

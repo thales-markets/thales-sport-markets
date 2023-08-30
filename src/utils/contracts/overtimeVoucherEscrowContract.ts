@@ -5,6 +5,7 @@ export const overtimeVoucherEscrowContract = {
         [Network.OptimismMainnet]: '0xaB8f1fF41e58Bc5A4587161a9b95F71fa39e1553',
         [Network.OptimismGoerli]: '0xFd4D94e538aF8c176540a1Ad7009184F03476737',
         [Network.ArbitrumOne]: '0xbd39d496EEBA3842521e8886a04312795c2bC799',
+        [Network.Base]: '0x9e244C353145018DA0885E5405f680f27F8eB0Fa',
     },
     abi: [
         {
