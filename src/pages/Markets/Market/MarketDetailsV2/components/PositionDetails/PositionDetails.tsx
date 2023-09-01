@@ -108,6 +108,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         doubleChanceMarketType: market.doubleChanceMarketType,
                         isOneSideMarket: market.isOneSideMarket,
                         tag: market.tags[0],
+                        playerName: market.playerName ?? undefined,
                         playerId: market.playerId ?? undefined,
                         playerPropsType: market.playerPropsType ?? undefined,
                     };

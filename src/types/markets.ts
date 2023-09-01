@@ -223,6 +223,7 @@ export type ParlaysMarketPosition = {
     doubleChanceMarketType: DoubleChanceMarketType | null;
     isOneSideMarket?: boolean;
     tag?: number;
+    playerName?: string;
     playerId?: number;
     playerPropsType?: number;
 };
