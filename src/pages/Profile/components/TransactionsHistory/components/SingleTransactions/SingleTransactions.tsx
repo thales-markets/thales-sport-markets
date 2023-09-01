@@ -125,7 +125,9 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                             return (
                                 <TableColumnClickable>
                                     <TableText>
-                                        {cellProps.cell.value.isOneSideMarket
+                                        {cellProps.cell.value.playerName !== null
+                                            ? cellProps.cell.value.playerName
+                                            : cellProps.cell.value.isOneSideMarket
                                             ? fixOneSideMarketCompetitorName(cellProps.cell.value.homeTeam)
                                             : `${cellProps.cell.value.homeTeam} vs ${cellProps.cell.value.awayTeam}`}
                                     </TableText>
