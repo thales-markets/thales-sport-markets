@@ -357,7 +357,11 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         ) : (
                             <ColumnDirectionInfo>
                                 <Label>{t('profile.card.result')}:</Label>
-                                <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
+                                <BoldValue>
+                                    {position.market.playerName !== null
+                                        ? position.market.playerPropsScore
+                                        : `${position.market.homeScore} : ${position.market.awayScore}`}
+                                </BoldValue>
                             </ColumnDirectionInfo>
                         )}
                         {isMobile ? (
