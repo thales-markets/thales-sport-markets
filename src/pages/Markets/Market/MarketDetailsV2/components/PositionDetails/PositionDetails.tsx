@@ -19,6 +19,7 @@ import {
     getParentMarketAddress,
     getOddTooltipText,
     getFormattedBonus,
+    isPlayerProps,
 } from 'utils/markets';
 import { isMarketPartOfCombinedMarketFromParlayData } from 'utils/combinedMarkets';
 import {
@@ -92,7 +93,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
             isWinner={isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == position}
             onClick={() => {
                 if (disabledPosition) return;
-                if (isParentMarketAddressInParlayData) {
+                if (isParentMarketAddressInParlayData && !isPlayerProps(market.betType)) {
                     dispatch(removeCombinedMarketFromParlay(parentMarketAddress));
                 }
                 if (isAddedToParlay) {

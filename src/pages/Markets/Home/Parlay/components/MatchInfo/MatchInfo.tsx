@@ -32,7 +32,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
-
     const symbolText = getSymbolText(market.position, market);
     const spreadTotalText = getSpreadTotalText(market, market.position);
     const bonus = getBonus(market);

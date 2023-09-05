@@ -564,6 +564,7 @@ export const isParentMarketSameForSportMarkets = (
     firstMarket: SportMarketInfo,
     secondMarket: SportMarketInfo
 ): boolean => {
+    if (isPlayerProps(firstMarket.betType) || isPlayerProps(secondMarket.betType)) return false;
     if (firstMarket.parentMarket && secondMarket.parentMarket) {
         return firstMarket.parentMarket == secondMarket.parentMarket;
     }
