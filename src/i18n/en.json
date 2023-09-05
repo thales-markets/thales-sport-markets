@@ -379,7 +379,10 @@
                 "total": "Total",
                 "double-chance": "Double chance",
                 "combined-positions": "Combined positions",
-                "strikeouts": "Player props"
+                "strikeouts": "Strikeouts",
+                "home runs": "Home runs",
+                "rushing-yards": "Rushing yards",
+                "passing-yards": "Passing yards"
             },
             "odd-tooltip": {
                 "scoring": {

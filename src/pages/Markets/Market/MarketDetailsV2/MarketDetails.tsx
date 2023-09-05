@@ -30,7 +30,6 @@ import MatchInfo from './components/MatchInfo';
 import Positions from './components/Positions';
 import { BetType } from 'enums/markets';
 import { ThemeInterface } from 'types/ui';
-import { isPlayerProps } from 'utils/markets';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -48,7 +47,18 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         spreadMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.SPREAD),
         totalMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.TOTAL),
         doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.DOUBLE_CHANCE),
-        playerPropsMarkets: market.childMarkets.filter((childMarket) => isPlayerProps(childMarket.betType)),
+        strikeOutsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_STRIKEOUTS
+        ),
+        homeRunsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_HOMERUNS
+        ),
+        passingYardsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PASSING_YARDS
+        ),
+        rushingYardsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RUSHING_YARDS
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -299,10 +309,31 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions markets={childMarkets.totalMarkets} betType={BetType.TOTAL} showOdds={showAMM} />
                     )}
                     {combinedMarkets.length > 0 && <CombinedPositions combinedMarkets={combinedMarkets} />}
-                    {childMarkets.playerPropsMarkets.length > 0 && (
+                    {childMarkets.strikeOutsMarkets.length > 0 && (
                         <Positions
-                            markets={childMarkets.playerPropsMarkets}
+                            markets={childMarkets.strikeOutsMarkets}
                             betType={BetType.PLAYER_PROPS_STRIKEOUTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.homeRunsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.homeRunsMarkets}
+                            betType={BetType.PLAYER_PROPS_HOMERUNS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.rushingYardsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.rushingYardsMarkets}
+                            betType={BetType.PLAYER_PROPS_RUSHING_YARDS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.passingYardsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.passingYardsMarkets}
+                            betType={BetType.PLAYER_PROPS_PASSING_YARDS}
                             showOdds={showAMM}
                         />
                     )}

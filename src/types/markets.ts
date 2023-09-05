@@ -101,7 +101,10 @@ export type SportMarketChildMarkets = {
     spreadMarkets: SportMarketInfo[];
     totalMarkets: SportMarketInfo[];
     doubleChanceMarkets: SportMarketInfo[];
-    playerPropsMarkets: SportMarketInfo[];
+    strikeOutsMarkets: SportMarketInfo[];
+    homeRunsMarkets: SportMarketInfo[];
+    rushingYardsMarkets: SportMarketInfo[];
+    passingYardsMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {
