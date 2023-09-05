@@ -30,6 +30,7 @@ import MatchInfo from './components/MatchInfo';
 import Positions from './components/Positions';
 import { BetType } from 'enums/markets';
 import { ThemeInterface } from 'types/ui';
+import { isPlayerProps } from 'utils/markets';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -47,11 +48,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         spreadMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.SPREAD),
         totalMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.TOTAL),
         doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.DOUBLE_CHANCE),
-        playerPropsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType === BetType.PLAYER_PROPS_STRIKEOUTS ||
-                childMarket.betType === BetType.PLAYER_PROPS_HOMERUNS
-        ),
+        playerPropsMarkets: market.childMarkets.filter((childMarket) => isPlayerProps(childMarket.betType)),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];

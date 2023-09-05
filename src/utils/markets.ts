@@ -27,7 +27,7 @@ import {
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
-import { BetType, DoubleChanceMarketType, OddsType, Position } from 'enums/markets';
+import { BetType, DoubleChanceMarketType, OddsType, PLAYER_PROPS_BET_TYPES, Position } from 'enums/markets';
 import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
@@ -61,6 +61,8 @@ export const getSymbolText = (
                 case BetType.TOTAL:
                 case BetType.PLAYER_PROPS_STRIKEOUTS:
                 case BetType.PLAYER_PROPS_HOMERUNS:
+                case BetType.PLAYER_PROPS_PASSING_YARDS:
+                case BetType.PLAYER_PROPS_RUSHING_YARDS:
                     return 'O';
                 case BetType.DOUBLE_CHANCE:
                     switch (market.doubleChanceMarketType) {
@@ -83,6 +85,8 @@ export const getSymbolText = (
                 case BetType.TOTAL:
                 case BetType.PLAYER_PROPS_STRIKEOUTS:
                 case BetType.PLAYER_PROPS_HOMERUNS:
+                case BetType.PLAYER_PROPS_PASSING_YARDS:
+                case BetType.PLAYER_PROPS_RUSHING_YARDS:
                     return 'U';
                 default:
                     return '2';
@@ -104,6 +108,8 @@ export const getSpreadTotalText = (market: SportMarketInfo | MarketData, positio
             return `${Number(market.total) / 100}`;
         case BetType.PLAYER_PROPS_STRIKEOUTS:
         case BetType.PLAYER_PROPS_HOMERUNS:
+        case BetType.PLAYER_PROPS_PASSING_YARDS:
+        case BetType.PLAYER_PROPS_RUSHING_YARDS:
             return `${Number(market.playerPropsLine)}`;
         default:
             return undefined;
@@ -125,6 +131,8 @@ export const getMarketName = (market: SportMarketInfo | MarketData, position?: P
             return position === Position.HOME ? market.homeTeam : market.awayTeam;
         case BetType.PLAYER_PROPS_STRIKEOUTS:
         case BetType.PLAYER_PROPS_HOMERUNS:
+        case BetType.PLAYER_PROPS_PASSING_YARDS:
+        case BetType.PLAYER_PROPS_RUSHING_YARDS:
             return market.playerName;
         default:
             return undefined;
@@ -215,14 +223,7 @@ export const getPositionOdds = (market: ParlaysMarket) => {
 
 export const getVisibilityOfDrawOption = (tags: Array<number>, betType: BetType) => {
     const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(Number(element)));
-    if (
-        tag ||
-        betType === BetType.TOTAL ||
-        betType === BetType.SPREAD ||
-        betType === BetType.PLAYER_PROPS_STRIKEOUTS ||
-        betType === BetType.PLAYER_PROPS_HOMERUNS
-    )
-        return false;
+    if (tag || betType === BetType.TOTAL || betType === BetType.SPREAD || isPlayerProps(betType)) return false;
     return true;
 };
 
@@ -378,6 +379,12 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.PLAYER_PROPS_HOMERUNS:
                     translationKey = 'player-props.home-runs-over';
                     break;
+                case BetType.PLAYER_PROPS_PASSING_YARDS:
+                    translationKey = 'player-props.passing-yards-over';
+                    break;
+                case BetType.PLAYER_PROPS_RUSHING_YARDS:
+                    translationKey = 'player-props.rushing-yards-over';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -399,6 +406,12 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_HOMERUNS:
                     translationKey = 'player-props.home-runs-under';
+                    break;
+                case BetType.PLAYER_PROPS_PASSING_YARDS:
+                    translationKey = 'player-props.passing-yards-under';
+                    break;
+                case BetType.PLAYER_PROPS_RUSHING_YARDS:
+                    translationKey = 'player-props.rushing-yards-under';
                     break;
                 default:
                     translationKey = market.isOneSideMarket
@@ -587,4 +600,8 @@ export const canPlayerBeAddedToParlay = (parlayPositions: ParlaysMarketPosition[
         }
     });
     return canBeAdded;
+};
+
+export const isPlayerProps = (betType: BetType) => {
+    return PLAYER_PROPS_BET_TYPES.includes(betType);
 };

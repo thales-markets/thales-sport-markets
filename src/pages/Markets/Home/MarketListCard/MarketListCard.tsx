@@ -13,7 +13,7 @@ import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'utils/formatters/date';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isUEFAGame, isFifaWCGame, isIIHFWCGame, isMotosport, isGolf } from 'utils/markets';
+import { isUEFAGame, isFifaWCGame, isIIHFWCGame, isMotosport, isGolf, isPlayerProps } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
 import CombinedMarketsOdds from './components/CombinedMarketsOdds';
@@ -92,10 +92,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const spreadTotalMarkets = market.childMarkets.filter(
         (market) => market.betType === BetType.SPREAD || market.betType === BetType.TOTAL
     );
-    const playerPropsMarkets = market.childMarkets.filter(
-        (market) =>
-            market.betType === BetType.PLAYER_PROPS_STRIKEOUTS || market.betType === BetType.PLAYER_PROPS_HOMERUNS
-    );
+    const playerPropsMarkets = market.childMarkets.filter((market) => isPlayerProps(market.betType));
 
     const hasChildMarkets =
         doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0 || playerPropsMarkets.length > 0;
