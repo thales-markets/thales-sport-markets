@@ -129,7 +129,7 @@ const MarketContainer = styled.div`
     justify-content: center;
     align-items: center;
     white-space: nowrap;
-    gap: 10px;
+    gap: 5px;
     :not(:last-of-type) {
         border-right: 3px solid ${(props) => props.theme.borderColor.primary};
         padding-right: 10px;

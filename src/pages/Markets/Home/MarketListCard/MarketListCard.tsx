@@ -51,7 +51,7 @@ import PlayerPropsOdds from './components/PlayerPropsOdds/PlayerPropsOdds';
 // 3 for double chance, 1 for spread, 1 for total
 const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
 // 1 for winner, 1 for double chance, 1 for spread, 1 for total
-const MAX_NUMBER_OF_MARKETS = 4;
+// const MAX_NUMBER_OF_MARKETS = 4;
 
 type MarketRowCardProps = {
     market: SportMarketInfo;
@@ -85,8 +85,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const combinedMarketPositions = market.combinedMarketsData ? market.combinedMarketsData : [];
 
-    const MAX_NUMBER_OF_MARKETS_COUNT = MAX_NUMBER_OF_MARKETS;
-
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.betType === BetType.DOUBLE_CHANCE);
     const spreadTotalMarkets = market.childMarkets.filter(
         (market) => market.betType === BetType.SPREAD || market.betType === BetType.TOTAL
@@ -97,6 +95,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         doubleChanceMarkets.length > 0 || spreadTotalMarkets.length > 0 || playerPropsMarkets.length > 0;
     const hasCombinedMarkets = market.combinedMarketsData ? true : false;
     const hasPlayerPropsMarkets = playerPropsMarkets.length > 0;
+    const MAX_NUMBER_OF_MARKETS_COUNT =
+        doubleChanceMarkets.length + playerPropsMarkets.length + combinedMarketPositions.length;
     const isMaxNumberOfChildMarkets =
         market.childMarkets.length === MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT ||
         market.childMarkets.length + combinedMarketPositions.length >= MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT;
