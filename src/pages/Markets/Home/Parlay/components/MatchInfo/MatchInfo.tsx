@@ -9,6 +9,7 @@ import {
     formatMarketOdds,
     getBonus,
     getFormattedBonus,
+    getMarketName,
     getOddTooltipText,
     getPositionOdds,
     getSpreadTotalText,
@@ -16,9 +17,9 @@ import {
 } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
+import { Position } from 'enums/markets';
 
 type MatchInfoProps = {
     market: ParlaysMarket;
@@ -31,21 +32,22 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
-
     const symbolText = getSymbolText(market.position, market);
     const spreadTotalText = getSpreadTotalText(market, market.position);
-
     const bonus = getBonus(market);
+    const marketNameHome = getMarketName(market, Position.HOME);
+    const marketNameAway = getMarketName(market, Position.AWAY);
+
     return (
         <>
             <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
             <MatchLabel>
                 <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                    {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
+                    {marketNameHome}
                 </ClubName>
-                {!market.isOneSideMarket && (
+                {!market.isOneSideMarket && market.playerName === null && (
                     <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                        {market.awayTeam}
+                        {marketNameAway}
                     </ClubName>
                 )}
             </MatchLabel>
@@ -115,6 +117,7 @@ const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
     line-height: ${(props) => (props.lineHeight ? props.lineHeight : '11px')};
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
+    white-space: pre-line;
 `;
 
 const Bonus = styled.div`
