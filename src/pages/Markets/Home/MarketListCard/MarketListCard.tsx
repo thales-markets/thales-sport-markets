@@ -29,6 +29,7 @@ import {
     OddsWrapper,
     PlayerPropsBubble,
     PlayerPropsContainer,
+    PlayerPropsLabel,
     PlayerPropsText,
     Result,
     ResultLabel,
@@ -43,6 +44,7 @@ import {
     TotalMarketsArrow,
     TotalMarketsContainer,
     TotalMarketsLabel,
+    TotalMarketsWrapper,
     VSLabel,
     Wrapper,
 } from './styled-components';
@@ -296,14 +298,19 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 />
                             )}
                             {showSecondRowOnDesktop && (
-                                <TotalMarketsContainer>
-                                    <TotalMarketsLabel>{t('markets.market-card.total-markets')}</TotalMarketsLabel>
-                                    <TotalMarkets>{MAX_NUMBER_OF_MARKETS_COUNT}</TotalMarkets>
-                                    <TotalMarketsArrow
-                                        className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
-                                        onClick={() => setIsExpanded(!isExpanded)}
-                                    />
-                                </TotalMarketsContainer>
+                                <TotalMarketsWrapper>
+                                    {hasPlayerPropsMarkets && (
+                                        <PlayerPropsLabel>{t('markets.market-card.player-props')}</PlayerPropsLabel>
+                                    )}
+                                    <TotalMarketsContainer>
+                                        <TotalMarketsLabel>{t('markets.market-card.total-markets')}</TotalMarketsLabel>
+                                        <TotalMarkets>{MAX_NUMBER_OF_MARKETS_COUNT}</TotalMarkets>
+                                        <TotalMarketsArrow
+                                            className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
+                                            onClick={() => setIsExpanded(!isExpanded)}
+                                        />
+                                    </TotalMarketsContainer>
+                                </TotalMarketsWrapper>
                             )}
                         </>
                     )}

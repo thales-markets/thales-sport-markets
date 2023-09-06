@@ -104,12 +104,38 @@ export const ResultLabel = styled.span`
     text-transform: uppercase;
 `;
 
+export const TotalMarketsWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+`;
+
 export const TotalMarketsContainer = styled.span`
     display: inline-flex;
     justify-content: center;
     align-items: center;
     width: 117px;
     padding-left: 9px;
+`;
+
+export const PlayerPropsLabel = styled.span`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    height: 20px;
+    border-radius: 30px;
+    border: 1px solid ${(props) => props.theme.background.quaternary};
+    box-shadow: 0px 0px 6.39919px 0px ${(props) => props.theme.background.quaternary};
+    color: ${(props) => props.theme.background.quaternary};
+    font-family: Roboto;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
 `;
 
 export const TotalMarketsLabel = styled.span`

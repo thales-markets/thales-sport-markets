@@ -426,6 +426,7 @@
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },
+            "player-props": "Player props",
             "total-markets": "Total markets",
             "race-winner": "Winner",
             "no-win": "No win",
