@@ -9,7 +9,7 @@ import { formatCurrency } from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { getOddTooltipText, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import { getMarketName, getOddTooltipText, getSpreadTotalText, getSymbolText } from 'utils/markets';
 import PositionSymbol from 'components/PositionSymbol';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -35,7 +35,7 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['timestamp']>) => (
                             <p>{formatTxTimestamp(cellProps.cell.value)}</p>
                         ),
-                        width: 150,
+                        width: '150px',
                         sortable: true,
                     },
                     {
@@ -44,7 +44,7 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['type']>) => (
                             <p>{t(`market.table.type.${cellProps.cell.value}`).toUpperCase()}</p>
                         ),
-                        width: 150,
+                        width: '80px',
                         sortable: true,
                     },
                     {
@@ -60,9 +60,16 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
                             );
+                            const additionalText = getMarketName(
+                                cellProps.cell.row.original.wholeMarket,
+                                cellProps.cell.value
+                            );
                             return symbolText ? (
                                 <PositionSymbol
                                     symbolText={symbolText}
+                                    flexDirection={'row-reverse'}
+                                    justifyContent="flex-end"
+                                    symbolAdditionalText={{ text: additionalText, textStyle: { textAlign: 'center' } }}
                                     additionalStyle={{
                                         width: 23,
                                         height: 23,
@@ -96,7 +103,7 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                 <p>N/A</p>
                             );
                         },
-                        width: 150,
+                        minWidth: 250,
                         sortable: true,
                     },
                     {
@@ -106,7 +113,7 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['paid']>) => (
                             <p>{cellProps.cell.value ? `$ ${formatCurrency(cellProps.cell.value)}` : 'N/A'}</p>
                         ),
-                        width: 150,
+                        width: '100px',
                         sortable: true,
                     },
                     {
@@ -116,7 +123,7 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['amount']>) => (
                             <p>{formatCurrency(cellProps.cell.value)}</p>
                         ),
-                        width: 150,
+                        width: '100px',
                         sortable: true,
                     },
                     {
@@ -125,7 +132,7 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                         Cell: (cellProps: CellProps<MarketTransaction, MarketTransaction['hash']>) => (
                             <ViewEtherscanLink hash={cellProps.cell.value} />
                         ),
-                        width: 150,
+                        width: '100px',
                     },
                 ]}
                 data={transactions}

@@ -112,6 +112,7 @@ export const getSpreadTotalText = (market: SportMarketInfo | MarketData, positio
         case BetType.PLAYER_PROPS_STRIKEOUTS:
         case BetType.PLAYER_PROPS_HOMERUNS:
         case BetType.PLAYER_PROPS_PASSING_YARDS:
+        case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
         case BetType.PLAYER_PROPS_RUSHING_YARDS:
             return `${Number(market.playerPropsLine)}`;
         default:
@@ -389,6 +390,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.PLAYER_PROPS_RUSHING_YARDS:
                     translationKey = 'player-props.rushing-yards-over';
                     break;
+                case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
+                    translationKey = 'player-props.passing-touchdowns-over';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -416,6 +420,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_RUSHING_YARDS:
                     translationKey = 'player-props.rushing-yards-under';
+                    break;
+                case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
+                    translationKey = 'player-props.passing-touchdowns-under';
                     break;
                 default:
                     translationKey = market.isOneSideMarket
