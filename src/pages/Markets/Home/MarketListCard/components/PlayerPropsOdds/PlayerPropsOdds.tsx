@@ -45,8 +45,6 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
         return result;
     }, [markets]);
 
-    console.log(marketsUI);
-
     return (
         <Container>
             {marketsUI.map((ppMarkets, index) => {
