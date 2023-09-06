@@ -68,7 +68,7 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                     symbolText={symbolText}
                                     symbolAdditionalText={{
                                         text: additionalText,
-                                        textStyle: { textAlign: 'center', marginLeft: 20, whiteSpace: 'pre-wrap' },
+                                        textStyle: { marginLeft: 24, whiteSpace: 'pre-wrap' },
                                     }}
                                     additionalStyle={{
                                         width: 23,
