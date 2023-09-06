@@ -59,6 +59,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         rushingYardsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RUSHING_YARDS
         ),
+        passingTouchdownsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -334,6 +337,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions
                             markets={childMarkets.passingYardsMarkets}
                             betType={BetType.PLAYER_PROPS_PASSING_YARDS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.passingTouchdownsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.passingTouchdownsMarkets}
+                            betType={BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS}
                             showOdds={showAMM}
                         />
                     )}
