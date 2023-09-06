@@ -4,6 +4,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
 import {
+    BetTypeNameMap,
     ENETPULSE_SPORTS,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
@@ -65,6 +66,7 @@ import {
     ColumnDirectionInfo,
     MatchPeriodContainer,
     MatchPeriodLabel,
+    PlayerIcon,
     PositionContainer,
     ResultContainer,
     ScoreContainer,
@@ -76,6 +78,7 @@ import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
+import { BetType } from 'enums/markets';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -234,15 +237,22 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
         <Wrapper>
             <MatchInfo>
                 <MatchLogo>
-                    <ClubLogo
-                        alt={position.market.homeTeam}
-                        src={homeLogoSrc}
-                        isFlag={position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG}
-                        losingTeam={false}
-                        onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
-                        customMobileSize={'30px'}
-                    />
-                    {!position.market.isOneSideMarket && (
+                    {position.market.playerName === null ? (
+                        <ClubLogo
+                            alt={position.market.homeTeam}
+                            src={homeLogoSrc}
+                            isFlag={
+                                position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG
+                            }
+                            losingTeam={false}
+                            onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
+                            customMobileSize={'30px'}
+                        />
+                    ) : (
+                        <PlayerIcon className="icon icon--profile" />
+                    )}
+
+                    {!position.market.isOneSideMarket && position.market.playerName === null && (
                         <ClubLogo
                             awayTeam={true}
                             alt={position.market.awayTeam}
@@ -258,11 +268,15 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 </MatchLogo>
                 <MatchLabel>
                     <ClubName>
-                        {position.market.isOneSideMarket
-                            ? fixOneSideMarketCompetitorName(position.market.homeTeam)
-                            : position.market.homeTeam}
+                        {position.market.playerName === null
+                            ? position.market.isOneSideMarket
+                                ? fixOneSideMarketCompetitorName(position.market.homeTeam)
+                                : position.market.homeTeam
+                            : `${position.market.playerName} (${BetTypeNameMap[position.market.betType as BetType]})`}
                     </ClubName>
-                    {!position.market.isOneSideMarket && <ClubName>{position.market.awayTeam}</ClubName>}
+                    {!position.market.isOneSideMarket && position.market.playerName === null && (
+                        <ClubName>{position.market.awayTeam}</ClubName>
+                    )}
                 </MatchLabel>
             </MatchInfo>
             <StatusContainer>
@@ -345,7 +359,11 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         ) : (
                             <ColumnDirectionInfo>
                                 <Label>{t('profile.card.result')}:</Label>
-                                <BoldValue>{`${position.market.homeScore} : ${position.market.awayScore}`}</BoldValue>
+                                <BoldValue>
+                                    {position.market.playerName !== null
+                                        ? position.market.playerPropsScore
+                                        : `${position.market.homeScore} : ${position.market.awayScore}`}
+                                </BoldValue>
                             </ColumnDirectionInfo>
                         )}
                         {isMobile ? (

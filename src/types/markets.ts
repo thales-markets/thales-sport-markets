@@ -37,6 +37,12 @@ export type SportMarketInfo = {
     doubleChanceMarketType: DoubleChanceMarketType | null;
     combinedMarketsData?: CombinedMarket[];
     isOneSideMarket: boolean;
+    playerId: number | null;
+    playerName: string | null;
+    playerPropsLine: number | null;
+    playerPropsType: number | null;
+    playerPropsOutcome: number | null;
+    playerPropsScore: number | null;
 };
 
 export type AMMPosition = {
@@ -83,12 +89,23 @@ export type MarketData = {
     total: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
     isOneSideMarket: boolean;
+    playerId: number | null;
+    playerName: string | null;
+    playerPropsLine: number | null;
+    playerPropsType: number | null;
+    playerPropsOutcome: number | null;
+    playerPropsScore: number | null;
 };
 
 export type SportMarketChildMarkets = {
     spreadMarkets: SportMarketInfo[];
     totalMarkets: SportMarketInfo[];
     doubleChanceMarkets: SportMarketInfo[];
+    strikeOutsMarkets: SportMarketInfo[];
+    homeRunsMarkets: SportMarketInfo[];
+    rushingYardsMarkets: SportMarketInfo[];
+    passingYardsMarkets: SportMarketInfo[];
+    passingTouchdownsMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {
@@ -210,6 +227,9 @@ export type ParlaysMarketPosition = {
     doubleChanceMarketType: DoubleChanceMarketType | null;
     isOneSideMarket?: boolean;
     tag?: number;
+    playerName?: string;
+    playerId?: number;
+    playerPropsType?: number;
 };
 
 export type ParlaysMarket = SportMarketInfo & {

@@ -29,6 +29,8 @@ import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { CollateralByNetworkId } from 'constants/network';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType } from 'enums/markets';
 
 const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -125,7 +127,11 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                             return (
                                 <TableColumnClickable>
                                     <TableText>
-                                        {cellProps.cell.value.isOneSideMarket
+                                        {cellProps.cell.value.playerName !== null
+                                            ? `${cellProps.cell.value.playerName} (${
+                                                  BetTypeNameMap[cellProps.cell.value.betType as BetType]
+                                              }) `
+                                            : cellProps.cell.value.isOneSideMarket
                                             ? fixOneSideMarketCompetitorName(cellProps.cell.value.homeTeam)
                                             : `${cellProps.cell.value.homeTeam} vs ${cellProps.cell.value.awayTeam}`}
                                     </TableText>
