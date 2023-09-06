@@ -1,11 +1,7 @@
 import { BetType, Position } from 'enums/markets';
 import React, { useMemo } from 'react';
-
 import { SportMarketChildMarkets, SportMarketInfo } from 'types/markets';
 import { Container, OddsContainer } from './styled-components';
-import { t } from 'i18next';
-import { PlayerPropsContainer, ArrowRight, PlayerPropsText, PlayerPropsBubble } from '../../styled-components';
-// import { BetTypeNameMap } from 'constants/tags';
 import styled from 'styled-components';
 import { BetTypeNameMap } from 'constants/tags';
 import Odd from '../Odd';
@@ -53,13 +49,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
 
     return (
         <Container>
-            <PlayerPropsContainer>
-                <ArrowRight className={'icon icon--arrow'}></ArrowRight>
-                <PlayerPropsText>{t(`markets.market-card.see-more-markets-mobile`)}</PlayerPropsText>
-                <PlayerPropsBubble>{markets.length}</PlayerPropsBubble>
-            </PlayerPropsContainer>
             {marketsUI.map((ppMarkets, index) => {
-                console.log(ppMarkets);
                 return (
                     <SectionContainer key={index} dark={index % 2 === 0}>
                         <SectionTitle>{BetTypeNameMap[ppMarkets[0].betType as BetType]}</SectionTitle>
@@ -100,6 +90,8 @@ const SectionContainer = styled.div<{ dark: boolean }>`
     align-items: flex-start;
     justify-content: flex-start;
     padding: 10px;
+    flex-direction: column;
+    gap: 10px;
 `;
 const OddsWrapper = styled.div`
     display: flex;
@@ -110,7 +102,7 @@ const OddsWrapper = styled.div`
 `;
 
 const SectionTitle = styled.span`
-    color: #fff;
+    color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -122,7 +114,7 @@ const SectionTitle = styled.span`
 `;
 
 const Player = styled.span`
-    color: #fff;
+    color: ${(props) => props.theme.textColor.quaternary};
     font-size: 10px;
     font-style: normal;
     font-weight: 500;

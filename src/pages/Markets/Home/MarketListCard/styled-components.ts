@@ -195,19 +195,12 @@ export const PlayerPropsText = styled.span`
 `;
 
 export const PlayerPropsContainer = styled.div`
-    position: absolute;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 4px;
     align-items: center;
-    bottom: 6px;
-    right: 10px;
-    cursor: pointer;
-    &:hover {
-        ${PlayerPropsText} {
-            text-decoration: underline;
-        }
-    }
+    margin-left: 10px;
+    margin-top: 6px;
 `;
 
 export const PlayerPropsBubble = styled.span`
@@ -220,7 +213,7 @@ export const PlayerPropsBubble = styled.span`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
