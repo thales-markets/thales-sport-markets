@@ -12,7 +12,7 @@ export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, B
 };
 
 export const INCENTIVIZED_LEAGUE = {
-    ids: [9011],
+    ids: [9011, 9002],
     startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
     endDate: new Date(Date.UTC(2024, 4, 16, 23, 59, 59)),
     link:
