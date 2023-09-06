@@ -138,7 +138,7 @@ export const getMarketName = (market: SportMarketInfo | MarketData, position?: P
         case BetType.PLAYER_PROPS_PASSING_YARDS:
         case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
         case BetType.PLAYER_PROPS_RUSHING_YARDS:
-            return `${market.playerName} (${BetTypeNameMap[market.betType as BetType]})`;
+            return `${market.playerName} \n(${BetTypeNameMap[market.betType as BetType]})`;
         default:
             return undefined;
     }

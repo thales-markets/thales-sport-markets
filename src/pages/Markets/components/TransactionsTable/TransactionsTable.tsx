@@ -9,7 +9,7 @@ import { formatCurrency } from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { getMarketName, getOddTooltipText, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import { getMarketName, getOddTooltipText, getSpreadTotalText, getSymbolText, isPlayerProps } from 'utils/markets';
 import PositionSymbol from 'components/PositionSymbol';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -60,16 +60,16 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
                             );
-                            const additionalText = getMarketName(
-                                cellProps.cell.row.original.wholeMarket,
-                                cellProps.cell.value
-                            );
+                            const additionalText = isPlayerProps(cellProps.cell.row.original.wholeMarket.betType)
+                                ? getMarketName(cellProps.cell.row.original.wholeMarket, cellProps.cell.value)
+                                : '';
                             return symbolText ? (
                                 <PositionSymbol
                                     symbolText={symbolText}
-                                    flexDirection={'row-reverse'}
-                                    justifyContent="flex-end"
-                                    symbolAdditionalText={{ text: additionalText, textStyle: { textAlign: 'center' } }}
+                                    symbolAdditionalText={{
+                                        text: additionalText,
+                                        textStyle: { textAlign: 'center', marginLeft: 20, whiteSpace: 'pre-wrap' },
+                                    }}
                                     additionalStyle={{
                                         width: 23,
                                         height: 23,
@@ -103,7 +103,8 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                 <p>N/A</p>
                             );
                         },
-                        minWidth: 250,
+                        minWidth: 200,
+                        width: '200px',
                         sortable: true,
                     },
                     {

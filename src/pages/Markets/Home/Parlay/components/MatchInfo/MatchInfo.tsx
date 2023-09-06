@@ -117,6 +117,7 @@ const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
     line-height: ${(props) => (props.lineHeight ? props.lineHeight : '11px')};
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
+    white-space: pre-line;
 `;
 
 const Bonus = styled.div`

@@ -37,7 +37,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         !showOdds || isMotosport(sportTag) || isGolf(sportTag) || areDoubleChanceMarkets || areOddsValid;
 
     return showContainer ? (
-        <Container>
+        <Container onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')}>
             <Header>
                 <Title isExpanded={isExpanded}>{t(`markets.market-card.bet-type.${BetTypeNameMap[betType]}`)}</Title>
             </Header>
