@@ -21,16 +21,12 @@ import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
 import {
     Arrow,
-    ArrowRight,
     ClubLogo,
     MainContainer,
     MatchInfoConatiner,
     MatchTimeLabel,
     OddsWrapper,
-    PlayerPropsBubble,
-    PlayerPropsContainer,
     PlayerPropsLabel,
-    PlayerPropsText,
     Result,
     ResultLabel,
     ResultWrapper,
@@ -50,6 +46,7 @@ import {
 } from './styled-components';
 import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
 import { BetType } from 'enums/markets';
+import PlayerPropsOdds from './components/PlayerPropsOdds/PlayerPropsOdds';
 
 // 3 for double chance, 1 for spread, 1 for total
 const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
@@ -358,19 +355,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <CombinedMarketsOdds market={market} isShownInSecondRow />
                             )}
                         </OddsWrapper>
-                        {hasPlayerPropsMarkets && (
-                            <SPAAnchor href={buildMarketLink(market.address, language)}>
-                                <PlayerPropsContainer>
-                                    <ArrowRight className={'icon icon--arrow'}></ArrowRight>
-                                    <PlayerPropsText>
-                                        {isMobile
-                                            ? t(`markets.market-card.see-more-markets-mobile`)
-                                            : t(`markets.market-card.see-more-markets`)}
-                                    </PlayerPropsText>
-                                    <PlayerPropsBubble>{playerPropsMarkets.length}</PlayerPropsBubble>
-                                </PlayerPropsContainer>
-                            </SPAAnchor>
-                        )}
                     </SecondRowContainer>
                     {isMobile && hasCombinedMarkets && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
@@ -384,6 +368,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <CombinedMarketsOdds market={market} isShownInSecondRow />
                         </ThirdRowContainer>
                     )}
+                    {hasPlayerPropsMarkets && <PlayerPropsOdds markets={playerPropsMarkets} />}
                 </>
             )}
         </Wrapper>
