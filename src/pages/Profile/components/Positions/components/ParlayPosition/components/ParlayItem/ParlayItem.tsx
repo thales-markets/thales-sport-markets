@@ -1,5 +1,6 @@
 import PositionSymbol from 'components/PositionSymbol';
 import {
+    BetTypeNameMap,
     ENETPULSE_SPORTS,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
@@ -40,6 +41,7 @@ import { ParlayStatus, PlayerIcon, Wrapper } from './styled-components';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { BetType } from 'enums/markets';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
@@ -138,7 +140,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                             ? market.isOneSideMarket
                                 ? fixOneSideMarketCompetitorName(market.homeTeam)
                                 : market.homeTeam
-                            : market.playerName}
+                            : `${market.playerName} (${BetTypeNameMap[market.betType as BetType]})`}
                     </ClubName>
                     {!market.isOneSideMarket && market.playerName === null && <ClubName>{market.awayTeam}</ClubName>}
                 </MatchLabel>

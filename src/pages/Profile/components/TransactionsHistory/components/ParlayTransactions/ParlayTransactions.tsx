@@ -50,10 +50,11 @@ import {
     isCombinedMarketWinner,
     removeCombinedMarketsFromParlayMarketType,
 } from 'utils/combinedMarkets';
-import { OddsType, Position } from 'enums/markets';
+import { BetType, OddsType, Position } from 'enums/markets';
 import { CollateralByNetworkId } from 'constants/network';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { BetTypeNameMap } from 'constants/tags';
 
 const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -479,7 +480,9 @@ export const getParlayRow = (
                                 ? fixOneSideMarketCompetitorName(position.market.homeTeam)
                                 : position.market.playerName === null
                                 ? position.market.homeTeam + ' vs ' + position.market.awayTeam
-                                : position.market.playerName}
+                                : `${position.market.playerName} (${
+                                      BetTypeNameMap[position.market.betType as BetType]
+                                  }) `}
                         </ParlayRowTeam>
                     </ParlayRowText>
                 </SPAAnchor>
