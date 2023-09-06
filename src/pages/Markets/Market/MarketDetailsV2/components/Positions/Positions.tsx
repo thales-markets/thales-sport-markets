@@ -52,22 +52,24 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
                             <DoubleChanceMarketPositions markets={markets} showOdds={showOdds} />
                         </ContentRow>
                     ) : (
-                        markets.map((market) => {
-                            return (
-                                <div key={market.address}>
-                                    {isPlayerProps(market.betType) && (
-                                        <PropsTextContainer>
-                                            <PropsText>{`${market.playerName} (${
-                                                BetTypeNameMap[market.betType as BetType]
-                                            })`}</PropsText>
-                                        </PropsTextContainer>
-                                    )}
-                                    <ContentRow>
-                                        <MarketPositions market={market} />
-                                    </ContentRow>
-                                </div>
-                            );
-                        })
+                        markets
+                            .sort((marketA: SportMarketInfo, marketB: SportMarketInfo) => {
+                                return sortMarketsByDisabled(marketA, marketB);
+                            })
+                            .map((market) => {
+                                return (
+                                    <div key={market.address}>
+                                        {isPlayerProps(market.betType) && (
+                                            <PropsTextContainer>
+                                                <PropsText>{`${market.playerName}`}</PropsText>
+                                            </PropsTextContainer>
+                                        )}
+                                        <ContentRow>
+                                            <MarketPositions market={market} />
+                                        </ContentRow>
+                                    </div>
+                                );
+                            })
                     )}
                 </ContentContianer>
             )}
@@ -75,6 +77,20 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
     ) : (
         <></>
     );
+};
+
+const sortMarketsByDisabled = (marketA: SportMarketInfo, marketB: SportMarketInfo) => {
+    const isGameStartedA = marketA.maturityDate < new Date();
+    const isGameOpenA = !marketA.isResolved && !marketA.isCanceled && !marketA.isPaused && !isGameStartedA;
+    const noOddA = !marketA.homeOdds || marketA.homeOdds == 0;
+
+    const isGameStartedB = marketB.maturityDate < new Date();
+    const isGameOpenB = !marketB.isResolved && !marketB.isCanceled && !marketB.isPaused && !isGameStartedB;
+    const noOddB = !marketB.homeOdds || marketB.homeOdds == 0;
+
+    const disabledPositionA = noOddA || !isGameOpenA;
+    const disabledPositionB = noOddB || !isGameOpenB;
+    return disabledPositionB ? -1 : disabledPositionA ? 0 : 1;
 };
 
 const PropsTextContainer = styled.div`

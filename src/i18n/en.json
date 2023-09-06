@@ -381,9 +381,9 @@
                 "combined-positions": "Combined positions",
                 "strikeouts": "Strikeouts",
                 "home runs": "Home runs",
-                "rushing-yards": "Rushing yards",
-                "passing-yards": "Passing yards",
-                "passing-touchdowns": "Passing touchdowns"
+                "rushing yards": "Rushing yards",
+                "passing yards": "Passing yards",
+                "passing touchdowns": "Passing touchdowns"
             },
             "odd-tooltip": {
                 "scoring": {

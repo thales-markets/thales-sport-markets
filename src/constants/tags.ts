@@ -552,9 +552,9 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.DOUBLE_CHANCE]: 'double-chance',
     [BetType.PLAYER_PROPS_STRIKEOUTS]: 'strikeouts',
     [BetType.PLAYER_PROPS_HOMERUNS]: 'home runs',
-    [BetType.PLAYER_PROPS_PASSING_YARDS]: 'passing-yards',
-    [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: 'passing-touchdowns',
-    [BetType.PLAYER_PROPS_RUSHING_YARDS]: 'rushing-yards',
+    [BetType.PLAYER_PROPS_PASSING_YARDS]: 'passing yards',
+    [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: 'passing touchdowns',
+    [BetType.PLAYER_PROPS_RUSHING_YARDS]: 'rushing yards',
 };
 
 export const SCORING_MAP: SportsMap = {
