@@ -115,6 +115,7 @@ export const getSpreadTotalText = (market: SportMarketInfo | MarketData, positio
         case BetType.PLAYER_PROPS_HOMERUNS:
         case BetType.PLAYER_PROPS_PASSING_YARDS:
         case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
+        case BetType.PLAYER_PROPS_RECEIVING_YARDS:
         case BetType.PLAYER_PROPS_RUSHING_YARDS:
             return `${Number(market.playerPropsLine)}`;
         default:
