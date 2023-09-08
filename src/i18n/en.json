@@ -383,6 +383,7 @@
                 "home runs": "Home runs",
                 "rushing yards": "Rushing yards",
                 "passing yards": "Passing yards",
+                "receiving yards": "Receiving yards",
                 "passing touchdowns": "Passing touchdowns"
             },
             "odd-tooltip": {
@@ -421,6 +422,8 @@
                     "passing-yards-under": "{{team}} will have less passing yards than {{scoring}}",
                     "rushing-yards-over": "{{team}} will have more rushing yards than {{scoring}}",
                     "rushing-yards-under": "{{team}} will have less rushing yards than {{scoring}}",
+                    "receiving-yards-over": "{{team}} will have more receiving yards than {{scoring}}",
+                    "receiving-yards-under": "{{team}} will have less receiving yards than {{scoring}}",
                     "passing-touchdowns-over": "{{team}} will have more passing touchdowns than {{scoring}}",
                     "passing-touchdowns-under": "{{team}} will have less passing touchdowns than {{scoring}}"
                 },

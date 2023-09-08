@@ -64,6 +64,7 @@ export const getSymbolText = (
                 case BetType.PLAYER_PROPS_HOMERUNS:
                 case BetType.PLAYER_PROPS_PASSING_YARDS:
                 case BetType.PLAYER_PROPS_RUSHING_YARDS:
+                case BetType.PLAYER_PROPS_RECEIVING_YARDS:
                 case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
                     return 'O';
                 case BetType.DOUBLE_CHANCE:
@@ -88,6 +89,7 @@ export const getSymbolText = (
                 case BetType.PLAYER_PROPS_STRIKEOUTS:
                 case BetType.PLAYER_PROPS_HOMERUNS:
                 case BetType.PLAYER_PROPS_PASSING_YARDS:
+                case BetType.PLAYER_PROPS_RECEIVING_YARDS:
                 case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
                 case BetType.PLAYER_PROPS_RUSHING_YARDS:
                     return 'U';
@@ -390,6 +392,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.PLAYER_PROPS_RUSHING_YARDS:
                     translationKey = 'player-props.rushing-yards-over';
                     break;
+                case BetType.PLAYER_PROPS_RECEIVING_YARDS:
+                    translationKey = 'player-props.receiving-yards-over';
+                    break;
                 case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
                     translationKey = 'player-props.passing-touchdowns-over';
                     break;
@@ -420,6 +425,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_RUSHING_YARDS:
                     translationKey = 'player-props.rushing-yards-under';
+                    break;
+                case BetType.PLAYER_PROPS_RECEIVING_YARDS:
+                    translationKey = 'player-props.receiving-yards-under';
                     break;
                 case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
                     translationKey = 'player-props.passing-touchdowns-under';
