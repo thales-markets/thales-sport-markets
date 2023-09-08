@@ -20,6 +20,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             homeRunsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_HOMERUNS),
             passingYardsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_PASSING_YARDS),
             rushingYardsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_RUSHING_YARDS),
+            receivingYardsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_RECEIVING_YARDS),
             passingTouchdownsMarkets: markets.filter(
                 (market) => market.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
             ),
@@ -40,6 +41,9 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
         }
         if (lastValidChildMarkets.passingYardsMarkets.length > 0) {
             result.push(lastValidChildMarkets.passingYardsMarkets);
+        }
+        if (lastValidChildMarkets.receivingYardsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.receivingYardsMarkets);
         }
 
         return result;
