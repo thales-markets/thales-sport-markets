@@ -18,6 +18,7 @@ import {
     convertFinalResultToResultType,
     convertPositionNameToPositionType,
     isParentMarketSameForSportMarkets,
+    isPlayerProps,
 } from './markets';
 import {
     COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS,
@@ -156,6 +157,7 @@ export const getCombinedMarketsFromParlayData = (parlayData: ParlaysMarketPositi
 };
 
 const isTwoSportMarketsFromSameParent = (firstMarket: SportMarketInfo, secondMarket: SportMarketInfo): boolean => {
+    if (isPlayerProps(firstMarket.betType) || isPlayerProps(secondMarket.betType)) return false;
     if (firstMarket.gameId && secondMarket.gameId) return firstMarket.gameId == secondMarket.gameId;
     if (!firstMarket.parentMarket && secondMarket.parentMarket)
         return firstMarket.address.toLowerCase() == secondMarket.parentMarket.toLowerCase();

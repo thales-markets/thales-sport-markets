@@ -183,6 +183,18 @@ const parlaySlice = createSlice({
                     state.error.code = ParlayErrorCode.MAX_MATCHES;
                     state.error.data = state.parlaySize.toString();
                 }
+                //  else if (state.parlay.length < state.parlaySize) {
+                //         state.multiSingle.push({
+                //             sportMarketAddress: action.payload.sportMarketAddress,
+                //             parentMarketAddress: action.payload.parentMarket,
+                //             amountToBuy: 0,
+                //         });
+                //         state.parlay.push(action.payload);
+                //     } else {
+                //         state.error.code = ParlayErrorCode.MAX_MATCHES;
+                //         state.error.data = state.parlaySize.toString();
+                //     }
+                // }
             } else {
                 // UPDATE market position
                 parlayCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
@@ -196,6 +208,8 @@ const parlaySlice = createSlice({
                 multiSingleCopy[index].amountToBuy = 0;
                 state.multiSingle = [...multiSingleCopy];
             }
+
+            //  else if (action.payload.playerId && canPlayerBeAddedToParlay(state.parlay, action.payload)) {
 
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);

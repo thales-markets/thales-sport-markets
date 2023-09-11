@@ -378,7 +378,13 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "Combined positions"
+                "combined-positions": "Combined positions",
+                "strikeouts": "Strikeouts",
+                "home runs": "Home runs",
+                "rushing yards": "Rushing yards",
+                "passing yards": "Passing yards",
+                "receiving yards": "Receiving yards",
+                "passing touchdowns": "Passing touchdowns"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -407,11 +413,28 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
+                "player-props": {
+                    "strikeouts-over": "{{team}} will have more strikeouts than {{scoring}}",
+                    "strikeouts-under": "{{team}} will have less strikeouts than {{scoring}}",
+                    "home-runs-over": "{{team}} will have more home runs than {{scoring}}",
+                    "home-runs-under": "{{team}} will have less home runs than {{scoring}}",
+                    "passing-yards-over": "{{team}} will have more passing yards than {{scoring}}",
+                    "passing-yards-under": "{{team}} will have less passing yards than {{scoring}}",
+                    "rushing-yards-over": "{{team}} will have more rushing yards than {{scoring}}",
+                    "rushing-yards-under": "{{team}} will have less rushing yards than {{scoring}}",
+                    "receiving-yards-over": "{{team}} will have more receiving yards than {{scoring}}",
+                    "receiving-yards-under": "{{team}} will have less receiving yards than {{scoring}}",
+                    "passing-touchdowns-over": "{{team}} will have more passing touchdowns than {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} will have less passing touchdowns than {{scoring}}"
+                },
                 "bonus": "{{bonus}} added bonus on win!"
             },
+            "player-props": "Player props",
             "total-markets": "Total markets",
             "race-winner": "Winner",
-            "no-win": "No win"
+            "no-win": "No win",
+            "see-more-markets": "see player props markets",
+            "see-more-markets-mobile": "player props"
         },
         "market-details": {
             "price": "Price",
