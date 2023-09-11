@@ -275,7 +275,7 @@ const parlaySlice = createSlice({
         },
         removeCombinedPosition: (state, action: PayloadAction<string>) => {
             state.combinedPositions = state.combinedPositions.filter((positions) =>
-                positions.markets.find((market) => market.parentMarket == action.payload) ? true : false
+                positions.markets.find((market) => market.parentMarket == action.payload) ? false : true
             );
 
             localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, state.combinedPositions);
