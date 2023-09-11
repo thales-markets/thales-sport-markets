@@ -54,53 +54,23 @@ export const getSymbolText = (
     if (market.isOneSideMarket) {
         return 'YES';
     }
-    switch (position) {
-        case Position.HOME:
-            switch (Number(market.betType)) {
-                case BetType.SPREAD:
-                    return 'H1';
-                case BetType.TOTAL:
-                case BetType.PLAYER_PROPS_STRIKEOUTS:
-                case BetType.PLAYER_PROPS_HOMERUNS:
-                case BetType.PLAYER_PROPS_PASSING_YARDS:
-                case BetType.PLAYER_PROPS_RUSHING_YARDS:
-                case BetType.PLAYER_PROPS_RECEIVING_YARDS:
-                case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
-                    return 'O';
-                case BetType.DOUBLE_CHANCE:
-                    switch (market.doubleChanceMarketType) {
-                        case DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE:
-                            return '1X';
-                        case DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE:
-                            return 'X2';
-                        case DoubleChanceMarketType.NO_DRAW:
-                            return '12';
-                        default:
-                            return '';
-                    }
-                default:
-                    return '1';
-            }
-        case Position.AWAY:
-            switch (Number(market.betType)) {
-                case BetType.SPREAD:
-                    return 'H2';
-                case BetType.TOTAL:
-                case BetType.PLAYER_PROPS_STRIKEOUTS:
-                case BetType.PLAYER_PROPS_HOMERUNS:
-                case BetType.PLAYER_PROPS_PASSING_YARDS:
-                case BetType.PLAYER_PROPS_RECEIVING_YARDS:
-                case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
-                case BetType.PLAYER_PROPS_RUSHING_YARDS:
-                    return 'U';
-                default:
-                    return '2';
-            }
-        case Position.DRAW:
-            return 'X';
-        default:
-            return '';
-    }
+
+    if (market.betType === BetType.SPREAD) return 'H' + (position === Position.HOME ? '1' : '2');
+    if (market.betType === BetType.TOTAL || isPlayerProps(market.betType))
+        return position === Position.HOME ? 'O' : 'U';
+    if (market.betType === BetType.DOUBLE_CHANCE)
+        switch (market.doubleChanceMarketType) {
+            case DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE:
+                return '1X';
+            case DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE:
+                return 'X2';
+            case DoubleChanceMarketType.NO_DRAW:
+                return '12';
+            default:
+                return '';
+        }
+    if (position === Position.DRAW) return 'X';
+    return position === Position.HOME ? '1' : '2';
 };
 
 export const getSpreadTotalText = (market: SportMarketInfo | MarketData, position: Position) => {
