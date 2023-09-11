@@ -104,23 +104,14 @@ export const getSymbolText = (
 };
 
 export const getSpreadTotalText = (market: SportMarketInfo | MarketData, position: Position) => {
-    switch (Number(market.betType)) {
-        case BetType.SPREAD:
-            return position === Position.HOME
-                ? `${Number(market.spread) > 0 ? '+' : '-'}${Math.abs(Number(market.spread)) / 100}`
-                : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread)) / 100}`;
-        case BetType.TOTAL:
-            return `${Number(market.total) / 100}`;
-        case BetType.PLAYER_PROPS_STRIKEOUTS:
-        case BetType.PLAYER_PROPS_HOMERUNS:
-        case BetType.PLAYER_PROPS_PASSING_YARDS:
-        case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
-        case BetType.PLAYER_PROPS_RECEIVING_YARDS:
-        case BetType.PLAYER_PROPS_RUSHING_YARDS:
-            return `${Number(market.playerPropsLine)}`;
-        default:
-            return undefined;
-    }
+    if (market.betType === BetType.SPREAD)
+        return position === Position.HOME
+            ? `${Number(market.spread) > 0 ? '+' : '-'}${Math.abs(Number(market.spread)) / 100}`
+            : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread)) / 100}`;
+
+    if (market.betType === BetType.TOTAL) return `${Number(market.total) / 100}`;
+    if (isPlayerProps(market.betType)) return `${Number(market.playerPropsLine)}`;
+    return undefined;
 };
 
 export const getTotalText = (market: SportMarketInfo) => {
@@ -130,21 +121,8 @@ export const getTotalText = (market: SportMarketInfo) => {
 
 export const getMarketName = (market: SportMarketInfo | MarketData, position?: Position) => {
     if (market.isOneSideMarket) return fixOneSideMarketCompetitorName(market.homeTeam);
-    switch (Number(market.betType)) {
-        case BetType.WINNER:
-        case BetType.SPREAD:
-        case BetType.TOTAL:
-        case BetType.DOUBLE_CHANCE:
-            return position === Position.HOME ? market.homeTeam : market.awayTeam;
-        case BetType.PLAYER_PROPS_STRIKEOUTS:
-        case BetType.PLAYER_PROPS_HOMERUNS:
-        case BetType.PLAYER_PROPS_PASSING_YARDS:
-        case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
-        case BetType.PLAYER_PROPS_RUSHING_YARDS:
-            return `${market.playerName} \n(${BetTypeNameMap[market.betType as BetType]})`;
-        default:
-            return undefined;
-    }
+    if (isPlayerProps(market.betType)) return `${market.playerName} \n(${BetTypeNameMap[market.betType as BetType]})`;
+    return position === Position.HOME ? market.homeTeam : market.awayTeam;
 };
 
 const getSpreadText = (market: SportMarketInfo, position: Position) => {
