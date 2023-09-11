@@ -104,19 +104,13 @@ const calculateCombinedMarketOdds = (markets: SportMarketInfo[], positions: Posi
     return firstPositionOdds * secondPositionOdds;
 };
 
-const calculateCombinedMarketOddBasedOnHistoryOdds = (odds: number[], markets: SportMarketInfo[]) => {
-    const firstPositionOdd = odds[0];
-    const secondPositionOdd = odds[1];
+const calculateCombinedMarketOddBasedOnHistoryOdds = (odds: number[]) => {
+    let totalOdd = 1;
 
-    if (!firstPositionOdd || !secondPositionOdd) return 0;
+    odds.forEach((odd) => (odd ? (totalOdd *= odd) : ''));
 
-    const sgpItem = isMarketCombinationInSGP(markets);
-
-    if (sgpItem) {
-        return (firstPositionOdd * secondPositionOdd) / sgpItem.SGPFee;
-    }
-
-    return firstPositionOdd * secondPositionOdd;
+    if (totalOdd == 1) return 0;
+    return totalOdd;
 };
 
 export const getCombinedPositionName = (
@@ -230,10 +224,7 @@ export const extractCombinedMarketsFromParlayMarketType = (parlayMarket: ParlayM
                         convertPositionNameToPositionType(firstPositionData.side),
                         convertPositionNameToPositionType(secondPositionData.side),
                     ],
-                    totalOdd: calculateCombinedMarketOddBasedOnHistoryOdds(
-                        [firstPositionOdd, secondPositionOdd],
-                        [sportMarkets[i], sportMarkets[j]]
-                    ),
+                    totalOdd: calculateCombinedMarketOddBasedOnHistoryOdds([firstPositionOdd, secondPositionOdd]),
                     totalBonus: 0,
                     positionName: getCombinedPositionName(
                         [sportMarkets[i], sportMarkets[j]],
