@@ -80,7 +80,6 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
     }`;
 
     const onClick = () => {
-        console.log('Click event');
         if (noOdd) return;
         if (isAddedToParlay) {
             dispatch(removeCombinedPosition(parentMarketAddress));
