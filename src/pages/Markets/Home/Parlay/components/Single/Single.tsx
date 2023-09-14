@@ -258,7 +258,6 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         };
         getMaxUsdAmount();
     }, [
-        usdAmountValue,
         paymentTokenBalance,
         selectedStableIndex,
         market.address,
