@@ -1,4 +1,5 @@
 import {
+    BetTypeNameMap,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
     GOLF_TAGS,
@@ -20,13 +21,14 @@ import {
     ParlayMarketWithQuotes,
     ParlayMarketWithRound,
     ParlaysMarket,
+    ParlaysMarketPosition,
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
-import { BetType, DoubleChanceMarketType, OddsType, Position } from 'enums/markets';
+import { BetType, DoubleChanceMarketType, OddsType, PLAYER_PROPS_BET_TYPES, Position } from 'enums/markets';
 import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
@@ -52,59 +54,45 @@ export const getSymbolText = (
     if (market.isOneSideMarket) {
         return 'YES';
     }
-    switch (position) {
-        case Position.HOME:
-            switch (Number(market.betType)) {
-                case BetType.SPREAD:
-                    return 'H1';
-                case BetType.TOTAL:
-                    return 'O';
-                case BetType.DOUBLE_CHANCE:
-                    switch (market.doubleChanceMarketType) {
-                        case DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE:
-                            return '1X';
-                        case DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE:
-                            return 'X2';
-                        case DoubleChanceMarketType.NO_DRAW:
-                            return '12';
-                        default:
-                            return '';
-                    }
-                default:
-                    return '1';
-            }
-        case Position.AWAY:
-            switch (Number(market.betType)) {
-                case BetType.SPREAD:
-                    return 'H2';
-                case BetType.TOTAL:
-                    return 'U';
-                default:
-                    return '2';
-            }
-        case Position.DRAW:
-            return 'X';
-        default:
-            return '';
-    }
+
+    if (market.betType === BetType.SPREAD) return 'H' + (position === Position.HOME ? '1' : '2');
+    if (market.betType === BetType.TOTAL || isPlayerProps(market.betType))
+        return position === Position.HOME ? 'O' : 'U';
+    if (market.betType === BetType.DOUBLE_CHANCE)
+        switch (market.doubleChanceMarketType) {
+            case DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE:
+                return '1X';
+            case DoubleChanceMarketType.AWAY_TEAM_NOT_TO_LOSE:
+                return 'X2';
+            case DoubleChanceMarketType.NO_DRAW:
+                return '12';
+            default:
+                return '';
+        }
+    if (position === Position.DRAW) return 'X';
+    return position === Position.HOME ? '1' : '2';
 };
 
 export const getSpreadTotalText = (market: SportMarketInfo | MarketData, position: Position) => {
-    switch (Number(market.betType)) {
-        case BetType.SPREAD:
-            return position === Position.HOME
-                ? `${Number(market.spread) > 0 ? '+' : '-'}${Math.abs(Number(market.spread)) / 100}`
-                : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread)) / 100}`;
-        case BetType.TOTAL:
-            return `${Number(market.total) / 100}`;
-        default:
-            return undefined;
-    }
+    if (market.betType === BetType.SPREAD)
+        return position === Position.HOME
+            ? `${Number(market.spread) > 0 ? '+' : '-'}${Math.abs(Number(market.spread)) / 100}`
+            : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread)) / 100}`;
+
+    if (market.betType === BetType.TOTAL) return `${Number(market.total) / 100}`;
+    if (isPlayerProps(market.betType)) return `${Number(market.playerPropsLine)}`;
+    return undefined;
 };
 
 export const getTotalText = (market: SportMarketInfo) => {
     if (market.betType == BetType.TOTAL) return `${Number(market.total) / 100}`;
     return undefined;
+};
+
+export const getMarketName = (market: SportMarketInfo | MarketData, position?: Position) => {
+    if (market.isOneSideMarket) return fixOneSideMarketCompetitorName(market.homeTeam);
+    if (isPlayerProps(market.betType)) return `${market.playerName} \n(${BetTypeNameMap[market.betType as BetType]})`;
+    return position === Position.HOME ? market.homeTeam : market.awayTeam;
 };
 
 const getSpreadText = (market: SportMarketInfo, position: Position) => {
@@ -191,7 +179,7 @@ export const getPositionOdds = (market: ParlaysMarket) => {
 
 export const getVisibilityOfDrawOption = (tags: Array<number>, betType: BetType) => {
     const tag = tags.find((element) => TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(Number(element)));
-    if (tag || betType === BetType.TOTAL || betType === BetType.SPREAD) return false;
+    if (tag || betType === BetType.TOTAL || betType === BetType.SPREAD || isPlayerProps(betType)) return false;
     return true;
 };
 
@@ -341,6 +329,24 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                             translationKey = '';
                     }
                     break;
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
+                    translationKey = 'player-props.strikeouts-over';
+                    break;
+                case BetType.PLAYER_PROPS_HOMERUNS:
+                    translationKey = 'player-props.home-runs-over';
+                    break;
+                case BetType.PLAYER_PROPS_PASSING_YARDS:
+                    translationKey = 'player-props.passing-yards-over';
+                    break;
+                case BetType.PLAYER_PROPS_RUSHING_YARDS:
+                    translationKey = 'player-props.rushing-yards-over';
+                    break;
+                case BetType.PLAYER_PROPS_RECEIVING_YARDS:
+                    translationKey = 'player-props.receiving-yards-over';
+                    break;
+                case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
+                    translationKey = 'player-props.passing-touchdowns-over';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -357,6 +363,24 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.TOTAL:
                     translationKey = 'total.under';
                     break;
+                case BetType.PLAYER_PROPS_STRIKEOUTS:
+                    translationKey = 'player-props.strikeouts-under';
+                    break;
+                case BetType.PLAYER_PROPS_HOMERUNS:
+                    translationKey = 'player-props.home-runs-under';
+                    break;
+                case BetType.PLAYER_PROPS_PASSING_YARDS:
+                    translationKey = 'player-props.passing-yards-under';
+                    break;
+                case BetType.PLAYER_PROPS_RUSHING_YARDS:
+                    translationKey = 'player-props.rushing-yards-under';
+                    break;
+                case BetType.PLAYER_PROPS_RECEIVING_YARDS:
+                    translationKey = 'player-props.receiving-yards-under';
+                    break;
+                case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
+                    translationKey = 'player-props.passing-touchdowns-under';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -370,11 +394,11 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
             break;
     }
     return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, {
-        team,
+        team: market.playerName === null ? team : market.playerName,
         team2,
         spread,
         total,
-        scoring,
+        scoring: market.playerName === null ? scoring : market.playerPropsLine,
         matchResolve,
     });
 };
@@ -486,6 +510,7 @@ export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: Pa
         const market = parlayMarket.sportMarkets.find((market) => market.address == address);
 
         if (position && market) {
+            position.market = market;
             position.market.isOneSideMarket = getIsOneSideMarket(Number(market.tags[0]));
 
             positions.push(position);
@@ -507,6 +532,7 @@ export const isParentMarketSameForSportMarkets = (
     firstMarket: SportMarketInfo,
     secondMarket: SportMarketInfo
 ): boolean => {
+    if (isPlayerProps(firstMarket.betType) || isPlayerProps(secondMarket.betType)) return false;
     if (firstMarket.parentMarket && secondMarket.parentMarket) {
         return firstMarket.parentMarket == secondMarket.parentMarket;
     }
@@ -528,3 +554,23 @@ export const getMarketAddressesFromSportMarketArray = (markets: SportMarketInfo[
 
 export const getIsOneSideMarket = (tag: number) =>
     SPORTS_TAGS_MAP['Motosport'].includes(Number(tag)) || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
+
+export const canPlayerBeAddedToParlay = (parlayPositions: ParlaysMarketPosition[], position: ParlaysMarketPosition) => {
+    let canBeAdded = true;
+    parlayPositions.map((parlayPosition) => {
+        if (parlayPosition.parentMarket === position.parentMarket) {
+            if (parlayPosition.playerId === null) {
+                canBeAdded = false;
+            }
+
+            if (parlayPosition.sportMarketAddress === position.sportMarketAddress) {
+                canBeAdded = false;
+            }
+        }
+    });
+    return canBeAdded;
+};
+
+export const isPlayerProps = (betType: BetType) => {
+    return PLAYER_PROPS_BET_TYPES.includes(betType);
+};

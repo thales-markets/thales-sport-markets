@@ -212,7 +212,8 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
 
 const getParlayItemStatus = (market: SportMarketInfo) => {
     if (market.isCanceled) return t('profile.card.canceled');
-    if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
+    if (market.isResolved)
+        return market.playerName !== null ? market.playerPropsScore : `${market.homeScore} : ${market.awayScore}`;
     return formatDateWithTime(market.maturityDate);
 };
 

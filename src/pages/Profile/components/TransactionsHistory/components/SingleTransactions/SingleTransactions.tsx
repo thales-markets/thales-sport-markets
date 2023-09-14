@@ -28,6 +28,8 @@ import { ParlaysMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType } from 'enums/markets';
 import { getDefaultCollateral } from 'utils/collaterals';
 
 const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
@@ -125,7 +127,11 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                             return (
                                 <TableColumnClickable>
                                     <TableText>
-                                        {cellProps.cell.value.isOneSideMarket
+                                        {cellProps.cell.value.playerName !== null
+                                            ? `${cellProps.cell.value.playerName} (${
+                                                  BetTypeNameMap[cellProps.cell.value.betType as BetType]
+                                              }) `
+                                            : cellProps.cell.value.isOneSideMarket
                                             ? fixOneSideMarketCompetitorName(cellProps.cell.value.homeTeam)
                                             : `${cellProps.cell.value.homeTeam} vs ${cellProps.cell.value.awayTeam}`}
                                     </TableText>
