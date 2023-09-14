@@ -17,7 +17,13 @@ import { removeAll, setPayment, setMultiSingle, removeFromParlay, getMultiSingle
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
-import { AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlayPayment, ParlaysMarket } from 'types/markets';
+import {
+    AvailablePerPosition,
+    CombinedParlayMarket,
+    MultiSingleTokenQuoteAndBonus,
+    ParlayPayment,
+    ParlaysMarket,
+} from 'types/markets';
 import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
@@ -69,13 +75,17 @@ import { OddsType } from 'enums/markets';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { ThemeInterface } from 'types/ui';
+import MatchInfoOfCombinedMarket from '../MatchInfoOfCombinedMarket';
+import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
+import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
+    combinedMarkets?: CombinedParlayMarket[];
     parlayPayment: ParlayPayment;
 };
 
-const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => {
+const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, parlayPayment }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -101,17 +111,30 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     const [calculatedSkewAverage, setCalculatedSkewAverage] = useState(0);
     const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [tokenAndBonus, setTokenAndBonus] = useState<MultiSingleTokenQuoteAndBonus[]>(
-        Array(markets.length).fill({
-            sportMarketAddress: '',
-            tokenAmount: 0,
-            bonusPercentageDec: 0,
-            totalBonusCurrency: 0,
-            ammQuote: 0,
-        })
+        Array(markets.length)
+            .fill({
+                sportMarketAddress: '',
+                isCombinedPosition: false,
+                tokenAmount: 0,
+                bonusPercentageDec: 0,
+                totalBonusCurrency: 0,
+                ammQuote: 0,
+            })
+            .concat(
+                Array(combinedMarkets ? combinedMarkets.length : 0).fill({
+                    sportMarketAddress: '',
+                    isCombinedPosition: true,
+                    tokenAmount: 0,
+                    bonusPercentageDec: 0,
+                    totalBonusCurrency: 0,
+                    ammQuote: 0,
+                })
+            )
     );
     const [isFetching, setIsFetching] = useState<Record<string, boolean>>({});
     const [isAllowing, setIsAllowing] = useState(false);
     const [isRecalculating, setIsRecalculating] = useState(false);
+    const [minUsdAmountValue, setMinUsdAmountValue] = useState<number>(0);
     const [isBuying, setIsBuying] = useState(false);
     const [hasValidationError, setHasValidationError] = useState(false);
     const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState<Record<string, string>>({});
@@ -189,6 +212,17 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         isVoucherSelected,
     ]);
 
+    const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const parlayAmmData = useMemo(() => {
+        if (parlayAmmDataQuery.isSuccess && parlayAmmDataQuery.data) {
+            return parlayAmmDataQuery.data;
+        }
+        return undefined;
+    }, [parlayAmmDataQuery.isSuccess, parlayAmmDataQuery.data]);
+
     useEffect(() => {
         // Used for transition between Ticket and Single to save payment selection and amount
         dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
@@ -204,6 +238,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
             isMounted.current = true;
         }
     }, [dispatch, networkId]);
+
+    useEffect(() => {
+        setMinUsdAmountValue(parlayAmmData?.minUsdAmount || 0);
+    }, [parlayAmmData?.minUsdAmount]);
 
     const fetchAmmQuote = useCallback(
         async (amountForQuote: number, market: ParlaysMarket) => {
@@ -223,6 +261,37 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
             }
         },
         [isMultiCollateralSupported, networkId, selectedStableIndex]
+    );
+
+    const fetchParlayAmmQuote = useCallback(
+        async (susdAmountForQuote: number) => {
+            const { parlayMarketsAMMContract } = networkConnector;
+            if (parlayMarketsAMMContract && minUsdAmountValue) {
+                const marketsAddresses = markets.map((market) => market.address);
+                const selectedPositions = markets.map((market) => market.position);
+                const minUsdAmount =
+                    susdAmountForQuote < minUsdAmountValue
+                        ? minUsdAmountValue // deafult value for qoute info
+                        : susdAmountForQuote;
+                const susdPaid = stableCoinParser(roundNumberToDecimals(minUsdAmount).toString(), networkId);
+                try {
+                    const parlayAmmQuote = await getParlayMarketsAMMQuoteMethod(
+                        selectedStableIndex,
+                        networkId,
+                        parlayMarketsAMMContract,
+                        marketsAddresses,
+                        selectedPositions,
+                        susdPaid
+                    );
+
+                    return parlayAmmQuote;
+                } catch (e: any) {
+                    console.log('E ', e);
+                    return null;
+                }
+            }
+        },
+        [networkId, selectedStableIndex, markets, minUsdAmountValue]
     );
 
     const fetchSkew = useCallback(async (amountForQuote: number, market: ParlaysMarket) => {
@@ -344,6 +413,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
                         tokenAndBonusArr.push({
                             sportMarketAddress: address,
+                            isCombinedPosition: false,
                             tokenAmount: tokenAmount,
                             bonusPercentageDec: bonusPercent,
                             totalBonusCurrency: totalBonusCurrency,
@@ -352,8 +422,65 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                     }
                 }
                 isFetchingRecords[address] = false;
-                setIsFetching(isFetchingRecords);
             }
+
+            if (combinedMarkets?.length) {
+                for (let i = 0; i < combinedMarkets?.length; i++) {
+                    try {
+                        const marketsAddresses = combinedMarkets[i].markets.map((market) => market.address);
+                        const selectedPositions = combinedMarkets[i].markets.map((market) => market.position);
+
+                        const { parlayMarketsAMMContract } = networkConnector;
+                        const amountForCombinedPosition = multiSingleAmounts.find(
+                            (item) => item.sportMarketAddress == marketsAddresses.join('-')
+                        )?.amountToBuy;
+
+                        if (
+                            parlayMarketsAMMContract &&
+                            amountForCombinedPosition &&
+                            Number(amountForCombinedPosition) >= 0 &&
+                            minUsdAmountValue
+                        ) {
+                            const parlayAmmQuote = await fetchParlayAmmQuote(Number(amountForCombinedPosition));
+                            if (parlayAmmQuote) {
+                                // const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
+                                const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
+                                const sUSDAfterFees = parlayAmmQuote['sUSDAfterFees'];
+
+                                const susdPaid = stableCoinParser(
+                                    roundNumberToDecimals(
+                                        Number(amountForCombinedPosition)
+                                            ? Number(amountForCombinedPosition)
+                                            : minUsdAmountValue
+                                    ).toString(),
+                                    networkId
+                                );
+
+                                const newSkewData = await parlayMarketsAMMContract?.calculateSkewImpact(
+                                    marketsAddresses,
+                                    selectedPositions,
+                                    susdPaid
+                                );
+
+                                skewTotal += bigNumberFormatter(newSkewData || 0);
+                                totalTokenAmount += parlayAmmTotalBuyAmount;
+
+                                tokenAndBonusArr.push({
+                                    sportMarketAddress: marketsAddresses.join('-'),
+                                    tokenAmount: parlayAmmTotalBuyAmount,
+                                    bonusPercentageDec: 0,
+                                    totalBonusCurrency: 0,
+                                    ammQuote: sUSDAfterFees,
+                                });
+                            }
+                        }
+                        isFetchingRecords[marketsAddresses.join('-')] = false;
+                    } catch (e) {
+                        console.log('E ', e);
+                    }
+                }
+            }
+            setIsFetching(isFetchingRecords);
 
             setCalculatedSkewAverage(skewTotal / markets.length);
             setBonusCurrency(totalBonusCurrency);
@@ -380,6 +507,9 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         isMultiCollateralSupported,
         networkId,
         isVoucherSelected,
+        combinedMarkets,
+        minUsdAmountValue,
+        fetchParlayAmmQuote,
     ]);
 
     const availablePerPositionMultiQuery = useAvailablePerPositionMultiQuery(markets, {
@@ -479,11 +609,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     };
 
     const handleSubmit = async () => {
-        const { sportsAMMContract, overtimeVoucherContract, signer } = networkConnector;
-        if (sportsAMMContract && overtimeVoucherContract && signer) {
+        const { sportsAMMContract, overtimeVoucherContract, parlayMarketsAMMContract, signer } = networkConnector;
+        if (sportsAMMContract && overtimeVoucherContract && parlayMarketsAMMContract && signer) {
             setIsBuying(true);
             const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
             const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
+            const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
             const transactions: any = [];
 
@@ -532,6 +663,69 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                                     value: Number(calculatedTotalBuyIn),
                                 });
                                 dispatch(removeFromParlay(marketAddress));
+                                refetchBalances(walletAddress, networkId);
+                            } else {
+                                reject(
+                                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')))
+                                );
+                            }
+                        } catch (e) {
+                            reject(toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again'))));
+                        }
+                    })
+                );
+            });
+
+            combinedMarkets?.forEach(async (combinedMarket: CombinedParlayMarket) => {
+                const marketAddressesArr = combinedMarket.markets.map((market) => market.address);
+                const positionsArr = combinedMarket.positions;
+
+                const singleTokenBonus = tokenAndBonus.find(
+                    (t) => t.sportMarketAddress === marketAddressesArr.join('-')
+                );
+
+                // const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
+
+                const expectedPayout =
+                    singleTokenBonus !== undefined
+                        ? stableCoinParser(
+                              roundNumberToDecimals(Number(singleTokenBonus.tokenAmount)).toString(),
+                              networkId
+                          )
+                        : 0.0;
+                const additionalSlippage = ethers.utils.parseEther('0.02');
+
+                transactions.push(
+                    new Promise(async (resolve, reject) => {
+                        const id = toast.loading(t('market.toast-message.transaction-pending'));
+
+                        try {
+                            const referralId =
+                                walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
+                                    ? getReferralId()
+                                    : null;
+                            const tx = await getParlayAMMTransaction(
+                                isVoucherSelected,
+                                overtimeVoucher ? overtimeVoucher.id : 0,
+                                selectedStableIndex,
+                                networkId,
+                                parlayMarketsAMMContractWithSigner,
+                                overtimeVoucherContractWithSigner,
+                                marketAddressesArr,
+                                positionsArr,
+                                singleTokenBonus?.ammQuote,
+                                expectedPayout,
+                                referralId,
+                                additionalSlippage
+                            );
+
+                            const txResult = await tx.wait();
+
+                            if (txResult && txResult.transactionHash) {
+                                resolve(
+                                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
+                                );
+                                dispatch(removeFromParlay(marketAddressesArr.join('-')));
                                 refetchBalances(walletAddress, networkId);
                             } else {
                                 reject(
@@ -624,28 +818,48 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
     };
 
     const setTooltipTextMessageUsdAmount = useCallback(
-        (market: ParlaysMarket, value: string | number, isMax: boolean) => {
+        (
+            market: ParlaysMarket | undefined,
+            combinedMarket: CombinedParlayMarket | undefined,
+            value: string | number,
+            isMax: boolean
+        ) => {
             const toolTipRecords = tooltipTextUsdAmount;
 
-            const positionOdds = roundNumberToDecimals(getPositionOdds(market));
-            const ammQuote = tokenAndBonus.find((t) => t.sportMarketAddress === market.address)?.ammQuote ?? 1;
+            const fullAddress = market
+                ? market.address
+                : combinedMarket?.markets.map((market) => market.address).join('-') ?? '';
+
+            const positionOdds = market
+                ? roundNumberToDecimals(getPositionOdds(market))
+                : combinedMarket?.totalOdd
+                ? combinedMarket?.totalOdd
+                : 0;
+            const ammQuote = tokenAndBonus.find((t) => t.sportMarketAddress === fullAddress)?.ammQuote ?? 1;
 
             let totalBuyIn = 0;
             multiSingleAmounts.forEach((m) => {
-                if (m.sportMarketAddress === market.address) {
+                if (m.sportMarketAddress === fullAddress) {
                     totalBuyIn += Number(value);
                 } else {
                     totalBuyIn += m.amountToBuy;
                 }
             });
 
+            if (combinedMarket && Number(value) < minUsdAmountValue) {
+                toolTipRecords[fullAddress] = t('markets.parlay.validation.single-min-amount', {
+                    min: formatCurrencyWithSign(USD_SIGN, minUsdAmountValue, 2),
+                });
+                setHasValidationError(true);
+            }
+
             if (value && Number(value) < positionOdds) {
-                toolTipRecords[market.address] = t('markets.parlay.validation.single-min-amount', {
+                toolTipRecords[fullAddress] = t('markets.parlay.validation.single-min-amount', {
                     min: formatCurrencyWithSign(USD_SIGN, positionOdds, 2),
                 });
                 setHasValidationError(true);
             } else if (ammQuote === 0) {
-                toolTipRecords[market.address] = t('markets.parlay.validation.availability');
+                toolTipRecords[fullAddress] = t('markets.parlay.validation.availability');
                 setHasValidationError(true);
             } else if (totalBuyIn > paymentTokenBalance && isMax) {
                 Object.keys(toolTipRecords).forEach((record) => {
@@ -653,16 +867,16 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                         toolTipRecords[record] = '';
                     }
                 });
-                toolTipRecords[market.address] = t('markets.parlay.validation.no-funds');
+                toolTipRecords[fullAddress] = t('markets.parlay.validation.no-funds');
                 setHasValidationError(true);
             } else {
-                toolTipRecords[market.address] = '';
+                toolTipRecords[fullAddress] = '';
                 setHasValidationError(false);
             }
 
             setTooltipTextUsdAmount(toolTipRecords);
         },
-        [multiSingleAmounts, paymentTokenBalance, t, tooltipTextUsdAmount, tokenAndBonus]
+        [tooltipTextUsdAmount, tokenAndBonus, multiSingleAmounts, minUsdAmountValue, paymentTokenBalance, t]
     );
 
     useEffect(() => {
@@ -673,8 +887,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
             const maxMsVal = multiSingleAmounts.reduce((max, ms) => (max.amountToBuy > ms.amountToBuy ? max : ms));
 
             const market = markets.find((m) => m.address === maxMsVal.sportMarketAddress);
-            if (market !== undefined) {
-                setTooltipTextMessageUsdAmount(market, maxMsVal.amountToBuy, true);
+            const combinedMarket = combinedMarkets?.find(
+                (combinedMarket) =>
+                    combinedMarket.markets.map((market) => market.address).join('-') == maxMsVal.sportMarketAddress
+            );
+            if (market !== undefined || combinedMarket !== undefined) {
+                setTooltipTextMessageUsdAmount(market, combinedMarket, maxMsVal.amountToBuy, true);
             }
         }
     }, [
@@ -684,6 +902,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         multiSingleAmounts,
         markets,
         selectedStableIndex,
+        combinedMarkets,
     ]);
 
     const inputRef = useRef<HTMLDivElement>(null);
@@ -712,27 +931,99 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         setShowShareTicketModal(!twitterShareDisabled);
     };
 
-    const setMultiSingleUsd = (market: ParlaysMarket, value: number) => {
+    const setMultiSingleUsd = (
+        market: ParlaysMarket | undefined,
+        combinedMarket: CombinedParlayMarket | undefined,
+        value: number
+    ) => {
         const isFetchingRecords = isFetching;
-        isFetchingRecords[market.address] = true;
+
+        const marketAddresses = combinedMarket ? combinedMarket.markets.map((market) => market.address) : [];
+        const parentMarketAddresses = combinedMarket ? combinedMarket.markets.map((market) => market.parentMarket) : [];
+
+        isFetchingRecords[market ? market.address : marketAddresses.join('-')] = true;
         setIsFetching(isFetchingRecords);
 
         new Promise((resolve) => {
             dispatch(
                 setMultiSingle({
-                    sportMarketAddress: market.address,
-                    parentMarketAddress: market.parentMarket ? market.parentMarket : market.address,
+                    sportMarketAddress: market ? market.address : marketAddresses.join('-'),
+                    parentMarketAddress: market
+                        ? market.parentMarket
+                            ? market.parentMarket
+                            : market.address
+                        : parentMarketAddresses.join('-'),
                     amountToBuy: value,
                 })
             );
             resolve(true);
         }).then(() => {
-            setTooltipTextMessageUsdAmount(market, value, false);
+            setTooltipTextMessageUsdAmount(market, combinedMarket, value, false);
         });
     };
     return (
         <>
             <ListContainer>
+                {combinedMarkets &&
+                    combinedMarkets.map((combinedPosition, index) => {
+                        const outOfLiquidity = false;
+                        const marketAddresses = combinedPosition.markets.map((position) => position.address);
+                        return (
+                            <div key={`${index}-${marketAddresses.join('-')}-ms`}>
+                                <RowMarket outOfLiquidity={outOfLiquidity}>
+                                    <MatchInfoOfCombinedMarket combinedMarket={combinedPosition} isHighlighted={true} />
+                                </RowMarket>
+                                <AmountToBuyMultiContainer ref={inputRef}>
+                                    <AmountToBuyMultiInfoLabel>{t('markets.parlay.buy-in')}:</AmountToBuyMultiInfoLabel>{' '}
+                                    <NumericInput
+                                        key={`${index}-${marketAddresses.join('-')}-ms-amount`}
+                                        value={
+                                            multiSingleAmounts.find(
+                                                (m) => marketAddresses.join('-') === m.sportMarketAddress
+                                            )?.amountToBuy || ''
+                                        }
+                                        onChange={(e) => {
+                                            if (Number(countDecimals(Number(e.target.value))) > 2) {
+                                                return;
+                                            }
+                                            setMultiSingleUsd(undefined, combinedPosition, Number(e.target.value));
+                                        }}
+                                        showValidation={
+                                            inputRefVisible &&
+                                            !!tooltipTextUsdAmount[marketAddresses.join('-')] &&
+                                            !openApprovalModal
+                                        }
+                                        validationMessage={tooltipTextUsdAmount[marketAddresses.join('-')] || ''}
+                                        inputFontSize="13px"
+                                        inputFontWeight="700"
+                                        inputTextAlign="center"
+                                        inputPadding="2px 0px"
+                                        width="80px"
+                                        height="21px"
+                                        margin="0 0 5px 2px"
+                                        containerWidth="auto"
+                                        borderColor={theme.input.borderColor.tertiary}
+                                    />
+                                    <AmountToBuyMultiPayoutLabel>
+                                        {t('markets.parlay.payout')}:
+                                    </AmountToBuyMultiPayoutLabel>{' '}
+                                    <AmountToBuyMultiPayoutValue isInfo={true}>
+                                        {isFetching[marketAddresses.join('-')] ||
+                                        !tokenAndBonus.find((t) => t.sportMarketAddress === marketAddresses.join('-'))
+                                            ?.tokenAmount
+                                            ? '-'
+                                            : formatCurrencyWithSign(
+                                                  USD_SIGN,
+                                                  tokenAndBonus.find(
+                                                      (t) => t.sportMarketAddress === marketAddresses.join('-')
+                                                  )?.tokenAmount || 0.0,
+                                                  2
+                                              )}
+                                    </AmountToBuyMultiPayoutValue>
+                                </AmountToBuyMultiContainer>
+                            </div>
+                        );
+                    })}
                 {markets.map((market, index) => {
                     const outOfLiquidity = false;
                     return (
@@ -752,7 +1043,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                                         if (Number(countDecimals(Number(e.target.value))) > 2) {
                                             return;
                                         }
-                                        setMultiSingleUsd(market, Number(e.target.value));
+                                        setMultiSingleUsd(market, undefined, Number(e.target.value));
                                     }}
                                     showValidation={
                                         inputRefVisible && !!tooltipTextUsdAmount[market.address] && !openApprovalModal
