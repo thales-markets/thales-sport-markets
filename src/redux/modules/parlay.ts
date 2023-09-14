@@ -41,16 +41,9 @@ const getDefaultPayment = (): ParlayPayment => {
 };
 
 const getDefaultMultiSingle = (): MultiSingleAmounts[] => {
-    const lsMultiSingle = localStore.get(LOCAL_STORAGE_KEYS.MULTI_SINGLE);
-    const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
-    const defaultArr = lsParlay !== undefined ? (lsParlay as ParlaysMarketPosition[]) : [];
+    const multiSinglePositions = localStore.get(LOCAL_STORAGE_KEYS.MULTI_SINGLE);
 
-    return lsMultiSingle !== undefined
-        ? (lsMultiSingle as MultiSingleAmounts[])
-        : Array(defaultArr.length).fill({
-              sportMarketAddress: '',
-              amountToBuy: 0,
-          });
+    return multiSinglePositions !== undefined ? (multiSinglePositions as MultiSingleAmounts[]) : [];
 };
 
 const getDefaultIsMultiSingle = () => {
@@ -92,19 +85,7 @@ const parlaySlice = createSlice({
             const parlayCopy = [...state.parlay];
             const index = state.parlay.findIndex((el) => el.parentMarket === action.payload.parentMarket);
             const numberOfDoubleChances = parlayCopy.filter((market) => market.doubleChanceMarketType !== null).length;
-            const combinedMarketsInParlay = getCombinedMarketsFromParlayData(state.parlay);
 
-            if (combinedMarketsInParlay.length) {
-                const nonCombinedMarkets =
-                    state.parlay.length - combinedMarketsInParlay.length > 0
-                        ? state.parlay.length - combinedMarketsInParlay.length
-                        : 0;
-                if (combinedMarketsInParlay.length + nonCombinedMarkets + 1 > state.parlaySize) {
-                    state.error.code = ParlayErrorCode.MAX_NUMBER_OF_MARKETS_WITH_COMBINED_MARKETS;
-                    state.error.data = DEFAULT_MAX_NUMBER_OF_MATCHES.toString();
-                    return;
-                }
-            }
             const multipleSidesAtOneEvent = parlayCopy
                 .filter((market) => market.isOneSideMarket)
                 .map((market) => market.tag)
@@ -271,14 +252,38 @@ const parlaySlice = createSlice({
                 return;
             }
 
+            //Multisingle amounts
+            const marketAddressesArr = action.payload.markets.map((market) => market.sportMarketAddress);
+            const parentAddressesArr = action.payload.markets.map((market) => market.parentMarket);
+            const index = state.multiSingle.findIndex((el) => el.sportMarketAddress === marketAddressesArr.join('-'));
+
+            if (index === -1) {
+                state.multiSingle.push({
+                    sportMarketAddress: marketAddressesArr.join('-'),
+                    parentMarketAddress: parentAddressesArr.join('-'),
+                    amountToBuy: 0,
+                });
+            } else {
+                const multiSingleCopy = [...state.multiSingle];
+                multiSingleCopy[index].sportMarketAddress = marketAddressesArr.join('-');
+                multiSingleCopy[index].parentMarketAddress = parentAddressesArr.join('-');
+                multiSingleCopy[index].amountToBuy = 0;
+                state.multiSingle = [...multiSingleCopy];
+            }
+
+            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
             localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, existingCombinedPositions);
         },
         removeCombinedPosition: (state, action: PayloadAction<string>) => {
             state.combinedPositions = state.combinedPositions.filter((positions) =>
                 positions.markets.find((market) => market.parentMarket == action.payload) ? false : true
             );
+            state.parlay = state.parlay.filter(
+                (market) => market.parentMarket !== action.payload || market.sportMarketAddress !== action.payload
+            );
 
             localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, state.combinedPositions);
+            localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
         },
         setParlaySize: (state, action: PayloadAction<number>) => {
             state.parlaySize = action.payload;
