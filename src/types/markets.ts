@@ -268,6 +268,7 @@ export type MultiSingleAmounts = {
 
 export type MultiSingleTokenQuoteAndBonus = {
     sportMarketAddress: string;
+    isCombinedPosition?: boolean;
     tokenAmount: number;
     bonusPercentageDec: number;
     totalBonusCurrency: number;
