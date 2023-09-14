@@ -264,11 +264,11 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
     );
 
     const fetchParlayAmmQuote = useCallback(
-        async (susdAmountForQuote: number) => {
+        async (combinedMarket: CombinedParlayMarket, susdAmountForQuote: number) => {
             const { parlayMarketsAMMContract } = networkConnector;
             if (parlayMarketsAMMContract && minUsdAmountValue) {
-                const marketsAddresses = markets.map((market) => market.address);
-                const selectedPositions = markets.map((market) => market.position);
+                const marketsAddresses = combinedMarket.markets.map((market) => market.address);
+                const selectedPositions = combinedMarket.markets.map((market) => market.position);
                 const minUsdAmount =
                     susdAmountForQuote < minUsdAmountValue
                         ? minUsdAmountValue // deafult value for qoute info
@@ -291,7 +291,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                 }
             }
         },
-        [networkId, selectedStableIndex, markets, minUsdAmountValue]
+        [networkId, selectedStableIndex, minUsdAmountValue]
     );
 
     const fetchSkew = useCallback(async (amountForQuote: number, market: ParlaysMarket) => {
@@ -441,7 +441,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                             Number(amountForCombinedPosition) >= 0 &&
                             minUsdAmountValue
                         ) {
-                            const parlayAmmQuote = await fetchParlayAmmQuote(Number(amountForCombinedPosition));
+                            const parlayAmmQuote = await fetchParlayAmmQuote(
+                                combinedMarkets[i],
+                                Number(amountForCombinedPosition)
+                            );
                             if (parlayAmmQuote) {
                                 // const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
                                 const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
@@ -607,6 +610,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
             }
         }
     };
+
+    console.log('tokenAndBonus ', tokenAndBonus);
 
     const handleSubmit = async () => {
         const { sportsAMMContract, overtimeVoucherContract, parlayMarketsAMMContract, signer } = networkConnector;
@@ -846,16 +851,14 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                 }
             });
 
-            if (combinedMarket && Number(value) < minUsdAmountValue) {
-                toolTipRecords[fullAddress] = t('markets.parlay.validation.single-min-amount', {
-                    min: formatCurrencyWithSign(USD_SIGN, minUsdAmountValue, 2),
-                });
-                setHasValidationError(true);
-            }
-
             if (value && Number(value) < positionOdds) {
                 toolTipRecords[fullAddress] = t('markets.parlay.validation.single-min-amount', {
                     min: formatCurrencyWithSign(USD_SIGN, positionOdds, 2),
+                });
+                setHasValidationError(true);
+            } else if (combinedMarket && Number(value) < minUsdAmountValue) {
+                toolTipRecords[fullAddress] = t('markets.parlay.validation.single-min-amount', {
+                    min: formatCurrencyWithSign(USD_SIGN, minUsdAmountValue, 2),
                 });
                 setHasValidationError(true);
             } else if (ammQuote === 0) {
