@@ -60,9 +60,10 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
                             );
-                            const additionalText = isPlayerProps(cellProps.cell.row.original.wholeMarket.betType)
-                                ? getMarketName(cellProps.cell.row.original.wholeMarket, cellProps.cell.value)
-                                : '';
+                            const additionalText =
+                                isPlayerProps(cellProps.cell.row.original.wholeMarket.betType) && !isMobile
+                                    ? getMarketName(cellProps.cell.row.original.wholeMarket, cellProps.cell.value)
+                                    : '';
                             return symbolText ? (
                                 <PositionSymbol
                                     symbolText={symbolText}
