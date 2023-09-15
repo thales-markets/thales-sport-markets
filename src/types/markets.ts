@@ -1,4 +1,5 @@
 import { BetType, DoubleChanceMarketType, Position, PositionName } from 'enums/markets';
+import { ethers } from 'ethers';
 
 export type SportMarketInfo = {
     id: string;
@@ -272,7 +273,7 @@ export type MultiSingleTokenQuoteAndBonus = {
     tokenAmount: number;
     bonusPercentageDec: number;
     totalBonusCurrency: number;
-    ammQuote: number;
+    ammQuote: number | ethers.BigNumber;
 };
 
 export type WinningInfo = {

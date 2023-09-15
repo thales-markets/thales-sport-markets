@@ -1,4 +1,3 @@
-import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -13,7 +12,14 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { removeAll, setPayment, setMultiSingle, removeFromParlay, getMultiSingle } from 'redux/modules/parlay';
+import {
+    removeAll,
+    setPayment,
+    setMultiSingle,
+    removeFromParlay,
+    getMultiSingle,
+    removeCombinedPosition,
+} from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
@@ -87,7 +93,6 @@ type MultiSingleProps = {
 
 const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, parlayPayment }) => {
     const { t } = useTranslation();
-    const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
     const theme: ThemeInterface = useTheme();
 
@@ -445,10 +450,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                                 combinedMarkets[i],
                                 Number(amountForCombinedPosition)
                             );
+
                             if (parlayAmmQuote) {
                                 // const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
                                 const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
-                                const sUSDAfterFees = parlayAmmQuote['sUSDAfterFees'];
 
                                 const susdPaid = stableCoinParser(
                                     roundNumberToDecimals(
@@ -473,7 +478,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                                     tokenAmount: parlayAmmTotalBuyAmount,
                                     bonusPercentageDec: 0,
                                     totalBonusCurrency: 0,
-                                    ammQuote: sUSDAfterFees,
+                                    ammQuote: susdPaid,
                                 });
                             }
                         }
@@ -611,8 +616,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
         }
     };
 
-    console.log('tokenAndBonus ', tokenAndBonus);
-
     const handleSubmit = async () => {
         const { sportsAMMContract, overtimeVoucherContract, parlayMarketsAMMContract, signer } = networkConnector;
         if (sportsAMMContract && overtimeVoucherContract && parlayMarketsAMMContract && signer) {
@@ -662,11 +665,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                                 resolve(
                                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
                                 );
-                                trackEvent({
-                                    category: 'parlay-multi-single',
-                                    action: `buy-with-${getCollateral(networkId, selectedStableIndex)}`,
-                                    value: Number(calculatedTotalBuyIn),
-                                });
                                 dispatch(removeFromParlay(marketAddress));
                                 refetchBalances(walletAddress, networkId);
                             } else {
@@ -684,12 +682,13 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
             combinedMarkets?.forEach(async (combinedMarket: CombinedParlayMarket) => {
                 const marketAddressesArr = combinedMarket.markets.map((market) => market.address);
                 const positionsArr = combinedMarket.positions;
+                const parentAddress = combinedMarket.markets.find((market) => market.parentMarket)?.parentMarket || '';
+
+                console.log('parentAddress ', parentAddress);
 
                 const singleTokenBonus = tokenAndBonus.find(
                     (t) => t.sportMarketAddress === marketAddressesArr.join('-')
                 );
-
-                // const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
 
                 const expectedPayout =
                     singleTokenBonus !== undefined
@@ -730,7 +729,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                                 resolve(
                                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
                                 );
-                                dispatch(removeFromParlay(marketAddressesArr.join('-')));
+                                dispatch(removeCombinedPosition(parentAddress));
                                 refetchBalances(walletAddress, networkId);
                             } else {
                                 reject(
