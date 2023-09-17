@@ -105,9 +105,15 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
     const multiSingleAmounts = useSelector(getMultiSingle);
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
-    const [hasAllowance, setHasAllowance] = useState(false);
+    const [hasAllowance, setHasAllowance] = useState<{ sportsAmm: boolean; parlayAmm: boolean }>({
+        sportsAmm: false,
+        parlayAmm: false,
+    });
     const [isAMMPaused, setIsAMMPaused] = useState(false);
-    const [openApprovalModal, setOpenApprovalModal] = useState(false);
+    const [openApprovalModal, setOpenApprovalModal] = useState<{ sportsAmm: boolean; parlayAmm: boolean }>({
+        sportsAmm: false,
+        parlayAmm: false,
+    });
     const [selectedStableIndex, setSelectedStableIndex] = useState(parlayPayment.selectedStableIndex);
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [totalBonusPercentageDec, setTotalBonusPercentageDec] = useState(0);
@@ -312,6 +318,21 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
     const calculatedBonusPercentageDec = useMemo(() => {
         return markets.map((market) => getBonus(market) / 100);
     }, [markets]);
+
+    const amountsForAllowance = useMemo(() => {
+        let amountForSportsAmm = 0;
+        let amountForParlayAmm = 0;
+        multiSingleAmounts.forEach((item) =>
+            item.sportMarketAddress.includes('-')
+                ? (amountForParlayAmm += item.amountToBuy)
+                : (amountForSportsAmm += item.amountToBuy)
+        );
+
+        return {
+            sportsAmm: amountForSportsAmm,
+            parlayAmm: amountForParlayAmm,
+        };
+    }, [multiSingleAmounts]);
 
     const calculatedTotalBuyIn = useMemo(() => {
         return multiSingleAmounts.reduce((a, b) => a + b.amountToBuy, 0);
@@ -531,8 +552,14 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
     }, [availablePerPositionMultiQuery.isSuccess, availablePerPositionMultiQuery.data]);
 
     useEffect(() => {
-        const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (sportsAMMContract && signer) {
+        const {
+            sportsAMMContract,
+            parlayMarketsAMMContract,
+            sUSDContract,
+            signer,
+            multipleCollateral,
+        } = networkConnector;
+        if (sportsAMMContract && parlayMarketsAMMContract && signer) {
             let collateralContractWithSigner: ethers.Contract | undefined;
             const collateral = getCollateral(networkId, selectedStableIndex);
             if (selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported) {
@@ -543,32 +570,47 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = stableCoinParser(
-                        Number(calculatedTotalBuyIn).toString(),
+                    const parsedAmountForSportsAmm = stableCoinParser(
+                        Number(amountsForAllowance.sportsAmm).toString(),
                         networkId,
                         getCollateral(networkId, selectedStableIndex)
                     );
+                    const parsedAmountForParlayAmm = stableCoinParser(
+                        Number(amountsForAllowance.sportsAmm).toString(),
+                        networkId,
+                        getCollateral(networkId, selectedStableIndex)
+                    );
+
                     await checkAllowance(
-                        parsedTicketPrice,
+                        parsedAmountForSportsAmm,
                         collateralContractWithSigner,
                         walletAddress,
                         sportsAMMContract.address
                     ).then((a) => {
                         if (!mountedRef.current) return null;
-                        setHasAllowance(a);
+                        setHasAllowance({ ...hasAllowance, sportsAmm: a });
+                    });
+                    await checkAllowance(
+                        parsedAmountForParlayAmm,
+                        collateralContractWithSigner,
+                        walletAddress,
+                        parlayMarketsAMMContract.address
+                    ).then((a) => {
+                        if (!mountedRef.current) return null;
+                        setHasAllowance({ ...hasAllowance, parlayAmm: a });
                     });
                 } catch (e) {
                     console.log(e);
                 }
             };
             if (isWalletConnected && calculatedTotalBuyIn) {
-                isVoucherSelected ? setHasAllowance(true) : getAllowance();
+                isVoucherSelected ? setHasAllowance({ sportsAmm: true, parlayAmm: true }) : getAllowance();
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         walletAddress,
         isWalletConnected,
-        hasAllowance,
         isAllowing,
         calculatedTotalBuyIn,
         selectedStableIndex,
@@ -577,7 +619,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
         networkId,
     ]);
 
-    const handleAllowance = async (approveAmount: BigNumber) => {
+    const handleAllowanceSportsAmm = async (approveAmount: BigNumber) => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMContract && signer) {
             setIsAllowing(true);
@@ -601,7 +643,46 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                 const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
                     gasLimit: getMaxGasLimitForNetwork(networkId),
                 })) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
+                setOpenApprovalModal({ ...openApprovalModal, sportsAmm: false });
+                const txResult = await tx.wait();
+
+                if (txResult && txResult.transactionHash) {
+                    setIsAllowing(false);
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+                }
+            } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
+                setIsAllowing(false);
+            }
+        }
+    };
+
+    const handleAllowanceParlayAmm = async (approveAmount: BigNumber) => {
+        const { parlayMarketsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+        if (parlayMarketsAMMContract && signer) {
+            setIsAllowing(true);
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
+            try {
+                let collateralContractWithSigner: ethers.Contract | undefined;
+                const collateral = getCollateral(networkId, selectedStableIndex);
+                if (
+                    selectedStableIndex !== 0 &&
+                    multipleCollateral &&
+                    multipleCollateral[collateral] &&
+                    isMultiCollateralSupported
+                ) {
+                    collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
+                } else {
+                    collateralContractWithSigner = sUSDContract?.connect(signer);
+                }
+
+                const addressToApprove = parlayMarketsAMMContract.address;
+
+                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
+                    gasLimit: getMaxGasLimitForNetwork(networkId),
+                })) as ethers.ContractTransaction;
+                setOpenApprovalModal({ ...openApprovalModal, sportsAmm: false });
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
@@ -683,8 +764,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                 const marketAddressesArr = combinedMarket.markets.map((market) => market.address);
                 const positionsArr = combinedMarket.positions;
                 const parentAddress = combinedMarket.markets.find((market) => market.parentMarket)?.parentMarket || '';
-
-                console.log('parentAddress ', parentAddress);
 
                 const singleTokenBonus = tokenAndBonus.find(
                     (t) => t.sportMarketAddress === marketAddressesArr.join('-')
@@ -806,9 +885,25 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
             );
         }
 
-        if (!hasAllowance) {
+        if (!hasAllowance.sportsAmm) {
             return (
-                <Button disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
+                <Button
+                    disabled={submitDisabled}
+                    onClick={() => setOpenApprovalModal({ ...openApprovalModal, sportsAmm: true })}
+                    {...defaultButtonProps}
+                >
+                    {t('common.wallet.approve')}
+                </Button>
+            );
+        }
+
+        if (!hasAllowance.parlayAmm) {
+            return (
+                <Button
+                    disabled={submitDisabled}
+                    onClick={() => setOpenApprovalModal({ ...openApprovalModal, parlayAmm: true })}
+                    {...defaultButtonProps}
+                >
                     {t('common.wallet.approve')}
                 </Button>
             );
@@ -993,7 +1088,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                                         showValidation={
                                             inputRefVisible &&
                                             !!tooltipTextUsdAmount[marketAddresses.join('-')] &&
-                                            !openApprovalModal
+                                            !openApprovalModal.parlayAmm
                                         }
                                         validationMessage={tooltipTextUsdAmount[marketAddresses.join('-')] || ''}
                                         inputFontSize="13px"
@@ -1048,7 +1143,9 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                                         setMultiSingleUsd(market, undefined, Number(e.target.value));
                                     }}
                                     showValidation={
-                                        inputRefVisible && !!tooltipTextUsdAmount[market.address] && !openApprovalModal
+                                        inputRefVisible &&
+                                        !!tooltipTextUsdAmount[market.address] &&
+                                        !openApprovalModal.sportsAmm
                                     }
                                     validationMessage={tooltipTextUsdAmount[market.address] || ''}
                                     inputFontSize="13px"
@@ -1154,15 +1251,30 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                     onClose={onModalClose}
                 />
             )}
-            {openApprovalModal && (
+            {openApprovalModal.sportsAmm && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={Number(calculatedTotalBuyIn) + Number(calculatedTotalBuyIn) * APPROVAL_BUFFER}
+                    defaultAmount={
+                        Number(amountsForAllowance.sportsAmm) + Number(amountsForAllowance.sportsAmm) * APPROVAL_BUFFER
+                    }
                     collateralIndex={selectedStableIndex}
                     tokenSymbol={getCollateral(networkId, selectedStableIndex)}
                     isAllowing={isAllowing}
-                    onSubmit={handleAllowance}
-                    onClose={() => setOpenApprovalModal(false)}
+                    onSubmit={handleAllowanceSportsAmm}
+                    onClose={() => setOpenApprovalModal({ ...openApprovalModal, sportsAmm: false })}
+                />
+            )}
+            {openApprovalModal.parlayAmm && (
+                <ApprovalModal
+                    // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
+                    defaultAmount={
+                        Number(amountsForAllowance.parlayAmm) + Number(amountsForAllowance.parlayAmm) * APPROVAL_BUFFER
+                    }
+                    collateralIndex={selectedStableIndex}
+                    tokenSymbol={getCollateral(networkId, selectedStableIndex)}
+                    isAllowing={isAllowing}
+                    onSubmit={handleAllowanceParlayAmm}
+                    onClose={() => setOpenApprovalModal({ ...openApprovalModal, parlayAmm: false })}
                 />
             )}
         </>
