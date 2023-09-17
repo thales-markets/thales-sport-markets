@@ -224,11 +224,11 @@ const parlaySlice = createSlice({
             let matchingCode: CombinedPositionsMatchingCode = CombinedPositionsMatchingCode.NOTHING_COMMON;
 
             if (existingCombinedPositions.length > 0) {
-                existingCombinedPositions.every((positions: CombinedMarketPosition, index: number) => {
+                existingCombinedPositions.forEach((positions: CombinedMarketPosition, index: number) => {
                     const comparePositions = compareCombinedPositionsFromParlayData(positions, action.payload);
                     matchingCode = comparePositions;
                     if (comparePositions == CombinedPositionsMatchingCode.SAME_POSITIONS) {
-                        return false;
+                        return;
                     }
                     if (
                         comparePositions == CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS ||
@@ -236,9 +236,9 @@ const parlaySlice = createSlice({
                     ) {
                         delete existingCombinedPositions[index];
                         existingCombinedPositions[index] = action.payload;
-                        return false;
+                        return;
                     }
-                    return true;
+                    return;
                 });
             }
 
@@ -276,14 +276,33 @@ const parlaySlice = createSlice({
         },
         removeCombinedPosition: (state, action: PayloadAction<string>) => {
             state.combinedPositions = state.combinedPositions.filter((positions) =>
-                positions.markets.find((market) => market.parentMarket == action.payload) ? false : true
+                positions.markets.find(
+                    (market) => market.parentMarket == action.payload && market.sportMarketAddress == action.payload
+                )
+                    ? false
+                    : true
             );
+
+            state.multiSingle = state.multiSingle.filter(
+                (ms) => ms.sportMarketAddress !== action.payload && ms.parentMarketAddress !== action.payload
+            );
+
             state.parlay = state.parlay.filter(
-                (market) => market.parentMarket !== action.payload || market.sportMarketAddress !== action.payload
+                (market) => market.sportMarketAddress !== action.payload && market.parentMarket !== action.payload
             );
+
+            if (state.multiSingle.length == 0) {
+                state.isMultiSingle = false;
+                localStore.set(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE, state.isMultiSingle);
+            }
+
+            if (state.parlay.length === 0) {
+                state.payment.amountToBuy = getDefaultPayment().amountToBuy;
+            }
 
             localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, state.combinedPositions);
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
         setParlaySize: (state, action: PayloadAction<number>) => {
             state.parlaySize = action.payload;
