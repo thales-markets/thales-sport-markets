@@ -581,23 +581,26 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                         getCollateral(networkId, selectedStableIndex)
                     );
 
-                    await checkAllowance(
-                        parsedAmountForSportsAmm,
-                        collateralContractWithSigner,
-                        walletAddress,
-                        sportsAMMContract.address
-                    ).then((a) => {
+                    const allowanceTx = [];
+
+                    allowanceTx.push(
+                        checkAllowance(
+                            parsedAmountForSportsAmm,
+                            collateralContractWithSigner,
+                            walletAddress,
+                            sportsAMMContract.address
+                        ),
+                        checkAllowance(
+                            parsedAmountForParlayAmm,
+                            collateralContractWithSigner,
+                            walletAddress,
+                            parlayMarketsAMMContract.address
+                        )
+                    );
+
+                    Promise.all(allowanceTx).then((allowanceResponses) => {
                         if (!mountedRef.current) return null;
-                        setHasAllowance({ ...hasAllowance, sportsAmm: a });
-                    });
-                    await checkAllowance(
-                        parsedAmountForParlayAmm,
-                        collateralContractWithSigner,
-                        walletAddress,
-                        parlayMarketsAMMContract.address
-                    ).then((a) => {
-                        if (!mountedRef.current) return null;
-                        setHasAllowance({ ...hasAllowance, parlayAmm: a });
+                        setHasAllowance({ sportsAmm: allowanceResponses[0], parlayAmm: allowanceResponses[1] });
                     });
                 } catch (e) {
                     console.log(e);
@@ -885,26 +888,26 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
             );
         }
 
-        if (!hasAllowance.sportsAmm) {
+        if (!hasAllowance.sportsAmm && amountsForAllowance.sportsAmm > 0) {
             return (
                 <Button
                     disabled={submitDisabled}
                     onClick={() => setOpenApprovalModal({ ...openApprovalModal, sportsAmm: true })}
                     {...defaultButtonProps}
                 >
-                    {t('common.wallet.approve')}
+                    {t('common.wallet.approve-sports')}
                 </Button>
             );
         }
 
-        if (!hasAllowance.parlayAmm) {
+        if (!hasAllowance.parlayAmm && amountsForAllowance.parlayAmm > 0) {
             return (
                 <Button
                     disabled={submitDisabled}
                     onClick={() => setOpenApprovalModal({ ...openApprovalModal, parlayAmm: true })}
                     {...defaultButtonProps}
                 >
-                    {t('common.wallet.approve')}
+                    {t('common.wallet.approve-parlay')}
                 </Button>
             );
         }
@@ -1016,8 +1019,13 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
     const twitterShareDisabled = submitDisabled || !hasAllowance;
     const onTwitterIconClick = () => {
         // create data copy to avoid modal re-render while opened
+        const combinedParlayMarkets = combinedMarkets
+            ? combinedMarkets.map((item) => item.markets.map((market) => market))
+            : [];
+        const finalMarkets = combinedParlayMarkets ? markets.concat(...combinedParlayMarkets) : markets;
+
         const modalData: ShareTicketModalProps = {
-            markets: markets,
+            markets: finalMarkets,
             multiSingle: true,
             totalQuote: getPositionOdds(markets[0]),
             paid: Number(calculatedTotalBuyIn),
@@ -1058,6 +1066,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
             setTooltipTextMessageUsdAmount(market, combinedMarket, value, false);
         });
     };
+
     return (
         <>
             <ListContainer>
@@ -1261,7 +1270,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                     tokenSymbol={getCollateral(networkId, selectedStableIndex)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowanceSportsAmm}
-                    onClose={() => setOpenApprovalModal({ ...openApprovalModal, sportsAmm: false })}
+                    onClose={() => setOpenApprovalModal({ sportsAmm: false, parlayAmm: false })}
                 />
             )}
             {openApprovalModal.parlayAmm && (
@@ -1274,7 +1283,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                     tokenSymbol={getCollateral(networkId, selectedStableIndex)}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowanceParlayAmm}
-                    onClose={() => setOpenApprovalModal({ ...openApprovalModal, parlayAmm: false })}
+                    onClose={() => setOpenApprovalModal({ sportsAmm: false, parlayAmm: false })}
                 />
             )}
         </>
