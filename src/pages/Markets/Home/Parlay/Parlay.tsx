@@ -173,6 +173,8 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch, combinedPositions]);
 
+    console.log('aggregatedParlayMarkets ', aggregatedParlayMarkets);
+
     const onCloseValidationModal = useCallback(() => dispatch(resetParlayError()), [dispatch]);
 
     const onToggleTypeClickHandler = () => {
@@ -229,7 +231,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                     })}
                             </ListContainer>
                             <HorizontalLine />
-                            {parlayMarkets.length === 1 ? (
+                            {parlayMarkets.length + combinedMarketsData.length === 1 ? (
                                 <Single
                                     market={parlayMarkets[0]}
                                     parlayPayment={parlayPayment}
