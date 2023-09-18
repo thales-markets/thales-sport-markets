@@ -300,7 +300,13 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "ตำแหน่งรวมกัน"
+                "combined-positions": "ตำแหน่งรวมกัน",
+                "strikeouts": "ขีดฆ่า",
+                "receiving yards": "ระยะรับ",
+                "passing touchdowns": "การผ่านทัชดาวน์",
+                "passing yards": "ระยะที่ผ่าน",
+                "home runs": "โฮมรัน",
+                "rushing yards": "วิ่งหลา"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -329,7 +335,21 @@
                 "bonus": "{{bonus}} added bonus on win!",
                 "and": "และ",
                 "race-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
-                "tournament-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}"
+                "tournament-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "player-props": {
+                    "home-runs-over": "{{team}} จะมีโฮมรันมากกว่า {{scoring}}",
+                    "passing-yards-over": "{{team}} จะมีระยะส่งบอลมากกว่า {{scoring}}",
+                    "strikeouts-over": "{{team}} จะมีขีดฆ่ามากกว่า {{scoring}}",
+                    "strikeouts-under": "{{team}} จะมีขีดฆ่าน้อยกว่า {{scoring}}",
+                    "home-runs-under": "{{team}} จะมีโฮมรันน้อยกว่า {{scoring}}",
+                    "passing-touchdowns-over": "{{team}} จะมีการจ่ายทัชดาวน์มากกว่า {{scoring}}",
+                    "rushing-yards-over": "{{team}} จะมีระยะการวิ่งมากกว่า {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} จะมีการส่งทัชดาวน์น้อยกว่า {{scoring}}",
+                    "receiving-yards-under": "{{team}} จะมีระยะรับน้อยกว่า {{scoring}}",
+                    "receiving-yards-over": "{{team}} จะมีระยะรับมากกว่า {{scoring}}",
+                    "rushing-yards-under": "{{team}} จะมีระยะวิ่งน้อยกว่า {{scoring}}",
+                    "passing-yards-under": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{scoring}}"
+                }
             },
             "starts-in": "เริ่มเข้า",
             "period": "ระยะเวลา",
@@ -340,7 +360,10 @@
             "inning": "โอกาส",
             "total-markets": "Total markets",
             "race-winner": "ผู้ชนะ",
-            "no-win": "ไม่ชนะ"
+            "no-win": "ไม่ชนะ",
+            "player-props": "อุปกรณ์ประกอบฉากของผู้เล่น",
+            "see-more-markets": "ดูตลาดอุปกรณ์ประกอบฉากของผู้เล่น",
+            "see-more-markets-mobile": "อุปกรณ์ประกอบฉากของผู้เล่น"
         },
         "market-details": {
             "price": "ราคา",
