@@ -854,12 +854,16 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
             return;
         }
 
-        if (!hasAllowance) {
+        if (
+            (!hasAllowance.sportsAmm && amountsForAllowance.sportsAmm > 0) ||
+            (!hasAllowance.parlayAmm && amountsForAllowance.parlayAmm > 0)
+        ) {
             setSubmitDisabled(false);
             return;
         }
 
         setSubmitDisabled(!paymentTokenBalance || calculatedTotalBuyIn > paymentTokenBalance);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         isBuying,
         isAllowing,
