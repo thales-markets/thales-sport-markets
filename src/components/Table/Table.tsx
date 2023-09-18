@@ -271,6 +271,7 @@ const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string;
         padding-right: 18px;
     }
     @media (max-width: 767px) {
+        min-width: auto;
         font-size: 12px;
         &:first-child {
             padding-left: 6px;

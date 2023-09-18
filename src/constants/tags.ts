@@ -134,7 +134,7 @@ export const TAGS_LIST: Tags = [
         logo: ``,
         logoClass: 'icon-league league--uel',
         favourite: false,
-        hidden: false,
+        hidden: true,
         priority: 111,
     },
     {
@@ -345,7 +345,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 19216,
-        label: 'UEFA Conference League qualification',
+        label: 'UEFA Conference League',
         logoClass: '',
         favourite: false,
         hidden: false,
@@ -361,7 +361,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 9073,
-        label: 'UEFA Europa League Qualification',
+        label: 'UEFA Europa League',
         logoClass: 'icon-league league--uel',
         favourite: false,
         hidden: false,

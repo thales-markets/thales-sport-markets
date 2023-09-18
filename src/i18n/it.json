@@ -300,7 +300,13 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "Posizioni combinate"
+                "combined-positions": "Posizioni combinate",
+                "passing touchdowns": "Passaggio di touchdown",
+                "strikeouts": "Strikeout",
+                "rushing yards": "Cantieri veloci",
+                "home runs": "Fuoricampo",
+                "passing yards": "Cantieri di passaggio",
+                "receiving yards": "Ricevere cantieri"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -329,7 +335,21 @@
                 "bonus": "{{bonus}} added bonus on win!",
                 "and": "E",
                 "race-winner": "{{team}} vincerà la gara {{matchResolve}}",
-                "tournament-winner": "{{team}} vincerà il torneo {{matchResolve}}"
+                "tournament-winner": "{{team}} vincerà il torneo {{matchResolve}}",
+                "player-props": {
+                    "rushing-yards-over": "{{team}} avrà più yard di corsa di {{scoring}}",
+                    "passing-touchdowns-over": "Il {{team}} avrà più touchdown di passaggio rispetto a {{scoring}}",
+                    "passing-yards-over": "{{team}} avrà più yard di passaggio di {{scoring}}",
+                    "rushing-yards-under": "{{team}} avrà meno yard di corsa rispetto a {{scoring}}",
+                    "strikeouts-under": "{{team}} avrà meno strikeout di {{scoring}}",
+                    "receiving-yards-under": "{{team}} avrà meno yard in ricezione rispetto a {{scoring}}",
+                    "receiving-yards-over": "{{team}} avrà più yard in ricezione rispetto a {{scoring}}",
+                    "home-runs-under": "{{team}} avrà meno fuoricampo di {{scoring}}",
+                    "strikeouts-over": "{{team}} avrà più strikeout di {{scoring}}",
+                    "passing-yards-under": "{{team}} avrà meno yard di passaggio di {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} avrà meno touchdown di passaggio rispetto a {{scoring}}",
+                    "home-runs-over": "{{team}} avrà più fuoricampo di {{scoring}}"
+                }
             },
             "starts-in": "Inizia tra",
             "period": "Periodo",
@@ -340,7 +360,10 @@
             "half-time": "Metà tempo",
             "total-markets": "Total markets",
             "race-winner": "Vincitore",
-            "no-win": "Ora in"
+            "no-win": "Ora in",
+            "see-more-markets-mobile": "oggetti di scena del giocatore",
+            "see-more-markets": "vedi i mercati degli oggetti di scena dei giocatori",
+            "player-props": "Oggetti di scena del giocatore"
         },
         "market-details": {
             "price": "Price",
