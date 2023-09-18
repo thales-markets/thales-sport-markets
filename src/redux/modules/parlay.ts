@@ -284,7 +284,8 @@ const parlaySlice = createSlice({
             );
 
             state.multiSingle = state.multiSingle.filter(
-                (ms) => ms.sportMarketAddress !== action.payload && ms.parentMarketAddress !== action.payload
+                (ms) =>
+                    !ms.sportMarketAddress.includes(action.payload) && !ms.parentMarketAddress.includes(action.payload)
             );
 
             state.parlay = state.parlay.filter(
