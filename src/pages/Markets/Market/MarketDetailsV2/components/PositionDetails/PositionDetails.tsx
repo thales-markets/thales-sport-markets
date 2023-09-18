@@ -6,7 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getParlay, removeCombinedMarketFromParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
+import {
+    getCombinedPositions,
+    getParlay,
+    removeCombinedPosition,
+    removeFromParlay,
+    updateParlay,
+} from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import { floorNumberToDecimals } from 'utils/formatters/number';
@@ -49,6 +55,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const parlay = useSelector(getParlay);
+    const combinedPositions = useSelector(getCombinedPositions);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
     const isMarketPartOfCombinedMarket = isMarketPartOfCombinedMarketFromParlayData(parlay, market);
 
@@ -83,8 +90,9 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
     const oddTooltipText = getOddTooltipText(position, market);
 
     const parentMarketAddress = market.parentMarket !== null ? market.parentMarket : market.address;
-    const isParentMarketAddressInParlayData = parlay.filter((data) => data.parentMarket == parentMarketAddress);
-
+    const isParentMarketAddressInParlayData =
+        !!parlay.find((data) => data.parentMarket == parentMarketAddress) ||
+        !!combinedPositions.find((item) => item.markets.find((market) => market.parentMarket == parentMarketAddress));
     const getDetails = () => (
         <Container
             disabled={disabledPosition}
@@ -93,7 +101,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
             onClick={() => {
                 if (disabledPosition) return;
                 if (isParentMarketAddressInParlayData) {
-                    dispatch(removeCombinedMarketFromParlay(parentMarketAddress));
+                    dispatch(removeCombinedPosition(parentMarketAddress));
                 }
                 if (isAddedToParlay) {
                     dispatch(removeFromParlay(market.address));
