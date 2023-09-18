@@ -849,7 +849,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
         );
         const anyUsdAmtUnderZero = multiSingleAmounts.some((s) => Number(s.amountToBuy) <= 0);
 
-        if (anyUsdAmtUnderZero || anyTokenAmtUnderMin || isBuying || isAllowing) {
+        if (anyUsdAmtUnderZero || anyTokenAmtUnderMin || isBuying || isAllowing || hasValidationError) {
             setSubmitDisabled(true);
             return;
         }
