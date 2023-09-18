@@ -231,9 +231,9 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                     })}
                             </ListContainer>
                             <HorizontalLine />
-                            {parlayMarkets.length + combinedMarketsData.length === 1 ? (
+                            {aggregatedParlayMarkets.length === 1 ? (
                                 <Single
-                                    market={parlayMarkets[0]}
+                                    market={aggregatedParlayMarkets[0]}
                                     parlayPayment={parlayPayment}
                                     onBuySuccess={onBuySuccess}
                                 />
