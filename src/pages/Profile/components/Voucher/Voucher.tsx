@@ -25,7 +25,6 @@ import SimpleLoader from 'components/SimpleLoader';
 import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { getMaxGasLimitForNetwork } from 'utils/network';
 import { ethers } from 'ethers';
 import { refetchAfterVoucherClaim } from 'utils/queryConnector';
 import { LINKS } from 'constants/links';
@@ -78,9 +77,7 @@ const Voucher: React.FC<{ searchText?: string }> = ({ searchText }) => {
             setIsClaiming(true);
             const id = toast.loading(t('profile.messages.transaction-pending'));
             try {
-                const tx = await overtimeVoucherEscrowContractWithSigner.claimVoucher({
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
+                const tx = await overtimeVoucherEscrowContractWithSigner.claimVoucher();
                 const txResult = await tx.wait();
                 if (txResult && txResult.transactionHash) {
                     refetchAfterVoucherClaim(walletAddress, networkId);

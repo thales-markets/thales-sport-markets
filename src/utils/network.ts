@@ -1,6 +1,6 @@
 import { STABLE_DECIMALS } from 'constants/currency';
 import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { MAX_GAS_LIMIT, NetworkNameById, SUPPORTED_NETWORKS } from 'constants/network';
+import { NetworkNameById, SUPPORTED_NETWORKS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import { getNavItemFromRoute } from './ui';
@@ -77,8 +77,3 @@ export const getDefaultCollateralIndexForNetworkId = (networkId: Network): numbe
 };
 
 export const isMultiCollateralSupportedForNetwork = (networkId: Network) => getCollaterals(networkId).length > 1;
-
-export const getMaxGasLimitForNetwork = (networkId: Network) => {
-    if (networkId == Network.ArbitrumOne) return undefined;
-    return MAX_GAS_LIMIT;
-};

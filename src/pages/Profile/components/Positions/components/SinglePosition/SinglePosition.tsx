@@ -41,7 +41,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
 } from 'utils/markets';
-import { getMaxGasLimitForNetwork } from 'utils/network';
+
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
@@ -190,9 +190,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
             contract.connect(signer);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
-                const tx = await contract.exerciseOptions({
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
+                const tx = await contract.exerciseOptions();
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {

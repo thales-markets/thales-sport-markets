@@ -53,7 +53,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
+import { checkAllowance } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -308,9 +308,10 @@ const LiquidityPool: React.FC = () => {
             try {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
-                const tx = (await sUSDContractWithSigner.approve(lpContract.address, approveAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                })) as ethers.ContractTransaction;
+                const tx = (await sUSDContractWithSigner.approve(
+                    lpContract.address,
+                    approveAmount
+                )) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
@@ -341,9 +342,7 @@ const LiquidityPool: React.FC = () => {
                 const liquidityPoolContractWithSigner = lpContract.connect(signer);
                 const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
-                const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
+                const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {
@@ -373,12 +372,8 @@ const LiquidityPool: React.FC = () => {
                 const parsedPercentage = ethers.utils.parseEther((Number(withdrawalPercentage) / 100).toString());
 
                 const tx = withdrawAll
-                    ? await liquidityPoolContractWithSigner.withdrawalRequest({
-                          gasLimit: getMaxGasLimitForNetwork(networkId),
-                      })
-                    : await liquidityPoolContractWithSigner.partialWithdrawalRequest(parsedPercentage, {
-                          gasLimit: getMaxGasLimitForNetwork(networkId),
-                      });
+                    ? await liquidityPoolContractWithSigner.withdrawalRequest()
+                    : await liquidityPoolContractWithSigner.partialWithdrawalRequest(parsedPercentage);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {

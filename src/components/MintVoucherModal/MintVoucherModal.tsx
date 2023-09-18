@@ -9,7 +9,7 @@ import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { getIsAppReady } from 'redux/modules/app';
 import { BigNumber, ethers } from 'ethers';
-import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
+import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -126,9 +126,10 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
                 const addressToApprove = overtimeVoucherContract.address;
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
-                const tx = (await sUSDContractWithSigner.approve(addressToApprove, approveAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                })) as ethers.ContractTransaction;
+                const tx = (await sUSDContractWithSigner.approve(
+                    addressToApprove,
+                    approveAmount
+                )) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
@@ -162,10 +163,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
 
                 const tx = await overtimeVoucherContractWithSigner.mint(
                     isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),
-                    parsedAmount,
-                    {
-                        gasLimit: getMaxGasLimitForNetwork(networkId),
-                    }
+                    parsedAmount
                 );
                 const txResult = await tx.wait();
 
