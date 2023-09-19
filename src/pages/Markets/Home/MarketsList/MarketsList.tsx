@@ -76,8 +76,18 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                             }
                             component={
                                 <IncentivizedLeague>
-                                    <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                    {networkId !== Network.Base ? (
+                                        <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
+                                    ) : (
+                                        ''
+                                    )}
+                                    {networkId == Network.OptimismMainnet ? (
+                                        <OPLogo />
+                                    ) : networkId == Network.ArbitrumOne ? (
+                                        <ArbitrumLogo />
+                                    ) : (
+                                        ''
+                                    )}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
@@ -105,7 +115,13 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                             component={
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                    {networkId == Network.OptimismMainnet ? (
+                                        <OPLogo />
+                                    ) : networkId == Network.ArbitrumOne ? (
+                                        <ArbitrumLogo />
+                                    ) : (
+                                        ''
+                                    )}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
