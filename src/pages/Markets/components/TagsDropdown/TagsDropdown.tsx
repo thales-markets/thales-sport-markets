@@ -141,10 +141,12 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 }
                                                 component={
                                                     <IncentivizedLeague>
-                                                        {networkId !== Network.ArbitrumOne ? (
+                                                        {networkId == Network.OptimismMainnet ? (
                                                             <OPLogo />
-                                                        ) : (
+                                                        ) : networkId == Network.ArbitrumOne ? (
                                                             <ArbitrumLogo />
+                                                        ) : (
+                                                            ''
                                                         )}
                                                     </IncentivizedLeague>
                                                 }
@@ -176,10 +178,12 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 }
                                                 component={
                                                     <IncentivizedLeague>
-                                                        {networkId !== Network.ArbitrumOne ? (
+                                                        {networkId == Network.OptimismMainnet ? (
                                                             <OPLogo />
-                                                        ) : (
+                                                        ) : networkId == Network.ArbitrumOne ? (
                                                             <ArbitrumLogo />
+                                                        ) : (
+                                                            ''
                                                         )}
                                                     </IncentivizedLeague>
                                                 }
