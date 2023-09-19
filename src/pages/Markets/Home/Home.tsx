@@ -83,7 +83,7 @@ const Home: React.FC = () => {
     );
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [showBurger, setShowBurger] = useState<boolean>(false);
-    const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, false);
+    const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
 
     const tagsList = orderBy(
