@@ -300,7 +300,13 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "Posiciones combinadas"
+                "combined-positions": "Posiciones combinadas",
+                "strikeouts": "ponches",
+                "home runs": "Jonrones",
+                "receiving yards": "Yardas receptoras",
+                "passing yards": "Pasando yardas",
+                "passing touchdowns": "Pasando touchdowns",
+                "rushing yards": "Yardas apresuradas"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -329,7 +335,21 @@
                 "bonus": "{{bonus}} added bonus on win!",
                 "and": "y",
                 "race-winner": "{{team}} ganará la carrera {{matchResolve}}",
-                "tournament-winner": "{{team}} ganará el torneo {{matchResolve}}"
+                "tournament-winner": "{{team}} ganará el torneo {{matchResolve}}",
+                "player-props": {
+                    "strikeouts-over": "{{team}} tendrá más ponches que {{scoring}}",
+                    "home-runs-under": "{{team}} tendrá menos jonrones que {{scoring}}",
+                    "rushing-yards-over": "{{team}} tendrá más yardas terrestres que {{scoring}}",
+                    "receiving-yards-over": "{{team}} tendrá más yardas en recepción que {{scoring}}",
+                    "passing-yards-over": "{{team}} tendrá más yardas aéreas que {{scoring}}",
+                    "passing-yards-under": "{{team}} tendrá menos yardas aéreas que {{scoring}}",
+                    "passing-touchdowns-over": "{{team}} tendrá más pases de touchdown que {{scoring}}",
+                    "receiving-yards-under": "{{team}} tendrá menos yardas recibidas que {{scoring}}",
+                    "rushing-yards-under": "{{team}} tendrá menos yardas terrestres que {{scoring}}",
+                    "home-runs-over": "{{team}} tendrá más jonrones que {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} tendrá menos pases de touchdown que {{scoring}}",
+                    "strikeouts-under": "{{team}} tendrá menos ponches que {{scoring}}"
+                }
             },
             "starts-in": "Empieza en",
             "period": "Período",
@@ -340,7 +360,10 @@
             "inning": "Inning",
             "total-markets": "Total markets",
             "race-winner": "Ganador",
-            "no-win": "Ahora en"
+            "no-win": "Ahora en",
+            "player-props": "Accesorios de jugador",
+            "see-more-markets": "ver mercados de accesorios para jugadores",
+            "see-more-markets-mobile": "accesorios de jugador"
         },
         "market-details": {
             "price": "Precio",

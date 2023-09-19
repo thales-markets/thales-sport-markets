@@ -300,7 +300,13 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "Postes combinés"
+                "combined-positions": "Postes combinés",
+                "receiving yards": "Chantiers de réception",
+                "rushing yards": "Chantiers précipités",
+                "passing yards": "Cours de dépassement",
+                "home runs": "Les circuits",
+                "passing touchdowns": "Passer des touchés",
+                "strikeouts": "Barrages"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -329,7 +335,21 @@
                 "bonus": "{{bonus}} bonus supplémentaire sur la victoire !",
                 "and": "et",
                 "race-winner": "{{team}} remportera la course {{matchResolve}}",
-                "tournament-winner": "{{team}} remportera le tournoi {{matchResolve}}"
+                "tournament-winner": "{{team}} remportera le tournoi {{matchResolve}}",
+                "player-props": {
+                    "strikeouts-over": "{{team}} aura plus de retraits au bâton que {{scoring}}",
+                    "passing-yards-over": "{{team}} aura plus de yards par la passe que {{scoring}}",
+                    "home-runs-under": "{{team}} aura moins de circuits que {{scoring}}",
+                    "rushing-yards-over": "{{team}} aura plus de yards au sol que {{scoring}}",
+                    "strikeouts-under": "{{team}} aura moins de retraits au bâton que {{scoring}}",
+                    "passing-yards-under": "{{team}} aura moins de yards par la passe que {{scoring}}",
+                    "home-runs-over": "{{team}} aura plus de circuits que {{scoring}}",
+                    "receiving-yards-over": "{{team}} aura plus de yards sur réception que {{scoring}}",
+                    "passing-touchdowns-over": "{{team}} aura plus de touchés par passes que {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} aura moins de touchés par passe que {{scoring}}",
+                    "receiving-yards-under": "{{team}} aura moins de yards sur réception que {{scoring}}",
+                    "rushing-yards-under": "{{team}} aura moins de yards au sol que {{scoring}}"
+                }
             },
             "starts-in": "Commence dans",
             "period": "Période",
@@ -340,7 +360,10 @@
             "inning": "Tour de batte",
             "total-markets": "Marchés totaux",
             "no-win": "Maintenant en",
-            "race-winner": "Gagnant"
+            "race-winner": "Gagnant",
+            "see-more-markets-mobile": "accessoires de joueur",
+            "see-more-markets": "voir les marchés d'accessoires de joueurs",
+            "player-props": "Accessoires de joueur"
         },
         "market-details": {
             "wallet-info": {

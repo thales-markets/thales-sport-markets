@@ -28,6 +28,7 @@ import Profile from 'pages/Profile';
 import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
 import { buildHref } from 'utils/routes';
+import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -100,7 +101,12 @@ const App = () => {
                     signer,
                 });
 
-                dispatch(updateNetworkSettings({ networkId: providerNetworkId }));
+                dispatch(
+                    updateNetworkSettings({
+                        networkId: providerNetworkId,
+                        networkName: SUPPORTED_NETWORKS_NAMES[providerNetworkId]?.toLowerCase(),
+                    })
+                );
                 dispatch(setAppReady());
             } catch (e) {
                 dispatch(setAppReady());

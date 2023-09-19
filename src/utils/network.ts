@@ -1,31 +1,17 @@
 import { STABLE_DECIMALS } from 'constants/currency';
-import { DEFAULT_NETWORK_ID } from 'constants/defaults';
-import { NetworkNameById, SUPPORTED_NETWORKS } from 'constants/network';
-import { BigNumber, ethers } from 'ethers';
+import { DEFAULT_NETWORK, SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
+import { BigNumber } from 'ethers';
 import { Network } from 'enums/network';
 import { getNavItemFromRoute } from './ui';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import localStore from './localStore';
 import { getCollaterals } from './collaterals';
+import { NetworkParams } from '../types/network';
 
 export const hasEthereumInjected = () => !!window.ethereum;
 
-export async function getDefaultNetworkId(): Promise<Network> {
-    try {
-        if (hasEthereumInjected()) {
-            const provider = new ethers.providers.Web3Provider(<any>window.ethereum, 'any');
-            const networkId = (await provider.getNetwork()).chainId;
-            return (networkId || DEFAULT_NETWORK_ID) as Network;
-        }
-        return DEFAULT_NETWORK_ID;
-    } catch (e) {
-        console.log(e);
-        return DEFAULT_NETWORK_ID;
-    }
-}
-
-export const isNetworkSupported = (networkId: number | string): networkId is Network => {
-    return networkId in NetworkNameById;
+export const isNetworkSupported = (networkId: Network): boolean => {
+    return !!SUPPORTED_NETWORKS[networkId];
 };
 
 export const checkAllowance = async (amount: BigNumber, token: any, walletAddress: string, spender: string) => {
@@ -39,29 +25,29 @@ export const checkAllowance = async (amount: BigNumber, token: any, walletAddres
 };
 
 export const getNetworkIconClassNameByNetworkId = (networkId: Network): string => {
-    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    const network = SUPPORTED_NETWORKS_PARAMS[networkId];
     if (network) return network.iconClassName;
     return 'Unknown';
 };
 
 export const getNetworkNameByNetworkId = (networkId: Network, shortName = false): string | undefined => {
-    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    const network = SUPPORTED_NETWORKS_PARAMS[networkId];
     return shortName ? network?.shortChainName : network?.chainName;
 };
 
 export const getDefaultDecimalsForNetwork = (networkId: Network) => {
-    if (networkId == Network.ArbitrumOne) return STABLE_DECIMALS.USDC;
+    if (networkId == Network.ArbitrumOne || networkId === Network.Base) return STABLE_DECIMALS.USDC;
     return STABLE_DECIMALS.sUSD;
 };
 
 export const getDefaultNetworkName = (shortName = false): string => {
     // find should always return Object for default network ID
-    const network = SUPPORTED_NETWORKS.find((item) => item.chainId === DEFAULT_NETWORK_ID) || SUPPORTED_NETWORKS[0];
+    const network = SUPPORTED_NETWORKS_PARAMS[DEFAULT_NETWORK.networkId];
     return shortName ? network?.shortChainName : network?.chainName;
 };
 
 export const getNetworkKeyByNetworkId = (networkId: Network): string => {
-    const network = SUPPORTED_NETWORKS.find((item) => item.chainId == networkId);
+    const network = SUPPORTED_NETWORKS_PARAMS[networkId];
     return network?.chainKey || 'optimism_mainnet';
 };
 
@@ -77,3 +63,35 @@ export const getDefaultCollateralIndexForNetworkId = (networkId: Network): numbe
 };
 
 export const isMultiCollateralSupportedForNetwork = (networkId: Network) => getCollaterals(networkId).length > 1;
+
+export const changeNetwork = async (network: NetworkParams, callback?: VoidFunction): Promise<void> => {
+    if (hasEthereumInjected()) {
+        try {
+            await (window.ethereum as any).request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: network.chainId }],
+            });
+            callback && callback();
+        } catch (switchError: any) {
+            if (network && switchError.code === 4902) {
+                try {
+                    await (window.ethereum as any).request({
+                        method: 'wallet_addEthereumChain',
+                        params: [network],
+                    });
+                    await (window.ethereum as any).request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: network.chainId }],
+                    });
+                    callback && callback();
+                } catch (addError) {
+                    console.log(addError);
+                }
+            } else {
+                console.log(switchError);
+            }
+        }
+    } else {
+        callback && callback();
+    }
+};
