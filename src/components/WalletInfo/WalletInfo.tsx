@@ -7,14 +7,14 @@ import styled from 'styled-components';
 import { truncateAddress } from 'utils/formatters/string';
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { hasEthereumInjected } from 'utils/network';
+import { changeNetwork } from 'utils/network';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import { formatCurrency } from 'utils/formatters/number';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { Network } from 'enums/network';
-import { NETWORK_SWITCHER_SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_DESCRIPTIONS } from 'constants/network';
+import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { useSwitchNetwork } from 'wagmi';
 import { getDefaultCollateral } from 'utils/collaterals';
 
@@ -49,6 +49,11 @@ const WalletInfo: React.FC = () => {
     }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
 
     const walletBalance = overtimeVoucher ? overtimeVoucher.remainingAmount : stableCoinBalance;
+
+    const selectedNetwork = useMemo(
+        () => SUPPORTED_NETWORKS_PARAMS[networkId] || SUPPORTED_NETWORKS_PARAMS[DEFAULT_NETWORK.networkId],
+        [networkId]
+    );
 
     // currently not supported network synchronization between browser without integrated wallet and wallet app on mobile
     const hideNetworkSwitcher =
@@ -95,78 +100,43 @@ const WalletInfo: React.FC = () => {
                                     ))}
                                 <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
                                     <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)}>
-                                        <NetworkIcon
-                                            className={`icon ${
-                                                networkId === Network.ArbitrumOne ? 'icon--arb' : 'icon--op'
-                                            }`}
-                                        />
+                                        <NetworkIcon className={selectedNetwork.iconClassName} />
                                         {!hideNetworkSwitcher && <DownIcon className={`icon icon--arrow-down`} />}
                                     </NetworkIconWrapper>
                                     {dropDownOpen && !hideNetworkSwitcher && (
                                         <NetworkDropDown>
-                                            {NETWORK_SWITCHER_SUPPORTED_NETWORKS.map((network) => (
-                                                <NetworkWrapper
-                                                    key={network.shortChainName}
-                                                    onClick={async () => {
-                                                        if (networkId !== network.networkId) {
-                                                            if (hasEthereumInjected()) {
-                                                                try {
-                                                                    await (window.ethereum as any).request({
-                                                                        method: 'wallet_switchEthereumChain',
-                                                                        params: [{ chainId: network.chainId }],
-                                                                    });
-                                                                    switchNetwork?.(network.networkId);
-                                                                    // Trigger App.js init
-                                                                    // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
-                                                                    dispatch(
-                                                                        switchToNetworkId({
-                                                                            networkId: network.networkId as Network,
-                                                                        })
-                                                                    );
-                                                                } catch (switchError: any) {
-                                                                    if (switchError.code === 4902) {
-                                                                        try {
-                                                                            await (window.ethereum as any).request({
-                                                                                method: 'wallet_addEthereumChain',
-                                                                                params: [
-                                                                                    SUPPORTED_NETWORKS_DESCRIPTIONS[
-                                                                                        +network.chainId
-                                                                                    ],
-                                                                                ],
-                                                                            });
-                                                                            await (window.ethereum as any).request({
-                                                                                method: 'wallet_switchEthereumChain',
-                                                                                params: [{ chainId: network.chainId }],
-                                                                            });
-                                                                        } catch (addError) {
-                                                                            console.log(addError);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                switchNetwork?.(network.networkId);
+                                            {Object.keys(SUPPORTED_NETWORKS_PARAMS)
+                                                .map((key) => {
+                                                    return {
+                                                        id: Number(key),
+                                                        ...SUPPORTED_NETWORKS_PARAMS[Number(key)],
+                                                    };
+                                                })
+                                                .sort((a, b) => a.order - b.order)
+                                                .map((network, index) => (
+                                                    <NetworkWrapper
+                                                        key={index}
+                                                        onClick={async () => {
+                                                            setDropDownOpen(false);
+                                                            await changeNetwork(network, () => {
+                                                                switchNetwork?.(network.id);
                                                                 // Trigger App.js init
-                                                                // do not use updateNetworkSettings(networkId) as it will trigger queries before provider is initialized in App.js
+                                                                // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
                                                                 dispatch(
                                                                     switchToNetworkId({
-                                                                        networkId: network.networkId as Network,
+                                                                        networkId: Number(network.id) as Network,
                                                                     })
                                                                 );
-                                                            }
-                                                        }
-
-                                                        setDropDownOpen(false);
-                                                    }}
-                                                >
-                                                    <NetworkIcon className={network.iconClassName} />
-                                                    <NetworkText>
-                                                        {networkId === network.networkId && (
-                                                            <NetworkSelectedIndicator />
-                                                        )}
-                                                        {network.shortChainName}
-                                                    </NetworkText>
-                                                </NetworkWrapper>
-                                            ))}
+                                                            });
+                                                        }}
+                                                    >
+                                                        <NetworkIcon className={network.iconClassName} />
+                                                        <NetworkText>
+                                                            {networkId === network.id && <NetworkSelectedIndicator />}
+                                                            {network.shortChainName}
+                                                        </NetworkText>
+                                                    </NetworkWrapper>
+                                                ))}
                                         </NetworkDropDown>
                                     )}
                                 </OutsideClickHandler>
@@ -284,11 +254,8 @@ const NetworkText = styled.span`
 const NetworkIcon = styled.i`
     font-size: 24px;
     color: ${(props) => props.theme.button.textColor.primary};
-    &.icon--arb {
-        position: relative;
-        left: -2px;
-    }
 `;
+
 const DownIcon = styled.i`
     font-size: 12px;
     color: ${(props) => props.theme.button.textColor.primary};
@@ -298,13 +265,12 @@ const NetworkDropDown = styled.div`
     z-index: 1000;
     position: absolute;
     top: 30px;
-    left: 0px;
+    right: 0px;
     display: flex;
     flex-direction: column;
     border-radius: 20px;
     background: ${(props) => props.theme.background.quaternary};
-    width: 100%;
-    min-width: 160px;
+    width: 130px;
     padding: 10px;
     justify-content: center;
     align-items: center;
@@ -313,11 +279,12 @@ const NetworkDropDown = styled.div`
 
 const NetworkWrapper = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     gap: 6px;
     cursor: pointer;
     width: 100%;
+    margin-left: 32px;
 `;
 
 const NetworkSelectedIndicator = styled.div`
