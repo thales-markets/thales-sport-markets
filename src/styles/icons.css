@@ -320,3 +320,7 @@
 .icon--golf::before {
     content: '\003F';
 }
+
+.icon--base:before {
+    content: '\00C0';
+}
