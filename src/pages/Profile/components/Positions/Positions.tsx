@@ -21,7 +21,6 @@ import {
     ClaimAllContainer,
 } from './styled-components';
 import { isParlayClaimable, isParlayOpen, isSportMarketExpired } from 'utils/markets';
-import { getMaxGasLimitForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -190,9 +189,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                             contract.connect(signer);
                             const id = toast.loading(t('market.toast-message.transaction-pending'));
                             try {
-                                const tx = await contract.exerciseOptions({
-                                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                                });
+                                const tx = await contract.exerciseOptions();
                                 const txResult = await tx.wait();
 
                                 if (txResult && txResult.transactionHash) {
@@ -231,9 +228,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                 try {
                                     const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
-                                    const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(market.id, {
-                                        gasLimit: getMaxGasLimitForNetwork(networkId),
-                                    });
+                                    const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(market.id);
                                     const txResult = await tx.wait();
 
                                     if (txResult && txResult.transactionHash) {
