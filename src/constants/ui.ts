@@ -61,7 +61,7 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
         route: ROUTES.Referral,
-        supportedNetworks: [Network.OptimismGoerli, Network.ArbitrumOne, Network.Base],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.ArbitrumOne, Network.Base],
     },
 ];
 
