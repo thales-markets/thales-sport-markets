@@ -314,7 +314,7 @@ const Home: React.FC = () => {
 
         let favouriteCount = 0;
         const favouriteTags = favouriteLeagues.filter((tag: any) => tag.favourite);
-        favouriteTags.forEach((tag) => {
+        favouriteTags.forEach((tag: TagInfo) => {
             favouriteCount += openMarketsCountPerTag[tag.id] || 0;
         });
         openMarketsCount[SportFilterEnum.Favourites] = favouriteCount;
@@ -460,6 +460,7 @@ const Home: React.FC = () => {
                                             setTagFilter={setTagFilter}
                                             setTagParam={setTagParam}
                                             openMarketsCountPerTag={openMarketsCountPerTag}
+                                            showActive={showActive}
                                         ></TagsDropdown>
                                     </React.Fragment>
                                 );
@@ -592,6 +593,7 @@ const Home: React.FC = () => {
                                             setTagFilter={setTagFilter}
                                             setTagParam={setTagParam}
                                             openMarketsCountPerTag={openMarketsCountPerTag}
+                                            showActive={showActive}
                                         ></TagsDropdown>
                                     </React.Fragment>
                                 );
