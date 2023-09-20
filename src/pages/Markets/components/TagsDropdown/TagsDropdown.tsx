@@ -23,6 +23,7 @@ type TagsDropdownProps = {
     setTagFilter: any;
     setTagParam: any;
     openMarketsCountPerTag: any;
+    showActive: boolean;
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({
@@ -32,6 +33,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     setTagFilter,
     setTagParam,
     openMarketsCountPerTag,
+    showActive,
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -42,6 +44,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     return (
         <Container open={open}>
             {tags
+                .filter((tag: TagInfo) => (showActive && !!openMarketsCountPerTag[tag.id]) || !showActive)
                 .sort((a, b) => {
                     const numberOfGamesA = Number(!!openMarketsCountPerTag[a.id]);
                     const numberOfGamesB = Number(!!openMarketsCountPerTag[b.id]);
