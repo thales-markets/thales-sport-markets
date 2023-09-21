@@ -160,13 +160,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         ) : (
                                             ''
                                         )}
-                                        {networkId == Network.OptimismMainnet ? (
-                                            <OPLogo />
-                                        ) : networkId == Network.ArbitrumOne ? (
-                                            <ArbitrumLogo />
-                                        ) : (
-                                            ''
-                                        )}
+                                        {getNetworkLogo(networkId)}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -204,13 +198,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         ) : (
                                             ''
                                         )}
-                                        {networkId == Network.OptimismMainnet ? (
-                                            <OPLogo />
-                                        ) : networkId == Network.ArbitrumOne ? (
-                                            <ArbitrumLogo />
-                                        ) : (
-                                            ''
-                                        )}
+                                        {getNetworkLogo(networkId)}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -404,6 +392,17 @@ const hideResultInfoPerPeriodForSports = (sportId: number) => {
         !SPORTS_TAGS_MAP['Motosport'].includes(sportId) &&
         sportId != 9399
     );
+};
+
+const getNetworkLogo = (networkId: number) => {
+    switch (networkId) {
+        case Network.OptimismMainnet:
+            return <OPLogo />;
+        case Network.ArbitrumOne:
+            return <ArbitrumLogo />;
+        default:
+            return <></>;
+    }
 };
 
 const RowContainer = styled(FlexDivRow)`
