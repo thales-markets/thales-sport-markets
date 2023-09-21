@@ -143,15 +143,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     />
                                                 }
                                                 component={
-                                                    <IncentivizedLeague>
-                                                        {networkId == Network.OptimismMainnet ? (
-                                                            <OPLogo />
-                                                        ) : networkId == Network.ArbitrumOne ? (
-                                                            <ArbitrumLogo />
-                                                        ) : (
-                                                            ''
-                                                        )}
-                                                    </IncentivizedLeague>
+                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
                                                 }
                                             ></Tooltip>
                                         )}
@@ -180,15 +172,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     />
                                                 }
                                                 component={
-                                                    <IncentivizedLeague>
-                                                        {networkId == Network.OptimismMainnet ? (
-                                                            <OPLogo />
-                                                        ) : networkId == Network.ArbitrumOne ? (
-                                                            <ArbitrumLogo />
-                                                        ) : (
-                                                            ''
-                                                        )}
-                                                    </IncentivizedLeague>
+                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
                                                 }
                                             ></Tooltip>
                                         )}
@@ -248,6 +232,17 @@ const LeagueFlag = (tagId: number | any) => {
             return <Flag size="m" code="BR" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
+    }
+};
+
+const getNetworkLogo = (networkId: number) => {
+    switch (networkId) {
+        case Network.OptimismMainnet:
+            return <OPLogo />;
+        case Network.ArbitrumOne:
+            return <ArbitrumLogo />;
+        default:
+            return <></>;
     }
 };
 
