@@ -186,7 +186,7 @@ export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; pad
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
     &:before {
         font-family: ExoticIcons !important;
-        content: '\\005C';
+        content: '\\0061';
     }
 `;
 
