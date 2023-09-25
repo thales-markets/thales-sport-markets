@@ -372,6 +372,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             showOdds={showAMM}
                         />
                     )}
+                    {childMarkets.oneSiderTouchdownsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.oneSiderTouchdownsMarkets}
+                            betType={BetType.PLAYER_PROPS_TOUCHDOWNS}
+                            showOdds={showAMM}
+                        />
+                    )}
                 </>
                 <Transactions market={market} />
             </MainContainer>
