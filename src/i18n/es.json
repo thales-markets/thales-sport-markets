@@ -306,7 +306,8 @@
                 "receiving yards": "Yardas receptoras",
                 "passing yards": "Pasando yardas",
                 "passing touchdowns": "Pasando touchdowns",
-                "rushing yards": "Yardas apresuradas"
+                "rushing yards": "Yardas apresuradas",
+                "scoring touchdown": "¿Quién anotará un touchdown en el juego?"
             },
             "odd-tooltip": {
                 "scoring": {

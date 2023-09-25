@@ -306,7 +306,8 @@
                 "receiving yards": "Empfangshöfe",
                 "strikeouts": "Durchgestrichen",
                 "passing yards": "Vorbeifahrende Höfe",
-                "home runs": "Home Runs"
+                "home runs": "Home Runs",
+                "scoring touchdown": "Wer erzielt im Spiel einen Touchdown?"
             },
             "odd-tooltip": {
                 "scoring": {

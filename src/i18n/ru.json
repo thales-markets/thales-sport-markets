@@ -306,7 +306,8 @@
                 "strikeouts": "Вычеркивания",
                 "rushing yards": "Стремительные ярды",
                 "passing yards": "Пасовые ярды",
-                "passing touchdowns": "Проходящие тачдауны"
+                "passing touchdowns": "Проходящие тачдауны",
+                "scoring touchdown": "Кто забьет тачдаун в игре?"
             },
             "odd-tooltip": {
                 "scoring": {

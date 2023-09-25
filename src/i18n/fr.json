@@ -306,7 +306,8 @@
                 "passing yards": "Cours de dépassement",
                 "home runs": "Les circuits",
                 "passing touchdowns": "Passer des touchés",
-                "strikeouts": "Barrages"
+                "strikeouts": "Barrages",
+                "scoring touchdown": "Qui marquera un touchdown dans le match ?"
             },
             "odd-tooltip": {
                 "scoring": {

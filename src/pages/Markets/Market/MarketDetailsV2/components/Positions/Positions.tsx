@@ -2,7 +2,7 @@ import { BetTypeNameMap } from 'constants/tags';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SportMarketInfo } from 'types/markets';
-import { isGolf, isMotosport, isPlayerProps } from 'utils/markets';
+import { isGolf, isMotosport, isOneSidePlayerProps, isPlayerProps } from 'utils/markets';
 import DoubleChanceMarketPositions from '../DoubleChanceMarketPositions';
 import MarketPositions from '../MarketPositions';
 import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
@@ -34,7 +34,12 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
     }
 
     const showContainer =
-        !showOdds || isMotosport(sportTag) || isGolf(sportTag) || areDoubleChanceMarkets || areOddsValid;
+        !showOdds ||
+        isMotosport(sportTag) ||
+        isGolf(sportTag) ||
+        areDoubleChanceMarkets ||
+        areOddsValid ||
+        isOneSidePlayerProps(betType);
 
     return showContainer ? (
         <Container onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')}>

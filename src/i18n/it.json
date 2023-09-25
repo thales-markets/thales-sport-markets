@@ -306,7 +306,8 @@
                 "rushing yards": "Cantieri veloci",
                 "home runs": "Fuoricampo",
                 "passing yards": "Cantieri di passaggio",
-                "receiving yards": "Ricevere cantieri"
+                "receiving yards": "Ricevere cantieri",
+                "scoring touchdown": "Chi segnerà un touchdown nel gioco?"
             },
             "odd-tooltip": {
                 "scoring": {

@@ -384,7 +384,8 @@
                 "rushing yards": "Rushing yards",
                 "passing yards": "Passing yards",
                 "receiving yards": "Receiving yards",
-                "passing touchdowns": "Passing touchdowns"
+                "passing touchdowns": "Passing touchdowns",
+                "scoring touchdown": "Who will score a touchdown in the game?"
             },
             "odd-tooltip": {
                 "scoring": {
