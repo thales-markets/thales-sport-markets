@@ -28,7 +28,14 @@ import {
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
-import { BetType, DoubleChanceMarketType, OddsType, PLAYER_PROPS_BET_TYPES, Position } from 'enums/markets';
+import {
+    BetType,
+    DoubleChanceMarketType,
+    ONE_SIDER_PLAYER_PROPS_BET_TYPES,
+    OddsType,
+    PLAYER_PROPS_BET_TYPES,
+    Position,
+} from 'enums/markets';
 import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
@@ -573,4 +580,8 @@ export const canPlayerBeAddedToParlay = (parlayPositions: ParlaysMarketPosition[
 
 export const isPlayerProps = (betType: BetType) => {
     return PLAYER_PROPS_BET_TYPES.includes(betType);
+};
+
+export const isOneSidePlayerProps = (betType: BetType) => {
+    return ONE_SIDER_PLAYER_PROPS_BET_TYPES.includes(betType);
 };

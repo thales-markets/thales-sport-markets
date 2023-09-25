@@ -556,6 +556,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: 'passing touchdowns',
     [BetType.PLAYER_PROPS_RUSHING_YARDS]: 'rushing yards',
     [BetType.PLAYER_PROPS_RECEIVING_YARDS]: 'receiving yards',
+    [BetType.PLAYER_PROPS_TOUCHDOWNS]: 'touchdowns',
 };
 
 export const SCORING_MAP: SportsMap = {

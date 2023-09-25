@@ -5,6 +5,7 @@ import { Container, OddsContainer } from './styled-components';
 import styled from 'styled-components';
 import { BetTypeNameMap } from 'constants/tags';
 import Odd from '../Odd';
+import { isOneSidePlayerProps } from 'utils/markets';
 
 type PlayerPropsOdds = {
     markets: SportMarketInfo[];
@@ -21,6 +22,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             passingYardsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_PASSING_YARDS),
             rushingYardsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_RUSHING_YARDS),
             receivingYardsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_RECEIVING_YARDS),
+            oneSiderTouchdownsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_TOUCHDOWNS),
             passingTouchdownsMarkets: markets.filter(
                 (market) => market.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
             ),
@@ -44,6 +46,10 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
         }
         if (lastValidChildMarkets.receivingYardsMarkets.length > 0) {
             result.push(lastValidChildMarkets.receivingYardsMarkets);
+        }
+
+        if (lastValidChildMarkets.oneSiderTouchdownsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.oneSiderTouchdownsMarkets);
         }
 
         return result;
