@@ -9,7 +9,14 @@ import { formatCurrency } from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
-import { getMarketName, getOddTooltipText, getSpreadTotalText, getSymbolText, isPlayerProps } from 'utils/markets';
+import {
+    getMarketName,
+    getOddTooltipText,
+    getSpreadTotalText,
+    getSymbolText,
+    isOneSidePlayerProps,
+    isPlayerProps,
+} from 'utils/markets';
 import PositionSymbol from 'components/PositionSymbol';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -78,7 +85,8 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                         borderWidth: 2,
                                     }}
                                     symbolUpperText={
-                                        spreadTotalText
+                                        spreadTotalText &&
+                                        !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType)
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {

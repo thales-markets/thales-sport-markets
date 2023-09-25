@@ -348,7 +348,8 @@
                     "receiving-yards-under": "{{team}} จะมีระยะรับน้อยกว่า {{scoring}}",
                     "receiving-yards-over": "{{team}} จะมีระยะรับมากกว่า {{scoring}}",
                     "rushing-yards-under": "{{team}} จะมีระยะวิ่งน้อยกว่า {{scoring}}",
-                    "passing-yards-under": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{scoring}}"
+                    "passing-yards-under": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{scoring}}",
+                    "touchdowns": "{{team}} จะทำคะแนนทัชดาวน์ในเกม"
                 }
             },
             "starts-in": "เริ่มเข้า",

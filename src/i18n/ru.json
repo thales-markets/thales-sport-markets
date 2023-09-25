@@ -348,7 +348,8 @@
                     "passing-yards-under": "У {{team}} будет меньше пасовых ярдов, чем у {{scoring}}",
                     "home-runs-under": "У {{team}} будет меньше хоум-ранов, чем у {{scoring}}",
                     "passing-touchdowns-under": "У {{team}} будет меньше тачдаунов в пас, чем у {{scoring}}",
-                    "passing-touchdowns-over": "У команды {{team}} будет больше тачдаунов в пас, чем у команды {{scoring}}"
+                    "passing-touchdowns-over": "У команды {{team}} будет больше тачдаунов в пас, чем у команды {{scoring}}",
+                    "touchdowns": "{{team}} забьет тачдаун в игре"
                 }
             },
             "starts-in": "Начинается через",

@@ -348,7 +348,8 @@
                     "rushing-yards-under": "{{team}} 的冲球码数将少于 {{scoring}}",
                     "strikeouts-under": "{{team}} 的三振次数将少于 {{scoring}}",
                     "receiving-yards-under": "{{team}} 的接球码数将少于 {{scoring}}",
-                    "passing-yards-under": "{{team}} 的传球码数将少于 {{scoring}}"
+                    "passing-yards-under": "{{team}} 的传球码数将少于 {{scoring}}",
+                    "touchdowns": "{{team}} 将在比赛中达阵得分"
                 }
             },
             "starts-in": "开始于",

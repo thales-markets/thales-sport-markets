@@ -348,7 +348,8 @@
                     "passing-touchdowns-under": "{{team}} wird weniger Pass-Touchdowns haben als {{scoring}}",
                     "passing-yards-under": "{{team}} wird weniger Passing Yards haben als {{scoring}}",
                     "strikeouts-under": "{{team}} wird weniger Strikeouts haben als {{scoring}}",
-                    "home-runs-over": "{{team}} wird mehr Homeruns haben als {{scoring}}"
+                    "home-runs-over": "{{team}} wird mehr Homeruns haben als {{scoring}}",
+                    "touchdowns": "{{team}} wird im Spiel einen Touchdown erzielen"
                 }
             },
             "starts-in": "Beginnt in",

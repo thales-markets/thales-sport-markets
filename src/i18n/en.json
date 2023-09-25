@@ -425,7 +425,8 @@
                     "receiving-yards-over": "{{team}} will have more receiving yards than {{scoring}}",
                     "receiving-yards-under": "{{team}} will have less receiving yards than {{scoring}}",
                     "passing-touchdowns-over": "{{team}} will have more passing touchdowns than {{scoring}}",
-                    "passing-touchdowns-under": "{{team}} will have less passing touchdowns than {{scoring}}"
+                    "passing-touchdowns-under": "{{team}} will have less passing touchdowns than {{scoring}}",
+                    "touchdowns": "{{team}} will score a touchdown in the game"
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },

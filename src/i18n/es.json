@@ -348,7 +348,8 @@
                     "rushing-yards-under": "{{team}} tendrá menos yardas terrestres que {{scoring}}",
                     "home-runs-over": "{{team}} tendrá más jonrones que {{scoring}}",
                     "passing-touchdowns-under": "{{team}} tendrá menos pases de touchdown que {{scoring}}",
-                    "strikeouts-under": "{{team}} tendrá menos ponches que {{scoring}}"
+                    "strikeouts-under": "{{team}} tendrá menos ponches que {{scoring}}",
+                    "touchdowns": "{{team}} anotará un touchdown en el juego"
                 }
             },
             "starts-in": "Empieza en",

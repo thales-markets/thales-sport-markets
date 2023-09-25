@@ -1,10 +1,11 @@
+import { BetTypeTitleMap } from 'constants/tags';
 import { BetType, Position } from 'enums/markets';
 import React, { useMemo } from 'react';
-import { SportMarketChildMarkets, SportMarketInfo } from 'types/markets';
-import { Container, OddsContainer } from './styled-components';
 import styled from 'styled-components';
-import { BetTypeNameMap } from 'constants/tags';
+import { SportMarketChildMarkets, SportMarketInfo } from 'types/markets';
+import { isOneSidePlayerProps } from 'utils/markets';
 import Odd from '../Odd';
+import { Container, OddsContainer } from './styled-components';
 
 type PlayerPropsOdds = {
     markets: SportMarketInfo[];
@@ -59,25 +60,31 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             {marketsUI.map((ppMarkets, index) => {
                 return (
                     <SectionContainer key={index} dark={index % 2 === 0}>
-                        <SectionTitle>{BetTypeNameMap[ppMarkets[0].betType as BetType]}</SectionTitle>
+                        <SectionTitle>{BetTypeTitleMap[ppMarkets[0].betType as BetType]}</SectionTitle>
                         <OddsWrapper>
                             {ppMarkets.map((ppMarket, ind) => {
                                 return (
                                     <MarketContainer key={ind}>
-                                        <Player>{`${ppMarket.playerName} ${ppMarket.playerPropsLine}`}</Player>
-                                        <OddsContainer>
+                                        <Player>{`${ppMarket.playerName} ${
+                                            isOneSidePlayerProps(ppMarket.betType) ? '' : ppMarket.playerPropsLine
+                                        }`}</Player>
+                                        <OddsContainer oneSidePlayerPropsLimit={isOneSidePlayerProps(ppMarket.betType)}>
                                             <Odd
                                                 market={ppMarket}
                                                 position={Position.HOME}
                                                 odd={ppMarket.homeOdds}
                                                 bonus={ppMarket.homeBonus}
                                             />
-                                            <Odd
-                                                market={ppMarket}
-                                                position={Position.AWAY}
-                                                odd={ppMarket.awayOdds}
-                                                bonus={ppMarket.awayBonus}
-                                            />
+                                            {!isOneSidePlayerProps(ppMarket.betType) ? (
+                                                <Odd
+                                                    market={ppMarket}
+                                                    position={Position.AWAY}
+                                                    odd={ppMarket.awayOdds}
+                                                    bonus={ppMarket.awayBonus}
+                                                />
+                                            ) : (
+                                                <></>
+                                            )}
                                         </OddsContainer>
                                     </MarketContainer>
                                 );
@@ -117,7 +124,7 @@ const SectionTitle = styled.span`
     text-transform: uppercase;
     line-height: 12px;
     width: 100%;
-    max-width: 150px;
+    //max-width: 150px;
 `;
 
 const Player = styled.span`

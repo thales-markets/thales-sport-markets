@@ -58,7 +58,7 @@ export const getSymbolText = (
         return combinedMarketPositionSymbol;
     }
 
-    if (market.isOneSideMarket) {
+    if (market.isOneSideMarket || isOneSidePlayerProps(market.betType)) {
         return 'YES';
     }
 
@@ -353,6 +353,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
                     translationKey = 'player-props.passing-touchdowns-over';
+                    break;
+                case BetType.PLAYER_PROPS_TOUCHDOWNS:
+                    translationKey = 'player-props.touchdowns';
                     break;
                 default:
                     translationKey = market.isOneSideMarket

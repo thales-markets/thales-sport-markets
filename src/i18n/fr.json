@@ -348,7 +348,8 @@
                     "passing-touchdowns-over": "{{team}} aura plus de touchés par passes que {{scoring}}",
                     "passing-touchdowns-under": "{{team}} aura moins de touchés par passe que {{scoring}}",
                     "receiving-yards-under": "{{team}} aura moins de yards sur réception que {{scoring}}",
-                    "rushing-yards-under": "{{team}} aura moins de yards au sol que {{scoring}}"
+                    "rushing-yards-under": "{{team}} aura moins de yards au sol que {{scoring}}",
+                    "touchdowns": "{{team}} marquera un touchdown dans le match"
                 }
             },
             "starts-in": "Commence dans",
