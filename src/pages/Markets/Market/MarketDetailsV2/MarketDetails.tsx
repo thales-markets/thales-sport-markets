@@ -65,6 +65,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         passingTouchdownsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
         ),
+        oneSiderTouchdownsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
