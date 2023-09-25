@@ -5,7 +5,6 @@ import { Container, OddsContainer } from './styled-components';
 import styled from 'styled-components';
 import { BetTypeNameMap } from 'constants/tags';
 import Odd from '../Odd';
-import { isOneSidePlayerProps } from 'utils/markets';
 
 type PlayerPropsOdds = {
     markets: SportMarketInfo[];
