@@ -548,6 +548,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
                         props: {
                             value: Number(calculatedTotalBuyIn),
                             collateral: getCollateral(networkId, selectedStableIndex),
+                            networkId,
                         },
                     });
                     setIsBuying(false);

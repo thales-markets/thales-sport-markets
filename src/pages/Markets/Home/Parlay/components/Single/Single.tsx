@@ -492,6 +492,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                         props: {
                             value: Number(ammPosition.quote),
                             collateral: getCollateral(networkId, selectedStableIndex),
+                            networkId,
                         },
                     });
                     trackEvent({

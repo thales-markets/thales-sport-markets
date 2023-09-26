@@ -383,6 +383,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         props: {
                             value: Number(usdAmountValue),
                             collateral: getCollateral(networkId, selectedStableIndex),
+                            networkId,
                         },
                     });
 
