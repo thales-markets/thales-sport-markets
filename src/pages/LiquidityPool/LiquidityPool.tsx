@@ -79,6 +79,7 @@ import { Network } from 'enums/network';
 import { delay } from 'utils/timer';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { stableCoinParser } from 'utils/formatters/ethers';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -364,6 +365,7 @@ const LiquidityPool: React.FC = () => {
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {
+                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.depositLp);
                     toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
