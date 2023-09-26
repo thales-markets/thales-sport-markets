@@ -252,20 +252,22 @@ export const updateTotalQuoteAndAmountFromContract = (
         let totalAmount = parlay.totalAmount;
 
         let realQuote = 1;
-        parlay.marketQuotes.map((quote) => {
-            realQuote = realQuote * quote;
-        });
+        if (parlay.marketQuotes) {
+            parlay.marketQuotes.map((quote) => {
+                realQuote = realQuote * quote;
+            });
 
-        parlay.sportMarketsFromContract.forEach((address, index) => {
-            const market = parlay.sportMarkets.find((market) => market.address === address);
+            parlay.sportMarketsFromContract.forEach((address, index) => {
+                const market = parlay.sportMarkets.find((market) => market.address === address);
 
-            if (market && market.isCanceled) {
-                realQuote = realQuote / parlay.marketQuotes[index];
-                const maximumQuote = PARLAY_MAXIMUM_QUOTE;
-                totalQuote = realQuote < maximumQuote ? maximumQuote : realQuote;
-                totalAmount = totalAmount * parlay.marketQuotes[index];
-            }
-        });
+                if (market && market.isCanceled) {
+                    realQuote = realQuote / parlay.marketQuotes[index];
+                    const maximumQuote = PARLAY_MAXIMUM_QUOTE;
+                    totalQuote = realQuote < maximumQuote ? maximumQuote : realQuote;
+                    totalAmount = totalAmount * parlay.marketQuotes[index];
+                }
+            });
+        }
 
         return {
             ...parlay,
