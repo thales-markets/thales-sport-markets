@@ -6,11 +6,11 @@ export const PLAUSIBLE = Plausible({
     apiHost: 'https://analytics-v2.thalesmarket.io',
 });
 
-// export const PLAUSIBLE_KEYS = {
-//     depositLp: 'deposit-lp',
-//     sellToAMM: 'amm-sell',
-//     buyFromAMM: 'amm-buy',
-//     buyFromRangeAMM: 'range-buy',
-//     sellToRangeAMM: 'range-sell',
-//     depositVaults: 'deposit-vaults',
-// };
+export const PLAUSIBLE_KEYS = {
+    parlayBuy: 'parlay-buy',
+    multiSingleBuy: 'multi-single-buy',
+    singleBuy: 'single-buy',
+    depositLp: 'deposit-lp',
+    walletConnect: 'wallet-connect',
+    submitReferralId: 'submit-referral-id',
+};
