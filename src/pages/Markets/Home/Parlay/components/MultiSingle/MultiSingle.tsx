@@ -64,6 +64,7 @@ import { OddsType } from 'enums/markets';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { ThemeInterface } from 'types/ui';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -543,6 +544,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
             await Promise.all(transactions)
                 .then(() => {
+                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.multiSingleBuy, {
+                        props: {
+                            value: Number(calculatedTotalBuyIn),
+                            collateral: getCollateral(networkId, selectedStableIndex),
+                        },
+                    });
                     setIsBuying(false);
                     setUsdAmountValue('');
                 })
