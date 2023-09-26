@@ -61,6 +61,7 @@ import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { getCollateral } from 'utils/collaterals';
 import { StablecoinKey } from 'types/tokens';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -377,6 +378,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                             value: Number(usdAmountValue),
                         });
                     }
+
+                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
+                        props: {
+                            value: Number(usdAmountValue),
+                            collateral: getCollateral(networkId, selectedStableIndex),
+                        },
+                    });
 
                     trackEvent({
                         category: 'parlay',
