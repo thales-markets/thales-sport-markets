@@ -365,7 +365,8 @@
             "no-win": "Ora in",
             "see-more-markets-mobile": "oggetti di scena del giocatore",
             "see-more-markets": "vedi i mercati degli oggetti di scena dei giocatori",
-            "player-props": "Oggetti di scena del giocatore"
+            "player-props": "Oggetti di scena del giocatore",
+            "resolved": "Risolto"
         },
         "market-details": {
             "price": "Price",

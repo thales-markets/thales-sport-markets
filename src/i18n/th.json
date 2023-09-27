@@ -365,7 +365,8 @@
             "no-win": "ไม่ชนะ",
             "player-props": "อุปกรณ์ประกอบฉากของผู้เล่น",
             "see-more-markets": "ดูตลาดอุปกรณ์ประกอบฉากของผู้เล่น",
-            "see-more-markets-mobile": "อุปกรณ์ประกอบฉากของผู้เล่น"
+            "see-more-markets-mobile": "อุปกรณ์ประกอบฉากของผู้เล่น",
+            "resolved": "แก้ไขแล้ว"
         },
         "market-details": {
             "price": "ราคา",

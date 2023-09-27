@@ -365,7 +365,8 @@
             "race-winner": "Победитель",
             "see-more-markets": "посмотреть рынки реквизита игроков",
             "see-more-markets-mobile": "реквизит игрока",
-            "player-props": "Реквизит игрока"
+            "player-props": "Реквизит игрока",
+            "resolved": "Решено"
         },
         "market-details": {
             "price": "Price",

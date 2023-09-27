@@ -373,6 +373,7 @@
             "half": "Half",
             "round": "Round",
             "half-time": "Half-time",
+            "resolved": "Resolved",
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",

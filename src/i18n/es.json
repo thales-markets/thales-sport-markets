@@ -365,7 +365,8 @@
             "no-win": "Ahora en",
             "player-props": "Accesorios de jugador",
             "see-more-markets": "ver mercados de accesorios para jugadores",
-            "see-more-markets-mobile": "accesorios de jugador"
+            "see-more-markets-mobile": "accesorios de jugador",
+            "resolved": "Resuelto"
         },
         "market-details": {
             "price": "Precio",
