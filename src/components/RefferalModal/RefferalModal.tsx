@@ -16,6 +16,7 @@ import TextInput from 'components/fields/TextInput';
 import Button from 'components/Button';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type RefferalModalProps = {
     onClose: () => void;
@@ -48,6 +49,7 @@ const RefferalModal: React.FC<RefferalModalProps> = ({ onClose }) => {
         if (response.data.error) {
             toast(t('common.referral.id-exists'), { type: 'error' });
         } else {
+            PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.submitReferralId);
             setSavedReffererID(reffererID);
             toast(t('common.referral.id-create-success'), { type: 'success' });
         }
