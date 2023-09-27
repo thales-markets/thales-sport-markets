@@ -29,6 +29,7 @@ import { Network } from 'enums/network';
 import { ThemeMap } from 'constants/ui';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { base } from 'constants/network';
+import { PLAUSIBLE } from 'constants/analytics';
 
 dotenv.config();
 
@@ -129,6 +130,8 @@ const theme = getDefaultTheme();
 const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
 const Root: React.FC<RootProps> = ({ store }) => {
+    PLAUSIBLE.enableAutoPageviews();
+
     return (
         <Provider store={store}>
             <MatomoProvider value={instance}>

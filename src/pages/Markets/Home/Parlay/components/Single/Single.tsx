@@ -63,6 +63,7 @@ import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { getCollateral, getStablecoinDecimals } from 'utils/collaterals';
 import { stableCoinParser } from 'utils/formatters/ethers';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -487,6 +488,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     dispatch(removeAll());
                     onBuySuccess && onBuySuccess();
 
+                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.singleBuy, {
+                        props: {
+                            value: Number(ammPosition.quote),
+                            collateral: getCollateral(networkId, selectedStableIndex),
+                            networkId,
+                        },
+                    });
                     trackEvent({
                         category: 'parlay-single',
                         action: `buy-with-${getCollateral(networkId, selectedStableIndex)}`,
