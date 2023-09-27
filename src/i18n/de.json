@@ -307,7 +307,8 @@
                 "strikeouts": "Durchgestrichen",
                 "passing yards": "Vorbeifahrende Höfe",
                 "home runs": "Home Runs",
-                "scoring touchdown": "Wer erzielt im Spiel einen Touchdown?"
+                "scoring touchdown": "Wer erzielt im Spiel einen Touchdown?",
+                "field goals made": "Field Goals gemacht"
             },
             "odd-tooltip": {
                 "scoring": {

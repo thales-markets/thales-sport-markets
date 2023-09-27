@@ -386,7 +386,8 @@
                 "passing yards": "Passing yards",
                 "receiving yards": "Receiving yards",
                 "passing touchdowns": "Passing touchdowns",
-                "scoring touchdown": "Who will score a touchdown in the game?"
+                "scoring touchdown": "Who will score a touchdown in the game?",
+                "field goals made": "Field goals made"
             },
             "odd-tooltip": {
                 "scoring": {

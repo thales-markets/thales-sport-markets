@@ -307,7 +307,8 @@
                 "passing yards": "Pasando yardas",
                 "passing touchdowns": "Pasando touchdowns",
                 "rushing yards": "Yardas apresuradas",
-                "scoring touchdown": "¿Quién anotará un touchdown en el juego?"
+                "scoring touchdown": "¿Quién anotará un touchdown en el juego?",
+                "field goals made": "Tiros de campo realizados"
             },
             "odd-tooltip": {
                 "scoring": {

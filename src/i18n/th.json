@@ -307,7 +307,8 @@
                 "passing yards": "ระยะที่ผ่าน",
                 "home runs": "โฮมรัน",
                 "rushing yards": "วิ่งหลา",
-                "scoring touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ในเกม?"
+                "scoring touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ในเกม?",
+                "field goals made": "ทำประตูในสนามได้"
             },
             "odd-tooltip": {
                 "scoring": {

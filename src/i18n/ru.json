@@ -307,7 +307,8 @@
                 "rushing yards": "Стремительные ярды",
                 "passing yards": "Пасовые ярды",
                 "passing touchdowns": "Проходящие тачдауны",
-                "scoring touchdown": "Кто забьет тачдаун в игре?"
+                "scoring touchdown": "Кто забьет тачдаун в игре?",
+                "field goals made": "Голы с игры забиты"
             },
             "odd-tooltip": {
                 "scoring": {

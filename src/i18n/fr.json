@@ -307,7 +307,8 @@
                 "home runs": "Les circuits",
                 "passing touchdowns": "Passer des touchés",
                 "strikeouts": "Barrages",
-                "scoring touchdown": "Qui marquera un touchdown dans le match ?"
+                "scoring touchdown": "Qui marquera un touchdown dans le match ?",
+                "field goals made": "Buts sur le terrain réussis"
             },
             "odd-tooltip": {
                 "scoring": {

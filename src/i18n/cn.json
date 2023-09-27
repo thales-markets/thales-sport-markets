@@ -307,7 +307,8 @@
                 "rushing yards": "冲码",
                 "passing touchdowns": "传球达阵",
                 "strikeouts": "三振",
-                "scoring touchdown": "谁将在比赛中达阵得分？"
+                "scoring touchdown": "谁将在比赛中达阵得分？",
+                "field goals made": "射门得分"
             },
             "odd-tooltip": {
                 "scoring": {
