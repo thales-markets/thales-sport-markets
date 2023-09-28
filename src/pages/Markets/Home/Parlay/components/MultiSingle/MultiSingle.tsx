@@ -485,13 +485,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                                     networkId
                                 );
 
-                                const newSkewData = await parlayMarketsAMMContract?.calculateSkewImpact(
-                                    marketsAddresses,
-                                    selectedPositions,
-                                    susdPaid
-                                );
-
-                                skewTotal += bigNumberFormatter(newSkewData || 0);
+                                skewTotal += bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0);
                                 totalTokenAmount += parlayAmmTotalBuyAmount;
 
                                 tokenAndBonusArr.push({
