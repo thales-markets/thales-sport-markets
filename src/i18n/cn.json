@@ -306,7 +306,9 @@
                 "passing yards": "传球码数",
                 "rushing yards": "冲码",
                 "passing touchdowns": "传球达阵",
-                "strikeouts": "三振"
+                "strikeouts": "三振",
+                "scoring touchdown": "谁将在比赛中达阵得分？",
+                "field goals made": "射门得分"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -348,7 +350,10 @@
                     "rushing-yards-under": "{{team}} 的冲球码数将少于 {{scoring}}",
                     "strikeouts-under": "{{team}} 的三振次数将少于 {{scoring}}",
                     "receiving-yards-under": "{{team}} 的接球码数将少于 {{scoring}}",
-                    "passing-yards-under": "{{team}} 的传球码数将少于 {{scoring}}"
+                    "passing-yards-under": "{{team}} 的传球码数将少于 {{scoring}}",
+                    "touchdowns": "{{team}} 将在比赛中达阵得分",
+                    "field-goals-made-under": "{{team}} 的射门得分将少于 {{scoring}}",
+                    "field-goals-made-over": "{{team}} 的射门数将多于 {{scoring}}"
                 }
             },
             "starts-in": "开始于",
@@ -363,7 +368,8 @@
             "race-winner": "优胜者",
             "see-more-markets": "查看玩家道具市场",
             "see-more-markets-mobile": "玩家道具",
-            "player-props": "玩家道具"
+            "player-props": "玩家道具",
+            "resolved": "解决"
         },
         "market-details": {
             "price": "价格",

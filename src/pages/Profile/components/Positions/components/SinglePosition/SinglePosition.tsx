@@ -40,6 +40,7 @@ import {
     getParentMarketAddress,
     getSpreadTotalText,
     getSymbolText,
+    isOneSidePlayerProps,
 } from 'utils/markets';
 
 import networkConnector from 'utils/networkConnector';
@@ -335,7 +336,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                     <PositionSymbol
                         symbolText={symbolText}
                         symbolUpperText={
-                            spreadTotalText
+                            spreadTotalText && !isOneSidePlayerProps(position.market.betType)
                                 ? {
                                       text: spreadTotalText,
                                       textStyle: {

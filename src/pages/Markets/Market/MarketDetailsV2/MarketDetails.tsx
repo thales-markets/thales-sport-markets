@@ -65,6 +65,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         passingTouchdownsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
         ),
+        oneSiderTouchdownsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS
+        ),
+        fieldGoalsMadeMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_FIELD_GOALS_MADE
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -366,6 +372,20 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions
                             markets={childMarkets.passingTouchdownsMarkets}
                             betType={BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.oneSiderTouchdownsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.oneSiderTouchdownsMarkets}
+                            betType={BetType.PLAYER_PROPS_TOUCHDOWNS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.fieldGoalsMadeMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.fieldGoalsMadeMarkets}
+                            betType={BetType.PLAYER_PROPS_FIELD_GOALS_MADE}
                             showOdds={showAMM}
                         />
                     )}

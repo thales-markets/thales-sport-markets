@@ -373,6 +373,7 @@
             "half": "Half",
             "round": "Round",
             "half-time": "Half-time",
+            "resolved": "Resolved",
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",
@@ -384,7 +385,9 @@
                 "rushing yards": "Rushing yards",
                 "passing yards": "Passing yards",
                 "receiving yards": "Receiving yards",
-                "passing touchdowns": "Passing touchdowns"
+                "passing touchdowns": "Passing touchdowns",
+                "scoring touchdown": "Who will score a touchdown in the game?",
+                "field goals made": "Field goals made"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -425,7 +428,10 @@
                     "receiving-yards-over": "{{team}} will have more receiving yards than {{scoring}}",
                     "receiving-yards-under": "{{team}} will have less receiving yards than {{scoring}}",
                     "passing-touchdowns-over": "{{team}} will have more passing touchdowns than {{scoring}}",
-                    "passing-touchdowns-under": "{{team}} will have less passing touchdowns than {{scoring}}"
+                    "passing-touchdowns-under": "{{team}} will have less passing touchdowns than {{scoring}}",
+                    "touchdowns": "{{team}} will score a touchdown in the game",
+                    "field-goals-made-over": "{{team}} will have more field goals made than {{scoring}}",
+                    "field-goals-made-under": "{{team}} will have less field goals made than {{scoring}}"
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },

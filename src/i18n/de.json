@@ -306,7 +306,9 @@
                 "receiving yards": "Empfangshöfe",
                 "strikeouts": "Durchgestrichen",
                 "passing yards": "Vorbeifahrende Höfe",
-                "home runs": "Home Runs"
+                "home runs": "Home Runs",
+                "scoring touchdown": "Wer erzielt im Spiel einen Touchdown?",
+                "field goals made": "Field Goals gemacht"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -348,7 +350,10 @@
                     "passing-touchdowns-under": "{{team}} wird weniger Pass-Touchdowns haben als {{scoring}}",
                     "passing-yards-under": "{{team}} wird weniger Passing Yards haben als {{scoring}}",
                     "strikeouts-under": "{{team}} wird weniger Strikeouts haben als {{scoring}}",
-                    "home-runs-over": "{{team}} wird mehr Homeruns haben als {{scoring}}"
+                    "home-runs-over": "{{team}} wird mehr Homeruns haben als {{scoring}}",
+                    "touchdowns": "{{team}} wird im Spiel einen Touchdown erzielen",
+                    "field-goals-made-over": "{{team}} wird mehr Field Goals erzielt haben als {{scoring}}",
+                    "field-goals-made-under": "{{team}} wird weniger Field Goals erzielen als {{scoring}}"
                 }
             },
             "starts-in": "Beginnt in",
@@ -363,7 +368,8 @@
             "no-win": "Jetzt in",
             "see-more-markets-mobile": "Spieler-Requisiten",
             "player-props": "Spieler-Requisiten",
-            "see-more-markets": "siehe Märkte für Spieler-Requisiten"
+            "see-more-markets": "siehe Märkte für Spieler-Requisiten",
+            "resolved": "Gelöst"
         },
         "market-details": {
             "price": "Preis",

@@ -556,6 +556,23 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: 'passing touchdowns',
     [BetType.PLAYER_PROPS_RUSHING_YARDS]: 'rushing yards',
     [BetType.PLAYER_PROPS_RECEIVING_YARDS]: 'receiving yards',
+    [BetType.PLAYER_PROPS_TOUCHDOWNS]: 'scoring touchdown',
+    [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: 'field goals made',
+};
+
+export const BetTypeTitleMap: Record<BetType, string> = {
+    [BetType.PLAYER_PROPS_TOUCHDOWNS]: 'Who will score a touchdown in the game?',
+    [BetType.WINNER]: '',
+    [BetType.SPREAD]: '',
+    [BetType.TOTAL]: '',
+    [BetType.DOUBLE_CHANCE]: '',
+    [BetType.PLAYER_PROPS_HOMERUNS]: '',
+    [BetType.PLAYER_PROPS_STRIKEOUTS]: '',
+    [BetType.PLAYER_PROPS_PASSING_YARDS]: '',
+    [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: '',
+    [BetType.PLAYER_PROPS_RUSHING_YARDS]: '',
+    [BetType.PLAYER_PROPS_RECEIVING_YARDS]: '',
+    [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: '',
 };
 
 export const SCORING_MAP: SportsMap = {

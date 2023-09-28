@@ -13,7 +13,13 @@ import SPAAnchor from 'components/SPAAnchor';
 import { VaultTrade, VaultTrades } from 'types/vault';
 import { Colors } from 'styles/common';
 import PositionSymbol from 'components/PositionSymbol';
-import { getOddTooltipText, getParentMarketAddress, getSpreadTotalText, getSymbolText } from 'utils/markets';
+import {
+    getOddTooltipText,
+    getParentMarketAddress,
+    getSpreadTotalText,
+    getSymbolText,
+    isOneSidePlayerProps,
+} from 'utils/markets';
 import { VaultTradeStatus } from 'enums/vault';
 
 type TradesTableProps = {
@@ -79,7 +85,8 @@ const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResultsMessage
                                 <PositionSymbol
                                     symbolText={symbolText}
                                     symbolUpperText={
-                                        spreadTotalText
+                                        spreadTotalText &&
+                                        !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType)
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {
