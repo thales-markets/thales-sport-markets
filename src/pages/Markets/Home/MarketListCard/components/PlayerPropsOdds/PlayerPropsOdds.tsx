@@ -152,9 +152,13 @@ const MarketContainer = styled.div`
     align-items: center;
     white-space: nowrap;
     gap: 5px;
+    flex-basis: 23%;
     :not(:last-of-type) {
         border-right: 3px solid ${(props) => props.theme.borderColor.primary};
         padding-right: 10px;
+    }
+    :last-of-type {
+        padding-right: 13px;
     }
 `;
 
