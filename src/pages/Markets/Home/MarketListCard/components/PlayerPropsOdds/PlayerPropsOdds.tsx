@@ -49,12 +49,12 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             result.push(lastValidChildMarkets.receivingYardsMarkets);
         }
 
-        if (lastValidChildMarkets.oneSiderTouchdownsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.oneSiderTouchdownsMarkets);
-        }
-
         if (lastValidChildMarkets.fieldGoalsMadeMarkets.length > 0) {
             result.push(lastValidChildMarkets.fieldGoalsMadeMarkets);
+        }
+
+        if (lastValidChildMarkets.oneSiderTouchdownsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.oneSiderTouchdownsMarkets);
         }
 
         return result;
