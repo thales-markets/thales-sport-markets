@@ -1,4 +1,4 @@
-import { BetTypeTitleMap } from 'constants/tags';
+import { BetTypeNameMap, BetTypeTitleMap } from 'constants/tags';
 import { BetType, Position } from 'enums/markets';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
@@ -65,7 +65,11 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             {marketsUI.map((ppMarkets, index) => {
                 return (
                     <SectionContainer key={index} dark={index % 2 === 0}>
-                        <SectionTitle>{BetTypeTitleMap[ppMarkets[0].betType as BetType]}</SectionTitle>
+                        <SectionTitle>
+                            {BetTypeTitleMap[ppMarkets[0].betType as BetType]
+                                ? BetTypeTitleMap[ppMarkets[0].betType as BetType]
+                                : BetTypeNameMap[ppMarkets[0].betType as BetType]}
+                        </SectionTitle>
                         <OddsWrapper>
                             {ppMarkets.map((ppMarket, ind) => {
                                 return (
