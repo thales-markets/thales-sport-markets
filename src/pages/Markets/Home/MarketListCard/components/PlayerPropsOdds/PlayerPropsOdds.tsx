@@ -77,7 +77,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
                                         <Player>{`${ppMarket.playerName} ${
                                             isOneSidePlayerProps(ppMarket.betType) ? '' : ppMarket.playerPropsLine
                                         }`}</Player>
-                                        <OddsContainer oneSidePlayerPropsLimit={isOneSidePlayerProps(ppMarket.betType)}>
+                                        <OddsContainer>
                                             <Odd
                                                 market={ppMarket}
                                                 position={Position.HOME}
@@ -133,7 +133,6 @@ const SectionTitle = styled.span`
     text-transform: uppercase;
     line-height: 12px;
     width: 100%;
-    //max-width: 150px;
 `;
 
 const Player = styled.span`
