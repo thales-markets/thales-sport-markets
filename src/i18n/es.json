@@ -306,7 +306,9 @@
                 "receiving yards": "Yardas receptoras",
                 "passing yards": "Pasando yardas",
                 "passing touchdowns": "Pasando touchdowns",
-                "rushing yards": "Yardas apresuradas"
+                "rushing yards": "Yardas apresuradas",
+                "scoring touchdown": "¿Quién anotará un touchdown en el juego?",
+                "field goals made": "Tiros de campo realizados"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -348,7 +350,10 @@
                     "rushing-yards-under": "{{team}} tendrá menos yardas terrestres que {{scoring}}",
                     "home-runs-over": "{{team}} tendrá más jonrones que {{scoring}}",
                     "passing-touchdowns-under": "{{team}} tendrá menos pases de touchdown que {{scoring}}",
-                    "strikeouts-under": "{{team}} tendrá menos ponches que {{scoring}}"
+                    "strikeouts-under": "{{team}} tendrá menos ponches que {{scoring}}",
+                    "touchdowns": "{{team}} anotará un touchdown en el juego",
+                    "field-goals-made-over": "{{team}} anotará más tiros de campo que {{scoring}}",
+                    "field-goals-made-under": "{{team}} anotará menos tiros de campo que {{scoring}}"
                 }
             },
             "starts-in": "Empieza en",
@@ -363,7 +368,8 @@
             "no-win": "Ahora en",
             "player-props": "Accesorios de jugador",
             "see-more-markets": "ver mercados de accesorios para jugadores",
-            "see-more-markets-mobile": "accesorios de jugador"
+            "see-more-markets-mobile": "accesorios de jugador",
+            "resolved": "Resuelto"
         },
         "market-details": {
             "price": "Precio",

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { AvailablePerPosition, SportMarketInfo } from 'types/markets';
-import { getVisibilityOfDrawOption } from 'utils/markets';
+import { getVisibilityOfDrawOption, isOneSidePlayerProps } from 'utils/markets';
 import PositionDetails from '../PositionDetails';
 import { Position } from 'enums/markets';
 
@@ -68,7 +68,7 @@ const MarketPositions: React.FC<MarketPositionsProps> = ({ market }) => {
                     position={Position.DRAW}
                 />
             )}
-            {!market.isOneSideMarket && (
+            {!market.isOneSideMarket && !isOneSidePlayerProps(market.betType) && (
                 <PositionDetails
                     market={market}
                     odd={market.awayOdds}

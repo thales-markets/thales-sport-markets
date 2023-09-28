@@ -28,7 +28,14 @@ import {
 import { addDaysToEnteredTimestamp } from './formatters/date';
 import { formatCurrency } from './formatters/number';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
-import { BetType, DoubleChanceMarketType, OddsType, PLAYER_PROPS_BET_TYPES, Position } from 'enums/markets';
+import {
+    BetType,
+    DoubleChanceMarketType,
+    ONE_SIDER_PLAYER_PROPS_BET_TYPES,
+    OddsType,
+    PLAYER_PROPS_BET_TYPES,
+    Position,
+} from 'enums/markets';
 import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
@@ -51,7 +58,7 @@ export const getSymbolText = (
         return combinedMarketPositionSymbol;
     }
 
-    if (market.isOneSideMarket) {
+    if (market.isOneSideMarket || isOneSidePlayerProps(market.betType)) {
         return 'YES';
     }
 
@@ -245,20 +252,22 @@ export const updateTotalQuoteAndAmountFromContract = (
         let totalAmount = parlay.totalAmount;
 
         let realQuote = 1;
-        parlay.marketQuotes.map((quote) => {
-            realQuote = realQuote * quote;
-        });
+        if (parlay.marketQuotes) {
+            parlay.marketQuotes.map((quote) => {
+                realQuote = realQuote * quote;
+            });
 
-        parlay.sportMarketsFromContract.forEach((address, index) => {
-            const market = parlay.sportMarkets.find((market) => market.address === address);
+            parlay.sportMarketsFromContract.forEach((address, index) => {
+                const market = parlay.sportMarkets.find((market) => market.address === address);
 
-            if (market && market.isCanceled) {
-                realQuote = realQuote / parlay.marketQuotes[index];
-                const maximumQuote = PARLAY_MAXIMUM_QUOTE;
-                totalQuote = realQuote < maximumQuote ? maximumQuote : realQuote;
-                totalAmount = totalAmount * parlay.marketQuotes[index];
-            }
-        });
+                if (market && market.isCanceled) {
+                    realQuote = realQuote / parlay.marketQuotes[index];
+                    const maximumQuote = PARLAY_MAXIMUM_QUOTE;
+                    totalQuote = realQuote < maximumQuote ? maximumQuote : realQuote;
+                    totalAmount = totalAmount * parlay.marketQuotes[index];
+                }
+            });
+        }
 
         return {
             ...parlay,
@@ -347,6 +356,12 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
                     translationKey = 'player-props.passing-touchdowns-over';
                     break;
+                case BetType.PLAYER_PROPS_TOUCHDOWNS:
+                    translationKey = 'player-props.touchdowns';
+                    break;
+                case BetType.PLAYER_PROPS_FIELD_GOALS_MADE:
+                    translationKey = 'player-props.field-goals-made-over';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -380,6 +395,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
                     translationKey = 'player-props.passing-touchdowns-under';
+                    break;
+                case BetType.PLAYER_PROPS_FIELD_GOALS_MADE:
+                    translationKey = 'player-props.field-goals-made-under';
                     break;
                 default:
                     translationKey = market.isOneSideMarket
@@ -516,7 +534,7 @@ export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: Pa
             positions.push(position);
             markets.push(market);
 
-            const quote = market.isCanceled ? 1 : parlayMarket.marketQuotes[index];
+            const quote = market.isCanceled || !parlayMarket.marketQuotes ? 1 : parlayMarket.marketQuotes[index];
             quotes.push(quote);
         }
     });
@@ -573,4 +591,8 @@ export const canPlayerBeAddedToParlay = (parlayPositions: ParlaysMarketPosition[
 
 export const isPlayerProps = (betType: BetType) => {
     return PLAYER_PROPS_BET_TYPES.includes(betType);
+};
+
+export const isOneSidePlayerProps = (betType: BetType) => {
+    return ONE_SIDER_PLAYER_PROPS_BET_TYPES.includes(betType);
 };

@@ -31,6 +31,7 @@ import {
     getSpreadAndTotalTextForCombinedMarket,
     getSpreadTotalText,
     getSymbolText,
+    isOneSidePlayerProps,
     isParlayOpen,
     isParlayWon,
     syncPositionsAndMarketsPerContractOrderInParlay,
@@ -497,7 +498,7 @@ export const getParlayRow = (
                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
                     symbolText={symbolText}
                     symbolUpperText={
-                        spreadTotalText
+                        spreadTotalText && !isOneSidePlayerProps(position.market.betType)
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {

@@ -306,7 +306,9 @@
                 "passing touchdowns": "การผ่านทัชดาวน์",
                 "passing yards": "ระยะที่ผ่าน",
                 "home runs": "โฮมรัน",
-                "rushing yards": "วิ่งหลา"
+                "rushing yards": "วิ่งหลา",
+                "scoring touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ในเกม?",
+                "field goals made": "ทำประตูในสนามได้"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -348,7 +350,10 @@
                     "receiving-yards-under": "{{team}} จะมีระยะรับน้อยกว่า {{scoring}}",
                     "receiving-yards-over": "{{team}} จะมีระยะรับมากกว่า {{scoring}}",
                     "rushing-yards-under": "{{team}} จะมีระยะวิ่งน้อยกว่า {{scoring}}",
-                    "passing-yards-under": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{scoring}}"
+                    "passing-yards-under": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{scoring}}",
+                    "touchdowns": "{{team}} จะทำคะแนนทัชดาวน์ในเกม",
+                    "field-goals-made-under": "{{team}} จะมีการยิงประตูน้อยกว่า {{scoring}}",
+                    "field-goals-made-over": "{{team}} จะมีการยิงประตูมากกว่า {{scoring}}"
                 }
             },
             "starts-in": "เริ่มเข้า",
@@ -363,7 +368,8 @@
             "no-win": "ไม่ชนะ",
             "player-props": "อุปกรณ์ประกอบฉากของผู้เล่น",
             "see-more-markets": "ดูตลาดอุปกรณ์ประกอบฉากของผู้เล่น",
-            "see-more-markets-mobile": "อุปกรณ์ประกอบฉากของผู้เล่น"
+            "see-more-markets-mobile": "อุปกรณ์ประกอบฉากของผู้เล่น",
+            "resolved": "แก้ไขแล้ว"
         },
         "market-details": {
             "price": "ราคา",

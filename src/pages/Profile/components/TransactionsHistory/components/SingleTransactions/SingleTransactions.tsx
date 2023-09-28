@@ -19,6 +19,7 @@ import {
     getOddTooltipText,
     getSpreadTotalText,
     getSymbolText,
+    isOneSidePlayerProps,
 } from 'utils/markets';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import ShareTicketModal, {
@@ -162,7 +163,8 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                         additionalStyle={{ width: 25, height: 25, fontSize: 11, borderWidth: 2 }}
                                         justifyContent="center"
                                         symbolUpperText={
-                                            spreadTotalText
+                                            spreadTotalText &&
+                                            !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType)
                                                 ? {
                                                       text: spreadTotalText,
                                                       textStyle: {

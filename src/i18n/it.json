@@ -306,7 +306,9 @@
                 "rushing yards": "Cantieri veloci",
                 "home runs": "Fuoricampo",
                 "passing yards": "Cantieri di passaggio",
-                "receiving yards": "Ricevere cantieri"
+                "receiving yards": "Ricevere cantieri",
+                "scoring touchdown": "Chi segnerà un touchdown nel gioco?",
+                "field goals made": "Field goal realizzati"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -348,7 +350,10 @@
                     "strikeouts-over": "{{team}} avrà più strikeout di {{scoring}}",
                     "passing-yards-under": "{{team}} avrà meno yard di passaggio di {{scoring}}",
                     "passing-touchdowns-under": "{{team}} avrà meno touchdown di passaggio rispetto a {{scoring}}",
-                    "home-runs-over": "{{team}} avrà più fuoricampo di {{scoring}}"
+                    "home-runs-over": "{{team}} avrà più fuoricampo di {{scoring}}",
+                    "touchdowns": "{{team}} segnerà un touchdown nel gioco",
+                    "field-goals-made-over": "{{team}} realizzerà più field goal di {{scoring}}",
+                    "field-goals-made-under": "{{team}} avrà meno field goal realizzati rispetto a {{scoring}}"
                 }
             },
             "starts-in": "Inizia tra",
@@ -363,7 +368,8 @@
             "no-win": "Ora in",
             "see-more-markets-mobile": "oggetti di scena del giocatore",
             "see-more-markets": "vedi i mercati degli oggetti di scena dei giocatori",
-            "player-props": "Oggetti di scena del giocatore"
+            "player-props": "Oggetti di scena del giocatore",
+            "resolved": "Risolto"
         },
         "market-details": {
             "price": "Price",

@@ -306,7 +306,9 @@
                 "strikeouts": "Вычеркивания",
                 "rushing yards": "Стремительные ярды",
                 "passing yards": "Пасовые ярды",
-                "passing touchdowns": "Проходящие тачдауны"
+                "passing touchdowns": "Проходящие тачдауны",
+                "scoring touchdown": "Кто забьет тачдаун в игре?",
+                "field goals made": "Голы с игры забиты"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -348,7 +350,10 @@
                     "passing-yards-under": "У {{team}} будет меньше пасовых ярдов, чем у {{scoring}}",
                     "home-runs-under": "У {{team}} будет меньше хоум-ранов, чем у {{scoring}}",
                     "passing-touchdowns-under": "У {{team}} будет меньше тачдаунов в пас, чем у {{scoring}}",
-                    "passing-touchdowns-over": "У команды {{team}} будет больше тачдаунов в пас, чем у команды {{scoring}}"
+                    "passing-touchdowns-over": "У команды {{team}} будет больше тачдаунов в пас, чем у команды {{scoring}}",
+                    "touchdowns": "{{team}} забьет тачдаун в игре",
+                    "field-goals-made-under": "У команды {{team}} будет забито меньше голов с игры, чем у команды {{scoring}}",
+                    "field-goals-made-over": "У команды {{team}} будет забито больше мячей с игры, чем у команды {{scoring}}"
                 }
             },
             "starts-in": "Начинается через",
@@ -363,7 +368,8 @@
             "race-winner": "Победитель",
             "see-more-markets": "посмотреть рынки реквизита игроков",
             "see-more-markets-mobile": "реквизит игрока",
-            "player-props": "Реквизит игрока"
+            "player-props": "Реквизит игрока",
+            "resolved": "Решено"
         },
         "market-details": {
             "price": "Price",
