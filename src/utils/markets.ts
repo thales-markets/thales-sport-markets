@@ -534,7 +534,7 @@ export const syncPositionsAndMarketsPerContractOrderInParlay = (parlayMarket: Pa
             positions.push(position);
             markets.push(market);
 
-            const quote = market.isCanceled ? 1 : parlayMarket.marketQuotes[index];
+            const quote = market.isCanceled || !!!parlayMarket.marketQuotes ? 1 : parlayMarket.marketQuotes[index];
             quotes.push(quote);
         }
     });
