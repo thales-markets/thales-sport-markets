@@ -454,7 +454,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
                 for (let i = 0; i < combinedMarkets?.length; i++) {
                     try {
                         const marketsAddresses = combinedMarkets[i].markets.map((market) => market.address);
-                        const selectedPositions = combinedMarkets[i].markets.map((market) => market.position);
 
                         const { parlayMarketsAMMContract } = networkConnector;
                         const amountForCombinedPosition = multiSingleAmounts.find(
