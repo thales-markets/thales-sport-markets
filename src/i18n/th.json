@@ -351,7 +351,9 @@
                     "receiving-yards-over": "{{team}} จะมีระยะรับมากกว่า {{scoring}}",
                     "rushing-yards-under": "{{team}} จะมีระยะวิ่งน้อยกว่า {{scoring}}",
                     "passing-yards-under": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{scoring}}",
-                    "touchdowns": "{{team}} จะทำคะแนนทัชดาวน์ในเกม"
+                    "touchdowns": "{{team}} จะทำคะแนนทัชดาวน์ในเกม",
+                    "field-goals-made-under": "{{team}} จะมีการยิงประตูน้อยกว่า {{scoring}}",
+                    "field-goals-made-over": "{{team}} จะมีการยิงประตูมากกว่า {{scoring}}"
                 }
             },
             "starts-in": "เริ่มเข้า",

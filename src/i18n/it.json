@@ -351,7 +351,9 @@
                     "passing-yards-under": "{{team}} avrà meno yard di passaggio di {{scoring}}",
                     "passing-touchdowns-under": "{{team}} avrà meno touchdown di passaggio rispetto a {{scoring}}",
                     "home-runs-over": "{{team}} avrà più fuoricampo di {{scoring}}",
-                    "touchdowns": "{{team}} segnerà un touchdown nel gioco"
+                    "touchdowns": "{{team}} segnerà un touchdown nel gioco",
+                    "field-goals-made-over": "{{team}} realizzerà più field goal di {{scoring}}",
+                    "field-goals-made-under": "{{team}} avrà meno field goal realizzati rispetto a {{scoring}}"
                 }
             },
             "starts-in": "Inizia tra",

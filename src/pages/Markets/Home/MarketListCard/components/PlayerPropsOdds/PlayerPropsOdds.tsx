@@ -26,6 +26,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             passingTouchdownsMarkets: markets.filter(
                 (market) => market.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
             ),
+            fieldGoalsMadeMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_FIELD_GOALS_MADE),
         };
 
         const result = [];
@@ -50,6 +51,10 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
 
         if (lastValidChildMarkets.oneSiderTouchdownsMarkets.length > 0) {
             result.push(lastValidChildMarkets.oneSiderTouchdownsMarkets);
+        }
+
+        if (lastValidChildMarkets.fieldGoalsMadeMarkets.length > 0) {
+            result.push(lastValidChildMarkets.fieldGoalsMadeMarkets);
         }
 
         return result;

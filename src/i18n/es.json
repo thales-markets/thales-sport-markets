@@ -351,7 +351,9 @@
                     "home-runs-over": "{{team}} tendrá más jonrones que {{scoring}}",
                     "passing-touchdowns-under": "{{team}} tendrá menos pases de touchdown que {{scoring}}",
                     "strikeouts-under": "{{team}} tendrá menos ponches que {{scoring}}",
-                    "touchdowns": "{{team}} anotará un touchdown en el juego"
+                    "touchdowns": "{{team}} anotará un touchdown en el juego",
+                    "field-goals-made-over": "{{team}} anotará más tiros de campo que {{scoring}}",
+                    "field-goals-made-under": "{{team}} anotará menos tiros de campo que {{scoring}}"
                 }
             },
             "starts-in": "Empieza en",

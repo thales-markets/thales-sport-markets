@@ -108,6 +108,7 @@ export type SportMarketChildMarkets = {
     receivingYardsMarkets: SportMarketInfo[];
     passingTouchdownsMarkets: SportMarketInfo[];
     oneSiderTouchdownsMarkets: SportMarketInfo[];
+    fieldGoalsMadeMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {

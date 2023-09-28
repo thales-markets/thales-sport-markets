@@ -359,6 +359,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.PLAYER_PROPS_TOUCHDOWNS:
                     translationKey = 'player-props.touchdowns';
                     break;
+                case BetType.PLAYER_PROPS_FIELD_GOALS_MADE:
+                    translationKey = 'player-props.field-goals-made-over';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -392,6 +395,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS:
                     translationKey = 'player-props.passing-touchdowns-under';
+                    break;
+                case BetType.PLAYER_PROPS_FIELD_GOALS_MADE:
+                    translationKey = 'player-props.field-goals-made-under';
                     break;
                 default:
                     translationKey = market.isOneSideMarket
