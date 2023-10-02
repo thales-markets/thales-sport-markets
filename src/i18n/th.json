@@ -353,7 +353,10 @@
                     "passing-yards-under": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{scoring}}",
                     "touchdowns": "{{team}} จะทำคะแนนทัชดาวน์ในเกม",
                     "field-goals-made-under": "{{team}} จะมีการยิงประตูน้อยกว่า {{scoring}}",
-                    "field-goals-made-over": "{{team}} จะมีการยิงประตูมากกว่า {{scoring}}"
+                    "field-goals-made-over": "{{team}} จะมีการยิงประตูมากกว่า {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "การรับ การวิ่ง การเตะเตะกลับ ทัชดาวน์การป้องกันและการสกัดกั้นจะถูกนับรวมในผลการแข่งขัน"
+                    }
                 }
             },
             "starts-in": "เริ่มเข้า",

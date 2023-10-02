@@ -353,7 +353,10 @@
                     "home-runs-over": "{{team}} avrà più fuoricampo di {{scoring}}",
                     "touchdowns": "{{team}} segnerà un touchdown nel gioco",
                     "field-goals-made-over": "{{team}} realizzerà più field goal di {{scoring}}",
-                    "field-goals-made-under": "{{team}} avrà meno field goal realizzati rispetto a {{scoring}}"
+                    "field-goals-made-under": "{{team}} avrà meno field goal realizzati rispetto a {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato"
+                    }
                 }
             },
             "starts-in": "Inizia tra",

@@ -353,7 +353,10 @@
                     "passing-yards-under": "{{team}} 的传球码数将少于 {{scoring}}",
                     "touchdowns": "{{team}} 将在比赛中达阵得分",
                     "field-goals-made-under": "{{team}} 的射门得分将少于 {{scoring}}",
-                    "field-goals-made-over": "{{team}} 的射门数将多于 {{scoring}}"
+                    "field-goals-made-over": "{{team}} 的射门数将多于 {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "接球、冲球、弃踢回攻、踢回攻、防守和拦截达阵均计入结果"
+                    }
                 }
             },
             "starts-in": "开始于",
