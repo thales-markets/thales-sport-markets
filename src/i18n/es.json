@@ -353,7 +353,10 @@
                     "strikeouts-under": "{{team}} tendrá menos ponches que {{scoring}}",
                     "touchdowns": "{{team}} anotará un touchdown en el juego",
                     "field-goals-made-over": "{{team}} anotará más tiros de campo que {{scoring}}",
-                    "field-goals-made-under": "{{team}} anotará menos tiros de campo que {{scoring}}"
+                    "field-goals-made-under": "{{team}} anotará menos tiros de campo que {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado."
+                    }
                 }
             },
             "starts-in": "Empieza en",
