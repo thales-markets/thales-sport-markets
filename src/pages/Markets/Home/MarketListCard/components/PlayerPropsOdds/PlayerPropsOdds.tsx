@@ -6,12 +6,15 @@ import { SportMarketChildMarkets, SportMarketInfo } from 'types/markets';
 import { isOneSidePlayerProps } from 'utils/markets';
 import Odd from '../Odd';
 import { Container, OddsContainer } from './styled-components';
+import Tooltip from 'components/Tooltip';
+import { useTranslation } from 'react-i18next';
 
 type PlayerPropsOdds = {
     markets: SportMarketInfo[];
 };
 
 const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
+    const { t } = useTranslation();
     const marketsUI: SportMarketInfo[][] = useMemo(() => {
         const lastValidChildMarkets: SportMarketChildMarkets = {
             spreadMarkets: [],
@@ -69,6 +72,21 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
                             {BetTypeTitleMap[ppMarkets[0].betType as BetType]
                                 ? BetTypeTitleMap[ppMarkets[0].betType as BetType]
                                 : BetTypeNameMap[ppMarkets[0].betType as BetType]}
+                            {isOneSidePlayerProps(ppMarkets[0].betType) && (
+                                <Tooltip
+                                    overlay={
+                                        <>
+                                            {t(
+                                                `markets.market-card.odd-tooltip.player-props.info.${
+                                                    BetTypeNameMap[ppMarkets[0].betType as BetType]
+                                                }`
+                                            )}
+                                        </>
+                                    }
+                                    iconFontSize={13}
+                                    marginLeft={3}
+                                />
+                            )}
                         </SectionTitle>
                         <OddsWrapper>
                             {ppMarkets.map((ppMarket, ind) => {

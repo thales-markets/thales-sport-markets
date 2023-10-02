@@ -431,7 +431,10 @@
                     "passing-touchdowns-under": "{{team}} will have less passing touchdowns than {{scoring}}",
                     "touchdowns": "{{team}} will score a touchdown in the game",
                     "field-goals-made-over": "{{team}} will have more field goals made than {{scoring}}",
-                    "field-goals-made-under": "{{team}} will have less field goals made than {{scoring}}"
+                    "field-goals-made-under": "{{team}} will have less field goals made than {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
+                    }
                 },
                 "bonus": "{{bonus}} added bonus on win!"
             },

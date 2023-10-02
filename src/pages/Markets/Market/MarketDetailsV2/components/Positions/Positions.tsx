@@ -8,6 +8,7 @@ import MarketPositions from '../MarketPositions';
 import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
 import { BetType } from 'enums/markets';
 import styled from 'styled-components';
+import Tooltip from 'components/Tooltip';
 
 type PositionsProps = {
     markets: SportMarketInfo[];
@@ -44,7 +45,24 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
     return showContainer ? (
         <Container onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')}>
             <Header>
-                <Title isExpanded={isExpanded}>{t(`markets.market-card.bet-type.${BetTypeNameMap[betType]}`)}</Title>
+                <Title isExpanded={isExpanded}>
+                    {t(`markets.market-card.bet-type.${BetTypeNameMap[betType]}`)}
+                    {isOneSidePlayerProps(markets[0].betType) && (
+                        <Tooltip
+                            overlay={
+                                <>
+                                    {t(
+                                        `markets.market-card.odd-tooltip.player-props.info.${
+                                            BetTypeNameMap[markets[0].betType as BetType]
+                                        }`
+                                    )}
+                                </>
+                            }
+                            iconFontSize={13}
+                            marginLeft={3}
+                        />
+                    )}
+                </Title>
             </Header>
             <Arrow
                 className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}

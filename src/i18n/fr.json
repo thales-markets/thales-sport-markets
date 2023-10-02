@@ -353,7 +353,10 @@
                     "rushing-yards-under": "{{team}} aura moins de yards au sol que {{scoring}}",
                     "touchdowns": "{{team}} marquera un touchdown dans le match",
                     "field-goals-made-over": "{{team}} aura plus de buts sur le terrain que {{scoring}}",
-                    "field-goals-made-under": "{{team}} aura moins de buts sur le terrain que {{scoring}}"
+                    "field-goals-made-under": "{{team}} aura moins de buts sur le terrain que {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
+                    }
                 }
             },
             "starts-in": "Commence dans",
