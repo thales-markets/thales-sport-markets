@@ -4,6 +4,8 @@ import { Network } from 'enums/network';
 import { getCollateral, getCollateralAddress, getDefaultCollateral } from './collaterals';
 import { isMultiCollateralSupportedForNetwork } from './network';
 import { Position } from 'enums/markets';
+import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
+import { StablecoinKey } from '../types/tokens';
 
 export const getParlayAMMTransaction: any = async (
     isVoucherSelected: boolean,
