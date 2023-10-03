@@ -13,13 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import {
-    getParlayPayment,
-    removeAll,
-    setPaymentAmountToBuy,
-    setPaymentIsVoucherSelected,
-    setPaymentSelectedStableIndex,
-} from 'redux/modules/parlay';
+import { getParlayPayment, removeAll, setPaymentAmountToBuy, setPaymentIsVoucherSelected } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -719,12 +713,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     </SummaryValue>
                 </RowContainer>
             </RowSummary>
-            <Payment
-                defaultSelectedStableIndex={selectedStableIndex}
-                defaultIsVoucherSelected={isVoucherSelected}
-                onChangeCollateral={(index) => dispatch(setPaymentSelectedStableIndex(index))}
-                setIsVoucherSelectedProp={(flag) => dispatch(setPaymentIsVoucherSelected(flag))}
-            />
+            <Payment />
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>

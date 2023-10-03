@@ -19,7 +19,6 @@ import {
     removeFromParlay,
     getMultiSingle,
     getParlayPayment,
-    setPaymentSelectedStableIndex,
     setPaymentIsVoucherSelected,
     setPaymentAmountToBuy,
 } from 'redux/modules/parlay';
@@ -810,12 +809,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                     </SummaryValue>
                 </RowContainer>
             </RowSummary>
-            <Payment
-                defaultSelectedStableIndex={selectedStableIndex}
-                defaultIsVoucherSelected={isVoucherSelected}
-                onChangeCollateral={(index) => dispatch(setPaymentSelectedStableIndex(index))}
-                setIsVoucherSelectedProp={(flag) => dispatch(setPaymentIsVoucherSelected(flag))}
-            />
+            <Payment />
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>

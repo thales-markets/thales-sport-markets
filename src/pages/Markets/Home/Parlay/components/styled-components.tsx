@@ -195,3 +195,32 @@ export const defaultButtonProps = {
     margin: '10px 0 0 0',
     padding: '5px 30px',
 };
+
+export const CheckboxContainer = styled.div`
+    margin-left: auto;
+    label {
+        color: ${(props) => props.theme.textColor.secondary};
+        font-size: 12px;
+        line-height: 13px;
+        font-weight: 600;
+        letter-spacing: 0.035em;
+        text-transform: uppercase;
+        padding-top: 15px;
+        padding-left: 15px;
+        input:checked ~ .checkmark {
+            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        }
+    }
+    .checkmark {
+        height: 15px;
+        width: 15px;
+        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        :after {
+            left: 3px;
+            width: 3px;
+            height: 8px;
+            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+            border-width: 0 2px 2px 0;
+        }
+    }
+`;

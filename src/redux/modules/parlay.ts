@@ -25,7 +25,8 @@ const getDefaultPayment = (): ParlayPayment => {
 
     return {
         selectedStableIndex: lsSelectedStableIndex !== undefined ? (lsSelectedStableIndex as number) : 0,
-        isVoucherSelected: undefined,
+        isVoucherAvailable: false,
+        isVoucherSelected: false,
         amountToBuy: '',
     };
 };
@@ -303,6 +304,9 @@ const parlaySlice = createSlice({
         setPaymentIsVoucherSelected: (state, action: PayloadAction<boolean>) => {
             state.payment = { ...state.payment, isVoucherSelected: action.payload };
         },
+        setPaymentIsVoucherAvailable: (state, action: PayloadAction<boolean>) => {
+            state.payment = { ...state.payment, isVoucherAvailable: action.payload };
+        },
         setPaymentAmountToBuy: (state, action: PayloadAction<number | string>) => {
             state.payment = { ...state.payment, amountToBuy: action.payload };
         },
@@ -328,6 +332,7 @@ export const {
     setIsMultiSingle,
     setPaymentSelectedStableIndex,
     setPaymentIsVoucherSelected,
+    setPaymentIsVoucherAvailable,
     setPaymentAmountToBuy,
     resetParlayError,
     setSGPFees,

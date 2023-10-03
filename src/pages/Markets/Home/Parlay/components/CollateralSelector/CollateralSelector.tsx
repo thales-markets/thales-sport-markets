@@ -2,7 +2,7 @@ import { ReactComponent as OvertimeVoucherIcon } from 'assets/images/overtime-vo
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -11,29 +11,24 @@ import { Coins, OvertimeVoucher } from 'types/tokens';
 import { getCollateralIndexForNetwork, getStableIcon } from 'utils/collaterals';
 import { formatCurrency } from 'utils/formatters/number';
 import { getIsMultiCollateralSupported } from 'utils/network';
+import { getParlayPayment, setPaymentIsVoucherSelected, setPaymentSelectedStableIndex } from 'redux/modules/parlay';
 
 type CollateralSelectorProps = {
     collateralArray: Array<string>;
-    selectedItem: number;
-    onChangeCollateral: (index: number) => void;
     overtimeVoucher?: OvertimeVoucher;
-    isVoucherSelected: boolean;
-    setIsVoucherSelected: any;
 };
 
-const CollateralSelector: React.FC<CollateralSelectorProps> = ({
-    collateralArray,
-    selectedItem,
-    onChangeCollateral,
-    overtimeVoucher,
-    isVoucherSelected,
-    setIsVoucherSelected,
-}) => {
+const CollateralSelector: React.FC<CollateralSelectorProps> = ({ collateralArray, overtimeVoucher }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const parlayPayment = useSelector(getParlayPayment);
+
+    const isVoucherSelected = parlayPayment.isVoucherSelected;
+    const selectedStableIndex = parlayPayment.selectedStableIndex;
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -56,8 +51,8 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                         <CollateralIcon>
                             <StyledOvertimeVoucherIcon
                                 onClick={() => {
-                                    setIsVoucherSelected(true);
-                                    onChangeCollateral(0);
+                                    dispatch(setPaymentIsVoucherSelected(true));
+                                    dispatch(setPaymentSelectedStableIndex(0));
                                 }}
                                 $isActive={isVoucherSelected}
                             />
@@ -76,26 +71,26 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                 key={index + 'container'}
                                 hasMoreThenTwoCollaterals={isMultiColletaralSupported}
                             >
-                                <CollateralName selected={selectedItem == index && !isVoucherSelected}>
+                                <CollateralName selected={selectedStableIndex == index && !isVoucherSelected}>
                                     {item}
                                 </CollateralName>
                                 <CollateralIcon key={index}>
                                     <AssetIcon
                                         key={index}
                                         onClick={() => {
-                                            setIsVoucherSelected(false);
-                                            onChangeCollateral(index);
+                                            dispatch(setPaymentIsVoucherSelected(false));
+                                            dispatch(setPaymentSelectedStableIndex(index));
                                         }}
                                         style={{
-                                            opacity: selectedItem == index && !isVoucherSelected ? '1' : '0.5',
+                                            opacity: selectedStableIndex == index && !isVoucherSelected ? '1' : '0.5',
                                             marginRight: 7,
                                             width: '25px',
                                             height: '25px',
                                         }}
                                     />
                                 </CollateralIcon>
-                                <CollateralBalance selected={selectedItem == index && !isVoucherSelected}>
-                                    {formatCurrency(stableBalances ? stableBalances[item as Coins] : 0, 0)}
+                                <CollateralBalance selected={selectedStableIndex == index && !isVoucherSelected}>
+                                    {formatCurrency(stableBalances ? stableBalances[item as Coins] : 0)}
                                 </CollateralBalance>
                             </CollateralContainer>
                         );

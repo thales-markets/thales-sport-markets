@@ -61,8 +61,7 @@ export const getDefaultCollateralIndexForNetworkId = (networkId: Network): numbe
     return networkId === Network.ArbitrumOne ? 0 : (lsSelectedStableIndex as number) || 0;
 };
 
-export const getIsMultiCollateralSupported = (networkId: Network, includeAdditional?: boolean): boolean =>
-    getCollaterals(networkId, includeAdditional).length > 1;
+export const getIsMultiCollateralSupported = (networkId: Network): boolean => getCollaterals(networkId).length > 1;
 
 export const changeNetwork = async (network: NetworkParams, callback?: VoidFunction): Promise<void> => {
     if (hasEthereumInjected()) {

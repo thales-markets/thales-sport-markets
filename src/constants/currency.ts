@@ -36,6 +36,11 @@ export const currencyKeyToAssetIconMap = {
     [CRYPTO_CURRENCY_MAP.DAI]: DAIIcon,
     [CRYPTO_CURRENCY_MAP.USDC]: USDCIcon,
     [CRYPTO_CURRENCY_MAP.USDT]: USDTIcon,
+    [CRYPTO_CURRENCY_MAP.USDCe]: USDTIcon,
+    [CRYPTO_CURRENCY_MAP.OP]: USDTIcon,
+    [CRYPTO_CURRENCY_MAP.ARB]: USDTIcon,
+    [CRYPTO_CURRENCY_MAP.WETH]: USDTIcon,
+    [CRYPTO_CURRENCY_MAP.ETH]: USDTIcon,
 };
 
 export const COLLATERALS: Record<Network, Coins[]> = {

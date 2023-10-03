@@ -19,6 +19,7 @@ import {
     getParlayPayment,
     removeAll,
     setPaymentAmountToBuy,
+    setPaymentIsVoucherAvailable,
     setPaymentIsVoucherSelected,
     setPaymentSelectedStableIndex,
 } from 'redux/modules/parlay';
@@ -48,6 +49,7 @@ import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyContainer,
+    CheckboxContainer,
     InfoContainer,
     InfoLabel,
     InfoValue,
@@ -72,6 +74,7 @@ import { coinParser } from 'utils/formatters/ethers';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import CollateralSelector from '../../../../../../components/CollateralSelector';
 import useExchangeRatesQuery, { Rates } from '../../../../../../queries/rates/useExchangeRatesQuery';
+import Checkbox from '../../../../../../components/fields/Checkbox';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -94,6 +97,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const parlayPayment = useSelector(getParlayPayment);
     const selectedStableIndex = parlayPayment.selectedStableIndex;
     const isVoucherSelected = parlayPayment.isVoucherSelected;
+    const isVoucherAvailable = parlayPayment.isVoucherAvailable;
     const usdAmountValue = parlayPayment.amountToBuy;
 
     const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -169,16 +173,15 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
-            if (isVoucherSelected === undefined) {
-                dispatch(setPaymentIsVoucherSelected(true));
-            }
+            dispatch(setPaymentIsVoucherAvailable(true));
+            dispatch(setPaymentIsVoucherSelected(true));
+
             return overtimeVoucherQuery.data;
         }
-        if (isVoucherSelected !== undefined) {
-            dispatch(setPaymentIsVoucherSelected(false));
-        }
+        dispatch(setPaymentIsVoucherAvailable(false));
+        dispatch(setPaymentIsVoucherSelected(false));
         return undefined;
-    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, isVoucherSelected, dispatch]);
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, dispatch]);
 
     const paymentTokenBalance: number = useMemo(() => {
         if (overtimeVoucher && isVoucherSelected) {
@@ -669,12 +672,25 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     </SummaryValue>
                 </RowContainer>
             </RowSummary>
-            <Payment
-                defaultSelectedStableIndex={selectedStableIndex}
-                defaultIsVoucherSelected={isVoucherSelected}
-                onChangeCollateral={(index) => dispatch(setPaymentSelectedStableIndex(index))}
-                setIsVoucherSelectedProp={(flag) => dispatch(setPaymentIsVoucherSelected(flag))}
-            />
+            <Payment />
+            {isVoucherAvailable && (
+                <RowSummary>
+                    <RowContainer>
+                        <SummaryLabel>{'PAY WITH VOUCHER'}:</SummaryLabel>
+                        <CheckboxContainer>
+                            <Checkbox
+                                // disabled={isAllowing}
+                                checked={isVoucherSelected}
+                                value={isVoucherSelected.toString()}
+                                onChange={(e: any) => {
+                                    dispatch(setPaymentIsVoucherSelected(e.target.checked || false));
+                                    dispatch(setPaymentSelectedStableIndex(0));
+                                }}
+                            />
+                        </CheckboxContainer>
+                    </RowContainer>
+                </RowSummary>
+            )}
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
@@ -697,10 +713,10 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                         borderColor={theme.input.borderColor.tertiary}
                         currencyComponent={
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId, true)}
+                                collateralArray={getCollaterals(networkId)}
                                 selectedItem={selectedStableIndex}
                                 onChangeCollateral={() => {}}
-                                // disabled={isSubmitting}
+                                disabled={isVoucherSelected}
                                 isDetailedView
                                 collateralBalances={multipleCollateralBalances.data}
                                 exchangeRates={exchangeRates}
