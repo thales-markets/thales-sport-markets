@@ -1,4 +1,9 @@
-import { ADDITIONAL_COLLATERALS, COLLATERAL_DECIMALS, currencyKeyToAssetIconMap } from 'constants/currency';
+import {
+    ADDITIONAL_COLLATERALS,
+    COLLATERAL_DECIMALS,
+    STABLE_COINS,
+    currencyKeyToAssetIconMap,
+} from 'constants/currency';
 import { COLLATERALS } from 'constants/currency';
 import { Network } from 'enums/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
@@ -22,3 +27,7 @@ export const getCollateralAddress = (networkId: Network, index: number, includeA
 
 export const getCollateralDecimals = (networkId: Network, index: number, includeAdditional?: boolean) =>
     COLLATERAL_DECIMALS[getCollateral(networkId, index, includeAdditional)];
+
+export const isStableCurrency = (currencyKey: Coins) => {
+    return STABLE_COINS.includes(currencyKey);
+};

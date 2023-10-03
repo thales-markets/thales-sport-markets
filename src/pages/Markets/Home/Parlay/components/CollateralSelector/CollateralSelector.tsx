@@ -35,15 +35,15 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
-    const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
 
     const isMultiColletaralSupported = getIsMultiCollateralSupported(networkId);
 
     const stableBalances = useMemo(() => {
-        return multipleStableBalances.data;
-    }, [multipleStableBalances.data]);
+        return multipleCollateralBalances.data;
+    }, [multipleCollateralBalances.data]);
 
     return (
         <Container>

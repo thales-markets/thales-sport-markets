@@ -298,6 +298,13 @@ const parlaySlice = createSlice({
         },
         setPaymentSelectedStableIndex: (state, action: PayloadAction<number>) => {
             state.payment = { ...state.payment, selectedStableIndex: action.payload };
+            localStore.set(LOCAL_STORAGE_KEYS.STABLE_INDEX, action.payload);
+        },
+        setPaymentIsVoucherSelected: (state, action: PayloadAction<boolean>) => {
+            state.payment = { ...state.payment, isVoucherSelected: action.payload };
+        },
+        setPaymentAmountToBuy: (state, action: PayloadAction<number | string>) => {
+            state.payment = { ...state.payment, amountToBuy: action.payload };
         },
         resetParlayError: (state) => {
             state.error = getDefaultError();
@@ -320,6 +327,8 @@ export const {
     setMultiSingle,
     setIsMultiSingle,
     setPaymentSelectedStableIndex,
+    setPaymentIsVoucherSelected,
+    setPaymentAmountToBuy,
     resetParlayError,
     setSGPFees,
 } = parlaySlice.actions;

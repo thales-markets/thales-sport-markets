@@ -15,6 +15,7 @@ import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContract
 import parlayMarketDataContract from 'utils/contracts/parlayMarketDataContract';
 import parlayAMMLiquidityPoolContract from 'utils/contracts/parlayAMMLiquidityPoolContract';
 import parlayAMMLiquidityPoolDataContract from 'utils/contracts/parlayAMMLiquidityPoolDataContract';
+import priceFeedContract from './contracts/priceFeedContract';
 import { Network } from 'enums/network';
 import { Coins } from 'types/tokens';
 
@@ -42,6 +43,7 @@ type NetworkConnector = {
     parlayMarketDataContract?: ethers.Contract;
     parlayAMMLiquidityPoolContract?: ethers.Contract;
     parlayAMMLiquidityPoolDataContract?: ethers.Contract;
+    priceFeedContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -68,6 +70,7 @@ const networkConnector: NetworkConnector = {
             parlayAMMLiquidityPoolDataContract,
             networkSettings
         );
+        this.priceFeedContract = initializeContract(priceFeedContract, networkSettings);
 
         this.multipleCollateral = {
             sUSD: initializeContract(multipleCollateral.sUSD, networkSettings),

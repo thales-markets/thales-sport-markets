@@ -13,12 +13,18 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { removeAll, setPayment } from 'redux/modules/parlay';
+import {
+    getParlayPayment,
+    removeAll,
+    setPaymentAmountToBuy,
+    setPaymentIsVoucherSelected,
+    setPaymentSelectedStableIndex,
+} from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
-import { ParlayPayment, ParlaysMarket } from 'types/markets';
+import { ParlaysMarket } from 'types/markets';
 import { bigNumberFormatter, coinParser } from 'utils/formatters/ethers';
 import {
     countDecimals,
@@ -65,7 +71,6 @@ import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type TicketProps = {
     markets: ParlaysMarket[];
-    parlayPayment: ParlayPayment;
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
     onBuySuccess?: () => void;
 };
@@ -75,7 +80,7 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOfLiquidity, onBuySuccess }) => {
+const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -88,10 +93,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
+    const parlayPayment = useSelector(getParlayPayment);
+    const selectedStableIndex = parlayPayment.selectedStableIndex;
+    const isVoucherSelected = parlayPayment.isVoucherSelected;
+    const usdAmountValue = parlayPayment.amountToBuy;
 
-    const [selectedStableIndex, setSelectedStableIndex] = useState(parlayPayment.selectedStableIndex);
-    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
-    const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
     const [minUsdAmountValue, setMinUsdAmountValue] = useState<number>(0);
     const [totalQuote, setTotalQuote] = useState(0);
     const [totalBonusPercentageDec, setTotalBonusPercentageDec] = useState(0);
@@ -150,7 +156,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     const parlayAmmDataQuery = useParlayAmmDataQuery(networkId, {
         enabled: isAppReady,
     });
-    const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
@@ -166,29 +172,29 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
-            if (parlayPayment.isVoucherSelected === undefined) {
-                setIsVoucherSelected(true);
+            if (isVoucherSelected === undefined) {
+                dispatch(setPaymentIsVoucherSelected(true));
             }
             return overtimeVoucherQuery.data;
         }
-        if (parlayPayment.isVoucherSelected !== undefined) {
-            setIsVoucherSelected(false);
+        if (isVoucherSelected !== undefined) {
+            dispatch(setPaymentIsVoucherSelected(false));
         }
         return undefined;
-    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, parlayPayment.isVoucherSelected]);
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, isVoucherSelected, dispatch]);
 
     const paymentTokenBalance: number = useMemo(() => {
         if (overtimeVoucher && isVoucherSelected) {
             return overtimeVoucher.remainingAmount;
         }
-        if (multipleStableBalances.data && multipleStableBalances.isSuccess) {
-            return multipleStableBalances.data[getCollateral(networkId, selectedStableIndex)];
+        if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
+            return multipleCollateralBalances.data[getCollateral(networkId, selectedStableIndex)];
         }
         return 0;
     }, [
         networkId,
-        multipleStableBalances.data,
-        multipleStableBalances.isSuccess,
+        multipleCollateralBalances.data,
+        multipleCollateralBalances.isSuccess,
         selectedStableIndex,
         overtimeVoucher,
         isVoucherSelected,
@@ -197,11 +203,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     useEffect(() => {
         setMinUsdAmountValue(parlayAmmData?.minUsdAmount || 0);
     }, [parlayAmmData?.minUsdAmount]);
-
-    useEffect(() => {
-        // Used for transition between Ticket and Single to save payment selection and amount
-        dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
-    }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
 
     // Clear Parlay when network is changed
     const isMounted = useRef(false);
@@ -643,7 +644,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
     }, [isVoucherSelected, setTooltipTextMessageUsdAmount, usdAmountValue, finalQuotes]);
 
     const setUsdAmount = (value: string | number) => {
-        setUsdAmountValue(value);
+        dispatch(setPaymentAmountToBuy(value));
         setTooltipTextMessageUsdAmount(value, finalQuotes);
     };
 
@@ -721,8 +722,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
             <Payment
                 defaultSelectedStableIndex={selectedStableIndex}
                 defaultIsVoucherSelected={isVoucherSelected}
-                onChangeCollateral={(index) => setSelectedStableIndex(index)}
-                setIsVoucherSelectedProp={setIsVoucherSelected}
+                onChangeCollateral={(index) => dispatch(setPaymentSelectedStableIndex(index))}
+                setIsVoucherSelectedProp={(flag) => dispatch(setPaymentIsVoucherSelected(flag))}
             />
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>

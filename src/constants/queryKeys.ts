@@ -140,6 +140,9 @@ const QUERY_KEYS = {
     },
     SGPFees: (networkId: Network) => ['sgpFees', networkId],
     CheckPausedAMM: (networkId: Network) => ['checkPausedAMM', networkId],
+    Rates: {
+        ExchangeRates: (networkId: Network) => ['rates', 'exchangeRates', networkId],
+    },
 };
 
 export default QUERY_KEYS;

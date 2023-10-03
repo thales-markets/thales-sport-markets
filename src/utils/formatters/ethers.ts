@@ -4,6 +4,10 @@ import { Coins } from 'types/tokens';
 import { getDefaultDecimalsForNetwork } from 'utils/network';
 import { COLLATERAL_DECIMALS } from 'constants/currency';
 
+export const bytesFormatter = (input: string) => ethers.utils.formatBytes32String(input);
+
+export const parseBytes32String = (input: string) => ethers.utils.parseBytes32String(input);
+
 export const bigNumberFormatter = (value: BigNumberish, decimals?: number) =>
     Number(ethers.utils.formatUnits(value, decimals !== undefined ? decimals : 18));
 

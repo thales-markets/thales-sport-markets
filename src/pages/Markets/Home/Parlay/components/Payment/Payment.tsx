@@ -1,6 +1,6 @@
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -9,11 +9,11 @@ import { RootState } from 'redux/rootReducer';
 import { formatCurrency } from 'utils/formatters/number';
 import { BalanceLabel, BalanceValue, BalanceWrapper, RowSummary, SummaryLabel } from '../styled-components';
 import CollateralSelector from '../CollateralSelector';
-import { getDefaultCollateralIndexForNetworkId, getIsMultiCollateralSupported } from 'utils/network';
+import { getIsMultiCollateralSupported } from 'utils/network';
 import { getCollateral, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
 
 type PaymentProps = {
-    defaultSelectedStableIndex?: number;
+    defaultSelectedStableIndex: number;
     defaultIsVoucherSelected?: boolean;
     showCollateralSelector?: boolean;
     onChangeCollateral?: (index: number) => void;
@@ -33,21 +33,9 @@ const Payment: React.FC<PaymentProps> = ({
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const [selectedStableIndex, setSelectedStableIndex] = useState(
-        defaultSelectedStableIndex !== undefined
-            ? defaultSelectedStableIndex
-            : getDefaultCollateralIndexForNetworkId(networkId)
-    );
-
     const [isVoucherSelected, setIsVoucherSelected] = useState<boolean>(!!defaultIsVoucherSelected);
 
-    useEffect(() => {
-        if (defaultSelectedStableIndex !== undefined) {
-            setSelectedStableIndex(defaultSelectedStableIndex);
-        }
-    }, [defaultSelectedStableIndex]);
-
-    const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
@@ -69,15 +57,15 @@ const Payment: React.FC<PaymentProps> = ({
         if (overtimeVoucher && isVoucherSelected) {
             return overtimeVoucher.remainingAmount;
         }
-        if (multipleStableBalances.data && multipleStableBalances.isSuccess) {
-            return multipleStableBalances.data[getCollateral(networkId, selectedStableIndex)];
+        if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
+            return multipleCollateralBalances.data[getCollateral(networkId, defaultSelectedStableIndex)];
         }
         return 0;
     }, [
         networkId,
-        multipleStableBalances.data,
-        multipleStableBalances.isSuccess,
-        selectedStableIndex,
+        multipleCollateralBalances.data,
+        multipleCollateralBalances.isSuccess,
+        defaultSelectedStableIndex,
         overtimeVoucher,
         isVoucherSelected,
     ]);
@@ -89,7 +77,7 @@ const Payment: React.FC<PaymentProps> = ({
 
     const collateralKey = isVoucherSelected
         ? getDefaultCollateral(networkId)
-        : getCollateral(networkId, selectedStableIndex);
+        : getCollateral(networkId, defaultSelectedStableIndex);
 
     const showMultiCollateral = overtimeVoucher !== undefined || getIsMultiCollateralSupported(networkId);
 
@@ -108,9 +96,8 @@ const Payment: React.FC<PaymentProps> = ({
             {showMultiCollateral && (
                 <CollateralSelector
                     collateralArray={getCollaterals(networkId)}
-                    selectedItem={selectedStableIndex}
+                    selectedItem={defaultSelectedStableIndex}
                     onChangeCollateral={(index) => {
-                        setSelectedStableIndex(index);
                         onChangeCollateral && onChangeCollateral(index);
                     }}
                     overtimeVoucher={overtimeVoucher}

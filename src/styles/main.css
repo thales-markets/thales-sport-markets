@@ -142,6 +142,7 @@ table {
 @import './homepage-icons.css';
 @import './league-icons.css';
 @import './thales-icons.css';
+@import './currencies.css';
 
 * {
     box-sizing: border-box;
