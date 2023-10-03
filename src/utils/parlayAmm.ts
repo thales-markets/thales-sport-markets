@@ -2,7 +2,7 @@ import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import { getCollateral, getCollateralAddress, getDefaultCollateral } from './collaterals';
-import { isMultiCollateralSupportedForNetwork } from './network';
+import { getIsMultiCollateralSupported } from './network';
 import { Position } from 'enums/markets';
 
 export const getParlayAMMTransaction: any = async (
@@ -22,7 +22,7 @@ export const getParlayAMMTransaction: any = async (
     let finalEstimation = null;
     const isNonDefaultCollateral = getCollateral(networkId, stableIndex) !== getDefaultCollateral(networkId);
     const collateralAddress = getCollateralAddress(networkId, stableIndex);
-    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
     if (isVoucherSelected) {
         if (networkId === Network.OptimismMainnet) {
@@ -131,7 +131,7 @@ export const getParlayMarketsAMMQuoteMethod: any = (
 ) => {
     const isNonDefaultCollateral = getCollateral(networkId, stableIndex) !== getDefaultCollateral(networkId);
     const collateralAddress = getCollateralAddress(networkId, stableIndex);
-    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
     if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
         return parlayMarketsAMMContract.buyQuoteFromParlayWithDifferentCollateral(

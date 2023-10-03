@@ -28,7 +28,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import { checkAllowance, getDefaultDecimalsForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { checkAllowance, getDefaultDecimalsForNetwork, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -57,9 +57,9 @@ import {
 import { ListContainer } from 'pages/Profile/components/Positions/styled-components';
 import MatchInfo from '../MatchInfo';
 import styled, { useTheme } from 'styled-components';
-import { bigNumberFormatter, stableCoinParser } from 'utils/formatters/ethers';
+import { bigNumberFormatter, coinParser } from 'utils/formatters/ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
-import { getCollateral, getStablecoinDecimals } from 'utils/collaterals';
+import { getCollateral, getCollateralDecimals } from 'utils/collaterals';
 import { OddsType } from 'enums/markets';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
@@ -146,7 +146,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
         }
     }, [ammContractsStatusData]);
 
-    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -247,7 +247,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
             const divider = isVoucherSelected
                 ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
-                : Number(`1e${getStablecoinDecimals(networkId, selectedStableIndex)}`);
+                : Number(`1e${getCollateralDecimals(networkId, selectedStableIndex)}`);
             const { sportsAMMContract, signer } = networkConnector;
             const tokenAndBonusArr = [] as MultiSingleTokenQuoteAndBonus[];
             const isFetchingRecords = isFetching;
@@ -401,7 +401,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, parlayPayment }) => 
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = stableCoinParser(
+                    const parsedTicketPrice = coinParser(
                         Number(calculatedTotalBuyIn).toString(),
                         networkId,
                         getCollateral(networkId, selectedStableIndex)

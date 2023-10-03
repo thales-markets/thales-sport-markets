@@ -20,7 +20,7 @@ import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import useInterval from 'hooks/useInterval';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { getIsMultiCollateralSupported } from 'utils/network';
 import NumericInput from 'components/fields/NumericInput';
 import { getDefaultCollateral } from 'utils/collaterals';
 
@@ -41,7 +41,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose }) => {
     const defaultSelectedToken = AVAILABLE_TOKENS.filter(
         (token: Token) =>
             token.chainId === networkId &&
-            (isMultiCollateralSupportedForNetwork(networkId) ? true : token.symbol === getDefaultCollateral(networkId))
+            (getIsMultiCollateralSupported(networkId) ? true : token.symbol === getDefaultCollateral(networkId))
     )[0];
     const [selectedToken, setSelectedToken] = useState<Token>(defaultSelectedToken);
     const [tokenBalance, setTokenBalance] = useState<number | string>('');

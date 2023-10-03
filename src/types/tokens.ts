@@ -1,4 +1,4 @@
-export type StablecoinKey = 'sUSD' | 'USDC' | 'USDT' | 'DAI';
+export type Coins = 'sUSD' | 'DAI' | 'USDCe' | 'USDC' | 'USDT' | 'OP' | 'WETH' | 'ETH' | 'ARB';
 
 export type Token = {
     address: string;

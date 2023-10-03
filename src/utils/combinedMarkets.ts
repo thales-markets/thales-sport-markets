@@ -24,7 +24,7 @@ import {
     POSITION_TO_ODDS_OBJECT_PROPERTY_NAME,
     SGPCombinationsFromContractOrderMapping,
 } from 'constants/markets';
-import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from './formatters/ethers';
+import { bigNumberFormatter } from './formatters/ethers';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import localStore from './localStore';
 import { BetType, ContractSGPOrder, Position } from 'enums/markets';
@@ -413,12 +413,12 @@ export const convertSGPContractDataToSGPItemType = (sgpContractData: SGPContract
     sgpContractData.forEach((item) => {
         const sgpFees = [item[1], item[2], item[3]];
         sgpFees.forEach((sgpContractItem, sgpIndex) => {
-            if (bigNumberFormmaterWithDecimals(sgpContractItem.toString()) !== 0) {
+            if (bigNumberFormatter(sgpContractItem.toString()) !== 0) {
                 const marketTypeCombination = SGPCombinationsFromContractOrderMapping[sgpIndex as ContractSGPOrder];
                 finalSGPItems.push({
                     tags: [Number(item[0])],
                     combination: marketTypeCombination,
-                    SGPFee: bigNumberFormmaterWithDecimals(sgpContractItem.toString()),
+                    SGPFee: bigNumberFormatter(sgpContractItem.toString()),
                 });
             }
         });

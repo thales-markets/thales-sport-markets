@@ -7,10 +7,10 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { OvertimeVoucher, StablecoinKey } from 'types/tokens';
-import { getCollateralIndex, getStableIcon } from 'utils/collaterals';
+import { Coins, OvertimeVoucher } from 'types/tokens';
+import { getCollateralIndexForNetwork, getStableIcon } from 'utils/collaterals';
 import { formatCurrency } from 'utils/formatters/number';
-import { isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { getIsMultiCollateralSupported } from 'utils/network';
 
 type CollateralSelectorProps = {
     collateralArray: Array<string>;
@@ -39,7 +39,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
         enabled: isAppReady && isWalletConnected,
     });
 
-    const isMultiColletaralSupported = isMultiCollateralSupportedForNetwork(networkId);
+    const isMultiColletaralSupported = getIsMultiCollateralSupported(networkId);
 
     const stableBalances = useMemo(() => {
         return multipleStableBalances.data;
@@ -69,8 +69,8 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                 )}
                 {collateralArray.length &&
                     collateralArray.map((item) => {
-                        const index = getCollateralIndex(networkId, item as StablecoinKey);
-                        const AssetIcon = getStableIcon(item as StablecoinKey);
+                        const index = getCollateralIndexForNetwork(networkId, item as Coins);
+                        const AssetIcon = getStableIcon(item as Coins);
                         return (
                             <CollateralContainer
                                 key={index + 'container'}
@@ -95,7 +95,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                     />
                                 </CollateralIcon>
                                 <CollateralBalance selected={selectedItem == index && !isVoucherSelected}>
-                                    {formatCurrency(stableBalances ? stableBalances[item as StablecoinKey] : 0, 0)}
+                                    {formatCurrency(stableBalances ? stableBalances[item as Coins] : 0, 0)}
                                 </CollateralBalance>
                             </CollateralContainer>
                         );

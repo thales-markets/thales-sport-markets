@@ -32,7 +32,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import { checkAllowance, getDefaultDecimalsForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { checkAllowance, getDefaultDecimalsForNetwork, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -61,8 +61,8 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
-import { getCollateral, getStablecoinDecimals } from 'utils/collaterals';
-import { stableCoinParser } from 'utils/formatters/ethers';
+import { getCollateral, getCollateralDecimals } from 'utils/collaterals';
+import { coinParser } from 'utils/formatters/ethers';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type SingleProps = {
@@ -150,7 +150,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         }
     }, [ammContractsStatusData]);
 
-    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
     const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -232,7 +232,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
                 const divider = isVoucherSelected
                     ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
-                    : Number(`1e${getStablecoinDecimals(networkId, selectedStableIndex)}`);
+                    : Number(`1e${getCollateralDecimals(networkId, selectedStableIndex)}`);
                 const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
 
                 const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
@@ -271,7 +271,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         const fetchData = async () => {
             const divider = isVoucherSelected
                 ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
-                : Number(`1e${getStablecoinDecimals(networkId, selectedStableIndex)}`);
+                : Number(`1e${getCollateralDecimals(networkId, selectedStableIndex)}`);
 
             const { sportsAMMContract, signer } = networkConnector;
             if (signer && sportsAMMContract) {
@@ -374,7 +374,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = stableCoinParser(
+                    const parsedTicketPrice = coinParser(
                         Number(usdAmountValue).toString(),
                         networkId,
                         getCollateral(networkId, selectedStableIndex)

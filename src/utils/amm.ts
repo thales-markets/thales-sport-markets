@@ -2,7 +2,7 @@ import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import { getCollateralAddress } from './collaterals';
-import { isMultiCollateralSupportedForNetwork } from './network';
+import { getIsMultiCollateralSupported } from './network';
 import { Position } from 'enums/markets';
 
 export const getAMMSportsTransaction: any = async (
@@ -21,7 +21,7 @@ export const getAMMSportsTransaction: any = async (
 ): Promise<ethers.ContractTransaction> => {
     let finalEstimation = null;
     const collateralAddress = getCollateralAddress(networkId, stableIndex);
-    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
     if (isVoucherSelected) {
         if (networkId === Network.OptimismMainnet) {
@@ -116,7 +116,7 @@ export const getSportsAMMQuoteMethod: any = (
     parsedAmount: BigNumber
 ) => {
     const collateralAddress = getCollateralAddress(networkId, stableIndex);
-    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
     if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
         return sportsAMMContract.buyFromAmmQuoteWithDifferentCollateral(

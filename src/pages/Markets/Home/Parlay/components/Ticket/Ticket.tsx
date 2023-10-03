@@ -19,7 +19,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlayPayment, ParlaysMarket } from 'types/markets';
-import { bigNumberFormatter, stableCoinParser } from 'utils/formatters/ethers';
+import { bigNumberFormatter, coinParser } from 'utils/formatters/ethers';
 import {
     countDecimals,
     formatCurrencyWithSign,
@@ -60,7 +60,7 @@ import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { getCollateral } from 'utils/collaterals';
-import { StablecoinKey } from 'types/tokens';
+import { Coins } from 'types/tokens';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type TicketProps = {
@@ -119,7 +119,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
     // Due to conversion from non sUSD to sUSD user needs 2% more funds in wallet
     const COLLATERAL_CONVERSION_MULTIPLIER =
-        getCollateral(networkId, selectedStableIndex) !== (CRYPTO_CURRENCY_MAP.sUSD as StablecoinKey) ? 1.02 : 1;
+        getCollateral(networkId, selectedStableIndex) !== (CRYPTO_CURRENCY_MAP.sUSD as Coins) ? 1.02 : 1;
 
     const hasParlayCombinedMarkets = isSGPInParlayMarkets(markets);
 
@@ -224,7 +224,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     susdAmountForQuote < minUsdAmountValue
                         ? minUsdAmountValue // deafult value for qoute info
                         : susdAmountForQuote;
-                const susdPaid = stableCoinParser(roundNumberToDecimals(minUsdAmount).toString(), networkId);
+                const susdPaid = coinParser(roundNumberToDecimals(minUsdAmount).toString(), networkId);
                 try {
                     const parlayAmmQuote = await getParlayMarketsAMMQuoteMethod(
                         selectedStableIndex,
@@ -266,7 +266,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = stableCoinParser(
+                    const parsedTicketPrice = coinParser(
                         Number(usdAmountValue).toString(),
                         networkId,
                         getCollateral(networkId, selectedStableIndex)
@@ -349,7 +349,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                         : null;
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
-                const susdPaid = stableCoinParser(roundNumberToDecimals(Number(usdAmountValue)).toString(), networkId);
+                const susdPaid = coinParser(roundNumberToDecimals(Number(usdAmountValue)).toString(), networkId);
                 const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
                 const additionalSlippage = ethers.utils.parseEther('0.02');
 
@@ -568,7 +568,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                     if (hasParlayCombinedMarkets) {
                         const marketsAddresses = markets.map((market) => market.address);
                         const selectedPositions = markets.map((market) => market.position);
-                        const susdPaid = stableCoinParser(
+                        const susdPaid = coinParser(
                             roundNumberToDecimals(
                                 Number(usdAmountValue) ? Number(usdAmountValue) : minUsdAmountValue
                             ).toString(),

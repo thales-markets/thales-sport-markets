@@ -23,7 +23,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Network } from 'enums/network';
 import { refetchBalances } from 'utils/queryConnector';
 import TextInput from '../fields/TextInput/TextInput';
-import { stableCoinParser } from 'utils/formatters/ethers';
+import { coinParser } from 'utils/formatters/ethers';
 import { getDefaultCollateral } from 'utils/collaterals';
 
 type MintVoucherModalProps = {
@@ -98,7 +98,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                    const parsedAmount = coinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -159,7 +159,7 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
             setIsSubmitting(true);
             try {
                 const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
-                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                const parsedAmount = coinParser(Number(amount).toString(), networkId);
 
                 const tx = await overtimeVoucherContractWithSigner.mint(
                     isAnotherWallet ? getAddress(recipient) : getAddress(walletAddress),

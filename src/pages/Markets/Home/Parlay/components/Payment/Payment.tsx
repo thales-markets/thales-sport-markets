@@ -9,7 +9,7 @@ import { RootState } from 'redux/rootReducer';
 import { formatCurrency } from 'utils/formatters/number';
 import { BalanceLabel, BalanceValue, BalanceWrapper, RowSummary, SummaryLabel } from '../styled-components';
 import CollateralSelector from '../CollateralSelector';
-import { getDefaultCollateralIndexForNetworkId, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { getDefaultCollateralIndexForNetworkId, getIsMultiCollateralSupported } from 'utils/network';
 import { getCollateral, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
 
 type PaymentProps = {
@@ -91,7 +91,7 @@ const Payment: React.FC<PaymentProps> = ({
         ? getDefaultCollateral(networkId)
         : getCollateral(networkId, selectedStableIndex);
 
-    const showMultiCollateral = overtimeVoucher !== undefined || isMultiCollateralSupportedForNetwork(networkId);
+    const showMultiCollateral = overtimeVoucher !== undefined || getIsMultiCollateralSupported(networkId);
 
     return (
         <>

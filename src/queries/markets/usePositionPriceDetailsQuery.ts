@@ -2,10 +2,10 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { AMMPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
-import { bigNumberFormatter, bigNumberFormmaterWithDecimals } from '../../utils/formatters/ethers';
+import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { Network } from 'enums/network';
-import { getCollateralAddress, getStablecoinDecimals } from 'utils/collaterals';
-import { getDefaultDecimalsForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { getCollateralAddress, getCollateralDecimals } from 'utils/collaterals';
+import { getDefaultDecimalsForNetwork, getIsMultiCollateralSupported } from 'utils/network';
 import { ethers } from 'ethers';
 import { ZERO_ADDRESS } from 'constants/network';
 import { Position } from 'enums/markets';
@@ -22,7 +22,7 @@ const usePositionPriceDetailsQuery = (
         QUERY_KEYS.PositionDetails(marketAddress, position, amount, stableIndex, networkId),
         async () => {
             try {
-                const isMultiCollateral = isMultiCollateralSupportedForNetwork(networkId) && stableIndex !== 0;
+                const isMultiCollateral = getIsMultiCollateralSupported(networkId) && stableIndex !== 0;
 
                 const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
@@ -37,10 +37,10 @@ const usePositionPriceDetailsQuery = (
 
                 return {
                     available: bigNumberFormatter(positionDetails.liquidity),
-                    quote: bigNumberFormmaterWithDecimals(
+                    quote: bigNumberFormatter(
                         isMultiCollateral ? positionDetails.quoteDifferentCollateral : positionDetails.quote,
                         isMultiCollateral
-                            ? getStablecoinDecimals(networkId, stableIndex)
+                            ? getCollateralDecimals(networkId, stableIndex)
                             : getDefaultDecimalsForNetwork(networkId)
                     ),
                     priceImpact: bigNumberFormatter(positionDetails.priceImpact),

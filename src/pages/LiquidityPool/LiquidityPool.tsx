@@ -78,7 +78,7 @@ import { useTheme } from 'styled-components';
 import { Network } from 'enums/network';
 import { delay } from 'utils/timer';
 import { getDefaultCollateral } from 'utils/collaterals';
-import { stableCoinParser } from 'utils/formatters/ethers';
+import { coinParser } from 'utils/formatters/ethers';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 const LiquidityPool: React.FC = () => {
@@ -189,7 +189,7 @@ const LiquidityPool: React.FC = () => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                    const parsedAmount = coinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -359,7 +359,7 @@ const LiquidityPool: React.FC = () => {
             setIsSubmitting(true);
             try {
                 const liquidityPoolContractWithSigner = lpContract.connect(signer);
-                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                const parsedAmount = coinParser(Number(amount).toString(), networkId);
 
                 const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount);
                 const txResult = await tx.wait();
