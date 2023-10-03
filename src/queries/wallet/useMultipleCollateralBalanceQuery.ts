@@ -4,6 +4,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { COLLATERAL_DECIMALS, CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { Network } from 'enums/network';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
+import { Coins } from 'types/tokens';
 
 const useMultipleCollateralBalanceQuery = (
     walletAddress: string,
