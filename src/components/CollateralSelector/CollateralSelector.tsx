@@ -63,7 +63,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
             <OutsideClickHandler onOutsideClick={() => setOpen(false)}>
                 <SelectedCollateral disabled={!!disabled} onClick={() => !disabled && setOpen(!open)}>
                     <TextCollateralWrapper>
-                        <TextCollateral>{collateralArray[selectedItem]}</TextCollateral>
+                        <TextCollateral lineHeight="14px">{collateralArray[selectedItem]}</TextCollateral>
                     </TextCollateralWrapper>
                     <Arrow
                         className={open ? `icon-thales icon-thales--caret-up` : `icon-thales icon-thales--caret-down`}
@@ -136,11 +136,11 @@ const Container = styled(FlexDivStart)`
     align-items: center;
 `;
 
-const Text = styled.span<{ fontWeight?: string }>`
+const Text = styled.span<{ fontWeight?: string; lineHeight?: string }>`
     font-style: normal;
     font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '600')};
     font-size: 14px;
-    line-height: 20px;
+    line-height: ${(props) => props.lineHeight || '20px'};
 `;
 
 const TextCollateral = styled(Text)`

@@ -117,7 +117,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const [availableCollateralAmount, setAvailableCollateralAmount] = useState(0);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
-    const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState('');
+    const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState('');
     const [availablePerPosition, setAvailablePerPosition] = useState<AvailablePerPosition>({
         [Position.HOME]: {
             available: 0,
@@ -277,7 +277,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     );
 
     useEffect(() => {
-        const getMaxUsdAmount = async () => {
+        const getMaxCollateralAmount = async () => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
@@ -323,7 +323,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 );
             }
         };
-        getMaxUsdAmount();
+        getMaxCollateralAmount();
     }, [
         collateralAmountValue,
         paymentTokenBalance,
@@ -352,8 +352,13 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 contract.connect(signer);
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
                 if (roundedMaxAmount) {
-                    const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
+                    const [
+                        collateralToSpendForMaxAmount,
+                        collateralToSpendForMinAmount,
+                        ammBalances,
+                    ] = await Promise.all([
                         fetchAmmQuote(roundedMaxAmount),
+                        fetchAmmQuote(MIN_TOKEN_AMOUNT),
                         contract.balancesOf(sportsAMMContract?.address),
                     ]);
                     if (!mountedRef.current) return null;
@@ -362,8 +367,8 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     const amountOfTokens =
                         fetchAmountOfTokensForXsUSDAmount(
                             Number(collateralAmountValue),
-                            convertFromStable(getPositionOdds(market)),
-                            sUSDToSpendForMaxAmount / divider,
+                            collateralToSpendForMinAmount / divider,
+                            collateralToSpendForMaxAmount / divider,
                             availablePerPosition[market.position].available || 0,
                             ammBalanceForSelectedPosition / divider
                         ) || 0;
@@ -558,7 +563,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     refetchBalances(walletAddress, networkId);
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
-                    setUsdAmount('');
+                    setCollateralAmount('');
                     setTokenAmount(0);
                     dispatch(removeAll());
                     onBuySuccess && onBuySuccess();
@@ -656,13 +661,13 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         );
     };
 
-    const setTooltipTextMessageUsdAmount = useCallback(
+    const setTooltipTextMessageCollateralAmount = useCallback(
         (value: string | number) => {
             const positionOdds = roundNumberToDecimals(getPositionOdds(market));
             const minCollateralAmount =
                 convertFromStable(positionOdds) * (isStableCollateral ? 1 : MIN_AMOUNT_MULTIPLIER);
             if (value && Number(value) < minCollateralAmount) {
-                setTooltipTextUsdAmount(
+                setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.single-min-amount', {
                         min: isStableCollateral
                             ? formatCurrencyWithSign(USD_SIGN, positionOdds, 2)
@@ -673,11 +678,11 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     })
                 );
             } else if (Number(value) > availableCollateralAmount) {
-                setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
+                setTooltipTextCollateralAmount(t('markets.parlay.validation.amount-exceeded'));
             } else if (Number(value) > paymentTokenBalance) {
-                setTooltipTextUsdAmount(t('markets.parlay.validation.no-funds'));
+                setTooltipTextCollateralAmount(t('markets.parlay.validation.no-funds'));
             } else {
-                setTooltipTextUsdAmount('');
+                setTooltipTextCollateralAmount('');
             }
         },
         [
@@ -692,12 +697,12 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     );
 
     useEffect(() => {
-        setTooltipTextMessageUsdAmount(collateralAmountValue);
-    }, [isVoucherSelected, setTooltipTextMessageUsdAmount, collateralAmountValue]);
+        setTooltipTextMessageCollateralAmount(collateralAmountValue);
+    }, [isVoucherSelected, setTooltipTextMessageCollateralAmount, collateralAmountValue]);
 
-    const setUsdAmount = (value: string | number) => {
+    const setCollateralAmount = (value: string | number) => {
         dispatch(setPaymentAmountToBuy(value));
-        setTooltipTextMessageUsdAmount(value);
+        setTooltipTextMessageCollateralAmount(value);
     };
 
     const inputRef = useRef<HTMLDivElement>(null);
@@ -707,13 +712,13 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && Number(collateralAmountValue) <= Number(paymentTokenBalance));
+        (!!tooltipTextCollateralAmount && Number(collateralAmountValue) <= Number(paymentTokenBalance));
     const hideProfit =
         ammPosition.quote <= 0 ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && Number(collateralAmountValue) <= Number(paymentTokenBalance));
+        (!!tooltipTextCollateralAmount && Number(collateralAmountValue) <= Number(paymentTokenBalance));
 
     const profitPercentage =
         (tokenAmount - (isStableCollateral ? ammPosition.quote : convertToStable(ammPosition.quote))) /
@@ -779,11 +784,11 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     <NumericInput
                         value={collateralAmountValue}
                         onChange={(e) => {
-                            setUsdAmount(e.target.value);
+                            setCollateralAmount(e.target.value);
                         }}
-                        onMaxButton={() => setUsdAmount(maxCollateralAmount)}
-                        showValidation={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
-                        validationMessage={tooltipTextUsdAmount}
+                        onMaxButton={() => setCollateralAmount(maxCollateralAmount)}
+                        showValidation={inputRefVisible && !!tooltipTextCollateralAmount && !openApprovalModal}
+                        validationMessage={tooltipTextCollateralAmount}
                         inputFontSize="18px"
                         inputFontWeight="700"
                         inputPadding="5px 10px"
