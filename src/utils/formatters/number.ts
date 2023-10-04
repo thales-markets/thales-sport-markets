@@ -2,7 +2,7 @@ import { DEFAULT_CURRENCY_DECIMALS, LONG_CURRENCY_DECIMALS, SHORT_CURRENCY_DECIM
 import numbro from 'numbro';
 
 type NumericValue = string | number;
-const getPrecision = (amount: NumericValue) => {
+export const getPrecision = (amount: NumericValue) => {
     if (Number(amount) >= 1) {
         return DEFAULT_CURRENCY_DECIMALS;
     }
@@ -62,6 +62,10 @@ export const formatPercentage = (value: NumericValue, decimals = DEFAULT_CURRENC
 export const formatPercentageWithSign = (value: NumericValue, decimals = DEFAULT_CURRENCY_DECIMALS) =>
     `${Number(value) > 0 ? '+' : ''}${formatPercentage(value, decimals)}`;
 
+export const ceilNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY_DECIMALS) => {
+    return Math.ceil(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
+};
+
 export const floorNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY_DECIMALS) => {
     return Math.floor(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
 };
@@ -80,4 +84,10 @@ export const countDecimals = (value: number) => {
         return str.split('.')[1].length || 0;
     }
     return Number(str.split('-')[1]) || 0;
+};
+
+// Bug: when number has more than 6 decimals with preceding zeros (e.g. 0.0000001), toString() returns string in exponential notation (e.g. 1e-7)
+export const truncToDecimals = (value: NumericValue, decimals = DEFAULT_CURRENCY_DECIMALS): string => {
+    const matchedValue = value.toString().match(`^-?\\\d+(?:\\\.\\\d{0,${decimals}})?`);
+    return matchedValue !== null ? matchedValue[0] : '0';
 };

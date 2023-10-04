@@ -8,7 +8,7 @@ import { Position } from 'enums/markets';
 export const getAMMSportsTransaction: any = async (
     isVoucherSelected: boolean,
     voucherId: number,
-    stableIndex: number,
+    collateralIndex: number,
     networkId: Network,
     sportsAMMContract: ethers.Contract,
     overtimeVoucherContract: ethers.Contract,
@@ -20,7 +20,7 @@ export const getAMMSportsTransaction: any = async (
     additionalSlippage?: BigNumber
 ): Promise<ethers.ContractTransaction> => {
     let finalEstimation = null;
-    const collateralAddress = getCollateralAddress(networkId, stableIndex);
+    const collateralAddress = getCollateralAddress(networkId, collateralIndex);
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
     if (isVoucherSelected) {
@@ -44,7 +44,7 @@ export const getAMMSportsTransaction: any = async (
         );
     }
 
-    if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
+    if (isMultiCollateralSupported && collateralIndex !== 0 && collateralAddress) {
         if (networkId === Network.OptimismMainnet) {
             const estimation = await sportsAMMContract?.estimateGas.buyFromAMMWithDifferentCollateralAndReferrer(
                 marketAddress,
@@ -108,17 +108,17 @@ export const getAMMSportsTransaction: any = async (
 };
 
 export const getSportsAMMQuoteMethod: any = (
-    stableIndex: number,
+    collateralIndex: number,
     networkId: Network,
     sportsAMMContract: ethers.Contract,
     marketAddress: string,
     selectedPosition: Position,
     parsedAmount: BigNumber
 ) => {
-    const collateralAddress = getCollateralAddress(networkId, stableIndex);
+    const collateralAddress = getCollateralAddress(networkId, collateralIndex);
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
-    if (isMultiCollateralSupported && stableIndex !== 0 && collateralAddress) {
+    if (isMultiCollateralSupported && collateralIndex !== 0 && collateralAddress) {
         return sportsAMMContract.buyFromAmmQuoteWithDifferentCollateral(
             marketAddress,
             selectedPosition,

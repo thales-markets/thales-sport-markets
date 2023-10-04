@@ -2,7 +2,7 @@ import { BetType, ContractSGPOrder, OddsType, Position } from 'enums/markets';
 
 export const ODDS_TYPES = [OddsType.AMM, OddsType.Decimal, OddsType.American];
 
-export const MAX_USD_SLIPPAGE = 0.99;
+export const MAX_COLLATERAL_SLIPPAGE = 0.99;
 export const APPROVAL_BUFFER = 0.01;
 
 export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, BetType[]> = {
@@ -138,5 +138,6 @@ export const POSITION_TO_ODDS_OBJECT_PROPERTY_NAME: Record<Position, 'homeOdds' 
 
 export const PARLAY_MAXIMUM_QUOTE = 0.01;
 
-export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.0; // 1%
+export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0; // 0% for now
 export const STABLECOIN_CONVERSION_BUFFER_PERCENTAGE = 0.005; // 0.5%
+export const MIN_AMOUNT_MULTIPLIER = 1.01; // 1%
