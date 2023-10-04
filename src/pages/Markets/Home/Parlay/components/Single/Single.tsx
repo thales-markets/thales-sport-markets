@@ -2,7 +2,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { LONG_CURRENCY_DECIMALS, USD_SIGN } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP, LONG_CURRENCY_DECIMALS, USD_SIGN } from 'constants/currency';
 import {
     ALTCOIN_CONVERSION_BUFFER_PERCENTAGE,
     APPROVAL_BUFFER,
@@ -465,7 +465,9 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 }
             };
             if (isWalletConnected && collateralAmountValue) {
-                isVoucherSelected ? setHasAllowance(true) : getAllowance();
+                isVoucherSelected || selectedCollateral === CRYPTO_CURRENCY_MAP.ETH
+                    ? setHasAllowance(true)
+                    : getAllowance();
             }
         }
     }, [

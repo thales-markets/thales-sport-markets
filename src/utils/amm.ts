@@ -1,9 +1,11 @@
 import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
-import { getCollateralAddress } from './collaterals';
+import { getCollateralAddress, getCollateralIndexForNetwork } from './collaterals';
 import { getIsMultiCollateralSupported } from './network';
 import { Position } from 'enums/markets';
+import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
+import { Coins } from '../types/tokens';
 
 export const getAMMSportsTransaction: any = async (
     isVoucherSelected: boolean,
@@ -20,8 +22,16 @@ export const getAMMSportsTransaction: any = async (
     additionalSlippage?: BigNumber
 ): Promise<ethers.ContractTransaction> => {
     let finalEstimation = null;
-    const collateralAddress = getCollateralAddress(networkId, collateralIndex);
+    let collateralAddress = getCollateralAddress(networkId, collateralIndex);
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+    const isEth = collateralAddress === ZERO_ADDRESS;
+
+    if (isEth) {
+        collateralAddress = getCollateralAddress(
+            networkId,
+            getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+        );
+    }
 
     if (isVoucherSelected) {
         if (networkId === Network.OptimismMainnet) {
@@ -45,8 +55,22 @@ export const getAMMSportsTransaction: any = async (
     }
 
     if (isMultiCollateralSupported && collateralIndex !== 0 && collateralAddress) {
-        if (networkId === Network.OptimismMainnet) {
-            const estimation = await sportsAMMContract?.estimateGas.buyFromAMMWithDifferentCollateralAndReferrer(
+        if (isEth) {
+            // if (networkId === Network.OptimismMainnet) {
+            //     const estimation = await sportsAMMContract?.estimateGas.buyFromAMMWithEthAndReferrer(
+            //         marketAddress,
+            //         selectedPosition,
+            //         parsedAmount,
+            //         ammQuote,
+            //         additionalSlippage,
+            //         collateralAddress,
+            //         referral || ZERO_ADDRESS
+            //     );
+
+            //     finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+            // }
+
+            return sportsAMMContract?.buyFromAMMWithEthAndReferrer(
                 marketAddress,
                 selectedPosition,
                 parsedAmount,
@@ -54,21 +78,34 @@ export const getAMMSportsTransaction: any = async (
                 additionalSlippage,
                 collateralAddress,
                 referral || ZERO_ADDRESS
+                // { gasLimit: finalEstimation }
             );
+        } else {
+            if (networkId === Network.OptimismMainnet) {
+                const estimation = await sportsAMMContract?.estimateGas.buyFromAMMWithDifferentCollateralAndReferrer(
+                    marketAddress,
+                    selectedPosition,
+                    parsedAmount,
+                    ammQuote,
+                    additionalSlippage,
+                    collateralAddress,
+                    referral || ZERO_ADDRESS
+                );
 
-            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+                finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+            }
+
+            return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
+                marketAddress,
+                selectedPosition,
+                parsedAmount,
+                ammQuote,
+                additionalSlippage,
+                collateralAddress,
+                referral || ZERO_ADDRESS,
+                { gasLimit: finalEstimation }
+            );
         }
-
-        return sportsAMMContract?.buyFromAMMWithDifferentCollateralAndReferrer(
-            marketAddress,
-            selectedPosition,
-            parsedAmount,
-            ammQuote,
-            additionalSlippage,
-            collateralAddress,
-            referral || ZERO_ADDRESS,
-            { gasLimit: finalEstimation }
-        );
     }
 
     if (networkId === Network.OptimismMainnet) {
@@ -115,8 +152,16 @@ export const getSportsAMMQuoteMethod: any = (
     selectedPosition: Position,
     parsedAmount: BigNumber
 ) => {
-    const collateralAddress = getCollateralAddress(networkId, collateralIndex);
+    let collateralAddress = getCollateralAddress(networkId, collateralIndex);
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+    const isEth = collateralAddress === ZERO_ADDRESS;
+
+    if (isEth) {
+        collateralAddress = getCollateralAddress(
+            networkId,
+            getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+        );
+    }
 
     if (isMultiCollateralSupported && collateralIndex !== 0 && collateralAddress) {
         return sportsAMMContract.buyFromAmmQuoteWithDifferentCollateral(

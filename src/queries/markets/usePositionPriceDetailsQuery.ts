@@ -4,11 +4,13 @@ import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { Network } from 'enums/network';
-import { getCollateralAddress, getCollateralDecimals } from 'utils/collaterals';
+import { getCollateralAddress, getCollateralDecimals, getCollateralIndexForNetwork } from 'utils/collaterals';
 import { getDefaultDecimalsForNetwork, getIsMultiCollateralSupported } from 'utils/network';
 import { ethers } from 'ethers';
 import { ZERO_ADDRESS } from 'constants/network';
 import { Position } from 'enums/markets';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { Coins } from '../../types/tokens';
 
 const usePositionPriceDetailsQuery = (
     marketAddress: string,
@@ -27,7 +29,15 @@ const usePositionPriceDetailsQuery = (
                 const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
                 const parsedAmount = ethers.utils.parseEther(amount.toString());
 
-                const collateralAddress = isMultiCollateral && getCollateralAddress(networkId, stableIndex);
+                let collateralAddress = isMultiCollateral && getCollateralAddress(networkId, stableIndex);
+                const isEth = collateralAddress === ZERO_ADDRESS;
+
+                if (isEth) {
+                    collateralAddress = getCollateralAddress(
+                        networkId,
+                        getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+                    );
+                }
                 const positionDetails = await sportPositionalMarketDataContract?.getPositionDetails(
                     marketAddress,
                     position,
