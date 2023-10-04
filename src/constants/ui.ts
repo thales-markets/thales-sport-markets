@@ -20,7 +20,7 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--profile',
         name: 'profile',
         route: ROUTES.Profile,
-        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.ArbitrumOne, Network.Base],
     },
 ];
 
@@ -30,21 +30,21 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--logo',
         name: 'markets',
         route: ROUTES.Markets.Home,
-        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.ArbitrumOne, Network.Base],
     },
     {
         i18label: 'markets.nav-menu.items.vaults',
         iconClass: 'icon icon--vaults',
         name: 'vaults',
         route: ROUTES.Vaults,
-        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.ArbitrumOne],
     },
     {
         i18label: 'markets.nav-menu.items.liquidity-pool',
         iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',
         route: ROUTES.LiquidityPool,
-        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.ArbitrumOne, Network.Base],
     },
 ];
 
@@ -54,14 +54,14 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--competition',
         name: 'parlay-competition',
         route: ROUTES.Leaderboard,
-        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.ArbitrumOne],
     },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',
         iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
         route: ROUTES.Referral,
-        supportedNetworks: [10, Network.OptimismGoerli, Network.ArbitrumOne],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.ArbitrumOne, Network.Base],
     },
 ];
 
@@ -71,7 +71,7 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--trivia',
         name: 'sports-trivia',
         route: ROUTES.Quiz,
-        supportedNetworks: [10, Network.OptimismGoerli],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli],
     },
 ];
 

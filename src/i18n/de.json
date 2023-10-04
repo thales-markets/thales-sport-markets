@@ -300,7 +300,15 @@
                 "spread": "Handicap",
                 "total": "Gesamt",
                 "double-chance": "Doppelte Chance",
-                "combined-positions": "Kombinierte Positionen"
+                "combined-positions": "Kombinierte Positionen",
+                "passing touchdowns": "Passende Touchdowns",
+                "rushing yards": "Rauschende Meter",
+                "receiving yards": "Empfangshöfe",
+                "strikeouts": "Durchgestrichen",
+                "passing yards": "Vorbeifahrende Höfe",
+                "home runs": "Home Runs",
+                "scoring touchdown": "Wer erzielt im Spiel einen Touchdown?",
+                "field goals made": "Field Goals gemacht"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -329,7 +337,27 @@
                 "bonus": "{{bonus}} zusätzlicher Bonus bei Sieg!",
                 "and": "Und",
                 "race-winner": "{{team}} wird das Rennen gewinnen {{matchResolve}}",
-                "tournament-winner": "{{team}} wird das Turnier gewinnen {{matchResolve}}"
+                "tournament-winner": "{{team}} wird das Turnier gewinnen {{matchResolve}}",
+                "player-props": {
+                    "home-runs-under": "{{team}} wird weniger Homeruns haben als {{scoring}}",
+                    "rushing-yards-over": "{{team}} wird mehr Rushing Yards haben als {{scoring}}",
+                    "receiving-yards-under": "{{team}} wird weniger Empfangshöfe haben als {{scoring}}",
+                    "passing-yards-over": "{{team}} wird mehr Passing Yards haben als {{scoring}}",
+                    "rushing-yards-under": "{{team}} wird weniger Rushing Yards haben als {{scoring}}",
+                    "passing-touchdowns-over": "{{team}} wird mehr Pass-Touchdowns haben als {{scoring}}",
+                    "receiving-yards-over": "{{team}} wird mehr Empfangshöfe haben als {{scoring}}",
+                    "strikeouts-over": "{{team}} wird mehr Strikeouts haben als {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} wird weniger Pass-Touchdowns haben als {{scoring}}",
+                    "passing-yards-under": "{{team}} wird weniger Passing Yards haben als {{scoring}}",
+                    "strikeouts-under": "{{team}} wird weniger Strikeouts haben als {{scoring}}",
+                    "home-runs-over": "{{team}} wird mehr Homeruns haben als {{scoring}}",
+                    "touchdowns": "{{team}} wird im Spiel einen Touchdown erzielen",
+                    "field-goals-made-over": "{{team}} wird mehr Field Goals erzielt haben als {{scoring}}",
+                    "field-goals-made-under": "{{team}} wird weniger Field Goals erzielen als {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "Receiving-, Rushing-, Punt-Return-, Kick-Return-, Defensive- und Interception-Touchdowns werden für das Ergebnis gezählt"
+                    }
+                }
             },
             "starts-in": "Beginnt in",
             "period": "Zeitraum",
@@ -340,7 +368,11 @@
             "inning": "Inning",
             "total-markets": "Total markets",
             "race-winner": "Gewinner",
-            "no-win": "Jetzt in"
+            "no-win": "Jetzt in",
+            "see-more-markets-mobile": "Spieler-Requisiten",
+            "player-props": "Spieler-Requisiten",
+            "see-more-markets": "siehe Märkte für Spieler-Requisiten",
+            "resolved": "Gelöst"
         },
         "market-details": {
             "price": "Preis",

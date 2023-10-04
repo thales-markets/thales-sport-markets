@@ -83,7 +83,7 @@ const Home: React.FC = () => {
     );
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [showBurger, setShowBurger] = useState<boolean>(false);
-    const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, false);
+    const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
 
     const tagsList = orderBy(
@@ -314,7 +314,7 @@ const Home: React.FC = () => {
 
         let favouriteCount = 0;
         const favouriteTags = favouriteLeagues.filter((tag: any) => tag.favourite);
-        favouriteTags.forEach((tag) => {
+        favouriteTags.forEach((tag: TagInfo) => {
             favouriteCount += openMarketsCountPerTag[tag.id] || 0;
         });
         openMarketsCount[SportFilterEnum.Favourites] = favouriteCount;
@@ -460,6 +460,7 @@ const Home: React.FC = () => {
                                             setTagFilter={setTagFilter}
                                             setTagParam={setTagParam}
                                             openMarketsCountPerTag={openMarketsCountPerTag}
+                                            showActive={showActive}
                                         ></TagsDropdown>
                                     </React.Fragment>
                                 );
@@ -592,14 +593,13 @@ const Home: React.FC = () => {
                                             setTagFilter={setTagFilter}
                                             setTagParam={setTagParam}
                                             openMarketsCountPerTag={openMarketsCountPerTag}
+                                            showActive={showActive}
                                         ></TagsDropdown>
                                     </React.Fragment>
                                 );
                             })}
                     </SportFiltersContainer>
-                    <Suspense fallback={<Loader />}>
-                        <SidebarLeaderboard />
-                    </Suspense>
+                    <Suspense fallback={<Loader />}>{networkId !== Network.Base && <SidebarLeaderboard />}</Suspense>
                 </SidebarContainer>
                 {/* MAIN PART */}
 

@@ -27,7 +27,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus } from 'utils/markets';
-import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
+import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
 import { refetchBalances } from 'utils/queryConnector';
@@ -61,6 +61,7 @@ import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { getCollateral } from 'utils/collaterals';
 import { StablecoinKey } from 'types/tokens';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -313,9 +314,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
 
                 const addressToApprove = parlayMarketsAMMContract.address;
 
-                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                })) as ethers.ContractTransaction;
+                const tx = (await collateralContractWithSigner?.approve(
+                    addressToApprove,
+                    approveAmount
+                )) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
@@ -376,6 +378,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, parlayPayment, setMarketsOutOf
                             value: Number(usdAmountValue),
                         });
                     }
+
+                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
+                        props: {
+                            value: Number(usdAmountValue),
+                            collateral: getCollateral(networkId, selectedStableIndex),
+                            networkId,
+                        },
+                    });
 
                     trackEvent({
                         category: 'parlay',

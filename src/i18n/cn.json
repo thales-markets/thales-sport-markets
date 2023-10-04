@@ -300,7 +300,15 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "合并职位"
+                "combined-positions": "合并职位",
+                "home runs": "本垒打",
+                "receiving yards": "接收码数",
+                "passing yards": "传球码数",
+                "rushing yards": "冲码",
+                "passing touchdowns": "传球达阵",
+                "strikeouts": "三振",
+                "scoring touchdown": "谁将在比赛中达阵得分？",
+                "field goals made": "射门得分"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -329,7 +337,27 @@
                 "bonus": "{{bonus}} added bonus on win!",
                 "and": "和",
                 "race-winner": "{{team}} 将赢得比赛 {{matchResolve}}",
-                "tournament-winner": "{{team}} 将赢得比赛 {{matchResolve}}"
+                "tournament-winner": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "player-props": {
+                    "home-runs-under": "{{team}} 的本垒打将少于 {{scoring}}",
+                    "passing-touchdowns-over": "{{team}} 的传球达阵次数将多于 {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} 的传球达阵次数将少于 {{scoring}}",
+                    "rushing-yards-over": "{{team}} 的冲球码数将比 {{scoring}} 更多",
+                    "home-runs-over": "{{team}} 将比 {{scoring}} 打出更多本垒打",
+                    "strikeouts-over": "{{team}} 的三振次数将多于 {{scoring}}",
+                    "receiving-yards-over": "{{team}} 的接球码数将多于 {{scoring}}",
+                    "passing-yards-over": "{{team}} 的传球码数将比 {{scoring}} 更多",
+                    "rushing-yards-under": "{{team}} 的冲球码数将少于 {{scoring}}",
+                    "strikeouts-under": "{{team}} 的三振次数将少于 {{scoring}}",
+                    "receiving-yards-under": "{{team}} 的接球码数将少于 {{scoring}}",
+                    "passing-yards-under": "{{team}} 的传球码数将少于 {{scoring}}",
+                    "touchdowns": "{{team}} 将在比赛中达阵得分",
+                    "field-goals-made-under": "{{team}} 的射门得分将少于 {{scoring}}",
+                    "field-goals-made-over": "{{team}} 的射门数将多于 {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "接球、冲球、弃踢回攻、踢回攻、防守和拦截达阵均计入结果"
+                    }
+                }
             },
             "starts-in": "开始于",
             "period": "时期",
@@ -340,7 +368,11 @@
             "half-time": "半场",
             "total-markets": "Total markets",
             "no-win": "没有赢",
-            "race-winner": "优胜者"
+            "race-winner": "优胜者",
+            "see-more-markets": "查看玩家道具市场",
+            "see-more-markets-mobile": "玩家道具",
+            "player-props": "玩家道具",
+            "resolved": "解决"
         },
         "market-details": {
             "price": "价格",

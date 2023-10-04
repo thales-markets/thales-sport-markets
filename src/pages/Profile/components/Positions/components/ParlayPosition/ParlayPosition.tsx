@@ -50,7 +50,6 @@ import {
     ExternalLinkContainer,
     Label,
 } from '../../styled-components';
-import { getMaxGasLimitForNetwork } from 'utils/network';
 import {
     extractCombinedMarketsFromParlayMarketType,
     removeCombinedMarketsFromParlayMarketType,
@@ -96,9 +95,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             try {
                 const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
-                const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
+                const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {

@@ -68,16 +68,22 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                     }}
                                     values={{
                                         rewards:
-                                            networkId !== Network.ArbitrumOne
+                                            networkId == Network.OptimismMainnet
                                                 ? INCENTIVIZED_LEAGUE.opRewards
-                                                : INCENTIVIZED_LEAGUE.thalesRewards,
+                                                : networkId == Network.ArbitrumOne
+                                                ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                : '',
                                     }}
                                 />
                             }
                             component={
                                 <IncentivizedLeague>
-                                    <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                    {networkId !== Network.Base ? (
+                                        <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
+                                    ) : (
+                                        ''
+                                    )}
+                                    {getNetworkLogo(networkId)}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
@@ -96,16 +102,18 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                     }}
                                     values={{
                                         rewards:
-                                            networkId !== Network.ArbitrumOne
-                                                ? INCENTIVIZED_GRAND_SLAM.opRewards
-                                                : INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                            networkId == Network.OptimismMainnet
+                                                ? INCENTIVIZED_LEAGUE.opRewards
+                                                : networkId == Network.ArbitrumOne
+                                                ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                : '',
                                     }}
                                 />
                             }
                             component={
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                    {getNetworkLogo(networkId)}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
@@ -189,6 +197,17 @@ const sortWinnerMarkets = (markets: SportMarkets, leagueId: number) => {
         return orderBy(markets, ['maturityDate', 'homeOdds'], ['asc', 'desc']);
     }
     return markets;
+};
+
+const getNetworkLogo = (networkId: number) => {
+    switch (networkId) {
+        case Network.OptimismMainnet:
+            return <OPLogo />;
+        case Network.ArbitrumOne:
+            return <ArbitrumLogo />;
+        default:
+            return <></>;
+    }
 };
 
 const LeagueCard = styled.div`

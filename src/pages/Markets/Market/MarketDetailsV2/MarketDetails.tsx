@@ -65,6 +65,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         passingTouchdownsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
         ),
+        fieldGoalsMadeMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_FIELD_GOALS_MADE
+        ),
+        oneSiderTouchdownsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -145,16 +151,22 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards:
-                                                networkId !== Network.ArbitrumOne
+                                                networkId == Network.OptimismMainnet
                                                     ? INCENTIVIZED_LEAGUE.opRewards
-                                                    : INCENTIVIZED_LEAGUE.thalesRewards,
+                                                    : networkId == Network.ArbitrumOne
+                                                    ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                    : '',
                                         }}
                                     />
                                 }
                                 component={
                                     <IncentivizedLeague>
-                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                        {networkId !== Network.Base ? (
+                                            <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        ) : (
+                                            ''
+                                        )}
+                                        {getNetworkLogo(networkId)}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -177,16 +189,22 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards:
-                                                networkId !== Network.ArbitrumOne
-                                                    ? INCENTIVIZED_GRAND_SLAM.opRewards
-                                                    : INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                                networkId == Network.OptimismMainnet
+                                                    ? INCENTIVIZED_LEAGUE.opRewards
+                                                    : networkId == Network.ArbitrumOne
+                                                    ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                    : '',
                                         }}
                                     />
                                 }
                                 component={
                                     <IncentivizedLeague>
-                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                        {networkId !== Network.Base ? (
+                                            <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        ) : (
+                                            ''
+                                        )}
+                                        {getNetworkLogo(networkId)}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -357,6 +375,20 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             showOdds={showAMM}
                         />
                     )}
+                    {childMarkets.fieldGoalsMadeMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.fieldGoalsMadeMarkets}
+                            betType={BetType.PLAYER_PROPS_FIELD_GOALS_MADE}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.oneSiderTouchdownsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.oneSiderTouchdownsMarkets}
+                            betType={BetType.PLAYER_PROPS_TOUCHDOWNS}
+                            showOdds={showAMM}
+                        />
+                    )}
                 </>
                 <Transactions market={market} />
             </MainContainer>
@@ -380,6 +412,17 @@ const hideResultInfoPerPeriodForSports = (sportId: number) => {
         !SPORTS_TAGS_MAP['Motosport'].includes(sportId) &&
         sportId != 9399
     );
+};
+
+const getNetworkLogo = (networkId: number) => {
+    switch (networkId) {
+        case Network.OptimismMainnet:
+            return <OPLogo />;
+        case Network.ArbitrumOne:
+            return <ArbitrumLogo />;
+        default:
+            return <></>;
+    }
 };
 
 const RowContainer = styled(FlexDivRow)`

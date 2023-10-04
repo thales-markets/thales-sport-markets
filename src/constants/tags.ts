@@ -134,7 +134,7 @@ export const TAGS_LIST: Tags = [
         logo: ``,
         logoClass: 'icon-league league--uel',
         favourite: false,
-        hidden: false,
+        hidden: true,
         priority: 111,
     },
     {
@@ -155,24 +155,24 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 109,
     },
-    {
-        id: 9445,
-        label: 'Formula 1',
-        logo: '/logos/leagueLogos/f1.png',
-        logoClass: 'icon-league league--f1',
-        favourite: false,
-        hidden: false,
-        priority: 701,
-    },
-    {
-        id: 9497,
-        label: 'MotoGP',
-        logo: `/logos/leagueLogos/motogp.png`,
-        logoClass: 'icon-league league--motogp',
-        favourite: false,
-        hidden: false,
-        priority: 702,
-    },
+    // {
+    //     id: 9445,
+    //     label: 'Formula 1',
+    //     logo: '/logos/leagueLogos/f1.png',
+    //     logoClass: 'icon-league league--f1',
+    //     favourite: false,
+    //     hidden: false,
+    //     priority: 701,
+    // },
+    // {
+    //     id: 9497,
+    //     label: 'MotoGP',
+    //     logo: `/logos/leagueLogos/motogp.png`,
+    //     logoClass: 'icon-league league--motogp',
+    //     favourite: false,
+    //     hidden: false,
+    //     priority: 702,
+    // },
     {
         id: 9153,
         label: 'Grand Slam',
@@ -345,7 +345,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 19216,
-        label: 'UEFA Conference League qualification',
+        label: 'UEFA Conference League',
         logoClass: '',
         favourite: false,
         hidden: false,
@@ -361,7 +361,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 9073,
-        label: 'UEFA Europa League Qualification',
+        label: 'UEFA Europa League',
         logoClass: 'icon-league league--uel',
         favourite: false,
         hidden: false,
@@ -556,6 +556,23 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: 'passing touchdowns',
     [BetType.PLAYER_PROPS_RUSHING_YARDS]: 'rushing yards',
     [BetType.PLAYER_PROPS_RECEIVING_YARDS]: 'receiving yards',
+    [BetType.PLAYER_PROPS_TOUCHDOWNS]: 'scoring touchdown',
+    [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: 'field goals made',
+};
+
+export const BetTypeTitleMap: Record<BetType, string> = {
+    [BetType.PLAYER_PROPS_TOUCHDOWNS]: 'Who will score a touchdown in the game?',
+    [BetType.WINNER]: '',
+    [BetType.SPREAD]: '',
+    [BetType.TOTAL]: '',
+    [BetType.DOUBLE_CHANCE]: '',
+    [BetType.PLAYER_PROPS_HOMERUNS]: '',
+    [BetType.PLAYER_PROPS_STRIKEOUTS]: '',
+    [BetType.PLAYER_PROPS_PASSING_YARDS]: '',
+    [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: '',
+    [BetType.PLAYER_PROPS_RUSHING_YARDS]: '',
+    [BetType.PLAYER_PROPS_RECEIVING_YARDS]: '',
+    [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: '',
 };
 
 export const SCORING_MAP: SportsMap = {

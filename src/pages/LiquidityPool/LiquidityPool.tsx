@@ -53,7 +53,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
+import { checkAllowance } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -79,6 +79,7 @@ import { Network } from 'enums/network';
 import { delay } from 'utils/timer';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { stableCoinParser } from 'utils/formatters/ethers';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -126,12 +127,6 @@ const LiquidityPool: React.FC = () => {
         enabled: isAppReady && isWalletConnected,
     });
 
-    useEffect(() => {
-        if (paymentTokenBalanceQuery.isSuccess && paymentTokenBalanceQuery.data !== undefined) {
-            setPaymentTokenBalance(Number(paymentTokenBalanceQuery.data));
-        }
-    }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
-
     const liquidityPoolDataQuery = useLiquidityPoolDataQuery(networkId, {
         enabled: isAppReady && !isParlayLP,
     });
@@ -139,6 +134,20 @@ const LiquidityPool: React.FC = () => {
     const parlayLiquidityPoolDataQuery = useParlayLiquidityPoolDataQuery(networkId, {
         enabled: isAppReady && isParlayLP,
     });
+
+    const userLiquidityPoolDataQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected && !isParlayLP,
+    });
+
+    const userParlayLiquidityPoolDataQuery = useParlayLiquidityPoolUserDataQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected && isParlayLP,
+    });
+
+    useEffect(() => {
+        if (paymentTokenBalanceQuery.isSuccess && paymentTokenBalanceQuery.data !== undefined) {
+            setPaymentTokenBalance(Number(paymentTokenBalanceQuery.data));
+        }
+    }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
 
     useEffect(() => {
         if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data && !isParlayLP) {
@@ -154,6 +163,49 @@ const LiquidityPool: React.FC = () => {
         parlayLiquidityPoolDataQuery.isSuccess,
         parlayLiquidityPoolDataQuery.data,
     ]);
+
+    useEffect(() => {
+        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data && !isParlayLP) {
+            setLastValidUserLiquidityPoolData(userLiquidityPoolDataQuery.data);
+        }
+
+        if (userParlayLiquidityPoolDataQuery.isSuccess && userParlayLiquidityPoolDataQuery.data && isParlayLP) {
+            setLastValidUserLiquidityPoolData(userParlayLiquidityPoolDataQuery.data);
+        }
+    }, [
+        userLiquidityPoolDataQuery.isSuccess,
+        userLiquidityPoolDataQuery.data,
+        isParlayLP,
+        userParlayLiquidityPoolDataQuery.isSuccess,
+        userParlayLiquidityPoolDataQuery.data,
+    ]);
+
+    useEffect(() => {
+        const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
+
+        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
+
+        if (signer && sUSDContract && lpContract) {
+            const sUSDContractWithSigner = sUSDContract.connect(signer);
+            const getAllowance = async () => {
+                try {
+                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                    const allowance = await checkAllowance(
+                        parsedAmount,
+                        sUSDContractWithSigner,
+                        walletAddress,
+                        lpContract.address
+                    );
+                    setAllowance(allowance);
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+            if (isWalletConnected) {
+                getAllowance();
+            }
+        }
+    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId, isParlayLP]);
 
     const liquidityPoolData: LiquidityPoolData | undefined = useMemo(() => {
         if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data && !isParlayLP) {
@@ -172,30 +224,6 @@ const LiquidityPool: React.FC = () => {
         lastValidLiquidityPoolData,
     ]);
 
-    const userLiquidityPoolDataQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected && !isParlayLP,
-    });
-
-    const userParlayLiquidityPoolDataQuery = useParlayLiquidityPoolUserDataQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected && isParlayLP,
-    });
-
-    useEffect(() => {
-        if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data && !isParlayLP) {
-            setLastValidUserLiquidityPoolData(userLiquidityPoolDataQuery.data);
-        }
-
-        if (userParlayLiquidityPoolDataQuery.isSuccess && userParlayLiquidityPoolDataQuery.data && isParlayLP) {
-            setLastValidUserLiquidityPoolData(userParlayLiquidityPoolDataQuery.data);
-        }
-    }, [
-        userLiquidityPoolDataQuery.isSuccess,
-        userLiquidityPoolDataQuery.data,
-        isParlayLP,
-        userParlayLiquidityPoolDataQuery.isSuccess,
-        userParlayLiquidityPoolDataQuery.data,
-    ]);
-
     const userLiquidityPoolData: UserLiquidityPoolData | undefined = useMemo(() => {
         if (userLiquidityPoolDataQuery.isSuccess && userLiquidityPoolDataQuery.data && !isParlayLP) {
             return userLiquidityPoolDataQuery.data;
@@ -212,6 +240,24 @@ const LiquidityPool: React.FC = () => {
         userParlayLiquidityPoolDataQuery.data,
         lastValidUserLiquidityPoolData,
     ]);
+
+    useEffect(
+        () =>
+            setIsWithdrawalPercentageValid(
+                (Number(withdrawalPercentage) <= 90 && Number(withdrawalPercentage) >= 10) || withdrawAll
+            ),
+        [withdrawalPercentage, withdrawAll]
+    );
+
+    useEffect(() => {
+        if (userLiquidityPoolData) {
+            setWithdrawalAmount(
+                withdrawAll
+                    ? userLiquidityPoolData.balanceCurrentRound
+                    : (userLiquidityPoolData.balanceCurrentRound * Number(withdrawalPercentage)) / 100
+            );
+        }
+    }, [withdrawalPercentage, withdrawAll, userLiquidityPoolData]);
 
     const isAmountEntered = Number(amount) > 0;
     const invalidAmount =
@@ -269,33 +315,6 @@ const LiquidityPool: React.FC = () => {
         liquidityPoolPaused ||
         isLiquidityPoolCapReached;
 
-    useEffect(() => {
-        const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
-
-        const lpContract = isParlayLP ? parlayAMMLiquidityPoolContract : liquidityPoolContract;
-
-        if (signer && sUSDContract && lpContract) {
-            const sUSDContractWithSigner = sUSDContract.connect(signer);
-            const getAllowance = async () => {
-                try {
-                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        sUSDContractWithSigner,
-                        walletAddress,
-                        lpContract.address
-                    );
-                    setAllowance(allowance);
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-            if (isWalletConnected) {
-                getAllowance();
-            }
-        }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId, isParlayLP]);
-
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { signer, sUSDContract, liquidityPoolContract, parlayAMMLiquidityPoolContract } = networkConnector;
 
@@ -308,9 +327,10 @@ const LiquidityPool: React.FC = () => {
             try {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
-                const tx = (await sUSDContractWithSigner.approve(lpContract.address, approveAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                })) as ethers.ContractTransaction;
+                const tx = (await sUSDContractWithSigner.approve(
+                    lpContract.address,
+                    approveAmount
+                )) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
@@ -341,12 +361,11 @@ const LiquidityPool: React.FC = () => {
                 const liquidityPoolContractWithSigner = lpContract.connect(signer);
                 const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
 
-                const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
+                const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {
+                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.depositLp);
                     toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
@@ -373,12 +392,8 @@ const LiquidityPool: React.FC = () => {
                 const parsedPercentage = ethers.utils.parseEther((Number(withdrawalPercentage) / 100).toString());
 
                 const tx = withdrawAll
-                    ? await liquidityPoolContractWithSigner.withdrawalRequest({
-                          gasLimit: getMaxGasLimitForNetwork(networkId),
-                      })
-                    : await liquidityPoolContractWithSigner.partialWithdrawalRequest(parsedPercentage, {
-                          gasLimit: getMaxGasLimitForNetwork(networkId),
-                      });
+                    ? await liquidityPoolContractWithSigner.withdrawalRequest()
+                    : await liquidityPoolContractWithSigner.partialWithdrawalRequest(parsedPercentage);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {
@@ -531,24 +546,6 @@ const LiquidityPool: React.FC = () => {
     const setMaxAmount = () => {
         setAmount(Math.trunc(userLiquidityPoolData ? userLiquidityPoolData.availableToDeposit * 100 : 0) / 100);
     };
-
-    useEffect(
-        () =>
-            setIsWithdrawalPercentageValid(
-                (Number(withdrawalPercentage) <= 90 && Number(withdrawalPercentage) >= 10) || withdrawAll
-            ),
-        [withdrawalPercentage, withdrawAll]
-    );
-
-    useEffect(() => {
-        if (userLiquidityPoolData) {
-            setWithdrawalAmount(
-                withdrawAll
-                    ? userLiquidityPoolData.balanceCurrentRound
-                    : (userLiquidityPoolData.balanceCurrentRound * Number(withdrawalPercentage)) / 100
-            );
-        }
-    }, [withdrawalPercentage, withdrawAll, userLiquidityPoolData]);
 
     return (
         <Wrapper>
@@ -886,15 +883,7 @@ const LiquidityPool: React.FC = () => {
                     </ContentContainer>
                     <ContentContainer>
                         <ButtonContainer>
-                            <ExternalButton
-                                target="_blank"
-                                rel="noreferrer"
-                                href={
-                                    networkId !== Network.ArbitrumOne
-                                        ? LINKS.UniswapBuyThalesOp
-                                        : LINKS.UniswapBuyThalesArbitrum
-                                }
-                            >
+                            <ExternalButton target="_blank" rel="noreferrer" href={getUniswapLink(networkId)}>
                                 {t('liquidity-pool.button.get-thales-label')}
                                 <GetStakeThalesIcon className={`icon icon--get-thales`} />
                             </ExternalButton>
@@ -1165,6 +1154,12 @@ const getInfoGraphicPercentages = (currentBalance: number, nextRoundBalance: num
         nextRoundBalancePercenatage,
         maxAllowancePercenatage,
     };
+};
+
+const getUniswapLink = (networkId: Network) => {
+    if (networkId === Network.ArbitrumOne) return LINKS.UniswapBuyThalesArbitrum;
+    if (networkId === Network.Base) return LINKS.UniswapBuyThalesBase;
+    return LINKS.UniswapBuyThalesOp;
 };
 
 export default LiquidityPool;

@@ -23,6 +23,7 @@ type TagsDropdownProps = {
     setTagFilter: any;
     setTagParam: any;
     openMarketsCountPerTag: any;
+    showActive: boolean;
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({
@@ -32,6 +33,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     setTagFilter,
     setTagParam,
     openMarketsCountPerTag,
+    showActive,
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -42,6 +44,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     return (
         <Container open={open}>
             {tags
+                .filter((tag: TagInfo) => (showActive && !!openMarketsCountPerTag[tag.id]) || !showActive)
                 .sort((a, b) => {
                     const numberOfGamesA = Number(!!openMarketsCountPerTag[a.id]);
                     const numberOfGamesB = Number(!!openMarketsCountPerTag[b.id]);
@@ -140,13 +143,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     />
                                                 }
                                                 component={
-                                                    <IncentivizedLeague>
-                                                        {networkId !== Network.ArbitrumOne ? (
-                                                            <OPLogo />
-                                                        ) : (
-                                                            <ArbitrumLogo />
-                                                        )}
-                                                    </IncentivizedLeague>
+                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
                                                 }
                                             ></Tooltip>
                                         )}
@@ -175,13 +172,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     />
                                                 }
                                                 component={
-                                                    <IncentivizedLeague>
-                                                        {networkId !== Network.ArbitrumOne ? (
-                                                            <OPLogo />
-                                                        ) : (
-                                                            <ArbitrumLogo />
-                                                        )}
-                                                    </IncentivizedLeague>
+                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
                                                 }
                                             ></Tooltip>
                                         )}
@@ -241,6 +232,17 @@ const LeagueFlag = (tagId: number | any) => {
             return <Flag size="m" code="BR" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
+    }
+};
+
+const getNetworkLogo = (networkId: number) => {
+    switch (networkId) {
+        case Network.OptimismMainnet:
+            return <OPLogo />;
+        case Network.ArbitrumOne:
+            return <ArbitrumLogo />;
+        default:
+            return <></>;
     }
 };
 

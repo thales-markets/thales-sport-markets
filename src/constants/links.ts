@@ -28,6 +28,8 @@ export const LINKS = {
         'https://app.uniswap.org/#/swap?outputCurrency=0x217d47011b23bb961eb6d93ca9945b7501a5bb11&chain=optimism',
     UniswapBuyThalesArbitrum:
         'https://app.uniswap.org/#/swap?outputCurrency=0xE85B662Fe97e8562f4099d8A1d5A92D4B453bF30&chain=arbitrum',
+    UniswapBuyThalesBase:
+        'https://app.uniswap.org/#/swap?outputCurrency=0xf34e0cff046e154cafcae502c7541b9e5fd8c249&chain=base',
     ThalesStaking: 'https://thalesmarket.io/token',
     ThalesTip99: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-99.md',
     ThalesTip142: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-142.md',

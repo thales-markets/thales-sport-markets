@@ -1,16 +1,20 @@
+import { BetTypeNameMap, BetTypeTitleMap } from 'constants/tags';
 import { BetType, Position } from 'enums/markets';
 import React, { useMemo } from 'react';
-import { SportMarketChildMarkets, SportMarketInfo } from 'types/markets';
-import { Container, OddsContainer } from './styled-components';
 import styled from 'styled-components';
-import { BetTypeNameMap } from 'constants/tags';
+import { SportMarketChildMarkets, SportMarketInfo } from 'types/markets';
+import { isOneSidePlayerProps } from 'utils/markets';
 import Odd from '../Odd';
+import { Container, OddsContainer } from './styled-components';
+import Tooltip from 'components/Tooltip';
+import { useTranslation } from 'react-i18next';
 
 type PlayerPropsOdds = {
     markets: SportMarketInfo[];
 };
 
 const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
+    const { t } = useTranslation();
     const marketsUI: SportMarketInfo[][] = useMemo(() => {
         const lastValidChildMarkets: SportMarketChildMarkets = {
             spreadMarkets: [],
@@ -21,9 +25,11 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             passingYardsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_PASSING_YARDS),
             rushingYardsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_RUSHING_YARDS),
             receivingYardsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_RECEIVING_YARDS),
+            oneSiderTouchdownsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_TOUCHDOWNS),
             passingTouchdownsMarkets: markets.filter(
                 (market) => market.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
             ),
+            fieldGoalsMadeMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_FIELD_GOALS_MADE),
         };
 
         const result = [];
@@ -46,6 +52,14 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             result.push(lastValidChildMarkets.receivingYardsMarkets);
         }
 
+        if (lastValidChildMarkets.fieldGoalsMadeMarkets.length > 0) {
+            result.push(lastValidChildMarkets.fieldGoalsMadeMarkets);
+        }
+
+        if (lastValidChildMarkets.oneSiderTouchdownsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.oneSiderTouchdownsMarkets);
+        }
+
         return result;
     }, [markets]);
 
@@ -54,12 +68,33 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             {marketsUI.map((ppMarkets, index) => {
                 return (
                     <SectionContainer key={index} dark={index % 2 === 0}>
-                        <SectionTitle>{BetTypeNameMap[ppMarkets[0].betType as BetType]}</SectionTitle>
+                        <SectionTitle>
+                            {BetTypeTitleMap[ppMarkets[0].betType as BetType]
+                                ? BetTypeTitleMap[ppMarkets[0].betType as BetType]
+                                : BetTypeNameMap[ppMarkets[0].betType as BetType]}
+                            {isOneSidePlayerProps(ppMarkets[0].betType) && (
+                                <Tooltip
+                                    overlay={
+                                        <>
+                                            {t(
+                                                `markets.market-card.odd-tooltip.player-props.info.${
+                                                    BetTypeNameMap[ppMarkets[0].betType as BetType]
+                                                }`
+                                            )}
+                                        </>
+                                    }
+                                    iconFontSize={13}
+                                    marginLeft={3}
+                                />
+                            )}
+                        </SectionTitle>
                         <OddsWrapper>
                             {ppMarkets.map((ppMarket, ind) => {
                                 return (
                                     <MarketContainer key={ind}>
-                                        <Player>{`${ppMarket.playerName} ${ppMarket.playerPropsLine}`}</Player>
+                                        <Player>{`${ppMarket.playerName} ${
+                                            isOneSidePlayerProps(ppMarket.betType) ? '' : ppMarket.playerPropsLine
+                                        }`}</Player>
                                         <OddsContainer>
                                             <Odd
                                                 market={ppMarket}
@@ -67,12 +102,16 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
                                                 odd={ppMarket.homeOdds}
                                                 bonus={ppMarket.homeBonus}
                                             />
-                                            <Odd
-                                                market={ppMarket}
-                                                position={Position.AWAY}
-                                                odd={ppMarket.awayOdds}
-                                                bonus={ppMarket.awayBonus}
-                                            />
+                                            {!isOneSidePlayerProps(ppMarket.betType) ? (
+                                                <Odd
+                                                    market={ppMarket}
+                                                    position={Position.AWAY}
+                                                    odd={ppMarket.awayOdds}
+                                                    bonus={ppMarket.awayBonus}
+                                                />
+                                            ) : (
+                                                <></>
+                                            )}
                                         </OddsContainer>
                                     </MarketContainer>
                                 );
@@ -112,7 +151,6 @@ const SectionTitle = styled.span`
     text-transform: uppercase;
     line-height: 12px;
     width: 100%;
-    max-width: 150px;
 `;
 
 const Player = styled.span`
@@ -132,9 +170,13 @@ const MarketContainer = styled.div`
     align-items: center;
     white-space: nowrap;
     gap: 5px;
+    flex-basis: 23%;
     :not(:last-of-type) {
         border-right: 3px solid ${(props) => props.theme.borderColor.primary};
         padding-right: 10px;
+    }
+    :last-of-type {
+        padding-right: 13px;
     }
 `;
 

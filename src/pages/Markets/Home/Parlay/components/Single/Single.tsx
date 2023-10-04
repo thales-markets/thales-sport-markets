@@ -32,12 +32,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import {
-    checkAllowance,
-    getDefaultDecimalsForNetwork,
-    getMaxGasLimitForNetwork,
-    isMultiCollateralSupportedForNetwork,
-} from 'utils/network';
+import { checkAllowance, getDefaultDecimalsForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -68,6 +63,7 @@ import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
 import { getCollateral, getStablecoinDecimals } from 'utils/collaterals';
 import { stableCoinParser } from 'utils/formatters/ethers';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -431,9 +427,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
                 const addressToApprove = sportsAMMContract.address;
 
-                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                })) as ethers.ContractTransaction;
+                const tx = (await collateralContractWithSigner?.approve(
+                    addressToApprove,
+                    approveAmount
+                )) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
@@ -490,6 +487,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     dispatch(removeAll());
                     onBuySuccess && onBuySuccess();
 
+                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.singleBuy, {
+                        props: {
+                            value: Number(ammPosition.quote),
+                            collateral: getCollateral(networkId, selectedStableIndex),
+                            networkId,
+                        },
+                    });
                     trackEvent({
                         category: 'parlay-single',
                         action: `buy-with-${getCollateral(networkId, selectedStableIndex)}`,

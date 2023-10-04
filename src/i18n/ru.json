@@ -300,7 +300,15 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "Комбинированные позиции"
+                "combined-positions": "Комбинированные позиции",
+                "receiving yards": "Приемные дворы",
+                "home runs": "Хоумраны",
+                "strikeouts": "Вычеркивания",
+                "rushing yards": "Стремительные ярды",
+                "passing yards": "Пасовые ярды",
+                "passing touchdowns": "Проходящие тачдауны",
+                "scoring touchdown": "Кто забьет тачдаун в игре?",
+                "field goals made": "Голы с игры забиты"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -329,7 +337,27 @@
                 "bonus": "{{bonus}} added bonus on win!",
                 "and": "и",
                 "race-winner": "{{team}} выиграет гонку {{matchResolve}}",
-                "tournament-winner": "{{team}} выиграет турнир {{matchResolve}}"
+                "tournament-winner": "{{team}} выиграет турнир {{matchResolve}}",
+                "player-props": {
+                    "passing-yards-over": "У {{team}} будет больше пасовых ярдов, чем у {{scoring}}",
+                    "receiving-yards-under": "У {{team}} будет меньше приемных ярдов, чем у {{scoring}}",
+                    "home-runs-over": "У {{team}} будет больше хоум-ранов, чем у {{scoring}}",
+                    "rushing-yards-over": "У {{team}} будет больше ярдов, чем у {{scoring}}",
+                    "strikeouts-over": "У {{team}} будет больше аутов, чем у {{scoring}}",
+                    "receiving-yards-over": "У {{team}} будет больше приемных ярдов, чем у {{scoring}}",
+                    "rushing-yards-under": "У {{team}} будет меньше ярдов, чем у {{scoring}}",
+                    "strikeouts-under": "У {{team}} будет меньше аутов, чем у {{scoring}}",
+                    "passing-yards-under": "У {{team}} будет меньше пасовых ярдов, чем у {{scoring}}",
+                    "home-runs-under": "У {{team}} будет меньше хоум-ранов, чем у {{scoring}}",
+                    "passing-touchdowns-under": "У {{team}} будет меньше тачдаунов в пас, чем у {{scoring}}",
+                    "passing-touchdowns-over": "У команды {{team}} будет больше тачдаунов в пас, чем у команды {{scoring}}",
+                    "touchdowns": "{{team}} забьет тачдаун в игре",
+                    "field-goals-made-under": "У команды {{team}} будет забито меньше голов с игры, чем у команды {{scoring}}",
+                    "field-goals-made-over": "У команды {{team}} будет забито больше мячей с игры, чем у команды {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "Прием, рывок, возврат панта, ответный удар, тачдауны защиты и перехвата засчитываются в результат."
+                    }
+                }
             },
             "starts-in": "Начинается через",
             "period": "Период",
@@ -340,7 +368,11 @@
             "quarter": "Четверть",
             "total-markets": "Total markets",
             "no-win": "Сейчас в",
-            "race-winner": "Победитель"
+            "race-winner": "Победитель",
+            "see-more-markets": "посмотреть рынки реквизита игроков",
+            "see-more-markets-mobile": "реквизит игрока",
+            "player-props": "Реквизит игрока",
+            "resolved": "Решено"
         },
         "market-details": {
             "price": "Price",

@@ -40,12 +40,7 @@ import {
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import {
-    checkAllowance,
-    getDefaultDecimalsForNetwork,
-    getMaxGasLimitForNetwork,
-    isMultiCollateralSupportedForNetwork,
-} from 'utils/network';
+import { checkAllowance, getDefaultDecimalsForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -84,6 +79,7 @@ import { ThemeInterface } from 'types/ui';
 import MatchInfoOfCombinedMarket from '../MatchInfoOfCombinedMarket';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -636,9 +632,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
 
                 const addressToApprove = sportsAMMContract.address;
 
-                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                })) as ethers.ContractTransaction;
+                const tx = (await collateralContractWithSigner?.approve(
+                    addressToApprove,
+                    approveAmount
+                )) as ethers.ContractTransaction;
                 setOpenApprovalModal({ ...openApprovalModal, sportsAmm: false });
                 const txResult = await tx.wait();
 
@@ -675,10 +672,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
 
                 const addressToApprove = parlayMarketsAMMContract.address;
 
-                const tx = (await collateralContractWithSigner?.approve(addressToApprove, approveAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                })) as ethers.ContractTransaction;
                 setOpenApprovalModal({ ...openApprovalModal, sportsAmm: false });
+                const tx = (await collateralContractWithSigner?.approve(
+                    addressToApprove,
+                    approveAmount
+                )) as ethers.ContractTransaction;
+
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
@@ -820,6 +819,13 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, combinedMarkets, par
 
             await Promise.all(transactions)
                 .then(() => {
+                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.multiSingleBuy, {
+                        props: {
+                            value: Number(calculatedTotalBuyIn),
+                            collateral: getCollateral(networkId, selectedStableIndex),
+                            networkId,
+                        },
+                    });
                     setIsBuying(false);
                     setUsdAmountValue('');
                 })

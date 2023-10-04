@@ -19,6 +19,7 @@ import {
     getOddTooltipText,
     getSpreadTotalText,
     getSymbolText,
+    isOneSidePlayerProps,
 } from 'utils/markets';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import ShareTicketModal, {
@@ -26,11 +27,11 @@ import ShareTicketModal, {
 } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { ParlaysMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { CollateralByNetworkId } from 'constants/network';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import { BetTypeNameMap } from 'constants/tags';
 import { BetType } from 'enums/markets';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -162,7 +163,8 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                         additionalStyle={{ width: 25, height: 25, fontSize: 11, borderWidth: 2 }}
                                         justifyContent="center"
                                         symbolUpperText={
-                                            spreadTotalText
+                                            spreadTotalText &&
+                                            !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType)
                                                 ? {
                                                       text: spreadTotalText,
                                                       textStyle: {
@@ -198,7 +200,7 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                 <TableColumnClickable>
                                     <TableText>
                                         {formatCurrencyWithKey(
-                                            CollateralByNetworkId[networkId],
+                                            getDefaultCollateral(networkId),
                                             cellProps.cell.value,
                                             2
                                         )}

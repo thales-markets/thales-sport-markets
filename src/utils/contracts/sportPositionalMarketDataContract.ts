@@ -5,6 +5,7 @@ const sportPositionalMarketDataContract = {
         [Network.OptimismMainnet]: '0xd8Bc9D6840C701bFAd5E7cf98CAdC2ee637c0701',
         [Network.OptimismGoerli]: '0x202209397e2A26dc3243bD4bF46480C1f6661032',
         [Network.ArbitrumOne]: '0x503e7F2C19384Ff68B445E21850fDC61f34434e6',
+        [Network.Base]: '0x3d4139934d7C54dF2b969C2a40029C869b7a8Cfb',
     },
     abi: [
         {

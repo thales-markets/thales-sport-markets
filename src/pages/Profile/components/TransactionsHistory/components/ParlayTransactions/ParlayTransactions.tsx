@@ -31,6 +31,7 @@ import {
     getSpreadAndTotalTextForCombinedMarket,
     getSpreadTotalText,
     getSymbolText,
+    isOneSidePlayerProps,
     isParlayOpen,
     isParlayWon,
     syncPositionsAndMarketsPerContractOrderInParlay,
@@ -51,10 +52,10 @@ import {
     removeCombinedMarketsFromParlayMarketType,
 } from 'utils/combinedMarkets';
 import { BetType, OddsType, Position } from 'enums/markets';
-import { CollateralByNetworkId } from 'constants/network';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import { BetTypeNameMap } from 'constants/tags';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -234,7 +235,7 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                         Cell: (cellProps: any) => {
                             return (
                                 <TableText>
-                                    {formatCurrencyWithKey(CollateralByNetworkId[networkId], cellProps.cell.value, 2)}
+                                    {formatCurrencyWithKey(getDefaultCollateral(networkId), cellProps.cell.value, 2)}
                                 </TableText>
                             );
                         },
@@ -497,7 +498,7 @@ export const getParlayRow = (
                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
                     symbolText={symbolText}
                     symbolUpperText={
-                        spreadTotalText
+                        spreadTotalText && !isOneSidePlayerProps(position.market.betType)
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {

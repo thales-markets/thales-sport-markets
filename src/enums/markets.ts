@@ -23,7 +23,7 @@ export enum SportFilterEnum {
     Tennis = 'Tennis',
     eSports = 'eSports',
     Cricket = 'Cricket',
-    Motosport = 'Motosport',
+    // Motosport = 'Motosport',
     Golf = 'Golf',
 }
 
@@ -68,6 +68,8 @@ export enum BetType {
     PLAYER_PROPS_PASSING_TOUCHDOWNS = 11052,
     PLAYER_PROPS_RUSHING_YARDS = 11053,
     PLAYER_PROPS_RECEIVING_YARDS = 11057,
+    PLAYER_PROPS_TOUCHDOWNS = 11055,
+    PLAYER_PROPS_FIELD_GOALS_MADE = 11060,
 }
 
 export enum ParlayErrorCode {
@@ -96,4 +98,8 @@ export const PLAYER_PROPS_BET_TYPES = [
     BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS,
     BetType.PLAYER_PROPS_RUSHING_YARDS,
     BetType.PLAYER_PROPS_RECEIVING_YARDS,
+    BetType.PLAYER_PROPS_TOUCHDOWNS,
+    BetType.PLAYER_PROPS_FIELD_GOALS_MADE,
 ];
+
+export const ONE_SIDER_PLAYER_PROPS_BET_TYPES = [BetType.PLAYER_PROPS_TOUCHDOWNS];
