@@ -664,6 +664,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const setTooltipTextMessageCollateralAmount = useCallback(
         (value: string | number) => {
             const positionOdds = roundNumberToDecimals(getPositionOdds(market));
+            // Due to conversion adding buffer for min amount in case of non stable collateral
             const minCollateralAmount =
                 convertFromStable(positionOdds) * (isStableCollateral ? 1 : MIN_AMOUNT_MULTIPLIER);
             if (value && Number(value) < minCollateralAmount) {

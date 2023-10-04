@@ -140,4 +140,4 @@ export const PARLAY_MAXIMUM_QUOTE = 0.01;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0; // 0% for now
 export const STABLECOIN_CONVERSION_BUFFER_PERCENTAGE = 0.005; // 0.5%
-export const MIN_AMOUNT_MULTIPLIER = 1.01; // 1%
+export const MIN_AMOUNT_MULTIPLIER = 1.02; // 2%
