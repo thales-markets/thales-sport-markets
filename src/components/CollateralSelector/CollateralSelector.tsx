@@ -85,7 +85,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                               <Icon
                                                   className={`currency-icon currency-icon--${collateral.name.toLowerCase()}`}
                                               />
-                                              <TextCollateral fontWeight="400">{collateral.name}</TextCollateral>
+                                              <TextCollateral fontWeight="600">{collateral.name}</TextCollateral>
                                           </FlexDivCentered>
                                           <div>
                                               <TextCollateral fontWeight="400">
@@ -94,7 +94,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                                       collateralBalances ? collateralBalances[collateral.name] : 0
                                                   )}
                                               </TextCollateral>
-                                              <TextCollateral fontWeight="800">
+                                              <TextCollateral fontWeight="600">
                                                   {!exchangeRates?.[collateral.name] &&
                                                   !isStableCurrency(collateral.name as Coins)
                                                       ? '...'
@@ -159,7 +159,7 @@ const TextCollateralWrapper = styled.div`
 const Arrow = styled.i`
     font-size: 10px;
     text-transform: none;
-    color: ${(props) => props.theme.input.textColor.primary};
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean }>`
@@ -175,6 +175,7 @@ const Dropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
     border-radius: 8px;
     background: ${(props) => props.theme.input.background.primary};
     z-index: 100;
+    border: 2px solid ${(props) => props.theme.input.borderColor.tertiary};
 `;
 
 const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
@@ -186,6 +187,7 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
     border-radius: 8px;
     background: ${(props) => props.theme.input.background.primary};
     z-index: 100;
+    border: 2px solid ${(props) => props.theme.input.borderColor.tertiary};
 `;
 
 const CollateralOption = styled.div`

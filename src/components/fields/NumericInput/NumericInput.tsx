@@ -138,12 +138,18 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     </MaxButton>
                 )}
                 {currencyLabel && (
-                    <CurrencyLabel className={disabled ? 'currency-label disabled' : 'currency-label'}>
+                    <CurrencyLabel
+                        className={disabled ? 'currency-label disabled' : 'currency-label'}
+                        hasSeparator={onMaxButton}
+                    >
                         {currencyLabel}
                     </CurrencyLabel>
                 )}
                 {currencyComponent && (
-                    <CurrencyComponentContainer className={disabled && !enableCurrencyComponentOnly ? 'disabled' : ''}>
+                    <CurrencyComponentContainer
+                        className={disabled && !enableCurrencyComponentOnly ? 'disabled' : ''}
+                        hasSeparator={onMaxButton}
+                    >
                         {currencyComponent}
                     </CurrencyComponentContainer>
                 )}
@@ -161,10 +167,10 @@ const RightContainer = styled(FlexDivCentered)<{ height?: string }>`
     right: 0;
     bottom: 0;
     height: ${(props) => props.height || '30px'};
-    padding-right: 10px;
 `;
 
-const CurrencyLabel = styled.label`
+const CurrencyLabel = styled.label<{ hasSeparator?: boolean }>`
+    border-left: ${(props) => (props.hasSeparator ? `2px solid ${props.theme.input.borderColor.tertiary}` : 'none')};
     font-size: 15px;
     line-height: 20px;
     color: ${(props) => props.theme.input.textColor.primary};
@@ -182,7 +188,9 @@ const MaxButton = styled.button`
     font-size: 10px;
     text-transform: uppercase;
     cursor: pointer;
+    margin-right: 8px;
     border-radius: 2px;
+    line-height: 12px;
     &:disabled {
         opacity: 0.4;
         cursor: default;
@@ -227,8 +235,9 @@ const BalanceContainer = styled(FlexDivCentered)`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-const CurrencyComponentContainer = styled(FlexDivCentered)`
-    line-height: 15px;
+const CurrencyComponentContainer = styled(FlexDivCentered)<{ hasSeparator?: boolean }>`
+    ${(props) => (props.hasSeparator ? `border-left: 2px solid ${props.theme.input.borderColor.tertiary};` : '')}
+    line-height: 22px;
     &.disabled {
         opacity: 0.4;
         cursor: default;
