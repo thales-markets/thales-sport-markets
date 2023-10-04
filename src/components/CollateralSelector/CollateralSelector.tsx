@@ -164,6 +164,7 @@ const Arrow = styled.i`
 
 const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean }>`
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 `;
 
 const Dropdown = styled(FlexDivColumnCentered)<{ width?: string }>`

@@ -763,9 +763,12 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 <RowSummary>
                     <RowContainer>
                         <SummaryLabel>{t('markets.parlay.pay-with-voucher')}:</SummaryLabel>
+                        <SummaryValue>
+                            {formatCurrencyWithSign(USD_SIGN, overtimeVoucher?.remainingAmount || 0, 2)}
+                        </SummaryValue>
                         <CheckboxContainer>
                             <Checkbox
-                                // disabled={isAllowing}
+                                disabled={isAllowing || isBuying}
                                 checked={isVoucherSelected}
                                 value={isVoucherSelected.toString()}
                                 onChange={(e: any) => {
@@ -794,6 +797,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                         inputFontWeight="700"
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
+                        disabled={isAllowing || isBuying}
                         currencyComponent={
                             <CollateralSelector
                                 collateralArray={getCollaterals(networkId)}

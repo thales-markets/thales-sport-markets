@@ -205,20 +205,20 @@ export const CheckboxContainer = styled.div`
         font-weight: 600;
         letter-spacing: 0.035em;
         text-transform: uppercase;
-        padding-top: 15px;
-        padding-left: 15px;
+        padding-top: 18px;
+        padding-left: 18px;
         input:checked ~ .checkmark {
             border: 2px solid ${(props) => props.theme.borderColor.quaternary};
         }
     }
     .checkmark {
-        height: 15px;
-        width: 15px;
+        height: 18px;
+        width: 18px;
         border: 2px solid ${(props) => props.theme.borderColor.quaternary};
         :after {
-            left: 3px;
-            width: 3px;
-            height: 8px;
+            left: 4px;
+            width: 4px;
+            height: 11px;
             border: 2px solid ${(props) => props.theme.borderColor.quaternary};
             border-width: 0 2px 2px 0;
         }
