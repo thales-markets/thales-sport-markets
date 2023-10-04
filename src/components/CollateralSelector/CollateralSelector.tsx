@@ -13,7 +13,7 @@ import {
 } from 'styles/common';
 import { Coins } from 'types/tokens';
 import { isStableCurrency } from 'utils/collaterals';
-import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { setPaymentSelectedStableIndex } from 'redux/modules/parlay';
 
 type CollateralSelectorProps = {
@@ -89,7 +89,8 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                           </FlexDivCentered>
                                           <div>
                                               <TextCollateral fontWeight="400">
-                                                  {formatCurrency(
+                                                  {formatCurrencyWithSign(
+                                                      null,
                                                       collateralBalances ? collateralBalances[collateral.name] : 0
                                                   )}
                                               </TextCollateral>
@@ -139,7 +140,7 @@ const Text = styled.span<{ fontWeight?: string }>`
     font-style: normal;
     font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '600')};
     font-size: 14px;
-    line-height: 100%;
+    line-height: 20px;
 `;
 
 const TextCollateral = styled(Text)`

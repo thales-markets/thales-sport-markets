@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, MAX_USD_SLIPPAGE } from 'constants/markets';
+import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, APPROVAL_BUFFER, MAX_USD_SLIPPAGE } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
@@ -31,9 +31,9 @@ import { AMMPosition, AvailablePerPosition, ParlaysMarket } from 'types/markets'
 import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
-    countDecimals,
     floorNumberToDecimals,
     formatCurrency,
+    formatCurrencyWithKey,
     formatCurrencyWithSign,
     formatPercentage,
     roundNumberToDecimals,
@@ -69,7 +69,7 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
-import { getCollateral, getCollateralDecimals, getCollaterals } from 'utils/collaterals';
+import { getCollateral, getCollateralDecimals, getCollaterals, isStableCurrency } from 'utils/collaterals';
 import { coinParser } from 'utils/formatters/ethers';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import CollateralSelector from '../../../../../../components/CollateralSelector';
@@ -200,6 +200,27 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         isVoucherSelected,
     ]);
 
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedStableIndex), [
+        networkId,
+        selectedStableIndex,
+    ]);
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const convertToStable = useCallback(
+        (value: number) => {
+            const rate = exchangeRates?.[selectedCollateral] || 0;
+            return isStableCurrency(selectedCollateral)
+                ? value
+                : value * rate * (1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE);
+        },
+        [selectedCollateral, exchangeRates]
+    );
+
     // Clear Parlay when network is changed
     const isMounted = useRef(false);
     useEffect(() => {
@@ -295,11 +316,14 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     const amountOfTokens =
                         fetchAmountOfTokensForXsUSDAmount(
                             Number(usdAmountValue),
-                            getPositionOdds(market),
+                            getPositionOdds(market) /
+                                ((exchangeRates?.[selectedCollateral] || 1) *
+                                    (1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE)),
                             sUSDToSpendForMaxAmount / divider,
                             availablePerPosition[market.position].available || 0,
                             ammBalanceForSelectedPosition / divider
                         ) || 0;
+
                     if (amountOfTokens > (availablePerPosition[market.position].available || 0)) {
                         setTokenAmount(0);
                         return;
@@ -589,7 +613,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const setTooltipTextMessageUsdAmount = useCallback(
         (value: string | number) => {
             const positionOdds = roundNumberToDecimals(getPositionOdds(market));
-            if (value && Number(value) < positionOdds) {
+            if (value && convertToStable(Number(value)) < positionOdds) {
                 setTooltipTextUsdAmount(
                     t('markets.parlay.validation.single-min-amount', {
                         min: formatCurrencyWithSign(USD_SIGN, positionOdds, 2),
@@ -603,7 +627,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 setTooltipTextUsdAmount('');
             }
         },
-        [market, availableUsdAmount, t, paymentTokenBalance]
+        [market, availableUsdAmount, t, paymentTokenBalance, convertToStable]
     );
 
     useEffect(() => {
@@ -630,7 +654,10 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         // hide when validation tooltip exists except in case of not enough funds
         (!!tooltipTextUsdAmount && Number(usdAmountValue) <= Number(paymentTokenBalance));
 
-    const profitPercentage = (tokenAmount - ammPosition.quote) / ammPosition.quote;
+    const profitPercentage =
+        (tokenAmount -
+            (isStableCurrency(selectedCollateral) ? ammPosition.quote : convertToStable(ammPosition.quote))) /
+        (isStableCurrency(selectedCollateral) ? ammPosition.quote : convertToStable(ammPosition.quote));
 
     const onModalClose = useCallback(() => {
         setShowShareTicketModal(false);
@@ -650,12 +677,6 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         setShareTicketModalData(modalData);
         setShowShareTicketModal(!twitterShareDisabled);
     };
-
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
-    const exchangeRates: Rates | null =
-        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     return (
         <>
@@ -699,9 +720,6 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     <NumericInput
                         value={usdAmountValue}
                         onChange={(e) => {
-                            if (Number(countDecimals(Number(e.target.value))) > 2) {
-                                return;
-                            }
                             setUsdAmount(e.target.value);
                         }}
                         onMaxButton={() => setUsdAmount(maxUsdAmount)}
@@ -729,7 +747,14 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             <InfoContainer>
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.available')}:</InfoLabel>
-                    <InfoValue>{formatCurrencyWithSign(USD_SIGN, availableUsdAmount)}</InfoValue>
+                    <InfoValue>
+                        {isStableCurrency(selectedCollateral)
+                            ? formatCurrencyWithSign(USD_SIGN, availableUsdAmount)
+                            : `${formatCurrencyWithKey(
+                                  selectedCollateral,
+                                  availableUsdAmount
+                              )} (${formatCurrencyWithSign(USD_SIGN, convertToStable(availableUsdAmount))})`}
+                    </InfoValue>
                 </InfoWrapper>
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.skew')}:</InfoLabel>
@@ -738,6 +763,19 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     </InfoValue>
                 </InfoWrapper>
             </InfoContainer>
+            <RowSummary>
+                <SummaryLabel>{'TOTAL TO PAY'}:</SummaryLabel>
+                <SummaryValue isInfo={true}>
+                    {hidePayout
+                        ? '-'
+                        : isStableCurrency(selectedCollateral)
+                        ? formatCurrencyWithSign(USD_SIGN, usdAmountValue)
+                        : `${formatCurrencyWithKey(selectedCollateral, usdAmountValue)} (${formatCurrencyWithSign(
+                              USD_SIGN,
+                              convertToStable(Number(usdAmountValue))
+                          )})`}
+                </SummaryValue>
+            </RowSummary>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
@@ -749,9 +787,14 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 <SummaryValue isInfo={true}>
                     {hideProfit
                         ? '-'
-                        : `${formatCurrencyWithSign(USD_SIGN, tokenAmount - ammPosition.quote, 2)} (${formatPercentage(
-                              profitPercentage
-                          )})`}
+                        : `${formatCurrencyWithSign(
+                              USD_SIGN,
+                              tokenAmount -
+                                  (isStableCurrency(selectedCollateral)
+                                      ? ammPosition.quote
+                                      : convertToStable(ammPosition.quote)),
+                              2
+                          )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>

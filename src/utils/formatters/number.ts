@@ -27,8 +27,18 @@ export const formatCurrency = (value: NumericValue, decimals = DEFAULT_CURRENCY_
 export const formatCurrencyWithPrecision = (value: NumericValue, trimDecimals = false) =>
     formatCurrency(value, getPrecision(value), trimDecimals);
 
-export const formatCurrencyWithSign = (sign: string | null | undefined, value: NumericValue, decimals?: number) =>
-    `${sign} ${formatCurrency(value, decimals !== undefined ? decimals : getPrecision(value))}`;
+export const formatCurrencyWithSign = (
+    sign: string | null | undefined,
+    value: NumericValue,
+    decimals?: number,
+    trimDecimals?: boolean
+) => {
+    return `${Number(value) < 0 ? '- ' : ''}${sign ? sign + ' ' : ''}${formatCurrency(
+        typeof value == 'number' ? Math.abs(value) : value,
+        decimals !== undefined ? decimals : getPrecision(value),
+        trimDecimals
+    )}`;
+};
 
 export const formatCurrencyWithKey = (
     currencyKey: string,
