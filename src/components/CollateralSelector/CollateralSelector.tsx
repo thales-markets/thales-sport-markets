@@ -63,7 +63,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
             <OutsideClickHandler onOutsideClick={() => setOpen(false)}>
                 <SelectedCollateral disabled={!!disabled} onClick={() => !disabled && setOpen(!open)}>
                     <TextCollateralWrapper isDetailedView={isDetailedView}>
-                        <TextCollateral lineHeight="15px" isDetailedView={isDetailedView} isSelectedCollateral={true}>
+                        <TextCollateral isDetailedView={isDetailedView} isSelectedCollateral={true}>
                             {collateralArray[selectedItem]}
                         </TextCollateral>
                     </TextCollateralWrapper>
@@ -142,15 +142,13 @@ const Container = styled(FlexDivStart)`
 
 const Text = styled.span<{
     fontWeight?: string;
-    lineHeight?: string;
     isDetailedView?: boolean;
     isSelectedCollateral?: boolean;
 }>`
     font-style: normal;
     font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '600')};
     font-size: ${(props) => (props.isDetailedView ? '14px' : '12px')};
-    line-height: ${(props) =>
-        !props.isDetailedView && props.isSelectedCollateral ? '12px' : props.lineHeight || '20px'};
+    ${(props) => (props.isSelectedCollateral ? `line-height: ${props.isDetailedView ? '15px' : '12px'};` : '')}
     @media (max-width: 768px) {
         ${(props) => (!props.isDetailedView && props.isSelectedCollateral ? 'font-size: 10px;' : '')}
         ${(props) => (!props.isDetailedView && props.isSelectedCollateral ? 'line-height: 10px;' : '')}
