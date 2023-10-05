@@ -80,6 +80,11 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import { BetType } from 'enums/markets';
+import CollateralSelector from 'components/CollateralSelector';
+import { getParlayPayment } from 'redux/modules/parlay';
+import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
+import { getIsMultiCollateralSupported } from 'utils/network';
+import { ZERO_ADDRESS } from 'constants/network';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -100,6 +105,8 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnect = useSelector((state: RootState) => getIsWalletConnected(state));
+    const parlayPayment = useSelector(getParlayPayment);
+    const selectedCollateralIndex = parlayPayment.selectedStableIndex;
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
@@ -107,6 +114,20 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const [awayLogoSrc, setAwayLogoSrc] = useState(
         getTeamImageSource(position.market.awayTeam, position.market.tags[0])
     );
+
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+        networkId,
+        selectedCollateralIndex,
+    ]);
+    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
+        networkId,
+        selectedCollateralIndex,
+    ]);
+
+    const isDefaultCollateral = selectedCollateral === defaultCollateral;
+    const isEth = collateralAddress === ZERO_ADDRESS;
 
     const marketTransactionsQuery = useMarketTransactionsQuery(position.market.address, networkId, position.account, {
         enabled: isWalletConnect,
@@ -185,13 +206,21 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
 
     const claimReward = async () => {
-        const { signer } = networkConnector;
-        if (signer) {
+        const { signer, sportsAMMContract } = networkConnector;
+        if (signer && sportsAMMContract) {
             const contract = new ethers.Contract(position.market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
+            const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
-                const tx = await contract.exerciseOptions();
+                const tx = isDefaultCollateral
+                    ? await contract.exerciseOptions()
+                    : await sportsAMMContractWithSigner.exerciseWithOfframp(
+                          position.market.address,
+                          collateralAddress,
+                          isEth
+                      );
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
@@ -389,6 +418,16 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                     <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
                                     <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
                                 </ColumnDirectionInfo>
+                                {isMultiCollateralSupported && (
+                                    <ColumnDirectionInfo>
+                                        <ClaimLabel>{'payout in'}:</ClaimLabel>
+                                        <CollateralSelector
+                                            collateralArray={getCollaterals(networkId)}
+                                            selectedItem={selectedCollateralIndex}
+                                            onChangeCollateral={() => {}}
+                                        />
+                                    </ColumnDirectionInfo>
+                                )}
                                 <Button
                                     onClick={(e: any) => {
                                         e.preventDefault();

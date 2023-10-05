@@ -39,6 +39,9 @@ import Button from 'components/Button';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getIsMobile } from 'redux/modules/app';
+import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils/collaterals';
+import { ZERO_ADDRESS } from 'constants/network';
+import { getParlayPayment } from 'redux/modules/parlay';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -60,8 +63,23 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const parlayPayment = useSelector(getParlayPayment);
+    const selectedCollateralIndex = parlayPayment.selectedStableIndex;
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
+
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+        networkId,
+        selectedCollateralIndex,
+    ]);
+    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
+        networkId,
+        selectedCollateralIndex,
+    ]);
+
+    const isDefaultCollateral = selectedCollateral === defaultCollateral;
+    const isEth = collateralAddress === ZERO_ADDRESS;
 
     const parlayMarketsQuery = useParlayMarketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress,
@@ -173,49 +191,62 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const isLoading = parlayMarketsQuery.isLoading || accountMarketsQuery.isLoading;
 
     const claimAllRewards = async () => {
-        const { signer, parlayMarketsAMMContract } = networkConnector;
+        const { signer, parlayMarketsAMMContract, sportsAMMContract } = networkConnector;
         if (signer) {
             const transactions: any = [];
 
             if (accountPositionsByStatus.claimable.length) {
-                accountPositionsByStatus.claimable.forEach(async (position) => {
-                    transactions.push(
-                        new Promise(async (resolve, reject) => {
-                            const contract = new ethers.Contract(
-                                position.market.address,
-                                sportsMarketContract.abi,
-                                signer
-                            );
-                            contract.connect(signer);
-                            const id = toast.loading(t('market.toast-message.transaction-pending'));
-                            try {
-                                const tx = await contract.exerciseOptions();
-                                const txResult = await tx.wait();
+                if (sportsAMMContract) {
+                    accountPositionsByStatus.claimable.forEach(async (position) => {
+                        transactions.push(
+                            new Promise(async (resolve, reject) => {
+                                const contract = new ethers.Contract(
+                                    position.market.address,
+                                    sportsMarketContract.abi,
+                                    signer
+                                );
+                                contract.connect(signer);
+                                const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
 
-                                if (txResult && txResult.transactionHash) {
-                                    resolve(
-                                        toast.update(
-                                            id,
-                                            getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
-                                        )
-                                    );
-                                } else {
+                                const id = toast.loading(t('market.toast-message.transaction-pending'));
+                                try {
+                                    const tx = isDefaultCollateral
+                                        ? await contract.exerciseOptions()
+                                        : await sportsAMMContractWithSigner.exerciseWithOfframp(
+                                              position.market.address,
+                                              collateralAddress,
+                                              isEth
+                                          );
+                                    const txResult = await tx.wait();
+
+                                    if (txResult && txResult.transactionHash) {
+                                        resolve(
+                                            toast.update(
+                                                id,
+                                                getSuccessToastOptions(t('market.toast-message.claim-winnings-success'))
+                                            )
+                                        );
+                                    } else {
+                                        reject(
+                                            toast.update(
+                                                id,
+                                                getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                            )
+                                        );
+                                    }
+                                } catch (e) {
                                     reject(
                                         toast.update(
                                             id,
                                             getErrorToastOptions(t('common.errors.unknown-error-try-again'))
                                         )
                                     );
+                                    console.log(e);
                                 }
-                            } catch (e) {
-                                reject(
-                                    toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')))
-                                );
-                                console.log(e);
-                            }
-                        })
-                    );
-                });
+                            })
+                        );
+                    });
+                }
             }
 
             if (parlayMarketsByStatus.claimable.length) {
