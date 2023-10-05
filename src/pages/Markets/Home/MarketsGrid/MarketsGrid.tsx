@@ -189,6 +189,7 @@ const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarketInfo[]>)
     const enetpulseEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[1]] ? marketsMap[EUROPA_LEAGUE_TAGS[1]] : [];
     if (rundownEuropaLeagueGames.length > 0 || enetpulseEuropaLeagueGames.length > 0) {
         marketsMap[EUROPA_LEAGUE_TAGS[0]] = [...rundownEuropaLeagueGames, ...enetpulseEuropaLeagueGames];
+        delete marketsMap[EUROPA_LEAGUE_TAGS[1]];
     }
     return marketsMap;
 };
