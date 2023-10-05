@@ -1,9 +1,12 @@
 import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
-import { getCollateral, getCollateralAddress, getDefaultCollateral } from './collaterals';
+import { getCollateral, getCollateralAddress, getCollateralIndexForNetwork, getDefaultCollateral } from './collaterals';
 import { getIsMultiCollateralSupported } from './network';
 import { Position } from 'enums/markets';
+import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
+import { Coins } from '../types/tokens';
+import { bigNumberFormatter } from './formatters/ethers';
 
 export const getParlayAMMTransaction: any = async (
     isVoucherSelected: boolean,
@@ -21,8 +24,16 @@ export const getParlayAMMTransaction: any = async (
 ): Promise<ethers.ContractTransaction> => {
     let finalEstimation = null;
     const isNonDefaultCollateral = getCollateral(networkId, stableIndex) !== getDefaultCollateral(networkId);
-    const collateralAddress = getCollateralAddress(networkId, stableIndex);
+    let collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+    const isEth = collateralAddress === ZERO_ADDRESS;
+
+    if (isEth) {
+        collateralAddress = getCollateralAddress(
+            networkId,
+            getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+        );
+    }
 
     if (isVoucherSelected) {
         if (networkId === Network.OptimismMainnet) {
@@ -50,30 +61,58 @@ export const getParlayAMMTransaction: any = async (
     }
 
     if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
-        if (networkId === Network.OptimismMainnet) {
-            const estimation = await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithDifferentCollateralAndReferrer(
+        if (isEth) {
+            if (networkId === Network.OptimismMainnet) {
+                const estimation = await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithEth(
+                    marketsAddresses,
+                    selectedPositions,
+                    sUSDPaid,
+                    additionalSlippage,
+                    expectedPayout,
+                    collateralAddress,
+                    referral || ZERO_ADDRESS,
+                    { value: sUSDPaid }
+                );
+
+                finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+            }
+
+            return parlayMarketsAMMContract?.buyFromParlayWithEth(
                 marketsAddresses,
                 selectedPositions,
                 sUSDPaid,
                 additionalSlippage,
                 expectedPayout,
                 collateralAddress,
-                referral || ZERO_ADDRESS
+                referral || ZERO_ADDRESS,
+                { value: sUSDPaid, gasLimit: finalEstimation }
             );
+        } else {
+            if (networkId === Network.OptimismMainnet) {
+                const estimation = await parlayMarketsAMMContract?.estimateGas.buyFromParlayWithDifferentCollateralAndReferrer(
+                    marketsAddresses,
+                    selectedPositions,
+                    sUSDPaid,
+                    additionalSlippage,
+                    expectedPayout,
+                    collateralAddress,
+                    referral || ZERO_ADDRESS
+                );
 
-            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+                finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
+            }
+
+            return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
+                marketsAddresses,
+                selectedPositions,
+                sUSDPaid,
+                additionalSlippage,
+                expectedPayout,
+                collateralAddress,
+                referral || ZERO_ADDRESS,
+                { gasLimit: finalEstimation }
+            );
         }
-
-        return parlayMarketsAMMContract?.buyFromParlayWithDifferentCollateralAndReferrer(
-            marketsAddresses,
-            selectedPositions,
-            sUSDPaid,
-            additionalSlippage,
-            expectedPayout,
-            collateralAddress,
-            referral || ZERO_ADDRESS,
-            { gasLimit: finalEstimation }
-        );
     }
 
     if (networkId === Network.OptimismMainnet) {
@@ -130,9 +169,18 @@ export const getParlayMarketsAMMQuoteMethod: any = (
     sUSDPaid: BigNumber
 ) => {
     const isNonDefaultCollateral = getCollateral(networkId, stableIndex) !== getDefaultCollateral(networkId);
-    const collateralAddress = getCollateralAddress(networkId, stableIndex);
+    let collateralAddress = getCollateralAddress(networkId, stableIndex);
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+    const isEth = collateralAddress === ZERO_ADDRESS;
 
+    if (isEth) {
+        collateralAddress = getCollateralAddress(
+            networkId,
+            getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+        );
+    }
+
+    console.log(marketsAddresses, selectedPositions, bigNumberFormatter(sUSDPaid), collateralAddress);
     if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
         return parlayMarketsAMMContract.buyQuoteFromParlayWithDifferentCollateral(
             marketsAddresses,

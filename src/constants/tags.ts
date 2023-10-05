@@ -134,7 +134,7 @@ export const TAGS_LIST: Tags = [
         logo: ``,
         logoClass: 'icon-league league--uel',
         favourite: false,
-        hidden: true,
+        hidden: false,
         priority: 111,
     },
     {
