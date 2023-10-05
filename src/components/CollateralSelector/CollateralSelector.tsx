@@ -215,7 +215,7 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
 const CollateralOption = styled.div`
     display: flex;
     align-items: center;
-    padding: 3px 7px;
+    padding: 5px 7px;
     border-radius: 8px;
     cursor: pointer;
     border: 2px solid ${(props) => props.theme.background.quaternary};

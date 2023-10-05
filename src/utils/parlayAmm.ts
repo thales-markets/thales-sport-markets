@@ -6,7 +6,6 @@ import { getIsMultiCollateralSupported } from './network';
 import { Position } from 'enums/markets';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { Coins } from '../types/tokens';
-import { bigNumberFormatter } from './formatters/ethers';
 
 export const getParlayAMMTransaction: any = async (
     isVoucherSelected: boolean,
@@ -18,6 +17,7 @@ export const getParlayAMMTransaction: any = async (
     marketsAddresses: string[],
     selectedPositions: Position[],
     sUSDPaid: BigNumber,
+    collateralPaid: BigNumber,
     expectedPayout: BigNumber,
     referral?: string | null,
     additionalSlippage?: BigNumber
@@ -71,7 +71,7 @@ export const getParlayAMMTransaction: any = async (
                     expectedPayout,
                     collateralAddress,
                     referral || ZERO_ADDRESS,
-                    { value: sUSDPaid }
+                    { value: collateralPaid }
                 );
 
                 finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
@@ -85,7 +85,7 @@ export const getParlayAMMTransaction: any = async (
                 expectedPayout,
                 collateralAddress,
                 referral || ZERO_ADDRESS,
-                { value: sUSDPaid, gasLimit: finalEstimation }
+                { value: collateralPaid, gasLimit: finalEstimation }
             );
         } else {
             if (networkId === Network.OptimismMainnet) {
@@ -180,7 +180,6 @@ export const getParlayMarketsAMMQuoteMethod: any = (
         );
     }
 
-    console.log(marketsAddresses, selectedPositions, bigNumberFormatter(sUSDPaid), collateralAddress);
     if (isMultiCollateralSupported && isNonDefaultCollateral && collateralAddress) {
         return parlayMarketsAMMContract.buyQuoteFromParlayWithDifferentCollateral(
             marketsAddresses,
