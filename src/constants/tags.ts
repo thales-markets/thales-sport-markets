@@ -134,7 +134,7 @@ export const TAGS_LIST: Tags = [
         logo: ``,
         logoClass: 'icon-league league--uel',
         favourite: false,
-        hidden: true,
+        hidden: false,
         priority: 111,
     },
     {
@@ -364,7 +364,7 @@ export const TAGS_LIST: Tags = [
         label: 'UEFA Europa League',
         logoClass: 'icon-league league--uel',
         favourite: false,
-        hidden: false,
+        hidden: true,
         priority: 117,
     },
     {
@@ -544,6 +544,7 @@ export const UEFA_TAGS = [9016, 9017, 18806, 18821, 9288, 9042, 19216, 9076, 907
 export const MOTOSPORT_TAGS = [9445, 9497];
 export const GOLF_TAGS = [109021, 109121];
 export const GOLF_TOURNAMENT_WINNER_TAG = 109121;
+export const EUROPA_LEAGUE_TAGS = [9017, 9073];
 
 export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.WINNER]: 'winner',

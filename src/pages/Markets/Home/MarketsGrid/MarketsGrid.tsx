@@ -1,8 +1,8 @@
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { SPORTS_MAP, TAGS_LIST } from 'constants/tags';
+import { EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import { Dictionary, groupBy } from 'lodash';
+import { groupBy } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
@@ -25,10 +25,12 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
         !isMobile ? addHoursToCurrentDate(72, true).getTime() : 0
     );
 
-    const marketsMap = groupBy(markets, (market) => market.tags[0]);
+    const marketsMap: Record<number, SportMarketInfo[]> = groupBy(markets, (market) => Number(market.tags[0]));
+    // UNIFYING EUROPA LEAGUE MARKETS FROM BOTH ENETPULSE & RUNDOWNS PROVIDERS
+    const unifiedMarketsMap = unifyEuropaLeagueMarkets(marketsMap);
     const marketsKeys = sortMarketKeys(
         Object.keys(marketsMap).map((key) => Number(key)),
-        marketsMap,
+        unifiedMarketsMap,
         favouriteLeagues,
         dateFilter
     );
@@ -40,7 +42,12 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
             <ListContainer>
                 {finalOrderKeys.map((leagueId: number, index: number) => {
                     return (
-                        <MarketsList key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
+                        <MarketsList
+                            key={index}
+                            league={leagueId}
+                            markets={unifiedMarketsMap[leagueId]}
+                            language={language}
+                        />
                     );
                 })}
             </ListContainer>
@@ -50,7 +57,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
 const sortMarketKeys = (
     marketsKeys: number[],
-    marketsMap: Dictionary<[SportMarketInfo, ...SportMarketInfo[]]>,
+    marketsMap: Record<number, SportMarketInfo[]>,
     favouriteLeagues: Tags,
     dateFilter: any
 ) => {
@@ -175,6 +182,15 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         ...motosportKeys,
         ...golfKeys,
     ];
+};
+
+const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarketInfo[]>) => {
+    const rundownEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[0]] ? marketsMap[EUROPA_LEAGUE_TAGS[0]] : [];
+    const enetpulseEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[1]] ? marketsMap[EUROPA_LEAGUE_TAGS[1]] : [];
+    if (rundownEuropaLeagueGames.length > 0 || enetpulseEuropaLeagueGames.length > 0) {
+        marketsMap[EUROPA_LEAGUE_TAGS[0]] = [...rundownEuropaLeagueGames, ...enetpulseEuropaLeagueGames];
+    }
+    return marketsMap;
 };
 
 const Container = styled(FlexDiv)`
