@@ -40,7 +40,6 @@ import networkConnector from 'utils/networkConnector';
 import { getParlayAMMTransaction, getParlayMarketsAMMQuoteMethod } from 'utils/parlayAmm';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
-import Payment from '../Payment';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
@@ -78,9 +77,9 @@ import {
 } from 'utils/collaterals';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import CollateralSelector from 'components/CollateralSelector';
-import useExchangeRatesQuery, { Rates } from '../../../../../../queries/rates/useExchangeRatesQuery';
-import { ZERO_ADDRESS } from '../../../../../../constants/network';
-import { Coins } from '../../../../../../types/tokens';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import { ZERO_ADDRESS } from 'constants/network';
+import { Coins } from 'types/tokens';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -152,9 +151,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     ]);
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isEth = collateralAddress === ZERO_ADDRESS;
+    const isDefaultCollateral = selectedCollateral === defaultCollateral;
 
     // Due to conversion from non default stable to collateral user needs 2% more funds in wallet
-    const COLLATERAL_CONVERSION_MULTIPLIER = selectedCollateral !== defaultCollateral ? 1.02 : 1;
+    const COLLATERAL_CONVERSION_MULTIPLIER = isDefaultCollateral ? 1 : 1.02;
 
     const hasParlayCombinedMarkets = isSGPInParlayMarkets(markets);
 
@@ -233,14 +233,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    // const convertToStable = useCallback(
-    //     (value: number) => {
-    //         const rate = exchangeRates?.[selectedCollateral] || 0;
-    //         return isStableCollateral ? value : value * rate * (1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE);
-    //     },
-    //     [selectedCollateral, exchangeRates, isStableCollateral]
-    // );
-
     const convertMinAmountFromStable = useCallback(() => {
         const rate = exchangeRates?.[selectedCollateral];
         if (isStableCollateral) {
@@ -283,7 +275,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                         ? minCollateralAmountValue // deafult value for qoute info
                         : collateralAmountForQuote;
                 try {
-                    const usdPaid = isStableCollateral
+                    const usdPaid = isDefaultCollateral
                         ? coinParser(minCollateralAmount.toString(), networkId)
                         : await multiCollateralOnOffRampContract.getMinimumReceived(
                               isEth
@@ -330,7 +322,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             convertMinAmountFromStable,
             selectedCollateral,
             collateralAddress,
-            isStableCollateral,
+            isDefaultCollateral,
             isEth,
         ]
     );
@@ -364,7 +356,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     console.log(e);
                 }
             };
-            console.log(collateralAmountValue, isEth, hasAllowance);
             if (isWalletConnected && collateralAmountValue) {
                 isVoucherSelected || isEth ? setHasAllowance(true) : getAllowance();
             }
@@ -820,7 +811,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     </SummaryValue>
                 </RowContainer>
             </RowSummary>
-            <Payment />
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
