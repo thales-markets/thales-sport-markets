@@ -328,7 +328,8 @@
             "total-quote": "Total quote",
             "result": "Result",
             "position-size": "Position size",
-            "starts": "Starts"
+            "starts": "Starts",
+            "payout-in": "Payout in"
         },
         "table": {
             "time": "Time",

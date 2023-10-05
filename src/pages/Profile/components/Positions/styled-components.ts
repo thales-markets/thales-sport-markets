@@ -241,3 +241,11 @@ export const ClaimLabel = styled(Label)`
 export const ClaimValue = styled(ClaimLabel)`
     text-transform: none;
 `;
+
+export const PayoutLabel = styled(ClaimLabel)`
+    white-space: nowrap;
+    @media (max-width: 768px) {
+        margin-right: 0px;
+        margin-bottom: 0px;
+    }
+`;

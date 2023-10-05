@@ -736,7 +736,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             markets: [market],
             multiSingle: false,
             totalQuote: getPositionOdds(market),
-            paid: Number(collateralAmountValue),
+            paid: convertToStable(Number(collateralAmountValue)),
             payout: tokenAmount,
             onClose: onModalClose,
         };

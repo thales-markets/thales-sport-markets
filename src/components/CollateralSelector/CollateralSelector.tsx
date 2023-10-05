@@ -151,6 +151,10 @@ const Text = styled.span<{
     font-size: ${(props) => (props.isDetailedView ? '14px' : '12px')};
     line-height: ${(props) =>
         !props.isDetailedView && props.isSelectedCollateral ? '12px' : props.lineHeight || '20px'};
+    @media (max-width: 768px) {
+        ${(props) => (!props.isDetailedView && props.isSelectedCollateral ? 'font-size: 10px;' : '')}
+        ${(props) => (!props.isDetailedView && props.isSelectedCollateral ? 'line-height: 10px;' : '')}
+    }
 `;
 
 const TextCollateral = styled(Text)`
@@ -170,6 +174,9 @@ const TextCollateral = styled(Text)`
 const TextCollateralWrapper = styled.div<{ isDetailedView?: boolean }>`
     min-width: ${(props) => (props.isDetailedView ? '48px' : '45px')};
     display: flex;
+    @media (max-width: 768px) {
+        ${(props) => (!props.isDetailedView ? 'min-width: 35px;' : '')}
+    }
 `;
 
 const Arrow = styled.i`

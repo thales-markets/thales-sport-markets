@@ -60,10 +60,12 @@ import {
     MatchInfo,
     MatchLabel,
     MatchLogo,
+    PayoutLabel,
     StatusContainer,
 } from '../../styled-components';
 import {
     BoldValue,
+    CollateralSelectorContainer,
     ColumnDirectionInfo,
     MatchPeriodContainer,
     MatchPeriodLabel,
@@ -411,6 +413,16 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                 >
                                     {t('profile.card.claim')}
                                 </Button>
+                                {isMultiCollateralSupported && (
+                                    <CollateralSelectorContainer>
+                                        <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
+                                        <CollateralSelector
+                                            collateralArray={getCollaterals(networkId)}
+                                            selectedItem={selectedCollateralIndex}
+                                            onChangeCollateral={() => {}}
+                                        />
+                                    </CollateralSelectorContainer>
+                                )}
                             </ClaimContainer>
                         ) : (
                             <>
@@ -420,7 +432,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                 </ColumnDirectionInfo>
                                 {isMultiCollateralSupported && (
                                     <ColumnDirectionInfo>
-                                        <ClaimLabel>{'payout in'}:</ClaimLabel>
+                                        <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
                                         <CollateralSelector
                                             collateralArray={getCollaterals(networkId)}
                                             selectedItem={selectedCollateralIndex}

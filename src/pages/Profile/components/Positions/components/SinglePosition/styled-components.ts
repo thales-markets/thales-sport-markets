@@ -111,3 +111,7 @@ export const PlayerIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     margin-left: 24px;
 `;
+
+export const CollateralSelectorContainer = styled(FlexDivRow)`
+    margin-top: 5px;
+`;
