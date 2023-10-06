@@ -62,6 +62,8 @@ import {
     MatchLogo,
     PayoutLabel,
     StatusContainer,
+    additionalClaimButtonStyle,
+    additionalClaimButtonStyleMobile,
 } from '../../styled-components';
 import {
     BoldValue,
@@ -110,6 +112,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const parlayPayment = useSelector(getParlayPayment);
     const selectedCollateralIndex = parlayPayment.selectedStableIndex;
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
     );
@@ -210,6 +213,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const claimReward = async () => {
         const { signer, sportsAMMContract } = networkConnector;
         if (signer && sportsAMMContract) {
+            setIsSubmitting(true);
             const contract = new ethers.Contract(position.market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
             const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
@@ -236,6 +240,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 console.log(e);
             }
+            setIsSubmitting(false);
         }
     };
 
@@ -405,13 +410,15 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                         e.stopPropagation();
                                         claimReward();
                                     }}
+                                    disabled={isSubmitting}
                                     backgroundColor={theme.button.background.quaternary}
                                     borderColor={theme.button.borderColor.secondary}
+                                    additionalStyles={additionalClaimButtonStyleMobile}
                                     padding="2px 5px"
                                     fontSize="9px"
                                     height="19px"
                                 >
-                                    {t('profile.card.claim')}
+                                    {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
                                 </Button>
                                 {isMultiCollateralSupported && (
                                     <CollateralSelectorContainer>
@@ -446,11 +453,13 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                         e.stopPropagation();
                                         claimReward();
                                     }}
+                                    disabled={isSubmitting}
                                     backgroundColor={theme.button.background.quaternary}
                                     borderColor={theme.button.borderColor.secondary}
-                                    padding="3px 15px"
+                                    additionalStyles={additionalClaimButtonStyle}
+                                    padding="2px 5px"
                                 >
-                                    {t('profile.card.claim')}
+                                    {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
                                 </Button>
                             </>
                         )}

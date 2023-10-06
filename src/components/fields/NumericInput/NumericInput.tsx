@@ -131,7 +131,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     borderColor={borderColor}
                 />
             </ValidationTooltip>
-            <RightContainer height={height}>
+            <RightContainer height={height} currencyLabel={!!currencyLabel}>
                 {onMaxButton && (
                     <MaxButton disabled={disabled} onClick={onMaxButton}>
                         {t('markets.market-details.max')}
@@ -162,11 +162,12 @@ const StyledInput = styled(Input)<{ padding?: string }>`
     padding: ${(props) => props.padding || '5px 100px 5px 10px'};
 `;
 
-const RightContainer = styled(FlexDivCentered)<{ height?: string }>`
+const RightContainer = styled(FlexDivCentered)<{ height?: string; currencyLabel?: boolean }>`
     position: absolute;
     right: 0;
     bottom: 0;
     height: ${(props) => props.height || '30px'};
+    padding-right: ${(props) => (props.currencyLabel ? '10px' : '0px')};
 `;
 
 const CurrencyLabel = styled.label<{ hasSeparator?: boolean }>`

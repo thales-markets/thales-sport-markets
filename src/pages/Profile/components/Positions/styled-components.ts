@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
@@ -249,3 +249,13 @@ export const PayoutLabel = styled(ClaimLabel)`
         margin-bottom: 0px;
     }
 `;
+
+export const additionalClaimButtonStyle: CSSProperties = {
+    minWidth: '100px',
+    maxWidth: '100px',
+};
+
+export const additionalClaimButtonStyleMobile: CSSProperties = {
+    minWidth: '65px',
+    maxWidth: '80px',
+};
