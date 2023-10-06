@@ -71,7 +71,7 @@ import { coinParser } from 'utils/formatters/ethers';
 import ApprovalModal from 'components/ApprovalModal';
 import { BigNumber, ethers } from 'ethers';
 import { APPROVAL_BUFFER } from 'constants/markets';
-import Tooltip from '../../../../../../components/Tooltip';
+import Tooltip from 'components/Tooltip';
 import { CollateralSelectorContainer } from '../SinglePosition/styled-components';
 
 type ParlayPosition = {
@@ -204,7 +204,13 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             try {
                 const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
 
-                const tx = await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress);
+                const tx = isDefaultCollateral
+                    ? await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress)
+                    : await parlayMarketsAMMContractWithSigner?.exerciseParlayWithOfframp(
+                          parlayAddress,
+                          collateralAddress,
+                          isEth
+                      );
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {

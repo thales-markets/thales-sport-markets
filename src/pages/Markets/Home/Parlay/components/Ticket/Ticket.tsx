@@ -82,7 +82,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import { ZERO_ADDRESS } from 'constants/network';
 import { Coins } from 'types/tokens';
-import Checkbox from '../../../../../../components/fields/Checkbox';
+import Checkbox from 'components/fields/Checkbox';
 
 type TicketProps = {
     markets: ParlaysMarket[];

@@ -184,9 +184,11 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
     align-items: end;
     justify-content: flex-end;
     margin-bottom: 10px;
+    margin-right: 10px;
 
     @media (max-width: 768px) {
         min-width: 60px;
+        margin-right: 5px;
     }
     button {
         margin-top: 2px;
