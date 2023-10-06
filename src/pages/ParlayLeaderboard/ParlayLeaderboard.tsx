@@ -453,7 +453,12 @@ const getExpandedRow = (
 
 export const getParlayItemStatus = (market: SportMarketInfo) => {
     if (market.isCanceled) return t('profile.card.canceled');
-    if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
+    if (market.isResolved) {
+        if (market.playerName !== null) {
+            return market.playerPropsScore;
+        }
+        return `${market.homeScore} : ${market.awayScore}`;
+    }
     return formatDateWithTime(Number(market.maturityDate) * 1000);
 };
 

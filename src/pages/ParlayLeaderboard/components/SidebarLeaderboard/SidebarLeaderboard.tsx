@@ -20,13 +20,15 @@ import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { PositionData } from 'types/markets';
 import { formatCurrency } from 'utils/formatters/number';
-import { truncateAddress } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName, truncateAddress } from 'utils/formatters/string';
 import {
     convertPositionNameToPositionType,
+    fixPlayerPropsLinesFromContract,
     formatMarketOdds,
     getOddTooltipText,
     getSpreadTotalText,
     getSymbolText,
+    isOneSidePlayerProps,
 } from 'utils/markets';
 import { Network } from 'enums/network';
 import { buildHref } from 'utils/routes';
@@ -55,6 +57,8 @@ import {
 } from './styled-components';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType } from 'enums/markets';
 
 const SidebarLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -156,6 +160,8 @@ const SidebarLeaderboard: React.FC = () => {
                                                     (position: PositionData) => position.market.address == market
                                                 );
 
+                                                position ? fixPlayerPropsLinesFromContract(position.market) : '';
+
                                                 const positionEnum = convertPositionNameToPositionType(
                                                     position ? position.side : ''
                                                 );
@@ -177,14 +183,34 @@ const SidebarLeaderboard: React.FC = () => {
                                                                 {getPositionStatus(position, theme)}
                                                                 <ParlayRowTeam
                                                                     title={
-                                                                        position.market.homeTeam +
-                                                                        ' vs ' +
-                                                                        position.market.awayTeam
+                                                                        position.market.isOneSideMarket
+                                                                            ? fixOneSideMarketCompetitorName(
+                                                                                  position.market.homeTeam
+                                                                              )
+                                                                            : position.market.playerName === null
+                                                                            ? position.market.homeTeam +
+                                                                              ' vs ' +
+                                                                              position.market.awayTeam
+                                                                            : `${position.market.playerName} (${
+                                                                                  BetTypeNameMap[
+                                                                                      position.market.betType as BetType
+                                                                                  ]
+                                                                              }) `
                                                                     }
                                                                 >
-                                                                    {position.market.homeTeam +
-                                                                        ' vs ' +
-                                                                        position.market.awayTeam}
+                                                                    {position.market.isOneSideMarket
+                                                                        ? fixOneSideMarketCompetitorName(
+                                                                              position.market.homeTeam
+                                                                          )
+                                                                        : position.market.playerName === null
+                                                                        ? position.market.homeTeam +
+                                                                          ' vs ' +
+                                                                          position.market.awayTeam
+                                                                        : `${position.market.playerName} (${
+                                                                              BetTypeNameMap[
+                                                                                  position.market.betType as BetType
+                                                                              ]
+                                                                          }) `}
                                                                 </ParlayRowTeam>
                                                             </ParlayRowMatch>
                                                             <PositionSymbol
@@ -208,7 +234,8 @@ const SidebarLeaderboard: React.FC = () => {
                                                                 }}
                                                                 symbolText={symbolText}
                                                                 symbolUpperText={
-                                                                    spreadTotalText
+                                                                    spreadTotalText &&
+                                                                    !isOneSidePlayerProps(position.market.betType)
                                                                         ? {
                                                                               text: spreadTotalText,
                                                                               textStyle: {
