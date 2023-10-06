@@ -14,7 +14,7 @@ import {
 import { Coins } from 'types/tokens';
 import { isStableCurrency } from 'utils/collaterals';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
-import { setPaymentSelectedStableIndex } from 'redux/modules/parlay';
+import { setPaymentSelectedCollateralIndex } from 'redux/modules/parlay';
 
 type CollateralSelectorProps = {
     collateralArray: Array<string>;
@@ -80,7 +80,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                           key={i}
                                           onClick={() => {
                                               onChangeCollateral(collateral.index);
-                                              dispatch(setPaymentSelectedStableIndex(collateral.index));
+                                              dispatch(setPaymentSelectedCollateralIndex(collateral.index));
                                           }}
                                       >
                                           <FlexDivCentered>
@@ -121,7 +121,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                           key={index}
                                           onClick={() => {
                                               onChangeCollateral(index);
-                                              dispatch(setPaymentSelectedStableIndex(index));
+                                              dispatch(setPaymentSelectedCollateralIndex(index));
                                           }}
                                       >
                                           <TextCollateral fontWeight="600">{collateral}</TextCollateral>

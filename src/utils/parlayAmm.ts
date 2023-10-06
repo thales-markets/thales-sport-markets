@@ -1,7 +1,7 @@
 import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
-import { getCollateral, getCollateralAddress, getCollateralIndexForNetwork, getDefaultCollateral } from './collaterals';
+import { getCollateral, getCollateralAddress, getCollateralIndex, getDefaultCollateral } from './collaterals';
 import { getIsMultiCollateralSupported } from './network';
 import { Position } from 'enums/markets';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
@@ -31,7 +31,7 @@ export const getParlayAMMTransaction: any = async (
     if (isEth) {
         collateralAddress = getCollateralAddress(
             networkId,
-            getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+            getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
         );
     }
 
@@ -176,7 +176,7 @@ export const getParlayMarketsAMMQuoteMethod: any = (
     if (isEth) {
         collateralAddress = getCollateralAddress(
             networkId,
-            getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+            getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
         );
     }
 

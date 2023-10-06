@@ -250,7 +250,7 @@ export type ParlayAmmData = {
 };
 
 export type ParlayPayment = {
-    selectedStableIndex: number;
+    selectedCollateralIndex: number;
     isVoucherAvailable: boolean;
     isVoucherSelected: boolean;
     amountToBuy: number | string;

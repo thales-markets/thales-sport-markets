@@ -57,8 +57,8 @@ export const isRouteAvailableForNetwork = (route: string, networkId: Network): b
 };
 
 export const getDefaultCollateralIndexForNetworkId = (networkId: Network): number => {
-    const lsSelectedStableIndex = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
-    return networkId === Network.ArbitrumOne ? 0 : (lsSelectedStableIndex as number) || 0;
+    const lsSelectedCollateralIndex = localStore.get(LOCAL_STORAGE_KEYS.COLLATERAL_INDEX);
+    return networkId === Network.ArbitrumOne ? 0 : (lsSelectedCollateralIndex as number) || 0;
 };
 
 export const getIsMultiCollateralSupported = (networkId: Network): boolean => getCollaterals(networkId).length > 1;

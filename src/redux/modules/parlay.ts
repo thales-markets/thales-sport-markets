@@ -21,10 +21,10 @@ const getDefaultParlay = (): ParlaysMarketPosition[] => {
 };
 
 const getDefaultPayment = (): ParlayPayment => {
-    const lsSelectedStableIndex = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
+    const lsSelectedCollateralIndex = localStore.get(LOCAL_STORAGE_KEYS.COLLATERAL_INDEX);
 
     return {
-        selectedStableIndex: lsSelectedStableIndex !== undefined ? (lsSelectedStableIndex as number) : 0,
+        selectedCollateralIndex: lsSelectedCollateralIndex !== undefined ? (lsSelectedCollateralIndex as number) : 0,
         isVoucherAvailable: false,
         isVoucherSelected: false,
         amountToBuy: '',
@@ -277,7 +277,7 @@ const parlaySlice = createSlice({
             state.payment = { ...state.payment, ...action.payload };
 
             // Store the users last selected stable index
-            localStore.set(LOCAL_STORAGE_KEYS.STABLE_INDEX, state.payment.selectedStableIndex);
+            localStore.set(LOCAL_STORAGE_KEYS.COLLATERAL_INDEX, state.payment.selectedCollateralIndex);
         },
         setIsMultiSingle: (state, action: PayloadAction<boolean>) => {
             state.isMultiSingle = action.payload;
@@ -297,9 +297,9 @@ const parlaySlice = createSlice({
             }
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
-        setPaymentSelectedStableIndex: (state, action: PayloadAction<number>) => {
-            state.payment = { ...state.payment, selectedStableIndex: action.payload };
-            localStore.set(LOCAL_STORAGE_KEYS.STABLE_INDEX, action.payload);
+        setPaymentSelectedCollateralIndex: (state, action: PayloadAction<number>) => {
+            state.payment = { ...state.payment, selectedCollateralIndex: action.payload };
+            localStore.set(LOCAL_STORAGE_KEYS.COLLATERAL_INDEX, action.payload);
         },
         setPaymentIsVoucherSelected: (state, action: PayloadAction<boolean>) => {
             state.payment = { ...state.payment, isVoucherSelected: action.payload };
@@ -330,7 +330,7 @@ export const {
     setPayment,
     setMultiSingle,
     setIsMultiSingle,
-    setPaymentSelectedStableIndex,
+    setPaymentSelectedCollateralIndex,
     setPaymentIsVoucherSelected,
     setPaymentIsVoucherAvailable,
     setPaymentAmountToBuy,

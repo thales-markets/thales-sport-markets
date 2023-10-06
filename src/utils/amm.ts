@@ -1,7 +1,7 @@
 import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
-import { getCollateralAddress, getCollateralIndexForNetwork } from './collaterals';
+import { getCollateralAddress, getCollateralIndex } from './collaterals';
 import { getIsMultiCollateralSupported } from './network';
 import { Position } from 'enums/markets';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
@@ -29,7 +29,7 @@ export const getAMMSportsTransaction: any = async (
     if (isEth) {
         collateralAddress = getCollateralAddress(
             networkId,
-            getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+            getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
         );
     }
 
@@ -160,7 +160,7 @@ export const getSportsAMMQuoteMethod: any = (
     if (isEth) {
         collateralAddress = getCollateralAddress(
             networkId,
-            getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+            getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
         );
     }
 

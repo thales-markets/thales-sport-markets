@@ -110,7 +110,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnect = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlayPayment = useSelector(getParlayPayment);
-    const selectedCollateralIndex = parlayPayment.selectedStableIndex;
+    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(

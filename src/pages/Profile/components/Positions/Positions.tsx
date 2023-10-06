@@ -70,7 +70,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const parlayPayment = useSelector(getParlayPayment);
-    const selectedCollateralIndex = parlayPayment.selectedStableIndex;
+    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 

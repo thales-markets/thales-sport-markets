@@ -4,7 +4,7 @@ import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
 import { bigNumberFormatter } from '../../utils/formatters/ethers';
 import { Network } from 'enums/network';
-import { getCollateralAddress, getCollateralDecimals, getCollateralIndexForNetwork } from 'utils/collaterals';
+import { getCollateralAddress, getCollateralDecimals, getCollateralIndex } from 'utils/collaterals';
 import { getDefaultDecimalsForNetwork, getIsMultiCollateralSupported } from 'utils/network';
 import { ethers } from 'ethers';
 import { ZERO_ADDRESS } from 'constants/network';
@@ -35,7 +35,7 @@ const usePositionPriceDetailsQuery = (
                 if (isEth) {
                     collateralAddress = getCollateralAddress(
                         networkId,
-                        getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+                        getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
                     );
                 }
                 const positionDetails = await sportPositionalMarketDataContract?.getPositionDetails(

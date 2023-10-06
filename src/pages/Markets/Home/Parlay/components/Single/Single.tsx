@@ -26,7 +26,7 @@ import {
     setPaymentAmountToBuy,
     setPaymentIsVoucherAvailable,
     setPaymentIsVoucherSelected,
-    setPaymentSelectedStableIndex,
+    setPaymentSelectedCollateralIndex,
 } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -101,7 +101,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
     const parlayPayment = useSelector(getParlayPayment);
-    const selectedCollateralIndex = parlayPayment.selectedStableIndex;
+    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
     const isVoucherSelected = parlayPayment.isVoucherSelected;
     const isVoucherAvailable = parlayPayment.isVoucherAvailable;
     const collateralAmountValue = parlayPayment.amountToBuy;
@@ -190,6 +190,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
             dispatch(setPaymentIsVoucherAvailable(true));
             dispatch(setPaymentIsVoucherSelected(true));
+            dispatch(setPaymentSelectedCollateralIndex(0));
 
             return overtimeVoucherQuery.data;
         }
@@ -773,7 +774,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                                 value={isVoucherSelected.toString()}
                                 onChange={(e: any) => {
                                     dispatch(setPaymentIsVoucherSelected(e.target.checked || false));
-                                    dispatch(setPaymentSelectedStableIndex(0));
+                                    dispatch(setPaymentSelectedCollateralIndex(0));
                                 }}
                             />
                         </CheckboxContainer>

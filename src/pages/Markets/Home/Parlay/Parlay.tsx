@@ -9,7 +9,7 @@ import {
     getHasParlayError,
     setParlaySize,
     resetParlayError,
-    setPaymentSelectedStableIndex,
+    setPaymentSelectedCollateralIndex,
     getIsMultiSingle,
     setIsMultiSingle,
     getMultiSingle,
@@ -74,7 +74,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     });
 
     useEffect(() => {
-        dispatch(setPaymentSelectedStableIndex(getDefaultCollateralIndexForNetworkId(networkId)));
+        dispatch(setPaymentSelectedCollateralIndex(getDefaultCollateralIndexForNetworkId(networkId)));
     }, [networkId, dispatch]);
 
     useEffect(() => {

@@ -19,7 +19,7 @@ import {
     setPaymentAmountToBuy,
     setPaymentIsVoucherAvailable,
     setPaymentIsVoucherSelected,
-    setPaymentSelectedStableIndex,
+    setPaymentSelectedCollateralIndex,
 } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -72,7 +72,7 @@ import {
     getCollateral,
     getCollateralAddress,
     getCollateralDecimals,
-    getCollateralIndexForNetwork,
+    getCollateralIndex,
     getCollaterals,
     getDefaultCollateral,
     isStableCurrency,
@@ -109,7 +109,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
     const parlayPayment = useSelector(getParlayPayment);
-    const selectedCollateralIndex = parlayPayment.selectedStableIndex;
+    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
     const isVoucherSelected = parlayPayment.isVoucherSelected;
     const isVoucherAvailable = parlayPayment.isVoucherAvailable;
     const collateralAmountValue = parlayPayment.amountToBuy;
@@ -207,6 +207,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
             dispatch(setPaymentIsVoucherAvailable(true));
             dispatch(setPaymentIsVoucherSelected(true));
+            dispatch(setPaymentSelectedCollateralIndex(0));
 
             return overtimeVoucherQuery.data;
         }
@@ -285,7 +286,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                               isEth
                                   ? getCollateralAddress(
                                         networkId,
-                                        getCollateralIndexForNetwork(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+                                        getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
                                     )
                                   : collateralAddress,
                               coinParser(minCollateralAmount.toString(), networkId, selectedCollateral)
@@ -829,7 +830,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                                 value={isVoucherSelected.toString()}
                                 onChange={(e: any) => {
                                     dispatch(setPaymentIsVoucherSelected(e.target.checked || false));
-                                    dispatch(setPaymentSelectedStableIndex(0));
+                                    dispatch(setPaymentSelectedCollateralIndex(0));
                                 }}
                             />
                         </CheckboxContainer>

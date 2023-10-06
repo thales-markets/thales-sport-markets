@@ -93,7 +93,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const parlayPayment = useSelector(getParlayPayment);
-    const selectedCollateralIndex = parlayPayment.selectedStableIndex;
+    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const [hasAllowance, setHasAllowance] = useState(false);

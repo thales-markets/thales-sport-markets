@@ -32,31 +32,22 @@ export const COLLATERALS: Record<Network, Coins[]> = {
         CRYPTO_CURRENCY_MAP.DAI as Coins,
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
-    ],
-    [Network.OptimismGoerli]: [
-        CRYPTO_CURRENCY_MAP.sUSD as Coins,
-        CRYPTO_CURRENCY_MAP.DAI as Coins,
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-    ],
-    [Network.ArbitrumOne]: [CRYPTO_CURRENCY_MAP.USDCe as Coins],
-    [Network.Base]: [CRYPTO_CURRENCY_MAP.USDC as Coins],
-};
-
-// TODO: merge with COLLATERALS when all pages will support these
-export const ADDITIONAL_COLLATERALS: Record<Network, Coins[]> = {
-    [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.OP as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
     ],
-    [Network.OptimismGoerli]: [],
-    [Network.Base]: [CRYPTO_CURRENCY_MAP.WETH as Coins, CRYPTO_CURRENCY_MAP.ETH as Coins],
+    [Network.OptimismGoerli]: [CRYPTO_CURRENCY_MAP.sUSD as Coins],
     [Network.ArbitrumOne]: [
+        CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
         CRYPTO_CURRENCY_MAP.ARB as Coins,
+        CRYPTO_CURRENCY_MAP.WETH as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+    ],
+    [Network.Base]: [
+        CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
     ],
