@@ -40,7 +40,7 @@ const getDefaultMultiSingle = (): MultiSingleAmounts[] => {
         ? (lsMultiSingle as MultiSingleAmounts[])
         : Array(defaultArr.length).fill({
               sportMarketAddress: '',
-              amountToBuy: 0,
+              amountToBuy: '',
           });
 };
 
@@ -164,7 +164,7 @@ const parlaySlice = createSlice({
                         state.multiSingle.push({
                             sportMarketAddress: action.payload.sportMarketAddress,
                             parentMarketAddress: action.payload.parentMarket,
-                            amountToBuy: 0,
+                            amountToBuy: '',
                         });
                         state.parlay.push(action.payload);
                     }

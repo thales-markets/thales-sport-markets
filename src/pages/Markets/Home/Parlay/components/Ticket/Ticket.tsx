@@ -19,6 +19,7 @@ import {
     setPaymentAmountToBuy,
     setPaymentIsVoucherAvailable,
     setPaymentIsVoucherSelected,
+    setPaymentSelectedStableIndex,
 } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
@@ -44,6 +45,7 @@ import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyContainer,
+    CheckboxContainer,
     InfoContainer,
     InfoLabel,
     InfoTooltip,
@@ -80,6 +82,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import { ZERO_ADDRESS } from 'constants/network';
 import { Coins } from 'types/tokens';
+import Checkbox from '../../../../../../components/fields/Checkbox';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -108,6 +111,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     const parlayPayment = useSelector(getParlayPayment);
     const selectedCollateralIndex = parlayPayment.selectedStableIndex;
     const isVoucherSelected = parlayPayment.isVoucherSelected;
+    const isVoucherAvailable = parlayPayment.isVoucherAvailable;
     const collateralAmountValue = parlayPayment.amountToBuy;
 
     const [minUsdAmountValue, setMinUsdAmountValue] = useState<number>(0);
@@ -264,7 +268,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     }, [dispatch, networkId]);
 
     const fetchParlayAmmQuote = useCallback(
-        async (collateralAmountForQuote: number) => {
+        async (collateralAmountForQuote: number, isMinAmountQuote?: boolean) => {
             const { parlayMarketsAMMContract, multiCollateralOnOffRampContract } = networkConnector;
             if (parlayMarketsAMMContract && multiCollateralOnOffRampContract && minUsdAmountValue) {
                 const minCollateralAmountValue = convertMinAmountFromStable();
@@ -286,7 +290,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                                   : collateralAddress,
                               coinParser(minCollateralAmount.toString(), networkId, selectedCollateral)
                           );
-                    if (collateralAmountForQuote !== minCollateralAmountValue) {
+                    if (!isMinAmountQuote) {
                         setUsdAmountValue(coinFormatter(usdPaid, networkId));
                     }
 
@@ -645,7 +649,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 const minCollateralAmountValue = convertMinAmountFromStable();
                 // Fetching for min collateral amount in order to calculate total bonus difference
                 const [parlayAmmMinimumCollateralAmountQuote, parlayAmmQuote] = await Promise.all([
-                    fetchParlayAmmQuote(minCollateralAmountValue),
+                    fetchParlayAmmQuote(minCollateralAmountValue, true),
                     fetchParlayAmmQuote(Number(collateralAmountValue)),
                 ]);
 
@@ -811,6 +815,27 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     </SummaryValue>
                 </RowContainer>
             </RowSummary>
+            {isVoucherAvailable && (
+                <RowSummary>
+                    <RowContainer>
+                        <SummaryLabel>{t('markets.parlay.pay-with-voucher')}:</SummaryLabel>
+                        <SummaryValue>
+                            {formatCurrencyWithSign(USD_SIGN, overtimeVoucher?.remainingAmount || 0, 2)}
+                        </SummaryValue>
+                        <CheckboxContainer>
+                            <Checkbox
+                                disabled={isAllowing || isBuying}
+                                checked={isVoucherSelected}
+                                value={isVoucherSelected.toString()}
+                                onChange={(e: any) => {
+                                    dispatch(setPaymentIsVoucherSelected(e.target.checked || false));
+                                    dispatch(setPaymentSelectedStableIndex(0));
+                                }}
+                            />
+                        </CheckboxContainer>
+                    </RowContainer>
+                </RowSummary>
+            )}
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>

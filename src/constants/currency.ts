@@ -1,9 +1,4 @@
 import { keyBy } from 'lodash';
-
-import { ReactComponent as sUSDIcon } from 'assets/currencies/sUSD.svg';
-import { ReactComponent as DAIIcon } from 'assets/currencies/DAI.svg';
-import { ReactComponent as USDCIcon } from 'assets/currencies/USDC.svg';
-import { ReactComponent as USDTIcon } from 'assets/currencies/USDT.svg';
 import { Coins } from 'types/tokens';
 import { Network } from 'enums/network';
 
@@ -30,18 +25,6 @@ export const STABLE_COINS = [
     CRYPTO_CURRENCY_MAP.USDC,
     CRYPTO_CURRENCY_MAP.USDT,
 ];
-
-export const currencyKeyToAssetIconMap = {
-    [CRYPTO_CURRENCY_MAP.sUSD]: sUSDIcon,
-    [CRYPTO_CURRENCY_MAP.DAI]: DAIIcon,
-    [CRYPTO_CURRENCY_MAP.USDC]: USDCIcon,
-    [CRYPTO_CURRENCY_MAP.USDT]: USDTIcon,
-    [CRYPTO_CURRENCY_MAP.USDCe]: USDTIcon,
-    [CRYPTO_CURRENCY_MAP.OP]: USDTIcon,
-    [CRYPTO_CURRENCY_MAP.ARB]: USDTIcon,
-    [CRYPTO_CURRENCY_MAP.WETH]: USDTIcon,
-    [CRYPTO_CURRENCY_MAP.ETH]: USDTIcon,
-};
 
 export const COLLATERALS: Record<Network, Coins[]> = {
     [Network.OptimismMainnet]: [

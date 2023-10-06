@@ -1,15 +1,8 @@
-import {
-    ADDITIONAL_COLLATERALS,
-    COLLATERAL_DECIMALS,
-    STABLE_COINS,
-    currencyKeyToAssetIconMap,
-} from 'constants/currency';
+import { ADDITIONAL_COLLATERALS, COLLATERAL_DECIMALS, STABLE_COINS } from 'constants/currency';
 import { COLLATERALS } from 'constants/currency';
 import { Network } from 'enums/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import { Coins } from 'types/tokens';
-
-export const getStableIcon = (currencyKey: Coins) => currencyKeyToAssetIconMap[currencyKey];
 
 export const getDefaultCollateral = (networkId: Network) => COLLATERALS[networkId][0];
 

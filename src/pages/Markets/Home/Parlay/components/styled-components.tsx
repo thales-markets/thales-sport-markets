@@ -3,6 +3,7 @@ import { FlexDiv, FlexDivCentered } from 'styles/common';
 import MuiTooltip from '@material-ui/core/Tooltip';
 
 export const RowSummary = styled.div<{ columnDirection?: boolean }>`
+    position: relative;
     display: flex;
     align-items: center;
     ${(props) => (props.columnDirection ? `flex-direction: column;` : '')}
@@ -26,14 +27,19 @@ export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
     }
 `;
 
-export const SummaryValue = styled.span<{ isInfo?: boolean; isCurrency?: boolean; isHidden?: boolean }>`
+export const SummaryValue = styled.span<{
+    isInfo?: boolean;
+    isCurrency?: boolean;
+    isHidden?: boolean;
+    isCollateralInfo?: boolean;
+}>`
     font-weight: 700;
     font-size: 11px;
     line-height: 12px;
     letter-spacing: 0.025em;
     display: ${(props) => (props.isHidden ? 'none' : '')};
     color: ${(props) => (props.isInfo || props.isCurrency ? props.theme.status.win : props.theme.textColor.primary)};
-    margin-left: ${(props) => (props.isInfo ? 'auto' : '5px')};
+    margin-left: ${(props) => (props.isInfo || props.isCollateralInfo ? 'auto' : '5px')};
 `;
 
 export const InfoContainer = styled.div`
@@ -223,4 +229,11 @@ export const CheckboxContainer = styled.div`
             border-width: 0 2px 2px 0;
         }
     }
+`;
+
+export const CollateralContainer = styled.div`
+    margin-left: auto;
+    border-radius: 5px;
+    padding: 3px;
+    background: ${(props) => props.theme.input.background.primary};
 `;
