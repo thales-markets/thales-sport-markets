@@ -887,7 +887,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={Number(collateralAmountValue) + Number(collateralAmountValue) * APPROVAL_BUFFER}
+                    defaultAmount={Number(collateralAmountValue) * (1 + APPROVAL_BUFFER)}
                     collateralIndex={selectedCollateralIndex}
                     tokenSymbol={selectedCollateral}
                     isAllowing={isAllowing}

@@ -429,7 +429,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
                 const collateralPaid = coinParser(collateralAmountValue.toString(), networkId, selectedCollateral);
-                const usdPaid = coinParser(roundNumberToDecimals(Number(usdAmountValue)).toString(), networkId);
+                const usdPaid = coinParser(usdAmountValue.toString(), networkId);
                 const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
                 const additionalSlippage = ethers.utils.parseEther('0.02');
 
@@ -667,10 +667,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     if (hasParlayCombinedMarkets) {
                         const marketsAddresses = markets.map((market) => market.address);
                         const selectedPositions = markets.map((market) => market.position);
-                        const usdPaidParsed = coinParser(
-                            roundNumberToDecimals(Number(usdPaid) ? Number(usdPaid) : minUsdAmountValue).toString(),
-                            networkId
-                        );
+                        const usdPaidParsed = coinParser((Number(usdPaid) || minUsdAmountValue).toString(), networkId);
 
                         const newSkewData = await parlayMarketsAMMContract?.calculateSkewImpact(
                             marketsAddresses,
@@ -944,7 +941,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={Number(collateralAmountValue) + Number(collateralAmountValue) * APPROVAL_BUFFER}
+                    defaultAmount={Number(collateralAmountValue) * (1 + APPROVAL_BUFFER)}
                     collateralIndex={selectedCollateralIndex}
                     tokenSymbol={selectedCollateral}
                     isAllowing={isAllowing}

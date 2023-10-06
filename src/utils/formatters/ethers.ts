@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { Coins } from 'types/tokens';
 import { getDefaultDecimalsForNetwork } from 'utils/network';
 import { COLLATERAL_DECIMALS } from 'constants/currency';
+import { roundNumberToDecimals } from './number';
 
 export const bytesFormatter = (input: string) => ethers.utils.formatBytes32String(input);
 
@@ -20,7 +21,7 @@ export const coinFormatter = (value: BigNumberish, networkId: number, currency?:
 export const coinParser = (value: string, networkId: number, currency?: Coins) => {
     const decimals = currency ? COLLATERAL_DECIMALS[currency] : getDefaultDecimalsForNetwork(networkId);
 
-    return ethers.utils.parseUnits(value, decimals);
+    return ethers.utils.parseUnits(roundNumberToDecimals(Number(value), decimals).toString(), decimals);
 };
 
 export const getAddress = (addr: string) => ethers.utils.getAddress(addr);

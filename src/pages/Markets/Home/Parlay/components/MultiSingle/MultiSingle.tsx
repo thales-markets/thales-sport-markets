@@ -1002,7 +1002,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={Number(calculatedTotalBuyIn) + Number(calculatedTotalBuyIn) * APPROVAL_BUFFER}
+                    defaultAmount={Number(calculatedTotalBuyIn) * (1 + APPROVAL_BUFFER)}
                     collateralIndex={selectedCollateralIndex}
                     tokenSymbol={selectedCollateral}
                     isAllowing={isAllowing}

@@ -45,7 +45,6 @@ import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils
 import { ZERO_ADDRESS } from 'constants/network';
 import { getParlayPayment } from 'redux/modules/parlay';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
-import { roundNumberToDecimals } from 'utils/formatters/number';
 import { coinParser } from 'utils/formatters/ethers';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
@@ -208,10 +207,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = coinParser(
-                        roundNumberToDecimals(Number(totalParlayClaimableAmount)).toString(),
-                        networkId
-                    );
+                    const parsedAmount = coinParser(Number(totalParlayClaimableAmount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         collateralContractWithSigner,

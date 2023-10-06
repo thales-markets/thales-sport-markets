@@ -11,7 +11,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import { ParlayMarket, ParlaysMarket } from 'types/markets';
 import { getEtherscanTxLink } from 'utils/etherscan';
-import { formatCurrencyWithSign, roundNumberToDecimals } from 'utils/formatters/number';
+import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { truncateAddress } from 'utils/formatters/string';
 import {
     convertPositionNameToPosition,
@@ -133,10 +133,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             const getAllowance = async () => {
                 try {
                     console.log(parlayMarket.totalAmount, addressToApprove, collateralContractWithSigner.address);
-                    const parsedAmount = coinParser(
-                        roundNumberToDecimals(Number(parlayMarket.totalAmount)).toString(),
-                        networkId
-                    );
+                    const parsedAmount = coinParser(Number(parlayMarket.totalAmount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         collateralContractWithSigner,
@@ -431,7 +428,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={roundNumberToDecimals(Number(parlayMarket.totalAmount) * (1 + APPROVAL_BUFFER))}
+                    defaultAmount={Number(parlayMarket.totalAmount) * (1 + APPROVAL_BUFFER)}
                     tokenSymbol={defaultCollateral}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
