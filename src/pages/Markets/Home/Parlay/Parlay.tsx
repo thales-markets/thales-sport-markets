@@ -74,7 +74,12 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     });
 
     useEffect(() => {
-        dispatch(setPaymentSelectedCollateralIndex(getDefaultCollateralIndexForNetworkId(networkId)));
+        dispatch(
+            setPaymentSelectedCollateralIndex({
+                selectedCollateralIndex: getDefaultCollateralIndexForNetworkId(networkId),
+                networkId: networkId,
+            })
+        );
     }, [networkId, dispatch]);
 
     useEffect(() => {

@@ -7,6 +7,7 @@ import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { GOLF_TAGS } from 'constants/tags';
 import { ParlayErrorCode } from 'enums/markets';
+import { Network } from 'enums/network';
 // import { canPlayerBeAddedToParlay } from 'utils/markets';
 
 const sliceName = 'parlay';
@@ -21,13 +22,16 @@ const getDefaultParlay = (): ParlaysMarketPosition[] => {
 };
 
 const getDefaultPayment = (): ParlayPayment => {
-    const lsSelectedCollateralIndex = localStore.get(LOCAL_STORAGE_KEYS.COLLATERAL_INDEX);
+    const lsSelectedCollateralIndex = localStore.get(
+        `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${Network.OptimismMainnet}`
+    );
 
     return {
         selectedCollateralIndex: lsSelectedCollateralIndex !== undefined ? (lsSelectedCollateralIndex as number) : 0,
         isVoucherAvailable: false,
         isVoucherSelected: false,
         amountToBuy: '',
+        networkId: Network.OptimismMainnet,
     };
 };
 
@@ -277,7 +281,10 @@ const parlaySlice = createSlice({
             state.payment = { ...state.payment, ...action.payload };
 
             // Store the users last selected stable index
-            localStore.set(LOCAL_STORAGE_KEYS.COLLATERAL_INDEX, state.payment.selectedCollateralIndex);
+            localStore.set(
+                `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${state.payment.networkId}`,
+                state.payment.selectedCollateralIndex
+            );
         },
         setIsMultiSingle: (state, action: PayloadAction<boolean>) => {
             state.isMultiSingle = action.payload;
@@ -297,9 +304,19 @@ const parlaySlice = createSlice({
             }
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
-        setPaymentSelectedCollateralIndex: (state, action: PayloadAction<number>) => {
-            state.payment = { ...state.payment, selectedCollateralIndex: action.payload };
-            localStore.set(LOCAL_STORAGE_KEYS.COLLATERAL_INDEX, action.payload);
+        setPaymentSelectedCollateralIndex: (
+            state,
+            action: PayloadAction<{ selectedCollateralIndex: number; networkId: Network }>
+        ) => {
+            state.payment = {
+                ...state.payment,
+                selectedCollateralIndex: action.payload.selectedCollateralIndex,
+                networkId: action.payload.networkId,
+            };
+            localStore.set(
+                `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${state.payment.networkId}`,
+                state.payment.selectedCollateralIndex
+            );
         },
         setPaymentIsVoucherSelected: (state, action: PayloadAction<boolean>) => {
             state.payment = { ...state.payment, isVoucherSelected: action.payload };

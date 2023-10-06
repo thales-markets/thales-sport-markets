@@ -2,7 +2,7 @@ import { USD_SIGN } from 'constants/currency';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useMemo, useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import {
     FlexDivSpaceBetween,
@@ -15,6 +15,7 @@ import { Coins } from 'types/tokens';
 import { isStableCurrency } from 'utils/collaterals';
 import { formatCurrencyWithSign } from 'utils/formatters/number';
 import { setPaymentSelectedCollateralIndex } from 'redux/modules/parlay';
+import { getNetworkId } from '../../redux/modules/wallet';
 
 type CollateralSelectorProps = {
     collateralArray: Array<string>;
@@ -38,6 +39,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     dropDownWidth,
 }) => {
     const dispatch = useDispatch();
+    const networkId = useSelector(getNetworkId);
 
     const [open, setOpen] = useState(false);
 
@@ -80,7 +82,12 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                           key={i}
                                           onClick={() => {
                                               onChangeCollateral(collateral.index);
-                                              dispatch(setPaymentSelectedCollateralIndex(collateral.index));
+                                              dispatch(
+                                                  setPaymentSelectedCollateralIndex({
+                                                      selectedCollateralIndex: collateral.index,
+                                                      networkId: networkId,
+                                                  })
+                                              );
                                           }}
                                       >
                                           <FlexDivCentered>
@@ -121,7 +128,12 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                           key={index}
                                           onClick={() => {
                                               onChangeCollateral(index);
-                                              dispatch(setPaymentSelectedCollateralIndex(index));
+                                              dispatch(
+                                                  setPaymentSelectedCollateralIndex({
+                                                      selectedCollateralIndex: index,
+                                                      networkId: networkId,
+                                                  })
+                                              );
                                           }}
                                       >
                                           <TextCollateral fontWeight="600">{collateral}</TextCollateral>

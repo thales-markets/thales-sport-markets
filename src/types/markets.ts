@@ -1,4 +1,5 @@
 import { BetType, DoubleChanceMarketType, Position, PositionName } from 'enums/markets';
+import { Network } from '../enums/network';
 
 export type SportMarketInfo = {
     id: string;
@@ -254,6 +255,7 @@ export type ParlayPayment = {
     isVoucherAvailable: boolean;
     isVoucherSelected: boolean;
     amountToBuy: number | string;
+    networkId: Network;
 };
 
 export type MultiSingleAmounts = {

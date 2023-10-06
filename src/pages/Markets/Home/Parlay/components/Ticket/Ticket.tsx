@@ -207,14 +207,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
             dispatch(setPaymentIsVoucherAvailable(true));
             dispatch(setPaymentIsVoucherSelected(true));
-            dispatch(setPaymentSelectedCollateralIndex(0));
+            dispatch(setPaymentSelectedCollateralIndex({ selectedCollateralIndex: 0, networkId: networkId }));
 
             return overtimeVoucherQuery.data;
         }
         dispatch(setPaymentIsVoucherAvailable(false));
         dispatch(setPaymentIsVoucherSelected(false));
         return undefined;
-    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, dispatch]);
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, dispatch, networkId]);
 
     const paymentTokenBalance: number = useMemo(() => {
         if (overtimeVoucher && isVoucherSelected) {
@@ -830,7 +830,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                                 value={isVoucherSelected.toString()}
                                 onChange={(e: any) => {
                                     dispatch(setPaymentIsVoucherSelected(e.target.checked || false));
-                                    dispatch(setPaymentSelectedCollateralIndex(0));
+                                    dispatch(
+                                        setPaymentSelectedCollateralIndex({
+                                            selectedCollateralIndex: 0,
+                                            networkId: networkId,
+                                        })
+                                    );
                                 }}
                             />
                         </CheckboxContainer>
