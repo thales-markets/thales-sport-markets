@@ -815,6 +815,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                                 dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
                             />
                         }
+                        balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
                     />
                 </AmountToBuyContainer>
             </InputContainer>

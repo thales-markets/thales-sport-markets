@@ -868,6 +868,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                                 dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
                             />
                         }
+                        balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
                     />
                 </AmountToBuyContainer>
             </InputContainer>

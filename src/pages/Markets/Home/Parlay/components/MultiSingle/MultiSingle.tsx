@@ -927,7 +927,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                 </CollateralContainer>
             </RowSummary>
             <RowSummary>
-                <SummaryLabel>{t('markets.parlay.available')}:</SummaryLabel>
+                <SummaryLabel>{t('markets.parlay.in-wallet')}:</SummaryLabel>
                 <SummaryValue isCollateralInfo={true}>
                     {isStableCollateral
                         ? formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)

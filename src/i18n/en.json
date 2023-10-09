@@ -510,6 +510,7 @@
             "pay-with": "Pay with",
             "pay-with-voucher": "Pay with voucher",
             "available": "Available",
+            "in-wallet": "In wallet",
             "skew": "Skew",
             "empty-title": "No positions",
             "empty-description": "Add position, choose a market and make your selection.",
