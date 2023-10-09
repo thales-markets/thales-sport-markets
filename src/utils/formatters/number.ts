@@ -6,7 +6,7 @@ export const getPrecision = (amount: NumericValue) => {
     if (Number(amount) >= 1) {
         return DEFAULT_CURRENCY_DECIMALS;
     }
-    if (Number(amount) > 0.01) {
+    if (Number(amount) >= 0.01) {
         return SHORT_CURRENCY_DECIMALS;
     }
     return LONG_CURRENCY_DECIMALS;

@@ -50,6 +50,7 @@ export type AMMPosition = {
     available: number;
     quote: number;
     priceImpact: number;
+    usdQuote: number;
 };
 
 export type AvailablePerPosition = Record<Position, { available?: number; buyBonus?: number }>;

@@ -2,13 +2,8 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { CRYPTO_CURRENCY_MAP, LONG_CURRENCY_DECIMALS, USD_SIGN } from 'constants/currency';
-import {
-    ALTCOIN_CONVERSION_BUFFER_PERCENTAGE,
-    APPROVAL_BUFFER,
-    MAX_COLLATERAL_SLIPPAGE,
-    MIN_AMOUNT_BUFFER_PERCENTAGE,
-} from 'constants/markets';
+import { CRYPTO_CURRENCY_MAP, DEFAULT_CURRENCY_DECIMALS, LONG_CURRENCY_DECIMALS, USD_SIGN } from 'constants/currency';
+import { APPROVAL_BUFFER, MAX_COLLATERAL_SLIPPAGE } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
@@ -82,7 +77,7 @@ import {
     getDefaultCollateral,
     isStableCurrency,
 } from 'utils/collaterals';
-import { coinParser } from 'utils/formatters/ethers';
+import { coinFormatter, coinParser } from 'utils/formatters/ethers';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import CollateralSelector from 'components/CollateralSelector';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
@@ -121,6 +116,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const [bonusCurrency, setBonusCurrency] = useState(0);
     const [maxCollateralAmount, setMaxCollateralAmount] = useState(0);
     const [availableCollateralAmount, setAvailableCollateralAmount] = useState(0);
+    const [availableUsdAmount, setAvailableUsdAmount] = useState(0);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState('');
@@ -139,6 +135,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         available: 0,
         quote: 0,
         priceImpact: 0,
+        usdQuote: 0,
     });
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
@@ -149,6 +146,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         payout: 0,
         onClose: () => {},
     });
+    const [quoteForMinAmount, setQuoteForMinAmount] = useState(0);
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -229,32 +227,6 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const convertToStable = useCallback(
-        (value: number) => {
-            const rate = exchangeRates?.[selectedCollateral] || 0;
-            return isStableCollateral ? value : value * rate * (1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE);
-        },
-        [selectedCollateral, exchangeRates, isStableCollateral]
-    );
-
-    const convertMinAmountFromStable = useCallback(
-        (value: number) => {
-            const rate = exchangeRates?.[selectedCollateral];
-            if (isDefaultCollateral) {
-                return value;
-            } else {
-                return (
-                    Math.ceil(
-                        (value / ((rate && !isStableCollateral ? rate : 1) * (1 - MIN_AMOUNT_BUFFER_PERCENTAGE))) *
-                            10 ** selectedCollateralDecimals
-                    ) /
-                    10 ** selectedCollateralDecimals
-                );
-            }
-        },
-        [selectedCollateral, exchangeRates, selectedCollateralDecimals, isStableCollateral, isDefaultCollateral]
-    );
-
     // Clear Parlay when network is changed
     const isMounted = useRef(false);
     useEffect(() => {
@@ -267,7 +239,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     }, [dispatch, networkId]);
 
     const fetchAmmQuote = useCallback(
-        async (amountForQuote: number) => {
+        async (amountForQuote: number, getExtendedQuote?: boolean) => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract && amountForQuote) {
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
@@ -280,7 +252,13 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     parsedAmount
                 );
 
-                return isMultiCollateralSupported && selectedCollateralIndex !== 0 ? ammQuote[0] : ammQuote;
+                return isMultiCollateralSupported && selectedCollateralIndex !== 0
+                    ? getExtendedQuote
+                        ? ammQuote
+                        : ammQuote[0]
+                    : getExtendedQuote
+                    ? [ammQuote, ammQuote]
+                    : ammQuote;
             }
         },
         [isMultiCollateralSupported, market.address, market.position, networkId, selectedCollateralIndex]
@@ -291,46 +269,36 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
+                if (roundedMaxAmount <= 0) return 0;
+
                 const divider = isVoucherSelected
                     ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
                     : Number(`1e${selectedCollateralDecimals}`);
-                const collateralToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
+                const ammQuote = await fetchAmmQuote(roundedMaxAmount, true);
+
+                const collateralToSpendForMaxAmount = ammQuote[0];
+                const usdToSpendForMaxAmount = ammQuote[1];
 
                 const decimalCollateralToSpendForMaxAmount = collateralToSpendForMaxAmount / divider;
+                const decimalUsdToSpendForMaxAmount = coinFormatter(usdToSpendForMaxAmount, networkId);
 
                 if (!mountedRef.current) return null;
-                setAvailableCollateralAmount(
-                    floorNumberToDecimals(
-                        decimalCollateralToSpendForMaxAmount,
-                        isStableCollateral ? undefined : LONG_CURRENCY_DECIMALS
-                    )
-                );
+
+                const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+                setAvailableCollateralAmount(floorNumberToDecimals(decimalCollateralToSpendForMaxAmount, decimals));
+                setAvailableUsdAmount(floorNumberToDecimals(decimalUsdToSpendForMaxAmount));
 
                 if (paymentTokenBalance > decimalCollateralToSpendForMaxAmount) {
                     if (paymentTokenBalance * MAX_COLLATERAL_SLIPPAGE >= decimalCollateralToSpendForMaxAmount) {
-                        setMaxCollateralAmount(
-                            floorNumberToDecimals(
-                                decimalCollateralToSpendForMaxAmount,
-                                isStableCollateral ? undefined : LONG_CURRENCY_DECIMALS
-                            )
-                        );
+                        setMaxCollateralAmount(floorNumberToDecimals(decimalCollateralToSpendForMaxAmount, decimals));
                     } else {
                         const calculatedMaxAmount = paymentTokenBalance * MAX_COLLATERAL_SLIPPAGE;
-                        setMaxCollateralAmount(
-                            floorNumberToDecimals(
-                                calculatedMaxAmount,
-                                isStableCollateral ? undefined : LONG_CURRENCY_DECIMALS
-                            )
-                        );
+                        setMaxCollateralAmount(floorNumberToDecimals(calculatedMaxAmount, decimals));
                     }
                     return;
                 }
-                setMaxCollateralAmount(
-                    floorNumberToDecimals(
-                        paymentTokenBalance * MAX_COLLATERAL_SLIPPAGE,
-                        isStableCollateral ? undefined : LONG_CURRENCY_DECIMALS
-                    )
-                );
+                setMaxCollateralAmount(floorNumberToDecimals(paymentTokenBalance * MAX_COLLATERAL_SLIPPAGE, decimals));
+                setMaxCollateralAmount(floorNumberToDecimals(paymentTokenBalance * MAX_COLLATERAL_SLIPPAGE, decimals));
             }
         };
         getMaxCollateralAmount();
@@ -371,6 +339,8 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                         fetchAmmQuote(MIN_TOKEN_AMOUNT),
                         contract.balancesOf(sportsAMMContract?.address),
                     ]);
+                    setQuoteForMinAmount(collateralToSpendForMinAmount / divider);
+
                     if (!mountedRef.current) return null;
 
                     const ammBalanceForSelectedPosition = ammBalances[market.position];
@@ -612,7 +582,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         if (
             !Number(collateralAmountValue) ||
             !tokenAmount ||
-            (isStableCollateral && tokenAmount < MIN_TOKEN_AMOUNT) ||
+            tokenAmount < MIN_TOKEN_AMOUNT ||
             isBuying ||
             isAllowing ||
             positionPriceDetailsQuery.isLoading
@@ -636,7 +606,6 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         tokenAmount,
         positionPriceDetailsQuery.isLoading,
         isAMMPaused,
-        isStableCollateral,
     ]);
 
     const getSubmitButton = () => {
@@ -656,7 +625,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             );
         }
         // Show Approve only on valid input buy amount
-        if (!hasAllowance && collateralAmountValue && (tokenAmount >= MIN_TOKEN_AMOUNT || !isStableCollateral)) {
+        if (!hasAllowance && collateralAmountValue && tokenAmount >= MIN_TOKEN_AMOUNT) {
             return (
                 <Button disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
                     {t('common.wallet.approve')}
@@ -673,22 +642,20 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
 
     const setTooltipTextMessageCollateralAmount = useCallback(
         (value: string | number) => {
-            const positionOdds = roundNumberToDecimals(getPositionOdds(market));
-            // Due to conversion adding buffer for min amount in case of non stable collateral
-            const minCollateralAmount = convertMinAmountFromStable(positionOdds);
-            if (value && Number(value) < minCollateralAmount) {
+            const positionOdds = getPositionOdds(market);
+            if (value && Number(value) < quoteForMinAmount) {
+                const decimals = isStableCollateral ? 2 : getPrecision(quoteForMinAmount);
                 setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.single-min-amount', {
-                        min: isStableCollateral
-                            ? formatCurrencyWithSign(
-                                  USD_SIGN,
-                                  ceilNumberToDecimals(minCollateralAmount, getPrecision(minCollateralAmount)),
-                                  2
-                              )
-                            : `${formatCurrencyWithKey(
-                                  selectedCollateral,
-                                  ceilNumberToDecimals(minCollateralAmount, getPrecision(minCollateralAmount))
-                              )} (${formatCurrencyWithSign(USD_SIGN, positionOdds, 2)})`,
+                        min: `${formatCurrencyWithKey(
+                            selectedCollateral,
+                            ceilNumberToDecimals(quoteForMinAmount, decimals),
+                            decimals
+                        )}${
+                            isDefaultCollateral
+                                ? ''
+                                : ` (${formatCurrencyWithSign(USD_SIGN, ceilNumberToDecimals(positionOdds), 2)})`
+                        }`,
                     })
                 );
             } else if (Number(value) > availableCollateralAmount) {
@@ -704,9 +671,10 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             availableCollateralAmount,
             t,
             paymentTokenBalance,
-            convertMinAmountFromStable,
             isStableCollateral,
             selectedCollateral,
+            quoteForMinAmount,
+            isDefaultCollateral,
         ]
     );
 
@@ -734,9 +702,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         // hide when validation tooltip exists except in case of not enough funds
         (!!tooltipTextCollateralAmount && Number(collateralAmountValue) <= Number(paymentTokenBalance));
 
-    const profitPercentage =
-        (tokenAmount - (isStableCollateral ? ammPosition.quote : convertToStable(ammPosition.quote))) /
-        (isStableCollateral ? ammPosition.quote : convertToStable(ammPosition.quote));
+    const profitPercentage = (tokenAmount - ammPosition.usdQuote) / ammPosition.usdQuote;
 
     const onModalClose = useCallback(() => {
         setShowShareTicketModal(false);
@@ -749,7 +715,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             markets: [market],
             multiSingle: false,
             totalQuote: getPositionOdds(market),
-            paid: convertToStable(Number(collateralAmountValue)),
+            paid: ammPosition.usdQuote,
             payout: tokenAmount,
             onClose: onModalClose,
         };
@@ -836,12 +802,12 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.available')}:</InfoLabel>
                     <InfoValue>
-                        {isStableCollateral
+                        {isDefaultCollateral
                             ? formatCurrencyWithSign(USD_SIGN, availableCollateralAmount)
                             : `${formatCurrencyWithKey(
                                   selectedCollateral,
                                   availableCollateralAmount
-                              )} (${formatCurrencyWithSign(USD_SIGN, convertToStable(availableCollateralAmount))})`}
+                              )} (${formatCurrencyWithSign(USD_SIGN, availableUsdAmount)})`}
                     </InfoValue>
                 </InfoWrapper>
                 <InfoWrapper>
@@ -856,12 +822,12 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 <SummaryValue isInfo={true}>
                     {hidePayout
                         ? '-'
-                        : isStableCollateral
-                        ? formatCurrencyWithSign(USD_SIGN, collateralAmountValue)
-                        : `${formatCurrencyWithKey(
-                              selectedCollateral,
-                              collateralAmountValue
-                          )} (${formatCurrencyWithSign(USD_SIGN, convertToStable(Number(collateralAmountValue)))})`}
+                        : isDefaultCollateral
+                        ? formatCurrencyWithSign(USD_SIGN, ammPosition.quote)
+                        : `${formatCurrencyWithKey(selectedCollateral, ammPosition.quote)} (${formatCurrencyWithSign(
+                              USD_SIGN,
+                              ammPosition.usdQuote
+                          )})`}
                 </SummaryValue>
             </RowSummary>
             <RowSummary>
@@ -877,8 +843,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                         ? '-'
                         : `${formatCurrencyWithSign(
                               USD_SIGN,
-                              tokenAmount -
-                                  (isStableCollateral ? ammPosition.quote : convertToStable(ammPosition.quote)),
+                              tokenAmount - ammPosition.usdQuote,
                               2
                           )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>

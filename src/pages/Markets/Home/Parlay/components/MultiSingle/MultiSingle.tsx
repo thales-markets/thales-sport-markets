@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, APPROVAL_BUFFER, MIN_AMOUNT_BUFFER_PERCENTAGE } from 'constants/markets';
+import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, APPROVAL_BUFFER } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useAvailablePerPositionMultiQuery from 'queries/markets/useAvailablePerPositionMultiQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -144,6 +144,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
         payout: 0,
         onClose: () => {},
     });
+    const [quoteForMinAmount, setQuoteForMinAmount] = useState(0);
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -230,24 +231,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             return isStableCollateral ? value : value * rate * (1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE);
         },
         [selectedCollateral, exchangeRates, isStableCollateral]
-    );
-
-    const convertMinAmountFromStable = useCallback(
-        (value: number) => {
-            const rate = exchangeRates?.[selectedCollateral];
-            if (isDefaultCollateral) {
-                return value;
-            } else {
-                return (
-                    Math.ceil(
-                        (value / ((rate && !isStableCollateral ? rate : 1) * (1 - MIN_AMOUNT_BUFFER_PERCENTAGE))) *
-                            10 ** selectedCollateralDecimals
-                    ) /
-                    10 ** selectedCollateralDecimals
-                );
-            }
-        },
-        [selectedCollateral, exchangeRates, selectedCollateralDecimals, isStableCollateral, isDefaultCollateral]
     );
 
     // Clear Parlay when network is changed
@@ -354,6 +337,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                                 availAmount,
                                 ammBalanceForSelectedPosition / divider
                             ) || 0;
+
+                        setQuoteForMinAmount(collateralToSpendForMinAmount / divider);
 
                         if (amountOfTokens > availAmount) {
                             tokenAndBonusArr.push({
@@ -634,9 +619,9 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             return;
         }
 
-        const anyTokenAmtUnderMin =
-            isStableCollateral &&
-            tokenAndBonus.some((t) => Number.isNaN(t.tokenAmount) || Number(t.tokenAmount) < MIN_TOKEN_AMOUNT);
+        const anyTokenAmtUnderMin = tokenAndBonus.some(
+            (t) => Number.isNaN(t.tokenAmount) || Number(t.tokenAmount) < MIN_TOKEN_AMOUNT
+        );
         const anyUsdAmtUnderZero = multiSingleAmounts.some((s) => Number(s.amountToBuy) <= 0);
 
         if (anyUsdAmtUnderZero || anyTokenAmtUnderMin || isBuying || isAllowing) {
@@ -659,7 +644,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
         tokenAndBonus,
         calculatedTotalBuyIn,
         isAMMPaused,
-        isStableCollateral,
     ]);
 
     const getSubmitButton = () => {
@@ -697,8 +681,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const setTooltipTextMessageUsdAmount = useCallback(
         (market: ParlaysMarket, value: string | number, isMax: boolean) => {
             const toolTipRecords = tooltipTextCollateralAmount;
-
-            const positionOdds = roundNumberToDecimals(getPositionOdds(market));
+            const positionOdds = getPositionOdds(market);
             const ammQuote = tokenAndBonus.find((t) => t.sportMarketAddress === market.address)?.ammQuote ?? 1;
 
             let totalBuyIn = 0;
@@ -710,20 +693,18 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                 }
             });
 
-            // Due to conversion adding buffer for min amount in case of non stable collateral
-            const minCollateralAmount = convertMinAmountFromStable(positionOdds);
-            if (value && Number(value) < minCollateralAmount) {
+            if (value && Number(value) < quoteForMinAmount) {
+                const decimals = isStableCollateral ? 2 : getPrecision(quoteForMinAmount);
                 toolTipRecords[market.address] = t('markets.parlay.validation.single-min-amount', {
-                    min: isStableCollateral
-                        ? formatCurrencyWithSign(
-                              USD_SIGN,
-                              ceilNumberToDecimals(minCollateralAmount, getPrecision(minCollateralAmount)),
-                              2
-                          )
-                        : `${formatCurrencyWithKey(
-                              selectedCollateral,
-                              ceilNumberToDecimals(minCollateralAmount, getPrecision(minCollateralAmount))
-                          )} (${formatCurrencyWithSign(USD_SIGN, positionOdds, 2)})`,
+                    min: `${formatCurrencyWithKey(
+                        selectedCollateral,
+                        ceilNumberToDecimals(quoteForMinAmount, decimals),
+                        decimals
+                    )}${
+                        isDefaultCollateral
+                            ? ''
+                            : ` (${formatCurrencyWithSign(USD_SIGN, ceilNumberToDecimals(positionOdds), 2)})`
+                    }`,
                 });
                 setHasValidationError(true);
             } else if (ammQuote === 0) {
@@ -752,7 +733,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             tokenAndBonus,
             selectedCollateral,
             isStableCollateral,
-            convertMinAmountFromStable,
+            quoteForMinAmount,
+            isDefaultCollateral,
         ]
     );
 
@@ -942,7 +924,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.in-wallet')}:</SummaryLabel>
                 <SummaryValue isCollateralInfo={true}>
-                    {isStableCollateral
+                    {isDefaultCollateral
                         ? formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)
                         : `${formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)} (${formatCurrencyWithSign(
                               USD_SIGN,
@@ -955,7 +937,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                 <SummaryValue isInfo={true}>
                     {hidePayout
                         ? '-'
-                        : isStableCollateral
+                        : isDefaultCollateral
                         ? formatCurrencyWithSign(USD_SIGN, calculatedTotalBuyIn)
                         : `${formatCurrencyWithKey(selectedCollateral, calculatedTotalBuyIn)} (${formatCurrencyWithSign(
                               USD_SIGN,

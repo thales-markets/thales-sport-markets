@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { AMMPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
-import { bigNumberFormatter } from '../../utils/formatters/ethers';
+import { bigNumberFormatter, coinFormatter } from '../../utils/formatters/ethers';
 import { Network } from 'enums/network';
 import { getCollateralAddress, getCollateralDecimals, getCollateralIndex } from 'utils/collaterals';
 import { getDefaultDecimalsForNetwork, getIsMultiCollateralSupported } from 'utils/network';
@@ -54,6 +54,7 @@ const usePositionPriceDetailsQuery = (
                             : getDefaultDecimalsForNetwork(networkId)
                     ),
                     priceImpact: bigNumberFormatter(positionDetails.priceImpact),
+                    usdQuote: coinFormatter(positionDetails.quote, networkId),
                 };
             } catch (e) {
                 console.log('Error ', e);
@@ -61,6 +62,7 @@ const usePositionPriceDetailsQuery = (
                     available: 0,
                     quote: 0,
                     priceImpact: 0,
+                    usdQuote: 0,
                 };
             }
         },
