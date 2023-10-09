@@ -75,7 +75,13 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
-import { getCollateral, getCollateralDecimals, getCollaterals, isStableCurrency } from 'utils/collaterals';
+import {
+    getCollateral,
+    getCollateralDecimals,
+    getCollaterals,
+    getDefaultCollateral,
+    isStableCurrency,
+} from 'utils/collaterals';
 import { coinParser } from 'utils/formatters/ethers';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import CollateralSelector from 'components/CollateralSelector';
@@ -145,6 +151,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     });
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
         selectedCollateralIndex,
@@ -154,6 +161,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         selectedCollateralIndex,
     ]);
     const isStableCollateral = isStableCurrency(selectedCollateral);
+    const isDefaultCollateral = selectedCollateral === defaultCollateral;
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -232,18 +240,19 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const convertMinAmountFromStable = useCallback(
         (value: number) => {
             const rate = exchangeRates?.[selectedCollateral];
-            if (isStableCollateral) {
+            if (isDefaultCollateral) {
                 return value;
             } else {
-                return rate
-                    ? Math.ceil(
-                          (value / (rate * (1 - MIN_AMOUNT_BUFFER_PERCENTAGE))) * 10 ** selectedCollateralDecimals
-                      ) /
-                          10 ** selectedCollateralDecimals
-                    : 0;
+                return (
+                    Math.ceil(
+                        (value / ((rate && !isStableCollateral ? rate : 1) * (1 - MIN_AMOUNT_BUFFER_PERCENTAGE))) *
+                            10 ** selectedCollateralDecimals
+                    ) /
+                    10 ** selectedCollateralDecimals
+                );
             }
         },
-        [selectedCollateral, exchangeRates, selectedCollateralDecimals, isStableCollateral]
+        [selectedCollateral, exchangeRates, selectedCollateralDecimals, isStableCollateral, isDefaultCollateral]
     );
 
     // Clear Parlay when network is changed
@@ -671,7 +680,11 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.single-min-amount', {
                         min: isStableCollateral
-                            ? formatCurrencyWithSign(USD_SIGN, positionOdds, 2)
+                            ? formatCurrencyWithSign(
+                                  USD_SIGN,
+                                  ceilNumberToDecimals(minCollateralAmount, getPrecision(minCollateralAmount)),
+                                  2
+                              )
                             : `${formatCurrencyWithKey(
                                   selectedCollateral,
                                   ceilNumberToDecimals(minCollateralAmount, getPrecision(minCollateralAmount))

@@ -240,18 +240,26 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
 
     const convertMinAmountFromStable = useCallback(() => {
         const rate = exchangeRates?.[selectedCollateral];
-        if (isStableCollateral) {
+        if (isDefaultCollateral) {
             return minUsdAmountValue;
         } else {
-            return rate
-                ? Math.ceil(
-                      (minUsdAmountValue / (rate * (1 - MIN_AMOUNT_BUFFER_PERCENTAGE))) *
-                          10 ** selectedCollateralDecimals
-                  ) /
-                      10 ** selectedCollateralDecimals
-                : 0;
+            return (
+                Math.ceil(
+                    (minUsdAmountValue /
+                        ((rate && !isStableCollateral ? rate : 1) * (1 - MIN_AMOUNT_BUFFER_PERCENTAGE))) *
+                        10 ** selectedCollateralDecimals
+                ) /
+                10 ** selectedCollateralDecimals
+            );
         }
-    }, [selectedCollateral, exchangeRates, selectedCollateralDecimals, isStableCollateral, minUsdAmountValue]);
+    }, [
+        selectedCollateral,
+        exchangeRates,
+        selectedCollateralDecimals,
+        isStableCollateral,
+        isDefaultCollateral,
+        minUsdAmountValue,
+    ]);
 
     useEffect(() => {
         setMinUsdAmountValue(parlayAmmData?.minUsdAmount || 0);
@@ -593,7 +601,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.min-amount', {
                         min: isStableCollateral
-                            ? formatCurrencyWithSign(USD_SIGN, minUsdAmountValue)
+                            ? formatCurrencyWithSign(
+                                  USD_SIGN,
+                                  ceilNumberToDecimals(
+                                      minCollateralAmountValue,
+                                      getPrecision(minCollateralAmountValue)
+                                  ),
+                                  2
+                              )
                             : `${formatCurrencyWithKey(
                                   selectedCollateral,
                                   ceilNumberToDecimals(minCollateralAmountValue, getPrecision(minCollateralAmountValue))

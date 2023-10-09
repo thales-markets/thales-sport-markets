@@ -336,7 +336,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                                 <WinValue>{formatCurrencyWithSign(USD_SIGN, parlayMarket.totalAmount)}</WinValue>
                             )}
                         </InfoContainerColumn>
-                        {isMultiCollateralSupported && (
+                        {isClaimable && isMultiCollateralSupported && (
                             <InfoContainerColumn
                                 onClick={(e) => {
                                     e.preventDefault();
