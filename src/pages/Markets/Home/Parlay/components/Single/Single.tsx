@@ -7,7 +7,7 @@ import {
     ALTCOIN_CONVERSION_BUFFER_PERCENTAGE,
     APPROVAL_BUFFER,
     MAX_COLLATERAL_SLIPPAGE,
-    MIN_AMOUNT_MULTIPLIER,
+    MIN_AMOUNT_BUFFER_PERCENTAGE,
 } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
@@ -229,7 +229,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         [selectedCollateral, exchangeRates, isStableCollateral]
     );
 
-    const convertFromStable = useCallback(
+    const convertMinAmountFromStable = useCallback(
         (value: number) => {
             const rate = exchangeRates?.[selectedCollateral];
             if (isStableCollateral) {
@@ -237,7 +237,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             } else {
                 return rate
                     ? Math.ceil(
-                          (value / (rate * 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE)) * 10 ** selectedCollateralDecimals
+                          (value / (rate * (1 - MIN_AMOUNT_BUFFER_PERCENTAGE))) * 10 ** selectedCollateralDecimals
                       ) /
                           10 ** selectedCollateralDecimals
                     : 0;
@@ -666,8 +666,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         (value: string | number) => {
             const positionOdds = roundNumberToDecimals(getPositionOdds(market));
             // Due to conversion adding buffer for min amount in case of non stable collateral
-            const minCollateralAmount =
-                convertFromStable(positionOdds) * (isStableCollateral ? 1 : MIN_AMOUNT_MULTIPLIER);
+            const minCollateralAmount = convertMinAmountFromStable(positionOdds);
             if (value && Number(value) < minCollateralAmount) {
                 setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.single-min-amount', {
@@ -692,7 +691,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             availableCollateralAmount,
             t,
             paymentTokenBalance,
-            convertFromStable,
+            convertMinAmountFromStable,
             isStableCollateral,
             selectedCollateral,
         ]

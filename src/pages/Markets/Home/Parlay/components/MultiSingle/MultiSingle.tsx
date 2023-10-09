@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, APPROVAL_BUFFER, MIN_AMOUNT_MULTIPLIER } from 'constants/markets';
+import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, APPROVAL_BUFFER, MIN_AMOUNT_BUFFER_PERCENTAGE } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useAvailablePerPositionMultiQuery from 'queries/markets/useAvailablePerPositionMultiQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -224,7 +224,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
         [selectedCollateral, exchangeRates, isStableCollateral]
     );
 
-    const convertFromStable = useCallback(
+    const convertMinAmountFromStable = useCallback(
         (value: number) => {
             const rate = exchangeRates?.[selectedCollateral];
             if (isStableCollateral) {
@@ -232,7 +232,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             } else {
                 return rate
                     ? Math.ceil(
-                          (value / (rate * 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE)) * 10 ** selectedCollateralDecimals
+                          (value / (rate * (1 - MIN_AMOUNT_BUFFER_PERCENTAGE))) * 10 ** selectedCollateralDecimals
                       ) /
                           10 ** selectedCollateralDecimals
                     : 0;
@@ -702,8 +702,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             });
 
             // Due to conversion adding buffer for min amount in case of non stable collateral
-            const minCollateralAmount =
-                convertFromStable(positionOdds) * (isStableCollateral ? 1 : MIN_AMOUNT_MULTIPLIER);
+            const minCollateralAmount = convertMinAmountFromStable(positionOdds);
             if (value && Number(value) < minCollateralAmount) {
                 toolTipRecords[market.address] = t('markets.parlay.validation.single-min-amount', {
                     min: isStableCollateral
@@ -740,7 +739,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             tokenAndBonus,
             selectedCollateral,
             isStableCollateral,
-            convertFromStable,
+            convertMinAmountFromStable,
         ]
     );
 
