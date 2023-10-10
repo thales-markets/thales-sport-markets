@@ -140,7 +140,7 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
 
             if (marketAddresses) {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const promises: CombinedMarketsContractData[] = [];
+                // const promises: CombinedMarketsContractData[] = [];
                 const numberOfBatches = Math.trunc(marketAddresses.length / BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY) + 1;
 
                 const promisesResult = [];
