@@ -964,5 +964,31 @@
                 "claim": "Withdrawal Claim"
             }
         }
+    },
+    "seo": {
+        "home": {
+            "title": "Overtime Markets: The Premier Web3 Sportsbook",
+            "description": "Join one of the best decentralized, transparent web3 sportsbooks. Secure positions in 12+ sports and 40+ leagues."
+        },
+        "markets": {
+            "title": "Overtime Markets: The Premier Web3 Sportsbook",
+            "description": "Join one of the best decentralized, transparent web3 sportsbooks. Secure positions in 12+ sports and 40+ leagues."
+        },
+        "vaults": {
+            "title": "Overtime Markets Vaults: Automated Trading",
+            "description": "Deposit assets into the Overtime Markets vault and let our automated trading mechanism earn ROI for you using a strategy you choose. "
+        },
+        "parlay-leaderboard": {
+            "title": "Overtime Markets: Earn Parlay Rewards Every 2 Weeks",
+            "description": "Top 10 parlays with the highest odds on Overtime Markets are eligible for biweekly bonuses. Start earning your bonuses now!"
+        },
+        "referral": {
+            "title": "Overtime Markets: Earn Referral Fees",
+            "description": "Refer a friend to Overtime and get a percentage from each trade of the person you refer, paid in USD collateral instantly and directly into your wallet."
+        },
+        "liquidity-pool": {
+            "title": "Overtime Markets: Be the House with our Liquidity Pool",
+            "description": "Be the Overtime Market house! Deposit stablecoin collateral into the liquidity pool and earn a percentage of the PnL every week."
+        }
     }
 }
