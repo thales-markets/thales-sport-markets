@@ -1,6 +1,6 @@
 import { USD_SIGN } from 'constants/currency';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -39,15 +39,20 @@ const Voucher: React.FC<VoucherProps> = ({ disabled }) => {
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
+            return overtimeVoucherQuery.data;
+        }
+        return undefined;
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
+
+    useEffect(() => {
+        if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
             dispatch(setPaymentIsVoucherAvailable(true));
             dispatch(setPaymentIsVoucherSelected(true));
             dispatch(setPaymentSelectedCollateralIndex({ selectedCollateralIndex: 0, networkId: networkId }));
-
-            return overtimeVoucherQuery.data;
+        } else {
+            dispatch(setPaymentIsVoucherAvailable(false));
+            dispatch(setPaymentIsVoucherSelected(false));
         }
-        dispatch(setPaymentIsVoucherAvailable(false));
-        dispatch(setPaymentIsVoucherSelected(false));
-        return undefined;
     }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, dispatch, networkId]);
 
     return (

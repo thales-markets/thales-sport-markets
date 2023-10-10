@@ -311,7 +311,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                         : 0;
                     const roundedMaxAmount = floorNumberToDecimals(availableAmount);
 
-                    if (roundedMaxAmount) {
+                    if (roundedMaxAmount && Number(amountToBuy) > 0) {
                         const [
                             collateralToSpendForMaxAmount,
                             collateralToSpendForMinAmount,

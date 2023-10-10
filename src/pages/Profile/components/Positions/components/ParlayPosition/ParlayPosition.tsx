@@ -132,7 +132,6 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
 
             const getAllowance = async () => {
                 try {
-                    console.log(parlayMarket.totalAmount, addressToApprove, collateralContractWithSigner.address);
                     const parsedAmount = coinParser(Number(parlayMarket.totalAmount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
