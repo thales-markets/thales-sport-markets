@@ -85,6 +85,7 @@ export const getAMMSportsTransaction: any = async (
                   }
               );
     }
+
     if (isEth) {
         if (networkId === Network.OptimismMainnet) {
             const estimation = await sportsAMMContract?.estimateGas.buyFromAMMWithEthAndReferrer(

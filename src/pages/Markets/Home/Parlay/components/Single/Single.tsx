@@ -442,9 +442,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 }
             };
             if (isWalletConnected && collateralAmountValue) {
-                isVoucherSelected || selectedCollateral === CRYPTO_CURRENCY_MAP.ETH
-                    ? setHasAllowance(true)
-                    : getAllowance();
+                isVoucherSelected || isEth ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -459,6 +457,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         networkId,
         selectedCollateral,
         isDefaultCollateral,
+        isEth,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -680,11 +679,13 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
 
     const hidePayout =
+        Number(collateralAmountValue) < quoteForMinAmount ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
         (!!tooltipTextCollateralAmount && Number(collateralAmountValue) <= Number(paymentTokenBalance));
     const hideProfit =
+        Number(collateralAmountValue) < quoteForMinAmount ||
         ammPosition.quote <= 0 ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||

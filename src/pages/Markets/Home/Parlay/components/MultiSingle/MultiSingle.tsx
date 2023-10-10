@@ -460,9 +460,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                 }
             };
             if (isWalletConnected && calculatedTotalBuyIn) {
-                isVoucherSelected || selectedCollateral === CRYPTO_CURRENCY_MAP.ETH
-                    ? setHasAllowance(true)
-                    : getAllowance();
+                isVoucherSelected || isEth ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -477,6 +475,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
         networkId,
         selectedCollateral,
         isDefaultCollateral,
+        isEth,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
