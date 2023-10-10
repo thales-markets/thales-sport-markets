@@ -986,6 +986,10 @@
             "title": "Overtime Markets: Earn Referral Fees",
             "description": "Refer a friend to Overtime and get a percentage from each trade of the person you refer, paid in USD collateral instantly and directly into your wallet."
         },
+        "profile": {
+            "title": "Overtime Market: My Profile",
+            "description": "Claim your winnings, see your past positions and performance, and track deposits you've made to the Overtime Market Vaults."
+        },
         "liquidity-pool": {
             "title": "Overtime Markets: Be the House with our Liquidity Pool",
             "description": "Be the Overtime Market house! Deposit stablecoin collateral into the liquidity pool and earn a percentage of the PnL every week."
