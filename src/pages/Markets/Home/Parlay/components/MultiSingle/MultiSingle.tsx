@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, APPROVAL_BUFFER } from 'constants/markets';
+import { APPROVAL_BUFFER } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useAvailablePerPositionMultiQuery from 'queries/markets/useAvailablePerPositionMultiQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -24,7 +24,7 @@ import {
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
-import { AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlaysMarket } from 'types/markets';
+import { AMMPosition, AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
@@ -66,7 +66,7 @@ import {
 import { ListContainer } from 'pages/Profile/components/Positions/styled-components';
 import MatchInfo from '../MatchInfo';
 import styled, { useTheme } from 'styled-components';
-import { bigNumberFormatter, coinFormatter, coinParser } from 'utils/formatters/ethers';
+import { coinFormatter, coinParser } from 'utils/formatters/ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import {
     getCollateral,
@@ -85,6 +85,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import Voucher from '../Voucher';
 import { Coins } from 'types/tokens';
+import usePositionPriceDetailsMultiQuery from 'queries/markets/usePositionPriceDetailsMultiQuery';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -109,7 +110,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const collateralAmountValue = parlayPayment.amountToBuy;
 
     const [calculatedTotalTokenAmount, setCalculatedTotalTokenAmount] = useState(0);
-    const [calculatedSkewAverage, setCalculatedSkewAverage] = useState(0);
     const [quoteForMinAmount, setQuoteForMinAmount] = useState(0);
     const [tokenAndBonus, setTokenAndBonus] = useState<MultiSingleTokenQuoteAndBonus[]>(
         Array(markets.length).fill({
@@ -134,6 +134,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState<Record<string, string>>({});
 
     const [availablePerPosition, setAvailablePerPosition] = useState<Record<string, AvailablePerPosition>>({});
+    const [ammPosition, setAmmPosition] = useState<Record<string, AMMPosition>>({});
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
@@ -224,14 +225,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const convertToStable = useCallback(
-        (value: number) => {
-            const rate = exchangeRates?.[selectedCollateral] || 0;
-            return isStableCollateral ? value : value * rate * (1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE);
-        },
-        [selectedCollateral, exchangeRates, isStableCollateral]
-    );
-
     // Clear Parlay when network is changed
     const isMounted = useRef(false);
     useEffect(() => {
@@ -244,7 +237,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     }, [dispatch, networkId]);
 
     const fetchAmmQuote = useCallback(
-        async (amountForQuote: number, market: ParlaysMarket) => {
+        async (amountForQuote: number, market: ParlaysMarket, getExtendedQuote?: boolean) => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract && amountForQuote) {
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
@@ -257,21 +250,19 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                     parsedAmount
                 );
 
-                return isDefaultCollateral ? ammQuote : ammQuote[0];
+                // Extended quote for non default collateral returns quote in collateral and quote in default collateral (USD)
+                // For default collateral it returns the same quote for both
+                return isDefaultCollateral
+                    ? getExtendedQuote
+                        ? [ammQuote, ammQuote]
+                        : ammQuote
+                    : getExtendedQuote
+                    ? ammQuote
+                    : ammQuote[0];
             }
         },
         [isDefaultCollateral, collateralAddress]
     );
-
-    const fetchSkew = useCallback(async (amountForQuote: number, market: ParlaysMarket) => {
-        const { sportsAMMContract } = networkConnector;
-        if (sportsAMMContract && amountForQuote) {
-            const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
-            const skewQuote = await sportsAMMContract?.buyPriceImpact(market.address, market.position, parsedAmount);
-
-            return bigNumberFormatter(skewQuote);
-        }
-    }, []);
 
     const calculatedBonusPercentageDec = useMemo(() => {
         return markets.map((market) => getBonus(market) / 100);
@@ -280,6 +271,30 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const calculatedTotalBuyIn = useMemo(() => {
         return multiSingleAmounts.reduce((a, b) => a + Number(b.amountToBuy), 0);
     }, [multiSingleAmounts]);
+
+    const calculatedTotalCollateralBuyIn = useMemo(() => {
+        let total = 0;
+        for (const key in ammPosition) {
+            total += ammPosition[key].quote;
+        }
+        return total;
+    }, [ammPosition]);
+
+    const calculatedTotalUsdBuyIn = useMemo(() => {
+        let total = 0;
+        for (const key in ammPosition) {
+            total += ammPosition[key].usdQuote;
+        }
+        return total;
+    }, [ammPosition]);
+
+    const calculatedSkewAverage = useMemo(() => {
+        let skewTotal = 0;
+        for (const key in ammPosition) {
+            skewTotal += ammPosition[key].priceImpact;
+        }
+        return markets.length > 0 ? skewTotal / markets.length : 0;
+    }, [ammPosition, markets]);
 
     useEffect(() => {
         let isSubscribed = true; // Use for race condition
@@ -294,7 +309,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             let totalTokenAmount = 0;
             let totalBonusPercentage = 0;
             let totalBonusCurrency = 0;
-            let skewTotal = 0;
 
             for (let i = 0; i < markets.length; i++) {
                 const address = markets[i].address;
@@ -388,15 +402,12 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                             totalBonusCurrency: totalBonusCurrency,
                             ammQuote: quote,
                         });
-                        const skewImpact = await fetchSkew(tokenAmount, markets[i]);
-                        skewTotal += skewImpact ?? 0;
                     }
                 }
                 isFetchingRecords[address] = false;
                 setIsFetching(isFetchingRecords);
             }
 
-            setCalculatedSkewAverage(skewTotal / markets.length);
             setBonusCurrency(totalBonusCurrency);
             setTotalBonusPercentageDec(totalBonusPercentage);
             setCalculatedTotalTokenAmount(totalTokenAmount);
@@ -415,12 +426,29 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
         availablePerPosition,
         markets,
         multiSingleAmounts,
-        fetchSkew,
         isFetching,
         networkId,
         isVoucherSelected,
         selectedCollateral,
     ]);
+
+    const positionPriceDetailsQuery = usePositionPriceDetailsMultiQuery(
+        markets,
+        tokenAndBonus,
+        selectedCollateral,
+        collateralAddress,
+        isDefaultCollateral,
+        networkId,
+        {
+            enabled: isAppReady,
+        }
+    );
+
+    useEffect(() => {
+        if (positionPriceDetailsQuery.isSuccess && positionPriceDetailsQuery.data) {
+            setAmmPosition(positionPriceDetailsQuery.data);
+        }
+    }, [positionPriceDetailsQuery.isSuccess, positionPriceDetailsQuery.data]);
 
     const availablePerPositionMultiQuery = useAvailablePerPositionMultiQuery(markets, {
         enabled: isAppReady,
@@ -562,7 +590,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                                 trackEvent({
                                     category: 'parlay-multi-single',
                                     action: `buy-with-${selectedCollateral}`,
-                                    value: Number(calculatedTotalBuyIn),
+                                    value: Number(calculatedTotalCollateralBuyIn),
                                 });
                                 dispatch(removeFromParlay(marketAddress));
                                 refetchBalances(walletAddress, networkId);
@@ -582,7 +610,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                 .then(() => {
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.multiSingleBuy, {
                         props: {
-                            value: Number(calculatedTotalBuyIn),
+                            value: Number(calculatedTotalCollateralBuyIn),
                             collateral: selectedCollateralIndex,
                             networkId,
                         },
@@ -749,10 +777,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
 
     const hidePayout = isRecalculating || hasValidationError;
 
-    const totalProfitPercentage =
-        (calculatedTotalTokenAmount -
-            (isStableCollateral ? calculatedTotalBuyIn : convertToStable(calculatedTotalBuyIn))) /
-        (isStableCollateral ? calculatedTotalBuyIn : convertToStable(calculatedTotalBuyIn));
+    const totalProfitPercentage = (calculatedTotalTokenAmount - calculatedTotalUsdBuyIn) / calculatedTotalUsdBuyIn;
 
     const onModalClose = useCallback(() => {
         setShowShareTicketModal(false);
@@ -765,7 +790,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             markets: markets,
             multiSingle: true,
             totalQuote: getPositionOdds(markets[0]),
-            paid: convertToStable(Number(calculatedTotalBuyIn)),
+            paid: Number(calculatedTotalUsdBuyIn),
             payout: Number(calculatedTotalTokenAmount),
             onClose: onModalClose,
         };
@@ -884,12 +909,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.in-wallet')}:</SummaryLabel>
                 <SummaryValue isCollateralInfo={true}>
-                    {isDefaultCollateral
-                        ? formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)
-                        : `${formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)} (${formatCurrencyWithSign(
-                              USD_SIGN,
-                              convertToStable(Number(paymentTokenBalance))
-                          )})`}
+                    {formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
                 </SummaryValue>
             </RowSummary>
             <RowSummary>
@@ -898,11 +918,11 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                     {hidePayout
                         ? '-'
                         : isDefaultCollateral
-                        ? formatCurrencyWithSign(USD_SIGN, calculatedTotalBuyIn)
-                        : `${formatCurrencyWithKey(selectedCollateral, calculatedTotalBuyIn)} (${formatCurrencyWithSign(
-                              USD_SIGN,
-                              convertToStable(Number(calculatedTotalBuyIn))
-                          )})`}
+                        ? formatCurrencyWithSign(USD_SIGN, calculatedTotalCollateralBuyIn)
+                        : `${formatCurrencyWithKey(
+                              selectedCollateral,
+                              calculatedTotalCollateralBuyIn
+                          )} (${formatCurrencyWithSign(USD_SIGN, Number(calculatedTotalUsdBuyIn))})`}
                 </SummaryValue>
             </RowSummary>
             <InfoContainer>
@@ -931,8 +951,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                         : `${formatCurrencyWithSign(
                               USD_SIGN,
 
-                              calculatedTotalTokenAmount -
-                                  (isStableCollateral ? calculatedTotalBuyIn : convertToStable(calculatedTotalBuyIn)),
+                              calculatedTotalTokenAmount - calculatedTotalUsdBuyIn,
                               2
                           )} (${formatPercentage(totalProfitPercentage)})`}
                 </SummaryValue>

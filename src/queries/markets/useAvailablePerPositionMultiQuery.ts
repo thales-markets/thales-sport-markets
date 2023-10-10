@@ -1,8 +1,8 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { AvailablePerPosition, ParlaysMarket } from '../../types/markets';
-import QUERY_KEYS from '../../constants/queryKeys';
-import networkConnector from '../../utils/networkConnector';
-import { bigNumberFormatter } from '../../utils/formatters/ethers';
+import { AvailablePerPosition, ParlaysMarket } from 'types/markets';
+import QUERY_KEYS from 'constants/queryKeys';
+import networkConnector from 'utils/networkConnector';
+import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { convertPriceImpactToBonus } from 'utils/markets';
 import { Position } from 'enums/markets';
 
@@ -14,16 +14,21 @@ const useAvailablePerPositionMultiQuery = (
         QUERY_KEYS.AvailablePerPositionMulti(marketAddresses.map((market) => market.address).join('-')),
         async () => {
             const map = {} as Record<string, AvailablePerPosition>;
-            for (let i = 0; i < marketAddresses.length; i++) {
-                const address = marketAddresses[i].address;
-                try {
-                    const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
+            const promises: any[] = [];
+            const sportPositionalMarketDataContract = networkConnector.sportPositionalMarketDataContract;
 
-                    const marketLiquidityAndPriceImpact = await sportPositionalMarketDataContract?.getMarketLiquidityAndPriceImpact(
-                        address
+            try {
+                for (let i = 0; i < marketAddresses.length; i++) {
+                    promises.push(
+                        sportPositionalMarketDataContract?.getMarketLiquidityAndPriceImpact(marketAddresses[i].address)
                     );
+                }
 
-                    map[address] = {
+                const responses = await Promise.all(promises);
+
+                for (let i = 0; i < marketAddresses.length; i++) {
+                    const marketLiquidityAndPriceImpact = responses[i];
+                    map[marketAddresses[i].address] = {
                         [Position.HOME]: {
                             available: bigNumberFormatter(marketLiquidityAndPriceImpact.homeLiquidity),
                             buyBonus: convertPriceImpactToBonus(
@@ -43,10 +48,10 @@ const useAvailablePerPositionMultiQuery = (
                             ),
                         },
                     };
-                } catch (e) {
-                    console.log(e);
-                    return undefined;
                 }
+            } catch (e) {
+                console.log(e);
+                return undefined;
             }
 
             return map;

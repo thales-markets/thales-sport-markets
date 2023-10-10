@@ -137,5 +137,3 @@ export const POSITION_TO_ODDS_OBJECT_PROPERTY_NAME: Record<Position, 'homeOdds' 
 };
 
 export const PARLAY_MAXIMUM_QUOTE = 0.01;
-
-export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.005; // 0.5%

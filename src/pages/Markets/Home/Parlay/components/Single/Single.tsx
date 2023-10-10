@@ -392,7 +392,9 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         market.address,
         market.position,
         tokenAmount || 1,
-        selectedCollateralIndex,
+        selectedCollateral,
+        collateralAddress,
+        isDefaultCollateral,
         networkId,
         {
             enabled: isAppReady,

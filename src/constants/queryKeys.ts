@@ -20,9 +20,15 @@ const QUERY_KEYS = {
         marketAddress: string,
         position: Position,
         amount: number,
-        stableIndex: number,
+        selectedCollateral: string,
         networkId: Network
-    ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
+    ) => ['positionDetails', marketAddress, position, amount, selectedCollateral, networkId],
+    PositionDetailsMulti: (marketAddresses: string, marketPositions: string, marketAmounts: string) => [
+        'positionDetailsMulti',
+        marketAddresses,
+        marketPositions,
+        marketAmounts,
+    ],
     AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
     AvailablePerPositionMulti: (marketAddresses: string) => ['availablePerPositionMulti', marketAddresses],
     AvailablePerDoubleChancePosition: (marketAddress: string) => ['availablePerDoubleChancePosition', marketAddress],
