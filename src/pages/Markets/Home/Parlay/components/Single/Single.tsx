@@ -105,7 +105,6 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const [availableUsdAmount, setAvailableUsdAmount] = useState(0);
     const [maxCollateralAmount, setMaxCollateralAmount] = useState(0);
     const [quoteForMinAmount, setQuoteForMinAmount] = useState(0);
-
     const [bonusPercentageDec, setBonusPercentageDec] = useState(0);
     const [bonusCurrency, setBonusCurrency] = useState(0);
 
@@ -379,7 +378,15 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         };
 
         fetchData().catch((e) => console.log(e));
-    }, [collateralAmountValue, isVoucherSelected, selectedCollateral, fetchAmmQuote, availablePerPosition, market]);
+    }, [
+        collateralAmountValue,
+        isVoucherSelected,
+        selectedCollateral,
+        fetchAmmQuote,
+        availablePerPosition,
+        market,
+        networkId,
+    ]);
 
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
         market.address,
