@@ -8,9 +8,10 @@ import {
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
     PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10,
-    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
     PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
+    PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM,
+    PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000,
 } from 'constants/markets';
 import { t } from 'i18next';
 import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
@@ -95,16 +96,9 @@ const ParlayLeaderboard: React.FC = () => {
         return parlays.filter((parlay) => parlay.account.toLowerCase().includes(searchText.toLowerCase()));
     }, [searchText, parlays]);
 
-    const rewards =
-        networkId !== Network.ArbitrumOne
-            ? period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
-                ? PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10
-                : PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20
-            : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
-            ? PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10
-            : PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
+    const rewards = getRewardsArray(networkId, period);
 
-    const rewardsAmount = networkId !== Network.ArbitrumOne ? '1,000 OP' : '1,000 ARB';
+    const rewardsAmount = getRewardsAmount(networkId, period);
 
     const stickyRow = useMemo(() => {
         const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
@@ -704,5 +698,31 @@ const AddressLink = styled.a`
         color: ${(props) => props.theme.textColor.quaternary};
     }
 `;
+
+const getRewardsArray = (networkId: Network, period: number): number[] => {
+    if (period > PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM) {
+        if (networkId == Network.ArbitrumOne || networkId == Network.OptimismMainnet)
+            return PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000;
+        return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
+    } else if (period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS) {
+        if (networkId !== Network.ArbitrumOne) return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
+        return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20;
+    } else {
+        if (networkId == Network.ArbitrumOne) return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
+        return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20;
+    }
+};
+
+const getRewardsAmount = (networkId: Network, period: number) => {
+    if (period <= PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM) {
+        if (networkId == Network.ArbitrumOne) return '1,000 ARB';
+        if (networkId == Network.OptimismMainnet) return '1,000 OP';
+        return '1,000 THALES';
+    }
+
+    if (networkId == Network.ArbitrumOne) return '2,000 ARB';
+    if (networkId == Network.OptimismMainnet) return '2,000 OP';
+    return '1,000 THALES';
+};
 
 export default ParlayLeaderboard;
