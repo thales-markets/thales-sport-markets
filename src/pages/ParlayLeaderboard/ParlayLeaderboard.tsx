@@ -6,6 +6,8 @@ import { USD_SIGN } from 'constants/currency';
 import {
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
+    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE,
+    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC_BASE,
     PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
@@ -64,7 +66,14 @@ const ParlayLeaderboard: React.FC = () => {
 
     const periodOptions: Array<{ value: number; label: string }> = [];
 
-    const latestPeriodBiweekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_BIWEEKLY_START_DATE) / 14);
+    const latestPeriodBiweekly = Math.trunc(
+        differenceInDays(
+            new Date(),
+            networkId == Network.Base
+                ? PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE
+                : PARLAY_LEADERBOARD_BIWEEKLY_START_DATE
+        ) / 14
+    );
 
     for (let index = 0; index <= latestPeriodBiweekly; index++) {
         periodOptions.push({
@@ -80,7 +89,15 @@ const ParlayLeaderboard: React.FC = () => {
     useEffect(
         () =>
             setPeriodEnd(
-                subMilliseconds(addDays(PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC, (period + 1) * 14), 1).getTime()
+                subMilliseconds(
+                    addDays(
+                        networkId == Network.Base
+                            ? PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC_BASE
+                            : PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
+                        (period + 1) * 14
+                    ),
+                    1
+                ).getTime()
             ),
         [period, networkId]
     );

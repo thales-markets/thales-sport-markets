@@ -36,6 +36,10 @@ export const MIN_LIQUIDITY = 10;
 export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE = new Date(2023, 2, 1, 0, 0, 0);
 export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC = new Date(Date.UTC(2023, 2, 1, 0, 0, 0));
 
+// Base leaderboard starts
+export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE = new Date(2023, 9, 11, 0, 0, 0);
+export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC_BASE = new Date(Date.UTC(2023, 9, 11, 0, 0, 0));
+
 export const PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS = 6;
 
 // New rewards distribution from 11/10/2023
