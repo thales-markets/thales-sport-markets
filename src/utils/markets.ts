@@ -54,18 +54,18 @@ export const getSymbolText = (
     market: SportMarketInfo | MarketData,
     combinedMarketPositionSymbol?: CombinedMarketsPositionName
 ) => {
+    const betType = Number(market.betType);
     if (combinedMarketPositionSymbol) {
         return combinedMarketPositionSymbol;
     }
 
-    if (market.isOneSideMarket || isOneSidePlayerProps(market.betType)) {
+    if (market.isOneSideMarket || isOneSidePlayerProps(Number(betType))) {
         return 'YES';
     }
 
-    if (market.betType === BetType.SPREAD) return 'H' + (position === Position.HOME ? '1' : '2');
-    if (market.betType === BetType.TOTAL || isPlayerProps(market.betType))
-        return position === Position.HOME ? 'O' : 'U';
-    if (market.betType === BetType.DOUBLE_CHANCE)
+    if (betType === BetType.SPREAD) return 'H' + (position === Position.HOME ? '1' : '2');
+    if (betType === BetType.TOTAL || isPlayerProps(betType)) return position === Position.HOME ? 'O' : 'U';
+    if (betType === BetType.DOUBLE_CHANCE)
         switch (market.doubleChanceMarketType) {
             case DoubleChanceMarketType.HOME_TEAM_NOT_TO_LOSE:
                 return '1X';
@@ -411,6 +411,7 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
             translationKey = 'draw';
             break;
     }
+
     return i18n.t(`markets.market-card.odd-tooltip.${translationKey}`, {
         team: market.playerName === null ? team : market.playerName,
         team2,
@@ -595,4 +596,8 @@ export const isPlayerProps = (betType: BetType) => {
 
 export const isOneSidePlayerProps = (betType: BetType) => {
     return ONE_SIDER_PLAYER_PROPS_BET_TYPES.includes(betType);
+};
+
+export const fixPlayerPropsLinesFromContract = (market: SportMarketInfo | MarketData) => {
+    Number(market.playerPropsLine) % 1 == 0 ? (market.playerPropsLine = Number(market.playerPropsLine) / 100) : '';
 };
