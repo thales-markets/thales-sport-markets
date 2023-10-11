@@ -1,15 +1,16 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
-import {
-    PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10,
-    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10,
-    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
-} from 'constants/markets';
+import { PARLAY_LEADERBOARD_BIWEEKLY_START_DATE, PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
 import { differenceInDays } from 'date-fns';
-import { getOpacity, getParlayItemStatus, getPositionStatus } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
+import {
+    getOpacity,
+    getParlayItemStatus,
+    getPositionStatus,
+    getRewardsArray,
+} from 'pages/ParlayLeaderboard/ParlayLeaderboard';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -69,17 +70,22 @@ const SidebarLeaderboard: React.FC = () => {
 
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
-    const latestPeriodBiweekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_BIWEEKLY_START_DATE) / 14);
+    const latestPeriodBiweekly = Math.trunc(
+        differenceInDays(
+            new Date(),
+            networkId == Network.Base
+                ? PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE
+                : PARLAY_LEADERBOARD_BIWEEKLY_START_DATE
+        ) / 14
+    );
+
     const query = useParlayLeaderboardQuery(networkId, latestPeriodBiweekly, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
     }, [query.isSuccess, query.data]);
 
-    const rewards =
-        networkId !== Network.ArbitrumOne
-            ? PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10
-            : PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10;
+    const rewards = getRewardsArray(networkId, latestPeriodBiweekly);
 
     return (
         <LeaderboardWrapper>
@@ -138,10 +144,14 @@ const SidebarLeaderboard: React.FC = () => {
                                         <ColumnWrapper>
                                             <DataLabel>
                                                 {formatCurrency(rewards[parlay.rank - 1], 0)}
-                                                {networkId !== Network.ArbitrumOne ? (
+                                                {networkId == Network.OptimismMainnet ? (
                                                     <OPLogoWrapper />
-                                                ) : (
+                                                ) : networkId == Network.ArbitrumOne ? (
                                                     <ArbitrumLogoWrapper />
+                                                ) : networkId == Network.Base ? (
+                                                    <ArbitrumLogoWrapper />
+                                                ) : (
+                                                    <></>
                                                 )}
                                             </DataLabel>
                                         </ColumnWrapper>

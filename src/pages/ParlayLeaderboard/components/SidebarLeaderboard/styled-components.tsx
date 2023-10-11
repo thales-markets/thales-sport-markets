@@ -1,4 +1,5 @@
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import { ReactComponent as BaseLogo } from 'assets/images/base-logo.svg';
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import styled from 'styled-components';
 import {
@@ -144,6 +145,12 @@ export const OPLogoWrapper = styled(OPLogo)`
 export const ArbitrumLogoWrapper = styled(ArbitrumLogo)`
     width: 17px;
     height: 17px;
+    margin-left: 5px;
+`;
+
+export const BaseLogoWrapper = styled(BaseLogo)`
+    width: 15px;
+    height: 15px;
     margin-left: 5px;
 `;
 

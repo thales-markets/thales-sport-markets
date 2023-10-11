@@ -711,7 +711,7 @@ const AddressLink = styled.a`
     }
 `;
 
-const getRewardsArray = (networkId: Network, period: number): number[] => {
+export const getRewardsArray = (networkId: Network, period: number): number[] => {
     if (period > PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM) {
         if (networkId == Network.ArbitrumOne || networkId == Network.OptimismMainnet)
             return PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000;
