@@ -610,7 +610,9 @@ const Home: React.FC = () => {
                                 );
                             })}
                     </SportFiltersContainer>
-                    <Suspense fallback={<Loader />}>{networkId !== Network.Base && <SidebarLeaderboard />}</Suspense>
+                    <Suspense fallback={<Loader />}>
+                        <SidebarLeaderboard />
+                    </Suspense>
                 </SidebarContainer>
                 {/* MAIN PART */}
 
