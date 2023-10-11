@@ -16,6 +16,7 @@ import { BetType, GlobalFiltersEnum } from 'enums/markets';
 import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const BATCH_SIZE = 100;
+const BATCH_SIZE_BASE = 50;
 const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 5;
 
 const marketsCache = {
@@ -44,17 +45,18 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
     let priceImpactFromContract: undefined | Array<any>;
     if (mapOnlyOpenedMarkets) {
         try {
+            const batchSize = networkId === Network.Base ? BATCH_SIZE_BASE : BATCH_SIZE;
             const { sportPositionalMarketDataContract, sportMarketManagerContract } = networkConnector;
             const numberOfActiveMarkets = await sportMarketManagerContract?.numActiveMarkets();
-            const numberOfBatches = Math.trunc(numberOfActiveMarkets / BATCH_SIZE) + 1;
+            const numberOfBatches = Math.trunc(numberOfActiveMarkets / batchSize) + 1;
 
             const promises = [];
             for (let i = 0; i < numberOfBatches; i++) {
-                promises.push(sportPositionalMarketDataContract?.getOddsForAllActiveMarketsInBatches(i, BATCH_SIZE));
+                promises.push(sportPositionalMarketDataContract?.getOddsForAllActiveMarketsInBatches(i, batchSize));
             }
             for (let i = 0; i < numberOfBatches; i++) {
                 promises.push(
-                    sportPositionalMarketDataContract?.getPriceImpactForAllActiveMarketsInBatches(i, BATCH_SIZE)
+                    sportPositionalMarketDataContract?.getPriceImpactForAllActiveMarketsInBatches(i, batchSize)
                 );
             }
 
