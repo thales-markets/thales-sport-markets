@@ -308,7 +308,8 @@
                 "passing touchdowns": "Pasando touchdowns",
                 "rushing yards": "Yardas apresuradas",
                 "scoring touchdown": "¿Quién anotará un touchdown en el juego?",
-                "field goals made": "Tiros de campo realizados"
+                "field goals made": "Tiros de campo realizados",
+                "pitcher hits allowed": "Se permiten hits del lanzador"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -356,7 +357,9 @@
                     "field-goals-made-under": "{{team}} anotará menos tiros de campo que {{scoring}}",
                     "info": {
                         "scoring touchdown": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado."
-                    }
+                    },
+                    "pitcher-hits-allowed-under": "{{team}} tendrá menos visitas permitidas que {{scoring}}",
+                    "pitcher-hits-allowed-over": "{{team}} tendrá más visitas permitidas que {{scoring}}"
                 }
             },
             "starts-in": "Empieza en",

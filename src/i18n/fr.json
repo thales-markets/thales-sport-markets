@@ -308,7 +308,8 @@
                 "passing touchdowns": "Passer des touchés",
                 "strikeouts": "Barrages",
                 "scoring touchdown": "Qui marquera un touchdown dans le match ?",
-                "field goals made": "Buts sur le terrain réussis"
+                "field goals made": "Buts sur le terrain réussis",
+                "pitcher hits allowed": "Coups de lanceur autorisés"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -356,7 +357,9 @@
                     "field-goals-made-under": "{{team}} aura moins de buts sur le terrain que {{scoring}}",
                     "info": {
                         "scoring touchdown": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
-                    }
+                    },
+                    "pitcher-hits-allowed-under": "{{team}} aura moins de coups autorisés que {{scoring}}",
+                    "pitcher-hits-allowed-over": "{{team}} aura plus de coups autorisés que {{scoring}}"
                 }
             },
             "starts-in": "Commence dans",
