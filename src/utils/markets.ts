@@ -599,5 +599,5 @@ export const isOneSidePlayerProps = (betType: BetType) => {
 };
 
 export const fixPlayerPropsLinesFromContract = (market: SportMarketInfo | MarketData) => {
-    market.playerPropsLine = Number(market.playerPropsLine) / 100;
+    Number(market.playerPropsLine) % 1 == 0 ? (market.playerPropsLine = Number(market.playerPropsLine) / 100) : '';
 };
