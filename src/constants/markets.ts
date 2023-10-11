@@ -2,7 +2,8 @@ import { BetType, ContractSGPOrder, OddsType, Position } from 'enums/markets';
 
 export const ODDS_TYPES = [OddsType.AMM, OddsType.Decimal, OddsType.American];
 
-export const MAX_COLLATERAL_SLIPPAGE = 0.99;
+export const MIN_COLLATERAL_MULTIPLIER = 1.01;
+export const MAX_COLLATERAL_MULTIPLIER = 0.99;
 export const APPROVAL_BUFFER = 0.01;
 
 export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, BetType[]> = {

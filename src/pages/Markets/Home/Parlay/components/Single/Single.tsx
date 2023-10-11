@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, DEFAULT_CURRENCY_DECIMALS, LONG_CURRENCY_DECIMALS, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, MAX_COLLATERAL_SLIPPAGE } from 'constants/markets';
+import { APPROVAL_BUFFER, MAX_COLLATERAL_MULTIPLIER } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
@@ -283,7 +283,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                 setAvailableCollateralAmount(floorNumberToDecimals(collateralToSpendForMaxAmount, decimals));
                 setAvailableUsdAmount(floorNumberToDecimals(usdToSpendForMaxAmount));
 
-                const paymentTokenBalanceWithSlippage = paymentTokenBalance * MAX_COLLATERAL_SLIPPAGE;
+                const paymentTokenBalanceWithSlippage = paymentTokenBalance * MAX_COLLATERAL_MULTIPLIER;
                 setMaxCollateralAmount(
                     floorNumberToDecimals(
                         paymentTokenBalanceWithSlippage >= collateralToSpendForMaxAmount
