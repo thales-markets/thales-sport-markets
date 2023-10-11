@@ -244,12 +244,7 @@ const ParlayLeaderboard: React.FC = () => {
                                 <Tooltip
                                     overlay={
                                         <>
-                                            {rewards[cellProps.cell.value - 1]}{' '}
-                                            {networkId !== Network.ArbitrumOne
-                                                ? 'OP'
-                                                : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
-                                                ? 'ARB'
-                                                : 'THALES'}
+                                            {rewards[cellProps.cell.value - 1]} {getRewardsCurrency(networkId)}
                                         </>
                                     }
                                     component={
@@ -723,6 +718,12 @@ const getRewardsAmount = (networkId: Network, period: number) => {
     if (networkId == Network.ArbitrumOne) return '2,000 ARB';
     if (networkId == Network.OptimismMainnet) return '2,000 OP';
     return '1,000 THALES';
+};
+
+const getRewardsCurrency = (networkId: Network) => {
+    if (networkId == Network.ArbitrumOne) return 'ARB';
+    if (networkId == Network.OptimismMainnet) return 'OP';
+    return 'THALES';
 };
 
 export default ParlayLeaderboard;
