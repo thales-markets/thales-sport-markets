@@ -54,7 +54,7 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--competition',
         name: 'parlay-competition',
         route: ROUTES.Leaderboard,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.ArbitrumOne],
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.ArbitrumOne, Network.Base],
     },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',
