@@ -393,7 +393,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 19199,
-        label: 'CONMEBOL',
+        label: 'CONMEBOL WC Qualification',
         logoClass: '',
         favourite: false,
         hidden: false,
