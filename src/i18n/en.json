@@ -393,7 +393,8 @@
                 "receiving yards": "Receiving yards",
                 "passing touchdowns": "Passing touchdowns",
                 "scoring touchdown": "Who will score a touchdown in the game?",
-                "field goals made": "Field goals made"
+                "field goals made": "Field goals made",
+                "pitcher hits allowed": "Pitcher hits allowed"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -438,6 +439,8 @@
                     "touchdowns": "{{team}} will score a touchdown in the game",
                     "field-goals-made-over": "{{team}} will have more field goals made than {{scoring}}",
                     "field-goals-made-under": "{{team}} will have less field goals made than {{scoring}}",
+                    "pitcher-hits-allowed-over": "{{team}} will have more hits allowed than {{scoring}}",
+                    "pitcher-hits-allowed-under": "{{team}} will have less hits allowed than {{scoring}}",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }
