@@ -6,12 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getParlay,
-    getParlayPayment,
     getHasParlayError,
     setParlaySize,
     resetParlayError,
-    setPayment,
-    setPaymentSelectedStableIndex,
+    setPaymentSelectedCollateralIndex,
     getIsMultiSingle,
     setIsMultiSingle,
     getMultiSingle,
@@ -24,7 +22,6 @@ import { FlexDivColumn } from 'styles/common';
 import { CombinedParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
-import Payment from './components/Payment';
 import Single from './components/Single';
 import MultiSingle from './components/MultiSingle';
 import Ticket from './components/Ticket';
@@ -55,7 +52,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlay = useSelector(getParlay);
-    const parlayPayment = useSelector(getParlayPayment);
     const isMultiSingleBet = useSelector(getIsMultiSingle);
     const hasParlayError = useSelector(getHasParlayError);
     const multiSingleStore = useSelector(getMultiSingle);
@@ -78,7 +74,12 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     });
 
     useEffect(() => {
-        dispatch(setPaymentSelectedStableIndex(getDefaultCollateralIndexForNetworkId(networkId)));
+        dispatch(
+            setPaymentSelectedCollateralIndex({
+                selectedCollateralIndex: getDefaultCollateralIndexForNetworkId(networkId),
+                networkId: networkId,
+            })
+        );
     }, [networkId, dispatch]);
 
     useEffect(() => {
@@ -180,7 +181,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                         ? combinedMarketsData.parlaysWithoutCombinedMarkets
                                         : parlayMarkets
                                 }
-                                parlayPayment={parlayPayment}
                             />
                         </>
                     ) : (
@@ -220,15 +220,10 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                             </ListContainer>
                             <HorizontalLine />
                             {parlayMarkets.length === 1 ? (
-                                <Single
-                                    market={parlayMarkets[0]}
-                                    parlayPayment={parlayPayment}
-                                    onBuySuccess={onBuySuccess}
-                                />
+                                <Single market={parlayMarkets[0]} onBuySuccess={onBuySuccess} />
                             ) : (
                                 <Ticket
                                     markets={parlayMarkets}
-                                    parlayPayment={parlayPayment}
                                     setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
                                     onBuySuccess={onBuySuccess}
                                 />
@@ -250,20 +245,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                         />
                         <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
                     </Empty>
-                    {isWalletConnected && (
-                        <Payment
-                            defaultSelectedStableIndex={parlayPayment.selectedStableIndex}
-                            defaultIsVoucherSelected={parlayPayment.isVoucherSelected}
-                            onChangeCollateral={(index) => {
-                                if (index !== parlayPayment.selectedStableIndex) {
-                                    dispatch(setPayment({ ...parlayPayment, selectedStableIndex: index }));
-                                }
-                            }}
-                            setIsVoucherSelectedProp={(isSelected) =>
-                                dispatch(setPayment({ ...parlayPayment, isVoucherSelected: isSelected }))
-                            }
-                        />
-                    )}
                 </>
             )}
             {hasParlayError && <ValidationModal onClose={onCloseValidationModal} />}

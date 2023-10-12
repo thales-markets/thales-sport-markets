@@ -1,4 +1,5 @@
 import { BetType, DoubleChanceMarketType, Position, PositionName } from 'enums/markets';
+import { Network } from '../enums/network';
 
 export type SportMarketInfo = {
     id: string;
@@ -49,6 +50,7 @@ export type AMMPosition = {
     available: number;
     quote: number;
     priceImpact: number;
+    usdQuote: number;
 };
 
 export type AvailablePerPosition = Record<Position, { available?: number; buyBonus?: number }>;
@@ -109,6 +111,7 @@ export type SportMarketChildMarkets = {
     passingTouchdownsMarkets: SportMarketInfo[];
     oneSiderTouchdownsMarkets: SportMarketInfo[];
     fieldGoalsMadeMarkets: SportMarketInfo[];
+    pitcherHitsAllowedMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {
@@ -250,15 +253,17 @@ export type ParlayAmmData = {
 };
 
 export type ParlayPayment = {
-    selectedStableIndex: number;
-    isVoucherSelected: boolean | undefined;
+    selectedCollateralIndex: number;
+    isVoucherAvailable: boolean;
+    isVoucherSelected: boolean;
     amountToBuy: number | string;
+    networkId: Network;
 };
 
 export type MultiSingleAmounts = {
     sportMarketAddress: string;
     parentMarketAddress: string;
-    amountToBuy: number;
+    amountToBuy: number | string;
 };
 
 export type MultiSingleTokenQuoteAndBonus = {

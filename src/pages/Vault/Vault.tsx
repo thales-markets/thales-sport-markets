@@ -68,7 +68,7 @@ import Button from 'components/Button';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { VaultTab } from 'enums/vault';
-import { stableCoinParser } from 'utils/formatters/ethers';
+import { coinParser } from 'utils/formatters/ethers';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { navigateTo } from 'utils/routes';
 
@@ -193,7 +193,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                    const parsedAmount = coinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -254,7 +254,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             try {
                 const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
 
-                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                const parsedAmount = coinParser(Number(amount).toString(), networkId);
 
                 const tx = await sportVaultContractWithSigner.deposit(parsedAmount);
                 const txResult = await tx.wait();

@@ -2,7 +2,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Network } from 'enums/network';
 import { getDefaultDecimalsForNetwork } from 'utils/network';
-import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
+import { bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 
 type OvertimeVoucherEscrowData = {
@@ -41,11 +41,8 @@ const useOvertimeVoucherEscrowQuery = (walletAddress: string, networkId: Network
                         sUSDContract.balanceOf(overtimeVoucherEscrowContract.address),
                     ]);
 
-                    const voucherEscrowBalance = bigNumberFormmaterWithDecimals(
-                        balance,
-                        getDefaultDecimalsForNetwork(networkId)
-                    );
-                    const voucherAmount = bigNumberFormmaterWithDecimals(
+                    const voucherEscrowBalance = bigNumberFormatter(balance, getDefaultDecimalsForNetwork(networkId));
+                    const voucherAmount = bigNumberFormatter(
                         voucherEscrowData.voucherAmount,
                         getDefaultDecimalsForNetwork(networkId)
                     );

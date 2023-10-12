@@ -570,6 +570,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_RECEIVING_YARDS]: 'receiving yards',
     [BetType.PLAYER_PROPS_TOUCHDOWNS]: 'scoring touchdown',
     [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: 'field goals made',
+    [BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED]: 'pitcher hits allowed',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
@@ -585,6 +586,7 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_RUSHING_YARDS]: '',
     [BetType.PLAYER_PROPS_RECEIVING_YARDS]: '',
     [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: '',
+    [BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED]: '',
 };
 
 export const SCORING_MAP: SportsMap = {

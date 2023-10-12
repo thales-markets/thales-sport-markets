@@ -308,7 +308,8 @@
                 "home runs": "โฮมรัน",
                 "rushing yards": "วิ่งหลา",
                 "scoring touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ในเกม?",
-                "field goals made": "ทำประตูในสนามได้"
+                "field goals made": "ทำประตูในสนามได้",
+                "pitcher hits allowed": "อนุญาตให้ตีเหยือกได้"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -356,7 +357,9 @@
                     "field-goals-made-over": "{{team}} จะมีการยิงประตูมากกว่า {{scoring}}",
                     "info": {
                         "scoring touchdown": "การรับ การวิ่ง การเตะเตะกลับ ทัชดาวน์การป้องกันและการสกัดกั้นจะถูกนับรวมในผลการแข่งขัน"
-                    }
+                    },
+                    "pitcher-hits-allowed-under": "{{team}} จะมีโอกาสโจมตีน้อยกว่า {{scoring}}",
+                    "pitcher-hits-allowed-over": "{{team}} จะได้รับอนุญาตให้โจมตีมากกว่า {{scoring}}"
                 }
             },
             "starts-in": "เริ่มเข้า",

@@ -1,10 +1,8 @@
-import { STABLE_DECIMALS, currencyKeyToAssetIconMap } from 'constants/currency';
+import { COLLATERAL_DECIMALS, STABLE_COINS } from 'constants/currency';
 import { COLLATERALS } from 'constants/currency';
 import { Network } from 'enums/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
-import { StablecoinKey } from 'types/tokens';
-
-export const getStableIcon = (currencyKey: StablecoinKey) => currencyKeyToAssetIconMap[currencyKey];
+import { Coins } from 'types/tokens';
 
 export const getDefaultCollateral = (networkId: Network) => COLLATERALS[networkId][0];
 
@@ -12,11 +10,15 @@ export const getCollateral = (networkId: Network, index: number) => COLLATERALS[
 
 export const getCollaterals = (networkId: Network) => COLLATERALS[networkId];
 
-export const getCollateralIndex = (networkId: Network, currencyKey: StablecoinKey) =>
+export const getCollateralIndex = (networkId: Network, currencyKey: Coins) =>
     COLLATERALS[networkId].indexOf(currencyKey);
 
-export const getCollateralAddress = (networkId: Network, stableIndex: number) =>
-    multipleCollateral[getCollateral(networkId, stableIndex)]?.addresses[networkId];
+export const getCollateralAddress = (networkId: Network, index: number) =>
+    multipleCollateral[getCollateral(networkId, index)]?.addresses[networkId];
 
-export const getStablecoinDecimals = (networkId: Network, stableIndex: number) =>
-    STABLE_DECIMALS[getCollateral(networkId, stableIndex)];
+export const getCollateralDecimals = (networkId: Network, index: number) =>
+    COLLATERAL_DECIMALS[getCollateral(networkId, index)];
+
+export const isStableCurrency = (currencyKey: Coins) => {
+    return STABLE_COINS.includes(currencyKey);
+};

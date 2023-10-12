@@ -1,12 +1,11 @@
-import { STABLE_DECIMALS } from 'constants/currency';
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { BigNumber } from 'ethers';
 import { Network } from 'enums/network';
 import { getNavItemFromRoute } from './ui';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import localStore from './localStore';
-import { getCollaterals } from './collaterals';
 import { NetworkParams } from '../types/network';
+import { getCollaterals } from './collaterals';
 
 export const hasEthereumInjected = () => !!window.ethereum;
 
@@ -36,8 +35,8 @@ export const getNetworkNameByNetworkId = (networkId: Network, shortName = false)
 };
 
 export const getDefaultDecimalsForNetwork = (networkId: Network) => {
-    if (networkId == Network.ArbitrumOne || networkId === Network.Base) return STABLE_DECIMALS.USDC;
-    return STABLE_DECIMALS.sUSD;
+    if (networkId == Network.ArbitrumOne || networkId === Network.Base) return 6;
+    return 18;
 };
 
 export const getDefaultNetworkName = (shortName = false): string => {
@@ -58,11 +57,13 @@ export const isRouteAvailableForNetwork = (route: string, networkId: Network): b
 };
 
 export const getDefaultCollateralIndexForNetworkId = (networkId: Network): number => {
-    const lsSelectedStableIndex = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
-    return networkId === Network.ArbitrumOne ? 0 : (lsSelectedStableIndex as number) || 0;
+    const lsSelectedCollateralIndex = localStore.get(`${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${networkId}`);
+    return lsSelectedCollateralIndex && getCollaterals(networkId).length > Number(lsSelectedCollateralIndex)
+        ? Number(lsSelectedCollateralIndex)
+        : 0;
 };
 
-export const isMultiCollateralSupportedForNetwork = (networkId: Network) => getCollaterals(networkId).length > 1;
+export const getIsMultiCollateralSupported = (networkId: Network): boolean => getCollaterals(networkId).length > 1;
 
 export const changeNetwork = async (network: NetworkParams, callback?: VoidFunction): Promise<void> => {
     if (hasEthereumInjected()) {
