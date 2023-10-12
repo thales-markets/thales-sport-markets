@@ -18,7 +18,6 @@ export const OverviewContainer = styled(FlexDivRow)`
     justify-content: space-between;
     width: 100%;
     align-items: center;
-    height: 35px;
     cursor: pointer;
     position: relative;
     @media (max-width: 768px) {

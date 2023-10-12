@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormmaterWithDecimals, bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
 import { LiquidityPoolData } from 'types/liquidityPool';
@@ -42,12 +42,12 @@ const useParlayLiquidityPoolDataQuery = (
                     );
 
                     liquidityPoolData.liquidityPoolStarted = contractLiquidityPoolData.started;
-                    liquidityPoolData.maxAllowedDeposit = bigNumberFormmaterWithDecimals(
+                    liquidityPoolData.maxAllowedDeposit = bigNumberFormatter(
                         contractLiquidityPoolData.maxAllowedDeposit,
                         decimals
                     );
                     liquidityPoolData.round = Number(contractLiquidityPoolData.round);
-                    liquidityPoolData.allocationNextRound = bigNumberFormmaterWithDecimals(
+                    liquidityPoolData.allocationNextRound = bigNumberFormatter(
                         contractLiquidityPoolData.totalDeposited,
                         decimals
                     );
@@ -55,7 +55,7 @@ const useParlayLiquidityPoolDataQuery = (
                         liquidityPoolData.maxAllowedDeposit - liquidityPoolData.allocationNextRound;
                     liquidityPoolData.allocationNextRoundPercentage =
                         (liquidityPoolData.allocationNextRound / liquidityPoolData.maxAllowedDeposit) * 100;
-                    liquidityPoolData.minDepositAmount = bigNumberFormmaterWithDecimals(
+                    liquidityPoolData.minDepositAmount = bigNumberFormatter(
                         contractLiquidityPoolData.minDepositAmount,
                         decimals
                     );
@@ -69,14 +69,14 @@ const useParlayLiquidityPoolDataQuery = (
                     liquidityPoolData.stakedThalesMultiplier = bigNumberFormatter(
                         contractLiquidityPoolData.stakedThalesMultiplier
                     );
-                    liquidityPoolData.allocationCurrentRound = bigNumberFormmaterWithDecimals(
+                    liquidityPoolData.allocationCurrentRound = bigNumberFormatter(
                         contractLiquidityPoolData.allocationCurrentRound,
                         decimals
                     );
                     liquidityPoolData.lifetimePnl =
-                        bigNumberFormmaterWithDecimals(contractLiquidityPoolData.lifetimePnl, 18) === 0
+                        bigNumberFormatter(contractLiquidityPoolData.lifetimePnl, 18) === 0
                             ? 0
-                            : bigNumberFormmaterWithDecimals(contractLiquidityPoolData.lifetimePnl, 18) - 1;
+                            : bigNumberFormatter(contractLiquidityPoolData.lifetimePnl, 18) - 1;
                     liquidityPoolData.roundEndTime = Number(contractLiquidityPoolData.roundEndTime) * 1000;
                     liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
 

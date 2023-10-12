@@ -77,10 +77,13 @@
             "swap-progress-label": "Swapping in progress..."
         },
         "enable-wallet-access": {
+            "approve": "Approve",
+            "approve-progress": "Approving...",
             "approve-label": "Approve {{currencyKey}}",
             "approve-progress-label": "Approving {{currencyKey}}...",
             "approve-all-label": "Approve all",
-            "custom-amount-label": "Approve amount of"
+            "custom-amount-label": "Approve amount of",
+            "approve-swap": "Approve swap to {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "Oops! You are on the wrong network!",
@@ -323,12 +326,15 @@
             "to-win": "win",
             "to-claim": "claim",
             "claim": "Claim",
+            "claim-progress": "Claiming...",
             "claim-all": "Claim All",
             "canceled": "Canceled",
             "total-quote": "Total quote",
             "result": "Result",
             "position-size": "Position size",
-            "starts": "Starts"
+            "starts": "Starts",
+            "payout-in": "Payout in",
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}."
         },
         "table": {
             "time": "Time",
@@ -498,10 +504,13 @@
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
+            "total-to-pay": "Total to pay",
             "payout": "Payout",
             "potential-profit": "Potential profit",
             "pay-with": "Pay with",
+            "pay-with-voucher": "Pay with voucher",
             "available": "Available",
+            "in-wallet": "In wallet",
             "skew": "Skew",
             "empty-title": "No positions",
             "empty-description": "Add position, choose a market and make your selection.",

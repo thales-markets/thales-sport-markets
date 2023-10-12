@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { BigNumber, ethers } from 'ethers';
-import { bigNumberFormatter, stableCoinParser } from 'utils/formatters/ethers';
+import { bigNumberFormatter, coinParser } from 'utils/formatters/ethers';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Checkbox from 'components/fields/Checkbox';
@@ -44,7 +44,7 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     const isAmountEntered = Number(amount) > 0;
     const isButtonDisabled = !isWalletConnected || isAllowing || (!approveAll && (!isAmountEntered || !isAmountValid));
 
-    const amountConverted = stableCoinParser(
+    const amountConverted = coinParser(
         Number(amount).toString(),
         networkId,
         getCollateral(networkId, collateralIndex || 0)

@@ -15,8 +15,10 @@ import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContract
 import parlayMarketDataContract from 'utils/contracts/parlayMarketDataContract';
 import parlayAMMLiquidityPoolContract from 'utils/contracts/parlayAMMLiquidityPoolContract';
 import parlayAMMLiquidityPoolDataContract from 'utils/contracts/parlayAMMLiquidityPoolDataContract';
+import priceFeedContract from './contracts/priceFeedContract';
+import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
 import { Network } from 'enums/network';
-import { StablecoinKey } from 'types/tokens';
+import { Coins } from 'types/tokens';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -24,7 +26,7 @@ type NetworkConnector = {
     signer: Signer | undefined;
     setNetworkSettings: (networkSettings: NetworkSettings) => void;
     paymentTokenContract?: ethers.Contract;
-    multipleCollateral?: Record<StablecoinKey, ethers.Contract | undefined>;
+    multipleCollateral?: Record<Coins, ethers.Contract | undefined>;
     marketManagerContract?: ethers.Contract;
     marketDataContract?: ethers.Contract;
     sportPositionalMarketDataContract?: ethers.Contract;
@@ -42,6 +44,8 @@ type NetworkConnector = {
     parlayMarketDataContract?: ethers.Contract;
     parlayAMMLiquidityPoolContract?: ethers.Contract;
     parlayAMMLiquidityPoolDataContract?: ethers.Contract;
+    priceFeedContract?: ethers.Contract;
+    multiCollateralOnOffRampContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -68,12 +72,19 @@ const networkConnector: NetworkConnector = {
             parlayAMMLiquidityPoolDataContract,
             networkSettings
         );
+        this.priceFeedContract = initializeContract(priceFeedContract, networkSettings);
+        this.multiCollateralOnOffRampContract = initializeContract(multiCollateralOnOffRampContract, networkSettings);
 
         this.multipleCollateral = {
             sUSD: initializeContract(multipleCollateral.sUSD, networkSettings),
             DAI: initializeContract(multipleCollateral.DAI, networkSettings),
             USDC: initializeContract(multipleCollateral.USDC, networkSettings),
+            USDCe: initializeContract(multipleCollateral.USDCe, networkSettings),
             USDT: initializeContract(multipleCollateral.USDT, networkSettings),
+            OP: initializeContract(multipleCollateral.OP, networkSettings),
+            WETH: initializeContract(multipleCollateral.WETH, networkSettings),
+            ETH: initializeContract(multipleCollateral.ETH, networkSettings),
+            ARB: initializeContract(multipleCollateral.ARB, networkSettings),
         };
     },
 };

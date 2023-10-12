@@ -12,6 +12,7 @@ type ButtonProps = {
     onClick?: any;
     fontSize?: string;
     fontWeight?: string;
+    lineHeight?: string;
     disabled?: boolean;
     additionalStyles?: CSSProperties;
     children?: any;
@@ -30,6 +31,7 @@ const Button: React.FC<ButtonProps> = ({
     additionalStyles,
     fontSize,
     fontWeight,
+    lineHeight,
     children,
 }) => {
     return (
@@ -45,6 +47,7 @@ const Button: React.FC<ButtonProps> = ({
             disabled={disabled}
             fontSize={fontSize}
             fontWeight={fontWeight}
+            lineHeight={lineHeight}
             style={additionalStyles}
         >
             {children}
@@ -62,6 +65,7 @@ const Wrapper = styled.button<{
     borderColor?: string;
     fontSize?: string;
     fontWeight?: string;
+    lineHeight?: string;
 }>`
     display: flex;
     text-transform: uppercase;
@@ -73,6 +77,7 @@ const Wrapper = styled.button<{
     border-radius: 5px;
     font-weight: ${(props) => props.fontWeight || '700'};
     font-size: ${(props) => props.fontSize || '15px'};
+    line-height: ${(props) => props.lineHeight || 'initial'};
     cursor: pointer;
     color: ${(props) => props.textColor || props.theme.button.textColor.primary};
     background: ${(props) => props.backgroundColor || props.theme.button.background.primary};
