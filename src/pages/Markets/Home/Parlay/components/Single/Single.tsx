@@ -2,8 +2,8 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, MAX_USD_SLIPPAGE } from 'constants/markets';
+import { CRYPTO_CURRENCY_MAP, DEFAULT_CURRENCY_DECIMALS, LONG_CURRENCY_DECIMALS, USD_SIGN } from 'constants/currency';
+import { APPROVAL_BUFFER, MAX_COLLATERAL_MULTIPLIER } from 'constants/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useAvailablePerPositionQuery from 'queries/markets/useAvailablePerPositionQuery';
@@ -15,29 +15,30 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { removeAll, setPayment } from 'redux/modules/parlay';
+import { getParlayPayment, removeAll, setPaymentAmountToBuy } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
-import { AMMPosition, AvailablePerPosition, ParlayPayment, ParlaysMarket } from 'types/markets';
+import { AMMPosition, AvailablePerPosition, ParlaysMarket } from 'types/markets';
 import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
-    countDecimals,
+    ceilNumberToDecimals,
     floorNumberToDecimals,
     formatCurrency,
+    formatCurrencyWithKey,
     formatCurrencyWithSign,
     formatPercentage,
+    getPrecision,
     roundNumberToDecimals,
 } from 'utils/formatters/number';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
-import { checkAllowance, getDefaultDecimalsForNetwork, isMultiCollateralSupportedForNetwork } from 'utils/network';
+import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
-import Payment from '../Payment';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
@@ -61,17 +62,27 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import NumericInput from 'components/fields/NumericInput';
-import { getCollateral, getStablecoinDecimals } from 'utils/collaterals';
-import { stableCoinParser } from 'utils/formatters/ethers';
+import {
+    getCollateral,
+    getCollateralAddress,
+    getCollateralIndex,
+    getCollaterals,
+    getDefaultCollateral,
+    isStableCurrency,
+} from 'utils/collaterals';
+import { coinFormatter, coinParser } from 'utils/formatters/ethers';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
+import CollateralSelector from 'components/CollateralSelector';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import Voucher from '../Voucher';
+import { Coins } from 'types/tokens';
 
 type SingleProps = {
     market: ParlaysMarket;
-    parlayPayment: ParlayPayment;
     onBuySuccess?: () => void;
 };
 
-const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) => {
+const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -84,22 +95,26 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
+    const parlayPayment = useSelector(getParlayPayment);
+    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
+    const isVoucherSelected = parlayPayment.isVoucherSelected;
+    const collateralAmountValue = parlayPayment.amountToBuy;
 
-    const [submitDisabled, setSubmitDisabled] = useState(false);
-    const [hasAllowance, setHasAllowance] = useState(false);
-    const [isAMMPaused, setIsAMMPaused] = useState(false);
-    const [openApprovalModal, setOpenApprovalModal] = useState(false);
-    const [selectedStableIndex, setSelectedStableIndex] = useState(parlayPayment.selectedStableIndex);
-    const [isVoucherSelected, setIsVoucherSelected] = useState<boolean | undefined>(parlayPayment.isVoucherSelected);
     const [tokenAmount, setTokenAmount] = useState(0);
+    const [availableCollateralAmount, setAvailableCollateralAmount] = useState(0);
+    const [availableUsdAmount, setAvailableUsdAmount] = useState(0);
+    const [maxCollateralAmount, setMaxCollateralAmount] = useState(0);
+    const [quoteForMinAmount, setQuoteForMinAmount] = useState(0);
     const [bonusPercentageDec, setBonusPercentageDec] = useState(0);
     const [bonusCurrency, setBonusCurrency] = useState(0);
-    const [usdAmountValue, setUsdAmountValue] = useState<number | string>(parlayPayment.amountToBuy);
-    const [maxUsdAmount, setMaxUsdAmount] = useState(0);
-    const [availableUsdAmount, setAvailableUsdAmount] = useState(0);
+
+    const [isAMMPaused, setIsAMMPaused] = useState(false);
+    const [submitDisabled, setSubmitDisabled] = useState(false);
+    const [hasAllowance, setHasAllowance] = useState(false);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
-    const [tooltipTextUsdAmount, setTooltipTextUsdAmount] = useState('');
+    const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState('');
+
     const [availablePerPosition, setAvailablePerPosition] = useState<AvailablePerPosition>({
         [Position.HOME]: {
             available: 0,
@@ -115,7 +130,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         available: 0,
         quote: 0,
         priceImpact: 0,
+        usdQuote: 0,
     });
+
+    const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
         markets: [],
@@ -125,6 +143,24 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         payout: 0,
         onClose: () => {},
     });
+
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+        networkId,
+        selectedCollateralIndex,
+    ]);
+    const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
+    const collateralAddress = useMemo(
+        () =>
+            getCollateralAddress(
+                networkId,
+                isEth ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateralIndex
+            ),
+        [networkId, selectedCollateralIndex, isEth]
+    );
+    const isStableCollateral = isStableCurrency(selectedCollateral);
+    const isDefaultCollateral = selectedCollateral === defaultCollateral;
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -150,9 +186,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         }
     }, [ammContractsStatusData]);
 
-    const isMultiCollateralSupported = isMultiCollateralSupportedForNetwork(networkId);
-
-    const multipleStableBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
@@ -161,38 +195,32 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
-            if (parlayPayment.isVoucherSelected === undefined) {
-                setIsVoucherSelected(true);
-            }
             return overtimeVoucherQuery.data;
         }
-        if (parlayPayment.isVoucherSelected !== undefined) {
-            setIsVoucherSelected(false);
-        }
         return undefined;
-    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data, parlayPayment.isVoucherSelected]);
+    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
 
     const paymentTokenBalance: number = useMemo(() => {
         if (overtimeVoucher && isVoucherSelected) {
             return overtimeVoucher.remainingAmount;
         }
-        if (multipleStableBalances.data && multipleStableBalances.isSuccess) {
-            return multipleStableBalances.data[getCollateral(networkId, selectedStableIndex)];
+        if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
+            return multipleCollateralBalances.data[selectedCollateral];
         }
         return 0;
     }, [
-        networkId,
-        multipleStableBalances.data,
-        multipleStableBalances.isSuccess,
-        selectedStableIndex,
+        multipleCollateralBalances.data,
+        multipleCollateralBalances.isSuccess,
+        selectedCollateral,
         overtimeVoucher,
         isVoucherSelected,
     ]);
 
-    useEffect(() => {
-        // Used for transition between Ticket and Single to save payment selection and amount
-        dispatch(setPayment({ selectedStableIndex, isVoucherSelected, amountToBuy: usdAmountValue }));
-    }, [dispatch, selectedStableIndex, isVoucherSelected, usdAmountValue]);
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     // Clear Parlay when network is changed
     const isMounted = useRef(false);
@@ -206,94 +234,112 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
     }, [dispatch, networkId]);
 
     const fetchAmmQuote = useCallback(
-        async (amountForQuote: number) => {
+        async (amountForQuote: number, getExtendedQuote?: boolean) => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract && amountForQuote) {
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
                 const ammQuote = await getSportsAMMQuoteMethod(
-                    selectedStableIndex,
-                    networkId,
+                    collateralAddress,
+                    isDefaultCollateral,
                     sportsAMMContract,
                     market.address,
                     market.position,
                     parsedAmount
                 );
 
-                return isMultiCollateralSupported && selectedStableIndex !== 0 ? ammQuote[0] : ammQuote;
+                // Extended quote for non default collateral returns quote in collateral and quote in default collateral (USD)
+                // For default collateral it returns the same quote for both
+                return isDefaultCollateral
+                    ? getExtendedQuote
+                        ? [ammQuote, ammQuote]
+                        : ammQuote
+                    : getExtendedQuote
+                    ? ammQuote
+                    : ammQuote[0];
             }
         },
-        [isMultiCollateralSupported, market.address, market.position, networkId, selectedStableIndex]
+        [market.address, market.position, collateralAddress, isDefaultCollateral]
     );
 
     useEffect(() => {
-        const getMaxUsdAmount = async () => {
+        const getMaxCollateralAmount = async () => {
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract) {
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
-                const divider = isVoucherSelected
-                    ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
-                    : Number(`1e${getStablecoinDecimals(networkId, selectedStableIndex)}`);
-                const susdToSpendForMaxAmount = await fetchAmmQuote(roundedMaxAmount);
+                if (roundedMaxAmount <= 0) return 0;
 
-                const decimalSusdToSpendForMaxAmount = susdToSpendForMaxAmount / divider;
+                const ammQuote = await fetchAmmQuote(roundedMaxAmount, true);
+
+                const collateralToSpendForMaxAmount = coinFormatter(
+                    ammQuote[0],
+                    networkId,
+                    isVoucherSelected ? undefined : selectedCollateral
+                );
+                const usdToSpendForMaxAmount = coinFormatter(ammQuote[1], networkId);
 
                 if (!mountedRef.current) return null;
-                setAvailableUsdAmount(floorNumberToDecimals(decimalSusdToSpendForMaxAmount));
 
-                if (paymentTokenBalance > decimalSusdToSpendForMaxAmount) {
-                    if (paymentTokenBalance * MAX_USD_SLIPPAGE >= decimalSusdToSpendForMaxAmount) {
-                        setMaxUsdAmount(floorNumberToDecimals(decimalSusdToSpendForMaxAmount));
-                    } else {
-                        const calculatedMaxAmount = paymentTokenBalance * MAX_USD_SLIPPAGE;
-                        setMaxUsdAmount(floorNumberToDecimals(calculatedMaxAmount));
-                    }
-                    return;
-                }
-                setMaxUsdAmount(floorNumberToDecimals(paymentTokenBalance * MAX_USD_SLIPPAGE));
+                const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+                setAvailableCollateralAmount(floorNumberToDecimals(collateralToSpendForMaxAmount, decimals));
+                setAvailableUsdAmount(floorNumberToDecimals(usdToSpendForMaxAmount));
+
+                const paymentTokenBalanceWithSlippage = paymentTokenBalance * MAX_COLLATERAL_MULTIPLIER;
+                setMaxCollateralAmount(
+                    floorNumberToDecimals(
+                        paymentTokenBalanceWithSlippage >= collateralToSpendForMaxAmount
+                            ? collateralToSpendForMaxAmount
+                            : paymentTokenBalanceWithSlippage,
+                        decimals
+                    )
+                );
             }
         };
-        getMaxUsdAmount();
+        getMaxCollateralAmount();
     }, [
-        usdAmountValue,
         paymentTokenBalance,
-        selectedStableIndex,
-        market.address,
-        market.position,
+        market,
         availablePerPosition,
         fetchAmmQuote,
         isVoucherSelected,
         networkId,
+        isStableCollateral,
+        selectedCollateral,
     ]);
 
     const calculatedBonusPercentageDec = useMemo(() => getBonus(market) / 100, [market]);
 
     useDebouncedEffect(() => {
         const fetchData = async () => {
-            const divider = isVoucherSelected
-                ? Number(`1e${getDefaultDecimalsForNetwork(networkId)}`)
-                : Number(`1e${getStablecoinDecimals(networkId, selectedStableIndex)}`);
-
+            const coin = isVoucherSelected ? undefined : selectedCollateral;
             const { sportsAMMContract, signer } = networkConnector;
-            if (signer && sportsAMMContract) {
+            if (signer && sportsAMMContract && Number(collateralAmountValue) > 0) {
                 const contract = new ethers.Contract(market.address, sportsMarketContract.abi, signer);
                 contract.connect(signer);
                 const roundedMaxAmount = floorNumberToDecimals(availablePerPosition[market.position].available || 0);
                 if (roundedMaxAmount) {
-                    const [sUSDToSpendForMaxAmount, ammBalances] = await Promise.all([
+                    const [
+                        collateralToSpendForMaxAmount,
+                        collateralToSpendForMinAmount,
+                        ammBalances,
+                    ] = await Promise.all([
                         fetchAmmQuote(roundedMaxAmount),
+                        fetchAmmQuote(MIN_TOKEN_AMOUNT),
                         contract.balancesOf(sportsAMMContract?.address),
                     ]);
+                    setQuoteForMinAmount(coinFormatter(collateralToSpendForMinAmount, networkId, coin));
+
                     if (!mountedRef.current) return null;
 
                     const ammBalanceForSelectedPosition = ammBalances[market.position];
                     const amountOfTokens =
                         fetchAmountOfTokensForXsUSDAmount(
-                            Number(usdAmountValue),
-                            getPositionOdds(market),
-                            sUSDToSpendForMaxAmount / divider,
+                            Number(collateralAmountValue),
+                            coinFormatter(collateralToSpendForMinAmount, networkId, coin),
+                            coinFormatter(collateralToSpendForMaxAmount, networkId, coin),
                             availablePerPosition[market.position].available || 0,
-                            ammBalanceForSelectedPosition / divider
+                            coinFormatter(ammBalanceForSelectedPosition, networkId, coin)
                         ) || 0;
+
                     if (amountOfTokens > (availablePerPosition[market.position].available || 0)) {
                         setTokenAmount(0);
                         return;
@@ -303,10 +349,10 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     const quote = await fetchAmmQuote(flooredAmountOfTokens);
                     if (!mountedRef.current) return null;
 
-                    const parsedQuote = quote / divider;
+                    const parsedQuote = coinFormatter(quote, networkId, coin);
 
                     const recalculatedTokenAmount = roundNumberToDecimals(
-                        (amountOfTokens * Number(usdAmountValue)) / parsedQuote
+                        (amountOfTokens * Number(collateralAmountValue)) / parsedQuote
                     );
                     const maxAvailableTokenAmount =
                         recalculatedTokenAmount > flooredAmountOfTokens
@@ -314,8 +360,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                             : recalculatedTokenAmount;
                     setTokenAmount(maxAvailableTokenAmount);
 
-                    if (Number(usdAmountValue) > 0) {
-                        const newQuote = maxAvailableTokenAmount / Number(usdAmountValue);
+                    if (Number(collateralAmountValue) > 0) {
+                        const newQuote = maxAvailableTokenAmount / Number(collateralAmountValue);
                         const calculatedReducedBonus =
                             (calculatedBonusPercentageDec * newQuote) /
                             Number(formatMarketOdds(OddsType.Decimal, getPositionOdds(market)));
@@ -332,13 +378,23 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         };
 
         fetchData().catch((e) => console.log(e));
-    }, [usdAmountValue, selectedStableIndex, fetchAmmQuote, availablePerPosition, market]);
+    }, [
+        collateralAmountValue,
+        isVoucherSelected,
+        selectedCollateral,
+        fetchAmmQuote,
+        availablePerPosition,
+        market,
+        networkId,
+    ]);
 
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
         market.address,
         market.position,
         tokenAmount || 1,
-        selectedStableIndex,
+        selectedCollateral,
+        collateralAddress,
+        isDefaultCollateral,
         networkId,
         {
             enabled: isAppReady,
@@ -363,21 +419,17 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
     useEffect(() => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (sportsAMMContract && signer) {
-            let collateralContractWithSigner: ethers.Contract | undefined;
-            const collateral = getCollateral(networkId, selectedStableIndex);
-            if (selectedStableIndex !== 0 && multipleCollateral && isMultiCollateralSupported) {
-                collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
-            } else {
-                collateralContractWithSigner = sUSDContract?.connect(signer);
-            }
+        if (sportsAMMContract && multipleCollateral && signer) {
+            const collateralContractWithSigner = isDefaultCollateral
+                ? sUSDContract?.connect(signer)
+                : multipleCollateral[selectedCollateral]?.connect(signer);
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = stableCoinParser(
-                        Number(usdAmountValue).toString(),
+                    const parsedTicketPrice = coinParser(
+                        Number(collateralAmountValue).toString(),
                         networkId,
-                        getCollateral(networkId, selectedStableIndex)
+                        selectedCollateral
                     );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
@@ -391,8 +443,8 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     console.log(e);
                 }
             };
-            if (isWalletConnected && usdAmountValue) {
-                isVoucherSelected ? setHasAllowance(true) : getAllowance();
+            if (isWalletConnected && collateralAmountValue) {
+                isVoucherSelected || isEth ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -400,31 +452,25 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         isWalletConnected,
         hasAllowance,
         isAllowing,
-        usdAmountValue,
-        selectedStableIndex,
+        collateralAmountValue,
+        selectedCollateralIndex,
         isVoucherSelected,
         isMultiCollateralSupported,
         networkId,
+        selectedCollateral,
+        isDefaultCollateral,
+        isEth,
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMContract, sUSDContract, signer, multipleCollateral } = networkConnector;
-        if (sportsAMMContract && signer) {
+        if (sportsAMMContract && multipleCollateral && signer) {
             setIsAllowing(true);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
-                let collateralContractWithSigner: ethers.Contract | undefined;
-                const collateral = getCollateral(networkId, selectedStableIndex);
-                if (
-                    selectedStableIndex !== 0 &&
-                    multipleCollateral &&
-                    multipleCollateral[collateral] &&
-                    isMultiCollateralSupported
-                ) {
-                    collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
-                } else {
-                    collateralContractWithSigner = sUSDContract?.connect(signer);
-                }
+                const collateralContractWithSigner = isDefaultCollateral
+                    ? sUSDContract?.connect(signer)
+                    : multipleCollateral[selectedCollateral]?.connect(signer);
 
                 const addressToApprove = sportsAMMContract.address;
 
@@ -465,7 +511,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                 const tx = await getAMMSportsTransaction(
                     isVoucherSelected,
                     overtimeVoucher ? overtimeVoucher.id : 0,
-                    selectedStableIndex,
+                    collateralAddress,
+                    isDefaultCollateral,
+                    isEth,
                     networkId,
                     sportsAMMContractWithSigner,
                     overtimeVoucherContractWithSigner,
@@ -483,7 +531,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     refetchBalances(walletAddress, networkId);
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
-                    setUsdAmount('');
+                    setCollateralAmount('');
                     setTokenAmount(0);
                     dispatch(removeAll());
                     onBuySuccess && onBuySuccess();
@@ -491,13 +539,13 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.singleBuy, {
                         props: {
                             value: Number(ammPosition.quote),
-                            collateral: getCollateral(networkId, selectedStableIndex),
+                            collateral: selectedCollateral,
                             networkId,
                         },
                     });
                     trackEvent({
                         category: 'parlay-single',
-                        action: `buy-with-${getCollateral(networkId, selectedStableIndex)}`,
+                        action: `buy-with-${selectedCollateral}`,
                         value: Number(formatCurrency(ammPosition.quote, 3, true)),
                     });
                 }
@@ -520,7 +568,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
 
         // Minimum of token amount
         if (
-            !Number(usdAmountValue) ||
+            !Number(collateralAmountValue) ||
             !tokenAmount ||
             tokenAmount < MIN_TOKEN_AMOUNT ||
             isBuying ||
@@ -530,15 +578,16 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             setSubmitDisabled(true);
             return;
         }
+
         // Enable Approve if it hasn't allowance
         if (!hasAllowance) {
             setSubmitDisabled(false);
             return;
         }
 
-        setSubmitDisabled(!paymentTokenBalance || Number(usdAmountValue) > Number(paymentTokenBalance));
+        setSubmitDisabled(!paymentTokenBalance || Number(collateralAmountValue) > Number(paymentTokenBalance));
     }, [
-        usdAmountValue,
+        collateralAmountValue,
         isBuying,
         isAllowing,
         hasAllowance,
@@ -564,8 +613,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                 </Button>
             );
         }
+
         // Show Approve only on valid input buy amount
-        if (!hasAllowance && usdAmountValue && tokenAmount >= MIN_TOKEN_AMOUNT) {
+        if (!hasAllowance && collateralAmountValue && tokenAmount >= MIN_TOKEN_AMOUNT) {
             return (
                 <Button disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
                     {t('common.wallet.approve')}
@@ -580,51 +630,71 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
         );
     };
 
-    const setTooltipTextMessageUsdAmount = useCallback(
+    const setTooltipTextMessageCollateralAmount = useCallback(
         (value: string | number) => {
-            const positionOdds = roundNumberToDecimals(getPositionOdds(market));
-            if (value && Number(value) < positionOdds) {
-                setTooltipTextUsdAmount(
+            const positionOdds = getPositionOdds(market);
+            if (value && Number(value) < quoteForMinAmount) {
+                const decimals = isStableCollateral ? 2 : getPrecision(quoteForMinAmount);
+                setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.single-min-amount', {
-                        min: formatCurrencyWithSign(USD_SIGN, positionOdds, 2),
+                        min: `${formatCurrencyWithKey(
+                            selectedCollateral,
+                            ceilNumberToDecimals(quoteForMinAmount, decimals),
+                            decimals
+                        )}${
+                            isDefaultCollateral
+                                ? ''
+                                : ` (${formatCurrencyWithSign(USD_SIGN, ceilNumberToDecimals(positionOdds), 2)})`
+                        }`,
                     })
                 );
-            } else if (Number(value) > availableUsdAmount) {
-                setTooltipTextUsdAmount(t('markets.parlay.validation.amount-exceeded'));
+            } else if (Number(value) > availableCollateralAmount) {
+                setTooltipTextCollateralAmount(t('markets.parlay.validation.amount-exceeded'));
             } else if (Number(value) > paymentTokenBalance) {
-                setTooltipTextUsdAmount(t('markets.parlay.validation.no-funds'));
+                setTooltipTextCollateralAmount(t('markets.parlay.validation.no-funds'));
             } else {
-                setTooltipTextUsdAmount('');
+                setTooltipTextCollateralAmount('');
             }
         },
-        [market, availableUsdAmount, t, paymentTokenBalance]
+        [
+            market,
+            availableCollateralAmount,
+            t,
+            paymentTokenBalance,
+            isStableCollateral,
+            selectedCollateral,
+            quoteForMinAmount,
+            isDefaultCollateral,
+        ]
     );
 
     useEffect(() => {
-        setTooltipTextMessageUsdAmount(usdAmountValue);
-    }, [isVoucherSelected, setTooltipTextMessageUsdAmount, usdAmountValue]);
+        setTooltipTextMessageCollateralAmount(collateralAmountValue);
+    }, [isVoucherSelected, setTooltipTextMessageCollateralAmount, collateralAmountValue]);
 
-    const setUsdAmount = (value: string | number) => {
-        setUsdAmountValue(value);
-        setTooltipTextMessageUsdAmount(value);
+    const setCollateralAmount = (value: string | number) => {
+        dispatch(setPaymentAmountToBuy(value));
+        setTooltipTextMessageCollateralAmount(value);
     };
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
 
     const hidePayout =
+        Number(collateralAmountValue) < quoteForMinAmount ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= Number(paymentTokenBalance));
+        (!!tooltipTextCollateralAmount && Number(collateralAmountValue) <= Number(paymentTokenBalance));
     const hideProfit =
+        Number(collateralAmountValue) < quoteForMinAmount ||
         ammPosition.quote <= 0 ||
         !tokenAmount ||
         positionPriceDetailsQuery.isLoading ||
         // hide when validation tooltip exists except in case of not enough funds
-        (!!tooltipTextUsdAmount && Number(usdAmountValue) <= Number(paymentTokenBalance));
+        (!!tooltipTextCollateralAmount && Number(collateralAmountValue) <= Number(paymentTokenBalance));
 
-    const profitPercentage = (tokenAmount - ammPosition.quote) / ammPosition.quote;
+    const profitPercentage = (tokenAmount - ammPosition.usdQuote) / ammPosition.usdQuote;
 
     const onModalClose = useCallback(() => {
         setShowShareTicketModal(false);
@@ -637,7 +707,7 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             markets: [market],
             multiSingle: false,
             totalQuote: getPositionOdds(market),
-            paid: Number(usdAmountValue),
+            paid: ammPosition.usdQuote,
             payout: tokenAmount,
             onClose: onModalClose,
         };
@@ -660,40 +730,52 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     </SummaryValue>
                 </RowContainer>
             </RowSummary>
-            <Payment
-                defaultSelectedStableIndex={selectedStableIndex}
-                defaultIsVoucherSelected={isVoucherSelected}
-                onChangeCollateral={(index) => setSelectedStableIndex(index)}
-                setIsVoucherSelectedProp={setIsVoucherSelected}
-            />
+            <Voucher disabled={isAllowing || isBuying} />
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
                 <AmountToBuyContainer>
                     <NumericInput
-                        value={usdAmountValue}
+                        value={collateralAmountValue}
                         onChange={(e) => {
-                            if (Number(countDecimals(Number(e.target.value))) > 2) {
-                                return;
-                            }
-                            setUsdAmount(e.target.value);
+                            setCollateralAmount(e.target.value);
                         }}
-                        onMaxButton={() => setUsdAmount(maxUsdAmount)}
-                        showValidation={inputRefVisible && !!tooltipTextUsdAmount && !openApprovalModal}
-                        validationMessage={tooltipTextUsdAmount}
+                        onMaxButton={() => setCollateralAmount(maxCollateralAmount)}
+                        showValidation={inputRefVisible && !!tooltipTextCollateralAmount && !openApprovalModal}
+                        validationMessage={tooltipTextCollateralAmount}
                         inputFontSize="18px"
                         inputFontWeight="700"
-                        inputTextAlign="center"
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
+                        disabled={isAllowing || isBuying}
+                        currencyComponent={
+                            <CollateralSelector
+                                collateralArray={getCollaterals(networkId)}
+                                selectedItem={selectedCollateralIndex}
+                                onChangeCollateral={() => {}}
+                                disabled={isVoucherSelected}
+                                isDetailedView
+                                collateralBalances={multipleCollateralBalances.data}
+                                exchangeRates={exchangeRates}
+                                dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                            />
+                        }
+                        balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
                     />
                 </AmountToBuyContainer>
             </InputContainer>
             <InfoContainer>
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.available')}:</InfoLabel>
-                    <InfoValue>{formatCurrencyWithSign(USD_SIGN, availableUsdAmount)}</InfoValue>
+                    <InfoValue>
+                        {isDefaultCollateral
+                            ? formatCurrencyWithSign(USD_SIGN, availableCollateralAmount)
+                            : `${formatCurrencyWithKey(
+                                  selectedCollateral,
+                                  availableCollateralAmount
+                              )} (${formatCurrencyWithSign(USD_SIGN, availableUsdAmount)})`}
+                    </InfoValue>
                 </InfoWrapper>
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.skew')}:</InfoLabel>
@@ -702,6 +784,19 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                     </InfoValue>
                 </InfoWrapper>
             </InfoContainer>
+            <RowSummary>
+                <SummaryLabel>{t('markets.parlay.total-to-pay')}:</SummaryLabel>
+                <SummaryValue isInfo={true}>
+                    {hidePayout
+                        ? '-'
+                        : isDefaultCollateral
+                        ? formatCurrencyWithSign(USD_SIGN, ammPosition.quote)
+                        : `${formatCurrencyWithKey(selectedCollateral, ammPosition.quote)} (${formatCurrencyWithSign(
+                              USD_SIGN,
+                              ammPosition.usdQuote
+                          )})`}
+                </SummaryValue>
+            </RowSummary>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
@@ -713,9 +808,11 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
                 <SummaryValue isInfo={true}>
                     {hideProfit
                         ? '-'
-                        : `${formatCurrencyWithSign(USD_SIGN, tokenAmount - ammPosition.quote, 2)} (${formatPercentage(
-                              profitPercentage
-                          )})`}
+                        : `${formatCurrencyWithSign(
+                              USD_SIGN,
+                              tokenAmount - ammPosition.usdQuote,
+                              2
+                          )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
@@ -735,9 +832,9 @@ const Single: React.FC<SingleProps> = ({ market, parlayPayment, onBuySuccess }) 
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={Number(usdAmountValue) + Number(usdAmountValue) * APPROVAL_BUFFER}
-                    collateralIndex={selectedStableIndex}
-                    tokenSymbol={getCollateral(networkId, selectedStableIndex)}
+                    defaultAmount={Number(collateralAmountValue) * (1 + APPROVAL_BUFFER)}
+                    collateralIndex={selectedCollateralIndex}
+                    tokenSymbol={selectedCollateral}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}

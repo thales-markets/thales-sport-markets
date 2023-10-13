@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
+import { bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
 import { OvertimeVoucher, OvertimeVouchers } from 'types/tokens';
@@ -27,7 +27,7 @@ const useOvertimeVoucherQuery = (
 
                     const remainingAmount = await overtimeVoucherContract?.amountInVoucher(overtimeVoucher.id);
 
-                    overtimeVoucher.remainingAmount = bigNumberFormmaterWithDecimals(
+                    overtimeVoucher.remainingAmount = bigNumberFormatter(
                         remainingAmount,
                         getDefaultDecimalsForNetwork(networkId)
                     );

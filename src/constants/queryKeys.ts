@@ -20,9 +20,15 @@ const QUERY_KEYS = {
         marketAddress: string,
         position: Position,
         amount: number,
-        stableIndex: number,
+        selectedCollateral: string,
         networkId: Network
-    ) => ['positionDetails', marketAddress, position, amount, stableIndex, networkId],
+    ) => ['positionDetails', marketAddress, position, amount, selectedCollateral, networkId],
+    PositionDetailsMulti: (marketAddresses: string, marketPositions: string, marketAmounts: string) => [
+        'positionDetailsMulti',
+        marketAddresses,
+        marketPositions,
+        marketAmounts,
+    ],
     AvailablePerPosition: (marketAddress: string) => ['availablePerPosition', marketAddress],
     AvailablePerPositionMulti: (marketAddresses: string) => ['availablePerPositionMulti', marketAddresses],
     AvailablePerDoubleChancePosition: (marketAddress: string) => ['availablePerDoubleChancePosition', marketAddress],
@@ -140,6 +146,9 @@ const QUERY_KEYS = {
     },
     SGPFees: (networkId: Network) => ['sgpFees', networkId],
     CheckPausedAMM: (networkId: Network) => ['checkPausedAMM', networkId],
+    Rates: {
+        ExchangeRates: (networkId: Network) => ['rates', 'exchangeRates', networkId],
+    },
 };
 
 export default QUERY_KEYS;

@@ -60,10 +60,14 @@ import {
     MatchInfo,
     MatchLabel,
     MatchLogo,
+    PayoutLabel,
     StatusContainer,
+    additionalClaimButtonStyle,
+    additionalClaimButtonStyleMobile,
 } from '../../styled-components';
 import {
     BoldValue,
+    CollateralSelectorContainer,
     ColumnDirectionInfo,
     MatchPeriodContainer,
     MatchPeriodLabel,
@@ -80,6 +84,11 @@ import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 import Button from 'components/Button';
 import { BetType } from 'enums/markets';
+import CollateralSelector from 'components/CollateralSelector';
+import { getParlayPayment } from 'redux/modules/parlay';
+import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
+import { getIsMultiCollateralSupported } from 'utils/network';
+import { ZERO_ADDRESS } from 'constants/network';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -100,13 +109,30 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnect = useSelector((state: RootState) => getIsWalletConnected(state));
+    const parlayPayment = useSelector(getParlayPayment);
+    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         getTeamImageSource(position.market.homeTeam, position.market.tags[0])
     );
     const [awayLogoSrc, setAwayLogoSrc] = useState(
         getTeamImageSource(position.market.awayTeam, position.market.tags[0])
     );
+
+    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+        networkId,
+        selectedCollateralIndex,
+    ]);
+    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
+        networkId,
+        selectedCollateralIndex,
+    ]);
+
+    const isDefaultCollateral = selectedCollateral === defaultCollateral;
+    const isEth = collateralAddress === ZERO_ADDRESS;
 
     const marketTransactionsQuery = useMarketTransactionsQuery(position.market.address, networkId, position.account, {
         enabled: isWalletConnect,
@@ -185,13 +211,22 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const claimAmount = claimCanceledGame ? claimAmountForCanceledGame : position.amount;
 
     const claimReward = async () => {
-        const { signer } = networkConnector;
-        if (signer) {
+        const { signer, sportsAMMContract } = networkConnector;
+        if (signer && sportsAMMContract) {
+            setIsSubmitting(true);
             const contract = new ethers.Contract(position.market.address, sportsMarketContract.abi, signer);
             contract.connect(signer);
+            const sportsAMMContractWithSigner = sportsAMMContract.connect(signer);
+
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
-                const tx = await contract.exerciseOptions();
+                const tx = isDefaultCollateral
+                    ? await contract.exerciseOptions()
+                    : await sportsAMMContractWithSigner.exerciseWithOfframp(
+                          position.market.address,
+                          collateralAddress,
+                          isEth
+                      );
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
@@ -205,6 +240,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 console.log(e);
             }
+            setIsSubmitting(false);
         }
     };
 
@@ -374,14 +410,26 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                         e.stopPropagation();
                                         claimReward();
                                     }}
+                                    disabled={isSubmitting}
                                     backgroundColor={theme.button.background.quaternary}
                                     borderColor={theme.button.borderColor.secondary}
+                                    additionalStyles={additionalClaimButtonStyleMobile}
                                     padding="2px 5px"
                                     fontSize="9px"
                                     height="19px"
                                 >
-                                    {t('profile.card.claim')}
+                                    {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
                                 </Button>
+                                {isMultiCollateralSupported && (
+                                    <CollateralSelectorContainer>
+                                        <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
+                                        <CollateralSelector
+                                            collateralArray={getCollaterals(networkId)}
+                                            selectedItem={selectedCollateralIndex}
+                                            onChangeCollateral={() => {}}
+                                        />
+                                    </CollateralSelectorContainer>
+                                )}
                             </ClaimContainer>
                         ) : (
                             <>
@@ -389,17 +437,29 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                     <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
                                     <ClaimValue>{formatCurrencyWithSign(USD_SIGN, claimAmount, 2)}</ClaimValue>
                                 </ColumnDirectionInfo>
+                                {isMultiCollateralSupported && (
+                                    <ColumnDirectionInfo>
+                                        <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
+                                        <CollateralSelector
+                                            collateralArray={getCollaterals(networkId)}
+                                            selectedItem={selectedCollateralIndex}
+                                            onChangeCollateral={() => {}}
+                                        />
+                                    </ColumnDirectionInfo>
+                                )}
                                 <Button
                                     onClick={(e: any) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         claimReward();
                                     }}
+                                    disabled={isSubmitting}
                                     backgroundColor={theme.button.background.quaternary}
                                     borderColor={theme.button.borderColor.secondary}
-                                    padding="3px 15px"
+                                    additionalStyles={additionalClaimButtonStyle}
+                                    padding="2px 5px"
                                 >
-                                    {t('profile.card.claim')}
+                                    {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
                                 </Button>
                             </>
                         )}

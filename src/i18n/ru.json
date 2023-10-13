@@ -308,7 +308,8 @@
                 "passing yards": "Пасовые ярды",
                 "passing touchdowns": "Проходящие тачдауны",
                 "scoring touchdown": "Кто забьет тачдаун в игре?",
-                "field goals made": "Голы с игры забиты"
+                "field goals made": "Голы с игры забиты",
+                "pitcher hits allowed": "Удары питчера разрешены"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -356,7 +357,9 @@
                     "field-goals-made-over": "У команды {{team}} будет забито больше мячей с игры, чем у команды {{scoring}}",
                     "info": {
                         "scoring touchdown": "Прием, рывок, возврат панта, ответный удар, тачдауны защиты и перехвата засчитываются в результат."
-                    }
+                    },
+                    "pitcher-hits-allowed-under": "У {{team}} будет меньше разрешенных попаданий, чем у {{scoring}}",
+                    "pitcher-hits-allowed-over": "У {{team}} будет разрешено больше попаданий, чем у {{scoring}}"
                 }
             },
             "starts-in": "Начинается через",

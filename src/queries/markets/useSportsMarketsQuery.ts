@@ -5,7 +5,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { CombinedMarketsContractData, SGPItem, SportMarketInfo, SportMarkets } from 'types/markets';
 import { Network } from 'enums/network';
-import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
+import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 import { convertPriceImpactToBonus, getIsOneSideMarket, getMarketAddressesFromSportMarketArray } from 'utils/markets';
@@ -16,6 +16,7 @@ import { BetType, GlobalFiltersEnum } from 'enums/markets';
 import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const BATCH_SIZE = 100;
+const BATCH_SIZE_BASE = 50;
 const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 5;
 
 const marketsCache = {
@@ -44,17 +45,18 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
     let priceImpactFromContract: undefined | Array<any>;
     if (mapOnlyOpenedMarkets) {
         try {
+            const batchSize = networkId === Network.Base ? BATCH_SIZE_BASE : BATCH_SIZE;
             const { sportPositionalMarketDataContract, sportMarketManagerContract } = networkConnector;
             const numberOfActiveMarkets = await sportMarketManagerContract?.numActiveMarkets();
-            const numberOfBatches = Math.trunc(numberOfActiveMarkets / BATCH_SIZE) + 1;
+            const numberOfBatches = Math.trunc(numberOfActiveMarkets / batchSize) + 1;
 
             const promises = [];
             for (let i = 0; i < numberOfBatches; i++) {
-                promises.push(sportPositionalMarketDataContract?.getOddsForAllActiveMarketsInBatches(i, BATCH_SIZE));
+                promises.push(sportPositionalMarketDataContract?.getOddsForAllActiveMarketsInBatches(i, batchSize));
             }
             for (let i = 0; i < numberOfBatches; i++) {
                 promises.push(
-                    sportPositionalMarketDataContract?.getPriceImpactForAllActiveMarketsInBatches(i, BATCH_SIZE)
+                    sportPositionalMarketDataContract?.getPriceImpactForAllActiveMarketsInBatches(i, batchSize)
                 );
             }
 
@@ -81,16 +83,10 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                     (obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase()
                 );
                 if (oddsItem) {
-                    market.homeOdds = bigNumberFormmaterWithDecimals(
-                        oddsItem.odds[0],
-                        getDefaultDecimalsForNetwork(networkId)
-                    );
-                    market.awayOdds = bigNumberFormmaterWithDecimals(
-                        oddsItem.odds[1],
-                        getDefaultDecimalsForNetwork(networkId)
-                    );
+                    market.homeOdds = bigNumberFormatter(oddsItem.odds[0], getDefaultDecimalsForNetwork(networkId));
+                    market.awayOdds = bigNumberFormatter(oddsItem.odds[1], getDefaultDecimalsForNetwork(networkId));
                     market.drawOdds = oddsItem.odds[2]
-                        ? bigNumberFormmaterWithDecimals(oddsItem.odds[2], getDefaultDecimalsForNetwork(networkId))
+                        ? bigNumberFormatter(oddsItem.odds[2], getDefaultDecimalsForNetwork(networkId))
                         : undefined;
                 }
             }
@@ -99,14 +95,10 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
                     (obj: any) => obj[0].toString().toLowerCase() === market.address.toLowerCase()
                 );
                 if (priceImpactItem) {
-                    market.homeBonus = convertPriceImpactToBonus(
-                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[0])
-                    );
-                    market.awayBonus = convertPriceImpactToBonus(
-                        bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[1])
-                    );
+                    market.homeBonus = convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[0]));
+                    market.awayBonus = convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[1]));
                     market.drawBonus = priceImpactItem.priceImpact[2]
-                        ? convertPriceImpactToBonus(bigNumberFormmaterWithDecimals(priceImpactItem.priceImpact[2]))
+                        ? convertPriceImpactToBonus(bigNumberFormatter(priceImpactItem.priceImpact[2]))
                         : undefined;
                 }
             }

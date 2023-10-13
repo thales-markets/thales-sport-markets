@@ -8,3 +8,11 @@
 .icon-thales--copy:before {
     content: '\0064';
 }
+
+.icon-thales--caret-down:before {
+    content: '\006B';
+}
+
+.icon-thales--caret-up:before {
+    content: '\0068';
+}

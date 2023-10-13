@@ -77,10 +77,13 @@
             "swap-progress-label": "Swapping in progress..."
         },
         "enable-wallet-access": {
+            "approve": "Approve",
+            "approve-progress": "Approving...",
             "approve-label": "Approve {{currencyKey}}",
             "approve-progress-label": "Approving {{currencyKey}}...",
             "approve-all-label": "Approve all",
-            "custom-amount-label": "Approve amount of"
+            "custom-amount-label": "Approve amount of",
+            "approve-swap": "Approve swap to {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "Oops! You are on the wrong network!",
@@ -323,12 +326,15 @@
             "to-win": "win",
             "to-claim": "claim",
             "claim": "Claim",
+            "claim-progress": "Claiming...",
             "claim-all": "Claim All",
             "canceled": "Canceled",
             "total-quote": "Total quote",
             "result": "Result",
             "position-size": "Position size",
-            "starts": "Starts"
+            "starts": "Starts",
+            "payout-in": "Payout in",
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}."
         },
         "table": {
             "time": "Time",
@@ -387,7 +393,8 @@
                 "receiving yards": "Receiving yards",
                 "passing touchdowns": "Passing touchdowns",
                 "scoring touchdown": "Who will score a touchdown in the game?",
-                "field goals made": "Field goals made"
+                "field goals made": "Field goals made",
+                "pitcher hits allowed": "Pitcher hits allowed"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -432,6 +439,8 @@
                     "touchdowns": "{{team}} will score a touchdown in the game",
                     "field-goals-made-over": "{{team}} will have more field goals made than {{scoring}}",
                     "field-goals-made-under": "{{team}} will have less field goals made than {{scoring}}",
+                    "pitcher-hits-allowed-over": "{{team}} will have more hits allowed than {{scoring}}",
+                    "pitcher-hits-allowed-under": "{{team}} will have less hits allowed than {{scoring}}",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }
@@ -498,10 +507,13 @@
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
+            "total-to-pay": "Total to pay",
             "payout": "Payout",
             "potential-profit": "Potential profit",
             "pay-with": "Pay with",
+            "pay-with-voucher": "Pay with voucher",
             "available": "Available",
+            "in-wallet": "In wallet",
             "skew": "Skew",
             "empty-title": "No positions",
             "empty-description": "Add position, choose a market and make your selection.",

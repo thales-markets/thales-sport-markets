@@ -33,7 +33,8 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
     leagueTag == 19216 ||
     leagueTag == 9073 ||
     leagueTag == 9409 ||
-    leagueTag == 9536
+    leagueTag == 9536 ||
+    leagueTag == 19199
         ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')

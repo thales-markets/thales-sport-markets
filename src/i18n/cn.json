@@ -308,7 +308,8 @@
                 "passing touchdowns": "传球达阵",
                 "strikeouts": "三振",
                 "scoring touchdown": "谁将在比赛中达阵得分？",
-                "field goals made": "射门得分"
+                "field goals made": "射门得分",
+                "pitcher hits allowed": "允许投手击球"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -356,7 +357,9 @@
                     "field-goals-made-over": "{{team}} 的射门数将多于 {{scoring}}",
                     "info": {
                         "scoring touchdown": "接球、冲球、弃踢回攻、踢回攻、防守和拦截达阵均计入结果"
-                    }
+                    },
+                    "pitcher-hits-allowed-over": "{{team}} 允许的命中数将多于 {{scoring}}",
+                    "pitcher-hits-allowed-under": "{{team}} 允许的命中数将少于 {{scoring}}"
                 }
             },
             "starts-in": "开始于",

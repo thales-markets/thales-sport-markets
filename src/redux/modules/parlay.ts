@@ -7,6 +7,7 @@ import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { GOLF_TAGS } from 'constants/tags';
 import { ParlayErrorCode } from 'enums/markets';
+import { Network } from 'enums/network';
 // import { canPlayerBeAddedToParlay } from 'utils/markets';
 
 const sliceName = 'parlay';
@@ -21,12 +22,16 @@ const getDefaultParlay = (): ParlaysMarketPosition[] => {
 };
 
 const getDefaultPayment = (): ParlayPayment => {
-    const lsSelectedStableIndex = localStore.get(LOCAL_STORAGE_KEYS.STABLE_INDEX);
+    const lsSelectedCollateralIndex = localStore.get(
+        `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${Network.OptimismMainnet}`
+    );
 
     return {
-        selectedStableIndex: lsSelectedStableIndex !== undefined ? (lsSelectedStableIndex as number) : 0,
-        isVoucherSelected: undefined,
+        selectedCollateralIndex: lsSelectedCollateralIndex !== undefined ? (lsSelectedCollateralIndex as number) : 0,
+        isVoucherAvailable: false,
+        isVoucherSelected: false,
         amountToBuy: '',
+        networkId: Network.OptimismMainnet,
     };
 };
 
@@ -39,7 +44,7 @@ const getDefaultMultiSingle = (): MultiSingleAmounts[] => {
         ? (lsMultiSingle as MultiSingleAmounts[])
         : Array(defaultArr.length).fill({
               sportMarketAddress: '',
-              amountToBuy: 0,
+              amountToBuy: '',
           });
 };
 
@@ -163,7 +168,7 @@ const parlaySlice = createSlice({
                         state.multiSingle.push({
                             sportMarketAddress: action.payload.sportMarketAddress,
                             parentMarketAddress: action.payload.parentMarket,
-                            amountToBuy: 0,
+                            amountToBuy: '',
                         });
                         state.parlay.push(action.payload);
                     }
@@ -276,7 +281,10 @@ const parlaySlice = createSlice({
             state.payment = { ...state.payment, ...action.payload };
 
             // Store the users last selected stable index
-            localStore.set(LOCAL_STORAGE_KEYS.STABLE_INDEX, state.payment.selectedStableIndex);
+            localStore.set(
+                `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${state.payment.networkId}`,
+                state.payment.selectedCollateralIndex
+            );
         },
         setIsMultiSingle: (state, action: PayloadAction<boolean>) => {
             state.isMultiSingle = action.payload;
@@ -296,8 +304,28 @@ const parlaySlice = createSlice({
             }
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
-        setPaymentSelectedStableIndex: (state, action: PayloadAction<number>) => {
-            state.payment = { ...state.payment, selectedStableIndex: action.payload };
+        setPaymentSelectedCollateralIndex: (
+            state,
+            action: PayloadAction<{ selectedCollateralIndex: number; networkId: Network }>
+        ) => {
+            state.payment = {
+                ...state.payment,
+                selectedCollateralIndex: action.payload.selectedCollateralIndex,
+                networkId: action.payload.networkId,
+            };
+            localStore.set(
+                `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${state.payment.networkId}`,
+                state.payment.selectedCollateralIndex
+            );
+        },
+        setPaymentIsVoucherSelected: (state, action: PayloadAction<boolean>) => {
+            state.payment = { ...state.payment, isVoucherSelected: action.payload };
+        },
+        setPaymentIsVoucherAvailable: (state, action: PayloadAction<boolean>) => {
+            state.payment = { ...state.payment, isVoucherAvailable: action.payload };
+        },
+        setPaymentAmountToBuy: (state, action: PayloadAction<number | string>) => {
+            state.payment = { ...state.payment, amountToBuy: action.payload };
         },
         resetParlayError: (state) => {
             state.error = getDefaultError();
@@ -319,7 +347,10 @@ export const {
     setPayment,
     setMultiSingle,
     setIsMultiSingle,
-    setPaymentSelectedStableIndex,
+    setPaymentSelectedCollateralIndex,
+    setPaymentIsVoucherSelected,
+    setPaymentIsVoucherAvailable,
+    setPaymentAmountToBuy,
     resetParlayError,
     setSGPFees,
 } = parlaySlice.actions;

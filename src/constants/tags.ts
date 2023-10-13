@@ -391,6 +391,14 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 109,
     },
+    {
+        id: 19199,
+        label: 'CONMEBOL WC Qualification',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 110,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -441,6 +449,7 @@ export const SPORTS_MAP: SportsMap = {
     9409: 'Basketball',
     9536: 'Soccer',
     9268: 'Soccer',
+    19199: 'Soccer',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -498,6 +507,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
         9073,
         9536,
         9268,
+        19199,
     ],
     MMA: [9007, 18196],
     Motosport: [9445, 9497],
@@ -533,6 +543,7 @@ export const ENETPULSE_SPORTS = [
     9409,
     9536,
     9268,
+    19199,
 ];
 
 export const JSON_ODDS_SPORTS = [109021, 109121];
@@ -559,6 +570,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_RECEIVING_YARDS]: 'receiving yards',
     [BetType.PLAYER_PROPS_TOUCHDOWNS]: 'scoring touchdown',
     [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: 'field goals made',
+    [BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED]: 'pitcher hits allowed',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
@@ -574,6 +586,7 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_RUSHING_YARDS]: '',
     [BetType.PLAYER_PROPS_RECEIVING_YARDS]: '',
     [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: '',
+    [BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED]: '',
 };
 
 export const SCORING_MAP: SportsMap = {
@@ -624,6 +637,7 @@ export const SCORING_MAP: SportsMap = {
     9409: 'points',
     9536: 'goals',
     9268: 'goals',
+    19199: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -674,6 +688,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9409: 'overtime',
     9536: 'regular',
     9268: 'regular',
+    19199: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -722,4 +737,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9409: 'quarter',
     9536: 'half',
     9268: 'half',
+    19199: 'half',
 };
