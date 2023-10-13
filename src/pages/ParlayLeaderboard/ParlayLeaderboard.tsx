@@ -14,6 +14,7 @@ import {
     PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
     PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM,
     PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000,
+    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10,
 } from 'constants/markets';
 import { t } from 'i18next';
 import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
@@ -718,7 +719,7 @@ export const getRewardsArray = (networkId: Network, period: number): number[] =>
         return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
     } else if (period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS) {
         if (networkId !== Network.ArbitrumOne) return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
-        return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20;
+        return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10;
     } else {
         if (networkId == Network.ArbitrumOne) return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
         return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20;
