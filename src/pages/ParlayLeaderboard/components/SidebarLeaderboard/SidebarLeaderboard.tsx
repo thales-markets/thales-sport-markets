@@ -55,6 +55,7 @@ import {
     ArbitrumLogoWrapper,
     Title,
     TitleLabel,
+    ThalesLogoWrapper,
 } from './styled-components';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
@@ -149,7 +150,7 @@ const SidebarLeaderboard: React.FC = () => {
                                                 ) : networkId == Network.ArbitrumOne ? (
                                                     <ArbitrumLogoWrapper />
                                                 ) : networkId == Network.Base ? (
-                                                    <ArbitrumLogoWrapper />
+                                                    <ThalesLogoWrapper />
                                                 ) : (
                                                     <></>
                                                 )}
