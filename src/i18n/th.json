@@ -62,7 +62,10 @@
             "approve-label": "อนุมัติ {{currencyKey}}",
             "approve-progress-label": "กำลังอนุมัติ {{currencyKey}}...",
             "approve-all-label": "อนุมัติทั้งหมด",
-            "custom-amount-label": "อนุมัติเป็นจำนวน"
+            "custom-amount-label": "อนุมัติเป็นจำนวน",
+            "approve": "อนุมัติ",
+            "approve-progress": "กำลังอนุมัติ...",
+            "approve-swap": "อนุมัติการแลกเปลี่ยนเป็น {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "อุ้ย! คุณอยู่ในเครือข่ายที่ไม่ถูกต้อง!",
@@ -277,7 +280,8 @@
         "race-starts": "เริ่มการแข่งขัน",
         "back": "กลับ",
         "apply-filters": "ใช้ตัวกรอง",
-        "incentivized-market": "ตลาดที่มีแรงจูงใจ"
+        "incentivized-market": "ตลาดที่มีแรงจูงใจ",
+        "number-of-rounds": "จำนวนรอบทั้งหมด"
     },
     "markets": {
         "market-card": {
@@ -461,7 +465,10 @@
             "toggle-parlay": {
                 "multi-single": "เดี่ยว",
                 "parlay": "พาร์เลย์"
-            }
+            },
+            "total-to-pay": "ค่าใช้จ่ายทั้งหมด",
+            "in-wallet": "ในกระเป๋าสตางค์",
+            "pay-with-voucher": "ชำระเงินด้วยบัตรกำนัล"
         },
         "nav-menu": {
             "items": {
@@ -619,7 +626,10 @@
             "result": "ผลลัพธ์",
             "position-size": "ขนาดตำแหน่ง",
             "starts": "เริ่ม",
-            "claim-all": "อ้างสิทธิ์ทั้งหมด"
+            "claim-all": "อ้างสิทธิ์ทั้งหมด",
+            "claim-progress": "กำลังอ้างสิทธิ์...",
+            "payout-in": "จ่ายเงินเข้า.",
+            "approve-swap-tooltip": "หากต้องการรับการจ่ายเงินเป็น {{currencyKey}} คุณต้องอนุมัติการแลกเปลี่ยนจาก {{defaultCurrency}} เป็น {{currencyKey}}"
         },
         "messages": {
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",

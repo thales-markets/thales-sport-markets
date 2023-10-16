@@ -50,7 +50,10 @@
             "approve-label": "Autoriser {{currencyKey}}",
             "approve-progress-label": "Autoristation {{currencyKey}}...",
             "approve-all-label": "Autoriser tout",
-            "custom-amount-label": "Autoriser un montant de"
+            "custom-amount-label": "Autoriser un montant de",
+            "approve-progress": "Approuvant...",
+            "approve": "Approuver",
+            "approve-swap": "Approuver l'échange vers {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "Oops ! Vous êtes sur le mauvais réseau !",
@@ -277,7 +280,8 @@
         "race-starts": "La course commence",
         "back": "Retour",
         "apply-filters": "Appliquer des filtres",
-        "incentivized-market": "MARCHÉ INCITATIF"
+        "incentivized-market": "MARCHÉ INCITATIF",
+        "number-of-rounds": "Nombre total de tours"
     },
     "markets": {
         "market-card": {
@@ -460,7 +464,10 @@
             "toggle-parlay": {
                 "multi-single": "Seul",
                 "parlay": "Parler"
-            }
+            },
+            "pay-with-voucher": "Payer avec un bon",
+            "total-to-pay": "Le total à payer",
+            "in-wallet": "Dans le portefeuille"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -619,7 +626,10 @@
             "result": "Résultat",
             "starts": "Départs",
             "position-size": "Taille du poste",
-            "claim-all": "Réclamer tout"
+            "claim-all": "Réclamer tout",
+            "payout-in": "Paiement en",
+            "claim-progress": "Affirmant...",
+            "approve-swap-tooltip": "Pour obtenir un paiement en {{currencyKey}}, vous devez approuver le passage de {{defaultCurrency}} à {{currencyKey}}."
         },
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",

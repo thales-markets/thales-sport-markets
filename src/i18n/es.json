@@ -71,7 +71,10 @@
             "approve-label": "Aprobar {{currencyKey}}",
             "approve-progress-label": "Aprobando {{currencyKey}}...",
             "approve-all-label": "Aprobar todo",
-            "custom-amount-label": "Aprobar cantidad de"
+            "custom-amount-label": "Aprobar cantidad de",
+            "approve": "Aprobar",
+            "approve-progress": "Aprobatorio...",
+            "approve-swap": "Aprobar el cambio a {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "Oops! Estás en la red equivocada!",
@@ -277,7 +280,8 @@
         "race-starts": "Comienza la carrera",
         "back": "atrás",
         "apply-filters": "Aplicar filtros",
-        "incentivized-market": "MERCADO INCENTIVIZADO"
+        "incentivized-market": "MERCADO INCENTIVIZADO",
+        "number-of-rounds": "Número total de rondas"
     },
     "markets": {
         "market-card": {
@@ -460,7 +464,10 @@
             "toggle-parlay": {
                 "multi-single": "Soltero",
                 "parlay": "Incrementar dinero en apuestas"
-            }
+            },
+            "pay-with-voucher": "Pagar con bono",
+            "total-to-pay": "Total a pagar",
+            "in-wallet": "en billetera"
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {
@@ -619,7 +626,10 @@
             "result": "Resultado",
             "starts": "Empieza",
             "position-size": "Tamaño de la posición",
-            "claim-all": "Reclamar todo"
+            "claim-all": "Reclamar todo",
+            "claim-progress": "Reclamando...",
+            "payout-in": "Pago en",
+            "approve-swap-tooltip": "Para recibir pagos en {{currencyKey}}, debe aprobar el intercambio de {{defaultCurrency}} a {{currencyKey}}."
         },
         "messages": {
             "no-open": "No tienes ninguna posición abierta",
