@@ -285,7 +285,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         ? market.homeScore == 1
                                             ? t('markets.market-card.race-winner')
                                             : t('markets.market-card.no-win')
-                                        : `${market.homeScore} - ${market.awayScore}`}{' '}
+                                        : Number(liveResultInfo?.sportId) != 9007
+                                        ? `${market.homeScore} - ${market.awayScore}`
+                                        : ''}
                                     {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
                                         liveResultInfo?.period == 2 && (
                                             <InfoLabel className="football">
@@ -296,6 +298,22 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                     ')'}
                                             </InfoLabel>
                                         )}
+                                    {Number(liveResultInfo?.sportId) == 9007 ? (
+                                        <>
+                                            {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
+                                            <InfoLabel className="ufc">
+                                                {'(Total number of rounds: ' +
+                                                    `${
+                                                        Number(market.homeScore) > 0
+                                                            ? market.homeScore
+                                                            : market.awayScore
+                                                    }` +
+                                                    ')'}
+                                            </InfoLabel>
+                                        </>
+                                    ) : (
+                                        ''
+                                    )}
                                 </ResultLabel>
                                 {hideResultInfoPerPeriod && (
                                     <PeriodsContainer directionRow={true}>
@@ -525,6 +543,12 @@ const InfoLabel = styled.label`
         font-size: 21px;
         font-weight: 700;
     }
+    &.ufc {
+        display: flex;
+        color: ${(props) => props.theme.textColor.secondary};
+        font-size: 14px;
+        font-weight: 700;
+    }
 
     &.blink {
         color: ${(props) => props.theme.status.loss};
@@ -539,7 +563,9 @@ const InfoLabel = styled.label`
     }
 `;
 
-const ResultLabel = styled.label``;
+const ResultLabel = styled.label`
+    text-align: center;
+`;
 
 const PeriodContainer = styled(FlexDivColumn)`
     margin: 0px 10px;

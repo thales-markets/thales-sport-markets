@@ -62,7 +62,10 @@
             "approve-label": "Approve {{currencyKey}}",
             "approve-progress-label": "Approving {{currencyKey}}...",
             "approve-all-label": "Approve all",
-            "custom-amount-label": "Approve amount of"
+            "custom-amount-label": "Approve amount of",
+            "approve-progress": "Одобрение...",
+            "approve": "Утвердить",
+            "approve-swap": "Одобрить обмен на {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "Oops! You are on the wrong network!",
@@ -460,7 +463,10 @@
             "toggle-parlay": {
                 "multi-single": "Одинокий",
                 "parlay": "экспресс"
-            }
+            },
+            "pay-with-voucher": "Оплатить ваучером",
+            "total-to-pay": "Итого к оплате",
+            "in-wallet": "В кошельке"
         },
         "discounted-per": "Со скидкой согласно",
         "nav-menu": {
@@ -619,7 +625,10 @@
             "starts": "Старт",
             "result": "Результат",
             "position-size": "Размер позиции",
-            "claim-all": "Требовать все"
+            "claim-all": "Требовать все",
+            "approve-swap-tooltip": "Чтобы получить выплату в {{currencyKey}}, вам необходимо одобрить обмен с {{defaultCurrency}} на {{currencyKey}}.",
+            "payout-in": "Выплата в",
+            "claim-progress": "Утверждение..."
         },
         "messages": {
             "no-claimable": "У вас нет требуемых должностей",

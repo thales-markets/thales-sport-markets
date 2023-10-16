@@ -71,7 +71,10 @@
             "approve-label": "批准 {{currencyKey}}",
             "approve-progress-label": "批准 {{currencyKey}} 进行中...",
             "approve-all-label": "批准所有",
-            "custom-amount-label": "批准指定数量"
+            "custom-amount-label": "批准指定数量",
+            "approve-swap": "批准兑换为 {{currencyKey}}",
+            "approve-progress": "正在批准...",
+            "approve": "批准"
         },
         "unsupported-network": {
             "title": "Overtime不支持当前连接的网络!",
@@ -460,7 +463,10 @@
             "toggle-parlay": {
                 "multi-single": "单身的",
                 "parlay": "过关"
-            }
+            },
+            "in-wallet": "在钱包里",
+            "total-to-pay": "总共支付",
+            "pay-with-voucher": "使用优惠券付款"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -619,7 +625,10 @@
             "result": "结果",
             "starts": "开始",
             "position-size": "仓位大小",
-            "claim-all": "索取全部"
+            "claim-all": "索取全部",
+            "approve-swap-tooltip": "要以 {{currencyKey}} 付款，您需要批准从 {{defaultCurrency}} 兑换为 {{currencyKey}}。",
+            "payout-in": "付款于",
+            "claim-progress": "声称..."
         },
         "messages": {
             "no-claimable": "您没有任何可申请的职位",
