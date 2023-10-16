@@ -280,7 +280,8 @@
         "race-starts": "Старт гонки",
         "back": "Назад",
         "apply-filters": "Применить фильтры",
-        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК"
+        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК",
+        "number-of-rounds": "Общее количество раундов"
     },
     "markets": {
         "market-card": {

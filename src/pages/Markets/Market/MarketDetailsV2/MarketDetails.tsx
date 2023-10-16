@@ -302,7 +302,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         <>
                                             {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
                                             <InfoLabel className="ufc">
-                                                {'(Total number of rounds: ' +
+                                                {`(${t('market.number-of-rounds')}: ` +
                                                     `${
                                                         Number(market.homeScore) > 0
                                                             ? market.homeScore

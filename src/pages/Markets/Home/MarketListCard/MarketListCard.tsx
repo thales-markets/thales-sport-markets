@@ -328,8 +328,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {Number(market.tags[0]) == 9007 ? (
                                 <>
                                     {Number(market.homeScore) > 0
-                                        ? `W - L R(${market.homeScore})`
-                                        : `L - W R(${market.awayScore})`}
+                                        ? `W - L (R${market.homeScore})`
+                                        : `L - W (R${market.awayScore})`}
                                 </>
                             ) : (
                                 ''

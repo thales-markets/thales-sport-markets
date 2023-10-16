@@ -280,7 +280,8 @@
         "race-starts": "Comienza la carrera",
         "back": "atrás",
         "apply-filters": "Aplicar filtros",
-        "incentivized-market": "MERCADO INCENTIVIZADO"
+        "incentivized-market": "MERCADO INCENTIVIZADO",
+        "number-of-rounds": "Número total de rondas"
     },
     "markets": {
         "market-card": {

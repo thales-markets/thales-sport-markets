@@ -280,7 +280,8 @@
         "race-starts": "La course commence",
         "back": "Retour",
         "apply-filters": "Appliquer des filtres",
-        "incentivized-market": "MARCHÉ INCITATIF"
+        "incentivized-market": "MARCHÉ INCITATIF",
+        "number-of-rounds": "Nombre total de tours"
     },
     "markets": {
         "market-card": {
