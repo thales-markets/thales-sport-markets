@@ -243,7 +243,8 @@
             "mobile-tags": {
                 "search": "搜索"
             },
-            "show-active": "仅显示活跃的运动"
+            "show-active": "仅显示活跃的运动",
+            "show-bonus": "仅显示有奖金的市场"
         },
         "back-to-markets": "查看其他比赛",
         "back-to-market": "返回市场页面",

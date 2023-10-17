@@ -243,7 +243,8 @@
             "mobile-tags": {
                 "search": "Suche"
             },
-            "show-active": "Nur aktive Sportarten anzeigen"
+            "show-active": "Nur aktive Sportarten anzeigen",
+            "show-bonus": "Nur Märkte mit Bonus anzeigen"
         },
         "back-to-markets": "Zurück zu den Märkten",
         "back-to-market": "Zurück zum Markt",
