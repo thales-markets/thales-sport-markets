@@ -314,7 +314,10 @@
                 "rushing yards": "วิ่งหลา",
                 "scoring touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ในเกม?",
                 "field goals made": "ทำประตูในสนามได้",
-                "pitcher hits allowed": "อนุญาตให้ตีเหยือกได้"
+                "pitcher hits allowed": "อนุญาตให้ตีเหยือกได้",
+                "points": "คะแนน",
+                "shots": "ช็อต",
+                "goals": "ใครจะเป็นผู้ทำประตูในเกม?"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -364,7 +367,12 @@
                         "scoring touchdown": "การรับ การวิ่ง การเตะเตะกลับ ทัชดาวน์การป้องกันและการสกัดกั้นจะถูกนับรวมในผลการแข่งขัน"
                     },
                     "pitcher-hits-allowed-under": "{{team}} จะมีโอกาสโจมตีน้อยกว่า {{scoring}}",
-                    "pitcher-hits-allowed-over": "{{team}} จะได้รับอนุญาตให้โจมตีมากกว่า {{scoring}}"
+                    "pitcher-hits-allowed-over": "{{team}} จะได้รับอนุญาตให้โจมตีมากกว่า {{scoring}}",
+                    "points-under": "{{team}} จะมีแต้มน้อยกว่า {{scoring}}",
+                    "shots-under": "{{team}} จะมีโอกาสยิงน้อยกว่า {{scoring}}",
+                    "goals": "{{team}} จะทำประตูในเกม",
+                    "shots-over": "{{team}} จะมีโอกาสยิงมากกว่า {{scoring}}",
+                    "points-over": "{{team}} จะมีแต้มมากกว่า {{scoring}}"
                 }
             },
             "starts-in": "เริ่มเข้า",

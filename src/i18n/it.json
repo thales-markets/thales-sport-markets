@@ -314,7 +314,10 @@
                 "receiving yards": "Ricevere cantieri",
                 "scoring touchdown": "Chi segnerà un touchdown nel gioco?",
                 "field goals made": "Field goal realizzati",
-                "pitcher hits allowed": "Sono consentiti i colpi del lanciatore"
+                "pitcher hits allowed": "Sono consentiti i colpi del lanciatore",
+                "points": "Punti",
+                "goals": "Chi segnerà un goal durante la partita?",
+                "shots": "Scatti"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -364,7 +367,12 @@
                         "scoring touchdown": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato"
                     },
                     "pitcher-hits-allowed-over": "{{team}} avrà più valide consentite di {{scoring}}",
-                    "pitcher-hits-allowed-under": "{{team}} avrà meno valide consentite di {{scoring}}"
+                    "pitcher-hits-allowed-under": "{{team}} avrà meno valide consentite di {{scoring}}",
+                    "points-under": "{{team}} avrà meno punti di {{scoring}}",
+                    "goals": "{{team}} segnerà un goal nel gioco",
+                    "shots-over": "{{team}} avrà più tiri di {{scoring}}",
+                    "shots-under": "{{team}} avrà meno tiri di {{scoring}}",
+                    "points-over": "{{team}} avrà più punti di {{scoring}}"
                 }
             },
             "starts-in": "Inizia tra",

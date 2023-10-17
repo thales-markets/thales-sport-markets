@@ -71,8 +71,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         pitcherHitsAllowedMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED
         ),
+        pointsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_POINTS),
+        shotsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_SHOTS),
         oneSiderTouchdownsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS
+        ),
+        oneSiderGoalsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_GOALS
         ),
     };
 
@@ -410,10 +415,31 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             showOdds={showAMM}
                         />
                     )}
+                    {childMarkets.pointsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.pointsMarkets}
+                            betType={BetType.PLAYER_PROPS_POINTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.shotsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.shotsMarkets}
+                            betType={BetType.PLAYER_PROPS_SHOTS}
+                            showOdds={showAMM}
+                        />
+                    )}
                     {childMarkets.oneSiderTouchdownsMarkets.length > 0 && (
                         <Positions
                             markets={childMarkets.oneSiderTouchdownsMarkets}
                             betType={BetType.PLAYER_PROPS_TOUCHDOWNS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.oneSiderGoalsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.oneSiderGoalsMarkets}
+                            betType={BetType.PLAYER_PROPS_GOALS}
                             showOdds={showAMM}
                         />
                     )}

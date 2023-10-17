@@ -314,7 +314,10 @@
                 "home runs": "Home Runs",
                 "scoring touchdown": "Wer erzielt im Spiel einen Touchdown?",
                 "field goals made": "Field Goals gemacht",
-                "pitcher hits allowed": "Pitcher-Hits erlaubt"
+                "pitcher hits allowed": "Pitcher-Hits erlaubt",
+                "points": "Punkte",
+                "shots": "Schüsse",
+                "goals": "Wer schießt im Spiel ein Tor?"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -364,7 +367,12 @@
                         "scoring touchdown": "Receiving-, Rushing-, Punt-Return-, Kick-Return-, Defensive- und Interception-Touchdowns werden für das Ergebnis gezählt"
                     },
                     "pitcher-hits-allowed-over": "{{team}} wird mehr Treffer haben als {{scoring}}",
-                    "pitcher-hits-allowed-under": "{{team}} wird weniger Treffer haben als {{scoring}}"
+                    "pitcher-hits-allowed-under": "{{team}} wird weniger Treffer haben als {{scoring}}",
+                    "shots-under": "{{team}} wird weniger Schüsse haben als {{scoring}}",
+                    "points-under": "{{team}} wird weniger Punkte haben als {{scoring}}",
+                    "shots-over": "{{team}} wird mehr Schüsse haben als {{scoring}}",
+                    "points-over": "{{team}} wird mehr Punkte haben als {{scoring}}",
+                    "goals": "{{team}} wird im Spiel ein Tor erzielen"
                 }
             },
             "starts-in": "Beginnt in",

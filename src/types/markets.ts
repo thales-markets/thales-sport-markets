@@ -112,6 +112,9 @@ export type SportMarketChildMarkets = {
     oneSiderTouchdownsMarkets: SportMarketInfo[];
     fieldGoalsMadeMarkets: SportMarketInfo[];
     pitcherHitsAllowedMarkets: SportMarketInfo[];
+    oneSiderGoalsMarkets: SportMarketInfo[];
+    shotsMarkets: SportMarketInfo[];
+    pointsMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {

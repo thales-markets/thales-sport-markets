@@ -33,6 +33,9 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             pitcherHitsAllowedMarkets: markets.filter(
                 (market) => market.betType == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED
             ),
+            pointsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_POINTS),
+            shotsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_SHOTS),
+            oneSiderGoalsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_GOALS),
         };
 
         const result = [];
@@ -63,8 +66,20 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             result.push(lastValidChildMarkets.pitcherHitsAllowedMarkets);
         }
 
+        if (lastValidChildMarkets.pointsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.pointsMarkets);
+        }
+
+        if (lastValidChildMarkets.shotsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.shotsMarkets);
+        }
+
         if (lastValidChildMarkets.oneSiderTouchdownsMarkets.length > 0) {
             result.push(lastValidChildMarkets.oneSiderTouchdownsMarkets);
+        }
+
+        if (lastValidChildMarkets.oneSiderGoalsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.oneSiderGoalsMarkets);
         }
 
         return result;
