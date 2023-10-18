@@ -94,7 +94,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
                             {BetTypeTitleMap[ppMarkets[0].betType as BetType]
                                 ? BetTypeTitleMap[ppMarkets[0].betType as BetType]
                                 : BetTypeNameMap[ppMarkets[0].betType as BetType]}
-                            {isOneSidePlayerProps(ppMarkets[0].betType) && (
+                            {(ppMarkets[0].betType as BetType) == BetType.PLAYER_PROPS_TOUCHDOWNS && (
                                 <Tooltip
                                     overlay={
                                         <>

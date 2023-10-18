@@ -573,7 +573,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED]: 'pitcher hits allowed',
     [BetType.PLAYER_PROPS_POINTS]: 'points',
     [BetType.PLAYER_PROPS_SHOTS]: 'shots',
-    [BetType.PLAYER_PROPS_GOALS]: 'scoring goals',
+    [BetType.PLAYER_PROPS_GOALS]: 'goals',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
