@@ -84,6 +84,14 @@ export enum ParlayErrorCode {
     UNIQUE_TOURNAMENT_PLAYERS = 7,
 }
 
+export enum CombinedPositionsMatchingCode {
+    SAME_POSITIONS = 0,
+    SAME_MARKETS = 1,
+    SAME_MARKET_ADDRESSES_NOT_POSITIONS = 2,
+    SAME_POSITIONS_DIFFERENT_ODDS = 3,
+    NOTHING_COMMON = 4,
+    SAME_PARENT_MARKET = 5,
+}
 export const PLAYER_PROPS_BET_TYPES = [
     BetType.PLAYER_PROPS_HOMERUNS,
     BetType.PLAYER_PROPS_STRIKEOUTS,

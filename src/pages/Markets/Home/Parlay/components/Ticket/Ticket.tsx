@@ -632,25 +632,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 if (!parlayAmmQuote.error) {
                     const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
                     const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
-                    const usdPaid = coinFormatter(parlayAmmQuote['usdPaid'], networkId);
 
                     setTotalQuote(parlayAmmTotalQuote);
-
-                    // Skew impact calculation if it's SGP
-                    if (hasParlayCombinedMarkets) {
-                        const marketsAddresses = markets.map((market) => market.address);
-                        const selectedPositions = markets.map((market) => market.position);
-                        const usdPaidParsed = coinParser((Number(usdPaid) || minUsdAmountValue).toString(), networkId);
-
-                        const newSkewData = await parlayMarketsAMMContract?.calculateSkewImpact(
-                            marketsAddresses,
-                            selectedPositions,
-                            usdPaidParsed
-                        );
-                        setSkew(bigNumberFormatter(newSkewData || 0));
-                    } else {
-                        setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
-                    }
+                    setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
                     setTotalBuyAmount(parlayAmmTotalBuyAmount);
 
                     const fetchedFinalQuotes: number[] = (parlayAmmQuote['finalQuotes'] || []).map((quote: BigNumber) =>

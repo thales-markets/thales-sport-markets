@@ -17,7 +17,7 @@ import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const BATCH_SIZE = 100;
 const BATCH_SIZE_BASE = 50;
-const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 5;
+const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 4;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
@@ -131,18 +131,39 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
             const marketAddresses = getMarketAddressesFromSportMarketArray(marketsFilteredByTags);
 
             if (marketAddresses) {
-                const promises: CombinedMarketsContractData[] = [];
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                // const promises: CombinedMarketsContractData[] = [];
                 const numberOfBatches = Math.trunc(marketAddresses.length / BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY) + 1;
+
+                const promisesResult = [];
 
                 for (let i = 0; i < numberOfBatches; i++) {
                     const arraySlice = marketAddresses.slice(
                         i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY,
                         i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY + BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY
                     );
-                    promises.push(sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(arraySlice));
+                    try {
+                        console.log('Markets ', arraySlice);
+                        console.log('Calling getCombinedOddsForBatchOfMarkets');
+
+                        const data = await sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(
+                            arraySlice
+                        );
+                        console.log('Data from contract ', data);
+                        promisesResult.push(data);
+                    } catch (e) {
+                        console.log('-------------------------------------------------');
+                        console.log('Error on markets ', arraySlice);
+                        console.log('Error ', e);
+                    }
+                    // const arraySlice = marketAddresses.slice(
+                    //         i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY,
+                    //         i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY + BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY
+                    //     );
+                    // promises.push(sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(arraySlice));
                 }
 
-                const promisesResult = await Promise.all(promises);
+                // const promisesResult = await Promise.all(promises));
 
                 const combinedMarketsData: CombinedMarketsContractData = [];
 
