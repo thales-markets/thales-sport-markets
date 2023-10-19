@@ -131,39 +131,18 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
             const marketAddresses = getMarketAddressesFromSportMarketArray(marketsFilteredByTags);
 
             if (marketAddresses) {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                // const promises: CombinedMarketsContractData[] = [];
+                const promises: CombinedMarketsContractData[] = [];
                 const numberOfBatches = Math.trunc(marketAddresses.length / BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY) + 1;
-
-                const promisesResult = [];
 
                 for (let i = 0; i < numberOfBatches; i++) {
                     const arraySlice = marketAddresses.slice(
                         i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY,
                         i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY + BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY
                     );
-                    try {
-                        console.log('Markets ', arraySlice);
-                        console.log('Calling getCombinedOddsForBatchOfMarkets');
-
-                        const data = await sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(
-                            arraySlice
-                        );
-                        console.log('Data from contract ', data);
-                        promisesResult.push(data);
-                    } catch (e) {
-                        console.log('-------------------------------------------------');
-                        console.log('Error on markets ', arraySlice);
-                        console.log('Error ', e);
-                    }
-                    // const arraySlice = marketAddresses.slice(
-                    //         i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY,
-                    //         i * BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY + BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY
-                    //     );
-                    // promises.push(sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(arraySlice));
+                    promises.push(sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(arraySlice));
                 }
 
-                // const promisesResult = await Promise.all(promises));
+                const promisesResult = await Promise.all(promises);
 
                 const combinedMarketsData: CombinedMarketsContractData = [];
 
