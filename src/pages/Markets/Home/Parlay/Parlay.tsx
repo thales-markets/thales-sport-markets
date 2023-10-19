@@ -201,7 +201,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                     />
                     {isMultiSingleBet && multiSingleStore.length ? (
                         <>
-                            <MultiSingle markets={parlayMarkets} combinedMarkets={combinedMarketsData} />
+                            <MultiSingle markets={parlayMarkets} />
                         </>
                     ) : (
                         <>
