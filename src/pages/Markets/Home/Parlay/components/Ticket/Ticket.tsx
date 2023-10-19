@@ -239,19 +239,19 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             if (Number(collateralAmountForQuote) <= 0) return;
 
             const { parlayMarketsAMMContract, multiCollateralOnOffRampContract } = networkConnector;
-            if (parlayMarketsAMMContract && multiCollateralOnOffRampContract && minUsdAmountValue) {
+            if (parlayMarketsAMMContract && minUsdAmountValue) {
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
 
                 try {
                     const [minimumReceivedForCollateralAmount, minimumNeededForMinUsdAmountValue] = await Promise.all([
-                        isDefaultCollateral
+                        isDefaultCollateral || !multiCollateralOnOffRampContract
                             ? 0
                             : multiCollateralOnOffRampContract.getMinimumReceived(
                                   collateralAddress,
                                   coinParser(collateralAmountForQuote.toString(), networkId, selectedCollateral)
                               ),
-                        isDefaultCollateral
+                        isDefaultCollateral || !multiCollateralOnOffRampContract
                             ? 0
                             : multiCollateralOnOffRampContract.getMinimumNeeded(
                                   collateralAddress,
