@@ -403,7 +403,7 @@ export const getParlayRow = (
     if (combinedMarkets?.length) {
         combinedMarkets.forEach((combinedMarket, index) => {
             const opacity = getOpacityForCombinedMarket(combinedMarket);
-            const odd = formatMarketOdds(selectedOddsType, combinedMarket.totalOdd);
+            const odd = formatMarketOdds(selectedOddsType, combinedMarket.totalOdd ? combinedMarket.totalOdd : 1);
             const symbolText = getCombinedPositionName(combinedMarket.markets, combinedMarket.positions);
 
             const homeTeam = combinedMarket.markets[0].homeTeam;
