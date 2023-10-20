@@ -17,7 +17,7 @@ import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const BATCH_SIZE = 100;
 const BATCH_SIZE_BASE = 50;
-const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 5;
+const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 4;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,

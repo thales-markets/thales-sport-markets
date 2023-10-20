@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivRow, FlexDivColumn } from 'styles/common';
+import { FlexDivRow, FlexDivColumn, FlexDiv } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     padding: 0 9px;
@@ -40,6 +40,8 @@ export const OddsContainer = styled(FlexDivRow)`
     align-items: center;
 `;
 
-export const CombinedOddsContainer = styled(FlexDivRow)`
-    align-items: flex-start;
+export const CombinedOddsContainer = styled(FlexDiv)`
+    position: relative;
+    align-items: center;
+    flex-direction: row;
 `;
