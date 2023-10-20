@@ -19,7 +19,9 @@
             "approve": "Autoriser",
             "get-usd-progress": "Création de {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "Informations sur le portefeuille"
+            "wallet-info": "Informations sur le portefeuille",
+            "approve-parlay": "Approuver ParlayAMM",
+            "approve-sports": "Approuver SportsAMM"
         },
         "referral": {
             "link-copied": "Lien de parrainage copié !",

@@ -29,6 +29,8 @@
             "wallet-options": "Wallet options",
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
+            "approve-parlay": "Approve ParlayAMM",
+            "approve-sports": "Approve SportsAMM",
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>."
         },

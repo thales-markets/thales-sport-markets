@@ -12,7 +12,9 @@
             "approve": "อนุมัติ",
             "get-usd-progress": "กำลังมิ้นต์ {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "ข้อมูลกระเป๋าเงิน"
+            "wallet-info": "ข้อมูลกระเป๋าเงิน",
+            "approve-parlay": "อนุมัติ ParlayAMM",
+            "approve-sports": "อนุมัติ SportsAMM"
         },
         "voucher": {
             "remaining-amount": "จำนวนเงินคงเหลือ",

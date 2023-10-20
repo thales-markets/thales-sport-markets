@@ -21,7 +21,9 @@
             "approve": "Aprobar",
             "get-usd-progress": "Obteniendo {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "Información de la billetera"
+            "wallet-info": "Información de la billetera",
+            "approve-sports": "Aprobar DeportesAMM",
+            "approve-parlay": "Aprobar ParlayAMM"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",

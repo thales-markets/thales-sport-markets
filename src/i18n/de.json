@@ -21,7 +21,9 @@
             "approve": "Genehmigen",
             "get-usd-progress": "{{amount}} wird gemintet...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "Wallet-Info"
+            "wallet-info": "Wallet-Info",
+            "approve-parlay": "ParlayAMM genehmigen",
+            "approve-sports": "Genehmigen Sie SportsAMM"
         },
         "voucher": {
             "remaining-amount": "Verbleibender Betrag",

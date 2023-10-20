@@ -21,7 +21,9 @@
             "approve": "批准",
             "get-usd-progress": "铸造 {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "钱包信息"
+            "wallet-info": "钱包信息",
+            "approve-parlay": "批准 ParlayAMM",
+            "approve-sports": "批准 SportsAMM"
         },
         "voucher": {
             "remaining-amount": "余额",

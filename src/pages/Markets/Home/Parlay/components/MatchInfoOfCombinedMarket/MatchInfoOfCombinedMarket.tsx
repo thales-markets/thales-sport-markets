@@ -1,7 +1,7 @@
 import PositionSymbol from 'components/PositionSymbol';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeCombinedMarketFromParlay } from 'redux/modules/parlay';
+import { removeCombinedPosition } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { CombinedParlayMarket } from 'types/markets';
@@ -99,7 +99,7 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
             ) : (
                 <XButton
                     onClick={() => {
-                        dispatch(removeCombinedMarketFromParlay(parentAddressOfCombinedMarket));
+                        dispatch(removeCombinedPosition(parentAddressOfCombinedMarket));
                     }}
                     className={`icon icon--cross-button`}
                 />
