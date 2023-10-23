@@ -33,6 +33,12 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             pitcherHitsAllowedMarkets: markets.filter(
                 (market) => market.betType == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED
             ),
+            hitsRecordedMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_HITS_RECORDED),
+            pointsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_POINTS),
+            shotsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_SHOTS),
+            oneSiderGoalsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_GOALS),
+            reboundsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_REBOUNDS),
+            assistsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_ASSISTS),
         };
 
         const result = [];
@@ -63,8 +69,32 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             result.push(lastValidChildMarkets.pitcherHitsAllowedMarkets);
         }
 
+        if (lastValidChildMarkets.hitsRecordedMarkets.length > 0) {
+            result.push(lastValidChildMarkets.hitsRecordedMarkets);
+        }
+
+        if (lastValidChildMarkets.pointsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.pointsMarkets);
+        }
+
+        if (lastValidChildMarkets.reboundsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.reboundsMarkets);
+        }
+
+        if (lastValidChildMarkets.assistsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.assistsMarkets);
+        }
+
+        if (lastValidChildMarkets.shotsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.shotsMarkets);
+        }
+
         if (lastValidChildMarkets.oneSiderTouchdownsMarkets.length > 0) {
             result.push(lastValidChildMarkets.oneSiderTouchdownsMarkets);
+        }
+
+        if (lastValidChildMarkets.oneSiderGoalsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.oneSiderGoalsMarkets);
         }
 
         return result;
@@ -79,7 +109,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
                             {BetTypeTitleMap[ppMarkets[0].betType as BetType]
                                 ? BetTypeTitleMap[ppMarkets[0].betType as BetType]
                                 : BetTypeNameMap[ppMarkets[0].betType as BetType]}
-                            {isOneSidePlayerProps(ppMarkets[0].betType) && (
+                            {(ppMarkets[0].betType as BetType) == BetType.PLAYER_PROPS_TOUCHDOWNS && (
                                 <Tooltip
                                     overlay={
                                         <>

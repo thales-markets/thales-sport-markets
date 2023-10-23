@@ -12,7 +12,9 @@
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "Информация о кошельке"
+            "wallet-info": "Информация о кошельке",
+            "approve-parlay": "Одобрить ParlayAMM",
+            "approve-sports": "Утвердить SportsAMM"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -313,13 +315,20 @@
                 "passing touchdowns": "Проходящие тачдауны",
                 "scoring touchdown": "Кто забьет тачдаун в игре?",
                 "field goals made": "Голы с игры забиты",
-                "pitcher hits allowed": "Удары питчера разрешены"
+                "pitcher hits allowed": "Удары питчера разрешены",
+                "shots": "Выстрелы",
+                "points": "Точки",
+                "goals": "Кто забьет гол в игре?",
+                "hits recorded": "Записано хитов",
+                "rebounds": "Подборы",
+                "assists": "помогает"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "наборы"
+                    "sets": "наборы",
+                    "rounds": "раунды"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -363,7 +372,18 @@
                         "scoring touchdown": "Прием, рывок, возврат панта, ответный удар, тачдауны защиты и перехвата засчитываются в результат."
                     },
                     "pitcher-hits-allowed-under": "У {{team}} будет меньше разрешенных попаданий, чем у {{scoring}}",
-                    "pitcher-hits-allowed-over": "У {{team}} будет разрешено больше попаданий, чем у {{scoring}}"
+                    "pitcher-hits-allowed-over": "У {{team}} будет разрешено больше попаданий, чем у {{scoring}}",
+                    "points-under": "{{team}} наберет меньше очков, чем {{scoring}}",
+                    "shots-over": "У {{team}} будет больше бросков, чем у {{scoring}}",
+                    "shots-under": "У {{team}} будет меньше бросков, чем у {{scoring}}",
+                    "goals": "{{team}} забьет гол в игре",
+                    "points-over": "{{team}} наберет больше очков, чем {{scoring}}",
+                    "hits-recorded-over": "У {{team}} будет записано больше попаданий, чем у {{scoring}}",
+                    "hits-recorded-under": "У {{team}} будет записано меньше попаданий, чем у {{scoring}}",
+                    "assists-under": "У {{team}} будет меньше результативных передач, чем у {{scoring}}",
+                    "rebounds-under": "У {{team}} будет меньше подборов, чем у {{scoring}}",
+                    "assists-over": "У команды {{team}} будет больше результативных передач, чем у команды {{scoring}}",
+                    "rebounds-over": "У {{team}} будет больше подборов, чем у {{scoring}}"
                 }
             },
             "starts-in": "Начинается через",
