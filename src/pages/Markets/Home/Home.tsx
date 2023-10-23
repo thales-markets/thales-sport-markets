@@ -84,7 +84,6 @@ const Home: React.FC = () => {
     const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
-    const [showBonusOnly, setShowBonusOnly] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_BONUS, false);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
 
     const tagsList = orderBy(
@@ -122,7 +121,6 @@ const Home: React.FC = () => {
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
     const [activeParam, setActiveParam] = useQueryParam('showActive', '');
-    const [bonusOnlyParam, setBonusOnlyParam] = useQueryParam('showBonus', '');
 
     const calculateDate = (hours: number, endOfDay?: boolean) => {
         const calculatedDate = addHoursToCurrentDate(hours, endOfDay);
@@ -189,9 +187,6 @@ const Home: React.FC = () => {
                 }
             }
             activeParam != '' ? setShowActive(activeParam === 'true') : setActiveParam(showActive.toString());
-            bonusOnlyParam != ''
-                ? setShowBonusOnly(bonusOnlyParam === 'true')
-                : setBonusOnlyParam(showBonusOnly.toString());
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
@@ -212,15 +207,6 @@ const Home: React.FC = () => {
 
         const filteredMarkets = (allMarkets[globalFilter] || allMarkets[GlobalFiltersEnum.OpenMarkets]).filter(
             (market: SportMarketInfo) => {
-                if (showBonusOnly) {
-                    if (
-                        !(market.homeBonus > 0 || market.awayBonus > 0 || (market.drawBonus && market.drawBonus > 0)) &&
-                        market.isOpen
-                    ) {
-                        return false;
-                    }
-                }
-
                 if (marketSearch) {
                     if (
                         !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
@@ -287,16 +273,7 @@ const Home: React.FC = () => {
         );
 
         return sortedFilteredMarkets;
-    }, [
-        marketSearch,
-        tagFilter,
-        dateFilter,
-        sportFilter,
-        globalFilter,
-        favouriteLeagues,
-        sportMarketsQueryNew,
-        showBonusOnly,
-    ]);
+    }, [marketSearch, tagFilter, dateFilter, sportFilter, globalFilter, favouriteLeagues, sportMarketsQueryNew]);
 
     useEffect(() => {
         if (sportFilter == SportFilterEnum.Favourites) {
@@ -432,17 +409,6 @@ const Home: React.FC = () => {
                             label={t(`market.filter-label.show-active`)}
                         />
                     </CheckboxContainer>
-                    <CheckboxContainer isMobile={isMobile}>
-                        <Checkbox
-                            checked={showBonusOnly}
-                            value={showBonusOnly.toString()}
-                            onChange={(e: any) => {
-                                setShowBonusOnly(e.target.checked || false);
-                                setBonusOnlyParam((e.target.checked || false).toString());
-                            }}
-                            label={t(`market.filter-label.show-bonus`)}
-                        />
-                    </CheckboxContainer>
                     <SportFiltersContainer>
                         {Object.values(SportFilterEnum)
                             .filter(
@@ -575,17 +541,6 @@ const Home: React.FC = () => {
                                 }
                             }}
                             label={t(`market.filter-label.show-active`)}
-                        />
-                    </CheckboxContainer>
-                    <CheckboxContainer isMobile={isMobile}>
-                        <Checkbox
-                            checked={showBonusOnly}
-                            value={showBonusOnly.toString()}
-                            onChange={(e: any) => {
-                                setShowBonusOnly(e.target.checked || false);
-                                setBonusOnlyParam((e.target.checked || false).toString());
-                            }}
-                            label={t(`market.filter-label.show-bonus`)}
                         />
                     </CheckboxContainer>
                     <SportFiltersContainer>

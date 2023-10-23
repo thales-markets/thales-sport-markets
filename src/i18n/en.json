@@ -248,8 +248,7 @@
             "mobile-tags": {
                 "search": "Search"
             },
-            "show-active": "Show only active sports",
-            "show-bonus": "Show only markets with bonus"
+            "show-active": "Show only active sports"
         },
         "back-to-markets": "Back to markets",
         "back": "Back",

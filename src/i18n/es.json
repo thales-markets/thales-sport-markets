@@ -245,8 +245,7 @@
             "mobile-tags": {
                 "search": "Búsqueda"
             },
-            "show-active": "Mostrar solo deportes activos",
-            "show-bonus": "Mostrar solo mercados con bonificación"
+            "show-active": "Mostrar solo deportes activos"
         },
         "back-to-markets": "Volver a los mercados",
         "back-to-market": "Volver al mercado",
