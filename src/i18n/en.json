@@ -408,7 +408,8 @@
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "sets"
+                    "sets": "sets",
+                    "rounds": "rounds"
                 },
                 "and": "and",
                 "match-resolve": {
