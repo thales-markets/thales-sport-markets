@@ -319,13 +319,15 @@
                 "pitcher hits allowed": "Sono consentiti i colpi del lanciatore",
                 "points": "Punti",
                 "goals": "Chi segnerà un goal durante la partita?",
-                "shots": "Scatti"
+                "shots": "Scatti",
+                "hits recorded": "Hit registrati"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "imposta"
+                    "sets": "imposta",
+                    "rounds": "giri"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -374,7 +376,9 @@
                     "goals": "{{team}} segnerà un goal nel gioco",
                     "shots-over": "{{team}} avrà più tiri di {{scoring}}",
                     "shots-under": "{{team}} avrà meno tiri di {{scoring}}",
-                    "points-over": "{{team}} avrà più punti di {{scoring}}"
+                    "points-over": "{{team}} avrà più punti di {{scoring}}",
+                    "hits-recorded-over": "{{team}} avrà più valide registrate di {{scoring}}",
+                    "hits-recorded-under": "{{team}} avrà meno valide registrate rispetto a {{scoring}}"
                 }
             },
             "starts-in": "Inizia tra",

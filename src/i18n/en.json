@@ -401,7 +401,8 @@
                 "pitcher hits allowed": "Pitcher hits allowed",
                 "points": "Points",
                 "shots": "Shots",
-                "goals": "Who will score a goal in the game?"
+                "goals": "Who will score a goal in the game?",
+                "hits recorded": "Hits recorded"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -453,6 +454,8 @@
                     "points-over": "{{team}} will have more points than {{scoring}}",
                     "points-under": "{{team}} will have less points than {{scoring}}",
                     "goals": "{{team}} will score a goal in the game",
+                    "hits-recorded-over": "{{team}} will have more hits recorded than {{scoring}}",
+                    "hits-recorded-under": "{{team}} will have less hits recorded than {{scoring}}",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }

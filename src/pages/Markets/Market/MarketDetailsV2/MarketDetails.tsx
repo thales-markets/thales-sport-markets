@@ -71,6 +71,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         pitcherHitsAllowedMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED
         ),
+        hitsRecordedMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_HITS_RECORDED
+        ),
         pointsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_POINTS),
         shotsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_SHOTS),
         oneSiderTouchdownsMarkets: market.childMarkets.filter(
@@ -412,6 +415,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions
                             markets={childMarkets.pitcherHitsAllowedMarkets}
                             betType={BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.hitsRecordedMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.hitsRecordedMarkets}
+                            betType={BetType.PLAYER_PROPS_HITS_RECORDED}
                             showOdds={showAMM}
                         />
                     )}

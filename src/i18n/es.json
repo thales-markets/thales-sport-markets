@@ -319,13 +319,15 @@
                 "pitcher hits allowed": "Se permiten hits del lanzador",
                 "goals": "¿Quién marcará un gol en el juego?",
                 "shots": "Disparos",
-                "points": "Puntos"
+                "points": "Puntos",
+                "hits recorded": "Visitas grabadas"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "conjuntos"
+                    "sets": "conjuntos",
+                    "rounds": "rondas"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -374,7 +376,9 @@
                     "goals": "{{team}} marcará un gol en el juego",
                     "points-over": "{{team}} tendrá más puntos que {{scoring}}",
                     "points-under": "{{team}} tendrá menos puntos que {{scoring}}",
-                    "shots-under": "{{team}} tendrá menos tiros que {{scoring}}"
+                    "shots-under": "{{team}} tendrá menos tiros que {{scoring}}",
+                    "hits-recorded-over": "{{team}} tendrá más visitas registradas que {{scoring}}",
+                    "hits-recorded-under": "{{team}} tendrá menos visitas registradas que {{scoring}}"
                 }
             },
             "starts-in": "Empieza en",

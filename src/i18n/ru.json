@@ -319,13 +319,15 @@
                 "pitcher hits allowed": "Удары питчера разрешены",
                 "shots": "Выстрелы",
                 "points": "Точки",
-                "goals": "Кто забьет гол в игре?"
+                "goals": "Кто забьет гол в игре?",
+                "hits recorded": "Записано хитов"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "наборы"
+                    "sets": "наборы",
+                    "rounds": "раунды"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -374,7 +376,9 @@
                     "shots-over": "У {{team}} будет больше бросков, чем у {{scoring}}",
                     "shots-under": "У {{team}} будет меньше бросков, чем у {{scoring}}",
                     "goals": "{{team}} забьет гол в игре",
-                    "points-over": "{{team}} наберет больше очков, чем {{scoring}}"
+                    "points-over": "{{team}} наберет больше очков, чем {{scoring}}",
+                    "hits-recorded-over": "У {{team}} будет записано больше попаданий, чем у {{scoring}}",
+                    "hits-recorded-under": "У {{team}} будет записано меньше попаданий, чем у {{scoring}}"
                 }
             },
             "starts-in": "Начинается через",

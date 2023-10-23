@@ -574,6 +574,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_POINTS]: 'points',
     [BetType.PLAYER_PROPS_SHOTS]: 'shots',
     [BetType.PLAYER_PROPS_GOALS]: 'goals',
+    [BetType.PLAYER_PROPS_HITS_RECORDED]: 'hits recorded',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
@@ -593,6 +594,7 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED]: '',
     [BetType.PLAYER_PROPS_POINTS]: '',
     [BetType.PLAYER_PROPS_SHOTS]: '',
+    [BetType.PLAYER_PROPS_HITS_RECORDED]: '',
 };
 
 export const SCORING_MAP: SportsMap = {
@@ -602,7 +604,7 @@ export const SCORING_MAP: SportsMap = {
     9004: 'points',
     9005: 'points',
     9006: 'goals',
-    9007: '',
+    9007: 'rounds',
     9008: 'points',
     9010: 'goals',
     9011: 'goals',

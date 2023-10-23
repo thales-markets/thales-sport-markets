@@ -319,13 +319,15 @@
                 "pitcher hits allowed": "Coups de lanceur autorisés",
                 "goals": "Qui marquera un but dans le match ?",
                 "shots": "Coups",
-                "points": "Points"
+                "points": "Points",
+                "hits recorded": "Hits enregistrés"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "buts",
                     "points": "points",
-                    "sets": "ensembles"
+                    "sets": "ensembles",
+                    "rounds": "Les manches"
                 },
                 "match-resolve": {
                     "regular": "dans le temps régulier",
@@ -374,7 +376,9 @@
                     "shots-under": "{{team}} aura moins de tirs que {{scoring}}",
                     "goals": "{{team}} marquera un but dans le match",
                     "shots-over": "{{team}} aura plus de tirs que {{scoring}}",
-                    "points-over": "{{team}} aura plus de points que {{scoring}}"
+                    "points-over": "{{team}} aura plus de points que {{scoring}}",
+                    "hits-recorded-over": "{{team}} aura plus de hits enregistrés que {{scoring}}",
+                    "hits-recorded-under": "{{team}} aura moins de coups sûrs enregistrés que {{scoring}}"
                 }
             },
             "starts-in": "Commence dans",

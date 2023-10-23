@@ -319,13 +319,15 @@
                 "pitcher hits allowed": "Pitcher-Hits erlaubt",
                 "points": "Punkte",
                 "shots": "Schüsse",
-                "goals": "Wer schießt im Spiel ein Tor?"
+                "goals": "Wer schießt im Spiel ein Tor?",
+                "hits recorded": "Treffer aufgezeichnet"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "Sätze"
+                    "sets": "Sätze",
+                    "rounds": "Runden"
                 },
                 "match-resolve": {
                     "regular": "in regulärer Spielzeite",
@@ -374,7 +376,9 @@
                     "points-under": "{{team}} wird weniger Punkte haben als {{scoring}}",
                     "shots-over": "{{team}} wird mehr Schüsse haben als {{scoring}}",
                     "points-over": "{{team}} wird mehr Punkte haben als {{scoring}}",
-                    "goals": "{{team}} wird im Spiel ein Tor erzielen"
+                    "goals": "{{team}} wird im Spiel ein Tor erzielen",
+                    "hits-recorded-under": "{{team}} wird weniger Treffer haben als {{scoring}}",
+                    "hits-recorded-over": "{{team}} wird mehr Treffer haben als {{scoring}}"
                 }
             },
             "starts-in": "Beginnt in",

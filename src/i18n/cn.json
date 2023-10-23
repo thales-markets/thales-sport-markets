@@ -319,13 +319,15 @@
                 "pitcher hits allowed": "允许投手击球",
                 "points": "积分",
                 "shots": "镜头",
-                "goals": "谁会在比赛中进球？"
+                "goals": "谁会在比赛中进球？",
+                "hits recorded": "点击记录"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "套"
+                    "sets": "套",
+                    "rounds": "回合"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -374,7 +376,9 @@
                     "goals": "{{team}} 将在比赛中进球",
                     "shots-over": "{{team}} 的射门次数将多于 {{scoring}}",
                     "points-under": "{{team}} 的得分将低于 {{scoring}}",
-                    "shots-under": "{{team}} 的射门次数将少于 {{scoring}}"
+                    "shots-under": "{{team}} 的射门次数将少于 {{scoring}}",
+                    "hits-recorded-under": "{{team}} 记录的命中数将少于 {{scoring}}",
+                    "hits-recorded-over": "{{team}} 记录的命中数将多于 {{scoring}}"
                 }
             },
             "starts-in": "开始于",

@@ -319,13 +319,15 @@
                 "pitcher hits allowed": "อนุญาตให้ตีเหยือกได้",
                 "points": "คะแนน",
                 "shots": "ช็อต",
-                "goals": "ใครจะเป็นผู้ทำประตูในเกม?"
+                "goals": "ใครจะเป็นผู้ทำประตูในเกม?",
+                "hits recorded": "บันทึกการเข้าชมแล้ว"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "ชุด"
+                    "sets": "ชุด",
+                    "rounds": "รอบ"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -374,7 +376,9 @@
                     "shots-under": "{{team}} จะมีโอกาสยิงน้อยกว่า {{scoring}}",
                     "goals": "{{team}} จะทำประตูในเกม",
                     "shots-over": "{{team}} จะมีโอกาสยิงมากกว่า {{scoring}}",
-                    "points-over": "{{team}} จะมีแต้มมากกว่า {{scoring}}"
+                    "points-over": "{{team}} จะมีแต้มมากกว่า {{scoring}}",
+                    "hits-recorded-over": "{{team}} จะมีการบันทึกการเข้าชมมากกว่า {{scoring}}",
+                    "hits-recorded-under": "{{team}} จะมีการบันทึกการเข้าชมน้อยกว่า {{scoring}}"
                 }
             },
             "starts-in": "เริ่มเข้า",
