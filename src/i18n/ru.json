@@ -319,7 +319,9 @@
                 "shots": "Выстрелы",
                 "points": "Точки",
                 "goals": "Кто забьет гол в игре?",
-                "hits recorded": "Записано хитов"
+                "hits recorded": "Записано хитов",
+                "rebounds": "Подборы",
+                "assists": "помогает"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -377,7 +379,11 @@
                     "goals": "{{team}} забьет гол в игре",
                     "points-over": "{{team}} наберет больше очков, чем {{scoring}}",
                     "hits-recorded-over": "У {{team}} будет записано больше попаданий, чем у {{scoring}}",
-                    "hits-recorded-under": "У {{team}} будет записано меньше попаданий, чем у {{scoring}}"
+                    "hits-recorded-under": "У {{team}} будет записано меньше попаданий, чем у {{scoring}}",
+                    "assists-under": "У {{team}} будет меньше результативных передач, чем у {{scoring}}",
+                    "rebounds-under": "У {{team}} будет меньше подборов, чем у {{scoring}}",
+                    "assists-over": "У команды {{team}} будет больше результативных передач, чем у команды {{scoring}}",
+                    "rebounds-over": "У {{team}} будет больше подборов, чем у {{scoring}}"
                 }
             },
             "starts-in": "Начинается через",

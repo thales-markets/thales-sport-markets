@@ -319,7 +319,9 @@
                 "points": "Punti",
                 "goals": "Chi segnerà un goal durante la partita?",
                 "shots": "Scatti",
-                "hits recorded": "Hit registrati"
+                "hits recorded": "Hit registrati",
+                "rebounds": "Rimbalzi",
+                "assists": "Assist"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -377,7 +379,11 @@
                     "shots-under": "{{team}} avrà meno tiri di {{scoring}}",
                     "points-over": "{{team}} avrà più punti di {{scoring}}",
                     "hits-recorded-over": "{{team}} avrà più valide registrate di {{scoring}}",
-                    "hits-recorded-under": "{{team}} avrà meno valide registrate rispetto a {{scoring}}"
+                    "hits-recorded-under": "{{team}} avrà meno valide registrate rispetto a {{scoring}}",
+                    "rebounds-under": "{{team}} avrà meno rimbalzi di {{scoring}}",
+                    "rebounds-over": "{{team}} avrà più rimbalzi di {{scoring}}",
+                    "assists-under": "{{team}} avrà meno assist di {{scoring}}",
+                    "assists-over": "{{team}} avrà più assist di {{scoring}}"
                 }
             },
             "starts-in": "Inizia tra",

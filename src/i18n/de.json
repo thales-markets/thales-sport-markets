@@ -319,7 +319,9 @@
                 "points": "Punkte",
                 "shots": "Schüsse",
                 "goals": "Wer schießt im Spiel ein Tor?",
-                "hits recorded": "Treffer aufgezeichnet"
+                "hits recorded": "Treffer aufgezeichnet",
+                "assists": "Unterstützt",
+                "rebounds": "Rebounds"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -377,7 +379,11 @@
                     "points-over": "{{team}} wird mehr Punkte haben als {{scoring}}",
                     "goals": "{{team}} wird im Spiel ein Tor erzielen",
                     "hits-recorded-under": "{{team}} wird weniger Treffer haben als {{scoring}}",
-                    "hits-recorded-over": "{{team}} wird mehr Treffer haben als {{scoring}}"
+                    "hits-recorded-over": "{{team}} wird mehr Treffer haben als {{scoring}}",
+                    "rebounds-under": "{{team}} wird weniger Rebounds haben als {{scoring}}",
+                    "assists-under": "{{team}} wird weniger Assists haben als {{scoring}}",
+                    "assists-over": "{{team}} wird mehr Assists haben als {{scoring}}",
+                    "rebounds-over": "{{team}} wird mehr Rebounds haben als {{scoring}}"
                 }
             },
             "starts-in": "Beginnt in",

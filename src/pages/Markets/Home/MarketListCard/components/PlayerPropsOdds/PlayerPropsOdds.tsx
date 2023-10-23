@@ -37,6 +37,8 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             pointsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_POINTS),
             shotsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_SHOTS),
             oneSiderGoalsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_GOALS),
+            reboundsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_REBOUNDS),
+            assistsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_ASSISTS),
         };
 
         const result = [];
@@ -73,6 +75,14 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
 
         if (lastValidChildMarkets.pointsMarkets.length > 0) {
             result.push(lastValidChildMarkets.pointsMarkets);
+        }
+
+        if (lastValidChildMarkets.reboundsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.reboundsMarkets);
+        }
+
+        if (lastValidChildMarkets.assistsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.assistsMarkets);
         }
 
         if (lastValidChildMarkets.shotsMarkets.length > 0) {

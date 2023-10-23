@@ -319,7 +319,9 @@
                 "points": "คะแนน",
                 "shots": "ช็อต",
                 "goals": "ใครจะเป็นผู้ทำประตูในเกม?",
-                "hits recorded": "บันทึกการเข้าชมแล้ว"
+                "hits recorded": "บันทึกการเข้าชมแล้ว",
+                "assists": "ช่วยเหลือ",
+                "rebounds": "รีบาวด์"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -377,7 +379,11 @@
                     "shots-over": "{{team}} จะมีโอกาสยิงมากกว่า {{scoring}}",
                     "points-over": "{{team}} จะมีแต้มมากกว่า {{scoring}}",
                     "hits-recorded-over": "{{team}} จะมีการบันทึกการเข้าชมมากกว่า {{scoring}}",
-                    "hits-recorded-under": "{{team}} จะมีการบันทึกการเข้าชมน้อยกว่า {{scoring}}"
+                    "hits-recorded-under": "{{team}} จะมีการบันทึกการเข้าชมน้อยกว่า {{scoring}}",
+                    "rebounds-over": "{{team}} จะมีการรีบาวด์มากกว่า {{scoring}}",
+                    "assists-over": "{{team}} จะมีแอสซิสต์มากกว่า {{scoring}}",
+                    "assists-under": "{{team}} จะมีแอสซิสต์น้อยกว่า {{scoring}}",
+                    "rebounds-under": "{{team}} จะมีการรีบาวด์น้อยกว่า {{scoring}}"
                 }
             },
             "starts-in": "เริ่มเข้า",

@@ -319,7 +319,9 @@
                 "goals": "¿Quién marcará un gol en el juego?",
                 "shots": "Disparos",
                 "points": "Puntos",
-                "hits recorded": "Visitas grabadas"
+                "hits recorded": "Visitas grabadas",
+                "assists": "Asistencias",
+                "rebounds": "Rebotes"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -377,7 +379,11 @@
                     "points-under": "{{team}} tendrá menos puntos que {{scoring}}",
                     "shots-under": "{{team}} tendrá menos tiros que {{scoring}}",
                     "hits-recorded-over": "{{team}} tendrá más visitas registradas que {{scoring}}",
-                    "hits-recorded-under": "{{team}} tendrá menos visitas registradas que {{scoring}}"
+                    "hits-recorded-under": "{{team}} tendrá menos visitas registradas que {{scoring}}",
+                    "assists-under": "{{team}} tendrá menos asistencias que {{scoring}}",
+                    "rebounds-over": "{{team}} tendrá más rebotes que {{scoring}}",
+                    "assists-over": "{{team}} tendrá más asistencias que {{scoring}}",
+                    "rebounds-under": "{{team}} tendrá menos rebotes que {{scoring}}"
                 }
             },
             "starts-in": "Empieza en",
