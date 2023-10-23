@@ -6,6 +6,8 @@ import { PositionBalance, SportMarketInfo } from 'types/markets';
 import { Network } from 'enums/network';
 import { bigNumberFormatter } from 'utils/formatters/ethers';
 import { getIsOneSideMarket } from '../../utils/markets';
+import { fixDuplicatedTeamName } from 'utils/formatters/string';
+import { ENETPULSE_SPORTS } from 'constants/tags';
 
 export type AccountPositionProfile = {
     sUSDPaid: number;
@@ -42,8 +44,14 @@ const useAccountMarketsQuery = (
                         open: !position.position.market.isCanceled && !position.position.market.isResolved,
                         market: {
                             ...position.position.market,
-                            homeTeam: position.position.market.homeTeam,
-                            awayTeam: position.position.market.awayTeam,
+                            homeTeam: fixDuplicatedTeamName(
+                                position.position.market.homeTeam,
+                                ENETPULSE_SPORTS.includes(Number(position.position.market.tags[0]))
+                            ),
+                            awayTeam: fixDuplicatedTeamName(
+                                position.position.market.awayTeam,
+                                ENETPULSE_SPORTS.includes(Number(position.position.market.tags[0]))
+                            ),
                             spread: Number(position.position.market.spread),
                             total: Number(position.position.market.total),
                             isOneSideMarket: getIsOneSideMarket(Number(position.position.market.tags[0])),

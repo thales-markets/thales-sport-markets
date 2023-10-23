@@ -47,7 +47,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
             <Header>
                 <Title isExpanded={isExpanded}>
                     {t(`markets.market-card.bet-type.${BetTypeNameMap[betType]}`)}
-                    {isOneSidePlayerProps(markets[0].betType) && (
+                    {(markets[0].betType as BetType) == BetType.PLAYER_PROPS_TOUCHDOWNS && (
                         <Tooltip
                             overlay={
                                 <>

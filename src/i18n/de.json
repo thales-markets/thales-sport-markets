@@ -21,7 +21,9 @@
             "approve": "Genehmigen",
             "get-usd-progress": "{{amount}} wird gemintet...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "Wallet-Info"
+            "wallet-info": "Wallet-Info",
+            "approve-parlay": "ParlayAMM genehmigen",
+            "approve-sports": "Genehmigen Sie SportsAMM"
         },
         "voucher": {
             "remaining-amount": "Verbleibender Betrag",
@@ -313,13 +315,20 @@
                 "home runs": "Home Runs",
                 "scoring touchdown": "Wer erzielt im Spiel einen Touchdown?",
                 "field goals made": "Field Goals gemacht",
-                "pitcher hits allowed": "Pitcher-Hits erlaubt"
+                "pitcher hits allowed": "Pitcher-Hits erlaubt",
+                "points": "Punkte",
+                "shots": "Schüsse",
+                "goals": "Wer schießt im Spiel ein Tor?",
+                "hits recorded": "Treffer aufgezeichnet",
+                "assists": "Unterstützt",
+                "rebounds": "Rebounds"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "Sätze"
+                    "sets": "Sätze",
+                    "rounds": "Runden"
                 },
                 "match-resolve": {
                     "regular": "in regulärer Spielzeite",
@@ -363,7 +372,18 @@
                         "scoring touchdown": "Receiving-, Rushing-, Punt-Return-, Kick-Return-, Defensive- und Interception-Touchdowns werden für das Ergebnis gezählt"
                     },
                     "pitcher-hits-allowed-over": "{{team}} wird mehr Treffer haben als {{scoring}}",
-                    "pitcher-hits-allowed-under": "{{team}} wird weniger Treffer haben als {{scoring}}"
+                    "pitcher-hits-allowed-under": "{{team}} wird weniger Treffer haben als {{scoring}}",
+                    "shots-under": "{{team}} wird weniger Schüsse haben als {{scoring}}",
+                    "points-under": "{{team}} wird weniger Punkte haben als {{scoring}}",
+                    "shots-over": "{{team}} wird mehr Schüsse haben als {{scoring}}",
+                    "points-over": "{{team}} wird mehr Punkte haben als {{scoring}}",
+                    "goals": "{{team}} wird im Spiel ein Tor erzielen",
+                    "hits-recorded-under": "{{team}} wird weniger Treffer haben als {{scoring}}",
+                    "hits-recorded-over": "{{team}} wird mehr Treffer haben als {{scoring}}",
+                    "rebounds-under": "{{team}} wird weniger Rebounds haben als {{scoring}}",
+                    "assists-under": "{{team}} wird weniger Assists haben als {{scoring}}",
+                    "assists-over": "{{team}} wird mehr Assists haben als {{scoring}}",
+                    "rebounds-over": "{{team}} wird mehr Rebounds haben als {{scoring}}"
                 }
             },
             "starts-in": "Beginnt in",
