@@ -326,8 +326,6 @@ const parlaySlice = createSlice({
                 state.payment.amountToBuy = getDefaultPayment().amountToBuy;
             }
 
-            console.log('state.parlay ', state.parlay.length);
-
             localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, state.combinedPositions);
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
