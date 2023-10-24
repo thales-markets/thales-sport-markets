@@ -111,6 +111,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                         sportMarketAddress: market.address,
                         position: position,
+                        betType: market.betType,
                         homeTeam: market.homeTeam || '',
                         awayTeam: market.awayTeam || '',
                         tags: market.tags,

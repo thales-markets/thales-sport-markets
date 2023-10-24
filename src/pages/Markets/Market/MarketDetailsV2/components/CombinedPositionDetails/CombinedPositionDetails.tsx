@@ -100,6 +100,7 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
             return {
                 parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                 sportMarketAddress: market.address,
+                betType: market.betType,
                 position: positions[index],
                 homeTeam: market.homeTeam || '',
                 awayTeam: market.awayTeam || '',

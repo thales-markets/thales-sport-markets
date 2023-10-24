@@ -59,6 +59,7 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
             return {
                 parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                 sportMarketAddress: market.address,
+                betType: market.betType,
                 position: positions[index],
                 homeTeam: market.homeTeam || '',
                 awayTeam: market.awayTeam || '',
