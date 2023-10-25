@@ -92,6 +92,10 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
                 doubleChanceMarketType: market.doubleChanceMarketType,
                 isOneSideMarket: market.isOneSideMarket,
                 tag: market.tags[0],
+                maturity: market.maturityDate.getTime(),
+                playerName: market.playerName ? market.playerName : undefined,
+                playerId: market.playerId ? market.playerId : undefined,
+                playerPropsType: market.playerPropsType ? market.playerPropsType : undefined,
             };
             dispatch(updateParlay(parlayMarket));
             if (isMobile) {

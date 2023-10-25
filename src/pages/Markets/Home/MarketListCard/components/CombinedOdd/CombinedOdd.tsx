@@ -65,6 +65,7 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
                 awayTeam: market.awayTeam || '',
                 doubleChanceMarketType: null,
                 tags: market.tags,
+                maturity: market.maturityDate.getTime(),
             };
         }),
         totalOdd: odd ? odd : 0,
