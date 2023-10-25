@@ -121,7 +121,6 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         playerName: market.playerName ?? undefined,
                         playerId: market.playerId ?? undefined,
                         playerPropsType: market.playerPropsType ?? undefined,
-                        maturity: market.maturityDate.getTime(),
                     };
                     dispatch(updateParlay(parlayMarket));
                     if (isMobile) {

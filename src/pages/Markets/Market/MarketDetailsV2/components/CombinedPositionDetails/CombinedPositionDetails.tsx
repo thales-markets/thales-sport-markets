@@ -106,7 +106,6 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
                 awayTeam: market.awayTeam || '',
                 doubleChanceMarketType: null,
                 tags: market.tags,
-                maturity: market.maturityDate.getTime(),
             };
         }),
         totalOdd: totalOdd ? totalOdd : 0,
