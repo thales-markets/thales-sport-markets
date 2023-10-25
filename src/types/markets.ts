@@ -119,6 +119,8 @@ export type SportMarketChildMarkets = {
     hitsRecordedMarkets: SportMarketInfo[];
     reboundsMarkets: SportMarketInfo[];
     assistsMarkets: SportMarketInfo[];
+    doubleDoubleMarkets: SportMarketInfo[];
+    tripleDoubleMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {

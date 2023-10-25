@@ -403,7 +403,9 @@
                 "goals": "Who will score a goal in the game?",
                 "hits recorded": "Hits recorded",
                 "rebounds": "Rebounds",
-                "assists": "Assists"
+                "assists": "Assists",
+                "double double": "Double-double",
+                "triple double": "Triple-double"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -462,6 +464,10 @@
                     "rebounds-under": "{{team}} will have less rebounds than {{scoring}}",
                     "assists-over": "{{team}} will have more assists than {{scoring}}",
                     "assists-under": "{{team}} will have less assists than {{scoring}}",
+                    "double-double-yes": "{{team}} will score a double-double",
+                    "double-double-no": "{{team}} will not score a double-double",
+                    "triple-double-yes": "{{team}} will score a triple-double",
+                    "triple-double-no": "{{team}} will not score a triple-double",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }

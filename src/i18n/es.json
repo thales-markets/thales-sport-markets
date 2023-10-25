@@ -321,7 +321,9 @@
                 "points": "Puntos",
                 "hits recorded": "Visitas grabadas",
                 "assists": "Asistencias",
-                "rebounds": "Rebotes"
+                "rebounds": "Rebotes",
+                "double double": "Doble doble",
+                "triple double": "Triple doble"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -383,7 +385,11 @@
                     "assists-under": "{{team}} tendrá menos asistencias que {{scoring}}",
                     "rebounds-over": "{{team}} tendrá más rebotes que {{scoring}}",
                     "assists-over": "{{team}} tendrá más asistencias que {{scoring}}",
-                    "rebounds-under": "{{team}} tendrá menos rebotes que {{scoring}}"
+                    "rebounds-under": "{{team}} tendrá menos rebotes que {{scoring}}",
+                    "triple-double-yes": "{{team}} anotará un triple-doble",
+                    "double-double-no": "{{team}} no anotará un doble-doble",
+                    "double-double-yes": "{{team}} anotará un doble-doble",
+                    "triple-double-no": "{{team}} no conseguirá un triple-doble"
                 }
             },
             "starts-in": "Empieza en",

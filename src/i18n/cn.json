@@ -321,7 +321,9 @@
                 "goals": "谁会在比赛中进球？",
                 "hits recorded": "点击记录",
                 "assists": "助攻",
-                "rebounds": "篮板球"
+                "rebounds": "篮板球",
+                "triple double": "三双",
+                "double double": "双双"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -383,7 +385,11 @@
                     "assists-over": "{{team}} 的助攻数将多于 {{scoring}}",
                     "rebounds-over": "{{team}} 的篮板数将多于 {{scoring}}",
                     "rebounds-under": "{{team}} 的篮板数将少于 {{scoring}}",
-                    "assists-under": "{{team}} 的助攻数将少于 {{scoring}}"
+                    "assists-under": "{{team}} 的助攻数将少于 {{scoring}}",
+                    "double-double-yes": "{{team}} 将得分两双",
+                    "double-double-no": "{{team}} 不会得分两双",
+                    "triple-double-yes": "{{team}}将获得三双",
+                    "triple-double-no": "{{team}}不会拿下三双"
                 }
             },
             "starts-in": "开始于",

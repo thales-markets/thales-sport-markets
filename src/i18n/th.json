@@ -321,7 +321,9 @@
                 "goals": "ใครจะเป็นผู้ทำประตูในเกม?",
                 "hits recorded": "บันทึกการเข้าชมแล้ว",
                 "assists": "ช่วยเหลือ",
-                "rebounds": "รีบาวด์"
+                "rebounds": "รีบาวด์",
+                "double double": "ดับเบิ้ลดับเบิ้ล",
+                "triple double": "ทริปเปิ้ล-ดับเบิ้ล"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -383,7 +385,11 @@
                     "rebounds-over": "{{team}} จะมีการรีบาวด์มากกว่า {{scoring}}",
                     "assists-over": "{{team}} จะมีแอสซิสต์มากกว่า {{scoring}}",
                     "assists-under": "{{team}} จะมีแอสซิสต์น้อยกว่า {{scoring}}",
-                    "rebounds-under": "{{team}} จะมีการรีบาวด์น้อยกว่า {{scoring}}"
+                    "rebounds-under": "{{team}} จะมีการรีบาวด์น้อยกว่า {{scoring}}",
+                    "double-double-yes": "{{team}} จะทำแต้มดับเบิ้ล-ดับเบิ้ล",
+                    "triple-double-yes": "{{team}} จะทำแต้มทริปเปิล-ดับเบิ้ล",
+                    "triple-double-no": "{{team}} จะไม่ทำแต้มทริปเปิล-ดับเบิ้ล",
+                    "double-double-no": "{{team}} จะไม่ทำคะแนนดับเบิ้ล-ดับเบิ้ล"
                 }
             },
             "starts-in": "เริ่มเข้า",
