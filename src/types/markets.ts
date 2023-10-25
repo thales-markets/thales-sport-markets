@@ -239,7 +239,6 @@ export type ParlaysMarketPosition = {
     tags: number[];
     betType: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
-    maturity: number;
     isOneSideMarket?: boolean;
     tag?: number;
     playerName?: string;

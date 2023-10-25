@@ -124,8 +124,22 @@ const parlaySlice = createSlice({
                         market.parentMarket == action.payload.parentMarket
                 );
 
-                if (existingNonPlayerPropsPosition !== -1)
-                    state.parlay = state.parlay.filter((_market, index) => index !== existingNonPlayerPropsPosition);
+                const samePlayerNamePlayerProps = state.parlay.findIndex(
+                    (market) =>
+                        PLAYER_PROPS_BET_TYPES.includes(market.betType) &&
+                        market.playerName?.trim().toLowerCase() == action.payload.playerName?.trim().toLowerCase()
+                );
+
+                if (samePlayerNamePlayerProps !== -1) {
+                    state.error.code = ParlayErrorCode.SAME_PLAYER_SAME_GAME_PLAYER_PROPS;
+                    return;
+                }
+
+                if (existingNonPlayerPropsPosition !== -1) {
+                    // state.parlay = state.parlay.filter((_market, index) => index !== existingNonPlayerPropsPosition);
+                    state.error.code = ParlayErrorCode.ADDING_PLAYER_PROPS_ALREADY_HAVE_POSITION_OF_SAME_MARKET;
+                    return;
+                }
             }
 
             if (
