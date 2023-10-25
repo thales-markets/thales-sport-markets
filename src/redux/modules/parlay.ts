@@ -127,7 +127,8 @@ const parlaySlice = createSlice({
                 const samePlayerNamePlayerProps = state.parlay.findIndex(
                     (market) =>
                         PLAYER_PROPS_BET_TYPES.includes(market.betType) &&
-                        market.playerName?.trim().toLowerCase() == action.payload.playerName?.trim().toLowerCase()
+                        market.playerName?.trim().toLowerCase() == action.payload.playerName?.trim().toLowerCase() &&
+                        market.sportMarketAddress !== action.payload.sportMarketAddress
                 );
 
                 if (samePlayerNamePlayerProps !== -1) {
