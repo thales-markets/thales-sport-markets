@@ -870,7 +870,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "Gli utenti che hanno coperto il 50% o più delle potenziali combinazioni dei biglietti vincenti verranno squalificati."
     },
     "wizard": {
         "title": "Get Started!",

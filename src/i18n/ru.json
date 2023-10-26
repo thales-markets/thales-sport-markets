@@ -870,7 +870,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "Пользователи, которые покрыли 50% или более потенциальных комбинаций своих выигрышных билетов, будут дисквалифицированы."
     },
     "wizard": {
         "title": "Get Started!",
