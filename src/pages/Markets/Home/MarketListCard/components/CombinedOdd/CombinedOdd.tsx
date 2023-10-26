@@ -2,7 +2,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCombinedPositions, getParlay, removeCombinedPosition, updateCombinedPositions } from 'redux/modules/parlay';
+import { getCombinedPositions, removeCombinedPosition, updateCombinedPositions } from 'redux/modules/parlay';
 import { CombinedMarketPosition, SportMarketInfo } from 'types/markets';
 import {
     formatMarketOdds,
@@ -39,7 +39,6 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const combinedPositions = useSelector(getCombinedPositions);
-    const parlay = useSelector(getParlay);
 
     const combinedMarketPositionSymbol = getCombinedPositionName(markets, positions);
 
@@ -49,10 +48,6 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
     const oddTooltipText = getCombinedOddTooltipText(markets, positions);
 
     const parentMarketAddress = markets[0].parentMarket !== null ? markets[0].parentMarket : markets[1].parentMarket;
-
-    const isParentMarketAddressInParlayData =
-        !!parlay.find((data) => data.parentMarket == parentMarketAddress) ||
-        !!combinedPositions.find((item) => item.markets.find((market) => market.parentMarket == parentMarketAddress));
 
     const combinedPosition: CombinedMarketPosition = {
         markets: markets.map((market, index) => {
@@ -87,9 +82,8 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
 
     const onClick = () => {
         if (noOdd) return;
-        if (isAddedToParlay || isParentMarketAddressInParlayData) {
+        if (isAddedToParlay) {
             dispatch(removeCombinedPosition(parentMarketAddress));
-            dispatch(updateCombinedPositions(combinedPosition));
         } else {
             trackEvent({
                 category: 'position',
