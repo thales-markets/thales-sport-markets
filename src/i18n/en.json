@@ -562,7 +562,10 @@
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "risk-per-comb": "Risk per combination exceeded",
                 "same-team": "The same team can't be in a Parlay more than once",
-                "not-supported": "Not supported validation error: {{error}}"
+                "not-supported": "Not supported validation error: {{error}}",
+                "same-game-different-player-props": "Not supported to combine different category of player props",
+                "player-props-and-other-positions": "Not supported to combine player props positions with other positions from same market",
+                "already-added-combined-positions": "Can not combine positions from the same market with combined positions"
             },
             "share-ticket": {
                 "header": "Web 3 Sport markets on",

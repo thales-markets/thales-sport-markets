@@ -2,13 +2,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    getCombinedPositions,
-    getParlay,
-    removeCombinedPosition,
-    removeFromParlay,
-    updateParlay,
-} from 'redux/modules/parlay';
+import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
 import {
     formatMarketOdds,
@@ -18,7 +12,6 @@ import {
     getSymbolText,
     hasBonus,
 } from 'utils/markets';
-import { isMarketPartOfCombinedMarketFromParlayData } from 'utils/combinedMarkets';
 import { getOddsType } from 'redux/modules/ui';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { getIsMobile } from 'redux/modules/app';
@@ -45,20 +38,11 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
     const isMobile = useSelector(getIsMobile);
     const parlay = useSelector(getParlay);
     const addedToParlay = parlay.filter((game: any) => game.sportMarketAddress == market.address)[0];
-    const combinedPositions = useSelector(getCombinedPositions);
-
-    const isMarketPartOfCombinedMarket = isMarketPartOfCombinedMarketFromParlayData(parlay, market);
-
-    const parentMarketAddress = market.parentMarket !== null ? market.parentMarket : market.address;
-    const isParentMarketAddressInParlayData =
-        !!parlay.find((data) => data.parentMarket == parentMarketAddress) ||
-        !!combinedPositions.find((item) => item.markets.find((market) => market.parentMarket == parentMarketAddress));
 
     const isAddedToParlay =
         addedToParlay &&
         addedToParlay.position == position &&
-        addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType &&
-        !isMarketPartOfCombinedMarket;
+        addedToParlay.doubleChanceMarketType === market.doubleChanceMarketType;
     const noOdd = !odd || odd == 0;
     const showBonus = hasBonus(bonus) && !noOdd;
 
@@ -66,9 +50,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
 
     const onClick = () => {
         if (noOdd) return;
-        if (isParentMarketAddressInParlayData) {
-            dispatch(removeCombinedPosition(parentMarketAddress));
-        }
+
         if (isAddedToParlay) {
             dispatch(removeFromParlay(market.address));
         } else {
@@ -80,6 +62,7 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
             const parlayMarket: ParlaysMarketPosition = {
                 parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                 sportMarketAddress: market.address,
+                betType: market.betType,
                 position: position,
                 homeTeam: market.homeTeam || '',
                 awayTeam: market.awayTeam || '',
@@ -87,6 +70,9 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
                 doubleChanceMarketType: market.doubleChanceMarketType,
                 isOneSideMarket: market.isOneSideMarket,
                 tag: market.tags[0],
+                playerName: market.playerName ? market.playerName : undefined,
+                playerId: market.playerId ? market.playerId : undefined,
+                playerPropsType: market.playerPropsType ? market.playerPropsType : undefined,
             };
             dispatch(updateParlay(parlayMarket));
             if (isMobile) {
