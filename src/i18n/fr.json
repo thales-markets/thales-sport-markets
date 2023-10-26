@@ -870,7 +870,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "Les utilisateurs ayant couvert 50 % ou plus des combinaisons potentielles de leurs billets gagnants seront disqualifiés."
     },
     "wizard": {
         "title": "C'est parti !",

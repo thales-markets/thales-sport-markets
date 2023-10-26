@@ -215,6 +215,7 @@ const ParlayLeaderboard: React.FC = () => {
                 </ul>
                 <Description>{t('parlay-leaderboard.info3')}</Description>
                 <Warning>{t('parlay-leaderboard.warning')}</Warning>
+                <Warning>{t('parlay-leaderboard.warning2')}</Warning>
                 <LeaderboardHeader>
                     <PeriodContainer>
                         <SelectContainer>
