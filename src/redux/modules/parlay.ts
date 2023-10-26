@@ -138,14 +138,8 @@ const parlaySlice = createSlice({
                     .filter((item) => item !== undefined);
 
                 if (alreadyAddedOtherPlayerPropsOfSameParentMarket.length) {
-                    if (alreadyAddedOtherPlayerPropsOfSameParentMarket.length == 1) {
-                        state.parlay = state.parlay.filter(
-                            (_market, index) => !alreadyAddedOtherPlayerPropsOfSameParentMarket.includes(index)
-                        );
-                    } else {
-                        state.error.code = ParlayErrorCode.SAME_GAME_OTHER_PLAYER_PROPS_TYPE;
-                        return;
-                    }
+                    state.error.code = ParlayErrorCode.SAME_GAME_OTHER_PLAYER_PROPS_TYPE;
+                    return;
                 }
 
                 if (existingNonPlayerPropsPosition !== -1) {
