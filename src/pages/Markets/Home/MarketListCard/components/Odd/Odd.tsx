@@ -23,7 +23,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { getIsMobile } from 'redux/modules/app';
 import { toast } from 'react-toastify';
 import { oddToastOptions } from 'config/toast';
-import { PLAYER_PROPS_BET_TYPES, Position } from 'enums/markets';
+import { Position } from 'enums/markets';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
 
@@ -50,9 +50,6 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
     const isCombinedPositionInStore = !!combinedPositions.find((item) =>
         item.markets.find((market) => market.parentMarket == parentMarketAddress)
     );
-    const isParentMarketAddressInParlayData =
-        !!parlay.find((data) => data.parentMarket == parentMarketAddress) ||
-        !!combinedPositions.find((item) => item.markets.find((market) => market.parentMarket == parentMarketAddress));
 
     const isAddedToParlay =
         addedToParlay &&
@@ -61,15 +58,11 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
     const noOdd = !odd || odd == 0;
     const showBonus = hasBonus(bonus) && !noOdd;
 
-    const isPlayerPropsPosition = PLAYER_PROPS_BET_TYPES.includes(market.betType);
-
     const oddTooltipText = getOddTooltipText(position, market);
 
     const onClick = () => {
         if (noOdd) return;
         if (isCombinedPositionInStore) {
-            dispatch(removeCombinedPosition(parentMarketAddress));
-        } else if (isParentMarketAddressInParlayData && !isPlayerPropsPosition) {
             dispatch(removeCombinedPosition(parentMarketAddress));
         }
 
