@@ -29,6 +29,14 @@ import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
 import { buildHref } from 'utils/routes';
 import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
+import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from '@biconomy/account';
+import { Bundler } from '@biconomy/bundler';
+import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from '@biconomy/modules';
+import { ethers } from 'ethers';
+import { ParticleNetwork } from '@particle-network/auth';
+import { ParticleProvider } from '@particle-network/provider';
+import biconomyConnector from 'utils/biconomyWallet';
+import { BiconomyPaymaster } from '@biconomy/paymaster';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -39,6 +47,26 @@ const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
+
+const particle = new ParticleNetwork({
+    projectId: '', // todo
+    clientKey: '', // todo
+    appId: '', // todo
+    chainName: 'arbitrum', //optional: current chain name, default Ethereum.
+    chainId: 42161, //optional: current chain id, default 1.
+    wallet: {
+        //optional: by default, the wallet entry is displayed in the bottom right corner of the webpage.
+        displayWalletEntry: true, //show wallet entry when connect particle.
+        uiMode: 'dark', //optional: light or dark, if not set, the default is the same as web auth.
+        supportChains: [
+            { id: 10, name: 'optimism' },
+            { id: 42161, name: 'arbitrum' },
+            { id: 420, name: 'optimism' },
+            { id: 84531, name: 'base' },
+        ], // optional: web wallet support chains.
+        customStyle: {}, //optional: custom wallet style
+    },
+});
 
 const App = () => {
     const dispatch = useDispatch();
@@ -94,11 +122,52 @@ const App = () => {
             try {
                 const chainIdFromProvider = (await provider.getNetwork()).chainId;
                 const providerNetworkId = !!address ? chainIdFromProvider : switchedToNetworkId;
+                let web3Provider;
+
+                if (particle.auth.isLogin()) {
+                    const particleProvider = new ParticleProvider(particle.auth);
+                    const chainId = (await provider.getNetwork()).chainId;
+                    console.log('chainId: ', chainId);
+                    const bundler = new Bundler({
+                        // get from biconomy dashboard https://dashboard.biconomy.io/
+                        bundlerUrl: ``, // todo
+                        chainId: (await provider.getNetwork()).chainId, // or any supported chain of your choice
+                        entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+                    });
+
+                    const paymaster = new BiconomyPaymaster({
+                        paymasterUrl: '', // todo
+                    });
+
+                    web3Provider = new ethers.providers.Web3Provider(particleProvider, 'any');
+
+                    const module = await ECDSAOwnershipValidationModule.create({
+                        signer: web3Provider.getSigner(),
+                        moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE,
+                    });
+
+                    const account = await BiconomySmartAccountV2.create({
+                        chainId,
+                        bundler,
+                        provider,
+                        paymaster,
+                        entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+                        defaultValidationModule: module,
+                        activeValidationModule: module,
+                    });
+                    const wallet = await account.init();
+
+                    const swAddress = await wallet.getAccountAddress();
+                    const isDeployed = await wallet.isAccountDeployed(swAddress);
+                    console.log('swAddress: ', swAddress, 'isDeployed: ', isDeployed);
+                    biconomyConnector.setWallet(wallet);
+                    dispatch(updateWallet({ walletAddress: swAddress }));
+                }
 
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
                     provider,
-                    signer,
+                    signer: web3Provider ? web3Provider.getSigner() : signer,
                 });
 
                 dispatch(

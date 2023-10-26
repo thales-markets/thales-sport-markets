@@ -30,6 +30,7 @@ import { ThemeMap } from 'constants/ui';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { base } from 'constants/network';
 import { PLAUSIBLE } from 'constants/analytics';
+import { particleWallet } from '@particle-network/rainbowkit-ext';
 
 dotenv.config();
 
@@ -84,10 +85,18 @@ const { chains, provider } = configureChains(
 );
 
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
+const particleWallets = [
+    particleWallet({ chains, authType: 'google' }),
+    particleWallet({ chains, authType: 'facebook' }),
+    particleWallet({ chains, authType: 'apple' }),
+    particleWallet({ chains }),
+];
+
 const connectors = connectorsForWallets([
     {
         groupName: 'Recommended',
         wallets: [
+            ...particleWallets,
             metaMaskWallet({ projectId, chains }),
             walletConnectWallet({ projectId, chains }),
             rabbyWallet({ chains }),
