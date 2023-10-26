@@ -114,7 +114,8 @@ const parlaySlice = createSlice({
                         market.awayTeam == action.payload.awayTeam
                 );
 
-            const isIncomingPositionPlayerProps = PLAYER_PROPS_BET_TYPES.includes(action.payload.betType as BetType);
+            const isIncomingPositionPlayerProps =
+                PLAYER_PROPS_BET_TYPES.includes(action.payload.betType as BetType) && action.payload.tag == 9004;
 
             // Check the case of multiple player props markets from same market
             if (isIncomingPositionPlayerProps && hasAddedSameParentMarket) {
@@ -124,20 +125,30 @@ const parlaySlice = createSlice({
                         market.parentMarket == action.payload.parentMarket
                 );
 
-                const samePlayerNamePlayerProps = state.parlay.findIndex(
-                    (market) =>
-                        PLAYER_PROPS_BET_TYPES.includes(market.betType) &&
-                        market.playerName?.trim().toLowerCase() == action.payload.playerName?.trim().toLowerCase() &&
-                        market.sportMarketAddress !== action.payload.sportMarketAddress
-                );
+                const alreadyAddedOtherPlayerPropsOfSameParentMarket = state.parlay
+                    .map((market, index) => {
+                        if (
+                            market.parentMarket == action.payload.parentMarket &&
+                            PLAYER_PROPS_BET_TYPES.includes(market.betType) &&
+                            market.betType !== action.payload.betType
+                        ) {
+                            return index;
+                        }
+                    })
+                    .filter((item) => item !== undefined);
 
-                if (samePlayerNamePlayerProps !== -1) {
-                    state.error.code = ParlayErrorCode.SAME_PLAYER_SAME_GAME_PLAYER_PROPS;
-                    return;
+                if (alreadyAddedOtherPlayerPropsOfSameParentMarket.length) {
+                    if (alreadyAddedOtherPlayerPropsOfSameParentMarket.length == 1) {
+                        state.parlay = state.parlay.filter(
+                            (_market, index) => !alreadyAddedOtherPlayerPropsOfSameParentMarket.includes(index)
+                        );
+                    } else {
+                        state.error.code = ParlayErrorCode.SAME_GAME_OTHER_PLAYER_PROPS_TYPE;
+                        return;
+                    }
                 }
 
                 if (existingNonPlayerPropsPosition !== -1) {
-                    // state.parlay = state.parlay.filter((_market, index) => index !== existingNonPlayerPropsPosition);
                     state.error.code = ParlayErrorCode.ADDING_PLAYER_PROPS_ALREADY_HAVE_POSITION_OF_SAME_MARKET;
                     return;
                 }
