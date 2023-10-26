@@ -870,7 +870,8 @@
             "period-end-label": "Der Zeitraum endet in",
             "period-ended-label": "Zeitraum beendet",
             "bi-weekly-period": "Zweimal wöchentlicher Zeitraum"
-        }
+        },
+        "warning2": "Benutzer, die 50 % oder mehr der möglichen Kombinationen ihrer Gewinnscheine abgedeckt haben, werden disqualifiziert."
     },
     "wizard": {
         "title": "Loslegen!",
