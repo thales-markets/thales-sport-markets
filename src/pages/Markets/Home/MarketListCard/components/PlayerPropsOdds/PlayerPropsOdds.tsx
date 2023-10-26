@@ -3,7 +3,7 @@ import { BetType, Position } from 'enums/markets';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { SportMarketChildMarkets, SportMarketInfo } from 'types/markets';
-import { isOneSidePlayerProps } from 'utils/markets';
+import { isOneSidePlayerProps, isSpecialYesNoProp } from 'utils/markets';
 import Odd from '../Odd';
 import { Container, OddsContainer } from './styled-components';
 import Tooltip from 'components/Tooltip';
@@ -140,7 +140,10 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
                                 return (
                                     <MarketContainer key={ind}>
                                         <Player>{`${ppMarket.playerName} ${
-                                            isOneSidePlayerProps(ppMarket.betType) ? '' : ppMarket.playerPropsLine
+                                            isOneSidePlayerProps(ppMarket.betType) ||
+                                            isSpecialYesNoProp(ppMarket.betType)
+                                                ? ''
+                                                : ppMarket.playerPropsLine
                                         }`}</Player>
                                         <OddsContainer>
                                             <Odd

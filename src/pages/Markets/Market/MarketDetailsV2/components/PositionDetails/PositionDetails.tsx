@@ -26,6 +26,7 @@ import {
     getOddTooltipText,
     getFormattedBonus,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import { isMarketPartOfCombinedMarketFromParlayData } from 'utils/combinedMarkets';
 import {
@@ -130,7 +131,10 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
         >
             <Text>
                 {symbolText}
-                {spreadTotalText && !isOneSidePlayerProps(market.betType) && ` (${spreadTotalText})`}
+                {spreadTotalText &&
+                    !isOneSidePlayerProps(market.betType) &&
+                    !isSpecialYesNoProp(market.betType) &&
+                    ` (${spreadTotalText})`}
             </Text>
             {showOdd ? (
                 <Text>

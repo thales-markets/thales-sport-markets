@@ -34,6 +34,7 @@ import {
     isOneSidePlayerProps,
     isParlayOpen,
     isParlayWon,
+    isSpecialYesNoProp,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
 import { t } from 'i18next';
@@ -498,7 +499,9 @@ export const getParlayRow = (
                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
                     symbolText={symbolText}
                     symbolUpperText={
-                        spreadTotalText && !isOneSidePlayerProps(position.market.betType)
+                        spreadTotalText &&
+                        !isOneSidePlayerProps(position.market.betType) &&
+                        !isSpecialYesNoProp(position.market.betType)
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {
