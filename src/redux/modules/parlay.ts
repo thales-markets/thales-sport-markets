@@ -15,6 +15,11 @@ import { GOLF_TAGS } from 'constants/tags';
 import { Network } from 'enums/network';
 // import { canPlayerBeAddedToParlay } from 'utils/markets';
 import { BetType, CombinedPositionsMatchingCode, ParlayErrorCode, PLAYER_PROPS_BET_TYPES } from 'enums/markets';
+import {
+    getHasCombinedMarketsParentMarketAddress,
+    getParentMarketAddressFromCombinedMarketPositionType,
+    hasParlayDataParentMarketAddress,
+} from 'utils/parlay';
 
 const sliceName = 'parlay';
 
@@ -98,6 +103,15 @@ const parlaySlice = createSlice({
                 (market) => market.parentMarket == action.payload.parentMarket
             );
             const numberOfDoubleChances = parlayCopy.filter((market) => market.doubleChanceMarketType !== null).length;
+            const alreadyAddedCombinedPositionWithAddress = getHasCombinedMarketsParentMarketAddress(
+                state.combinedPositions,
+                action.payload.parentMarket
+            );
+
+            if (alreadyAddedCombinedPositionWithAddress) {
+                state.error.code = ParlayErrorCode.COMBINE_REGULAR_WITH_COMBINED_POSITIONS;
+                return;
+            }
 
             const multipleSidesAtOneEvent = parlayCopy
                 .filter((market) => market.isOneSideMarket)
@@ -265,6 +279,18 @@ const parlaySlice = createSlice({
         },
         updateCombinedPositions: (state, action: PayloadAction<CombinedMarketPosition>) => {
             const existingCombinedPositions = state.combinedPositions;
+
+            const parentMarketAddressFromIncomingPosition = getParentMarketAddressFromCombinedMarketPositionType(
+                action.payload
+            );
+
+            if (
+                parentMarketAddressFromIncomingPosition &&
+                hasParlayDataParentMarketAddress(state.parlay, parentMarketAddressFromIncomingPosition)
+            ) {
+                state.error.code = ParlayErrorCode.COMBINE_REGULAR_WITH_COMBINED_POSITIONS;
+                return;
+            }
 
             let matchingCode: CombinedPositionsMatchingCode = CombinedPositionsMatchingCode.NOTHING_COMMON;
 
