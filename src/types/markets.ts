@@ -1,4 +1,6 @@
 import { BetType, DoubleChanceMarketType, Position, PositionName } from 'enums/markets';
+import { Network } from '../enums/network';
+import { ethers } from 'ethers';
 
 export type SportMarketInfo = {
     id: string;
@@ -37,12 +39,19 @@ export type SportMarketInfo = {
     doubleChanceMarketType: DoubleChanceMarketType | null;
     combinedMarketsData?: CombinedMarket[];
     isOneSideMarket: boolean;
+    playerId: number | null;
+    playerName: string | null;
+    playerPropsLine: number | null;
+    playerPropsType: number | null;
+    playerPropsOutcome: number | null;
+    playerPropsScore: number | null;
 };
 
 export type AMMPosition = {
     available: number;
     quote: number;
     priceImpact: number;
+    usdQuote: number;
 };
 
 export type AvailablePerPosition = Record<Position, { available?: number; buyBonus?: number }>;
@@ -83,12 +92,33 @@ export type MarketData = {
     total: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
     isOneSideMarket: boolean;
+    playerId: number | null;
+    playerName: string | null;
+    playerPropsLine: number | null;
+    playerPropsType: number | null;
+    playerPropsOutcome: number | null;
+    playerPropsScore: number | null;
 };
 
 export type SportMarketChildMarkets = {
     spreadMarkets: SportMarketInfo[];
     totalMarkets: SportMarketInfo[];
     doubleChanceMarkets: SportMarketInfo[];
+    strikeOutsMarkets: SportMarketInfo[];
+    homeRunsMarkets: SportMarketInfo[];
+    rushingYardsMarkets: SportMarketInfo[];
+    passingYardsMarkets: SportMarketInfo[];
+    receivingYardsMarkets: SportMarketInfo[];
+    passingTouchdownsMarkets: SportMarketInfo[];
+    oneSiderTouchdownsMarkets: SportMarketInfo[];
+    fieldGoalsMadeMarkets: SportMarketInfo[];
+    pitcherHitsAllowedMarkets: SportMarketInfo[];
+    oneSiderGoalsMarkets: SportMarketInfo[];
+    shotsMarkets: SportMarketInfo[];
+    pointsMarkets: SportMarketInfo[];
+    hitsRecordedMarkets: SportMarketInfo[];
+    reboundsMarkets: SportMarketInfo[];
+    assistsMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {
@@ -210,6 +240,16 @@ export type ParlaysMarketPosition = {
     doubleChanceMarketType: DoubleChanceMarketType | null;
     isOneSideMarket?: boolean;
     tag?: number;
+    playerName?: string;
+    playerId?: number;
+    playerPropsType?: number;
+};
+
+export type CombinedMarketPosition = {
+    markets: ParlaysMarketPosition[];
+    totalOdd: number;
+    totalBonus?: number;
+    positionName: CombinedMarketsPositionName;
 };
 
 export type ParlaysMarket = SportMarketInfo & {
@@ -227,23 +267,26 @@ export type ParlayAmmData = {
 };
 
 export type ParlayPayment = {
-    selectedStableIndex: number;
-    isVoucherSelected: boolean | undefined;
+    selectedCollateralIndex: number;
+    isVoucherAvailable: boolean;
+    isVoucherSelected: boolean;
     amountToBuy: number | string;
+    networkId: Network;
 };
 
 export type MultiSingleAmounts = {
     sportMarketAddress: string;
     parentMarketAddress: string;
-    amountToBuy: number;
+    amountToBuy: number | string;
 };
 
 export type MultiSingleTokenQuoteAndBonus = {
     sportMarketAddress: string;
+    isCombinedPosition?: boolean;
     tokenAmount: number;
     bonusPercentageDec: number;
     totalBonusCurrency: number;
-    ammQuote: number;
+    ammQuote: number | ethers.BigNumber;
 };
 
 export type WinningInfo = {

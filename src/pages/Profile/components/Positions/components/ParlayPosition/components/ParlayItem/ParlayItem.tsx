@@ -1,5 +1,6 @@
 import PositionSymbol from 'components/PositionSymbol';
 import {
+    BetTypeNameMap,
     ENETPULSE_SPORTS,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
@@ -26,6 +27,7 @@ import {
     getOddTooltipText,
     getSpreadTotalText,
     getSymbolText,
+    isOneSidePlayerProps,
 } from 'utils/markets';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import { ClubLogo, ClubName, MatchInfo, MatchLabel, MatchLogo, StatusContainer } from '../../../../styled-components';
@@ -36,10 +38,11 @@ import {
     Status,
     TeamScoreLabel,
 } from '../../../SinglePosition/styled-components';
-import { ParlayStatus, Wrapper } from './styled-components';
+import { ParlayStatus, PlayerIcon, Wrapper } from './styled-components';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { BetType } from 'enums/markets';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
@@ -107,15 +110,20 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
         <Wrapper style={{ opacity: market.isCanceled ? 0.5 : 1 }}>
             <MatchInfo>
                 <MatchLogo>
-                    <ClubLogo
-                        alt={market.homeTeam}
-                        src={homeLogoSrc}
-                        isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
-                        losingTeam={false}
-                        onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
-                        customMobileSize={'30px'}
-                    />
-                    {!market.isOneSideMarket && (
+                    {market.playerName === null ? (
+                        <ClubLogo
+                            alt={market.homeTeam}
+                            src={homeLogoSrc}
+                            isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
+                            losingTeam={false}
+                            onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
+                            customMobileSize={'30px'}
+                        />
+                    ) : (
+                        <PlayerIcon className="icon icon--profile" />
+                    )}
+
+                    {!market.isOneSideMarket && market.playerName === null && (
                         <ClubLogo
                             awayTeam={true}
                             alt={market.awayTeam}
@@ -129,9 +137,13 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                 </MatchLogo>
                 <MatchLabel>
                     <ClubName isOneSided={market.isOneSideMarket}>
-                        {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
+                        {market.playerName === null
+                            ? market.isOneSideMarket
+                                ? fixOneSideMarketCompetitorName(market.homeTeam)
+                                : market.homeTeam
+                            : `${market.playerName} (${BetTypeNameMap[market.betType as BetType]})`}
                     </ClubName>
-                    {!market.isOneSideMarket && <ClubName>{market.awayTeam}</ClubName>}
+                    {!market.isOneSideMarket && market.playerName === null && <ClubName>{market.awayTeam}</ClubName>}
                 </MatchLabel>
             </MatchInfo>
             <StatusContainer>
@@ -144,7 +156,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                     }}
                     symbolText={symbolText}
                     symbolUpperText={
-                        spreadTotalText
+                        spreadTotalText && !isOneSidePlayerProps(market.betType)
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {
@@ -154,7 +166,9 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                             : undefined
                     }
                     tooltip={<>{getOddTooltipText(positionEnum, market)}</>}
-                    additionalStyle={market.isOneSideMarket ? { fontSize: 11 } : {}}
+                    additionalStyle={
+                        market.isOneSideMarket || isOneSidePlayerProps(market.betType) ? { fontSize: 11 } : {}
+                    }
                 />
                 {isPendingResolution && !isMobile ? (
                     isEnetpulseSport ? (
@@ -217,7 +231,8 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
 
 const getParlayItemStatus = (market: SportMarketInfo) => {
     if (market.isCanceled) return t('profile.card.canceled');
-    if (market.isResolved) return `${market.homeScore} : ${market.awayScore}`;
+    if (market.isResolved)
+        return market.playerName !== null ? market.playerPropsScore : `${market.homeScore} : ${market.awayScore}`;
     return formatDateWithTime(market.maturityDate);
 };
 

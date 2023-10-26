@@ -29,6 +29,8 @@
             "wallet-options": "Wallet options",
             "get-usd": "Get {{amount}}",
             "approve": "Approve",
+            "approve-parlay": "Approve ParlayAMM",
+            "approve-sports": "Approve SportsAMM",
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>."
         },
@@ -77,10 +79,13 @@
             "swap-progress-label": "Swapping in progress..."
         },
         "enable-wallet-access": {
+            "approve": "Approve",
+            "approve-progress": "Approving...",
             "approve-label": "Approve {{currencyKey}}",
             "approve-progress-label": "Approving {{currencyKey}}...",
             "approve-all-label": "Approve all",
-            "custom-amount-label": "Approve amount of"
+            "custom-amount-label": "Approve amount of",
+            "approve-swap": "Approve swap to {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "Oops! You are on the wrong network!",
@@ -183,6 +188,7 @@
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
+        "number-of-rounds": "Total number of rounds",
         "toast-message": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
@@ -323,12 +329,15 @@
             "to-win": "win",
             "to-claim": "claim",
             "claim": "Claim",
+            "claim-progress": "Claiming...",
             "claim-all": "Claim All",
             "canceled": "Canceled",
             "total-quote": "Total quote",
             "result": "Result",
             "position-size": "Position size",
-            "starts": "Starts"
+            "starts": "Starts",
+            "payout-in": "Payout in",
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}."
         },
         "table": {
             "time": "Time",
@@ -373,18 +382,35 @@
             "half": "Half",
             "round": "Round",
             "half-time": "Half-time",
+            "resolved": "Resolved",
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "Combined positions"
+                "combined-positions": "Combined positions",
+                "strikeouts": "Strikeouts",
+                "home runs": "Home runs",
+                "rushing yards": "Rushing yards",
+                "passing yards": "Passing yards",
+                "receiving yards": "Receiving yards",
+                "passing touchdowns": "Passing touchdowns",
+                "scoring touchdown": "Who will score a touchdown in the game?",
+                "field goals made": "Field goals made",
+                "pitcher hits allowed": "Pitcher hits allowed",
+                "points": "Points",
+                "shots": "Shots",
+                "goals": "Who will score a goal in the game?",
+                "hits recorded": "Hits recorded",
+                "rebounds": "Rebounds",
+                "assists": "Assists"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "sets"
+                    "sets": "sets",
+                    "rounds": "rounds"
                 },
                 "and": "and",
                 "match-resolve": {
@@ -407,11 +433,47 @@
                     "12": "{{team}} or {{team2}} will win the match {{matchResolve}}.",
                     "1x2": "{{team}} will win the match or the match will end in a draw {{matchResolve}}."
                 },
+                "player-props": {
+                    "strikeouts-over": "{{team}} will have more strikeouts than {{scoring}}",
+                    "strikeouts-under": "{{team}} will have less strikeouts than {{scoring}}",
+                    "home-runs-over": "{{team}} will have more home runs than {{scoring}}",
+                    "home-runs-under": "{{team}} will have less home runs than {{scoring}}",
+                    "passing-yards-over": "{{team}} will have more passing yards than {{scoring}}",
+                    "passing-yards-under": "{{team}} will have less passing yards than {{scoring}}",
+                    "rushing-yards-over": "{{team}} will have more rushing yards than {{scoring}}",
+                    "rushing-yards-under": "{{team}} will have less rushing yards than {{scoring}}",
+                    "receiving-yards-over": "{{team}} will have more receiving yards than {{scoring}}",
+                    "receiving-yards-under": "{{team}} will have less receiving yards than {{scoring}}",
+                    "passing-touchdowns-over": "{{team}} will have more passing touchdowns than {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} will have less passing touchdowns than {{scoring}}",
+                    "touchdowns": "{{team}} will score a touchdown in the game",
+                    "field-goals-made-over": "{{team}} will have more field goals made than {{scoring}}",
+                    "field-goals-made-under": "{{team}} will have less field goals made than {{scoring}}",
+                    "pitcher-hits-allowed-over": "{{team}} will have more hits allowed than {{scoring}}",
+                    "pitcher-hits-allowed-under": "{{team}} will have less hits allowed than {{scoring}}",
+                    "shots-over": "{{team}} will have more shots than {{scoring}}",
+                    "shots-under": "{{team}} will have less shots than {{scoring}}",
+                    "points-over": "{{team}} will have more points than {{scoring}}",
+                    "points-under": "{{team}} will have less points than {{scoring}}",
+                    "goals": "{{team}} will score a goal in the game",
+                    "hits-recorded-over": "{{team}} will have more hits recorded than {{scoring}}",
+                    "hits-recorded-under": "{{team}} will have less hits recorded than {{scoring}}",
+                    "rebounds-over": "{{team}} will have more rebounds than {{scoring}}",
+                    "rebounds-under": "{{team}} will have less rebounds than {{scoring}}",
+                    "assists-over": "{{team}} will have more assists than {{scoring}}",
+                    "assists-under": "{{team}} will have less assists than {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
+                    }
+                },
                 "bonus": "{{bonus}} added bonus on win!"
             },
+            "player-props": "Player props",
             "total-markets": "Total markets",
             "race-winner": "Winner",
-            "no-win": "No win"
+            "no-win": "No win",
+            "see-more-markets": "see player props markets",
+            "see-more-markets-mobile": "player props"
         },
         "market-details": {
             "price": "Price",
@@ -466,10 +528,13 @@
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
+            "total-to-pay": "Total to pay",
             "payout": "Payout",
             "potential-profit": "Potential profit",
             "pay-with": "Pay with",
+            "pay-with-voucher": "Pay with voucher",
             "available": "Available",
+            "in-wallet": "In wallet",
             "skew": "Skew",
             "empty-title": "No positions",
             "empty-description": "Add position, choose a market and make your selection.",
@@ -523,7 +588,7 @@
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "discounted-per": "Discounted as per",
-        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS",
         "incentivized-tooltip-tennis": "Wimbledon will be incentivized, as the tournament starts on July 3rd. The markets will be boosted with {{rewards}} until the end of the tournament on July 16th. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
     },
@@ -819,6 +884,7 @@
         "distribution-note": "Rewards will be distributed to the <bold>TOP 10 parlays every 2 weeks</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
+        "warning2": "Users that have covered 50% or more of potential combinations of their winning tickets will be disqualified.",
         "info": "If multiple parlays have the same total quote and the number of positions the following will be used as tie-breakers in respective order:",
         "info1": "- The amount paid",
         "info2": "- Actual total quote (gotten by multiplying positions individually)",

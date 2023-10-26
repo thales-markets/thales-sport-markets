@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { SportMarkets, TagInfo } from 'types/markets';
 import MarketListCard from '../MarketListCard';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import Tooltip from 'components/Tooltip';
 import { Trans, useTranslation } from 'react-i18next';
@@ -69,16 +68,22 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                     }}
                                     values={{
                                         rewards:
-                                            networkId !== Network.ArbitrumOne
+                                            networkId == Network.OptimismMainnet
                                                 ? INCENTIVIZED_LEAGUE.opRewards
-                                                : INCENTIVIZED_LEAGUE.thalesRewards,
+                                                : networkId == Network.ArbitrumOne
+                                                ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                : '',
                                     }}
                                 />
                             }
                             component={
                                 <IncentivizedLeague>
-                                    <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                    {networkId !== Network.Base ? (
+                                        <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
+                                    ) : (
+                                        ''
+                                    )}
+                                    {getNetworkLogo(networkId)}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
@@ -97,16 +102,18 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                     }}
                                     values={{
                                         rewards:
-                                            networkId !== Network.ArbitrumOne
-                                                ? INCENTIVIZED_GRAND_SLAM.opRewards
-                                                : INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                            networkId == Network.OptimismMainnet
+                                                ? INCENTIVIZED_LEAGUE.opRewards
+                                                : networkId == Network.ArbitrumOne
+                                                ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                : '',
                                     }}
                                 />
                             }
                             component={
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                    {getNetworkLogo(networkId)}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
@@ -176,6 +183,10 @@ const LeagueFlag = (tagId: number | any) => {
             return <Flag size="l" code="PT" />;
         case TAGS_FLAGS.T20_BLAST:
             return <Flag size="l" code="GB-UKM" />;
+        case TAGS_FLAGS.SAUDI_PROFESSIONAL_LEAGUE:
+            return <Flag size="l" code="SA" />;
+        case TAGS_FLAGS.BRAZIL_1:
+            return <Flag size="l" code="BR" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
     }
@@ -186,6 +197,17 @@ const sortWinnerMarkets = (markets: SportMarkets, leagueId: number) => {
         return orderBy(markets, ['maturityDate', 'homeOdds'], ['asc', 'desc']);
     }
     return markets;
+};
+
+const getNetworkLogo = (networkId: number) => {
+    switch (networkId) {
+        case Network.OptimismMainnet:
+            return <OPLogo />;
+        case Network.ArbitrumOne:
+            return <ArbitrumLogo />;
+        default:
+            return <></>;
+    }
 };
 
 const LeagueCard = styled.div`

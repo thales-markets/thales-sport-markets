@@ -1,20 +1,29 @@
+import PositionSymbol from 'components/PositionSymbol';
+import SPAAnchor from 'components/SPAAnchor';
+import Table from 'components/Table';
+import ViewEtherscanLink from 'components/ViewEtherscanLink';
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType } from 'enums/markets';
+import { VaultTradeStatus } from 'enums/vault';
+import i18n from 'i18n';
 import React, { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CellProps } from 'react-table';
-import { formatTxTimestamp } from 'utils/formatters/date';
-import Table from 'components/Table';
 import styled from 'styled-components';
-import { buildMarketLink } from 'utils/routes';
-import ViewEtherscanLink from 'components/ViewEtherscanLink';
-import './style.css';
-import i18n from 'i18n';
-import { formatCurrency } from 'utils/formatters/number';
-import SPAAnchor from 'components/SPAAnchor';
-import { VaultTrade, VaultTrades } from 'types/vault';
 import { Colors } from 'styles/common';
-import PositionSymbol from 'components/PositionSymbol';
-import { getOddTooltipText, getParentMarketAddress, getSpreadTotalText, getSymbolText } from 'utils/markets';
-import { VaultTradeStatus } from 'enums/vault';
+import { VaultTrade, VaultTrades } from 'types/vault';
+import { formatTxTimestamp } from 'utils/formatters/date';
+import { formatCurrency } from 'utils/formatters/number';
+import {
+    fixPlayerPropsLinesFromContract,
+    getOddTooltipText,
+    getParentMarketAddress,
+    getSpreadTotalText,
+    getSymbolText,
+    isOneSidePlayerProps,
+} from 'utils/markets';
+import { buildMarketLink } from 'utils/routes';
+import './style.css';
 
 type TradesTableProps = {
     transactions: VaultTrades;
@@ -43,21 +52,28 @@ const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResultsMessage
                         Header: <>{t('market.table.game-col')}</>,
                         accessor: 'game',
                         sortType: 'alphanumeric',
-                        Cell: (cellProps: CellProps<VaultTrade, VaultTrade['game']>) => (
-                            <SPAAnchor
-                                className="hover-underline"
-                                onClick={(e) => e.stopPropagation()}
-                                href={buildMarketLink(
-                                    getParentMarketAddress(
-                                        cellProps.row.original.wholeMarket.parentMarket,
-                                        cellProps.row.original.wholeMarket.address
-                                    ),
-                                    language
-                                )}
-                            >
-                                {cellProps.cell.value}
-                            </SPAAnchor>
-                        ),
+                        Cell: (cellProps: CellProps<VaultTrade, VaultTrade['game']>) => {
+                            const playerName = cellProps.row.original.wholeMarket.playerName
+                                ? cellProps.row.original.wholeMarket.playerName
+                                : null;
+
+                            const betType = BetTypeNameMap[cellProps.row.original.wholeMarket.betType as BetType];
+                            return (
+                                <SPAAnchor
+                                    className="hover-underline"
+                                    onClick={(e) => e.stopPropagation()}
+                                    href={buildMarketLink(
+                                        getParentMarketAddress(
+                                            cellProps.row.original.wholeMarket.parentMarket,
+                                            cellProps.row.original.wholeMarket.address
+                                        ),
+                                        language
+                                    )}
+                                >
+                                    {playerName ? playerName + ' - ' + betType : cellProps.cell.value}
+                                </SPAAnchor>
+                            );
+                        },
                         width: 150,
                         sortable: true,
                     },
@@ -75,11 +91,15 @@ const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResultsMessage
                                 cellProps.cell.row.original.wholeMarket,
                                 cellProps.cell.value
                             );
+                            cellProps.cell.row.original.wholeMarket.playerPropsLine
+                                ? fixPlayerPropsLinesFromContract(cellProps.cell.row.original.wholeMarket)
+                                : '';
                             return (
                                 <PositionSymbol
                                     symbolText={symbolText}
                                     symbolUpperText={
-                                        spreadTotalText
+                                        spreadTotalText &&
+                                        !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType)
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {

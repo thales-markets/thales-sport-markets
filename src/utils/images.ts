@@ -30,7 +30,11 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
     leagueTag == 9288 ||
     leagueTag == 9042 ||
     leagueTag == 9076 ||
-    leagueTag == 19216
+    leagueTag == 19216 ||
+    leagueTag == 9073 ||
+    leagueTag == 9409 ||
+    leagueTag == 9536 ||
+    leagueTag == 19199
         ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')
@@ -45,6 +49,8 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
         ? `/logos/PGA/${team.trim().replaceAll(' ', '-').toLowerCase()}.png`
         : leagueTag == 109121
         ? `/logos/PGA/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.png`
+        : leagueTag == 9268
+        ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.png`
         : `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')

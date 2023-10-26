@@ -21,6 +21,7 @@ import {
     getParentMarketAddress,
     getSpreadTotalText,
     getSymbolText,
+    isOneSidePlayerProps,
     isParlayClaimable,
     isParlayOpen,
 } from 'utils/markets';
@@ -30,8 +31,8 @@ import { ethers } from 'ethers';
 import { buildMarketLink } from 'utils/routes';
 import i18n from 'i18n';
 import SPAAnchor from 'components/SPAAnchor';
-import { CollateralByNetworkId } from 'constants/network';
 import { ThemeInterface } from 'types/ui';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?: string }> = ({
     parlayTx,
@@ -110,7 +111,7 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
                         Cell: (cellProps: any) => {
                             return (
                                 <TableText>
-                                    {formatCurrencyWithKey(CollateralByNetworkId[networkId], cellProps.cell.value, 2)}
+                                    {formatCurrencyWithKey(getDefaultCollateral(networkId), cellProps.cell.value, 2)}
                                 </TableText>
                             );
                         },
@@ -198,7 +199,7 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
                                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
                                     symbolText={symbolText}
                                     symbolUpperText={
-                                        spreadTotalText
+                                        spreadTotalText && !isOneSidePlayerProps(market.betType)
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {

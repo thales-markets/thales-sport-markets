@@ -15,9 +15,10 @@ export const LOCAL_STORAGE_KEYS = {
     STOP_PULSING: 'stopPulsing',
     FAVOURITE_LEAGUES: 'favouriteLeagues',
     PARLAY: 'parlay',
+    COMBINED_POSITIONS: 'combinedPositions',
     MULTI_SINGLE: 'multiSingle',
     IS_MULTI_SINGLE: 'isMultiSingle',
     BRACKETS: 'brackets',
-    STABLE_INDEX: 'stableIndex',
+    COLLATERAL_INDEX: 'collateralIndex',
     SGP_FEES: 'sgpFees',
 };

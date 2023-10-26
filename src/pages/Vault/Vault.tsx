@@ -52,7 +52,7 @@ import networkConnector from 'utils/networkConnector';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance, getMaxGasLimitForNetwork } from 'utils/network';
+import { checkAllowance } from 'utils/network';
 import { BigNumber, ethers } from 'ethers';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import SimpleLoader from 'components/SimpleLoader';
@@ -68,7 +68,7 @@ import Button from 'components/Button';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { VaultTab } from 'enums/vault';
-import { stableCoinParser } from 'utils/formatters/ethers';
+import { coinParser } from 'utils/formatters/ethers';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { navigateTo } from 'utils/routes';
 
@@ -193,7 +193,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             const sUSDContractWithSigner = sUSDContract.connect(signer);
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                    const parsedAmount = coinParser(Number(amount).toString(), networkId);
                     const allowance = await checkAllowance(
                         parsedAmount,
                         sUSDContractWithSigner,
@@ -220,9 +220,10 @@ const Vault: React.FC<VaultProps> = (props) => {
             try {
                 const sUSDContractWithSigner = sUSDContract.connect(signer);
 
-                const tx = (await sUSDContractWithSigner.approve(vaultAddress, approveAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                })) as ethers.ContractTransaction;
+                const tx = (await sUSDContractWithSigner.approve(
+                    vaultAddress,
+                    approveAmount
+                )) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
 
@@ -253,11 +254,9 @@ const Vault: React.FC<VaultProps> = (props) => {
             try {
                 const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
 
-                const parsedAmount = stableCoinParser(Number(amount).toString(), networkId);
+                const parsedAmount = coinParser(Number(amount).toString(), networkId);
 
-                const tx = await sportVaultContractWithSigner.deposit(parsedAmount, {
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
+                const tx = await sportVaultContractWithSigner.deposit(parsedAmount);
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {
@@ -282,9 +281,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             try {
                 const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
 
-                const tx = await sportVaultContractWithSigner.withdrawalRequest({
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
+                const tx = await sportVaultContractWithSigner.withdrawalRequest();
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {
@@ -309,9 +306,7 @@ const Vault: React.FC<VaultProps> = (props) => {
             try {
                 const sportVaultContractWithSigner = new ethers.Contract(vaultAddress, vaultContract.abi, signer);
 
-                const tx = await sportVaultContractWithSigner.closeRound({
-                    gasLimit: getMaxGasLimitForNetwork(networkId),
-                });
+                const tx = await sportVaultContractWithSigner.closeRound();
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.events) {

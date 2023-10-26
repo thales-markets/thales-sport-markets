@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
@@ -184,9 +184,11 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
     align-items: end;
     justify-content: flex-end;
     margin-bottom: 10px;
+    margin-right: 10px;
 
     @media (max-width: 768px) {
         min-width: 60px;
+        margin-right: 5px;
     }
     button {
         margin-top: 2px;
@@ -241,3 +243,21 @@ export const ClaimLabel = styled(Label)`
 export const ClaimValue = styled(ClaimLabel)`
     text-transform: none;
 `;
+
+export const PayoutLabel = styled(ClaimLabel)`
+    white-space: nowrap;
+    @media (max-width: 768px) {
+        margin-right: 0px;
+        margin-bottom: 0px;
+    }
+`;
+
+export const additionalClaimButtonStyle: CSSProperties = {
+    minWidth: '100px',
+    maxWidth: '100px',
+};
+
+export const additionalClaimButtonStyleMobile: CSSProperties = {
+    minWidth: '65px',
+    maxWidth: '80px',
+};

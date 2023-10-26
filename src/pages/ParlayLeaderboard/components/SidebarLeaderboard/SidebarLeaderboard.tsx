@@ -1,15 +1,16 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
-import {
-    PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10,
-    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10,
-    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
-} from 'constants/markets';
+import { PARLAY_LEADERBOARD_BIWEEKLY_START_DATE, PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
 import { differenceInDays } from 'date-fns';
-import { getOpacity, getParlayItemStatus, getPositionStatus } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
+import {
+    getOpacity,
+    getParlayItemStatus,
+    getPositionStatus,
+    getRewardsArray,
+} from 'pages/ParlayLeaderboard/ParlayLeaderboard';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,13 +21,15 @@ import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { PositionData } from 'types/markets';
 import { formatCurrency } from 'utils/formatters/number';
-import { truncateAddress } from 'utils/formatters/string';
+import { fixOneSideMarketCompetitorName, truncateAddress } from 'utils/formatters/string';
 import {
     convertPositionNameToPositionType,
+    fixPlayerPropsLinesFromContract,
     formatMarketOdds,
     getOddTooltipText,
     getSpreadTotalText,
     getSymbolText,
+    isOneSidePlayerProps,
 } from 'utils/markets';
 import { Network } from 'enums/network';
 import { buildHref } from 'utils/routes';
@@ -52,9 +55,12 @@ import {
     ArbitrumLogoWrapper,
     Title,
     TitleLabel,
+    ThalesLogoWrapper,
 } from './styled-components';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType } from 'enums/markets';
 
 const SidebarLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -65,17 +71,22 @@ const SidebarLeaderboard: React.FC = () => {
 
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
-    const latestPeriodBiweekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_BIWEEKLY_START_DATE) / 14);
+    const latestPeriodBiweekly = Math.trunc(
+        differenceInDays(
+            new Date(),
+            networkId == Network.Base
+                ? PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE
+                : PARLAY_LEADERBOARD_BIWEEKLY_START_DATE
+        ) / 14
+    );
+
     const query = useParlayLeaderboardQuery(networkId, latestPeriodBiweekly, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
     }, [query.isSuccess, query.data]);
 
-    const rewards =
-        networkId !== Network.ArbitrumOne
-            ? PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10
-            : PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10;
+    const rewards = getRewardsArray(networkId, latestPeriodBiweekly);
 
     return (
         <LeaderboardWrapper>
@@ -134,10 +145,14 @@ const SidebarLeaderboard: React.FC = () => {
                                         <ColumnWrapper>
                                             <DataLabel>
                                                 {formatCurrency(rewards[parlay.rank - 1], 0)}
-                                                {networkId !== Network.ArbitrumOne ? (
+                                                {networkId == Network.OptimismMainnet ? (
                                                     <OPLogoWrapper />
-                                                ) : (
+                                                ) : networkId == Network.ArbitrumOne ? (
                                                     <ArbitrumLogoWrapper />
+                                                ) : networkId == Network.Base ? (
+                                                    <ThalesLogoWrapper />
+                                                ) : (
+                                                    <></>
                                                 )}
                                             </DataLabel>
                                         </ColumnWrapper>
@@ -155,6 +170,8 @@ const SidebarLeaderboard: React.FC = () => {
                                                 const position = parlay.positions.find(
                                                     (position: PositionData) => position.market.address == market
                                                 );
+
+                                                position ? fixPlayerPropsLinesFromContract(position.market) : '';
 
                                                 const positionEnum = convertPositionNameToPositionType(
                                                     position ? position.side : ''
@@ -177,14 +194,34 @@ const SidebarLeaderboard: React.FC = () => {
                                                                 {getPositionStatus(position, theme)}
                                                                 <ParlayRowTeam
                                                                     title={
-                                                                        position.market.homeTeam +
-                                                                        ' vs ' +
-                                                                        position.market.awayTeam
+                                                                        position.market.isOneSideMarket
+                                                                            ? fixOneSideMarketCompetitorName(
+                                                                                  position.market.homeTeam
+                                                                              )
+                                                                            : position.market.playerName === null
+                                                                            ? position.market.homeTeam +
+                                                                              ' vs ' +
+                                                                              position.market.awayTeam
+                                                                            : `${position.market.playerName} (${
+                                                                                  BetTypeNameMap[
+                                                                                      position.market.betType as BetType
+                                                                                  ]
+                                                                              }) `
                                                                     }
                                                                 >
-                                                                    {position.market.homeTeam +
-                                                                        ' vs ' +
-                                                                        position.market.awayTeam}
+                                                                    {position.market.isOneSideMarket
+                                                                        ? fixOneSideMarketCompetitorName(
+                                                                              position.market.homeTeam
+                                                                          )
+                                                                        : position.market.playerName === null
+                                                                        ? position.market.homeTeam +
+                                                                          ' vs ' +
+                                                                          position.market.awayTeam
+                                                                        : `${position.market.playerName} (${
+                                                                              BetTypeNameMap[
+                                                                                  position.market.betType as BetType
+                                                                              ]
+                                                                          }) `}
                                                                 </ParlayRowTeam>
                                                             </ParlayRowMatch>
                                                             <PositionSymbol
@@ -208,7 +245,8 @@ const SidebarLeaderboard: React.FC = () => {
                                                                 }}
                                                                 symbolText={symbolText}
                                                                 symbolUpperText={
-                                                                    spreadTotalText
+                                                                    spreadTotalText &&
+                                                                    !isOneSidePlayerProps(position.market.betType)
                                                                         ? {
                                                                               text: spreadTotalText,
                                                                               textStyle: {

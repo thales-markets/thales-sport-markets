@@ -105,3 +105,13 @@ export const Status = styled.span<{ color: string }>`
     align-self: center;
     justify-content: space-evenly;
 `;
+
+export const PlayerIcon = styled.i`
+    font-size: 40px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-left: 24px;
+`;
+
+export const CollateralSelectorContainer = styled(FlexDivRow)`
+    margin-top: 5px;
+`;

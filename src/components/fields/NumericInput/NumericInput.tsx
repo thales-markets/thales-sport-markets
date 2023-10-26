@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { FieldContainer, FieldLabel, Input } from '../common';
 import MuiTooltip from '@material-ui/core/Tooltip';
 import { FlexDivCentered } from 'styles/common';
+import { ReactComponent as BalanceIcon } from 'assets/images/balance-icon.svg';
 
 type NumericInputProps = {
     value: string | number;
@@ -93,7 +94,12 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     {tooltip && <Tooltip overlay={tooltip} />}:
                 </FieldLabel>
             )}
-            {balance && <BalanceContainer>{isBalanceLoading ? '-' : balance}</BalanceContainer>}
+            {balance && (
+                <BalanceContainer>
+                    <StyledBalanceIcon />
+                    {isBalanceLoading ? '-' : balance}
+                </BalanceContainer>
+            )}
             {info && (
                 <InfoWrapper>
                     <InfoText>{info}</InfoText>
@@ -131,19 +137,25 @@ const NumericInput: React.FC<NumericInputProps> = ({
                     borderColor={borderColor}
                 />
             </ValidationTooltip>
-            <RightContainer height={height}>
+            <RightContainer height={height} currencyLabel={!!currencyLabel}>
                 {onMaxButton && (
                     <MaxButton disabled={disabled} onClick={onMaxButton}>
                         {t('markets.market-details.max')}
                     </MaxButton>
                 )}
                 {currencyLabel && (
-                    <CurrencyLabel className={disabled ? 'currency-label disabled' : 'currency-label'}>
+                    <CurrencyLabel
+                        className={disabled ? 'currency-label disabled' : 'currency-label'}
+                        hasSeparator={onMaxButton}
+                    >
                         {currencyLabel}
                     </CurrencyLabel>
                 )}
                 {currencyComponent && (
-                    <CurrencyComponentContainer className={disabled && !enableCurrencyComponentOnly ? 'disabled' : ''}>
+                    <CurrencyComponentContainer
+                        className={disabled && !enableCurrencyComponentOnly ? 'disabled' : ''}
+                        hasSeparator={onMaxButton}
+                    >
                         {currencyComponent}
                     </CurrencyComponentContainer>
                 )}
@@ -156,15 +168,16 @@ const StyledInput = styled(Input)<{ padding?: string }>`
     padding: ${(props) => props.padding || '5px 100px 5px 10px'};
 `;
 
-const RightContainer = styled(FlexDivCentered)<{ height?: string }>`
+const RightContainer = styled(FlexDivCentered)<{ height?: string; currencyLabel?: boolean }>`
     position: absolute;
     right: 0;
     bottom: 0;
     height: ${(props) => props.height || '30px'};
-    padding-right: 10px;
+    padding-right: ${(props) => (props.currencyLabel ? '10px' : '0px')};
 `;
 
-const CurrencyLabel = styled.label`
+const CurrencyLabel = styled.label<{ hasSeparator?: boolean }>`
+    border-left: ${(props) => (props.hasSeparator ? `2px solid ${props.theme.input.borderColor.tertiary}` : 'none')};
     font-size: 15px;
     line-height: 20px;
     color: ${(props) => props.theme.input.textColor.primary};
@@ -182,7 +195,9 @@ const MaxButton = styled.button`
     font-size: 10px;
     text-transform: uppercase;
     cursor: pointer;
+    margin-right: 8px;
     border-radius: 2px;
+    line-height: 12px;
     &:disabled {
         opacity: 0.4;
         cursor: default;
@@ -221,14 +236,22 @@ const BalanceContainer = styled(FlexDivCentered)`
     right: 0;
     bottom: 36px;
     font-weight: normal;
-    font-size: 13px;
+    font-size: 11px;
     line-height: 15px;
-    text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-const CurrencyComponentContainer = styled(FlexDivCentered)`
-    line-height: 15px;
+const StyledBalanceIcon = styled(BalanceIcon)`
+    height: 13px;
+    margin: 0 2px 1px 0;
+    path {
+        fill: ${(props) => props.theme.textColor.quaternary};
+    }
+`;
+
+const CurrencyComponentContainer = styled(FlexDivCentered)<{ hasSeparator?: boolean }>`
+    ${(props) => (props.hasSeparator ? `border-left: 2px solid ${props.theme.input.borderColor.tertiary};` : '')}
+    line-height: 22px;
     &.disabled {
         opacity: 0.4;
         cursor: default;

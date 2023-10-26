@@ -2,7 +2,8 @@ import { BetType, ContractSGPOrder, OddsType, Position } from 'enums/markets';
 
 export const ODDS_TYPES = [OddsType.AMM, OddsType.Decimal, OddsType.American];
 
-export const MAX_USD_SLIPPAGE = 0.99;
+export const MIN_COLLATERAL_MULTIPLIER = 1.01;
+export const MAX_COLLATERAL_MULTIPLIER = 0.99;
 export const APPROVAL_BUFFER = 0.01;
 
 export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, BetType[]> = {
@@ -12,12 +13,14 @@ export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, B
 };
 
 export const INCENTIVIZED_LEAGUE = {
-    ids: [9004, 9006],
-    startDate: new Date(Date.UTC(2023, 3, 11, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 5, 30, 23, 59, 59)),
-    link: 'https://dune.com/leifu/overtime-nhl-and-nba-playoff-campaign-11-apr-2023',
-    opRewards: '20,000 OP',
-    thalesRewards: '40,000 THALES',
+    ids: [9011, 9002, 9004],
+    startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 4, 16, 23, 59, 59)),
+    link:
+        'https://medium.com/@OvertimeMarkets.xyz/get-ready-for-the-big-leagues-season-overtimes-biggest-reward-program-to-date-2d3949a06338',
+    opRewards: '30,000 OP',
+    arbRewards: '30, 000 ARB',
+    thalesRewards: '30,000 THALES',
 };
 
 export const INCENTIVIZED_GRAND_SLAM = {
@@ -34,7 +37,16 @@ export const MIN_LIQUIDITY = 10;
 export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE = new Date(2023, 2, 1, 0, 0, 0);
 export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC = new Date(Date.UTC(2023, 2, 1, 0, 0, 0));
 
+// Base leaderboard starts
+export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE = new Date(2023, 9, 11, 0, 0, 0);
+export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC_BASE = new Date(Date.UTC(2023, 9, 11, 0, 0, 0));
+
 export const PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS = 6;
+
+// New rewards distribution from 11/10/2023
+export const PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM = 15;
+export const PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000 = [500, 350, 250, 200, 170, 140, 120, 100, 90, 80];
+// ------------------------------
 
 export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20 = [
     300,
@@ -133,3 +145,5 @@ export const POSITION_TO_ODDS_OBJECT_PROPERTY_NAME: Record<Position, 'homeOdds' 
     1: 'awayOdds',
     2: 'drawOdds',
 };
+
+export const PARLAY_MAXIMUM_QUOTE = 0.01;

@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormmaterWithDecimals } from 'utils/formatters/ethers';
+import { bigNumberFormatter } from 'utils/formatters/ethers';
 import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
 import { UserVaultsData } from 'types/vault';
@@ -35,11 +35,11 @@ const useUserVaultsDataQuery = (
 
                         userVaultData.balanceTotal += contractUserVaultData.withdrawalRequested
                             ? 0
-                            : bigNumberFormmaterWithDecimals(
+                            : bigNumberFormatter(
                                   contractUserVaultData.balanceCurrentRound,
                                   getDefaultDecimalsForNetwork(networkId)
                               ) +
-                              bigNumberFormmaterWithDecimals(
+                              bigNumberFormatter(
                                   contractUserVaultData.balanceNextRound,
                                   getDefaultDecimalsForNetwork(networkId)
                               );

@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -24,6 +23,7 @@ type TagsDropdownProps = {
     setTagFilter: any;
     setTagParam: any;
     openMarketsCountPerTag: any;
+    showActive: boolean;
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({
@@ -33,6 +33,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     setTagFilter,
     setTagParam,
     openMarketsCountPerTag,
+    showActive,
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -43,6 +44,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     return (
         <Container open={open}>
             {tags
+                .filter((tag: TagInfo) => (showActive && !!openMarketsCountPerTag[tag.id]) || !showActive)
                 .sort((a, b) => {
                     const numberOfGamesA = Number(!!openMarketsCountPerTag[a.id]);
                     const numberOfGamesB = Number(!!openMarketsCountPerTag[b.id]);
@@ -141,13 +143,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     />
                                                 }
                                                 component={
-                                                    <IncentivizedLeague>
-                                                        {networkId !== Network.ArbitrumOne ? (
-                                                            <OPLogo />
-                                                        ) : (
-                                                            <ThalesLogo />
-                                                        )}
-                                                    </IncentivizedLeague>
+                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
                                                 }
                                             ></Tooltip>
                                         )}
@@ -176,13 +172,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     />
                                                 }
                                                 component={
-                                                    <IncentivizedLeague>
-                                                        {networkId !== Network.ArbitrumOne ? (
-                                                            <OPLogo />
-                                                        ) : (
-                                                            <ArbitrumLogo />
-                                                        )}
-                                                    </IncentivizedLeague>
+                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
                                                 }
                                             ></Tooltip>
                                         )}
@@ -236,8 +226,23 @@ const LeagueFlag = (tagId: number | any) => {
             return <Flag size="m" code="PT" />;
         case TAGS_FLAGS.T20_BLAST:
             return <Flag size="m" code="GB-UKM" />;
+        case TAGS_FLAGS.SAUDI_PROFESSIONAL_LEAGUE:
+            return <Flag size="m" code="SA" />;
+        case TAGS_FLAGS.BRAZIL_1:
+            return <Flag size="m" code="BR" />;
         default:
             return <FlagWorld alt="World flag" src="/world-flag.png" />;
+    }
+};
+
+const getNetworkLogo = (networkId: number) => {
+    switch (networkId) {
+        case Network.OptimismMainnet:
+            return <OPLogo />;
+        case Network.ArbitrumOne:
+            return <ArbitrumLogo />;
+        default:
+            return <></>;
     }
 };
 

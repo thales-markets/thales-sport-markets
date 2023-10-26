@@ -171,6 +171,7 @@ const Table: React.FC<TableProps> = ({
                                                         {...cell.getCellProps()}
                                                         key={cellIndex}
                                                         width={cell.column.width}
+                                                        minWidth={cell.column.minWidth}
                                                         id={cell.column.id}
                                                         onClick={
                                                             onTableCellClick
@@ -216,6 +217,7 @@ const ExpandableRowReact: React.FC<{
                         {...cell.getCellProps()}
                         key={cellIndex}
                         width={cell.column.width}
+                        minWidth={cell.column.minWidth}
                         id={cell.column.id}
                     >
                         {cell.render('Cell')}
@@ -257,10 +259,10 @@ const TableRowHead = styled(TableRow)`
     min-height: 40px;
 `;
 
-const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string }>`
+const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string; minWidth?: number }>`
     flex: 1;
-    min-width: 0px;
     max-width: ${(props) => (props.width ? props.width : 'initial')};
+    min-width: ${(props) => (props.minWidth ? `${props.minWidth}px` : '0px')};
     justify-content: ${(props) => CellAlignment[props.id] || 'left'};
     &:first-child {
         padding-left: 18px;
@@ -269,6 +271,7 @@ const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string 
         padding-right: 18px;
     }
     @media (max-width: 767px) {
+        min-width: auto;
         font-size: 12px;
         &:first-child {
             padding-left: 6px;

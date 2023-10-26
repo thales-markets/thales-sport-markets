@@ -1,6 +1,5 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
@@ -48,6 +47,47 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         spreadMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.SPREAD),
         totalMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.TOTAL),
         doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.DOUBLE_CHANCE),
+        strikeOutsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_STRIKEOUTS
+        ),
+        homeRunsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_HOMERUNS
+        ),
+        passingYardsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PASSING_YARDS
+        ),
+        rushingYardsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RUSHING_YARDS
+        ),
+        receivingYardsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RECEIVING_YARDS
+        ),
+        passingTouchdownsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
+        ),
+        fieldGoalsMadeMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_FIELD_GOALS_MADE
+        ),
+        pitcherHitsAllowedMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED
+        ),
+        hitsRecordedMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_HITS_RECORDED
+        ),
+        pointsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_POINTS),
+        reboundsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_REBOUNDS
+        ),
+        assistsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_ASSISTS
+        ),
+        shotsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_SHOTS),
+        oneSiderTouchdownsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS
+        ),
+        oneSiderGoalsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_GOALS
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -128,16 +168,22 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards:
-                                                networkId !== Network.ArbitrumOne
+                                                networkId == Network.OptimismMainnet
                                                     ? INCENTIVIZED_LEAGUE.opRewards
-                                                    : INCENTIVIZED_LEAGUE.thalesRewards,
+                                                    : networkId == Network.ArbitrumOne
+                                                    ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                    : '',
                                         }}
                                     />
                                 }
                                 component={
                                     <IncentivizedLeague>
-                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ThalesLogo />}
+                                        {networkId !== Network.Base ? (
+                                            <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        ) : (
+                                            ''
+                                        )}
+                                        {getNetworkLogo(networkId)}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -160,16 +206,22 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards:
-                                                networkId !== Network.ArbitrumOne
-                                                    ? INCENTIVIZED_GRAND_SLAM.opRewards
-                                                    : INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                                networkId == Network.OptimismMainnet
+                                                    ? INCENTIVIZED_LEAGUE.opRewards
+                                                    : networkId == Network.ArbitrumOne
+                                                    ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                    : '',
                                         }}
                                     />
                                 }
                                 component={
                                     <IncentivizedLeague>
-                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {networkId !== Network.ArbitrumOne ? <OPLogo /> : <ArbitrumLogo />}
+                                        {networkId !== Network.Base ? (
+                                            <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        ) : (
+                                            ''
+                                        )}
+                                        {getNetworkLogo(networkId)}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
@@ -247,7 +299,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         ? market.homeScore == 1
                                             ? t('markets.market-card.race-winner')
                                             : t('markets.market-card.no-win')
-                                        : `${market.homeScore} - ${market.awayScore}`}{' '}
+                                        : Number(liveResultInfo?.sportId) != 9007
+                                        ? `${market.homeScore} - ${market.awayScore}`
+                                        : ''}
                                     {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
                                         liveResultInfo?.period == 2 && (
                                             <InfoLabel className="football">
@@ -258,6 +312,22 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                     ')'}
                                             </InfoLabel>
                                         )}
+                                    {Number(liveResultInfo?.sportId) == 9007 ? (
+                                        <>
+                                            {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
+                                            <InfoLabel className="ufc">
+                                                {`(${t('market.number-of-rounds')}: ` +
+                                                    `${
+                                                        Number(market.homeScore) > 0
+                                                            ? market.homeScore
+                                                            : market.awayScore
+                                                    }` +
+                                                    ')'}
+                                            </InfoLabel>
+                                        </>
+                                    ) : (
+                                        ''
+                                    )}
                                 </ResultLabel>
                                 {hideResultInfoPerPeriod && (
                                     <PeriodsContainer directionRow={true}>
@@ -298,6 +368,111 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions markets={childMarkets.totalMarkets} betType={BetType.TOTAL} showOdds={showAMM} />
                     )}
                     {combinedMarkets.length > 0 && <CombinedPositions combinedMarkets={combinedMarkets} />}
+                    {childMarkets.strikeOutsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.strikeOutsMarkets}
+                            betType={BetType.PLAYER_PROPS_STRIKEOUTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.homeRunsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.homeRunsMarkets}
+                            betType={BetType.PLAYER_PROPS_HOMERUNS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.rushingYardsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.rushingYardsMarkets}
+                            betType={BetType.PLAYER_PROPS_RUSHING_YARDS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.passingYardsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.passingYardsMarkets}
+                            betType={BetType.PLAYER_PROPS_PASSING_YARDS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.receivingYardsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.receivingYardsMarkets}
+                            betType={BetType.PLAYER_PROPS_RECEIVING_YARDS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.passingTouchdownsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.passingTouchdownsMarkets}
+                            betType={BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.fieldGoalsMadeMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.fieldGoalsMadeMarkets}
+                            betType={BetType.PLAYER_PROPS_FIELD_GOALS_MADE}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.pitcherHitsAllowedMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.pitcherHitsAllowedMarkets}
+                            betType={BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.hitsRecordedMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.hitsRecordedMarkets}
+                            betType={BetType.PLAYER_PROPS_HITS_RECORDED}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.pointsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.pointsMarkets}
+                            betType={BetType.PLAYER_PROPS_POINTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.reboundsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.reboundsMarkets}
+                            betType={BetType.PLAYER_PROPS_REBOUNDS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.assistsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.assistsMarkets}
+                            betType={BetType.PLAYER_PROPS_ASSISTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.shotsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.shotsMarkets}
+                            betType={BetType.PLAYER_PROPS_SHOTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.oneSiderTouchdownsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.oneSiderTouchdownsMarkets}
+                            betType={BetType.PLAYER_PROPS_TOUCHDOWNS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.oneSiderGoalsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.oneSiderGoalsMarkets}
+                            betType={BetType.PLAYER_PROPS_GOALS}
+                            showOdds={showAMM}
+                        />
+                    )}
                 </>
                 <Transactions market={market} />
             </MainContainer>
@@ -321,6 +496,17 @@ const hideResultInfoPerPeriodForSports = (sportId: number) => {
         !SPORTS_TAGS_MAP['Motosport'].includes(sportId) &&
         sportId != 9399
     );
+};
+
+const getNetworkLogo = (networkId: number) => {
+    switch (networkId) {
+        case Network.OptimismMainnet:
+            return <OPLogo />;
+        case Network.ArbitrumOne:
+            return <ArbitrumLogo />;
+        default:
+            return <></>;
+    }
 };
 
 const RowContainer = styled(FlexDivRow)`
@@ -413,6 +599,12 @@ const InfoLabel = styled.label`
         font-size: 21px;
         font-weight: 700;
     }
+    &.ufc {
+        display: flex;
+        color: ${(props) => props.theme.textColor.secondary};
+        font-size: 14px;
+        font-weight: 700;
+    }
 
     &.blink {
         color: ${(props) => props.theme.status.loss};
@@ -427,7 +619,9 @@ const InfoLabel = styled.label`
     }
 `;
 
-const ResultLabel = styled.label``;
+const ResultLabel = styled.label`
+    text-align: center;
+`;
 
 const PeriodContainer = styled(FlexDivColumn)`
     margin: 0px 10px;

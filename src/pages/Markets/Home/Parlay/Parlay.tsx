@@ -6,16 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getParlay,
-    getParlayPayment,
     getHasParlayError,
     setParlaySize,
     resetParlayError,
-    setPayment,
-    setPaymentSelectedStableIndex,
+    setPaymentSelectedCollateralIndex,
     getIsMultiSingle,
     setIsMultiSingle,
     getMultiSingle,
     removeAll,
+    getCombinedPositions,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -24,14 +23,12 @@ import { FlexDivColumn } from 'styles/common';
 import { CombinedParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
-import Payment from './components/Payment';
 import Single from './components/Single';
 import MultiSingle from './components/MultiSingle';
 import Ticket from './components/Ticket';
 import ValidationModal from './components/ValidationModal';
 import Toggle from 'components/Toggle';
 import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
-import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
 import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
 import { GlobalFiltersEnum } from 'enums/markets';
 import { useTheme } from 'styled-components';
@@ -41,11 +38,11 @@ type ParylayProps = {
     onBuySuccess?: () => void;
 };
 
-type CombinedMarketsData = {
-    combinedMarkets: CombinedParlayMarket[];
-    parlaysWithoutCombinedMarkets: ParlaysMarket[];
-    isCombinedMarketsInParlay: boolean;
-};
+// type CombinedMarketsData = {
+//     combinedMarkets: CombinedParlayMarket[];
+//     parlaysWithoutCombinedMarkets: ParlaysMarket[];
+//     isCombinedMarketsInParlay: boolean;
+// };
 
 const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const dispatch = useDispatch();
@@ -55,17 +52,14 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlay = useSelector(getParlay);
-    const parlayPayment = useSelector(getParlayPayment);
+    const combinedPositions = useSelector(getCombinedPositions);
     const isMultiSingleBet = useSelector(getIsMultiSingle);
     const hasParlayError = useSelector(getHasParlayError);
     const multiSingleStore = useSelector(getMultiSingle);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
-    const [combinedMarketsData, setCombinedMarketsData] = useState<CombinedMarketsData>({
-        combinedMarkets: [],
-        parlaysWithoutCombinedMarkets: [],
-        isCombinedMarketsInParlay: false,
-    });
+    const [combinedMarketsData, setCombinedMarketsData] = useState<CombinedParlayMarket[]>([]);
+    const [aggregatedParlayMarkets, setAggregatedParlayMarkets] = useState<ParlaysMarket[]>([]);
 
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
@@ -78,7 +72,12 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     });
 
     useEffect(() => {
-        dispatch(setPaymentSelectedStableIndex(getDefaultCollateralIndexForNetworkId(networkId)));
+        dispatch(
+            setPaymentSelectedCollateralIndex({
+                selectedCollateralIndex: getDefaultCollateralIndexForNetworkId(networkId),
+                networkId: networkId,
+            })
+        );
     }, [networkId, dispatch]);
 
     useEffect(() => {
@@ -115,6 +114,44 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                         position: parlayMarket.position,
                     };
                 });
+
+            const combinedPositionMarkets: CombinedParlayMarket[] = combinedPositions
+                .filter((combinedPosition) => {
+                    return combinedPosition.markets.every((combinedMarket) => {
+                        return !!sportOpenMarkets.find(
+                            (sportMarket) => sportMarket.address == combinedMarket.sportMarketAddress
+                        );
+                    });
+                })
+                .map((position) => {
+                    const combinedParlayMarket: CombinedParlayMarket = {
+                        markets: [],
+                        positions: [],
+                        totalOdd: 0,
+                        totalBonus: 0,
+                        positionName: null,
+                    };
+
+                    position.markets.forEach((market) => {
+                        const sportMarket = sportOpenMarkets.find(
+                            (sportMarket) => sportMarket.address == market.sportMarketAddress
+                        );
+                        if (sportMarket) {
+                            combinedParlayMarket.markets.push({
+                                ...sportMarket,
+                                position: market.position,
+                            });
+                            combinedParlayMarket.positions.push(market.position);
+                        }
+                    });
+
+                    combinedParlayMarket.totalOdd = position.totalOdd;
+                    combinedParlayMarket.totalBonus = position.totalBonus ?? 0;
+                    combinedParlayMarket.positionName = position.positionName;
+
+                    return combinedParlayMarket;
+                });
+
             // If market is not opened any more remove it
             if (parlay.length > parlayMarkets.length) {
                 const notOpenedMarkets = parlay.filter((parlayMarket) => {
@@ -126,28 +163,16 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                 if (notOpenedMarkets.length > 0) dispatch(removeAll());
             }
 
-            if (parlayMarkets.length) {
-                const combinedMarketsFromParlay = extractCombinedMarketsFromParlayMarkets(parlayMarkets);
-                const parlaysWithoutCombinedMarkets = removeCombinedMarketFromParlayMarkets(parlayMarkets);
-
-                if (combinedMarketsFromParlay.length > 0) {
-                    setCombinedMarketsData({
-                        isCombinedMarketsInParlay: true,
-                        combinedMarkets: combinedMarketsFromParlay,
-                        parlaysWithoutCombinedMarkets,
-                    });
-                } else {
-                    setCombinedMarketsData({
-                        isCombinedMarketsInParlay: false,
-                        combinedMarkets: [],
-                        parlaysWithoutCombinedMarkets: [],
-                    });
-                }
-            }
-
+            setCombinedMarketsData(combinedPositionMarkets);
             setParlayMarkets(parlayMarkets);
+
+            if (combinedPositionMarkets.length > 0 || parlayMarkets.length > 0) {
+                const markets: ParlaysMarket[] = [];
+                combinedPositionMarkets.forEach((item) => item.markets.forEach((market) => markets.push(market)));
+                setAggregatedParlayMarkets([...markets, ...parlayMarkets]);
+            }
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch, combinedPositions]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetParlayError()), [dispatch]);
 
@@ -158,7 +183,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
 
     return (
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
-            {parlayMarkets.length > 0 ? (
+            {parlayMarkets.length > 0 || combinedMarketsData.length > 0 ? (
                 <>
                     <Toggle
                         label={{
@@ -174,30 +199,13 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                     />
                     {isMultiSingleBet && multiSingleStore.length ? (
                         <>
-                            <MultiSingle
-                                markets={
-                                    combinedMarketsData.parlaysWithoutCombinedMarkets.length
-                                        ? combinedMarketsData.parlaysWithoutCombinedMarkets
-                                        : parlayMarkets
-                                }
-                                parlayPayment={parlayPayment}
-                            />
+                            <MultiSingle markets={parlayMarkets} />
                         </>
                     ) : (
                         <>
                             <ListContainer>
-                                {combinedMarketsData?.isCombinedMarketsInParlay &&
-                                    combinedMarketsData.parlaysWithoutCombinedMarkets.length > 0 &&
-                                    combinedMarketsData.parlaysWithoutCombinedMarkets.map((market, index) => {
-                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                                        return (
-                                            <RowMarket key={`${index}-non-combined`} outOfLiquidity={outOfLiquidity}>
-                                                <MatchInfo market={market} isHighlighted={true} />
-                                            </RowMarket>
-                                        );
-                                    })}
-                                {combinedMarketsData?.isCombinedMarketsInParlay &&
-                                    combinedMarketsData.combinedMarkets.map((market, index) => {
+                                {combinedMarketsData.length > 0 &&
+                                    combinedMarketsData.map((market, index) => {
                                         return (
                                             <RowMarket key={index + 'combined'} outOfLiquidity={false}>
                                                 <MatchInfoOfCombinedMarket
@@ -207,8 +215,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                             </RowMarket>
                                         );
                                     })}
-                                {!combinedMarketsData?.isCombinedMarketsInParlay &&
-                                    parlayMarkets.length &&
+                                {parlayMarkets.length > 0 &&
                                     parlayMarkets.map((market, index) => {
                                         const outOfLiquidity = outOfLiquidityMarkets.includes(index);
                                         return (
@@ -219,16 +226,11 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                     })}
                             </ListContainer>
                             <HorizontalLine />
-                            {parlayMarkets.length === 1 ? (
-                                <Single
-                                    market={parlayMarkets[0]}
-                                    parlayPayment={parlayPayment}
-                                    onBuySuccess={onBuySuccess}
-                                />
+                            {aggregatedParlayMarkets.length === 1 ? (
+                                <Single market={aggregatedParlayMarkets[0]} onBuySuccess={onBuySuccess} />
                             ) : (
                                 <Ticket
-                                    markets={parlayMarkets}
-                                    parlayPayment={parlayPayment}
+                                    markets={aggregatedParlayMarkets}
                                     setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
                                     onBuySuccess={onBuySuccess}
                                 />
@@ -250,20 +252,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                         />
                         <EmptyDesc>{t('markets.parlay.empty-description')}</EmptyDesc>
                     </Empty>
-                    {isWalletConnected && (
-                        <Payment
-                            defaultSelectedStableIndex={parlayPayment.selectedStableIndex}
-                            defaultIsVoucherSelected={parlayPayment.isVoucherSelected}
-                            onChangeCollateral={(index) => {
-                                if (index !== parlayPayment.selectedStableIndex) {
-                                    dispatch(setPayment({ ...parlayPayment, selectedStableIndex: index }));
-                                }
-                            }}
-                            setIsVoucherSelectedProp={(isSelected) =>
-                                dispatch(setPayment({ ...parlayPayment, isVoucherSelected: isSelected }))
-                            }
-                        />
-                    )}
                 </>
             )}
             {hasParlayError && <ValidationModal onClose={onCloseValidationModal} />}

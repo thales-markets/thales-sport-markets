@@ -12,7 +12,9 @@
             "approve": "อนุมัติ",
             "get-usd-progress": "กำลังมิ้นต์ {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "ข้อมูลกระเป๋าเงิน"
+            "wallet-info": "ข้อมูลกระเป๋าเงิน",
+            "approve-parlay": "อนุมัติ ParlayAMM",
+            "approve-sports": "อนุมัติ SportsAMM"
         },
         "voucher": {
             "remaining-amount": "จำนวนเงินคงเหลือ",
@@ -62,7 +64,10 @@
             "approve-label": "อนุมัติ {{currencyKey}}",
             "approve-progress-label": "กำลังอนุมัติ {{currencyKey}}...",
             "approve-all-label": "อนุมัติทั้งหมด",
-            "custom-amount-label": "อนุมัติเป็นจำนวน"
+            "custom-amount-label": "อนุมัติเป็นจำนวน",
+            "approve": "อนุมัติ",
+            "approve-progress": "กำลังอนุมัติ...",
+            "approve-swap": "อนุมัติการแลกเปลี่ยนเป็น {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "อุ้ย! คุณอยู่ในเครือข่ายที่ไม่ถูกต้อง!",
@@ -277,7 +282,8 @@
         "race-starts": "เริ่มการแข่งขัน",
         "back": "กลับ",
         "apply-filters": "ใช้ตัวกรอง",
-        "incentivized-market": "ตลาดที่มีแรงจูงใจ"
+        "incentivized-market": "ตลาดที่มีแรงจูงใจ",
+        "number-of-rounds": "จำนวนรอบทั้งหมด"
     },
     "markets": {
         "market-card": {
@@ -300,13 +306,29 @@
                 "spread": "Handicap",
                 "total": "Total",
                 "double-chance": "Double chance",
-                "combined-positions": "ตำแหน่งรวมกัน"
+                "combined-positions": "ตำแหน่งรวมกัน",
+                "strikeouts": "ขีดฆ่า",
+                "receiving yards": "ระยะรับ",
+                "passing touchdowns": "การผ่านทัชดาวน์",
+                "passing yards": "ระยะที่ผ่าน",
+                "home runs": "โฮมรัน",
+                "rushing yards": "วิ่งหลา",
+                "scoring touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ในเกม?",
+                "field goals made": "ทำประตูในสนามได้",
+                "pitcher hits allowed": "อนุญาตให้ตีเหยือกได้",
+                "points": "คะแนน",
+                "shots": "ช็อต",
+                "goals": "ใครจะเป็นผู้ทำประตูในเกม?",
+                "hits recorded": "บันทึกการเข้าชมแล้ว",
+                "assists": "ช่วยเหลือ",
+                "rebounds": "รีบาวด์"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "ชุด"
+                    "sets": "ชุด",
+                    "rounds": "รอบ"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -329,7 +351,40 @@
                 "bonus": "{{bonus}} added bonus on win!",
                 "and": "และ",
                 "race-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
-                "tournament-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}"
+                "tournament-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "player-props": {
+                    "home-runs-over": "{{team}} จะมีโฮมรันมากกว่า {{scoring}}",
+                    "passing-yards-over": "{{team}} จะมีระยะส่งบอลมากกว่า {{scoring}}",
+                    "strikeouts-over": "{{team}} จะมีขีดฆ่ามากกว่า {{scoring}}",
+                    "strikeouts-under": "{{team}} จะมีขีดฆ่าน้อยกว่า {{scoring}}",
+                    "home-runs-under": "{{team}} จะมีโฮมรันน้อยกว่า {{scoring}}",
+                    "passing-touchdowns-over": "{{team}} จะมีการจ่ายทัชดาวน์มากกว่า {{scoring}}",
+                    "rushing-yards-over": "{{team}} จะมีระยะการวิ่งมากกว่า {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} จะมีการส่งทัชดาวน์น้อยกว่า {{scoring}}",
+                    "receiving-yards-under": "{{team}} จะมีระยะรับน้อยกว่า {{scoring}}",
+                    "receiving-yards-over": "{{team}} จะมีระยะรับมากกว่า {{scoring}}",
+                    "rushing-yards-under": "{{team}} จะมีระยะวิ่งน้อยกว่า {{scoring}}",
+                    "passing-yards-under": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{scoring}}",
+                    "touchdowns": "{{team}} จะทำคะแนนทัชดาวน์ในเกม",
+                    "field-goals-made-under": "{{team}} จะมีการยิงประตูน้อยกว่า {{scoring}}",
+                    "field-goals-made-over": "{{team}} จะมีการยิงประตูมากกว่า {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "การรับ การวิ่ง การเตะเตะกลับ ทัชดาวน์การป้องกันและการสกัดกั้นจะถูกนับรวมในผลการแข่งขัน"
+                    },
+                    "pitcher-hits-allowed-under": "{{team}} จะมีโอกาสโจมตีน้อยกว่า {{scoring}}",
+                    "pitcher-hits-allowed-over": "{{team}} จะได้รับอนุญาตให้โจมตีมากกว่า {{scoring}}",
+                    "points-under": "{{team}} จะมีแต้มน้อยกว่า {{scoring}}",
+                    "shots-under": "{{team}} จะมีโอกาสยิงน้อยกว่า {{scoring}}",
+                    "goals": "{{team}} จะทำประตูในเกม",
+                    "shots-over": "{{team}} จะมีโอกาสยิงมากกว่า {{scoring}}",
+                    "points-over": "{{team}} จะมีแต้มมากกว่า {{scoring}}",
+                    "hits-recorded-over": "{{team}} จะมีการบันทึกการเข้าชมมากกว่า {{scoring}}",
+                    "hits-recorded-under": "{{team}} จะมีการบันทึกการเข้าชมน้อยกว่า {{scoring}}",
+                    "rebounds-over": "{{team}} จะมีการรีบาวด์มากกว่า {{scoring}}",
+                    "assists-over": "{{team}} จะมีแอสซิสต์มากกว่า {{scoring}}",
+                    "assists-under": "{{team}} จะมีแอสซิสต์น้อยกว่า {{scoring}}",
+                    "rebounds-under": "{{team}} จะมีการรีบาวด์น้อยกว่า {{scoring}}"
+                }
             },
             "starts-in": "เริ่มเข้า",
             "period": "ระยะเวลา",
@@ -340,7 +395,11 @@
             "inning": "โอกาส",
             "total-markets": "Total markets",
             "race-winner": "ผู้ชนะ",
-            "no-win": "ไม่ชนะ"
+            "no-win": "ไม่ชนะ",
+            "player-props": "อุปกรณ์ประกอบฉากของผู้เล่น",
+            "see-more-markets": "ดูตลาดอุปกรณ์ประกอบฉากของผู้เล่น",
+            "see-more-markets-mobile": "อุปกรณ์ประกอบฉากของผู้เล่น",
+            "resolved": "แก้ไขแล้ว"
         },
         "market-details": {
             "price": "ราคา",
@@ -426,7 +485,10 @@
             "toggle-parlay": {
                 "multi-single": "เดี่ยว",
                 "parlay": "พาร์เลย์"
-            }
+            },
+            "total-to-pay": "ค่าใช้จ่ายทั้งหมด",
+            "in-wallet": "ในกระเป๋าสตางค์",
+            "pay-with-voucher": "ชำระเงินด้วยบัตรกำนัล"
         },
         "nav-menu": {
             "items": {
@@ -452,7 +514,7 @@
                 "march-madness": "มาร์ชแมดเนส"
             }
         },
-        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ",
         "incentivized-tooltip-tennis": "วิมเบิลดันจะได้รับแรงจูงใจ เนื่องจากทัวร์นาเมนต์จะเริ่มในวันที่ 3 กรกฎาคม ตลาดจะได้รับการกระตุ้นด้วย {{rewards}} จนกว่าจะสิ้นสุดทัวร์นาเมนต์ในวันที่ 16 กรกฎาคม รางวัลจะกระจายตามปริมาณของคุณที่ขับเคลื่อนผ่านตลาดเหล่านี้ คุณสามารถติดตามการจัดสรรรางวัลได้ที่ <detailsLink>Dune Dashboard</detailsLink>"
     },
@@ -584,7 +646,10 @@
             "result": "ผลลัพธ์",
             "position-size": "ขนาดตำแหน่ง",
             "starts": "เริ่ม",
-            "claim-all": "อ้างสิทธิ์ทั้งหมด"
+            "claim-all": "อ้างสิทธิ์ทั้งหมด",
+            "claim-progress": "กำลังอ้างสิทธิ์...",
+            "payout-in": "จ่ายเงินเข้า.",
+            "approve-swap-tooltip": "หากต้องการรับการจ่ายเงินเป็น {{currencyKey}} คุณต้องอนุมัติการแลกเปลี่ยนจาก {{defaultCurrency}} เป็น {{currencyKey}}"
         },
         "messages": {
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",
@@ -805,7 +870,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "ผู้ใช้ที่ได้ครอบคลุม 50% หรือมากกว่าของการผสมผสานที่เป็นไปได้ของตั๋วที่ชนะจะถูกตัดสิทธิ์"
     },
     "wizard": {
         "title": "Get Started!",

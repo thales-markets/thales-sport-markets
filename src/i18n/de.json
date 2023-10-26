@@ -21,7 +21,9 @@
             "approve": "Genehmigen",
             "get-usd-progress": "{{amount}} wird gemintet...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "Wallet-Info"
+            "wallet-info": "Wallet-Info",
+            "approve-parlay": "ParlayAMM genehmigen",
+            "approve-sports": "Genehmigen Sie SportsAMM"
         },
         "voucher": {
             "remaining-amount": "Verbleibender Betrag",
@@ -71,7 +73,10 @@
             "approve-label": "{{currencyKey}} genehmigen",
             "approve-progress-label": "{{currencyKey}} wird genehmigt...",
             "approve-all-label": "Alles genehmigen",
-            "custom-amount-label": "Betrag genehmigen"
+            "custom-amount-label": "Betrag genehmigen",
+            "approve": "Genehmigen",
+            "approve-progress": "Genehmigen...",
+            "approve-swap": "Tausch auf {{currencyKey}} genehmigen"
         },
         "unsupported-network": {
             "title": "Oops! Du bist im falschen Netzwerk!",
@@ -277,7 +282,8 @@
         "race-starts": "Rennen beginnt",
         "back": "Der Rücken",
         "apply-filters": "Filter anwenden",
-        "incentivized-market": "INCENTIVISIERTER MARKT"
+        "incentivized-market": "INCENTIVISIERTER MARKT",
+        "number-of-rounds": "Gesamtzahl der Runden"
     },
     "markets": {
         "market-card": {
@@ -300,13 +306,29 @@
                 "spread": "Handicap",
                 "total": "Gesamt",
                 "double-chance": "Doppelte Chance",
-                "combined-positions": "Kombinierte Positionen"
+                "combined-positions": "Kombinierte Positionen",
+                "passing touchdowns": "Passende Touchdowns",
+                "rushing yards": "Rauschende Meter",
+                "receiving yards": "Empfangshöfe",
+                "strikeouts": "Durchgestrichen",
+                "passing yards": "Vorbeifahrende Höfe",
+                "home runs": "Home Runs",
+                "scoring touchdown": "Wer erzielt im Spiel einen Touchdown?",
+                "field goals made": "Field Goals gemacht",
+                "pitcher hits allowed": "Pitcher-Hits erlaubt",
+                "points": "Punkte",
+                "shots": "Schüsse",
+                "goals": "Wer schießt im Spiel ein Tor?",
+                "hits recorded": "Treffer aufgezeichnet",
+                "assists": "Unterstützt",
+                "rebounds": "Rebounds"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "Sätze"
+                    "sets": "Sätze",
+                    "rounds": "Runden"
                 },
                 "match-resolve": {
                     "regular": "in regulärer Spielzeite",
@@ -329,7 +351,40 @@
                 "bonus": "{{bonus}} zusätzlicher Bonus bei Sieg!",
                 "and": "Und",
                 "race-winner": "{{team}} wird das Rennen gewinnen {{matchResolve}}",
-                "tournament-winner": "{{team}} wird das Turnier gewinnen {{matchResolve}}"
+                "tournament-winner": "{{team}} wird das Turnier gewinnen {{matchResolve}}",
+                "player-props": {
+                    "home-runs-under": "{{team}} wird weniger Homeruns haben als {{scoring}}",
+                    "rushing-yards-over": "{{team}} wird mehr Rushing Yards haben als {{scoring}}",
+                    "receiving-yards-under": "{{team}} wird weniger Empfangshöfe haben als {{scoring}}",
+                    "passing-yards-over": "{{team}} wird mehr Passing Yards haben als {{scoring}}",
+                    "rushing-yards-under": "{{team}} wird weniger Rushing Yards haben als {{scoring}}",
+                    "passing-touchdowns-over": "{{team}} wird mehr Pass-Touchdowns haben als {{scoring}}",
+                    "receiving-yards-over": "{{team}} wird mehr Empfangshöfe haben als {{scoring}}",
+                    "strikeouts-over": "{{team}} wird mehr Strikeouts haben als {{scoring}}",
+                    "passing-touchdowns-under": "{{team}} wird weniger Pass-Touchdowns haben als {{scoring}}",
+                    "passing-yards-under": "{{team}} wird weniger Passing Yards haben als {{scoring}}",
+                    "strikeouts-under": "{{team}} wird weniger Strikeouts haben als {{scoring}}",
+                    "home-runs-over": "{{team}} wird mehr Homeruns haben als {{scoring}}",
+                    "touchdowns": "{{team}} wird im Spiel einen Touchdown erzielen",
+                    "field-goals-made-over": "{{team}} wird mehr Field Goals erzielt haben als {{scoring}}",
+                    "field-goals-made-under": "{{team}} wird weniger Field Goals erzielen als {{scoring}}",
+                    "info": {
+                        "scoring touchdown": "Receiving-, Rushing-, Punt-Return-, Kick-Return-, Defensive- und Interception-Touchdowns werden für das Ergebnis gezählt"
+                    },
+                    "pitcher-hits-allowed-over": "{{team}} wird mehr Treffer haben als {{scoring}}",
+                    "pitcher-hits-allowed-under": "{{team}} wird weniger Treffer haben als {{scoring}}",
+                    "shots-under": "{{team}} wird weniger Schüsse haben als {{scoring}}",
+                    "points-under": "{{team}} wird weniger Punkte haben als {{scoring}}",
+                    "shots-over": "{{team}} wird mehr Schüsse haben als {{scoring}}",
+                    "points-over": "{{team}} wird mehr Punkte haben als {{scoring}}",
+                    "goals": "{{team}} wird im Spiel ein Tor erzielen",
+                    "hits-recorded-under": "{{team}} wird weniger Treffer haben als {{scoring}}",
+                    "hits-recorded-over": "{{team}} wird mehr Treffer haben als {{scoring}}",
+                    "rebounds-under": "{{team}} wird weniger Rebounds haben als {{scoring}}",
+                    "assists-under": "{{team}} wird weniger Assists haben als {{scoring}}",
+                    "assists-over": "{{team}} wird mehr Assists haben als {{scoring}}",
+                    "rebounds-over": "{{team}} wird mehr Rebounds haben als {{scoring}}"
+                }
             },
             "starts-in": "Beginnt in",
             "period": "Zeitraum",
@@ -340,7 +395,11 @@
             "inning": "Inning",
             "total-markets": "Total markets",
             "race-winner": "Gewinner",
-            "no-win": "Jetzt in"
+            "no-win": "Jetzt in",
+            "see-more-markets-mobile": "Spieler-Requisiten",
+            "player-props": "Spieler-Requisiten",
+            "see-more-markets": "siehe Märkte für Spieler-Requisiten",
+            "resolved": "Gelöst"
         },
         "market-details": {
             "price": "Preis",
@@ -425,7 +484,10 @@
             "toggle-parlay": {
                 "parlay": "Spielen",
                 "multi-single": "Einzel"
-            }
+            },
+            "in-wallet": "Im Portemonnaie",
+            "pay-with-voucher": "Bezahlen Sie mit Gutschein",
+            "total-to-pay": "Gesamtbetrag"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -453,7 +515,7 @@
             }
         },
         "incentivized-markets": "ANREIZMÄRKTE",
-        "incentivized-tooltip": "NBA play-in and playoffs will be incentivized, followed with NHL incentives starting on April 17th as the hockey tournament starts. The markets will be boosted with {{rewards}} until the end of the tournaments in June. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-tennis": "Wimbledon wird einen Anreiz erhalten, da das Turnier am 3. Juli beginnt. Die Märkte werden bis zum Ende des Turniers am 16. Juli mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen."
     },
     "rewards": {
@@ -584,7 +646,10 @@
             "starts": "Beginnt",
             "result": "Ergebnis",
             "position-size": "Positionsgröße",
-            "claim-all": "Alle beanspruchen"
+            "claim-all": "Alle beanspruchen",
+            "claim-progress": "Behauptung...",
+            "payout-in": "Auszahlung in",
+            "approve-swap-tooltip": "Um eine Auszahlung in {{currencyKey}} zu erhalten, müssen Sie den Umtausch von {{defaultCurrency}} in {{currencyKey}} genehmigen."
         },
         "messages": {
             "no-open": "Sie haben keine offene Stelle",
@@ -805,7 +870,8 @@
             "period-end-label": "Der Zeitraum endet in",
             "period-ended-label": "Zeitraum beendet",
             "bi-weekly-period": "Zweimal wöchentlicher Zeitraum"
-        }
+        },
+        "warning2": "Benutzer, die 50 % oder mehr der möglichen Kombinationen ihrer Gewinnscheine abgedeckt haben, werden disqualifiziert."
     },
     "wizard": {
         "title": "Loslegen!",
