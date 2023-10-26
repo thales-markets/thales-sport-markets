@@ -870,7 +870,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "ผู้ใช้ที่ได้ครอบคลุม 50% หรือมากกว่าของการผสมผสานที่เป็นไปได้ของตั๋วที่ชนะจะถูกตัดสิทธิ์"
     },
     "wizard": {
         "title": "Get Started!",

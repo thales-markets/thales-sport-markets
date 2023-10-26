@@ -870,7 +870,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "覆盖中奖彩票潜在组合 50% 或以上的用户将被取消资格。"
     },
     "wizard": {
         "title": "Get Started!",
