@@ -49,14 +49,14 @@ const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 
 const particle = new ParticleNetwork({
-    projectId: '', // todo
-    clientKey: '', // todo
-    appId: '', // todo
-    chainName: 'arbitrum', //optional: current chain name, default Ethereum.
-    chainId: 42161, //optional: current chain id, default 1.
+    projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
+    clientKey: process.env.REACT_APP_CLIENT_KEY,
+    appId: process.env.REACT_APP_PARTICLE_APP_ID,
+    chainName: 'arbitrum', //optional
+    chainId: 42161, //optional
     wallet: {
         //optional: by default, the wallet entry is displayed in the bottom right corner of the webpage.
-        displayWalletEntry: true, //show wallet entry when connect particle.
+        displayWalletEntry: false, //show wallet entry when connect particle.
         uiMode: 'dark', //optional: light or dark, if not set, the default is the same as web auth.
         supportChains: [
             { id: 10, name: 'optimism' },
@@ -127,16 +127,17 @@ const App = () => {
                 if (particle.auth.isLogin()) {
                     const particleProvider = new ParticleProvider(particle.auth);
                     const chainId = (await provider.getNetwork()).chainId;
-                    console.log('chainId: ', chainId);
                     const bundler = new Bundler({
                         // get from biconomy dashboard https://dashboard.biconomy.io/
-                        bundlerUrl: ``, // todo
+                        bundlerUrl: `https://bundler.biconomy.io/api/v2/${chainId}/${process.env.REACT_APP_BICONOMY_BUNDLE_KEY}`,
                         chainId: (await provider.getNetwork()).chainId, // or any supported chain of your choice
                         entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
                     });
 
                     const paymaster = new BiconomyPaymaster({
-                        paymasterUrl: '', // todo
+                        paymasterUrl: `https://paymaster.biconomy.io/api/v1/${chainId}/${
+                            process.env['REACT_APP_PAYMASTER_KEY_' + chainId]
+                        }`,
                     });
 
                     web3Provider = new ethers.providers.Web3Provider(particleProvider, 'any');
@@ -158,8 +159,6 @@ const App = () => {
                     const wallet = await account.init();
 
                     const swAddress = await wallet.getAccountAddress();
-                    const isDeployed = await wallet.isAccountDeployed(swAddress);
-                    console.log('swAddress: ', swAddress, 'isDeployed: ', isDeployed);
                     biconomyConnector.setWallet(wallet);
                     dispatch(updateWallet({ walletAddress: swAddress }));
                 }
