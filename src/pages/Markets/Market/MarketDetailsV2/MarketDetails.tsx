@@ -71,8 +71,22 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         pitcherHitsAllowedMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED
         ),
+        hitsRecordedMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_HITS_RECORDED
+        ),
+        pointsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_POINTS),
+        reboundsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_REBOUNDS
+        ),
+        assistsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_ASSISTS
+        ),
+        shotsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_SHOTS),
         oneSiderTouchdownsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS
+        ),
+        oneSiderGoalsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_GOALS
         ),
     };
 
@@ -410,10 +424,52 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             showOdds={showAMM}
                         />
                     )}
+                    {childMarkets.hitsRecordedMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.hitsRecordedMarkets}
+                            betType={BetType.PLAYER_PROPS_HITS_RECORDED}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.pointsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.pointsMarkets}
+                            betType={BetType.PLAYER_PROPS_POINTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.reboundsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.reboundsMarkets}
+                            betType={BetType.PLAYER_PROPS_REBOUNDS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.assistsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.assistsMarkets}
+                            betType={BetType.PLAYER_PROPS_ASSISTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.shotsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.shotsMarkets}
+                            betType={BetType.PLAYER_PROPS_SHOTS}
+                            showOdds={showAMM}
+                        />
+                    )}
                     {childMarkets.oneSiderTouchdownsMarkets.length > 0 && (
                         <Positions
                             markets={childMarkets.oneSiderTouchdownsMarkets}
                             betType={BetType.PLAYER_PROPS_TOUCHDOWNS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.oneSiderGoalsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.oneSiderGoalsMarkets}
+                            betType={BetType.PLAYER_PROPS_GOALS}
                             showOdds={showAMM}
                         />
                     )}

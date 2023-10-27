@@ -21,7 +21,9 @@
             "approve": "批准",
             "get-usd-progress": "铸造 {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "钱包信息"
+            "wallet-info": "钱包信息",
+            "approve-parlay": "批准 ParlayAMM",
+            "approve-sports": "批准 SportsAMM"
         },
         "voucher": {
             "remaining-amount": "余额",
@@ -313,13 +315,20 @@
                 "strikeouts": "三振",
                 "scoring touchdown": "谁将在比赛中达阵得分？",
                 "field goals made": "射门得分",
-                "pitcher hits allowed": "允许投手击球"
+                "pitcher hits allowed": "允许投手击球",
+                "points": "积分",
+                "shots": "镜头",
+                "goals": "谁会在比赛中进球？",
+                "hits recorded": "点击记录",
+                "assists": "助攻",
+                "rebounds": "篮板球"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "套"
+                    "sets": "套",
+                    "rounds": "回合"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -363,7 +372,18 @@
                         "scoring touchdown": "接球、冲球、弃踢回攻、踢回攻、防守和拦截达阵均计入结果"
                     },
                     "pitcher-hits-allowed-over": "{{team}} 允许的命中数将多于 {{scoring}}",
-                    "pitcher-hits-allowed-under": "{{team}} 允许的命中数将少于 {{scoring}}"
+                    "pitcher-hits-allowed-under": "{{team}} 允许的命中数将少于 {{scoring}}",
+                    "points-over": "{{team}} 将比 {{scoring}} 获得更多分数",
+                    "goals": "{{team}} 将在比赛中进球",
+                    "shots-over": "{{team}} 的射门次数将多于 {{scoring}}",
+                    "points-under": "{{team}} 的得分将低于 {{scoring}}",
+                    "shots-under": "{{team}} 的射门次数将少于 {{scoring}}",
+                    "hits-recorded-under": "{{team}} 记录的命中数将少于 {{scoring}}",
+                    "hits-recorded-over": "{{team}} 记录的命中数将多于 {{scoring}}",
+                    "assists-over": "{{team}} 的助攻数将多于 {{scoring}}",
+                    "rebounds-over": "{{team}} 的篮板数将多于 {{scoring}}",
+                    "rebounds-under": "{{team}} 的篮板数将少于 {{scoring}}",
+                    "assists-under": "{{team}} 的助攻数将少于 {{scoring}}"
                 }
             },
             "starts-in": "开始于",
@@ -850,7 +870,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "覆盖中奖彩票潜在组合 50% 或以上的用户将被取消资格。"
     },
     "wizard": {
         "title": "Get Started!",

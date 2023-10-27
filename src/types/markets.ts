@@ -113,6 +113,12 @@ export type SportMarketChildMarkets = {
     oneSiderTouchdownsMarkets: SportMarketInfo[];
     fieldGoalsMadeMarkets: SportMarketInfo[];
     pitcherHitsAllowedMarkets: SportMarketInfo[];
+    oneSiderGoalsMarkets: SportMarketInfo[];
+    shotsMarkets: SportMarketInfo[];
+    pointsMarkets: SportMarketInfo[];
+    hitsRecordedMarkets: SportMarketInfo[];
+    reboundsMarkets: SportMarketInfo[];
+    assistsMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {
@@ -231,6 +237,7 @@ export type ParlaysMarketPosition = {
     homeTeam: string;
     awayTeam: string;
     tags: number[];
+    betType: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
     isOneSideMarket?: boolean;
     tag?: number;

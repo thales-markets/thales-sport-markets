@@ -19,7 +19,9 @@
             "approve": "Autoriser",
             "get-usd-progress": "Création de {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "Informations sur le portefeuille"
+            "wallet-info": "Informations sur le portefeuille",
+            "approve-parlay": "Approuver ParlayAMM",
+            "approve-sports": "Approuver SportsAMM"
         },
         "referral": {
             "link-copied": "Lien de parrainage copié !",
@@ -313,13 +315,20 @@
                 "strikeouts": "Barrages",
                 "scoring touchdown": "Qui marquera un touchdown dans le match ?",
                 "field goals made": "Buts sur le terrain réussis",
-                "pitcher hits allowed": "Coups de lanceur autorisés"
+                "pitcher hits allowed": "Coups de lanceur autorisés",
+                "goals": "Qui marquera un but dans le match ?",
+                "shots": "Coups",
+                "points": "Points",
+                "hits recorded": "Hits enregistrés",
+                "assists": "Aides",
+                "rebounds": "Rebonds"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "buts",
                     "points": "points",
-                    "sets": "ensembles"
+                    "sets": "ensembles",
+                    "rounds": "Les manches"
                 },
                 "match-resolve": {
                     "regular": "dans le temps régulier",
@@ -363,7 +372,18 @@
                         "scoring touchdown": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
                     },
                     "pitcher-hits-allowed-under": "{{team}} aura moins de coups autorisés que {{scoring}}",
-                    "pitcher-hits-allowed-over": "{{team}} aura plus de coups autorisés que {{scoring}}"
+                    "pitcher-hits-allowed-over": "{{team}} aura plus de coups autorisés que {{scoring}}",
+                    "points-under": "{{team}} aura moins de points que {{scoring}}",
+                    "shots-under": "{{team}} aura moins de tirs que {{scoring}}",
+                    "goals": "{{team}} marquera un but dans le match",
+                    "shots-over": "{{team}} aura plus de tirs que {{scoring}}",
+                    "points-over": "{{team}} aura plus de points que {{scoring}}",
+                    "hits-recorded-over": "{{team}} aura plus de hits enregistrés que {{scoring}}",
+                    "hits-recorded-under": "{{team}} aura moins de coups sûrs enregistrés que {{scoring}}",
+                    "rebounds-over": "{{team}} aura plus de rebonds que {{scoring}}",
+                    "assists-over": "{{team}} aura plus de passes décisives que {{scoring}}",
+                    "rebounds-under": "{{team}} aura moins de rebonds que {{scoring}}",
+                    "assists-under": "{{team}} aura moins de passes décisives que {{scoring}}"
                 }
             },
             "starts-in": "Commence dans",
@@ -850,7 +870,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "Les utilisateurs ayant couvert 50 % ou plus des combinaisons potentielles de leurs billets gagnants seront disqualifiés."
     },
     "wizard": {
         "title": "C'est parti !",

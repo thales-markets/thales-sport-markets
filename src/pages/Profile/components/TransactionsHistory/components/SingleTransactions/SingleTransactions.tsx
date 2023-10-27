@@ -26,10 +26,10 @@ import ShareTicketModal, {
     ShareTicketModalProps,
 } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { ParlaysMarket } from 'types/markets';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { fixDuplicatedTeamName, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
-import { BetTypeNameMap } from 'constants/tags';
+import { BetTypeNameMap, ENETPULSE_SPORTS } from 'constants/tags';
 import { BetType } from 'enums/markets';
 import { getDefaultCollateral } from 'utils/collaterals';
 
@@ -134,7 +134,17 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                               }) `
                                             : cellProps.cell.value.isOneSideMarket
                                             ? fixOneSideMarketCompetitorName(cellProps.cell.value.homeTeam)
-                                            : `${cellProps.cell.value.homeTeam} vs ${cellProps.cell.value.awayTeam}`}
+                                            : `${fixDuplicatedTeamName(
+                                                  cellProps.cell.value.homeTeam,
+                                                  ENETPULSE_SPORTS.includes(
+                                                      Number(cellProps.cell.row.original.wholeMarket.tags[0])
+                                                  )
+                                              )} vs ${fixDuplicatedTeamName(
+                                                  cellProps.cell.value.awayTeam,
+                                                  ENETPULSE_SPORTS.includes(
+                                                      Number(cellProps.cell.row.original.wholeMarket.tags[0])
+                                                  )
+                                              )}`}
                                     </TableText>
                                 </TableColumnClickable>
                             );

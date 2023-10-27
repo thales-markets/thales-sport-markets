@@ -14,7 +14,12 @@ import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { GOLF_TAGS } from 'constants/tags';
 import { Network } from 'enums/network';
 // import { canPlayerBeAddedToParlay } from 'utils/markets';
-import { CombinedPositionsMatchingCode, ParlayErrorCode } from 'enums/markets';
+import { BetType, CombinedPositionsMatchingCode, ParlayErrorCode, PLAYER_PROPS_BET_TYPES } from 'enums/markets';
+import {
+    getHasCombinedMarketsParentMarketAddress,
+    getParentMarketAddressFromCombinedMarketPositionType,
+    hasParlayDataParentMarketAddress,
+} from 'utils/parlay';
 
 const sliceName = 'parlay';
 
@@ -89,8 +94,24 @@ const parlaySlice = createSlice({
     reducers: {
         updateParlay: (state, action: PayloadAction<ParlaysMarketPosition>) => {
             const parlayCopy = [...state.parlay];
-            const index = state.parlay.findIndex((el) => el.parentMarket === action.payload.parentMarket);
+            const existingMarketIndex = state.parlay.findIndex(
+                (el) =>
+                    el.parentMarket === action.payload.parentMarket &&
+                    el.sportMarketAddress == action.payload.sportMarketAddress
+            );
+            const hasAddedSameParentMarket = !!state.parlay.find(
+                (market) => market.parentMarket == action.payload.parentMarket
+            );
             const numberOfDoubleChances = parlayCopy.filter((market) => market.doubleChanceMarketType !== null).length;
+            const alreadyAddedCombinedPositionWithAddress = getHasCombinedMarketsParentMarketAddress(
+                state.combinedPositions,
+                action.payload.parentMarket
+            );
+
+            if (alreadyAddedCombinedPositionWithAddress) {
+                state.error.code = ParlayErrorCode.COMBINE_REGULAR_WITH_COMBINED_POSITIONS;
+                return;
+            }
 
             const multipleSidesAtOneEvent = parlayCopy
                 .filter((market) => market.isOneSideMarket)
@@ -107,10 +128,44 @@ const parlaySlice = createSlice({
                         market.awayTeam == action.payload.awayTeam
                 );
 
+            const isIncomingPositionPlayerProps =
+                PLAYER_PROPS_BET_TYPES.includes(action.payload.betType as BetType) && action.payload.tag == 9004;
+
+            // Check the case of multiple player props markets from same market
+            if (isIncomingPositionPlayerProps && hasAddedSameParentMarket) {
+                const existingNonPlayerPropsPosition = state.parlay.findIndex(
+                    (market) =>
+                        !PLAYER_PROPS_BET_TYPES.includes(market.betType) &&
+                        market.parentMarket == action.payload.parentMarket
+                );
+
+                const alreadyAddedOtherPlayerPropsOfSameParentMarket = state.parlay
+                    .map((market, index) => {
+                        if (
+                            market.parentMarket == action.payload.parentMarket &&
+                            PLAYER_PROPS_BET_TYPES.includes(market.betType) &&
+                            market.betType !== action.payload.betType
+                        ) {
+                            return index;
+                        }
+                    })
+                    .filter((item) => item !== undefined);
+
+                if (alreadyAddedOtherPlayerPropsOfSameParentMarket.length) {
+                    state.error.code = ParlayErrorCode.SAME_GAME_OTHER_PLAYER_PROPS_TYPE;
+                    return;
+                }
+
+                if (existingNonPlayerPropsPosition !== -1) {
+                    state.error.code = ParlayErrorCode.ADDING_PLAYER_PROPS_ALREADY_HAVE_POSITION_OF_SAME_MARKET;
+                    return;
+                }
+            }
+
             if (
                 action.payload.doubleChanceMarketType !== null &&
                 numberOfDoubleChances >= MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY &&
-                (index === -1 || parlayCopy[index].doubleChanceMarketType === null)
+                (existingMarketIndex === -1 || parlayCopy[existingMarketIndex].doubleChanceMarketType === null)
             ) {
                 state.error.code = ParlayErrorCode.MAX_DOUBLE_CHANCES;
                 state.error.data = MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY.toString();
@@ -144,7 +199,7 @@ const parlaySlice = createSlice({
 
                 state.error.code = ParlayErrorCode.UNIQUE_TOURNAMENT_PLAYERS;
                 state.error.data = fixOneSideMarketCompetitorName(existingSides);
-            } else if (index === -1) {
+            } else if (existingMarketIndex === -1) {
                 // ADD new market
                 if (state.parlay.length < state.parlaySize) {
                     const parlayTeamsByLeague = parlayCopy
@@ -155,7 +210,7 @@ const parlaySlice = createSlice({
                     const homeTeamInParlay = parlayTeamsByLeague.filter((team) => team === action.payload.homeTeam)[0];
                     const awayTeamInParlay = parlayTeamsByLeague.filter((team) => team === action.payload.awayTeam)[0];
 
-                    if (homeTeamInParlay || awayTeamInParlay) {
+                    if ((homeTeamInParlay || awayTeamInParlay) && !isIncomingPositionPlayerProps) {
                         state.error.code = ParlayErrorCode.SAME_TEAM_TWICE;
                         state.error.data = homeTeamInParlay ? homeTeamInParlay : awayTeamInParlay;
                     } else {
@@ -184,15 +239,13 @@ const parlaySlice = createSlice({
                 // }
             } else {
                 // UPDATE market position
-                parlayCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
-                parlayCopy[index].position = action.payload.position;
-                parlayCopy[index].doubleChanceMarketType = action.payload.doubleChanceMarketType;
+                parlayCopy[existingMarketIndex] = action.payload;
                 state.parlay = [...parlayCopy];
 
                 // reset multiSingle if position is changed
                 const multiSingleCopy = [...state.multiSingle];
-                multiSingleCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
-                multiSingleCopy[index].amountToBuy = 0;
+                multiSingleCopy[existingMarketIndex].sportMarketAddress = action.payload.sportMarketAddress;
+                multiSingleCopy[existingMarketIndex].amountToBuy = 0;
                 state.multiSingle = [...multiSingleCopy];
             }
 
@@ -226,6 +279,18 @@ const parlaySlice = createSlice({
         },
         updateCombinedPositions: (state, action: PayloadAction<CombinedMarketPosition>) => {
             const existingCombinedPositions = state.combinedPositions;
+
+            const parentMarketAddressFromIncomingPosition = getParentMarketAddressFromCombinedMarketPositionType(
+                action.payload
+            );
+
+            if (
+                parentMarketAddressFromIncomingPosition &&
+                hasParlayDataParentMarketAddress(state.parlay, parentMarketAddressFromIncomingPosition)
+            ) {
+                state.error.code = ParlayErrorCode.COMBINE_REGULAR_WITH_COMBINED_POSITIONS;
+                return;
+            }
 
             let matchingCode: CombinedPositionsMatchingCode = CombinedPositionsMatchingCode.NOTHING_COMMON;
 

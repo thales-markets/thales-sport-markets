@@ -215,6 +215,7 @@ const ParlayLeaderboard: React.FC = () => {
                 </ul>
                 <Description>{t('parlay-leaderboard.info3')}</Description>
                 <Warning>{t('parlay-leaderboard.warning')}</Warning>
+                <Warning>{t('parlay-leaderboard.warning2')}</Warning>
                 <LeaderboardHeader>
                     <PeriodContainer>
                         <SelectContainer>
@@ -713,6 +714,9 @@ const AddressLink = styled.a`
 `;
 
 export const getRewardsArray = (networkId: Network, period: number): number[] => {
+    if (networkId == Network.Base) {
+        return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
+    }
     if (period > PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM) {
         if (networkId == Network.ArbitrumOne || networkId == Network.OptimismMainnet)
             return PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000;

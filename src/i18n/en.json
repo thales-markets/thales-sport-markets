@@ -397,13 +397,20 @@
                 "passing touchdowns": "Passing touchdowns",
                 "scoring touchdown": "Who will score a touchdown in the game?",
                 "field goals made": "Field goals made",
-                "pitcher hits allowed": "Pitcher hits allowed"
+                "pitcher hits allowed": "Pitcher hits allowed",
+                "points": "Points",
+                "shots": "Shots",
+                "goals": "Who will score a goal in the game?",
+                "hits recorded": "Hits recorded",
+                "rebounds": "Rebounds",
+                "assists": "Assists"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "sets"
+                    "sets": "sets",
+                    "rounds": "rounds"
                 },
                 "and": "and",
                 "match-resolve": {
@@ -444,6 +451,17 @@
                     "field-goals-made-under": "{{team}} will have less field goals made than {{scoring}}",
                     "pitcher-hits-allowed-over": "{{team}} will have more hits allowed than {{scoring}}",
                     "pitcher-hits-allowed-under": "{{team}} will have less hits allowed than {{scoring}}",
+                    "shots-over": "{{team}} will have more shots than {{scoring}}",
+                    "shots-under": "{{team}} will have less shots than {{scoring}}",
+                    "points-over": "{{team}} will have more points than {{scoring}}",
+                    "points-under": "{{team}} will have less points than {{scoring}}",
+                    "goals": "{{team}} will score a goal in the game",
+                    "hits-recorded-over": "{{team}} will have more hits recorded than {{scoring}}",
+                    "hits-recorded-under": "{{team}} will have less hits recorded than {{scoring}}",
+                    "rebounds-over": "{{team}} will have more rebounds than {{scoring}}",
+                    "rebounds-under": "{{team}} will have less rebounds than {{scoring}}",
+                    "assists-over": "{{team}} will have more assists than {{scoring}}",
+                    "assists-under": "{{team}} will have less assists than {{scoring}}",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }
@@ -544,7 +562,10 @@
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "risk-per-comb": "Risk per combination exceeded",
                 "same-team": "The same team can't be in a Parlay more than once",
-                "not-supported": "Not supported validation error: {{error}}"
+                "not-supported": "Not supported validation error: {{error}}",
+                "same-game-different-player-props": "Not supported to combine different category of player props",
+                "player-props-and-other-positions": "Not supported to combine player props positions with other positions from same market",
+                "already-added-combined-positions": "Can not combine positions from the same market with combined positions"
             },
             "share-ticket": {
                 "header": "Web 3 Sport markets on",
@@ -866,6 +887,7 @@
         "distribution-note": "Rewards will be distributed to the <bold>TOP 10 parlays every 2 weeks</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
+        "warning2": "Users that have covered 50% or more of potential combinations of their winning tickets will be disqualified.",
         "info": "If multiple parlays have the same total quote and the number of positions the following will be used as tie-breakers in respective order:",
         "info1": "- The amount paid",
         "info2": "- Actual total quote (gotten by multiplying positions individually)",

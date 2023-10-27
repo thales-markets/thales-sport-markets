@@ -121,6 +121,15 @@ const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
                         })}
                     </ErrorMessage>
                 )}
+                {parlayError.code === ParlayErrorCode.SAME_GAME_OTHER_PLAYER_PROPS_TYPE && (
+                    <ErrorMessage>{t('markets.parlay.validation.same-game-different-player-props')}</ErrorMessage>
+                )}
+                {parlayError.code === ParlayErrorCode.ADDING_PLAYER_PROPS_ALREADY_HAVE_POSITION_OF_SAME_MARKET && (
+                    <ErrorMessage>{t('markets.parlay.validation.player-props-and-other-positions')}</ErrorMessage>
+                )}
+                {parlayError.code === ParlayErrorCode.COMBINE_REGULAR_WITH_COMBINED_POSITIONS && (
+                    <ErrorMessage>{t('markets.parlay.validation.already-added-combined-positions')}</ErrorMessage>
+                )}
             </Container>
         </Modal>
     );
