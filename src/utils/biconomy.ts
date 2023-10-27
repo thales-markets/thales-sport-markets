@@ -10,7 +10,6 @@ export const executeBiconomyTransaction = async (
     methodName: string,
     data?: ReadonlyArray<any>
 ): Promise<string | ethers.providers.TransactionReceipt> => {
-    console.log('here we go');
     if (biconomyConnector.wallet && contract) {
         let populatedTx;
         if (data) {
@@ -19,7 +18,6 @@ export const executeBiconomyTransaction = async (
             populatedTx = await contract.populateTransaction[methodName]();
         }
 
-        console.log('populated: ', populatedTx);
         const transaction = {
             to: contract.address,
             data: populatedTx.data,
@@ -60,7 +58,6 @@ export const executeBiconomyTransaction = async (
                 paymasterAndDataWithLimits.verificationGasLimit &&
                 paymasterAndDataWithLimits.preVerificationGas
             ) {
-                console.log('replace');
                 // Returned gas limits must be replaced in your op as you update paymasterAndData.
                 // Because these are the limits paymaster service signed on to generate paymasterAndData
                 // If you receive AA34 error check here..

@@ -160,7 +160,7 @@ const App = () => {
 
                     const swAddress = await wallet.getAccountAddress();
                     biconomyConnector.setWallet(wallet);
-                    dispatch(updateWallet({ walletAddress: swAddress }));
+                    dispatch(updateWallet({ walletAddress: swAddress, isAA: true }));
                 }
 
                 networkConnector.setNetworkSettings({
@@ -185,7 +185,7 @@ const App = () => {
     }, [dispatch, provider, signer, switchedToNetworkId, address]);
 
     useEffect(() => {
-        dispatch(updateWallet({ walletAddress: address }));
+        dispatch(updateWallet({ walletAddress: address, isAA: particle.auth.isLogin() }));
     }, [address, dispatch]);
 
     useEffect(() => {

@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import { getParlayPayment, removeAll, setPaymentAmountToBuy } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
@@ -96,6 +96,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isAA = useSelector((state: RootState) => getIsAA(state));
     const selectedOddsType = useSelector(getOddsType);
     const parlayPayment = useSelector(getParlayPayment);
     const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
@@ -424,10 +425,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     collateralPaid,
                     expectedPayout,
                     referralId,
-                    additionalSlippage
+                    additionalSlippage,
+                    isAA
                 );
 
-                const txResult = await tx.wait();
+                const txResult = isAA ? tx : await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
                     if (hasParlayCombinedMarkets) {

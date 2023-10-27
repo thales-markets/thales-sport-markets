@@ -21,7 +21,7 @@ import {
     getParlayPayment,
     setPaymentAmountToBuy,
 } from 'redux/modules/parlay';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AMMPosition, AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlaysMarket } from 'types/markets';
@@ -103,6 +103,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isAA = useSelector((state: RootState) => getIsAA(state));
     const multiSingleAmounts = useSelector(getMultiSingle);
     const parlayPayment = useSelector(getParlayPayment);
     const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
@@ -578,10 +579,11 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                                 parsedAmount,
                                 ammQuote,
                                 referralId,
-                                ethers.utils.parseEther('0.02')
+                                ethers.utils.parseEther('0.02'),
+                                isAA
                             );
 
-                            const txResult = await tx.wait();
+                            const txResult = isAA ? tx : await tx.wait();
 
                             if (txResult && txResult.transactionHash) {
                                 resolve(
