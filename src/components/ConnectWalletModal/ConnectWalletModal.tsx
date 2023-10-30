@@ -2,10 +2,12 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import MetaMaskIcon from 'assets/images/wallets/metamask.svg';
 import WalletConnectIcon from 'assets/images/wallets/wallet_connect.svg';
+import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
+import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 
 ReactModal.setAppElement('#root');
 
@@ -59,13 +61,30 @@ const ConnectWalletModal: React.FC = () => {
                     <Button>{'Twitter'}</Button>
                     <Button>{'Twitter'}</Button>
                 </SocialButtonsWrapper>
-                <ShowMoreLabel>{t('common.wallet.view-more-options')}</ShowMoreLabel>
                 <SocialButtonsWrapper>
                     <Button>{'Twitter'}</Button>
                     <Button>{'Twitter'}</Button>
                     <Button>{'Twitter'}</Button>
                 </SocialButtonsWrapper>
+                <ShowMoreLabel>{t('common.wallet.view-more-options')}</ShowMoreLabel>
             </SocialLoginWrapper>
+            <FooterText>
+                <Trans
+                    i18nKey="common.wallet.disclaimer"
+                    components={{
+                        disclaimer: (
+                            <Link href={disclaimer}>
+                                <></>
+                            </Link>
+                        ),
+                        terms: (
+                            <Link href={termsOfUse}>
+                                <></>
+                            </Link>
+                        ),
+                    }}
+                />
+            </FooterText>
         </ReactModal>
     );
 };
@@ -83,15 +102,24 @@ const Header = styled.h2`
     line-height: 45.96px;
 `;
 
+const Link = styled.a`
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
 const SecondaryText = styled.p`
     color: ${(props) => props.theme.connectWalletModal.secondaryText};
     font-size: 13px;
     font-weight: 400;
 `;
 
+const FooterText = styled(SecondaryText)`
+    margin-top: 48px;
+`;
+
 const WalletIconsWrapper = styled(FlexDivCentered)``;
 
 const WalletIconContainer = styled(FlexDivCentered)`
+    cursor: pointer;
     flex-direction: column;
     width: 120px;
     height: 120px;
