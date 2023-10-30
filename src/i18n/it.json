@@ -321,7 +321,9 @@
                 "shots": "Scatti",
                 "hits recorded": "Hit registrati",
                 "rebounds": "Rimbalzi",
-                "assists": "Assist"
+                "assists": "Assist",
+                "double double": "Doppio-doppio",
+                "triple double": "Tripla-doppia"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -383,7 +385,11 @@
                     "rebounds-under": "{{team}} avrà meno rimbalzi di {{scoring}}",
                     "rebounds-over": "{{team}} avrà più rimbalzi di {{scoring}}",
                     "assists-under": "{{team}} avrà meno assist di {{scoring}}",
-                    "assists-over": "{{team}} avrà più assist di {{scoring}}"
+                    "assists-over": "{{team}} avrà più assist di {{scoring}}",
+                    "triple-double-no": "{{team}} non segnerà una tripla doppia",
+                    "double-double-no": "{{team}} non segnerà una doppia doppia",
+                    "double-double-yes": "{{team}} segnerà una doppia doppia",
+                    "triple-double-yes": "{{team}} segnerà una tripla doppia"
                 }
             },
             "starts-in": "Inizia tra",

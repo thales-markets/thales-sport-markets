@@ -321,7 +321,9 @@
                 "goals": "Wer schießt im Spiel ein Tor?",
                 "hits recorded": "Treffer aufgezeichnet",
                 "assists": "Unterstützt",
-                "rebounds": "Rebounds"
+                "rebounds": "Rebounds",
+                "double double": "Doppelt-doppelt",
+                "triple double": "Triple-Double"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -383,7 +385,11 @@
                     "rebounds-under": "{{team}} wird weniger Rebounds haben als {{scoring}}",
                     "assists-under": "{{team}} wird weniger Assists haben als {{scoring}}",
                     "assists-over": "{{team}} wird mehr Assists haben als {{scoring}}",
-                    "rebounds-over": "{{team}} wird mehr Rebounds haben als {{scoring}}"
+                    "rebounds-over": "{{team}} wird mehr Rebounds haben als {{scoring}}",
+                    "double-double-no": "{{team}} wird kein Double-Double erzielen",
+                    "triple-double-no": "{{team}} wird kein Triple-Double erzielen",
+                    "triple-double-yes": "{{team}} wird ein Triple-Double erzielen",
+                    "double-double-yes": "{{team}} wird ein Double-Double erzielen"
                 }
             },
             "starts-in": "Beginnt in",

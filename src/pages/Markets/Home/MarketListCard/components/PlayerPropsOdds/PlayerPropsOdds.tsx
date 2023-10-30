@@ -3,7 +3,7 @@ import { BetType, Position } from 'enums/markets';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { SportMarketChildMarkets, SportMarketInfo } from 'types/markets';
-import { isOneSidePlayerProps } from 'utils/markets';
+import { isOneSidePlayerProps, isSpecialYesNoProp } from 'utils/markets';
 import Odd from '../Odd';
 import { Container, OddsContainer } from './styled-components';
 import Tooltip from 'components/Tooltip';
@@ -39,6 +39,8 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             oneSiderGoalsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_GOALS),
             reboundsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_REBOUNDS),
             assistsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_ASSISTS),
+            doubleDoubleMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_DOUBLE_DOUBLE),
+            tripleDoubleMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_TRIPLE_DOUBLE),
         };
 
         const result = [];
@@ -83,6 +85,14 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
 
         if (lastValidChildMarkets.assistsMarkets.length > 0) {
             result.push(lastValidChildMarkets.assistsMarkets);
+        }
+
+        if (lastValidChildMarkets.doubleDoubleMarkets.length > 0) {
+            result.push(lastValidChildMarkets.doubleDoubleMarkets);
+        }
+
+        if (lastValidChildMarkets.tripleDoubleMarkets.length > 0) {
+            result.push(lastValidChildMarkets.tripleDoubleMarkets);
         }
 
         if (lastValidChildMarkets.shotsMarkets.length > 0) {
@@ -130,7 +140,10 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
                                 return (
                                     <MarketContainer key={ind}>
                                         <Player>{`${ppMarket.playerName} ${
-                                            isOneSidePlayerProps(ppMarket.betType) ? '' : ppMarket.playerPropsLine
+                                            isOneSidePlayerProps(ppMarket.betType) ||
+                                            isSpecialYesNoProp(ppMarket.betType)
+                                                ? ''
+                                                : ppMarket.playerPropsLine
                                         }`}</Player>
                                         <OddsContainer>
                                             <Odd

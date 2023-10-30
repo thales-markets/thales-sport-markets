@@ -30,6 +30,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import { Network } from 'enums/network';
 import { buildHref } from 'utils/routes';
@@ -246,7 +247,8 @@ const SidebarLeaderboard: React.FC = () => {
                                                                 symbolText={symbolText}
                                                                 symbolUpperText={
                                                                     spreadTotalText &&
-                                                                    !isOneSidePlayerProps(position.market.betType)
+                                                                    !isOneSidePlayerProps(position.market.betType) &&
+                                                                    !isSpecialYesNoProp(position.market.betType)
                                                                         ? {
                                                                               text: spreadTotalText,
                                                                               textStyle: {

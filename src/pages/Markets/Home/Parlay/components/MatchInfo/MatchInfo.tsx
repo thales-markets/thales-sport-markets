@@ -15,6 +15,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
@@ -63,7 +64,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 }}
                 symbolText={symbolText}
                 symbolUpperText={
-                    spreadTotalText && !isOneSidePlayerProps(market.betType)
+                    spreadTotalText && !isOneSidePlayerProps(market.betType) && !isSpecialYesNoProp(market.betType)
                         ? {
                               text: spreadTotalText,
                               textStyle: {
@@ -76,7 +77,11 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         : undefined
                 }
                 tooltip={!readOnly && <>{getOddTooltipText(market.position, market)}</>}
-                additionalStyle={market.isOneSideMarket || isOneSidePlayerProps(market.betType) ? { fontSize: 10 } : {}}
+                additionalStyle={
+                    market.isOneSideMarket || isOneSidePlayerProps(market.betType) || isSpecialYesNoProp(market.betType)
+                        ? { fontSize: 10 }
+                        : {}
+                }
             />
             {!readOnly && <Bonus>{bonus > 0 ? getFormattedBonus(bonus) : ''}</Bonus>}
             {readOnly ? (
