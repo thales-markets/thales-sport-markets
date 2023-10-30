@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { useTranslation } from 'react-i18next';
 
 ReactModal.setAppElement('#root');
