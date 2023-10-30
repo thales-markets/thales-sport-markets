@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { useTranslation } from 'react-i18next';
 
+import MetaMaskIcon from 'assets/images/wallets/metamask.svg';
+import WalletConnectIcon from 'assets/images/wallets/wallet_connect.svg';
+
 ReactModal.setAppElement('#root');
 
 const defaultStyle = {
@@ -42,10 +45,12 @@ const ConnectWalletModal: React.FC = () => {
             </HeaderContainer>
             <WalletIconsWrapper>
                 <WalletIconContainer>
-                    <WalletName></WalletName>
+                    <WalletIcon src={MetaMaskIcon} />
+                    <WalletName>{t('common.wallet.metamask')}</WalletName>
                 </WalletIconContainer>
                 <WalletIconContainer>
-                    <WalletName></WalletName>
+                    <WalletIcon src={WalletConnectIcon} />
+                    <WalletName>{t('common.wallet.wallet-connect')}</WalletName>
                 </WalletIconContainer>
             </WalletIconsWrapper>
             <SocialLoginWrapper>
@@ -86,9 +91,18 @@ const SecondaryText = styled.p`
 
 const WalletIconsWrapper = styled(FlexDivCentered)``;
 
-const WalletIconContainer = styled.div`
+const WalletIconContainer = styled(FlexDivCentered)`
+    flex-direction: column;
+    width: 120px;
+    height: 120px;
+    margin: 0 10px;
     border-radius: 15px;
     border: ${(props) => `1px ${props.theme.connectWalletModal.border} solid`};
+`;
+
+const WalletIcon = styled.img`
+    width: 60px;
+    height: 60px;
 `;
 
 const WalletName = styled.span`
