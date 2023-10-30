@@ -126,4 +126,9 @@ export default {
     chart: {
         primary: Colors.PURPLE,
     },
+    connectWalletModal: {
+        secondaryText: Colors.GRAY_TEXT,
+        border: Colors.GRAY_TEXT,
+        buttonBackground: Colors.GRAY_BACKGROUND,
+    },
 };
