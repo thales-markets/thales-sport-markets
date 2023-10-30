@@ -41,6 +41,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 
 import networkConnector from 'utils/networkConnector';
@@ -372,7 +373,9 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                     <PositionSymbol
                         symbolText={symbolText}
                         symbolUpperText={
-                            spreadTotalText && !isOneSidePlayerProps(position.market.betType)
+                            spreadTotalText &&
+                            !isOneSidePlayerProps(position.market.betType) &&
+                            !isSpecialYesNoProp(position.market.betType)
                                 ? {
                                       text: spreadTotalText,
                                       textStyle: {

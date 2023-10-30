@@ -28,6 +28,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import { ClubLogo, ClubName, MatchInfo, MatchLabel, MatchLogo, StatusContainer } from '../../../../styled-components';
@@ -156,7 +157,7 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                     }}
                     symbolText={symbolText}
                     symbolUpperText={
-                        spreadTotalText && !isOneSidePlayerProps(market.betType)
+                        spreadTotalText && !isOneSidePlayerProps(market.betType) && !isSpecialYesNoProp(market.betType)
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {
@@ -167,7 +168,11 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                     }
                     tooltip={<>{getOddTooltipText(positionEnum, market)}</>}
                     additionalStyle={
-                        market.isOneSideMarket || isOneSidePlayerProps(market.betType) ? { fontSize: 11 } : {}
+                        market.isOneSideMarket ||
+                        isOneSidePlayerProps(market.betType) ||
+                        isSpecialYesNoProp(market.betType)
+                            ? { fontSize: 11 }
+                            : {}
                     }
                 />
                 {isPendingResolution && !isMobile ? (

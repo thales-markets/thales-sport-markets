@@ -81,6 +81,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         assistsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_ASSISTS
         ),
+        doubleDoubleMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_DOUBLE_DOUBLE
+        ),
+        tripleDoubleMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TRIPLE_DOUBLE
+        ),
         shotsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_SHOTS),
         oneSiderTouchdownsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS
@@ -449,6 +455,20 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions
                             markets={childMarkets.assistsMarkets}
                             betType={BetType.PLAYER_PROPS_ASSISTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.doubleDoubleMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.doubleDoubleMarkets}
+                            betType={BetType.PLAYER_PROPS_DOUBLE_DOUBLE}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.tripleDoubleMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.tripleDoubleMarkets}
+                            betType={BetType.PLAYER_PROPS_TRIPLE_DOUBLE}
                             showOdds={showAMM}
                         />
                     )}

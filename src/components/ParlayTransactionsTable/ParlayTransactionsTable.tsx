@@ -24,6 +24,7 @@ import {
     isOneSidePlayerProps,
     isParlayClaimable,
     isParlayOpen,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -199,7 +200,9 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
                                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
                                     symbolText={symbolText}
                                     symbolUpperText={
-                                        spreadTotalText && !isOneSidePlayerProps(market.betType)
+                                        spreadTotalText &&
+                                        !isOneSidePlayerProps(market.betType) &&
+                                        !isSpecialYesNoProp(market.betType)
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {

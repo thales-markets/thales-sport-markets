@@ -321,7 +321,9 @@
                 "points": "Points",
                 "hits recorded": "Hits enregistrés",
                 "assists": "Aides",
-                "rebounds": "Rebonds"
+                "rebounds": "Rebonds",
+                "triple double": "Triple-double",
+                "double double": "Double double"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -383,7 +385,11 @@
                     "rebounds-over": "{{team}} aura plus de rebonds que {{scoring}}",
                     "assists-over": "{{team}} aura plus de passes décisives que {{scoring}}",
                     "rebounds-under": "{{team}} aura moins de rebonds que {{scoring}}",
-                    "assists-under": "{{team}} aura moins de passes décisives que {{scoring}}"
+                    "assists-under": "{{team}} aura moins de passes décisives que {{scoring}}",
+                    "double-double-no": "{{team}} ne marquera pas de double-double",
+                    "double-double-yes": "{{team}} marquera un double-double",
+                    "triple-double-no": "{{team}} ne marquera pas de triple-double",
+                    "triple-double-yes": "{{team}} marquera un triple-double"
                 }
             },
             "starts-in": "Commence dans",

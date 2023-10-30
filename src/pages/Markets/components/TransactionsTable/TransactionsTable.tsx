@@ -16,6 +16,7 @@ import {
     getSymbolText,
     isOneSidePlayerProps,
     isPlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import PositionSymbol from 'components/PositionSymbol';
 import { useTheme } from 'styled-components';
@@ -86,7 +87,8 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                     }}
                                     symbolUpperText={
                                         spreadTotalText &&
-                                        !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType)
+                                        !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType) &&
+                                        !isSpecialYesNoProp(cellProps.cell.row.original.wholeMarket.betType)
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {

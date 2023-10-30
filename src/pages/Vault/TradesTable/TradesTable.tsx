@@ -21,6 +21,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import './style.css';
@@ -99,7 +100,8 @@ const TradesTable: FC<TradesTableProps> = memo(({ transactions, noResultsMessage
                                     symbolText={symbolText}
                                     symbolUpperText={
                                         spreadTotalText &&
-                                        !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType)
+                                        !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType) &&
+                                        !isSpecialYesNoProp(cellProps.cell.row.original.wholeMarket.betType)
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {
