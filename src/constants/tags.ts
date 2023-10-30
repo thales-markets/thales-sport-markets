@@ -633,7 +633,7 @@ export const SCORING_MAP: SportsMap = {
     19138: 'round',
     9020: 'points',
     9399: 'points',
-    18196: '',
+    18196: 'rounds',
     9057: 'goals',
     9061: 'goals',
     9045: 'goals',
