@@ -23,6 +23,10 @@
         },
         "wallet": {
             "connect-your-wallet": "Connect wallet",
+            "please-connect": "please, connect wallet to start using overtime.xyz",
+            "or-connect-with": "or connect with",
+            "view-more-options": "View more options",
+            "view-less-options": "View less options",
             "switch-wallet": "Switch wallet",
             "disconnect-wallet": "Disconnect wallet",
             "wallet-info": "Wallet info",
