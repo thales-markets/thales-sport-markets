@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
@@ -46,6 +46,7 @@ import { ZERO_ADDRESS } from 'constants/network';
 import { getParlayPayment } from 'redux/modules/parlay';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import { coinParser } from 'utils/formatters/ethers';
+import { executeBiconomyTransaction } from 'utils/biconomy';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -65,6 +66,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const [hasAllowance, setHasAllowance] = useState(false);
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isAA = useSelector((state: RootState) => getIsAA(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -265,14 +267,26 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
                                 const id = toast.loading(t('market.toast-message.transaction-pending'));
                                 try {
-                                    const tx = isDefaultCollateral
-                                        ? await contract.exerciseOptions()
-                                        : await sportsAMMContractWithSigner.exerciseWithOfframp(
-                                              position.market.address,
-                                              collateralAddress,
-                                              isEth
-                                          );
-                                    const txResult = await tx.wait();
+                                    let txResult;
+                                    if (isAA) {
+                                        txResult = isDefaultCollateral
+                                            ? await executeBiconomyTransaction(networkId, contract, 'exerciseOptions')
+                                            : await executeBiconomyTransaction(
+                                                  networkId,
+                                                  sportsAMMContractWithSigner,
+                                                  'exerciseWithOfframp',
+                                                  [position.market.address, collateralAddress, isEth]
+                                              );
+                                    } else {
+                                        const tx = isDefaultCollateral
+                                            ? await contract.exerciseOptions()
+                                            : await sportsAMMContractWithSigner.exerciseWithOfframp(
+                                                  position.market.address,
+                                                  collateralAddress,
+                                                  isEth
+                                              );
+                                        txResult = await tx.wait();
+                                    }
 
                                     if (txResult && txResult.transactionHash) {
                                         resolve(

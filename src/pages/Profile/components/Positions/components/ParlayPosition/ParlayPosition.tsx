@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { ParlayMarket, ParlaysMarket } from 'types/markets';
 import { getEtherscanTxLink } from 'utils/etherscan';
@@ -73,6 +73,7 @@ import { BigNumber, ethers } from 'ethers';
 import { APPROVAL_BUFFER } from 'constants/markets';
 import Tooltip from 'components/Tooltip';
 import { CollateralSelectorContainer } from '../SinglePosition/styled-components';
+import { executeBiconomyTransaction } from 'utils/biconomy';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;
@@ -90,6 +91,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isAA = useSelector((state: RootState) => getIsAA(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const parlayPayment = useSelector(getParlayPayment);
@@ -198,16 +200,32 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
         if (signer && parlayMarketsAMMContract) {
             setIsSubmitting(true);
             try {
+                let txResult;
                 const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
-
-                const tx = isDefaultCollateral
-                    ? await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress)
-                    : await parlayMarketsAMMContractWithSigner?.exerciseParlayWithOfframp(
-                          parlayAddress,
-                          collateralAddress,
-                          isEth
-                      );
-                const txResult = await tx.wait();
+                if (isAA) {
+                    txResult = isDefaultCollateral
+                        ? await executeBiconomyTransaction(
+                              networkId,
+                              parlayMarketsAMMContractWithSigner,
+                              'exerciseParlay',
+                              [parlayAddress]
+                          )
+                        : await executeBiconomyTransaction(
+                              networkId,
+                              parlayMarketsAMMContractWithSigner,
+                              'exerciseParlayWithOfframp',
+                              [parlayAddress, collateralAddress, isEth]
+                          );
+                } else {
+                    const tx = isDefaultCollateral
+                        ? await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress)
+                        : await parlayMarketsAMMContractWithSigner?.exerciseParlayWithOfframp(
+                              parlayAddress,
+                              collateralAddress,
+                              isEth
+                          );
+                    txResult = await tx.wait();
+                }
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
