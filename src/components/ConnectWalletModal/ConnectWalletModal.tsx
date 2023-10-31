@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
@@ -39,6 +39,8 @@ const onClose = () => {
 const ConnectWalletModal: React.FC = () => {
     const { t } = useTranslation();
 
+    const [viewMore, setViewMore] = useState<boolean>(false);
+
     return (
         <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={defaultStyle}>
             <HeaderContainer>
@@ -61,12 +63,21 @@ const ConnectWalletModal: React.FC = () => {
                     <Button>{'Twitter'}</Button>
                     <Button>{'Twitter'}</Button>
                 </SocialButtonsWrapper>
-                <SocialButtonsWrapper>
-                    <Button>{'Twitter'}</Button>
-                    <Button>{'Twitter'}</Button>
-                    <Button>{'Twitter'}</Button>
-                </SocialButtonsWrapper>
-                <ShowMoreLabel>{t('common.wallet.view-more-options')}</ShowMoreLabel>
+                {viewMore && (
+                    <SocialButtonsWrapper>
+                        <Button>{'Twitter'}</Button>
+                        <Button>{'Twitter'}</Button>
+                        <Button>{'Twitter'}</Button>
+                    </SocialButtonsWrapper>
+                )}
+                <ShowMoreLabel onClick={() => setViewMore(!viewMore)}>
+                    {viewMore ? t('common.wallet.view-less-options') : t('common.wallet.view-more-options')}
+                    {viewMore ? (
+                        <ArrowIcon className="icon-exotic icon-exotic--up" />
+                    ) : (
+                        <ArrowIcon className="icon-exotic icon-exotic--down" />
+                    )}
+                </ShowMoreLabel>
             </SocialLoginWrapper>
             <FooterText>
                 <Trans
@@ -157,7 +168,8 @@ const ConnectWithLabel = styled(SecondaryText)`
     margin-right: auto;
     top: -8px;
     text-align: center;
-    width: 100px;
+    width: 120px;
+    background-color: ${(props) => props.theme.connectWalletModal.modalBackground};
 `;
 
 const SocialButtonsWrapper = styled(FlexDivRow)`
@@ -167,6 +179,14 @@ const SocialButtonsWrapper = styled(FlexDivRow)`
 
 const ShowMoreLabel = styled(SecondaryText)`
     text-transform: capitalize;
+    margin-top: 14px;
+    cursor: pointer;
+`;
+
+const ArrowIcon = styled.i`
+    font-size: 9px;
+    margin-left: 7px;
+    color: ${(props) => props.theme.connectWalletModal.secondaryText};
 `;
 
 const Button = styled(FlexDivCentered)<{ active?: boolean }>`
