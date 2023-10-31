@@ -57,6 +57,7 @@ export const Colors = {
 
     GRAY_TEXT: '#848E9C',
     GRAY_BACKGROUND: '#2B3139',
+    DARK_GREY_BACKGROUND: '#181A20',
 
     WHITE: '#FFFFFF',
 

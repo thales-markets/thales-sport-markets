@@ -130,5 +130,6 @@ export default {
         secondaryText: Colors.GRAY_TEXT,
         border: Colors.GRAY_TEXT,
         buttonBackground: Colors.GRAY_BACKGROUND,
+        modalBackground: Colors.DARK_GREY_BACKGROUND,
     },
 };
