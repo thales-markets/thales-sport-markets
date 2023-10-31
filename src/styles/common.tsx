@@ -55,10 +55,6 @@ export const Colors = {
     GRAY_GRADIENT_2: '#2f3454',
     GRAY_GRADIENT_3: '#2c3250',
 
-    GRAY_TEXT: '#848E9C',
-    GRAY_BACKGROUND: '#2B3139',
-    DARK_GREY_BACKGROUND: '#181A20',
-
     WHITE: '#FFFFFF',
 
     GREEN: '#5FC694',

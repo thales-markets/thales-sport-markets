@@ -127,9 +127,9 @@ export default {
         primary: Colors.PURPLE,
     },
     connectWalletModal: {
-        secondaryText: Colors.GRAY_TEXT,
-        border: Colors.GRAY_TEXT,
-        buttonBackground: Colors.GRAY_BACKGROUND,
-        modalBackground: Colors.DARK_GREY_BACKGROUND,
+        secondaryText: Colors.WHITE,
+        border: Colors.GRAY_LIGHT,
+        buttonBackground: Colors.GRAY_LIGHT,
+        modalBackground: Colors.GRAY_DARK,
     },
 };
