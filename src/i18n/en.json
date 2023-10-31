@@ -12,6 +12,18 @@
             "sat": "sat",
             "sun": "sun"
         },
+        "login-with": {
+            "discord": "Discord",
+            "twitter": "Twitter",
+            "x": "X",
+            "gmail": "Gmail",
+            "github": "GitHub",
+            "facebook": "Facebook",
+            "apple": "Apple",
+            "twitch": "Twitch",
+            "microsoft": "Microsoft",
+            "linkedin": "Linkedin"
+        },
         "pagination": {
             "page": "Page",
             "rows-per-page": "Rows per page:"
