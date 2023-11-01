@@ -4,10 +4,12 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { Trans, useTranslation } from 'react-i18next';
 
-import MetaMaskIcon from 'assets/images/wallets/metamask.svg';
-import WalletConnectIcon from 'assets/images/wallets/wallet_connect.svg';
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
+
+import { useConnect } from 'wagmi';
+import { SUPPORTED_HOSTED_WALLETS } from 'constants/wallet';
+import { getSpecificConnectorFromConnectorsArray, getWalletIcon, getWalleti18Label } from 'utils/biconomy';
 
 ReactModal.setAppElement('#root');
 
@@ -38,6 +40,9 @@ const onClose = () => {
 
 const ConnectWalletModal: React.FC = () => {
     const { t } = useTranslation();
+    const { connect, connectors } = useConnect();
+
+    // console.log('connectors ', connectors);
 
     const [viewMore, setViewMore] = useState<boolean>(false);
 
@@ -48,14 +53,17 @@ const ConnectWalletModal: React.FC = () => {
                 <SecondaryText>{t('common.wallet.please-connect')}</SecondaryText>
             </HeaderContainer>
             <WalletIconsWrapper>
-                <WalletIconContainer>
-                    <WalletIcon src={MetaMaskIcon} />
-                    <WalletName>{t('common.wallet.metamask')}</WalletName>
-                </WalletIconContainer>
-                <WalletIconContainer>
-                    <WalletIcon src={WalletConnectIcon} />
-                    <WalletName>{t('common.wallet.wallet-connect')}</WalletName>
-                </WalletIconContainer>
+                {SUPPORTED_HOSTED_WALLETS.map((walletId) => {
+                    const connector = getSpecificConnectorFromConnectorsArray(connectors, walletId);
+                    if (connector) {
+                        return (
+                            <WalletIconContainer onClick={() => connect({ connector })} key={connector.id}>
+                                <WalletIcon src={getWalletIcon(walletId)} />
+                                <WalletName>{t(getWalleti18Label(walletId))}</WalletName>
+                            </WalletIconContainer>
+                        );
+                    }
+                })}
             </WalletIconsWrapper>
             <SocialLoginWrapper>
                 <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
@@ -137,6 +145,9 @@ const WalletIconContainer = styled(FlexDivCentered)`
     margin: 0 10px;
     border-radius: 15px;
     border: ${(props) => `1px ${props.theme.connectWalletModal.border} solid`};
+    &:hover {
+        border: ${(props) => `1px ${props.theme.connectWalletModal.hover} solid`};
+    }
 `;
 
 const WalletIcon = styled.img`
@@ -148,6 +159,9 @@ const WalletName = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 13px;
     font-weight: 400;
+    &:hover {
+        color: ${(props) => props.theme.connectWalletModal.hover};
+    }
 `;
 
 const SocialLoginWrapper = styled(FlexDivCentered)`
@@ -194,13 +208,14 @@ const Button = styled(FlexDivCentered)<{ active?: boolean }>`
     width: 100%;
     height: 34px;
     background-color: ${(props) => props.theme.connectWalletModal.buttonBackground};
-    color: ${(props) => props.theme.connectWalletModal.secondaryText};
+    color: ${(props) => props.theme.textColor.primary};
     margin-left: 3px;
     margin-right: 3px;
     margin-bottom: 5px;
     font-size: 18px;
     font-weight: 700;
     text-transform: uppercase;
+    cursor: pointer;
 `;
 
 export default ConnectWalletModal;
