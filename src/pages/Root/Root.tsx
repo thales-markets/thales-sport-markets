@@ -8,15 +8,15 @@ import '@rainbow-me/rainbowkit/dist/index.css';
 import { connectorsForWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import {
     injectedWallet,
-    rainbowWallet,
-    metaMaskWallet,
-    coinbaseWallet,
+    // rainbowWallet,
+    // metaMaskWallet,
+    // coinbaseWallet,
     walletConnectWallet,
-    braveWallet,
-    ledgerWallet,
-    imTokenWallet,
-    trustWallet,
-    rabbyWallet,
+    // braveWallet,
+    // ledgerWallet,
+    // imTokenWallet,
+    // trustWallet,
+    // rabbyWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { optimism, optimismGoerli, arbitrum } from 'wagmi/chains';
@@ -87,9 +87,10 @@ const { chains, provider } = configureChains(
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
 const particleWallets = [
     particleWallet({ chains, authType: 'google' }),
-    particleWallet({ chains, authType: 'facebook' }),
+    particleWallet({ chains, authType: 'github' }),
     particleWallet({ chains, authType: 'apple' }),
-    particleWallet({ chains }),
+    particleWallet({ chains, authType: 'twitter' }),
+    particleWallet({ chains, authType: 'discord' }),
 ];
 
 const connectors = connectorsForWallets([
@@ -97,16 +98,16 @@ const connectors = connectorsForWallets([
         groupName: 'Recommended',
         wallets: [
             ...particleWallets,
-            metaMaskWallet({ projectId, chains }),
+            // metaMaskWallet({ projectId, chains }),
             walletConnectWallet({ projectId, chains }),
-            rabbyWallet({ chains }),
-            braveWallet({ chains }),
-            ledgerWallet({ projectId, chains }),
-            trustWallet({ projectId, chains }),
+            // rabbyWallet({ chains }),
+            // braveWallet({ chains }),
+            // ledgerWallet({ projectId, chains }),
+            // trustWallet({ projectId, chains }),
             injectedWallet({ chains }),
-            coinbaseWallet({ appName: 'Overtime', chains }),
-            rainbowWallet({ projectId, chains }),
-            imTokenWallet({ projectId, chains }),
+            // coinbaseWallet({ appName: 'Overtime', chains }),
+            // rainbowWallet({ projectId, chains }),
+            // imTokenWallet({ projectId, chains }),
         ],
     },
 ]);
