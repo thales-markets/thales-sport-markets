@@ -131,5 +131,6 @@ export default {
         border: Colors.GRAY_LIGHT,
         buttonBackground: Colors.GRAY_LIGHT,
         modalBackground: Colors.GRAY_DARK,
+        hover: Colors.BLUE,
     },
 };
