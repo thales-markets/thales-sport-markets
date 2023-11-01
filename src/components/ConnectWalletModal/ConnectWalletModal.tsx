@@ -8,7 +8,7 @@ import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 
 import { useConnect } from 'wagmi';
-import { SUPPORTED_HOSTED_WALLETS } from 'constants/wallet';
+import { SUPPORTED_HOSTED_WALLETS, SUPPORTED_PARTICAL_CONNECTORS } from 'constants/wallet';
 import { getSpecificConnectorFromConnectorsArray, getWalletIcon, getWalleti18Label } from 'utils/biconomy';
 
 ReactModal.setAppElement('#root');
@@ -42,7 +42,7 @@ const ConnectWalletModal: React.FC = () => {
     const { t } = useTranslation();
     const { connect, connectors } = useConnect();
 
-    // console.log('connectors ', connectors);
+    console.log('connectors ', connectors);
 
     const [viewMore, setViewMore] = useState<boolean>(false);
 
@@ -68,14 +68,30 @@ const ConnectWalletModal: React.FC = () => {
             <SocialLoginWrapper>
                 <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
                 <SocialButtonsWrapper>
-                    <Button>{'Twitter'}</Button>
-                    <Button>{'Twitter'}</Button>
+                    {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
+                        const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
+                        if (index <= 1 && connector && connector?.ready) {
+                            return (
+                                <Button key={index} onClick={() => connect({ connector })}>
+                                    {item}
+                                </Button>
+                            );
+                        }
+                    })}
                 </SocialButtonsWrapper>
+
                 {viewMore && (
                     <SocialButtonsWrapper>
-                        <Button>{'Twitter'}</Button>
-                        <Button>{'Twitter'}</Button>
-                        <Button>{'Twitter'}</Button>
+                        {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
+                            const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
+                            if (index > 1 && connector && connector?.ready) {
+                                return (
+                                    <Button key={index} onClick={() => connect({ connector })}>
+                                        {item}
+                                    </Button>
+                                );
+                            }
+                        })}
                     </SocialButtonsWrapper>
                 )}
                 <ShowMoreLabel onClick={() => setViewMore(!viewMore)}>
@@ -137,6 +153,17 @@ const FooterText = styled(SecondaryText)`
 
 const WalletIconsWrapper = styled(FlexDivCentered)``;
 
+const WalletIcon = styled.img`
+    width: 60px;
+    height: 60px;
+`;
+
+const WalletName = styled.span`
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 13px;
+    font-weight: 400;
+`;
+
 const WalletIconContainer = styled(FlexDivCentered)`
     cursor: pointer;
     flex-direction: column;
@@ -147,20 +174,9 @@ const WalletIconContainer = styled(FlexDivCentered)`
     border: ${(props) => `1px ${props.theme.connectWalletModal.border} solid`};
     &:hover {
         border: ${(props) => `1px ${props.theme.connectWalletModal.hover} solid`};
-    }
-`;
-
-const WalletIcon = styled.img`
-    width: 60px;
-    height: 60px;
-`;
-
-const WalletName = styled.span`
-    color: ${(props) => props.theme.textColor.primary};
-    font-size: 13px;
-    font-weight: 400;
-    &:hover {
-        color: ${(props) => props.theme.connectWalletModal.hover};
+        ${WalletName} {
+            color: ${(props) => props.theme.connectWalletModal.hover};
+        }
     }
 `;
 
@@ -216,6 +232,10 @@ const Button = styled(FlexDivCentered)<{ active?: boolean }>`
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
+    &:hover {
+        background-color: ${(props) => props.theme.connectWalletModal.hover};
+        color: ${(props) => props.theme.connectWalletModal.hoverText};
+    }
 `;
 
 export default ConnectWalletModal;

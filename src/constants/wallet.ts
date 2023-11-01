@@ -6,16 +6,16 @@ export const BALANCE_THRESHOLD = 0.00000001;
 
 export const SUPPORTED_HOSTED_WALLETS: HostedWallets[] = [
     HostedWallets.METAMASK,
-    HostedWallets.WALLET_CONNECT,
     HostedWallets.INJECTED,
+    HostedWallets.WALLET_CONNECT,
 ];
 
 export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
-    ParticalTypes.APPLE,
-    ParticalTypes.DISCORD,
-    ParticalTypes.GITHUB,
     ParticalTypes.GOOGLE,
     ParticalTypes.TWITTER,
+    ParticalTypes.DISCORD,
+    ParticalTypes.GITHUB,
+    ParticalTypes.APPLE,
 ];
 
 export const HOSTED_WALLETS_ICONS: { walletId: HostedWallets; image: string }[] = [

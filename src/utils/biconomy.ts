@@ -97,8 +97,12 @@ export const getHostedConnectors = (connectors: Connector[]): Connector[] => {
 
 export const getSpecificConnectorFromConnectorsArray = (
     connectors: Connector[],
-    name: string
+    name: string,
+    particle?: boolean
 ): Connector | undefined => {
+    if (particle) {
+        return connectors.find((connector: any) => connector?.options?.authType == name);
+    }
     return connectors.find((connector: any) => connector.id == name);
 };
 
