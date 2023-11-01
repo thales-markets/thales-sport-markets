@@ -3,6 +3,9 @@ import biconomyConnector from './biconomyWallet';
 import { IHybridPaymaster, PaymasterFeeQuote, PaymasterMode, SponsorUserOperationDto } from '@biconomy/paymaster';
 import { Network } from 'enums/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
+import { Connector } from 'wagmi';
+import { HostedWallets } from 'enums/wallet';
+import { HOSTED_WALLETS_ICONS, HOSTED_WALLETS_LABELS } from 'constants/wallet';
 
 export const executeBiconomyTransaction = async (
     network: Network,
@@ -78,4 +81,32 @@ export const executeBiconomyTransaction = async (
     }
 
     return '';
+};
+
+export const getParticleConnectors = (connectors: Connector[]): Connector[] => {
+    return connectors.filter(
+        (connector: any) => connector?.name.toLowerCase() == 'particle' || connector?.id.toLowerCase() == 'particle'
+    );
+};
+
+export const getHostedConnectors = (connectors: Connector[]): Connector[] => {
+    return connectors.filter(
+        (connector: any) => connector?.name.toLowerCase() !== 'particle' && connector?.id.toLowerCase() !== 'particle'
+    );
+};
+
+export const getSpecificConnectorFromConnectorsArray = (
+    connectors: Connector[],
+    name: string
+): Connector | undefined => {
+    return connectors.find((connector: any) => connector.id == name);
+};
+
+export const getWalletIcon = (walletId: HostedWallets) => {
+    return HOSTED_WALLETS_ICONS.find((item) => item.walletId == walletId)?.image;
+};
+
+export const getWalleti18Label = (walletId: HostedWallets) => {
+    const label = HOSTED_WALLETS_LABELS.find((item) => item.walletId == walletId)?.labelKey;
+    return label ? label : '';
 };
