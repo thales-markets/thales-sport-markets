@@ -82,3 +82,8 @@
     font-family: 'Currencies';
     src: local('Currencies'), url(../assets/fonts/Currencies/currencies.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'SocialIcons';
+    src: local('SocialIcons'), url(../assets/fonts/SocialLogin/SocialIcons.ttf) format('truetype');
+}

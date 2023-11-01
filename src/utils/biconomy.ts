@@ -4,8 +4,8 @@ import { IHybridPaymaster, PaymasterFeeQuote, PaymasterMode, SponsorUserOperatio
 import { Network } from 'enums/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import { Connector } from 'wagmi';
-import { HostedWallets } from 'enums/wallet';
-import { HOSTED_WALLETS_ICONS, HOSTED_WALLETS_LABELS } from 'constants/wallet';
+import { HostedWallets, ParticalTypes } from 'enums/wallet';
+import { HOSTED_WALLETS_ICONS, HOSTED_WALLETS_LABELS, PARTICAL_LOGINS_CLASSNAMES } from 'constants/wallet';
 
 export const executeBiconomyTransaction = async (
     network: Network,
@@ -112,5 +112,10 @@ export const getWalletIcon = (walletId: HostedWallets) => {
 
 export const getWalleti18Label = (walletId: HostedWallets) => {
     const label = HOSTED_WALLETS_LABELS.find((item) => item.walletId == walletId)?.labelKey;
+    return label ? label : '';
+};
+
+export const getClassNameForParticalLogin = (socialId: ParticalTypes) => {
+    const label = PARTICAL_LOGINS_CLASSNAMES.find((item) => item.socialId == socialId)?.className;
     return label ? label : '';
 };

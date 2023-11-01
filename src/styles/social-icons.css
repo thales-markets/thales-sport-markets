@@ -1,0 +1,26 @@
+.social-icon {
+    display: inline-block;
+    font-family: SocialIcons !important;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.icon--google:before {
+    content: '\0041';
+}
+
+.icon--apple:before {
+    content: '\0042';
+}
+
+.icon--discord:before {
+    content: '\0043';
+}
+
+.icon--github:before {
+    content: '\0044';
+}
+
+.icon--x:before {
+    content: '\0045';
+}
