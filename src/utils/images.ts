@@ -38,7 +38,7 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
         ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')
-              .toLowerCase()}.webp`
+              .toLowerCase()}.png`
         : leagueTag == 9153 || leagueTag == 9156
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.png`
         : leagueTag == 9445 || leagueTag == 9497

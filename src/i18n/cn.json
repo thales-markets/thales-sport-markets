@@ -455,8 +455,8 @@
                 "amm-contract-paused": "连本带利 AMM 已暂停",
                 "unique-players": "不能在连赢中添加同一参与者两次。 {{existingParticipant}} 已加入连本带利",
                 "same-event-participant": "每个活动仅支持一名参与者。无法添加 {{addedParticipant}}，因为 {{existingParticipant}} 已在连本带利中",
-                "player-props-and-other-positions": "不支持将玩家道具位置与同一市场的其他位置组合起来",
                 "same-game-different-player-props": "不支持组合不同类别的玩家道具",
+                "player-props-and-other-positions": "不支持将玩家道具位置与同一市场的其他位置组合起来",
                 "already-added-combined-positions": "不能将同一市场的头寸与合并头寸合并"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
