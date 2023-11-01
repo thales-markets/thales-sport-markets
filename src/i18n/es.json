@@ -454,7 +454,10 @@
                 "max-combined-markets": "El número máximo de mercados combinados en Parlay es {{max}}.",
                 "amm-contract-paused": "Parlay AMM en pausa",
                 "unique-players": "No se puede agregar el mismo participante dos veces en parlay. {{existingParticipant}} ya está en Parlay",
-                "same-event-participant": "Solo se admite un participante por evento. No se puede agregar {{addedParticipant}} porque {{existingParticipant}} ya está en Parlay"
+                "same-event-participant": "Solo se admite un participante por evento. No se puede agregar {{addedParticipant}} porque {{existingParticipant}} ya está en Parlay",
+                "same-game-different-player-props": "No se admite la combinación de diferentes categorías de accesorios de jugador.",
+                "already-added-combined-positions": "No se pueden combinar posiciones del mismo mercado con posiciones combinadas",
+                "player-props-and-other-positions": "No se admite combinar posiciones de accesorios de jugadores con otras posiciones del mismo mercado."
             },
             "payout": "Total recibido",
             "empty-title": "Sin posiciones",

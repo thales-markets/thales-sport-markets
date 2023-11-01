@@ -454,7 +454,10 @@
                 "max-combined-markets": "Максимальное количество комбинированных рынков в Parlay составляет {{max}}.",
                 "amm-contract-paused": "Экспресс AMM приостановлен",
                 "unique-players": "Нельзя дважды добавить одного и того же участника в экспресс. {{existingParticipant}} уже находится в Parlay",
-                "same-event-participant": "Поддерживается только один участник на событие. Невозможно добавить {{addedParticipant}}, поскольку {{existingParticipant}} уже находится в Parlay"
+                "same-event-participant": "Поддерживается только один участник на событие. Невозможно добавить {{addedParticipant}}, поскольку {{existingParticipant}} уже находится в Parlay",
+                "already-added-combined-positions": "Невозможно объединить позиции с одного рынка с помощью комбинированных позиций.",
+                "player-props-and-other-positions": "Не поддерживается объединение позиций реквизита игрока с другими позициями с того же рынка.",
+                "same-game-different-player-props": "Не поддерживается объединение различных категорий реквизита игрока."
             },
             "empty-title": "Нет позиций",
             "empty-description": "Добавьте позицию, выберите рынок и сделайте свой выбор.",
