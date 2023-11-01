@@ -47,3 +47,26 @@ export const HOSTED_WALLETS_LABELS: { walletId: HostedWallets; labelKey: string 
         labelKey: 'common.wallet.wallet-connect',
     },
 ];
+
+export const PARTICAL_LOGINS_CLASSNAMES: { socialId: ParticalTypes; className: string }[] = [
+    {
+        socialId: ParticalTypes.APPLE,
+        className: 'social-icon icon--apple',
+    },
+    {
+        socialId: ParticalTypes.DISCORD,
+        className: 'social-icon icon--discord',
+    },
+    {
+        socialId: ParticalTypes.GITHUB,
+        className: 'social-icon icon--github',
+    },
+    {
+        socialId: ParticalTypes.GOOGLE,
+        className: 'social-icon icon--google',
+    },
+    {
+        socialId: ParticalTypes.TWITTER,
+        className: 'social-icon icon--x',
+    },
+];

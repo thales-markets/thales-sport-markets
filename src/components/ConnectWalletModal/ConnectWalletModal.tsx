@@ -9,7 +9,12 @@ import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 
 import { useConnect } from 'wagmi';
 import { SUPPORTED_HOSTED_WALLETS, SUPPORTED_PARTICAL_CONNECTORS } from 'constants/wallet';
-import { getSpecificConnectorFromConnectorsArray, getWalletIcon, getWalleti18Label } from 'utils/biconomy';
+import {
+    getClassNameForParticalLogin,
+    getSpecificConnectorFromConnectorsArray,
+    getWalletIcon,
+    getWalleti18Label,
+} from 'utils/biconomy';
 
 ReactModal.setAppElement('#root');
 
@@ -73,6 +78,7 @@ const ConnectWalletModal: React.FC = () => {
                         if (index <= 1 && connector && connector?.ready) {
                             return (
                                 <Button key={index} onClick={() => connect({ connector })}>
+                                    <SocialIcon className={getClassNameForParticalLogin(item)} />
                                     {item}
                                 </Button>
                             );
@@ -87,6 +93,7 @@ const ConnectWalletModal: React.FC = () => {
                             if (index > 1 && connector && connector?.ready) {
                                 return (
                                     <Button key={index} onClick={() => connect({ connector })}>
+                                        <SocialIcon className={getClassNameForParticalLogin(item)} />
                                         {item}
                                     </Button>
                                 );
@@ -217,6 +224,11 @@ const ArrowIcon = styled.i`
     font-size: 9px;
     margin-left: 7px;
     color: ${(props) => props.theme.connectWalletModal.secondaryText};
+`;
+
+const SocialIcon = styled.i`
+    font-size: 22px;
+    margin-right: 7px;
 `;
 
 const Button = styled(FlexDivCentered)<{ active?: boolean }>`
