@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { ParlaysMarket, SportMarketLiveResult } from 'types/markets';
@@ -89,6 +89,7 @@ import { getParlayPayment } from 'redux/modules/parlay';
 import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { ZERO_ADDRESS } from 'constants/network';
+import { executeBiconomyTransaction } from 'utils/biconomy';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -108,6 +109,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isAA = useSelector((state: RootState) => getIsAA(state));
     const isWalletConnect = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlayPayment = useSelector(getParlayPayment);
     const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
@@ -220,14 +222,26 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
-                const tx = isDefaultCollateral
-                    ? await contract.exerciseOptions()
-                    : await sportsAMMContractWithSigner.exerciseWithOfframp(
-                          position.market.address,
-                          collateralAddress,
-                          isEth
-                      );
-                const txResult = await tx.wait();
+                let txResult;
+                if (isAA) {
+                    txResult = isDefaultCollateral
+                        ? await executeBiconomyTransaction(networkId, contract, 'exerciseOptions')
+                        : await executeBiconomyTransaction(
+                              networkId,
+                              sportsAMMContractWithSigner,
+                              'exerciseWithOfframp',
+                              [position.market.address, collateralAddress, isEth]
+                          );
+                } else {
+                    const tx = isDefaultCollateral
+                        ? await contract.exerciseOptions()
+                        : await sportsAMMContractWithSigner.exerciseWithOfframp(
+                              position.market.address,
+                              collateralAddress,
+                              isEth
+                          );
+                    txResult = await tx.wait();
+                }
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
