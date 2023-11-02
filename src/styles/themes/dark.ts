@@ -133,5 +133,6 @@ export default {
         modalBackground: Colors.GRAY_DARK,
         hover: Colors.BLUE,
         hoverText: Colors.GRAY_DARK,
+        errorMessage: Colors.RED,
     },
 };

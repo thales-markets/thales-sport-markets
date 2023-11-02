@@ -17,6 +17,7 @@ import { Network } from 'enums/network';
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { useSwitchNetwork } from 'wagmi';
 import { getDefaultCollateral } from 'utils/collaterals';
+import ConnectWalletModal from 'components/ConnectWalletModal';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -28,6 +29,8 @@ const WalletInfo: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
+    const [openWalletConnectModal, setOpenWalletConnectModal] = useState(false);
 
     const [dropDownOpen, setDropDownOpen] = useState(false);
 
@@ -67,13 +70,19 @@ const WalletInfo: React.FC = () => {
         <Container>
             <FlexDivColumn>
                 <RainbowConnectButton.Custom>
-                    {({ openConnectModal, openAccountModal }) => {
+                    {({ openAccountModal }) => {
                         return (
                             <Wrapper>
+                                <ConnectWalletModal
+                                    isOpen={openWalletConnectModal}
+                                    onClose={() => setOpenWalletConnectModal(!openWalletConnectModal)}
+                                />
                                 <WalletAddressInfo
                                     isWalletConnected={isWalletConnected}
                                     isClickable={true}
-                                    onClick={isWalletConnected ? openAccountModal : openConnectModal}
+                                    onClick={
+                                        isWalletConnected ? openAccountModal : () => setOpenWalletConnectModal(true)
+                                    }
                                 >
                                     <Text className="wallet-info">
                                         {isWalletConnected
