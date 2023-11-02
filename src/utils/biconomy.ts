@@ -6,6 +6,15 @@ import multipleCollateral from './contracts/multipleCollateralContract';
 import { Connector } from 'wagmi';
 import { HostedWallets, ParticalTypes } from 'enums/wallet';
 import { HOSTED_WALLETS_ICONS, HOSTED_WALLETS_LABELS, PARTICAL_LOGINS_CLASSNAMES } from 'constants/wallet';
+import {
+    BatchedSessionRouterModule,
+    DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
+    DEFAULT_SESSION_KEY_MANAGER_MODULE,
+    SessionKeyManagerModule,
+} from '@biconomy/modules';
+import { defaultAbiCoder } from 'ethers/lib/utils.js';
+
+const ERC20SVM = '0x000000D50C68705bd6897B2d17c7de32FB519fDA'; // session validation module for erc20 transfers
 
 export const executeBiconomyTransaction = async (
     network: Network,
@@ -81,6 +90,112 @@ export const executeBiconomyTransaction = async (
     }
 
     return '';
+};
+
+export const checkSession = async () => {
+    if (biconomyConnector.wallet) {
+        const isSessionKeyModuleEnabled = await biconomyConnector.wallet.isModuleEnabled(
+            DEFAULT_SESSION_KEY_MANAGER_MODULE
+        );
+        const isBRMenabled = await biconomyConnector.wallet.isModuleEnabled(DEFAULT_BATCHED_SESSION_ROUTER_MODULE);
+        console.log('is session enabled: ', isSessionKeyModuleEnabled);
+        console.log('is batched session enabled: ', isBRMenabled);
+    }
+};
+
+export const createSession = async (scwAddress: string, collateralAddress: string, receiverAddress: string) => {
+    const biconomySmartAccount = biconomyConnector.wallet;
+    if (scwAddress && biconomySmartAccount) {
+        try {
+            const managerModuleAddr = DEFAULT_SESSION_KEY_MANAGER_MODULE;
+            const routerModuleAddr = DEFAULT_BATCHED_SESSION_ROUTER_MODULE;
+
+            const mockSessionModuleAddr = '0x7Ba4a7338D7A90dfA465cF975Cc6691812C3772E';
+
+            // -----> setMerkle tree tx flow
+            // create dapp side session key
+            const sessionSigner = ethers.Wallet.createRandom();
+            const sessionKeyEOA = await sessionSigner.getAddress();
+            console.log('sessionKeyEOA', sessionKeyEOA);
+            // BREWARE JUST FOR DEMO: update local storage with session key
+            window.localStorage.setItem('sessionPKey', sessionSigner.privateKey);
+
+            // generate sessionModule
+            const sessionModule = await SessionKeyManagerModule.create({
+                moduleAddress: managerModuleAddr,
+                smartAccountAddress: scwAddress,
+            });
+
+            const sessionRouterModule = await BatchedSessionRouterModule.create({
+                moduleAddress: routerModuleAddr,
+                sessionKeyManagerModule: sessionModule,
+                smartAccountAddress: scwAddress,
+            });
+
+            // cretae session key data
+            const sessionKeyData = defaultAbiCoder.encode(
+                ['address', 'address', 'address', 'uint256'],
+                [
+                    sessionKeyEOA,
+                    collateralAddress, // erc20 token address
+                    receiverAddress, // receiver address, SportsAMM and ParlayAMM
+                    ethers.utils.parseUnits('50'.toString(), 6).toHexString(), // 50 usdc amount
+                ]
+            );
+
+            const sessionKeyData2 = defaultAbiCoder.encode(['address'], [sessionKeyEOA]);
+
+            const sessionTxData = await sessionRouterModule.createSessionData([
+                {
+                    validUntil: 0,
+                    validAfter: 0,
+                    sessionValidationModule: ERC20SVM,
+                    sessionPublicKey: sessionKeyEOA,
+                    sessionKeyData: sessionKeyData,
+                },
+                {
+                    validUntil: 0,
+                    validAfter: 0,
+                    sessionValidationModule: mockSessionModuleAddr,
+                    sessionPublicKey: sessionKeyEOA,
+                    sessionKeyData: sessionKeyData2,
+                },
+            ]);
+            console.log('sessionTxData', sessionTxData);
+
+            // tx to set session key
+            const tx3 = {
+                to: managerModuleAddr, // session manager module address
+                data: sessionTxData.data,
+            };
+
+            const isSessionKeyModuleEnabled = await biconomySmartAccount.isModuleEnabled(
+                DEFAULT_SESSION_KEY_MANAGER_MODULE
+            );
+            const isBRMenabled = await biconomySmartAccount.isModuleEnabled(DEFAULT_BATCHED_SESSION_ROUTER_MODULE);
+
+            const transactionArray = [];
+            if (!isSessionKeyModuleEnabled) {
+                // -----> enableModule session manager module
+                const tx1 = await biconomySmartAccount.getEnableModuleData(managerModuleAddr);
+                transactionArray.push(tx1);
+            }
+            if (!isBRMenabled) {
+                // -----> enableModule batched session router module
+                const tx2 = await biconomySmartAccount.getEnableModuleData(routerModuleAddr);
+                transactionArray.push(tx2);
+            }
+            transactionArray.push(tx3);
+
+            const partialUserOp = await biconomySmartAccount.buildUserOp(transactionArray);
+            const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp);
+            console.log(`userOp Hash: ${userOpResponse.userOpHash}`);
+            const transactionDetails = await userOpResponse.wait();
+            console.log('txHash', transactionDetails.receipt.transactionHash);
+        } catch (err: any) {
+            console.error(err);
+        }
+    }
 };
 
 export const getParticleConnectors = (connectors: Connector[]): Connector[] => {
