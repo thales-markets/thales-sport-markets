@@ -27,10 +27,11 @@ type MatchInfoProps = {
     market: ParlaysMarket;
     readOnly?: boolean;
     isHighlighted?: boolean;
+    isFlexCard?: boolean;
     customStyle?: { fontSize?: string; lineHeight?: string };
 };
 
-const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
+const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, isFlexCard, customStyle }) => {
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
@@ -42,7 +43,13 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
 
     return (
         <>
-            <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
+            <MatchLogos
+                market={market}
+                width={'120px'}
+                padding={'0 0 0 4px'}
+                isHighlighted={isHighlighted}
+                isFlexCard={isFlexCard}
+            />
             <MatchLabel>
                 <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
                     {marketNameHome}

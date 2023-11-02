@@ -10,16 +10,22 @@ type MatchLogosProps = {
     width?: string;
     padding?: string;
     isHighlighted?: boolean;
+    isFlexCard?: boolean;
 };
 
-const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighlighted }) => {
+const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighlighted, isFlexCard }) => {
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
 
+    console.log();
     useEffect(() => {
-        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
-        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam, market.tags]);
+        if (market.playerName === null) {
+            setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+            setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+        } else {
+            setHomeLogoSrc(getTeamImageSource(market.playerName, market.tags[0]));
+        }
+    }, [market.homeTeam, market.awayTeam, market.tags, market.playerName]);
 
     return (
         <Container
@@ -33,6 +39,15 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighl
                     src={homeLogoSrc}
                     isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                     isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
+                    onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
+                />
+            ) : isFlexCard ? (
+                <ClubLogo
+                    alt="Player image"
+                    src={homeLogoSrc}
+                    isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
+                    isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
+                    isPlayerImage={true}
                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                 />
             ) : (
@@ -61,12 +76,12 @@ const Container = styled.div<{ isFlag?: boolean; width?: string; padding?: strin
     ${(props) => (props.isFlag && props.padding ? `padding: ${props.padding};` : '')}
 `;
 
-const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean; isHighlighted?: boolean }>`
+const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean; isHighlighted?: boolean; isPlayerImage?: boolean }>`
     position: absolute;
     ${(props) => (props.isFlag ? 'object-fit: cover;' : '')}
     ${(props) => (props.isFlag ? 'border-radius: 50%;' : '')}
-    height: ${(props) => (props.isFlag ? '25px' : '27px')};
-    width: ${(props) => (props.isFlag ? '25px' : '27px')};
+    height: ${(props) => (props.isFlag ? '25px' : props.isPlayerImage ? '27px' : '27px')};
+    width: ${(props) => (props.isFlag ? '25px' : props.isPlayerImage ? '37px' : '27px')};
     ${(props) => (props.awayTeam ? `margin-left: ${props.isFlag ? '23' : '16'}px;` : '')}
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
     opacity: ${(props) => (props.isHighlighted ? '1' : '0.4')};

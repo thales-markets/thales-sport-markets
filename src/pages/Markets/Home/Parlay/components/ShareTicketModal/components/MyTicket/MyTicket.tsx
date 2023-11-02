@@ -123,6 +123,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, totalQuote, p
                                         readOnly={true}
                                         isHighlighted={true}
                                         customStyle={matchInfoStyle}
+                                        isFlexCard={true}
                                     />
                                 </RowMarket>
                                 {markets.length !== index + 1 && <HorizontalDashedLine />}
