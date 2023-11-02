@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Button from 'components/Button';
@@ -19,7 +24,6 @@ import SelectInput from 'components/SelectInput';
 import Checkbox from 'components/fields/Checkbox';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { LINKS } from 'constants/links';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Network } from 'enums/network';
 import { refetchBalances } from 'utils/queryConnector';
 import TextInput from '../fields/TextInput/TextInput';
@@ -46,6 +50,8 @@ const getVoucherOptions = (networkId: Network): Array<{ value: number; label: st
 
 const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -55,8 +61,6 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [paymentTokenBalance, setPaymentTokenBalance] = useState<number | string>('');
-
-    const { openConnectModal } = useConnectModal();
 
     const [amount, setAmount] = useState<number>(-1);
     const [isAnotherWallet, setIsAnotherWallet] = useState<boolean>(false);
@@ -188,7 +192,19 @@ const MintVoucherModal: React.FC<MintVoucherModalProps> = ({ onClose }) => {
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
-            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
+            return (
+                <Button
+                    onClick={() =>
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: true,
+                            })
+                        )
+                    }
+                >
+                    {t('common.wallet.connect-your-wallet')}
+                </Button>
+            );
         }
         if (insufficientBalance) {
             return <Button disabled={true}>{t(`common.errors.insufficient-balance`)}</Button>;

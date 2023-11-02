@@ -1,7 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { getIsWalletConnected, getNetworkId, getWalletAddress, switchToNetworkId } from 'redux/modules/wallet';
+import {
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    getWalletConnectModalVisibility,
+    setWalletConnectModalVisibility,
+    switchToNetworkId,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { truncateAddress } from 'utils/formatters/string';
@@ -29,8 +36,7 @@ const WalletInfo: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-
-    const [openWalletConnectModal, setOpenWalletConnectModal] = useState(false);
+    const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
 
     const [dropDownOpen, setDropDownOpen] = useState(false);
 
@@ -74,14 +80,27 @@ const WalletInfo: React.FC = () => {
                         return (
                             <Wrapper>
                                 <ConnectWalletModal
-                                    isOpen={openWalletConnectModal}
-                                    onClose={() => setOpenWalletConnectModal(!openWalletConnectModal)}
+                                    isOpen={connectWalletModalVisibility}
+                                    onClose={() =>
+                                        dispatch(
+                                            setWalletConnectModalVisibility({
+                                                visibility: !connectWalletModalVisibility,
+                                            })
+                                        )
+                                    }
                                 />
                                 <WalletAddressInfo
                                     isWalletConnected={isWalletConnected}
                                     isClickable={true}
                                     onClick={
-                                        isWalletConnected ? openAccountModal : () => setOpenWalletConnectModal(true)
+                                        isWalletConnected
+                                            ? openAccountModal
+                                            : () =>
+                                                  dispatch(
+                                                      setWalletConnectModalVisibility({
+                                                          visibility: !connectWalletModalVisibility,
+                                                      })
+                                                  )
                                     }
                                 >
                                     <Text className="wallet-info">

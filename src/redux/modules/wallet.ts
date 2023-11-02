@@ -12,6 +12,7 @@ type WalletSliceState = {
     networkId: Network;
     networkName: string;
     switchToNetworkId: Network; // used to trigger manually network switch in App.js
+    openWalletConnectModal: boolean;
 };
 
 const initialState: WalletSliceState = {
@@ -20,6 +21,7 @@ const initialState: WalletSliceState = {
     networkId: DEFAULT_NETWORK.networkId,
     networkName: DEFAULT_NETWORK.name,
     switchToNetworkId: DEFAULT_NETWORK.networkId,
+    openWalletConnectModal: false,
 };
 
 const walletDetailsSlice = createSlice({
@@ -56,6 +58,9 @@ const walletDetailsSlice = createSlice({
         ) => {
             state.switchToNetworkId = action.payload.networkId;
         },
+        setWalletConnectModalVisibility: (state, action: PayloadAction<{ visibility: boolean }>) => {
+            state.openWalletConnectModal = action.payload.visibility;
+        },
     },
 });
 
@@ -64,8 +69,14 @@ export const getNetworkId = (state: RootState) => getWalletState(state).networkI
 export const getSwitchToNetworkId = (state: RootState) => getWalletState(state).switchToNetworkId;
 export const getWalletAddress = (state: RootState) => getWalletState(state).walletAddress;
 export const getIsAA = (state: RootState) => getWalletState(state).isAA;
+export const getWalletConnectModalVisibility = (state: RootState) => getWalletState(state).openWalletConnectModal;
 export const getIsWalletConnected = createSelector(getWalletAddress, (walletAddress) => walletAddress != null);
 
-export const { updateNetworkSettings, switchToNetworkId, updateWallet } = walletDetailsSlice.actions;
+export const {
+    updateNetworkSettings,
+    switchToNetworkId,
+    updateWallet,
+    setWalletConnectModalVisibility,
+} = walletDetailsSlice.actions;
 
 export default walletDetailsSlice.reducer;
