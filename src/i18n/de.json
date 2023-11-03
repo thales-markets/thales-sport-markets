@@ -454,7 +454,10 @@
                 "max-combined-markets": "Die maximale Anzahl kombinierter Märkte in Parlay beträgt {{max}}.",
                 "amm-contract-paused": "Parlay AMM angehalten",
                 "unique-players": "Derselbe Teilnehmer kann im Parlay nicht zweimal hinzugefügt werden. {{existingParticipant}} ist bereits in Parlay",
-                "same-event-participant": "Es wird nur ein Teilnehmer pro Veranstaltung unterstützt. {{addedParticipant}} kann nicht hinzugefügt werden, da {{existingParticipant}} bereits in Parlay ist"
+                "same-event-participant": "Es wird nur ein Teilnehmer pro Veranstaltung unterstützt. {{addedParticipant}} kann nicht hinzugefügt werden, da {{existingParticipant}} bereits in Parlay ist",
+                "already-added-combined-positions": "Positionen aus demselben Markt können nicht mit kombinierten Positionen kombiniert werden",
+                "player-props-and-other-positions": "Das Kombinieren von Spieler-Requisitenpositionen mit anderen Positionen aus demselben Markt wird nicht unterstützt",
+                "same-game-different-player-props": "Die Kombination verschiedener Kategorien von Spieler-Requisiten wird nicht unterstützt"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
