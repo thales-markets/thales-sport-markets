@@ -3,17 +3,16 @@ import { Position } from 'enums/markets';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 
 type MatchLogosProps = {
     market: ParlaysMarket;
     width?: string;
     padding?: string;
     isHighlighted?: boolean;
-    isFlexCard?: boolean;
 };
 
-const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighlighted, isFlexCard }) => {
+const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighlighted }) => {
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
 
@@ -41,17 +40,15 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighl
                     isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                 />
-            ) : isFlexCard ? (
+            ) : (
                 <ClubLogo
                     alt="Player image"
                     src={homeLogoSrc}
                     isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                     isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
                     isPlayerImage={true}
-                    onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
+                    onError={getOnPlayerImageError(setHomeLogoSrc)}
                 />
-            ) : (
-                <PlayerIcon className="icon icon--profile" />
             )}
             {!market.isOneSideMarket && market.playerName === null && (
                 <ClubLogo
@@ -85,12 +82,6 @@ const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean; isHighlighte
     ${(props) => (props.awayTeam ? `margin-left: ${props.isFlag ? '23' : '16'}px;` : '')}
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
     opacity: ${(props) => (props.isHighlighted ? '1' : '0.4')};
-`;
-
-const PlayerIcon = styled.i`
-    font-size: 28px;
-    color: ${(props) => props.theme.textColor.secondary};
-    margin-left: 10px;
 `;
 
 export default MatchLogos;
