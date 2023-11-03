@@ -21,7 +21,7 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
 
 const OVERTIME_LOGO = '/logos/overtime-logo.png';
 const OVERTIME_LOGO_DARK = '/logos/overtime-logo-dark.svg';
-const PROFILE_SILHOUETTE = '/profile-silhouette.webp';
+const PROFILE_SILHOUETTE = '/profile-silhouette.svg';
 
 export const getOnImageError = (setSrc: (src: string) => void, leagueTag: number | string, isDark = false) => () => {
     setSrc(TAGS_LIST.find((t) => t.id === Number(leagueTag))?.logo || (isDark ? OVERTIME_LOGO_DARK : OVERTIME_LOGO));
