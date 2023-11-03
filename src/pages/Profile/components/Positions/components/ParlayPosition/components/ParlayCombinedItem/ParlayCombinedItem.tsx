@@ -18,7 +18,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { CombinedMarket, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { formatDateWithTime } from 'utils/formatters/date';
+import { formatDateWithTime } from 'thales-utils';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds, getCombinedOddTooltipText, getSpreadAndTotalTextForCombinedMarket } from 'utils/markets';
 import { getOrdinalNumberLabel } from 'utils/ui';

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getOddsType, setOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { addHoursToCurrentDate } from 'utils/formatters/date';
+import { addHoursToCurrentDate } from 'thales-utils';
 import { getQueryStringVal } from 'utils/useQueryParams';
 
 type GlobalFiltersProps = {

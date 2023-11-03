@@ -25,9 +25,8 @@ import {
     Wrapper,
 } from '../styled-components';
 import { getTwitterProfileLink } from 'utils/quiz';
-import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
+import { formatCurrency, formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { CURRENCY_MAP } from 'constants/currency';
-import { truncateAddress } from 'utils/formatters/string';
 import HelpUsImprove from '../HelpUsImprove';
 import { DEFAULT_TWITTER_PROFILE_IMAGE, MAX_TRIVA_WEEKS } from 'constants/quiz';
 import SelectInput from 'components/SelectInput';

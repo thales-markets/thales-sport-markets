@@ -19,7 +19,8 @@ import { setTheme } from 'redux/modules/ui';
 import { generalConfig } from 'config/general';
 import axios from 'axios';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
-import { isAndroid, isMetamask, isMobile } from 'utils/device';
+import { isAndroid, isMetamask } from 'thales-utils';
+import { isMobile } from 'utils/device';
 import { Theme } from 'enums/ui';
 
 const DappLayout: React.FC = ({ children }) => {

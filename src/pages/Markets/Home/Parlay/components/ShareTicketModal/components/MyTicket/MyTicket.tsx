@@ -19,7 +19,7 @@ import {
     FlexDivRowCentered,
 } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrencyWithSign } from 'thales-utils';
 import { formatMarketOdds } from 'utils/markets';
 import { buildReffererLink } from 'utils/routes';
 import MatchInfo from '../../../MatchInfo';

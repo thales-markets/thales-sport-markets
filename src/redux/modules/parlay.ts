@@ -7,7 +7,7 @@ import {
     ParlaysMarketPosition,
     SGPItem,
 } from 'types/markets';
-import localStore from 'utils/localStore';
+import { localStore } from 'thales-utils';
 import { RootState } from '../rootReducer';
 import { compareCombinedPositionsFromParlayData, getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';

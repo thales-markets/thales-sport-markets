@@ -1,8 +1,7 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Network } from 'enums/network';
-import { getDefaultDecimalsForNetwork } from 'utils/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { getDefaultDecimalsForNetwork, bigNumberFormatter } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
 
 type OvertimeVoucherEscrowData = {

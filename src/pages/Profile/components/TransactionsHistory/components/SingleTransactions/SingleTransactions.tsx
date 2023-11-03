@@ -9,9 +9,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { getEtherscanTxLink } from 'utils/etherscan';
-import { formatTxTimestamp } from 'utils/formatters/date';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
+import { getEtherscanTxLink, formatTxTimestamp, formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,

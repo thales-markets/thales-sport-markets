@@ -4,7 +4,7 @@ const liquidityPoolDataContract = {
     addresses: {
         [Network.OptimismMainnet]: '0x23823f1C7C4AE2Acef3bCCFCD5F282AE078150C2',
         [Network.OptimismGoerli]: '0xB0b68F811Eb18E63aD942A7EcAE038715d4026c6',
-        [Network.ArbitrumOne]: '0x230893C24804B89D0ec3FFfFa243CE32C6b6541B',
+        [Network.Arbitrum]: '0x230893C24804B89D0ec3FFfFa243CE32C6b6541B',
         [Network.Base]: '0x25E9513a00d53e8a0CB2005A48fB0031F6141325',
     },
     abi: [

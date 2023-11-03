@@ -19,7 +19,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { PositionData, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { formatDateWithTime } from 'utils/formatters/date';
+import { formatDateWithTime } from 'thales-utils';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import {
     convertPositionNameToPositionType,

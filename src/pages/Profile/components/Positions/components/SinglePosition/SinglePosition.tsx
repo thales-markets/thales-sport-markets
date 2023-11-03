@@ -29,8 +29,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { ParlaysMarket, SportMarketLiveResult } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { formatDateWithTime } from 'utils/formatters/date';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatDateWithTime, formatCurrencyWithSign } from 'thales-utils';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import {
     convertPositionNameToPosition,

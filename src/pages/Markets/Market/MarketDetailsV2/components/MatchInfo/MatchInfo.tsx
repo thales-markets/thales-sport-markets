@@ -18,7 +18,7 @@ import {
 import Tooltip from 'components/Tooltip';
 import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
-import { formatShortDateWithTime } from 'utils/formatters/date';
+import { formatShortDateWithTime } from 'thales-utils';
 import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP } from 'constants/tags';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';

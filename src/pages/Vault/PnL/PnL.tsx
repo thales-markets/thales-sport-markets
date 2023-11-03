@@ -9,7 +9,7 @@ import { VaultPnls } from 'types/vault';
 import useVaultPnlsQuery from 'queries/vault/useVaultPnlsQuery';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { formatPercentageWithSign } from 'utils/formatters/number';
+import { formatPercentageWithSign } from 'thales-utils';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 
