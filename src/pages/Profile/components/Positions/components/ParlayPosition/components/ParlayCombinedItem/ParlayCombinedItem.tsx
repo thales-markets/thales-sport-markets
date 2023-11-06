@@ -1,12 +1,5 @@
 import PositionSymbol from 'components/PositionSymbol';
-import {
-    ENETPULSE_SPORTS,
-    FIFA_WC_TAG,
-    FIFA_WC_U20_TAG,
-    JSON_ODDS_SPORTS,
-    SPORTS_TAGS_MAP,
-    SPORT_PERIODS_MAP,
-} from 'constants/tags';
+import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
@@ -16,8 +9,11 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { RootState } from 'redux/rootReducer';
+import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { CombinedMarket, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import { getCombinedPositionName } from 'utils/combinedMarkets';
 import { formatDateWithTime } from 'utils/formatters/date';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds, getCombinedOddTooltipText, getSpreadAndTotalTextForCombinedMarket } from 'utils/markets';
@@ -31,9 +27,6 @@ import {
     TeamScoreLabel,
 } from '../../../SinglePosition/styled-components';
 import { ParlayStatus, Wrapper } from './styled-components';
-import { getCombinedPositionName } from 'utils/combinedMarkets';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
 const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ combinedMarket }) => {
     const theme: ThemeInterface = useTheme();
@@ -110,7 +103,6 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
                     <ClubLogo
                         alt={market.homeTeam}
                         src={homeLogoSrc}
-                        isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                         losingTeam={false}
                         onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                         customMobileSize={'30px'}
@@ -119,7 +111,6 @@ const ParlayCombinedItem: React.FC<{ combinedMarket: CombinedMarket }> = ({ comb
                         awayTeam={true}
                         alt={market.awayTeam}
                         src={awayLogoSrc}
-                        isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                         losingTeam={false}
                         onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                         customMobileSize={'30px'}

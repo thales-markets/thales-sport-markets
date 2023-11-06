@@ -1,20 +1,19 @@
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
+import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { Network } from 'enums/network';
 import React from 'react';
-import Flag from 'react-flagpack';
 import { Trans } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
-import { getNetworkId } from 'redux/modules/wallet';
-import { TAGS_FLAGS } from 'enums/tags';
-import { Network } from 'enums/network';
+import { getLeagueFlagSource } from 'utils/images';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -116,7 +115,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                         }
                                     }}
                                 >
-                                    {LeagueFlag(tag.id)}
+                                    <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
                                     <Label>{tag.label}</Label>
                                     {INCENTIVIZED_LEAGUE.ids.includes(tag.id) &&
                                         new Date() > INCENTIVIZED_LEAGUE.startDate &&
@@ -186,53 +185,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                 })}
         </Container>
     );
-};
-
-const LeagueFlag = (tagId: number | any) => {
-    switch (tagId) {
-        case TAGS_FLAGS.NCAA_FOOTBALL:
-            return <Flag size="m" code="USA" />;
-        case TAGS_FLAGS.NFL:
-            return <Flag size="m" code="USA" />;
-        case TAGS_FLAGS.MLB:
-            return <Flag size="m" code="USA" />;
-        case TAGS_FLAGS.NBA:
-            return <Flag size="m" code="USA" />;
-        case TAGS_FLAGS.NCAA_BASKETBALL:
-            return <Flag size="m" code="USA" />;
-        case TAGS_FLAGS.NHL:
-            return <Flag size="m" code="USA" />;
-        case TAGS_FLAGS.WNBA:
-            return <Flag size="m" code="USA" />;
-        case TAGS_FLAGS.MLS:
-            return <Flag size="m" code="USA" />;
-        case TAGS_FLAGS.EPL:
-            return <Flag size="m" code="GB-ENG" />;
-        case TAGS_FLAGS.LIGUE_ONE:
-            return <Flag size="m" code="FR" />;
-        case TAGS_FLAGS.BUNDESLIGA:
-            return <Flag size="m" code="DE" />;
-        case TAGS_FLAGS.LA_LIGA:
-            return <Flag size="m" code="ES" />;
-        case TAGS_FLAGS.SERIE_A:
-            return <Flag size="m" code="IT" />;
-        case TAGS_FLAGS.J1_LEAGUE:
-            return <Flag size="m" code="JP" />;
-        case TAGS_FLAGS.IPL:
-            return <Flag size="m" code="IN" />;
-        case TAGS_FLAGS.EREDIVISIE:
-            return <Flag size="m" code="NL" />;
-        case TAGS_FLAGS.PRIMEIRA_LIGA:
-            return <Flag size="m" code="PT" />;
-        case TAGS_FLAGS.T20_BLAST:
-            return <Flag size="m" code="GB-UKM" />;
-        case TAGS_FLAGS.SAUDI_PROFESSIONAL_LEAGUE:
-            return <Flag size="m" code="SA" />;
-        case TAGS_FLAGS.BRAZIL_1:
-            return <Flag size="m" code="BR" />;
-        default:
-            return <FlagWorld alt="World flag" src="/world-flag.png" />;
-    }
 };
 
 const getNetworkLogo = (networkId: number) => {
@@ -309,10 +261,9 @@ const StarIcon = styled.i<{ isMobile: boolean }>`
     }
 `;
 
-const FlagWorld = styled.img`
-    width: 20px;
-    height: 15px;
-    border-radius: 1.5px;
+const LeagueFlag = styled.img`
+    width: 18px;
+    height: 18px;
 `;
 
 const IncentivizedLeague = styled.div`

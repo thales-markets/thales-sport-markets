@@ -1,27 +1,27 @@
+import Tooltip from 'components/Tooltip';
+import { SPORTS_TAGS_MAP } from 'constants/tags';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
+import { formatShortDateWithTime } from 'utils/formatters/date';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
+import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import {
     Container,
+    LeagueLogo,
     LeagueLogoContainer,
+    MatchTime,
+    MatchTimeContainer,
+    MatchTimeLabel,
     ParticipantLogo,
     ParticipantLogoContainer,
     ParticipantsContainer,
-    LeagueLogo,
-    MatchTimeLabel,
-    MatchTime,
-    MatchTimeContainer,
-    Wrapper,
-    TeamNamesWrapper,
     TeamName,
+    TeamNamesWrapper,
     Versus,
+    Wrapper,
 } from './styled-components';
-import Tooltip from 'components/Tooltip';
-import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
-import { formatShortDateWithTime } from 'utils/formatters/date';
-import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
-import { FIFA_WC_TAG, FIFA_WC_U20_TAG, SPORTS_TAGS_MAP } from 'constants/tags';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 
 type MatchInfoPropsType = {
     market: SportMarketInfo;
@@ -76,7 +76,6 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                         >
                             <ParticipantLogo
                                 src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.tags[0])}
-                                isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                                 onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                             />
                         </ParticipantLogoContainer>
@@ -92,7 +91,6 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                             >
                                 <ParticipantLogo
                                     src={awayLogoSrc ? awayLogoSrc : getErrorImage(market.tags[0])}
-                                    isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                                     onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                                 />
                             </ParticipantLogoContainer>

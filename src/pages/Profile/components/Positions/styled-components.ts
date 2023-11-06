@@ -111,10 +111,7 @@ export const ClubLogo = styled.img<{
     awayTeam?: boolean;
     losingTeam?: boolean;
     customMobileSize?: string;
-    isFlag?: boolean;
 }>`
-    ${(props) => (props?.isFlag ? 'object-fit: cover;' : '')}
-    ${(props) => (props?.isFlag ? 'border-radius: 50%;' : '')}
     height: 40px;
     width: 40px;
     opacity: ${(props) => (props?.losingTeam ? `0.4` : '1')};

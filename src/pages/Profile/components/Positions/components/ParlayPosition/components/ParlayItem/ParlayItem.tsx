@@ -1,14 +1,7 @@
 import PositionSymbol from 'components/PositionSymbol';
-import {
-    BetTypeNameMap,
-    ENETPULSE_SPORTS,
-    FIFA_WC_TAG,
-    FIFA_WC_U20_TAG,
-    JSON_ODDS_SPORTS,
-    SPORTS_TAGS_MAP,
-    SPORT_PERIODS_MAP,
-} from 'constants/tags';
+import { BetTypeNameMap, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
+import { BetType } from 'enums/markets';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -17,9 +10,12 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { RootState } from 'redux/rootReducer';
+import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { PositionData, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import { formatDateWithTime } from 'utils/formatters/date';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import {
     convertPositionNameToPositionType,
@@ -40,10 +36,6 @@ import {
     TeamScoreLabel,
 } from '../../../SinglePosition/styled-components';
 import { ParlayStatus, Wrapper } from './styled-components';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
-import { BetType } from 'enums/markets';
 
 const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | undefined; quote: number }> = ({
     market,
@@ -123,7 +115,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         <ClubLogo
                             alt={market.homeTeam}
                             src={homeLogoSrc}
-                            isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                             losingTeam={false}
                             onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                             customMobileSize={'30px'}
@@ -132,7 +123,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                         <ClubLogo
                             alt={market.playerName}
                             src={homeLogoSrc}
-                            isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                             losingTeam={false}
                             onError={getOnPlayerImageError(setHomeLogoSrc)}
                             customMobileSize={'30px'}
@@ -144,7 +134,6 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                             awayTeam={true}
                             alt={market.awayTeam}
                             src={awayLogoSrc}
-                            isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                             losingTeam={false}
                             onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                             customMobileSize={'30px'}
