@@ -37,6 +37,7 @@ import { ParticleNetwork } from '@particle-network/auth';
 import { ParticleProvider } from '@particle-network/provider';
 import biconomyConnector from 'utils/biconomyWallet';
 import { BiconomyPaymaster } from '@biconomy/paymaster';
+import { checkSession } from 'utils/biconomy';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -160,6 +161,7 @@ const App = () => {
 
                     const swAddress = await wallet.getAccountAddress();
                     biconomyConnector.setWallet(wallet);
+                    await checkSession();
                     dispatch(updateWallet({ walletAddress: swAddress, isAA: true }));
                 }
 
