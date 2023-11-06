@@ -35,10 +35,14 @@ import {
     TitleVaultIcon,
     UsersInVaultText,
 } from './styled-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import {
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import { isParlayVault, VAULT_MAP } from 'constants/vault';
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
@@ -78,6 +82,8 @@ type VaultProps = RouteComponentProps<{
 
 const Vault: React.FC<VaultProps> = (props) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+
     const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -102,8 +108,6 @@ const Vault: React.FC<VaultProps> = (props) => {
             navigateTo(ROUTES.Vaults);
         }
     }, [vaultAddress]);
-
-    const { openConnectModal } = useConnectModal();
 
     const paymentTokenBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -324,7 +328,19 @@ const Vault: React.FC<VaultProps> = (props) => {
 
     const getDepositSubmitButton = () => {
         if (!isWalletConnected) {
-            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
+            return (
+                <Button
+                    onClick={() =>
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: true,
+                            })
+                        )
+                    }
+                >
+                    {t('common.wallet.connect-your-wallet')}
+                </Button>
+            );
         }
         if (insufficientBalance) {
             return <Button disabled={true}>{t(`common.errors.insufficient-balance`)}</Button>;
@@ -354,7 +370,19 @@ const Vault: React.FC<VaultProps> = (props) => {
 
     const getWithdrawButton = () => {
         if (!isWalletConnected) {
-            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
+            return (
+                <Button
+                    onClick={() =>
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: true,
+                            })
+                        )
+                    }
+                >
+                    {t('common.wallet.connect-your-wallet')}
+                </Button>
+            );
         }
         return (
             <Button disabled={isRequestWithdrawalButtonDisabled} onClick={handleWithdrawalRequest}>

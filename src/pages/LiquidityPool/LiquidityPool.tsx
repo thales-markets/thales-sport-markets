@@ -38,9 +38,14 @@ import {
     MainContentContainer,
     defaultButtonProps,
 } from './styled-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
 import NumericInput from 'components/fields/NumericInput';
@@ -83,6 +88,8 @@ import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+
     const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -525,7 +532,19 @@ const LiquidityPool: React.FC = () => {
 
     const getWithdrawButton = () => {
         if (!isWalletConnected) {
-            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
+            return (
+                <Button
+                    onClick={() =>
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: true,
+                            })
+                        )
+                    }
+                >
+                    {t('common.wallet.connect-your-wallet')}
+                </Button>
+            );
         }
         return (
             <Button

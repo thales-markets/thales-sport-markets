@@ -1,5 +1,4 @@
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, DEFAULT_CURRENCY_DECIMALS, LONG_CURRENCY_DECIMALS, USD_SIGN } from 'constants/currency';
@@ -17,7 +16,13 @@ import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import { getParlayPayment, removeAll, setPaymentAmountToBuy } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsAA,
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { AMMPosition, AvailablePerPosition, ParlaysMarket } from 'types/markets';
@@ -85,7 +90,7 @@ type SingleProps = {
 const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
-    const { openConnectModal } = useConnectModal();
+
     const theme: ThemeInterface = useTheme();
 
     const dispatch = useDispatch();
@@ -610,7 +615,16 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
 
         if (!isWalletConnected) {
             return (
-                <Button onClick={() => openConnectModal?.()} {...defaultButtonProps}>
+                <Button
+                    onClick={() =>
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: true,
+                            })
+                        )
+                    }
+                    {...defaultButtonProps}
+                >
                     {t('common.wallet.connect-your-wallet')}
                 </Button>
             );
