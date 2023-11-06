@@ -63,7 +63,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                         <LanguageSelector />
                     </FlexDivCentered>
                     <WalletWrapper>
-                        <WalletInfo />
+                        <WalletInfo onCloseMobile={() => setNavMenuVisibility(false)} />
                     </WalletWrapper>
                 </HeaderContainer>
                 <ItemsContainer>

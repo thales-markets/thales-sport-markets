@@ -26,7 +26,11 @@ import { useSwitchNetwork } from 'wagmi';
 import { getDefaultCollateral } from 'utils/collaterals';
 import ConnectWalletModal from 'components/ConnectWalletModal';
 
-const WalletInfo: React.FC = () => {
+type WalletInfoProps = {
+    onCloseMobile?: () => void;
+};
+
+const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const { switchNetwork } = useSwitchNetwork();
@@ -95,12 +99,14 @@ const WalletInfo: React.FC = () => {
                                     onClick={
                                         isWalletConnected
                                             ? openAccountModal
-                                            : () =>
+                                            : () => {
                                                   dispatch(
                                                       setWalletConnectModalVisibility({
                                                           visibility: !connectWalletModalVisibility,
                                                       })
-                                                  )
+                                                  );
+                                                  onCloseMobile ? onCloseMobile() : '';
+                                              }
                                     }
                                 >
                                     <Text className="wallet-info">
