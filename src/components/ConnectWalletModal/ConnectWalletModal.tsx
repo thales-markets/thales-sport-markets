@@ -269,7 +269,9 @@ const ConnectWithLabel = styled(SecondaryText)`
 const SocialButtonsWrapper = styled(FlexDivRow)`
     justify-content: space-around;
     width: 100%;
-    flex-wrap: wrap;
+    @media (max-width: 575px) {
+        flex-wrap: wrap;
+    }
 `;
 
 const SocialIcon = styled.i`
