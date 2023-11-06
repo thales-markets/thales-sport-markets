@@ -16,6 +16,9 @@ import {
     getWalleti18Label,
 } from 'utils/biconomy';
 import SimpleLoader from 'components/SimpleLoader';
+import { getIsMobile } from 'redux/modules/app';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/rootReducer';
 
 ReactModal.setAppElement('#root');
 
@@ -28,11 +31,12 @@ const defaultStyle = {
         padding: '25px',
         backgroundColor: '#181A20',
         border: 'none',
-        borderRadius: '15px',
         width: '720px',
+        borderRadius: '15px',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         overflow: 'none',
+        height: 'auto',
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -48,6 +52,19 @@ type ConnectWalletModalProps = {
 const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
     const { connect, connectors, isLoading, error, isSuccess } = useConnect();
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
+    useEffect(() => {
+        if (isMobile) {
+            defaultStyle.content.width = '100%';
+            defaultStyle.content.padding = '20px 5px';
+            defaultStyle.content.height = '100%';
+        } else {
+            defaultStyle.content.width = '720px';
+            defaultStyle.content.padding = '25px';
+            defaultStyle.content.height = 'auto';
+        }
+    }, [isMobile]);
 
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -171,6 +188,9 @@ const CloseIcon = styled.i`
         content: '\\004F';
         color: ${(props) => props.theme.textColor.primary};
     }
+    @media (max-width: 575px) {
+        padding: 15px;
+    }
 `;
 
 const Header = styled.h2`
@@ -249,6 +269,7 @@ const ConnectWithLabel = styled(SecondaryText)`
 const SocialButtonsWrapper = styled(FlexDivRow)`
     justify-content: space-around;
     width: 100%;
+    flex-wrap: wrap;
 `;
 
 const SocialIcon = styled.i`
