@@ -138,9 +138,6 @@ const SidebarLeaderboard: React.FC = () => {
                             const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlayData);
                             const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlayData);
 
-                            console.log('combinedMarkets ', combinedMarkets);
-                            console.log('parlayWithoutCombinedMarkets ', parlayWithoutCombinedMarkets);
-
                             return (
                                 <React.Fragment key={index}>
                                     <LeaderboardRow

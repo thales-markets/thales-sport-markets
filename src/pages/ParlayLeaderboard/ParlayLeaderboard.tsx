@@ -359,7 +359,7 @@ const ParlayLeaderboard: React.FC = () => {
 
                     const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
                     const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlay);
-                    console.log('combinedMarkets ', combinedMarkets);
+
                     const toRender = getParlayRow(
                         parlayWithoutCombinedMarkets,
                         selectedOddsType,
