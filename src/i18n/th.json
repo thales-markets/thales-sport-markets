@@ -450,7 +450,10 @@
                 "max-combined-markets": "จำนวนตลาดรวมสูงสุดในพาร์เลย์คือ {{max}}",
                 "amm-contract-paused": "AMM พาร์เลย์หยุดชั่วคราว",
                 "unique-players": "ไม่สามารถเพิ่มผู้เข้าร่วมคนเดียวกันสองครั้งในพาร์เลย์ {{existingParticipant}} อยู่ในพาร์เลย์แล้ว",
-                "same-event-participant": "รองรับผู้เข้าร่วมเพียงหนึ่งคนต่อเหตุการณ์ ไม่สามารถเพิ่ม {{addedParticipant}} ได้ เนื่องจาก {{existingParticipant}} อยู่ใน Parlay แล้ว"
+                "same-event-participant": "รองรับผู้เข้าร่วมเพียงหนึ่งคนต่อเหตุการณ์ ไม่สามารถเพิ่ม {{addedParticipant}} ได้ เนื่องจาก {{existingParticipant}} อยู่ใน Parlay แล้ว",
+                "already-added-combined-positions": "ไม่สามารถรวมตำแหน่งจากตลาดเดียวกันกับตำแหน่งรวมได้",
+                "same-game-different-player-props": "ไม่รองรับการรวมอุปกรณ์ประกอบฉากของผู้เล่นประเภทต่างๆ",
+                "player-props-and-other-positions": "ไม่รองรับการรวมตำแหน่งอุปกรณ์ประกอบฉากของผู้เล่นกับตำแหน่งอื่นจากตลาดเดียวกัน"
             },
             "skew": "ลาด",
             "payout": "การจ่ายเงิน",

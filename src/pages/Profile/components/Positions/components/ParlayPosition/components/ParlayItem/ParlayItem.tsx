@@ -20,7 +20,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { PositionData, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatDateWithTime } from 'thales-utils';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import {
     convertPositionNameToPositionType,
     formatMarketOdds,
@@ -39,7 +39,7 @@ import {
     Status,
     TeamScoreLabel,
 } from '../../../SinglePosition/styled-components';
-import { ParlayStatus, PlayerIcon, Wrapper } from './styled-components';
+import { ParlayStatus, Wrapper } from './styled-components';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
@@ -55,13 +55,21 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
 
-    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+    const [homeLogoSrc, setHomeLogoSrc] = useState(
+        market.playerName === null
+            ? getTeamImageSource(market.homeTeam, market.tags[0])
+            : getTeamImageSource(market.playerName, market.tags[0])
+    );
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
 
     useEffect(() => {
-        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
-        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam, market.tags]);
+        if (market.playerName === null) {
+            setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+            setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+        } else {
+            setHomeLogoSrc(getTeamImageSource(market.playerName, market.tags[0]));
+        }
+    }, [market.homeTeam, market.awayTeam, market.tags, market.playerName]);
 
     const positionEnum = convertPositionNameToPositionType(position ? position.side : '');
 
@@ -121,7 +129,14 @@ const ParlayItem: React.FC<{ market: SportMarketInfo; position: PositionData | u
                             customMobileSize={'30px'}
                         />
                     ) : (
-                        <PlayerIcon className="icon icon--profile" />
+                        <ClubLogo
+                            alt={market.playerName}
+                            src={homeLogoSrc}
+                            isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
+                            losingTeam={false}
+                            onError={getOnPlayerImageError(setHomeLogoSrc)}
+                            customMobileSize={'30px'}
+                        />
                     )}
 
                     {!market.isOneSideMarket && market.playerName === null && (
