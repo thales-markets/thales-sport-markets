@@ -345,7 +345,7 @@ const getPositionStatus = (position: PositionData, theme: ThemeInterface) => {
     );
 };
 
-const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket, theme: ThemeInterface) => {
+export const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket, theme: ThemeInterface) => {
     const isOpen = combinedMarket.markets[0].isOpen || combinedMarket.markets[1].isOpen;
     if (isOpen) return <StatusIcon color={theme.status.open} className={`icon icon--open`} />;
     if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions))
@@ -367,7 +367,7 @@ const getOpacity = (position: PositionData) => {
     }
 };
 
-const getOpacityForCombinedMarket = (combinedMarket: CombinedMarket) => {
+export const getOpacityForCombinedMarket = (combinedMarket: CombinedMarket) => {
     if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions)) return 1;
     if (combinedMarket.markets[0].isResolved && combinedMarket.markets[1].isResolved) return 0.5;
     return 1;
@@ -400,7 +400,6 @@ export const getParlayRow = (
     combinedMarkets?: CombinedMarket[]
 ) => {
     const render: any = [];
-
     if (combinedMarkets?.length) {
         combinedMarkets.forEach((combinedMarket, index) => {
             const opacity = getOpacityForCombinedMarket(combinedMarket);
