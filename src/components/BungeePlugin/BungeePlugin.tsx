@@ -10,9 +10,10 @@ import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSou
 import { Network } from 'enums/network';
 import { mainnet, useNetwork } from 'wagmi';
 import { ThemeInterface } from 'types/ui';
-import { hexToRGB } from 'utils/style';
+import { hexToRGB } from 'thales-utils';
 import { ethers } from 'ethers';
 import { getDefaultCollateral } from 'utils/collaterals';
+import { SupportedNetwork } from 'types/network';
 
 type CustomizationProps = {
     width?: number;
@@ -29,7 +30,7 @@ type CustomizationProps = {
     outline?: string;
 };
 
-const SUPPORTED_DESTINATION_NETWORKS = [Network.OptimismMainnet, Network.ArbitrumOne, Network.Base];
+const SUPPORTED_DESTINATION_NETWORKS = [Network.OptimismMainnet, Network.Arbitrum, Network.Base];
 
 const BungeePlugin: React.FC = () => {
     const { chain } = useNetwork();
@@ -57,7 +58,7 @@ const BungeePlugin: React.FC = () => {
     const defaultDestinationToken = allTokens.filter(
         (token) =>
             token.chainId === defaultDestNetwork &&
-            token.symbol === getDefaultCollateral(defaultDestNetwork as Network).toUpperCase() // SUSD is symbol on Bungee instead of sUSD
+            token.symbol === getDefaultCollateral(defaultDestNetwork as SupportedNetwork).toUpperCase() // SUSD is symbol on Bungee instead of sUSD
     )[0]?.address;
 
     // All colors should stricktly be in RGB format

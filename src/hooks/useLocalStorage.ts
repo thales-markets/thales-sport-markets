@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import localStore from 'utils/localStore';
+import { localStore } from 'thales-utils';
 
 function useLocalStorage<S>(key: string, initialValue: S) {
     const [storedValue, setStoredValue] = useState(() => {

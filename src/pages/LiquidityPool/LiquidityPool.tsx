@@ -46,7 +46,7 @@ import { LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
 import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserLiquidityPoolData, LiquidityPoolData } from 'types/liquidityPool';
-import { formatCurrencyWithSign, formatPercentage } from 'utils/formatters/number';
+import { formatCurrencyWithSign, formatPercentage, coinParser } from 'thales-utils';
 import { USD_SIGN } from 'constants/currency';
 import TimeRemaining from 'components/TimeRemaining';
 import networkConnector from 'utils/networkConnector';
@@ -78,7 +78,6 @@ import { useTheme } from 'styled-components';
 import { Network } from 'enums/network';
 import { delay } from 'utils/timer';
 import { getDefaultCollateral } from 'utils/collaterals';
-import { coinParser } from 'utils/formatters/ethers';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 
 const LiquidityPool: React.FC = () => {
@@ -1157,7 +1156,7 @@ const getInfoGraphicPercentages = (currentBalance: number, nextRoundBalance: num
 };
 
 const getUniswapLink = (networkId: Network) => {
-    if (networkId === Network.ArbitrumOne) return LINKS.UniswapBuyThalesArbitrum;
+    if (networkId === Network.Arbitrum) return LINKS.UniswapBuyThalesArbitrum;
     if (networkId === Network.Base) return LINKS.UniswapBuyThalesBase;
     return LINKS.UniswapBuyThalesOp;
 };

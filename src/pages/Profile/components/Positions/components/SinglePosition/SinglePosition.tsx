@@ -3,15 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PositionSymbol from 'components/PositionSymbol';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import {
-    BetTypeNameMap,
-    ENETPULSE_SPORTS,
-    FIFA_WC_TAG,
-    FIFA_WC_U20_TAG,
-    JSON_ODDS_SPORTS,
-    SPORTS_TAGS_MAP,
-    SPORT_PERIODS_MAP,
-} from 'constants/tags';
+import { BetTypeNameMap, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
@@ -29,8 +21,7 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { ParlaysMarket, SportMarketLiveResult } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { formatDateWithTime } from 'utils/formatters/date';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatDateWithTime, formatCurrencyWithSign } from 'thales-utils';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import {
     convertPositionNameToPosition,
@@ -282,9 +273,6 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         <ClubLogo
                             alt={position.market.homeTeam}
                             src={homeLogoSrc}
-                            isFlag={
-                                position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG
-                            }
                             losingTeam={false}
                             onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
                             customMobileSize={'30px'}
@@ -293,9 +281,6 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         <ClubLogo
                             alt={position.market.playerName}
                             src={homeLogoSrc}
-                            isFlag={
-                                position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG
-                            }
                             losingTeam={false}
                             onError={getOnPlayerImageError(setHomeLogoSrc)}
                             customMobileSize={'30px'}
@@ -307,9 +292,6 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                             awayTeam={true}
                             alt={position.market.awayTeam}
                             src={awayLogoSrc}
-                            isFlag={
-                                position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG
-                            }
                             losingTeam={false}
                             onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
                             customMobileSize={'30px'}

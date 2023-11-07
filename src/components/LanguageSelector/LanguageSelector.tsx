@@ -2,11 +2,11 @@ import { SupportedLanguages } from 'enums/languages';
 import i18n from 'i18n';
 import { DEFAULT_LANGUAGE, LanguageNameMap } from 'i18n/config';
 import React, { useEffect, useState } from 'react';
-import Flag from 'react-flagpack';
 import { withTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import { getLanguageFlagSource } from 'utils/images';
 import useQueryParam from 'utils/useQueryParams';
 
 type LanguageSelectorProps = {
@@ -49,7 +49,10 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ isBurger }) => {
                             setDropdownIsOpen(!languageDropdownIsOpen);
                         }}
                     >
-                        {LanguageFlag(selectedLanguage as any)}
+                        <LanguageFlag
+                            alt={(selectedLanguage as any).toString()}
+                            src={getLanguageFlagSource(selectedLanguage as any)}
+                        />
                     </LanguageButton>
                     {languageDropdownIsOpen && (
                         <DropDown className={isBurger ? 'language-dropdown' : ''}>
@@ -65,7 +68,10 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ isBurger }) => {
                                     data-matomo-action={language}
                                 >
                                     <>
-                                        {LanguageFlag(language as any)}
+                                        <LanguageFlag
+                                            alt={(language as any).toString()}
+                                            src={getLanguageFlagSource(language as any)}
+                                        />
                                         <FlexDivCentered>
                                             <LanguageName key={language}>
                                                 {(LanguageNameMap as any)[language]}
@@ -155,27 +161,9 @@ const LanguageName = styled.div`
     text-transform: uppercase;
 `;
 
-const LanguageFlag = (language: SupportedLanguages | any) => {
-    switch (language) {
-        case SupportedLanguages.ENGLISH:
-            return <Flag code="GB-UKM" />;
-        case SupportedLanguages.CHINESE:
-            return <Flag code="CN" />;
-        case SupportedLanguages.FRENCH:
-            return <Flag code="FR" />;
-        case SupportedLanguages.GERMAN:
-            return <Flag code="DE" />;
-        // case SupportedLanguages.ITALIAN:
-        //     return <Flag code="IT" />;
-        // case SupportedLanguages.RUSSIAN:
-        //     return <Flag code="RU" />;
-        case SupportedLanguages.SPANISH:
-            return <Flag code="ES" />;
-        case SupportedLanguages.THAI:
-            return <Flag code="TH" />;
-        default:
-            return <Flag code="GB-UKM" />;
-    }
-};
+const LanguageFlag = styled.img`
+    height: 27px;
+    width: 27px;
+`;
 
 export default withTranslation()(LanguageSelector);

@@ -9,9 +9,13 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { ParlayMarket, PositionData, SportMarketInfo } from 'types/markets';
-import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
-import { truncateAddress } from 'utils/formatters/string';
+import {
+    formatDateWithTime,
+    formatTxTimestamp,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    truncateAddress,
+} from 'thales-utils';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,

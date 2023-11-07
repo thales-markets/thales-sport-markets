@@ -30,11 +30,15 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
-import { CombinedMarket, ParlayMarket, ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
-import { getEtherscanAddressLink } from 'utils/etherscan';
-import { formatDateWithTime } from 'utils/formatters/date';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
-import { truncateAddress } from 'utils/formatters/string';
+import { CombinedMarket } from 'types/markets';
+import { ParlayMarket, ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
+import {
+    getEtherscanAddressLink,
+    formatDateWithTime,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    truncateAddress,
+} from 'thales-utils';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
@@ -131,7 +135,7 @@ const ParlayLeaderboard: React.FC = () => {
                                 overlay={
                                     <>
                                         {rewards[data.rank - 1]}{' '}
-                                        {networkId !== Network.ArbitrumOne
+                                        {networkId !== Network.Arbitrum
                                             ? 'OP'
                                             : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
                                             ? 'ARB'
@@ -144,7 +148,7 @@ const ParlayLeaderboard: React.FC = () => {
                                             style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
                                             color={theme.background.tertiary}
                                             className={`icon ${
-                                                networkId !== Network.ArbitrumOne
+                                                networkId !== Network.Arbitrum
                                                     ? 'icon--op-rewards'
                                                     : 'icon--thales-rewards'
                                             }`}
@@ -273,7 +277,7 @@ const ParlayLeaderboard: React.FC = () => {
                                                 style={{ fontSize: 16, position: 'absolute', left: '-20px' }}
                                                 color={theme.background.tertiary}
                                                 className={`icon ${
-                                                    networkId !== Network.ArbitrumOne
+                                                    networkId !== Network.Arbitrum
                                                         ? 'icon--op-rewards'
                                                         : 'icon--thales-rewards'
                                                 }`}
@@ -727,32 +731,32 @@ export const getRewardsArray = (networkId: Network, period: number): number[] =>
         return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
     }
     if (period > PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM) {
-        if (networkId == Network.ArbitrumOne || networkId == Network.OptimismMainnet)
+        if (networkId == Network.Arbitrum || networkId == Network.OptimismMainnet)
             return PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000;
         return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
     } else if (period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS) {
-        if (networkId !== Network.ArbitrumOne) return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
+        if (networkId !== Network.Arbitrum) return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
         return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10;
     } else {
-        if (networkId == Network.ArbitrumOne) return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
+        if (networkId == Network.Arbitrum) return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
         return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20;
     }
 };
 
 const getRewardsAmount = (networkId: Network, period: number) => {
     if (period <= PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM) {
-        if (networkId == Network.ArbitrumOne) return '1,000 ARB';
+        if (networkId == Network.Arbitrum) return '1,000 ARB';
         if (networkId == Network.OptimismMainnet) return '1,000 OP';
         return '1,000 THALES';
     }
 
-    if (networkId == Network.ArbitrumOne) return '2,000 ARB';
+    if (networkId == Network.Arbitrum) return '2,000 ARB';
     if (networkId == Network.OptimismMainnet) return '2,000 OP';
     return '1,000 THALES';
 };
 
 const getRewardsCurrency = (networkId: Network) => {
-    if (networkId == Network.ArbitrumOne) return 'ARB';
+    if (networkId == Network.Arbitrum) return 'ARB';
     if (networkId == Network.OptimismMainnet) return 'OP';
     return 'THALES';
 };

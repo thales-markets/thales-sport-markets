@@ -1,6 +1,7 @@
 import { keyBy } from 'lodash';
 import { Coins } from 'types/tokens';
 import { Network } from 'enums/network';
+import { SupportedNetwork } from 'types/network';
 
 export const CURRENCY_MAP = {
     sUSD: 'sUSD',
@@ -26,7 +27,7 @@ export const STABLE_COINS = [
     CRYPTO_CURRENCY_MAP.USDT,
 ];
 
-export const COLLATERALS: Record<Network, Coins[]> = {
+export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.sUSD as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,
@@ -37,7 +38,7 @@ export const COLLATERALS: Record<Network, Coins[]> = {
         CRYPTO_CURRENCY_MAP.ETH as Coins,
     ],
     [Network.OptimismGoerli]: [CRYPTO_CURRENCY_MAP.sUSD as Coins],
-    [Network.ArbitrumOne]: [
+    [Network.Arbitrum]: [
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.DAI as Coins,

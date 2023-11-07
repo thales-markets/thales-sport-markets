@@ -1,20 +1,19 @@
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
+import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import Tooltip from 'components/Tooltip';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
 import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_LIST } from 'constants/tags';
+import { Network } from 'enums/network';
+import { orderBy } from 'lodash';
 import React, { useState } from 'react';
-import Flag from 'react-flagpack';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
+import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { SportMarkets, TagInfo } from 'types/markets';
+import { getLeagueFlagSource } from 'utils/images';
 import MarketListCard from '../MarketListCard';
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import Tooltip from 'components/Tooltip';
-import { Trans, useTranslation } from 'react-i18next';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
-import { getNetworkId } from 'redux/modules/wallet';
-import { Network } from 'enums/network';
-import { TAGS_FLAGS } from 'enums/tags';
-import { orderBy } from 'lodash';
 
 type MarketsList = {
     markets: SportMarkets;
@@ -46,7 +45,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                         }
                     }}
                 >
-                    {LeagueFlag(Number(league))}
+                    <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
                     <LeagueName>{leagueName}</LeagueName>
                     {hideLeague ? (
                         <ArrowIcon className={`icon-exotic icon-exotic--right`} />
@@ -70,7 +69,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                         rewards:
                                             networkId == Network.OptimismMainnet
                                                 ? INCENTIVIZED_LEAGUE.opRewards
-                                                : networkId == Network.ArbitrumOne
+                                                : networkId == Network.Arbitrum
                                                 ? INCENTIVIZED_LEAGUE.thalesRewards
                                                 : '',
                                     }}
@@ -104,7 +103,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                         rewards:
                                             networkId == Network.OptimismMainnet
                                                 ? INCENTIVIZED_LEAGUE.opRewards
-                                                : networkId == Network.ArbitrumOne
+                                                : networkId == Network.Arbitrum
                                                 ? INCENTIVIZED_LEAGUE.thalesRewards
                                                 : '',
                                     }}
@@ -145,53 +144,6 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     );
 };
 
-const LeagueFlag = (tagId: number | any) => {
-    switch (tagId) {
-        case TAGS_FLAGS.NCAA_FOOTBALL:
-            return <Flag size="l" code="USA" />;
-        case TAGS_FLAGS.NFL:
-            return <Flag size="l" code="USA" />;
-        case TAGS_FLAGS.MLB:
-            return <Flag size="l" code="USA" />;
-        case TAGS_FLAGS.NBA:
-            return <Flag size="l" code="USA" />;
-        case TAGS_FLAGS.NCAA_BASKETBALL:
-            return <Flag size="l" code="USA" />;
-        case TAGS_FLAGS.NHL:
-            return <Flag size="l" code="USA" />;
-        case TAGS_FLAGS.WNBA:
-            return <Flag size="l" code="USA" />;
-        case TAGS_FLAGS.MLS:
-            return <Flag size="l" code="USA" />;
-        case TAGS_FLAGS.EPL:
-            return <Flag size="l" code="GB-ENG" />;
-        case TAGS_FLAGS.LIGUE_ONE:
-            return <Flag size="l" code="FR" />;
-        case TAGS_FLAGS.BUNDESLIGA:
-            return <Flag size="l" code="DE" />;
-        case TAGS_FLAGS.LA_LIGA:
-            return <Flag size="l" code="ES" />;
-        case TAGS_FLAGS.SERIE_A:
-            return <Flag size="l" code="IT" />;
-        case TAGS_FLAGS.J1_LEAGUE:
-            return <Flag size="l" code="JP" />;
-        case TAGS_FLAGS.IPL:
-            return <Flag size="l" code="IN" />;
-        case TAGS_FLAGS.EREDIVISIE:
-            return <Flag size="l" code="NL" />;
-        case TAGS_FLAGS.PRIMEIRA_LIGA:
-            return <Flag size="l" code="PT" />;
-        case TAGS_FLAGS.T20_BLAST:
-            return <Flag size="l" code="GB-UKM" />;
-        case TAGS_FLAGS.SAUDI_PROFESSIONAL_LEAGUE:
-            return <Flag size="l" code="SA" />;
-        case TAGS_FLAGS.BRAZIL_1:
-            return <Flag size="l" code="BR" />;
-        default:
-            return <FlagWorld alt="World flag" src="/world-flag.png" />;
-    }
-};
-
 const sortWinnerMarkets = (markets: SportMarkets, leagueId: number) => {
     if (leagueId == GOLF_TOURNAMENT_WINNER_TAG || MOTOSPORT_TAGS.includes(leagueId)) {
         return orderBy(markets, ['maturityDate', 'homeOdds'], ['asc', 'desc']);
@@ -203,7 +155,7 @@ const getNetworkLogo = (networkId: number) => {
     switch (networkId) {
         case Network.OptimismMainnet:
             return <OPLogo />;
-        case Network.ArbitrumOne:
+        case Network.Arbitrum:
             return <ArbitrumLogo />;
         default:
             return <></>;
@@ -244,10 +196,9 @@ const GamesContainer = styled.div<{ hidden?: boolean }>`
     display: ${(props) => (props.hidden ? 'none' : '')};
 `;
 
-const FlagWorld = styled.img`
-    width: 32px;
+const LeagueFlag = styled.img`
+    width: 24px;
     height: 24px;
-    border-radius: 1.5px;
     cursor: pointer;
 `;
 

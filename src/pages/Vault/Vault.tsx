@@ -44,7 +44,7 @@ import NumericInput from 'components/fields/NumericInput';
 import { getIsAppReady } from 'redux/modules/app';
 import { UserVaultData, VaultData } from 'types/vault';
 import useVaultDataQuery from 'queries/vault/useVaultDataQuery';
-import { formatCurrencyWithSign, formatPercentage, formatCurrency } from 'utils/formatters/number';
+import { formatCurrencyWithSign, formatPercentage, formatCurrency, coinParser } from 'thales-utils';
 import { USD_SIGN } from 'constants/currency';
 import TimeRemaining from 'components/TimeRemaining';
 import useUserVaultDataQuery from 'queries/vault/useUserVaultDataQuery';
@@ -68,7 +68,6 @@ import Button from 'components/Button';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { VaultTab } from 'enums/vault';
-import { coinParser } from 'utils/formatters/ethers';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { navigateTo } from 'utils/routes';
 

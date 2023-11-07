@@ -17,9 +17,14 @@ import {
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
-import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
-import { fixOneSideMarketCompetitorName, truncateAddress } from 'utils/formatters/string';
+import {
+    formatDateWithTime,
+    formatTxTimestamp,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    truncateAddress,
+} from 'thales-utils';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
