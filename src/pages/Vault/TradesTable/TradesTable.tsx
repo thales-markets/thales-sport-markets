@@ -12,8 +12,7 @@ import { CellProps } from 'react-table';
 import styled from 'styled-components';
 import { Colors } from 'styles/common';
 import { VaultTrade, VaultTrades } from 'types/vault';
-import { formatTxTimestamp } from 'utils/formatters/date';
-import { formatCurrency } from 'utils/formatters/number';
+import { formatTxTimestamp, formatCurrency } from 'thales-utils';
 import {
     fixPlayerPropsLinesFromContract,
     getOddTooltipText,

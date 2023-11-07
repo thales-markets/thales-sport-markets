@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { AMMPosition } from '../../types/markets';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from '../../utils/networkConnector';
-import { bigNumberFormatter, coinFormatter } from '../../utils/formatters/ethers';
+import { bigNumberFormatter, coinFormatter } from 'thales-utils';
 import { Network } from 'enums/network';
 import { ethers } from 'ethers';
 import { ZERO_ADDRESS } from 'constants/network';

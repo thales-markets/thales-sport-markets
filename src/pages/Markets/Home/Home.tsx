@@ -24,7 +24,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
-import { addHoursToCurrentDate } from 'utils/formatters/date';
+import { addHoursToCurrentDate } from 'thales-utils';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
 import FilterTagsMobile from '../components/FilterTagsMobile';
@@ -690,7 +690,7 @@ const Home: React.FC = () => {
                 </MainContainer>
                 {/* RIGHT PART */}
                 <SidebarContainer maxWidth={320}>
-                    {[Network.OptimismMainnet, Network.ArbitrumOne].includes(networkId) && <GetUsd />}
+                    {[Network.OptimismMainnet, Network.Arbitrum].includes(networkId) && <GetUsd />}
                     <Suspense fallback={<Loader />}>
                         <Parlay />
                     </Suspense>

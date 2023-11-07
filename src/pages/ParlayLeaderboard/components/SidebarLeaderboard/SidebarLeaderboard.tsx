@@ -20,8 +20,8 @@ import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { PositionData } from 'types/markets';
-import { formatCurrency } from 'utils/formatters/number';
-import { fixOneSideMarketCompetitorName, truncateAddress } from 'utils/formatters/string';
+import { formatCurrency, truncateAddress } from 'thales-utils';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import {
     convertPositionNameToPositionType,
     fixPlayerPropsLinesFromContract,
@@ -148,7 +148,7 @@ const SidebarLeaderboard: React.FC = () => {
                                                 {formatCurrency(rewards[parlay.rank - 1], 0)}
                                                 {networkId == Network.OptimismMainnet ? (
                                                     <OPLogoWrapper />
-                                                ) : networkId == Network.ArbitrumOne ? (
+                                                ) : networkId == Network.Arbitrum ? (
                                                     <ArbitrumLogoWrapper />
                                                 ) : networkId == Network.Base ? (
                                                     <ThalesLogoWrapper />

@@ -25,9 +25,8 @@ import {
     POSITION_TO_ODDS_OBJECT_PROPERTY_NAME,
     SGPCombinationsFromContractOrderMapping,
 } from 'constants/markets';
-import { bigNumberFormatter } from './formatters/ethers';
+import { bigNumberFormatter, localStore } from 'thales-utils';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import localStore from './localStore';
 import { BetType, CombinedPositionsMatchingCode, ContractSGPOrder, Position } from 'enums/markets';
 import _ from 'lodash';
 

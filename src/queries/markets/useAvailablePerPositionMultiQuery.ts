@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { AvailablePerPosition, ParlaysMarket } from 'types/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import networkConnector from 'utils/networkConnector';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter } from 'thales-utils';
 import { convertPriceImpactToBonus } from 'utils/markets';
 import { Position } from 'enums/markets';
 

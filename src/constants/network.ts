@@ -1,24 +1,24 @@
 import { Network } from 'enums/network';
 import { Chain } from 'wagmi';
-import { NetworkParams } from '../types/network';
+import { NetworkParams, SupportedNetwork } from '../types/network';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-export const SUPPORTED_NETWORKS: Record<Network, string> = {
+export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
     [Network.OptimismGoerli]: 'GOERLI-OPTIMISM',
-    [Network.ArbitrumOne]: 'ARBITRUM-ONE',
+    [Network.Arbitrum]: 'ARBITRUM-ONE',
     [Network.Base]: 'BASE',
 };
 
-export const SUPPORTED_NETWORKS_NAMES: Record<Network, string> = {
+export const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISM MAINNET',
     [Network.OptimismGoerli]: 'OPTIMISM GOERLI',
-    [Network.ArbitrumOne]: 'ARBITRUM ONE',
+    [Network.Arbitrum]: 'ARBITRUM ONE',
     [Network.Base]: 'BASE',
 };
 
-export const DEFAULT_NETWORK: { name: string; networkId: Network } = {
+export const DEFAULT_NETWORK: { name: string; networkId: SupportedNetwork } = {
     name: SUPPORTED_NETWORKS_NAMES[Network.OptimismMainnet],
     networkId: Network.OptimismMainnet,
 };
@@ -39,7 +39,7 @@ export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
         },
         order: 1,
     },
-    [Network.ArbitrumOne]: {
+    [Network.Arbitrum]: {
         chainId: '0xA4B1',
         chainName: 'Arbitrum One',
         shortChainName: 'Arbitrum',
