@@ -135,7 +135,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         }}
                                                         values={{
                                                             rewards:
-                                                                networkId !== Network.ArbitrumOne
+                                                                networkId !== Network.Arbitrum
                                                                     ? INCENTIVIZED_LEAGUE.opRewards
                                                                     : INCENTIVIZED_LEAGUE.thalesRewards,
                                                         }}
@@ -164,7 +164,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         }}
                                                         values={{
                                                             rewards:
-                                                                networkId !== Network.ArbitrumOne
+                                                                networkId !== Network.Arbitrum
                                                                     ? INCENTIVIZED_GRAND_SLAM.opRewards
                                                                     : INCENTIVIZED_GRAND_SLAM.arbRewards,
                                                         }}
@@ -191,7 +191,7 @@ const getNetworkLogo = (networkId: number) => {
     switch (networkId) {
         case Network.OptimismMainnet:
             return <OPLogo />;
-        case Network.ArbitrumOne:
+        case Network.Arbitrum:
             return <ArbitrumLogo />;
         default:
             return <></>;

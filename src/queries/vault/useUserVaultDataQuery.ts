@@ -1,10 +1,9 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
 import { UserVaultData } from 'types/vault';
-import { getDefaultDecimalsForNetwork } from 'utils/network';
 import { isParlayVault } from 'constants/vault';
 
 const useUserVaultDataQuery = (

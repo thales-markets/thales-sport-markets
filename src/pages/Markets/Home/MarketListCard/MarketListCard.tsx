@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { formatShortDateWithTime } from 'utils/formatters/date';
+import { formatShortDateWithTime } from 'thales-utils';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isUEFAGame, isFifaWCGame, isIIHFWCGame, isMotosport, isGolf, isPlayerProps } from 'utils/markets';

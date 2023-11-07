@@ -14,7 +14,7 @@ import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { PositionData, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { formatDateWithTime } from 'utils/formatters/date';
+import { formatDateWithTime } from 'thales-utils';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import {

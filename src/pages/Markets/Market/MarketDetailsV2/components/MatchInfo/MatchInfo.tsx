@@ -1,12 +1,5 @@
-import Tooltip from 'components/Tooltip';
-import { SPORTS_TAGS_MAP } from 'constants/tags';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { formatShortDateWithTime } from 'utils/formatters/date';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
-import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import {
     Container,
     LeagueLogo,
@@ -22,6 +15,13 @@ import {
     Versus,
     Wrapper,
 } from './styled-components';
+import Tooltip from 'components/Tooltip';
+import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
+import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
+import { formatShortDateWithTime } from 'thales-utils';
+import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
+import { SPORTS_TAGS_MAP } from 'constants/tags';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 
 type MatchInfoPropsType = {
     market: SportMarketInfo;

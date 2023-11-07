@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
 import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
-import { getDefaultDecimalsForNetwork } from 'utils/network';
+import { getDefaultDecimalsForNetwork } from 'thales-utils';
 
 const useSUSDWalletBalance = (
     walletAddress: string,

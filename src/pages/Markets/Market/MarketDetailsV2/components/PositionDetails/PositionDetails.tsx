@@ -9,7 +9,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
-import { floorNumberToDecimals } from 'utils/formatters/number';
+import { floorNumberToDecimals } from 'thales-utils';
 import {
     hasBonus,
     formatMarketOdds,

@@ -12,7 +12,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
-import { isFirefox, isIos, isMetamask } from 'utils/device';
+import { isFirefox, isIos, isMetamask } from 'thales-utils';
 import { TwitterIcon } from '../styled-components';
 import MyTicket from './components/MyTicket';
 

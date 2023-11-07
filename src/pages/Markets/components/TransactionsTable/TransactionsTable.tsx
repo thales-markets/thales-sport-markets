@@ -1,11 +1,10 @@
 import React, { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CellProps } from 'react-table';
-import { formatTxTimestamp } from 'utils/formatters/date';
+import { formatTxTimestamp, formatCurrency } from 'thales-utils';
 import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import { MarketTransaction, MarketTransactions } from 'types/markets';
-import { formatCurrency } from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';

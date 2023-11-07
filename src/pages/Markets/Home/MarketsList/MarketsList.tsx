@@ -69,7 +69,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                         rewards:
                                             networkId == Network.OptimismMainnet
                                                 ? INCENTIVIZED_LEAGUE.opRewards
-                                                : networkId == Network.ArbitrumOne
+                                                : networkId == Network.Arbitrum
                                                 ? INCENTIVIZED_LEAGUE.thalesRewards
                                                 : '',
                                     }}
@@ -103,7 +103,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                         rewards:
                                             networkId == Network.OptimismMainnet
                                                 ? INCENTIVIZED_LEAGUE.opRewards
-                                                : networkId == Network.ArbitrumOne
+                                                : networkId == Network.Arbitrum
                                                 ? INCENTIVIZED_LEAGUE.thalesRewards
                                                 : '',
                                     }}
@@ -155,7 +155,7 @@ const getNetworkLogo = (networkId: number) => {
     switch (networkId) {
         case Network.OptimismMainnet:
             return <OPLogo />;
-        case Network.ArbitrumOne:
+        case Network.Arbitrum:
             return <ArbitrumLogo />;
         default:
             return <></>;

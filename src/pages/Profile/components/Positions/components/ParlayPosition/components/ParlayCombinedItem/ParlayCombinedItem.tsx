@@ -14,7 +14,7 @@ import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { CombinedMarket, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCombinedPositionName } from 'utils/combinedMarkets';
-import { formatDateWithTime } from 'utils/formatters/date';
+import { formatDateWithTime } from 'thales-utils';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds, getCombinedOddTooltipText, getSpreadAndTotalTextForCombinedMarket } from 'utils/markets';
 import { getOrdinalNumberLabel } from 'utils/ui';
