@@ -30,6 +30,7 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { CombinedMarket } from 'types/markets';
 import { ParlayMarket, ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
 import {
     getEtherscanAddressLink,
@@ -47,6 +48,7 @@ import {
 import TimeRemaining from 'components/TimeRemaining';
 import {
     extractCombinedMarketsFromParlayMarketType,
+    isCombinedMarketWinner,
     removeCombinedMarketsFromParlayMarketType,
 } from 'utils/combinedMarkets';
 import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
@@ -415,6 +417,14 @@ export const getPositionStatus = (position: PositionData, theme: ThemeInterface)
     } else {
         return <StatusIcon color={theme.status.open} className={`icon icon--open`} />;
     }
+};
+
+export const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket, theme: ThemeInterface) => {
+    const isOpen = combinedMarket.markets[0].isOpen || combinedMarket.markets[1].isOpen;
+    if (isOpen) return <StatusIcon color={theme.status.open} className={`icon icon--open`} />;
+    if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions))
+        return <StatusIcon color={theme.status.win} className={`icon icon--win`} />;
+    return <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />;
 };
 
 export const getOpacity = (position: PositionData) => {
