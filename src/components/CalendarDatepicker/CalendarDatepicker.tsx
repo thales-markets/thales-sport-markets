@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
-import { formatShortDate } from 'utils/formatters/date';
+import { formatShortDate } from 'thales-utils';
 import { useTranslation } from 'react-i18next';
 
 type CalendarDatepickerProps = {

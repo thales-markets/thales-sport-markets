@@ -4,7 +4,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { PositionBalance, SportMarketInfo } from 'types/markets';
 import { Network } from 'enums/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter } from 'thales-utils';
 import { getIsOneSideMarket } from '../../utils/markets';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import { ENETPULSE_SPORTS } from 'constants/tags';

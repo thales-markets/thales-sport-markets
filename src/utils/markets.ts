@@ -25,8 +25,7 @@ import {
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
-import { addDaysToEnteredTimestamp } from './formatters/date';
-import { formatCurrency } from './formatters/number';
+import { addDaysToEnteredTimestamp, formatCurrency } from 'thales-utils';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     BetType,

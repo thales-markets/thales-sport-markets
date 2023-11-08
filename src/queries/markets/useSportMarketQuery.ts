@@ -6,8 +6,7 @@ import { Network } from 'enums/network';
 import networkConnector from 'utils/networkConnector';
 import { insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
 import { getIsOneSideMarket, getMarketAddressesFromSportMarketArray } from 'utils/markets';
-import { getDefaultDecimalsForNetwork } from 'utils/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { getDefaultDecimalsForNetwork, bigNumberFormatter } from 'thales-utils';
 
 const useSportMarketQuery = (
     marketAddress: string,

@@ -19,7 +19,6 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
-import { bigNumberFormatter, coinFormatter, coinParser } from 'utils/formatters/ethers';
 import {
     ceilNumberToDecimals,
     formatCurrencyWithKey,
@@ -27,7 +26,10 @@ import {
     formatPercentage,
     getPrecision,
     roundNumberToDecimals,
-} from 'utils/formatters/number';
+    bigNumberFormatter,
+    coinFormatter,
+    coinParser,
+} from 'thales-utils';
 import { formatMarketOdds, getBonus } from 'utils/markets';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
