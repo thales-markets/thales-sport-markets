@@ -23,6 +23,7 @@ type CollateralSelectorProps = {
     onChangeCollateral: (index: number) => void;
     disabled?: boolean;
     isDetailedView?: boolean;
+    hideCollateralNameOnInput?: boolean;
     collateralBalances?: any;
     exchangeRates?: Rates | null;
     dropDownWidth?: string;
@@ -34,6 +35,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     onChangeCollateral,
     disabled,
     isDetailedView,
+    hideCollateralNameOnInput,
     collateralBalances,
     exchangeRates,
     dropDownWidth,
@@ -66,7 +68,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                 <SelectedCollateral disabled={!!disabled} onClick={() => !disabled && setOpen(!open)}>
                     <TextCollateralWrapper isDetailedView={isDetailedView}>
                         <TextCollateral isDetailedView={isDetailedView} isSelectedCollateral={true}>
-                            {collateralArray[selectedItem]}
+                            {!hideCollateralNameOnInput && collateralArray[selectedItem]}
                         </TextCollateral>
                     </TextCollateralWrapper>
                     <Arrow

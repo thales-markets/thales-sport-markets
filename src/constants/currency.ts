@@ -26,6 +26,12 @@ export const STABLE_COINS = [
     CRYPTO_CURRENCY_MAP.USDT,
 ];
 
+export const PARTICAL_SUPPORTED_COLLATERALS: Coins[] = [
+    CRYPTO_CURRENCY_MAP.USDC as Coins,
+    CRYPTO_CURRENCY_MAP.USDT as Coins,
+    CRYPTO_CURRENCY_MAP.ETH as Coins,
+];
+
 export const COLLATERALS: Record<Network, Coins[]> = {
     [Network.OptimismMainnet]: [
         CRYPTO_CURRENCY_MAP.sUSD as Coins,
@@ -53,6 +59,31 @@ export const COLLATERALS: Record<Network, Coins[]> = {
     ],
 };
 
+export const PARTICAL_COLLATERALS: Record<Network, Coins[]> = {
+    [Network.OptimismMainnet]: [
+        CRYPTO_CURRENCY_MAP.DAI as Coins,
+        CRYPTO_CURRENCY_MAP.USDC as Coins,
+        CRYPTO_CURRENCY_MAP.USDT as Coins,
+        CRYPTO_CURRENCY_MAP.OP as Coins,
+        CRYPTO_CURRENCY_MAP.WETH as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+    ],
+    [Network.OptimismGoerli]: [CRYPTO_CURRENCY_MAP.sUSD as Coins],
+    [Network.ArbitrumOne]: [
+        CRYPTO_CURRENCY_MAP.USDCe as Coins,
+        CRYPTO_CURRENCY_MAP.USDC as Coins,
+        CRYPTO_CURRENCY_MAP.DAI as Coins,
+        CRYPTO_CURRENCY_MAP.USDT as Coins,
+        CRYPTO_CURRENCY_MAP.ARB as Coins,
+        CRYPTO_CURRENCY_MAP.WETH as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+    ],
+    [Network.Base]: [
+        CRYPTO_CURRENCY_MAP.USDC as Coins,
+        CRYPTO_CURRENCY_MAP.WETH as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+    ],
+};
 export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     sUSD: 18,
     DAI: 18,
