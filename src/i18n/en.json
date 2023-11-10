@@ -1011,31 +1011,35 @@
     "seo": {
         "home": {
             "title": "Overtime Markets: The Premier Web3 Sportsbook",
-            "description": "Join one of the best decentralized, transparent web3 sportsbooks. Secure positions in 12+ sports and 40+ leagues."
+            "description": "Enter the world of the premier on-chain web3 sportsbook. Secure positions in 12+ sports and 40+ leagues."
         },
         "markets": {
-            "title": "Overtime Markets: The Premier Web3 Sportsbook",
-            "description": "Join one of the best decentralized, transparent web3 sportsbooks. Secure positions in 12+ sports and 40+ leagues."
+            "title": "Overtime Markets: Web3 Sportsbook Markets for 40+ Leagues",
+            "description": "Join the best web3 sportsbook on the market. Secure positions in the top leagues like the NFL, NBA, UCL, EPL, and more."
         },
         "vaults": {
             "title": "Overtime Markets Vaults: Automated Trading",
-            "description": "Deposit assets into the Overtime Markets vault and let our automated trading mechanism earn ROI for you using a strategy you choose. "
+            "description": "Deposit assets into the Overtime Markets vault and let our automated trading mechanism deploy a strategy you choose. "
         },
         "parlay-leaderboard": {
             "title": "Overtime Markets: Earn Parlay Rewards Every 2 Weeks",
-            "description": "Top 10 parlays with the highest odds on Overtime Markets are eligible for biweekly bonuses. Start earning your bonuses now!"
+            "description": "Overtime Markets is a web3 sportsbook with the best biweekly bonuses on the market for parlay players! Check out the leaderboard and if you qualified here."
         },
         "referral": {
             "title": "Overtime Markets: Earn Referral Fees",
-            "description": "Refer a friend to Overtime and get a percentage from each trade of the person you refer, paid in USD collateral instantly and directly into your wallet."
+            "description": "Refer a friend to Overtime Markets and get a percentage from each trade of the person you refer, paid in USD collateral instantly and directly into your wallet."
         },
         "profile": {
-            "title": "Overtime Market: My Profile",
-            "description": "Claim your winnings, see your past positions and performance, and track deposits you've made to the Overtime Market Vaults."
+            "title": "Overtime Market: User Profile",
+            "description": "Claim your winnings, review your performance, and track deposits you've made to the Overtime Market Vaults."
         },
         "liquidity-pool": {
             "title": "Overtime Markets: Be the House with our Liquidity Pool",
-            "description": "Be the Overtime Market house! Deposit stablecoin collateral into the liquidity pool and earn a percentage of the PnL every week."
+            "description": "Be the Overtime Market house! Deposit stablecoin collateral into the liquidity pool for a chance to earn a percentage of the PnL every week."
+        },
+        "single-market": {
+            "title": "Overtime Markets Web3 Sportsbook: {{dynamicTitle}}",
+            "description": "{{dynamicTitle}}: Enjoy the best Web3 sportsbook odds on the market. No registration needed. Fully decentralized sports markets."
         }
     }
 }

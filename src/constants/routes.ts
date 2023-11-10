@@ -1,4 +1,4 @@
-import { Page } from 'types/ui';
+import { MetaRoutes } from 'enums/routes';
 
 const ROUTES = {
     Home: '/',
@@ -19,34 +19,41 @@ const ROUTES = {
     ParlayLiquidityPool: '/liquidity-pool?pool-type=parlay',
 };
 
-export const PAGE_NAME_TO_META_DATA_KEYS: { [page in Page]: { title: string; description: string } } = {
-    Home: {
+export const PAGE_NAME_TO_META_DATA_KEYS: {
+    [page in MetaRoutes]: { title: string; description: string; hasCustomData?: boolean };
+} = {
+    [MetaRoutes.Home]: {
         title: 'seo.home.title',
         description: 'seo.home.description',
     },
-    Markets: {
+    [MetaRoutes.Markets]: {
         title: 'seo.markets.title',
         description: 'seo.markets.description',
     },
-    Vaults: {
+    [MetaRoutes.Vaults]: {
         title: 'seo.vaults.title',
         description: 'seo.vaults.description',
     },
-    ParlayLeaderboard: {
+    [MetaRoutes.ParlayLeaderboard]: {
         title: 'seo.parlay-leaderboard.title',
         description: 'seo.parlay-leaderboard.description',
     },
-    Referral: {
+    [MetaRoutes.Referral]: {
         title: 'seo.referral.title',
         description: 'seo.referral.description',
     },
-    Profile: {
+    [MetaRoutes.Profile]: {
         title: 'seo.profile.title',
         description: 'seo.profile.description',
     },
-    LiquidityPool: {
+    [MetaRoutes.LiquidityPool]: {
         title: 'seo.liquidity-pool.title',
         description: 'seo.liquidity-pool.description',
+    },
+    [MetaRoutes.SingleMarket]: {
+        title: 'seo.single-market.title',
+        description: 'seo.single-market.description',
+        hasCustomData: true,
     },
 };
 
