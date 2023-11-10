@@ -183,7 +183,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved}>
             <MainContainer>
                 <MatchInfoConatiner data-matomo-category="market-list-card" data-matomo-action="click-market-details">
-                    <SPAAnchor href={buildMarketLink(market.address, language)}>
+                    <SPAAnchor
+                        href={buildMarketLink(
+                            market.address,
+                            language,
+                            false,
+                            `${market.homeTeam} vs ${market.awayTeam}`
+                        )}
+                    >
                         <Tooltip
                             overlay={
                                 <>

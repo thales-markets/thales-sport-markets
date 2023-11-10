@@ -22,6 +22,7 @@ import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import { isAndroid, isMetamask } from 'thales-utils';
 import { isMobile } from 'utils/device';
 import { Theme } from 'enums/ui';
+import MetaData from 'components/MetaData';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -109,6 +110,7 @@ const DappLayout: React.FC = ({ children }) => {
             {isAppReady ? (
                 <Background>
                     <Wrapper>
+                        <MetaData />
                         <DappHeader />
                         {children}
                         <DappFooter />

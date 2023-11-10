@@ -30,6 +30,8 @@ import MatchInfo from './components/MatchInfo';
 import Positions from './components/Positions';
 import { BetType } from 'enums/markets';
 import { ThemeInterface } from 'types/ui';
+import { history } from 'utils/routes';
+import queryString from 'query-string';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -41,6 +43,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const searchQuery = new URLSearchParams(location.search);
+    const queryParams: { title?: string } = queryString.parse(location.search);
 
     const [showParlayMobileModal, setShowParlayMobileModal] = useState(false);
     const lastValidChildMarkets: SportMarketChildMarkets = {
@@ -97,6 +101,14 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
+
+    useEffect(() => {
+        if (!queryParams.title) {
+            searchQuery.set('title', `${market.homeTeam} vs ${market.awayTeam}`);
+            history.push({ search: searchQuery.toString() });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [market.awayTeam, market.homeTeam, queryParams]);
 
     const isMounted = useRef(false);
     useEffect(() => {
