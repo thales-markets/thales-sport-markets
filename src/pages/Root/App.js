@@ -29,7 +29,6 @@ import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
 import { buildHref } from 'utils/routes';
 import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
-import MetaData from 'components/MetaData';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -178,7 +177,6 @@ const App = () => {
                                 path={ROUTES.Markets.Market}
                                 render={(routeProps) => (
                                     <DappLayout>
-                                        <MetaData page={'Markets'} />
                                         <Market {...routeProps} />
                                     </DappLayout>
                                 )}
@@ -186,14 +184,12 @@ const App = () => {
                             <Route exact path={ROUTES.Markets.Home}>
                                 <DappLayout>
                                     <BannerCarousel />
-                                    <MetaData page={'Home'} />
                                     <Markets />
                                 </DappLayout>
                             </Route>
                             {isRouteAvailableForNetwork(ROUTES.Leaderboard, networkId) && (
                                 <Route exact path={ROUTES.Leaderboard}>
                                     <DappLayout>
-                                        <MetaData page={'ParlayLeaderboard'} />
                                         <ParlayLeaderboard />
                                     </DappLayout>
                                 </Route>
@@ -201,7 +197,6 @@ const App = () => {
                             {isRouteAvailableForNetwork(ROUTES.Profile, networkId) && (
                                 <Route exact path={ROUTES.Profile}>
                                     <DappLayout>
-                                        <MetaData page={'Profile'} />
                                         <Profile />
                                     </DappLayout>
                                 </Route>
@@ -209,7 +204,6 @@ const App = () => {
                             {isRouteAvailableForNetwork(ROUTES.Referral, networkId) && (
                                 <Route exact path={ROUTES.Referral}>
                                     <DappLayout>
-                                        <MetaData page={'Referral'} />
                                         <Referral />
                                     </DappLayout>
                                 </Route>
@@ -229,7 +223,6 @@ const App = () => {
                             {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
                                 <Route exact path={ROUTES.Vaults}>
                                     <DappLayout>
-                                        <MetaData page={'Vaults'} />
                                         <Vaults />
                                     </DappLayout>
                                 </Route>
@@ -241,7 +234,6 @@ const App = () => {
                                     path={ROUTES.Vault}
                                     render={(routeProps) => (
                                         <DappLayout>
-                                            <MetaData page={'Vaults'} />
                                             <Vault {...routeProps} />
                                         </DappLayout>
                                     )}
@@ -258,14 +250,12 @@ const App = () => {
                             {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                                 <Route exact path={ROUTES.LiquidityPool}>
                                     <DappLayout>
-                                        <MetaData page={'LiquidityPool'} />
                                         <LiquidityPool />
                                     </DappLayout>
                                 </Route>
                             )}
                             <Route exact path={ROUTES.Home}>
                                 <LandingPageLayout>
-                                    <MetaData page={'Home'} />
                                     <LandingPage />
                                 </LandingPageLayout>
                             </Route>
@@ -273,7 +263,6 @@ const App = () => {
                                 <Redirect to={ROUTES.Markets.Home} />
                                 <DappLayout>
                                     <BannerCarousel />
-                                    <MetaData page={'Home'} />
                                     <Markets />
                                 </DappLayout>
                             </Route>
