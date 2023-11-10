@@ -21,7 +21,9 @@
             "approve": "Genehmigen",
             "get-usd-progress": "{{amount}} wird gemintet...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "Wallet-Info"
+            "wallet-info": "Wallet-Info",
+            "approve-parlay": "ParlayAMM genehmigen",
+            "approve-sports": "Genehmigen Sie SportsAMM"
         },
         "voucher": {
             "remaining-amount": "Verbleibender Betrag",
@@ -71,7 +73,10 @@
             "approve-label": "{{currencyKey}} genehmigen",
             "approve-progress-label": "{{currencyKey}} wird genehmigt...",
             "approve-all-label": "Alles genehmigen",
-            "custom-amount-label": "Betrag genehmigen"
+            "custom-amount-label": "Betrag genehmigen",
+            "approve": "Genehmigen",
+            "approve-progress": "Genehmigen...",
+            "approve-swap": "Tausch auf {{currencyKey}} genehmigen"
         },
         "unsupported-network": {
             "title": "Oops! Du bist im falschen Netzwerk!",
@@ -277,7 +282,8 @@
         "race-starts": "Rennen beginnt",
         "back": "Der Rücken",
         "apply-filters": "Filter anwenden",
-        "incentivized-market": "INCENTIVISIERTER MARKT"
+        "incentivized-market": "INCENTIVISIERTER MARKT",
+        "number-of-rounds": "Gesamtzahl der Runden"
     },
     "markets": {
         "market-card": {
@@ -309,13 +315,22 @@
                 "home runs": "Home Runs",
                 "scoring touchdown": "Wer erzielt im Spiel einen Touchdown?",
                 "field goals made": "Field Goals gemacht",
-                "pitcher hits allowed": "Pitcher-Hits erlaubt"
+                "pitcher hits allowed": "Pitcher-Hits erlaubt",
+                "points": "Punkte",
+                "shots": "Schüsse",
+                "goals": "Wer schießt im Spiel ein Tor?",
+                "hits recorded": "Treffer aufgezeichnet",
+                "assists": "Unterstützt",
+                "rebounds": "Rebounds",
+                "double double": "Doppelt-doppelt",
+                "triple double": "Triple-Double"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "Sätze"
+                    "sets": "Sätze",
+                    "rounds": "Runden"
                 },
                 "match-resolve": {
                     "regular": "in regulärer Spielzeite",
@@ -359,7 +374,22 @@
                         "scoring touchdown": "Receiving-, Rushing-, Punt-Return-, Kick-Return-, Defensive- und Interception-Touchdowns werden für das Ergebnis gezählt"
                     },
                     "pitcher-hits-allowed-over": "{{team}} wird mehr Treffer haben als {{scoring}}",
-                    "pitcher-hits-allowed-under": "{{team}} wird weniger Treffer haben als {{scoring}}"
+                    "pitcher-hits-allowed-under": "{{team}} wird weniger Treffer haben als {{scoring}}",
+                    "shots-under": "{{team}} wird weniger Schüsse haben als {{scoring}}",
+                    "points-under": "{{team}} wird weniger Punkte haben als {{scoring}}",
+                    "shots-over": "{{team}} wird mehr Schüsse haben als {{scoring}}",
+                    "points-over": "{{team}} wird mehr Punkte haben als {{scoring}}",
+                    "goals": "{{team}} wird im Spiel ein Tor erzielen",
+                    "hits-recorded-under": "{{team}} wird weniger Treffer haben als {{scoring}}",
+                    "hits-recorded-over": "{{team}} wird mehr Treffer haben als {{scoring}}",
+                    "rebounds-under": "{{team}} wird weniger Rebounds haben als {{scoring}}",
+                    "assists-under": "{{team}} wird weniger Assists haben als {{scoring}}",
+                    "assists-over": "{{team}} wird mehr Assists haben als {{scoring}}",
+                    "rebounds-over": "{{team}} wird mehr Rebounds haben als {{scoring}}",
+                    "double-double-no": "{{team}} wird kein Double-Double erzielen",
+                    "triple-double-no": "{{team}} wird kein Triple-Double erzielen",
+                    "triple-double-yes": "{{team}} wird ein Triple-Double erzielen",
+                    "double-double-yes": "{{team}} wird ein Double-Double erzielen"
                 }
             },
             "starts-in": "Beginnt in",
@@ -424,7 +454,10 @@
                 "max-combined-markets": "Die maximale Anzahl kombinierter Märkte in Parlay beträgt {{max}}.",
                 "amm-contract-paused": "Parlay AMM angehalten",
                 "unique-players": "Derselbe Teilnehmer kann im Parlay nicht zweimal hinzugefügt werden. {{existingParticipant}} ist bereits in Parlay",
-                "same-event-participant": "Es wird nur ein Teilnehmer pro Veranstaltung unterstützt. {{addedParticipant}} kann nicht hinzugefügt werden, da {{existingParticipant}} bereits in Parlay ist"
+                "same-event-participant": "Es wird nur ein Teilnehmer pro Veranstaltung unterstützt. {{addedParticipant}} kann nicht hinzugefügt werden, da {{existingParticipant}} bereits in Parlay ist",
+                "already-added-combined-positions": "Positionen aus demselben Markt können nicht mit kombinierten Positionen kombiniert werden",
+                "player-props-and-other-positions": "Das Kombinieren von Spieler-Requisitenpositionen mit anderen Positionen aus demselben Markt wird nicht unterstützt",
+                "same-game-different-player-props": "Die Kombination verschiedener Kategorien von Spieler-Requisiten wird nicht unterstützt"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
@@ -460,7 +493,10 @@
             "toggle-parlay": {
                 "parlay": "Spielen",
                 "multi-single": "Einzel"
-            }
+            },
+            "in-wallet": "Im Portemonnaie",
+            "pay-with-voucher": "Bezahlen Sie mit Gutschein",
+            "total-to-pay": "Gesamtbetrag"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -619,7 +655,10 @@
             "starts": "Beginnt",
             "result": "Ergebnis",
             "position-size": "Positionsgröße",
-            "claim-all": "Alle beanspruchen"
+            "claim-all": "Alle beanspruchen",
+            "claim-progress": "Behauptung...",
+            "payout-in": "Auszahlung in",
+            "approve-swap-tooltip": "Um eine Auszahlung in {{currencyKey}} zu erhalten, müssen Sie den Umtausch von {{defaultCurrency}} in {{currencyKey}} genehmigen."
         },
         "messages": {
             "no-open": "Sie haben keine offene Stelle",
@@ -840,7 +879,8 @@
             "period-end-label": "Der Zeitraum endet in",
             "period-ended-label": "Zeitraum beendet",
             "bi-weekly-period": "Zweimal wöchentlicher Zeitraum"
-        }
+        },
+        "warning2": "Benutzer, die 50 % oder mehr der möglichen Kombinationen ihrer Gewinnscheine abgedeckt haben, werden disqualifiziert."
     },
     "wizard": {
         "title": "Loslegen!",

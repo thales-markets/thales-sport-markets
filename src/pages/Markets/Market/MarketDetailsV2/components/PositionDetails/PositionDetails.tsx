@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getParlay, removeCombinedMarketFromParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
+import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
-import { floorNumberToDecimals } from 'utils/formatters/number';
+import { floorNumberToDecimals } from 'thales-utils';
 import {
     hasBonus,
     formatMarketOdds,
@@ -20,6 +20,7 @@ import {
     getOddTooltipText,
     getFormattedBonus,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import { isMarketPartOfCombinedMarketFromParlayData } from 'utils/combinedMarkets';
 import {
@@ -83,9 +84,6 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
 
     const oddTooltipText = getOddTooltipText(position, market);
 
-    const parentMarketAddress = market.parentMarket !== null ? market.parentMarket : market.address;
-    const isParentMarketAddressInParlayData = parlay.filter((data) => data.parentMarket == parentMarketAddress);
-
     const getDetails = () => (
         <Container
             disabled={disabledPosition}
@@ -93,9 +91,6 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
             isWinner={isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == position}
             onClick={() => {
                 if (disabledPosition) return;
-                if (isParentMarketAddressInParlayData) {
-                    dispatch(removeCombinedMarketFromParlay(parentMarketAddress));
-                }
                 if (isAddedToParlay) {
                     dispatch(removeFromParlay(market.address));
                 } else {
@@ -103,6 +98,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
                         parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                         sportMarketAddress: market.address,
                         position: position,
+                        betType: market.betType,
                         homeTeam: market.homeTeam || '',
                         awayTeam: market.awayTeam || '',
                         tags: market.tags,
@@ -122,7 +118,10 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, odd, availabl
         >
             <Text>
                 {symbolText}
-                {spreadTotalText && !isOneSidePlayerProps(market.betType) && ` (${spreadTotalText})`}
+                {spreadTotalText &&
+                    !isOneSidePlayerProps(market.betType) &&
+                    !isSpecialYesNoProp(market.betType) &&
+                    ` (${spreadTotalText})`}
             </Text>
             {showOdd ? (
                 <Text>

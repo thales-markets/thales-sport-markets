@@ -35,7 +35,9 @@ import {
     formatPercentage,
     getPrecision,
     roundNumberToDecimals,
-} from 'utils/formatters/number';
+    coinFormatter,
+    coinParser,
+} from 'thales-utils';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
@@ -66,7 +68,6 @@ import {
 import { ListContainer } from 'pages/Profile/components/Positions/styled-components';
 import MatchInfo from '../MatchInfo';
 import styled, { useTheme } from 'styled-components';
-import { coinFormatter, coinParser } from 'utils/formatters/ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import {
     getCollateral,

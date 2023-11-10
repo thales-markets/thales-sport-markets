@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { formatShortDateWithTime } from 'utils/formatters/date';
+import { formatShortDateWithTime } from 'thales-utils';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isUEFAGame, isFifaWCGame, isIIHFWCGame, isMotosport, isGolf, isPlayerProps } from 'utils/markets';
@@ -322,7 +322,18 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 ? market.homeScore == 1
                                     ? t('markets.market-card.race-winner')
                                     : t('markets.market-card.no-win')
-                                : `${market.homeScore} - ${market.awayScore}`}
+                                : Number(market.tags[0]) != 9007
+                                ? `${market.homeScore} - ${market.awayScore}`
+                                : ''}
+                            {Number(market.tags[0]) == 9007 ? (
+                                <>
+                                    {Number(market.homeScore) > 0
+                                        ? `W - L (R${market.homeScore})`
+                                        : `L - W (R${market.awayScore})`}
+                                </>
+                            ) : (
+                                ''
+                            )}
                         </Result>
                     </ResultWrapper>
                 ) : (
@@ -365,7 +376,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     )}
                     {!isMobile && hasCombinedMarkets && doubleChanceMarkets.length > 0 && (
                         <ThirdRowContainer mobilePaddingRight={isMaxNumberOfChildMarkets ? 4 : 20}>
-                            <CombinedMarketsOdds market={market} isShownInSecondRow />
+                            <OddsWrapper>
+                                <CombinedMarketsOdds market={market} isShownInSecondRow />
+                            </OddsWrapper>
                         </ThirdRowContainer>
                     )}
                     {hasPlayerPropsMarkets && <PlayerPropsOdds markets={playerPropsMarkets} />}

@@ -1,23 +1,20 @@
-import { getSuccessToastOptions, getErrorToastOptions, defaultToastOptions } from 'config/toast';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactModal from 'react-modal';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
-import MySimpleTicket from './components/MySimpleTicket';
-import MyTicket from './components/MyTicket';
+import { isFirefox, isIos, isMetamask } from 'thales-utils';
 import { TwitterIcon } from '../styled-components';
-import DisplayOptions from './components/DisplayOptions';
-import { DisplayOptionsType } from './components/DisplayOptions/DisplayOptions';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import { getIsMobile } from 'redux/modules/app';
-import { isMetamask, isFirefox, isIos } from 'utils/device';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import MyTicket from './components/MyTicket';
 
 export type ShareTicketModalProps = {
     markets: ParlaysMarket[];
@@ -46,11 +43,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
     const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
-
-    const defaultDisplayOptions: DisplayOptionsType = {
-        isSimpleView: false,
-    };
-    const [displayOptions, setDisplayOptions] = useState<DisplayOptionsType>(defaultDisplayOptions);
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -239,63 +231,40 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
             contentElement={(props, children) => (
                 <>
                     <div {...props}>{children}</div>
-                    {!isMobile && (
-                        <DisplayOptions
-                            defaultDisplayOptions={displayOptions}
-                            setDisplayOptions={setDisplayOptions}
-                            onShare={onTwitterShareClick}
-                            isDisabled={isLoading}
-                        />
-                    )}
                     {isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
                 </>
             )}
         >
-            <Container ref={ref} isSimpleView={displayOptions.isSimpleView}>
+            <Container ref={ref}>
                 {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
-                {displayOptions.isSimpleView ? (
-                    <MySimpleTicket markets={markets} payout={payout} />
-                ) : (
-                    <MyTicket
-                        markets={markets}
-                        totalQuote={totalQuote}
-                        paid={paid}
-                        payout={payout}
-                        multiSingle={multiSingle}
-                    />
-                )}
-                {isMobile ? (
-                    <DisplayOptions
-                        defaultDisplayOptions={displayOptions}
-                        setDisplayOptions={setDisplayOptions}
-                        onShare={onTwitterShareClick}
-                        isDisabled={isLoading}
-                    />
-                ) : (
-                    <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
-                        <TwitterIcon disabled={isLoading} fontSize={'30px'} />
-                        <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
-                    </TwitterShare>
-                )}
+                <MyTicket
+                    markets={markets}
+                    totalQuote={totalQuote}
+                    paid={paid}
+                    payout={payout}
+                    multiSingle={multiSingle}
+                />
+
+                <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
+                    <TwitterIcon disabled={isLoading} fontSize={'30px'} />
+                    <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
+                </TwitterShare>
             </Container>
         </ReactModal>
     );
 };
 
 // Aspect ratio is important for Twitter: horizontal (Simple View) 2:1 and vertical min 3:4
-const Container = styled(FlexDivColumnCentered)<{ isSimpleView: boolean }>`
-    width: ${(props) => (props.isSimpleView ? '400' : '386')}px;
-    ${(props) => (props.isSimpleView ? 'height: 200px;' : 'max-height: 515px;')}
+const Container = styled(FlexDivColumnCentered)`
+    width: 386px;
+    max-height: 600px;
     padding: 15px;
     flex: none;
-    background: ${(props) =>
-        props.isSimpleView
-            ? 'linear-gradient(135deg, #070814 0%, #424470 100%)'
-            : 'linear-gradient(180deg, #303656 0%, #1a1c2b 100%)'};
+    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
     border-radius: 10px;
     @media (max-width: 950px) {
-        width: ${(props) => (props.isSimpleView ? '360' : '357')}px;
-        ${(props) => (props.isSimpleView ? 'height: 180px;' : 'max-height: 476px;')}
+        width: 357px;
+        max-height: 476px;
     }
 `;
 

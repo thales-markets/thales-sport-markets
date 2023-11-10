@@ -1,6 +1,7 @@
 import {
     CombinedMarket,
     CombinedMarketContractData,
+    CombinedMarketPosition,
     CombinedMarketsContractData,
     CombinedMarketsPositionName,
     CombinedParlayMarket,
@@ -24,10 +25,10 @@ import {
     POSITION_TO_ODDS_OBJECT_PROPERTY_NAME,
     SGPCombinationsFromContractOrderMapping,
 } from 'constants/markets';
-import { bigNumberFormatter } from './formatters/ethers';
+import { bigNumberFormatter, localStore } from 'thales-utils';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import localStore from './localStore';
-import { BetType, ContractSGPOrder, Position } from 'enums/markets';
+import { BetType, CombinedPositionsMatchingCode, ContractSGPOrder, Position } from 'enums/markets';
+import _ from 'lodash';
 
 export const isSpecificCombinedPositionAddedToParlay = (
     parlayData: ParlaysMarketPosition[],
@@ -102,19 +103,13 @@ const calculateCombinedMarketOdds = (markets: SportMarketInfo[], positions: Posi
     return firstPositionOdds * secondPositionOdds;
 };
 
-const calculateCombinedMarketOddBasedOnHistoryOdds = (odds: number[], markets: SportMarketInfo[]) => {
-    const firstPositionOdd = odds[0];
-    const secondPositionOdd = odds[1];
+const calculateCombinedMarketOddBasedOnHistoryOdds = (odds: number[]) => {
+    let totalOdd = 1;
 
-    if (!firstPositionOdd || !secondPositionOdd) return 0;
+    odds.forEach((odd) => (odd ? (totalOdd *= odd) : ''));
 
-    const sgpItem = isMarketCombinationInSGP(markets);
-
-    if (sgpItem) {
-        return (firstPositionOdd * secondPositionOdd) / sgpItem.SGPFee;
-    }
-
-    return firstPositionOdd * secondPositionOdd;
+    if (totalOdd == 1) return 0;
+    return totalOdd;
 };
 
 export const getCombinedPositionName = (
@@ -228,10 +223,7 @@ export const extractCombinedMarketsFromParlayMarketType = (parlayMarket: ParlayM
                         convertPositionNameToPositionType(firstPositionData.side),
                         convertPositionNameToPositionType(secondPositionData.side),
                     ],
-                    totalOdd: calculateCombinedMarketOddBasedOnHistoryOdds(
-                        [firstPositionOdd, secondPositionOdd],
-                        [sportMarkets[i], sportMarkets[j]]
-                    ),
+                    totalOdd: calculateCombinedMarketOddBasedOnHistoryOdds([firstPositionOdd, secondPositionOdd]),
                     totalBonus: 0,
                     positionName: getCombinedPositionName(
                         [sportMarkets[i], sportMarkets[j]],
@@ -430,4 +422,41 @@ export const convertSGPContractDataToSGPItemType = (sgpContractData: SGPContract
 export const filterMarketsByTagsArray = (sportMarkets: SportMarkets, tags: number[]): SportMarkets => {
     if (!tags.length) return sportMarkets;
     return sportMarkets.filter((market) => market.tags.findIndex((tag) => tags.includes(Number(tag))) !== -1);
+};
+
+export const compareCombinedPositionsFromParlayData = (
+    combinedPositions: CombinedMarketPosition,
+    combinedPositionsParlay: CombinedMarketPosition
+) => {
+    if (_.isEqual(combinedPositions.markets, combinedPositionsParlay.markets))
+        return CombinedPositionsMatchingCode.SAME_POSITIONS;
+
+    let numberOfEqualParentMarketsNotPositions = 0;
+    let numberOfEqualMarketsAndPositions = 0;
+
+    combinedPositions.markets.every((market) => {
+        combinedPositionsParlay.markets.every((_market) => {
+            if (
+                market.sportMarketAddress == _market.sportMarketAddress ||
+                market.parentMarket == _market.parentMarket
+            ) {
+                if (market.position !== _market.position) {
+                    numberOfEqualParentMarketsNotPositions++;
+                } else {
+                    numberOfEqualMarketsAndPositions++;
+                }
+            }
+        });
+    });
+
+    if (numberOfEqualMarketsAndPositions > 0) return CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS;
+
+    if (
+        combinedPositions.markets.length == combinedPositionsParlay.markets.length &&
+        combinedPositions.markets.length == numberOfEqualParentMarketsNotPositions
+    )
+        return CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS;
+
+    if (numberOfEqualParentMarketsNotPositions > 0) return CombinedPositionsMatchingCode.SAME_PARENT_MARKET;
+    return CombinedPositionsMatchingCode.NOTHING_COMMON;
 };

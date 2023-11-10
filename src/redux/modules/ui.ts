@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { ThemeMap } from 'constants/ui';
-import localStore from 'utils/localStore';
+import { localStore } from 'thales-utils';
 import { RootState } from '../rootReducer';
 import { TAGS_LIST } from 'constants/tags';
 import { Tags } from 'types/markets';

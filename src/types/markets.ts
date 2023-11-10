@@ -1,5 +1,6 @@
 import { BetType, DoubleChanceMarketType, Position, PositionName } from 'enums/markets';
 import { Network } from '../enums/network';
+import { ethers } from 'ethers';
 
 export type SportMarketInfo = {
     id: string;
@@ -112,6 +113,14 @@ export type SportMarketChildMarkets = {
     oneSiderTouchdownsMarkets: SportMarketInfo[];
     fieldGoalsMadeMarkets: SportMarketInfo[];
     pitcherHitsAllowedMarkets: SportMarketInfo[];
+    oneSiderGoalsMarkets: SportMarketInfo[];
+    shotsMarkets: SportMarketInfo[];
+    pointsMarkets: SportMarketInfo[];
+    hitsRecordedMarkets: SportMarketInfo[];
+    reboundsMarkets: SportMarketInfo[];
+    assistsMarkets: SportMarketInfo[];
+    doubleDoubleMarkets: SportMarketInfo[];
+    tripleDoubleMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {
@@ -230,12 +239,20 @@ export type ParlaysMarketPosition = {
     homeTeam: string;
     awayTeam: string;
     tags: number[];
+    betType: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
     isOneSideMarket?: boolean;
     tag?: number;
     playerName?: string;
     playerId?: number;
     playerPropsType?: number;
+};
+
+export type CombinedMarketPosition = {
+    markets: ParlaysMarketPosition[];
+    totalOdd: number;
+    totalBonus?: number;
+    positionName: CombinedMarketsPositionName;
 };
 
 export type ParlaysMarket = SportMarketInfo & {
@@ -268,10 +285,11 @@ export type MultiSingleAmounts = {
 
 export type MultiSingleTokenQuoteAndBonus = {
     sportMarketAddress: string;
+    isCombinedPosition?: boolean;
     tokenAmount: number;
     bonusPercentageDec: number;
     totalBonusCurrency: number;
-    ammQuote: number;
+    ammQuote: number | ethers.BigNumber;
 };
 
 export type WinningInfo = {

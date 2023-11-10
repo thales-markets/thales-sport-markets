@@ -3,15 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PositionSymbol from 'components/PositionSymbol';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
-import {
-    BetTypeNameMap,
-    ENETPULSE_SPORTS,
-    FIFA_WC_TAG,
-    FIFA_WC_U20_TAG,
-    JSON_ODDS_SPORTS,
-    SPORTS_TAGS_MAP,
-    SPORT_PERIODS_MAP,
-} from 'constants/tags';
+import { BetTypeNameMap, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
@@ -29,9 +21,8 @@ import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { ParlaysMarket, SportMarketLiveResult } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { formatDateWithTime } from 'utils/formatters/date';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { formatDateWithTime, formatCurrencyWithSign } from 'thales-utils';
+import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
@@ -41,8 +32,19 @@ import {
     getSpreadTotalText,
     getSymbolText,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 
+import Button from 'components/Button';
+import CollateralSelector from 'components/CollateralSelector';
+import { ZERO_ADDRESS } from 'constants/network';
+import { BetType } from 'enums/markets';
+import { getParlayPayment } from 'redux/modules/parlay';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
+import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { buildMarketLink } from 'utils/routes';
@@ -71,7 +73,6 @@ import {
     ColumnDirectionInfo,
     MatchPeriodContainer,
     MatchPeriodLabel,
-    PlayerIcon,
     PositionContainer,
     ResultContainer,
     ScoreContainer,
@@ -79,16 +80,6 @@ import {
     TeamScoreLabel,
     Wrapper,
 } from './styled-components';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
-import Button from 'components/Button';
-import { BetType } from 'enums/markets';
-import CollateralSelector from 'components/CollateralSelector';
-import { getParlayPayment } from 'redux/modules/parlay';
-import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
-import { getIsMultiCollateralSupported } from 'utils/network';
-import { ZERO_ADDRESS } from 'constants/network';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -114,7 +105,9 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(
-        getTeamImageSource(position.market.homeTeam, position.market.tags[0])
+        position.market.playerName === null
+            ? getTeamImageSource(position.market.homeTeam, position.market.tags[0])
+            : getTeamImageSource(position.market.playerName, position.market.tags[0])
     );
     const [awayLogoSrc, setAwayLogoSrc] = useState(
         getTeamImageSource(position.market.awayTeam, position.market.tags[0])
@@ -154,9 +147,13 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     }, [marketTransactionsQuery.data, position.market.finalResult]);
 
     useEffect(() => {
-        setHomeLogoSrc(getTeamImageSource(position.market.homeTeam, position.market.tags[0]));
-        setAwayLogoSrc(getTeamImageSource(position.market.awayTeam, position.market.tags[0]));
-    }, [position.market.homeTeam, position.market.awayTeam, position.market.tags]);
+        if (position.market.playerName === null) {
+            setHomeLogoSrc(getTeamImageSource(position.market.homeTeam, position.market.tags[0]));
+            setAwayLogoSrc(getTeamImageSource(position.market.awayTeam, position.market.tags[0]));
+        } else {
+            setHomeLogoSrc(getTeamImageSource(position.market.playerName, position.market.tags[0]));
+        }
+    }, [position.market.homeTeam, position.market.awayTeam, position.market.tags, position.market.playerName]);
 
     const isClaimable = position.claimable;
     const isCanceled = position.market.isCanceled;
@@ -276,15 +273,18 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                         <ClubLogo
                             alt={position.market.homeTeam}
                             src={homeLogoSrc}
-                            isFlag={
-                                position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG
-                            }
                             losingTeam={false}
                             onError={getOnImageError(setHomeLogoSrc, position.market.tags[0])}
                             customMobileSize={'30px'}
                         />
                     ) : (
-                        <PlayerIcon className="icon icon--profile" />
+                        <ClubLogo
+                            alt={position.market.playerName}
+                            src={homeLogoSrc}
+                            losingTeam={false}
+                            onError={getOnPlayerImageError(setHomeLogoSrc)}
+                            customMobileSize={'30px'}
+                        />
                     )}
 
                     {!position.market.isOneSideMarket && position.market.playerName === null && (
@@ -292,9 +292,6 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                             awayTeam={true}
                             alt={position.market.awayTeam}
                             src={awayLogoSrc}
-                            isFlag={
-                                position.market.tags[0] == FIFA_WC_TAG || position.market.tags[0] == FIFA_WC_U20_TAG
-                            }
                             losingTeam={false}
                             onError={getOnImageError(setAwayLogoSrc, position.market.tags[0])}
                             customMobileSize={'30px'}
@@ -372,7 +369,9 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                     <PositionSymbol
                         symbolText={symbolText}
                         symbolUpperText={
-                            spreadTotalText && !isOneSidePlayerProps(position.market.betType)
+                            spreadTotalText &&
+                            !isOneSidePlayerProps(position.market.betType) &&
+                            !isSpecialYesNoProp(position.market.betType)
                                 ? {
                                       text: spreadTotalText,
                                       textStyle: {

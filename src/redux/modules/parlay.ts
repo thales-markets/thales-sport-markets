@@ -1,14 +1,25 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { MultiSingleAmounts, ParlayPayment, ParlaysMarketPosition, SGPItem } from 'types/markets';
-import localStore from 'utils/localStore';
+import {
+    CombinedMarketPosition,
+    MultiSingleAmounts,
+    ParlayPayment,
+    ParlaysMarketPosition,
+    SGPItem,
+} from 'types/markets';
+import { localStore } from 'thales-utils';
 import { RootState } from '../rootReducer';
-import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
+import { compareCombinedPositionsFromParlayData, getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { GOLF_TAGS } from 'constants/tags';
-import { ParlayErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
 // import { canPlayerBeAddedToParlay } from 'utils/markets';
+import { BetType, CombinedPositionsMatchingCode, ParlayErrorCode, PLAYER_PROPS_BET_TYPES } from 'enums/markets';
+import {
+    getHasCombinedMarketsParentMarketAddress,
+    getParentMarketAddressFromCombinedMarketPositionType,
+    hasParlayDataParentMarketAddress,
+} from 'utils/parlay';
 
 const sliceName = 'parlay';
 
@@ -19,6 +30,11 @@ const MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY = 10;
 const getDefaultParlay = (): ParlaysMarketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
     return lsParlay !== undefined ? (lsParlay as ParlaysMarketPosition[]) : [];
+};
+
+const getDefaultCombinedPositions = (): CombinedMarketPosition[] => {
+    const combinedPositions = localStore.get(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS);
+    return combinedPositions !== undefined ? (combinedPositions as CombinedMarketPosition[]) : [];
 };
 
 const getDefaultPayment = (): ParlayPayment => {
@@ -36,16 +52,9 @@ const getDefaultPayment = (): ParlayPayment => {
 };
 
 const getDefaultMultiSingle = (): MultiSingleAmounts[] => {
-    const lsMultiSingle = localStore.get(LOCAL_STORAGE_KEYS.MULTI_SINGLE);
-    const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
-    const defaultArr = lsParlay !== undefined ? (lsParlay as ParlaysMarketPosition[]) : [];
+    const multiSinglePositions = localStore.get(LOCAL_STORAGE_KEYS.MULTI_SINGLE);
 
-    return lsMultiSingle !== undefined
-        ? (lsMultiSingle as MultiSingleAmounts[])
-        : Array(defaultArr.length).fill({
-              sportMarketAddress: '',
-              amountToBuy: '',
-          });
+    return multiSinglePositions !== undefined ? (multiSinglePositions as MultiSingleAmounts[]) : [];
 };
 
 const getDefaultIsMultiSingle = () => {
@@ -59,6 +68,7 @@ const getDefaultError = () => {
 
 type ParlaySliceState = {
     parlay: ParlaysMarketPosition[];
+    combinedPositions: CombinedMarketPosition[];
     parlaySize: number;
     payment: ParlayPayment;
     multiSingle: MultiSingleAmounts[];
@@ -69,6 +79,7 @@ type ParlaySliceState = {
 
 const initialState: ParlaySliceState = {
     parlay: getDefaultParlay(),
+    combinedPositions: getDefaultCombinedPositions(),
     parlaySize: DEFAULT_MAX_NUMBER_OF_MATCHES,
     payment: getDefaultPayment(),
     multiSingle: getDefaultMultiSingle(),
@@ -83,21 +94,25 @@ const parlaySlice = createSlice({
     reducers: {
         updateParlay: (state, action: PayloadAction<ParlaysMarketPosition>) => {
             const parlayCopy = [...state.parlay];
-            const index = state.parlay.findIndex((el) => el.parentMarket === action.payload.parentMarket);
+            const existingMarketIndex = state.parlay.findIndex(
+                (el) =>
+                    el.parentMarket === action.payload.parentMarket &&
+                    el.sportMarketAddress == action.payload.sportMarketAddress
+            );
+            const hasAddedSameParentMarket = !!state.parlay.find(
+                (market) => market.parentMarket == action.payload.parentMarket
+            );
             const numberOfDoubleChances = parlayCopy.filter((market) => market.doubleChanceMarketType !== null).length;
-            const combinedMarketsInParlay = getCombinedMarketsFromParlayData(state.parlay);
+            const alreadyAddedCombinedPositionWithAddress = getHasCombinedMarketsParentMarketAddress(
+                state.combinedPositions,
+                action.payload.parentMarket
+            );
 
-            if (combinedMarketsInParlay.length) {
-                const nonCombinedMarkets =
-                    state.parlay.length - combinedMarketsInParlay.length > 0
-                        ? state.parlay.length - combinedMarketsInParlay.length
-                        : 0;
-                if (combinedMarketsInParlay.length + nonCombinedMarkets + 1 > state.parlaySize) {
-                    state.error.code = ParlayErrorCode.MAX_NUMBER_OF_MARKETS_WITH_COMBINED_MARKETS;
-                    state.error.data = DEFAULT_MAX_NUMBER_OF_MATCHES.toString();
-                    return;
-                }
+            if (alreadyAddedCombinedPositionWithAddress) {
+                state.error.code = ParlayErrorCode.COMBINE_REGULAR_WITH_COMBINED_POSITIONS;
+                return;
             }
+
             const multipleSidesAtOneEvent = parlayCopy
                 .filter((market) => market.isOneSideMarket)
                 .map((market) => market.tag)
@@ -113,10 +128,44 @@ const parlaySlice = createSlice({
                         market.awayTeam == action.payload.awayTeam
                 );
 
+            const isIncomingPositionPlayerProps =
+                PLAYER_PROPS_BET_TYPES.includes(action.payload.betType as BetType) && action.payload.tag == 9004;
+
+            // Check the case of multiple player props markets from same market
+            if (isIncomingPositionPlayerProps && hasAddedSameParentMarket) {
+                const existingNonPlayerPropsPosition = state.parlay.findIndex(
+                    (market) =>
+                        !PLAYER_PROPS_BET_TYPES.includes(market.betType) &&
+                        market.parentMarket == action.payload.parentMarket
+                );
+
+                const alreadyAddedOtherPlayerPropsOfSameParentMarket = state.parlay
+                    .map((market, index) => {
+                        if (
+                            market.parentMarket == action.payload.parentMarket &&
+                            PLAYER_PROPS_BET_TYPES.includes(market.betType) &&
+                            market.betType !== action.payload.betType
+                        ) {
+                            return index;
+                        }
+                    })
+                    .filter((item) => item !== undefined);
+
+                if (alreadyAddedOtherPlayerPropsOfSameParentMarket.length) {
+                    state.error.code = ParlayErrorCode.SAME_GAME_OTHER_PLAYER_PROPS_TYPE;
+                    return;
+                }
+
+                if (existingNonPlayerPropsPosition !== -1) {
+                    state.error.code = ParlayErrorCode.ADDING_PLAYER_PROPS_ALREADY_HAVE_POSITION_OF_SAME_MARKET;
+                    return;
+                }
+            }
+
             if (
                 action.payload.doubleChanceMarketType !== null &&
                 numberOfDoubleChances >= MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY &&
-                (index === -1 || parlayCopy[index].doubleChanceMarketType === null)
+                (existingMarketIndex === -1 || parlayCopy[existingMarketIndex].doubleChanceMarketType === null)
             ) {
                 state.error.code = ParlayErrorCode.MAX_DOUBLE_CHANCES;
                 state.error.data = MAX_NUMBER_OF_DOUBLE_CHANCES_ON_PARLAY.toString();
@@ -150,7 +199,7 @@ const parlaySlice = createSlice({
 
                 state.error.code = ParlayErrorCode.UNIQUE_TOURNAMENT_PLAYERS;
                 state.error.data = fixOneSideMarketCompetitorName(existingSides);
-            } else if (index === -1) {
+            } else if (existingMarketIndex === -1) {
                 // ADD new market
                 if (state.parlay.length < state.parlaySize) {
                     const parlayTeamsByLeague = parlayCopy
@@ -161,7 +210,7 @@ const parlaySlice = createSlice({
                     const homeTeamInParlay = parlayTeamsByLeague.filter((team) => team === action.payload.homeTeam)[0];
                     const awayTeamInParlay = parlayTeamsByLeague.filter((team) => team === action.payload.awayTeam)[0];
 
-                    if (homeTeamInParlay || awayTeamInParlay) {
+                    if ((homeTeamInParlay || awayTeamInParlay) && !isIncomingPositionPlayerProps) {
                         state.error.code = ParlayErrorCode.SAME_TEAM_TWICE;
                         state.error.data = homeTeamInParlay ? homeTeamInParlay : awayTeamInParlay;
                     } else {
@@ -190,15 +239,13 @@ const parlaySlice = createSlice({
                 // }
             } else {
                 // UPDATE market position
-                parlayCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
-                parlayCopy[index].position = action.payload.position;
-                parlayCopy[index].doubleChanceMarketType = action.payload.doubleChanceMarketType;
+                parlayCopy[existingMarketIndex] = action.payload;
                 state.parlay = [...parlayCopy];
 
                 // reset multiSingle if position is changed
                 const multiSingleCopy = [...state.multiSingle];
-                multiSingleCopy[index].sportMarketAddress = action.payload.sportMarketAddress;
-                multiSingleCopy[index].amountToBuy = 0;
+                multiSingleCopy[existingMarketIndex].sportMarketAddress = action.payload.sportMarketAddress;
+                multiSingleCopy[existingMarketIndex].amountToBuy = 0;
                 state.multiSingle = [...multiSingleCopy];
             }
 
@@ -229,6 +276,105 @@ const parlaySlice = createSlice({
 
             state.parlay.push(...action.payload);
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+        },
+        updateCombinedPositions: (state, action: PayloadAction<CombinedMarketPosition>) => {
+            const existingCombinedPositions = state.combinedPositions;
+
+            const parentMarketAddressFromIncomingPosition = getParentMarketAddressFromCombinedMarketPositionType(
+                action.payload
+            );
+
+            if (
+                parentMarketAddressFromIncomingPosition &&
+                hasParlayDataParentMarketAddress(state.parlay, parentMarketAddressFromIncomingPosition)
+            ) {
+                state.error.code = ParlayErrorCode.COMBINE_REGULAR_WITH_COMBINED_POSITIONS;
+                return;
+            }
+
+            let matchingCode: CombinedPositionsMatchingCode = CombinedPositionsMatchingCode.NOTHING_COMMON;
+
+            if (existingCombinedPositions.length > 0) {
+                existingCombinedPositions.forEach((positions: CombinedMarketPosition, index: number) => {
+                    const comparePositions = compareCombinedPositionsFromParlayData(positions, action.payload);
+                    matchingCode = comparePositions;
+                    if (comparePositions == CombinedPositionsMatchingCode.SAME_POSITIONS) {
+                        return;
+                    }
+                    if (
+                        comparePositions == CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS ||
+                        comparePositions == CombinedPositionsMatchingCode.SAME_PARENT_MARKET
+                    ) {
+                        delete existingCombinedPositions[index];
+                        existingCombinedPositions[index] = action.payload;
+                        return;
+                    }
+                    return;
+                });
+            }
+
+            if (existingCombinedPositions.length == 0 || matchingCode == CombinedPositionsMatchingCode.NOTHING_COMMON) {
+                existingCombinedPositions.push(action.payload);
+            }
+
+            if (state.combinedPositions.length * 2 + state.parlay.length > 10) {
+                state.error.code = ParlayErrorCode.MAX_COMBINED_MARKETS;
+                state.error.data = MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY.toString();
+                return;
+            }
+
+            //Multisingle amounts
+            const marketAddressesArr = action.payload.markets.map((market) => market.sportMarketAddress);
+            const parentAddressesArr = action.payload.markets.map((market) => market.parentMarket);
+            const index = state.multiSingle.findIndex((el) => el.sportMarketAddress === marketAddressesArr.join('-'));
+
+            if (index === -1) {
+                state.multiSingle.push({
+                    sportMarketAddress: marketAddressesArr.join('-'),
+                    parentMarketAddress: parentAddressesArr.join('-'),
+                    amountToBuy: 0,
+                });
+            } else {
+                const multiSingleCopy = [...state.multiSingle];
+                multiSingleCopy[index].sportMarketAddress = marketAddressesArr.join('-');
+                multiSingleCopy[index].parentMarketAddress = parentAddressesArr.join('-');
+                multiSingleCopy[index].amountToBuy = 0;
+                state.multiSingle = [...multiSingleCopy];
+            }
+
+            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
+            localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, existingCombinedPositions);
+        },
+        removeCombinedPosition: (state, action: PayloadAction<string>) => {
+            state.combinedPositions = state.combinedPositions.filter((positions) =>
+                positions.markets.find(
+                    (market) => market.parentMarket == action.payload && market.sportMarketAddress == action.payload
+                )
+                    ? false
+                    : true
+            );
+
+            state.multiSingle = state.multiSingle.filter(
+                (ms) =>
+                    !ms.sportMarketAddress.includes(action.payload) && !ms.parentMarketAddress.includes(action.payload)
+            );
+
+            state.parlay = state.parlay.filter(
+                (market) => market.sportMarketAddress !== action.payload && market.parentMarket !== action.payload
+            );
+
+            if (state.multiSingle.length == 0) {
+                state.isMultiSingle = false;
+                localStore.set(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE, state.isMultiSingle);
+            }
+
+            if (state.parlay.length === 0) {
+                state.payment.amountToBuy = getDefaultPayment().amountToBuy;
+            }
+
+            localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, state.combinedPositions);
+            localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
         setParlaySize: (state, action: PayloadAction<number>) => {
             state.parlaySize = action.payload;
@@ -270,11 +416,13 @@ const parlaySlice = createSlice({
         },
         removeAll: (state) => {
             state.parlay = [];
+            state.combinedPositions = [];
             state.payment.amountToBuy = getDefaultPayment().amountToBuy;
             state.multiSingle = [];
             state.error = getDefaultError();
             localStore.set(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE, false);
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
+            localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, state.combinedPositions);
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
         setPayment: (state, action: PayloadAction<ParlayPayment>) => {
@@ -340,6 +488,8 @@ const parlaySlice = createSlice({
 export const {
     updateParlay,
     updateParlayWithMultiplePositions,
+    updateCombinedPositions,
+    removeCombinedPosition,
     setParlaySize,
     removeFromParlay,
     removeCombinedMarketFromParlay,
@@ -358,6 +508,7 @@ export const {
 const getParlayState = (state: RootState) => state[sliceName];
 export const getParlay = (state: RootState) => getParlayState(state).parlay;
 export const getMultiSingle = (state: RootState) => getParlayState(state).multiSingle;
+export const getCombinedPositions = (state: RootState) => getParlayState(state).combinedPositions;
 export const getIsMultiSingle = (state: RootState) => getParlayState(state).isMultiSingle;
 export const getParlaySize = (state: RootState) => getParlayState(state).parlaySize;
 export const getParlayPayment = (state: RootState) => getParlayState(state).payment;

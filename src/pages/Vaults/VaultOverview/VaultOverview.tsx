@@ -23,7 +23,7 @@ import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { getIsAppReady } from 'redux/modules/app';
 import { VaultData } from 'types/vault';
-import { formatPercentage, formatPercentageWithSign } from 'utils/formatters/number';
+import { formatPercentage, formatPercentageWithSign } from 'thales-utils';
 import SimpleLoader from 'components/SimpleLoader';
 import TimeRemaining from 'components/TimeRemaining';
 import { Colors, FlexDivColumn } from 'styles/common';

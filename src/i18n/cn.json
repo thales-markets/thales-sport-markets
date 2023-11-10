@@ -21,7 +21,9 @@
             "approve": "批准",
             "get-usd-progress": "铸造 {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "钱包信息"
+            "wallet-info": "钱包信息",
+            "approve-parlay": "批准 ParlayAMM",
+            "approve-sports": "批准 SportsAMM"
         },
         "voucher": {
             "remaining-amount": "余额",
@@ -71,7 +73,10 @@
             "approve-label": "批准 {{currencyKey}}",
             "approve-progress-label": "批准 {{currencyKey}} 进行中...",
             "approve-all-label": "批准所有",
-            "custom-amount-label": "批准指定数量"
+            "custom-amount-label": "批准指定数量",
+            "approve-swap": "批准兑换为 {{currencyKey}}",
+            "approve-progress": "正在批准...",
+            "approve": "批准"
         },
         "unsupported-network": {
             "title": "Overtime不支持当前连接的网络!",
@@ -277,7 +282,8 @@
         "race-starts": "比赛开始",
         "back": "后退",
         "apply-filters": "应用过滤器",
-        "incentivized-market": "激励市场"
+        "incentivized-market": "激励市场",
+        "number-of-rounds": "总轮数"
     },
     "markets": {
         "market-card": {
@@ -309,13 +315,22 @@
                 "strikeouts": "三振",
                 "scoring touchdown": "谁将在比赛中达阵得分？",
                 "field goals made": "射门得分",
-                "pitcher hits allowed": "允许投手击球"
+                "pitcher hits allowed": "允许投手击球",
+                "points": "积分",
+                "shots": "镜头",
+                "goals": "谁会在比赛中进球？",
+                "hits recorded": "点击记录",
+                "assists": "助攻",
+                "rebounds": "篮板球",
+                "triple double": "三双",
+                "double double": "双双"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "套"
+                    "sets": "套",
+                    "rounds": "回合"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -359,7 +374,22 @@
                         "scoring touchdown": "接球、冲球、弃踢回攻、踢回攻、防守和拦截达阵均计入结果"
                     },
                     "pitcher-hits-allowed-over": "{{team}} 允许的命中数将多于 {{scoring}}",
-                    "pitcher-hits-allowed-under": "{{team}} 允许的命中数将少于 {{scoring}}"
+                    "pitcher-hits-allowed-under": "{{team}} 允许的命中数将少于 {{scoring}}",
+                    "points-over": "{{team}} 将比 {{scoring}} 获得更多分数",
+                    "goals": "{{team}} 将在比赛中进球",
+                    "shots-over": "{{team}} 的射门次数将多于 {{scoring}}",
+                    "points-under": "{{team}} 的得分将低于 {{scoring}}",
+                    "shots-under": "{{team}} 的射门次数将少于 {{scoring}}",
+                    "hits-recorded-under": "{{team}} 记录的命中数将少于 {{scoring}}",
+                    "hits-recorded-over": "{{team}} 记录的命中数将多于 {{scoring}}",
+                    "assists-over": "{{team}} 的助攻数将多于 {{scoring}}",
+                    "rebounds-over": "{{team}} 的篮板数将多于 {{scoring}}",
+                    "rebounds-under": "{{team}} 的篮板数将少于 {{scoring}}",
+                    "assists-under": "{{team}} 的助攻数将少于 {{scoring}}",
+                    "double-double-yes": "{{team}} 将得分两双",
+                    "double-double-no": "{{team}} 不会得分两双",
+                    "triple-double-yes": "{{team}}将获得三双",
+                    "triple-double-no": "{{team}}不会拿下三双"
                 }
             },
             "starts-in": "开始于",
@@ -424,7 +454,10 @@
                 "max-combined-markets": "Parlay 中组合市场的最大数量为 {{max}}。",
                 "amm-contract-paused": "连本带利 AMM 已暂停",
                 "unique-players": "不能在连赢中添加同一参与者两次。 {{existingParticipant}} 已加入连本带利",
-                "same-event-participant": "每个活动仅支持一名参与者。无法添加 {{addedParticipant}}，因为 {{existingParticipant}} 已在连本带利中"
+                "same-event-participant": "每个活动仅支持一名参与者。无法添加 {{addedParticipant}}，因为 {{existingParticipant}} 已在连本带利中",
+                "same-game-different-player-props": "不支持组合不同类别的玩家道具",
+                "player-props-and-other-positions": "不支持将玩家道具位置与同一市场的其他位置组合起来",
+                "already-added-combined-positions": "不能将同一市场的头寸与合并头寸合并"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
@@ -460,7 +493,10 @@
             "toggle-parlay": {
                 "multi-single": "单身的",
                 "parlay": "过关"
-            }
+            },
+            "in-wallet": "在钱包里",
+            "total-to-pay": "总共支付",
+            "pay-with-voucher": "使用优惠券付款"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -619,7 +655,10 @@
             "result": "结果",
             "starts": "开始",
             "position-size": "仓位大小",
-            "claim-all": "索取全部"
+            "claim-all": "索取全部",
+            "approve-swap-tooltip": "要以 {{currencyKey}} 付款，您需要批准从 {{defaultCurrency}} 兑换为 {{currencyKey}}。",
+            "payout-in": "付款于",
+            "claim-progress": "声称..."
         },
         "messages": {
             "no-claimable": "您没有任何可申请的职位",
@@ -840,7 +879,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "覆盖中奖彩票潜在组合 50% 或以上的用户将被取消资格。"
     },
     "wizard": {
         "title": "Get Started!",

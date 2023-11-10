@@ -1,49 +1,55 @@
-import { FIFA_WC_TAG, FIFA_WC_U20_TAG } from 'constants/tags';
 import { Position } from 'enums/markets';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 
 type MatchLogosProps = {
     market: ParlaysMarket;
     width?: string;
-    padding?: string;
     isHighlighted?: boolean;
 };
 
-const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighlighted }) => {
-    const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.tags[0]));
+const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, isHighlighted }) => {
+    const [homeLogoSrc, setHomeLogoSrc] = useState(
+        market.playerName === null
+            ? getTeamImageSource(market.homeTeam, market.tags[0])
+            : getTeamImageSource(market.playerName, market.tags[0])
+    );
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.tags[0]));
 
+    console.log();
     useEffect(() => {
-        setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
-        setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
-    }, [market.homeTeam, market.awayTeam, market.tags]);
+        if (market.playerName === null) {
+            setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.tags[0]));
+            setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.tags[0]));
+        } else {
+            setHomeLogoSrc(getTeamImageSource(market.playerName, market.tags[0]));
+        }
+    }, [market.homeTeam, market.awayTeam, market.tags, market.playerName]);
 
     return (
-        <Container
-            isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
-            width={width}
-            padding={padding}
-        >
+        <Container width={width}>
             {market.playerName === null ? (
                 <ClubLogo
-                    alt="Home team logo"
+                    alt={market.homeTeam}
                     src={homeLogoSrc}
-                    isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                     isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
                     onError={getOnImageError(setHomeLogoSrc, market.tags[0])}
                 />
             ) : (
-                <PlayerIcon className="icon icon--profile" />
+                <ClubLogo
+                    alt={market.playerName}
+                    src={homeLogoSrc}
+                    isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
+                    onError={getOnPlayerImageError(setHomeLogoSrc)}
+                />
             )}
             {!market.isOneSideMarket && market.playerName === null && (
                 <ClubLogo
                     awayTeam={true}
-                    alt="Away team logo"
+                    alt={market.awayTeam}
                     src={awayLogoSrc}
-                    isFlag={market.tags[0] == FIFA_WC_TAG || market.tags[0] == FIFA_WC_U20_TAG}
                     isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.HOME}
                     onError={getOnImageError(setAwayLogoSrc, market.tags[0])}
                 />
@@ -52,30 +58,21 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, padding, isHighl
     );
 };
 
-const Container = styled.div<{ isFlag?: boolean; width?: string; padding?: string }>`
+const Container = styled.div<{ width?: string }>`
     display: flex;
     position: relative;
     align-items: center;
     width: ${(props) => (props.width ? props.width : '100%')};
     height: 100%;
-    ${(props) => (props.isFlag && props.padding ? `padding: ${props.padding};` : '')}
 `;
 
-const ClubLogo = styled.img<{ isFlag?: boolean; awayTeam?: boolean; isHighlighted?: boolean }>`
+const ClubLogo = styled.img<{ awayTeam?: boolean; isHighlighted?: boolean }>`
     position: absolute;
-    ${(props) => (props.isFlag ? 'object-fit: cover;' : '')}
-    ${(props) => (props.isFlag ? 'border-radius: 50%;' : '')}
-    height: ${(props) => (props.isFlag ? '25px' : '27px')};
-    width: ${(props) => (props.isFlag ? '25px' : '27px')};
-    ${(props) => (props.awayTeam ? `margin-left: ${props.isFlag ? '23' : '16'}px;` : '')}
+    height: 27px;
+    width: 27px;
+    ${(props) => (props.awayTeam ? `margin-left: 16px;` : '')}
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
     opacity: ${(props) => (props.isHighlighted ? '1' : '0.4')};
-`;
-
-const PlayerIcon = styled.i`
-    font-size: 28px;
-    color: ${(props) => props.theme.textColor.secondary};
-    margin-left: 10px;
 `;
 
 export default MatchLogos;

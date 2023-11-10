@@ -12,7 +12,9 @@
             "approve": "อนุมัติ",
             "get-usd-progress": "กำลังมิ้นต์ {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "ข้อมูลกระเป๋าเงิน"
+            "wallet-info": "ข้อมูลกระเป๋าเงิน",
+            "approve-parlay": "อนุมัติ ParlayAMM",
+            "approve-sports": "อนุมัติ SportsAMM"
         },
         "voucher": {
             "remaining-amount": "จำนวนเงินคงเหลือ",
@@ -62,7 +64,10 @@
             "approve-label": "อนุมัติ {{currencyKey}}",
             "approve-progress-label": "กำลังอนุมัติ {{currencyKey}}...",
             "approve-all-label": "อนุมัติทั้งหมด",
-            "custom-amount-label": "อนุมัติเป็นจำนวน"
+            "custom-amount-label": "อนุมัติเป็นจำนวน",
+            "approve": "อนุมัติ",
+            "approve-progress": "กำลังอนุมัติ...",
+            "approve-swap": "อนุมัติการแลกเปลี่ยนเป็น {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "อุ้ย! คุณอยู่ในเครือข่ายที่ไม่ถูกต้อง!",
@@ -277,7 +282,8 @@
         "race-starts": "เริ่มการแข่งขัน",
         "back": "กลับ",
         "apply-filters": "ใช้ตัวกรอง",
-        "incentivized-market": "ตลาดที่มีแรงจูงใจ"
+        "incentivized-market": "ตลาดที่มีแรงจูงใจ",
+        "number-of-rounds": "จำนวนรอบทั้งหมด"
     },
     "markets": {
         "market-card": {
@@ -309,13 +315,22 @@
                 "rushing yards": "วิ่งหลา",
                 "scoring touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ในเกม?",
                 "field goals made": "ทำประตูในสนามได้",
-                "pitcher hits allowed": "อนุญาตให้ตีเหยือกได้"
+                "pitcher hits allowed": "อนุญาตให้ตีเหยือกได้",
+                "points": "คะแนน",
+                "shots": "ช็อต",
+                "goals": "ใครจะเป็นผู้ทำประตูในเกม?",
+                "hits recorded": "บันทึกการเข้าชมแล้ว",
+                "assists": "ช่วยเหลือ",
+                "rebounds": "รีบาวด์",
+                "double double": "ดับเบิ้ลดับเบิ้ล",
+                "triple double": "ทริปเปิ้ล-ดับเบิ้ล"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "ชุด"
+                    "sets": "ชุด",
+                    "rounds": "รอบ"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -359,7 +374,22 @@
                         "scoring touchdown": "การรับ การวิ่ง การเตะเตะกลับ ทัชดาวน์การป้องกันและการสกัดกั้นจะถูกนับรวมในผลการแข่งขัน"
                     },
                     "pitcher-hits-allowed-under": "{{team}} จะมีโอกาสโจมตีน้อยกว่า {{scoring}}",
-                    "pitcher-hits-allowed-over": "{{team}} จะได้รับอนุญาตให้โจมตีมากกว่า {{scoring}}"
+                    "pitcher-hits-allowed-over": "{{team}} จะได้รับอนุญาตให้โจมตีมากกว่า {{scoring}}",
+                    "points-under": "{{team}} จะมีแต้มน้อยกว่า {{scoring}}",
+                    "shots-under": "{{team}} จะมีโอกาสยิงน้อยกว่า {{scoring}}",
+                    "goals": "{{team}} จะทำประตูในเกม",
+                    "shots-over": "{{team}} จะมีโอกาสยิงมากกว่า {{scoring}}",
+                    "points-over": "{{team}} จะมีแต้มมากกว่า {{scoring}}",
+                    "hits-recorded-over": "{{team}} จะมีการบันทึกการเข้าชมมากกว่า {{scoring}}",
+                    "hits-recorded-under": "{{team}} จะมีการบันทึกการเข้าชมน้อยกว่า {{scoring}}",
+                    "rebounds-over": "{{team}} จะมีการรีบาวด์มากกว่า {{scoring}}",
+                    "assists-over": "{{team}} จะมีแอสซิสต์มากกว่า {{scoring}}",
+                    "assists-under": "{{team}} จะมีแอสซิสต์น้อยกว่า {{scoring}}",
+                    "rebounds-under": "{{team}} จะมีการรีบาวด์น้อยกว่า {{scoring}}",
+                    "double-double-yes": "{{team}} จะทำแต้มดับเบิ้ล-ดับเบิ้ล",
+                    "triple-double-yes": "{{team}} จะทำแต้มทริปเปิล-ดับเบิ้ล",
+                    "triple-double-no": "{{team}} จะไม่ทำแต้มทริปเปิล-ดับเบิ้ล",
+                    "double-double-no": "{{team}} จะไม่ทำคะแนนดับเบิ้ล-ดับเบิ้ล"
                 }
             },
             "starts-in": "เริ่มเข้า",
@@ -420,7 +450,10 @@
                 "max-combined-markets": "จำนวนตลาดรวมสูงสุดในพาร์เลย์คือ {{max}}",
                 "amm-contract-paused": "AMM พาร์เลย์หยุดชั่วคราว",
                 "unique-players": "ไม่สามารถเพิ่มผู้เข้าร่วมคนเดียวกันสองครั้งในพาร์เลย์ {{existingParticipant}} อยู่ในพาร์เลย์แล้ว",
-                "same-event-participant": "รองรับผู้เข้าร่วมเพียงหนึ่งคนต่อเหตุการณ์ ไม่สามารถเพิ่ม {{addedParticipant}} ได้ เนื่องจาก {{existingParticipant}} อยู่ใน Parlay แล้ว"
+                "same-event-participant": "รองรับผู้เข้าร่วมเพียงหนึ่งคนต่อเหตุการณ์ ไม่สามารถเพิ่ม {{addedParticipant}} ได้ เนื่องจาก {{existingParticipant}} อยู่ใน Parlay แล้ว",
+                "already-added-combined-positions": "ไม่สามารถรวมตำแหน่งจากตลาดเดียวกันกับตำแหน่งรวมได้",
+                "same-game-different-player-props": "ไม่รองรับการรวมอุปกรณ์ประกอบฉากของผู้เล่นประเภทต่างๆ",
+                "player-props-and-other-positions": "ไม่รองรับการรวมตำแหน่งอุปกรณ์ประกอบฉากของผู้เล่นกับตำแหน่งอื่นจากตลาดเดียวกัน"
             },
             "skew": "ลาด",
             "payout": "การจ่ายเงิน",
@@ -461,7 +494,10 @@
             "toggle-parlay": {
                 "multi-single": "เดี่ยว",
                 "parlay": "พาร์เลย์"
-            }
+            },
+            "total-to-pay": "ค่าใช้จ่ายทั้งหมด",
+            "in-wallet": "ในกระเป๋าสตางค์",
+            "pay-with-voucher": "ชำระเงินด้วยบัตรกำนัล"
         },
         "nav-menu": {
             "items": {
@@ -619,7 +655,10 @@
             "result": "ผลลัพธ์",
             "position-size": "ขนาดตำแหน่ง",
             "starts": "เริ่ม",
-            "claim-all": "อ้างสิทธิ์ทั้งหมด"
+            "claim-all": "อ้างสิทธิ์ทั้งหมด",
+            "claim-progress": "กำลังอ้างสิทธิ์...",
+            "payout-in": "จ่ายเงินเข้า.",
+            "approve-swap-tooltip": "หากต้องการรับการจ่ายเงินเป็น {{currencyKey}} คุณต้องอนุมัติการแลกเปลี่ยนจาก {{defaultCurrency}} เป็น {{currencyKey}}"
         },
         "messages": {
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",
@@ -840,7 +879,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "ผู้ใช้ที่ได้ครอบคลุม 50% หรือมากกว่าของการผสมผสานที่เป็นไปได้ของตั๋วที่ชนะจะถูกตัดสิทธิ์"
     },
     "wizard": {
         "title": "Get Started!",

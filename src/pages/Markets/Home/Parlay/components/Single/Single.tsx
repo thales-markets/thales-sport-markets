@@ -32,7 +32,9 @@ import {
     formatPercentage,
     getPrecision,
     roundNumberToDecimals,
-} from 'utils/formatters/number';
+    coinFormatter,
+    coinParser,
+} from 'thales-utils';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
@@ -70,7 +72,6 @@ import {
     getDefaultCollateral,
     isStableCurrency,
 } from 'utils/collaterals';
-import { coinFormatter, coinParser } from 'utils/formatters/ethers';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import CollateralSelector from 'components/CollateralSelector';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';

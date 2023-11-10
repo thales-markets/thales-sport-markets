@@ -19,7 +19,6 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered } from 'styles/common';
 import { ParlaysMarket } from 'types/markets';
-import { bigNumberFormatter, coinFormatter, coinParser } from 'utils/formatters/ethers';
 import {
     ceilNumberToDecimals,
     formatCurrencyWithKey,
@@ -27,7 +26,10 @@ import {
     formatPercentage,
     getPrecision,
     roundNumberToDecimals,
-} from 'utils/formatters/number';
+    bigNumberFormatter,
+    coinFormatter,
+    coinParser,
+} from 'thales-utils';
 import { formatMarketOdds, getBonus } from 'utils/markets';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
@@ -239,7 +241,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             if (Number(collateralAmountForQuote) <= 0) return;
 
             const { parlayMarketsAMMContract, multiCollateralOnOffRampContract } = networkConnector;
-            if (parlayMarketsAMMContract && multiCollateralOnOffRampContract && minUsdAmountValue) {
+            if (parlayMarketsAMMContract && minUsdAmountValue) {
                 const marketsAddresses = markets.map((market) => market.address);
                 const selectedPositions = markets.map((market) => market.position);
 
@@ -247,13 +249,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     const [minimumReceivedForCollateralAmount, minimumNeededForMinUsdAmountValue] = await Promise.all([
                         isDefaultCollateral
                             ? 0
-                            : multiCollateralOnOffRampContract.getMinimumReceived(
+                            : multiCollateralOnOffRampContract?.getMinimumReceived(
                                   collateralAddress,
                                   coinParser(collateralAmountForQuote.toString(), networkId, selectedCollateral)
                               ),
                         isDefaultCollateral
                             ? 0
-                            : multiCollateralOnOffRampContract.getMinimumNeeded(
+                            : multiCollateralOnOffRampContract?.getMinimumNeeded(
                                   collateralAddress,
                                   coinParser(minUsdAmountValue.toString(), networkId)
                               ),
@@ -632,25 +634,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 if (!parlayAmmQuote.error) {
                     const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
                     const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
-                    const usdPaid = coinFormatter(parlayAmmQuote['usdPaid'], networkId);
 
                     setTotalQuote(parlayAmmTotalQuote);
-
-                    // Skew impact calculation if it's SGP
-                    if (hasParlayCombinedMarkets) {
-                        const marketsAddresses = markets.map((market) => market.address);
-                        const selectedPositions = markets.map((market) => market.position);
-                        const usdPaidParsed = coinParser((Number(usdPaid) || minUsdAmountValue).toString(), networkId);
-
-                        const newSkewData = await parlayMarketsAMMContract?.calculateSkewImpact(
-                            marketsAddresses,
-                            selectedPositions,
-                            usdPaidParsed
-                        );
-                        setSkew(bigNumberFormatter(newSkewData || 0));
-                    } else {
-                        setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
-                    }
+                    setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
                     setTotalBuyAmount(parlayAmmTotalBuyAmount);
 
                     const fetchedFinalQuotes: number[] = (parlayAmmQuote['finalQuotes'] || []).map((quote: BigNumber) =>

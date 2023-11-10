@@ -12,7 +12,9 @@
             "approve": "Approve",
             "get-usd-progress": "Minting {{amount}}...",
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
-            "wallet-info": "Информация о кошельке"
+            "wallet-info": "Информация о кошельке",
+            "approve-parlay": "Одобрить ParlayAMM",
+            "approve-sports": "Утвердить SportsAMM"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -62,7 +64,10 @@
             "approve-label": "Approve {{currencyKey}}",
             "approve-progress-label": "Approving {{currencyKey}}...",
             "approve-all-label": "Approve all",
-            "custom-amount-label": "Approve amount of"
+            "custom-amount-label": "Approve amount of",
+            "approve-progress": "Одобрение...",
+            "approve": "Утвердить",
+            "approve-swap": "Одобрить обмен на {{currencyKey}}"
         },
         "unsupported-network": {
             "title": "Oops! You are on the wrong network!",
@@ -277,7 +282,8 @@
         "race-starts": "Старт гонки",
         "back": "Назад",
         "apply-filters": "Применить фильтры",
-        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК"
+        "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК",
+        "number-of-rounds": "Общее количество раундов"
     },
     "markets": {
         "market-card": {
@@ -309,13 +315,22 @@
                 "passing touchdowns": "Проходящие тачдауны",
                 "scoring touchdown": "Кто забьет тачдаун в игре?",
                 "field goals made": "Голы с игры забиты",
-                "pitcher hits allowed": "Удары питчера разрешены"
+                "pitcher hits allowed": "Удары питчера разрешены",
+                "shots": "Выстрелы",
+                "points": "Точки",
+                "goals": "Кто забьет гол в игре?",
+                "hits recorded": "Записано хитов",
+                "rebounds": "Подборы",
+                "assists": "помогает",
+                "triple double": "Трипл-дабл",
+                "double double": "Дабл-дабл"
             },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
                     "points": "points",
-                    "sets": "наборы"
+                    "sets": "наборы",
+                    "rounds": "раунды"
                 },
                 "match-resolve": {
                     "regular": "in regular time",
@@ -359,7 +374,22 @@
                         "scoring touchdown": "Прием, рывок, возврат панта, ответный удар, тачдауны защиты и перехвата засчитываются в результат."
                     },
                     "pitcher-hits-allowed-under": "У {{team}} будет меньше разрешенных попаданий, чем у {{scoring}}",
-                    "pitcher-hits-allowed-over": "У {{team}} будет разрешено больше попаданий, чем у {{scoring}}"
+                    "pitcher-hits-allowed-over": "У {{team}} будет разрешено больше попаданий, чем у {{scoring}}",
+                    "points-under": "{{team}} наберет меньше очков, чем {{scoring}}",
+                    "shots-over": "У {{team}} будет больше бросков, чем у {{scoring}}",
+                    "shots-under": "У {{team}} будет меньше бросков, чем у {{scoring}}",
+                    "goals": "{{team}} забьет гол в игре",
+                    "points-over": "{{team}} наберет больше очков, чем {{scoring}}",
+                    "hits-recorded-over": "У {{team}} будет записано больше попаданий, чем у {{scoring}}",
+                    "hits-recorded-under": "У {{team}} будет записано меньше попаданий, чем у {{scoring}}",
+                    "assists-under": "У {{team}} будет меньше результативных передач, чем у {{scoring}}",
+                    "rebounds-under": "У {{team}} будет меньше подборов, чем у {{scoring}}",
+                    "assists-over": "У команды {{team}} будет больше результативных передач, чем у команды {{scoring}}",
+                    "rebounds-over": "У {{team}} будет больше подборов, чем у {{scoring}}",
+                    "double-double-no": "{{team}} не забьет дабл-дабл",
+                    "triple-double-yes": "{{team}} забьет трипл-дабл",
+                    "double-double-yes": "{{team}} забьет дабл-дабл",
+                    "triple-double-no": "{{team}} не забьет трипл-дабл"
                 }
             },
             "starts-in": "Начинается через",
@@ -424,7 +454,10 @@
                 "max-combined-markets": "Максимальное количество комбинированных рынков в Parlay составляет {{max}}.",
                 "amm-contract-paused": "Экспресс AMM приостановлен",
                 "unique-players": "Нельзя дважды добавить одного и того же участника в экспресс. {{existingParticipant}} уже находится в Parlay",
-                "same-event-participant": "Поддерживается только один участник на событие. Невозможно добавить {{addedParticipant}}, поскольку {{existingParticipant}} уже находится в Parlay"
+                "same-event-participant": "Поддерживается только один участник на событие. Невозможно добавить {{addedParticipant}}, поскольку {{existingParticipant}} уже находится в Parlay",
+                "same-game-different-player-props": "Не поддерживается объединение различных категорий реквизита игрока.",
+                "already-added-combined-positions": "Невозможно объединить позиции с одного рынка с помощью комбинированных позиций.",
+                "player-props-and-other-positions": "Не поддерживается объединение позиций реквизита игрока с другими позициями с того же рынка."
             },
             "empty-title": "Нет позиций",
             "empty-description": "Добавьте позицию, выберите рынок и сделайте свой выбор.",
@@ -460,7 +493,10 @@
             "toggle-parlay": {
                 "multi-single": "Одинокий",
                 "parlay": "экспресс"
-            }
+            },
+            "pay-with-voucher": "Оплатить ваучером",
+            "total-to-pay": "Итого к оплате",
+            "in-wallet": "В кошельке"
         },
         "discounted-per": "Со скидкой согласно",
         "nav-menu": {
@@ -619,7 +655,10 @@
             "starts": "Старт",
             "result": "Результат",
             "position-size": "Размер позиции",
-            "claim-all": "Требовать все"
+            "claim-all": "Требовать все",
+            "approve-swap-tooltip": "Чтобы получить выплату в {{currencyKey}}, вам необходимо одобрить обмен с {{defaultCurrency}} на {{currencyKey}}.",
+            "payout-in": "Выплата в",
+            "claim-progress": "Утверждение..."
         },
         "messages": {
             "no-claimable": "У вас нет требуемых должностей",
@@ -840,7 +879,8 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "bi-weekly-period": "Bi-weekly period"
-        }
+        },
+        "warning2": "Пользователи, которые покрыли 50% или более потенциальных комбинаций своих выигрышных билетов, будут дисквалифицированы."
     },
     "wizard": {
         "title": "Get Started!",

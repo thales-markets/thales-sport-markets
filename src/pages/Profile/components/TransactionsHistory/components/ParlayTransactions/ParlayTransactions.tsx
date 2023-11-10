@@ -17,9 +17,14 @@ import {
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
-import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
-import { fixOneSideMarketCompetitorName, truncateAddress } from 'utils/formatters/string';
+import {
+    formatDateWithTime,
+    formatTxTimestamp,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    truncateAddress,
+} from 'thales-utils';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
@@ -34,6 +39,7 @@ import {
     isOneSidePlayerProps,
     isParlayOpen,
     isParlayWon,
+    isSpecialYesNoProp,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
 import { t } from 'i18next';
@@ -344,7 +350,7 @@ const getPositionStatus = (position: PositionData, theme: ThemeInterface) => {
     );
 };
 
-const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket, theme: ThemeInterface) => {
+export const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket, theme: ThemeInterface) => {
     const isOpen = combinedMarket.markets[0].isOpen || combinedMarket.markets[1].isOpen;
     if (isOpen) return <StatusIcon color={theme.status.open} className={`icon icon--open`} />;
     if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions))
@@ -366,7 +372,7 @@ const getOpacity = (position: PositionData) => {
     }
 };
 
-const getOpacityForCombinedMarket = (combinedMarket: CombinedMarket) => {
+export const getOpacityForCombinedMarket = (combinedMarket: CombinedMarket) => {
     if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions)) return 1;
     if (combinedMarket.markets[0].isResolved && combinedMarket.markets[1].isResolved) return 0.5;
     return 1;
@@ -399,11 +405,10 @@ export const getParlayRow = (
     combinedMarkets?: CombinedMarket[]
 ) => {
     const render: any = [];
-
     if (combinedMarkets?.length) {
         combinedMarkets.forEach((combinedMarket, index) => {
             const opacity = getOpacityForCombinedMarket(combinedMarket);
-            const odd = formatMarketOdds(selectedOddsType, combinedMarket.totalOdd);
+            const odd = formatMarketOdds(selectedOddsType, combinedMarket.totalOdd ? combinedMarket.totalOdd : 1);
             const symbolText = getCombinedPositionName(combinedMarket.markets, combinedMarket.positions);
 
             const homeTeam = combinedMarket.markets[0].homeTeam;
@@ -498,7 +503,9 @@ export const getParlayRow = (
                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
                     symbolText={symbolText}
                     symbolUpperText={
-                        spreadTotalText && !isOneSidePlayerProps(position.market.betType)
+                        spreadTotalText &&
+                        !isOneSidePlayerProps(position.market.betType) &&
+                        !isSpecialYesNoProp(position.market.betType)
                             ? {
                                   text: spreadTotalText,
                                   textStyle: {

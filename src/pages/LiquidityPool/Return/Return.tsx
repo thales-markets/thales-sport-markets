@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { getIsAppReady } from 'redux/modules/app';
 import { LiquidityPoolReturn, LiquidityPoolType } from 'types/liquidityPool';
 import useLiquidityPoolReturnQuery from 'queries/liquidityPool/useLiquidityPoolReturnQuery';
-import { formatPercentage } from 'utils/formatters/number';
+import { formatPercentage } from 'thales-utils';
 import {
     ContentInfoContainer,
     LiquidityPoolInfoContainer,

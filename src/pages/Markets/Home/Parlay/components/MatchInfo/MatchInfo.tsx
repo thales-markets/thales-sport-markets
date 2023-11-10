@@ -1,10 +1,12 @@
 import PositionSymbol from 'components/PositionSymbol';
+import { Position } from 'enums/markets';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromParlay } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { ParlaysMarket } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import {
     formatMarketOdds,
     getBonus,
@@ -15,12 +17,10 @@ import {
     getSpreadTotalText,
     getSymbolText,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
-import { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
-import { Position } from 'enums/markets';
 
 type MatchInfoProps = {
     market: ParlaysMarket;
@@ -41,7 +41,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
 
     return (
         <>
-            <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
+            <MatchLogos market={market} width={'120px'} isHighlighted={isHighlighted} />
             <MatchLabel>
                 <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
                     {marketNameHome}
@@ -63,7 +63,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 }}
                 symbolText={symbolText}
                 symbolUpperText={
-                    spreadTotalText && !isOneSidePlayerProps(market.betType)
+                    spreadTotalText && !isOneSidePlayerProps(market.betType) && !isSpecialYesNoProp(market.betType)
                         ? {
                               text: spreadTotalText,
                               textStyle: {
@@ -76,7 +76,11 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         : undefined
                 }
                 tooltip={!readOnly && <>{getOddTooltipText(market.position, market)}</>}
-                additionalStyle={market.isOneSideMarket || isOneSidePlayerProps(market.betType) ? { fontSize: 10 } : {}}
+                additionalStyle={
+                    market.isOneSideMarket || isOneSidePlayerProps(market.betType) || isSpecialYesNoProp(market.betType)
+                        ? { fontSize: 10 }
+                        : {}
+                }
             />
             {!readOnly && <Bonus>{bonus > 0 ? getFormattedBonus(bonus) : ''}</Bonus>}
             {readOnly ? (

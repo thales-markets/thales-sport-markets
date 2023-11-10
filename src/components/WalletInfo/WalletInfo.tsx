@@ -4,19 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress, switchToNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { truncateAddress } from 'utils/formatters/string';
+import { truncateAddress, changeNetwork, formatCurrency } from 'thales-utils';
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { changeNetwork } from 'utils/network';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import { formatCurrency } from 'utils/formatters/number';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { Network } from 'enums/network';
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { useSwitchNetwork } from 'wagmi';
 import { getDefaultCollateral } from 'utils/collaterals';
+import { SupportedNetwork } from 'types/network';
 
 const WalletInfo: React.FC = () => {
     const { t } = useTranslation();
@@ -124,7 +122,9 @@ const WalletInfo: React.FC = () => {
                                                                 // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
                                                                 dispatch(
                                                                     switchToNetworkId({
-                                                                        networkId: Number(network.id) as Network,
+                                                                        networkId: Number(
+                                                                            network.id
+                                                                        ) as SupportedNetwork,
                                                                     })
                                                                 );
                                                             });

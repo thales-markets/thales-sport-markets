@@ -5,19 +5,17 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { CombinedMarketsContractData, SGPItem, SportMarketInfo, SportMarkets } from 'types/markets';
 import { Network } from 'enums/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter, localStore, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
 import networkConnector from 'utils/networkConnector';
 import { convertPriceImpactToBonus, getIsOneSideMarket, getMarketAddressesFromSportMarketArray } from 'utils/markets';
 import { filterMarketsByTagsArray, insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
-import localStore from 'utils/localStore';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { BetType, GlobalFiltersEnum } from 'enums/markets';
-import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const BATCH_SIZE = 100;
 const BATCH_SIZE_BASE = 50;
-const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 5;
+const BATCH_SIZE_FOR_COMBINED_MARKETS_QUERY = 4;
 
 const marketsCache = {
     [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
