@@ -1007,5 +1007,39 @@
         "single-lp": "LP individual",
         "parlay-lp": "Parlay LP",
         "description-parlay": "<h1>Descripción</h1><p> La provisión de liquidez implica que los usuarios depositen garantías de monedas estables en un grupo de liquidez basado en contratos inteligentes para el comercio de horas extra. La garantía depositada se utiliza para facilitar la negociación en Parlay AMM de Overtime.</p><p> Para poder proporcionar liquidez, deberá apostar THALES. No hay un límite máximo por billetera y puede depositar un máximo de 1 {{currency}} por {{thalesStakedAmount}} THALES apostado hasta que se llene el fondo de liquidez.</p><p> Al final de cada ronda, la parte proporcional del PnL de esa ronda se agregará a su saldo depositado.</p><p> Si desea retirar dinero, puede indicarlo en cualquier momento durante la ronda en curso y, al final de la ronda, se le enviará la cantidad que indicó para el retiro (incluido el PnL de esa ronda). El importe mínimo a retirar está fijado en el 10%</p><p> Si decide dejar de participar en THALES mientras proporciona liquidez, tenga en cuenta que primero deberá señalar un retiro del grupo de liquidez.</p><p> Proporcionar liquidez lo expone a varios riesgos, incluidas pérdidas potenciales debido a que los usuarios ganan en el comercio, así como riesgos de seguridad de contratos inteligentes. Asegúrese de comprender estos riesgos antes de depositar.</p><p><tipLink> TIP-142</tipLink> tiene más detalles sobre la implementación técnica de la provisión de liquidez de horas extras.</p>"
+    },
+    "seo": {
+        "home": {
+            "description": "Ingrese al mundo de la principal casa de apuestas deportivas web3 en cadena. Posiciones seguras en más de 12 deportes y más de 40 ligas.",
+            "title": "Mercados de horas extras: la casa de apuestas Premier Web3"
+        },
+        "markets": {
+            "title": "Mercados de horas extras: mercados de apuestas deportivas Web3 para más de 40 ligas",
+            "description": "Únase a la mejor casa de apuestas web3 del mercado. Asegure posiciones en las mejores ligas como la NFL, NBA, UCL, EPL y más."
+        },
+        "vaults": {
+            "title": "Bóvedas de mercados de horas extras: comercio automatizado",
+            "description": "Deposite activos en la bóveda de Overtime Markets y deje que nuestro mecanismo de negociación automatizado implemente la estrategia que usted elija."
+        },
+        "parlay-leaderboard": {
+            "description": "Overtime Markets es una casa de apuestas web3 con los mejores bonos quincenales del mercado para jugadores parlay. Consulta la clasificación y si calificaste aquí.",
+            "title": "Mercados de horas extras: gane recompensas Parlay cada 2 semanas"
+        },
+        "referral": {
+            "description": "Recomiende a un amigo a Overtime Markets y obtenga un porcentaje de cada operación de la persona que recomiende, pagado en garantía en USD al instante y directamente en su billetera.",
+            "title": "Mercados de horas extras: gane tarifas de referencia"
+        },
+        "profile": {
+            "description": "Reclame sus ganancias, revise su desempeño y realice un seguimiento de los depósitos que haya realizado en Overtime Market Vaults.",
+            "title": "Mercado de horas extras: perfil de usuario"
+        },
+        "liquidity-pool": {
+            "description": "¡Sé la casa del mercado de horas extras! Deposite garantía de moneda estable en el fondo de liquidez para tener la oportunidad de ganar un porcentaje del PnL cada semana.",
+            "title": "Mercados de horas extras: Sea la casa con nuestro fondo de liquidez"
+        },
+        "single-market": {
+            "title": "Apuestas deportivas Web3 de mercados de tiempo extra: {{dynamicTitle}}",
+            "description": "{{dynamicTitle}}: disfrute de las mejores cuotas de apuestas deportivas Web3 del mercado. No es necesario registrarse. Mercados deportivos totalmente descentralizados."
+        }
     }
 }

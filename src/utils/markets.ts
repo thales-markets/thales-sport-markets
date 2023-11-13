@@ -5,6 +5,7 @@ import {
     GOLF_TAGS,
     GOLF_TOURNAMENT_WINNER_TAG,
     IIHF_WC_TAG,
+    INTERNATIONAL_SPORTS,
     MATCH_RESOLVE_MAP,
     MOTOSPORT_TAGS,
     SCORING_MAP,
@@ -203,6 +204,8 @@ export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG || Numb
 export const isIIHFWCGame = (tag: number) => Number(tag) === IIHF_WC_TAG;
 
 export const isUEFAGame = (tag: number) => UEFA_TAGS.includes(tag);
+
+export const isInternationalGame = (tag: number) => INTERNATIONAL_SPORTS.includes(tag);
 
 export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 

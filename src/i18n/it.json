@@ -1007,5 +1007,39 @@
         "parlay-lp": "Parlay LP",
         "description-parlay": "<h1>Descrizione</h1><p> La fornitura di liquidità prevede che gli utenti depositino collaterale in stablecoin in un pool di liquidità basato su contratto intelligente per il trading straordinario. La garanzia depositata viene utilizzata per facilitare il trading su Parlay AMM di Overtime.</p><p> Per essere in grado di fornire liquidità dovrai fare staking su THALES. Non c&#39;è un limite massimo per portafoglio e puoi depositare un massimo di 1 {{currency}} per {{thalesStakedAmount}} THALES puntato fino a riempire il pool di liquidità.</p><p> Alla fine di ogni round, la quota proporzionale del PnL di quel round verrà aggiunta al tuo saldo depositato.</p><p> Se desideri prelevare, puoi segnalarlo in qualsiasi momento durante il round in corso, e alla fine del round ti viene inviato l&#39;importo che hai segnalato per il prelievo (comprensivo del PnL di quel round). L&#39;importo minimo da prelevare è fissato al 10%</p><p> Se decidi di annullare lo staking di THALES mentre fornisci liquidità, tieni presente che dovrai prima segnalare un prelievo dal pool di liquidità.</p><p> Fornire liquidità ti espone a vari rischi, tra cui potenziali perdite dovute agli utenti che vincono nel trading e rischi per la sicurezza dei contratti intelligenti. Assicurati di aver compreso questi rischi prima di depositare.</p><p><tipLink> SUGGERIMENTO-142</tipLink> ha maggiori dettagli sull&#39;implementazione tecnica della fornitura di liquidità per gli straordinari.</p>",
         "single-lp": "LP singolo"
+    },
+    "seo": {
+        "home": {
+            "title": "Mercati straordinari: le scommesse sportive Premier Web3",
+            "description": "Entra nel mondo delle principali scommesse sportive on-chain web3. Posizioni sicure in oltre 12 sport e oltre 40 campionati."
+        },
+        "markets": {
+            "title": "Mercati straordinari: mercati di scommesse sportive Web3 per oltre 40 campionati",
+            "description": "Unisciti alle migliori scommesse sportive web3 sul mercato. Assicurati posizioni nei migliori campionati come NFL, NBA, UCL, EPL e altri."
+        },
+        "vaults": {
+            "description": "Deposita beni nel caveau di Overtime Markets e lascia che il nostro meccanismo di trading automatizzato implementi una strategia di tua scelta.",
+            "title": "Casseforti dei mercati straordinari: trading automatizzato"
+        },
+        "parlay-leaderboard": {
+            "title": "Mercati straordinari: guadagna premi Parlay ogni 2 settimane",
+            "description": "Overtime Markets è un sito di scommesse sportive web3 con i migliori bonus bisettimanali sul mercato per i giocatori parlay! Controlla la classifica e se ti sei qualificato qui."
+        },
+        "referral": {
+            "description": "Invita un amico a Overtime Markets e ottieni una percentuale da ogni operazione della persona che inviti, pagata in garanzia in USD istantaneamente e direttamente nel tuo portafoglio.",
+            "title": "Mercati straordinari: guadagna commissioni di riferimento"
+        },
+        "profile": {
+            "description": "Richiedi le tue vincite, esamina le tue prestazioni e monitora i depositi effettuati negli Overtime Market Vault.",
+            "title": "Mercato straordinario: profilo utente"
+        },
+        "liquidity-pool": {
+            "description": "Diventa la casa del mercato degli straordinari! Deposita garanzie collaterali sulle stablecoin nel pool di liquidità per avere la possibilità di guadagnare una percentuale del PnL ogni settimana.",
+            "title": "Mercati straordinari: sii la casa con il nostro pool di liquidità"
+        },
+        "single-market": {
+            "title": "Mercati straordinari Scommesse sportive Web3: {{dynamicTitle}}",
+            "description": "{{dynamicTitle}}: goditi le migliori quote per scommesse sportive Web3 sul mercato. Non è necessaria alcuna registrazione. Mercati sportivi completamente decentralizzati."
+        }
     }
 }
