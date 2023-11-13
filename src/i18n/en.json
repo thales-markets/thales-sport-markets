@@ -748,6 +748,14 @@
             "affiliate-leaderboard": "Affiliate Leaderboard"
         }
     },
+    "deposit": {
+        "deposit-crypto": "Deposit crypto",
+        "select-token": "Select token",
+        "address-input-label": "Your personal {{ token }} deposit address on {{ network }}",
+        "send": "Send {{ token }} on {{ network }} to the address above!",
+        "copying-address": "Please wait",
+        "copied": "Address copied!"
+    },
     "wizard": {
         "title": "Get Started!",
         "steps": {
