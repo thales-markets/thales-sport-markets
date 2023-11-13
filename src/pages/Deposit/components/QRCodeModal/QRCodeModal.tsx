@@ -5,11 +5,12 @@ import QRCode from 'react-qr-code';
 type QRCodeModalProps = {
     onClose: () => void;
     walletAddress: string;
+    title: string;
 };
 
-const QRCodeModal: React.FC<QRCodeModalProps> = ({ onClose, walletAddress }) => {
+const QRCodeModal: React.FC<QRCodeModalProps> = ({ onClose, walletAddress, title }) => {
     return (
-        <Modal title={''} onClose={() => onClose()}>
+        <Modal title={title} onClose={() => onClose()}>
             <QRCode value={walletAddress} />
         </Modal>
     );

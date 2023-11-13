@@ -754,7 +754,8 @@
         "address-input-label": "Your personal {{ token }} deposit address on {{ network }}",
         "send": "Send {{ token }} on {{ network }} to the address above!",
         "copying-address": "Please wait",
-        "copied": "Address copied!"
+        "copied": "Address copied!",
+        "qr-modal-title": "Send {{ token }} ({{ network }})"
     },
     "wizard": {
         "title": "Get Started!",
