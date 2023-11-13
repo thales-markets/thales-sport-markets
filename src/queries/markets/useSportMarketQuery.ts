@@ -30,7 +30,7 @@ const useSportMarketQuery = (
                     }),
                 ]);
 
-                const parentMarket = parentMarketFromGraph[0];
+                const parentMarket = parentMarketFromGraph ? parentMarketFromGraph[0] : undefined;
                 const marketAddresses = getMarketAddressesFromSportMarketArray([parentMarket]);
 
                 const [parentMarketData, combinedMarketsContractData] = await Promise.all([
