@@ -29,6 +29,7 @@ import Wizard from 'pages/Wizard';
 import Referral from 'pages/Referral';
 import { buildHref } from 'utils/routes';
 import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
+import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -170,104 +171,106 @@ const App = () => {
         <Theme>
             <QueryClientProvider client={queryConnector.queryClient}>
                 <Suspense fallback={<Loader />}>
-                    <Router history={history}>
-                        <Switch>
-                            <Route
-                                exact
-                                path={ROUTES.Markets.Market}
-                                render={(routeProps) => (
-                                    <DappLayout>
-                                        <Market {...routeProps} />
-                                    </DappLayout>
-                                )}
-                            />
-                            <Route exact path={ROUTES.Markets.Home}>
-                                <DappLayout>
-                                    <BannerCarousel />
-                                    <Markets />
-                                </DappLayout>
-                            </Route>
-                            {isRouteAvailableForNetwork(ROUTES.Leaderboard, networkId) && (
-                                <Route exact path={ROUTES.Leaderboard}>
-                                    <DappLayout>
-                                        <ParlayLeaderboard />
-                                    </DappLayout>
-                                </Route>
-                            )}
-                            {isRouteAvailableForNetwork(ROUTES.Profile, networkId) && (
-                                <Route exact path={ROUTES.Profile}>
-                                    <DappLayout>
-                                        <Profile />
-                                    </DappLayout>
-                                </Route>
-                            )}
-                            {isRouteAvailableForNetwork(ROUTES.Referral, networkId) && (
-                                <Route exact path={ROUTES.Referral}>
-                                    <DappLayout>
-                                        <Referral />
-                                    </DappLayout>
-                                </Route>
-                            )}
-                            <Route exact path={ROUTES.Wizard}>
-                                <DappLayout>
-                                    <Wizard />
-                                </DappLayout>
-                            </Route>
-                            {isRouteAvailableForNetwork(ROUTES.Quiz, networkId) && (
-                                <Route exact path={ROUTES.Quiz}>
-                                    <DappLayout>
-                                        <Quiz />
-                                    </DappLayout>
-                                </Route>
-                            )}
-                            {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
-                                <Route exact path={ROUTES.Vaults}>
-                                    <DappLayout>
-                                        <Vaults />
-                                    </DappLayout>
-                                </Route>
-                            )}
-
-                            {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
+                    <RouterProvider>
+                        <Router history={history}>
+                            <Switch>
                                 <Route
                                     exact
-                                    path={ROUTES.Vault}
+                                    path={ROUTES.Markets.Market}
                                     render={(routeProps) => (
                                         <DappLayout>
-                                            <Vault {...routeProps} />
+                                            <Market {...routeProps} />
                                         </DappLayout>
                                     )}
                                 />
-                            )}
+                                <Route exact path={ROUTES.Markets.Home}>
+                                    <DappLayout>
+                                        <BannerCarousel />
+                                        <Markets />
+                                    </DappLayout>
+                                </Route>
+                                {isRouteAvailableForNetwork(ROUTES.Leaderboard, networkId) && (
+                                    <Route exact path={ROUTES.Leaderboard}>
+                                        <DappLayout>
+                                            <ParlayLeaderboard />
+                                        </DappLayout>
+                                    </Route>
+                                )}
+                                {isRouteAvailableForNetwork(ROUTES.Profile, networkId) && (
+                                    <Route exact path={ROUTES.Profile}>
+                                        <DappLayout>
+                                            <Profile />
+                                        </DappLayout>
+                                    </Route>
+                                )}
+                                {isRouteAvailableForNetwork(ROUTES.Referral, networkId) && (
+                                    <Route exact path={ROUTES.Referral}>
+                                        <DappLayout>
+                                            <Referral />
+                                        </DappLayout>
+                                    </Route>
+                                )}
+                                <Route exact path={ROUTES.Wizard}>
+                                    <DappLayout>
+                                        <Wizard />
+                                    </DappLayout>
+                                </Route>
+                                {isRouteAvailableForNetwork(ROUTES.Quiz, networkId) && (
+                                    <Route exact path={ROUTES.Quiz}>
+                                        <DappLayout>
+                                            <Quiz />
+                                        </DappLayout>
+                                    </Route>
+                                )}
+                                {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
+                                    <Route exact path={ROUTES.Vaults}>
+                                        <DappLayout>
+                                            <Vaults />
+                                        </DappLayout>
+                                    </Route>
+                                )}
 
-                            {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, networkId) && (
-                                <Route exact path={ROUTES.QuizLeaderboard}>
+                                {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
+                                    <Route
+                                        exact
+                                        path={ROUTES.Vault}
+                                        render={(routeProps) => (
+                                            <DappLayout>
+                                                <Vault {...routeProps} />
+                                            </DappLayout>
+                                        )}
+                                    />
+                                )}
+
+                                {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, networkId) && (
+                                    <Route exact path={ROUTES.QuizLeaderboard}>
+                                        <DappLayout>
+                                            <QuizLeaderboard />
+                                        </DappLayout>
+                                    </Route>
+                                )}
+                                {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
+                                    <Route exact path={ROUTES.LiquidityPool}>
+                                        <DappLayout>
+                                            <LiquidityPool />
+                                        </DappLayout>
+                                    </Route>
+                                )}
+                                <Route exact path={ROUTES.Home}>
+                                    <LandingPageLayout>
+                                        <LandingPage />
+                                    </LandingPageLayout>
+                                </Route>
+                                <Route>
+                                    <Redirect to={ROUTES.Markets.Home} />
                                     <DappLayout>
-                                        <QuizLeaderboard />
+                                        <BannerCarousel />
+                                        <Markets />
                                     </DappLayout>
                                 </Route>
-                            )}
-                            {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
-                                <Route exact path={ROUTES.LiquidityPool}>
-                                    <DappLayout>
-                                        <LiquidityPool />
-                                    </DappLayout>
-                                </Route>
-                            )}
-                            <Route exact path={ROUTES.Home}>
-                                <LandingPageLayout>
-                                    <LandingPage />
-                                </LandingPageLayout>
-                            </Route>
-                            <Route>
-                                <Redirect to={ROUTES.Markets.Home} />
-                                <DappLayout>
-                                    <BannerCarousel />
-                                    <Markets />
-                                </DappLayout>
-                            </Route>
-                        </Switch>
-                    </Router>
+                            </Switch>
+                        </Router>
+                    </RouterProvider>
                     <ReactQueryDevtools initialIsOpen={false} />
                 </Suspense>
             </QueryClientProvider>
