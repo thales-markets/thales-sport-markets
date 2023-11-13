@@ -1007,5 +1007,39 @@
         "description-parlay": "<h1>Description</h1><p> La fourniture de liquidités implique que les utilisateurs déposent des garanties stables dans un pool de liquidités basé sur un contrat intelligent pour le trading des heures supplémentaires. La garantie déposée est utilisée pour faciliter la négociation sur l&#39;AMM Parlay d&#39;Overtime.</p><p> Pour pouvoir fournir des liquidités, vous devrez jalonner THALES. Il n&#39;y a pas de plafond maximum par portefeuille et vous pouvez déposer un maximum de 1 {{currency}} par {{thalesStakedAmount}} THALES jalonné jusqu&#39;à ce que le pool de liquidités soit rempli.</p><p> À la fin de chaque tour, la part proportionnelle du PnL de ce tour sera ajoutée à votre solde déposé.</p><p> Si vous souhaitez retirer, vous pouvez le signaler à tout moment pendant le tour en cours, et à la fin du tour, le montant que vous avez signalé pour le retrait (y compris le PnL de ce tour) vous est envoyé. Le montant minimum à retirer est fixé à 10%</p><p> Si vous décidez de retirer THALES tout en fournissant des liquidités, sachez que vous devrez d&#39;abord signaler un retrait du pool de liquidités.</p><p> L&#39;apport de liquidités vous expose à divers risques, notamment les pertes potentielles dues aux utilisateurs gagnants dans le trading ainsi que les risques de sécurité des contrats intelligents. Veuillez vous assurer que vous comprenez ces risques avant de déposer.</p><p><tipLink> CONSEIL-142</tipLink> a plus de détails sur la mise en œuvre technique de la fourniture de liquidités pour les heures supplémentaires.</p>",
         "parlay-lp": "Parlay LP",
         "single-lp": "LP unique"
+    },
+    "seo": {
+        "home": {
+            "title": "Marchés des heures supplémentaires : le premier site de paris sportifs Web3",
+            "description": "Entrez dans le monde du premier bookmaker Web3 en chaîne. Obtenez des positions dans plus de 12 sports et plus de 40 ligues."
+        },
+        "markets": {
+            "description": "Rejoignez le meilleur bookmaker web3 du marché. Obtenez des positions dans les meilleures ligues comme la NFL, la NBA, l'UCL, l'EPL et plus encore.",
+            "title": "Marchés des heures supplémentaires : marchés de paris sportifs Web3 pour plus de 40 ligues"
+        },
+        "vaults": {
+            "description": "Déposez des actifs dans le coffre-fort d'Overtime Markets et laissez notre mécanisme de trading automatisé déployer la stratégie de votre choix.",
+            "title": "Coffres-forts des marchés supplémentaires : trading automatisé"
+        },
+        "parlay-leaderboard": {
+            "title": "Marchés des heures supplémentaires : gagnez des récompenses Parlay toutes les 2 semaines",
+            "description": "Overtime Markets est un bookmaker web3 avec les meilleurs bonus bihebdomadaires du marché pour les joueurs parlay ! Consultez le classement et si vous vous êtes qualifié ici."
+        },
+        "referral": {
+            "description": "Parrainez un ami sur Overtime Markets et obtenez un pourcentage de chaque transaction de la personne que vous parrainez, payé en garantie en USD instantanément et directement dans votre portefeuille.",
+            "title": "Marchés des heures supplémentaires : gagnez des frais de référence"
+        },
+        "profile": {
+            "description": "Réclamez vos gains, examinez vos performances et suivez les dépôts que vous avez effectués dans les coffres-forts du marché des heures supplémentaires.",
+            "title": "Marché des heures supplémentaires : profil utilisateur"
+        },
+        "liquidity-pool": {
+            "description": "Soyez la maison du marché des heures supplémentaires ! Déposez une garantie stable en pièces dans le pool de liquidités pour avoir une chance de gagner un pourcentage du PnL chaque semaine.",
+            "title": "Marchés des heures supplémentaires : soyez la maison avec notre pool de liquidités"
+        },
+        "single-market": {
+            "description": "{{dynamicTitle}} : profitez des meilleures cotes de paris sportifs Web3 du marché. Aucune inscription nécessaire. Marchés sportifs entièrement décentralisés.",
+            "title": "Paris sportifs Web3 sur les marchés des heures supplémentaires : {{dynamicTitle}}"
+        }
     }
 }

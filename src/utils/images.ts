@@ -1,7 +1,8 @@
 import { SupportedLanguages } from 'enums/languages';
-import { COUNTRIES_SPORT, TAGS_LIST } from '../constants/tags';
-import { fixOneSideMarketCompetitorName } from './formatters/string';
 import { TAGS_FLAGS } from 'enums/tags';
+import { TAGS_LIST } from '../constants/tags';
+import { fixOneSideMarketCompetitorName } from './formatters/string';
+import { isInternationalGame } from './markets';
 
 export const getTeamImageSource = (team: string, leagueTag: number) =>
     leagueTag == 9153 || leagueTag == 9156
@@ -16,8 +17,8 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
         ? `/logos/PGA/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
         : leagueTag == 9268
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : COUNTRIES_SPORT.includes(leagueTag)
-        ? `/logos/Countries/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : isInternationalGame(Number(leagueTag))
+        ? `/logos/Countries/${team.trim().replaceAll(' ', '-').toLowerCase()}.svg`
         : `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')
