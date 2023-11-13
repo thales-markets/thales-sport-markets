@@ -24,6 +24,7 @@ type CollateralSelectorProps = {
     disabled?: boolean;
     isDetailedView?: boolean;
     hideCollateralNameOnInput?: boolean;
+    hideBalance?: boolean;
     collateralBalances?: any;
     exchangeRates?: Rates | null;
     dropDownWidth?: string;
@@ -36,6 +37,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     disabled,
     isDetailedView,
     hideCollateralNameOnInput,
+    hideBalance,
     collateralBalances,
     exchangeRates,
     dropDownWidth,
@@ -100,23 +102,25 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                                   {collateral.name}
                                               </TextCollateral>
                                           </FlexDivCentered>
-                                          <div>
-                                              <TextCollateral fontWeight="400" isDetailedView={true}>
-                                                  {formatCurrencyWithSign(
-                                                      null,
-                                                      collateralBalances ? collateralBalances[collateral.name] : 0
-                                                  )}
-                                              </TextCollateral>
-                                              <TextCollateral fontWeight="600" isDetailedView={true}>
-                                                  {!exchangeRates?.[collateral.name] &&
-                                                  !isStableCurrency(collateral.name as Coins)
-                                                      ? '...'
-                                                      : ` (${formatCurrencyWithSign(
-                                                            USD_SIGN,
-                                                            getUSDForCollateral(collateral.name as Coins)
-                                                        )})`}
-                                              </TextCollateral>
-                                          </div>
+                                          {!hideBalance && (
+                                              <div>
+                                                  <TextCollateral fontWeight="400" isDetailedView={true}>
+                                                      {formatCurrencyWithSign(
+                                                          null,
+                                                          collateralBalances ? collateralBalances[collateral.name] : 0
+                                                      )}
+                                                  </TextCollateral>
+                                                  <TextCollateral fontWeight="600" isDetailedView={true}>
+                                                      {!exchangeRates?.[collateral.name] &&
+                                                      !isStableCurrency(collateral.name as Coins)
+                                                          ? '...'
+                                                          : ` (${formatCurrencyWithSign(
+                                                                USD_SIGN,
+                                                                getUSDForCollateral(collateral.name as Coins)
+                                                            )})`}
+                                                  </TextCollateral>
+                                              </div>
+                                          )}
                                       </DetailedCollateralOption>
                                   );
                               })}
