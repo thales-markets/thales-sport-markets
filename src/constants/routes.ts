@@ -15,6 +15,7 @@ const ROUTES = {
     LiquidityPool: '/liquidity-pool',
     SingleLiquidityPool: '/liquidity-pool?pool-type=single',
     ParlayLiquidityPool: '/liquidity-pool?pool-type=parlay',
+    Deposit: '/deposit',
 };
 
 export default ROUTES;
