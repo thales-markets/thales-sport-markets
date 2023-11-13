@@ -151,7 +151,9 @@ const Deposit: React.FC = () => {
                                             {token}
                                         </Token>
                                         <IndividualTokenBalance>
-                                            {formatCurrency(multipleCollateralBalances.data[token])}
+                                            {multipleCollateralBalances.data
+                                                ? formatCurrency(multipleCollateralBalances.data[token])
+                                                : 0}
                                         </IndividualTokenBalance>
                                     </IndividualTokenBalanceWrapper>
                                 );

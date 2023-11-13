@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
@@ -8,17 +8,13 @@ import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 
 import { Connector, useConnect } from 'wagmi';
-import { SUPPORTED_HOSTED_WALLETS, SUPPORTED_PARTICAL_CONNECTORS } from 'constants/wallet';
-import {
-    getClassNameForParticalLogin,
-    getSpecificConnectorFromConnectorsArray,
-    getWalletIcon,
-    getWalleti18Label,
-} from 'utils/biconomy';
+import { SUPPORTED_PARTICAL_CONNECTORS } from 'constants/wallet';
+import { getClassNameForParticalLogin, getSpecificConnectorFromConnectorsArray } from 'utils/biconomy';
 import SimpleLoader from 'components/SimpleLoader';
 import { getIsMobile } from 'redux/modules/app';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 ReactModal.setAppElement('#root');
 
@@ -51,8 +47,9 @@ type ConnectWalletModalProps = {
 
 const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
-    const { connect, connectors, isLoading, error, isSuccess } = useConnect();
+    const { connect, connectors, isLoading, isSuccess } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const { openConnectModal } = useConnectModal();
 
     useEffect(() => {
         if (isMobile) {
@@ -65,15 +62,6 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             defaultStyle.content.height = 'auto';
         }
     }, [isMobile]);
-
-    const [errorMessage, setErrorMessage] = useState<string>('');
-
-    useEffect(() => {
-        if (error && error.message && errorMessage !== error.message) {
-            setErrorMessage(error.message);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [error]);
 
     const handleConnect = (connector: Connector) => {
         try {
@@ -96,25 +84,9 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             {!isLoading && (
                 <>
                     <HeaderContainer>
-                        <Header>{t('common.wallet.connect-your-wallet')}</Header>
-                        <SecondaryText>{t('common.wallet.please-connect')}</SecondaryText>
+                        <Header>{t('common.wallet.connect-wallet-modal-title')}</Header>
                     </HeaderContainer>
-                    <WalletIconsWrapper>
-                        {SUPPORTED_HOSTED_WALLETS.map((walletId) => {
-                            const connector = getSpecificConnectorFromConnectorsArray(connectors, walletId);
-                            if (connector) {
-                                return (
-                                    <WalletIconContainer onClick={() => handleConnect(connector)} key={connector.id}>
-                                        <WalletIcon src={getWalletIcon(walletId)} />
-                                        <WalletName>{t(getWalleti18Label(walletId))}</WalletName>
-                                    </WalletIconContainer>
-                                );
-                            }
-                        })}
-                    </WalletIconsWrapper>
-                    <ErrorMessage>{errorMessage}</ErrorMessage>
                     <SocialLoginWrapper>
-                        <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
                         <SocialButtonsWrapper>
                             {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
                                 const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
@@ -142,6 +114,18 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                             })}
                         </SocialButtonsWrapper>
                     </SocialLoginWrapper>
+                    <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
+                    <WalletIconsWrapper>
+                        <WalletIconContainer
+                            onClick={() => {
+                                onClose();
+                                openConnectModal?.();
+                            }}
+                        >
+                            <WalletIcon className={'social-icon icon--wallet'} />
+                            <WalletName>{t('common.wallet.connect-your-wallet')}</WalletName>
+                        </WalletIconContainer>
+                    </WalletIconsWrapper>
                     <FooterText>
                         <Trans
                             i18nKey="common.wallet.disclaimer"
@@ -172,7 +156,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
 const HeaderContainer = styled(FlexDivCentered)`
     flex-direction: column;
-    margin-bottom: 24px;
+    margin-bottom: 40px;
 `;
 
 const CloseIconContainer = styled(FlexDiv)`
@@ -195,10 +179,8 @@ const CloseIcon = styled.i`
 
 const Header = styled.h2`
     color: ${(props) => props.theme.textColor.primary};
-    text-transform: uppercase;
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 45.96px;
+    font-size: 20px;
+    font-weight: 400;
 `;
 
 const Link = styled.a`
@@ -217,14 +199,15 @@ const FooterText = styled(SecondaryText)`
 
 const WalletIconsWrapper = styled(FlexDivCentered)``;
 
-const WalletIcon = styled.img`
-    width: 60px;
-    height: 60px;
+const WalletIcon = styled.i`
+    font-size: 40px;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const WalletName = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 13px;
+    margin-top: 20px;
     font-weight: 400;
 `;
 
@@ -241,29 +224,21 @@ const WalletIconContainer = styled(FlexDivCentered)`
         ${WalletName} {
             color: ${(props) => props.theme.connectWalletModal.hover};
         }
+        ${WalletIcon} {
+            color: ${(props) => props.theme.connectWalletModal.hover};
+        }
     }
 `;
 
 const SocialLoginWrapper = styled(FlexDivCentered)`
     position: relative;
-    padding: 23px 40px;
-    margin-top: 50px;
+    padding: 0px 23px;
     flex-direction: column;
-    border: ${(props) => `1px ${props.theme.connectWalletModal.border} solid`};
-    border-radius: 15px;
 `;
 
 const ConnectWithLabel = styled(SecondaryText)`
-    position: absolute;
-    padding: 0 5px;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    top: -8px;
+    margin: 32px 0px;
     text-align: center;
-    width: 120px;
-    background-color: ${(props) => props.theme.connectWalletModal.modalBackground};
 `;
 
 const SocialButtonsWrapper = styled(FlexDivRow)`
@@ -283,7 +258,7 @@ const Button = styled(FlexDivCentered)<{ active?: boolean }>`
     border-radius: 8px;
     width: 100%;
     height: 34px;
-    background-color: ${(props) => props.theme.connectWalletModal.buttonBackground};
+    border: 1px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
     margin-left: 3px;
     margin-right: 3px;
@@ -302,14 +277,6 @@ const LoaderContainer = styled.div`
     height: 180px !important;
     width: 80px;
     overflow: none;
-`;
-
-const ErrorMessage = styled(FlexDiv)`
-    margin-top: 15px;
-    align-items: center;
-    justify-content: center;
-    color: ${(props) => props.theme.connectWalletModal.errorMessage};
-    font-size: 17px;
 `;
 
 export default ConnectWalletModal;

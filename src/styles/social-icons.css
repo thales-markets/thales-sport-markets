@@ -28,3 +28,7 @@
 .icon--qr-code::before {
     content: '\004D';
 }
+
+.icon--wallet::before {
+    content: '\0047';
+}
