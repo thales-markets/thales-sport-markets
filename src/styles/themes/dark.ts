@@ -41,12 +41,14 @@ export default {
     input: {
         background: {
             primary: Colors.WHITE,
+            secondary: Colors.GRAY_DARK,
             selection: {
                 primary: Colors.GRAY_LIGHT,
             },
         },
         textColor: {
             primary: Colors.GRAY_DARK,
+            secondary: Colors.BLUE,
         },
         borderColor: {
             primary: Colors.WHITE,
@@ -134,5 +136,8 @@ export default {
         hover: Colors.BLUE,
         hoverText: Colors.GRAY_DARK,
         errorMessage: Colors.RED,
+        warningBackground: Colors.RED,
+        warningText: Colors.WHITE,
+        totalBalanceBackground: Colors.GRAY_SECOND,
     },
 };
