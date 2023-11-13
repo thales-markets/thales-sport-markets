@@ -78,6 +78,13 @@ const DappFooter: React.FC = () => {
                     i18nKey="footer.disclaimer"
                     components={{
                         disclaimer: <DisclaimerLink href={termsOfUse} rel="noreferrer" target="_blank" />,
+                        guidelines: (
+                            <DisclaimerLink
+                                href={'https://docs.overtimemarkets.xyz/sports-trading-guidelines'}
+                                rel="noreferrer"
+                                target="_blank"
+                            />
+                        ),
                     }}
                 />
             </DisclaimerContainer>
