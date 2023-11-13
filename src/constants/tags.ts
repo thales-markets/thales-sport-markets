@@ -58,7 +58,7 @@ export const TAGS_LIST: Tags = [
     {
         id: 9007,
         label: 'UFC',
-        logo: '/logos/ufc-logo.webp',
+        logo: '/logos/leagueLogos/ufc.webp',
         logoClass: 'icon-league league--ufc',
         favourite: false,
         hidden: false,
@@ -556,7 +556,7 @@ export const MOTOSPORT_TAGS = [9445, 9497];
 export const GOLF_TAGS = [109021, 109121];
 export const GOLF_TOURNAMENT_WINNER_TAG = 109121;
 export const EUROPA_LEAGUE_TAGS = [9017, 9073];
-export const COUNTRIES_SPORT = [18821, 19199, 9409, 9033, 9050, 9288, 18806, 9018, 9296, 9076];
+export const INTERNATIONAL_SPORTS = [18821, 19199, 9409, 9033, 9050, 9288, 18806, 9018, 9296, 9076];
 
 export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.WINNER]: 'winner',
