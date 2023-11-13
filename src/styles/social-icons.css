@@ -24,3 +24,7 @@
 .icon--x:before {
     content: '\0045';
 }
+
+.icon--qr-code::before {
+    content: '\004D';
+}
