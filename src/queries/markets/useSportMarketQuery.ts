@@ -71,13 +71,13 @@ const useSportMarketQuery = (
                               ))
                             : 0;
                         childMarketOddsData[i].odds[1]
-                            ? (parentMarket.childMarkets[i].homeOdds = bigNumberFormatter(
+                            ? (parentMarket.childMarkets[i].awayOdds = bigNumberFormatter(
                                   childMarketOddsData[i].odds[1],
                                   getDefaultDecimalsForNetwork(networkId)
                               ))
                             : 0;
                         childMarketOddsData[i].odds[2]
-                            ? (parentMarket.childMarkets[i].homeOdds = bigNumberFormatter(
+                            ? (parentMarket.childMarkets[i].drawOdds = bigNumberFormatter(
                                   childMarketOddsData[i].odds[2],
                                   getDefaultDecimalsForNetwork(networkId)
                               ))
