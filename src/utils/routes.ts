@@ -32,6 +32,7 @@ export const buildReffererLink = (reffererID: string) => {
 };
 
 export const getMetaRouteItem = (pathName: string) => {
+    console.log('pathName ', pathName);
     if (pathName.includes(ROUTES.Markets.Home + '/')) return MetaRoutes.SingleMarket;
     if (pathName.includes(ROUTES.Markets.Home)) return MetaRoutes.Markets;
     if (pathName.includes(ROUTES.Vaults)) return MetaRoutes.Vaults;

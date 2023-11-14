@@ -15,7 +15,10 @@ const MetaData: React.FC = () => {
     return (
         <Helmet>
             <title>
-                {t(PAGE_NAME_TO_META_DATA_KEYS[metaRoute].title, dynamicTitle ? { dynamicTitle } : undefined)}
+                {t(
+                    PAGE_NAME_TO_META_DATA_KEYS[metaRoute].title,
+                    PAGE_NAME_TO_META_DATA_KEYS[metaRoute].hasCustomData && dynamicTitle ? { dynamicTitle } : undefined
+                )}
             </title>
             <meta
                 name="description"
