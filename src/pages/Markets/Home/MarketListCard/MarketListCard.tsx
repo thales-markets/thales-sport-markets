@@ -188,7 +188,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             market.address,
                             language,
                             false,
-                            `${market.homeTeam} vs ${market.awayTeam}`
+                            encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
                         )}
                     >
                         <Tooltip
