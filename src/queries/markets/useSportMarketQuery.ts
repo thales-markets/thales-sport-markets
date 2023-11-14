@@ -33,9 +33,6 @@ const useSportMarketQuery = (
                 const parentMarket = parentMarketFromGraph ? parentMarketFromGraph[0] : undefined;
                 const marketAddresses = getMarketAddressesFromSportMarketArray([parentMarket]);
 
-                console.log('parentMarket ', parentMarket);
-                console.log('childMarkets ', childMarkets);
-
                 const [parentMarketData, combinedMarketsContractData] = await Promise.all([
                     sportPositionalMarketDataContract?.getMarketData(marketAddress),
                     sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(marketAddresses),
@@ -67,7 +64,6 @@ const useSportMarketQuery = (
                     const childMarketOddsData = await Promise.all(childMarketsOddsPromises);
 
                     for (let i = 0; i < childMarketOddsData.length; i++) {
-                        console.log('childMarketOddsData ', childMarketOddsData[i]);
                         childMarketOddsData[i].odds[0]
                             ? (parentMarket.childMarkets[i].homeOdds = bigNumberFormatter(
                                   childMarketOddsData[i].odds[0],
