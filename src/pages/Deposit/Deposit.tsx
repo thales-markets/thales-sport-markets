@@ -13,11 +13,12 @@ import { RootState } from 'redux/rootReducer';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
-import { formatCurrency, formatCurrencyWithKey } from 'utils/formatters/number';
+import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { toast } from 'react-toastify';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import QRCodeModal from './components/QRCodeModal';
+import BalanceDetails from './components/BalanceDetails';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
@@ -137,29 +138,7 @@ const Deposit: React.FC = () => {
                     </DepositAddressFormContainer>
                 </FormContainer>
                 <BalanceSection>
-                    <BalanceWrapper>
-                        <SectionLabel>{'Balance'}</SectionLabel>
-                        <TotalBalance>{'$304.654'}</TotalBalance>
-                        <TokenBalancesWrapper>
-                            {getCollaterals(networkId, true).map((token, index) => {
-                                return (
-                                    <IndividualTokenBalanceWrapper key={`ind-token-${index}`}>
-                                        <Token>
-                                            <TokenIcon
-                                                className={`currency-icon currency-icon--${token.toLowerCase()}`}
-                                            />
-                                            {token}
-                                        </Token>
-                                        <IndividualTokenBalance>
-                                            {multipleCollateralBalances.data
-                                                ? formatCurrency(multipleCollateralBalances.data[token])
-                                                : 0}
-                                        </IndividualTokenBalance>
-                                    </IndividualTokenBalanceWrapper>
-                                );
-                            })}
-                        </TokenBalancesWrapper>
-                    </BalanceWrapper>
+                    <BalanceDetails />
                     <TutorialLinksContainer>
                         <SectionLabel>{'Tutorials'}</SectionLabel>
                         <Link href={'#'}>{'Coinbase'}</Link>
@@ -301,65 +280,12 @@ const WarningIcon = styled.i`
     padding-left: 5px;
 `;
 
-const BalanceWrapper = styled(FlexDiv)`
-    flex-direction: column;
-    border: 1px ${(props) => props.theme.borderColor.primary} solid;
-    border-radius: 5px;
-    padding: 19px;
-    margin-bottom: 20px;
-    background-color: ${(props) => props.theme.connectWalletModal.totalBalanceBackground};
-`;
-
 const SectionLabel = styled.span`
     font-size: 12px;
     font-weight: 700;
     text-transform: capitalize;
     letter-spacing: 3px;
     margin-bottom: 13px;
-`;
-
-const TotalBalance = styled.span`
-    font-size: 42px;
-    font-weight: 700;
-    width: 100%;
-    border-bottom: 1px ${(props) => props.theme.borderColor.primary} solid;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-`;
-
-const TokenBalancesWrapper = styled(FlexDiv)`
-    flex-direction: row;
-    flex-wrap: wrap;
-`;
-
-const IndividualTokenBalanceWrapper = styled(FlexDiv)`
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    min-width: 150px;
-    margin-right: 40px;
-    @media (max-width: 575px) {
-        margin-right: 10px;
-    }
-`;
-
-const Token = styled(FlexDiv)`
-    font-weight: 700;
-    align-items: center;
-    font-size: 12px;
-`;
-
-const TokenIcon = styled.i`
-    font-size: 20px;
-    margin-right: 5px;
-    color: ${(props) => props.theme.textColor.primary};
-`;
-
-const IndividualTokenBalance = styled.span`
-    font-size: 12px;
-    font-weight: 600;
-    text-align: right;
 `;
 
 const TutorialLinksContainer = styled(FlexDiv)`
