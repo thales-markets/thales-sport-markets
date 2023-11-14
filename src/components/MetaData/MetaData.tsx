@@ -1,30 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import { PAGE_NAME_TO_META_DATA_KEYS } from 'constants/routes';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import { getMetaRouteItem } from 'utils/routes';
-import queryString from 'query-string';
+import { getMetaRouteItem, ifIpfsDeployment } from 'utils/routes';
+import { getQueryStringVal } from 'utils/useQueryParams';
 
 const MetaData: React.FC = () => {
     const { t } = useTranslation();
-    const location = useLocation();
-    const queryParams: { title?: string } = queryString.parse(location.search);
 
-    const [dynamicTitle, setDynamicTitle] = useState<string>('');
+    const dynamicTitle = getQueryStringVal('title');
 
-    useEffect(() => {
-        if (queryParams?.title) {
-            setDynamicTitle(queryParams?.title);
-        }
-    }, [queryParams?.title]);
-
-    const metaRoute = getMetaRouteItem(location.pathname);
+    const metaRoute = getMetaRouteItem(ifIpfsDeployment ? location.hash : location.pathname);
 
     return (
         <Helmet>
             <title>
-                {t(PAGE_NAME_TO_META_DATA_KEYS[metaRoute].title, dynamicTitle ? { dynamicTitle } : undefined)}
+                {t(
+                    PAGE_NAME_TO_META_DATA_KEYS[metaRoute].title,
+                    PAGE_NAME_TO_META_DATA_KEYS[metaRoute].hasCustomData && dynamicTitle ? { dynamicTitle } : undefined
+                )}
             </title>
             <meta
                 name="description"
