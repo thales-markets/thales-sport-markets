@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { PAGE_NAME_TO_META_DATA_KEYS } from 'constants/routes';
 import { useTranslation } from 'react-i18next';
-import { getMetaRouteItem } from 'utils/routes';
+import { getMetaRouteItem, ifIpfsDeployment } from 'utils/routes';
 import { getQueryStringVal } from 'utils/useQueryParams';
 
 const MetaData: React.FC = () => {
@@ -10,7 +10,7 @@ const MetaData: React.FC = () => {
 
     const dynamicTitle = getQueryStringVal('title');
 
-    const metaRoute = getMetaRouteItem(location.pathname);
+    const metaRoute = getMetaRouteItem(ifIpfsDeployment ? location.hash : location.pathname);
 
     return (
         <Helmet>
