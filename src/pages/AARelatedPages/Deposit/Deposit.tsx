@@ -19,6 +19,14 @@ import { toast } from 'react-toastify';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import QRCodeModal from './components/QRCodeModal';
 import BalanceDetails from './components/BalanceDetails';
+import {
+    BalanceSection,
+    FormContainer,
+    InputContainer,
+    InputLabel,
+    PrimaryHeading,
+    Wrapper,
+} from '../styled-components';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
@@ -70,7 +78,7 @@ const Deposit: React.FC = () => {
                 <FormContainer>
                     {!isMobile && <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>}
                     <InputLabel>{t('deposit.select-token')}</InputLabel>
-                    <WalletAddressInputContainer ref={inputRef}>
+                    <InputContainer ref={inputRef}>
                         <NumericInput
                             value={getCollaterals(networkId, true)[selectedToken]}
                             onChange={(e) => {
@@ -103,7 +111,7 @@ const Deposit: React.FC = () => {
                             )}
                             enableCurrencyComponentOnly={true}
                         />
-                    </WalletAddressInputContainer>
+                    </InputContainer>
                     <DepositAddressFormContainer>
                         <InputLabel>
                             {t('deposit.address-input-label', {
@@ -112,7 +120,7 @@ const Deposit: React.FC = () => {
                             })}
                         </InputLabel>
                         <WalletAddressInputWrapper>
-                            <WalletAddressInputContainer>
+                            <InputContainer>
                                 <WalletAddressInput
                                     type={'text'}
                                     value={walletAddress}
@@ -125,7 +133,7 @@ const Deposit: React.FC = () => {
                                     }}
                                     className="social-icon icon--qr-code"
                                 />
-                            </WalletAddressInputContainer>
+                            </InputContainer>
                             <CopyButton onClick={() => handleCopy()}>{'Copy'}</CopyButton>
                         </WalletAddressInputWrapper>
                         <WarningContainer>
@@ -162,48 +170,6 @@ const Deposit: React.FC = () => {
     );
 };
 
-const Wrapper = styled(FlexDiv)`
-    align-items: flex-start;
-    flex-direction: row;
-    width: 100%;
-    @media (max-width: 575px) {
-        flex-wrap: wrap-reverse;
-    }
-`;
-
-const FormContainer = styled(FlexDiv)`
-    flex-direction: column;
-    width: 60%;
-    @media (max-width: 575px) {
-        width: 100%;
-    }
-`;
-
-const BalanceSection = styled(FlexDiv)`
-    flex-direction: column;
-    width: 40%;
-    padding: 0 20px;
-    @media (max-width: 575px) {
-        padding: 0;
-        width: 100%;
-    }
-`;
-
-const PrimaryHeading = styled.h1`
-    font-size: 20px;
-    font-weight: 800;
-    text-transform: uppercase;
-    line-height: 20px;
-    margin-bottom: 21px;
-`;
-
-const InputLabel = styled.span`
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: capitalize;
-    margin-bottom: 5px;
-`;
-
 const DepositAddressFormContainer = styled(FlexDiv)`
     flex-direction: column;
     width: 100%;
@@ -215,12 +181,6 @@ const WalletAddressInputWrapper = styled(FlexDiv)`
     width: 100%;
     justify-content: space-between;
     align-items: center;
-`;
-
-const WalletAddressInputContainer = styled(FlexDiv)`
-    position: relative;
-    margin-right: 10px;
-    width: 100%;
 `;
 
 const WalletAddressInput = styled.input`
