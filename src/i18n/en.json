@@ -758,6 +758,11 @@
         "copied": "Address copied!",
         "qr-modal-title": "Send {{ token }} ({{ network }})"
     },
+    "withdraw": {
+        "address-input-label": "Your personal {{ token }} withdrawal address on {{ network }}",
+        "amount": "Amount",
+        "paste-address": "Paste your wallet address here"
+    },
     "wizard": {
         "title": "Get Started!",
         "steps": {
