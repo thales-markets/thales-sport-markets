@@ -14,6 +14,7 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import { getNetworkNameByNetworkId } from 'utils/network';
 
 const Withdraw: React.FC = () => {
     const theme: ThemeInterface = useTheme();
@@ -24,6 +25,8 @@ const Withdraw: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
     const [selectedToken, setSelectedToken] = useState<number>(0);
+    const [withdrawalWalletAddress, setWithdrawalWalletAddress] = useState<string>('');
+    const [amount, setAmount] = useState<number>(0);
 
     const inputRef = useRef<HTMLDivElement>(null);
 
@@ -72,7 +75,6 @@ const Withdraw: React.FC = () => {
                                 exchangeRates={exchangeRates}
                                 dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
                                 hideCollateralNameOnInput={true}
-                                hideBalance={true}
                             />
                         }
                         balance={formatCurrencyWithKey(
@@ -80,6 +82,30 @@ const Withdraw: React.FC = () => {
                             paymentTokenBalance
                         )}
                         enableCurrencyComponentOnly={true}
+                    />
+                </InputContainer>
+                <InputLabel marginTop="20px">
+                    {t('withdraw.address-input-label', {
+                        token: selectedToken,
+                        network: getNetworkNameByNetworkId(networkId),
+                    })}
+                </InputLabel>
+                <InputContainer>
+                    <NumericInput
+                        value={withdrawalWalletAddress}
+                        onChange={(el) => setWithdrawalWalletAddress(el.target.value)}
+                        placeholder={t('withdraw.paste-address')}
+                        inputType="text"
+                    />
+                </InputContainer>
+                <InputLabel marginTop="20px">{t('withdraw.amount')}</InputLabel>
+                <InputContainer>
+                    <NumericInput
+                        value={amount}
+                        onChange={(el) => setAmount(Number(el.target.value))}
+                        placeholder={t('withdraw.paste-address')}
+                        onMaxButton={() => setAmount(paymentTokenBalance)}
+                        currencyLabel={getCollaterals(networkId, true)[selectedToken]}
                     />
                 </InputContainer>
             </FormContainer>

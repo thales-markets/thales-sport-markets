@@ -36,10 +36,11 @@ export const PrimaryHeading = styled.h1`
     margin-bottom: 21px;
 `;
 
-export const InputLabel = styled.span`
+export const InputLabel = styled.span<{ marginTop?: string }>`
     font-size: 12px;
     font-weight: 700;
     text-transform: capitalize;
+    margin-top: ${(props) => (props.marginTop ? props.marginTop : '')};
     margin-bottom: 5px;
 `;
 
