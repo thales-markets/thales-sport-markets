@@ -761,7 +761,17 @@
     "withdraw": {
         "address-input-label": "Your personal {{ token }} withdrawal address on {{ network }}",
         "amount": "Amount",
-        "paste-address": "Paste your wallet address here"
+        "heading-withdraw": "Withdraw crypto",
+        "paste-address": "Paste your wallet address here",
+        "button-label-withdraw": "Withdraw",
+        "confirmation-modal": {
+            "title": "Withdrawal Requested",
+            "correct-address": "Make sure the Address is correct and that it accepts [{{ network }}] [{{ token }}]",
+            "withdrawal-transaction-warning": "Withdraw transactions can not be cancelled",
+            "withdrawal-fee": "Withdrawal fee",
+            "address": "Address",
+            "network": "Network"
+        }
     },
     "wizard": {
         "title": "Get Started!",
