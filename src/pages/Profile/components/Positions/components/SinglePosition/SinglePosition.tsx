@@ -225,9 +225,9 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                 let txResult;
                 if (isAA) {
                     txResult = isDefaultCollateral
-                        ? await executeBiconomyTransaction(networkId, contract, 'exerciseOptions')
+                        ? await executeBiconomyTransaction(collateralAddress, contract, 'exerciseOptions')
                         : await executeBiconomyTransaction(
-                              networkId,
+                              collateralAddress,
                               sportsAMMContractWithSigner,
                               'exerciseWithOfframp',
                               [position.market.address, collateralAddress, isEth]

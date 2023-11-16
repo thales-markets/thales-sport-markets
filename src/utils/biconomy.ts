@@ -1,8 +1,6 @@
 import { Contract, ethers } from 'ethers';
 import biconomyConnector from './biconomyWallet';
 import { IHybridPaymaster, PaymasterFeeQuote, PaymasterMode, SponsorUserOperationDto } from '@biconomy/paymaster';
-import { Network } from 'enums/network';
-import multipleCollateral from './contracts/multipleCollateralContract';
 import { Connector } from 'wagmi';
 import { HostedWallets, ParticalTypes } from 'enums/wallet';
 import { HOSTED_WALLETS_ICONS, HOSTED_WALLETS_LABELS, PARTICAL_LOGINS_CLASSNAMES } from 'constants/wallet';
@@ -15,14 +13,16 @@ import {
 import { defaultAbiCoder } from 'ethers/lib/utils.js';
 
 const ERC20SVM = '0x000000D50C68705bd6897B2d17c7de32FB519fDA'; // session validation module for erc20 transfers
+export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
 
 export const executeBiconomyTransaction = async (
-    network: Network,
+    collateral: string,
     contract: Contract | undefined,
     methodName: string,
     data?: ReadonlyArray<any>
 ): Promise<string | ethers.providers.TransactionReceipt> => {
     if (biconomyConnector.wallet && contract) {
+        console.log('collateral: ', collateral);
         let populatedTx;
         if (data) {
             populatedTx = await contract.populateTransaction[methodName](...data);
@@ -41,7 +41,7 @@ export const executeBiconomyTransaction = async (
 
         const buyFeeQuotesResponse = await biconomyPaymaster.getPaymasterFeeQuotesOrData(userOperation, {
             mode: PaymasterMode.ERC20,
-            tokenList: [multipleCollateral.USDC.addresses[network]],
+            tokenList: [collateral], // collateral for paying gas
         });
 
         const feeQuotesBuy = buyFeeQuotesResponse.feeQuotes as PaymasterFeeQuote[];

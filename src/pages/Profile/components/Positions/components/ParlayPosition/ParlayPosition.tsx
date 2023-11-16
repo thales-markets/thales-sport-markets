@@ -205,13 +205,13 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 if (isAA) {
                     txResult = isDefaultCollateral
                         ? await executeBiconomyTransaction(
-                              networkId,
+                              collateralAddress,
                               parlayMarketsAMMContractWithSigner,
                               'exerciseParlay',
                               [parlayAddress]
                           )
                         : await executeBiconomyTransaction(
-                              networkId,
+                              collateralAddress,
                               parlayMarketsAMMContractWithSigner,
                               'exerciseParlayWithOfframp',
                               [parlayAddress, collateralAddress, isEth]

@@ -2,7 +2,7 @@ import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import { Position } from 'enums/markets';
-import { executeBiconomyTransaction } from './biconomy';
+import { ETH_PAYMASTER, executeBiconomyTransaction } from './biconomy';
 
 export const getParlayAMMTransaction: any = async (
     isVoucherSelected: boolean,
@@ -26,14 +26,12 @@ export const getParlayAMMTransaction: any = async (
 
     if (isVoucherSelected) {
         if (isAA) {
-            return executeBiconomyTransaction(networkId, overtimeVoucherContract, 'buyFromParlayAMMWithVoucher', [
-                marketsAddresses,
-                selectedPositions,
-                sUSDPaid,
-                additionalSlippage,
-                expectedPayout,
-                voucherId,
-            ]);
+            return executeBiconomyTransaction(
+                collateralAddress,
+                overtimeVoucherContract,
+                'buyFromParlayAMMWithVoucher',
+                [marketsAddresses, selectedPositions, sUSDPaid, additionalSlippage, expectedPayout, voucherId]
+            );
         } else {
             if (networkId === Network.OptimismMainnet) {
                 const estimation = await overtimeVoucherContract?.estimateGas.buyFromParlayAMMWithVoucher(
@@ -63,7 +61,7 @@ export const getParlayAMMTransaction: any = async (
     if (isDefaultCollateral) {
         if (isAA) {
             return executeBiconomyTransaction(
-                networkId,
+                collateralAddress,
                 parlayMarketsAMMContract,
                 referral ? 'buyFromParlayWithReferrer' : 'buyFromParlay',
                 referral
@@ -126,7 +124,7 @@ export const getParlayAMMTransaction: any = async (
 
     if (isEth) {
         if (isAA) {
-            return executeBiconomyTransaction(networkId, parlayMarketsAMMContract, 'buyFromParlayWithEth', [
+            return executeBiconomyTransaction(ETH_PAYMASTER, parlayMarketsAMMContract, 'buyFromParlayWithEth', [
                 marketsAddresses,
                 selectedPositions,
                 sUSDPaid,
@@ -166,7 +164,7 @@ export const getParlayAMMTransaction: any = async (
     } else {
         if (isAA) {
             await executeBiconomyTransaction(
-                networkId,
+                collateralAddress,
                 parlayMarketsAMMContract,
                 'buyFromParlayWithDifferentCollateralAndReferrer',
                 [

@@ -2,7 +2,8 @@ import { GAS_ESTIMATION_BUFFER, ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { Network } from 'enums/network';
 import { Position } from 'enums/markets';
-import { executeBiconomyTransaction } from './biconomy';
+import { ETH_PAYMASTER, executeBiconomyTransaction } from './biconomy';
+import multipleCollateral from './contracts/multipleCollateralContract';
 
 export const getAMMSportsTransaction: any = async (
     isVoucherSelected: boolean,
@@ -25,12 +26,12 @@ export const getAMMSportsTransaction: any = async (
 
     if (isVoucherSelected) {
         if (isAA) {
-            return executeBiconomyTransaction(networkId, overtimeVoucherContract, 'buyFromAMMWithVoucher', [
-                marketAddress,
-                selectedPosition,
-                parsedAmount,
-                voucherId,
-            ]);
+            return executeBiconomyTransaction(
+                multipleCollateral.USDC.addresses[networkId],
+                overtimeVoucherContract,
+                'buyFromAMMWithVoucher',
+                [marketAddress, selectedPosition, parsedAmount, voucherId]
+            );
         } else {
             if (networkId === Network.OptimismMainnet) {
                 const estimation = await overtimeVoucherContract.estimateGas.buyFromAMMWithVoucher(
@@ -56,7 +57,7 @@ export const getAMMSportsTransaction: any = async (
     if (isDefaultCollateral) {
         if (isAA) {
             return executeBiconomyTransaction(
-                networkId,
+                collateralAddress,
                 sportsAMMContract,
                 referral ? 'buyFromAMMWithReferrer' : 'buyFromAMM',
                 referral
@@ -110,7 +111,7 @@ export const getAMMSportsTransaction: any = async (
 
     if (isEth) {
         if (isAA) {
-            return executeBiconomyTransaction(networkId, sportsAMMContract, 'buyFromAMMWithEthAndReferrer', [
+            return executeBiconomyTransaction(ETH_PAYMASTER, sportsAMMContract, 'buyFromAMMWithEthAndReferrer', [
                 marketAddress,
                 selectedPosition,
                 parsedAmount,
@@ -150,7 +151,7 @@ export const getAMMSportsTransaction: any = async (
     } else {
         if (isAA) {
             return executeBiconomyTransaction(
-                networkId,
+                collateralAddress,
                 sportsAMMContract,
                 'buyFromAMMWithDifferentCollateralAndReferrer',
                 [
