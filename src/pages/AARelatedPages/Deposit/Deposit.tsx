@@ -25,6 +25,8 @@ import {
     InputContainer,
     InputLabel,
     PrimaryHeading,
+    WarningContainer,
+    WarningIcon,
     Wrapper,
 } from '../styled-components';
 
@@ -217,27 +219,6 @@ const CopyButton = styled(FlexDiv)`
     justify-content: center;
     color: ${(props) => props.theme.button.textColor.primary};
     background-color: ${(props) => props.theme.button.background.quaternary};
-`;
-
-const WarningContainer = styled(FlexDiv)`
-    width: 100%;
-    background-color: ${(props) => props.theme.connectWalletModal.warningBackground};
-    color: ${(props) => props.theme.connectWalletModal.warningText};
-    padding: 5px;
-    align-items: center;
-    font-weight: 400;
-    text-transform: capitalize;
-    font-size: 18px;
-    border-radius: 5px;
-    margin-top: 18px;
-    @media (max-width: 575px) {
-        font-size: 12px;
-    }
-`;
-
-const WarningIcon = styled.i`
-    padding-right: 12px;
-    padding-left: 5px;
 `;
 
 const SectionLabel = styled.span`
