@@ -128,6 +128,7 @@ const App = () => {
                 let web3Provider;
 
                 if (particle.auth.isLogin()) {
+                    const userInfo = particle.auth.getUserInfo();
                     const particleProvider = new ParticleProvider(particle.auth);
                     const chainId = (await provider.getNetwork()).chainId;
                     const bundler = new Bundler({
@@ -163,6 +164,7 @@ const App = () => {
 
                     const swAddress = await wallet.getAccountAddress();
                     biconomyConnector.setWallet(wallet);
+                    biconomyConnector.setUserInfo(userInfo);
                     await checkSession();
                     dispatch(updateWallet({ walletAddress: swAddress, isAA: true }));
                 }
