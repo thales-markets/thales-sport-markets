@@ -81,9 +81,10 @@ import { Coins } from 'types/tokens';
 type SingleProps = {
     market: ParlaysMarket;
     onBuySuccess?: () => void;
+    setUpdatedQuotes: (quotes: number[]) => void;
 };
 
-const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
+const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -133,7 +134,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         priceImpact: 0,
         usdQuote: 0,
     });
-
+    const [totalQuote, setTotalQuote] = useState<number>(0);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
@@ -360,20 +361,6 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                             ? flooredAmountOfTokens
                             : recalculatedTokenAmount;
                     setTokenAmount(maxAvailableTokenAmount);
-
-                    if (Number(collateralAmountValue) > 0) {
-                        const newQuote = maxAvailableTokenAmount / Number(collateralAmountValue);
-                        const calculatedReducedBonus =
-                            (calculatedBonusPercentageDec * newQuote) /
-                            Number(formatMarketOdds(OddsType.Decimal, getPositionOdds(market)));
-                        setBonusPercentageDec(calculatedReducedBonus);
-
-                        const calculatedBonusCurrency = maxAvailableTokenAmount * calculatedReducedBonus;
-                        setBonusCurrency(calculatedBonusCurrency);
-                    } else {
-                        setBonusPercentageDec(calculatedBonusPercentageDec);
-                        setBonusCurrency(0);
-                    }
                 }
             }
         };
@@ -387,6 +374,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         availablePerPosition,
         market,
         networkId,
+        ammPosition.usdQuote,
     ]);
 
     const positionPriceDetailsQuery = usePositionPriceDetailsQuery(
@@ -407,6 +395,28 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
             setAmmPosition(positionPriceDetailsQuery.data);
         }
     }, [positionPriceDetailsQuery.isSuccess, positionPriceDetailsQuery.data]);
+
+    useEffect(() => {
+        if (tokenAmount) {
+            const newQuote = tokenAmount / (isStableCollateral ? Number(collateralAmountValue) : ammPosition.usdQuote);
+
+            setTotalQuote(newQuote);
+            setUpdatedQuotes([1 / Number(newQuote)]);
+            const calculatedReducedBonus =
+                (calculatedBonusPercentageDec * newQuote) /
+                Number(formatMarketOdds(OddsType.Decimal, getPositionOdds(market)));
+            setBonusPercentageDec(calculatedReducedBonus);
+
+            const calculatedBonusCurrency = tokenAmount * calculatedReducedBonus;
+            setBonusCurrency(calculatedBonusCurrency);
+        } else {
+            setBonusPercentageDec(calculatedBonusPercentageDec);
+            setBonusCurrency(0);
+        }
+        // dependencies omitted are already dependencies of dependencies included
+        // added to avoid redundant render
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ammPosition.usdQuote, calculatedBonusPercentageDec, isStableCollateral, setUpdatedQuotes]);
 
     const availablePerPositionQuery = useAvailablePerPositionQuery(market.address, {
         enabled: isAppReady,
@@ -716,12 +726,22 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         setShowShareTicketModal(!twitterShareDisabled);
     };
 
+    useEffect(() => {
+        setTotalQuote(0);
+        setUpdatedQuotes([]);
+    }, [market, market.position, setUpdatedQuotes]);
+
     return (
         <>
             <RowSummary columnDirection={true}>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
-                    <SummaryValue>{formatMarketOdds(selectedOddsType, getPositionOdds(market))}</SummaryValue>
+                    <SummaryValue>
+                        {formatMarketOdds(
+                            selectedOddsType,
+                            Number(collateralAmountValue) && totalQuote ? 1 / totalQuote : getPositionOdds(market)
+                        )}
+                    </SummaryValue>
                 </RowContainer>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
