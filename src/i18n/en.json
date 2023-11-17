@@ -547,6 +547,8 @@
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
+            "total-gas": "Gas Fee(ESTIMATED)",
+            "gas-tooltip": "Current Gas Fee required by the blockchain to settle the transaction",
             "total-to-pay": "Total to pay",
             "payout": "Payout",
             "potential-profit": "Potential profit",

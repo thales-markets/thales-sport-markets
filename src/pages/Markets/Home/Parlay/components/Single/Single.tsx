@@ -48,6 +48,7 @@ import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import {
     AmountToBuyContainer,
+    GasSummary,
     InfoContainer,
     InfoLabel,
     InfoValue,
@@ -81,6 +82,9 @@ import CollateralSelector from 'components/CollateralSelector';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import Voucher from '../Voucher';
 import { Coins } from 'types/tokens';
+import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
+import { ZERO_ADDRESS } from 'constants/network';
+import Tooltip from 'components/Tooltip';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -113,6 +117,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const [quoteForMinAmount, setQuoteForMinAmount] = useState(0);
     const [bonusPercentageDec, setBonusPercentageDec] = useState(0);
     const [bonusCurrency, setBonusCurrency] = useState(0);
+    const [gas, setGas] = useState(0);
 
     const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -479,13 +484,22 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     : multipleCollateral[selectedCollateral]?.connect(signer);
 
                 const addressToApprove = sportsAMMContract.address;
-
-                const tx = (await collateralContractWithSigner?.approve(
-                    addressToApprove,
-                    approveAmount
-                )) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
-                const txResult = await tx.wait();
+                let txResult;
+                if (isAA) {
+                    txResult = await executeBiconomyTransaction(
+                        collateralContractWithSigner?.address ?? '',
+                        collateralContractWithSigner,
+                        'approve',
+                        [addressToApprove, approveAmount]
+                    );
+                } else {
+                    const tx = (await collateralContractWithSigner?.approve(
+                        addressToApprove,
+                        approveAmount
+                    )) as ethers.ContractTransaction;
+                    setOpenApprovalModal(false);
+                    txResult = await tx.wait();
+                }
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
@@ -731,6 +745,43 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
         setShowShareTicketModal(!twitterShareDisabled);
     };
 
+    useEffect(() => {
+        const setGasFee = async () => {
+            const { sportsAMMContract } = networkConnector;
+            const ammQuote = await fetchAmmQuote(tokenAmount || 1);
+            const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
+            if (isDefaultCollateral) {
+                const gas = await getGasFeesForTx(collateralAddress, sportsAMMContract, 'buyFromAMM', [
+                    market.address,
+                    market.position,
+                    parsedAmount,
+                    ammQuote,
+                    ethers.utils.parseEther('0.02'),
+                ]);
+
+                setGas(gas as number);
+            } else {
+                const gas = await getGasFeesForTx(
+                    collateralAddress,
+                    sportsAMMContract,
+                    'buyFromAMMWithDifferentCollateralAndReferrer',
+                    [
+                        market.address,
+                        market.position,
+                        parsedAmount,
+                        ammQuote,
+                        ethers.utils.parseEther('0.02'),
+                        collateralAddress,
+                        ZERO_ADDRESS,
+                    ]
+                );
+
+                setGas(gas as number);
+            }
+        };
+        if (isAA) setGasFee();
+    }, [collateralAddress, market, tokenAmount, isDefaultCollateral, fetchAmmQuote, isAA]);
+
     return (
         <>
             <RowSummary columnDirection={true}>
@@ -800,17 +851,29 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                     </InfoValue>
                 </InfoWrapper>
             </InfoContainer>
+            {isAA && (
+                <GasSummary>
+                    <SummaryLabel>
+                        {t('markets.parlay.total-gas')}:
+                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} iconFontSize={11} marginLeft={3} />
+                    </SummaryLabel>
+                    <SummaryValue isCollateralInfo={true}>
+                        {gas === 0 ? '-' : formatCurrencyWithSign(USD_SIGN, gas as number, 2, true)}
+                    </SummaryValue>
+                </GasSummary>
+            )}
+
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.total-to-pay')}:</SummaryLabel>
                 <SummaryValue isInfo={true}>
                     {hidePayout
                         ? '-'
                         : isDefaultCollateral
-                        ? formatCurrencyWithSign(USD_SIGN, ammPosition.quote)
-                        : `${formatCurrencyWithKey(selectedCollateral, ammPosition.quote)} (${formatCurrencyWithSign(
-                              USD_SIGN,
-                              ammPosition.usdQuote
-                          )})`}
+                        ? formatCurrencyWithSign(USD_SIGN, ammPosition.quote + gas)
+                        : `${formatCurrencyWithKey(
+                              selectedCollateral,
+                              ammPosition.quote + gas
+                          )} (${formatCurrencyWithSign(USD_SIGN, ammPosition.usdQuote + gas)})`}
                 </SummaryValue>
             </RowSummary>
             <RowSummary>
@@ -826,7 +889,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                         ? '-'
                         : `${formatCurrencyWithSign(
                               USD_SIGN,
-                              tokenAmount - ammPosition.usdQuote,
+                              tokenAmount - ammPosition.usdQuote - gas,
                               2
                           )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>

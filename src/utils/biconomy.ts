@@ -20,7 +20,7 @@ export const executeBiconomyTransaction = async (
     contract: Contract | undefined,
     methodName: string,
     data?: ReadonlyArray<any>
-): Promise<string | ethers.providers.TransactionReceipt> => {
+): Promise<ethers.providers.TransactionReceipt | undefined> => {
     if (biconomyConnector.wallet && contract) {
         console.log('collateral: ', collateral);
         let populatedTx;
@@ -43,6 +43,8 @@ export const executeBiconomyTransaction = async (
             mode: PaymasterMode.ERC20,
             tokenList: [collateral], // collateral for paying gas
         });
+
+        console.log('buyFeeQuotesResponse: ', buyFeeQuotesResponse);
 
         const feeQuotesBuy = buyFeeQuotesResponse.feeQuotes as PaymasterFeeQuote[];
         const spenderBuy = buyFeeQuotesResponse.tokenPaymasterAddress || '';
@@ -88,8 +90,41 @@ export const executeBiconomyTransaction = async (
         console.log(receipt);
         return receipt;
     }
+};
 
-    return '';
+export const getGasFeesForTx = async (
+    collateral: string,
+    contract: Contract | undefined,
+    methodName: string,
+    data?: ReadonlyArray<any>
+): Promise<number | undefined> => {
+    if (biconomyConnector.wallet && contract) {
+        console.log('collateral: ', collateral);
+        let populatedTx;
+        if (data) {
+            populatedTx = await contract.populateTransaction[methodName](...data);
+        } else {
+            populatedTx = await contract.populateTransaction[methodName]();
+        }
+
+        const transaction = {
+            to: contract.address,
+            data: populatedTx.data,
+        };
+
+        const userOperation = await biconomyConnector.wallet.buildUserOp([transaction]);
+
+        const biconomyPaymaster = biconomyConnector.wallet.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
+
+        const buyFeeQuotesResponse = await biconomyPaymaster.getPaymasterFeeQuotesOrData(userOperation, {
+            mode: PaymasterMode.ERC20,
+            tokenList: [collateral], // collateral for paying gas
+        });
+
+        const feeQuotesBuy = buyFeeQuotesResponse.feeQuotes as PaymasterFeeQuote[];
+
+        return feeQuotesBuy[0] ? feeQuotesBuy[0].maxGasFee : 0;
+    }
 };
 
 export const checkSession = async () => {
