@@ -784,6 +784,9 @@
             "amount": "Amount is not valid"
         }
     },
+    "my-portfolio": {
+        "estimated-balance": "Estimated balance"
+    },
     "wizard": {
         "title": "Get Started!",
         "steps": {
