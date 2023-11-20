@@ -312,6 +312,10 @@
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
         },
+        "wrapper-nav": {
+            "my-tickets": "My tickets",
+            "my-portfolio": "My portfolio"
+        },
         "open-claimable": "Open/Claimable",
         "transaction-history": "Transaction history",
         "vaults": "Vaults/LP",
