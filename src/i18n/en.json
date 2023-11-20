@@ -772,7 +772,12 @@
             "withdrawal-transaction-warning": "Withdraw transactions can not be cancelled",
             "withdrawal-fee": "Withdrawal fee",
             "address": "Address",
-            "network": "Network"
+            "network": "Network",
+            "confirm": "Confirm"
+        },
+        "validation": {
+            "wallet-address": "Wallet address is not valid",
+            "amount": "Amount is not valid"
         }
     },
     "wizard": {

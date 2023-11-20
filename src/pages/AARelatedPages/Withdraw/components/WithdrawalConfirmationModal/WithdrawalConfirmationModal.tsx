@@ -37,6 +37,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                     <ItemContainer>
                         <ItemLabel>{t('withdraw.amount')}:</ItemLabel>
                         <ItemDescription>
+                            {<TokenIcon className={`currency-icon currency-icon--${token.toLowerCase()}`} />}
                             {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.USDC, amount)}
                             {` (${t('withdraw.confirmation-modal.withdrawal-fee')}: ${formatCurrencyWithKey(
                                 CRYPTO_CURRENCY_MAP.USDC,
@@ -53,6 +54,9 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         <ItemDescription>{network}</ItemDescription>
                     </ItemContainer>
                 </DetailsContainer>
+                <ButtonContainer>
+                    <Button>{t('withdraw.confirmation-modal.confirm')}</Button>
+                </ButtonContainer>
             </MainContainer>
         </Modal>
     );
@@ -61,7 +65,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
 const MainContainer = styled(FlexDiv)`
     padding: 30px 20px 10px 20px;
     flex-direction: column;
-    max-width: 500px;
+    max-width: 550px;
 `;
 
 const ListContainer = styled(FlexDiv)`
@@ -75,6 +79,13 @@ const ListContainer = styled(FlexDiv)`
 const List = styled.ol`
     list-style-type: decimal;
     line-height: 24px;
+    list-style-position: inside;
+`;
+
+const TokenIcon = styled.i`
+    font-size: 25px;
+    margin-right: 5px;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const DetailsContainer = styled(FlexDiv)`
@@ -82,6 +93,7 @@ const DetailsContainer = styled(FlexDiv)`
     margin-top: 10px;
     flex-direction: column;
     background-color: ${(props) => props.theme.connectWalletModal.totalBalanceBackground};
+    padding: 18px;
 `;
 
 const ItemContainer = styled(FlexDiv)`
@@ -102,6 +114,26 @@ const ItemLabel = styled(FlexDiv)`
 
 const ItemDescription = styled(FlexDiv)`
     align-items: center;
+`;
+
+const ButtonContainer = styled(FlexDiv)`
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 24px;
+`;
+
+const Button = styled(FlexDiv)`
+    cursor: pointer;
+    padding: 8px 20px;
+    align-items: center;
+    justify-content: center;
+    color: ${(props) => props.theme.button.textColor.primary};
+    background-color: ${(props) => props.theme.button.background.quaternary};
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 5px;
 `;
 
 export default WithdrawalConfirmationModal;

@@ -1,5 +1,5 @@
 import BalanceDetails from 'pages/AARelatedPages/Deposit/components/BalanceDetails';
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import {
     BalanceSection,
     FormContainer,
@@ -26,6 +26,14 @@ import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuer
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { FlexDiv } from 'styles/common';
 import WithdrawalConfirmationModal from './components/WithdrawalConfirmationModal';
+import { ethers } from 'ethers';
+import TextInput from 'components/fields/TextInput';
+import Button from 'components/Button';
+
+type FormValidation = {
+    walletAddress: boolean;
+    amount: boolean;
+};
 
 const Withdraw: React.FC = () => {
     const theme: ThemeInterface = useTheme();
@@ -39,6 +47,7 @@ const Withdraw: React.FC = () => {
     const [withdrawalWalletAddress, setWithdrawalWalletAddress] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
     const [showWithdrawalConfirmationModal, setWithdrawalConfirmationModalVisibility] = useState<boolean>(false);
+    const [validation, setValidation] = useState<FormValidation>({ walletAddress: false, amount: false });
 
     const inputRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +67,22 @@ const Withdraw: React.FC = () => {
     });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    useEffect(() => {
+        let walletValidation = false;
+        let amountValidation = false;
+
+        if (withdrawalWalletAddress != '' && ethers.utils.isAddress(withdrawalWalletAddress)) {
+            walletValidation = true;
+        }
+
+        if (amount > 0 && !(amount > paymentTokenBalance)) {
+            amountValidation = true;
+        }
+
+        setValidation({ walletAddress: walletValidation, amount: amountValidation });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [amount, paymentTokenBalance, withdrawalWalletAddress]);
 
     return (
         <>
@@ -105,11 +130,14 @@ const Withdraw: React.FC = () => {
                         })}
                     </InputLabel>
                     <InputContainer>
-                        <NumericInput
+                        <TextInput
                             value={withdrawalWalletAddress}
-                            onChange={(el) => setWithdrawalWalletAddress(el.target.value)}
+                            onChange={(el: { target: { value: React.SetStateAction<string> } }) =>
+                                setWithdrawalWalletAddress(el.target.value)
+                            }
                             placeholder={t('withdraw.paste-address')}
-                            inputType="text"
+                            showValidation={!validation.walletAddress && !!withdrawalWalletAddress}
+                            validationMessage={t('withdraw.validation.wallet-address')}
                         />
                     </InputContainer>
                     <InputLabel marginTop="20px">{t('withdraw.amount')}</InputLabel>
@@ -120,6 +148,8 @@ const Withdraw: React.FC = () => {
                             placeholder={t('withdraw.paste-address')}
                             onMaxButton={() => setAmount(paymentTokenBalance)}
                             currencyLabel={getCollaterals(networkId, true)[selectedToken]}
+                            showValidation={!validation.amount && amount > 0}
+                            validationMessage={t('withdraw.validation.amount')}
                         />
                     </InputContainer>
                     <WarningContainer>
@@ -130,7 +160,14 @@ const Withdraw: React.FC = () => {
                         })}
                     </WarningContainer>
                     <ButtonContainer>
-                        <Button onClick={() => setWithdrawalConfirmationModalVisibility(true)}>
+                        <Button
+                            backgroundColor={theme.button.background.quaternary}
+                            disabled={!validation.amount || !validation.walletAddress}
+                            textColor={theme.button.textColor.primary}
+                            borderColor={theme.button.borderColor.secondary}
+                            padding={'8px 80px'}
+                            onClick={() => setWithdrawalConfirmationModalVisibility(true)}
+                        >
                             {t('withdraw.button-label-withdraw')}
                         </Button>
                     </ButtonContainer>
@@ -157,19 +194,6 @@ const ButtonContainer = styled(FlexDiv)`
     padding: 40px 0px;
     align-items: center;
     justify-content: center;
-`;
-
-const Button = styled(FlexDiv)`
-    cursor: pointer;
-    padding: 8px 80px;
-    align-items: center;
-    justify-content: center;
-    color: ${(props) => props.theme.button.textColor.primary};
-    background-color: ${(props) => props.theme.button.background.quaternary};
-    font-size: 22px;
-    font-weight: 700;
-    text-transform: uppercase;
-    border-radius: 5px;
 `;
 
 export default Withdraw;
