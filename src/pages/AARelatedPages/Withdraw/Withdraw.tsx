@@ -165,7 +165,8 @@ const Withdraw: React.FC = () => {
                             disabled={!validation.amount || !validation.walletAddress}
                             textColor={theme.button.textColor.primary}
                             borderColor={theme.button.borderColor.secondary}
-                            padding={'8px 80px'}
+                            padding={'5px 60px'}
+                            fontSize={'22px'}
                             onClick={() => setWithdrawalConfirmationModalVisibility(true)}
                         >
                             {t('withdraw.button-label-withdraw')}
