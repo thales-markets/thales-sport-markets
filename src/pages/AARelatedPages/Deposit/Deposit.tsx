@@ -30,6 +30,10 @@ import {
     Wrapper,
 } from '../styled-components';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
+import visa from 'assets/images/onramper/visa.svg';
+import master from 'assets/images/onramper/master.svg';
+import applepay from 'assets/images/onramper/applepay.svg';
+import gpay from 'assets/images/onramper/gpay.svg';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
@@ -92,6 +96,19 @@ const Deposit: React.FC = () => {
         setSelectedToken(index);
         setSelectedTokenFromQuery(index.toString());
     };
+
+    const apiKey = process.env.REACT_APP_ONRAMPER_KEY || '';
+
+    const onramperUrl = useMemo(() => {
+        return `https://buy.onramper.com?apiKey=${apiKey}&mode=buy&onlyCryptos=${
+            getCollaterals(networkId, true)[selectedToken]
+        }_${getNetworkNameByNetworkId(networkId, true)}&networkWallets=${getNetworkNameByNetworkId(
+            networkId,
+            true
+        )}:${walletAddress}`;
+    }, [walletAddress, networkId, apiKey, selectedToken]);
+
+    console.log();
 
     return (
         <>
@@ -166,6 +183,17 @@ const Deposit: React.FC = () => {
                             })}
                         </WarningContainer>
                     </DepositAddressFormContainer>
+                    <BuyWithText>Or buy with</BuyWithText>
+                    <OnramperDiv
+                        onClick={() => {
+                            window.open(onramperUrl, '_blank');
+                        }}
+                    >
+                        <img src={visa} />
+                        <img src={master} />
+                        <img src={applepay} />
+                        <img src={gpay} />
+                    </OnramperDiv>
                 </FormContainer>
                 <BalanceSection>
                     <BalanceDetails />
@@ -198,11 +226,29 @@ const DepositAddressFormContainer = styled(FlexDiv)`
     margin-top: 20px;
 `;
 
+const BuyWithText = styled.span`
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+    margin: auto;
+    margin-top: 80px;
+    margin-bottom: 60px;
+`;
+
 const WalletAddressInputWrapper = styled(FlexDiv)`
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
     align-items: center;
+`;
+
+const OnramperDiv = styled(FlexDiv)`
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
 `;
 
 const WalletAddressInput = styled.input`
