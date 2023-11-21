@@ -32,14 +32,17 @@ const Balance: React.FC = () => {
 
     const totalBalanceValue = useMemo(() => {
         let total = 0;
+        try {
+            if (exchangeRates && multipleCollateralBalances.data) {
+                getCollaterals(networkId, true).forEach((token) => {
+                    total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                });
+            }
 
-        if (exchangeRates && multipleCollateralBalances.data) {
-            getCollaterals(networkId, true).forEach((token) => {
-                total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
-            });
+            return total ? total : 'N/A';
+        } catch (e) {
+            return 'N/A';
         }
-
-        return total ? total : 'N/A';
     }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     return (
