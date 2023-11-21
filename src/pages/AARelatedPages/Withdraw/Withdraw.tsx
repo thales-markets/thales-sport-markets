@@ -29,6 +29,7 @@ import WithdrawalConfirmationModal from './components/WithdrawalConfirmationModa
 import { ethers } from 'ethers';
 import TextInput from 'components/fields/TextInput';
 import Button from 'components/Button';
+import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 
 type FormValidation = {
     walletAddress: boolean;
@@ -48,6 +49,20 @@ const Withdraw: React.FC = () => {
     const [amount, setAmount] = useState<number>(0);
     const [showWithdrawalConfirmationModal, setWithdrawalConfirmationModalVisibility] = useState<boolean>(false);
     const [validation, setValidation] = useState<FormValidation>({ walletAddress: false, amount: false });
+
+    const selectedTokenFromUrl = getQueryStringVal('coin-index');
+
+    const [, setSelectedTokenFromQuery] = useQueryParam(
+        'coin-index',
+        selectedTokenFromUrl ? selectedTokenFromUrl : '0'
+    );
+
+    useEffect(() => {
+        if (selectedTokenFromUrl != selectedToken.toString()) {
+            setSelectedToken(Number(selectedTokenFromUrl));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedTokenFromUrl]);
 
     const inputRef = useRef<HTMLDivElement>(null);
 
@@ -84,6 +99,11 @@ const Withdraw: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [amount, paymentTokenBalance, withdrawalWalletAddress]);
 
+    const handleChangeCollateral = (index: number) => {
+        setSelectedToken(index);
+        setSelectedTokenFromQuery(index.toString());
+    };
+
     return (
         <>
             <Wrapper>
@@ -107,7 +127,7 @@ const Withdraw: React.FC = () => {
                                 <CollateralSelector
                                     collateralArray={getCollaterals(networkId, true)}
                                     selectedItem={selectedToken}
-                                    onChangeCollateral={(index) => setSelectedToken(index)}
+                                    onChangeCollateral={(index) => handleChangeCollateral(index)}
                                     disabled={false}
                                     isDetailedView
                                     collateralBalances={[multipleCollateralBalances.data]}

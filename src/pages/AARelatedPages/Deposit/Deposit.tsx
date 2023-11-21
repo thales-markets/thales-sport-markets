@@ -1,5 +1,5 @@
 import NumericInput from 'components/fields/NumericInput';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -29,6 +29,7 @@ import {
     WarningIcon,
     Wrapper,
 } from '../styled-components';
+import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
@@ -41,6 +42,20 @@ const Deposit: React.FC = () => {
 
     const [selectedToken, setSelectedToken] = useState<number>(0);
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
+
+    const selectedTokenFromUrl = getQueryStringVal('coin-index');
+
+    const [, setSelectedTokenFromQuery] = useQueryParam(
+        'coin-index',
+        selectedTokenFromUrl ? selectedTokenFromUrl : '0'
+    );
+
+    useEffect(() => {
+        if (selectedTokenFromUrl != selectedToken.toString()) {
+            setSelectedToken(Number(selectedTokenFromUrl));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedTokenFromUrl]);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -73,6 +88,11 @@ const Deposit: React.FC = () => {
         }
     };
 
+    const handleChangeCollateral = (index: number) => {
+        setSelectedToken(index);
+        setSelectedTokenFromQuery(index.toString());
+    };
+
     return (
         <>
             {isMobile && <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>}
@@ -97,7 +117,7 @@ const Deposit: React.FC = () => {
                                 <CollateralSelector
                                     collateralArray={getCollaterals(networkId, true)}
                                     selectedItem={selectedToken}
-                                    onChangeCollateral={(index) => setSelectedToken(index)}
+                                    onChangeCollateral={(index) => handleChangeCollateral(index)}
                                     disabled={false}
                                     isDetailedView
                                     collateralBalances={[multipleCollateralBalances.data]}

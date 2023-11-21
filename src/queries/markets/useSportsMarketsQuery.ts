@@ -65,7 +65,7 @@ const mapMarkets = async (allMarkets: SportMarkets, mapOnlyOpenedMarkets: boolea
             oddsFromContract = promisesResult.slice(0, numberOfBatches).flat(1);
             priceImpactFromContract = promisesResult.slice(numberOfBatches, numberOfBatches + numberOfBatches).flat(1);
         } catch (e) {
-            console.log('Could not get oods from chain', e);
+            console.log('Could not get odds from chain', e);
         }
     }
 
