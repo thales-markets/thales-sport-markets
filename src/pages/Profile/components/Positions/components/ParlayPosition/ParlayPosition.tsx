@@ -171,15 +171,25 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             setIsAllowing(true);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
+                let txResult;
                 const collateralContractWithSigner = sUSDContract?.connect(signer);
                 const addressToApprove = parlayMarketsAMMContract.address;
 
-                const tx = (await collateralContractWithSigner?.approve(
-                    addressToApprove,
-                    approveAmount
-                )) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
-                const txResult = await tx.wait();
+                if (isAA) {
+                    txResult = await executeBiconomyTransaction(
+                        collateralAddress,
+                        collateralContractWithSigner,
+                        'approve',
+                        [addressToApprove, approveAmount]
+                    );
+                } else {
+                    const tx = (await collateralContractWithSigner?.approve(
+                        addressToApprove,
+                        approveAmount
+                    )) as ethers.ContractTransaction;
+                    setOpenApprovalModal(false);
+                    txResult = await tx.wait();
+                }
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
