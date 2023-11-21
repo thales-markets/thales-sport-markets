@@ -27,9 +27,10 @@ type MatchInfoProps = {
     readOnly?: boolean;
     isHighlighted?: boolean;
     customStyle?: { fontSize?: string; lineHeight?: string };
+    updatedQuote?: number;
 };
 
-const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
+const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle, updatedQuote }) => {
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
@@ -54,7 +55,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
             </MatchLabel>
             <PositionSymbol
                 symbolAdditionalText={{
-                    text: formatMarketOdds(selectedOddsType, getPositionOdds(market)),
+                    text: formatMarketOdds(selectedOddsType, updatedQuote || getPositionOdds(market)),
                     textStyle: {
                         width: '34px',
                         marginRight: '3px',

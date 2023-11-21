@@ -58,8 +58,10 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const multiSingleStore = useSelector(getMultiSingle);
 
     const [parlayMarkets, setParlayMarkets] = useState<ParlaysMarket[]>([]);
+
     const [combinedMarketsData, setCombinedMarketsData] = useState<CombinedParlayMarket[]>([]);
     const [aggregatedParlayMarkets, setAggregatedParlayMarkets] = useState<ParlaysMarket[]>([]);
+    const [updatedQuotes, setUpdatedQuotes] = useState<number[]>([]);
 
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
@@ -174,6 +176,10 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, parlay, dispatch, combinedPositions]);
 
+    useEffect(() => {
+        setUpdatedQuotes([]);
+    }, [setUpdatedQuotes, parlayMarkets]);
+
     const onCloseValidationModal = useCallback(() => dispatch(resetParlayError()), [dispatch]);
 
     const onToggleTypeClickHandler = () => {
@@ -220,19 +226,28 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                         const outOfLiquidity = outOfLiquidityMarkets.includes(index);
                                         return (
                                             <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                                <MatchInfo market={market} isHighlighted={true} />
+                                                <MatchInfo
+                                                    updatedQuote={updatedQuotes?.[index]}
+                                                    market={market}
+                                                    isHighlighted={true}
+                                                />
                                             </RowMarket>
                                         );
                                     })}
                             </ListContainer>
                             <HorizontalLine />
                             {aggregatedParlayMarkets.length === 1 ? (
-                                <Single market={aggregatedParlayMarkets[0]} onBuySuccess={onBuySuccess} />
+                                <Single
+                                    market={aggregatedParlayMarkets[0]}
+                                    onBuySuccess={onBuySuccess}
+                                    setUpdatedQuotes={setUpdatedQuotes}
+                                />
                             ) : (
                                 <Ticket
                                     markets={aggregatedParlayMarkets}
                                     setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
                                     onBuySuccess={onBuySuccess}
+                                    setUpdatedQuotes={setUpdatedQuotes}
                                 />
                             )}
                         </>

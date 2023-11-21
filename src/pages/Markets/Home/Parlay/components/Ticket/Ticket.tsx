@@ -68,6 +68,7 @@ import {
     getCollateralIndex,
     getCollaterals,
     getDefaultCollateral,
+    isStableCurrency,
 } from 'utils/collaterals';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import CollateralSelector from 'components/CollateralSelector';
@@ -79,6 +80,7 @@ type TicketProps = {
     markets: ParlaysMarket[];
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
     onBuySuccess?: () => void;
+    setUpdatedQuotes: (quotes: number[]) => void;
 };
 
 const TicketErrorMessage = {
@@ -86,7 +88,7 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess }) => {
+const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess, setUpdatedQuotes }) => {
     const { t } = useTranslation();
     const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
@@ -148,6 +150,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         [networkId, selectedCollateralIndex, isEth]
     );
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
+    const isStableCollateral = isStableCurrency(selectedCollateral);
 
     const hasParlayCombinedMarkets = isSGPInParlayMarkets(markets);
 
@@ -264,6 +267,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     const usdPaid = isDefaultCollateral
                         ? coinParser(collateralAmountForQuote.toString(), networkId)
                         : minimumReceivedForCollateralAmount;
+
                     const minUsdPaid = coinParser(minUsdAmountValue.toString(), networkId);
 
                     setUsdAmountValue(coinFormatter(usdPaid, networkId));
@@ -635,7 +639,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
                     const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
 
-                    setTotalQuote(parlayAmmTotalQuote);
+                    setTotalQuote(
+                        1 /
+                            (parlayAmmTotalBuyAmount /
+                                (isStableCollateral ? Number(collateralAmountValue) : Number(usdAmountValue)))
+                    );
                     setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
                     setTotalBuyAmount(parlayAmmTotalBuyAmount);
 
@@ -647,7 +655,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                         .map((finalQuote, index) => (finalQuote === 0 ? index : -1))
                         .filter((index) => index !== -1);
                     setMarketsOutOfLiquidity(marketsOutOfLiquidity);
+
                     setFinalQuotes(fetchedFinalQuotes);
+                    setUpdatedQuotes(fetchedFinalQuotes);
 
                     const baseQuote = bigNumberFormatter(parlayAmmQuote['minimumCollateralAmountTotalQuote']);
                     const calculatedReducedTotalBonus =
@@ -687,6 +697,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         hasParlayCombinedMarkets,
         markets,
         networkId,
+        usdAmountValue,
+        isStableCollateral,
+        setUpdatedQuotes,
     ]);
 
     useEffect(() => {
