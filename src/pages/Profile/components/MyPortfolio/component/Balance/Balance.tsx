@@ -1,6 +1,7 @@
+import { USD_SIGN } from 'constants/currency';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -9,7 +10,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { getCollaterals } from 'utils/collaterals';
-import { formatCurrency } from 'utils/formatters/number';
+import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
 
 const Balance: React.FC = () => {
     const { t } = useTranslation();
@@ -29,13 +30,23 @@ const Balance: React.FC = () => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    console.log('exchangeRates ', exchangeRates);
+    const totalBalanceValue = useMemo(() => {
+        let total = 0;
+
+        if (exchangeRates) {
+            getCollaterals(networkId, true).forEach((token) => {
+                total += multipleCollateralBalances.data[token] * exchangeRates[token];
+            });
+        }
+
+        return total ? total : 'N/A';
+    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     return (
         <Wrapper>
             <Heading>{t('my-portfolio.estimated-balance')}</Heading>
-            <BalanceAmount>{'$ 304.76'}</BalanceAmount>
-            <hr />
+            <BalanceAmount>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</BalanceAmount>
+            <Divider />
             {getCollaterals(networkId, true).map((token, index) => {
                 return (
                     <CollateralItem key={index}>
@@ -54,8 +65,8 @@ const Balance: React.FC = () => {
                                   )})`
                                 : ``}
                         </TokenBalance>
-                        <Deposit>{'Deposit'}</Deposit>
-                        <Withdraw>{'Withdraw'}</Withdraw>
+                        <Deposit>{t('my-portfolio.deposit')}</Deposit>
+                        <Withdraw>{t('my-portfolio.withdraw')}</Withdraw>
                     </CollateralItem>
                 );
             })}
@@ -69,6 +80,11 @@ const Wrapper = styled(FlexDiv)`
     background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
     padding: 20px 27px;
     margin-top: 10px;
+`;
+
+const Divider = styled.hr`
+    width: 100%;
+    border-bottom: 2px ${(props) => props.theme.borderColor.primary} solid;
 `;
 
 const Heading = styled.h2`
@@ -98,7 +114,7 @@ const CollateralName = styled(FlexDiv)`
     font-size: 12px;
     letter-spacing: 3.5px;
     align-items: center;
-    width: 25%;
+    width: 20%;
     justify-content: flex-start;
 `;
 
@@ -118,6 +134,7 @@ const TokenBalance = styled(FlexDiv)`
 const Deposit = styled.span`
     color: ${(props) => props.theme.textColor.quaternary};
     font-size: 12px;
+    text-transform: uppercase;
     font-weight: 700;
     cursor: pointer;
 `;

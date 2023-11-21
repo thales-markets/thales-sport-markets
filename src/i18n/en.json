@@ -785,7 +785,9 @@
         }
     },
     "my-portfolio": {
-        "estimated-balance": "Estimated balance"
+        "estimated-balance": "Estimated balance",
+        "deposit": "Deposit",
+        "withdraw": "Withdraw"
     },
     "wizard": {
         "title": "Get Started!",
