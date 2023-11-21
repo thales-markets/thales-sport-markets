@@ -1,3 +1,4 @@
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +22,15 @@ const Balance: React.FC = () => {
         enabled: isAppReady && isWalletConnected,
     });
 
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    console.log('exchangeRates ', exchangeRates);
+
     return (
         <Wrapper>
             <Heading>{t('my-portfolio.estimated-balance')}</Heading>
@@ -36,7 +46,13 @@ const Balance: React.FC = () => {
                         <TokenBalance>
                             {multipleCollateralBalances.data
                                 ? formatCurrency(multipleCollateralBalances.data[token])
-                                : 0}
+                                : 0}{' '}
+                            {token}
+                            {exchangeRates && multipleCollateralBalances.data
+                                ? ` ( $ ${formatCurrency(
+                                      multipleCollateralBalances.data[token] * exchangeRates[token]
+                                  )})`
+                                : ``}
                         </TokenBalance>
                         <Deposit>{'Deposit'}</Deposit>
                         <Withdraw>{'Withdraw'}</Withdraw>
@@ -96,6 +112,7 @@ const TokenBalance = styled(FlexDiv)`
     font-weight: 700;
     width: 25%;
     text-align: right;
+    justify-content: flex-end;
 `;
 
 const Deposit = styled.span`
