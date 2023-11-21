@@ -1,5 +1,8 @@
+import { USD_SIGN } from 'constants/currency';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { getNetworkId, getWalletAddress, getIsWalletConnected } from 'redux/modules/wallet';
@@ -7,9 +10,11 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { getCollaterals } from 'utils/collaterals';
-import { formatCurrency } from 'utils/formatters/number';
+import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
 
 const BalanceDetails: React.FC = () => {
+    const { t } = useTranslation();
+
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -19,10 +24,32 @@ const BalanceDetails: React.FC = () => {
         enabled: isAppReady && isWalletConnected,
     });
 
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const totalBalanceValue = useMemo(() => {
+        let total = 0;
+        try {
+            if (exchangeRates && multipleCollateralBalances.data) {
+                getCollaterals(networkId, true).forEach((token) => {
+                    total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                });
+            }
+
+            return total ? total : 'N/A';
+        } catch (e) {
+            return 'N/A';
+        }
+    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
+
     return (
         <BalanceWrapper>
-            <SectionLabel>{'Balance'}</SectionLabel>
-            <TotalBalance>{'$304.654'}</TotalBalance>
+            <SectionLabel>{t('my-portfolio.estimated-balance')}</SectionLabel>
+            <TotalBalance>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</TotalBalance>
             <TokenBalancesWrapper>
                 {getCollaterals(networkId, true).map((token, index) => {
                     return (
