@@ -1,4 +1,6 @@
+import SPAAnchor from 'components/SPAAnchor';
 import { USD_SIGN } from 'constants/currency';
+import i18n from 'i18n';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useMemo } from 'react';
@@ -11,6 +13,7 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { getCollaterals } from 'utils/collaterals';
 import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
+import { buildDepositOrWithdrawLink } from 'utils/routes';
 
 const Balance: React.FC = () => {
     const { t } = useTranslation();
@@ -18,6 +21,7 @@ const Balance: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const language = i18n.language;
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -68,8 +72,12 @@ const Balance: React.FC = () => {
                                   )})`
                                 : ``}
                         </TokenBalance>
-                        <Deposit>{t('my-portfolio.deposit')}</Deposit>
-                        <Withdraw>{t('my-portfolio.withdraw')}</Withdraw>
+                        <SPAAnchor href={buildDepositOrWithdrawLink(language, 'deposit', index)}>
+                            <Deposit>{t('my-portfolio.deposit')}</Deposit>
+                        </SPAAnchor>
+                        <SPAAnchor href={buildDepositOrWithdrawLink(language, 'withdraw', index)}>
+                            <Withdraw>{t('my-portfolio.withdraw')}</Withdraw>
+                        </SPAAnchor>
                     </CollateralItem>
                 );
             })}
