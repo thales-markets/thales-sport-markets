@@ -202,7 +202,7 @@ const Withdraw: React.FC = () => {
                     amount={amount}
                     token={getCollaterals(networkId, true)[selectedToken]}
                     withdrawalAddress={withdrawalWalletAddress}
-                    network={getNetworkNameByNetworkId(networkId)}
+                    network={networkId}
                     onClose={() => setWithdrawalConfirmationModalVisibility(false)}
                 />
             )}

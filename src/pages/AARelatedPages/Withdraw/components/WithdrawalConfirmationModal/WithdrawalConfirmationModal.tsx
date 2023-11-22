@@ -1,17 +1,22 @@
 import Modal from 'components/Modal';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
-import React from 'react';
+import { Network } from 'enums/network';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { Coins } from 'types/tokens';
+import { executeBiconomyTransaction } from 'utils/biconomy';
+import { coinParser } from 'utils/formatters/ethers';
 import { formatCurrencyWithKey } from 'utils/formatters/number';
+import { getNetworkNameByNetworkId } from 'utils/network';
+import networkConnector from 'utils/networkConnector';
 
 type WithdrawalConfirmationModalProps = {
     amount: number;
     token: Coins;
     withdrawalAddress: string;
-    network: string | undefined;
+    network: Network;
     onClose: () => void;
 };
 
@@ -24,12 +29,25 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
 }) => {
     const { t } = useTranslation();
 
+    const networkName = useMemo(() => {
+        return getNetworkNameByNetworkId(network);
+    }, [network]);
+
+    const parsedAmount = useMemo(() => {
+        return coinParser('' + amount, network, token);
+    }, [amount, network, token]);
+
     return (
         <Modal title={t('withdraw.confirmation-modal.title')} onClose={() => onClose()}>
             <MainContainer>
                 <ListContainer>
                     <List>
-                        <li>{t('withdraw.confirmation-modal.correct-address', { token, network })}</li>
+                        <li>
+                            {t('withdraw.confirmation-modal.correct-address', {
+                                token,
+                                networkName,
+                            })}
+                        </li>
                         <li>{t('withdraw.confirmation-modal.withdrawal-transaction-warning')}</li>
                     </List>
                 </ListContainer>
@@ -51,11 +69,26 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                     </ItemContainer>
                     <ItemContainer>
                         <ItemLabel>{t('withdraw.confirmation-modal.network')}:</ItemLabel>
-                        <ItemDescription>{network}</ItemDescription>
+                        <ItemDescription>{networkName}</ItemDescription>
                     </ItemContainer>
                 </DetailsContainer>
                 <ButtonContainer>
-                    <Button>{t('withdraw.confirmation-modal.confirm')}</Button>
+                    <Button
+                        onClick={async () => {
+                            const { signer, multipleCollateral } = networkConnector;
+                            if (multipleCollateral && signer) {
+                                const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
+                                await executeBiconomyTransaction(
+                                    collateralContractWithSigner?.address as string,
+                                    collateralContractWithSigner,
+                                    'transfer',
+                                    [withdrawalAddress, parsedAmount]
+                                );
+                            }
+                        }}
+                    >
+                        {t('withdraw.confirmation-modal.confirm')}
+                    </Button>
                 </ButtonContainer>
             </MainContainer>
         </Modal>
