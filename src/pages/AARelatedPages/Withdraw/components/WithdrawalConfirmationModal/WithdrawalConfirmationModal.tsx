@@ -1,12 +1,11 @@
 import Modal from 'components/Modal';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { Network } from 'enums/network';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { Coins } from 'types/tokens';
-import { executeBiconomyTransaction } from 'utils/biconomy';
+import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import { coinParser } from 'utils/formatters/ethers';
 import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { getNetworkNameByNetworkId } from 'utils/network';
@@ -29,6 +28,8 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
 }) => {
     const { t } = useTranslation();
 
+    const [gas, setGas] = useState(0);
+
     const networkName = useMemo(() => {
         return getNetworkNameByNetworkId(network);
     }, [network]);
@@ -36,6 +37,19 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     const parsedAmount = useMemo(() => {
         return coinParser('' + amount, network, token);
     }, [amount, network, token]);
+
+    useEffect(() => {
+        const { signer, multipleCollateral } = networkConnector;
+        if (multipleCollateral && signer) {
+            const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
+            getGasFeesForTx(collateralContractWithSigner?.address as string, collateralContractWithSigner, 'transfer', [
+                withdrawalAddress,
+                parsedAmount,
+            ]).then((estimateGas) => {
+                setGas(estimateGas as number);
+            });
+        }
+    }, [token, parsedAmount, withdrawalAddress]);
 
     return (
         <Modal title={t('withdraw.confirmation-modal.title')} onClose={() => onClose()}>
@@ -56,10 +70,11 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         <ItemLabel>{t('withdraw.amount')}:</ItemLabel>
                         <ItemDescription>
                             {<TokenIcon className={`currency-icon currency-icon--${token.toLowerCase()}`} />}
-                            {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.USDC, amount)}
+                            {formatCurrencyWithKey(token, amount)}
                             {` (${t('withdraw.confirmation-modal.withdrawal-fee')}: ${formatCurrencyWithKey(
-                                CRYPTO_CURRENCY_MAP.USDC,
-                                2
+                                token,
+                                gas,
+                                4
                             )})`}
                         </ItemDescription>
                     </ItemContainer>
