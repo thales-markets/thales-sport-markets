@@ -267,6 +267,7 @@ const WalletAddressInput = styled.input`
 const QRIcon = styled.i`
     font-size: 24px;
     position: absolute;
+    cursor: pointer;
     right: 5px;
     top: 5px;
     color: ${(props) => props.theme.input.textColor.secondary};
