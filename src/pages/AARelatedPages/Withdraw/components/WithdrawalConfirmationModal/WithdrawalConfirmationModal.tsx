@@ -1,7 +1,9 @@
 import Modal from 'components/Modal';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { Network } from 'enums/network';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { Coins } from 'types/tokens';
@@ -51,6 +53,27 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
         }
     }, [token, parsedAmount, withdrawalAddress]);
 
+    const handleSubmit = async () => {
+        const id = toast.loading(t('withdraw.toast-message.pending'));
+
+        try {
+            const { signer, multipleCollateral } = networkConnector;
+            if (multipleCollateral && signer) {
+                const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
+                await executeBiconomyTransaction(
+                    collateralContractWithSigner?.address as string,
+                    collateralContractWithSigner,
+                    'transfer',
+                    [withdrawalAddress, parsedAmount]
+                );
+            }
+            toast.update(id, getSuccessToastOptions(t('withdraw.toast-message.success')));
+        } catch (e) {
+            console.log('Error ', e);
+            toast.update(id, getErrorToastOptions(t('withdraw.toast-message.error')));
+        }
+    };
+
     return (
         <Modal title={t('withdraw.confirmation-modal.title')} onClose={() => onClose()}>
             <MainContainer>
@@ -88,22 +111,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                     </ItemContainer>
                 </DetailsContainer>
                 <ButtonContainer>
-                    <Button
-                        onClick={async () => {
-                            const { signer, multipleCollateral } = networkConnector;
-                            if (multipleCollateral && signer) {
-                                const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
-                                await executeBiconomyTransaction(
-                                    collateralContractWithSigner?.address as string,
-                                    collateralContractWithSigner,
-                                    'transfer',
-                                    [withdrawalAddress, parsedAmount]
-                                );
-                            }
-                        }}
-                    >
-                        {t('withdraw.confirmation-modal.confirm')}
-                    </Button>
+                    <Button onClick={() => handleSubmit()}>{t('withdraw.confirmation-modal.confirm')}</Button>
                 </ButtonContainer>
             </MainContainer>
         </Modal>

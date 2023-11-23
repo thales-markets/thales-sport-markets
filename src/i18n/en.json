@@ -779,6 +779,11 @@
             "network": "Network",
             "confirm": "Confirm"
         },
+        "toast-messages": {
+            "pending": "Transaction pending...",
+            "error": "Some error occurred while withdrawing funds.",
+            "success": "Successfully withdrawal"
+        },
         "validation": {
             "wallet-address": "Wallet address is not valid",
             "amount": "Amount is not valid"
