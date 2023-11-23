@@ -1,24 +1,26 @@
+import applepay from 'assets/images/onramper/applepay.svg';
+import gpay from 'assets/images/onramper/gpay.svg';
+import master from 'assets/images/onramper/master.svg';
+import visa from 'assets/images/onramper/visa.svg';
+import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
+import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
-import { FlexDiv } from 'styles/common';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
-import CollateralSelector from 'components/CollateralSelector';
-import { getCollaterals } from 'utils/collaterals';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import styled, { useTheme } from 'styled-components';
+import { FlexDiv } from 'styles/common';
+import { ThemeInterface } from 'types/ui';
+import { getCollaterals } from 'utils/collaterals';
 import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { getNetworkNameByNetworkId } from 'utils/network';
-import { toast } from 'react-toastify';
-import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
-import QRCodeModal from './components/QRCodeModal';
-import BalanceDetails from './components/BalanceDetails';
+import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 import {
     BalanceSection,
     FormContainer,
@@ -29,11 +31,8 @@ import {
     WarningIcon,
     Wrapper,
 } from '../styled-components';
-import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
-import visa from 'assets/images/onramper/visa.svg';
-import master from 'assets/images/onramper/master.svg';
-import applepay from 'assets/images/onramper/applepay.svg';
-import gpay from 'assets/images/onramper/gpay.svg';
+import BalanceDetails from './components/BalanceDetails';
+import QRCodeModal from './components/QRCodeModal';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
