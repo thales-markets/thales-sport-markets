@@ -1,5 +1,24 @@
+import Button from 'components/Button';
+import CollateralSelector from 'components/CollateralSelector';
+import NumericInput from 'components/fields/NumericInput';
+import TextInput from 'components/fields/TextInput';
+import { ethers } from 'ethers';
+import { t } from 'i18next';
 import BalanceDetails from 'pages/AARelatedPages/Deposit/components/BalanceDetails';
-import React, { useRef, useState, useMemo, useEffect } from 'react';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import styled, { useTheme } from 'styled-components';
+import { FlexDiv } from 'styles/common';
+import { ThemeInterface } from 'types/ui';
+import { getCollaterals } from 'utils/collaterals';
+import { formatCurrencyWithKey } from 'utils/formatters/number';
+import { getNetworkNameByNetworkId } from 'utils/network';
+import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 import {
     BalanceSection,
     FormContainer,
@@ -10,26 +29,7 @@ import {
     WarningIcon,
     Wrapper,
 } from '../styled-components';
-import CollateralSelector from 'components/CollateralSelector';
-import NumericInput from 'components/fields/NumericInput';
-import { t } from 'i18next';
-import { getCollaterals } from 'utils/collaterals';
-import { formatCurrencyWithKey } from 'utils/formatters/number';
-import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId, getWalletAddress, getIsWalletConnected } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import styled, { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
-import { getNetworkNameByNetworkId } from 'utils/network';
-import { FlexDiv } from 'styles/common';
 import WithdrawalConfirmationModal from './components/WithdrawalConfirmationModal';
-import { ethers } from 'ethers';
-import TextInput from 'components/fields/TextInput';
-import Button from 'components/Button';
-import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 
 type FormValidation = {
     walletAddress: boolean;

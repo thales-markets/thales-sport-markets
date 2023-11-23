@@ -3,7 +3,10 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { Network } from 'enums/network';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { Coins } from 'types/tokens';
@@ -29,6 +32,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     onClose,
 }) => {
     const { t } = useTranslation();
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [gas, setGas] = useState(0);
 
@@ -76,7 +80,11 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     };
 
     return (
-        <Modal title={t('withdraw.confirmation-modal.title')} onClose={() => onClose()}>
+        <Modal
+            title={t('withdraw.confirmation-modal.title')}
+            customStyle={isMobile ? { content: { width: '100%', padding: '0 10px' } } : undefined}
+            onClose={() => onClose()}
+        >
             <MainContainer>
                 <ListContainer>
                     <List>
@@ -123,6 +131,11 @@ const MainContainer = styled(FlexDiv)`
     padding: 30px 20px 10px 20px;
     flex-direction: column;
     max-width: 550px;
+    align-items: center;
+    justify-content: center;
+    @media (max-width: 575px) {
+        width: 100%;
+    }
 `;
 
 const ListContainer = styled(FlexDiv)`
@@ -143,6 +156,9 @@ const TokenIcon = styled.i`
     font-size: 25px;
     margin-right: 5px;
     color: ${(props) => props.theme.textColor.primary};
+    @media (max-width: 575px) {
+        margin-right: 0px;
+    }
 `;
 
 const DetailsContainer = styled(FlexDiv)`
@@ -154,11 +170,17 @@ const DetailsContainer = styled(FlexDiv)`
 `;
 
 const ItemContainer = styled(FlexDiv)`
-    width: 100%;
+    width: fit-content;
     flex-direction: row;
     align-items: center;
+    width: 100%;
+    justify-content: space-between;
     margin: 5px 0px;
     color: ${(props) => props.theme.textColor.primary};
+    @media (max-width: 575px) {
+        height: 50px;
+        overflow-wrap: break-word;
+    }
 `;
 
 const ItemLabel = styled(FlexDiv)`
@@ -167,10 +189,20 @@ const ItemLabel = styled(FlexDiv)`
     font-weight: 700;
     text-transform: capitalize;
     margin-right: 15px;
+    @media (max-width: 575px) {
+        word-wrap: break-word;
+    }
 `;
 
-const ItemDescription = styled(FlexDiv)`
+const ItemDescription = styled.div`
+    display: block;
     align-items: center;
+    overflow-wrap: break-word;
+    width: fit-content;
+    @media (max-width: 575px) {
+        max-width: 150px;
+        text-align: right;
+    }
 `;
 
 const ButtonContainer = styled(FlexDiv)`
