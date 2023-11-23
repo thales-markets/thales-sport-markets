@@ -83,7 +83,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                         <li>
                             {t('withdraw.confirmation-modal.correct-address', {
                                 token,
-                                networkName,
+                                network: networkName,
                             })}
                         </li>
                         <li>{t('withdraw.confirmation-modal.withdrawal-transaction-warning')}</li>
