@@ -54,7 +54,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     }, [token, parsedAmount, withdrawalAddress]);
 
     const handleSubmit = async () => {
-        const id = toast.loading(t('withdraw.toast-message.pending'));
+        const id = toast.loading(t('withdraw.toast-messages.pending'));
 
         try {
             const { signer, multipleCollateral } = networkConnector;
@@ -66,11 +66,12 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
                     'transfer',
                     [withdrawalAddress, parsedAmount]
                 );
+                toast.update(id, getSuccessToastOptions(t('withdraw.toast-messages.success')));
             }
-            toast.update(id, getSuccessToastOptions(t('withdraw.toast-message.success')));
+            toast.update(id, getErrorToastOptions(t('withdraw.toast-messages.error')));
         } catch (e) {
             console.log('Error ', e);
-            toast.update(id, getErrorToastOptions(t('withdraw.toast-message.error')));
+            toast.update(id, getErrorToastOptions(t('withdraw.toast-messages.error')));
         }
     };
 
