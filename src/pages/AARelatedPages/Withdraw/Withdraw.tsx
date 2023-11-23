@@ -21,6 +21,7 @@ import { getNetworkNameByNetworkId } from 'utils/network';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 import {
     BalanceSection,
+    CollateralContainer,
     FormContainer,
     InputContainer,
     InputLabel,
@@ -72,7 +73,7 @@ const Withdraw: React.FC = () => {
 
     const paymentTokenBalance: number = useMemo(() => {
         if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
-            return multipleCollateralBalances.data[getCollaterals(networkId, true)[selectedToken]];
+            return multipleCollateralBalances.data[getCollaterals(networkId)[selectedToken]];
         }
         return 0;
     }, [multipleCollateralBalances.data, multipleCollateralBalances.isSuccess, networkId, selectedToken]);
@@ -110,39 +111,22 @@ const Withdraw: React.FC = () => {
                 <FormContainer>
                     <PrimaryHeading>{t('withdraw.heading-withdraw')}</PrimaryHeading>
                     <InputLabel>{t('deposit.select-token')}</InputLabel>
-                    <InputContainer ref={inputRef}>
-                        <NumericInput
-                            value={getCollaterals(networkId, true)[selectedToken]}
-                            onChange={(e) => {
-                                console.log(e);
-                            }}
-                            inputFontSize="18px"
-                            inputFontWeight="700"
-                            inputPadding="5px 10px"
-                            borderColor={theme.input.borderColor.tertiary}
+                    <CollateralContainer ref={inputRef}>
+                        <CollateralSelector
+                            collateralArray={getCollaterals(networkId)}
+                            selectedItem={selectedToken}
+                            onChangeCollateral={(index) => handleChangeCollateral(index)}
                             disabled={false}
-                            readonly={true}
-                            inputType="text"
-                            currencyComponent={
-                                <CollateralSelector
-                                    collateralArray={getCollaterals(networkId, true)}
-                                    selectedItem={selectedToken}
-                                    onChangeCollateral={(index) => handleChangeCollateral(index)}
-                                    disabled={false}
-                                    isDetailedView
-                                    collateralBalances={[multipleCollateralBalances.data]}
-                                    exchangeRates={exchangeRates}
-                                    dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
-                                    hideCollateralNameOnInput={true}
-                                />
-                            }
-                            balance={formatCurrencyWithKey(
-                                getCollaterals(networkId, true)[selectedToken],
-                                paymentTokenBalance
-                            )}
-                            enableCurrencyComponentOnly={true}
+                            collateralBalances={[multipleCollateralBalances.data]}
+                            exchangeRates={exchangeRates}
+                            dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                            hideCollateralNameOnInput={false}
+                            hideBalance
+                            isDetailedView
+                            stretch
+                            showCollateralImg
                         />
-                    </InputContainer>
+                    </CollateralContainer>
                     <InputLabel marginTop="20px">
                         {t('withdraw.address-input-label', {
                             token: selectedToken,
@@ -167,15 +151,19 @@ const Withdraw: React.FC = () => {
                             onChange={(el) => setAmount(Number(el.target.value))}
                             placeholder={t('withdraw.paste-address')}
                             onMaxButton={() => setAmount(paymentTokenBalance)}
-                            currencyLabel={getCollaterals(networkId, true)[selectedToken]}
+                            currencyLabel={getCollaterals(networkId)[selectedToken]}
                             showValidation={!validation.amount && amount > 0}
                             validationMessage={t('withdraw.validation.amount')}
+                            balance={formatCurrencyWithKey(
+                                getCollaterals(networkId)[selectedToken],
+                                paymentTokenBalance
+                            )}
                         />
                     </InputContainer>
                     <WarningContainer>
                         <WarningIcon className={'icon icon--warning'} />
                         {t('deposit.send', {
-                            token: getCollaterals(networkId, true)[selectedToken],
+                            token: getCollaterals(networkId)[selectedToken],
                             network: getNetworkNameByNetworkId(networkId),
                         })}
                     </WarningContainer>
@@ -200,7 +188,7 @@ const Withdraw: React.FC = () => {
             {showWithdrawalConfirmationModal && (
                 <WithdrawalConfirmationModal
                     amount={amount}
-                    token={getCollaterals(networkId, true)[selectedToken]}
+                    token={getCollaterals(networkId)[selectedToken]}
                     withdrawalAddress={withdrawalWalletAddress}
                     network={networkId}
                     onClose={() => setWithdrawalConfirmationModalVisibility(false)}

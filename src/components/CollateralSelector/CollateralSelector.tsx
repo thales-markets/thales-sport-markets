@@ -28,6 +28,8 @@ type CollateralSelectorProps = {
     collateralBalances?: any;
     exchangeRates?: Rates | null;
     dropDownWidth?: string;
+    showCollateralImg?: boolean;
+    stretch?: boolean;
 };
 
 const CollateralSelector: React.FC<CollateralSelectorProps> = ({
@@ -41,6 +43,8 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     collateralBalances,
     exchangeRates,
     dropDownWidth,
+    showCollateralImg,
+    stretch,
 }) => {
     const dispatch = useDispatch();
     const networkId = useSelector(getNetworkId);
@@ -65,10 +69,17 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     }, [collateralArray, isDetailedView, getUSDForCollateral]);
 
     return (
-        <Container>
-            <OutsideClickHandler onOutsideClick={() => setOpen(false)}>
-                <SelectedCollateral disabled={!!disabled} onClick={() => !disabled && setOpen(!open)}>
+        <Container stretch={stretch}>
+            <OutsideClickHandler display="contents" onOutsideClick={() => setOpen(false)}>
+                <SelectedCollateral stretch={stretch} disabled={!!disabled} onClick={() => !disabled && setOpen(!open)}>
                     <TextCollateralWrapper isDetailedView={isDetailedView}>
+                        {showCollateralImg && (
+                            <Icon
+                                className={`currency-icon currency-icon--${collateralArray[
+                                    selectedItem
+                                ].toLowerCase()}`}
+                            />
+                        )}
                         <TextCollateral isDetailedView={isDetailedView} isSelectedCollateral={true}>
                             {!hideCollateralNameOnInput && collateralArray[selectedItem]}
                         </TextCollateral>
@@ -153,9 +164,10 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     );
 };
 
-const Container = styled(FlexDivStart)`
+const Container = styled(FlexDivStart)<{ stretch?: boolean }>`
     margin: 0 7px;
     align-items: center;
+    width: ${(props) => (props.stretch ? '100%' : '')};
 `;
 
 const Text = styled.span<{
@@ -190,6 +202,7 @@ const TextCollateral = styled(Text)`
 const TextCollateralWrapper = styled.div<{ isDetailedView?: boolean }>`
     min-width: ${(props) => (props.isDetailedView ? '48px' : '45px')};
     display: flex;
+    align-items: center;
     @media (max-width: 768px) {
         ${(props) => (!props.isDetailedView ? 'min-width: 35px;' : '')}
     }
@@ -201,9 +214,11 @@ const Arrow = styled.i`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean }>`
+const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean; stretch?: boolean }>`
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? 0.4 : 1)};
+    justify-content: ${(props) => (props.stretch ? 'space-between' : '')};
+    width: ${(props) => (props.stretch ? '100%' : '')}; ;
 `;
 
 const Dropdown = styled(FlexDivColumnCentered)<{ width?: string }>`

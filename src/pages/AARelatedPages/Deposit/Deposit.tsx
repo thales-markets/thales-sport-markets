@@ -3,7 +3,6 @@ import gpay from 'assets/images/onramper/gpay.svg';
 import master from 'assets/images/onramper/master.svg';
 import visa from 'assets/images/onramper/visa.svg';
 import CollateralSelector from 'components/CollateralSelector';
-import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -14,15 +13,14 @@ import { toast } from 'react-toastify';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { ThemeInterface } from 'types/ui';
 import { getCollaterals } from 'utils/collaterals';
-import { formatCurrencyWithKey } from 'utils/formatters/number';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 import {
     BalanceSection,
+    CollateralContainer,
     FormContainer,
     InputContainer,
     InputLabel,
@@ -36,7 +34,6 @@ import QRCodeModal from './components/QRCodeModal';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
-    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -63,13 +60,6 @@ const Deposit: React.FC = () => {
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
-
-    const paymentTokenBalance: number = useMemo(() => {
-        if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
-            return multipleCollateralBalances.data[getCollaterals(networkId, true)[selectedToken]];
-        }
-        return 0;
-    }, [multipleCollateralBalances.data, multipleCollateralBalances.isSuccess, networkId, selectedToken]);
 
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
         enabled: isAppReady,
@@ -100,7 +90,7 @@ const Deposit: React.FC = () => {
 
     const onramperUrl = useMemo(() => {
         return `https://buy.onramper.com?apiKey=${apiKey}&mode=buy&onlyCryptos=${
-            getCollaterals(networkId, true)[selectedToken]
+            getCollaterals(networkId)[selectedToken]
         }_${getNetworkNameByNetworkId(networkId, true)}&networkWallets=${getNetworkNameByNetworkId(
             networkId,
             true
@@ -117,43 +107,27 @@ const Deposit: React.FC = () => {
                     {!isMobile && <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>}
                     <InputLabel>{t('deposit.select-token')}</InputLabel>
                     <InputContainer ref={inputRef}>
-                        <NumericInput
-                            value={getCollaterals(networkId, true)[selectedToken]}
-                            onChange={(e) => {
-                                console.log(e);
-                            }}
-                            inputFontSize="18px"
-                            inputFontWeight="700"
-                            inputPadding="5px 10px"
-                            borderColor={theme.input.borderColor.tertiary}
-                            disabled={false}
-                            readonly={true}
-                            inputType="text"
-                            currencyComponent={
-                                <CollateralSelector
-                                    collateralArray={getCollaterals(networkId, true)}
-                                    selectedItem={selectedToken}
-                                    onChangeCollateral={(index) => handleChangeCollateral(index)}
-                                    disabled={false}
-                                    isDetailedView
-                                    collateralBalances={[multipleCollateralBalances.data]}
-                                    exchangeRates={exchangeRates}
-                                    dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
-                                    hideCollateralNameOnInput={true}
-                                    hideBalance={true}
-                                />
-                            }
-                            balance={formatCurrencyWithKey(
-                                getCollaterals(networkId, true)[selectedToken],
-                                paymentTokenBalance
-                            )}
-                            enableCurrencyComponentOnly={true}
-                        />
+                        <CollateralContainer ref={inputRef}>
+                            <CollateralSelector
+                                collateralArray={getCollaterals(networkId)}
+                                selectedItem={selectedToken}
+                                onChangeCollateral={(index) => handleChangeCollateral(index)}
+                                disabled={false}
+                                collateralBalances={[multipleCollateralBalances.data]}
+                                exchangeRates={exchangeRates}
+                                dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                                hideCollateralNameOnInput={false}
+                                hideBalance
+                                isDetailedView
+                                stretch
+                                showCollateralImg
+                            />
+                        </CollateralContainer>
                     </InputContainer>
                     <DepositAddressFormContainer>
                         <InputLabel>
                             {t('deposit.address-input-label', {
-                                token: getCollaterals(networkId, true)[selectedToken],
+                                token: getCollaterals(networkId)[selectedToken],
                                 network: getNetworkNameByNetworkId(networkId),
                             })}
                         </InputLabel>
@@ -177,7 +151,7 @@ const Deposit: React.FC = () => {
                         <WarningContainer>
                             <WarningIcon className={'icon icon--warning'} />
                             {t('deposit.send', {
-                                token: getCollaterals(networkId, true)[selectedToken],
+                                token: getCollaterals(networkId)[selectedToken],
                                 network: getNetworkNameByNetworkId(networkId),
                             })}
                         </WarningContainer>
@@ -210,7 +184,7 @@ const Deposit: React.FC = () => {
                     onClose={() => setShowQRModal(false)}
                     walletAddress={walletAddress}
                     title={t('deposit.qr-modal-title', {
-                        token: getCollaterals(networkId, true)[selectedToken],
+                        token: getCollaterals(networkId)[selectedToken],
                         network: getNetworkNameByNetworkId(networkId),
                     })}
                 />

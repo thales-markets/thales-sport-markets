@@ -51,6 +51,20 @@ export const InputContainer = styled(FlexDiv)`
     width: 100%;
 `;
 
+export const CollateralContainer = styled.div`
+    position: relative;
+    width: 100%;
+    margin-left: auto;
+    border-radius: 5px;
+    padding: 8px;
+    max-height: 30px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    background: ${(props) => props.theme.input.background.primary};
+    cursor: pointer;
+`;
+
 export const WarningContainer = styled(FlexDiv)`
     width: 100%;
     background-color: ${(props) => props.theme.connectWalletModal.warningBackground};

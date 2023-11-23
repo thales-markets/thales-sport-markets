@@ -1,5 +1,4 @@
-import { COLLATERAL_DECIMALS, PARTICAL_COLLATERALS, STABLE_COINS } from 'constants/currency';
-import { COLLATERALS } from 'constants/currency';
+import { COLLATERALS, COLLATERAL_DECIMALS, STABLE_COINS } from 'constants/currency';
 import { Network } from 'enums/network';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import { Coins } from 'types/tokens';
@@ -8,8 +7,7 @@ export const getDefaultCollateral = (networkId: Network) => COLLATERALS[networkI
 
 export const getCollateral = (networkId: Network, index: number) => COLLATERALS[networkId][index];
 
-export const getCollaterals = (networkId: Network, particalWallet?: boolean) =>
-    particalWallet ? PARTICAL_COLLATERALS[networkId] : COLLATERALS[networkId];
+export const getCollaterals = (networkId: Network) => COLLATERALS[networkId];
 
 export const getCollateralIndex = (networkId: Network, currencyKey: Coins) =>
     COLLATERALS[networkId].indexOf(currencyKey);

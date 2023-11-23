@@ -38,7 +38,7 @@ const Balance: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, true).forEach((token) => {
+                getCollaterals(networkId).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
             }
@@ -54,7 +54,7 @@ const Balance: React.FC = () => {
             <Heading>{t('my-portfolio.estimated-balance')}</Heading>
             <BalanceAmount>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</BalanceAmount>
             <Divider />
-            {getCollaterals(networkId, true).map((token, index) => {
+            {getCollaterals(networkId).map((token, index) => {
                 return (
                     <CollateralItem key={index}>
                         <CollateralName>
