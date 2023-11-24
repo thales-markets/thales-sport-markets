@@ -3,8 +3,8 @@ import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
-import Search from 'components/Search';
 import SPAAnchor from 'components/SPAAnchor';
+import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
@@ -19,12 +19,11 @@ import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
-import { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
 
 const PULSING_COUNT = 10;
 
@@ -91,19 +90,19 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        {location.pathname !== ROUTES.Wizard && (
-                            <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.Wizard)}>
-                                <Button
-                                    backgroundColor={theme.button.background.tertiary}
-                                    textColor={theme.button.textColor.quaternary}
-                                    borderColor={theme.button.borderColor.secondary}
-                                    fontWeight="400"
-                                    fontSize="12.5px"
-                                >
-                                    {t('markets.nav-menu.labels.get-started')}
-                                </Button>
-                            </SPAAnchor>
-                        )}
+                        <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
+                            <Button
+                                backgroundColor={theme.button.background.quaternary}
+                                textColor={theme.button.textColor.primary}
+                                borderColor={theme.button.borderColor.secondary}
+                                fontWeight="400"
+                                additionalStyles={{ borderRadius: '15.5px', fontWeight: '800', fontSize: '14px' }}
+                                height="24px"
+                                width="100%"
+                            >
+                                {t('my-portfolio.deposit')}
+                            </Button>
+                        </SPAAnchor>
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
                         <MenuIcon
