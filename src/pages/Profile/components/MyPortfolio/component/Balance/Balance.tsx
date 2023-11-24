@@ -6,8 +6,8 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId, getWalletAddress, getIsWalletConnected } from 'redux/modules/wallet';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -21,6 +21,8 @@ const Balance: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
     const language = i18n.language;
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
@@ -66,7 +68,7 @@ const Balance: React.FC = () => {
                                 ? formatCurrency(multipleCollateralBalances.data[token])
                                 : 0}{' '}
                             {token}
-                            {exchangeRates && multipleCollateralBalances.data
+                            {exchangeRates && multipleCollateralBalances.data && !isMobile
                                 ? ` ( $ ${formatCurrency(
                                       multipleCollateralBalances.data[token] * exchangeRates[token]
                                   )})`
@@ -127,6 +129,9 @@ const CollateralName = styled(FlexDiv)`
     align-items: center;
     width: 20%;
     justify-content: flex-start;
+    @media (max-width: 575px) {
+        font-size: 10px;
+    }
 `;
 
 const TokenIcon = styled.i`
@@ -140,6 +145,9 @@ const TokenBalance = styled(FlexDiv)`
     width: 25%;
     text-align: right;
     justify-content: flex-end;
+    @media (max-width: 575px) {
+        font-size: 10px;
+    }
 `;
 
 const Deposit = styled.span`
@@ -148,6 +156,9 @@ const Deposit = styled.span`
     text-transform: uppercase;
     font-weight: 700;
     cursor: pointer;
+    @media (max-width: 575px) {
+        font-size: 10px;
+    }
 `;
 
 const Withdraw = styled(Deposit)`
