@@ -238,6 +238,7 @@ const WalletIconContainer = styled(FlexDivCentered)`
     cursor: pointer;
     flex-direction: row;
     width: 100%;
+    margin: 0 3px;
     border-radius: 8px;
     border: ${(props) => `1px ${props.theme.connectWalletModal.border} solid`};
     &:hover {
