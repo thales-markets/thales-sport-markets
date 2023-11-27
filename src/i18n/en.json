@@ -36,6 +36,7 @@
         "wallet": {
             "connect-wallet-modal-title": "Log in to OvertimeMarkets",
             "connect-your-wallet": "Connect wallet",
+            "connect-with-wallet": "Connect with wallet",
             "please-connect": "please, connect wallet to start using overtime.xyz",
             "or-connect-with": "or connect with",
             "view-more-options": "View more options",

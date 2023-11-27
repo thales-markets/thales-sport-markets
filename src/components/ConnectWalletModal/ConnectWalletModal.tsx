@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
-import { Trans, useTranslation } from 'react-i18next';
 
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 
-import { Connector, useConnect } from 'wagmi';
-import { SUPPORTED_PARTICAL_CONNECTORS } from 'constants/wallet';
-import { getClassNameForParticalLogin, getSpecificConnectorFromConnectorsArray } from 'utils/biconomy';
-import SimpleLoader from 'components/SimpleLoader';
-import { getIsMobile } from 'redux/modules/app';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import SimpleLoader from 'components/SimpleLoader';
+import { SUPPORTED_PARTICAL_CONNECTORS } from 'constants/wallet';
+import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
+import { RootState } from 'redux/rootReducer';
+import { getClassNameForParticalLogin, getSpecificConnectorFromConnectorsArray } from 'utils/biconomy';
+import { Connector, useConnect } from 'wagmi';
 
 ReactModal.setAppElement('#root');
 
@@ -123,7 +123,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                             }}
                         >
                             <WalletIcon className={'social-icon icon--wallet'} />
-                            <WalletName>{t('common.wallet.connect-your-wallet')}</WalletName>
+                            <WalletName>{t('common.wallet.connect-with-wallet')}</WalletName>
                         </WalletIconContainer>
                     </WalletIconsWrapper>
                     <FooterText>
@@ -197,27 +197,31 @@ const FooterText = styled(SecondaryText)`
     margin-top: 48px;
 `;
 
-const WalletIconsWrapper = styled(FlexDivCentered)``;
+const WalletIconsWrapper = styled(FlexDivCentered)`
+    justify-content: center;
+    padding: 0px 23px;
+    align-items: center;
+`;
 
 const WalletIcon = styled.i`
-    font-size: 40px;
+    font-size: 24px;
+    margin-right: 5px;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
 const WalletName = styled.span`
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 13px;
-    margin-top: 20px;
-    font-weight: 400;
+    text-transform: capitalize;
+    font-size: 18px;
+    padding: 6px 0;
+    font-weight: 600;
 `;
 
 const WalletIconContainer = styled(FlexDivCentered)`
     cursor: pointer;
-    flex-direction: column;
-    width: 120px;
-    height: 120px;
-    margin: 0 10px;
-    border-radius: 15px;
+    flex-direction: row;
+    width: 100%;
+    border-radius: 8px;
     border: ${(props) => `1px ${props.theme.connectWalletModal.border} solid`};
     &:hover {
         border: ${(props) => `1px ${props.theme.connectWalletModal.hover} solid`};
