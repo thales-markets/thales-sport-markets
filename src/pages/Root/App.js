@@ -38,6 +38,7 @@ import { ParticleProvider } from '@particle-network/provider';
 import biconomyConnector from 'utils/biconomyWallet';
 import { BiconomyPaymaster } from '@biconomy/paymaster';
 import { checkSession } from 'utils/biconomy';
+// import { checkSession } from 'utils/biconomy';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -55,8 +56,8 @@ const particle = new ParticleNetwork({
     projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
     clientKey: process.env.REACT_APP_CLIENT_KEY,
     appId: process.env.REACT_APP_PARTICLE_APP_ID,
-    chainName: 'arbitrum', //optional
-    chainId: 42161, //optional
+    chainName: 'optimism', //optional
+    chainId: 10, //optional
     wallet: {
         //optional: by default, the wallet entry is displayed in the bottom right corner of the webpage.
         displayWalletEntry: false, //show wallet entry when connect particle.
@@ -160,14 +161,18 @@ const App = () => {
                         defaultValidationModule: module,
                         activeValidationModule: module,
                     });
-                    const wallet = await account.init();
 
-                    const swAddress = await wallet.getAccountAddress();
-                    biconomyConnector.setWallet(wallet);
+                    const swAddress = await account.getAccountAddress();
+                    const deployed = await account.isAccountDeployed(swAddress);
+
+                    biconomyConnector.setWallet(account);
                     biconomyConnector.setUserInfo(userInfo);
-                    await checkSession();
+                    // await checkSession();
+                    // console.log('is account deployed: ', deployed);
                     dispatch(updateWallet({ walletAddress: swAddress, isAA: true }));
                 }
+
+                console.log(web3Provider);
 
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
