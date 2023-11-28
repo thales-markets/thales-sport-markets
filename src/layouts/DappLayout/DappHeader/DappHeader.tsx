@@ -3,8 +3,8 @@ import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
-import Search from 'components/Search';
 import SPAAnchor from 'components/SPAAnchor';
+import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
@@ -19,12 +19,11 @@ import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
-import { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
 
 const PULSING_COUNT = 10;
 
@@ -106,11 +105,7 @@ const DappHeader: React.FC = () => {
                         )}
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
-                        <MenuIcon
-                            onClick={() => setNavMenuVisibility(true)}
-                            data-matomo-category="dapp-header"
-                            data-matomo-action="menu-icon"
-                        />
+                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
                         <NavMenu
                             visibility={navMenuVisibility}
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}

@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import ROUTES, { RESET_STATE } from 'constants/routes';
 import { ReactComponent as LogoIcon } from 'assets/images/overtime-logo.svg';
 import SPAAnchor from 'components/SPAAnchor';
+import ROUTES, { RESET_STATE } from 'constants/routes';
+import React from 'react';
+import styled from 'styled-components';
 import { buildHref } from 'utils/routes';
 
 const Logo: React.FC = () => (
-    <Container data-matomo-category="dapp-header" data-matomo-action="overtime-logo">
+    <Container>
         <SPAAnchor href={buildHref(ROUTES.Markets.Home)} state={RESET_STATE}>
             <StyledLogo />
         </SPAAnchor>

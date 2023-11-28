@@ -11,12 +11,12 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import { buildHref } from 'utils/routes';
 import {
-    ProfileContainer,
-    ProfileIconContainer,
-    ProfileIcon,
-    NotificationCount,
-    ProfileLabel,
     Count,
+    NotificationCount,
+    ProfileContainer,
+    ProfileIcon,
+    ProfileIconContainer,
+    ProfileLabel,
     TeamImage,
 } from './styled-components';
 
@@ -30,7 +30,7 @@ const ProfileItem: React.FC<ProfileItemProperties> = ({ labelHidden, avatarSize 
     const { t } = useTranslation();
     return (
         <SPAAnchor href={buildHref(ROUTES.Profile)}>
-            <ProfileContainer data-matomo-category="dapp-header" data-matomo-action="profile">
+            <ProfileContainer>
                 <ProfileIconWidget avatarSize={avatarSize} />
                 {!labelHidden && <ProfileLabel>{t('markets.nav-menu.items.profile')}</ProfileLabel>}
             </ProfileContainer>

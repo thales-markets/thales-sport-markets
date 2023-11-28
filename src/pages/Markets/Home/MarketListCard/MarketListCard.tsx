@@ -2,23 +2,26 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
+import { BetType } from 'enums/markets';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
+import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
-import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { formatShortDateWithTime } from 'thales-utils';
+import { SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isUEFAGame, isFifaWCGame, isIIHFWCGame, isMotosport, isGolf, isPlayerProps } from 'utils/markets';
+import { isFifaWCGame, isGolf, isIIHFWCGame, isMotosport, isPlayerProps, isUEFAGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
 import CombinedMarketsOdds from './components/CombinedMarketsOdds';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
+import PlayerPropsOdds from './components/PlayerPropsOdds/PlayerPropsOdds';
 import {
     Arrow,
     ClubLogo,
@@ -44,9 +47,6 @@ import {
     VSLabel,
     Wrapper,
 } from './styled-components';
-import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
-import { BetType } from 'enums/markets';
-import PlayerPropsOdds from './components/PlayerPropsOdds/PlayerPropsOdds';
 
 // 3 for double chance, 1 for spread, 1 for total
 const MAX_NUMBER_OF_CHILD_MARKETS_ON_CONTRACT = 5;
@@ -182,7 +182,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     return (
         <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved}>
             <MainContainer>
-                <MatchInfoConatiner data-matomo-category="market-list-card" data-matomo-action="click-market-details">
+                <MatchInfoConatiner>
                     <SPAAnchor
                         href={buildMarketLink(
                             market.address,
