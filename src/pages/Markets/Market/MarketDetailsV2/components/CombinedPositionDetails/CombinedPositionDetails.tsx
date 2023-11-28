@@ -1,6 +1,7 @@
 import Tooltip from 'components/Tooltip';
 import { oddToastOptions } from 'config/toast';
 import { MIN_LIQUIDITY } from 'constants/markets';
+import { CombinedPositionsMatchingCode, Position } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,34 +9,33 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getCombinedPositions, removeCombinedPosition, updateCombinedPositions } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { CombinedMarketPosition, SportMarketInfo } from 'types/markets';
 import { floorNumberToDecimals } from 'thales-utils';
+import { CombinedMarketPosition, SportMarketInfo } from 'types/markets';
 import {
-    formatMarketOdds,
-    getSpreadTotalText,
-    getParentMarketAddress,
-    getCombinedOddTooltipText,
-    getTotalText,
-} from 'utils/markets';
-import {
-    compareCombinedPositionsFromParlayData,
+    checkIfCombinedPositionAlreadyInParlay,
     getCombinedPositionName,
     isCombinedMarketWinner,
 } from 'utils/combinedMarkets';
 import {
+    formatMarketOdds,
+    getCombinedOddTooltipText,
+    getParentMarketAddress,
+    getSpreadTotalText,
+    getTotalText,
+} from 'utils/markets';
+import {
     Bonus,
     Container,
-    Text,
     Status,
+    Text,
+    TooltipBonusText,
     TooltipContainer,
-    TooltipText,
     TooltipFooter,
     TooltipFooterInfo,
     TooltipFooterInfoContianer,
     TooltipFooterInfoLabel,
-    TooltipBonusText,
+    TooltipText,
 } from './styled-components';
-import { CombinedPositionsMatchingCode, Position } from 'enums/markets';
 
 type CombinedPositionDetailsProps = {
     markets: SportMarketInfo[];
@@ -103,13 +103,9 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
         positionName: symbolText || '',
     };
 
-    const isAddedToParlay = combinedPositions.find(
-        (item) =>
-            compareCombinedPositionsFromParlayData(item, combinedPosition) ==
-            CombinedPositionsMatchingCode.SAME_POSITIONS
-    )
-        ? true
-        : false;
+    const { matchingCode } = checkIfCombinedPositionAlreadyInParlay(combinedPosition, combinedPositions);
+
+    const isAddedToParlay = matchingCode == CombinedPositionsMatchingCode.SAME_POSITIONS ? true : false;
 
     const getDetails = () => (
         <Container

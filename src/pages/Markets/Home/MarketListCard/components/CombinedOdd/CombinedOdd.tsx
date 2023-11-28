@@ -1,9 +1,18 @@
+import { useMatomo } from '@datapunt/matomo-tracker-react';
 import PositionSymbol from 'components/PositionSymbol';
+import { oddToastOptions } from 'config/toast';
+import { CombinedPositionsMatchingCode, Position } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
 import { getCombinedPositions, removeCombinedPosition, updateCombinedPositions } from 'redux/modules/parlay';
+import { getOddsType } from 'redux/modules/ui';
+import { useTheme } from 'styled-components';
 import { CombinedMarketPosition, SportMarketInfo } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import { checkIfCombinedPositionAlreadyInParlay, getCombinedPositionName } from 'utils/combinedMarkets';
 import {
     formatMarketOdds,
     getCombinedOddTooltipText,
@@ -13,15 +22,6 @@ import {
     getSymbolText,
     hasBonus,
 } from 'utils/markets';
-import { compareCombinedPositionsFromParlayData, getCombinedPositionName } from 'utils/combinedMarkets';
-import { getOddsType } from 'redux/modules/ui';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { getIsMobile } from 'redux/modules/app';
-import { toast } from 'react-toastify';
-import { oddToastOptions } from 'config/toast';
-import { CombinedPositionsMatchingCode, Position } from 'enums/markets';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
 type CombinedMarketOddsProps = {
     markets: SportMarketInfo[];
@@ -67,13 +67,9 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
         positionName: combinedMarketPositionSymbol || '',
     };
 
-    const isAddedToParlay = combinedPositions.find(
-        (item) =>
-            compareCombinedPositionsFromParlayData(item, combinedPosition) ==
-            CombinedPositionsMatchingCode.SAME_POSITIONS
-    )
-        ? true
-        : false;
+    const { matchingCode } = checkIfCombinedPositionAlreadyInParlay(combinedPosition, combinedPositions);
+
+    const isAddedToParlay = matchingCode == CombinedPositionsMatchingCode.SAME_POSITIONS ? true : false;
 
     const spreadAndTotalValues = getSpreadAndTotalTextForCombinedMarket(markets, positions);
     const spreadAndTotalText = `${spreadAndTotalValues.spread ? spreadAndTotalValues.spread + '/' : ''}${

@@ -1,5 +1,8 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { GOLF_TAGS } from 'constants/tags';
+import { Network } from 'enums/network';
+import { localStore } from 'thales-utils';
 import {
     CombinedMarketPosition,
     MultiSingleAmounts,
@@ -7,12 +10,9 @@ import {
     ParlaysMarketPosition,
     SGPItem,
 } from 'types/markets';
-import { localStore } from 'thales-utils';
-import { RootState } from '../rootReducer';
-import { compareCombinedPositionsFromParlayData, getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
+import { checkIfCombinedPositionAlreadyInParlay, getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { GOLF_TAGS } from 'constants/tags';
-import { Network } from 'enums/network';
+import { RootState } from '../rootReducer';
 // import { canPlayerBeAddedToParlay } from 'utils/markets';
 import { BetType, CombinedPositionsMatchingCode, ParlayErrorCode, PLAYER_PROPS_BET_TYPES } from 'enums/markets';
 import {
@@ -292,28 +292,16 @@ const parlaySlice = createSlice({
                 return;
             }
 
-            let matchingCode: CombinedPositionsMatchingCode = CombinedPositionsMatchingCode.NOTHING_COMMON;
+            const { matchingCode, existingMarketIndex } = checkIfCombinedPositionAlreadyInParlay(
+                action.payload,
+                existingCombinedPositions
+            );
 
-            if (existingCombinedPositions.length > 0) {
-                existingCombinedPositions.forEach((positions: CombinedMarketPosition, index: number) => {
-                    const comparePositions = compareCombinedPositionsFromParlayData(positions, action.payload);
-                    matchingCode = comparePositions;
-                    if (comparePositions == CombinedPositionsMatchingCode.SAME_POSITIONS) {
-                        return;
-                    }
-                    if (
-                        comparePositions == CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS ||
-                        comparePositions == CombinedPositionsMatchingCode.SAME_PARENT_MARKET
-                    ) {
-                        delete existingCombinedPositions[index];
-                        existingCombinedPositions[index] = action.payload;
-                        return;
-                    }
-                    return;
-                });
+            if (matchingCode == CombinedPositionsMatchingCode.SAME_MARKETS && existingMarketIndex !== undefined) {
+                existingCombinedPositions[existingMarketIndex] = action.payload;
             }
 
-            if (existingCombinedPositions.length == 0 || matchingCode == CombinedPositionsMatchingCode.NOTHING_COMMON) {
+            if (matchingCode == CombinedPositionsMatchingCode.NOTHING_COMMON) {
                 existingCombinedPositions.push(action.payload);
             }
 
