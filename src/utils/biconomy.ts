@@ -11,8 +11,15 @@ import {
     SessionKeyManagerModule,
 } from '@biconomy/modules';
 import { defaultAbiCoder } from 'ethers/lib/utils.js';
+import { checkAllowance } from './network';
+import sportsAMMContract from './contracts/sportsAMMContract';
+import parlayMarketsAMMContract from './contracts/parlayMarketsAMMContract';
+import { Network } from 'enums/network';
+import erc20Contract from './contracts/sUSDContract';
+import networkConnector from './networkConnector';
 
-const ERC20SVM = '0x000000D50C68705bd6897B2d17c7de32FB519fDA'; // session validation module for erc20 transfers
+// const ERC20SVM = '0x000000D50C68705bd6897B2d17c7de32FB519fDA'; // session validation module for erc20 transfers
+const OVERTIMEVM = process.env.REACT_APP_OVERTIME_VALIDATION_MODULE; // overtime session validation module on Optimism
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
 
 export const executeBiconomyTransaction = async (
@@ -22,7 +29,27 @@ export const executeBiconomyTransaction = async (
     data?: ReadonlyArray<any>
 ): Promise<ethers.providers.TransactionReceipt | undefined> => {
     if (biconomyConnector.wallet && contract) {
-        console.log('collateral: ', collateral);
+        // const managerModuleAddr = DEFAULT_SESSION_KEY_MANAGER_MODULE;
+
+        // // get session key from local storage
+        // const sessionKeyPrivKey = window.localStorage.getItem('sessionPKey');
+
+        // console.log('sessionKeyPrivKey', sessionKeyPrivKey);
+        // if (!sessionKeyPrivKey) {
+        //     console.log('errore');
+        // }
+        // const sessionSigner = new ethers.Wallet(sessionKeyPrivKey as string);
+        // console.log('sessionSigner', sessionSigner);
+
+        // // generate sessionModule
+        // const sessionModule = await SessionKeyManagerModule.create({
+        //     moduleAddress: managerModuleAddr,
+        //     smartAccountAddress: biconomyConnector.wallet.accountAddress as string,
+        // });
+
+        // // set active module to sessionModule
+        // biconomyConnector.wallet = biconomyConnector.wallet.setActiveValidationModule(sessionModule);
+
         let populatedTx;
         if (data) {
             populatedTx = await contract.populateTransaction[methodName](...data);
@@ -35,7 +62,17 @@ export const executeBiconomyTransaction = async (
             data: populatedTx.data,
         };
 
-        const userOperation = await biconomyConnector.wallet.buildUserOp([transaction]);
+        // const userOperation = await biconomyConnector.wallet.buildUserOp([transaction], {
+        //     skipBundlerGasEstimation: false,
+        //     params: {
+        //         sessionSigner: sessionSigner,
+        //         sessionValidationModule: OVERTIMEVM,
+        //     },
+        // });
+
+        const userOperation = await biconomyConnector.wallet.buildUserOp([transaction], {
+            skipBundlerGasEstimation: false,
+        });
 
         const biconomyPaymaster = biconomyConnector.wallet.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
 
@@ -43,8 +80,6 @@ export const executeBiconomyTransaction = async (
             mode: PaymasterMode.ERC20,
             tokenList: [collateral], // collateral for paying gas
         });
-
-        console.log('buyFeeQuotesResponse: ', buyFeeQuotesResponse);
 
         const feeQuotesBuy = buyFeeQuotesResponse.feeQuotes as PaymasterFeeQuote[];
         const spenderBuy = buyFeeQuotesResponse.tokenPaymasterAddress || '';
@@ -58,7 +93,7 @@ export const executeBiconomyTransaction = async (
         const paymasterServiceData = {
             mode: PaymasterMode.ERC20,
             feeTokenAddress: feeQuotesBuy[0].tokenAddress,
-            calculateGasLimits: true, // Always recommended and especially when using token paymaster
+            calculateGasLimits: true, // Always recommended to be true and especially when using token paymaster
         };
 
         try {
@@ -86,8 +121,11 @@ export const executeBiconomyTransaction = async (
 
         const signedUserOp = await biconomyConnector.wallet.signUserOp(finalUserOp);
         const response = await biconomyConnector.wallet.sendSignedUserOp(signedUserOp);
+        // const response = await biconomyConnector.wallet.sendUserOp(finalUserOp, {
+        //     sessionSigner: sessionSigner,
+        //     sessionValidationModule: OVERTIMEVM,
+        // });
         const receipt = (await response.wait(1)).receipt;
-        console.log(receipt);
         return receipt;
     }
 };
@@ -100,6 +138,17 @@ export const getGasFeesForTx = async (
 ): Promise<number | undefined> => {
     if (biconomyConnector.wallet && contract) {
         console.log('collateral: ', collateral);
+
+        // // get session key from local storage
+        // const sessionKeyPrivKey = window.localStorage.getItem('sessionPKey');
+
+        // console.log('sessionKeyPrivKey', sessionKeyPrivKey);
+        // if (!sessionKeyPrivKey) {
+        //     console.log('errore');
+        // }
+        // const sessionSigner = new ethers.Wallet(sessionKeyPrivKey as string);
+        // console.log('sessionSigner', sessionSigner);
+
         let populatedTx;
         if (data) {
             populatedTx = await contract.populateTransaction[methodName](...data);
@@ -111,6 +160,14 @@ export const getGasFeesForTx = async (
             to: contract.address,
             data: populatedTx.data,
         };
+
+        // {
+        //     skipBundlerGasEstimation: false,
+        //     params: {
+        //         sessionSigner: sessionSigner,
+        //         sessionValidationModule: OVERTIMEVM,
+        //     },
+        // }
 
         const userOperation = await biconomyConnector.wallet.buildUserOp([transaction]);
 
@@ -128,31 +185,32 @@ export const getGasFeesForTx = async (
 };
 
 export const checkSession = async () => {
-    if (biconomyConnector.wallet) {
-        const isSessionKeyModuleEnabled = await biconomyConnector.wallet.isModuleEnabled(
-            DEFAULT_SESSION_KEY_MANAGER_MODULE
-        );
-        const isBRMenabled = await biconomyConnector.wallet.isModuleEnabled(DEFAULT_BATCHED_SESSION_ROUTER_MODULE);
-        console.log('is session enabled: ', isSessionKeyModuleEnabled);
-        console.log('is batched session enabled: ', isBRMenabled);
+    try {
+        if (biconomyConnector.wallet) {
+            const isSessionKeyModuleEnabled = await biconomyConnector.wallet.isModuleEnabled(
+                DEFAULT_SESSION_KEY_MANAGER_MODULE
+            );
+            const isBRMenabled = await biconomyConnector.wallet.isModuleEnabled(DEFAULT_BATCHED_SESSION_ROUTER_MODULE);
+            const isActiveValidationModuleDefined = biconomyConnector.wallet.isActiveValidationModuleDefined();
+            console.log('sessions: ', isSessionKeyModuleEnabled, isBRMenabled, isActiveValidationModuleDefined);
+            return isSessionKeyModuleEnabled && isBRMenabled;
+        }
+    } catch {
+        return false;
     }
 };
 
-export const createSession = async (scwAddress: string, collateralAddress: string, receiverAddress: string) => {
+export const createSession = async (scwAddress: string, collateralAddress: string, networkId: Network) => {
     const biconomySmartAccount = biconomyConnector.wallet;
     if (scwAddress && biconomySmartAccount) {
         try {
             const managerModuleAddr = DEFAULT_SESSION_KEY_MANAGER_MODULE;
             const routerModuleAddr = DEFAULT_BATCHED_SESSION_ROUTER_MODULE;
 
-            const mockSessionModuleAddr = '0x7Ba4a7338D7A90dfA465cF975Cc6691812C3772E';
-
             // -----> setMerkle tree tx flow
             // create dapp side session key
             const sessionSigner = ethers.Wallet.createRandom();
             const sessionKeyEOA = await sessionSigner.getAddress();
-            console.log('sessionKeyEOA', sessionKeyEOA);
-            // BREWARE JUST FOR DEMO: update local storage with session key
             window.localStorage.setItem('sessionPKey', sessionSigner.privateKey);
 
             // generate sessionModule
@@ -167,47 +225,50 @@ export const createSession = async (scwAddress: string, collateralAddress: strin
                 smartAccountAddress: scwAddress,
             });
 
-            // cretae session key data
+            // create session key data
             const sessionKeyData = defaultAbiCoder.encode(
                 ['address', 'address', 'address', 'uint256'],
                 [
                     sessionKeyEOA,
                     collateralAddress, // erc20 token address
-                    receiverAddress, // receiver address, SportsAMM and ParlayAMM
+                    sportsAMMContract.addresses[networkId], // receiver address, SportsAMM and ParlayAMM
                     ethers.utils.parseUnits('50'.toString(), 6).toHexString(), // 50 usdc amount
                 ]
             );
 
-            const sessionKeyData2 = defaultAbiCoder.encode(['address'], [sessionKeyEOA]);
-
+            const dateAfter = new Date();
+            const dateUntil = new Date();
+            dateUntil.setHours(dateAfter.getHours() + 1); // add 1h to date, so we create 1h session
             const sessionTxData = await sessionRouterModule.createSessionData([
                 {
-                    validUntil: 0,
-                    validAfter: 0,
-                    sessionValidationModule: ERC20SVM,
+                    validUntil: dateUntil.getTime(),
+                    validAfter: dateAfter.getTime(),
+                    sessionValidationModule: OVERTIMEVM ?? '',
                     sessionPublicKey: sessionKeyEOA,
                     sessionKeyData: sessionKeyData,
                 },
-                {
-                    validUntil: 0,
-                    validAfter: 0,
-                    sessionValidationModule: mockSessionModuleAddr,
-                    sessionPublicKey: sessionKeyEOA,
-                    sessionKeyData: sessionKeyData2,
-                },
             ]);
-            console.log('sessionTxData', sessionTxData);
 
             // tx to set session key
             const tx3 = {
                 to: managerModuleAddr, // session manager module address
                 data: sessionTxData.data,
             };
+            let isSessionKeyModuleEnabled = false;
+            try {
+                isSessionKeyModuleEnabled = await biconomySmartAccount.isModuleEnabled(
+                    DEFAULT_SESSION_KEY_MANAGER_MODULE
+                );
+            } catch {
+                console.log('session is not enabled');
+            }
 
-            const isSessionKeyModuleEnabled = await biconomySmartAccount.isModuleEnabled(
-                DEFAULT_SESSION_KEY_MANAGER_MODULE
-            );
-            const isBRMenabled = await biconomySmartAccount.isModuleEnabled(DEFAULT_BATCHED_SESSION_ROUTER_MODULE);
+            let isBRMenabled = false;
+            try {
+                isBRMenabled = await biconomySmartAccount.isModuleEnabled(DEFAULT_BATCHED_SESSION_ROUTER_MODULE);
+            } catch {
+                console.log('session is not enabled');
+            }
 
             const transactionArray = [];
             if (!isSessionKeyModuleEnabled) {
@@ -222,9 +283,104 @@ export const createSession = async (scwAddress: string, collateralAddress: strin
             }
             transactionArray.push(tx3);
 
+            const collateralContract = new Contract(
+                collateralAddress,
+                erc20Contract.abi,
+                biconomyConnector.wallet?.provider
+            );
+
+            const [sportsAMMAllowance, parlayAMMAllowance] = await Promise.all([
+                checkAllowance(
+                    ethers.constants.MaxUint256,
+                    collateralContract,
+                    scwAddress,
+                    sportsAMMContract.addresses[networkId]
+                ),
+                checkAllowance(
+                    ethers.constants.MaxUint256,
+                    collateralContract,
+                    scwAddress,
+                    parlayMarketsAMMContract.addresses[networkId]
+                ),
+            ]);
+            const { signer } = networkConnector;
+
+            if (signer) {
+                const collateralContractWithSigner = collateralContract.connect(signer);
+                if (!sportsAMMAllowance) {
+                    const populatedTx = await collateralContractWithSigner.populateTransaction.approve(
+                        sportsAMMContract.addresses[networkId],
+                        ethers.constants.MaxUint256
+                    );
+                    const transaction = {
+                        to: collateralContractWithSigner.address,
+                        data: populatedTx.data,
+                    };
+                    transactionArray.push(transaction);
+                }
+                if (!parlayAMMAllowance) {
+                    const populatedTx = await collateralContractWithSigner.populateTransaction.approve(
+                        parlayMarketsAMMContract.addresses[networkId],
+                        ethers.constants.MaxUint256
+                    );
+                    const transaction = {
+                        to: collateralContractWithSigner.address,
+                        data: populatedTx.data,
+                    };
+                    transactionArray.push(transaction);
+                }
+            }
+
             const partialUserOp = await biconomySmartAccount.buildUserOp(transactionArray);
-            const userOpResponse = await biconomySmartAccount.sendUserOp(partialUserOp);
-            console.log(`userOp Hash: ${userOpResponse.userOpHash}`);
+
+            const biconomyPaymaster = biconomySmartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
+
+            const buyFeeQuotesResponse = await biconomyPaymaster.getPaymasterFeeQuotesOrData(partialUserOp, {
+                mode: PaymasterMode.ERC20,
+                tokenList: [collateralAddress], // collateral for paying gas
+            });
+
+            console.log('buyFeeQuotesResponse: ', buyFeeQuotesResponse);
+
+            const feeQuotesBuy = buyFeeQuotesResponse.feeQuotes as PaymasterFeeQuote[];
+            const spenderBuy = buyFeeQuotesResponse.tokenPaymasterAddress || '';
+
+            const finalUserOp = await biconomySmartAccount.buildTokenPaymasterUserOp(partialUserOp, {
+                feeQuote: feeQuotesBuy[0],
+                spender: spenderBuy,
+                maxApproval: true,
+            });
+
+            const paymasterServiceData = {
+                mode: PaymasterMode.ERC20,
+                feeTokenAddress: feeQuotesBuy[0].tokenAddress,
+                calculateGasLimits: true, // Always recommended and especially when using token paymaster
+            };
+
+            try {
+                const paymasterAndDataWithLimits = await biconomyPaymaster.getPaymasterAndData(
+                    finalUserOp,
+                    paymasterServiceData
+                );
+                finalUserOp.paymasterAndData = paymasterAndDataWithLimits.paymasterAndData;
+                if (
+                    paymasterAndDataWithLimits.callGasLimit &&
+                    paymasterAndDataWithLimits.verificationGasLimit &&
+                    paymasterAndDataWithLimits.preVerificationGas
+                ) {
+                    // Returned gas limits must be replaced in your op as you update paymasterAndData.
+                    // Because these are the limits paymaster service signed on to generate paymasterAndData
+                    // If you receive AA34 error check here..
+
+                    finalUserOp.callGasLimit = paymasterAndDataWithLimits.callGasLimit;
+                    finalUserOp.verificationGasLimit = paymasterAndDataWithLimits.verificationGasLimit;
+                    finalUserOp.preVerificationGas = paymasterAndDataWithLimits.preVerificationGas;
+                }
+            } catch (e) {
+                console.log('error received ', e);
+            }
+
+            const userOpResponse = await biconomySmartAccount.sendUserOp(finalUserOp);
             const transactionDetails = await userOpResponse.wait();
             console.log('txHash', transactionDetails.receipt.transactionHash);
         } catch (err: any) {

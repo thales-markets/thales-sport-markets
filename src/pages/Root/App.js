@@ -38,7 +38,6 @@ import { ParticleProvider } from '@particle-network/provider';
 import biconomyConnector from 'utils/biconomyWallet';
 import { BiconomyPaymaster } from '@biconomy/paymaster';
 import { checkSession } from 'utils/biconomy';
-// import { checkSession } from 'utils/biconomy';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -163,16 +162,10 @@ const App = () => {
                     });
 
                     const swAddress = await account.getAccountAddress();
-                    const deployed = await account.isAccountDeployed(swAddress);
-
                     biconomyConnector.setWallet(account);
                     biconomyConnector.setUserInfo(userInfo);
-                    // await checkSession();
-                    // console.log('is account deployed: ', deployed);
                     dispatch(updateWallet({ walletAddress: swAddress, isAA: true }));
                 }
-
-                console.log(web3Provider);
 
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
