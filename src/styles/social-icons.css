@@ -32,3 +32,16 @@
 .icon--wallet::before {
     content: '\0047';
 }
+
+.icon--visa::before {
+    content: '\004A';
+}
+.icon--master::before {
+    content: '\004B';
+}
+.icon--applepay::before {
+    content: '\0048';
+}
+.icon--googlepay::before {
+    content: '\0049';
+}

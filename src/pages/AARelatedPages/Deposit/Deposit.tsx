@@ -1,7 +1,3 @@
-import applepay from 'assets/images/onramper/applepay.svg';
-import gpay from 'assets/images/onramper/gpay.svg';
-import master from 'assets/images/onramper/master.svg';
-import visa from 'assets/images/onramper/visa.svg';
 import CollateralSelector from 'components/CollateralSelector';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
@@ -162,10 +158,10 @@ const Deposit: React.FC = () => {
                             window.open(onramperUrl, '_blank');
                         }}
                     >
-                        <img src={visa} />
-                        <img src={master} />
-                        <img src={applepay} />
-                        <img src={gpay} />
+                        <OnramperIcons className={`social-icon icon--visa`} />
+                        <OnramperIcons className={`social-icon icon--master`} />
+                        <OnramperIcons className={`social-icon icon--applepay`} />
+                        <OnramperIcons className={`social-icon icon--googlepay`} />
                     </OnramperDiv>
                 </FormContainer>
                 <BalanceSection>
@@ -208,6 +204,10 @@ const BuyWithText = styled.span`
     margin: auto;
     margin-top: 80px;
     margin-bottom: 60px;
+`;
+
+const OnramperIcons = styled.i`
+    font-size: 100px;
 `;
 
 const WalletAddressInputWrapper = styled(FlexDiv)`
