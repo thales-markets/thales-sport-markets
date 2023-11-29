@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from './styled-components';
 
-import WrapperNavigation from './components/WrapperNavigation';
-import MyTickets from './components/MyTickets';
-import MyPortfolio from './components/MyPortfolio';
+import { useSelector } from 'react-redux';
+import { getIsAA } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
+import MyPortfolio from './components/MyPortfolio';
+import MyTickets from './components/MyTickets';
+import WrapperNavigation from './components/WrapperNavigation';
 
 const Profile: React.FC = () => {
     const selectedTabFromQuery = getQueryStringVal('selected-tab');
+    const isAA = useSelector((state: RootState) => getIsAA(state));
 
     const [tabIndex, setTabIndex] = useState<number>(0);
     const [, setSelectedTab] = useQueryParam('selected-tab', '0');
@@ -25,9 +29,15 @@ const Profile: React.FC = () => {
 
     return (
         <Container>
-            <WrapperNavigation tabIndex={tabIndex} onChangeTab={(index) => handleTabChange(index)} />
-            {tabIndex == 0 && <MyTickets />}
-            {tabIndex == 1 && <MyPortfolio />}
+            {isAA ? (
+                <>
+                    <WrapperNavigation tabIndex={tabIndex} onChangeTab={(index) => handleTabChange(index)} />
+                    {tabIndex == 0 && <MyTickets />}
+                    {tabIndex == 1 && <MyPortfolio />}
+                </>
+            ) : (
+                <MyTickets />
+            )}
         </Container>
     );
 };
