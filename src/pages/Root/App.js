@@ -1,43 +1,42 @@
+import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from '@biconomy/account';
+import { Bundler } from '@biconomy/bundler';
+import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from '@biconomy/modules';
+import { BiconomyPaymaster } from '@biconomy/paymaster';
+import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { ParticleNetwork } from '@particle-network/auth';
+import { ParticleProvider } from '@particle-network/provider';
+import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
-import React, { lazy, Suspense, useEffect } from 'react';
+import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
+import ROUTES from 'constants/routes';
+import { ethers } from 'ethers';
+import DappLayout from 'layouts/DappLayout';
+import LandingPageLayout from 'layouts/LandingPageLayout';
+import Theme from 'layouts/Theme';
+import Profile from 'pages/Profile';
+import Referral from 'pages/Referral';
+import Wizard from 'pages/Wizard';
+import { Suspense, lazy, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
 import {
+    getIsAA,
     getNetworkId,
-    updateNetworkSettings,
-    switchToNetworkId,
-    updateWallet,
     getSwitchToNetworkId,
+    switchToNetworkId,
+    updateNetworkSettings,
+    updateWallet,
 } from 'redux/modules/wallet';
-import queryConnector from 'utils/queryConnector';
-import { history } from 'utils/routes';
-import networkConnector from 'utils/networkConnector';
-import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
-import ROUTES from 'constants/routes';
-import Theme from 'layouts/Theme';
-import DappLayout from 'layouts/DappLayout';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { useAccount, useProvider, useSigner, useDisconnect, useNetwork, mainnet } from 'wagmi';
-import LandingPageLayout from 'layouts/LandingPageLayout';
-import BannerCarousel from 'components/BannerCarousel';
-import { isMobile } from 'utils/device';
-import Profile from 'pages/Profile';
-import Wizard from 'pages/Wizard';
-import Referral from 'pages/Referral';
-import { buildHref } from 'utils/routes';
-import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
-import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from '@biconomy/account';
-import { Bundler } from '@biconomy/bundler';
-import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from '@biconomy/modules';
-import { ethers } from 'ethers';
-import { ParticleNetwork } from '@particle-network/auth';
-import { ParticleProvider } from '@particle-network/provider';
 import biconomyConnector from 'utils/biconomyWallet';
-import { BiconomyPaymaster } from '@biconomy/paymaster';
-import { checkSession } from 'utils/biconomy';
+import { isMobile } from 'utils/device';
+import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
+import networkConnector from 'utils/networkConnector';
+import queryConnector from 'utils/queryConnector';
+import { buildHref, history } from 'utils/routes';
+import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -76,6 +75,7 @@ const App = () => {
     const { trackPageView, trackEvent } = useMatomo();
     const networkId = useSelector((state) => getNetworkId(state));
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
+    const isAA = useSelector((state) => getIsAA(state));
 
     const { address } = useAccount();
     const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
@@ -260,16 +260,21 @@ const App = () => {
                                 </DappLayout>
                             </Route>
 
-                            <Route exact path={ROUTES.Deposit}>
-                                <DappLayout>
-                                    <Deposit />
-                                </DappLayout>
-                            </Route>
-                            <Route exact path={ROUTES.Withdraw}>
-                                <DappLayout>
-                                    <Withdraw />
-                                </DappLayout>
-                            </Route>
+                            {isAA && (
+                                <Route exact path={ROUTES.Deposit}>
+                                    <DappLayout>
+                                        <Deposit />
+                                    </DappLayout>
+                                </Route>
+                            )}
+                            {isAA && (
+                                <Route exact path={ROUTES.Withdraw}>
+                                    <DappLayout>
+                                        <Withdraw />
+                                    </DappLayout>
+                                </Route>
+                            )}
+
                             {isRouteAvailableForNetwork(ROUTES.Leaderboard, networkId) && (
                                 <Route exact path={ROUTES.Leaderboard}>
                                     <DappLayout>
