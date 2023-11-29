@@ -222,6 +222,10 @@ const OnramperDiv = styled(FlexDiv)`
     justify-content: center;
     gap: 10px;
     cursor: pointer;
+    transition: transform 0.3s ease-out;
+    :hover {
+        transform: scale(1.2);
+    }
 `;
 
 const WalletAddressInput = styled.input`
