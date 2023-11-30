@@ -137,8 +137,6 @@ export const getGasFeesForTx = async (
     data?: ReadonlyArray<any>
 ): Promise<number | undefined> => {
     if (biconomyConnector.wallet && contract) {
-        console.log('collateral: ', collateral);
-
         // // get session key from local storage
         // const sessionKeyPrivKey = window.localStorage.getItem('sessionPKey');
 

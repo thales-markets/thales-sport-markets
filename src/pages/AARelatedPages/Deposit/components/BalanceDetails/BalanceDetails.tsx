@@ -124,6 +124,7 @@ const TokenIcon = styled.i`
     font-size: 20px;
     margin-right: 5px;
     color: ${(props) => props.theme.textColor.primary};
+    font-weight: 100;
 `;
 
 const IndividualTokenBalance = styled.span`

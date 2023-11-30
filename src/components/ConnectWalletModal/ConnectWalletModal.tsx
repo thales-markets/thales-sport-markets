@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
@@ -15,6 +15,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { getClassNameForParticalLogin, getSpecificConnectorFromConnectorsArray } from 'utils/biconomy';
 import { Connector, useConnect } from 'wagmi';
+import Checkbox from 'components/fields/Checkbox';
 
 ReactModal.setAppElement('#root');
 
@@ -26,7 +27,7 @@ const defaultStyle = {
         bottom: 'auto',
         padding: '25px',
         backgroundColor: '#181A20',
-        border: 'none',
+        border: '1px solid #5F6180',
         width: '720px',
         borderRadius: '15px',
         marginRight: '-50%',
@@ -50,6 +51,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const { connect, connectors, isLoading, isSuccess } = useConnect();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { openConnectModal } = useConnectModal();
+    const [termsAccepted, setTerms] = useState(false);
 
     useEffect(() => {
         if (isMobile) {
@@ -86,80 +88,85 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     <HeaderContainer>
                         <Header>{t('common.wallet.connect-wallet-modal-title')}</Header>
                     </HeaderContainer>
-                    <SocialLoginWrapper>
-                        <SocialButtonsWrapper>
-                            {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
-                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
-                                if (index == 0 && connector && connector?.ready) {
-                                    return (
-                                        <Button
-                                            key={index}
-                                            onClick={() => handleConnect(connector)}
-                                            oneButtoninRow={true}
-                                        >
-                                            <SocialIcon className={getClassNameForParticalLogin(item)} />
-                                            {item}
-                                        </Button>
-                                    );
-                                }
-                            })}
-                        </SocialButtonsWrapper>
-                        <SocialButtonsWrapper>
-                            {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
-                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
-                                if (index > 0 && index < 3 && connector && connector?.ready) {
-                                    return (
-                                        <Button key={index} onClick={() => handleConnect(connector)}>
-                                            <SocialIcon className={getClassNameForParticalLogin(item)} />
-                                            {item}
-                                        </Button>
-                                    );
-                                }
-                            })}
-                        </SocialButtonsWrapper>
-                        <SocialButtonsWrapper>
-                            {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
-                                const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
-                                if (index > 2 && index < 5 && connector && connector?.ready) {
-                                    return (
-                                        <Button key={index} onClick={() => handleConnect(connector)}>
-                                            <SocialIcon className={getClassNameForParticalLogin(item)} />
-                                            {item}
-                                        </Button>
-                                    );
-                                }
-                            })}
-                        </SocialButtonsWrapper>
-                    </SocialLoginWrapper>
-                    <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
-                    <WalletIconsWrapper>
-                        <WalletIconContainer
-                            onClick={() => {
-                                onClose();
-                                openConnectModal?.();
-                            }}
-                        >
-                            <WalletIcon className={'social-icon icon--wallet'} />
-                            <WalletName>{t('common.wallet.connect-with-wallet')}</WalletName>
-                        </WalletIconContainer>
-                    </WalletIconsWrapper>
-                    <FooterText>
-                        <Trans
-                            i18nKey="common.wallet.disclaimer"
-                            components={{
-                                disclaimer: (
-                                    <Link href={disclaimer}>
-                                        <></>
-                                    </Link>
-                                ),
-                                terms: (
-                                    <Link href={termsOfUse}>
-                                        <></>
-                                    </Link>
-                                ),
-                            }}
-                        />
-                    </FooterText>
+                    <ButtonsContainer disabled={!termsAccepted}>
+                        <SocialLoginWrapper>
+                            <SocialButtonsWrapper>
+                                {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
+                                    const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
+                                    if (index == 0 && connector && connector?.ready) {
+                                        return (
+                                            <Button
+                                                key={index}
+                                                onClick={() => handleConnect(connector)}
+                                                oneButtoninRow={true}
+                                            >
+                                                <SocialIcon className={getClassNameForParticalLogin(item)} />
+                                                {item}
+                                            </Button>
+                                        );
+                                    }
+                                })}
+                            </SocialButtonsWrapper>
+                            <SocialButtonsWrapper>
+                                {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
+                                    const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
+                                    if (index > 0 && index < 3 && connector && connector?.ready) {
+                                        return (
+                                            <Button key={index} onClick={() => handleConnect(connector)}>
+                                                <SocialIcon className={getClassNameForParticalLogin(item)} />
+                                                {item}
+                                            </Button>
+                                        );
+                                    }
+                                })}
+                            </SocialButtonsWrapper>
+                            <SocialButtonsWrapper>
+                                {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
+                                    const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
+                                    if (index > 2 && index < 5 && connector && connector?.ready) {
+                                        return (
+                                            <Button key={index} onClick={() => handleConnect(connector)}>
+                                                <SocialIcon className={getClassNameForParticalLogin(item)} />
+                                                {item}
+                                            </Button>
+                                        );
+                                    }
+                                })}
+                            </SocialButtonsWrapper>
+                        </SocialLoginWrapper>
+                        <ConnectWithLabel>{t('common.wallet.or-connect-with')}</ConnectWithLabel>
+                        <WalletIconsWrapper>
+                            <WalletIconContainer
+                                onClick={() => {
+                                    onClose();
+                                    openConnectModal?.();
+                                }}
+                            >
+                                <WalletIcon className={'social-icon icon--wallet'} />
+                                <WalletName>{t('common.wallet.connect-with-wallet')}</WalletName>
+                            </WalletIconContainer>
+                        </WalletIconsWrapper>
+                    </ButtonsContainer>
+                    <FooterContainer disabled={!termsAccepted}>
+                        <FooterText>
+                            <Trans
+                                i18nKey="common.wallet.disclaimer"
+                                components={{
+                                    disclaimer: (
+                                        <Link href={disclaimer}>
+                                            <></>
+                                        </Link>
+                                    ),
+                                    terms: (
+                                        <Link href={termsOfUse}>
+                                            <></>
+                                        </Link>
+                                    ),
+                                }}
+                            />
+                        </FooterText>
+                        <Checkbox value={''} checked={termsAccepted} onChange={setTerms.bind(this, !termsAccepted)} />
+                    </FooterContainer>
                 </>
             )}
             {isLoading && (
@@ -202,6 +209,9 @@ const Header = styled.h2`
 
 const Link = styled.a`
     color: ${(props) => props.theme.textColor.primary};
+    text-decoration: underline;
+    text-decoration-color: ${(props) => props.theme.textColor.primary};
+    line-height: 18px;
 `;
 
 const SecondaryText = styled.p`
@@ -211,17 +221,32 @@ const SecondaryText = styled.p`
 `;
 
 const FooterText = styled(SecondaryText)`
-    margin-top: 48px;
+    margin: auto;
 `;
 
+const FooterContainer = styled(FlexDivCentered)<{ disabled: boolean }>`
+    margin: 0px 90px;
+    margin-top: 28px;
+    padding-top: 20px;
+
+    @media (max-width: 575px) {
+        margin: 0px 40px;
+        margin-top: 28px;
+    }
+
+    border-top: ${(props) => (props.disabled ? `1px ${props.theme.borderColor.quaternary} solid` : '')};
+`;
 const WalletIconsWrapper = styled(FlexDivCentered)`
     justify-content: center;
-    padding: 0px 23px;
+    padding: 0px 90px;
     align-items: center;
+    @media (max-width: 575px) {
+        padding: 0px 40px;
+    }
 `;
 
 const WalletIcon = styled.i`
-    font-size: 24px;
+    font-size: 20px;
     margin-right: 5px;
     color: ${(props) => props.theme.textColor.primary};
 `;
@@ -234,11 +259,15 @@ const WalletName = styled.span`
     font-weight: 600;
 `;
 
+const ButtonsContainer = styled.div<{ disabled: boolean }>`
+    opacity: ${(props) => (props.disabled ? 0.2 : 1)};
+    pointer-events: ${(props) => (props.disabled ? 'none' : '')};
+`;
+
 const WalletIconContainer = styled(FlexDivCentered)`
     cursor: pointer;
     flex-direction: row;
     width: 100%;
-    margin: 0 3px;
     border-radius: 8px;
     border: ${(props) => `1px ${props.theme.connectWalletModal.border} solid`};
     &:hover {
@@ -254,8 +283,12 @@ const WalletIconContainer = styled(FlexDivCentered)`
 
 const SocialLoginWrapper = styled(FlexDivCentered)`
     position: relative;
-    padding: 0px 23px;
+    padding: 0px 90px;
     flex-direction: column;
+    gap: 10px;
+    @media (max-width: 575px) {
+        padding: 0px 40px;
+    }
 `;
 
 const ConnectWithLabel = styled(SecondaryText)`
@@ -264,9 +297,11 @@ const ConnectWithLabel = styled(SecondaryText)`
 `;
 
 const SocialButtonsWrapper = styled(FlexDivRow)`
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
+    gap: 20px;
     @media (max-width: 575px) {
+        gap: 10px;
         flex-wrap: wrap;
     }
 `;
@@ -283,11 +318,8 @@ const Button = styled(FlexDivCentered)<{ oneButtoninRow?: boolean; active?: bool
     border: 1px ${(props) => props.theme.borderColor.primary} solid;
     color: ${(props) => props.theme.textColor.primary};
     background-color: ${(props) => (props.oneButtoninRow ? props.theme.button.background.tertiary : '')};
-    margin-left: 3px;
-    margin-right: 3px;
-    margin-bottom: 5px;
     font-size: 18px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: capitalize;
     cursor: pointer;
     &:hover {

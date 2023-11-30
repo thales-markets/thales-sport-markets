@@ -27,6 +27,7 @@ import {
 } from '../styled-components';
 import BalanceDetails from './components/BalanceDetails';
 import QRCodeModal from './components/QRCodeModal';
+import { COLLATERALS_AA } from 'constants/currency';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
@@ -105,7 +106,7 @@ const Deposit: React.FC = () => {
                     <InputContainer ref={inputRef}>
                         <CollateralContainer ref={inputRef}>
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId)}
+                                collateralArray={COLLATERALS_AA[networkId]}
                                 selectedItem={selectedToken}
                                 onChangeCollateral={(index) => handleChangeCollateral(index)}
                                 disabled={false}

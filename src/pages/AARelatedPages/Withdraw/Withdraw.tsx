@@ -73,7 +73,7 @@ const Withdraw: React.FC = () => {
 
     const paymentTokenBalance: number = useMemo(() => {
         if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
-            return multipleCollateralBalances.data[getCollaterals(networkId)[selectedToken]];
+            return multipleCollateralBalances.data[getCollaterals(networkId, true)[selectedToken]];
         }
         return 0;
     }, [multipleCollateralBalances.data, multipleCollateralBalances.isSuccess, networkId, selectedToken]);
@@ -113,7 +113,7 @@ const Withdraw: React.FC = () => {
                     <InputLabel>{t('deposit.select-token')}</InputLabel>
                     <CollateralContainer ref={inputRef}>
                         <CollateralSelector
-                            collateralArray={getCollaterals(networkId)}
+                            collateralArray={getCollaterals(networkId, true)}
                             selectedItem={selectedToken}
                             onChangeCollateral={(index) => handleChangeCollateral(index)}
                             disabled={false}
@@ -151,11 +151,11 @@ const Withdraw: React.FC = () => {
                             onChange={(el) => setAmount(Number(el.target.value))}
                             placeholder={t('withdraw.paste-address')}
                             onMaxButton={() => setAmount(paymentTokenBalance)}
-                            currencyLabel={getCollaterals(networkId)[selectedToken]}
+                            currencyLabel={getCollaterals(networkId, true)[selectedToken]}
                             showValidation={!validation.amount && amount > 0}
                             validationMessage={t('withdraw.validation.amount')}
                             balance={formatCurrencyWithKey(
-                                getCollaterals(networkId)[selectedToken],
+                                getCollaterals(networkId, true)[selectedToken],
                                 paymentTokenBalance
                             )}
                         />
@@ -163,7 +163,7 @@ const Withdraw: React.FC = () => {
                     <WarningContainer>
                         <WarningIcon className={'icon icon--warning'} />
                         {t('deposit.send', {
-                            token: getCollaterals(networkId)[selectedToken],
+                            token: getCollaterals(networkId, true)[selectedToken],
                             network: getNetworkNameByNetworkId(networkId),
                         })}
                     </WarningContainer>
@@ -188,7 +188,7 @@ const Withdraw: React.FC = () => {
             {showWithdrawalConfirmationModal && (
                 <WithdrawalConfirmationModal
                     amount={amount}
-                    token={getCollaterals(networkId)[selectedToken]}
+                    token={getCollaterals(networkId, true)[selectedToken]}
                     withdrawalAddress={withdrawalWalletAddress}
                     network={networkId}
                     onClose={() => setWithdrawalConfirmationModalVisibility(false)}
