@@ -49,6 +49,7 @@ const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
 const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
+const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 
 const particle = new ParticleNetwork({
     projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
@@ -298,7 +299,8 @@ const App = () => {
                             )}
                             <Route exact path={ROUTES.Wizard}>
                                 <DappLayout>
-                                    <Wizard />
+                                    {isAA && <GetStarted />}
+                                    {!isAA && <Wizard />}
                                 </DappLayout>
                             </Route>
                             {isRouteAvailableForNetwork(ROUTES.Quiz, networkId) && (

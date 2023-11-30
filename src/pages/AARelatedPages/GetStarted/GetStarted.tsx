@@ -1,33 +1,40 @@
-import { WizardStep } from 'enums/wizard';
+import { GetStartedStep } from 'enums/wizard';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivStart } from 'styles/common';
-import YouTubeVideo from '../../components/YouTubeVideo';
+import { FlexDiv, FlexDivColumn, FlexDivStart } from 'styles/common';
 import Step from './components/Step';
 
-const Wizard: React.FC = () => {
+const GetStarted: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isAA = useSelector((state: RootState) => getIsAA(state));
 
-    const steps: WizardStep[] = [WizardStep.CONNECT_METAMASK, WizardStep.FUND, WizardStep.EXCHANGE, WizardStep.TRADE];
-    const [currentStep, setCurrentStep] = useState(isWalletConnected ? WizardStep.FUND : WizardStep.CONNECT_METAMASK);
+    const steps: GetStartedStep[] = [GetStartedStep.LOG_IN, GetStartedStep.DEPOSIT, GetStartedStep.TRADE];
+    const [currentStep, setCurrentStep] = useState<GetStartedStep>(
+        isWalletConnected && isAA ? GetStartedStep.DEPOSIT : GetStartedStep.LOG_IN
+    );
 
     useEffect(() => {
         if (isWalletConnected) {
-            setCurrentStep(WizardStep.FUND);
+            setCurrentStep(GetStartedStep.DEPOSIT);
         } else {
-            setCurrentStep(WizardStep.CONNECT_METAMASK);
+            setCurrentStep(GetStartedStep.LOG_IN);
         }
     }, [isWalletConnected]);
 
     return (
         <Container>
-            <WizardTitle>{t('wizard.title')}</WizardTitle>
+            <Title>{t('get-started.title')}</Title>
+            <ProgressDisplayWrapper>
+                {steps.map((step, index) => {
+                    return <ProgressBar key={`progress-${index}`} selected={step <= currentStep} />;
+                })}
+            </ProgressDisplayWrapper>
             {steps.map((step, index) => {
                 const stepNumber = index + 1;
                 return (
@@ -42,12 +49,6 @@ const Wizard: React.FC = () => {
                     </React.Fragment>
                 );
             })}
-            <VideoContainer>
-                <YouTubeVideo
-                    source="https://www.youtube.com/embed/udYpsNueZp4"
-                    title="What are Overtime Markets and how to participate?  *UPDATED* Overtime Markets video walk through"
-                />
-            </VideoContainer>
         </Container>
     );
 };
@@ -57,17 +58,32 @@ const Container = styled(FlexDivColumn)`
     margin-bottom: 40px;
 `;
 
-const WizardTitle = styled(FlexDivStart)`
+const Title = styled(FlexDivStart)`
     font-weight: 600;
     font-size: 20px;
     line-height: 24px;
     color: ${(props) => props.theme.textColor.primary};
     margin-top: 20px;
     margin-bottom: 40px;
-    margin-left: 10%;
     @media (max-width: 950px) {
         margin: 20px auto;
     }
+`;
+
+const ProgressDisplayWrapper = styled(FlexDiv)`
+    margin-top: 30px;
+    height: 20px;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+const ProgressBar = styled(FlexDiv)<{ selected?: boolean }>`
+    height: 10px;
+    width: 32%;
+    border-radius: 10px;
+    background-color: ${(props) =>
+        props.selected ? props.theme.progressBar.selected : props.theme.progressBar.unselected};
 `;
 
 const HorizontalLine = styled.hr`
@@ -77,8 +93,4 @@ const HorizontalLine = styled.hr`
     border-radius: 3px;
 `;
 
-const VideoContainer = styled.div`
-    margin-top: 50px;
-`;
-
-export default Wizard;
+export default GetStarted;

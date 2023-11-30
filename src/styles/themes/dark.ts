@@ -140,4 +140,8 @@ export default {
         warningText: Colors.WHITE,
         totalBalanceBackground: Colors.GRAY_SECOND,
     },
+    progressBar: {
+        selected: Colors.BLUE,
+        unselected: Colors.WHITE,
+    },
 };

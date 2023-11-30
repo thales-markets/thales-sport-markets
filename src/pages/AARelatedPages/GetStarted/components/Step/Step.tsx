@@ -1,70 +1,59 @@
-import { useAccountModal, useConnectModal } from '@rainbow-me/rainbowkit';
-import SwapModal from 'components/SwapModal';
+import ConnectWalletModal from 'components/ConnectWalletModal';
 import ROUTES from 'constants/routes';
-import { WizardStep } from 'enums/wizard';
+import { GetStartedStep } from 'enums/wizard';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import FundModal from '../FundModal';
 
 type StepProps = {
     stepNumber: number;
-    stepType: WizardStep;
-    currentStep: WizardStep;
-    setCurrentStep: (step: WizardStep) => void;
+    stepType: GetStartedStep;
+    currentStep: GetStartedStep;
+    setCurrentStep: (step: GetStartedStep) => void;
 };
 
 const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurrentStep }) => {
-    const { openConnectModal } = useConnectModal();
-    const { openAccountModal } = useAccountModal();
-
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isAA = useSelector((state: RootState) => getIsAA(state));
 
-    const [showFundModal, setShowFundModal] = useState(false);
-    const [showSwapModal, setShowSwapModal] = useState(false);
+    const [showWalletConnectModal, setShowWalletConnectModal] = useState<boolean>(false);
 
     const stepTitle = useMemo(() => {
-        let transKey = 'wizard.steps.title';
+        let transKey = 'get-started.steps.title';
         switch (stepType) {
-            case WizardStep.CONNECT_METAMASK:
-                transKey += '.connect-wallet';
+            case GetStartedStep.LOG_IN:
+                transKey += isAA && isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
-            case WizardStep.FUND:
-                transKey += '.fund';
+            case GetStartedStep.DEPOSIT:
+                transKey += '.deposit';
                 break;
-            case WizardStep.EXCHANGE:
-                transKey += '.exchange';
-                break;
-            case WizardStep.TRADE:
+            case GetStartedStep.TRADE:
                 transKey += '.trade';
                 break;
         }
         return t(transKey);
-    }, [stepType]);
+    }, [isAA, isWalletConnected, stepType]);
 
     const stepDescription = useMemo(() => {
-        let transKey = 'wizard.steps.description';
+        let transKey = 'get-started.steps.description';
         switch (stepType) {
-            case WizardStep.CONNECT_METAMASK:
-                transKey += '.connect-wallet';
+            case GetStartedStep.LOG_IN:
+                transKey += isAA && isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
-            case WizardStep.FUND:
-                transKey += '.fund';
+            case GetStartedStep.DEPOSIT:
+                transKey += '.deposit';
                 break;
-            case WizardStep.EXCHANGE:
-                transKey += '.exchange';
-                break;
-            case WizardStep.TRADE:
+            case GetStartedStep.TRADE:
                 transKey += '.trade';
                 break;
         }
@@ -73,25 +62,21 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
             network: getNetworkNameByNetworkId(networkId, true) || getDefaultNetworkName(true),
             collateral: getDefaultCollateral(networkId),
         });
-    }, [stepType, networkId]);
+    }, [stepType, networkId, isAA, isWalletConnected]);
 
     const getStepAction = () => {
         let className = '';
-        let transKey = 'wizard.steps.action';
+        let transKey = 'get-started.steps.action';
         switch (stepType) {
-            case WizardStep.CONNECT_METAMASK:
-                className = 'icon--wallet-connected';
-                transKey += isWalletConnected ? '.connected' : '.connect-wallet';
-                break;
-            case WizardStep.FUND:
+            case GetStartedStep.LOG_IN:
                 className = 'icon--card';
-                transKey += '.fund';
+                transKey += isAA && isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
-            case WizardStep.EXCHANGE:
-                className = 'icon--exchange';
-                transKey += '.exchange';
+            case GetStartedStep.DEPOSIT:
+                className = 'icon--card';
+                transKey += '.deposit';
                 break;
-            case WizardStep.TRADE:
+            case GetStartedStep.TRADE:
                 className = 'icon--logo';
                 transKey += '.trade';
                 break;
@@ -114,7 +99,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
     };
 
     const isActive = currentStep === stepType;
-    const isDisabled = !isWalletConnected && stepType !== WizardStep.CONNECT_METAMASK;
+    const isDisabled = !isWalletConnected && stepType !== GetStartedStep.LOG_IN;
 
     const onStepActionClickHandler = () => {
         if (isDisabled) {
@@ -122,16 +107,13 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
         }
         setCurrentStep(stepType);
         switch (stepType) {
-            case WizardStep.CONNECT_METAMASK:
-                isWalletConnected ? openAccountModal?.() : openConnectModal?.();
+            case GetStartedStep.LOG_IN:
+                setShowWalletConnectModal(true);
                 break;
-            case WizardStep.FUND:
-                setShowFundModal(true);
+            case GetStartedStep.DEPOSIT:
+                window.open(buildHref(ROUTES.Deposit));
                 break;
-            case WizardStep.EXCHANGE:
-                setShowSwapModal(true);
-                break;
-            case WizardStep.TRADE:
+            case GetStartedStep.TRADE:
                 window.open(buildHref(ROUTES.Markets.Home));
                 break;
         }
@@ -161,8 +143,9 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                     </StepActionSection>
                 </>
             )}
-            {showFundModal && <FundModal onClose={() => setShowFundModal(false)} />}
-            {showSwapModal && <SwapModal onClose={() => setShowSwapModal(false)} />}
+            {showWalletConnectModal && (
+                <ConnectWalletModal isOpen={showWalletConnectModal} onClose={() => setShowWalletConnectModal(false)} />
+            )}
         </Container>
     );
 };
