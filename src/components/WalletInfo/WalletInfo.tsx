@@ -82,7 +82,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
                 <RainbowConnectButton.Custom>
                     {({ openAccountModal }) => {
                         return (
-                            <Wrapper>
+                            <Wrapper displayPadding={isWalletConnected}>
                                 {isWalletConnected && (
                                     <WalletAddressInfo
                                         isWalletConnected={isWalletConnected}
