@@ -158,6 +158,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isAA), [
         networkId,
         selectedCollateralIndex,
+        isAA,
     ]);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const collateralAddress = useMemo(

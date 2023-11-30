@@ -160,6 +160,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isAA), [
         networkId,
         selectedCollateralIndex,
+        isAA,
     ]);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const collateralAddress = useMemo(

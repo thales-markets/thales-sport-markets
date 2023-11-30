@@ -50,7 +50,7 @@ const Balance: React.FC = () => {
         } catch (e) {
             return 'N/A';
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, isAA]);
 
     return (
         <Wrapper>
