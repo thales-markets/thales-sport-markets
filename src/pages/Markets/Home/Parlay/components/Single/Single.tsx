@@ -157,7 +157,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isAA), [
         networkId,
         selectedCollateralIndex,
     ]);
@@ -818,7 +818,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess }) => {
                         disabled={isAllowing || isBuying}
                         currencyComponent={
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId)}
+                                collateralArray={getCollaterals(networkId, isAA)}
                                 selectedItem={selectedCollateralIndex}
                                 onChangeCollateral={() => {}}
                                 disabled={isVoucherSelected}

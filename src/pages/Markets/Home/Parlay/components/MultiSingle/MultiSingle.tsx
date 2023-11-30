@@ -155,7 +155,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isAA), [
         networkId,
         selectedCollateralIndex,
     ]);
@@ -911,7 +911,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                 <SummaryLabel>{t('markets.parlay.pay-with')}:</SummaryLabel>
                 <CollateralContainer>
                     <CollateralSelector
-                        collateralArray={getCollaterals(networkId)}
+                        collateralArray={getCollaterals(networkId, isAA)}
                         selectedItem={selectedCollateralIndex}
                         onChangeCollateral={() => {}}
                         disabled={isVoucherSelected}
