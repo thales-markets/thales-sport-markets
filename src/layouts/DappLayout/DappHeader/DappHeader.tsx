@@ -103,10 +103,10 @@ const DappHeader: React.FC = () => {
                                     backgroundColor={theme.button.background.quaternary}
                                     textColor={theme.button.textColor.primary}
                                     borderColor={theme.button.borderColor.secondary}
+                                    width="150px"
                                     fontWeight="400"
                                     additionalStyles={{ borderRadius: '15.5px', fontWeight: '800', fontSize: '14px' }}
-                                    height="24px"
-                                    width="100%"
+                                    height="28px"
                                 >
                                     {t('my-portfolio.deposit')}
                                 </Button>
@@ -114,9 +114,10 @@ const DappHeader: React.FC = () => {
                         )}
                         {!isWalletConnected && (
                             <Button
-                                backgroundColor={theme.button.background.secondary}
+                                backgroundColor={'transparent'}
                                 textColor={theme.button.textColor.quaternary}
                                 borderColor={theme.button.borderColor.secondary}
+                                width="150px"
                                 fontWeight="400"
                                 additionalStyles={{
                                     borderRadius: '15.5px',
@@ -125,7 +126,7 @@ const DappHeader: React.FC = () => {
                                     marginRight: '10px',
                                     textTransform: 'capitalize',
                                 }}
-                                height="24px"
+                                height="28px"
                                 onClick={() =>
                                     dispatch(
                                         setWalletConnectModalVisibility({
@@ -145,12 +146,13 @@ const DappHeader: React.FC = () => {
                                 fontWeight="400"
                                 additionalStyles={{
                                     borderRadius: '15.5px',
-                                    fontWeight: '800',
+                                    fontWeight: '700',
                                     fontSize: '14px',
                                     marginRight: '5px',
                                     textTransform: 'capitalize',
                                 }}
-                                height="24px"
+                                width="150px"
+                                height="28px"
                                 onClick={() =>
                                     dispatch(
                                         setWalletConnectModalVisibility({
@@ -225,7 +227,7 @@ const DappHeader: React.FC = () => {
                                 textColor={theme.button.textColor.quaternary}
                                 borderColor={theme.button.borderColor.secondary}
                                 fontWeight="400"
-                                height="24px"
+                                height="28px"
                                 width="100%"
                                 margin="10px 0 0 0"
                             >

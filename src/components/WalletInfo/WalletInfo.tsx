@@ -122,9 +122,20 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
                                         </WalletBalanceInfo>
                                     ))}
                                 <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
-                                    <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)}>
-                                        <NetworkIcon className={selectedNetwork.iconClassName} />
-                                        {!hideNetworkSwitcher && <DownIcon className={`icon icon--arrow-down`} />}
+                                    <NetworkIconWrapper
+                                        onClick={() => setDropDownOpen(!dropDownOpen)}
+                                        isConnected={isWalletConnected}
+                                    >
+                                        <NetworkIcon
+                                            className={selectedNetwork.iconClassName}
+                                            isConnected={isWalletConnected}
+                                        />
+                                        {!hideNetworkSwitcher && (
+                                            <DownIcon
+                                                isConnected={isWalletConnected}
+                                                className={`icon icon--arrow-down`}
+                                            />
+                                        )}
                                     </NetworkIconWrapper>
                                     {dropDownOpen && !hideNetworkSwitcher && (
                                         <NetworkDropDown>
@@ -153,7 +164,10 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
                                                             });
                                                         }}
                                                     >
-                                                        <NetworkIcon className={network.iconClassName} />
+                                                        <NetworkIcon
+                                                            isConnected={true}
+                                                            className={network.iconClassName}
+                                                        />
                                                         <NetworkText>
                                                             {networkId === network.id && <NetworkSelectedIndicator />}
                                                             {network.shortChainName}
@@ -196,7 +210,7 @@ const Container = styled(FlexDivCentered)`
 const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
     border-radius: 20px;
-    border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+    border: 1px solid ${(props) => props.theme.borderColor.quaternary};
     height: 28px;
     justify-content: space-between;
     align-items: center;
@@ -214,9 +228,6 @@ const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?:
         display: none;
     }
     :hover {
-        .wallet-info {
-            ${(props) => (props.isWalletConnected ? ' display: none;' : '')}
-        }
         .wallet-info-hover {
             display: inline;
             width: fit-content;
@@ -238,8 +249,8 @@ const WalletBalanceInfo = styled.div`
     display: flex;
 `;
 
-const NetworkIconWrapper = styled.div`
-    background: ${(props) => props.theme.background.quaternary};
+const NetworkIconWrapper = styled.div<{ isConnected: boolean }>`
+    background: ${(props) => (props.isConnected ? props.theme.background.quaternary : 'transparent')};
     height: 28px;
     border-radius: 20px;
     display: flex;
@@ -283,14 +294,16 @@ const NetworkText = styled.span`
     text-align: left;
 `;
 
-const NetworkIcon = styled.i`
+const NetworkIcon = styled.i<{ isConnected: boolean }>`
     font-size: 24px;
-    color: ${(props) => props.theme.button.textColor.primary};
+    color: ${(props) =>
+        props.isConnected ? props.theme.button.textColor.primary : props.theme.button.textColor.quaternary};
 `;
 
-const DownIcon = styled.i`
+const DownIcon = styled.i<{ isConnected: boolean }>`
     font-size: 12px;
-    color: ${(props) => props.theme.button.textColor.primary};
+    color: ${(props) =>
+        props.isConnected ? props.theme.button.textColor.primary : props.theme.button.textColor.quaternary};
 `;
 
 const NetworkDropDown = styled.div`
