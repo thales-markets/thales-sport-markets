@@ -9,13 +9,15 @@ import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
 
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import SimpleLoader from 'components/SimpleLoader';
+import Checkbox from 'components/fields/Checkbox';
+import ROUTES from 'constants/routes';
 import { SUPPORTED_PARTICAL_CONNECTORS } from 'constants/wallet';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import { getClassNameForParticalLogin, getSpecificConnectorFromConnectorsArray } from 'utils/biconomy';
+import { navigateTo } from 'utils/routes';
 import { Connector, useConnect } from 'wagmi';
-import Checkbox from 'components/fields/Checkbox';
 
 ReactModal.setAppElement('#root');
 
@@ -52,6 +54,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { openConnectModal } = useConnectModal();
     const [termsAccepted, setTerms] = useState(false);
+    const [isPartical, setIsPartical] = useState<boolean>(false);
 
     useEffect(() => {
         if (isMobile) {
@@ -68,15 +71,19 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
     const handleConnect = (connector: Connector) => {
         try {
             connect({ connector });
+            connector?.id == 'particle' ? setIsPartical(true) : setIsPartical(false);
         } catch (e) {
             console.log('Error occurred');
         }
     };
 
     useEffect(() => {
-        if (isSuccess) onClose();
+        if (isSuccess) {
+            if (isPartical) navigateTo(ROUTES.Wizard);
+            onClose();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSuccess]);
+    }, [isSuccess, isPartical]);
 
     return (
         <ReactModal isOpen={isOpen} onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={defaultStyle}>
