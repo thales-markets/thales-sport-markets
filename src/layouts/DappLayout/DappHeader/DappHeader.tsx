@@ -220,7 +220,60 @@ const DappHeader: React.FC = () => {
                             />
                         </MenuIconContainer>
                     </WrapperMobile>
-                    {location.pathname !== ROUTES.Wizard && (
+                    <MobileButtonWrapper>
+                        {!isWalletConnected && (
+                            <Button
+                                backgroundColor={'transparent'}
+                                textColor={theme.button.textColor.quaternary}
+                                borderColor={theme.button.borderColor.secondary}
+                                width="140px"
+                                fontWeight="400"
+                                additionalStyles={{
+                                    borderRadius: '15.5px',
+                                    fontWeight: '800',
+                                    fontSize: '14px',
+                                    textTransform: 'capitalize',
+                                }}
+                                height="28px"
+                                onClick={() =>
+                                    dispatch(
+                                        setWalletConnectModalVisibility({
+                                            visibility: true,
+                                        })
+                                    )
+                                }
+                            >
+                                {t('get-started.log-in')}
+                            </Button>
+                        )}
+                        {!isWalletConnected && (
+                            <Button
+                                backgroundColor={theme.button.background.quaternary}
+                                textColor={theme.button.textColor.primary}
+                                borderColor={theme.button.borderColor.secondary}
+                                fontWeight="400"
+                                additionalStyles={{
+                                    borderRadius: '15.5px',
+                                    fontWeight: '700',
+                                    fontSize: '14px',
+                                    textTransform: 'capitalize',
+                                }}
+                                width="140px"
+                                height="28px"
+                                onClick={() =>
+                                    dispatch(
+                                        setWalletConnectModalVisibility({
+                                            visibility: true,
+                                        })
+                                    )
+                                }
+                            >
+                                {t('get-started.sign-up')}
+                            </Button>
+                        )}
+                        {!isWalletConnected && <WalletInfo />}
+                    </MobileButtonWrapper>
+                    {location.pathname !== ROUTES.Wizard && isWalletConnected && (
                         <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
                             <Button
                                 backgroundColor={theme.button.background.secondary}
@@ -363,6 +416,12 @@ const Count = styled.span`
     color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 800;
     font-size: 12px;
+`;
+
+const MobileButtonWrapper = styled(FlexDivRowCentered)`
+    width: 100%;
+    margin-top: 10px;
+    gap: 10px;
 `;
 
 export default DappHeader;
