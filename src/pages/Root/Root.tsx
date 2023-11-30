@@ -8,15 +8,15 @@ import '@rainbow-me/rainbowkit/dist/index.css';
 import { connectorsForWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import {
     injectedWallet,
-    // rainbowWallet,
-    // metaMaskWallet,
-    // coinbaseWallet,
+    rainbowWallet,
+    metaMaskWallet,
+    coinbaseWallet,
     walletConnectWallet,
-    // braveWallet,
-    // ledgerWallet,
-    // imTokenWallet,
-    // trustWallet,
-    // rabbyWallet,
+    braveWallet,
+    ledgerWallet,
+    imTokenWallet,
+    trustWallet,
+    rabbyWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { optimism, optimismGoerli, arbitrum } from 'wagmi/chains';
@@ -97,17 +97,17 @@ const connectors = connectorsForWallets([
     {
         groupName: 'Recommended',
         wallets: [
-            ...particleWallets,
-            // metaMaskWallet({ projectId, chains }),
+            metaMaskWallet({ projectId, chains }),
             walletConnectWallet({ projectId, chains }),
-            // rabbyWallet({ chains }),
-            // braveWallet({ chains }),
-            // ledgerWallet({ projectId, chains }),
-            // trustWallet({ projectId, chains }),
+            rabbyWallet({ chains }),
+            braveWallet({ chains }),
+            ledgerWallet({ projectId, chains }),
+            trustWallet({ projectId, chains }),
             injectedWallet({ chains }),
-            // coinbaseWallet({ appName: 'Overtime', chains }),
-            // rainbowWallet({ projectId, chains }),
-            // imTokenWallet({ projectId, chains }),
+            coinbaseWallet({ appName: 'Overtime', chains }),
+            rainbowWallet({ projectId, chains }),
+            imTokenWallet({ projectId, chains }),
+            ...particleWallets,
         ],
     },
 ]);
