@@ -17,7 +17,12 @@ import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
@@ -90,7 +95,7 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <Logo />
                     <RightContainer>
-                        <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
+                        {/* <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
                             <Button
                                 backgroundColor={theme.button.background.quaternary}
                                 textColor={theme.button.textColor.primary}
@@ -102,7 +107,53 @@ const DappHeader: React.FC = () => {
                             >
                                 {t('my-portfolio.deposit')}
                             </Button>
-                        </SPAAnchor>
+                        </SPAAnchor> */}
+                        <Button
+                            backgroundColor={theme.button.background.secondary}
+                            textColor={theme.button.textColor.quaternary}
+                            borderColor={theme.button.borderColor.secondary}
+                            fontWeight="400"
+                            additionalStyles={{
+                                borderRadius: '15.5px',
+                                fontWeight: '800',
+                                fontSize: '14px',
+                                marginRight: '10px',
+                                textTransform: 'capitalize',
+                            }}
+                            height="24px"
+                            onClick={() =>
+                                dispatch(
+                                    setWalletConnectModalVisibility({
+                                        visibility: true,
+                                    })
+                                )
+                            }
+                        >
+                            {t('get-started.log-in')}
+                        </Button>
+                        <Button
+                            backgroundColor={theme.button.background.quaternary}
+                            textColor={theme.button.textColor.primary}
+                            borderColor={theme.button.borderColor.secondary}
+                            fontWeight="400"
+                            additionalStyles={{
+                                borderRadius: '15.5px',
+                                fontWeight: '800',
+                                fontSize: '14px',
+                                marginRight: '5px',
+                                textTransform: 'capitalize',
+                            }}
+                            height="24px"
+                            onClick={() =>
+                                dispatch(
+                                    setWalletConnectModalVisibility({
+                                        visibility: true,
+                                    })
+                                )
+                            }
+                        >
+                            {t('get-started.sign-up')}
+                        </Button>
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
                         <MenuIcon
