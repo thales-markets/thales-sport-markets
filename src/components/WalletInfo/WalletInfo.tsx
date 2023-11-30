@@ -1,6 +1,14 @@
+import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
+import ConnectWalletModal from 'components/ConnectWalletModal';
+import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
+import { Network } from 'enums/network';
+import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
+import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
+import OutsideClickHandler from 'react-outside-click-handler';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getIsWalletConnected,
     getNetworkId,
@@ -11,20 +19,12 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { truncateAddress } from 'utils/formatters/string';
-import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
-import OutsideClickHandler from 'react-outside-click-handler';
-import { changeNetwork } from 'utils/network';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import { formatCurrency } from 'utils/formatters/number';
-import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { Network } from 'enums/network';
-import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
-import { useSwitchNetwork } from 'wagmi';
 import { getDefaultCollateral } from 'utils/collaterals';
-import ConnectWalletModal from 'components/ConnectWalletModal';
+import { formatCurrency } from 'utils/formatters/number';
+import { truncateAddress } from 'utils/formatters/string';
+import { changeNetwork } from 'utils/network';
+import { useSwitchNetwork } from 'wagmi';
 
 type WalletInfoProps = {
     onCloseMobile?: () => void;
@@ -83,41 +83,30 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
                     {({ openAccountModal }) => {
                         return (
                             <Wrapper>
-                                <ConnectWalletModal
-                                    isOpen={connectWalletModalVisibility}
-                                    onClose={() =>
-                                        dispatch(
-                                            setWalletConnectModalVisibility({
-                                                visibility: !connectWalletModalVisibility,
-                                            })
-                                        )
-                                    }
-                                />
-                                <WalletAddressInfo
-                                    isWalletConnected={isWalletConnected}
-                                    isClickable={true}
-                                    onClick={
-                                        isWalletConnected
-                                            ? openAccountModal
-                                            : () => {
-                                                  dispatch(
-                                                      setWalletConnectModalVisibility({
-                                                          visibility: !connectWalletModalVisibility,
-                                                      })
-                                                  );
-                                                  onCloseMobile ? onCloseMobile() : '';
-                                              }
-                                    }
-                                >
-                                    <Text className="wallet-info">
-                                        {isWalletConnected
-                                            ? truncateAddress(walletAddress, 5, 5)
-                                            : t('common.wallet.connect-your-wallet')}
-                                    </Text>
-                                    {isWalletConnected && (
-                                        <Text className="wallet-info-hover">{t('common.wallet.wallet-options')}</Text>
-                                    )}
-                                </WalletAddressInfo>
+                                {isWalletConnected && (
+                                    <WalletAddressInfo
+                                        isWalletConnected={isWalletConnected}
+                                        isClickable={true}
+                                        onClick={
+                                            isWalletConnected
+                                                ? openAccountModal
+                                                : () => {
+                                                      dispatch(
+                                                          setWalletConnectModalVisibility({
+                                                              visibility: !connectWalletModalVisibility,
+                                                          })
+                                                      );
+                                                      onCloseMobile ? onCloseMobile() : '';
+                                                  }
+                                        }
+                                    >
+                                        <Text className="wallet-info">
+                                            {isWalletConnected
+                                                ? truncateAddress(walletAddress, 5, 5)
+                                                : t('common.wallet.connect-your-wallet')}
+                                        </Text>
+                                    </WalletAddressInfo>
+                                )}
                                 {!isMobile &&
                                     isWalletConnected &&
                                     (overtimeVoucher ? (
@@ -179,6 +168,16 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
                     }}
                 </RainbowConnectButton.Custom>
             </FlexDivColumn>
+            <ConnectWalletModal
+                isOpen={connectWalletModalVisibility}
+                onClose={() =>
+                    dispatch(
+                        setWalletConnectModalVisibility({
+                            visibility: !connectWalletModalVisibility,
+                        })
+                    )
+                }
+            />
         </Container>
     );
 };
@@ -194,15 +193,14 @@ const Container = styled(FlexDivCentered)`
     }
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
     border-radius: 20px;
     border: 2px solid ${(props) => props.theme.borderColor.quaternary};
-    min-width: 160px;
     height: 28px;
     justify-content: space-between;
     align-items: center;
-    padding-left: 10px;
+    padding-left: ${(props) => (props.displayPadding ? '10px' : '')};
 `;
 
 const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
