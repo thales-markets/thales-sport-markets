@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { BigNumber, ethers } from 'ethers';
-import { bigNumberFormatter, coinParser } from 'utils/formatters/ethers';
+import { bigNumberFormatter, coinParser } from 'thales-utils';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import Checkbox from 'components/fields/Checkbox';

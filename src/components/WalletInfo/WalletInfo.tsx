@@ -1,7 +1,6 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
-import { Network } from 'enums/network';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import React, { useMemo, useState } from 'react';
@@ -19,12 +18,13 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { truncateAddress, changeNetwork, formatCurrency } from 'thales-utils';
+
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getDefaultCollateral } from 'utils/collaterals';
-import { formatCurrency } from 'utils/formatters/number';
-import { truncateAddress } from 'utils/formatters/string';
-import { changeNetwork } from 'utils/network';
+
 import { useSwitchNetwork } from 'wagmi';
+import { getDefaultCollateral } from 'utils/collaterals';
+import { SupportedNetwork } from 'types/network';
 
 type WalletInfoProps = {
     onCloseMobile?: () => void;
@@ -158,7 +158,9 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
                                                                 // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
                                                                 dispatch(
                                                                     switchToNetworkId({
-                                                                        networkId: Number(network.id) as Network,
+                                                                        networkId: Number(
+                                                                            network.id
+                                                                        ) as SupportedNetwork,
                                                                     })
                                                                 );
                                                             });

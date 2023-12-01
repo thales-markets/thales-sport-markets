@@ -192,11 +192,7 @@ const DappHeader: React.FC = () => {
                         )}
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
-                        <MenuIcon
-                            onClick={() => setNavMenuVisibility(true)}
-                            data-matomo-category="dapp-header"
-                            data-matomo-action="menu-icon"
-                        />
+                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
                         <NavMenu
                             visibility={navMenuVisibility}
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}

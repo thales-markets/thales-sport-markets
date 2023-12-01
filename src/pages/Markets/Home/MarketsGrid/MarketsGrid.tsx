@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { isMobile } from 'utils/device';
-import { addHoursToCurrentDate } from 'utils/formatters/date';
+import { addHoursToCurrentDate } from 'thales-utils';
 import MarketsList from '../MarketsList';
 
 type MarketsGridProps = {

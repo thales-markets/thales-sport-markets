@@ -24,17 +24,17 @@ import SelectInput from 'components/SelectInput';
 import Checkbox from 'components/fields/Checkbox';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { LINKS } from 'constants/links';
-import { Network } from 'enums/network';
 import { refetchBalances } from 'utils/queryConnector';
 import TextInput from '../fields/TextInput/TextInput';
-import { coinParser } from 'utils/formatters/ethers';
+import { coinParser } from 'thales-utils';
 import { getDefaultCollateral } from 'utils/collaterals';
+import { SupportedNetwork } from 'types/network';
 
 type MintVoucherModalProps = {
     onClose: () => void;
 };
 
-const getVoucherOptions = (networkId: Network): Array<{ value: number; label: string }> => {
+const getVoucherOptions = (networkId: SupportedNetwork): Array<{ value: number; label: string }> => {
     const collateral = getDefaultCollateral(networkId);
     return [
         { value: 5, label: `5 ${collateral}` },

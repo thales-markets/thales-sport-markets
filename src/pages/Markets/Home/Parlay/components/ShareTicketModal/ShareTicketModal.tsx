@@ -1,4 +1,3 @@
-import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LINKS } from 'constants/links';
 import { toPng } from 'html-to-image';
@@ -11,8 +10,8 @@ import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
+import { isFirefox, isIos, isMetamask } from 'thales-utils';
 import { ParlaysMarket } from 'types/markets';
-import { isFirefox, isIos, isMetamask } from 'utils/device';
 import { TwitterIcon } from '../styled-components';
 import MyTicket from './components/MyTicket';
 
@@ -38,7 +37,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     onClose,
 }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const { trackEvent } = useMatomo();
 
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
@@ -191,11 +189,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const onTwitterShareClick = () => {
         if (!isLoading) {
-            trackEvent({
-                category: 'share-ticket-modal',
-                action: 'click-on-share-tw-icon',
-            });
-
             if (isMetamaskBrowser) {
                 // Metamask dosn't support image download neither clipboard.write
                 toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);

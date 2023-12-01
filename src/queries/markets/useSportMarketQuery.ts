@@ -1,13 +1,12 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { CombinedMarketsContractData, SportMarketInfo } from 'types/markets';
+import { SportMarketInfo } from 'types/markets';
 import thalesData from 'thales-data';
 import { Network } from 'enums/network';
 import networkConnector from 'utils/networkConnector';
 import { insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
 import { getIsOneSideMarket, getMarketAddressesFromSportMarketArray } from 'utils/markets';
-import { getDefaultDecimalsForNetwork } from 'utils/network';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { getDefaultDecimalsForNetwork, bigNumberFormatter } from 'thales-utils';
 
 const useSportMarketQuery = (
     marketAddress: string,
@@ -20,23 +19,28 @@ const useSportMarketQuery = (
             try {
                 const { sportPositionalMarketDataContract } = networkConnector;
 
-                const parentMarketFromGraph: SportMarketInfo[] = await thalesData.sportMarkets.markets({
-                    network: networkId,
-                    market: marketAddress,
-                });
+                const [parentMarketFromGraph, childMarkets] = await Promise.all([
+                    thalesData.sportMarkets.markets({
+                        network: networkId,
+                        market: marketAddress,
+                    }),
+                    thalesData.sportMarkets.markets({
+                        network: networkId,
+                        parentMarket: marketAddress,
+                    }),
+                ]);
 
-                const childMarkets: SportMarketInfo[] = await thalesData.sportMarkets.markets({
-                    network: networkId,
-                    parentMarket: marketAddress,
-                });
+                const parentMarket = parentMarketFromGraph ? parentMarketFromGraph[0] : undefined;
+                const marketAddresses = getMarketAddressesFromSportMarketArray([parentMarket]);
 
-                const parentMarketData = await sportPositionalMarketDataContract?.getMarketData(marketAddress);
+                const [parentMarketData, combinedMarketsContractData] = await Promise.all([
+                    sportPositionalMarketDataContract?.getMarketData(marketAddress),
+                    sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(marketAddresses),
+                ]);
 
                 if (parentMarketFromGraph) {
-                    const parentMarket = parentMarketFromGraph[0];
                     parentMarket.isOneSideMarket = getIsOneSideMarket(Number(parentMarket.tags[0]));
                     parentMarket.childMarkets = childMarkets;
-                    const marketAddresses = getMarketAddressesFromSportMarketArray([parentMarket]);
                     parentMarket.homeOdds = parentMarketData.odds[0]
                         ? bigNumberFormatter(parentMarketData.odds[0], getDefaultDecimalsForNetwork(networkId))
                         : 0;
@@ -49,36 +53,36 @@ const useSportMarketQuery = (
                     parentMarket.gameId = parentMarketData.gameId;
 
                     // Child Markets contract odds
-                    for (let i = 0; i < parentMarket.childMarkets.length; i++) {
-                        const marketDataOfChildMarket = await sportPositionalMarketDataContract?.getMarketData(
-                            parentMarket.childMarkets[i].address
-                        );
+                    const childMarketsOddsPromises = [];
 
-                        marketDataOfChildMarket.odds[0]
+                    for (let i = 0; i < parentMarket.childMarkets.length; i++) {
+                        childMarketsOddsPromises.push(
+                            sportPositionalMarketDataContract?.getMarketData(parentMarket.childMarkets[i].address)
+                        );
+                    }
+
+                    const childMarketOddsData = await Promise.all(childMarketsOddsPromises);
+
+                    for (let i = 0; i < childMarketOddsData.length; i++) {
+                        childMarketOddsData[i].odds[0]
                             ? (parentMarket.childMarkets[i].homeOdds = bigNumberFormatter(
-                                  marketDataOfChildMarket.odds[0],
+                                  childMarketOddsData[i].odds[0],
                                   getDefaultDecimalsForNetwork(networkId)
                               ))
                             : 0;
-                        marketDataOfChildMarket.odds[1]
+                        childMarketOddsData[i].odds[1]
                             ? (parentMarket.childMarkets[i].awayOdds = bigNumberFormatter(
-                                  marketDataOfChildMarket.odds[1],
+                                  childMarketOddsData[i].odds[1],
                                   getDefaultDecimalsForNetwork(networkId)
                               ))
                             : 0;
-                        marketDataOfChildMarket.odds[2]
+                        childMarketOddsData[i].odds[2]
                             ? (parentMarket.childMarkets[i].drawOdds = bigNumberFormatter(
-                                  marketDataOfChildMarket.odds[2],
+                                  childMarketOddsData[i].odds[2],
                                   getDefaultDecimalsForNetwork(networkId)
                               ))
                             : 0;
                     }
-
-                    const combinedMarketsContractData:
-                        | CombinedMarketsContractData
-                        | undefined = await sportPositionalMarketDataContract?.getCombinedOddsForBatchOfMarkets(
-                        marketAddresses
-                    );
 
                     if (combinedMarketsContractData) {
                         const modifiedMarkets = insertCombinedMarketsIntoArrayOFMarkets(

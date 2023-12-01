@@ -17,7 +17,7 @@ import TokenDropdown from './TokenDropdown';
 import { Token } from 'types/tokens';
 import { getIsAppReady } from 'redux/modules/app';
 import useTokenBalanceQuery from 'queries/wallet/useTokenBalanceQuery';
-import { formatCurrencyWithPrecision } from 'utils/formatters/number';
+import { formatCurrencyWithPrecision } from 'thales-utils';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import networkConnector from 'utils/networkConnector';

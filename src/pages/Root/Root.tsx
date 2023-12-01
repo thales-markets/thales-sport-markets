@@ -1,36 +1,35 @@
+import { RainbowKitProvider, connectorsForWallets, darkTheme } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/dist/index.css';
+import {
+    braveWallet,
+    coinbaseWallet,
+    imTokenWallet,
+    injectedWallet,
+    ledgerWallet,
+    metaMaskWallet,
+    rabbyWallet,
+    rainbowWallet,
+    trustWallet,
+    walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets';
+import WalletDisclaimer from 'components/WalletDisclaimer';
+import { PLAUSIBLE } from 'constants/analytics';
+import { base } from 'constants/network';
+import { ThemeMap } from 'constants/ui';
+import dotenv from 'dotenv';
+import { Network } from 'enums/network';
+import { merge } from 'lodash';
+import App from 'pages/Root/App';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
-import App from 'pages/Root/App';
-import dotenv from 'dotenv';
-import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
-import '@rainbow-me/rainbowkit/dist/index.css';
-import { connectorsForWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
-import {
-    injectedWallet,
-    rainbowWallet,
-    metaMaskWallet,
-    coinbaseWallet,
-    walletConnectWallet,
-    braveWallet,
-    ledgerWallet,
-    imTokenWallet,
-    trustWallet,
-    rabbyWallet,
-} from '@rainbow-me/rainbowkit/wallets';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { optimism, optimismGoerli, arbitrum } from 'wagmi/chains';
+import { getDefaultTheme } from 'redux/modules/ui';
+import { particleWallet } from '@particle-network/rainbowkit-ext';
+import { WagmiConfig, configureChains, createClient } from 'wagmi';
+import { arbitrum, optimism, optimismGoerli } from 'wagmi/chains';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
-import WalletDisclaimer from 'components/WalletDisclaimer';
-import { merge } from 'lodash';
-import { Network } from 'enums/network';
-import { ThemeMap } from 'constants/ui';
-import { getDefaultTheme } from 'redux/modules/ui';
-import { base } from 'constants/network';
-import { PLAUSIBLE } from 'constants/analytics';
-import { particleWallet } from '@particle-network/rainbowkit-ext';
 
 dotenv.config();
 
@@ -51,7 +50,7 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
         blast: 'optimism-mainnet',
     },
     [Network.OptimismGoerli]: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
-    [Network.ArbitrumOne]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
+    [Network.Arbitrum]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
     [Network.Base]: { ankr: 'base', chainnode: '', blast: '' },
 };
 
@@ -118,24 +117,6 @@ const wagmiClient = createClient({
     provider,
 });
 
-const instance = createInstance({
-    urlBase: 'https://data.thalesmarket.io',
-    siteId: process.env.REACT_APP_SITE_ID ? Number(process.env.REACT_APP_SITE_ID) : 6,
-    trackerUrl: 'https://data.thalesmarket.io/p.php', // optional, default value: `${urlBase}matomo.php`
-    srcUrl: 'https://data.thalesmarket.io/p.js', //
-    configurations: {
-        disableCookies: true,
-        setSecureCookie: true,
-        setRequestMethod: 'POST',
-    },
-    disabled: false, // optional, false by default. Makes all tracking calls no-ops if set to true.
-    heartBeat: {
-        active: true, // optional, default value: true
-        seconds: 10, // optional, default value: `15
-    },
-    linkTracking: true, // optional, default value: true
-});
-
 const theme = getDefaultTheme();
 const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
@@ -144,20 +125,18 @@ const Root: React.FC<RootProps> = ({ store }) => {
 
     return (
         <Provider store={store}>
-            <MatomoProvider value={instance}>
-                <WagmiConfig client={wagmiClient}>
-                    <RainbowKitProvider
-                        chains={chains}
-                        theme={customTheme}
-                        appInfo={{
-                            appName: 'Overtime',
-                            disclaimer: WalletDisclaimer,
-                        }}
-                    >
-                        <App />
-                    </RainbowKitProvider>
-                </WagmiConfig>
-            </MatomoProvider>
+            <WagmiConfig client={wagmiClient}>
+                <RainbowKitProvider
+                    chains={chains}
+                    theme={customTheme}
+                    appInfo={{
+                        appName: 'Overtime',
+                        disclaimer: WalletDisclaimer,
+                    }}
+                >
+                    <App />
+                </RainbowKitProvider>
+            </WagmiConfig>
         </Provider>
     );
 };

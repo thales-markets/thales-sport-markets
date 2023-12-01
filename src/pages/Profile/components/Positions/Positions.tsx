@@ -45,7 +45,7 @@ import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils
 import { ZERO_ADDRESS } from 'constants/network';
 import { getParlayPayment } from 'redux/modules/parlay';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
-import { coinParser } from 'utils/formatters/ethers';
+import { coinParser } from 'thales-utils';
 import { executeBiconomyTransaction } from 'utils/biconomy';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {

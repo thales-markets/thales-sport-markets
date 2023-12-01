@@ -9,9 +9,13 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { ParlayMarket, PositionData, SportMarketInfo } from 'types/markets';
-import { formatDateWithTime, formatTxTimestamp } from 'utils/formatters/date';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
-import { truncateAddress } from 'utils/formatters/string';
+import {
+    formatDateWithTime,
+    formatTxTimestamp,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    truncateAddress,
+} from 'thales-utils';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
@@ -24,6 +28,7 @@ import {
     isOneSidePlayerProps,
     isParlayClaimable,
     isParlayOpen,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -199,7 +204,9 @@ const ParlayTransactionsTable: React.FC<{ parlayTx: ParlayMarket[]; searchText?:
                                     additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
                                     symbolText={symbolText}
                                     symbolUpperText={
-                                        spreadTotalText && !isOneSidePlayerProps(market.betType)
+                                        spreadTotalText &&
+                                        !isOneSidePlayerProps(market.betType) &&
+                                        !isSpecialYesNoProp(market.betType)
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {

@@ -1,11 +1,10 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
 import { OvertimeVoucher, OvertimeVouchers } from 'types/tokens';
 import thalesData from 'thales-data';
-import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const useOvertimeVoucherQuery = (
     walletAddress: string,

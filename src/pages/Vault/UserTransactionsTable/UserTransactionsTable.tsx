@@ -1,12 +1,10 @@
 import React, { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CellProps } from 'react-table';
-import { formatTxTimestamp } from 'utils/formatters/date';
+import { formatTxTimestamp, formatCurrency, truncateAddress } from 'thales-utils';
 import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
-import { formatCurrency } from 'utils/formatters/number';
 import { VaultUserTransaction, VaultUserTransactions } from 'types/vault';
-import { truncateAddress } from 'utils/formatters/string';
 
 type UserTransactionsTableProps = {
     transactions: VaultUserTransactions;

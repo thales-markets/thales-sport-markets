@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter } from 'thales-utils';
 import { BALANCE_THRESHOLD } from 'constants/wallet';
 import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';

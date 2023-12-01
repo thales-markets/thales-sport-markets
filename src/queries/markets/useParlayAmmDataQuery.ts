@@ -2,9 +2,8 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ParlayAmmData } from 'types/markets';
 import networkConnector from 'utils/networkConnector';
-import { bigNumberFormatter } from 'utils/formatters/ethers';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { Network } from 'enums/network';
-import { getDefaultDecimalsForNetwork } from 'utils/network';
 
 const useParlayAmmDataQuery = (networkId: Network, options?: UseQueryOptions<ParlayAmmData | undefined>) => {
     return useQuery<ParlayAmmData | undefined>(

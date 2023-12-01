@@ -5,6 +5,7 @@ import {
     GOLF_TAGS,
     GOLF_TOURNAMENT_WINNER_TAG,
     IIHF_WC_TAG,
+    INTERNATIONAL_SPORTS,
     MATCH_RESOLVE_MAP,
     MOTOSPORT_TAGS,
     SCORING_MAP,
@@ -25,8 +26,7 @@ import {
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
-import { addDaysToEnteredTimestamp } from './formatters/date';
-import { formatCurrency } from './formatters/number';
+import { addDaysToEnteredTimestamp, formatCurrency } from 'thales-utils';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     BetType,
@@ -35,6 +35,7 @@ import {
     OddsType,
     PLAYER_PROPS_BET_TYPES,
     Position,
+    SPECIAL_YES_NO_BET_TYPES,
 } from 'enums/markets';
 import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
 
@@ -61,6 +62,10 @@ export const getSymbolText = (
 
     if (market.isOneSideMarket || isOneSidePlayerProps(Number(betType))) {
         return 'YES';
+    }
+
+    if (isSpecialYesNoProp(Number(betType))) {
+        return position === Position.HOME ? 'YES' : 'NO';
     }
 
     if (betType === BetType.SPREAD) return 'H' + (position === Position.HOME ? '1' : '2');
@@ -199,6 +204,8 @@ export const isFifaWCGame = (tag: number) => Number(tag) === FIFA_WC_TAG || Numb
 export const isIIHFWCGame = (tag: number) => Number(tag) === IIHF_WC_TAG;
 
 export const isUEFAGame = (tag: number) => UEFA_TAGS.includes(tag);
+
+export const isInternationalGame = (tag: number) => INTERNATIONAL_SPORTS.includes(tag);
 
 export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 
@@ -383,6 +390,12 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.PLAYER_PROPS_ASSISTS:
                     translationKey = 'player-props.assists-over';
                     break;
+                case BetType.PLAYER_PROPS_DOUBLE_DOUBLE:
+                    translationKey = 'player-props.double-double-yes';
+                    break;
+                case BetType.PLAYER_PROPS_TRIPLE_DOUBLE:
+                    translationKey = 'player-props.triple-double-yes';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -437,6 +450,12 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_ASSISTS:
                     translationKey = 'player-props.assists-under';
+                    break;
+                case BetType.PLAYER_PROPS_DOUBLE_DOUBLE:
+                    translationKey = 'player-props.double-double-no';
+                    break;
+                case BetType.PLAYER_PROPS_TRIPLE_DOUBLE:
+                    translationKey = 'player-props.triple-double-no';
                     break;
                 default:
                     translationKey = market.isOneSideMarket
@@ -635,6 +654,10 @@ export const isPlayerProps = (betType: BetType) => {
 
 export const isOneSidePlayerProps = (betType: BetType) => {
     return ONE_SIDER_PLAYER_PROPS_BET_TYPES.includes(betType);
+};
+
+export const isSpecialYesNoProp = (betType: BetType) => {
+    return SPECIAL_YES_NO_BET_TYPES.includes(betType);
 };
 
 export const fixPlayerPropsLinesFromContract = (market: SportMarketInfo | MarketData) => {

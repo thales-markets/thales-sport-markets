@@ -1,90 +1,89 @@
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import ApprovalModal from 'components/ApprovalModal';
+import Button from 'components/Button';
+import SimpleLoader from 'components/SimpleLoader';
+import TimeRemaining from 'components/TimeRemaining';
+import Toggle from 'components/Toggle/Toggle';
+import Tooltip from 'components/Tooltip';
+import NumericInput from 'components/fields/NumericInput';
+import RadioButton from 'components/fields/RadioButton/RadioButton';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
+import { USD_SIGN } from 'constants/currency';
+import { LINKS } from 'constants/links';
+import { LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
+import { Network } from 'enums/network';
+import { BigNumber, ethers } from 'ethers';
+import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
+import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
+import useParlayLiquidityPoolDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolDataQuery';
+import useParlayLiquidityPoolUserDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolUserDataQuery';
+import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import {
-    Container,
-    Title,
-    ButtonContainer,
-    Wrapper,
-    ToggleContainer,
-    LiquidityPoolFilledGraphicContainer,
-    LiquidityPoolFilledGraphicPercentage,
-    LiquidityPoolFilledText,
-    RoundInfoContainer,
-    RoundInfo,
-    ContentInfo,
-    BoldContent,
-    WarningContentInfo,
-    ExternalButton,
-    LoaderContainer,
-    RoundEndContainer,
-    RoundEndLabel,
-    RoundEnd,
-    ContentContainer,
-    MainContainer,
-    LiquidityPoolInfoContainer,
-    LiquidityPoolInfoGraphic,
-    LiquidityPoolInfoLabel,
-    LiquidityPoolInfo,
-    LiquidityPoolInfoTitle,
-    ContentInfoContainer,
-    CopyContainer,
-    Description,
-    GetStakeThalesIcon,
-    TipLink,
-    SliderContainer,
-    SliderRange,
-    StyledSlider,
-    RadioButtonContainer,
-    MainContentContainer,
-    defaultButtonProps,
-} from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
+import { toast } from 'react-toastify';
+import { getIsAppReady } from 'redux/modules/app';
 import {
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
     setWalletConnectModalVisibility,
 } from 'redux/modules/wallet';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { LiquidityPoolPnlType, LiquidityPoolTab } from 'enums/liquidityPool';
-import NumericInput from 'components/fields/NumericInput';
-import { getIsAppReady } from 'redux/modules/app';
-import { UserLiquidityPoolData, LiquidityPoolData } from 'types/liquidityPool';
-import { formatCurrencyWithSign, formatPercentage } from 'utils/formatters/number';
-import { USD_SIGN } from 'constants/currency';
-import TimeRemaining from 'components/TimeRemaining';
-import networkConnector from 'utils/networkConnector';
-import { toast } from 'react-toastify';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance } from 'utils/network';
-import { BigNumber, ethers } from 'ethers';
-import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
-import SimpleLoader from 'components/SimpleLoader';
-import Transactions from './Transactions';
-import PnL from './PnL';
-import Toggle from 'components/Toggle/Toggle';
-import Tooltip from 'components/Tooltip';
-import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
-import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
-import { LINKS } from 'constants/links';
-import MaxAllowanceTooltip from './components/MaxAllowanceTooltip';
-import { refetchLiquidityPoolData } from 'utils/queryConnector';
-import { FlexDivRow } from 'styles/common';
-import RadioButton from 'components/fields/RadioButton/RadioButton';
-import Return from './Return';
-import { history } from 'utils/routes';
-import useParlayLiquidityPoolUserDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolUserDataQuery';
-import useParlayLiquidityPoolDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolDataQuery';
-import Button from 'components/Button';
-import { ThemeInterface } from 'types/ui';
+import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { Network } from 'enums/network';
-import { delay } from 'utils/timer';
+import { FlexDivRow } from 'styles/common';
+import { coinParser, formatCurrencyWithSign, formatPercentage } from 'thales-utils';
+import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
+import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
-import { coinParser } from 'utils/formatters/ethers';
-import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
+import { checkAllowance } from 'utils/network';
+import networkConnector from 'utils/networkConnector';
+import { refetchLiquidityPoolData } from 'utils/queryConnector';
+import { history } from 'utils/routes';
+import { delay } from 'utils/timer';
+import PnL from './PnL';
+import Return from './Return';
+import Transactions from './Transactions';
+import MaxAllowanceTooltip from './components/MaxAllowanceTooltip';
+import {
+    BoldContent,
+    ButtonContainer,
+    Container,
+    ContentContainer,
+    ContentInfo,
+    ContentInfoContainer,
+    CopyContainer,
+    Description,
+    ExternalButton,
+    GetStakeThalesIcon,
+    LiquidityPoolFilledGraphicContainer,
+    LiquidityPoolFilledGraphicPercentage,
+    LiquidityPoolFilledText,
+    LiquidityPoolInfo,
+    LiquidityPoolInfoContainer,
+    LiquidityPoolInfoGraphic,
+    LiquidityPoolInfoLabel,
+    LiquidityPoolInfoTitle,
+    LoaderContainer,
+    MainContainer,
+    MainContentContainer,
+    RadioButtonContainer,
+    RoundEnd,
+    RoundEndContainer,
+    RoundEndLabel,
+    RoundInfo,
+    RoundInfoContainer,
+    SliderContainer,
+    SliderRange,
+    StyledSlider,
+    TipLink,
+    Title,
+    ToggleContainer,
+    WarningContentInfo,
+    Wrapper,
+    defaultButtonProps,
+} from './styled-components';
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
@@ -568,10 +567,7 @@ const LiquidityPool: React.FC = () => {
 
     return (
         <Wrapper>
-            <ToggleContainer
-                data-matomo-category="liquidity-pool"
-                data-matomo-action={isParlayLP ? 'switch-to-parlay' : 'switch-to-single'}
-            >
+            <ToggleContainer>
                 <Toggle
                     label={{
                         firstLabel: t('liquidity-pool.single-lp'),
@@ -1176,7 +1172,7 @@ const getInfoGraphicPercentages = (currentBalance: number, nextRoundBalance: num
 };
 
 const getUniswapLink = (networkId: Network) => {
-    if (networkId === Network.ArbitrumOne) return LINKS.UniswapBuyThalesArbitrum;
+    if (networkId === Network.Arbitrum) return LINKS.UniswapBuyThalesArbitrum;
     if (networkId === Network.Base) return LINKS.UniswapBuyThalesBase;
     return LINKS.UniswapBuyThalesOp;
 };

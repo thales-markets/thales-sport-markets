@@ -10,9 +10,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { ParlayMarket, ParlaysMarket } from 'types/markets';
-import { getEtherscanTxLink } from 'utils/etherscan';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
-import { truncateAddress } from 'utils/formatters/string';
+import { getEtherscanTxLink, formatCurrencyWithSign, truncateAddress, coinParser } from 'thales-utils';
 import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
@@ -67,7 +65,6 @@ import { getParlayPayment } from 'redux/modules/parlay';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
 import { ZERO_ADDRESS } from 'constants/network';
-import { coinParser } from 'utils/formatters/ethers';
 import ApprovalModal from 'components/ApprovalModal';
 import { BigNumber, ethers } from 'ethers';
 import { APPROVAL_BUFFER } from 'constants/markets';

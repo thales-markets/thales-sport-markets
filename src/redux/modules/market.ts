@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import localStore from 'utils/localStore';
+import { localStore } from 'thales-utils';
 import { RootState } from '../rootReducer';
 
 const sliceName = 'market';

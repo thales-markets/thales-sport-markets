@@ -321,7 +321,9 @@
                 "goals": "Wer schießt im Spiel ein Tor?",
                 "hits recorded": "Treffer aufgezeichnet",
                 "assists": "Unterstützt",
-                "rebounds": "Rebounds"
+                "rebounds": "Rebounds",
+                "double double": "Doppelt-doppelt",
+                "triple double": "Triple-Double"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -383,7 +385,11 @@
                     "rebounds-under": "{{team}} wird weniger Rebounds haben als {{scoring}}",
                     "assists-under": "{{team}} wird weniger Assists haben als {{scoring}}",
                     "assists-over": "{{team}} wird mehr Assists haben als {{scoring}}",
-                    "rebounds-over": "{{team}} wird mehr Rebounds haben als {{scoring}}"
+                    "rebounds-over": "{{team}} wird mehr Rebounds haben als {{scoring}}",
+                    "double-double-no": "{{team}} wird kein Double-Double erzielen",
+                    "triple-double-no": "{{team}} wird kein Triple-Double erzielen",
+                    "triple-double-yes": "{{team}} wird ein Triple-Double erzielen",
+                    "double-double-yes": "{{team}} wird ein Double-Double erzielen"
                 }
             },
             "starts-in": "Beginnt in",
@@ -448,7 +454,10 @@
                 "max-combined-markets": "Die maximale Anzahl kombinierter Märkte in Parlay beträgt {{max}}.",
                 "amm-contract-paused": "Parlay AMM angehalten",
                 "unique-players": "Derselbe Teilnehmer kann im Parlay nicht zweimal hinzugefügt werden. {{existingParticipant}} ist bereits in Parlay",
-                "same-event-participant": "Es wird nur ein Teilnehmer pro Veranstaltung unterstützt. {{addedParticipant}} kann nicht hinzugefügt werden, da {{existingParticipant}} bereits in Parlay ist"
+                "same-event-participant": "Es wird nur ein Teilnehmer pro Veranstaltung unterstützt. {{addedParticipant}} kann nicht hinzugefügt werden, da {{existingParticipant}} bereits in Parlay ist",
+                "already-added-combined-positions": "Positionen aus demselben Markt können nicht mit kombinierten Positionen kombiniert werden",
+                "player-props-and-other-positions": "Das Kombinieren von Spieler-Requisitenpositionen mit anderen Positionen aus demselben Markt wird nicht unterstützt",
+                "same-game-different-player-props": "Die Kombination verschiedener Kategorien von Spieler-Requisiten wird nicht unterstützt"
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
@@ -998,5 +1007,39 @@
         "parlay-lp": "Parlay-LP",
         "single-lp": "Einzel-LP",
         "description-parlay": "<h1>Beschreibung</h1><p> Bei der Liquiditätsbereitstellung hinterlegen Benutzer Stablecoin-Sicherheiten in einem auf Smart Contracts basierenden Liquiditätspool für den Overtime-Handel. Die hinterlegten Sicherheiten werden verwendet, um den Handel auf Parlay AMM von Overtime zu erleichtern.</p><p> Um Liquidität bereitstellen zu können, müssen Sie THALES einsetzen. Es gibt keine maximale Obergrenze pro Wallet und Sie können maximal 1 {{currency}} pro eingesetzten {{thalesStakedAmount}} THALES einzahlen, bis der Liquiditätspool gefüllt ist.</p><p> Am Ende jeder Runde wird der proportionale Anteil des PnL dieser Runde zu Ihrem eingezahlten Guthaben hinzugefügt.</p><p> Wenn Sie eine Auszahlung wünschen, können Sie dies jederzeit während der laufenden Runde signalisieren. Am Ende der Runde wird Ihnen der von Ihnen zur Auszahlung angegebene Betrag (einschließlich des PnL dieser Runde) zugesandt. Der Mindestauszahlungsbetrag ist auf 10 % festgelegt</p><p> Wenn Sie sich entscheiden, THALES unter Bereitstellung von Liquidität aufzulösen, beachten Sie bitte, dass Sie zunächst einen Rückzug aus dem Liquiditätspool signalisieren müssen.</p><p> Durch die Bereitstellung von Liquidität sind Sie verschiedenen Risiken ausgesetzt, darunter potenzielle Verluste aufgrund von Handelsgewinnen der Benutzer sowie Sicherheitsrisiken bei Smart Contracts. Bitte stellen Sie sicher, dass Sie diese Risiken verstehen, bevor Sie eine Einzahlung tätigen.</p><p><tipLink> TIPP-142</tipLink> Weitere Einzelheiten zur technischen Umsetzung der Überstundenliquiditätsbereitstellung finden Sie hier.</p>"
+    },
+    "seo": {
+        "home": {
+            "title": "Overtime-Märkte: Das führende Web3-Sportwettenangebot",
+            "description": "Betreten Sie die Welt des führenden On-Chain-Web3-Sportwettenanbieters. Sichern Sie sich Positionen in über 12 Sportarten und über 40 Ligen."
+        },
+        "markets": {
+            "description": "Treten Sie dem besten Web3-Sportwettenanbieter auf dem Markt bei. Sichern Sie sich Positionen in den Top-Ligen wie NFL, NBA, UCL, EPL und mehr.",
+            "title": "Overtime-Märkte: Web3-Sportwettenmärkte für über 40 Ligen"
+        },
+        "vaults": {
+            "title": "Overtime Markets Vaults: Automatisierter Handel",
+            "description": "Zahlen Sie Vermögenswerte in den Tresor von Overtime Markets ein und lassen Sie unseren automatisierten Handelsmechanismus eine von Ihnen gewählte Strategie anwenden."
+        },
+        "parlay-leaderboard": {
+            "title": "Überstundenmärkte: Verdienen Sie alle 2 Wochen Parlay-Belohnungen",
+            "description": "Overtime Markets ist ein Web3-Sportwettenanbieter mit den besten zweiwöchentlichen Boni auf dem Markt für Parlay-Spieler! Schauen Sie sich hier die Bestenliste an und ob Sie sich qualifiziert haben."
+        },
+        "referral": {
+            "title": "Überstundenmärkte: Verdienen Sie Empfehlungsgebühren",
+            "description": "Empfehlen Sie einen Freund an Overtime Markets und erhalten Sie einen Prozentsatz von jedem Trade der von Ihnen geworbenen Person, der in USD-Sicherheit sofort und direkt in Ihr Wallet ausgezahlt wird."
+        },
+        "profile": {
+            "description": "Fordern Sie Ihre Gewinne an, überprüfen Sie Ihre Leistung und verfolgen Sie die Einzahlungen, die Sie in die Overtime Market Vaults getätigt haben.",
+            "title": "Überstundenmarkt: Benutzerprofil"
+        },
+        "liquidity-pool": {
+            "description": "Seien Sie das Haus des Overtime Market! Zahlen Sie Stablecoin-Sicherheiten in den Liquiditätspool ein, um jede Woche einen Prozentsatz des PnL zu verdienen.",
+            "title": "Overtime-Märkte: Seien Sie das Haus mit unserem Liquiditätspool"
+        },
+        "single-market": {
+            "description": "{{dynamicTitle}}: Genießen Sie die besten Web3-Sportwetten-Quoten auf dem Markt. Keine Registrierung erforderlich. Vollständig dezentralisierte Sportmärkte.",
+            "title": "Overtime Markets Web3 Sportwetten: {{dynamicTitle}}"
+        }
     }
 }

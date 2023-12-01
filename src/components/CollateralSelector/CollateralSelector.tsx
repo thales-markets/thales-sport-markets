@@ -13,7 +13,7 @@ import {
 } from 'styles/common';
 import { Coins } from 'types/tokens';
 import { isStableCurrency } from 'utils/collaterals';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrencyWithSign } from 'thales-utils';
 import { setPaymentSelectedCollateralIndex } from 'redux/modules/parlay';
 import { getNetworkId } from '../../redux/modules/wallet';
 

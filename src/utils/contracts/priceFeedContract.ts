@@ -4,7 +4,7 @@ const priceFeedContract = {
     addresses: {
         [Network.OptimismMainnet]: '0xf4aef21d906992aFAdde7A9676e1dB4feb6390DD',
         [Network.OptimismGoerli]: '0x7A13403eBd6ee7a45abA2cEe663eF038A66F0A82',
-        [Network.ArbitrumOne]: '0x563cCaBfBaCCb1a2e00d21704570cFc1AF21f47f',
+        [Network.Arbitrum]: '0x563cCaBfBaCCb1a2e00d21704570cFc1AF21f47f',
         [Network.Base]: '0x5B5DbF38a1fcf63B58d263648EBb63b53c1de3E7',
     },
     abi: [

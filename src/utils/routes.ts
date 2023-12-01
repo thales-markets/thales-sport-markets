@@ -1,4 +1,5 @@
 import ROUTES from 'constants/routes';
+import { MetaRoutes } from 'enums/routes';
 import { createBrowserHistory, createHashHistory } from 'history';
 
 const ifIpfsDeployment = process.env.REACT_APP_IPFS_DEPLOYMENT === 'true';
@@ -13,8 +14,10 @@ export const navigateTo = (path: string, replacePath = false, scrollToTop = fals
 
 export const buildHref = (route: string) => `${ifIpfsDeployment ? '#' : ''}${route}`;
 
-export const buildMarketLink = (marketAddress: string, language: string, excludeSlash = false) =>
-    `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Markets.Home}/${marketAddress}?lang=${language}`;
+export const buildMarketLink = (marketAddress: string, language: string, excludeSlash = false, title?: string) =>
+    `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Markets.Home}/${marketAddress}?lang=${language}${
+        title ? `&title=${title}` : ''
+    }`;
 
 export const buildVaultLink = (vaultId: string, language: string, excludeSlash = false) =>
     `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Vaults}/${vaultId}?lang=${language}`;
@@ -32,6 +35,17 @@ export const buildDepositOrWithdrawLink = (language: string, page: string, coinI
 
 export const buildReffererLink = (reffererID: string) => {
     return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${ROUTES.Markets.Home}?referrerId=${reffererID}`;
+};
+
+export const getMetaRouteItem = (pathName: string) => {
+    if (pathName.includes(ROUTES.Markets.Home + '/')) return MetaRoutes.SingleMarket;
+    if (pathName.includes(ROUTES.Markets.Home)) return MetaRoutes.Markets;
+    if (pathName.includes(ROUTES.Vaults)) return MetaRoutes.Vaults;
+    if (pathName.includes(ROUTES.ParlayLiquidityPool)) return MetaRoutes.ParlayLeaderboard;
+    if (pathName.includes(ROUTES.Referral)) return MetaRoutes.Referral;
+    if (pathName.includes(ROUTES.Profile)) return MetaRoutes.Profile;
+    if (pathName.includes(ROUTES.LiquidityPool)) return MetaRoutes.LiquidityPool;
+    return MetaRoutes.Home;
 };
 
 export { history, ifIpfsDeployment };

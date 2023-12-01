@@ -1,10 +1,18 @@
-import { useMatomo } from '@datapunt/matomo-tracker-react';
 import ApprovalModal from 'components/ApprovalModal';
+import Button from 'components/Button';
+import CollateralSelector from 'components/CollateralSelector';
+import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER } from 'constants/markets';
+import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
+import { ListContainer } from 'pages/Profile/components/Positions/styled-components';
+import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useAvailablePerPositionMultiQuery from 'queries/markets/useAvailablePerPositionMultiQuery';
+import usePositionPriceDetailsMultiQuery from 'queries/markets/usePositionPriceDetailsMultiQuery';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -13,11 +21,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import {
-    removeAll,
-    setMultiSingle,
-    removeFromParlay,
     getMultiSingle,
     getParlayPayment,
+    removeAll,
+    removeFromParlay,
+    setMultiSingle,
     setPaymentAmountToBuy,
 } from 'redux/modules/parlay';
 import {
@@ -28,27 +36,42 @@ import {
     setWalletConnectModalVisibility,
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
-import { AMMPosition, AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlaysMarket } from 'types/markets';
-import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
-import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import {
     ceilNumberToDecimals,
+    coinFormatter,
+    coinParser,
     floorNumberToDecimals,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
     formatPercentage,
     getPrecision,
     roundNumberToDecimals,
-} from 'utils/formatters/number';
+} from 'thales-utils';
+import { AMMPosition, AvailablePerPosition, MultiSingleTokenQuoteAndBonus, ParlaysMarket } from 'types/markets';
+import { Coins } from 'types/tokens';
+import { ThemeInterface } from 'types/ui';
+import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
+import {
+    getCollateral,
+    getCollateralAddress,
+    getCollateralIndex,
+    getCollaterals,
+    getDefaultCollateral,
+    isStableCurrency,
+} from 'utils/collaterals';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
 import { formatMarketOdds, getBonus, getPositionOdds } from 'utils/markets';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
+import MatchInfo from '../MatchInfo';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
+import Voucher from '../Voucher';
 import {
     AmountToBuyMultiContainer,
     AmountToBuyMultiInfoLabel,
@@ -68,29 +91,6 @@ import {
     XButton,
     defaultButtonProps,
 } from '../styled-components';
-import { ListContainer } from 'pages/Profile/components/Positions/styled-components';
-import MatchInfo from '../MatchInfo';
-import styled, { useTheme } from 'styled-components';
-import { coinFormatter, coinParser } from 'utils/formatters/ethers';
-import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
-import {
-    getCollateral,
-    getCollateralAddress,
-    getCollateralIndex,
-    getCollaterals,
-    getDefaultCollateral,
-    isStableCurrency,
-} from 'utils/collaterals';
-import { OddsType } from 'enums/markets';
-import Button from 'components/Button';
-import NumericInput from 'components/fields/NumericInput';
-import { ThemeInterface } from 'types/ui';
-import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
-import CollateralSelector from 'components/CollateralSelector';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
-import Voucher from '../Voucher';
-import { Coins } from 'types/tokens';
-import usePositionPriceDetailsMultiQuery from 'queries/markets/usePositionPriceDetailsMultiQuery';
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
@@ -98,8 +98,6 @@ type MultiSingleProps = {
 
 const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const { t } = useTranslation();
-    const { trackEvent } = useMatomo();
-
     const theme: ThemeInterface = useTheme();
 
     const dispatch = useDispatch();
@@ -595,11 +593,6 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                                 resolve(
                                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
                                 );
-                                trackEvent({
-                                    category: 'parlay-multi-single',
-                                    action: `buy-with-${selectedCollateral}`,
-                                    value: Number(calculatedTotalCollateralBuyIn),
-                                });
                                 dispatch(removeFromParlay(marketAddress));
                                 refetchBalances(walletAddress, networkId);
                             } else {

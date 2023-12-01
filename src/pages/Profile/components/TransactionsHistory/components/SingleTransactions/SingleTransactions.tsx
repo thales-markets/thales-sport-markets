@@ -9,9 +9,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { getEtherscanTxLink } from 'utils/etherscan';
-import { formatTxTimestamp } from 'utils/formatters/date';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'utils/formatters/number';
+import { getEtherscanTxLink, formatTxTimestamp, formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
@@ -20,6 +18,7 @@ import {
     getSpreadTotalText,
     getSymbolText,
     isOneSidePlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import ShareTicketModal, {
@@ -174,7 +173,8 @@ const TransactionsHistory: React.FC<{ searchText?: string }> = ({ searchText }) 
                                         justifyContent="center"
                                         symbolUpperText={
                                             spreadTotalText &&
-                                            !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType)
+                                            !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType) &&
+                                            !isSpecialYesNoProp(cellProps.cell.row.original.wholeMarket.betType)
                                                 ? {
                                                       text: spreadTotalText,
                                                       textStyle: {

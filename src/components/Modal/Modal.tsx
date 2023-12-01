@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDiv, FlexDivRow } from 'styles/common';
 import ReactModal from 'react-modal';
-import { convertCssToStyledProperties } from 'utils/style';
+import { convertCssToStyledProperties } from 'thales-utils';
 
 type ModalProps = {
     title: string;

@@ -11,7 +11,7 @@ import useVaultTradesQuery from 'queries/vault/useVaultTradesQuery';
 import { VaultTrades, VaultTrade, VaultUserTransactions, VaultUserTransaction } from 'types/vault';
 import SelectInput from 'components/SelectInput';
 import { isParlayVault } from 'constants/vault';
-import { formatCurrency, formatPercentageWithSign } from 'utils/formatters/number';
+import { formatCurrency, formatPercentageWithSign } from 'thales-utils';
 import useVaultUserTransactionsQuery from 'queries/vault/useVaultUserTransactionsQuery';
 import UserTransactionsTable from '../UserTransactionsTable';
 import useParlayVaultTradesQuery from 'queries/vault/useParlayVaultTradesQuery';
