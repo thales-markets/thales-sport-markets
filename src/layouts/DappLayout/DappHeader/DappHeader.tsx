@@ -97,25 +97,27 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
-                        <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
-                            <Button
-                                backgroundColor={theme.button.background.tertiary}
-                                textColor={theme.button.textColor.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
-                                width="150px"
-                                fontWeight="400"
-                                additionalStyles={{
-                                    borderRadius: '8px',
-                                    fontWeight: '700',
-                                    fontSize: '14px',
-                                    textTransform: 'capitalize',
-                                    marginLeft: '20px',
-                                }}
-                                height="28px"
-                            >
-                                {t('get-started.get-started')}
-                            </Button>
-                        </SPAAnchor>
+                        {!isWalletConnected && (
+                            <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
+                                <Button
+                                    backgroundColor={theme.button.background.tertiary}
+                                    textColor={theme.button.textColor.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    width="150px"
+                                    fontWeight="400"
+                                    additionalStyles={{
+                                        borderRadius: '8px',
+                                        fontWeight: '700',
+                                        fontSize: '14px',
+                                        textTransform: 'capitalize',
+                                        marginLeft: '20px',
+                                    }}
+                                    height="28px"
+                                >
+                                    {t('get-started.get-started')}
+                                </Button>
+                            </SPAAnchor>
+                        )}
                     </LeftContainer>
                     <RightContainer>
                         {isAA && (
