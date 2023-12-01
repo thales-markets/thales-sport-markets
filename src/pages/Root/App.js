@@ -1,14 +1,21 @@
+import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from '@biconomy/account';
+import { Bundler } from '@biconomy/bundler';
+import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from '@biconomy/modules';
+import { BiconomyPaymaster } from '@biconomy/paymaster';
+import { ParticleNetwork } from '@particle-network/auth';
+import { ParticleProvider } from '@particle-network/provider';
 import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
 import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
 import ROUTES from 'constants/routes';
+import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
 import Wizard from 'pages/Wizard';
-import { lazy, Suspense, useEffect } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +29,7 @@ import {
     updateNetworkSettings,
     updateWallet,
 } from 'redux/modules/wallet';
+import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
@@ -29,12 +37,6 @@ import queryConnector from 'utils/queryConnector';
 import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
-import { ParticleNetwork } from '@particle-network/auth';
-import { ParticleProvider } from '@particle-network/provider';
-import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from '@biconomy/account';
-import { Bundler } from '@biconomy/bundler';
-import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from '@biconomy/modules';
-import { BiconomyPaymaster } from '@biconomy/paymaster';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
