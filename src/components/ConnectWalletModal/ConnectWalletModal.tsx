@@ -79,7 +79,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
     useEffect(() => {
         if (isSuccess) {
-            if (isPartical) navigateTo(ROUTES.Wizard);
+            navigateTo(ROUTES.Wizard);
             onClose();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
