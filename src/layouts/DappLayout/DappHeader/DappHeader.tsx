@@ -95,7 +95,28 @@ const DappHeader: React.FC = () => {
         <>
             {!isMobile && (
                 <Container>
-                    <Logo />
+                    <LeftContainer>
+                        <Logo />
+                        <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
+                            <Button
+                                backgroundColor={theme.button.background.tertiary}
+                                textColor={theme.button.textColor.quaternary}
+                                borderColor={theme.button.borderColor.secondary}
+                                width="150px"
+                                fontWeight="400"
+                                additionalStyles={{
+                                    borderRadius: '8px',
+                                    fontWeight: '700',
+                                    fontSize: '14px',
+                                    textTransform: 'capitalize',
+                                    marginLeft: '20px',
+                                }}
+                                height="28px"
+                            >
+                                {t('get-started.get-started')}
+                            </Button>
+                        </SPAAnchor>
+                    </LeftContainer>
                     <RightContainer>
                         {isAA && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
@@ -315,6 +336,8 @@ const Container = styled(FlexDivRowCentered)`
         }
     }
 `;
+
+const LeftContainer = styled(FlexDivRowCentered)``;
 
 const RightContainer = styled(FlexDivRowCentered)`
     @media (max-width: 767px) {
