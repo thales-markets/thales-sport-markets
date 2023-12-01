@@ -73,6 +73,8 @@ const DappHeader: React.FC = () => {
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
+    const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
+
     const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
@@ -97,7 +99,7 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
-                        {isWalletConnected && (
+                        {isWalletConnected && isMarketsPage && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
                                 <Button
                                     backgroundColor={theme.button.background.tertiary}
