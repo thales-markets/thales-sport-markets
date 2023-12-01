@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
-import { buildHref } from 'utils/routes';
+import { buildHref, navigateTo } from 'utils/routes';
 
 type StepProps = {
     stepNumber: number;
@@ -113,10 +113,10 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 );
                 break;
             case GetStartedStep.DEPOSIT:
-                window.open(buildHref(ROUTES.Deposit));
+                navigateTo(buildHref(ROUTES.Deposit));
                 break;
             case GetStartedStep.TRADE:
-                window.open(buildHref(ROUTES.Markets.Home));
+                navigateTo(buildHref(ROUTES.Markets.Home));
                 break;
         }
     };
