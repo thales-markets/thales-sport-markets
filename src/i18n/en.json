@@ -763,7 +763,10 @@
         "send": "Make sure you are depositing {{ network }} {{ token }} to the address above!",
         "copying-address": "Please wait",
         "copied": "Address copied!",
-        "qr-modal-title": "Send {{ token }} ({{ network }})"
+        "qr-modal-title": "Send {{ token }} ({{ network }})",
+        "all-set": "You are all set!",
+        "ready-to-use": "Your account is now ready to start using Overtime Markets!",
+        "go": "Let's go!"
     },
     "withdraw": {
         "address-input-label": "Your personal {{ token }} withdrawal address on {{ network }}",
