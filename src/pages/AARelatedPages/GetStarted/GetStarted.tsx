@@ -1,31 +1,67 @@
 import { GetStartedStep } from 'enums/wizard';
 import { t } from 'i18next';
-import React, { useEffect, useState } from 'react';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
-import { getIsAA, getIsWalletConnected } from 'redux/modules/wallet';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivStart } from 'styles/common';
+import { getCollaterals } from 'utils/collaterals';
 import Step from './components/Step';
 
 const GetStarted: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const steps: GetStartedStep[] = [GetStartedStep.LOG_IN, GetStartedStep.DEPOSIT, GetStartedStep.TRADE];
     const [currentStep, setCurrentStep] = useState<GetStartedStep>(
         isWalletConnected && isAA ? GetStartedStep.DEPOSIT : GetStartedStep.LOG_IN
     );
 
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const totalBalanceValue = useMemo(() => {
+        let total = 0;
+        try {
+            if (exchangeRates && multipleCollateralBalances.data) {
+                getCollaterals(networkId, isAA).forEach((token) => {
+                    total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                });
+            }
+
+            return total ? total : 0;
+        } catch (e) {
+            return 0;
+        }
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, isAA]);
+
     useEffect(() => {
+        if (totalBalanceValue > 0) {
+            setCurrentStep(GetStartedStep.TRADE);
+            return;
+        }
         if (isWalletConnected) {
             setCurrentStep(GetStartedStep.DEPOSIT);
         } else {
             setCurrentStep(GetStartedStep.LOG_IN);
         }
-    }, [isWalletConnected]);
+    }, [isWalletConnected, totalBalanceValue]);
 
     return (
         <Container>
