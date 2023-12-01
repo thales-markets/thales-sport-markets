@@ -81,8 +81,9 @@ import {
     defaultButtonProps,
 } from '../styled-components';
 import { ZERO_ADDRESS } from 'constants/network';
-import Tooltip from 'rc-tooltip';
+
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
+import Tooltip from 'components/Tooltip';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -901,7 +902,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 <GasSummary>
                     <SummaryLabel>
                         {t('markets.parlay.total-gas')}:
-                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} />
+                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} iconFontSize={13} marginLeft={3} />
                     </SummaryLabel>
                     <SummaryValue isCollateralInfo={true}>
                         {gas === 0 ? '-' : formatCurrencyWithSign(USD_SIGN, gas as number, 2, true)}

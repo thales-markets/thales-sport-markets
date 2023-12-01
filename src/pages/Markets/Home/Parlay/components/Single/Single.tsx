@@ -83,7 +83,7 @@ import {
 } from '../styled-components';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import { ZERO_ADDRESS } from 'constants/network';
-import Tooltip from 'rc-tooltip';
+import Tooltip from 'components/Tooltip';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -863,7 +863,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                 <GasSummary>
                     <SummaryLabel>
                         {t('markets.parlay.total-gas')}:
-                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} />
+                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} iconFontSize={13} marginLeft={3} />
                     </SummaryLabel>
                     <SummaryValue isCollateralInfo={true}>
                         {gas === 0 ? '-' : formatCurrencyWithSign(USD_SIGN, gas as number, 2, true)}
