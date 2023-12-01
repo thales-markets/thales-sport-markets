@@ -97,7 +97,7 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
-                        {!isWalletConnected && (
+                        {isWalletConnected && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
                                 <Button
                                     backgroundColor={theme.button.background.tertiary}
@@ -180,6 +180,7 @@ const DappHeader: React.FC = () => {
                                     dispatch(
                                         setWalletConnectModalVisibility({
                                             visibility: true,
+                                            origin: 'sign-up',
                                         })
                                     )
                                 }

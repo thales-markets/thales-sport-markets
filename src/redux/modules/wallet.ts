@@ -1,8 +1,8 @@
-import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
-import { getAddress } from 'utils/formatters/ethers';
-import { RootState } from 'redux/rootReducer';
-import { Network } from 'enums/network';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { DEFAULT_NETWORK } from 'constants/network';
+import { Network } from 'enums/network';
+import { RootState } from 'redux/rootReducer';
+import { getAddress } from 'utils/formatters/ethers';
 
 const sliceName = 'wallet';
 
@@ -12,7 +12,10 @@ type WalletSliceState = {
     networkId: Network;
     networkName: string;
     switchToNetworkId: Network; // used to trigger manually network switch in App.js
-    openWalletConnectModal: boolean;
+    walletConnectModal: {
+        visibility: boolean;
+        origin?: 'sign-up' | 'sign-in' | undefined;
+    };
 };
 
 const initialState: WalletSliceState = {
@@ -21,7 +24,10 @@ const initialState: WalletSliceState = {
     networkId: DEFAULT_NETWORK.networkId,
     networkName: DEFAULT_NETWORK.name,
     switchToNetworkId: DEFAULT_NETWORK.networkId,
-    openWalletConnectModal: false,
+    walletConnectModal: {
+        visibility: false,
+        origin: undefined,
+    },
 };
 
 const walletDetailsSlice = createSlice({
@@ -58,8 +64,12 @@ const walletDetailsSlice = createSlice({
         ) => {
             state.switchToNetworkId = action.payload.networkId;
         },
-        setWalletConnectModalVisibility: (state, action: PayloadAction<{ visibility: boolean }>) => {
-            state.openWalletConnectModal = action.payload.visibility;
+        setWalletConnectModalVisibility: (
+            state,
+            action: PayloadAction<{ visibility: boolean; origin?: 'sign-up' | 'sign-in' | undefined }>
+        ) => {
+            state.walletConnectModal.visibility = action.payload.visibility;
+            state.walletConnectModal.origin = action.payload.origin;
         },
     },
 });
@@ -69,7 +79,9 @@ export const getNetworkId = (state: RootState) => getWalletState(state).networkI
 export const getSwitchToNetworkId = (state: RootState) => getWalletState(state).switchToNetworkId;
 export const getWalletAddress = (state: RootState) => getWalletState(state).walletAddress;
 export const getIsAA = (state: RootState) => getWalletState(state).isAA;
-export const getWalletConnectModalVisibility = (state: RootState) => getWalletState(state).openWalletConnectModal;
+export const getWalletConnectModalVisibility = (state: RootState) =>
+    getWalletState(state).walletConnectModal.visibility;
+export const getWalletConnectModalOrigin = (state: RootState) => getWalletState(state).walletConnectModal.origin;
 export const getIsWalletConnected = createSelector(getWalletAddress, (walletAddress) => walletAddress != null);
 
 export const {
