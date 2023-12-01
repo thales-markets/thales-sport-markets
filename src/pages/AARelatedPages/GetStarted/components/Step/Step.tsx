@@ -1,11 +1,10 @@
-import ConnectWalletModal from 'components/ConnectWalletModal';
 import ROUTES from 'constants/routes';
 import { GetStartedStep } from 'enums/wizard';
 import { t } from 'i18next';
-import React, { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsAA, getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
@@ -25,8 +24,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isAA = useSelector((state: RootState) => getIsAA(state));
-
-    const [showWalletConnectModal, setShowWalletConnectModal] = useState<boolean>(false);
+    const dispatch = useDispatch();
 
     const stepTitle = useMemo(() => {
         let transKey = 'get-started.steps.title';
@@ -108,7 +106,11 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
         setCurrentStep(stepType);
         switch (stepType) {
             case GetStartedStep.LOG_IN:
-                setShowWalletConnectModal(true);
+                dispatch(
+                    setWalletConnectModalVisibility({
+                        visibility: true,
+                    })
+                );
                 break;
             case GetStartedStep.DEPOSIT:
                 window.open(buildHref(ROUTES.Deposit));
@@ -142,9 +144,6 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                         {getStepAction()}
                     </StepActionSection>
                 </>
-            )}
-            {showWalletConnectModal && (
-                <ConnectWalletModal isOpen={showWalletConnectModal} onClose={() => setShowWalletConnectModal(false)} />
             )}
         </Container>
     );
