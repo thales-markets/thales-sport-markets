@@ -11,8 +11,7 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { Coins } from 'types/tokens';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
-import { coinParser } from 'utils/formatters/ethers';
-import { formatCurrencyWithKey } from 'utils/formatters/number';
+import { coinParser, formatCurrencyWithKey } from 'thales-utils';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 

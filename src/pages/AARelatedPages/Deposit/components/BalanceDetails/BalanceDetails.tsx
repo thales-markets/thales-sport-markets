@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { Coins } from 'types/tokens';
 import { getCollaterals, isStableCurrency } from 'utils/collaterals';
-import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrency, formatCurrencyWithSign } from 'thales-utils';
 
 const BalanceDetails: React.FC = () => {
     const { t } = useTranslation();

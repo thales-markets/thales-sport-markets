@@ -16,7 +16,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { getCollaterals } from 'utils/collaterals';
-import { formatCurrencyWithKey } from 'utils/formatters/number';
+import { formatCurrencyWithKey } from 'thales-utils';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 import {

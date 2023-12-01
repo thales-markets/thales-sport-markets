@@ -863,7 +863,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                 <GasSummary>
                     <SummaryLabel>
                         {t('markets.parlay.total-gas')}:
-                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} iconFontSize={13} marginLeft={3} />
+                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} />
                     </SummaryLabel>
                     <SummaryValue isCollateralInfo={true}>
                         {gas === 0 ? '-' : formatCurrencyWithSign(USD_SIGN, gas as number, 2, true)}

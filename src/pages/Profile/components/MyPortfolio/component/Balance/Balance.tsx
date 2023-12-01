@@ -12,7 +12,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { getCollaterals } from 'utils/collaterals';
-import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrency, formatCurrencyWithSign } from 'thales-utils';
 import { buildDepositOrWithdrawLink } from 'utils/routes';
 
 const Balance: React.FC = () => {

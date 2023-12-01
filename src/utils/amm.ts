@@ -4,6 +4,7 @@ import { Network } from 'enums/network';
 import { Position } from 'enums/markets';
 import { ETH_PAYMASTER, executeBiconomyTransaction } from './biconomy';
 import multipleCollateral from './contracts/multipleCollateralContract';
+import { SupportedNetwork } from 'types/network';
 
 export const getAMMSportsTransaction: any = async (
     isVoucherSelected: boolean,
@@ -27,7 +28,7 @@ export const getAMMSportsTransaction: any = async (
     if (isVoucherSelected) {
         if (isAA) {
             return executeBiconomyTransaction(
-                multipleCollateral.USDC.addresses[networkId],
+                multipleCollateral.USDC.addresses[networkId as SupportedNetwork],
                 overtimeVoucherContract,
                 'buyFromAMMWithVoucher',
                 [marketAddress, selectedPosition, parsedAmount, voucherId]

@@ -6,7 +6,6 @@ import {
 } from '@biconomy/modules';
 import { IHybridPaymaster, PaymasterFeeQuote, PaymasterMode, SponsorUserOperationDto } from '@biconomy/paymaster';
 import { HOSTED_WALLETS_ICONS, HOSTED_WALLETS_LABELS, PARTICAL_LOGINS_CLASSNAMES } from 'constants/wallet';
-import { Network } from 'enums/network';
 import { HostedWallets, ParticalTypes } from 'enums/wallet';
 import { Contract, ethers } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils.js';
@@ -18,6 +17,7 @@ import erc20Contract from './contracts/sUSDContract';
 import sportsAMMContract from './contracts/sportsAMMContract';
 import { checkAllowance, getNetworkNameByNetworkId } from './network';
 import networkConnector from './networkConnector';
+import { SupportedNetwork } from 'types/network';
 
 // const ERC20SVM = '0x000000D50C68705bd6897B2d17c7de32FB519fDA'; // session validation module for erc20 transfers
 const OVERTIMEVM = process.env.REACT_APP_OVERTIME_VALIDATION_MODULE; // overtime session validation module on Optimism
@@ -199,7 +199,7 @@ export const checkSession = async () => {
     }
 };
 
-export const createSession = async (scwAddress: string, collateralAddress: string, networkId: Network) => {
+export const createSession = async (scwAddress: string, collateralAddress: string, networkId: SupportedNetwork) => {
     const biconomySmartAccount = biconomyConnector.wallet;
     if (scwAddress && biconomySmartAccount) {
         try {
@@ -425,7 +425,12 @@ export const getClassNameForParticalLogin = (socialId: ParticalTypes) => {
     return label ? label : '';
 };
 
-export const getOnRamperUrl = (apiKey: string, walletAddress: string, networkId: Network, selectedToken: number) => {
+export const getOnRamperUrl = (
+    apiKey: string,
+    walletAddress: string,
+    networkId: SupportedNetwork,
+    selectedToken: number
+) => {
     return `https://buy.onramper.com?apiKey=${apiKey}&mode=buy&onlyCryptos=${
         getCollaterals(networkId)[selectedToken]
     }_${getNetworkNameByNetworkId(networkId, true)}&networkWallets=${getNetworkNameByNetworkId(
