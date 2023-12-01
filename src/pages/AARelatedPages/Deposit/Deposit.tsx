@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -27,6 +27,7 @@ import {
     WarningIcon,
     Wrapper,
 } from '../styled-components';
+import AllSetModal from './components/AllSetModal';
 import BalanceDetails from './components/BalanceDetails';
 import QRCodeModal from './components/QRCodeModal';
 
@@ -37,9 +38,12 @@ const Deposit: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isAA = useSelector((state: RootState) => getIsAA(state));
 
     const [selectedToken, setSelectedToken] = useState<number>(0);
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
+    const [totalValue, setTotalValue] = useState<number | undefined>(undefined);
+    const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
 
     const selectedTokenFromUrl = getQueryStringVal('coin-index');
 
@@ -57,6 +61,7 @@ const Deposit: React.FC = () => {
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
+        refetchInterval: 3000,
     });
 
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
@@ -64,6 +69,33 @@ const Deposit: React.FC = () => {
     });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const totalBalanceValue = useMemo(() => {
+        let total = 0;
+        try {
+            if (exchangeRates && multipleCollateralBalances.data) {
+                getCollaterals(networkId, isAA).forEach((token) => {
+                    total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                });
+            }
+
+            return total;
+        } catch (e) {
+            return undefined;
+        }
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, isAA]);
+
+    useEffect(() => {
+        if (totalBalanceValue == 0) {
+            setTotalValue(0);
+            return;
+        }
+        if (totalValue == 0 && totalBalanceValue && totalBalanceValue > 0) {
+            setTotalValue(totalBalanceValue);
+            setShowSuccessfulDepositModal(true);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [totalBalanceValue]);
 
     const inputRef = useRef<HTMLDivElement>(null);
 
@@ -180,6 +212,7 @@ const Deposit: React.FC = () => {
                     })}
                 />
             )}
+            {showSuccessfulDepositModal && <AllSetModal onClose={() => setShowSuccessfulDepositModal(false)} />}
         </>
     );
 };
