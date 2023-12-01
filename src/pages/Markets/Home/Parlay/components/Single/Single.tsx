@@ -751,40 +751,69 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
 
     useEffect(() => {
         const setGasFee = async () => {
-            const { sportsAMMContract } = networkConnector;
+            const { sportsAMMContract, signer, sUSDContract, multipleCollateral } = networkConnector;
+            if (!signer) return;
+            if (!multipleCollateral) return;
+            if (!sportsAMMContract) return;
             const ammQuote = await fetchAmmQuote(tokenAmount || 1);
             const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(tokenAmount).toString());
-            if (isDefaultCollateral) {
-                const gas = await getGasFeesForTx(collateralAddress, sportsAMMContract, 'buyFromAMM', [
-                    market.address,
-                    market.position,
-                    parsedAmount,
-                    ammQuote,
-                    ethers.utils.parseEther('0.02'),
-                ]);
+            if (!hasAllowance) {
+                const collateralContractWithSigner = isDefaultCollateral
+                    ? sUSDContract?.connect(signer)
+                    : multipleCollateral[selectedCollateral]?.connect(signer);
+
+                const addressToApprove = sportsAMMContract.address;
+
+                const gas = await getGasFeesForTx(
+                    collateralContractWithSigner?.address ?? '',
+                    collateralContractWithSigner,
+                    'approve',
+                    [addressToApprove, ethers.constants.MaxUint256]
+                );
 
                 setGas(gas as number);
             } else {
-                const gas = await getGasFeesForTx(
-                    collateralAddress,
-                    sportsAMMContract,
-                    'buyFromAMMWithDifferentCollateralAndReferrer',
-                    [
+                if (isDefaultCollateral) {
+                    const gas = await getGasFeesForTx(collateralAddress, sportsAMMContract, 'buyFromAMM', [
                         market.address,
                         market.position,
                         parsedAmount,
                         ammQuote,
                         ethers.utils.parseEther('0.02'),
-                        collateralAddress,
-                        ZERO_ADDRESS,
-                    ]
-                );
+                    ]);
 
-                setGas(gas as number);
+                    setGas(gas as number);
+                } else {
+                    const gas = await getGasFeesForTx(
+                        collateralAddress,
+                        sportsAMMContract,
+                        'buyFromAMMWithDifferentCollateralAndReferrer',
+                        [
+                            market.address,
+                            market.position,
+                            parsedAmount,
+                            ammQuote,
+                            ethers.utils.parseEther('0.02'),
+                            collateralAddress,
+                            ZERO_ADDRESS,
+                        ]
+                    );
+
+                    setGas(gas as number);
+                }
             }
         };
         if (isAA) setGasFee();
-    }, [collateralAddress, market, tokenAmount, isDefaultCollateral, fetchAmmQuote, isAA]);
+    }, [
+        collateralAddress,
+        market,
+        tokenAmount,
+        isDefaultCollateral,
+        fetchAmmQuote,
+        isAA,
+        hasAllowance,
+        selectedCollateral,
+    ]);
 
     return (
         <>

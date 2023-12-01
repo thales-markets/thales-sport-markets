@@ -773,7 +773,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
 
     useEffect(() => {
         const setGasFee = async () => {
-            const { parlayMarketsAMMContract } = networkConnector;
+            const {
+                parlayMarketsAMMContract,
+                sUSDContract,
+                signer,
+                multipleCollateral,
+                sportsAMMContract,
+            } = networkConnector;
+            if (!signer) return;
+            if (!multipleCollateral) return;
+            if (!sportsAMMContract) return;
 
             const marketsAddresses = markets.map((market) => market.address);
             const selectedPositions = markets.map((market) => market.position);
@@ -781,38 +790,65 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
             const additionalSlippage = ethers.utils.parseEther('0.02');
 
-            if (isDefaultCollateral) {
-                const gas = await getGasFeesForTx(collateralAddress, parlayMarketsAMMContract, 'buyFromParlay', [
-                    marketsAddresses,
-                    selectedPositions,
-                    usdPaid,
-                    additionalSlippage,
-                    expectedPayout,
-                    ZERO_ADDRESS,
-                ]);
+            if (!hasAllowance) {
+                const collateralContractWithSigner = isDefaultCollateral
+                    ? sUSDContract?.connect(signer)
+                    : multipleCollateral[selectedCollateral]?.connect(signer);
+
+                const addressToApprove = sportsAMMContract.address;
+
+                const gas = await getGasFeesForTx(
+                    collateralContractWithSigner?.address ?? '',
+                    collateralContractWithSigner,
+                    'approve',
+                    [addressToApprove, ethers.constants.MaxUint256]
+                );
 
                 setGas(gas as number);
             } else {
-                const gas = await getGasFeesForTx(
-                    collateralAddress,
-                    parlayMarketsAMMContract,
-                    'buyFromParlayWithDifferentCollateralAndReferrer',
-                    [
+                if (isDefaultCollateral) {
+                    const gas = await getGasFeesForTx(collateralAddress, parlayMarketsAMMContract, 'buyFromParlay', [
                         marketsAddresses,
                         selectedPositions,
                         usdPaid,
                         additionalSlippage,
                         expectedPayout,
-                        collateralAddress,
                         ZERO_ADDRESS,
-                    ]
-                );
+                    ]);
 
-                setGas(gas as number);
+                    setGas(gas as number);
+                } else {
+                    const gas = await getGasFeesForTx(
+                        collateralAddress,
+                        parlayMarketsAMMContract,
+                        'buyFromParlayWithDifferentCollateralAndReferrer',
+                        [
+                            marketsAddresses,
+                            selectedPositions,
+                            usdPaid,
+                            additionalSlippage,
+                            expectedPayout,
+                            collateralAddress,
+                            ZERO_ADDRESS,
+                        ]
+                    );
+
+                    setGas(gas as number);
+                }
             }
         };
         if (isAA) setGasFee();
-    }, [collateralAddress, markets, usdAmountValue, networkId, totalBuyAmount, isDefaultCollateral, isAA]);
+    }, [
+        collateralAddress,
+        markets,
+        usdAmountValue,
+        networkId,
+        totalBuyAmount,
+        isDefaultCollateral,
+        isAA,
+        hasAllowance,
+        selectedCollateral,
+    ]);
 
     return (
         <>
