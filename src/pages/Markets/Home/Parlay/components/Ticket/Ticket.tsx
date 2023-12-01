@@ -1,11 +1,17 @@
-import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
+import Button from 'components/Button';
+import CollateralSelector from 'components/CollateralSelector';
+import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, MIN_COLLATERAL_MULTIPLIER } from 'constants/markets';
+import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
+import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -17,19 +23,31 @@ import { getParlayPayment, removeAll, setPaymentAmountToBuy } from 'redux/module
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
-import { ParlaysMarket } from 'types/markets';
 import {
+    bigNumberFormatter,
     ceilNumberToDecimals,
+    coinFormatter,
+    coinParser,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
     formatPercentage,
     getPrecision,
     roundNumberToDecimals,
-    bigNumberFormatter,
-    coinFormatter,
-    coinParser,
 } from 'thales-utils';
+import { ParlaysMarket } from 'types/markets';
+import { Coins } from 'types/tokens';
+import { ThemeInterface } from 'types/ui';
+import {
+    getCollateral,
+    getCollateralAddress,
+    getCollateralIndex,
+    getCollaterals,
+    getDefaultCollateral,
+    isStableCurrency,
+} from 'utils/collaterals';
+import { isSGPInParlayMarkets } from 'utils/combinedMarkets';
 import { formatMarketOdds, getBonus } from 'utils/markets';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
@@ -38,6 +56,7 @@ import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
+import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
     InfoContainer,
@@ -55,30 +74,12 @@ import {
     XButton,
     defaultButtonProps,
 } from '../styled-components';
-import { isSGPInParlayMarkets } from 'utils/combinedMarkets';
-import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
-import { OddsType } from 'enums/markets';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
-import Button from 'components/Button';
-import NumericInput from 'components/fields/NumericInput';
-import {
-    getCollateral,
-    getCollateralAddress,
-    getCollateralIndex,
-    getCollaterals,
-    getDefaultCollateral,
-} from 'utils/collaterals';
-import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
-import CollateralSelector from 'components/CollateralSelector';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
-import { Coins } from 'types/tokens';
-import Voucher from '../Voucher';
 
 type TicketProps = {
     markets: ParlaysMarket[];
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
     onBuySuccess?: () => void;
+    setUpdatedQuotes: (quotes: number[]) => void;
 };
 
 const TicketErrorMessage = {
@@ -86,9 +87,8 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess }) => {
+const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess, setUpdatedQuotes }) => {
     const { t } = useTranslation();
-    const { trackEvent } = useMatomo();
     const { openConnectModal } = useConnectModal();
     const theme: ThemeInterface = useTheme();
 
@@ -148,6 +148,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         [networkId, selectedCollateralIndex, isEth]
     );
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
+    const isStableCollateral = isStableCurrency(selectedCollateral);
 
     const hasParlayCombinedMarkets = isSGPInParlayMarkets(markets);
 
@@ -264,6 +265,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     const usdPaid = isDefaultCollateral
                         ? coinParser(collateralAmountForQuote.toString(), networkId)
                         : minimumReceivedForCollateralAmount;
+
                     const minUsdPaid = coinParser(minUsdAmountValue.toString(), networkId);
 
                     setUsdAmountValue(coinFormatter(usdPaid, networkId));
@@ -432,26 +434,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 const txResult = await tx.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    if (hasParlayCombinedMarkets) {
-                        trackEvent({
-                            category: 'parlay',
-                            action: 'parlay-has-combined-position',
-                            value: Number(collateralAmountValue),
-                        });
-                    }
-
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
                         props: {
                             value: Number(collateralAmountValue),
                             collateral: selectedCollateral,
                             networkId,
                         },
-                    });
-
-                    trackEvent({
-                        category: 'parlay',
-                        action: `buy-with-${selectedCollateral}`,
-                        value: Number(collateralAmountValue),
                     });
                     refetchBalances(walletAddress, networkId);
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
@@ -635,7 +623,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
                     const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['totalBuyAmount']);
 
-                    setTotalQuote(parlayAmmTotalQuote);
+                    setTotalQuote(
+                        1 /
+                            (parlayAmmTotalBuyAmount /
+                                (isStableCollateral ? Number(collateralAmountValue) : Number(usdAmountValue)))
+                    );
                     setSkew(bigNumberFormatter(parlayAmmQuote['skewImpact'] || 0));
                     setTotalBuyAmount(parlayAmmTotalBuyAmount);
 
@@ -647,7 +639,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                         .map((finalQuote, index) => (finalQuote === 0 ? index : -1))
                         .filter((index) => index !== -1);
                     setMarketsOutOfLiquidity(marketsOutOfLiquidity);
+
                     setFinalQuotes(fetchedFinalQuotes);
+                    setUpdatedQuotes(fetchedFinalQuotes);
 
                     const baseQuote = bigNumberFormatter(parlayAmmQuote['minimumCollateralAmountTotalQuote']);
                     const calculatedReducedTotalBonus =
@@ -687,6 +681,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         hasParlayCombinedMarkets,
         markets,
         networkId,
+        usdAmountValue,
+        isStableCollateral,
+        setUpdatedQuotes,
     ]);
 
     useEffect(() => {

@@ -15,6 +15,8 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import {
@@ -32,8 +34,6 @@ import {
     Separator,
     Wrapper,
 } from './styled-components';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
 type NavMenuProps = {
     visibility?: boolean | null;
@@ -70,8 +70,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(null)}
-                                    data-matomo-category="navigation-menu"
-                                    data-matomo-action={item.name}
                                 >
                                     {isWalletConnected ? (
                                         <ProfileIconWidget avatarSize={25} iconColor={theme.textColor.primary} />
@@ -92,8 +90,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(null)}
-                                    data-matomo-category="navigation-menu"
-                                    data-matomo-action={item.name}
                                 >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
@@ -110,8 +106,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(null)}
-                                    data-matomo-category="navigation-menu"
-                                    data-matomo-action={item.name}
                                 >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>
@@ -128,8 +122,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                                     key={index}
                                     active={location.pathname === item.route}
                                     onClick={() => setNavMenuVisibility(null)}
-                                    data-matomo-category="navigation-menu"
-                                    data-matomo-action={item.name}
                                 >
                                     <NavIcon className={item.iconClass} active={location.pathname === item.route} />
                                     <NavLabel>{t(item.i18label)}</NavLabel>

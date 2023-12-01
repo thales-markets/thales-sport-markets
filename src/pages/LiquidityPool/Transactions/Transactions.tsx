@@ -1,17 +1,17 @@
+import SelectInput from 'components/SelectInput';
+import { LiquidityPoolTransaction } from 'enums/liquidityPool';
+import { orderBy } from 'lodash';
+import useLiquidityPoolUserTransactionsQuery from 'queries/liquidityPool/useLiquidityPoolUserTransactionsQuery';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { useTranslation } from 'react-i18next';
-import { orderBy } from 'lodash';
-import { getIsAppReady } from 'redux/modules/app';
-import { LiquidityPoolUserTransactions, LiquidityPoolUserTransaction, LiquidityPoolType } from 'types/liquidityPool';
-import SelectInput from 'components/SelectInput';
-import useLiquidityPoolUserTransactionsQuery from 'queries/liquidityPool/useLiquidityPoolUserTransactionsQuery';
+import { LiquidityPoolType, LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import UserTransactionsTable from '../UserTransactionsTable';
-import { LiquidityPoolTransaction } from 'enums/liquidityPool';
 
 type TransactionsProps = {
     currentRound: number;
@@ -92,7 +92,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
     const noLiquidityPoolMyTransactions = liquidityPoolMyTransactions.length === 0;
 
     return (
-        <Container data-matomo-category="liquidity-pool" data-matomo-action="interaction-with-transaction-tables">
+        <Container>
             <Header>
                 <TabContainer>
                     {tabContent.map((tab, index) => (
