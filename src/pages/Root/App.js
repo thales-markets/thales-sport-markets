@@ -29,6 +29,12 @@ import queryConnector from 'utils/queryConnector';
 import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
+import { ParticleNetwork } from '@particle-network/auth';
+import { ParticleProvider } from '@particle-network/provider';
+import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from '@biconomy/account';
+import { Bundler } from '@biconomy/bundler';
+import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from '@biconomy/modules';
+import { BiconomyPaymaster } from '@biconomy/paymaster';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
