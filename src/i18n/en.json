@@ -760,7 +760,7 @@
         "deposit-crypto": "Deposit crypto",
         "select-token": "Select token",
         "address-input-label": "Your personal {{ token }} deposit address on {{ network }}",
-        "send": "Send {{ token }} on {{ network }} to the address above!",
+        "send": "Make sure you are depositing {{ network }} {{ token }} to the address above!",
         "copying-address": "Please wait",
         "copied": "Address copied!",
         "qr-modal-title": "Send {{ token }} ({{ network }})"

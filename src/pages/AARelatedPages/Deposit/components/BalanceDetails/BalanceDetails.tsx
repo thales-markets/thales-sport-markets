@@ -1,15 +1,16 @@
 import { USD_SIGN } from 'constants/currency';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId, getWalletAddress, getIsWalletConnected } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress, getIsWalletConnected, getIsAA } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { getCollaterals } from 'utils/collaterals';
+import { Coins } from 'types/tokens';
+import { getCollaterals, isStableCurrency } from 'utils/collaterals';
 import { formatCurrency, formatCurrencyWithSign } from 'utils/formatters/number';
 
 const BalanceDetails: React.FC = () => {
@@ -17,6 +18,7 @@ const BalanceDetails: React.FC = () => {
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isAA = useSelector((state: RootState) => getIsAA(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
@@ -46,12 +48,19 @@ const BalanceDetails: React.FC = () => {
         }
     }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
+    const getUSDForCollateral = useCallback(
+        (token: Coins) =>
+            (multipleCollateralBalances.data ? multipleCollateralBalances.data[token] : 0) *
+            (isStableCurrency(token as Coins) ? 1 : exchangeRates?.[token] || 0),
+        [multipleCollateralBalances, exchangeRates]
+    );
+
     return (
         <BalanceWrapper>
             <SectionLabel>{t('my-portfolio.estimated-balance')}</SectionLabel>
             <TotalBalance>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</TotalBalance>
             <TokenBalancesWrapper>
-                {getCollaterals(networkId).map((token, index) => {
+                {getCollaterals(networkId, isAA).map((token, index) => {
                     return (
                         <IndividualTokenBalanceWrapper key={`ind-token-${index}`}>
                             <Token>
@@ -62,6 +71,11 @@ const BalanceDetails: React.FC = () => {
                                 {multipleCollateralBalances.data
                                     ? formatCurrency(multipleCollateralBalances.data[token])
                                     : 0}
+                            </IndividualTokenBalance>
+                            <IndividualTokenBalance>
+                                {!exchangeRates?.[token] && !isStableCurrency(token as Coins)
+                                    ? '...'
+                                    : ` (${formatCurrencyWithSign(USD_SIGN, getUSDForCollateral(token as Coins))})`}
                             </IndividualTokenBalance>
                         </IndividualTokenBalanceWrapper>
                     );
@@ -100,6 +114,7 @@ const TotalBalance = styled.span`
 const TokenBalancesWrapper = styled(FlexDiv)`
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-between;
 `;
 
 const IndividualTokenBalanceWrapper = styled(FlexDiv)`
@@ -108,7 +123,7 @@ const IndividualTokenBalanceWrapper = styled(FlexDiv)`
     align-items: center;
     margin-bottom: 20px;
     min-width: 150px;
-    margin-right: 40px;
+    margin-right: 10px;
     @media (max-width: 575px) {
         margin-right: 10px;
     }

@@ -333,8 +333,10 @@ const Button = styled(FlexDivCentered)<{ oneButtoninRow?: boolean; active?: bool
     text-transform: capitalize;
     cursor: pointer;
     &:hover {
-        background-color: ${(props) => props.theme.connectWalletModal.hover};
-        color: ${(props) => props.theme.connectWalletModal.hoverText};
+        background-color: ${(props) => (props.oneButtoninRow ? props.theme.connectWalletModal.hover : '')};
+        color: ${(props) =>
+            props.oneButtoninRow ? props.theme.button.textColor.primary : props.theme.button.textColor.quaternary};
+        border: ${(props) => (props.oneButtoninRow ? 'none' : `1px ${props.theme.button.borderColor.secondary} solid`)};
     }
 `;
 
