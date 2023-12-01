@@ -94,8 +94,6 @@ const Deposit: React.FC = () => {
         )}:${walletAddress}`;
     }, [walletAddress, networkId, apiKey, selectedToken]);
 
-    console.log();
-
     return (
         <>
             {isMobile && <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>}
@@ -124,7 +122,7 @@ const Deposit: React.FC = () => {
                     <DepositAddressFormContainer>
                         <InputLabel>
                             {t('deposit.address-input-label', {
-                                token: getCollaterals(networkId)[selectedToken],
+                                token: getCollaterals(networkId, true)[selectedToken],
                                 network: getNetworkNameByNetworkId(networkId),
                             })}
                         </InputLabel>
@@ -148,7 +146,7 @@ const Deposit: React.FC = () => {
                         <WarningContainer>
                             <WarningIcon className={'icon icon--warning'} />
                             {t('deposit.send', {
-                                token: getCollaterals(networkId)[selectedToken],
+                                token: getCollaterals(networkId, true)[selectedToken],
                                 network: getNetworkNameByNetworkId(networkId),
                             })}
                         </WarningContainer>
