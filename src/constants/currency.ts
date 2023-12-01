@@ -61,15 +61,15 @@ export const COLLATERALS: Record<Network, Coins[]> = {
 
 export const COLLATERALS_AA: Record<Network, Coins[]> = {
     [Network.OptimismMainnet]: [
-        CRYPTO_CURRENCY_MAP.sUSD as Coins,
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
+        CRYPTO_CURRENCY_MAP.sUSD as Coins,
     ],
     [Network.OptimismGoerli]: [CRYPTO_CURRENCY_MAP.sUSD as Coins],
     [Network.ArbitrumOne]: [
-        CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.USDC as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
+        CRYPTO_CURRENCY_MAP.USDCe as Coins,
     ],
     [Network.Base]: [CRYPTO_CURRENCY_MAP.USDC as Coins],
 };
