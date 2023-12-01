@@ -1,5 +1,6 @@
 import CollateralSelector from 'components/CollateralSelector';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
+import { COLLATERALS_AA } from 'constants/currency';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -11,6 +12,7 @@ import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modu
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
+import { getOnRamperUrl } from 'utils/biconomy';
 import { getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
@@ -27,7 +29,6 @@ import {
 } from '../styled-components';
 import BalanceDetails from './components/BalanceDetails';
 import QRCodeModal from './components/QRCodeModal';
-import { COLLATERALS_AA } from 'constants/currency';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
@@ -86,12 +87,7 @@ const Deposit: React.FC = () => {
     const apiKey = process.env.REACT_APP_ONRAMPER_KEY || '';
 
     const onramperUrl = useMemo(() => {
-        return `https://buy.onramper.com?apiKey=${apiKey}&mode=buy&onlyCryptos=${
-            getCollaterals(networkId)[selectedToken]
-        }_${getNetworkNameByNetworkId(networkId, true)}&networkWallets=${getNetworkNameByNetworkId(
-            networkId,
-            true
-        )}:${walletAddress}`;
+        return getOnRamperUrl(apiKey, walletAddress, networkId, selectedToken);
     }, [walletAddress, networkId, apiKey, selectedToken]);
 
     return (

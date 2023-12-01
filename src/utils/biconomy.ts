@@ -1,21 +1,22 @@
-import { Contract, ethers } from 'ethers';
-import biconomyConnector from './biconomyWallet';
-import { IHybridPaymaster, PaymasterFeeQuote, PaymasterMode, SponsorUserOperationDto } from '@biconomy/paymaster';
-import { Connector } from 'wagmi';
-import { HostedWallets, ParticalTypes } from 'enums/wallet';
-import { HOSTED_WALLETS_ICONS, HOSTED_WALLETS_LABELS, PARTICAL_LOGINS_CLASSNAMES } from 'constants/wallet';
 import {
     BatchedSessionRouterModule,
     DEFAULT_BATCHED_SESSION_ROUTER_MODULE,
     DEFAULT_SESSION_KEY_MANAGER_MODULE,
     SessionKeyManagerModule,
 } from '@biconomy/modules';
-import { defaultAbiCoder } from 'ethers/lib/utils.js';
-import { checkAllowance } from './network';
-import sportsAMMContract from './contracts/sportsAMMContract';
-import parlayMarketsAMMContract from './contracts/parlayMarketsAMMContract';
+import { IHybridPaymaster, PaymasterFeeQuote, PaymasterMode, SponsorUserOperationDto } from '@biconomy/paymaster';
+import { HOSTED_WALLETS_ICONS, HOSTED_WALLETS_LABELS, PARTICAL_LOGINS_CLASSNAMES } from 'constants/wallet';
 import { Network } from 'enums/network';
+import { HostedWallets, ParticalTypes } from 'enums/wallet';
+import { Contract, ethers } from 'ethers';
+import { defaultAbiCoder } from 'ethers/lib/utils.js';
+import { Connector } from 'wagmi';
+import biconomyConnector from './biconomyWallet';
+import { getCollaterals } from './collaterals';
+import parlayMarketsAMMContract from './contracts/parlayMarketsAMMContract';
 import erc20Contract from './contracts/sUSDContract';
+import sportsAMMContract from './contracts/sportsAMMContract';
+import { checkAllowance, getNetworkNameByNetworkId } from './network';
 import networkConnector from './networkConnector';
 
 // const ERC20SVM = '0x000000D50C68705bd6897B2d17c7de32FB519fDA'; // session validation module for erc20 transfers
@@ -422,4 +423,13 @@ export const getWalleti18Label = (walletId: HostedWallets) => {
 export const getClassNameForParticalLogin = (socialId: ParticalTypes) => {
     const label = PARTICAL_LOGINS_CLASSNAMES.find((item) => item.socialId == socialId)?.className;
     return label ? label : '';
+};
+
+export const getOnRamperUrl = (apiKey: string, walletAddress: string, networkId: Network, selectedToken: number) => {
+    return `https://buy.onramper.com?apiKey=${apiKey}&mode=buy&onlyCryptos=${
+        getCollaterals(networkId)[selectedToken]
+    }_${getNetworkNameByNetworkId(networkId, true)}&networkWallets=${getNetworkNameByNetworkId(
+        networkId,
+        true
+    )}:${walletAddress}`;
 };
