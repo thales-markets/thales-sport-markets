@@ -37,7 +37,7 @@ const BalanceDetails: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId).forEach((token) => {
+                getCollaterals(networkId, isAA).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
             }
@@ -46,7 +46,7 @@ const BalanceDetails: React.FC = () => {
         } catch (e) {
             return 'N/A';
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, isAA]);
 
     const getUSDForCollateral = useCallback(
         (token: Coins) =>
