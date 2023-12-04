@@ -14,7 +14,7 @@ import ROUTES from 'constants/routes';
 import { SUPPORTED_PARTICAL_CONNECTORS } from 'constants/wallet';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getWalletConnectModalOrigin } from 'redux/modules/wallet';
+import { getNetworkId, getWalletConnectModalOrigin } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { getClassNameForParticalLogin, getSpecificConnectorFromConnectorsArray } from 'utils/biconomy';
 import { navigateTo } from 'utils/routes';
@@ -51,7 +51,11 @@ type ConnectWalletModalProps = {
 
 const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
-    const { connect, connectors, isLoading, isSuccess } = useConnect();
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+
+    const { connectors, isLoading, isSuccess, connect } = useConnect({
+        chainId: networkId,
+    });
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const { openConnectModal } = useConnectModal();
     const [termsAccepted, setTerms] = useState(false);
