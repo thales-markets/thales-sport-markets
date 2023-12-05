@@ -1,11 +1,11 @@
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
-import { BigNumber } from 'ethers';
-import { Network } from 'enums/network';
-import { getNavItemFromRoute } from './ui';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { Network } from 'enums/network';
+import { BigNumber } from 'ethers';
 import { localStore } from 'thales-utils';
 import { SupportedNetwork } from '../types/network';
 import { getCollaterals } from './collaterals';
+import { getNavItemFromRoute } from './ui';
 
 export const isNetworkSupported = (networkId: SupportedNetwork): boolean => {
     return !!SUPPORTED_NETWORKS[networkId];
