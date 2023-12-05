@@ -1,6 +1,6 @@
 import { particleWallet } from '@particle-network/rainbowkit-ext';
-import { RainbowKitProvider, connectorsForWallets, darkTheme } from '@rainbow-me/rainbowkit';
-import '@rainbow-me/rainbowkit/dist/index.css';
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { base } from '@rainbow-me/rainbowkit/dist/css/reset.css';
 import {
     braveWallet,
     coinbaseWallet,
@@ -12,57 +12,15 @@ import {
     rainbowWallet,
     trustWallet,
     walletConnectWallet,
-} from '@rainbow-me/rainbowkit/wallets';
-import WalletDisclaimer from 'components/WalletDisclaimer';
-import { PLAUSIBLE } from 'constants/analytics';
-import { base } from 'constants/network';
-import { ThemeMap } from 'constants/ui';
-import dotenv from 'dotenv';
-import { Network } from 'enums/network';
-import { merge } from 'lodash';
-import App from 'pages/Root/App';
-import React, { useMemo } from 'react';
-import { Provider } from 'react-redux';
-import { Store } from 'redux';
-import { getDefaultTheme } from 'redux/modules/ui';
-import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { arbitrum, optimism, optimismGoerli } from 'wagmi/chains';
-import { infuraProvider } from 'wagmi/providers/infura';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { publicProvider } from 'wagmi/providers/public';
-import ParticleProvider from './Provider/ParticleProvider';
+} from '@rainbow-me/rainbowkit/dist/wallets/walletConnectors';
+import { useMemo } from 'react';
+import { configureChains, createClient } from 'wagmi';
+import { arbitrum, optimism, optimismGoerli } from 'wagmi/dist/chains';
+import { infuraProvider } from 'wagmi/dist/providers/infura';
+import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
+import { publicProvider } from 'wagmi/dist/providers/public';
 
-dotenv.config();
-
-type RootProps = {
-    store: Store;
-};
-
-type RpcProvider = {
-    ankr: string;
-    chainnode: string;
-    blast: string;
-};
-
-const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
-    [Network.OptimismMainnet]: {
-        ankr: 'optimism',
-        chainnode: 'optimism-mainnet',
-        blast: 'optimism-mainnet',
-    },
-    [Network.OptimismGoerli]: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
-    [Network.Arbitrum]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
-    [Network.Base]: { ankr: 'base', chainnode: '', blast: '' },
-};
-
-const STALL_TIMEOUT = 2000;
-
-const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
-
-const theme = getDefaultTheme();
-const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
-
-const Root: React.FC<RootProps> = ({ store }) => {
+const WagmiProvider: React.FC = () => {
     const { chains, provider } = configureChains(
         [optimism, optimismGoerli, arbitrum, base],
         [
@@ -121,27 +79,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
         connectors,
         provider,
     });
-
-    PLAUSIBLE.enableAutoPageviews();
-
-    return (
-        <Provider store={store}>
-            <ParticleProvider>
-                <WagmiConfig client={wagmiClient}>
-                    <RainbowKitProvider
-                        chains={chains}
-                        theme={customTheme}
-                        appInfo={{
-                            appName: 'Overtime',
-                            disclaimer: WalletDisclaimer,
-                        }}
-                    >
-                        <App />
-                    </RainbowKitProvider>
-                </WagmiConfig>
-            </ParticleProvider>
-        </Provider>
-    );
 };
 
-export default Root;
+export default WagmiProvider;
+

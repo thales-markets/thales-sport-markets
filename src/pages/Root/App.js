@@ -2,7 +2,6 @@ import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from '@biconomy/ac
 import { Bundler } from '@biconomy/bundler';
 import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from '@biconomy/modules';
 import { BiconomyPaymaster } from '@biconomy/paymaster';
-import { ParticleNetwork } from '@particle-network/auth';
 import { ParticleProvider } from '@particle-network/provider';
 import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
@@ -15,7 +14,7 @@ import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
 import Wizard from 'pages/Wizard';
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy, useContext, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,6 +35,7 @@ import networkConnector from 'utils/networkConnector';
 import queryConnector from 'utils/queryConnector';
 import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
+import { ParticleContext } from './Provider/ParticleProvider/ParticleProvider';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
@@ -51,26 +51,6 @@ const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
 const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
 const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 
-const particle = new ParticleNetwork({
-    projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
-    clientKey: process.env.REACT_APP_CLIENT_KEY,
-    appId: process.env.REACT_APP_PARTICLE_APP_ID,
-    chainName: 'optimism', //optional
-    chainId: 10, //optional
-    wallet: {
-        //optional: by default, the wallet entry is displayed in the bottom right corner of the webpage.
-        displayWalletEntry: false, //show wallet entry when connect particle.
-        uiMode: 'dark', //optional: light or dark, if not set, the default is the same as web auth.
-        supportChains: [
-            { id: 10, name: 'optimism' },
-            { id: 42161, name: 'arbitrum' },
-            { id: 420, name: 'optimism' },
-            { id: 84531, name: 'base' },
-        ], // optional: web wallet support chains.
-        customStyle: {}, //optional: custom wallet style
-    },
-});
-
 const App = () => {
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
@@ -83,16 +63,29 @@ const App = () => {
     const { disconnect } = useDisconnect();
     const { chain } = useNetwork();
 
+    const particle = useContext(ParticleContext);
+
     queryConnector.setQueryClient();
 
     useEffect(() => {
         const init = async () => {
             try {
+                console.log('provider ', provider);
+                console.log('address ', address);
+
+                console.log('provider ', provider);
+                console.log('signer ', signer);
+                console.log('switchedToNetworkId ', switchedToNetworkId);
+                console.log('particle.auth.isLogin() ', particle ? particle?.auth?.isLogin() : 'test nista');
+                console.log('--------------------------------------------------------');
+                let walletAddress = address;
+                let isAA = false;
+
                 const chainIdFromProvider = (await provider.getNetwork()).chainId;
                 const providerNetworkId = !!address ? chainIdFromProvider : switchedToNetworkId;
                 let web3Provider;
 
-                if (particle.auth.isLogin()) {
+                if (particle && particle.auth.isLogin()) {
                     const userInfo = particle.auth.getUserInfo();
                     const particleProvider = new ParticleProvider(particle.auth);
                     const chainId = (await provider.getNetwork()).chainId;
@@ -110,7 +103,9 @@ const App = () => {
                     });
 
                     web3Provider = new ethers.providers.Web3Provider(particleProvider, 'any');
+                    const networkOdParticle = await web3Provider.getNetwork();
 
+                    console.log('networkOdParticle ', networkOdParticle);
                     const module = await ECDSAOwnershipValidationModule.create({
                         signer: web3Provider.getSigner(),
                         moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE,
@@ -129,8 +124,11 @@ const App = () => {
                     const swAddress = await account.getAccountAddress();
                     biconomyConnector.setWallet(account);
                     biconomyConnector.setUserInfo(userInfo);
-                    dispatch(updateWallet({ walletAddress: swAddress, isAA: true }));
+                    walletAddress = swAddress;
+                    isAA = true;
                 }
+
+                dispatch(updateWallet({ walletAddress, isAA }));
 
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
@@ -151,11 +149,8 @@ const App = () => {
             }
         };
         init();
-    }, [dispatch, provider, signer, switchedToNetworkId, address]);
-
-    useEffect(() => {
-        dispatch(updateWallet({ walletAddress: address, isAA: particle.auth.isLogin() }));
-    }, [address, dispatch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, switchedToNetworkId, address]);
 
     useEffect(() => {
         const handlePageResized = () => {
@@ -185,6 +180,7 @@ const App = () => {
                 const chainId = Number.isInteger(chainIdParam) ? chainIdParam : parseInt(chainIdParam, 16);
 
                 if (!address && isNetworkSupported(chainId)) {
+                    console.log('Ulazi u switchNetowkrId');
                     // when wallet disconnected reflect network change from browser wallet to dApp
                     dispatch(switchToNetworkId({ networkId: chainId }));
                 }
@@ -194,7 +190,14 @@ const App = () => {
 
     useEffect(() => {
         // only Wizard page requires mainnet because of Bridge functionality
-        if (chain?.unsupported && !(chain?.id === mainnet.id && location.pathname === buildHref(ROUTES.Wizard))) {
+        console.log('chain ', chain);
+        console.log('chain?.unsupported ', chain?.unsupported);
+        if (
+            chain &&
+            chain?.unsupported &&
+            !(chain?.id === mainnet.id && location.pathname === buildHref(ROUTES.Wizard))
+        ) {
+            console.log('Ulazi u disconnect');
             disconnect();
         }
     }, [disconnect, chain]);

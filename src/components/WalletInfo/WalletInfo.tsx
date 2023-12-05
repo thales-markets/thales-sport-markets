@@ -18,13 +18,13 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { truncateAddress, changeNetwork, formatCurrency } from 'thales-utils';
+import { changeNetwork, formatCurrency, truncateAddress } from 'thales-utils';
 
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 
-import { useSwitchNetwork } from 'wagmi';
-import { getDefaultCollateral } from 'utils/collaterals';
 import { SupportedNetwork } from 'types/network';
+import { getDefaultCollateral } from 'utils/collaterals';
+import { useSwitchNetwork } from 'wagmi';
 
 type WalletInfoProps = {
     onCloseMobile?: () => void;
@@ -153,6 +153,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
                                                         onClick={async () => {
                                                             setDropDownOpen(false);
                                                             await changeNetwork(network, () => {
+                                                                console.log('Pokretanje switchNetworka');
                                                                 switchNetwork?.(network.id);
                                                                 // Trigger App.js init
                                                                 // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
