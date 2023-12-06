@@ -1,7 +1,7 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
-import { PARLAY_LEADERBOARD_BIWEEKLY_START_DATE, PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE } from 'constants/markets';
+import { PARLAY_LEADERBOARD_BIWEEKLY_START_DATE, PARLAY_LEADERBOARD_END_PERIOD_BASE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
 import { differenceInDays } from 'date-fns';
@@ -82,14 +82,10 @@ const SidebarLeaderboard: React.FC = () => {
 
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
-    const latestPeriodBiweekly = Math.trunc(
-        differenceInDays(
-            new Date(),
-            networkId == Network.Base
-                ? PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE
-                : PARLAY_LEADERBOARD_BIWEEKLY_START_DATE
-        ) / 14
-    );
+    const latestPeriodBiweekly = useMemo(() => {
+        if (networkId == Network.Base) return PARLAY_LEADERBOARD_END_PERIOD_BASE;
+        return Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_BIWEEKLY_START_DATE) / 14);
+    }, [networkId]);
 
     const query = useParlayLeaderboardQuery(networkId, latestPeriodBiweekly, { enabled: isAppReady });
 
