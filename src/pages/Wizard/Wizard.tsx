@@ -1,3 +1,4 @@
+import { WizardStep } from 'enums/wizard';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -8,7 +9,6 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivStart } from 'styles/common';
 import YouTubeVideo from '../../components/YouTubeVideo';
 import Step from './components/Step';
-import { WizardStep } from 'enums/wizard';
 
 const Wizard: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -44,7 +44,7 @@ const Wizard: React.FC = () => {
             })}
             <VideoContainer>
                 <YouTubeVideo
-                    source="https://www.youtube.com/embed/udYpsNueZp4"
+                    source="https://www.youtube.com/embed/fk05qbqbuZo"
                     title="What are Overtime Markets and how to participate?  *UPDATED* Overtime Markets video walk through"
                 />
             </VideoContainer>
