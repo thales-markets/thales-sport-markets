@@ -258,6 +258,8 @@
         "view-all-markets": "View all markets",
         "table": {
             "title": "Recent activity",
+            "single-title": "Recent single activity",
+            "parlay-title": "Recent parlay activity",
             "date-time-col": "date | time",
             "type-col": "type",
             "position-col": "position",

@@ -1,10 +1,10 @@
-import React, { useMemo, DependencyList, CSSProperties, useEffect, useState } from 'react';
-import { useTable, useSortBy, Column, Row, Cell, usePagination } from 'react-table';
 import SimpleLoader from 'components/SimpleLoader';
-import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
-import { FlexDiv, FlexDivCentered } from 'styles/common';
 import { SortDirection } from 'enums/markets';
+import React, { CSSProperties, DependencyList, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Cell, Column, Row, usePagination, useSortBy, useTable } from 'react-table';
+import styled from 'styled-components';
+import { FlexDiv, FlexDivCentered } from 'styles/common';
 
 type CSSPropertiesWithMedia = { cssProperties: CSSProperties } & { mediaMaxWidth: string };
 
@@ -32,6 +32,7 @@ type TableProps = {
     onSortByChanged?: any;
     currentPage?: number;
     rowsPerPage?: number;
+    tableHeight?: string;
     expandedRow?: (row: Row<any>) => JSX.Element;
     stickyRow?: JSX.Element;
 };
@@ -55,6 +56,7 @@ const Table: React.FC<TableProps> = ({
     rowsPerPage,
     expandedRow,
     stickyRow,
+    tableHeight,
 }) => {
     const { t } = useTranslation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,7 +135,7 @@ const Table: React.FC<TableProps> = ({
                     ))}
                 </TableRowHead>
             ))}
-            <ReactTable {...getTableProps()}>
+            <ReactTable height={tableHeight} {...getTableProps()}>
                 {isLoading ? (
                     <LoaderContainer>
                         <SimpleLoader />
@@ -230,9 +232,9 @@ const ExpandableRowReact: React.FC<{
     );
 };
 
-const ReactTable = styled.div`
+const ReactTable = styled.div<{ height?: string }>`
     width: 100%;
-    height: 100%;
+    height: ${(props) => props.height || '100%'};
     overflow-x: auto;
     position: relative;
     display: flex;
