@@ -1,35 +1,35 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { buildVaultLink } from 'utils/routes';
-import {
-    VaultContainer,
-    SpaContainer,
-    VaultTitle,
-    VaultSectionDescription,
-    LoaderContainer,
-    VaultInfoContainer,
-    VaultInfoLabel,
-    VaultInfo,
-    VaultBottomWrapper,
-    VaultTopWrapper,
-    TitleVaultIcon,
-    NewBadge,
-} from './styled-components';
 import SPAAnchor from 'components/SPAAnchor';
-import i18n from 'i18n';
-import { VAULT_MAP } from 'constants/vault';
-import { RootState } from 'redux/rootReducer';
-import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
-import { getIsAppReady } from 'redux/modules/app';
-import { VaultData } from 'types/vault';
-import { formatPercentage, formatPercentageWithSign } from 'utils/formatters/number';
 import SimpleLoader from 'components/SimpleLoader';
 import TimeRemaining from 'components/TimeRemaining';
-import { Colors, FlexDivColumn } from 'styles/common';
+import { VAULT_MAP } from 'constants/vault';
+import i18n from 'i18n';
 import useVaultDataQuery from 'queries/vault/useVaultDataQuery';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
+import { Colors, FlexDivColumn } from 'styles/common';
+import { formatPercentage, formatPercentageWithSign } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
+import { VaultData } from 'types/vault';
+import { buildVaultLink } from 'utils/routes';
+import {
+    LoaderContainer,
+    NewBadge,
+    SpaContainer,
+    TitleVaultIcon,
+    VaultBottomWrapper,
+    VaultContainer,
+    VaultInfo,
+    VaultInfoContainer,
+    VaultInfoLabel,
+    VaultSectionDescription,
+    VaultTitle,
+    VaultTopWrapper,
+} from './styled-components';
 
 type VaultOverviewProps = {
     vaultId: string;
@@ -63,7 +63,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
     }, [vaultDataQuery.isSuccess, vaultDataQuery.data, lastValidVaultData]);
 
     return (
-        <SpaContainer data-matomo-category="vaults" data-matomo-action={vaultId}>
+        <SpaContainer>
             <SPAAnchor href={buildVaultLink(vaultId, language)}>
                 <FlexDivColumn style={{ height: '100%' }}>
                     <VaultContainer>

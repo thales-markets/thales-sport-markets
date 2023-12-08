@@ -1,11 +1,10 @@
 import React, { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CellProps } from 'react-table';
-import { formatTxTimestamp } from 'utils/formatters/date';
+import { formatTxTimestamp, formatCurrency } from 'thales-utils';
 import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import { MarketTransaction, MarketTransactions } from 'types/markets';
-import { formatCurrency } from 'utils/formatters/number';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
 import { getIsMobile } from 'redux/modules/app';
@@ -16,6 +15,7 @@ import {
     getSymbolText,
     isOneSidePlayerProps,
     isPlayerProps,
+    isSpecialYesNoProp,
 } from 'utils/markets';
 import PositionSymbol from 'components/PositionSymbol';
 import { useTheme } from 'styled-components';
@@ -86,7 +86,8 @@ const TransactionsTable: FC<TransactionsTableProps> = memo(({ transactions, noRe
                                     }}
                                     symbolUpperText={
                                         spreadTotalText &&
-                                        !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType)
+                                        !isOneSidePlayerProps(cellProps.cell.row.original.wholeMarket.betType) &&
+                                        !isSpecialYesNoProp(cellProps.cell.row.original.wholeMarket.betType)
                                             ? {
                                                   text: spreadTotalText,
                                                   textStyle: {

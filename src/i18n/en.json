@@ -171,7 +171,7 @@
         "github": "GitHub",
         "instagram": "Instagram",
         "reddit": "Reddit",
-        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own."
+        "disclaimer": "This frontend is hosted decentrally on IPFS (InterPlanetary File System). It serves to visualise the blockchain data and help users interact with the Overtime contracts that belong to Thales DAO. By doing so it helps users understand the risks of using those smart contracts and what the specific interactions entail. The frontend does not facilitate anything else apart from interacting with those contracts in a visually comprehensive way. In doing so, it is no different than the functionality provided by Etherscan or RPCs (Remote Procedure Calls). The frontend itself does not belong to Thales DAO or any individual. It stores no user data and has no dedicated backend or database. All code is uploaded statically directly to the IPFS. Just as the blockchain does no geo-fencing and no KYC, neither can this frontend do so. However, by interacting with Thales DAO contracts, you commit to have read, understood and accepted <disclaimer>Thales DAO’s terms of use</disclaimer> and you take full liability in case you have not adhered to those terms. Thales DAO uses the decentralised sUSD token as collateral for all its transactions. In doing so it inherits all the usage rules from Synthetix DAO with regards to collateral and does not introduce its own.To get familiar with Overtime rules and trading guidelines, please visit the <guidelines>Sports Trading Guidelines page</guidelines> in the Overtime docs."
     },
     "market": {
         "match-time": "Match time",
@@ -258,6 +258,8 @@
         "view-all-markets": "View all markets",
         "table": {
             "title": "Recent activity",
+            "single-title": "Recent single activity",
+            "parlay-title": "Recent parlay activity",
             "date-time-col": "date | time",
             "type-col": "type",
             "position-col": "position",
@@ -403,7 +405,9 @@
                 "goals": "Who will score a goal in the game?",
                 "hits recorded": "Hits recorded",
                 "rebounds": "Rebounds",
-                "assists": "Assists"
+                "assists": "Assists",
+                "double double": "Double-double",
+                "triple double": "Triple-double"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -462,6 +466,10 @@
                     "rebounds-under": "{{team}} will have less rebounds than {{scoring}}",
                     "assists-over": "{{team}} will have more assists than {{scoring}}",
                     "assists-under": "{{team}} will have less assists than {{scoring}}",
+                    "double-double-yes": "{{team}} will score a double-double",
+                    "double-double-no": "{{team}} will not score a double-double",
+                    "triple-double-yes": "{{team}} will score a triple-double",
+                    "triple-double-no": "{{team}} will not score a triple-double",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }
@@ -562,7 +570,10 @@
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
                 "risk-per-comb": "Risk per combination exceeded",
                 "same-team": "The same team can't be in a Parlay more than once",
-                "not-supported": "Not supported validation error: {{error}}"
+                "not-supported": "Not supported validation error: {{error}}",
+                "same-game-different-player-props": "Not supported to combine different category of player props",
+                "player-props-and-other-positions": "Not supported to combine player props positions with other positions from same market",
+                "already-added-combined-positions": "Can not combine positions from the same market with combined positions"
             },
             "share-ticket": {
                 "header": "Web 3 Sport markets on",
@@ -997,6 +1008,40 @@
                 "withdrawalRequest": "Withdrawal Request",
                 "claim": "Withdrawal Claim"
             }
+        }
+    },
+    "seo": {
+        "home": {
+            "title": "Overtime Markets: The Premier Web3 Sportsbook",
+            "description": "Enter the world of the premier on-chain web3 sportsbook. Secure positions in 12+ sports and 40+ leagues."
+        },
+        "markets": {
+            "title": "Overtime Markets: Web3 Sportsbook Markets for 40+ Leagues",
+            "description": "Join the best web3 sportsbook on the market. Secure positions in the top leagues like the NFL, NBA, UCL, EPL, and more."
+        },
+        "vaults": {
+            "title": "Overtime Markets Vaults: Automated Trading",
+            "description": "Deposit assets into the Overtime Markets vault and let our automated trading mechanism deploy a strategy you choose. "
+        },
+        "parlay-leaderboard": {
+            "title": "Overtime Markets: Earn Parlay Rewards Every 2 Weeks",
+            "description": "Overtime Markets is a web3 sportsbook with the best biweekly bonuses on the market for parlay players! Check out the leaderboard and if you qualified here."
+        },
+        "referral": {
+            "title": "Overtime Markets: Earn Referral Fees",
+            "description": "Refer a friend to Overtime Markets and get a percentage from each trade of the person you refer, paid in USD collateral instantly and directly into your wallet."
+        },
+        "profile": {
+            "title": "Overtime Market: User Profile",
+            "description": "Claim your winnings, review your performance, and track deposits you've made to the Overtime Market Vaults."
+        },
+        "liquidity-pool": {
+            "title": "Overtime Markets: Be the House with our Liquidity Pool",
+            "description": "Be the Overtime Market house! Deposit stablecoin collateral into the liquidity pool for a chance to earn a percentage of the PnL every week."
+        },
+        "single-market": {
+            "title": "Overtime Markets Web3 Sportsbook: {{dynamicTitle}}",
+            "description": "{{dynamicTitle}}: Enjoy the best Web3 sportsbook odds on the market. No registration needed. Fully decentralized sports markets."
         }
     }
 }

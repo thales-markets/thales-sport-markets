@@ -3,7 +3,7 @@ import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { VaultTrades, VaultTrade } from 'types/vault';
-import { getEtherscanTxLink } from 'utils/etherscan';
+import { getEtherscanTxLink } from 'thales-utils';
 import { convertFinalResultToResultType } from 'utils/markets';
 import { VaultTradeStatus } from 'enums/vault';
 

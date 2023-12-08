@@ -6,16 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import {
-    getCombinedPositions,
-    getParlay,
-    removeCombinedMarketFromParlay,
-    removeCombinedPosition,
-    updateCombinedPositions,
-} from 'redux/modules/parlay';
+import { getCombinedPositions, removeCombinedPosition, updateCombinedPositions } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { CombinedMarketPosition, SportMarketInfo } from 'types/markets';
-import { floorNumberToDecimals } from 'utils/formatters/number';
+import { floorNumberToDecimals } from 'thales-utils';
 import {
     formatMarketOdds,
     getSpreadTotalText,
@@ -60,7 +54,6 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
-    const parlay = useSelector(getParlay);
     const combinedPositions = useSelector(getCombinedPositions);
 
     const isGameStarted = markets[0].maturityDate < new Date();
@@ -89,9 +82,6 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
     const oddTooltipText = getCombinedOddTooltipText(markets, positions);
 
     const parentMarketAddress = markets[0].parentMarket !== null ? markets[0].parentMarket : markets[1].parentMarket;
-    const isParentMarketAddressInParlayData =
-        !!parlay.find((data) => data.parentMarket == parentMarketAddress) ||
-        !!combinedPositions.find((item) => item.markets.find((market) => market.parentMarket == parentMarketAddress));
 
     const isCombinedPositionWinner = isCombinedMarketWinner(markets, positions);
 
@@ -100,6 +90,7 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
             return {
                 parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                 sportMarketAddress: market.address,
+                betType: market.betType,
                 position: positions[index],
                 homeTeam: market.homeTeam || '',
                 awayTeam: market.awayTeam || '',
@@ -127,11 +118,8 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
             isWinner={isGameRegularlyResolved && isCombinedPositionWinner}
             onClick={() => {
                 if (noOdd || disabledPosition) return;
-                if (isParentMarketAddressInParlayData) {
-                    dispatch(removeCombinedPosition(parentMarketAddress));
-                }
                 if (isAddedToParlay) {
-                    dispatch(removeCombinedMarketFromParlay(parentMarketAddress));
+                    dispatch(removeCombinedPosition(parentMarketAddress));
                 } else {
                     dispatch(updateCombinedPositions(combinedPosition));
                     if (isMobile) {

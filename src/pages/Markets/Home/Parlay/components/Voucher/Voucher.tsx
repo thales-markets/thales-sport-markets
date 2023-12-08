@@ -12,7 +12,7 @@ import {
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { formatCurrencyWithSign } from 'utils/formatters/number';
+import { formatCurrencyWithSign } from 'thales-utils';
 import { CheckboxContainer, RowContainer, RowSummary, SummaryLabel, SummaryValue } from '../styled-components';
 import Checkbox from 'components/fields/Checkbox';
 

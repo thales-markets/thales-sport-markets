@@ -1,12 +1,4 @@
 import { Duration } from 'date-fns';
-import format from 'date-fns/format';
-
-export const formatTxTimestamp = (timestamp: number | Date) => format(timestamp, 'MMM d, yy | HH:mm');
-
-export const formatShortDate = (date: Date | number) => format(date, 'MMM d, yyyy');
-export const formatShortDateWithTime = (date: Date | number) => format(date, 'MMM d, yyyy | HH:mm');
-
-export const formatDateWithTime = (date: Date | number) => format(date, 'dd MMM HH:mm');
 
 export const formattedDuration = (
     duration: Duration,
@@ -77,19 +69,4 @@ export const formattedDurationFull = (
     formatted.push(`${duration.hours}${dateTimeTranslationMap['hours-short']}`);
     formatted.push(`${duration.minutes}${dateTimeTranslationMap['minutes-short']}`);
     return (firstTwo ? formatted.slice(0, 2) : formatted).join(delimiter);
-};
-
-export const addHoursToCurrentDate = (numberOfHours: number, setToEOD?: boolean) => {
-    const newDateFilter = new Date();
-    if (setToEOD) {
-        newDateFilter.setHours(23, 59, 59, 999);
-        newDateFilter.setTime(newDateFilter.getTime() + numberOfHours * 60 * 60 * 1000);
-    } else {
-        newDateFilter.setTime(newDateFilter.getTime() + numberOfHours * 60 * 60 * 1000);
-    }
-    return newDateFilter;
-};
-
-export const addDaysToEnteredTimestamp = (numberOfDays: number, timestamp: number) => {
-    return new Date().setTime(new Date(timestamp).getTime() + numberOfDays * 24 * 60 * 60 * 1000);
 };

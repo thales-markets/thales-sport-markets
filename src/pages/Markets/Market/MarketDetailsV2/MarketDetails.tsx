@@ -6,11 +6,14 @@ import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets'
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
+import { BetType } from 'enums/markets';
+import { Network } from 'enums/network';
 import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
+import queryString from 'query-string';
 import React, { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -20,16 +23,16 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { Network } from 'enums/network';
+import { ThemeInterface } from 'types/ui';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
+import useQueryParam from 'utils/useQueryParams';
 import Web3 from 'web3';
 import Transactions from '../Transactions';
 import CombinedPositions from './components/CombinedPositions';
 import MatchInfo from './components/MatchInfo';
+import ParlayTransactions from './components/ParlayTransactions';
 import Positions from './components/Positions';
-import { BetType } from 'enums/markets';
-import { ThemeInterface } from 'types/ui';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -41,7 +44,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const queryParams: { title?: string } = queryString.parse(location.search);
 
+    const [metaTitle, setMetaTitle] = useQueryParam('title', queryParams?.title ? queryParams?.title : '');
     const [showParlayMobileModal, setShowParlayMobileModal] = useState(false);
     const lastValidChildMarkets: SportMarketChildMarkets = {
         spreadMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.SPREAD),
@@ -81,6 +86,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         assistsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_ASSISTS
         ),
+        doubleDoubleMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_DOUBLE_DOUBLE
+        ),
+        tripleDoubleMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TRIPLE_DOUBLE
+        ),
         shotsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_SHOTS),
         oneSiderTouchdownsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS
@@ -91,6 +102,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
+
+    useEffect(() => {
+        if (!metaTitle) {
+            setMetaTitle(`${market.homeTeam} vs ${market.awayTeam}`);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [market.awayTeam, market.homeTeam]);
 
     const isMounted = useRef(false);
     useEffect(() => {
@@ -125,6 +143,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
+
     useEffect(() => {
         if (isEnetpulseSport) {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
@@ -170,7 +189,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             rewards:
                                                 networkId == Network.OptimismMainnet
                                                     ? INCENTIVIZED_LEAGUE.opRewards
-                                                    : networkId == Network.ArbitrumOne
+                                                    : networkId == Network.Arbitrum
                                                     ? INCENTIVIZED_LEAGUE.thalesRewards
                                                     : '',
                                         }}
@@ -208,7 +227,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             rewards:
                                                 networkId == Network.OptimismMainnet
                                                     ? INCENTIVIZED_LEAGUE.opRewards
-                                                    : networkId == Network.ArbitrumOne
+                                                    : networkId == Network.Arbitrum
                                                     ? INCENTIVIZED_LEAGUE.thalesRewards
                                                     : '',
                                         }}
@@ -452,6 +471,20 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             showOdds={showAMM}
                         />
                     )}
+                    {childMarkets.doubleDoubleMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.doubleDoubleMarkets}
+                            betType={BetType.PLAYER_PROPS_DOUBLE_DOUBLE}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.tripleDoubleMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.tripleDoubleMarkets}
+                            betType={BetType.PLAYER_PROPS_TRIPLE_DOUBLE}
+                            showOdds={showAMM}
+                        />
+                    )}
                     {childMarkets.shotsMarkets.length > 0 && (
                         <Positions
                             markets={childMarkets.shotsMarkets}
@@ -475,6 +508,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     )}
                 </>
                 <Transactions market={market} />
+                <ParlayTransactions market={market} />
             </MainContainer>
             {showAMM && (
                 <SidebarContainer>
@@ -502,7 +536,7 @@ const getNetworkLogo = (networkId: number) => {
     switch (networkId) {
         case Network.OptimismMainnet:
             return <OPLogo />;
-        case Network.ArbitrumOne:
+        case Network.Arbitrum:
             return <ArbitrumLogo />;
         default:
             return <></>;

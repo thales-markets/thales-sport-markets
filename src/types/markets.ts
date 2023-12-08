@@ -119,6 +119,8 @@ export type SportMarketChildMarkets = {
     hitsRecordedMarkets: SportMarketInfo[];
     reboundsMarkets: SportMarketInfo[];
     assistsMarkets: SportMarketInfo[];
+    doubleDoubleMarkets: SportMarketInfo[];
+    tripleDoubleMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {
@@ -237,6 +239,7 @@ export type ParlaysMarketPosition = {
     homeTeam: string;
     awayTeam: string;
     tags: number[];
+    betType: number;
     doubleChanceMarketType: DoubleChanceMarketType | null;
     isOneSideMarket?: boolean;
     tag?: number;

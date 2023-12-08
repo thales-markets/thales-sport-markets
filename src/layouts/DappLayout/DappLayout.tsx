@@ -1,32 +1,28 @@
+import axios from 'axios';
+import Loader from 'components/Loader';
+import MetaData from 'components/MetaData';
+import { generalConfig } from 'config/general';
+import { Theme } from 'enums/ui';
+import useWidgetBotScript from 'hooks/useWidgetBotScript';
+import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
-import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { FlexDivColumn } from 'styles/common';
-import DappHeader from './DappHeader';
-import Loader from 'components/Loader';
+import { useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import DappFooter from './DappFooter';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
-import queryString from 'query-string';
-import { getReferralId, setReferralId } from 'utils/referral';
-import { useLocation } from 'react-router-dom';
-import i18n from 'i18n';
+import { getIsAppReady } from 'redux/modules/app';
 import { setTheme } from 'redux/modules/ui';
-import { generalConfig } from 'config/general';
-import axios from 'axios';
-import useWidgetBotScript from 'hooks/useWidgetBotScript';
-import { isAndroid, isMetamask, isMobile } from 'utils/device';
-import { Theme } from 'enums/ui';
+import { RootState } from 'redux/rootReducer';
+import styled from 'styled-components';
+import { FlexDivColumn } from 'styles/common';
+import { isAndroid, isMetamask } from 'thales-utils';
+import { isMobile } from 'utils/device';
+import { setReferralId } from 'utils/referral';
+import DappFooter from './DappFooter';
+import DappHeader from './DappHeader';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
-    const { trackPageView } = useMatomo();
     const dispatch = useDispatch();
     const location = useLocation();
     const queryParams: { referralId?: string; referrerId?: string } = queryString.parse(location.search);
@@ -52,42 +48,6 @@ const DappLayout: React.FC = ({ children }) => {
     }, [queryParams.referralId, queryParams.referrerId]);
 
     useEffect(() => {
-        const customDimensions = [
-            {
-                id: 1,
-                value: networkId ? networkId?.toString() : '',
-            },
-        ];
-
-        const referralId = getReferralId();
-        if (referralId) {
-            customDimensions.push({
-                id: 2,
-                value: referralId,
-            });
-        }
-
-        const language = i18n.language;
-
-        if (language) {
-            customDimensions.push({
-                id: 3,
-                value: language,
-            });
-        }
-
-        if (walletAddress) {
-            customDimensions.push({
-                id: 4,
-                value: walletAddress,
-            });
-        }
-
-        trackPageView({ customDimensions });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [networkId, i18n.language, walletAddress]);
-
-    useEffect(() => {
         dispatch(setTheme(Theme.DARK));
     }, [dispatch]);
 
@@ -108,6 +68,7 @@ const DappLayout: React.FC = ({ children }) => {
             {isAppReady ? (
                 <Background>
                     <Wrapper>
+                        <MetaData />
                         <DappHeader />
                         {children}
                         <DappFooter />

@@ -1,8 +1,8 @@
 import QUERY_KEYS from 'constants/queryKeys';
+import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
 import { ParlayMarket } from 'types/markets';
-import { Network } from 'enums/network';
 import { getIsOneSideMarket, updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 
 export const useParlayMarketsQuery = (
@@ -13,7 +13,7 @@ export const useParlayMarketsQuery = (
     options?: UseQueryOptions<ParlayMarket[] | undefined>
 ) => {
     return useQuery<ParlayMarket[] | undefined>(
-        QUERY_KEYS.ParlayMarkets(networkId, account),
+        QUERY_KEYS.ParlayMarkets(networkId, account, minTimestamp, maxTimestamp),
         async () => {
             try {
                 if (!account) return undefined;

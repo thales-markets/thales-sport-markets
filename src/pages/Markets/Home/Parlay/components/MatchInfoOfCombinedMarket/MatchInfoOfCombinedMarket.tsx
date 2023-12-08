@@ -49,7 +49,7 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
 
     return (
         <>
-            <MatchLogos market={market} width={'120px'} padding={'0 0 0 4px'} isHighlighted={isHighlighted} />
+            <MatchLogos market={market} width={'120px'} isHighlighted={isHighlighted} />
             <MatchLabel>
                 <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
                     {market.homeTeam}

@@ -1,9 +1,17 @@
 import PositionSymbol from 'components/PositionSymbol';
+import { oddToastOptions } from 'config/toast';
+import { CombinedPositionsMatchingCode, Position } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCombinedPositions, getParlay, removeCombinedPosition, updateCombinedPositions } from 'redux/modules/parlay';
+import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
+import { getCombinedPositions, removeCombinedPosition, updateCombinedPositions } from 'redux/modules/parlay';
+import { getOddsType } from 'redux/modules/ui';
+import { useTheme } from 'styled-components';
 import { CombinedMarketPosition, SportMarketInfo } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import { compareCombinedPositionsFromParlayData, getCombinedPositionName } from 'utils/combinedMarkets';
 import {
     formatMarketOdds,
     getCombinedOddTooltipText,
@@ -13,15 +21,6 @@ import {
     getSymbolText,
     hasBonus,
 } from 'utils/markets';
-import { compareCombinedPositionsFromParlayData, getCombinedPositionName } from 'utils/combinedMarkets';
-import { getOddsType } from 'redux/modules/ui';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { getIsMobile } from 'redux/modules/app';
-import { toast } from 'react-toastify';
-import { oddToastOptions } from 'config/toast';
-import { CombinedPositionsMatchingCode, Position } from 'enums/markets';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
 type CombinedMarketOddsProps = {
     markets: SportMarketInfo[];
@@ -35,11 +34,9 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
-    const { trackEvent } = useMatomo();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const combinedPositions = useSelector(getCombinedPositions);
-    const parlay = useSelector(getParlay);
 
     const combinedMarketPositionSymbol = getCombinedPositionName(markets, positions);
 
@@ -50,15 +47,12 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
 
     const parentMarketAddress = markets[0].parentMarket !== null ? markets[0].parentMarket : markets[1].parentMarket;
 
-    const isParentMarketAddressInParlayData =
-        !!parlay.find((data) => data.parentMarket == parentMarketAddress) ||
-        !!combinedPositions.find((item) => item.markets.find((market) => market.parentMarket == parentMarketAddress));
-
     const combinedPosition: CombinedMarketPosition = {
         markets: markets.map((market, index) => {
             return {
                 parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                 sportMarketAddress: market.address,
+                betType: market.betType,
                 position: positions[index],
                 homeTeam: market.homeTeam || '',
                 awayTeam: market.awayTeam || '',
@@ -86,15 +80,9 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
 
     const onClick = () => {
         if (noOdd) return;
-        if (isAddedToParlay || isParentMarketAddressInParlayData) {
+        if (isAddedToParlay) {
             dispatch(removeCombinedPosition(parentMarketAddress));
-            dispatch(updateCombinedPositions(combinedPosition));
         } else {
-            trackEvent({
-                category: 'position',
-                action: 'combined',
-                value: showBonus ? Number(bonus) : 0,
-            });
             dispatch(updateCombinedPositions(combinedPosition));
             if (isMobile) {
                 toast(oddTooltipText, oddToastOptions);
