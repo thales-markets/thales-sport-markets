@@ -2,7 +2,6 @@ import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from '@biconomy/ac
 import { Bundler } from '@biconomy/bundler';
 import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from '@biconomy/modules';
 import { BiconomyPaymaster } from '@biconomy/paymaster';
-import { ParticleNetwork } from '@particle-network/auth';
 import { ParticleProvider } from '@particle-network/provider';
 import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
@@ -15,7 +14,7 @@ import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
 import Wizard from 'pages/Wizard';
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy, useContext, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,6 +25,7 @@ import {
     getNetworkId,
     getSwitchToNetworkId,
     switchToNetworkId,
+    updateAAStatus,
     updateNetworkSettings,
     updateWallet,
 } from 'redux/modules/wallet';
@@ -36,6 +36,7 @@ import networkConnector from 'utils/networkConnector';
 import queryConnector from 'utils/queryConnector';
 import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
+import { ParticleContext } from './Provider/ParticleProvider/ParticleProvider';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
@@ -51,27 +52,9 @@ const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
 const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
 const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 
-const particle = new ParticleNetwork({
-    projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
-    clientKey: process.env.REACT_APP_CLIENT_KEY,
-    appId: process.env.REACT_APP_PARTICLE_APP_ID,
-    chainName: 'optimism', //optional
-    chainId: 10, //optional
-    wallet: {
-        //optional: by default, the wallet entry is displayed in the bottom right corner of the webpage.
-        displayWalletEntry: false, //show wallet entry when connect particle.
-        uiMode: 'dark', //optional: light or dark, if not set, the default is the same as web auth.
-        supportChains: [
-            { id: 10, name: 'optimism' },
-            { id: 42161, name: 'arbitrum' },
-            { id: 420, name: 'optimism' },
-            { id: 84531, name: 'base' },
-        ], // optional: web wallet support chains.
-        customStyle: {}, //optional: custom wallet style
-    },
-});
-
 const App = () => {
+    const particle = useContext(ParticleContext);
+
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
@@ -88,55 +71,12 @@ const App = () => {
     useEffect(() => {
         const init = async () => {
             try {
+                console.log('--------------------- Init App.js ------------------------');
                 const chainIdFromProvider = (await provider.getNetwork()).chainId;
                 const providerNetworkId = !!address ? chainIdFromProvider : switchedToNetworkId;
-                let web3Provider;
 
-                if (particle.auth.isLogin()) {
-                    const userInfo = particle.auth.getUserInfo();
-                    const particleProvider = new ParticleProvider(particle.auth);
-                    const chainId = (await provider.getNetwork()).chainId;
-                    const bundler = new Bundler({
-                        // get from biconomy dashboard https://dashboard.biconomy.io/
-                        bundlerUrl: `https://bundler.biconomy.io/api/v2/${chainId}/${process.env.REACT_APP_BICONOMY_BUNDLE_KEY}`,
-                        chainId: (await provider.getNetwork()).chainId, // or any supported chain of your choice
-                        entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-                    });
-
-                    const paymaster = new BiconomyPaymaster({
-                        paymasterUrl: `https://paymaster.biconomy.io/api/v1/${chainId}/${
-                            process.env['REACT_APP_PAYMASTER_KEY_' + chainId]
-                        }`,
-                    });
-
-                    web3Provider = new ethers.providers.Web3Provider(particleProvider, 'any');
-
-                    const module = await ECDSAOwnershipValidationModule.create({
-                        signer: web3Provider.getSigner(),
-                        moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE,
-                    });
-
-                    const account = await BiconomySmartAccountV2.create({
-                        chainId,
-                        bundler,
-                        provider,
-                        paymaster,
-                        entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-                        defaultValidationModule: module,
-                        activeValidationModule: module,
-                    });
-
-                    const swAddress = await account.getAccountAddress();
-                    biconomyConnector.setWallet(account);
-                    biconomyConnector.setUserInfo(userInfo);
-                    dispatch(updateWallet({ walletAddress: swAddress, isAA: true }));
-                }
-
-                networkConnector.setNetworkSettings({
-                    networkId: providerNetworkId,
-                    provider,
-                    signer: web3Provider ? web3Provider.getSigner() : signer,
-                });
+                console.log('chainIdFromProvider ', chainIdFromProvider);
+                console.log('providerNetworkId ', providerNetworkId);
 
                 dispatch(
                     updateNetworkSettings({
@@ -145,17 +85,88 @@ const App = () => {
                     })
                 );
                 dispatch(setAppReady());
+                console.log('--------------------- Init App.js ------------------------');
             } catch (e) {
                 dispatch(setAppReady());
                 console.log(e);
             }
         };
         init();
-    }, [dispatch, provider, signer, switchedToNetworkId, address]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, particle]);
 
     useEffect(() => {
-        dispatch(updateWallet({ walletAddress: address, isAA: particle.auth.isLogin() }));
-    }, [address, dispatch]);
+        const init = async () => {
+            console.log('-------------- Init particle useEffect --------------');
+            const chainIdFromProvider = (await provider.getNetwork()).chainId;
+            const providerNetworkId = !!address ? chainIdFromProvider : switchedToNetworkId;
+            let web3Provider;
+
+            console.log('chainIdFromProvider from par -> ', chainIdFromProvider);
+            console.log('providerNetworkId from par -> ', providerNetworkId);
+
+            if (particle && particle.auth.isLogin()) {
+                console.log('Ulazi u islogin');
+                const userInfo = particle.auth.getUserInfo();
+                const particleProvider = new ParticleProvider(particle.auth);
+                const chainId = (await provider.getNetwork()).chainId;
+                const bundler = new Bundler({
+                    // get from biconomy dashboard https://dashboard.biconomy.io/
+                    bundlerUrl: `https://bundler.biconomy.io/api/v2/${chainId}/${process.env.REACT_APP_BICONOMY_BUNDLE_KEY}`,
+                    chainId: (await provider.getNetwork()).chainId, // or any supported chain of your choice
+                    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+                });
+
+                const paymaster = new BiconomyPaymaster({
+                    paymasterUrl: `https://paymaster.biconomy.io/api/v1/${chainId}/${
+                        process.env['REACT_APP_PAYMASTER_KEY_' + chainId]
+                    }`,
+                });
+
+                web3Provider = new ethers.providers.Web3Provider(particleProvider, 'any');
+
+                const module = await ECDSAOwnershipValidationModule.create({
+                    signer: web3Provider.getSigner(),
+                    moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE,
+                });
+
+                const account = await BiconomySmartAccountV2.create({
+                    chainId,
+                    bundler,
+                    provider,
+                    paymaster,
+                    entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
+                    defaultValidationModule: module,
+                    activeValidationModule: module,
+                });
+
+                const swAddress = await account.getAccountAddress();
+                biconomyConnector.setWallet(account);
+                biconomyConnector.setUserInfo(userInfo);
+                dispatch(updateWallet({ walletAddress: swAddress }));
+            }
+
+            networkConnector.setNetworkSettings({
+                networkId: providerNetworkId,
+                provider,
+                signer: web3Provider ? web3Provider.getSigner() : signer,
+            });
+            console.log('-------------- Init particle useEffect --------------');
+        };
+        init();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, particle, provider, signer, address]);
+
+    useEffect(() => {
+        !particle?.auth.isLogin() && dispatch(updateWallet({ walletAddress: address }));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [address, particle?.auth.isLogin()]);
+
+    useEffect(() => {
+        console.log('update is AA ', particle?.auth.isLogin());
+        dispatch(updateAAStatus({ isAA: particle?.auth?.isLogin() ? true : false }));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, particle?.auth.isLogin()]);
 
     useEffect(() => {
         const handlePageResized = () => {
@@ -195,6 +206,7 @@ const App = () => {
     useEffect(() => {
         // only Wizard page requires mainnet because of Bridge functionality
         if (chain?.unsupported && !(chain?.id === mainnet.id && location.pathname === buildHref(ROUTES.Wizard))) {
+            console.log('Disconnect');
             disconnect();
         }
     }, [disconnect, chain]);

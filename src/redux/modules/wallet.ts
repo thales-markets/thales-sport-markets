@@ -1,7 +1,7 @@
-import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
-import { getAddress } from 'thales-utils';
-import { RootState } from 'redux/rootReducer';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { DEFAULT_NETWORK } from 'constants/network';
+import { RootState } from 'redux/rootReducer';
+import { getAddress } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 
 const sliceName = 'wallet';
@@ -43,6 +43,9 @@ const walletDetailsSlice = createSlice({
             };
 
             return newState;
+        },
+        updateAAStatus: (state, action: PayloadAction<{ isAA: boolean }>) => {
+            state.isAA = action.payload.isAA;
         },
         updateNetworkSettings: (
             state,
@@ -88,6 +91,7 @@ export const {
     updateNetworkSettings,
     switchToNetworkId,
     updateWallet,
+    updateAAStatus,
     setWalletConnectModalVisibility,
 } = walletDetailsSlice.actions;
 
