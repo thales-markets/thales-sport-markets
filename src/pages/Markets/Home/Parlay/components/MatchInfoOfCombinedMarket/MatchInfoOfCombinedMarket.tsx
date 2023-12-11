@@ -3,20 +3,20 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeCombinedPosition } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { CombinedParlayMarket } from 'types/markets';
-import { formatMarketOdds, getCombinedOddTooltipText, getFormattedBonus, getSpreadTotalText } from 'utils/markets';
+import { ThemeInterface } from 'types/ui';
 import { getCombinedPositionName } from 'utils/combinedMarkets';
+import { formatMarketOdds, getCombinedOddTooltipText, getFormattedBonus, getSpreadTotalText } from 'utils/markets';
 import MatchLogos from '../MatchLogos';
 import { XButton } from '../styled-components';
-import { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
 
 type MatchInfoCominedMarketProps = {
     combinedMarket: CombinedParlayMarket;
     readOnly?: boolean;
     isHighlighted?: boolean;
     customStyle?: { fontSize?: string; lineHeight?: string };
+    updatedQuote?: number;
 };
 
 const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
@@ -24,6 +24,7 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
     readOnly,
     isHighlighted,
     customStyle,
+    updatedQuote,
 }) => {
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
@@ -60,7 +61,7 @@ const MatchInfoOfCombinedMarket: React.FC<MatchInfoCominedMarketProps> = ({
             </MatchLabel>
             <PositionSymbol
                 symbolAdditionalText={{
-                    text: formatMarketOdds(selectedOddsType, odd),
+                    text: formatMarketOdds(selectedOddsType, updatedQuote ? updatedQuote : odd),
                     textStyle: {
                         width: '34px',
                         marginRight: '3px',
