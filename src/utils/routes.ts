@@ -28,7 +28,9 @@ export const buildLpLink = (language: string, lpType: string, excludeSlash = fal
     }&lang=${language}`;
 
 export const buildReffererLink = (reffererID: string) => {
-    return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${ROUTES.Markets.Home}?referrerId=${reffererID}`;
+    return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${
+        ROUTES.Markets.Home
+    }?referrerId=${encodeURIComponent(reffererID)}`;
 };
 
 export const getMetaRouteItem = (pathName: string) => {
