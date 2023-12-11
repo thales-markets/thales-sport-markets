@@ -37,7 +37,11 @@ const DappLayout: React.FC = ({ children }) => {
         if (referrerId) {
             const fetchIdAddress = async () => {
                 const response = await axios.get(
-                    `${generalConfig.API_URL}/get-refferer-id-address/${encodeURIComponent(referrerId)}`
+                    // passing an encoded string to encodeURIComponent causes an error in some cases
+                    // reffererId is already encoded so we have to decode it
+                    `${generalConfig.API_URL}/get-refferer-id-address/${encodeURIComponent(
+                        decodeURIComponent(referrerId)
+                    )}`
                 );
                 if (response.data) {
                     setReferralId(response.data);
