@@ -168,7 +168,10 @@ export const getGasFeesForTx = async (
         //     },
         // }
 
-        const userOperation = await biconomyConnector.wallet.buildUserOp([transaction]);
+
+        const userOperation = await biconomyConnector.wallet.buildUserOp([transaction], {
+            skipBundlerGasEstimation: false,
+        });
 
         const biconomyPaymaster = biconomyConnector.wallet.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
 
