@@ -1,4 +1,3 @@
-import { useMatomo } from '@datapunt/matomo-tracker-react';
 import PositionSymbol from 'components/PositionSymbol';
 import { oddToastOptions } from 'config/toast';
 import { CombinedPositionsMatchingCode, Position } from 'enums/markets';
@@ -35,7 +34,6 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
-    const { trackEvent } = useMatomo();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const combinedPositions = useSelector(getCombinedPositions);
@@ -81,11 +79,6 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
         if (isAddedToParlay) {
             dispatch(removeCombinedPosition(parentMarketAddress));
         } else {
-            trackEvent({
-                category: 'position',
-                action: 'combined',
-                value: showBonus ? Number(bonus) : 0,
-            });
             dispatch(updateCombinedPositions(combinedPosition));
             if (isMobile) {
                 toast(oddTooltipText, oddToastOptions);

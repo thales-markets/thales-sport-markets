@@ -1,4 +1,3 @@
-import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Button from 'components/Button';
 import GetUsd from 'components/GetUsd';
 import Loader from 'components/Loader';
@@ -8,39 +7,37 @@ import SimpleLoader from 'components/SimpleLoader';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { EUROPA_LEAGUE_TAGS, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
+import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
-import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
+import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
+import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import { setSGPFees } from 'redux/modules/parlay';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { addHoursToCurrentDate } from 'thales-utils';
+import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
+import Checkbox from '../../../components/fields/Checkbox/Checkbox';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import GlobalFilters from '../components/GlobalFilters';
 import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
-import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
-import { setSGPFees } from 'redux/modules/parlay';
-import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
-import Checkbox from '../../../components/fields/Checkbox/Checkbox';
-import { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
-import { CSSProperties } from 'styled-components';
-import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
-import { Network } from 'enums/network';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -73,7 +70,6 @@ const Home: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
-    const { trackPageView } = useMatomo();
     const location = useLocation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -364,10 +360,6 @@ const Home: React.FC = () => {
         }
     }, [location, resetFilters]);
 
-    useEffect(() => {
-        trackPageView({});
-    }, [trackPageView]);
-
     return (
         <Container>
             <ReactModal
@@ -610,9 +602,7 @@ const Home: React.FC = () => {
                                 );
                             })}
                     </SportFiltersContainer>
-                    <Suspense fallback={<Loader />}>
-                        <SidebarLeaderboard />
-                    </Suspense>
+                    <Suspense fallback={<Loader />}>{networkId !== Network.Base && <SidebarLeaderboard />}</Suspense>
                 </SidebarContainer>
                 {/* MAIN PART */}
 

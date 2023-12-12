@@ -6,11 +6,14 @@ import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets'
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
+import { BetType } from 'enums/markets';
+import { Network } from 'enums/network';
 import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
+import queryString from 'query-string';
 import React, { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -20,18 +23,16 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { Network } from 'enums/network';
+import { ThemeInterface } from 'types/ui';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
+import useQueryParam from 'utils/useQueryParams';
 import Web3 from 'web3';
 import Transactions from '../Transactions';
 import CombinedPositions from './components/CombinedPositions';
 import MatchInfo from './components/MatchInfo';
+import ParlayTransactions from './components/ParlayTransactions';
 import Positions from './components/Positions';
-import { BetType } from 'enums/markets';
-import { ThemeInterface } from 'types/ui';
-import queryString from 'query-string';
-import useQueryParam from 'utils/useQueryParams';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -142,6 +143,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
+
     useEffect(() => {
         if (isEnetpulseSport) {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
@@ -506,6 +508,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     )}
                 </>
                 <Transactions market={market} />
+                <ParlayTransactions market={market} />
             </MainContainer>
             {showAMM && (
                 <SidebarContainer>

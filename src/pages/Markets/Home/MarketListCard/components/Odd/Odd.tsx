@@ -1,9 +1,16 @@
 import PositionSymbol from 'components/PositionSymbol';
+import { oddToastOptions } from 'config/toast';
+import { Position } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
 import { getParlay, removeFromParlay, updateParlay } from 'redux/modules/parlay';
+import { getOddsType } from 'redux/modules/ui';
+import { useTheme } from 'styled-components';
 import { ParlaysMarketPosition, SportMarketInfo } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import {
     formatMarketOdds,
     getFormattedBonus,
@@ -12,14 +19,6 @@ import {
     getSymbolText,
     hasBonus,
 } from 'utils/markets';
-import { getOddsType } from 'redux/modules/ui';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { getIsMobile } from 'redux/modules/app';
-import { toast } from 'react-toastify';
-import { oddToastOptions } from 'config/toast';
-import { Position } from 'enums/markets';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
 type OddProps = {
     market: SportMarketInfo;
@@ -33,7 +32,6 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
-    const { trackEvent } = useMatomo();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const parlay = useSelector(getParlay);
@@ -54,11 +52,6 @@ const Odd: React.FC<OddProps> = ({ market, position, odd, bonus, isShownInSecond
         if (isAddedToParlay) {
             dispatch(removeFromParlay(market.address));
         } else {
-            trackEvent({
-                category: 'position',
-                action: showBonus ? 'discount' : 'non-discount',
-                value: showBonus ? Number(bonus) : 0,
-            });
             const parlayMarket: ParlaysMarketPosition = {
                 parentMarket: getParentMarketAddress(market.parentMarket, market.address),
                 sportMarketAddress: market.address,
