@@ -64,7 +64,9 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
             if (multipleCollateral && signer) {
                 const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
                 await executeBiconomyTransaction(
-                    collateralContractWithSigner?.address as string,
+                    network === 10
+                        ? '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58'
+                        : (collateralContractWithSigner?.address as string),
                     collateralContractWithSigner,
                     'transfer',
                     [withdrawalAddress, parsedAmount]
