@@ -13,8 +13,18 @@ import {
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
     UEFA_TAGS,
 } from 'constants/tags';
+import {
+    BetType,
+    DoubleChanceMarketType,
+    ONE_SIDER_PLAYER_PROPS_BET_TYPES,
+    OddsType,
+    PLAYER_PROPS_BET_TYPES,
+    Position,
+    SPECIAL_YES_NO_BET_TYPES,
+} from 'enums/markets';
 import i18n from 'i18n';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
+import { addDaysToEnteredTimestamp, formatCurrency } from 'thales-utils';
 import {
     CombinedMarketsPositionName,
     MarketData,
@@ -26,18 +36,8 @@ import {
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
-import { addDaysToEnteredTimestamp, formatCurrency } from 'thales-utils';
-import { fixOneSideMarketCompetitorName } from './formatters/string';
-import {
-    BetType,
-    DoubleChanceMarketType,
-    ONE_SIDER_PLAYER_PROPS_BET_TYPES,
-    OddsType,
-    PLAYER_PROPS_BET_TYPES,
-    Position,
-    SPECIAL_YES_NO_BET_TYPES,
-} from 'enums/markets';
 import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
+import { fixOneSideMarketCompetitorName } from './formatters/string';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 
@@ -662,4 +662,17 @@ export const isSpecialYesNoProp = (betType: BetType) => {
 
 export const fixPlayerPropsLinesFromContract = (market: SportMarketInfo | MarketData) => {
     Number(market.playerPropsLine) % 1 == 0 ? (market.playerPropsLine = Number(market.playerPropsLine) / 100) : '';
+};
+
+export const getUpdatedQuote = (
+    updateQuotes: number[],
+    positionIndex: number,
+    isCombinedPosition: boolean,
+    combinedPositionsCount: number
+) => {
+    const startIndex = isCombinedPosition ? positionIndex * 2 : positionIndex;
+
+    return isCombinedPosition
+        ? updateQuotes?.[startIndex] * updateQuotes?.[startIndex + 1]
+        : updateQuotes?.[combinedPositionsCount * 2 + startIndex];
 };
