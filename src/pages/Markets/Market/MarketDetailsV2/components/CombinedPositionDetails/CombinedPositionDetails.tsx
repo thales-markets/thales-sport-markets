@@ -105,7 +105,7 @@ const CombinedPositionDetails: React.FC<CombinedPositionDetailsProps> = ({
 
     const { matchingCode } = checkIfCombinedPositionAlreadyInParlay(combinedPosition, combinedPositions);
 
-    const isAddedToParlay = matchingCode == CombinedPositionsMatchingCode.SAME_POSITIONS ? true : false;
+    const isAddedToParlay = matchingCode === CombinedPositionsMatchingCode.SAME_POSITIONS;
 
     const getDetails = () => (
         <Container

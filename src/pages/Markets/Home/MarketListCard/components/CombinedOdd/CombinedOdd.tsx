@@ -67,7 +67,7 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
 
     const { matchingCode } = checkIfCombinedPositionAlreadyInParlay(combinedPosition, combinedPositions);
 
-    const isAddedToParlay = matchingCode == CombinedPositionsMatchingCode.SAME_POSITIONS ? true : false;
+    const isAddedToParlay = matchingCode === CombinedPositionsMatchingCode.SAME_POSITIONS;
 
     const spreadAndTotalValues = getSpreadAndTotalTextForCombinedMarket(markets, positions);
     const spreadAndTotalText = `${spreadAndTotalValues.spread ? spreadAndTotalValues.spread + '/' : ''}${
