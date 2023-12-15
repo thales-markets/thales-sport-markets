@@ -11,7 +11,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { useTheme } from 'styled-components';
 import { CombinedMarketPosition, SportMarketInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { compareCombinedPositionsFromParlayData, getCombinedPositionName } from 'utils/combinedMarkets';
+import { checkIfCombinedPositionAlreadyInParlay, getCombinedPositionName } from 'utils/combinedMarkets';
 import {
     formatMarketOdds,
     getCombinedOddTooltipText,
@@ -65,13 +65,9 @@ const CombinedOdd: React.FC<CombinedMarketOddsProps> = ({ markets, positions, od
         positionName: combinedMarketPositionSymbol || '',
     };
 
-    const isAddedToParlay = combinedPositions.find(
-        (item) =>
-            compareCombinedPositionsFromParlayData(item, combinedPosition) ==
-            CombinedPositionsMatchingCode.SAME_POSITIONS
-    )
-        ? true
-        : false;
+    const { matchingCode } = checkIfCombinedPositionAlreadyInParlay(combinedPosition, combinedPositions);
+
+    const isAddedToParlay = matchingCode === CombinedPositionsMatchingCode.SAME_POSITIONS;
 
     const spreadAndTotalValues = getSpreadAndTotalTextForCombinedMarket(markets, positions);
     const spreadAndTotalText = `${spreadAndTotalValues.spread ? spreadAndTotalValues.spread + '/' : ''}${
