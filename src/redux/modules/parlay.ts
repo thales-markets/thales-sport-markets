@@ -297,11 +297,11 @@ const parlaySlice = createSlice({
                 existingCombinedPositions
             );
 
-            if (matchingCode == CombinedPositionsMatchingCode.SAME_MARKETS && existingMarketIndex !== undefined) {
+            if (matchingCode === CombinedPositionsMatchingCode.SAME_MARKETS && existingMarketIndex !== undefined) {
                 existingCombinedPositions[existingMarketIndex] = action.payload;
             }
 
-            if (matchingCode == CombinedPositionsMatchingCode.NOTHING_COMMON) {
+            if (matchingCode === CombinedPositionsMatchingCode.NOTHING_COMMON) {
                 existingCombinedPositions.push(action.payload);
             }
 
