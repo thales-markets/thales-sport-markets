@@ -1,9 +1,16 @@
+import { GlobalFiltersEnum, Position } from 'enums/markets';
 import { Network } from 'enums/network';
 import { LiquidityPoolType } from 'types/liquidityPool';
-import { GlobalFiltersEnum, Position } from 'enums/markets';
 
 const QUERY_KEYS = {
-    ParlayMarkets: (networkId: Network, account: string) => ['parlayMarkets', networkId, account],
+    ParlayMarkets: (networkId: Network, account: string, minTimestamp?: number, maxTimestamp?: number) => [
+        'parlayMarkets',
+        networkId,
+        account,
+        minTimestamp,
+        maxTimestamp,
+    ],
+    MarketParlays: (networkId: Network, marketAddress: string) => ['marketParlays', networkId, marketAddress],
     ParlayLeaderboard: (networkId: Network, period: number) => ['parlayLeaderboard', period, networkId],
     SportMarkets: (globalFilter: GlobalFiltersEnum, networkId: Network) => ['sportMarkets', globalFilter, networkId],
     SportMarket: (address: string, networkId: Network) => ['sportMarket', address, networkId],

@@ -1,13 +1,14 @@
+import { orderBy } from 'lodash';
+import TransactionsTable from 'pages/Markets/components/TransactionsTable';
+import useClaimTransactionsPerMarket from 'queries/markets/useClaimTransactionsPerMarket';
+import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { orderBy } from 'lodash';
-import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
-import TransactionsTable from 'pages/Markets/components/TransactionsTable';
+import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import {
     ClaimTransaction,
@@ -16,7 +17,6 @@ import {
     MarketTransactionType,
     SportMarketInfo,
 } from 'types/markets';
-import useClaimTransactionsPerMarket from 'queries/markets/useClaimTransactionsPerMarket';
 import { convertFinalResultToResultType, getIsOneSideMarket } from 'utils/markets';
 
 type TransactionsProps = {
@@ -92,7 +92,7 @@ const Transactions: React.FC<TransactionsProps> = ({ market }) => {
     return (
         <Container>
             <TableContainer>
-                <Title>{t('market.table.title')}</Title>
+                <Title>{t('market.table.single-title')}</Title>
                 <TransactionsTable
                     transactions={marketTransactions}
                     isLoading={isLoading}
@@ -128,7 +128,6 @@ const Container = styled(FlexDivColumn)`
         padding: 20px 10px;
     }
     max-height: 357px;
-    min-height: 357px;
 `;
 
 const TableContainer = styled(FlexDivColumn)`

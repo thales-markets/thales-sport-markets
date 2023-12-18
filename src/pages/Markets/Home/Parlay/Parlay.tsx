@@ -1,38 +1,38 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
+import Toggle from 'components/Toggle';
+import { GlobalFiltersEnum } from 'enums/markets';
 import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
-import React, { useEffect, useCallback, useState } from 'react';
+import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
-    getParlay,
-    getHasParlayError,
-    setParlaySize,
-    resetParlayError,
-    setPaymentSelectedCollateralIndex,
-    getIsMultiSingle,
-    setIsMultiSingle,
-    getMultiSingle,
-    removeAll,
     getCombinedPositions,
+    getHasParlayError,
+    getIsMultiSingle,
+    getMultiSingle,
+    getParlay,
+    removeAll,
+    resetParlayError,
+    setIsMultiSingle,
+    setParlaySize,
+    setPaymentSelectedCollateralIndex,
 } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { CombinedParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import { getUpdatedQuote } from 'utils/markets';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfo from './components/MatchInfo';
-import Single from './components/Single';
+import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
 import MultiSingle from './components/MultiSingle';
+import Single from './components/Single';
 import Ticket from './components/Ticket';
 import ValidationModal from './components/ValidationModal';
-import Toggle from 'components/Toggle';
-import MatchInfoOfCombinedMarket from './components/MatchInfoOfCombinedMarket';
-import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
-import { GlobalFiltersEnum } from 'enums/markets';
-import { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
 
 type ParylayProps = {
     onBuySuccess?: () => void;
@@ -217,6 +217,12 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                                 <MatchInfoOfCombinedMarket
                                                     combinedMarket={market}
                                                     isHighlighted={true}
+                                                    updatedQuote={getUpdatedQuote(
+                                                        updatedQuotes,
+                                                        index,
+                                                        true,
+                                                        combinedMarketsData.length
+                                                    )}
                                                 />
                                             </RowMarket>
                                         );
@@ -227,7 +233,12 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                         return (
                                             <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
                                                 <MatchInfo
-                                                    updatedQuote={updatedQuotes?.[index]}
+                                                    updatedQuote={getUpdatedQuote(
+                                                        updatedQuotes,
+                                                        index,
+                                                        false,
+                                                        combinedMarketsData.length
+                                                    )}
                                                     market={market}
                                                     isHighlighted={true}
                                                 />

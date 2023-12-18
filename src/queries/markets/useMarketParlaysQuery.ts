@@ -2,26 +2,27 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
-import { ParlayMarket } from 'types/markets';
+import { ParlayMarket, SportMarketInfo } from 'types/markets';
 import { getIsOneSideMarket, updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 
-export const useParlayMarketsQuery = (
-    account: string,
+export const useMarketParlaysQuery = (
+    market: SportMarketInfo,
     networkId: Network,
-    minTimestamp?: number,
-    maxTimestamp?: number,
     options?: UseQueryOptions<ParlayMarket[] | undefined>
 ) => {
     return useQuery<ParlayMarket[] | undefined>(
-        QUERY_KEYS.ParlayMarkets(networkId, account, minTimestamp, maxTimestamp),
+        QUERY_KEYS.MarketParlays(networkId, market.address),
         async () => {
             try {
-                if (!account) return undefined;
+                if (!market) return undefined;
+
+                const marketAddresses = [
+                    market.address,
+                    ...market.childMarkets.map((childMarket) => childMarket.address),
+                ];
                 const parlayMarkets = await thalesData.sportMarkets.parlayMarkets({
-                    account,
+                    sportMarketsAddresses: marketAddresses,
                     network: networkId,
-                    maxTimestamp,
-                    minTimestamp,
                 });
 
                 const parlayMarketsModified = parlayMarkets.map((parlayMarket: ParlayMarket) => {

@@ -34,7 +34,9 @@ export const buildDepositOrWithdrawLink = (language: string, page: string, coinI
 };
 
 export const buildReffererLink = (reffererID: string) => {
-    return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${ROUTES.Markets.Home}?referrerId=${reffererID}`;
+    return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${
+        ROUTES.Markets.Home
+    }?referrerId=${encodeURIComponent(reffererID)}`;
 };
 
 export const getMetaRouteItem = (pathName: string) => {
