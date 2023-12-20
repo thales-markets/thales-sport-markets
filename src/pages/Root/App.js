@@ -103,7 +103,7 @@ const App = () => {
 
     useEffect(() => {
         dispatch(updateParticleState({ connectedViaParticle: !!particle?.auth?.isLogin() }));
-    }, [dispatch, particle?.auth]);
+    }, [dispatch, particle, address, signer]);
 
     useEffect(() => {
         const handlePageResized = () => {
