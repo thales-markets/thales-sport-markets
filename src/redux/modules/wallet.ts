@@ -1,7 +1,7 @@
-import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
-import { getAddress } from 'thales-utils';
-import { RootState } from 'redux/rootReducer';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { DEFAULT_NETWORK } from 'constants/network';
+import { RootState } from 'redux/rootReducer';
+import { getAddress } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 
 const sliceName = 'wallet';
@@ -9,6 +9,7 @@ const sliceName = 'wallet';
 type WalletSliceState = {
     walletAddress: string | null;
     isAA: boolean;
+    connectedViaParticle: boolean;
     networkId: SupportedNetwork;
     networkName: string;
     switchToNetworkId: SupportedNetwork; // used to trigger manually network switch in App.js
@@ -21,6 +22,7 @@ type WalletSliceState = {
 const initialState: WalletSliceState = {
     walletAddress: null,
     isAA: false,
+    connectedViaParticle: false,
     networkId: DEFAULT_NETWORK.networkId,
     networkName: DEFAULT_NETWORK.name,
     switchToNetworkId: DEFAULT_NETWORK.networkId,

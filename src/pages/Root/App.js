@@ -1,8 +1,3 @@
-import { BiconomySmartAccountV2, DEFAULT_ENTRYPOINT_ADDRESS } from '@biconomy/account';
-import { Bundler } from '@biconomy/bundler';
-import { DEFAULT_ECDSA_OWNERSHIP_MODULE, ECDSAOwnershipValidationModule } from '@biconomy/modules';
-import { BiconomyPaymaster } from '@biconomy/paymaster';
-import { ParticleNetwork } from '@particle-network/auth';
 import { ParticleProvider } from '@particle-network/provider';
 import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
@@ -15,7 +10,7 @@ import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
 import Wizard from 'pages/Wizard';
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy, useContext, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,13 +24,13 @@ import {
     updateNetworkSettings,
     updateWallet,
 } from 'redux/modules/wallet';
-import biconomyConnector from 'utils/biconomyWallet';
 import { isMobile } from 'utils/device';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import queryConnector from 'utils/queryConnector';
 import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
+import { ParticleContext } from './Provider/ParticleProvider/ParticleProvider';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
@@ -51,26 +46,6 @@ const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
 const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
 const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 
-const particle = new ParticleNetwork({
-    projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
-    clientKey: process.env.REACT_APP_CLIENT_KEY,
-    appId: process.env.REACT_APP_PARTICLE_APP_ID,
-    chainName: 'optimism', //optional
-    chainId: 10, //optional
-    wallet: {
-        //optional: by default, the wallet entry is displayed in the bottom right corner of the webpage.
-        displayWalletEntry: false, //show wallet entry when connect particle.
-        uiMode: 'dark', //optional: light or dark, if not set, the default is the same as web auth.
-        supportChains: [
-            { id: 10, name: 'optimism' },
-            { id: 42161, name: 'arbitrum' },
-            { id: 420, name: 'optimism' },
-            { id: 84531, name: 'base' },
-        ], // optional: web wallet support chains.
-        customStyle: {}, //optional: custom wallet style
-    },
-});
-
 const App = () => {
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
@@ -85,6 +60,8 @@ const App = () => {
 
     queryConnector.setQueryClient();
 
+    const particle = useContext(ParticleContext);
+
     useEffect(() => {
         const init = async () => {
             try {
@@ -92,44 +69,9 @@ const App = () => {
                 const providerNetworkId = !!address ? chainIdFromProvider : switchedToNetworkId;
                 let web3Provider;
 
-                if (particle.auth.isLogin()) {
-                    const userInfo = particle.auth.getUserInfo();
+                if (particle && particle?.auth?.isLogin()) {
                     const particleProvider = new ParticleProvider(particle.auth);
-                    const chainId = (await provider.getNetwork()).chainId;
-                    const bundler = new Bundler({
-                        // get from biconomy dashboard https://dashboard.biconomy.io/
-                        bundlerUrl: `https://bundler.biconomy.io/api/v2/${chainId}/${process.env.REACT_APP_BICONOMY_BUNDLE_KEY}`,
-                        chainId: (await provider.getNetwork()).chainId, // or any supported chain of your choice
-                        entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-                    });
-
-                    const paymaster = new BiconomyPaymaster({
-                        paymasterUrl: `https://paymaster.biconomy.io/api/v1/${chainId}/${
-                            process.env['REACT_APP_PAYMASTER_KEY_' + chainId]
-                        }`,
-                    });
-
                     web3Provider = new ethers.providers.Web3Provider(particleProvider, 'any');
-
-                    const module = await ECDSAOwnershipValidationModule.create({
-                        signer: web3Provider.getSigner(),
-                        moduleAddress: DEFAULT_ECDSA_OWNERSHIP_MODULE,
-                    });
-
-                    const account = await BiconomySmartAccountV2.create({
-                        chainId,
-                        bundler,
-                        provider,
-                        paymaster,
-                        entryPointAddress: DEFAULT_ENTRYPOINT_ADDRESS,
-                        defaultValidationModule: module,
-                        activeValidationModule: module,
-                    });
-
-                    const swAddress = await account.getAccountAddress();
-                    biconomyConnector.setWallet(account);
-                    biconomyConnector.setUserInfo(userInfo);
-                    dispatch(updateWallet({ walletAddress: swAddress, isAA: true }));
                 }
 
                 networkConnector.setNetworkSettings({
@@ -151,10 +93,11 @@ const App = () => {
             }
         };
         init();
-    }, [dispatch, provider, signer, switchedToNetworkId, address]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, provider, signer, switchedToNetworkId, address, particle?.auth]);
 
     useEffect(() => {
-        dispatch(updateWallet({ walletAddress: address, isAA: particle.auth.isLogin() }));
+        dispatch(updateWallet({ walletAddress: address }));
     }, [address, dispatch]);
 
     useEffect(() => {
