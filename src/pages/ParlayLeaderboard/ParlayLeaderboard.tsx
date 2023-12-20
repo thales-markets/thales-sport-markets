@@ -1,23 +1,28 @@
 import Search from 'components/Search';
 import SelectInput from 'components/SelectInput';
 import Table from 'components/Table';
+import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import {
+    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10,
+    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
-    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE,
+    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC_BASE,
     PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS,
+    PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
-    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
-    PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM,
     PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000,
-    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10,
 } from 'constants/markets';
-import { t } from 'i18next';
 import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
+import { OddsType } from 'enums/markets';
+import { Network } from 'enums/network';
+import i18n from 'i18n';
+import { t } from 'i18next';
+import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -28,35 +33,29 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
-import { CombinedMarket } from 'types/markets';
-import { ParlayMarket, ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
 import {
-    getEtherscanAddressLink,
-    formatDateWithTime,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
+    formatDateWithTime,
+    getEtherscanAddressLink,
     truncateAddress,
 } from 'thales-utils';
+import { CombinedMarket, ParlayMarket, ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import {
+    extractCombinedMarketsFromParlayMarketType,
+    isCombinedMarketWinner,
+    removeCombinedMarketsFromParlayMarketType,
+} from 'utils/combinedMarkets';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
     formatMarketOdds,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
-import TimeRemaining from 'components/TimeRemaining';
-import {
-    extractCombinedMarketsFromParlayMarketType,
-    isCombinedMarketWinner,
-    removeCombinedMarketsFromParlayMarketType,
-} from 'utils/combinedMarkets';
-import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
-import i18n from 'i18n';
-import { OddsType } from 'enums/markets';
-import { Network } from 'enums/network';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
+import { formatParlayOdds } from 'utils/parlay';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -162,7 +161,7 @@ const ParlayLeaderboard: React.FC = () => {
                         )}
                     </StickyCell>
                     <StickyCell>{truncateAddress(data.account, 5)}</StickyCell>
-                    <StickyCell>{formatMarketOdds(selectedOddsType, data.totalQuote)}</StickyCell>
+                    <StickyCell>{formatParlayOdds(selectedOddsType, data.sUSDPaid, data.totalAmount)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.sUSDPaid, 2)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.totalAmount, 2)}</StickyCell>
                     <ExpandStickyRowIcon
@@ -330,7 +329,13 @@ const ParlayLeaderboard: React.FC = () => {
                         accessor: 'totalQuote',
                         Header: <>{t('parlay-leaderboard.sidebar.quote')}</>,
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['totalQuote']>) => (
-                            <TableText>{formatMarketOdds(selectedOddsType, cellProps.cell.value)}</TableText>
+                            <TableText>
+                                {formatParlayOdds(
+                                    selectedOddsType,
+                                    cellProps.row.original.sUSDPaid,
+                                    cellProps.row.original.totalAmount
+                                )}
+                            </TableText>
                         ),
                         sortable: true,
                         sortType: quoteSort(selectedOddsType),
@@ -374,7 +379,13 @@ const ParlayLeaderboard: React.FC = () => {
                             <LastExpandedSection style={{ gap: 20 }}>
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
-                                    <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
+                                    <QuoteText>
+                                        {formatParlayOdds(
+                                            selectedOddsType,
+                                            row.original.sUSDPaid,
+                                            row.original.totalAmount
+                                        )}
+                                    </QuoteText>
                                 </QuoteWrapper>
 
                                 <QuoteWrapper>

@@ -1,10 +1,13 @@
 import PositionSymbol from 'components/PositionSymbol';
-import SimpleLoader from 'components/SimpleLoader';
 import SPAAnchor from 'components/SPAAnchor';
+import SimpleLoader from 'components/SimpleLoader';
 import { PARLAY_LEADERBOARD_BIWEEKLY_START_DATE, PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
+import { BetTypeNameMap } from 'constants/tags';
 import { differenceInDays } from 'date-fns';
+import { BetType, OddsType } from 'enums/markets';
+import { Network } from 'enums/network';
 import {
     getOpacity,
     getParlayItemStatus,
@@ -12,6 +15,7 @@ import {
     getPositionStatusForCombinedMarket,
     getRewardsArray,
 } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
+import { getOpacityForCombinedMarket } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,8 +24,15 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { CombinedMarket, ParlayMarket, ParlayMarketWithQuotes, PositionData } from 'types/markets';
+import { useTheme } from 'styled-components';
 import { formatCurrency, truncateAddress } from 'thales-utils';
+import { CombinedMarket, ParlayMarket, ParlayMarketWithQuotes, PositionData } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import {
+    extractCombinedMarketsFromParlayMarketType,
+    getCombinedPositionName,
+    removeCombinedMarketsFromParlayMarketType,
+} from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import {
     convertPositionNameToPositionType,
@@ -36,9 +47,10 @@ import {
     isSpecialYesNoProp,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
-import { Network } from 'enums/network';
+import { formatParlayOdds } from 'utils/parlay';
 import { buildHref } from 'utils/routes';
 import {
+    ArbitrumLogoWrapper,
     ArrowIcon,
     ColumnLabel,
     ColumnWrapper,
@@ -57,21 +69,10 @@ import {
     ParlayRowResult,
     ParlayRowTeam,
     Rank,
-    ArbitrumLogoWrapper,
+    ThalesLogoWrapper,
     Title,
     TitleLabel,
-    ThalesLogoWrapper,
 } from './styled-components';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
-import { BetTypeNameMap } from 'constants/tags';
-import { BetType, OddsType } from 'enums/markets';
-import {
-    extractCombinedMarketsFromParlayMarketType,
-    getCombinedPositionName,
-    removeCombinedMarketsFromParlayMarketType,
-} from 'utils/combinedMarkets';
-import { getOpacityForCombinedMarket } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 
 const SidebarLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -155,7 +156,11 @@ const SidebarLeaderboard: React.FC = () => {
                                         </ColumnWrapper>
                                         <ColumnWrapper>
                                             <DataLabel>
-                                                {formatMarketOdds(selectedOddsType, parlay.totalQuote)}
+                                                {formatParlayOdds(
+                                                    selectedOddsType,
+                                                    parlay.sUSDPaid,
+                                                    parlay.totalAmount
+                                                )}
                                             </DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>

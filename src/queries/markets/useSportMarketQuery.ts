@@ -1,12 +1,12 @@
-import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from 'constants/queryKeys';
-import { SportMarketInfo } from 'types/markets';
-import thalesData from 'thales-data';
 import { Network } from 'enums/network';
-import networkConnector from 'utils/networkConnector';
+import { useQuery, UseQueryOptions } from 'react-query';
+import thalesData from 'thales-data';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
+import { SportMarketInfo } from 'types/markets';
 import { insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
 import { getIsOneSideMarket, getMarketAddressesFromSportMarketArray } from 'utils/markets';
-import { getDefaultDecimalsForNetwork, bigNumberFormatter } from 'thales-utils';
+import networkConnector from 'utils/networkConnector';
 
 const useSportMarketQuery = (
     marketAddress: string,
