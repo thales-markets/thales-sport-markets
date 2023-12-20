@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -38,7 +38,7 @@ const Deposit: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
     const [selectedToken, setSelectedToken] = useState<number>(0);
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
@@ -74,7 +74,7 @@ const Deposit: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, isAA).forEach((token) => {
+                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
             }
@@ -83,7 +83,7 @@ const Deposit: React.FC = () => {
         } catch (e) {
             return undefined;
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, isAA]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, isConnectedViaParticle]);
 
     useEffect(() => {
         if (totalBalanceValue == 0) {

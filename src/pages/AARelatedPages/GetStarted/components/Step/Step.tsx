@@ -4,7 +4,12 @@ import { t } from 'i18next';
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsAA, getIsWalletConnected, getNetworkId, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import {
+    getIsConnectedViaParticle,
+    getIsWalletConnected,
+    getNetworkId,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
@@ -23,14 +28,14 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const dispatch = useDispatch();
 
     const stepTitle = useMemo(() => {
         let transKey = 'get-started.steps.title';
         switch (stepType) {
             case GetStartedStep.LOG_IN:
-                transKey += isAA && isWalletConnected ? '.logged-in' : '.sign-up';
+                transKey += isConnectedViaParticle && isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
                 transKey += '.deposit';
@@ -40,13 +45,13 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 break;
         }
         return t(transKey);
-    }, [isAA, isWalletConnected, stepType]);
+    }, [isConnectedViaParticle, isWalletConnected, stepType]);
 
     const stepDescription = useMemo(() => {
         let transKey = 'get-started.steps.description';
         switch (stepType) {
             case GetStartedStep.LOG_IN:
-                transKey += isAA && isWalletConnected ? '.logged-in' : '.sign-up';
+                transKey += isConnectedViaParticle && isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
                 transKey += '.deposit';
@@ -60,7 +65,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
             network: getNetworkNameByNetworkId(networkId, true) || getDefaultNetworkName(true),
             collateral: getDefaultCollateral(networkId),
         });
-    }, [stepType, networkId, isAA, isWalletConnected]);
+    }, [stepType, networkId, isConnectedViaParticle, isWalletConnected]);
 
     const getStepAction = () => {
         let className = '';
@@ -68,7 +73,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
         switch (stepType) {
             case GetStartedStep.LOG_IN:
                 className = 'icon--card';
-                transKey += isAA && isWalletConnected ? '.logged-in' : '.sign-up';
+                transKey += isConnectedViaParticle && isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
                 className = 'icon--card';

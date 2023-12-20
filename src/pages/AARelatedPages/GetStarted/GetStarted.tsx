@@ -5,7 +5,7 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivStart } from 'styles/common';
@@ -15,14 +15,14 @@ import Step from './components/Step';
 const GetStarted: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const steps: GetStartedStep[] = [GetStartedStep.LOG_IN, GetStartedStep.DEPOSIT, GetStartedStep.TRADE];
     const [currentStep, setCurrentStep] = useState<GetStartedStep>(
-        isWalletConnected && isAA ? GetStartedStep.DEPOSIT : GetStartedStep.LOG_IN
+        isWalletConnected && isConnectedViaParticle ? GetStartedStep.DEPOSIT : GetStartedStep.LOG_IN
     );
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
@@ -40,7 +40,7 @@ const GetStarted: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, isAA).forEach((token) => {
+                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
             }
@@ -49,7 +49,7 @@ const GetStarted: React.FC = () => {
         } catch (e) {
             return 0;
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, isAA]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, isConnectedViaParticle]);
 
     useEffect(() => {
         if (totalBalanceValue > 0) {

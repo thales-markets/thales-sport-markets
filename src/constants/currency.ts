@@ -1,7 +1,7 @@
-import { keyBy } from 'lodash';
-import { Coins } from 'types/tokens';
 import { Network } from 'enums/network';
+import { keyBy } from 'lodash';
 import { SupportedNetwork } from 'types/network';
+import { Coins } from 'types/tokens';
 
 export const CURRENCY_MAP = {
     sUSD: 'sUSD',
@@ -56,17 +56,25 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
 
 export const COLLATERALS_AA: Record<SupportedNetwork, Coins[]> = {
     [Network.OptimismMainnet]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.sUSD as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+        // CRYPTO_CURRENCY_MAP.USDC as Coins,
+        // CRYPTO_CURRENCY_MAP.USDT as Coins,
+        // CRYPTO_CURRENCY_MAP.sUSD as Coins,
     ],
-    [Network.OptimismGoerli]: [CRYPTO_CURRENCY_MAP.sUSD as Coins],
+    [Network.OptimismGoerli]: [
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+        // CRYPTO_CURRENCY_MAP.sUSD as Coins
+    ],
     [Network.Arbitrum]: [
-        CRYPTO_CURRENCY_MAP.USDC as Coins,
-        CRYPTO_CURRENCY_MAP.USDT as Coins,
-        CRYPTO_CURRENCY_MAP.USDCe as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+        // CRYPTO_CURRENCY_MAP.USDC as Coins,
+        // CRYPTO_CURRENCY_MAP.USDT as Coins,
+        // CRYPTO_CURRENCY_MAP.USDCe as Coins,
     ],
-    [Network.Base]: [CRYPTO_CURRENCY_MAP.USDC as Coins],
+    [Network.Base]: [
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+        // CRYPTO_CURRENCY_MAP.USDC as Coins
+    ],
 };
 
 export const COLLATERAL_DECIMALS: Record<Coins, number> = {

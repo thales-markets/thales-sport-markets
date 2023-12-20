@@ -17,11 +17,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
 import {
-    getIsAA,
+    getIsConnectedViaParticle,
     getNetworkId,
     getSwitchToNetworkId,
     switchToNetworkId,
     updateNetworkSettings,
+    updateParticleState,
     updateWallet,
 } from 'redux/modules/wallet';
 import { isMobile } from 'utils/device';
@@ -50,7 +51,7 @@ const App = () => {
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
-    const isAA = useSelector((state) => getIsAA(state));
+    const isConnectedViaParticle = useSelector((state) => getIsConnectedViaParticle(state));
 
     const { address } = useAccount();
     const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
@@ -99,6 +100,10 @@ const App = () => {
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
     }, [address, dispatch]);
+
+    useEffect(() => {
+        dispatch(updateParticleState({ connectedViaParticle: !!particle?.auth?.isLogin() }));
+    }, [dispatch, particle?.auth]);
 
     useEffect(() => {
         const handlePageResized = () => {
@@ -186,14 +191,14 @@ const App = () => {
                                     </Route>
                                 )}
 
-                                {isAA && (
+                                {isConnectedViaParticle && (
                                     <Route exact path={ROUTES.Deposit}>
                                         <DappLayout>
                                             <Deposit />
                                         </DappLayout>
                                     </Route>
                                 )}
-                                {isAA && (
+                                {isConnectedViaParticle && (
                                     <Route exact path={ROUTES.Withdraw}>
                                         <DappLayout>
                                             <Withdraw />
@@ -202,8 +207,8 @@ const App = () => {
                                 )}
                                 <Route exact path={ROUTES.Wizard}>
                                     <DappLayout>
-                                        {isAA && <GetStarted />}
-                                        {!isAA && <Wizard />}
+                                        {isConnectedViaParticle && <GetStarted />}
+                                        {!isConnectedViaParticle && <Wizard />}
                                     </DappLayout>
                                 </Route>
                                 {isRouteAvailableForNetwork(ROUTES.Quiz, networkId) && (

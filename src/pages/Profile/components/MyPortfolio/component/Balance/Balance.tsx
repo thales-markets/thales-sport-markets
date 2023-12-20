@@ -7,19 +7,19 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { getCollaterals } from 'utils/collaterals';
 import { formatCurrency, formatCurrencyWithSign } from 'thales-utils';
+import { getCollaterals } from 'utils/collaterals';
 import { buildDepositOrWithdrawLink } from 'utils/routes';
 
 const Balance: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -41,7 +41,7 @@ const Balance: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, isAA).forEach((token) => {
+                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
             }
@@ -50,14 +50,14 @@ const Balance: React.FC = () => {
         } catch (e) {
             return 'N/A';
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, isAA]);
+    }, [exchangeRates, isConnectedViaParticle, multipleCollateralBalances.data, networkId]);
 
     return (
         <Wrapper>
             <Heading>{t('my-portfolio.estimated-balance')}</Heading>
             <BalanceAmount>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</BalanceAmount>
             <Divider />
-            {getCollaterals(networkId, isAA).map((token, index) => {
+            {getCollaterals(networkId, isConnectedViaParticle).map((token, index) => {
                 return (
                     <CollateralItem key={index}>
                         <CollateralName>

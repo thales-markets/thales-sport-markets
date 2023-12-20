@@ -5,20 +5,20 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId, getWalletAddress, getIsWalletConnected, getIsAA } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
+import { formatCurrency, formatCurrencyWithSign } from 'thales-utils';
 import { Coins } from 'types/tokens';
 import { getCollaterals, isStableCurrency } from 'utils/collaterals';
-import { formatCurrency, formatCurrencyWithSign } from 'thales-utils';
 
 const BalanceDetails: React.FC = () => {
     const { t } = useTranslation();
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
@@ -37,7 +37,7 @@ const BalanceDetails: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, isAA).forEach((token) => {
+                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
             }
@@ -46,7 +46,7 @@ const BalanceDetails: React.FC = () => {
         } catch (e) {
             return 'N/A';
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, isAA]);
+    }, [exchangeRates, isConnectedViaParticle, multipleCollateralBalances.data, networkId]);
 
     const getUSDForCollateral = useCallback(
         (token: Coins) =>
@@ -60,7 +60,7 @@ const BalanceDetails: React.FC = () => {
             <SectionLabel>{t('my-portfolio.estimated-balance')}</SectionLabel>
             <TotalBalance>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</TotalBalance>
             <TokenBalancesWrapper>
-                {getCollaterals(networkId, isAA).map((token, index) => {
+                {getCollaterals(networkId, isConnectedViaParticle).map((token, index) => {
                     return (
                         <IndividualTokenBalanceWrapper key={`ind-token-${index}`}>
                             <Token>

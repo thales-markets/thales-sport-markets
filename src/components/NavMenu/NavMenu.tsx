@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsAA, getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -50,7 +50,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
     return (
         <OutsideClickHandler onOutsideClick={() => visibility == true && setNavMenuVisibility(false)}>
@@ -135,8 +135,8 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    {!isAA && <MintVoucher style={{ width: '100%' }} />}
-                    {isAA && (
+                    {!isConnectedViaParticle && <MintVoucher style={{ width: '100%' }} />}
+                    {isConnectedViaParticle && (
                         <Button
                             backgroundColor={theme.button.background.quaternary}
                             textColor={theme.button.textColor.primary}

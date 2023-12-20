@@ -46,6 +46,9 @@ const walletDetailsSlice = createSlice({
 
             return newState;
         },
+        updateParticleState: (state, action: PayloadAction<{ connectedViaParticle: boolean }>) => {
+            state.connectedViaParticle = action.payload.connectedViaParticle;
+        },
         updateNetworkSettings: (
             state,
             action: PayloadAction<{
@@ -81,6 +84,7 @@ export const getNetworkId = (state: RootState) => getWalletState(state).networkI
 export const getSwitchToNetworkId = (state: RootState) => getWalletState(state).switchToNetworkId;
 export const getWalletAddress = (state: RootState) => getWalletState(state).walletAddress;
 export const getIsAA = (state: RootState) => getWalletState(state).isAA;
+export const getIsConnectedViaParticle = (state: RootState) => getWalletState(state).connectedViaParticle;
 export const getWalletConnectModalVisibility = (state: RootState) =>
     getWalletState(state).walletConnectModal.visibility;
 export const getWalletConnectModalOrigin = (state: RootState) => getWalletState(state).walletConnectModal.origin;
@@ -90,6 +94,7 @@ export const {
     updateNetworkSettings,
     switchToNetworkId,
     updateWallet,
+    updateParticleState,
     setWalletConnectModalVisibility,
 } = walletDetailsSlice.actions;
 
