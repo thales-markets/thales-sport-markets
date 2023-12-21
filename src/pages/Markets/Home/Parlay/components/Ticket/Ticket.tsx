@@ -6,6 +6,7 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, MIN_COLLATERAL_MULTIPLIER } from 'constants/markets';
+import { ZERO_ADDRESS } from 'constants/network';
 import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
@@ -80,10 +81,10 @@ import {
     XButton,
     defaultButtonProps,
 } from '../styled-components';
-import { ZERO_ADDRESS } from 'constants/network';
 
-import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import Tooltip from 'components/Tooltip';
+import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
+import SuggestedAmount from '../SuggestedAmount';
 
 type TicketProps = {
     markets: ParlaysMarket[];
@@ -879,6 +880,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 </RowContainer>
             </RowSummary>
             <Voucher disabled={isAllowing || isBuying} />
+            <SuggestedAmount
+                insertedAmount={collateralAmountValue}
+                exchangeRates={exchangeRates}
+                collateralIndex={selectedCollateralIndex}
+                changeAmount={(value) => setCollateralAmount(value)}
+            />
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>

@@ -1,11 +1,13 @@
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
+import Tooltip from 'components/Tooltip';
 import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, DEFAULT_CURRENCY_DECIMALS, LONG_CURRENCY_DECIMALS, USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER, MAX_COLLATERAL_MULTIPLIER } from 'constants/markets';
+import { ZERO_ADDRESS } from 'constants/network';
 import { OddsType, Position } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
@@ -47,6 +49,7 @@ import { AMMPosition, AvailablePerPosition, ParlaysMarket } from 'types/markets'
 import { Coins } from 'types/tokens';
 import { ThemeInterface } from 'types/ui';
 import { getAMMSportsTransaction, getSportsAMMQuoteMethod } from 'utils/amm';
+import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import {
     getCollateral,
     getCollateralAddress,
@@ -64,6 +67,7 @@ import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
+import SuggestedAmount from '../SuggestedAmount';
 import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
@@ -81,9 +85,6 @@ import {
     TwitterIcon,
     defaultButtonProps,
 } from '../styled-components';
-import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
-import { ZERO_ADDRESS } from 'constants/network';
-import Tooltip from 'components/Tooltip';
 
 type SingleProps = {
     market: ParlaysMarket;
@@ -836,6 +837,12 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                 </RowContainer>
             </RowSummary>
             <Voucher disabled={isAllowing || isBuying} />
+            <SuggestedAmount
+                insertedAmount={collateralAmountValue}
+                exchangeRates={exchangeRates}
+                collateralIndex={selectedCollateralIndex}
+                changeAmount={(value) => setCollateralAmount(value)}
+            />
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>

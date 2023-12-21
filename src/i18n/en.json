@@ -804,7 +804,9 @@
     "my-portfolio": {
         "estimated-balance": "Estimated balance",
         "deposit": "Deposit",
-        "withdraw": "Withdraw"
+        "withdraw": "Withdraw",
+        "top-up-eth": "Top up ETH",
+        "top-up-eth-tooltip": "Your ETH gas balance is low.\n\nPlease deposit more ETH or swap other deposited tokens for more ETH"
     },
     "get-started": {
         "sign-up": "Sign Up",
