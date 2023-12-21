@@ -59,6 +59,7 @@ import {
     isSpecialYesNoProp,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
+import { formatParlayOdds } from 'utils/parlay';
 import { buildMarketLink } from 'utils/routes';
 import { Container } from './styled-components';
 
@@ -277,7 +278,13 @@ const ParlayTransactions: React.FC<{ market: SportMarketInfo }> = ({ market }) =
                             <LastExpandedSection>
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('profile.table.total-quote')}:</QuoteLabel>
-                                    <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
+                                    <QuoteText>
+                                        {formatParlayOdds(
+                                            selectedOddsType,
+                                            row.original.sUSDPaid,
+                                            row.original.totalAmount
+                                        )}
+                                    </QuoteText>
                                 </QuoteWrapper>
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('profile.table.total-amount')}:</QuoteLabel>

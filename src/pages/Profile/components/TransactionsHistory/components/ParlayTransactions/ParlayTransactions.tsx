@@ -1,14 +1,31 @@
 import PositionSymbol from 'components/PositionSymbol';
+import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType, OddsType, Position } from 'enums/markets';
+import { ethers } from 'ethers';
+import i18n from 'i18n';
+import { t } from 'i18next';
+import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
+import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
+import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import {
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    formatDateWithTime,
+    formatTxTimestamp,
+    truncateAddress,
+} from 'thales-utils';
 import {
     CombinedMarket,
     ParlayMarket,
@@ -17,13 +34,14 @@ import {
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import { getDefaultCollateral } from 'utils/collaterals';
 import {
-    formatDateWithTime,
-    formatTxTimestamp,
-    formatCurrencyWithKey,
-    formatCurrencyWithSign,
-    truncateAddress,
-} from 'thales-utils';
+    extractCombinedMarketsFromParlayMarketType,
+    getCombinedPositionName,
+    isCombinedMarketWinner,
+    removeCombinedMarketsFromParlayMarketType,
+} from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import {
     convertFinalResultToResultType,
@@ -42,26 +60,8 @@ import {
     isSpecialYesNoProp,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
-import { t } from 'i18next';
-import { useTranslation } from 'react-i18next';
-import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
-import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
-import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { ethers } from 'ethers';
+import { formatParlayOdds } from 'utils/parlay';
 import { buildMarketLink } from 'utils/routes';
-import SPAAnchor from 'components/SPAAnchor';
-import i18n from 'i18n';
-import {
-    extractCombinedMarketsFromParlayMarketType,
-    getCombinedPositionName,
-    isCombinedMarketWinner,
-    removeCombinedMarketsFromParlayMarketType,
-} from 'utils/combinedMarkets';
-import { BetType, OddsType, Position } from 'enums/markets';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
-import { BetTypeNameMap } from 'constants/tags';
-import { getDefaultCollateral } from 'utils/collaterals';
 
 const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -303,7 +303,13 @@ const ParlayTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
                             <LastExpandedSection>
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('profile.table.total-quote')}:</QuoteLabel>
-                                    <QuoteText>{formatMarketOdds(selectedOddsType, row.original.totalQuote)}</QuoteText>
+                                    <QuoteText>
+                                        {formatParlayOdds(
+                                            selectedOddsType,
+                                            row.original.sUSDPaid,
+                                            row.original.totalAmount
+                                        )}
+                                    </QuoteText>
                                 </QuoteWrapper>
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('profile.table.total-amount')}:</QuoteLabel>
