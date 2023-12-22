@@ -61,6 +61,8 @@ const BalanceDetails: React.FC = () => {
             <TotalBalance>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</TotalBalance>
             <TokenBalancesWrapper>
                 {getCollaterals(networkId, isConnectedViaParticle).map((token, index) => {
+                    const decimalsForTokenAmount = exchangeRates?.[token] ? (exchangeRates?.[token] > 1000 ? 4 : 2) : 2;
+
                     return (
                         <IndividualTokenBalanceWrapper key={`ind-token-${index}`}>
                             <Token>
@@ -69,7 +71,7 @@ const BalanceDetails: React.FC = () => {
                             </Token>
                             <IndividualTokenBalance>
                                 {multipleCollateralBalances.data
-                                    ? formatCurrency(multipleCollateralBalances.data[token])
+                                    ? formatCurrency(multipleCollateralBalances.data[token], decimalsForTokenAmount)
                                     : 0}
                             </IndividualTokenBalance>
                             <IndividualTokenBalance>
