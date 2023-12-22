@@ -32,8 +32,8 @@ const Profile: React.FC = () => {
             {isConnectedViaParticle ? (
                 <>
                     <WrapperNavigation tabIndex={tabIndex} onChangeTab={(index) => handleTabChange(index)} />
-                    {tabIndex == 0 && <MyTickets />}
-                    {tabIndex == 1 && <MyPortfolio />}
+                    {tabIndex == 0 && <MyPortfolio />}
+                    {tabIndex == 1 && <MyTickets />}
                 </>
             ) : (
                 <MyTickets />

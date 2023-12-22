@@ -14,10 +14,10 @@ const WrapperNavigation: React.FC<WrapperNavigationProps> = ({ tabIndex, onChang
     return (
         <Wrapper>
             <NavItem active={tabIndex == 0} onClick={() => onChangeTab(0)}>
-                {t('profile.wrapper-nav.my-tickets')}
+                {t('profile.wrapper-nav.my-portfolio')}
             </NavItem>
             <NavItem active={tabIndex == 1} onClick={() => onChangeTab(1)}>
-                {t('profile.wrapper-nav.my-portfolio')}
+                {t('profile.wrapper-nav.my-tickets')}
             </NavItem>
         </Wrapper>
     );
