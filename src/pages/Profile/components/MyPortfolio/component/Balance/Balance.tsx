@@ -58,6 +58,8 @@ const Balance: React.FC = () => {
             <BalanceAmount>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</BalanceAmount>
             <Divider />
             {getCollaterals(networkId, isConnectedViaParticle).map((token, index) => {
+                const decimalsForTokenAmount = exchangeRates?.[token] ? (exchangeRates?.[token] > 1000 ? 4 : 2) : 2;
+
                 return (
                     <CollateralItem key={index}>
                         <CollateralName>
@@ -66,7 +68,7 @@ const Balance: React.FC = () => {
                         </CollateralName>
                         <TokenBalance>
                             {multipleCollateralBalances.data
-                                ? formatCurrency(multipleCollateralBalances.data[token])
+                                ? formatCurrency(multipleCollateralBalances.data[token], decimalsForTokenAmount)
                                 : 0}{' '}
                             {token}
                             {exchangeRates && multipleCollateralBalances.data && !isMobile
