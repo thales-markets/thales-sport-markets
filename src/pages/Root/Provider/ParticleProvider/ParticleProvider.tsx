@@ -24,7 +24,7 @@ const ParticleProvider: React.FC<ParticleProviderProps> = ({ children }) => {
                 chainId: networkId || 10,
                 wallet: {
                     //optional: by default, the wallet entry is displayed in the bottom right corner of the webpage.
-                    displayWalletEntry: true, //show wallet entry when connect particle.
+                    displayWalletEntry: false, //show wallet entry when connect particle.
                     uiMode: 'dark', //optional: light or dark, if not set, the default is the same as web auth.
                     supportChains: [
                         { id: 10, name: 'optimism' },
