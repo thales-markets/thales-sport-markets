@@ -9,12 +9,15 @@ import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
-import React, { useState } from 'react';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import ReactTooltip from 'rc-tooltip';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import {
@@ -26,8 +29,9 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
+import { getCollaterals } from 'utils/collaterals';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 
@@ -67,10 +71,13 @@ const DappHeader: React.FC = () => {
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+    const [showLowBalanceAlert, setShowLowBalanceAlert] = useState<boolean>(false);
+
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
     const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
@@ -78,6 +85,41 @@ const DappHeader: React.FC = () => {
     const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
+
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+        refetchInterval: 5000,
+    });
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const totalBalanceValue = useMemo(() => {
+        let total = 0;
+        try {
+            if (exchangeRates && multipleCollateralBalances.data) {
+                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
+                    total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
+                });
+            }
+
+            return total;
+        } catch (e) {
+            return undefined;
+        }
+    }, [exchangeRates, multipleCollateralBalances.data, networkId, isConnectedViaParticle]);
+
+    useEffect(() => {
+        if (isConnectedViaParticle && Number(totalBalanceValue) < 2) {
+            setShowLowBalanceAlert(true);
+        } else {
+            setShowLowBalanceAlert(false);
+        }
+    }, [totalBalanceValue, isConnectedViaParticle]);
 
     const claimablePositionCount =
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
@@ -122,7 +164,34 @@ const DappHeader: React.FC = () => {
                         )}
                     </LeftContainer>
                     <RightContainer>
-                        {isConnectedViaParticle && (
+                        {showLowBalanceAlert && (
+                            <TopUpButtonContainer>
+                                <ReactTooltip
+                                    overlay={<TooltipOverlay>{t('my-portfolio.top-up-eth-tooltip')}</TooltipOverlay>}
+                                    placement={'bottom'}
+                                    trigger={['hover']}
+                                >
+                                    <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
+                                        <Button
+                                            backgroundColor={theme.button.background.secondary}
+                                            textColor={theme.error.textColor.primary}
+                                            borderColor={theme.error.borderColor.primary}
+                                            width="150px"
+                                            fontWeight="400"
+                                            additionalStyles={{
+                                                borderRadius: '15.5px',
+                                                fontWeight: '800',
+                                                fontSize: '14px',
+                                            }}
+                                            height="28px"
+                                        >
+                                            {t('my-portfolio.top-up-eth')}
+                                        </Button>
+                                    </SPAAnchor>
+                                </ReactTooltip>
+                            </TopUpButtonContainer>
+                        )}
+                        {isConnectedViaParticle && !showLowBalanceAlert && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
                                 <Button
                                     backgroundColor={theme.button.background.quaternary}
@@ -446,6 +515,20 @@ const MobileButtonWrapper = styled(FlexDivRowCentered)`
     width: 100%;
     margin-top: 10px;
     gap: 10px;
+`;
+
+const TopUpButtonContainer = styled(FlexDiv)`
+    align-items: center;
+    justify-content: center;
+`;
+
+const TooltipOverlay = styled(FlexDiv)`
+    text-align: left;
+    background-color: ${(props) => props.theme.background.primary};
+    color: ${(props) => props.theme.textColor.primary};
+    border: ${(props) => `1.5px solid ${props.theme.error.borderColor.primary}`};
+    padding: 12px;
+    text-transform: uppercase;
 `;
 
 export default DappHeader;
