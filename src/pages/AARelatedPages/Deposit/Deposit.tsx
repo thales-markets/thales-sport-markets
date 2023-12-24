@@ -181,7 +181,7 @@ const Deposit: React.FC = () => {
                             })}
                         </WarningContainer>
                     </DepositAddressFormContainer>
-                    <BuyWithText>Or buy with</BuyWithText>
+                    <BuyWithText>{t('deposit.or-buy-with')}</BuyWithText>
                     <OnramperDiv
                         onClick={() => {
                             window.open(onramperUrl, '_blank');

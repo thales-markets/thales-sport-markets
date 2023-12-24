@@ -766,6 +766,7 @@
     },
     "deposit": {
         "deposit-crypto": "Deposit crypto",
+        "or-buy-with": "Or buy with",
         "select-token": "Select token",
         "address-input-label": "Your personal {{ token }} deposit address on {{ network }}",
         "send": "Make sure you are depositing {{ network }} {{ token }} to the address above!",
