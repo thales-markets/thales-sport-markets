@@ -1,13 +1,14 @@
-import { STABLE_COINS, USD_SIGN } from 'constants/currency';
+import { USD_SIGN } from 'constants/currency';
+import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { floorNumberToDecimals, formatCurrencyWithKey } from 'thales-utils';
-import { getCollateral } from 'utils/collaterals';
+import { COLLATERAL_DECIMALS, formatCurrencyWithKey } from 'thales-utils';
+import { getCollateral, isStableCurrency } from 'utils/collaterals';
 
 const AMOUNTS = [5, 10, 20, 50, 100];
 
@@ -27,16 +28,27 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const collateral = getCollateral(networkId, collateralIndex);
-    const isStableCollateral = !!STABLE_COINS.find((stable) => stable == collateral);
+
+    const convertFromStable = useCallback(
+        (value: number) => {
+            const rate = exchangeRates?.[collateral];
+            if (isStableCurrency(collateral)) {
+                return value;
+            } else {
+                const priceFeedBuffer = 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE;
+                return rate
+                    ? Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[collateral]) /
+                          10 ** COLLATERAL_DECIMALS[collateral]
+                    : 0;
+            }
+        },
+        [collateral, exchangeRates]
+    );
 
     return (
         <Container>
             {AMOUNTS.map((amount, index) => {
-                const buyAmount = isStableCollateral
-                    ? floorNumberToDecimals(amount)
-                    : exchangeRates
-                    ? floorNumberToDecimals(amount / exchangeRates[collateral], 4)
-                    : floorNumberToDecimals(amount);
+                const buyAmount = convertFromStable(amount);
 
                 return (
                     <AmountContainer
