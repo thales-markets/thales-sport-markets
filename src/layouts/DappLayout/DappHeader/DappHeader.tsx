@@ -31,7 +31,6 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
-import { getCollaterals } from 'utils/collaterals';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 
@@ -98,28 +97,26 @@ const DappHeader: React.FC = () => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const totalBalanceValue = useMemo(() => {
+    const ethBalanceValue = useMemo(() => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
-                    total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
-                });
+                total = multipleCollateralBalances.data['ETH'] * (exchangeRates['ETH'] ? exchangeRates['ETH'] : 1);
             }
 
             return total;
         } catch (e) {
             return undefined;
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, isConnectedViaParticle]);
+    }, [exchangeRates, multipleCollateralBalances.data]);
 
     useEffect(() => {
-        if (isConnectedViaParticle && Number(totalBalanceValue) < 2) {
+        if (isConnectedViaParticle && Number(ethBalanceValue) < 2) {
             setShowLowBalanceAlert(true);
         } else {
             setShowLowBalanceAlert(false);
         }
-    }, [totalBalanceValue, isConnectedViaParticle]);
+    }, [ethBalanceValue, isConnectedViaParticle]);
 
     const claimablePositionCount =
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
@@ -171,7 +168,7 @@ const DappHeader: React.FC = () => {
                                     placement={'bottom'}
                                     trigger={['hover']}
                                 >
-                                    <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
+                                    <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
                                         <Button
                                             backgroundColor={theme.button.background.secondary}
                                             textColor={theme.error.textColor.primary}
@@ -218,7 +215,6 @@ const DappHeader: React.FC = () => {
                                     fontWeight: '800',
                                     fontSize: '14px',
                                     marginRight: '10px',
-                                    textTransform: 'capitalize',
                                 }}
                                 height="28px"
                                 onClick={() =>
@@ -243,7 +239,6 @@ const DappHeader: React.FC = () => {
                                     fontWeight: '700',
                                     fontSize: '14px',
                                     marginRight: '5px',
-                                    textTransform: 'capitalize',
                                 }}
                                 width="150px"
                                 height="28px"
