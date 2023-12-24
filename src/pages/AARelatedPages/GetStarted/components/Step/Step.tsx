@@ -1,5 +1,6 @@
 import ROUTES from 'constants/routes';
 import { GetStartedStep } from 'enums/wizard';
+import i18n from 'i18n';
 import { t } from 'i18next';
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,9 +14,9 @@ import {
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getDefaultCollateral } from 'utils/collaterals';
+import { getCollateralIndex, getDefaultCollateral } from 'utils/collaterals';
 import { getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
-import { buildHref, navigateTo } from 'utils/routes';
+import { buildDepositOrWithdrawLink, buildHref, navigateTo } from 'utils/routes';
 
 type StepProps = {
     stepNumber: number;
@@ -30,6 +31,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const dispatch = useDispatch();
+    const language = i18n.language;
 
     const stepTitle = useMemo(() => {
         let transKey = 'get-started.steps.title';
@@ -118,7 +120,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 );
                 break;
             case GetStartedStep.DEPOSIT:
-                navigateTo(buildHref(ROUTES.Deposit));
+                navigateTo(buildDepositOrWithdrawLink(language, 'deposit', getCollateralIndex(networkId, 'ETH', true)));
                 break;
             case GetStartedStep.TRADE:
                 navigateTo(buildHref(ROUTES.Markets.Home));
