@@ -819,13 +819,13 @@
             "title": {
                 "sign-up": "Sign up",
                 "logged-in": "Logged in",
-                "deposit": "Deposit Funds",
+                "deposit": "Deposit ETH",
                 "trade": "Start using Overtime Markets!"
             },
             "description": {
                 "sign-up": "Click on the Sign Up button and choose your Log In method of choice.",
                 "logged-in": "You have successfully created your Overtime Smart Account on the blockchain and are logged in.",
-                "deposit": "To start using Overtime, you have to fund your new account with USDT or USDC. Click on the Deposit Now button and choose between a Direct Deposit to Address or Buy With Credit Card",
+                "deposit": "To start using Overtime, you have to fund your new account with ETH. Click on the Deposit Now button and choose between a Direct Deposit to Address or Buy With Credit Card.",
                 "trade": "You Account is now funded and you are ready to place your positions on Overtime!"
             },
             "action": {
