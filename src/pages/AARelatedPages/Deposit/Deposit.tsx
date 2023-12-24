@@ -73,6 +73,8 @@ const Deposit: React.FC = () => {
     const totalBalanceValue = useMemo(() => {
         let total = 0;
         try {
+            if (!exchangeRates && !multipleCollateralBalances.data) return undefined;
+
             if (exchangeRates && multipleCollateralBalances.data) {
                 getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
