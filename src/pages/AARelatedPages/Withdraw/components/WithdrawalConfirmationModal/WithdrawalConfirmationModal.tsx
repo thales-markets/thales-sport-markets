@@ -9,9 +9,9 @@ import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { Coins } from 'types/tokens';
-import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import { coinParser, formatCurrencyWithKey } from 'thales-utils';
+import { Coins } from 'types/tokens';
+import { getGasFeesForTx } from 'utils/biconomy';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 
@@ -63,13 +63,16 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
             const { signer, multipleCollateral } = networkConnector;
             if (multipleCollateral && signer) {
                 const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
-                await executeBiconomyTransaction(
-                    collateralContractWithSigner?.address as string,
-                    collateralContractWithSigner,
-                    'transfer',
-                    [withdrawalAddress, parsedAmount]
-                );
-                toast.update(id, getSuccessToastOptions(t('withdraw.toast-messages.success')));
+                const tx =
+                    collateralContractWithSigner &&
+                    (await collateralContractWithSigner?.transfer(withdrawalAddress, parsedAmount));
+
+                const txResult = await tx.wait();
+
+                if (txResult) {
+                    toast.update(id, getSuccessToastOptions(t('withdraw.toast-messages.success')));
+                    return;
+                }
             }
             toast.update(id, getErrorToastOptions(t('withdraw.toast-messages.error')));
         } catch (e) {
