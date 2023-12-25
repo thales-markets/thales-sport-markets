@@ -270,7 +270,9 @@
             "no-results-for-wallet": "Aucune transaction associée à ce portefeuille.",
             "usd-value-col": "valeur en USD",
             "result-col": "résultat",
-            "game-col": "Match"
+            "game-col": "Match",
+            "single-title": "Activité unique récente",
+            "parlay-title": "Activité récente de Parlay"
         },
         "skew-tooltip": "Le Skew Impact est le montant de la prime ajoutée à un prix de position basé sur le risque actuel que l'AMM encourt sur ce marché spécifique.",
         "tooltip": {
