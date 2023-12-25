@@ -1,25 +1,56 @@
+import ApprovalModal from 'components/ApprovalModal';
+import Button from 'components/Button/Button';
+import CollateralSelector from 'components/CollateralSelector';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
+import { APPROVAL_BUFFER } from 'constants/markets';
+import { ZERO_ADDRESS } from 'constants/network';
+import { Position } from 'enums/markets';
+import { BigNumber, ethers } from 'ethers';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
+import { getParlayPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import { useTheme } from 'styled-components';
+import { coinParser, formatCurrencyWithSign, getEtherscanTxLink, truncateAddress } from 'thales-utils';
 import { ParlayMarket, ParlaysMarket } from 'types/markets';
-import { getEtherscanTxLink, formatCurrencyWithSign, truncateAddress, coinParser } from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
+import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
+import {
+    extractCombinedMarketsFromParlayMarketType,
+    removeCombinedMarketsFromParlayMarketType,
+} from 'utils/combinedMarkets';
 import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
-    formatMarketOdds,
     isParlayClaimable,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
+import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
+import { formatParlayOdds, getParlayQuote } from 'utils/parlay';
 import { refetchAfterClaim } from 'utils/queryConnector';
+import {
+    ClaimContainer,
+    ClaimLabel,
+    ClaimValue,
+    ExternalLink,
+    ExternalLinkArrow,
+    ExternalLinkContainer,
+    Label,
+    PayoutLabel,
+    additionalClaimButtonStyle,
+    additionalClaimButtonStyleMobile,
+} from '../../styled-components';
+import { CollateralSelectorContainer } from '../SinglePosition/styled-components';
+import ParlayCombinedItem from './components/ParlayCombinedItem';
 import ParlayItem from './components/ParlayItem';
 import {
     ArrowIcon,
@@ -39,37 +70,6 @@ import {
     WinLabel,
     WinValue,
 } from './styled-components';
-import {
-    ClaimContainer,
-    ClaimLabel,
-    ClaimValue,
-    ExternalLink,
-    ExternalLinkArrow,
-    ExternalLinkContainer,
-    Label,
-    PayoutLabel,
-    additionalClaimButtonStyle,
-    additionalClaimButtonStyleMobile,
-} from '../../styled-components';
-import {
-    extractCombinedMarketsFromParlayMarketType,
-    removeCombinedMarketsFromParlayMarketType,
-} from 'utils/combinedMarkets';
-import ParlayCombinedItem from './components/ParlayCombinedItem';
-import { Position } from 'enums/markets';
-import Button from 'components/Button/Button';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
-import CollateralSelector from 'components/CollateralSelector';
-import { getParlayPayment } from 'redux/modules/parlay';
-import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
-import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
-import { ZERO_ADDRESS } from 'constants/network';
-import ApprovalModal from 'components/ApprovalModal';
-import { BigNumber, ethers } from 'ethers';
-import { APPROVAL_BUFFER } from 'constants/markets';
-import Tooltip from 'components/Tooltip';
-import { CollateralSelectorContainer } from '../SinglePosition/styled-components';
 import { executeBiconomyTransaction } from 'utils/biconomy';
 
 type ParlayPosition = {
@@ -274,7 +274,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             } as ParlaysMarket;
         }),
         multiSingle: false,
-        totalQuote: parlayMarket.totalQuote,
+        totalQuote: getParlayQuote(parlayMarket.sUSDPaid, parlayMarket.totalAmount),
         paid: parlayMarket.sUSDPaid,
         payout: parlayMarket.totalAmount,
         onClose: () => {
@@ -435,7 +435,9 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 <CollapseFooterContainer>
                     <TotalQuoteContainer>
                         <Label>{t('profile.card.total-quote')}:</Label>
-                        <Value>{formatMarketOdds(selectedOddsType, parlayMarket.totalQuote)}</Value>
+                        <Value>
+                            {formatParlayOdds(selectedOddsType, parlayMarket.sUSDPaid, parlayMarket.totalAmount)}
+                        </Value>
                     </TotalQuoteContainer>
                     <ProfitContainer>
                         {isClaimable ? (

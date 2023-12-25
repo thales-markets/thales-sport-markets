@@ -271,7 +271,9 @@
             "no-results-for-wallet": "No transactions associated with this wallet.",
             "usd-value-col": "стоимость в долларах",
             "game-col": "игра",
-            "result-col": "результат"
+            "result-col": "результат",
+            "single-title": "Недавнее одиночное действие",
+            "parlay-title": "Недавние экспресс-активности"
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",

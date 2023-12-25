@@ -13,11 +13,11 @@
     },
     {
         "image": "LP_banner.png",
-        "url": "https://overtimemarkets.xyz/#/liquidity-pool"
+        "url": "https://overtimemarkets.xyz/liquidity-pool"
     },
     {
         "image": "vaults.jpg",
-        "url": "https://overtimemarkets.xyz/#/vaults"
+        "url": "https://overtimemarkets.xyz/vaults"
     },
     {
         "image": "stake-thales.jpg",
@@ -25,10 +25,10 @@
     },
     {
         "image": "banner_bi-weekly.png",
-        "url": "https://overtimemarkets.xyz/#/parlay-leaderboard"
+        "url": "https://overtimemarkets.xyz/parlay-leaderboard"
     },
     {
         "image": "refer-friends.jpg",
-        "url": "https://overtimemarkets.xyz/#/referral"
+        "url": "https://overtimemarkets.xyz/referral"
     }
 ]

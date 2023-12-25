@@ -271,7 +271,9 @@
             "no-results-for-wallet": "ไม่มีธุรกรรมที่เกี่ยวข้องกับกระเป๋าเงินนี้",
             "game-col": "เกม",
             "usd-value-col": "มูลค่า",
-            "result-col": "ผลลัพธ์"
+            "result-col": "ผลลัพธ์",
+            "single-title": "กิจกรรมเดี่ยวล่าสุด",
+            "parlay-title": "กิจกรรมพาร์เลย์ล่าสุด"
         },
         "tooltip": {
             "amount-exceeded": "จำนวนเงินเกินจำนวนที่มีอยู่ใน AMM",
