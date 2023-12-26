@@ -222,7 +222,7 @@ const Deposit: React.FC = () => {
                     walletAddress={walletAddress}
                     title={t('deposit.qr-modal-title', {
                         token: getCollaterals(networkId)[selectedToken],
-                        network: getNetworkNameByNetworkId(networkId),
+                        network: getNetworkNameByNetworkId(networkId, true),
                     })}
                 />
             )}
