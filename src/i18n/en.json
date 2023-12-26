@@ -788,7 +788,7 @@
         "button-label-withdraw": "Withdraw",
         "confirmation-modal": {
             "title": "Withdrawal Requested",
-            "correct-address": "Make sure the Address is correct and that it accepts [{{ network }}] [{{ token }}]",
+            "correct-address": "Make sure the address is correct and that it accepts {{ token }} on {{ network }}",
             "withdrawal-transaction-warning": "Withdraw transactions can not be cancelled",
             "withdrawal-fee": "Withdrawal fee",
             "address": "Address",

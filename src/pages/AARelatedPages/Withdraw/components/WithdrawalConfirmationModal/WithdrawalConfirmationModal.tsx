@@ -1,7 +1,7 @@
 import Modal from 'components/Modal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { Network } from 'enums/network';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -11,7 +11,6 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { coinParser, formatCurrencyWithKey } from 'thales-utils';
 import { Coins } from 'types/tokens';
-import { getGasFeesForTx } from 'utils/biconomy';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 
@@ -33,7 +32,7 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const [gas, setGas] = useState(0);
+    // const [_gas, setGas] = useState(0);
 
     const networkName = useMemo(() => {
         return getNetworkNameByNetworkId(network);
@@ -43,18 +42,18 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
         return coinParser('' + amount, network, token);
     }, [amount, network, token]);
 
-    useEffect(() => {
-        const { signer, multipleCollateral } = networkConnector;
-        if (multipleCollateral && signer) {
-            const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
-            getGasFeesForTx(collateralContractWithSigner?.address as string, collateralContractWithSigner, 'transfer', [
-                withdrawalAddress,
-                parsedAmount,
-            ]).then((estimateGas) => {
-                setGas(estimateGas as number);
-            });
-        }
-    }, [token, parsedAmount, withdrawalAddress]);
+    // useEffect(() => {
+    //     const { signer, multipleCollateral } = networkConnector;
+    //     if (multipleCollateral && signer) {
+    //         const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
+    //         getGasFeesForTx(collateralContractWithSigner?.address as string, collateralContractWithSigner, 'transfer', [
+    //             withdrawalAddress,
+    //             parsedAmount,
+    //         ]).then((estimateGas) => {
+    //             setGas(estimateGas as number);
+    //         });
+    //     }
+    // }, [token, parsedAmount, withdrawalAddress]);
 
     const handleSubmit = async () => {
         const id = toast.loading(t('withdraw.toast-messages.pending'));
@@ -88,28 +87,19 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
             onClose={() => onClose()}
         >
             <MainContainer>
-                <ListContainer>
-                    <List>
-                        <li>
-                            {t('withdraw.confirmation-modal.correct-address', {
-                                token,
-                                network: networkName,
-                            })}
-                        </li>
-                        <li>{t('withdraw.confirmation-modal.withdrawal-transaction-warning')}</li>
-                    </List>
-                </ListContainer>
+                <MakeSureText>
+                    {t('withdraw.confirmation-modal.correct-address', {
+                        token,
+                        network: networkName,
+                    })}
+                </MakeSureText>
+
                 <DetailsContainer>
                     <ItemContainer>
                         <ItemLabel>{t('withdraw.amount')}:</ItemLabel>
                         <ItemDescription>
                             {<TokenIcon className={`currency-icon currency-icon--${token.toLowerCase()}`} />}
                             {formatCurrencyWithKey(token, amount)}
-                            {` (${t('withdraw.confirmation-modal.withdrawal-fee')}: ${formatCurrencyWithKey(
-                                token,
-                                gas,
-                                4
-                            )})`}
                         </ItemDescription>
                     </ItemContainer>
                     <ItemContainer>
@@ -140,20 +130,6 @@ const MainContainer = styled(FlexDiv)`
     }
 `;
 
-const ListContainer = styled(FlexDiv)`
-    font-size: 18px;
-    font-weight: 400;
-    text-transform: capitalize;
-    word-wrap: break-word;
-    color: ${(props) => props.theme.textColor.primary};
-`;
-
-const List = styled.ol`
-    list-style-type: decimal;
-    line-height: 24px;
-    list-style-position: inside;
-`;
-
 const TokenIcon = styled.i`
     font-size: 25px;
     margin-right: 5px;
@@ -161,6 +137,16 @@ const TokenIcon = styled.i`
     @media (max-width: 575px) {
         margin-right: 0px;
     }
+`;
+
+const MakeSureText = styled.span`
+    color: ${(props) => props.theme.textColor.primary};
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 14px;
 `;
 
 const DetailsContainer = styled(FlexDiv)`
@@ -189,7 +175,6 @@ const ItemLabel = styled(FlexDiv)`
     align-items: center;
     font-size: 18px;
     font-weight: 700;
-    text-transform: capitalize;
     margin-right: 15px;
     @media (max-width: 575px) {
         word-wrap: break-word;
