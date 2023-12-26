@@ -766,6 +766,7 @@
     },
     "deposit": {
         "deposit-crypto": "Deposit crypto",
+        "description": "To trade on Overtime you have to fund your account. Carefully follow the steps below and deposit the selected cryptocurrency into the generated address.",
         "or-buy-with": "Or buy with",
         "select-token": "Select token",
         "address-input-label": "Your personal {{ token }} deposit address on {{ network }}",

@@ -126,10 +126,20 @@ const Deposit: React.FC = () => {
 
     return (
         <>
-            {isMobile && <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>}
+            {isMobile && (
+                <>
+                    <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>
+                    <DescriptionLabel>{t('deposit.description')}</DescriptionLabel>
+                </>
+            )}
             <Wrapper>
                 <FormContainer>
-                    {!isMobile && <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>}
+                    {!isMobile && (
+                        <>
+                            <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>
+                            <DescriptionLabel>{t('deposit.description')}</DescriptionLabel>
+                        </>
+                    )}
                     <InputLabel>{t('deposit.select-token')}</InputLabel>
                     <InputContainer ref={inputRef}>
                         <CollateralContainer ref={inputRef}>
@@ -191,6 +201,7 @@ const Deposit: React.FC = () => {
                         <OnramperIcons className={`social-icon icon--master`} />
                         <OnramperIcons className={`social-icon icon--applepay`} />
                         <OnramperIcons className={`social-icon icon--googlepay`} />
+                        <ExternalIcon className={`icon icon--arrow-external`} />
                     </OnramperDiv>
                 </FormContainer>
                 <BalanceSection>
@@ -298,7 +309,7 @@ const CopyButton = styled(FlexDiv)`
 const SectionLabel = styled.span`
     font-size: 12px;
     font-weight: 700;
-    text-transform: capitalize;
+    text-transform: uppercase;
     letter-spacing: 3px;
     margin-bottom: 13px;
 `;
@@ -312,14 +323,30 @@ const TutorialLinksContainer = styled(FlexDiv)`
 `;
 
 const Link = styled.a`
-    width: fit-content;
+    font-family: Roboto;
+    color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
+    font-style: normal;
     font-weight: 700;
-    text-decoration: underline;
+    line-height: 250%;
+    text-decoration-line: underline;
     text-transform: capitalize;
-    padding-bottom: 15px;
-    :visited {
-        color: ${(props) => props.theme.textColor.primary};
-    }
 `;
+
+const DescriptionLabel = styled.span`
+    font-family: Roboto;
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 119%; /* 14.28px */
+    margin-top: 4px;
+    margin-bottom: 20px;
+`;
+
+const ExternalIcon = styled.i`
+    font-size: 14px;
+    margin-top: 20px;
+`;
+
 export default Deposit;
