@@ -10,7 +10,7 @@ import { FlexDiv } from 'styles/common';
 import { COLLATERAL_DECIMALS, formatCurrencyWithKey } from 'thales-utils';
 import { getCollateral, isStableCurrency } from 'utils/collaterals';
 
-const AMOUNTS = [3, 5, 10, 50, 100];
+const AMOUNTS = [3, 10, 20, 50, 100];
 
 type SuggestedAmountProps = {
     collateralIndex: number;
