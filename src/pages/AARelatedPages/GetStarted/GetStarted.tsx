@@ -80,6 +80,7 @@ const GetStarted: React.FC = () => {
                             stepType={step}
                             currentStep={currentStep}
                             setCurrentStep={setCurrentStep}
+                            hasFunds={totalBalanceValue > 0}
                         />
                         {!isMobile && stepNumber !== steps.length && <HorizontalLine />}
                     </React.Fragment>

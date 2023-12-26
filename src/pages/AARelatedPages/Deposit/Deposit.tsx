@@ -192,7 +192,7 @@ const Deposit: React.FC = () => {
                         <OnramperIcons className={`social-icon icon--master`} />
                         <OnramperIcons className={`social-icon icon--applepay`} />
                         <OnramperIcons className={`social-icon icon--googlepay`} />
-                        <ExternalIcon className={`social-icon icon--arrow-external`} />
+                        <ExternalIcon className={`social-icon icon--arrow-link`} />
                     </OnramperDiv>
                 </FormContainer>
                 <BalanceSection>

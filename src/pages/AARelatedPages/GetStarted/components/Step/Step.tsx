@@ -1,43 +1,37 @@
 import ROUTES from 'constants/routes';
 import { GetStartedStep } from 'enums/wizard';
-import i18n from 'i18n';
-import { t } from 'i18next';
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
-import {
-    getIsConnectedViaParticle,
-    getIsWalletConnected,
-    getNetworkId,
-    setWalletConnectModalVisibility,
-} from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getCollateralIndex, getDefaultCollateral } from 'utils/collaterals';
-import { getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
-import { buildDepositOrWithdrawLink, buildHref, navigateTo } from 'utils/routes';
+import { getNetworkNameByNetworkId } from 'utils/network';
+import { buildHref, navigateTo } from 'utils/routes';
+import { getIsMobile } from 'redux/modules/app';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 type StepProps = {
     stepNumber: number;
     stepType: GetStartedStep;
     currentStep: GetStartedStep;
     setCurrentStep: (step: GetStartedStep) => void;
+    hasFunds: boolean;
 };
 
-const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurrentStep }) => {
+const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurrentStep, hasFunds }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+    const { t } = useTranslation();
     const dispatch = useDispatch();
-    const language = i18n.language;
 
     const stepTitle = useMemo(() => {
         let transKey = 'get-started.steps.title';
         switch (stepType) {
             case GetStartedStep.LOG_IN:
-                transKey += isConnectedViaParticle && isWalletConnected ? '.logged-in' : '.sign-up';
+                transKey += isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
                 transKey += '.deposit';
@@ -47,13 +41,13 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 break;
         }
         return t(transKey);
-    }, [isConnectedViaParticle, isWalletConnected, stepType]);
+    }, [isWalletConnected, stepType, t]);
 
     const stepDescription = useMemo(() => {
         let transKey = 'get-started.steps.description';
         switch (stepType) {
             case GetStartedStep.LOG_IN:
-                transKey += isConnectedViaParticle && isWalletConnected ? '.logged-in' : '.sign-up';
+                transKey += isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
                 transKey += '.deposit';
@@ -64,40 +58,53 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
         }
 
         return t(transKey, {
-            network: getNetworkNameByNetworkId(networkId, true) || getDefaultNetworkName(true),
+            network: getNetworkNameByNetworkId(networkId, true),
             collateral: getDefaultCollateral(networkId),
         });
-    }, [stepType, networkId, isConnectedViaParticle, isWalletConnected]);
+    }, [stepType, networkId, isWalletConnected, t]);
+
+    const showStepIcon = useMemo(() => {
+        if (isWalletConnected) {
+            switch (stepType) {
+                case GetStartedStep.LOG_IN:
+                    return isWalletConnected;
+
+                case GetStartedStep.DEPOSIT:
+                    return hasFunds;
+
+                case GetStartedStep.TRADE:
+                    return false;
+            }
+        }
+    }, [isWalletConnected, stepType, hasFunds]);
 
     const getStepAction = () => {
         let className = '';
         let transKey = 'get-started.steps.action';
         switch (stepType) {
             case GetStartedStep.LOG_IN:
-                className = 'icon--card';
-                transKey += isConnectedViaParticle && isWalletConnected ? '.logged-in' : '.sign-up';
+                className = 'social-icon icon--logged-in';
+                transKey += isWalletConnected ? '.logged-in' : '.sign-up';
                 break;
             case GetStartedStep.DEPOSIT:
-                className = 'icon--card';
+                className = 'icon icon--card';
                 transKey += '.deposit';
                 break;
             case GetStartedStep.TRADE:
-                className = 'icon--logo';
+                className = 'icon icon--logo';
                 transKey += '.trade';
                 break;
         }
         return (
             <StepAction>
                 <StepActionIconWrapper isActive={isActive} pulsate={!isMobile}>
-                    <StepActionIcon
-                        className={`icon ${className}`}
-                        isDisabled={isDisabled}
-                        onClick={onStepActionClickHandler}
-                    />
+                    <StepActionIcon className={`${className}`} isDisabled={isDisabled} isActive={isActive} />
                 </StepActionIconWrapper>
                 <StepActionLabel isDisabled={isDisabled} onClick={onStepActionClickHandler}>
-                    <StepActionName>{t(transKey)}</StepActionName>
-                    {!isMobile && <LinkIcon className={`icon icon--arrow-external`} isActive={isActive} />}
+                    <StepActionName isActive={isActive} completed={showStepIcon}>
+                        {t(transKey)}
+                    </StepActionName>
+                    {!isMobile && <LinkIcon className={`icon icon--external`} isActive={isActive} />}
                 </StepActionLabel>
             </StepAction>
         );
@@ -120,7 +127,7 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
                 );
                 break;
             case GetStartedStep.DEPOSIT:
-                navigateTo(buildDepositOrWithdrawLink(language, 'deposit', getCollateralIndex(networkId, 'ETH', true)));
+                navigateTo(buildHref(ROUTES.Deposit));
                 break;
             case GetStartedStep.TRADE:
                 navigateTo(buildHref(ROUTES.Markets.Home));
@@ -131,27 +138,26 @@ const Step: React.FC<StepProps> = ({ stepNumber, stepType, currentStep, setCurre
     const changeCurrentStep = () => (isDisabled ? null : setCurrentStep(stepType));
 
     return (
-        <Container>
-            {isMobile ? (
-                <StepActionSection isActive={isActive} isDisabled={isDisabled}>
-                    {getStepAction()}
-                </StepActionSection>
-            ) : (
-                <>
-                    <StepNumberSection>
-                        <StepNumberWrapper isActive={isActive} isDisabled={isDisabled} onClick={changeCurrentStep}>
-                            <StepNumber isActive={isActive}>{stepNumber}</StepNumber>
-                        </StepNumberWrapper>
-                    </StepNumberSection>
-                    <StepDescriptionSection isActive={isActive} isDisabled={isDisabled} onClick={changeCurrentStep}>
-                        <StepTitle>{stepTitle}</StepTitle>
-                        <StepDescription>{stepDescription}</StepDescription>
-                    </StepDescriptionSection>
-                    <StepActionSection isActive={isActive} isDisabled={isDisabled}>
-                        {getStepAction()}
-                    </StepActionSection>
-                </>
-            )}
+        <Container onClick={isActive ? onStepActionClickHandler : () => {}}>
+            <StepNumberSection>
+                <StepNumberWrapper
+                    completed={!isActive && showStepIcon}
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    onClick={changeCurrentStep}
+                >
+                    <StepNumber isActive={isActive}>
+                        {!isActive && showStepIcon ? <CorrectIcon className="icon icon--correct" /> : stepNumber}
+                    </StepNumber>
+                </StepNumberWrapper>
+            </StepNumberSection>
+            <StepDescriptionSection isActive={isActive} isDisabled={isDisabled} onClick={changeCurrentStep}>
+                <StepTitle completed={!isActive && showStepIcon}>{stepTitle}</StepTitle>
+                <StepDescription completed={!isActive && showStepIcon}>{stepDescription}</StepDescription>
+            </StepDescriptionSection>
+            <StepActionSection isActive={isActive} isDisabled={isDisabled}>
+                {getStepAction()}
+            </StepActionSection>
         </Container>
     );
 };
@@ -160,55 +166,48 @@ const Container = styled.div`
     display: flex;
     margin-top: 20px;
     margin-bottom: 20px;
-    @media (max-width: 950px) {
-        margin-top: 10px;
-        margin-bottom: 10px;
+    gap: 30px;
+    @media (max-width: 600px) {
+        gap: 16px;
     }
 `;
 
-const StepNumberSection = styled(FlexDivCentered)`
-    width: 10%;
-`;
+const StepNumberSection = styled(FlexDivCentered)``;
 
 const StepDescriptionSection = styled(FlexDivColumn)<{ isActive: boolean; isDisabled?: boolean }>`
-    width: 60%;
     color: ${(props) => (props.isActive ? props.theme.textColor.primary : props.theme.textColor.secondary)};
-    cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
+    cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
 `;
 
 const StepActionSection = styled(FlexDivCentered)<{ isActive: boolean; isDisabled?: boolean }>`
-    width: 30%;
     text-align: center;
     color: ${(props) => (props.isActive ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
-    @media (max-width: 950px) {
-        width: 100%;
-        text-align: start;
-        justify-content: start;
-    }
 `;
 
 const StepAction = styled.div`
-    @media (max-width: 950px) {
-        display: flex;
+    width: 180px;
+    @media (max-width: 600px) {
+        width: 80px;
     }
 `;
 
-const StepTitle = styled.span`
+const StepTitle = styled.span<{ completed?: boolean }>`
     font-weight: 700;
     font-size: 20px;
     line-height: 27px;
-
+    color: ${(props) => (props.completed ? props.theme.background.quaternary : '')};
     margin-bottom: 10px;
 `;
 
-const StepDescription = styled.p`
+const StepDescription = styled.p<{ completed?: boolean }>`
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
     text-align: justify;
+    color: ${(props) => (props.completed ? props.theme.background.quaternary : '')};
 `;
 
-const StepNumberWrapper = styled.div<{ isActive: boolean; isDisabled?: boolean }>`
+const StepNumberWrapper = styled.div<{ isActive: boolean; isDisabled?: boolean; completed?: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -216,13 +215,23 @@ const StepNumberWrapper = styled.div<{ isActive: boolean; isDisabled?: boolean }
     height: 45px;
     border-radius: 50%;
     ${(props) => (props.isActive ? `border: 2px solid ${props.theme.borderColor.quaternary};` : '')}
-    ${(props) => (props.isActive ? '' : `background: ${props.theme.background.tertiary};`)}
+    ${(props) =>
+        props.isActive
+            ? ''
+            : `background: ${props.completed ? props.theme.background.quaternary : props.theme.background.tertiary};`}
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : props.isActive ? 'default' : 'pointer')};
+    @media (max-width: 600px) {
+        width: 36px;
+        height: 36px;
+    }
 `;
 
 const StepNumber = styled.span<{ isActive: boolean }>`
     font-weight: 700;
     font-size: 29px;
+    @media (max-width: 600px) {
+        font-size: 20px;
+    }
     line-height: 43px;
     text-transform: uppercase;
     color: ${(props) =>
@@ -230,19 +239,9 @@ const StepNumber = styled.span<{ isActive: boolean }>`
 `;
 
 const StepActionIconWrapper = styled.div<{ isActive: boolean; pulsate?: boolean }>`
+    text-align: center;
     animation: ${(props) => (props.pulsate && props.isActive ? 'pulsing 1s ease-in' : '')};
     animation-iteration-count: ${(props) => (props.pulsate && props.isActive ? 'infinite;' : '')};
-
-    @media (max-width: 950px) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        ${(props) => (props.isActive ? `border: 2px solid ${props.theme.borderColor.quaternary};` : '')}
-        ${(props) => (props.isActive ? '' : `background: ${props.theme.background.tertiary};`)}
-    }
 
     @keyframes pulsing {
         0% {
@@ -260,33 +259,24 @@ const StepActionIconWrapper = styled.div<{ isActive: boolean; pulsate?: boolean 
     }
 `;
 
-const StepActionIcon = styled.i<{ isDisabled?: boolean }>`
+const StepActionIcon = styled.i<{ isDisabled?: boolean; isActive?: boolean }>`
     font-size: 35px;
     padding-bottom: 15px;
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
-    @media (max-width: 950px) {
-        padding-bottom: 0;
-        color: ${(props) => props.theme.textColor.primary};
-        font-size: 30px;
-    }
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const StepActionLabel = styled.div<{ isDisabled?: boolean }>`
     cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
-    @media (max-width: 950px) {
-        display: flex;
-        align-items: center;
-        margin-left: 20px;
-    }
 `;
 
-const StepActionName = styled.span`
+const StepActionName = styled.span<{ isActive?: boolean; completed?: boolean }>`
     font-weight: 600;
     font-size: 14px;
     line-height: 16px;
-    @media (max-width: 950px) {
-        font-size: 20px;
-        line-height: 27px;
+    color: ${(props) => props.theme.background.quaternary};
+    @media (max-width: 600px) {
+        display: none;
     }
 `;
 
@@ -295,6 +285,12 @@ const LinkIcon = styled.i<{ isActive: boolean }>`
     margin-left: 10px;
     animation: ${(props) => (props.isActive ? 'pulsing 1s ease-in' : '')};
     animation-iteration-count: ${(props) => (props.isActive ? 'infinite;' : '')};
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const CorrectIcon = styled.i`
+    font-size: 20px;
+    color: ${(props) => props.theme.background.primary};
 `;
 
 export default Step;

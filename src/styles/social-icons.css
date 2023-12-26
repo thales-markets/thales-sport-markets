@@ -25,10 +25,6 @@
     content: '\0045';
 }
 
-.icon--qr-code::before {
-    content: '\004D';
-}
-
 .icon--wallet::before {
     content: '\0047';
 }
@@ -47,6 +43,14 @@
     content: '\004B';
 }
 
-.icon--arrow-external::before {
+.icon--arrow-link::before {
     content: '\004C';
+}
+
+.icon--qr-code::before {
+    content: '\004D';
+}
+
+.icon--logged-in:before {
+    content: '\004E';
 }
