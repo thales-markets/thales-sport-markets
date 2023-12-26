@@ -156,6 +156,7 @@ const Deposit: React.FC = () => {
                                 isDetailedView
                                 stretch
                                 showCollateralImg
+                                showNetworkName
                             />
                         </CollateralContainer>
                     </InputContainer>
@@ -187,7 +188,7 @@ const Deposit: React.FC = () => {
                             <WarningIcon className={'icon icon--warning'} />
                             {t('deposit.send', {
                                 token: getCollaterals(networkId, true)[selectedToken],
-                                network: getNetworkNameByNetworkId(networkId),
+                                network: getNetworkNameByNetworkId(networkId, true),
                             })}
                         </WarningContainer>
                     </DepositAddressFormContainer>

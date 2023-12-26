@@ -16,6 +16,7 @@ import { isStableCurrency } from 'utils/collaterals';
 import { formatCurrencyWithSign } from 'thales-utils';
 import { setPaymentSelectedCollateralIndex } from 'redux/modules/parlay';
 import { getNetworkId } from '../../redux/modules/wallet';
+import { getNetworkNameByNetworkId } from 'utils/network';
 
 type CollateralSelectorProps = {
     collateralArray: Array<string>;
@@ -30,6 +31,7 @@ type CollateralSelectorProps = {
     dropDownWidth?: string;
     showCollateralImg?: boolean;
     stretch?: boolean;
+    showNetworkName?: boolean;
 };
 
 const CollateralSelector: React.FC<CollateralSelectorProps> = ({
@@ -45,6 +47,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     dropDownWidth,
     showCollateralImg,
     stretch,
+    showNetworkName,
 }) => {
     const dispatch = useDispatch();
     const networkId = useSelector(getNetworkId);
@@ -82,6 +85,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                         )}
                         <TextCollateral isDetailedView={isDetailedView} isSelectedCollateral={true}>
                             {!hideCollateralNameOnInput && collateralArray[selectedItem]}
+                            {showNetworkName && ` (${getNetworkNameByNetworkId(networkId, true)})`}
                         </TextCollateral>
                     </TextCollateralWrapper>
                     <Arrow
