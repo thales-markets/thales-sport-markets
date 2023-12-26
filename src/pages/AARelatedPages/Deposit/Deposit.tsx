@@ -199,10 +199,23 @@ const Deposit: React.FC = () => {
                     <BalanceDetails />
                     <TutorialLinksContainer>
                         <SectionLabel>{'Tutorials'}</SectionLabel>
-                        <Link href={'#'}>{'Coinbase'}</Link>
-                        <Link href={'#'}>{'Coinbase'}</Link>
-                        <Link href={'#'}>{'Coinbase'}</Link>
-                        <Link href={'#'}>{'Coinbase'}</Link>
+                        <Link href={'https://docs.overtimemarkets.xyz/deposit-guides/deposit-usdc-from-coinbase'}>
+                            {'Coinbase'}
+                        </Link>
+                        <Link
+                            href={
+                                'https://docs.overtimemarkets.xyz/deposit-guides/deposit-usdc-or-usdt-from-binance/deposit-from-binance-mobile-app'
+                            }
+                        >
+                            {'Binance Mobile App'}
+                        </Link>
+                        <Link
+                            href={
+                                'https://docs.overtimemarkets.xyz/deposit-guides/deposit-usdc-or-usdt-from-binance/deposit-from-binance-website'
+                            }
+                        >
+                            {'Binance Website'}
+                        </Link>
                     </TutorialLinksContainer>
                 </BalanceSection>
             </Wrapper>
