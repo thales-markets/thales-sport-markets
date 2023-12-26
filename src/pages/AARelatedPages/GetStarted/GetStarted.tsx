@@ -91,7 +91,8 @@ const GetStarted: React.FC = () => {
 };
 
 const Container = styled(FlexDivColumn)`
-    width: 80%;
+    width: 100%;
+    max-width: 1080px;
     margin-bottom: 40px;
 `;
 
@@ -100,15 +101,15 @@ const Title = styled(FlexDivStart)`
     font-size: 20px;
     line-height: 24px;
     color: ${(props) => props.theme.textColor.primary};
-    margin-top: 20px;
-    margin-bottom: 40px;
+    margin-top: 40px;
+    margin-bottom: 16px;
     @media (max-width: 950px) {
         margin: 20px auto;
     }
 `;
 
 const ProgressDisplayWrapper = styled(FlexDiv)`
-    margin-top: 30px;
+    margin-top: 10px;
     height: 20px;
     width: 100%;
     flex-direction: row;

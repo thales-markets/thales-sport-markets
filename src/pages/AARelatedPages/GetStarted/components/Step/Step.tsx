@@ -167,8 +167,10 @@ const Container = styled.div`
     margin-top: 20px;
     margin-bottom: 20px;
     gap: 30px;
+    padding: 0 20px;
     @media (max-width: 600px) {
         gap: 16px;
+        padding: 0;
     }
 `;
 
