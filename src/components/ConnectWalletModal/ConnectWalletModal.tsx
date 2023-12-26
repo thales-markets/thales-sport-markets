@@ -29,7 +29,7 @@ const defaultStyle = {
         right: 'auto',
         bottom: 'auto',
         padding: '25px',
-        backgroundColor: '#181A20',
+        backgroundColor: '#1A1C2B',
         border: '1px solid #5F6180',
         width: '720px',
         borderRadius: '15px',
