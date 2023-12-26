@@ -202,7 +202,7 @@ const Deposit: React.FC = () => {
                         <OnramperIcons className={`social-icon icon--master`} />
                         <OnramperIcons className={`social-icon icon--applepay`} />
                         <OnramperIcons className={`social-icon icon--googlepay`} />
-                        <ExternalIcon className={`icon icon--arrow-external`} />
+                        <ExternalIcon className={`social-icon icon--arrow-external`} />
                     </OnramperDiv>
                 </FormContainer>
                 <BalanceSection>
@@ -346,8 +346,8 @@ const DescriptionLabel = styled.span`
 `;
 
 const ExternalIcon = styled.i`
-    font-size: 14px;
-    margin-top: 20px;
+    font-size: 26px;
+    font-weight: 400;
 `;
 
 export default Deposit;

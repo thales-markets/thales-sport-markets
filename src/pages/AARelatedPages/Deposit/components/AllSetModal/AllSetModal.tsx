@@ -62,7 +62,6 @@ const Text = styled.span`
     font-style: normal;
     font-weight: 700;
     line-height: 100%; /* 28px */
-    text-transform: capitalize;
 `;
 
 const CheckIcon = styled.i`
