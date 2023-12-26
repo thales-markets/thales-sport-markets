@@ -58,15 +58,11 @@ const WagmiProvider: React.FC<WagmiProviderProps> = ({ children }) => {
         [
             jsonRpcProvider({
                 rpc: (chain) => ({
-                    http:
-                        chain.id === Network.Base
-                            ? // Use Ankr as primary RPC provider on Base as Chainnode isn't available
-                              `https://rpc.ankr.com/base/${process.env.REACT_APP_ANKR_PROJECT_ID}`
-                            : !CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode
-                            ? chain.rpcUrls.default.http[0]
-                            : `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode}.chainnodes.org/${
-                                  process.env.REACT_APP_CHAINNODE_PROJECT_ID
-                              }`,
+                    http: !!CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode
+                        ? `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode}.chainnodes.org/${
+                              process.env.REACT_APP_CHAINNODE_PROJECT_ID
+                          }`
+                        : chain.rpcUrls.default.http[0],
                 }),
                 stallTimeout: STALL_TIMEOUT,
                 priority: 1,
