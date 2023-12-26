@@ -2,13 +2,13 @@ import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
+    getIsConnectedViaParticle,
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
@@ -23,8 +23,11 @@ import { changeNetwork, formatCurrency, truncateAddress } from 'thales-utils';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 
 import { SupportedNetwork } from 'types/network';
-import { getDefaultCollateral } from 'utils/collaterals';
+import { getCollaterals, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
 import { useSwitchNetwork } from 'wagmi';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import { Coins } from 'types/tokens';
 
 type WalletInfoProps = {
     onCloseMobile?: () => void;
@@ -38,18 +41,12 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
 
     const [dropDownOpen, setDropDownOpen] = useState(false);
-
-    const stableCointBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
-    const stableCoinBalance = useMemo(() => {
-        return stableCointBalanceQuery?.data || 0;
-    }, [stableCointBalanceQuery.data]);
 
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -60,8 +57,6 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
         }
         return undefined;
     }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
-
-    const walletBalance = overtimeVoucher ? overtimeVoucher.remainingAmount : stableCoinBalance;
 
     const selectedNetwork = useMemo(
         () => SUPPORTED_NETWORKS_PARAMS[networkId] || SUPPORTED_NETWORKS_PARAMS[DEFAULT_NETWORK.networkId],
@@ -75,6 +70,46 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
         !window.ethereum?.isBraveWallet &&
         !window.ethereum?.isCoinbaseWallet &&
         !window.ethereum?.isTrust;
+
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const getUSDForCollateral = useCallback(
+        (token: Coins) =>
+            (multipleCollateralBalances.data ? multipleCollateralBalances.data[token] : 0) *
+            (isStableCurrency(token as Coins) ? 1 : exchangeRates?.[token] || 0),
+        [multipleCollateralBalances, exchangeRates]
+    );
+
+    const walletBalance = useMemo(() => {
+        if (overtimeVoucher) {
+            return { coin: getCollaterals(networkId)[0], amount: overtimeVoucher.remainingAmount };
+        }
+        if (multipleCollateralBalances.data && exchangeRates) {
+            const highestBalanceCollateral = getCollaterals(networkId, isConnectedViaParticle).sort((a, b) => {
+                return getUSDForCollateral(b) - getUSDForCollateral(a);
+            })[0];
+            return {
+                coin: highestBalanceCollateral,
+                amount: multipleCollateralBalances.data[highestBalanceCollateral],
+            };
+        }
+    }, [
+        exchangeRates,
+        overtimeVoucher,
+        multipleCollateralBalances,
+        isConnectedViaParticle,
+        networkId,
+        getUSDForCollateral,
+    ]);
 
     return (
         <Container>
@@ -112,13 +147,13 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
                                     (overtimeVoucher ? (
                                         <WalletBalanceInfo>
                                             <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
-                                            <Text>{formatCurrency(walletBalance, 2)}</Text>
+                                            <Text>{formatCurrency(walletBalance?.amount, 2)}</Text>
                                             <Currency>{getDefaultCollateral(networkId)}</Currency>
                                         </WalletBalanceInfo>
                                     ) : (
                                         <WalletBalanceInfo>
-                                            <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                            <Currency>{getDefaultCollateral(networkId)}</Currency>
+                                            <Text>{formatCurrency(walletBalance?.amount, 4)}</Text>
+                                            <Currency>{walletBalance?.coin}</Currency>
                                         </WalletBalanceInfo>
                                     ))}
                                 <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>

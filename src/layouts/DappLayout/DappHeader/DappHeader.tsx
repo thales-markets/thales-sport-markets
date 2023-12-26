@@ -110,8 +110,6 @@ const DappHeader: React.FC = () => {
         }
     }, [exchangeRates, multipleCollateralBalances.data]);
 
-    console.log('ethBalanceValue: ', ethBalanceValue);
-
     useEffect(() => {
         if (isConnectedViaParticle && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
             setShowLowBalanceAlert(true);

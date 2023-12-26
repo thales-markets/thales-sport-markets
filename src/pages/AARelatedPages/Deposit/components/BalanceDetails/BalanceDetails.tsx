@@ -60,30 +60,44 @@ const BalanceDetails: React.FC = () => {
             <SectionLabel>{t('my-portfolio.estimated-balance')}</SectionLabel>
             <TotalBalance>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</TotalBalance>
             <TokenBalancesWrapper>
-                {getCollaterals(networkId, isConnectedViaParticle).map((token, index) => {
-                    const decimalsForTokenAmount = exchangeRates?.[token] ? (exchangeRates?.[token] > 1000 ? 4 : 2) : 2;
+                {getCollaterals(networkId, isConnectedViaParticle)
+                    .sort((a, b) => {
+                        return getUSDForCollateral(b) - getUSDForCollateral(a);
+                    })
+                    .map((token, index) => {
+                        const decimalsForTokenAmount = exchangeRates?.[token]
+                            ? exchangeRates?.[token] > 1000
+                                ? 4
+                                : 2
+                            : 2;
 
-                    return (
-                        <IndividualTokenBalanceWrapper key={`ind-token-${index}`}>
-                            <Token>
-                                <TokenIcon className={`currency-icon currency-icon--${token.toLowerCase()}`} />
-                                {token}
-                            </Token>
-                            <RightTokenBalanceWrapper>
-                                <IndividualTokenBalance>
-                                    {multipleCollateralBalances.data
-                                        ? formatCurrency(multipleCollateralBalances.data[token], decimalsForTokenAmount)
-                                        : 0}
-                                </IndividualTokenBalance>
-                                <IndividualTokenBalance>
-                                    {!exchangeRates?.[token] && !isStableCurrency(token as Coins)
-                                        ? '...'
-                                        : ` (${formatCurrencyWithSign(USD_SIGN, getUSDForCollateral(token as Coins))})`}
-                                </IndividualTokenBalance>
-                            </RightTokenBalanceWrapper>
-                        </IndividualTokenBalanceWrapper>
-                    );
-                })}
+                        return (
+                            <IndividualTokenBalanceWrapper key={`ind-token-${index}`}>
+                                <Token>
+                                    <TokenIcon className={`currency-icon currency-icon--${token.toLowerCase()}`} />
+                                    {token}
+                                </Token>
+                                <RightTokenBalanceWrapper>
+                                    <IndividualTokenBalance>
+                                        {multipleCollateralBalances.data
+                                            ? formatCurrency(
+                                                  multipleCollateralBalances.data[token],
+                                                  decimalsForTokenAmount
+                                              )
+                                            : 0}
+                                    </IndividualTokenBalance>
+                                    <IndividualTokenBalance>
+                                        {!exchangeRates?.[token] && !isStableCurrency(token as Coins)
+                                            ? '...'
+                                            : ` (${formatCurrencyWithSign(
+                                                  USD_SIGN,
+                                                  getUSDForCollateral(token as Coins)
+                                              )})`}
+                                    </IndividualTokenBalance>
+                                </RightTokenBalanceWrapper>
+                            </IndividualTokenBalanceWrapper>
+                        );
+                    })}
             </TokenBalancesWrapper>
         </BalanceWrapper>
     );
