@@ -12,7 +12,7 @@ export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, B
     [ContractSGPOrder.SPREADTOTALS]: [10001, 10002],
 };
 
-export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.01; // 1%
+export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.05; // 5%
 
 export const INCENTIVIZED_LEAGUE = {
     ids: [9011, 9002, 9004],
