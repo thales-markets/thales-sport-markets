@@ -61,15 +61,25 @@ const WithdrawalConfirmationModal: React.FC<WithdrawalConfirmationModalProps> = 
         try {
             const { signer, multipleCollateral } = networkConnector;
             if (multipleCollateral && signer) {
-                const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
-                const tx =
-                    collateralContractWithSigner &&
-                    (await collateralContractWithSigner?.transfer(withdrawalAddress, parsedAmount));
+                let txResult;
+                if (token === 'ETH') {
+                    const tx = {
+                        to: withdrawalAddress,
+                        value: parsedAmount,
+                    };
+                    txResult = await signer.sendTransaction(tx);
+                } else {
+                    const collateralContractWithSigner = multipleCollateral[token]?.connect(signer);
+                    const tx =
+                        collateralContractWithSigner &&
+                        (await collateralContractWithSigner?.transfer(withdrawalAddress, parsedAmount));
 
-                const txResult = await tx.wait();
+                    txResult = await tx.wait();
+                }
 
                 if (txResult) {
                     toast.update(id, getSuccessToastOptions(t('withdraw.toast-messages.success')));
+                    onClose();
                     return;
                 }
             }

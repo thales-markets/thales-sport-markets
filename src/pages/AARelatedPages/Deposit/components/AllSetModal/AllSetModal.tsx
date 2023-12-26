@@ -74,8 +74,11 @@ const FooterText = styled.span`
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
-    line-height: 100%; /* 14px */
+
     text-transform: capitalize;
+    text-align: center;
+    text-align: center;
+    line-height: 140%;
 `;
 
 export default AllSetModal;
