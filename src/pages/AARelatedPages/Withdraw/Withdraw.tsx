@@ -164,7 +164,7 @@ const Withdraw: React.FC = () => {
                         <WarningIcon className={'icon icon--warning'} />
                         {t('deposit.send', {
                             token: getCollaterals(networkId, true)[selectedToken],
-                            network: getNetworkNameByNetworkId(networkId),
+                            network: getNetworkNameByNetworkId(networkId, true),
                         })}
                     </WarningContainer>
                     <ButtonContainer>

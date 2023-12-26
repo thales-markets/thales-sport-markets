@@ -272,11 +272,11 @@ const OnramperDiv = styled(FlexDiv)`
 
 const WalletAddressInput = styled.input`
     font-size: 18px;
-    font-weight: 700;
+    font-weight: 400;
     cursor: pointer;
     width: 100%;
     padding: 5px;
-    opacity: 0.5;
+    opacity: 0.8;
     border-radius: 5px;
     color: ${(props) => props.theme.input.textColor.secondary};
     background-color: ${(props) => props.theme.input.background.secondary};

@@ -169,21 +169,7 @@ const DappHeader: React.FC = () => {
                                     trigger={['hover']}
                                 >
                                     <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
-                                        <Button
-                                            backgroundColor={theme.button.background.secondary}
-                                            textColor={theme.error.textColor.primary}
-                                            borderColor={theme.error.borderColor.primary}
-                                            width="150px"
-                                            fontWeight="400"
-                                            additionalStyles={{
-                                                borderRadius: '15.5px',
-                                                fontWeight: '800',
-                                                fontSize: '14px',
-                                            }}
-                                            height="28px"
-                                        >
-                                            {t('my-portfolio.top-up-eth')}
-                                        </Button>
+                                        <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
                                     </SPAAnchor>
                                 </ReactTooltip>
                             </TopUpButtonContainer>
@@ -524,6 +510,36 @@ const TooltipOverlay = styled(FlexDiv)`
     border: ${(props) => `1.5px solid ${props.theme.error.borderColor.primary}`};
     padding: 12px;
     text-transform: uppercase;
+`;
+
+const TopUpButton = styled.button`
+    background-color: ${(props) => props.theme.button.background.secondary};
+    color: ${(props) => props.theme.error.textColor.primary};
+    border: 1px solid ${(props) => props.theme.error.borderColor.primary};
+    border-radius: 15px;
+    padding: 6px 30px;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    filter: drop-shadow(0px 0px 14px rgba(191, 73, 81, 0.7));
+    animation: pulse 2s infinite;
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 `;
 
 export default DappHeader;
