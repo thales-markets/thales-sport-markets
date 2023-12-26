@@ -8,7 +8,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDiv } from 'styles/common';
+import { FlexDiv, FlexDivEnd } from 'styles/common';
 import { formatCurrency, formatCurrencyWithSign } from 'thales-utils';
 import { Coins } from 'types/tokens';
 import { getCollaterals, isStableCurrency } from 'utils/collaterals';
@@ -69,16 +69,18 @@ const BalanceDetails: React.FC = () => {
                                 <TokenIcon className={`currency-icon currency-icon--${token.toLowerCase()}`} />
                                 {token}
                             </Token>
-                            <IndividualTokenBalance>
-                                {multipleCollateralBalances.data
-                                    ? formatCurrency(multipleCollateralBalances.data[token], decimalsForTokenAmount)
-                                    : 0}
-                            </IndividualTokenBalance>
-                            <IndividualTokenBalance>
-                                {!exchangeRates?.[token] && !isStableCurrency(token as Coins)
-                                    ? '...'
-                                    : ` (${formatCurrencyWithSign(USD_SIGN, getUSDForCollateral(token as Coins))})`}
-                            </IndividualTokenBalance>
+                            <RightTokenBalanceWrapper>
+                                <IndividualTokenBalance>
+                                    {multipleCollateralBalances.data
+                                        ? formatCurrency(multipleCollateralBalances.data[token], decimalsForTokenAmount)
+                                        : 0}
+                                </IndividualTokenBalance>
+                                <IndividualTokenBalance>
+                                    {!exchangeRates?.[token] && !isStableCurrency(token as Coins)
+                                        ? '...'
+                                        : ` (${formatCurrencyWithSign(USD_SIGN, getUSDForCollateral(token as Coins))})`}
+                                </IndividualTokenBalance>
+                            </RightTokenBalanceWrapper>
                         </IndividualTokenBalanceWrapper>
                     );
                 })}
@@ -148,6 +150,10 @@ const IndividualTokenBalance = styled.span`
     font-size: 12px;
     font-weight: 600;
     text-align: right;
+`;
+
+const RightTokenBalanceWrapper = styled(FlexDivEnd)`
+    gap: 4px;
 `;
 
 export default BalanceDetails;
