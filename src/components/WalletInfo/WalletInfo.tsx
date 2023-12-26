@@ -152,7 +152,16 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ onCloseMobile }) => {
                                         </WalletBalanceInfo>
                                     ) : (
                                         <WalletBalanceInfo>
-                                            <Text>{formatCurrency(walletBalance?.amount, 4)}</Text>
+                                            <Text>
+                                                {formatCurrency(
+                                                    walletBalance?.amount,
+                                                    walletBalance && exchangeRates
+                                                        ? exchangeRates[walletBalance.coin] > 1000
+                                                            ? 4
+                                                            : 2
+                                                        : 2
+                                                )}
+                                            </Text>
                                             <Currency>{walletBalance?.coin}</Currency>
                                         </WalletBalanceInfo>
                                     ))}
