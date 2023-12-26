@@ -22,6 +22,7 @@ import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 import {
     BalanceSection,
     CollateralContainer,
+    DescriptionLabel,
     FormContainer,
     InputContainer,
     InputLabel,
@@ -110,6 +111,7 @@ const Withdraw: React.FC = () => {
             <Wrapper>
                 <FormContainer>
                     <PrimaryHeading>{t('withdraw.heading-withdraw')}</PrimaryHeading>
+                    <DescriptionLabel>{t('withdraw.description')}</DescriptionLabel>
                     <InputLabel>{t('deposit.select-token')}</InputLabel>
                     <CollateralContainer ref={inputRef}>
                         <CollateralSelector
@@ -129,7 +131,7 @@ const Withdraw: React.FC = () => {
                     </CollateralContainer>
                     <InputLabel marginTop="20px">
                         {t('withdraw.address-input-label', {
-                            token: selectedToken,
+                            token: getCollaterals(networkId, true)[selectedToken],
                             network: getNetworkNameByNetworkId(networkId),
                         })}
                     </InputLabel>
@@ -162,7 +164,7 @@ const Withdraw: React.FC = () => {
                     </InputContainer>
                     <WarningContainer>
                         <WarningIcon className={'icon icon--warning'} />
-                        {t('deposit.send', {
+                        {t('withdraw.warning', {
                             token: getCollaterals(networkId, true)[selectedToken],
                             network: getNetworkNameByNetworkId(networkId, true),
                         })}

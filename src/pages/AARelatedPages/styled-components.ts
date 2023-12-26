@@ -6,6 +6,8 @@ export const Wrapper = styled(FlexDiv)`
     flex-direction: row;
     width: 100%;
     max-width: 1080px;
+    flex: 1;
+    margin-top: 40px;
     @media (max-width: 575px) {
         margin-top: 20px;
         flex-wrap: wrap-reverse;
@@ -35,6 +37,17 @@ export const PrimaryHeading = styled.h1`
     font-weight: 800;
     text-transform: uppercase;
     line-height: 20px;
+`;
+
+export const DescriptionLabel = styled.span`
+    font-family: Roboto;
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 119%; /* 14.28px */
+    margin-top: 4px;
+    margin-bottom: 20px;
 `;
 
 export const InputLabel = styled.span<{ marginTop?: string }>`

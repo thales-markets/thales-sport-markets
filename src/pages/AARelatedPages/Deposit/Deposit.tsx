@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsAppReady } from 'redux/modules/app';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -19,6 +19,7 @@ import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
 import {
     BalanceSection,
     CollateralContainer,
+    DescriptionLabel,
     FormContainer,
     InputContainer,
     InputLabel,
@@ -37,7 +38,6 @@ const Deposit: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
     const [selectedToken, setSelectedToken] = useState<number>(0);
@@ -126,20 +126,10 @@ const Deposit: React.FC = () => {
 
     return (
         <>
-            {isMobile && (
-                <>
-                    <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>
-                    <DescriptionLabel>{t('deposit.description')}</DescriptionLabel>
-                </>
-            )}
             <Wrapper>
                 <FormContainer>
-                    {!isMobile && (
-                        <>
-                            <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>
-                            <DescriptionLabel>{t('deposit.description')}</DescriptionLabel>
-                        </>
-                    )}
+                    <PrimaryHeading>{t('deposit.deposit-crypto')}</PrimaryHeading>
+                    <DescriptionLabel>{t('deposit.description')}</DescriptionLabel>
                     <InputLabel>{t('deposit.select-token')}</InputLabel>
                     <InputContainer ref={inputRef}>
                         <CollateralContainer ref={inputRef}>
@@ -250,6 +240,9 @@ const BuyWithText = styled.span`
 
 const OnramperIcons = styled.i`
     font-size: 100px;
+    @media (max-width: 800px) {
+        font-size: 80px;
+    }
 `;
 
 const WalletAddressInputWrapper = styled(FlexDiv)`
@@ -332,17 +325,6 @@ const Link = styled.a`
     line-height: 250%;
     text-decoration-line: underline;
     text-transform: capitalize;
-`;
-
-const DescriptionLabel = styled.span`
-    font-family: Roboto;
-    color: ${(props) => props.theme.textColor.primary};
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 119%; /* 14.28px */
-    margin-top: 4px;
-    margin-bottom: 20px;
 `;
 
 const ExternalIcon = styled.i`
