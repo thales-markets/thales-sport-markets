@@ -98,7 +98,7 @@ const DappHeader: React.FC = () => {
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const ethBalanceValue = useMemo(() => {
-        let total = 0;
+        let total = undefined;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
                 total = multipleCollateralBalances.data['ETH'] * (exchangeRates['ETH'] ? exchangeRates['ETH'] : 1);
@@ -110,8 +110,10 @@ const DappHeader: React.FC = () => {
         }
     }, [exchangeRates, multipleCollateralBalances.data]);
 
+    console.log('ethBalanceValue: ', ethBalanceValue);
+
     useEffect(() => {
-        if (isConnectedViaParticle && Number(ethBalanceValue) < 2) {
+        if (isConnectedViaParticle && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
             setShowLowBalanceAlert(true);
         } else {
             setShowLowBalanceAlert(false);
@@ -161,7 +163,7 @@ const DappHeader: React.FC = () => {
                         )}
                     </LeftContainer>
                     <RightContainer>
-                        {showLowBalanceAlert && (
+                        {ethBalanceValue !== undefined && showLowBalanceAlert && (
                             <TopUpButtonContainer>
                                 <ReactTooltip
                                     overlay={<TooltipOverlay>{t('my-portfolio.top-up-eth-tooltip')}</TooltipOverlay>}
@@ -174,7 +176,7 @@ const DappHeader: React.FC = () => {
                                 </ReactTooltip>
                             </TopUpButtonContainer>
                         )}
-                        {isConnectedViaParticle && !showLowBalanceAlert && (
+                        {ethBalanceValue !== undefined && !showLowBalanceAlert && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
                                 <Button
                                     backgroundColor={theme.button.background.quaternary}
@@ -525,6 +527,7 @@ const TopUpButton = styled.button`
     line-height: normal;
     filter: drop-shadow(0px 0px 14px rgba(191, 73, 81, 0.7));
     animation: pulse 2s infinite;
+    cursor: pointer;
 
     @keyframes pulse {
         0% {
