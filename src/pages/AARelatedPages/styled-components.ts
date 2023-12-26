@@ -5,6 +5,7 @@ export const Wrapper = styled(FlexDiv)`
     align-items: flex-start;
     flex-direction: row;
     width: 100%;
+    max-width: 1080px;
     @media (max-width: 575px) {
         margin-top: 20px;
         flex-wrap: wrap-reverse;
@@ -34,7 +35,6 @@ export const PrimaryHeading = styled.h1`
     font-weight: 800;
     text-transform: uppercase;
     line-height: 20px;
-    margin-bottom: 21px;
 `;
 
 export const InputLabel = styled.span<{ marginTop?: string }>`
@@ -72,7 +72,6 @@ export const WarningContainer = styled(FlexDiv)`
     padding: 5px;
     align-items: center;
     font-weight: 400;
-    text-transform: capitalize;
     font-size: 18px;
     border-radius: 5px;
     margin-top: 18px;
