@@ -30,6 +30,7 @@ import {
 } from 'redux/modules/parlay';
 import {
     getIsAA,
+    getIsConnectedViaParticle,
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
@@ -107,6 +108,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const multiSingleAmounts = useSelector(getMultiSingle);
     const parlayPayment = useSelector(getParlayPayment);
     const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
@@ -688,7 +690,13 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
 
         if (!hasAllowance) {
             return (
-                <Button disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
+                <Button
+                    disabled={submitDisabled}
+                    onClick={() =>
+                        isParticle ? handleAllowance(ethers.constants.MaxUint256) : setOpenApprovalModal(true)
+                    }
+                    {...defaultButtonProps}
+                >
                     {t('common.wallet.approve')}
                 </Button>
             );

@@ -16,7 +16,13 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getParlayPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsAA,
+    getIsConnectedViaParticle,
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { coinParser, formatCurrencyWithSign, getEtherscanTxLink, truncateAddress } from 'thales-utils';
@@ -89,6 +95,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const parlayPayment = useSelector(getParlayPayment);
@@ -296,7 +303,11 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             onClick={(e: any) => {
                 e.preventDefault();
                 e.stopPropagation();
-                hasAllowance || isDefaultCollateral ? claimParlay(parlayMarket.id) : setOpenApprovalModal(true);
+                hasAllowance || isDefaultCollateral
+                    ? claimParlay(parlayMarket.id)
+                    : isParticle
+                    ? handleAllowance(ethers.constants.MaxUint256)
+                    : setOpenApprovalModal(true);
             }}
         >
             {hasAllowance || isDefaultCollateral
