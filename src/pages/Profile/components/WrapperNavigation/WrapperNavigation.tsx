@@ -27,6 +27,7 @@ const Wrapper = styled(FlexDiv)`
     width: 100%;
     border-bottom: 2px ${(props) => props.theme.borderColor.quaternary} solid;
     flex-direction: row;
+    margin-top: 30px;
     @media (max-width: 575px) {
         margin-top: 20px;
     }
