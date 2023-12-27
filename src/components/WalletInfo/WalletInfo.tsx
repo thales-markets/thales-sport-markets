@@ -86,8 +86,6 @@ const WalletInfo: React.FC = ({}) => {
         getUSDForCollateral,
     ]);
 
-    console.log('connectWalletModalVisibility: ', connectWalletModalVisibility);
-
     return (
         <Container>
             <FlexDivColumn>
@@ -140,7 +138,6 @@ const WalletInfo: React.FC = ({}) => {
             <ConnectWalletModal
                 isOpen={connectWalletModalVisibility}
                 onClose={() => {
-                    console.log('pls do this');
                     dispatch(
                         setWalletConnectModalVisibility({
                             visibility: false,
