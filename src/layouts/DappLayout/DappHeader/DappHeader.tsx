@@ -142,13 +142,13 @@ const DappHeader: React.FC = () => {
                         {isWalletConnected && isMarketsPage && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
                                 <Button
-                                    backgroundColor={theme.button.background.tertiary}
+                                    backgroundColor={theme.background.primary}
                                     textColor={theme.button.textColor.quaternary}
                                     borderColor={theme.button.borderColor.secondary}
                                     width="150px"
                                     fontWeight="400"
                                     additionalStyles={{
-                                        borderRadius: '8px',
+                                        borderRadius: '20px',
                                         fontWeight: '700',
                                         fontSize: '14px',
                                         textTransform: 'capitalize',
@@ -352,14 +352,20 @@ const DappHeader: React.FC = () => {
                                 {location.pathname !== ROUTES.Wizard && ethBalanceValue !== undefined && (
                                     <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
                                         <Button
-                                            backgroundColor={theme.button.background.secondary}
+                                            backgroundColor={theme.background.primary}
                                             textColor={theme.button.textColor.quaternary}
                                             borderColor={theme.button.borderColor.secondary}
-                                            fontWeight="400"
-                                            height="28px"
                                             width="100%"
+                                            fontWeight="400"
+                                            additionalStyles={{
+                                                borderRadius: '20px',
+                                                fontWeight: '700',
+                                                fontSize: '14px',
+                                                textTransform: 'capitalize',
+                                            }}
+                                            height="28px"
                                         >
-                                            {t('markets.nav-menu.labels.get-started')}
+                                            {t('get-started.get-started')}
                                         </Button>
                                     </SPAAnchor>
                                 )}
