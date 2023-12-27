@@ -776,7 +776,13 @@
         "qr-modal-title": "Send {{ token }} ({{ network }})",
         "all-set": "You are all set!",
         "ready-to-use": "Your account is topped up and ready to start using Overtime Markets! You can place trades with ETH or you can deposit other tokens now visible on the deposit page.",
-        "go": "Let's go!"
+        "go": "Let's go!",
+        "tutorials": {
+            "title": "Deposit Guides",
+            "coinbase": "Deposit from Coinbase",
+            "binance-mobile": "Deposit from Binance Mobile App",
+            "binance": "Deposit from Binance Website"
+        }
     },
     "withdraw": {
         "address-input-label": "Your personal {{ token }} withdrawal address on {{ network }}",
