@@ -33,6 +33,7 @@ import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
+import NetworkSwitcher from 'components/NetworkSwitcher';
 
 const PULSING_COUNT = 10;
 
@@ -343,7 +344,7 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.sign-up')}
                             </Button>
                         )}
-                        {!isWalletConnected && <WalletInfo />}
+                        {!isWalletConnected && <NetworkSwitcher />}
                     </MobileButtonWrapper>
                     {location.pathname !== ROUTES.Wizard && isWalletConnected && (
                         <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
