@@ -89,8 +89,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             if (modalOrigin == 'sign-up') navigateTo(ROUTES.Wizard);
             onClose();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSuccess, isPartical]);
+    }, [isSuccess, isPartical, modalOrigin, onClose]);
 
     return (
         <ReactModal isOpen={isOpen} onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={defaultStyle}>

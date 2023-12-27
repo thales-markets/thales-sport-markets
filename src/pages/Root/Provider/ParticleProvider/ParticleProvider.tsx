@@ -1,4 +1,5 @@
 import { ParticleNetwork } from '@particle-network/auth';
+import { Network } from 'enums/network';
 import React, { createContext, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -27,10 +28,10 @@ const ParticleProvider: React.FC<ParticleProviderProps> = ({ children }) => {
                     displayWalletEntry: false, //show wallet entry when connect particle.
                     uiMode: 'dark', //optional: light or dark, if not set, the default is the same as web auth.
                     supportChains: [
-                        { id: 10, name: 'optimism' },
-                        { id: 42161, name: 'arbitrum' },
-                        { id: 420, name: 'optimism' },
-                        { id: 84531, name: 'base' },
+                        { id: Network.OptimismMainnet, name: 'optimism' },
+                        { id: Network.Arbitrum, name: 'arbitrum' },
+                        { id: Network.Base, name: 'base' },
+                        { id: Network.OptimismGoerli, name: 'optimism' },
                     ], // optional: web wallet support chains.
                     customStyle: {}, //optional: custom wallet style
                 },

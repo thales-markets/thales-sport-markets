@@ -55,10 +55,7 @@ const Deposit: React.FC = () => {
     );
 
     useEffect(() => {
-        if (selectedTokenFromUrl != selectedToken.toString()) {
-            setSelectedToken(Number(selectedTokenFromUrl));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setSelectedToken(Number(selectedTokenFromUrl));
     }, [selectedTokenFromUrl]);
 
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
@@ -75,31 +72,31 @@ const Deposit: React.FC = () => {
     const totalBalanceValue = useMemo(() => {
         let total = 0;
         try {
-            if (!exchangeRates && !multipleCollateralBalances.data) return undefined;
-
             if (exchangeRates && multipleCollateralBalances.data) {
                 getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
+                return total;
             }
-
-            return total;
+            return undefined;
         } catch (e) {
             return undefined;
         }
     }, [exchangeRates, multipleCollateralBalances.data, networkId, isConnectedViaParticle]);
 
     useEffect(() => {
-        if (totalBalanceValue == 0) {
-            setTotalValue(0);
-            return;
+        if (totalValue === undefined) {
+            if (totalBalanceValue == 0) {
+                setTotalValue(0);
+                return;
+            }
         }
+
         if (totalValue == 0 && totalBalanceValue && totalBalanceValue > 0) {
             setTotalValue(totalBalanceValue);
             setShowSuccessfulDepositModal(true);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalBalanceValue]);
+    }, [totalBalanceValue, totalValue]);
 
     const ethBalanceValue = useMemo(() => {
         let total = undefined;

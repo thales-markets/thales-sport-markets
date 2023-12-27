@@ -191,20 +191,18 @@ const App = () => {
                                     </Route>
                                 )}
 
-                                {isConnectedViaParticle && (
-                                    <Route exact path={ROUTES.Deposit}>
-                                        <DappLayout>
-                                            <Deposit />
-                                        </DappLayout>
-                                    </Route>
-                                )}
-                                {isConnectedViaParticle && (
-                                    <Route exact path={ROUTES.Withdraw}>
-                                        <DappLayout>
-                                            <Withdraw />
-                                        </DappLayout>
-                                    </Route>
-                                )}
+                                <Route exact path={ROUTES.Deposit}>
+                                    <DappLayout>
+                                        <Deposit />
+                                    </DappLayout>
+                                </Route>
+
+                                <Route exact path={ROUTES.Withdraw}>
+                                    <DappLayout>
+                                        <Withdraw />
+                                    </DappLayout>
+                                </Route>
+
                                 <Route exact path={ROUTES.Wizard}>
                                     <DappLayout>
                                         {isConnectedViaParticle && <GetStarted />}

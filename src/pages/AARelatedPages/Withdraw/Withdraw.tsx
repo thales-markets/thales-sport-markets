@@ -60,10 +60,7 @@ const Withdraw: React.FC = () => {
     );
 
     useEffect(() => {
-        if (selectedTokenFromUrl != selectedToken.toString()) {
-            setSelectedToken(Number(selectedTokenFromUrl));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setSelectedToken(Number(selectedTokenFromUrl));
     }, [selectedTokenFromUrl]);
 
     const inputRef = useRef<HTMLDivElement>(null);
@@ -98,7 +95,6 @@ const Withdraw: React.FC = () => {
         }
 
         setValidation({ walletAddress: walletValidation, amount: amountValidation });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [amount, paymentTokenBalance, withdrawalWalletAddress]);
 
     const handleChangeCollateral = (index: number) => {
