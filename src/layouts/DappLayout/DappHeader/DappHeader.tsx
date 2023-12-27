@@ -301,9 +301,10 @@ const DappHeader: React.FC = () => {
                                     backgroundColor={'transparent'}
                                     textColor={theme.button.textColor.quaternary}
                                     borderColor={theme.button.borderColor.secondary}
-                                    width="140px"
+                                    width="100%"
                                     fontWeight="400"
                                     additionalStyles={{
+                                        maxWidth: 400,
                                         borderRadius: '15.5px',
                                         fontWeight: '800',
                                         fontSize: '14px',
@@ -327,12 +328,13 @@ const DappHeader: React.FC = () => {
                                     borderColor={theme.button.borderColor.secondary}
                                     fontWeight="400"
                                     additionalStyles={{
+                                        maxWidth: 400,
                                         borderRadius: '15.5px',
                                         fontWeight: '700',
                                         fontSize: '14px',
                                         textTransform: 'capitalize',
                                     }}
-                                    width="140px"
+                                    width="100%"
                                     height="28px"
                                     onClick={() =>
                                         dispatch(
@@ -370,29 +372,26 @@ const DappHeader: React.FC = () => {
                                     </SPAAnchor>
                                 )}
                                 {ethBalanceValue !== undefined && showLowBalanceAlert && (
-                                    <TopUpButtonContainer>
-                                        <ReactTooltip
-                                            overlay={
-                                                <TooltipOverlay>{t('my-portfolio.top-up-eth-tooltip')}</TooltipOverlay>
-                                            }
-                                            placement={'bottom'}
-                                            trigger={['hover']}
-                                        >
-                                            <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
-                                                <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
-                                            </SPAAnchor>
-                                        </ReactTooltip>
-                                    </TopUpButtonContainer>
+                                    <SPAAnchor
+                                        style={{ marginRight: '5px', width: '100%' }}
+                                        href={buildHref(ROUTES.Deposit)}
+                                    >
+                                        <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
+                                    </SPAAnchor>
                                 )}
                                 {ethBalanceValue !== undefined && !showLowBalanceAlert && (
-                                    <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
+                                    <SPAAnchor
+                                        style={{ marginRight: '15px', width: '100%' }}
+                                        href={buildHref(ROUTES.Deposit)}
+                                    >
                                         <Button
                                             backgroundColor={theme.button.background.quaternary}
                                             textColor={theme.button.textColor.primary}
                                             borderColor={theme.button.borderColor.secondary}
-                                            width="150px"
+                                            width="100%"
                                             fontWeight="400"
                                             additionalStyles={{
+                                                maxWidth: 400,
                                                 borderRadius: '15.5px',
                                                 fontWeight: '800',
                                                 fontSize: '14px',
@@ -425,6 +424,10 @@ const Container = styled(FlexDivRowCentered)`
         }
         50% {
             transform: scale(1.2);
+            @media (max-width: 767px) {
+                transform: scale(1.1);
+            }
+
             opacity: 1;
         }
         100% {
@@ -541,7 +544,7 @@ const Count = styled.span`
 const MobileButtonWrapper = styled(FlexDivRowCentered)`
     width: 100%;
     margin-top: 10px;
-    gap: 10px;
+    gap: 20px;
     min-height: 32px;
 `;
 
@@ -566,6 +569,8 @@ const TopUpButton = styled.button`
     border-radius: 15px;
     padding: 6px 30px;
     min-width: 140px;
+    width: 100%;
+    max-width: 400px;
     font-family: Roboto;
     font-size: 14px;
     font-style: normal;

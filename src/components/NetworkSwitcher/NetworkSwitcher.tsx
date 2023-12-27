@@ -2,7 +2,6 @@ import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { useState, useMemo } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, switchToNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -15,32 +14,27 @@ const NetworkSwitcher: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
-
     const { switchNetwork } = useSwitchNetwork();
     const [dropDownOpen, setDropDownOpen] = useState(false);
     const selectedNetwork = useMemo(
         () => SUPPORTED_NETWORKS_PARAMS[networkId] || SUPPORTED_NETWORKS_PARAMS[DEFAULT_NETWORK.networkId],
         [networkId]
     );
-
-    // currently not supported network synchronization between browser without integrated wallet and wallet app on mobile
-    const hideNetworkSwitcher =
-        isMobile &&
-        !window.ethereum?.isMetaMask &&
-        !window.ethereum?.isBraveWallet &&
-        !window.ethereum?.isCoinbaseWallet &&
-        !window.ethereum?.isTrust;
-
+    // // currently not supported network synchronization between browser without integrated wallet and wallet app on mobile
+    // const hideNetworkSwitcher =
+    //     isMobile &&
+    //     !window.ethereum?.isMetaMask &&
+    //     !window.ethereum?.isBraveWallet &&
+    //     !window.ethereum?.isCoinbaseWallet &&
+    //     !window.ethereum?.isTrust;
     return (
         <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
             <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)} isConnected={isWalletConnected}>
                 <NetworkIcon className={selectedNetwork.iconClassName} isConnected={isWalletConnected} />
-                {!hideNetworkSwitcher && (
-                    <DownIcon isConnected={isWalletConnected} className={`icon icon--arrow-down`} />
-                )}
+
+                <DownIcon isConnected={isWalletConnected} className={`icon icon--arrow-down`} />
             </NetworkIconWrapper>
-            {dropDownOpen && !hideNetworkSwitcher && (
+            {dropDownOpen && (
                 <NetworkDropDown>
                     {Object.keys(SUPPORTED_NETWORKS_PARAMS)
                         .map((key) => {
