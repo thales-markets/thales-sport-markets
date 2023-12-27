@@ -32,6 +32,8 @@ import {
 import AllSetModal from './components/AllSetModal';
 import BalanceDetails from './components/BalanceDetails';
 import QRCodeModal from './components/QRCodeModal';
+import { navigateTo } from 'utils/routes';
+import ROUTES from 'constants/routes';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
@@ -53,6 +55,10 @@ const Deposit: React.FC = () => {
         'coin-index',
         selectedTokenFromUrl ? selectedTokenFromUrl : '0'
     );
+
+    useEffect(() => {
+        if (!isConnectedViaParticle) navigateTo(ROUTES.Markets.Home);
+    }, [isConnectedViaParticle]);
 
     useEffect(() => {
         setSelectedToken(Number(selectedTokenFromUrl));

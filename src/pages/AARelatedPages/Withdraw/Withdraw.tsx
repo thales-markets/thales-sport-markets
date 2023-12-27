@@ -10,7 +10,7 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -32,6 +32,8 @@ import {
     Wrapper,
 } from '../styled-components';
 import WithdrawalConfirmationModal from './components/WithdrawalConfirmationModal';
+import ROUTES from 'constants/routes';
+import { navigateTo } from 'utils/routes';
 
 type FormValidation = {
     walletAddress: boolean;
@@ -45,7 +47,7 @@ const Withdraw: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const [selectedToken, setSelectedToken] = useState<number>(0);
     const [withdrawalWalletAddress, setWithdrawalWalletAddress] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
@@ -101,6 +103,10 @@ const Withdraw: React.FC = () => {
         setSelectedToken(index);
         setSelectedTokenFromQuery(index.toString());
     };
+
+    useEffect(() => {
+        if (!isConnectedViaParticle) navigateTo(ROUTES.Markets.Home);
+    }, [isConnectedViaParticle]);
 
     return (
         <>

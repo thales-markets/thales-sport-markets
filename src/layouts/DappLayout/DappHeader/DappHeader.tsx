@@ -162,7 +162,7 @@ const DappHeader: React.FC = () => {
                         )}
                     </LeftContainer>
                     <RightContainer>
-                        {ethBalanceValue !== undefined && showLowBalanceAlert && (
+                        {isConnectedViaParticle && ethBalanceValue !== undefined && showLowBalanceAlert && (
                             <TopUpButtonContainer>
                                 <ReactTooltip
                                     overlay={<TooltipOverlay>{t('my-portfolio.top-up-eth-tooltip')}</TooltipOverlay>}
@@ -175,7 +175,7 @@ const DappHeader: React.FC = () => {
                                 </ReactTooltip>
                             </TopUpButtonContainer>
                         )}
-                        {ethBalanceValue !== undefined && !showLowBalanceAlert && (
+                        {isConnectedViaParticle && ethBalanceValue !== undefined && !showLowBalanceAlert && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
                                 <Button
                                     backgroundColor={theme.button.background.quaternary}
@@ -371,7 +371,7 @@ const DappHeader: React.FC = () => {
                                         </Button>
                                     </SPAAnchor>
                                 )}
-                                {ethBalanceValue !== undefined && showLowBalanceAlert && (
+                                {isConnectedViaParticle && ethBalanceValue !== undefined && showLowBalanceAlert && (
                                     <SPAAnchor
                                         style={{ marginRight: '5px', width: '100%' }}
                                         href={buildHref(ROUTES.Deposit)}
@@ -379,7 +379,7 @@ const DappHeader: React.FC = () => {
                                         <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
                                     </SPAAnchor>
                                 )}
-                                {ethBalanceValue !== undefined && !showLowBalanceAlert && (
+                                {isConnectedViaParticle && ethBalanceValue !== undefined && !showLowBalanceAlert && (
                                     <SPAAnchor
                                         style={{ marginRight: '15px', width: '100%' }}
                                         href={buildHref(ROUTES.Deposit)}
