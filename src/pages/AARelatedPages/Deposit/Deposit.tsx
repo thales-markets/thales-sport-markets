@@ -278,6 +278,10 @@ const BuyWithText = styled.span`
     margin: auto;
     margin-top: 80px;
     margin-bottom: 60px;
+    @media (max-width: 800px) {
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
 `;
 
 const OnramperIcons = styled.i`
@@ -291,7 +295,11 @@ const WalletAddressInputWrapper = styled(FlexDiv)`
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
+    gap: 10px;
     align-items: center;
+    @media (max-width: 575px) {
+        flex-direction: column;
+    }
 `;
 
 const OnramperDiv = styled(FlexDiv)`
@@ -309,6 +317,7 @@ const WalletAddressInput = styled.input`
     font-size: 18px;
     font-weight: 400;
     cursor: pointer;
+    height: 32px;
     width: 100%;
     padding: 5px;
     opacity: 0.8;
@@ -316,6 +325,9 @@ const WalletAddressInput = styled.input`
     color: ${(props) => props.theme.input.textColor.secondary};
     background-color: ${(props) => props.theme.input.background.secondary};
     border: ${(props) => `1px ${props.theme.input.borderColor.tertiary} solid`};
+    @media (max-width: 800px) {
+        font-size: 14px;
+    }
 `;
 
 const QRIcon = styled.i`
@@ -325,6 +337,9 @@ const QRIcon = styled.i`
     right: 5px;
     top: 5px;
     color: ${(props) => props.theme.input.textColor.secondary};
+    @media (max-width: 575px) {
+        font-size: 20px;
+    }
 `;
 
 const CopyButton = styled(FlexDiv)`
@@ -340,6 +355,9 @@ const CopyButton = styled(FlexDiv)`
     justify-content: center;
     color: ${(props) => props.theme.button.textColor.primary};
     background-color: ${(props) => props.theme.button.background.quaternary};
+    @media (max-width: 575px) {
+        width: 100%;
+    }
 `;
 
 const SectionLabel = styled.span`

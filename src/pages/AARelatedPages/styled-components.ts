@@ -6,17 +6,18 @@ export const Wrapper = styled(FlexDiv)`
     flex-direction: row;
     width: 100%;
     max-width: 1080px;
+    gap: 20px;
     flex: 1;
     margin-top: 40px;
-    @media (max-width: 575px) {
+    @media (max-width: 800px) {
         margin-top: 20px;
-        flex-wrap: wrap-reverse;
+        flex-direction: column;
     }
 `;
 
 export const FormContainer = styled(FlexDiv)`
     flex-direction: column;
-    width: 60%;
+    flex: 6;
     @media (max-width: 575px) {
         width: 100%;
     }
@@ -24,8 +25,7 @@ export const FormContainer = styled(FlexDiv)`
 
 export const BalanceSection = styled(FlexDiv)`
     flex-direction: column;
-    width: 40%;
-    padding: 0 20px;
+    flex: 4;
     @media (max-width: 575px) {
         padding: 0;
         width: 100%;
@@ -67,7 +67,6 @@ export const InputLabel = styled.span<{ marginTop?: string }>`
 
 export const InputContainer = styled(FlexDiv)`
     position: relative;
-    margin-right: 10px;
     width: 100%;
 `;
 
