@@ -39,7 +39,7 @@ export const PrimaryHeading = styled.h1`
     line-height: 20px;
 `;
 
-export const DescriptionLabel = styled.span`
+const Label = styled.span`
     font-family: Roboto;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
@@ -47,6 +47,13 @@ export const DescriptionLabel = styled.span`
     font-weight: 400;
     line-height: 119%; /* 14.28px */
     margin-top: 4px;
+`;
+
+export const WarningLabel = styled(Label)`
+    margin-top: 2px;
+`;
+
+export const DescriptionLabel = styled(Label)`
     margin-bottom: 20px;
 `;
 

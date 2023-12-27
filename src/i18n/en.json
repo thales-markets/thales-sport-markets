@@ -770,6 +770,7 @@
         "or-buy-with": "Or buy with",
         "select-token": "Select token",
         "address-input-label": "Your personal {{ token }} deposit address on {{ network }}",
+        "warning": "Your ETH balance is low. Please top up your ETH balance to continue using Overtime",
         "send": "Make sure you are depositing {{ network }} {{ token }} to the address above!",
         "copying-address": "Please wait",
         "copied": "Address copied!",

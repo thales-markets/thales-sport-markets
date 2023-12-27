@@ -11,7 +11,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDiv } from 'styles/common';
+import { FlexDiv, FlexDivStart } from 'styles/common';
 import { getOnRamperUrl } from 'utils/biconomy';
 import { getCollaterals } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
@@ -26,6 +26,7 @@ import {
     PrimaryHeading,
     WarningContainer,
     WarningIcon,
+    WarningLabel,
     Wrapper,
 } from '../styled-components';
 import AllSetModal from './components/AllSetModal';
@@ -44,6 +45,7 @@ const Deposit: React.FC = () => {
     const [showQRModal, setShowQRModal] = useState<boolean>(false);
     const [totalValue, setTotalValue] = useState<number | undefined>(undefined);
     const [showSuccessfulDepositModal, setShowSuccessfulDepositModal] = useState<boolean>(false);
+    const [lowBalanceAlert, setLowBalanceAlert] = useState(false);
 
     const selectedTokenFromUrl = getQueryStringVal('coin-index');
 
@@ -99,6 +101,27 @@ const Deposit: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [totalBalanceValue]);
 
+    const ethBalanceValue = useMemo(() => {
+        let total = undefined;
+        try {
+            if (exchangeRates && multipleCollateralBalances.data) {
+                total = multipleCollateralBalances.data['ETH'] * (exchangeRates['ETH'] ? exchangeRates['ETH'] : 1);
+            }
+
+            return total;
+        } catch (e) {
+            return undefined;
+        }
+    }, [exchangeRates, multipleCollateralBalances.data]);
+
+    useEffect(() => {
+        if (isConnectedViaParticle && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
+            setLowBalanceAlert(true);
+        } else {
+            setLowBalanceAlert(false);
+        }
+    }, [ethBalanceValue, isConnectedViaParticle]);
+
     const inputRef = useRef<HTMLDivElement>(null);
 
     const walletAddressInputRef = useRef<HTMLInputElement>(null);
@@ -134,7 +157,7 @@ const Deposit: React.FC = () => {
                     <InputContainer ref={inputRef}>
                         <CollateralContainer ref={inputRef}>
                             <CollateralSelector
-                                collateralArray={COLLATERALS_AA[networkId]}
+                                collateralArray={lowBalanceAlert ? ['ETH'] : COLLATERALS_AA[networkId]}
                                 selectedItem={selectedToken}
                                 onChangeCollateral={(index) => handleChangeCollateral(index)}
                                 disabled={false}
@@ -150,6 +173,12 @@ const Deposit: React.FC = () => {
                             />
                         </CollateralContainer>
                     </InputContainer>
+                    {lowBalanceAlert && (
+                        <FlexDivStart>
+                            <WarningI className="icon icon--risks" />
+                            <WarningLabel>{t('deposit.warning')}</WarningLabel>
+                        </FlexDivStart>
+                    )}
                     <DepositAddressFormContainer>
                         <InputLabel>
                             {t('deposit.address-input-label', {
@@ -342,6 +371,12 @@ const Link = styled.a`
 const ExternalIcon = styled.i`
     font-size: 26px;
     font-weight: 400;
+`;
+
+const WarningI = styled.i`
+    font-size: 12px;
+    margin-right: 2px;
+    margin-top: 2px;
 `;
 
 export default Deposit;
