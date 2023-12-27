@@ -293,74 +293,113 @@ const DappHeader: React.FC = () => {
                             />
                         </MenuIconContainer>
                     </WrapperMobile>
+
                     <MobileButtonWrapper>
-                        {!isWalletConnected && (
-                            <Button
-                                backgroundColor={'transparent'}
-                                textColor={theme.button.textColor.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
-                                width="140px"
-                                fontWeight="400"
-                                additionalStyles={{
-                                    borderRadius: '15.5px',
-                                    fontWeight: '800',
-                                    fontSize: '14px',
-                                    textTransform: 'capitalize',
-                                }}
-                                height="28px"
-                                onClick={() =>
-                                    dispatch(
-                                        setWalletConnectModalVisibility({
-                                            visibility: true,
-                                        })
-                                    )
-                                }
-                            >
-                                {t('get-started.log-in')}
-                            </Button>
+                        {!isWalletConnected ? (
+                            <>
+                                <Button
+                                    backgroundColor={'transparent'}
+                                    textColor={theme.button.textColor.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    width="140px"
+                                    fontWeight="400"
+                                    additionalStyles={{
+                                        borderRadius: '15.5px',
+                                        fontWeight: '800',
+                                        fontSize: '14px',
+                                        textTransform: 'capitalize',
+                                    }}
+                                    height="28px"
+                                    onClick={() =>
+                                        dispatch(
+                                            setWalletConnectModalVisibility({
+                                                visibility: true,
+                                            })
+                                        )
+                                    }
+                                >
+                                    {t('get-started.log-in')}
+                                </Button>
+
+                                <Button
+                                    backgroundColor={theme.button.background.quaternary}
+                                    textColor={theme.button.textColor.primary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    fontWeight="400"
+                                    additionalStyles={{
+                                        borderRadius: '15.5px',
+                                        fontWeight: '700',
+                                        fontSize: '14px',
+                                        textTransform: 'capitalize',
+                                    }}
+                                    width="140px"
+                                    height="28px"
+                                    onClick={() =>
+                                        dispatch(
+                                            setWalletConnectModalVisibility({
+                                                visibility: true,
+                                            })
+                                        )
+                                    }
+                                >
+                                    {t('get-started.sign-up')}
+                                </Button>
+
+                                <NetworkSwitcher />
+                            </>
+                        ) : (
+                            <>
+                                {location.pathname !== ROUTES.Wizard && ethBalanceValue !== undefined && (
+                                    <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
+                                        <Button
+                                            backgroundColor={theme.button.background.secondary}
+                                            textColor={theme.button.textColor.quaternary}
+                                            borderColor={theme.button.borderColor.secondary}
+                                            fontWeight="400"
+                                            height="28px"
+                                            width="100%"
+                                        >
+                                            {t('markets.nav-menu.labels.get-started')}
+                                        </Button>
+                                    </SPAAnchor>
+                                )}
+                                {ethBalanceValue !== undefined && showLowBalanceAlert && (
+                                    <TopUpButtonContainer>
+                                        <ReactTooltip
+                                            overlay={
+                                                <TooltipOverlay>{t('my-portfolio.top-up-eth-tooltip')}</TooltipOverlay>
+                                            }
+                                            placement={'bottom'}
+                                            trigger={['hover']}
+                                        >
+                                            <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
+                                                <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
+                                            </SPAAnchor>
+                                        </ReactTooltip>
+                                    </TopUpButtonContainer>
+                                )}
+                                {ethBalanceValue !== undefined && !showLowBalanceAlert && (
+                                    <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
+                                        <Button
+                                            backgroundColor={theme.button.background.quaternary}
+                                            textColor={theme.button.textColor.primary}
+                                            borderColor={theme.button.borderColor.secondary}
+                                            width="150px"
+                                            fontWeight="400"
+                                            additionalStyles={{
+                                                borderRadius: '15.5px',
+                                                fontWeight: '800',
+                                                fontSize: '14px',
+                                            }}
+                                            height="28px"
+                                        >
+                                            {t('my-portfolio.deposit')}
+                                        </Button>
+                                    </SPAAnchor>
+                                )}
+                            </>
                         )}
-                        {!isWalletConnected && (
-                            <Button
-                                backgroundColor={theme.button.background.quaternary}
-                                textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.secondary}
-                                fontWeight="400"
-                                additionalStyles={{
-                                    borderRadius: '15.5px',
-                                    fontWeight: '700',
-                                    fontSize: '14px',
-                                    textTransform: 'capitalize',
-                                }}
-                                width="140px"
-                                height="28px"
-                                onClick={() =>
-                                    dispatch(
-                                        setWalletConnectModalVisibility({
-                                            visibility: true,
-                                        })
-                                    )
-                                }
-                            >
-                                {t('get-started.sign-up')}
-                            </Button>
-                        )}
-                        {!isWalletConnected && <NetworkSwitcher />}
                     </MobileButtonWrapper>
-                    {location.pathname !== ROUTES.Wizard && isWalletConnected && (
-                        <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
-                            <Button
-                                backgroundColor={theme.button.background.secondary}
-                                textColor={theme.button.textColor.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
-                                fontWeight="400"
-                                height="28px"
-                                width="100%"
-                                margin="10px 0 0 0"
-                            >
-                                {t('markets.nav-menu.labels.get-started')}
-                            </Button>
-                        </SPAAnchor>
-                    )}
                 </>
             )}
         </>
@@ -497,6 +536,7 @@ const MobileButtonWrapper = styled(FlexDivRowCentered)`
     width: 100%;
     margin-top: 10px;
     gap: 10px;
+    min-height: 32px;
 `;
 
 const TopUpButtonContainer = styled(FlexDiv)`
@@ -519,6 +559,7 @@ const TopUpButton = styled.button`
     border: 1px solid ${(props) => props.theme.error.borderColor.primary};
     border-radius: 15px;
     padding: 6px 30px;
+    min-width: 140px;
     font-family: Roboto;
     font-size: 14px;
     font-style: normal;
