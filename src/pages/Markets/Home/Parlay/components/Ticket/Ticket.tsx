@@ -148,10 +148,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
 
     const [gas, setGas] = useState(0);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isAA), [
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isParticle), [
         networkId,
         selectedCollateralIndex,
-        isAA,
+        isParticle,
     ]);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const collateralAddress = useMemo(
@@ -159,11 +159,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             getCollateralAddress(
                 networkId,
                 isEth
-                    ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins, isAA)
+                    ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins, isParticle)
                     : selectedCollateralIndex,
-                isAA
+                isParticle
             ),
-        [networkId, selectedCollateralIndex, isEth, isAA]
+        [networkId, selectedCollateralIndex, isEth, isParticle]
     );
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const isStableCollateral = isStableCurrency(selectedCollateral);
@@ -913,7 +913,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                         disabled={isAllowing || isBuying}
                         currencyComponent={
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId, isAA)}
+                                collateralArray={getCollaterals(networkId, isParticle)}
                                 selectedItem={selectedCollateralIndex}
                                 onChangeCollateral={() => {}}
                                 disabled={isVoucherSelected}

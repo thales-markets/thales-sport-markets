@@ -158,10 +158,10 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isAA), [
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isParticle), [
         networkId,
         selectedCollateralIndex,
-        isAA,
+        isParticle,
     ]);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const collateralAddress = useMemo(
@@ -169,9 +169,9 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
             getCollateralAddress(
                 networkId,
                 isEth ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateralIndex,
-                isAA
+                isParticle
             ),
-        [networkId, selectedCollateralIndex, isEth, isAA]
+        [networkId, selectedCollateralIndex, isEth, isParticle]
     );
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
@@ -871,7 +871,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                         disabled={isAllowing || isBuying}
                         currencyComponent={
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId, isAA)}
+                                collateralArray={getCollaterals(networkId, isParticle)}
                                 selectedItem={selectedCollateralIndex}
                                 onChangeCollateral={() => {}}
                                 disabled={isVoucherSelected}
