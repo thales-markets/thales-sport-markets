@@ -9,19 +9,16 @@ import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import ReactTooltip from 'rc-tooltip';
-import React, { useEffect, useMemo, useState } from 'react';
+
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import {
-    getIsConnectedViaParticle,
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
@@ -29,11 +26,12 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import NetworkSwitcher from 'components/NetworkSwitcher';
+import TopUp from './components/TopUp';
 
 const PULSING_COUNT = 10;
 
@@ -70,13 +68,10 @@ const DappHeader: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
-    const [showLowBalanceAlert, setShowLowBalanceAlert] = useState<boolean>(false);
 
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
@@ -85,39 +80,6 @@ const DappHeader: React.FC = () => {
     const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
-
-    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-        refetchInterval: 5000,
-    });
-
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
-
-    const exchangeRates: Rates | null =
-        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
-
-    const ethBalanceValue = useMemo(() => {
-        let total = undefined;
-        try {
-            if (exchangeRates && multipleCollateralBalances.data) {
-                total = multipleCollateralBalances.data['ETH'] * (exchangeRates['ETH'] ? exchangeRates['ETH'] : 1);
-            }
-
-            return total;
-        } catch (e) {
-            return undefined;
-        }
-    }, [exchangeRates, multipleCollateralBalances.data]);
-
-    useEffect(() => {
-        if (isConnectedViaParticle && ethBalanceValue !== undefined && Number(ethBalanceValue) < 2) {
-            setShowLowBalanceAlert(true);
-        } else {
-            setShowLowBalanceAlert(false);
-        }
-    }, [ethBalanceValue, isConnectedViaParticle]);
 
     const claimablePositionCount =
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
@@ -162,34 +124,6 @@ const DappHeader: React.FC = () => {
                         )}
                     </LeftContainer>
                     <RightContainer>
-                        {isConnectedViaParticle && ethBalanceValue !== undefined && showLowBalanceAlert && (
-                            <TopUpButtonContainer>
-                                <ReactTooltip
-                                    overlay={<TooltipOverlay>{t('my-portfolio.top-up-eth-tooltip')}</TooltipOverlay>}
-                                    placement={'bottom'}
-                                    trigger={['hover']}
-                                >
-                                    <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
-                                        <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
-                                    </SPAAnchor>
-                                </ReactTooltip>
-                            </TopUpButtonContainer>
-                        )}
-                        {isConnectedViaParticle && ethBalanceValue !== undefined && !showLowBalanceAlert && (
-                            <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
-                                <Button
-                                    backgroundColor={theme.button.background.quaternary}
-                                    textColor={theme.button.textColor.primary}
-                                    borderColor={theme.button.borderColor.secondary}
-                                    width="150px"
-                                    fontWeight="400"
-                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '800', fontSize: '14px' }}
-                                    height="28px"
-                                >
-                                    {t('my-portfolio.deposit')}
-                                </Button>
-                            </SPAAnchor>
-                        )}
                         {!isWalletConnected && (
                             <Button
                                 backgroundColor={'transparent'}
@@ -241,6 +175,7 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.sign-up')}
                             </Button>
                         )}
+                        <TopUp />
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
                         <MenuIcon onClick={() => setNavMenuVisibility(true)} />
@@ -294,6 +229,12 @@ const DappHeader: React.FC = () => {
                         </MenuIconContainer>
                     </WrapperMobile>
 
+                    {isWalletConnected && (
+                        <FlexDivCentered>
+                            <WalletInfo />
+                        </FlexDivCentered>
+                    )}
+
                     <MobileButtonWrapper>
                         {!isWalletConnected ? (
                             <>
@@ -346,62 +287,12 @@ const DappHeader: React.FC = () => {
                                 >
                                     {t('get-started.sign-up')}
                                 </Button>
-
+                                <TopUp />
                                 <NetworkSwitcher />
                             </>
                         ) : (
                             <>
-                                {location.pathname !== ROUTES.Wizard && ethBalanceValue !== undefined && (
-                                    <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
-                                        <Button
-                                            backgroundColor={theme.background.primary}
-                                            textColor={theme.button.textColor.quaternary}
-                                            borderColor={theme.button.borderColor.secondary}
-                                            width="100%"
-                                            fontWeight="400"
-                                            additionalStyles={{
-                                                borderRadius: '20px',
-                                                fontWeight: '700',
-                                                fontSize: '14px',
-                                                textTransform: 'capitalize',
-                                            }}
-                                            height="28px"
-                                        >
-                                            {t('get-started.get-started')}
-                                        </Button>
-                                    </SPAAnchor>
-                                )}
-                                {isConnectedViaParticle && ethBalanceValue !== undefined && showLowBalanceAlert && (
-                                    <SPAAnchor
-                                        style={{ marginRight: '5px', width: '100%' }}
-                                        href={buildHref(ROUTES.Deposit)}
-                                    >
-                                        <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
-                                    </SPAAnchor>
-                                )}
-                                {isConnectedViaParticle && ethBalanceValue !== undefined && !showLowBalanceAlert && (
-                                    <SPAAnchor
-                                        style={{ marginRight: '15px', width: '100%' }}
-                                        href={buildHref(ROUTES.Deposit)}
-                                    >
-                                        <Button
-                                            backgroundColor={theme.button.background.quaternary}
-                                            textColor={theme.button.textColor.primary}
-                                            borderColor={theme.button.borderColor.secondary}
-                                            width="100%"
-                                            fontWeight="400"
-                                            additionalStyles={{
-                                                maxWidth: 400,
-                                                borderRadius: '15.5px',
-                                                fontWeight: '800',
-                                                fontSize: '14px',
-                                            }}
-                                            height="28px"
-                                        >
-                                            {t('my-portfolio.deposit')}
-                                        </Button>
-                                    </SPAAnchor>
-                                )}
+                                <TopUp />
                             </>
                         )}
                     </MobileButtonWrapper>
@@ -546,54 +437,6 @@ const MobileButtonWrapper = styled(FlexDivRowCentered)`
     margin-top: 10px;
     gap: 20px;
     min-height: 32px;
-`;
-
-const TopUpButtonContainer = styled(FlexDiv)`
-    align-items: center;
-    justify-content: center;
-`;
-
-const TooltipOverlay = styled(FlexDiv)`
-    text-align: left;
-    background-color: ${(props) => props.theme.background.primary};
-    color: ${(props) => props.theme.textColor.primary};
-    border: ${(props) => `1.5px solid ${props.theme.error.borderColor.primary}`};
-    padding: 12px;
-    text-transform: uppercase;
-`;
-
-const TopUpButton = styled.button`
-    background-color: ${(props) => props.theme.button.background.secondary};
-    color: ${(props) => props.theme.error.textColor.primary};
-    border: 1px solid ${(props) => props.theme.error.borderColor.primary};
-    border-radius: 15px;
-    padding: 6px 30px;
-    min-width: 140px;
-    width: 100%;
-    max-width: 400px;
-    font-family: Roboto;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 800;
-    line-height: normal;
-    filter: drop-shadow(0px 0px 14px rgba(191, 73, 81, 0.7));
-    animation: pulse 2s infinite;
-    cursor: pointer;
-
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-            opacity: 1;
-        }
-        50% {
-            transform: scale(1.1);
-            opacity: 1;
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
 `;
 
 export default DappHeader;

@@ -4,7 +4,7 @@ import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsAppReady } from 'redux/modules/app';
 import {
     getIsConnectedViaParticle,
     getIsWalletConnected,
@@ -33,7 +33,6 @@ const WalletInfo: React.FC = ({}) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
 
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
@@ -106,8 +105,7 @@ const WalletInfo: React.FC = ({}) => {
                                         </Text>
                                     </WalletAddressInfo>
                                 )}
-                                {!isMobile &&
-                                    isWalletConnected &&
+                                {isWalletConnected &&
                                     (overtimeVoucher ? (
                                         <WalletBalanceInfo>
                                             <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
