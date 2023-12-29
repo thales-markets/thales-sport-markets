@@ -852,7 +852,8 @@
         },
         "parlay-lp": {
             "title": "Parlay LP"
-        }
+        },
+        "deprecated-info": "Obsolète, veuillez retirer vos fonds !"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",

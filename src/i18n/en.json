@@ -887,7 +887,8 @@
                 "withdrawalRequest": "Withdrawal Request",
                 "claim": "Withdrawal Claim"
             }
-        }
+        },
+        "deprecated-info": "Deprecated, please withdraw your funds!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",

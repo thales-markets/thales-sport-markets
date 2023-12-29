@@ -852,7 +852,8 @@
         },
         "parlay-lp": {
             "title": "Парлай ЛП"
-        }
+        },
+        "deprecated-info": "Устарело, пожалуйста, выведите свои средства!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",

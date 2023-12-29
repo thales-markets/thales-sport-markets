@@ -1,7 +1,7 @@
 import SPAAnchor from 'components/SPAAnchor';
 import SimpleLoader from 'components/SimpleLoader';
 import TimeRemaining from 'components/TimeRemaining';
-import { VAULT_MAP } from 'constants/vault';
+import { DEPRECATED_VAULTS, VAULT_MAP } from 'constants/vault';
 import i18n from 'i18n';
 import useVaultDataQuery from 'queries/vault/useVaultDataQuery';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -17,6 +17,7 @@ import { ThemeInterface } from 'types/ui';
 import { VaultData } from 'types/vault';
 import { buildVaultLink } from 'utils/routes';
 import {
+    DeprecatedInfo,
     LoaderContainer,
     NewBadge,
     SpaContainer,
@@ -65,6 +66,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
     return (
         <SpaContainer>
             <SPAAnchor href={buildVaultLink(vaultId, language)}>
+                {DEPRECATED_VAULTS.includes(vaultId) && <DeprecatedInfo>{t(`vault.deprecated-info`)}</DeprecatedInfo>}
                 <FlexDivColumn style={{ height: '100%' }}>
                     <VaultContainer>
                         <VaultTitle>
@@ -78,7 +80,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                             </LoaderContainer>
                         ) : (
                             <FlexDivColumn>
-                                <VaultTopWrapper>
+                                <VaultTopWrapper deprecatedVault={vaultId == 'parlay-discount-vault'}>
                                     <VaultSectionDescription>
                                         <Trans
                                             i18nKey={`vault.${vaultId}.description`}
