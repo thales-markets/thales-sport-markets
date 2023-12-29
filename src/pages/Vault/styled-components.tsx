@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import {
+    Colors,
+    FlexDiv,
     FlexDivCentered,
     FlexDivColumn,
     FlexDivColumnCentered,
-    FlexDivStart,
     FlexDivRow,
-    FlexDiv,
+    FlexDivStart,
 } from 'styles/common';
 
 export const Wrapper = styled(FlexDivColumn)`
@@ -25,6 +26,16 @@ export const Container = styled(FlexDivRow)`
         flex-direction: column;
         margin-top: 10px;
     }
+`;
+
+export const DeprecatedContainer = styled(FlexDiv)`
+    width: 80%;
+    background-color: ${Colors.GRAY_LIGHT};
+    border-radius: 15px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
 `;
 
 const ContentContainer = styled(FlexDivColumn)`

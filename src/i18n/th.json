@@ -852,7 +852,8 @@
         },
         "parlay-lp": {
             "title": "หจก.พาร์เลย์"
-        }
+        },
+        "deprecated-info": "เลิกใช้แล้ว โปรดถอนเงินของคุณ!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",

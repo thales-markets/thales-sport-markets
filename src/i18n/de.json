@@ -852,7 +852,8 @@
         },
         "parlay-lp": {
             "title": "Parlay-LP"
-        }
+        },
+        "deprecated-info": "Veraltet, bitte heben Sie Ihr Geld ab!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",

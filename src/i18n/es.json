@@ -852,7 +852,8 @@
         },
         "parlay-lp": {
             "title": "Parlay LP"
-        }
+        },
+        "deprecated-info": "En desuso, ¡retire sus fondos!"
     },
     "parlay-leaderboard": {
         "title": "Leaderboard de incentivos en Parlays",

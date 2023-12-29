@@ -852,7 +852,8 @@
         },
         "parlay-lp": {
             "title": "连本带利LP"
-        }
+        },
+        "deprecated-info": "已弃用，请撤回资金！"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
