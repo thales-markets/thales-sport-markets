@@ -165,7 +165,9 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
         () =>
             getCollateralAddress(
                 networkId,
-                isEth ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateralIndex
+                isEth
+                    ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins, isParticle)
+                    : selectedCollateralIndex
             ),
         [networkId, selectedCollateralIndex, isEth]
     );

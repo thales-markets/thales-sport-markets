@@ -168,13 +168,18 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
         () =>
             getCollateralAddress(
                 networkId,
-                isEth ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateralIndex,
+                isEth
+                    ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins, isParticle)
+                    : selectedCollateralIndex,
                 isParticle
             ),
         [networkId, selectedCollateralIndex, isEth, isParticle]
     );
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
+
+    console.log('selected collateral: ', selectedCollateral);
+    console.log('default collateral: ', isDefaultCollateral);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -252,6 +257,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract && amountForQuote) {
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
+                console.log('collateral address: ', collateralAddress);
                 const ammQuote = await getSportsAMMQuoteMethod(
                     collateralAddress,
                     isDefaultCollateral,
