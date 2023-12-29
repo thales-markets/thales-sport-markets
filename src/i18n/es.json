@@ -271,7 +271,9 @@
             "no-results-for-wallet": "No hay transacciones asociadas con esta billetera.",
             "usd-value-col": "valor usd",
             "game-col": "juego",
-            "result-col": "resultado"
+            "result-col": "resultado",
+            "parlay-title": "Actividad parlay reciente",
+            "single-title": "Actividad única reciente"
         },
         "tooltip": {
             "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
@@ -850,7 +852,8 @@
         },
         "parlay-lp": {
             "title": "Parlay LP"
-        }
+        },
+        "deprecated-info": "En desuso, ¡retire sus fondos!"
     },
     "parlay-leaderboard": {
         "title": "Leaderboard de incentivos en Parlays",

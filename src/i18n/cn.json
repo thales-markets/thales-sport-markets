@@ -271,7 +271,9 @@
             "no-results-for-wallet": "没有与此钱包相关的交易。",
             "game-col": "游戏",
             "usd-value-col": "美元价值",
-            "result-col": "结果"
+            "result-col": "结果",
+            "parlay-title": "最近的连本带利活动",
+            "single-title": "近期单一活动"
         },
         "tooltip": {
             "amount-exceeded": "金额超过AMM的余额。",
@@ -850,7 +852,8 @@
         },
         "parlay-lp": {
             "title": "连本带利LP"
-        }
+        },
+        "deprecated-info": "已弃用，请撤回资金！"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",

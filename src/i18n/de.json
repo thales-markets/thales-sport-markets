@@ -271,7 +271,9 @@
             "no-results-for-wallet": "Mit diesen Wallet sind keine Transaktionen verbunden.",
             "result-col": "Ergebnis",
             "usd-value-col": "USD-Wert",
-            "game-col": "Spiel"
+            "game-col": "Spiel",
+            "parlay-title": "Aktuelle Parlay-Aktivität",
+            "single-title": "Letzte Einzelaktivität"
         },
         "tooltip": {
             "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
@@ -850,7 +852,8 @@
         },
         "parlay-lp": {
             "title": "Parlay-LP"
-        }
+        },
+        "deprecated-info": "Veraltet, bitte heben Sie Ihr Geld ab!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
