@@ -169,7 +169,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                     ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins, isParticle)
                     : selectedCollateralIndex
             ),
-        [networkId, selectedCollateralIndex, isEth]
+        [networkId, selectedCollateralIndex, isEth, isParticle]
     );
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;

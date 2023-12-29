@@ -178,9 +178,6 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
 
-    console.log('selected collateral: ', selectedCollateral);
-    console.log('default collateral: ', isDefaultCollateral);
-
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
     useEffect(() => {
