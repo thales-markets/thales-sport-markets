@@ -91,7 +91,8 @@ const BalanceDetails: React.FC = () => {
                                             ? '...'
                                             : ` (${formatCurrencyWithSign(
                                                   USD_SIGN,
-                                                  getUSDForCollateral(token as Coins)
+                                                  getUSDForCollateral(token as Coins),
+                                                  2
                                               )})`}
                                     </IndividualTokenBalance>
                                 </RightTokenBalanceWrapper>
