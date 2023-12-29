@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import {
-    Colors,
     FlexDiv,
     FlexDivCentered,
     FlexDivColumn,
@@ -30,7 +29,7 @@ export const Container = styled(FlexDivRow)`
 
 export const DeprecatedContainer = styled(FlexDiv)`
     width: 80%;
-    background-color: ${Colors.GRAY_LIGHT};
+    background-color: ${(props) => props.theme.background.tertiary};
     border-radius: 15px;
     height: 50px;
     align-items: center;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Colors, FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 
 export const SpaContainer = styled(FlexDivColumn)`
     border-radius: 15px;
@@ -28,7 +28,7 @@ export const SpaContainer = styled(FlexDivColumn)`
 
 export const DeprecatedInfo = styled(FlexDiv)`
     height: 50px;
-    background-color: ${Colors.GRAY_LIGHT};
+    background-color: ${(props) => props.theme.background.tertiary};
     border-radius: 15px 15px 0px 0px;
     align-items: center;
     justify-content: center;
