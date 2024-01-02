@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRowCentered } from 'styles/common';
 
 export const SpaContainer = styled(FlexDivColumn)`
     border-radius: 15px;
@@ -26,6 +26,15 @@ export const SpaContainer = styled(FlexDivColumn)`
     max-width: 400px;
 `;
 
+export const DeprecatedInfo = styled(FlexDiv)`
+    height: 50px;
+    background-color: ${(props) => props.theme.background.tertiary};
+    border-radius: 15px 15px 0px 0px;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+`;
+
 export const VaultContainer = styled(FlexDivColumn)`
     align-items: start;
     font-weight: 400;
@@ -38,7 +47,9 @@ export const VaultContainer = styled(FlexDivColumn)`
     height: 100%;
 `;
 
-export const VaultTopWrapper = styled(FlexDivColumn)``;
+export const VaultTopWrapper = styled(FlexDivColumn)<{ deprecatedVault?: boolean }>`
+    flex-grow: ${(props) => (props.deprecatedVault ? 0 : 1)};
+`;
 
 export const VaultBottomWrapper = styled(FlexDivRowCentered)`
     align-self: center;

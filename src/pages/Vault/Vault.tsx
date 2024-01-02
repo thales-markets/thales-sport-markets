@@ -1,79 +1,74 @@
+import ApprovalModal from 'components/ApprovalModal';
+import Button from 'components/Button';
+import SimpleLoader from 'components/SimpleLoader';
+import TimeRemaining from 'components/TimeRemaining';
+import Toggle from 'components/Toggle/Toggle';
+import Tooltip from 'components/Tooltip';
+import NumericInput from 'components/fields/NumericInput';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { USD_SIGN } from 'constants/currency';
+import ROUTES from 'constants/routes';
+import { DEPRECATED_VAULTS, VAULT_MAP, isParlayVault } from 'constants/vault';
+import { VaultTab } from 'enums/vault';
+import { BigNumber, ethers } from 'ethers';
+import BackToLink from 'pages/Markets/components/BackToLink';
+import { NewBadge } from 'pages/Vaults/VaultOverview/styled-components';
+import useUserVaultDataQuery from 'queries/vault/useUserVaultDataQuery';
+import useVaultDataQuery from 'queries/vault/useVaultDataQuery';
+import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import BackToLink from 'pages/Markets/components/BackToLink';
-import ROUTES from 'constants/routes';
-import { buildHref } from 'utils/routes';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { getIsAppReady } from 'redux/modules/app';
+import { getIsWalletConnected, getNetworkId, getWalletAddress, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { useTheme } from 'styled-components';
+import { coinParser, formatCurrency, formatCurrencyWithSign, formatPercentage } from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
+import { UserVaultData, VaultData } from 'types/vault';
+import { getDefaultCollateral } from 'utils/collaterals';
+import vaultContract from 'utils/contracts/sportVaultContract';
+import { checkAllowance } from 'utils/network';
+import networkConnector from 'utils/networkConnector';
+import { refetchVaultData } from 'utils/queryConnector';
+import { buildHref, navigateTo } from 'utils/routes';
+import PnL from './PnL';
+import Transactions from './Transactions';
 import {
-    Container,
-    Title,
+    BoldContent,
     ButtonContainer,
-    InputContainer,
-    Wrapper,
-    ToggleContainer,
+    Container,
+    ContentInfo,
+    ContentInfoContainer,
+    DeprecatedContainer,
     Description,
+    InputContainer,
+    LeftContainer,
+    LeftLoaderContainer,
+    RightContainer,
+    RightLoaderContainer,
+    RoundAllocation,
+    RoundAllocationContainer,
+    RoundAllocationLabel,
+    RoundAllocationWrapper,
+    RoundEnd,
+    RoundEndContainer,
+    RoundEndLabel,
+    RoundInfo,
+    RoundInfoContainer,
+    RoundInfoWrapper,
+    Title,
+    TitleVaultIcon,
+    ToggleContainer,
+    UsersInVaultText,
     VaultFilledGraphicContainer,
     VaultFilledGraphicPercentage,
     VaultFilledText,
-    RoundInfoWrapper,
-    RoundInfoContainer,
-    RoundInfo,
-    LeftContainer,
-    RightContainer,
-    ContentInfoContainer,
-    ContentInfo,
-    BoldContent,
     WarningContentInfo,
-    LeftLoaderContainer,
-    RightLoaderContainer,
-    RoundEndContainer,
-    RoundEndLabel,
-    RoundEnd,
-    RoundAllocationContainer,
-    RoundAllocationLabel,
-    RoundAllocation,
-    RoundAllocationWrapper,
-    TitleVaultIcon,
-    UsersInVaultText,
+    Wrapper,
 } from './styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import {
-    getIsWalletConnected,
-    getNetworkId,
-    getWalletAddress,
-    setWalletConnectModalVisibility,
-} from 'redux/modules/wallet';
-import { isParlayVault, VAULT_MAP } from 'constants/vault';
-import NumericInput from 'components/fields/NumericInput';
-import { getIsAppReady } from 'redux/modules/app';
-import { UserVaultData, VaultData } from 'types/vault';
-import useVaultDataQuery from 'queries/vault/useVaultDataQuery';
-import { formatCurrencyWithSign, formatPercentage, formatCurrency, coinParser } from 'thales-utils';
-import { USD_SIGN } from 'constants/currency';
-import TimeRemaining from 'components/TimeRemaining';
-import useUserVaultDataQuery from 'queries/vault/useUserVaultDataQuery';
-import networkConnector from 'utils/networkConnector';
-import { toast } from 'react-toastify';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import ApprovalModal from 'components/ApprovalModal';
-import { checkAllowance } from 'utils/network';
-import { BigNumber, ethers } from 'ethers';
-import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
-import SimpleLoader from 'components/SimpleLoader';
-import Transactions from './Transactions';
-import PnL from './PnL';
-import { RouteComponentProps } from 'react-router-dom';
-import vaultContract from 'utils/contracts/sportVaultContract';
-import Toggle from 'components/Toggle/Toggle';
-import Tooltip from 'components/Tooltip';
-import { refetchVaultData } from 'utils/queryConnector';
-import { NewBadge } from 'pages/Vaults/VaultOverview/styled-components';
-import Button from 'components/Button';
-import { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
-import { VaultTab } from 'enums/vault';
-import { getDefaultCollateral } from 'utils/collaterals';
-import { navigateTo } from 'utils/routes';
 
 type VaultProps = RouteComponentProps<{
     vaultId: string;
@@ -457,6 +452,9 @@ const Vault: React.FC<VaultProps> = (props) => {
                         )}
                     </RoundInfoWrapper>
                 </>
+            )}
+            {DEPRECATED_VAULTS.includes(vaultId) && (
+                <DeprecatedContainer>{t(`vault.deprecated-info`)}</DeprecatedContainer>
             )}
             <Container>
                 <LeftContainer>
