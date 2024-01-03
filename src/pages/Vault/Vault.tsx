@@ -341,6 +341,7 @@ const Vault: React.FC<VaultProps> = (props) => {
                 </Button>
             );
         }
+
         if (insufficientBalance) {
             return <Button disabled={true}>{t(`common.errors.insufficient-balance`)}</Button>;
         }
