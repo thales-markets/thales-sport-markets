@@ -47,6 +47,10 @@ export const PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS = 6;
 // New rewards distribution from 11/10/2023
 export const PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM = 15;
 export const PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000 = [500, 350, 250, 200, 170, 140, 120, 100, 90, 80];
+
+// New rewards distribution from 03/01/2024
+export const PARLAY_LEADERBOARD_NEW_REWARDS_1000_OP_PERIOD_FROM = 22;
+
 // ------------------------------
 
 export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20 = [
