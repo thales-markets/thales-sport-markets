@@ -12,6 +12,7 @@ import {
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
     PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC_BASE,
     PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS,
+    PARLAY_LEADERBOARD_NEW_REWARDS_1000_OP_PERIOD_FROM,
     PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
@@ -742,7 +743,10 @@ export const getRewardsArray = (networkId: Network, period: number): number[] =>
         return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
     }
     if (period > PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM) {
-        if (networkId == Network.Arbitrum || networkId == Network.OptimismMainnet)
+        if (
+            networkId == Network.Arbitrum ||
+            (networkId == Network.OptimismMainnet && period < PARLAY_LEADERBOARD_NEW_REWARDS_1000_OP_PERIOD_FROM)
+        )
             return PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000;
         return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
     } else if (period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS) {
@@ -755,7 +759,10 @@ export const getRewardsArray = (networkId: Network, period: number): number[] =>
 };
 
 const getRewardsAmount = (networkId: Network, period: number) => {
-    if (period <= PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM) {
+    if (
+        period <= PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM ||
+        (networkId == Network.OptimismMainnet && period >= PARLAY_LEADERBOARD_NEW_REWARDS_1000_OP_PERIOD_FROM)
+    ) {
         if (networkId == Network.Arbitrum) return '1,000 ARB';
         if (networkId == Network.OptimismMainnet) return '1,000 OP';
         return '1,000 THALES';
