@@ -27,6 +27,12 @@ export const buildLpLink = (language: string, lpType: string, excludeSlash = fal
         lpType == 'parlay' ? ROUTES.ParlayLiquidityPool : ROUTES.SingleLiquidityPool
     }&lang=${language}`;
 
+export const buildDepositOrWithdrawLink = (language: string, page: string, coinIndex: number, excludeSlash = false) => {
+    return `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${
+        page == 'withdraw' ? ROUTES.Withdraw : ROUTES.Deposit
+    }?lang=${language}&coin-index=${coinIndex}`;
+};
+
 export const buildReffererLink = (reffererID: string) => {
     return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${
         ROUTES.Markets.Home

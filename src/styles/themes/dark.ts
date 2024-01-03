@@ -31,6 +31,7 @@ export default {
             secondary: Colors.WHITE,
             tertiary: Colors.ORANGE,
             quaternary: Colors.BLUE,
+            quinary: Colors.GRAY,
         },
         borderColor: {
             primary: Colors.GREEN,
@@ -41,12 +42,14 @@ export default {
     input: {
         background: {
             primary: Colors.WHITE,
+            secondary: Colors.GRAY_DARK,
             selection: {
                 primary: Colors.GRAY_LIGHT,
             },
         },
         textColor: {
             primary: Colors.GRAY_DARK,
+            secondary: Colors.BLUE,
         },
         borderColor: {
             primary: Colors.WHITE,
@@ -125,5 +128,21 @@ export default {
     },
     chart: {
         primary: Colors.PURPLE,
+    },
+    connectWalletModal: {
+        secondaryText: Colors.WHITE,
+        border: Colors.GRAY_LIGHT,
+        buttonBackground: Colors.GRAY_LIGHT,
+        modalBackground: Colors.GRAY_DARK,
+        hover: Colors.BLUE,
+        hoverText: Colors.GRAY_DARK,
+        errorMessage: Colors.RED,
+        warningBackground: Colors.RED,
+        warningText: Colors.WHITE,
+        totalBalanceBackground: Colors.GRAY_SECOND,
+    },
+    progressBar: {
+        selected: Colors.BLUE,
+        unselected: Colors.WHITE,
     },
 };

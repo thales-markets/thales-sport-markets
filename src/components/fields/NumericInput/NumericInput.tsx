@@ -19,6 +19,8 @@ type NumericInputProps = {
     showValidation?: boolean;
     validationMessage?: string;
     currencyComponent?: any;
+    readonly?: boolean;
+    inputType?: 'text' | 'number';
     currencyLabel?: string;
     tooltip?: string;
     onMaxButton?: any;
@@ -51,6 +53,8 @@ const NumericInput: React.FC<NumericInputProps> = ({
     showValidation,
     validationMessage,
     currencyComponent,
+    readonly,
+    inputType,
     currencyLabel,
     tooltip,
     onMaxButton,
@@ -112,9 +116,10 @@ const NumericInput: React.FC<NumericInputProps> = ({
                 arrow={true}
             >
                 <StyledInput
+                    readOnly={readonly}
                     {...rest}
                     value={value}
-                    type="number"
+                    type={inputType ? inputType : 'number'}
                     onChange={handleOnChange}
                     placeholder={placeholder}
                     disabled={disabled}
@@ -164,7 +169,8 @@ const NumericInput: React.FC<NumericInputProps> = ({
     );
 };
 
-const StyledInput = styled(Input)<{ padding?: string }>`
+const StyledInput = styled(Input)<{ padding?: string; readonly?: boolean }>`
+    cursor: ${(props) => (props.readOnly ? 'pointer' : '')};
     padding: ${(props) => props.padding || '5px 100px 5px 10px'};
 `;
 

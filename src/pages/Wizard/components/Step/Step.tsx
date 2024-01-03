@@ -1,6 +1,7 @@
 import { useAccountModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import SwapModal from 'components/SwapModal';
 import ROUTES from 'constants/routes';
+import { WizardStep } from 'enums/wizard';
 import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,11 +10,10 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { getDefaultCollateral } from 'utils/collaterals';
 import { getDefaultNetworkName, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import FundModal from '../FundModal';
-import { WizardStep } from 'enums/wizard';
-import { getDefaultCollateral } from 'utils/collaterals';
 
 type StepProps = {
     stepNumber: number;

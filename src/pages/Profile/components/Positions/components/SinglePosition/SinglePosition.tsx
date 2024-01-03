@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { ParlaysMarket, SportMarketLiveResult } from 'types/markets';
@@ -80,6 +80,7 @@ import {
     TeamScoreLabel,
     Wrapper,
 } from './styled-components';
+import { executeBiconomyTransaction } from 'utils/biconomy';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;
@@ -99,6 +100,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isAA = useSelector((state: RootState) => getIsAA(state));
     const isWalletConnect = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlayPayment = useSelector(getParlayPayment);
     const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
@@ -115,13 +117,15 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isAA), [
         networkId,
         selectedCollateralIndex,
+        isAA,
     ]);
-    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
+    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex, isAA), [
         networkId,
         selectedCollateralIndex,
+        isAA,
     ]);
 
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
@@ -217,14 +221,26 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
-                const tx = isDefaultCollateral
-                    ? await contract.exerciseOptions()
-                    : await sportsAMMContractWithSigner.exerciseWithOfframp(
-                          position.market.address,
-                          collateralAddress,
-                          isEth
-                      );
-                const txResult = await tx.wait();
+                let txResult;
+                if (isAA) {
+                    txResult = isDefaultCollateral
+                        ? await executeBiconomyTransaction(collateralAddress, contract, 'exerciseOptions')
+                        : await executeBiconomyTransaction(
+                              collateralAddress,
+                              sportsAMMContractWithSigner,
+                              'exerciseWithOfframp',
+                              [position.market.address, collateralAddress, isEth]
+                          );
+                } else {
+                    const tx = isDefaultCollateral
+                        ? await contract.exerciseOptions()
+                        : await sportsAMMContractWithSigner.exerciseWithOfframp(
+                              position.market.address,
+                              collateralAddress,
+                              isEth
+                          );
+                    txResult = await tx.wait();
+                }
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
@@ -423,7 +439,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                     <CollateralSelectorContainer>
                                         <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
                                         <CollateralSelector
-                                            collateralArray={getCollaterals(networkId)}
+                                            collateralArray={getCollaterals(networkId, isAA)}
                                             selectedItem={selectedCollateralIndex}
                                             onChangeCollateral={() => {}}
                                         />
@@ -440,7 +456,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                     <ColumnDirectionInfo>
                                         <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
                                         <CollateralSelector
-                                            collateralArray={getCollaterals(networkId)}
+                                            collateralArray={getCollaterals(networkId, isAA)}
                                             selectedItem={selectedCollateralIndex}
                                             onChangeCollateral={() => {}}
                                         />

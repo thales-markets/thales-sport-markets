@@ -1,24 +1,28 @@
+import { ParticleProvider } from '@particle-network/provider';
 import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
 import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
 import ROUTES from 'constants/routes';
+import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
 import Wizard from 'pages/Wizard';
-import { lazy, Suspense, useEffect } from 'react';
+import { Suspense, lazy, useContext, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
 import {
+    getIsConnectedViaParticle,
     getNetworkId,
     getSwitchToNetworkId,
     switchToNetworkId,
     updateNetworkSettings,
+    updateParticleState,
     updateWallet,
 } from 'redux/modules/wallet';
 import { isMobile } from 'utils/device';
@@ -27,6 +31,7 @@ import networkConnector from 'utils/networkConnector';
 import queryConnector from 'utils/queryConnector';
 import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
+import { ParticleContext } from './Provider/ParticleProvider/ParticleProvider';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
@@ -38,11 +43,15 @@ const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
+const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
+const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
+const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 
 const App = () => {
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
+    const isConnectedViaParticle = useSelector((state) => getIsConnectedViaParticle(state));
 
     const { address } = useAccount();
     const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
@@ -52,16 +61,24 @@ const App = () => {
 
     queryConnector.setQueryClient();
 
+    const particle = useContext(ParticleContext);
+
     useEffect(() => {
         const init = async () => {
             try {
                 const chainIdFromProvider = (await provider.getNetwork()).chainId;
                 const providerNetworkId = !!address ? chainIdFromProvider : switchedToNetworkId;
+                let web3Provider;
+
+                if (particle && particle?.auth?.isLogin()) {
+                    const particleProvider = new ParticleProvider(particle.auth);
+                    web3Provider = new ethers.providers.Web3Provider(particleProvider, 'any');
+                }
 
                 networkConnector.setNetworkSettings({
                     networkId: providerNetworkId,
                     provider,
-                    signer,
+                    signer: web3Provider ? web3Provider.getSigner() : signer,
                 });
 
                 dispatch(
@@ -77,11 +94,16 @@ const App = () => {
             }
         };
         init();
-    }, [dispatch, provider, signer, switchedToNetworkId, address]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, provider, signer, switchedToNetworkId, address, particle?.auth]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
     }, [address, dispatch]);
+
+    useEffect(() => {
+        dispatch(updateParticleState({ connectedViaParticle: !!particle?.auth?.isLogin() }));
+    }, [dispatch, particle, address, signer]);
 
     useEffect(() => {
         const handlePageResized = () => {
@@ -168,9 +190,23 @@ const App = () => {
                                         </DappLayout>
                                     </Route>
                                 )}
+
+                                <Route exact path={ROUTES.Deposit}>
+                                    <DappLayout>
+                                        <Deposit />
+                                    </DappLayout>
+                                </Route>
+
+                                <Route exact path={ROUTES.Withdraw}>
+                                    <DappLayout>
+                                        <Withdraw />
+                                    </DappLayout>
+                                </Route>
+
                                 <Route exact path={ROUTES.Wizard}>
                                     <DappLayout>
-                                        <Wizard />
+                                        {isConnectedViaParticle && <GetStarted />}
+                                        {!isConnectedViaParticle && <Wizard />}
                                     </DappLayout>
                                 </Route>
                                 {isRouteAvailableForNetwork(ROUTES.Quiz, networkId) && (

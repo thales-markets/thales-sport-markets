@@ -21,10 +21,15 @@ import useParlayLiquidityPoolUserDataQuery from 'queries/liquidityPool/useParlay
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
@@ -82,6 +87,8 @@ import {
 
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+
     const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -524,7 +531,19 @@ const LiquidityPool: React.FC = () => {
 
     const getWithdrawButton = () => {
         if (!isWalletConnected) {
-            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
+            return (
+                <Button
+                    onClick={() =>
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: true,
+                            })
+                        )
+                    }
+                >
+                    {t('common.wallet.connect-your-wallet')}
+                </Button>
+            );
         }
         return (
             <Button

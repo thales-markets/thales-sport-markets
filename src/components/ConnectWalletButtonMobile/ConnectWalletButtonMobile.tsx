@@ -1,12 +1,16 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDiv } from '../../styles/common';
 
 const ConnectWalletButtonMobile: React.FC = () => {
+    const dispatch = useDispatch();
+
     return (
         <RainbowConnectButton.Custom>
-            {({ account, chain, openConnectModal, openAccountModal, mounted }) => {
+            {({ account, chain, openAccountModal, mounted }) => {
                 const connected = mounted && account && chain;
 
                 return (
@@ -26,7 +30,13 @@ const ConnectWalletButtonMobile: React.FC = () => {
                                     return (
                                         <ItemIcon
                                             className="icon icon--wallet-disconnected"
-                                            onClick={openConnectModal}
+                                            onClick={() =>
+                                                dispatch(
+                                                    setWalletConnectModalVisibility({
+                                                        visibility: true,
+                                                    })
+                                                )
+                                            }
                                         />
                                     );
                                 }
