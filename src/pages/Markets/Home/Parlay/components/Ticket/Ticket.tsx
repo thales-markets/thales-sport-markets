@@ -915,7 +915,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                             <CollateralSelector
                                 collateralArray={getCollaterals(networkId, isParticle)}
                                 selectedItem={selectedCollateralIndex}
-                                onChangeCollateral={() => {}}
+                                onChangeCollateral={() => {
+                                    setCollateralAmount('');
+                                }}
                                 disabled={isVoucherSelected}
                                 isDetailedView
                                 collateralBalances={multipleCollateralBalances.data}
