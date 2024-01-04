@@ -1044,5 +1044,8 @@
             "title": "Overtime Markets Web3 Sportsbook: {{dynamicTitle}}",
             "description": "{{dynamicTitle}}: Enjoy the best Web3 sportsbook odds on the market. No registration needed. Fully decentralized sports markets."
         }
+    },
+    "banner": {
+        "arb-distribution-message": "ARB distribution has started. Earn ARB by using Overtime. Checkout the details here."
     }
 }
