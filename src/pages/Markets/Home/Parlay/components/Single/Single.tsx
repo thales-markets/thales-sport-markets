@@ -254,7 +254,6 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
             const { sportsAMMContract } = networkConnector;
             if (sportsAMMContract && amountForQuote) {
                 const parsedAmount = ethers.utils.parseEther(roundNumberToDecimals(amountForQuote).toString());
-                console.log('collateral address: ', collateralAddress);
                 const ammQuote = await getSportsAMMQuoteMethod(
                     collateralAddress,
                     isDefaultCollateral,
@@ -876,7 +875,9 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                             <CollateralSelector
                                 collateralArray={getCollaterals(networkId, isParticle)}
                                 selectedItem={selectedCollateralIndex}
-                                onChangeCollateral={() => {}}
+                                onChangeCollateral={() => {
+                                    setCollateralAmount('');
+                                }}
                                 disabled={isVoucherSelected}
                                 isDetailedView
                                 collateralBalances={multipleCollateralBalances.data}

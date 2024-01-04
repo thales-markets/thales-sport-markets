@@ -1,11 +1,23 @@
-import { COLLATERALS_AA, COLLATERAL_DECIMALS, STABLE_COINS } from 'constants/currency';
+import { COLLATERALS_AA, COLLATERAL_DECIMALS, CRYPTO_CURRENCY_MAP, STABLE_COINS } from 'constants/currency';
 import { COLLATERALS } from 'constants/currency';
 
 import multipleCollateral from './contracts/multipleCollateralContract';
 import { Coins } from 'types/tokens';
 import { SupportedNetwork } from 'types/network';
+import { Network } from 'enums/network';
 
-export const getDefaultCollateral = (networkId: SupportedNetwork) => COLLATERALS[networkId][0];
+export const getDefaultCollateral = (networkId: SupportedNetwork) => {
+    if (networkId === Network.OptimismMainnet) {
+        return CRYPTO_CURRENCY_MAP.sUSD as Coins;
+    }
+    if (networkId === Network.Arbitrum) {
+        return CRYPTO_CURRENCY_MAP.USDCe as Coins;
+    }
+    if (networkId === Network.Base) {
+        return CRYPTO_CURRENCY_MAP.USDC as Coins;
+    }
+    return COLLATERALS[networkId][0];
+};
 
 export const getCollateral = (networkId: SupportedNetwork, index: number, isAA?: boolean) =>
     isAA ? COLLATERALS_AA[networkId][index] : COLLATERALS[networkId][index];
