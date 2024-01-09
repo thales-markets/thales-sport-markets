@@ -96,7 +96,11 @@ const WalletInfo: React.FC = ({}) => {
                                     <WalletAddressInfo
                                         isWalletConnected={isWalletConnected}
                                         isClickable={true}
-                                        onClick={openAccountModal}
+                                        onClick={
+                                            !isConnectedViaParticle
+                                                ? openAccountModal
+                                                : () => window.open(PARTICLE_WALLET, '_blank')
+                                        }
                                     >
                                         <Text className="wallet-info">
                                             {isWalletConnected
@@ -218,5 +222,7 @@ const Currency = styled(Text)`
     font-weight: bold;
     margin-left: 2px;
 `;
+
+const PARTICLE_WALLET = 'https://wallet.particle.network/';
 
 export default WalletInfo;
