@@ -20,9 +20,6 @@ const useParlayLiquidityPoolUserDataQuery = (
                 isWithdrawalRequested: false,
                 hasDepositForCurrentRound: false,
                 hasDepositForNextRound: false,
-                stakedThales: 0,
-                maxDeposit: 0,
-                availableToDeposit: 0,
                 withdrawalShare: 0,
                 isPartialWithdrawalRequested: false,
                 withdrawalAmount: 0,
@@ -64,15 +61,6 @@ const useParlayLiquidityPoolUserDataQuery = (
 
                     userLiquidityPoolData.hasDepositForCurrentRound = userLiquidityPoolData.balanceCurrentRound > 0;
                     userLiquidityPoolData.hasDepositForNextRound = userLiquidityPoolData.balanceNextRound > 0;
-                    userLiquidityPoolData.maxDeposit = bigNumberFormatter(
-                        contractUserLiquidityPoolData.maxDeposit,
-                        decimals
-                    );
-                    userLiquidityPoolData.stakedThales = bigNumberFormatter(contractUserLiquidityPoolData.stakedThales);
-                    userLiquidityPoolData.availableToDeposit = bigNumberFormatter(
-                        contractUserLiquidityPoolData.availableToDeposit,
-                        decimals
-                    );
 
                     return userLiquidityPoolData;
                 }

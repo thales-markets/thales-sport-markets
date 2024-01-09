@@ -531,12 +531,11 @@ const LiquidityPool: React.FC = () => {
 
     const infoGraphicPercentages = getInfoGraphicPercentages(
         userLiquidityPoolData ? userLiquidityPoolData.balanceCurrentRound : 0,
-        userLiquidityPoolData ? userLiquidityPoolData.balanceTotal : 0,
-        userLiquidityPoolData ? userLiquidityPoolData.maxDeposit : 0
+        userLiquidityPoolData ? userLiquidityPoolData.balanceTotal : 0
     );
 
     const setMaxAmount = () => {
-        setAmount(Math.trunc(userLiquidityPoolData ? userLiquidityPoolData.availableToDeposit * 100 : 0) / 100);
+        setAmount(0);
     };
 
     return (
@@ -1070,30 +1069,22 @@ const LiquidityPool: React.FC = () => {
     );
 };
 
-const getInfoGraphicPercentages = (currentBalance: number, nextRoundBalance: number, maxAllowance: number) => {
+const getInfoGraphicPercentages = (currentBalance: number, nextRoundBalance: number) => {
     let currentBalancePercenatage = 1;
     let nextRoundBalancePercenatage = 1;
-    let maxAllowancePercenatage = 1;
 
-    if (maxAllowance > currentBalance && maxAllowance > nextRoundBalance) {
-        currentBalancePercenatage = currentBalance / maxAllowance;
-        nextRoundBalancePercenatage = nextRoundBalance / maxAllowance;
-    } else if (currentBalance > nextRoundBalance) {
-        maxAllowancePercenatage = maxAllowance / currentBalance;
+    if (currentBalance > nextRoundBalance) {
         nextRoundBalancePercenatage = nextRoundBalance / currentBalance;
     } else if (nextRoundBalance === 0) {
         currentBalancePercenatage = 0;
         nextRoundBalancePercenatage = 0;
-        maxAllowancePercenatage = 0;
     } else {
-        maxAllowancePercenatage = maxAllowance / nextRoundBalance;
         currentBalancePercenatage = currentBalance / nextRoundBalance;
     }
 
     return {
         currentBalancePercenatage,
         nextRoundBalancePercenatage,
-        maxAllowancePercenatage,
     };
 };
 
