@@ -4,3 +4,9 @@ export enum WizardStep {
     EXCHANGE,
     TRADE,
 }
+
+export enum GetStartedStep {
+    LOG_IN,
+    DEPOSIT,
+    TRADE,
+}

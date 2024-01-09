@@ -25,6 +25,10 @@
     content: '\004D';
 }
 
+.icon-exotic--up:before {
+    content: '\004C';
+}
+
 .icon-exotic--link:before {
     content: '\004E';
 }

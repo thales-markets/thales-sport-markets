@@ -37,7 +37,7 @@ import {
 } from './styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getWalletAddress, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import {
     getIsQuizStarted,
     startQuiz,
@@ -79,7 +79,6 @@ import HelpUsImprove from './HelpUsImprove';
 import useQuizLeaderboardQuery from 'queries/quiz/useQuizLeaderboardQuery';
 import { FinishInfo, LeaderboardItem } from 'types/quiz';
 import ordinal from 'ordinal';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import TextInput from 'components/fields/TextInput';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -104,8 +103,6 @@ const Quiz: React.FC = () => {
     const [percentageTimeRemaining, setPercentageTimeRemaining] = useState<number>(0);
     const [isTwitterValid, setIsTwitterValid] = useState<boolean>(true);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-    const { openConnectModal } = useConnectModal();
 
     const isStartQuizDisabled = !twitter || twitter.trim() === '' || isSubmitting;
     const isQuizInProgress = isQuizStarted && !isQuizFinished && currentQuizItem;
@@ -215,7 +212,16 @@ const Quiz: React.FC = () => {
     const getSubmitButton = () => {
         if (!isWalletConnected && !isQuizFinished) {
             return (
-                <Button onClick={() => openConnectModal?.()} {...defaultButtonProps}>
+                <Button
+                    onClick={() =>
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: true,
+                            })
+                        )
+                    }
+                    {...defaultButtonProps}
+                >
                     {t('common.wallet.connect-your-wallet')}
                 </Button>
             );

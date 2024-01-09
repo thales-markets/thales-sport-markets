@@ -8,7 +8,7 @@ type AppSliceState = {
 
 const initialState: AppSliceState = {
     isReady: false,
-    isMobile: false,
+    isMobile: window.innerWidth < 950,
 };
 
 const appSlice = createSlice({

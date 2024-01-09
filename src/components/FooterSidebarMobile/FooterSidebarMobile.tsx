@@ -1,29 +1,28 @@
+import ConnectWalletButtonMobile from 'components/ConnectWalletButtonMobile';
 import SPAAnchor from 'components/SPAAnchor';
+import { ODDS_TYPES } from 'constants/markets';
 import ROUTES from 'constants/routes';
-import React, { useCallback, useEffect, useState } from 'react';
+import { OddsType } from 'enums/markets';
+import { t } from 'i18next';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import OutsideClickHandler from 'react-outside-click-handler';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCombinedPositions, getParlay } from 'redux/modules/parlay';
+import { setOddsType } from 'redux/modules/ui';
+import { getIsWalletConnected } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import { FlexDivCentered } from 'styles/common';
 import { buildHref } from 'utils/routes';
 import {
     Container,
-    ItemContainer,
-    ItemIcon,
-    DropdownContainer,
     DropDown,
     DropDownItem,
+    DropdownContainer,
+    ItemContainer,
+    ItemIcon,
     Label,
     ParlayNumber,
 } from './styled-components';
-import ConnectWalletButtonMobile from 'components/ConnectWalletButtonMobile';
-import { t } from 'i18next';
-import { FlexDivCentered } from 'styles/common';
-import { ODDS_TYPES } from 'constants/markets';
-import { setOddsType } from 'redux/modules/ui';
-import { useDispatch, useSelector } from 'react-redux';
-import OutsideClickHandler from 'react-outside-click-handler';
-import { getParlay } from 'redux/modules/parlay';
-import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected } from 'redux/modules/wallet';
-import { getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
-import { OddsType } from 'enums/markets';
 
 type FooterSidebarMobileProps = {
     setParlayMobileVisibility: (value: boolean) => void;
@@ -34,16 +33,9 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
     const dispatch = useDispatch();
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const parlayMarkets = useSelector(getParlay);
+    const combinedPositions = useSelector(getCombinedPositions);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
     const [pulse, setPulse] = useState(false);
-
-    const combinedMarkets = getCombinedMarketsFromParlayData(parlayMarkets);
-    const ticketLength =
-        parlayMarkets.length > 0
-            ? combinedMarkets.length > 0
-                ? parlayMarkets.length - combinedMarkets.length / 2
-                : parlayMarkets.length
-            : 0;
 
     const setSelectedOddsType = useCallback(
         (oddsType: OddsType) => {
@@ -60,6 +52,10 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
             parlayMarkets.length == 1 ? (parlayMarkets.length + 1) * 1000 : parlayMarkets.length * 1000
         );
     };
+
+    const ticketLength = useMemo(() => {
+        return parlayMarkets.length + combinedPositions.length;
+    }, [parlayMarkets, combinedPositions]);
 
     useEffect(() => {
         animate();
@@ -105,10 +101,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
                     </ItemContainer>
                 )}
                 <ItemContainer onClick={() => setParlayMobileVisibility(true)}>
-                    <ItemIcon
-                        iteration={parlayMarkets.length}
-                        className={`icon icon--parlay ${pulse ? 'pulse' : ''}`}
-                    />
+                    <ItemIcon iteration={ticketLength} className={`icon icon--parlay ${pulse ? 'pulse' : ''}`} />
                     <ParlayNumber>{ticketLength || ''}</ParlayNumber>
                 </ItemContainer>
                 {setShowBurger && (
