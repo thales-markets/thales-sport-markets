@@ -534,10 +534,6 @@ const LiquidityPool: React.FC = () => {
         userLiquidityPoolData ? userLiquidityPoolData.balanceTotal : 0
     );
 
-    const setMaxAmount = () => {
-        setAmount(0);
-    };
-
     return (
         <Wrapper>
             <ToggleContainer>
@@ -648,7 +644,6 @@ const LiquidityPool: React.FC = () => {
                                     onChange={(_, value) => setAmount(value)}
                                     placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                                     currencyLabel={collateral}
-                                    onMaxButton={setMaxAmount}
                                     showValidation={insufficientBalance || exceededLiquidityPoolCap || invalidAmount}
                                     validationMessage={t(
                                         `${
