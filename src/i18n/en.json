@@ -12,6 +12,18 @@
             "sat": "sat",
             "sun": "sun"
         },
+        "login-with": {
+            "discord": "Discord",
+            "twitter": "Twitter",
+            "x": "X",
+            "gmail": "Gmail",
+            "github": "GitHub",
+            "facebook": "Facebook",
+            "apple": "Apple",
+            "twitch": "Twitch",
+            "microsoft": "Microsoft",
+            "linkedin": "Linkedin"
+        },
         "pagination": {
             "page": "Page",
             "rows-per-page": "Rows per page:"
@@ -22,7 +34,15 @@
             }
         },
         "wallet": {
+            "connect-wallet-modal-title": "Log in to OvertimeMarkets",
             "connect-your-wallet": "Connect wallet",
+            "connect-with-wallet": "Connect with wallet",
+            "please-connect": "please, connect wallet to start using overtime.xyz",
+            "or-connect-with": "or connect with",
+            "view-more-options": "View more options",
+            "view-less-options": "View less options",
+            "metamask": "Metamask",
+            "wallet-connect": "Wallet Connect",
             "switch-wallet": "Switch wallet",
             "disconnect-wallet": "Disconnect wallet",
             "wallet-info": "Wallet info",
@@ -32,7 +52,7 @@
             "approve-parlay": "Approve ParlayAMM",
             "approve-sports": "Approve SportsAMM",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>."
+            "disclaimer": "By Singing Up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Thales DAO protocol <disclaimer>disclaimer</disclaimer>."
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -295,6 +315,10 @@
             "lifetime-wins": "Lifetime wins",
             "in-vaults": "In vaults"
         },
+        "wrapper-nav": {
+            "my-tickets": "My tickets",
+            "my-portfolio": "My portfolio"
+        },
         "open-claimable": "Open/Claimable",
         "transaction-history": "Transaction history",
         "vaults": "Vaults/LP",
@@ -524,7 +548,6 @@
             },
             "labels": {
                 "language": "Language",
-                "get-started": "Get started",
                 "march-madness": "March Madness"
             }
         },
@@ -536,6 +559,8 @@
             "parlay-fee": "Parlay fee",
             "safebox-fee": "SafeBox fee",
             "positions": "Positions",
+            "total-gas": "Gas Fee(ESTIMATED)",
+            "gas-tooltip": "Current Gas Fee required by the blockchain to settle the transaction",
             "total-to-pay": "Total to pay",
             "payout": "Payout",
             "potential-profit": "Potential profit",
@@ -736,6 +761,90 @@
             "all-transactions": "All transactions",
             "see-result-by-trader": "See result by trader",
             "affiliate-leaderboard": "Affiliate Leaderboard"
+        }
+    },
+    "deposit": {
+        "deposit-crypto": "Deposit crypto",
+        "description": "To trade on Overtime you have to fund your account. Carefully follow the steps below and deposit the selected cryptocurrency into the generated address.",
+        "or-buy-with": "Or buy with",
+        "select-token": "Select token",
+        "address-input-label": "Your personal {{ token }} deposit address on {{ network }}",
+        "warning": "Your ETH balance is low. Please top up your ETH balance to continue using Overtime",
+        "send": "Make sure you are depositing {{ network }} {{ token }} to the address above!",
+        "copying-address": "Please wait",
+        "copied": "Address copied!",
+        "qr-modal-title": "Send {{ token }} ({{ network }})",
+        "all-set": "You are all set!",
+        "ready-to-use": "Your account is topped up and ready to start using Overtime Markets! You can place trades with ETH or you can deposit other tokens now visible on the deposit page.",
+        "go": "Let's go!",
+        "tutorials": {
+            "title": "Deposit Guides",
+            "coinbase": "Deposit from Coinbase",
+            "binance-mobile": "Deposit from Binance Mobile App",
+            "binance": "Deposit from Binance Website"
+        }
+    },
+    "withdraw": {
+        "address-input-label": "Your personal {{ token }} withdrawal address on {{ network }}",
+        "description": "Use this page to withdraw funds from your Overtime account. Carefully follow the steps below and make sure to double check everything.",
+        "amount": "Amount",
+        "heading-withdraw": "Withdraw crypto",
+        "paste-address": "Paste your wallet address here",
+        "warning": "Double check the Withdrawal Address and make sure it accepts {{ token }} on {{ network }}",
+        "button-label-withdraw": "Withdraw",
+        "confirmation-modal": {
+            "title": "Withdrawal Requested",
+            "correct-address": "Make sure the address is correct and that it accepts {{ token }} on {{ network }}",
+            "withdrawal-transaction-warning": "Withdraw transactions can not be cancelled",
+            "withdrawal-fee": "Withdrawal fee",
+            "address": "Address",
+            "network": "Network",
+            "confirm": "Confirm"
+        },
+        "toast-messages": {
+            "pending": "Transaction pending...",
+            "error": "Some error occurred while withdrawing funds.",
+            "success": "Successfully withdrawal"
+        },
+        "validation": {
+            "wallet-address": "Wallet address is not valid",
+            "amount": "Amount is not valid"
+        }
+    },
+    "my-portfolio": {
+        "estimated-balance": "Estimated balance",
+        "deposit": "Deposit",
+        "withdraw": "Withdraw",
+        "top-up-eth": "Top up ETH",
+        "top-up-eth-tooltip": "Your ETH gas balance is low.\n\nPlease deposit more ETH or swap other deposited tokens for more ETH"
+    },
+    "get-started": {
+        "sign-up": "Sign Up",
+        "log-in": "Log in",
+        "sign-out": "Sign out",
+        "get-started": "Get started",
+        "title": "Get Started on Overtime",
+        "steps": {
+            "title": {
+                "sign-up": "Sign up",
+                "logged-in": "Logged in",
+                "deposit": "Deposit ETH",
+                "trade": "Start using Overtime Markets!"
+            },
+            "description": {
+                "sign-up": "Click on the Sign Up button and choose your Log In method of choice.",
+                "logged-in": "You have successfully created your Overtime Smart Account on the blockchain and are logged in.",
+                "deposit": "To start using Overtime, you have to fund your new account with ETH. Click on the Deposit Now button and choose between a Direct Deposit to Address or Buy With Credit Card.",
+                "trade": "You Account is now funded and you are ready to place your positions on Overtime!"
+            },
+            "action": {
+                "connect-wallet": "Connect Wallet",
+                "connected": "Connected",
+                "deposit": "Deposit",
+                "logged-in": "Logged in",
+                "sign-up": "Sign up",
+                "trade": "Trade on Overtime"
+            }
         }
     },
     "wizard": {

@@ -9,6 +9,7 @@ import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -17,13 +18,20 @@ import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
+import NetworkSwitcher from 'components/NetworkSwitcher';
+import TopUp from './components/TopUp';
 
 const PULSING_COUNT = 10;
 
@@ -64,7 +72,10 @@ const DappHeader: React.FC = () => {
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
+
+    const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
 
     const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
@@ -88,21 +99,83 @@ const DappHeader: React.FC = () => {
         <>
             {!isMobile && (
                 <Container>
-                    <Logo />
-                    <RightContainer>
-                        {location.pathname !== ROUTES.Wizard && (
-                            <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.Wizard)}>
+                    <LeftContainer>
+                        <Logo />
+                        {isWalletConnected && isMarketsPage && (
+                            <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
                                 <Button
-                                    backgroundColor={theme.button.background.tertiary}
+                                    backgroundColor={theme.background.primary}
                                     textColor={theme.button.textColor.quaternary}
                                     borderColor={theme.button.borderColor.secondary}
+                                    width="150px"
                                     fontWeight="400"
-                                    fontSize="12.5px"
+                                    additionalStyles={{
+                                        borderRadius: '20px',
+                                        fontWeight: '700',
+                                        fontSize: '14px',
+                                        textTransform: 'capitalize',
+                                        marginLeft: '20px',
+                                    }}
+                                    height="28px"
                                 >
-                                    {t('markets.nav-menu.labels.get-started')}
+                                    {t('get-started.get-started')}
                                 </Button>
                             </SPAAnchor>
                         )}
+                    </LeftContainer>
+                    <RightContainer>
+                        {!isWalletConnected && (
+                            <Button
+                                backgroundColor={'transparent'}
+                                textColor={theme.button.textColor.quaternary}
+                                borderColor={theme.button.borderColor.secondary}
+                                width="150px"
+                                fontWeight="400"
+                                additionalStyles={{
+                                    borderRadius: '15.5px',
+                                    fontWeight: '800',
+                                    fontSize: '14px',
+                                    marginRight: '10px',
+                                }}
+                                height="28px"
+                                onClick={() =>
+                                    dispatch(
+                                        setWalletConnectModalVisibility({
+                                            visibility: true,
+                                        })
+                                    )
+                                }
+                            >
+                                {t('get-started.log-in')}
+                            </Button>
+                        )}
+                        {!isWalletConnected && (
+                            <Button
+                                backgroundColor={theme.button.background.quaternary}
+                                textColor={theme.button.textColor.primary}
+                                borderColor={theme.button.borderColor.secondary}
+                                fontWeight="400"
+                                additionalStyles={{
+                                    borderRadius: '15.5px',
+                                    fontWeight: '700',
+                                    fontSize: '14px',
+                                    marginRight: '5px',
+                                }}
+                                width="150px"
+                                height="28px"
+                                onClick={() =>
+                                    dispatch(
+                                        setWalletConnectModalVisibility({
+                                            visibility: true,
+                                            origin: 'sign-up',
+                                        })
+                                    )
+                                }
+                            >
+                                {t('get-started.sign-up')}
+                            </Button>
+                        )}
+                        <TopUp />
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
                         <MenuIcon onClick={() => setNavMenuVisibility(true)} />
@@ -155,21 +228,74 @@ const DappHeader: React.FC = () => {
                             />
                         </MenuIconContainer>
                     </WrapperMobile>
-                    {location.pathname !== ROUTES.Wizard && (
-                        <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
-                            <Button
-                                backgroundColor={theme.button.background.secondary}
-                                textColor={theme.button.textColor.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
-                                fontWeight="400"
-                                height="24px"
-                                width="100%"
-                                margin="10px 0 0 0"
-                            >
-                                {t('markets.nav-menu.labels.get-started')}
-                            </Button>
-                        </SPAAnchor>
+
+                    {isWalletConnected && (
+                        <FlexDivCentered>
+                            <WalletInfo />
+                        </FlexDivCentered>
                     )}
+
+                    <MobileButtonWrapper>
+                        {!isWalletConnected ? (
+                            <>
+                                <Button
+                                    backgroundColor={'transparent'}
+                                    textColor={theme.button.textColor.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    width="100%"
+                                    fontWeight="400"
+                                    additionalStyles={{
+                                        maxWidth: 400,
+                                        borderRadius: '15.5px',
+                                        fontWeight: '800',
+                                        fontSize: '14px',
+                                        textTransform: 'capitalize',
+                                    }}
+                                    height="28px"
+                                    onClick={() =>
+                                        dispatch(
+                                            setWalletConnectModalVisibility({
+                                                visibility: true,
+                                            })
+                                        )
+                                    }
+                                >
+                                    {t('get-started.log-in')}
+                                </Button>
+
+                                <Button
+                                    backgroundColor={theme.button.background.quaternary}
+                                    textColor={theme.button.textColor.primary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    fontWeight="400"
+                                    additionalStyles={{
+                                        maxWidth: 400,
+                                        borderRadius: '15.5px',
+                                        fontWeight: '700',
+                                        fontSize: '14px',
+                                        textTransform: 'capitalize',
+                                    }}
+                                    width="100%"
+                                    height="28px"
+                                    onClick={() =>
+                                        dispatch(
+                                            setWalletConnectModalVisibility({
+                                                visibility: true,
+                                            })
+                                        )
+                                    }
+                                >
+                                    {t('get-started.sign-up')}
+                                </Button>
+                                <TopUp />
+                                <NetworkSwitcher />
+                            </>
+                        ) : (
+                            <>
+                                <TopUp />
+                            </>
+                        )}
+                    </MobileButtonWrapper>
                 </>
             )}
         </>
@@ -189,6 +315,10 @@ const Container = styled(FlexDivRowCentered)`
         }
         50% {
             transform: scale(1.2);
+            @media (max-width: 767px) {
+                transform: scale(1.1);
+            }
+
             opacity: 1;
         }
         100% {
@@ -197,6 +327,8 @@ const Container = styled(FlexDivRowCentered)`
         }
     }
 `;
+
+const LeftContainer = styled(FlexDivRowCentered)``;
 
 const RightContainer = styled(FlexDivRowCentered)`
     @media (max-width: 767px) {
@@ -298,6 +430,13 @@ const Count = styled.span`
     color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 800;
     font-size: 12px;
+`;
+
+const MobileButtonWrapper = styled(FlexDivRowCentered)`
+    width: 100%;
+    margin-top: 10px;
+    gap: 20px;
+    min-height: 32px;
 `;
 
 export default DappHeader;

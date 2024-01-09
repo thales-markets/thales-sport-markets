@@ -3,13 +3,23 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@biconomy/account": "^3.1.0",
+        "@biconomy/bundler": "^3.1.0",
+        "@biconomy/common": "^3.1.0",
+        "@biconomy/core-types": "^3.1.0",
+        "@biconomy/modules": "^3.1.0",
+        "@biconomy/paymaster": "^3.1.0",
         "@eth-optimism/contracts": "^0.5.14",
         "@google-cloud/translate": "^6.3.0",
         "@material-ui/core": "^4.11.3",
         "@metamask/detect-provider": "^1.2.0",
+        "@particle-network/auth": "1.2.0",
+        "@particle-network/provider": "1.2.0",
+        "@particle-network/rainbowkit-ext": "1.2.0",
         "@rainbow-me/rainbowkit": "^0.12.16",
         "@reduxjs/toolkit": "^1.7.2",
         "@socket.tech/plugin": "^1.2.4",
+        "@wagmi/chains": "^1.8.0",
         "date-fns": "^2.28.0",
         "ethers": "^5.7.2",
         "hammerjs": "^2.0.8",
@@ -49,6 +59,7 @@
         "thales-data": "1.2.71",
         "thales-utils": "^0.1.2",
         "typescript": "^4.2.2",
+        "viem": "^1.16.3",
         "wagmi": "^0.12.18",
         "web3": "^1.7.4"
     },
@@ -84,14 +95,17 @@
         "eject": "react-scripts eject",
         "prepare": "husky install"
     },
-    "eslintConfig": {
-        "extends": [
-            "react-app"
-        ]
-    },
     "browserslist": [
         ">0.2%",
+        "not ie <= 99",
+        "not android <= 4.4.4",
         "not dead",
         "not op_mini all"
-    ]
+    ],
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    }
 }

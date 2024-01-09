@@ -9,6 +9,13 @@ export const RowSummary = styled.div<{ columnDirection?: boolean }>`
     ${(props) => (props.columnDirection ? `flex-direction: column;` : '')}
 `;
 
+export const GasSummary = styled(RowSummary)<{ columnDirection?: boolean }>`
+    border-top: 2px solid ${(props) => props.theme.background.tertiary};
+    border-bottom: 2px solid ${(props) => props.theme.background.tertiary};
+    margin-top: 2px;
+    margin-bottom: 2px;
+`;
+
 export const RowContainer = styled(FlexDiv)`
     align-items: center;
     width: 100%;

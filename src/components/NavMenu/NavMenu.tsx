@@ -1,3 +1,4 @@
+import Button from 'components/Button';
 import LanguageSelector from 'components/LanguageSelector';
 import MintVoucher from 'components/MintVoucher';
 import SPAAnchor from 'components/SPAAnchor';
@@ -13,12 +14,13 @@ import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
+import { useDisconnect } from 'wagmi';
 import {
     CloseIcon,
     FooterContainer,
@@ -44,9 +46,11 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
     const { t } = useTranslation();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
+    const { disconnect } = useDisconnect();
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
     return (
         <OutsideClickHandler onOutsideClick={() => visibility == true && setNavMenuVisibility(false)}>
@@ -131,7 +135,28 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    <MintVoucher style={{ width: '100%' }} />
+                    {!isConnectedViaParticle && <MintVoucher style={{ width: '100%' }} />}
+                    {isConnectedViaParticle && (
+                        <Button
+                            backgroundColor={theme.button.background.quaternary}
+                            textColor={theme.button.textColor.primary}
+                            borderColor={theme.button.borderColor.secondary}
+                            width="140px"
+                            fontWeight="400"
+                            additionalStyles={{
+                                borderRadius: '5px',
+                                fontSize: '14px',
+                                textTransform: 'capitalize',
+                            }}
+                            height="28px"
+                            onClick={() => {
+                                disconnect();
+                                setNavMenuVisibility(false);
+                            }}
+                        >
+                            {t('get-started.sign-out')}
+                        </Button>
+                    )}
                 </FooterContainer>
             </Wrapper>
         </OutsideClickHandler>

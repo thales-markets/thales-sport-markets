@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/rootReducer';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import { BigNumber, ethers } from 'ethers';
 import { bigNumberFormatter, coinParser } from 'thales-utils';
 import styled from 'styled-components';
@@ -11,7 +11,6 @@ import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { getCollateral } from 'utils/collaterals';
 
 type ApprovalModalProps = {
@@ -32,13 +31,13 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     onClose,
 }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [amount, setAmount] = useState<number | string>(defaultAmount);
     const [approveAll, setApproveAll] = useState<boolean>(true);
     const [isAmountValid, setIsAmountValid] = useState<boolean>(true);
-
-    const { openConnectModal } = useConnectModal();
 
     const maxApproveAmount = bigNumberFormatter(ethers.constants.MaxUint256);
     const isAmountEntered = Number(amount) > 0;
@@ -52,7 +51,19 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
 
     const getSubmitButton = () => {
         if (!isWalletConnected) {
-            return <Button onClick={() => openConnectModal?.()}>{t('common.wallet.connect-your-wallet')}</Button>;
+            return (
+                <Button
+                    onClick={() =>
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: true,
+                            })
+                        )
+                    }
+                >
+                    {t('common.wallet.connect-your-wallet')}
+                </Button>
+            );
         }
         if (!approveAll && !isAmountEntered) {
             return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
