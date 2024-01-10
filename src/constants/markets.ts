@@ -27,11 +27,20 @@ export const INCENTIVIZED_LEAGUE = {
 
 export const INCENTIVIZED_GRAND_SLAM = {
     ids: [9153],
-    startDate: new Date(Date.UTC(2023, 5, 30, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 6, 16, 23, 59, 59)),
-    link: 'https://dune.com/leifu/overtime-wimbledon-campaign-2003',
-    opRewards: '5000 OP',
+    startDate: new Date(Date.UTC(2024, 0, 10, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 0, 26, 23, 59, 59)),
+    link: 'https://medium.com/@OvertimeMarkets.xyz/2f5b1bdc4fc9',
+    opRewards: '',
     arbRewards: '5000 ARB',
+};
+
+export const INCENTIVIZED_NFL_PLAYOFFS = {
+    ids: [9002],
+    startDate: new Date(Date.UTC(2024, 0, 10, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 1, 11, 23, 59, 59)),
+    link: 'https://medium.com/@OvertimeMarkets.xyz/2f5b1bdc4fc9',
+    opRewards: '',
+    arbRewards: '40000 ARB',
 };
 
 export const MIN_LIQUIDITY = 10;

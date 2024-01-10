@@ -21,7 +21,15 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Informations sur le portefeuille",
             "approve-parlay": "Approuver ParlayAMM",
-            "approve-sports": "Approuver SportsAMM"
+            "approve-sports": "Approuver SportsAMM",
+            "wallet-connect": "Connexion au portefeuille",
+            "or-connect-with": "ou connectez-vous avec",
+            "metamask": "Métamasque",
+            "connect-with-wallet": "Connectez-vous avec le portefeuille",
+            "please-connect": "veuillez connecter le portefeuille pour commencer à utiliser overtime.xyz",
+            "view-less-options": "Afficher moins d'options",
+            "view-more-options": "Afficher plus d'options",
+            "connect-wallet-modal-title": "Connectez-vous à OvertimeMarkets"
         },
         "referral": {
             "link-copied": "Lien de parrainage copié !",
@@ -159,7 +167,19 @@
         "fifa-tooltip": "Les résultats des marchés de la Coupe du Monde de la FIFA sont basés sur les résultats de la réglementation, s'ils vont en prolongation, le résultat de la réglementation est celui auquel le marché se résoudra.",
         "tennis-tooltip": "En cas de forfait, le match sera considéré comme annulé. En cas d'abandon / disqualification pendant le match, cela sera traité comme une victoire pour le joueur passant au tour suivant",
         "iihf-tooltip": "Les résultats des marchés du Championnat du monde de l'IIHF sont basés sur les résultats de la réglementation, s'ils vont en prolongation, le résultat de la réglementation est celui auquel le marché se résoudra.",
-        "football-tooltip": "Les résultats des marchés sont basés sur les résultats de la régulation, s'ils vont en prolongation, le résultat de la régulation est celui auquel le marché se résoudra."
+        "football-tooltip": "Les résultats des marchés sont basés sur les résultats de la régulation, s'ils vont en prolongation, le résultat de la régulation est celui auquel le marché se résoudra.",
+        "login-with": {
+            "discord": "Discorde",
+            "gmail": "Gmail",
+            "twitch": "Tic",
+            "twitter": "Twitter",
+            "microsoft": "Microsoft",
+            "linkedin": "Linkedin",
+            "x": "X",
+            "facebook": "Facebook",
+            "apple": "Pomme",
+            "github": "GitHub"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
@@ -498,7 +518,9 @@
             },
             "pay-with-voucher": "Payer avec un bon",
             "total-to-pay": "Le total à payer",
-            "in-wallet": "Dans le portefeuille"
+            "in-wallet": "Dans le portefeuille",
+            "gas-tooltip": "Frais de gaz actuels requis par la blockchain pour régler la transaction",
+            "total-gas": "Frais de gaz (ESTIMÉS)"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -527,7 +549,8 @@
         },
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "MARCHÉS RÉCOMPENSÉS",
-        "incentivized-tooltip-tennis": "Wimbledon sera incité, car le tournoi commence le 3 juillet. Les marchés seront boostés avec {{rewards}} jusqu'à la fin du tournoi le 16 juillet. Les récompenses seront distribuées en fonction de votre volume généré par ces marchés. Vous pouvez suivre l'attribution de vos récompenses sur notre <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip-tennis": "Wimbledon sera incité, car le tournoi commence le 3 juillet. Les marchés seront boostés avec {{rewards}} jusqu'à la fin du tournoi le 16 juillet. Les récompenses seront distribuées en fonction de votre volume généré par ces marchés. Vous pouvez suivre l'attribution de vos récompenses sur notre <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip-nfl-playoffs": "Un total énorme de {{rewards}} sera distribué pendant les séries éliminatoires de la NFL. Vérifiez plus de détails <detailsLink>ici</detailsLink>."
     },
     "rewards": {
         "table": {
@@ -708,7 +731,11 @@
         "go-to-parlay-lp": "Aller à Parlay LP",
         "parlay-lp-title": "Pool de liquidités Parlay",
         "go-to-single-lp": "Aller à Single LP",
-        "single-lp-title": "Pool de liquidité unique"
+        "single-lp-title": "Pool de liquidité unique",
+        "wrapper-nav": {
+            "my-tickets": "Mes billets",
+            "my-portfolio": "Mon portfolio"
+        }
     },
     "referral": {
         "generate-link": "Générer un lien",
@@ -1044,5 +1071,92 @@
             "description": "{{dynamicTitle}} : profitez des meilleures cotes de paris sportifs Web3 du marché. Aucune inscription nécessaire. Marchés sportifs entièrement décentralisés.",
             "title": "Paris sportifs Web3 sur les marchés des heures supplémentaires : {{dynamicTitle}}"
         }
+    },
+    "deposit": {
+        "tutorials": {
+            "coinbase": "Dépôt depuis Coinbase",
+            "binance": "Dépôt depuis le site Web de Binance",
+            "title": "Guides de dépôt",
+            "binance-mobile": "Dépôt depuis l'application mobile Binance"
+        },
+        "or-buy-with": "Ou achetez avec",
+        "copying-address": "S'il vous plaît, attendez",
+        "select-token": "Sélectionnez le jeton",
+        "send": "Assurez-vous de déposer {{ network }} {{ token }} à l'adresse ci-dessus !",
+        "ready-to-use": "Votre compte est rechargé et prêt à commencer à utiliser Overtime Markets ! Vous pouvez effectuer des transactions avec ETH ou déposer d’autres jetons désormais visibles sur la page de dépôt.",
+        "go": "Allons-y!",
+        "all-set": "Vous êtes prêt!",
+        "address-input-label": "Votre adresse de dépôt personnelle {{ token }} sur {{ network }}",
+        "warning": "Votre solde ETH est faible. Veuillez recharger votre solde ETH pour continuer à utiliser les heures supplémentaires",
+        "copied": "Adresse copiée !",
+        "description": "Pour trader sur Overtime, vous devez approvisionner votre compte. Suivez attentivement les étapes ci-dessous et déposez la crypto-monnaie sélectionnée à l'adresse générée.",
+        "deposit-crypto": "Déposer des cryptomonnaies",
+        "qr-modal-title": "Envoyer {{ token }} ({{ network }})"
+    },
+    "withdraw": {
+        "confirmation-modal": {
+            "correct-address": "Assurez-vous que l'adresse est correcte et qu'elle accepte {{ token }} sur {{ network }}",
+            "withdrawal-fee": "Frais de retrait",
+            "address": "Adresse",
+            "confirm": "Confirmer",
+            "withdrawal-transaction-warning": "Les transactions de retrait ne peuvent pas être annulées",
+            "network": "Réseau",
+            "title": "Retrait demandé"
+        },
+        "toast-messages": {
+            "pending": "Transaction en attente...",
+            "error": "Une erreur s'est produite lors du retrait des fonds.",
+            "success": "Retrait réussi"
+        },
+        "validation": {
+            "amount": "Le montant n'est pas valide",
+            "wallet-address": "L'adresse du portefeuille n'est pas valide"
+        },
+        "heading-withdraw": "Retirer des cryptomonnaies",
+        "description": "Utilisez cette page pour retirer des fonds de votre compte Heures supplémentaires. Suivez attentivement les étapes ci-dessous et assurez-vous de tout vérifier.",
+        "address-input-label": "Votre adresse de retrait personnelle {{ token }} sur {{ network }}",
+        "warning": "Vérifiez à nouveau l'adresse de retrait et assurez-vous qu'elle accepte {{ token }} sur {{ network }}",
+        "button-label-withdraw": "Retirer",
+        "amount": "Montant",
+        "paste-address": "Collez l'adresse de votre portefeuille ici"
+    },
+    "my-portfolio": {
+        "withdraw": "Retirer",
+        "deposit": "Dépôt",
+        "top-up-eth-tooltip": "Votre bilan de gaz ETH est faible.\n\nVeuillez déposer plus d'ETH ou échanger d'autres jetons déposés contre plus d'ETH",
+        "top-up-eth": "Recharger l'ETH",
+        "estimated-balance": "Solde estimé"
+    },
+    "get-started": {
+        "steps": {
+            "title": {
+                "trade": "Commencez à utiliser les marchés supplémentaires !",
+                "logged-in": "Connecté",
+                "sign-up": "S'inscrire",
+                "deposit": "Déposer des ETH"
+            },
+            "description": {
+                "deposit": "Pour commencer à utiliser Overtime, vous devez approvisionner votre nouveau compte avec ETH. Cliquez sur le bouton Déposer maintenant et choisissez entre un dépôt direct à l'adresse ou un achat par carte de crédit.",
+                "trade": "Votre compte est maintenant financé et vous êtes prêt à placer vos positions en heures supplémentaires !",
+                "sign-up": "Cliquez sur le bouton S'inscrire et choisissez la méthode de connexion de votre choix.",
+                "logged-in": "Vous avez créé avec succès votre compte Overtime Smart sur la blockchain et êtes connecté."
+            },
+            "action": {
+                "logged-in": "Connecté",
+                "trade": "Échangez sur les heures supplémentaires",
+                "connected": "Connecté",
+                "connect-wallet": "Connecter le portefeuille",
+                "sign-up": "S'inscrire",
+                "deposit": "Dépôt"
+            }
+        },
+        "get-started": "Commencer",
+        "title": "Commencez les heures supplémentaires",
+        "sign-out": "se déconnecter",
+        "log-in": "Se connecter",
+        "sign-up": "S'inscrire"
+    },
+    "banner": {
+        "arb-distribution-message": "La distribution d'ARB a commencé. Gagnez des jetons ARB en utilisant les heures supplémentaires. Consultez les détails ici."
     }
 }
