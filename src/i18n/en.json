@@ -626,7 +626,8 @@
         "discounted-per": "Discounted as per",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS",
-        "incentivized-tooltip-tennis": "Wimbledon will be incentivized, as the tournament starts on July 3rd. The markets will be boosted with {{rewards}} until the end of the tournament on July 16th. Rewards will be distributed based on your volume driven through these markets. You can track your rewards allocation on our <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip-tennis": "A total of {{rewards}} will be distributed during the Australian Open. Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-nfl-playoffs": "A whopping total of {{rewards}} will be distributed during the NFL playoffs. Check more details <detailsLink>here</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
