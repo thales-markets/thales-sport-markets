@@ -2,7 +2,7 @@ import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg'
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_PLAYOFFS } from 'constants/markets';
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
@@ -209,7 +209,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         )}
                     {INCENTIVIZED_GRAND_SLAM.ids.includes(Number(market.tags[0])) &&
                         new Date(market.maturityDate) > INCENTIVIZED_GRAND_SLAM.startDate &&
-                        new Date(market.maturityDate) < INCENTIVIZED_GRAND_SLAM.endDate && (
+                        new Date(market.maturityDate) < INCENTIVIZED_GRAND_SLAM.endDate &&
+                        networkId == Network.Arbitrum && (
                             <Tooltip
                                 overlay={
                                     <Trans
@@ -224,22 +225,43 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             ),
                                         }}
                                         values={{
-                                            rewards:
-                                                networkId == Network.OptimismMainnet
-                                                    ? INCENTIVIZED_LEAGUE.opRewards
-                                                    : networkId == Network.Arbitrum
-                                                    ? INCENTIVIZED_LEAGUE.thalesRewards
-                                                    : '',
+                                            rewards: INCENTIVIZED_GRAND_SLAM.arbRewards,
                                         }}
                                     />
                                 }
                                 component={
                                     <IncentivizedLeague>
-                                        {networkId !== Network.Base ? (
-                                            <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        ) : (
-                                            ''
-                                        )}
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        {getNetworkLogo(networkId)}
+                                    </IncentivizedLeague>
+                                }
+                            ></Tooltip>
+                        )}
+                    {INCENTIVIZED_NFL_PLAYOFFS.ids.includes(Number(market.tags[0])) &&
+                        new Date(market.maturityDate) > INCENTIVIZED_NFL_PLAYOFFS.startDate &&
+                        new Date(market.maturityDate) < INCENTIVIZED_NFL_PLAYOFFS.endDate &&
+                        networkId == Network.Arbitrum && (
+                            <Tooltip
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.incentivized-tooltip-nfl-playoffs"
+                                        components={{
+                                            detailsLink: (
+                                                <a
+                                                    href={INCENTIVIZED_NFL_PLAYOFFS.link}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                />
+                                            ),
+                                        }}
+                                        values={{
+                                            rewards: INCENTIVIZED_NFL_PLAYOFFS.arbRewards,
+                                        }}
+                                    />
+                                }
+                                component={
+                                    <IncentivizedLeague>
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
                                         {getNetworkLogo(networkId)}
                                     </IncentivizedLeague>
                                 }

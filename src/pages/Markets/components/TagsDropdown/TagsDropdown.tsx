@@ -1,7 +1,7 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_PLAYOFFS } from 'constants/markets';
 import { Network } from 'enums/network';
 import React from 'react';
 import { Trans } from 'react-i18next';
@@ -148,7 +148,8 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                         )}
                                     {INCENTIVIZED_GRAND_SLAM.ids.includes(tag.id) &&
                                         new Date() > INCENTIVIZED_GRAND_SLAM.startDate &&
-                                        new Date() < INCENTIVIZED_GRAND_SLAM.endDate && (
+                                        new Date() < INCENTIVIZED_GRAND_SLAM.endDate &&
+                                        networkId == Network.Arbitrum && (
                                             <Tooltip
                                                 overlay={
                                                     <Trans
@@ -163,10 +164,34 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                             ),
                                                         }}
                                                         values={{
-                                                            rewards:
-                                                                networkId !== Network.Arbitrum
-                                                                    ? INCENTIVIZED_GRAND_SLAM.opRewards
-                                                                    : INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                                            rewards: INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                                        }}
+                                                    />
+                                                }
+                                                component={
+                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
+                                                }
+                                            ></Tooltip>
+                                        )}
+                                    {INCENTIVIZED_NFL_PLAYOFFS.ids.includes(tag.id) &&
+                                        new Date() > INCENTIVIZED_NFL_PLAYOFFS.startDate &&
+                                        new Date() < INCENTIVIZED_NFL_PLAYOFFS.endDate &&
+                                        networkId == Network.Arbitrum && (
+                                            <Tooltip
+                                                overlay={
+                                                    <Trans
+                                                        i18nKey="markets.incentivized-tooltip-nfl-playoffs"
+                                                        components={{
+                                                            detailsLink: (
+                                                                <a
+                                                                    href={INCENTIVIZED_NFL_PLAYOFFS.link}
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                />
+                                                            ),
+                                                        }}
+                                                        values={{
+                                                            rewards: INCENTIVIZED_NFL_PLAYOFFS.arbRewards,
                                                         }}
                                                     />
                                                 }
