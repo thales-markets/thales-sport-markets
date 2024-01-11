@@ -14,7 +14,15 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "ข้อมูลกระเป๋าเงิน",
             "approve-parlay": "อนุมัติ ParlayAMM",
-            "approve-sports": "อนุมัติ SportsAMM"
+            "approve-sports": "อนุมัติ SportsAMM",
+            "view-less-options": "ดูตัวเลือกน้อยลง",
+            "connect-with-wallet": "เชื่อมต่อกับกระเป๋าสตางค์",
+            "wallet-connect": "เชื่อมต่อกระเป๋าเงิน",
+            "or-connect-with": "หรือเชื่อมต่อกับ",
+            "metamask": "เมตามาสค์",
+            "view-more-options": "ดูตัวเลือกเพิ่มเติม",
+            "connect-wallet-modal-title": "เข้าสู่ระบบ OvertimeMarkets",
+            "please-connect": "กรุณาเชื่อมต่อกระเป๋าเงินเพื่อเริ่มใช้งาน overtime.xyz"
         },
         "voucher": {
             "remaining-amount": "จำนวนเงินคงเหลือ",
@@ -159,7 +167,19 @@
         "fifa-tooltip": "ผลการแข่งขันในตลาด FIFA World Cup อิงตามผลการควบคุม หากเกินเวลา ผลการควบคุมจะเป็นผลที่ตลาดจะแก้ไข",
         "tennis-tooltip": "ในกรณีของการวอล์กโอเวอร์ การแข่งขันจะถือเป็นการยกเลิก ในกรณีที่ออกจากตำแหน่ง/ถูกตัดสิทธิ์ในระหว่างการแข่งขัน จะถือว่าเป็นชัยชนะสำหรับผู้เล่นที่ผ่านเข้าสู่รอบต่อไป",
         "iihf-tooltip": "ผลลัพธ์ของตลาด IIHF World Championship ขึ้นอยู่กับผลการควบคุม หากพวกเขาทำงานล่วงเวลา ผลการควบคุมจะเป็นผลที่ตลาดจะแก้ไข",
-        "football-tooltip": "ผลลัพธ์ของตลาดขึ้นอยู่กับผลลัพธ์ของกฎข้อบังคับ หากพวกเขาทำงานล่วงเวลา ผลลัพธ์ของกฎข้อบังคับคือผลลัพธ์ของกฎข้อบังคับที่ตลาดจะแก้ไข"
+        "football-tooltip": "ผลลัพธ์ของตลาดขึ้นอยู่กับผลลัพธ์ของกฎข้อบังคับ หากพวกเขาทำงานล่วงเวลา ผลลัพธ์ของกฎข้อบังคับคือผลลัพธ์ของกฎข้อบังคับที่ตลาดจะแก้ไข",
+        "login-with": {
+            "apple": "แอปเปิล",
+            "gmail": "Gmail",
+            "twitch": "ชัก",
+            "discord": "ความไม่ลงรอยกัน",
+            "facebook": "เฟสบุ๊ค",
+            "twitter": "ทวิตเตอร์",
+            "github": "GitHub",
+            "microsoft": "ไมโครซอฟต์",
+            "linkedin": "ลิงค์ดิน",
+            "x": "เอ็กซ์"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -499,7 +519,9 @@
             },
             "total-to-pay": "ค่าใช้จ่ายทั้งหมด",
             "in-wallet": "ในกระเป๋าสตางค์",
-            "pay-with-voucher": "ชำระเงินด้วยบัตรกำนัล"
+            "pay-with-voucher": "ชำระเงินด้วยบัตรกำนัล",
+            "gas-tooltip": "ค่าธรรมเนียมก๊าซปัจจุบันที่ blockchain ต้องการเพื่อชำระธุรกรรม",
+            "total-gas": "ค่าน้ำมัน(โดยประมาณ)"
         },
         "nav-menu": {
             "items": {
@@ -527,7 +549,8 @@
         },
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ",
-        "incentivized-tooltip-tennis": "วิมเบิลดันจะได้รับแรงจูงใจ เนื่องจากทัวร์นาเมนต์จะเริ่มในวันที่ 3 กรกฎาคม ตลาดจะได้รับการกระตุ้นด้วย {{rewards}} จนกว่าจะสิ้นสุดทัวร์นาเมนต์ในวันที่ 16 กรกฎาคม รางวัลจะกระจายตามปริมาณของคุณที่ขับเคลื่อนผ่านตลาดเหล่านี้ คุณสามารถติดตามการจัดสรรรางวัลได้ที่ <detailsLink>Dune Dashboard</detailsLink>"
+        "incentivized-tooltip-tennis": "วิมเบิลดันจะได้รับแรงจูงใจ เนื่องจากทัวร์นาเมนต์จะเริ่มในวันที่ 3 กรกฎาคม ตลาดจะได้รับการกระตุ้นด้วย {{rewards}} จนกว่าจะสิ้นสุดทัวร์นาเมนต์ในวันที่ 16 กรกฎาคม รางวัลจะกระจายตามปริมาณของคุณที่ขับเคลื่อนผ่านตลาดเหล่านี้ คุณสามารถติดตามการจัดสรรรางวัลได้ที่ <detailsLink>Dune Dashboard</detailsLink>",
+        "incentivized-tooltip-nfl-playoffs": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในระหว่างรอบตัดเชือก NFL ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
     },
     "rewards": {
         "header": "รางวัล",
@@ -708,7 +731,11 @@
         "go-to-parlay-lp": "ไปที่หจก.พาร์เลย์",
         "go-to-single-lp": "ไปที่ Single หจก",
         "parlay-lp-title": "พูลสภาพคล่องของ Parlay",
-        "single-lp-title": "พูลสภาพคล่องเดียว"
+        "single-lp-title": "พูลสภาพคล่องเดียว",
+        "wrapper-nav": {
+            "my-portfolio": "ผลงานของฉัน",
+            "my-tickets": "ตั๋วของฉัน"
+        }
     },
     "referral": {
         "generate-link": "สร้างลิงค์",
@@ -1044,5 +1071,92 @@
             "description": "{{dynamicTitle}}: เพลิดเพลินกับอัตราต่อรองเว็บ3 สปอร์ตบุ๊คที่ดีที่สุดในตลาด ไม่จำเป็นต้องลงทะเบียน ตลาดกีฬาที่มีการกระจายอำนาจอย่างเต็มที่",
             "title": "ตลาดต่อเวลา Web3 Sportsbook: {{dynamicTitle}}"
         }
+    },
+    "deposit": {
+        "tutorials": {
+            "coinbase": "ฝากเงินจาก Coinbase",
+            "binance": "ฝากเงินจากเว็บไซต์ Binance",
+            "title": "คู่มือการฝากเงิน",
+            "binance-mobile": "ฝากเงินจากแอพ Binance บนมือถือ"
+        },
+        "address-input-label": "ที่อยู่การฝากเงิน {{ token }} ส่วนตัวของคุณบน {{ network }}",
+        "select-token": "เลือกโทเค็น",
+        "deposit-crypto": "ฝาก crypto",
+        "or-buy-with": "หรือซื้อกับ",
+        "description": "หากต้องการซื้อขายล่วงเวลา คุณต้องเติมเงินในบัญชีของคุณ ทำตามขั้นตอนด้านล่างอย่างระมัดระวังและฝากสกุลเงินดิจิทัลที่เลือกไว้ในที่อยู่ที่สร้างขึ้น",
+        "go": "ไปกันเถอะ!",
+        "copied": "คัดลอกที่อยู่แล้ว!",
+        "ready-to-use": "บัญชีของคุณได้รับการเติมเงินแล้วและพร้อมที่จะเริ่มใช้งานตลาดล่วงเวลา! คุณสามารถทำการซื้อขายกับ ETH หรือคุณสามารถฝากโทเค็นอื่น ๆ ที่แสดงอยู่บนหน้าการฝากเงินได้",
+        "qr-modal-title": "ส่ง {{ token }} ({{ network }})",
+        "copying-address": "โปรดรอ",
+        "all-set": "คุณพร้อมแล้ว!",
+        "send": "ตรวจสอบให้แน่ใจว่าคุณกำลังฝาก {{ network }} {{ token }} ไปยังที่อยู่ด้านบน!",
+        "warning": "ยอดคงเหลือ ETH ของคุณต่ำ โปรดเติมเงิน ETH ของคุณเพื่อใช้ล่วงเวลาต่อไป"
+    },
+    "withdraw": {
+        "confirmation-modal": {
+            "network": "เครือข่าย",
+            "address": "ที่อยู่",
+            "withdrawal-transaction-warning": "ธุรกรรมการถอนไม่สามารถยกเลิกได้",
+            "correct-address": "ตรวจสอบให้แน่ใจว่าที่อยู่ถูกต้องและยอมรับ {{ token }} บน {{ network }}",
+            "title": "ร้องขอการถอนเงิน",
+            "withdrawal-fee": "ค่าธรรมเนียมการถอน",
+            "confirm": "ยืนยัน"
+        },
+        "toast-messages": {
+            "error": "เกิดข้อผิดพลาดบางอย่างขณะถอนเงิน",
+            "pending": "การทำธุรกรรมที่รอดำเนินการ...",
+            "success": "ถอนเงินสำเร็จ"
+        },
+        "validation": {
+            "wallet-address": "ที่อยู่กระเป๋าเงินไม่ถูกต้อง",
+            "amount": "จำนวนเงินไม่ถูกต้อง"
+        },
+        "paste-address": "วางที่อยู่กระเป๋าสตางค์ของคุณที่นี่",
+        "warning": "ตรวจสอบที่อยู่การถอนเงินอีกครั้ง และตรวจสอบให้แน่ใจว่ายอมรับ {{ token }} บน {{ network }}",
+        "address-input-label": "ที่อยู่การถอนเงิน {{ token }} ส่วนตัวของคุณบน {{ network }}",
+        "button-label-withdraw": "ถอน",
+        "heading-withdraw": "ถอนเงินดิจิตอล",
+        "description": "ใช้หน้านี้เพื่อถอนเงินออกจากบัญชีล่วงเวลาของคุณ ทำตามขั้นตอนด้านล่างอย่างระมัดระวังและอย่าลืมตรวจสอบทุกอย่างอีกครั้ง",
+        "amount": "จำนวน"
+    },
+    "my-portfolio": {
+        "top-up-eth": "เติมเงิน ETH",
+        "withdraw": "ถอน",
+        "deposit": "เงินฝาก",
+        "estimated-balance": "ยอดคงเหลือโดยประมาณ",
+        "top-up-eth-tooltip": "ยอดก๊าซ ETH ของคุณต่ำ\n\nโปรดฝาก ETH เพิ่ม หรือแลกเปลี่ยนโทเค็นที่ฝากอื่น ๆ เพื่อรับ ETH เพิ่มเติม"
+    },
+    "get-started": {
+        "steps": {
+            "title": {
+                "sign-up": "ลงชื่อ",
+                "logged-in": "เข้าสู่ระบบ",
+                "deposit": "ฝาก ETH",
+                "trade": "เริ่มใช้ตลาดล่วงเวลา!"
+            },
+            "description": {
+                "logged-in": "คุณได้สร้างบัญชี Overtime Smart ของคุณบนบล็อกเชนสำเร็จแล้วและเข้าสู่ระบบแล้ว",
+                "trade": "บัญชีของคุณได้รับเงินทุนแล้ว และคุณพร้อมที่จะวางตำแหน่งของคุณในช่วงต่อเวลาแล้ว!",
+                "sign-up": "คลิกที่ปุ่มลงทะเบียนและเลือกวิธีการเข้าสู่ระบบที่คุณต้องการ",
+                "deposit": "เพื่อเริ่มใช้งานล่วงเวลา คุณต้องเติมเงินในบัญชีใหม่ของคุณด้วย ETH คลิกที่ปุ่มฝากเงินทันที และเลือกระหว่างการฝากโดยตรงไปยังที่อยู่หรือซื้อด้วยบัตรเครดิต"
+            },
+            "action": {
+                "connect-wallet": "เชื่อมต่อกระเป๋าเงิน",
+                "deposit": "เงินฝาก",
+                "logged-in": "เข้าสู่ระบบ",
+                "connected": "เชื่อมต่อแล้ว",
+                "trade": "การค้าขายล่วงเวลา",
+                "sign-up": "ลงชื่อ"
+            }
+        },
+        "sign-out": "ออกจากระบบ",
+        "sign-up": "ลงชื่อ",
+        "log-in": "เข้าสู่ระบบ",
+        "get-started": "เริ่ม",
+        "title": "เริ่มต้นการทำงานล่วงเวลา"
+    },
+    "banner": {
+        "arb-distribution-message": "การกระจาย ARB ได้เริ่มต้นแล้ว รับโทเค็น ARB โดยใช้การต่อเวลา ชำระเงินรายละเอียดได้ที่นี่"
     }
 }
