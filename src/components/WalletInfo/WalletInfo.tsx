@@ -1,7 +1,7 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -18,11 +18,9 @@ import styled from 'styled-components';
 import { formatCurrency, truncateAddress } from 'thales-utils';
 
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getCollaterals, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
-import { Coins } from 'types/tokens';
+import { getDefaultCollateral } from 'utils/collaterals';
 import NetworkSwitcher from 'components/NetworkSwitcher';
+import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 
 const WalletInfo: React.FC = ({}) => {
     const { t } = useTranslation();
@@ -45,45 +43,14 @@ const WalletInfo: React.FC = ({}) => {
         return undefined;
     }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
 
-    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+    const stableCointBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
+    const stableCoinBalance = useMemo(() => {
+        return stableCointBalanceQuery?.data || 0;
+    }, [stableCointBalanceQuery.data]);
 
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
-
-    const exchangeRates: Rates | null =
-        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
-
-    const getUSDForCollateral = useCallback(
-        (token: Coins) =>
-            (multipleCollateralBalances.data ? multipleCollateralBalances.data[token] : 0) *
-            (isStableCurrency(token as Coins) ? 1 : exchangeRates?.[token] || 0),
-        [multipleCollateralBalances, exchangeRates]
-    );
-
-    const walletBalance = useMemo(() => {
-        if (overtimeVoucher) {
-            return { coin: getCollaterals(networkId)[0], amount: overtimeVoucher.remainingAmount };
-        }
-        if (multipleCollateralBalances.data && exchangeRates) {
-            const highestBalanceCollateral = getCollaterals(networkId, isConnectedViaParticle).sort((a, b) => {
-                return getUSDForCollateral(b) - getUSDForCollateral(a);
-            })[0];
-            return {
-                coin: highestBalanceCollateral,
-                amount: multipleCollateralBalances.data[highestBalanceCollateral],
-            };
-        }
-    }, [
-        exchangeRates,
-        overtimeVoucher,
-        multipleCollateralBalances,
-        isConnectedViaParticle,
-        networkId,
-        getUSDForCollateral,
-    ]);
+    const walletBalance = overtimeVoucher ? overtimeVoucher.remainingAmount : stableCoinBalance;
 
     return (
         <Container>
@@ -113,22 +80,13 @@ const WalletInfo: React.FC = ({}) => {
                                     (overtimeVoucher ? (
                                         <WalletBalanceInfo>
                                             <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
-                                            <Text>{formatCurrency(walletBalance?.amount, 2)}</Text>
+                                            <Text>{formatCurrency(walletBalance, 2)}</Text>
                                             <Currency>{getDefaultCollateral(networkId)}</Currency>
                                         </WalletBalanceInfo>
                                     ) : (
                                         <WalletBalanceInfo>
-                                            <Text>
-                                                {formatCurrency(
-                                                    walletBalance?.amount,
-                                                    walletBalance && exchangeRates
-                                                        ? exchangeRates[walletBalance.coin] > 1000
-                                                            ? 4
-                                                            : 2
-                                                        : 2
-                                                )}
-                                            </Text>
-                                            <Currency>{walletBalance?.coin}</Currency>
+                                            <Text>{formatCurrency(walletBalance, 2)}</Text>
+                                            <Currency>{getDefaultCollateral(networkId)}</Currency>
                                         </WalletBalanceInfo>
                                     ))}
                                 <NetworkSwitcher />

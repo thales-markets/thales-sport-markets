@@ -155,21 +155,18 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isParticle), [
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
         selectedCollateralIndex,
-        isParticle,
     ]);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const collateralAddress = useMemo(
         () =>
             getCollateralAddress(
                 networkId,
-                isEth
-                    ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins, isParticle)
-                    : selectedCollateralIndex
+                isEth ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateralIndex
             ),
-        [networkId, selectedCollateralIndex, isEth, isParticle]
+        [networkId, selectedCollateralIndex, isEth]
     );
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
@@ -915,7 +912,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                 <SummaryLabel>{t('markets.parlay.pay-with')}:</SummaryLabel>
                 <CollateralContainer>
                     <CollateralSelector
-                        collateralArray={getCollaterals(networkId, isParticle)}
+                        collateralArray={getCollaterals(networkId)}
                         selectedItem={selectedCollateralIndex}
                         onChangeCollateral={() => {}}
                         disabled={isVoucherSelected}

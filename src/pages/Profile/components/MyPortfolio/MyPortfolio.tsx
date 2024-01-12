@@ -7,7 +7,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -19,7 +19,6 @@ const MyPortfolio: React.FC = () => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -41,7 +40,7 @@ const MyPortfolio: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
+                getCollaterals(networkId).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
             }
@@ -50,14 +49,14 @@ const MyPortfolio: React.FC = () => {
         } catch (e) {
             return 'N/A';
         }
-    }, [exchangeRates, isConnectedViaParticle, multipleCollateralBalances.data, networkId]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     return (
         <Wrapper>
             <Heading>{t('my-portfolio.estimated-balance')}</Heading>
             <BalanceAmount>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</BalanceAmount>
             <Divider />
-            {getCollaterals(networkId, isConnectedViaParticle).map((token, index) => {
+            {getCollaterals(networkId).map((token, index) => {
                 const decimalsForTokenAmount = exchangeRates?.[token] ? (exchangeRates?.[token] > 1000 ? 4 : 2) : 2;
 
                 return (

@@ -434,7 +434,7 @@ export const getOnRamperUrl = (
     selectedToken: number
 ) => {
     return `https://buy.onramper.com?apiKey=${apiKey}&mode=buy&onlyCryptos=${
-        getCollaterals(networkId, true)[selectedToken]
+        getCollaterals(networkId)[selectedToken]
     }_${getNetworkNameByNetworkId(networkId, true)}&networkWallets=${getNetworkNameByNetworkId(
         networkId,
         true

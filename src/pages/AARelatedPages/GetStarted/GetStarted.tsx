@@ -40,7 +40,7 @@ const GetStarted: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
+                getCollaterals(networkId).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
             }
@@ -49,7 +49,7 @@ const GetStarted: React.FC = () => {
         } catch (e) {
             return 0;
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, isConnectedViaParticle]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     useEffect(() => {
         if (totalBalanceValue > 0) {
