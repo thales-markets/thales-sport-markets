@@ -148,22 +148,18 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
 
     const [gas, setGas] = useState(0);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isParticle), [
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
         selectedCollateralIndex,
-        isParticle,
     ]);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const collateralAddress = useMemo(
         () =>
             getCollateralAddress(
                 networkId,
-                isEth
-                    ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins, isParticle)
-                    : selectedCollateralIndex,
-                isParticle
+                isEth ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateralIndex
             ),
-        [networkId, selectedCollateralIndex, isEth, isParticle]
+        [networkId, selectedCollateralIndex, isEth]
     );
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const isStableCollateral = isStableCurrency(selectedCollateral);
@@ -913,7 +909,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                         disabled={isAllowing || isBuying}
                         currencyComponent={
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId, isParticle)}
+                                collateralArray={getCollaterals(networkId)}
                                 selectedItem={selectedCollateralIndex}
                                 onChangeCollateral={() => {
                                     setCollateralAmount('');
