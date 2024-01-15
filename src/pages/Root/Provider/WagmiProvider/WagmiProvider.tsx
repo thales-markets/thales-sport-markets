@@ -13,13 +13,14 @@ import {
     trustWallet,
     walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
-import { arbitrum, base, optimism, optimismGoerli } from '@wagmi/chains';
 import WalletDisclaimer from 'components/WalletDisclaimer';
+import { base } from 'constants/network';
 import { ThemeMap } from 'constants/ui';
 import { Network } from 'enums/network';
 import { merge } from 'lodash';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
+import { arbitrum, optimism, optimismGoerli } from 'wagmi/dist/chains';
 import { infuraProvider } from 'wagmi/dist/providers/infura';
 import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
 import { publicProvider } from 'wagmi/dist/providers/public';
