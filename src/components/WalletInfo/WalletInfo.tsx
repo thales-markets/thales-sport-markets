@@ -17,10 +17,10 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { formatCurrency, truncateAddress } from 'thales-utils';
 
-import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getDefaultCollateral } from 'utils/collaterals';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { getDefaultCollateral } from 'utils/collaterals';
 
 const WalletInfo: React.FC = ({}) => {
     const { t } = useTranslation();
@@ -65,7 +65,7 @@ const WalletInfo: React.FC = ({}) => {
                                         isClickable={true}
                                         onClick={
                                             !isConnectedViaParticle
-                                                ? openAccountModal
+                                                ? () => openAccountModal()
                                                 : () => window.open(PARTICLE_WALLET, '_blank')
                                         }
                                     >
@@ -95,16 +95,18 @@ const WalletInfo: React.FC = ({}) => {
                     }}
                 </RainbowConnectButton.Custom>
             </FlexDivColumn>
-            <ConnectWalletModal
-                isOpen={connectWalletModalVisibility}
-                onClose={() => {
-                    dispatch(
-                        setWalletConnectModalVisibility({
-                            visibility: false,
-                        })
-                    );
-                }}
-            />
+            {connectWalletModalVisibility && (
+                <ConnectWalletModal
+                    isOpen={connectWalletModalVisibility}
+                    onClose={() => {
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: false,
+                            })
+                        );
+                    }}
+                />
+            )}
         </Container>
     );
 };

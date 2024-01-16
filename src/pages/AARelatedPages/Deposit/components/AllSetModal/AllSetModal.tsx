@@ -1,13 +1,13 @@
+import Button from 'components/Button';
 import Modal from 'components/Modal';
+import SPAAnchor from 'components/SPAAnchor';
+import ROUTES from 'constants/routes';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import ReactModal from 'react-modal';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { useTranslation } from 'react-i18next';
-import Button from 'components/Button';
-import ReactModal from 'react-modal';
 import { buildHref } from 'utils/routes';
-import ROUTES from 'constants/routes';
-import SPAAnchor from 'components/SPAAnchor';
 
 type AllSetModalProps = {
     onClose: () => void;
@@ -75,7 +75,6 @@ const FooterText = styled.span`
     font-style: normal;
     font-weight: 500;
 
-    text-transform: capitalize;
     text-align: center;
     text-align: center;
     line-height: 140%;
