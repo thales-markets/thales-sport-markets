@@ -345,7 +345,8 @@
                 "assists": "助攻",
                 "rebounds": "篮板球",
                 "triple double": "三双",
-                "double double": "双双"
+                "double double": "双双",
+                "receptions": "招待会"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -411,7 +412,9 @@
                     "double-double-yes": "{{team}} 将得分两双",
                     "double-double-no": "{{team}} 不会得分两双",
                     "triple-double-yes": "{{team}}将获得三双",
-                    "triple-double-no": "{{team}}不会拿下三双"
+                    "triple-double-no": "{{team}}不会拿下三双",
+                    "receptions-over": "{{team}} 的接球次数将多于 {{scoring}}",
+                    "receptions-under": "{{team}} 的接球次数将少于 {{scoring}}"
                 }
             },
             "starts-in": "开始于",

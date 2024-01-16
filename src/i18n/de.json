@@ -345,7 +345,8 @@
                 "assists": "Unterstützt",
                 "rebounds": "Rebounds",
                 "double double": "Doppelt-doppelt",
-                "triple double": "Triple-Double"
+                "triple double": "Triple-Double",
+                "receptions": "Empfänge"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -411,7 +412,9 @@
                     "double-double-no": "{{team}} wird kein Double-Double erzielen",
                     "triple-double-no": "{{team}} wird kein Triple-Double erzielen",
                     "triple-double-yes": "{{team}} wird ein Triple-Double erzielen",
-                    "double-double-yes": "{{team}} wird ein Double-Double erzielen"
+                    "double-double-yes": "{{team}} wird ein Double-Double erzielen",
+                    "receptions-under": "{{team}} wird weniger Empfänge haben als {{scoring}}",
+                    "receptions-over": "{{team}} wird mehr Empfänge haben als {{scoring}}"
                 }
             },
             "starts-in": "Beginnt in",

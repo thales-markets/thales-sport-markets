@@ -345,7 +345,8 @@
                 "rebounds": "Rimbalzi",
                 "assists": "Assist",
                 "double double": "Doppio-doppio",
-                "triple double": "Tripla-doppia"
+                "triple double": "Tripla-doppia",
+                "receptions": "Ricevimenti"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -411,7 +412,9 @@
                     "triple-double-no": "{{team}} non segnerà una tripla doppia",
                     "double-double-no": "{{team}} non segnerà una doppia doppia",
                     "double-double-yes": "{{team}} segnerà una doppia doppia",
-                    "triple-double-yes": "{{team}} segnerà una tripla doppia"
+                    "triple-double-yes": "{{team}} segnerà una tripla doppia",
+                    "receptions-over": "{{team}} avrà più ricezioni di {{scoring}}",
+                    "receptions-under": "{{team}} avrà meno ricezioni di {{scoring}}"
                 }
             },
             "starts-in": "Inizia tra",

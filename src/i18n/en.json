@@ -431,7 +431,8 @@
                 "rebounds": "Rebounds",
                 "assists": "Assists",
                 "double double": "Double-double",
-                "triple double": "Triple-double"
+                "triple double": "Triple-double",
+                "receptions": "Receptions"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -494,6 +495,8 @@
                     "double-double-no": "{{team}} will not score a double-double",
                     "triple-double-yes": "{{team}} will score a triple-double",
                     "triple-double-no": "{{team}} will not score a triple-double",
+                    "receptions-over": "{{team}} will have more receptions than {{scoring}}",
+                    "receptions-under": "{{team}} will have less receptions than {{scoring}}",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }

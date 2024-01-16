@@ -345,7 +345,8 @@
                 "assists": "ช่วยเหลือ",
                 "rebounds": "รีบาวด์",
                 "double double": "ดับเบิ้ลดับเบิ้ล",
-                "triple double": "ทริปเปิ้ล-ดับเบิ้ล"
+                "triple double": "ทริปเปิ้ล-ดับเบิ้ล",
+                "receptions": "แผนกต้อนรับ"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -411,7 +412,9 @@
                     "double-double-yes": "{{team}} จะทำแต้มดับเบิ้ล-ดับเบิ้ล",
                     "triple-double-yes": "{{team}} จะทำแต้มทริปเปิล-ดับเบิ้ล",
                     "triple-double-no": "{{team}} จะไม่ทำแต้มทริปเปิล-ดับเบิ้ล",
-                    "double-double-no": "{{team}} จะไม่ทำคะแนนดับเบิ้ล-ดับเบิ้ล"
+                    "double-double-no": "{{team}} จะไม่ทำคะแนนดับเบิ้ล-ดับเบิ้ล",
+                    "receptions-under": "{{team}} จะมีการรับน้อยกว่า {{scoring}}",
+                    "receptions-over": "{{team}} จะมีการรับมากกว่า {{scoring}}"
                 }
             },
             "starts-in": "เริ่มเข้า",
