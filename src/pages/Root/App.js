@@ -89,7 +89,7 @@ const App = () => {
                 const providerNetworkId = !!address ? chainIdFromProvider : switchedToNetworkId;
                 let web3Provider;
 
-                if (particle && particle?.auth?.isLogin()) {
+                if (particle?.auth?.isLogin()) {
                     const particleProvider = new ParticleProvider(particle.auth);
                     web3Provider = new ethers.providers.Web3Provider(particleProvider, 'any');
                 }
@@ -113,8 +113,7 @@ const App = () => {
             }
         };
         init();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, provider, signer, switchedToNetworkId, address, particle?.auth]);
+    }, [dispatch, provider, signer, switchedToNetworkId, address]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
