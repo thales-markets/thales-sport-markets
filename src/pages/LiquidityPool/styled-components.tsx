@@ -372,6 +372,11 @@ export const SliderContainer = styled.div`
     margin-bottom: 10px;
 `;
 
+export const InputButtonContainer = styled.div`
+    max-width: 350px;
+    width: 100%;
+`;
+
 export const StyledSlider = styled((props) => (
     <Slider
         classes={{ root: props.className, thumb: props.className, track: props.className, rail: props.className }}
