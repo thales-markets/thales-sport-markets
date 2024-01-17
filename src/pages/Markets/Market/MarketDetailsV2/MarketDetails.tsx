@@ -99,6 +99,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         oneSiderGoalsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_GOALS
         ),
+        receptionsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RECEPTIONS
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -525,6 +528,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions
                             markets={childMarkets.oneSiderGoalsMarkets}
                             betType={BetType.PLAYER_PROPS_GOALS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.receptionsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.receptionsMarkets}
+                            betType={BetType.PLAYER_PROPS_RECEPTIONS}
                             showOdds={showAMM}
                         />
                     )}

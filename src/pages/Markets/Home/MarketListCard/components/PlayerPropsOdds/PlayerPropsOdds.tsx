@@ -1,13 +1,13 @@
+import Tooltip from 'components/Tooltip';
 import { BetTypeNameMap, BetTypeTitleMap } from 'constants/tags';
 import { BetType, Position } from 'enums/markets';
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SportMarketChildMarkets, SportMarketInfo } from 'types/markets';
 import { isOneSidePlayerProps, isSpecialYesNoProp } from 'utils/markets';
 import Odd from '../Odd';
 import { Container, OddsContainer } from './styled-components';
-import Tooltip from 'components/Tooltip';
-import { useTranslation } from 'react-i18next';
 
 type PlayerPropsOdds = {
     markets: SportMarketInfo[];
@@ -41,6 +41,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             assistsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_ASSISTS),
             doubleDoubleMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_DOUBLE_DOUBLE),
             tripleDoubleMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_TRIPLE_DOUBLE),
+            receptionsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_RECEPTIONS),
         };
 
         const result = [];
@@ -105,6 +106,10 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
 
         if (lastValidChildMarkets.oneSiderGoalsMarkets.length > 0) {
             result.push(lastValidChildMarkets.oneSiderGoalsMarkets);
+        }
+
+        if (lastValidChildMarkets.receptionsMarkets.length > 0) {
+            result.push(lastValidChildMarkets.receptionsMarkets);
         }
 
         return result;
