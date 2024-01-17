@@ -117,15 +117,13 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, isAA), [
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
         selectedCollateralIndex,
-        isAA,
     ]);
-    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex, isAA), [
+    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
         networkId,
         selectedCollateralIndex,
-        isAA,
     ]);
 
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
@@ -439,7 +437,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                     <CollateralSelectorContainer>
                                         <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
                                         <CollateralSelector
-                                            collateralArray={getCollaterals(networkId, isAA)}
+                                            collateralArray={getCollaterals(networkId)}
                                             selectedItem={selectedCollateralIndex}
                                             onChangeCollateral={() => {}}
                                         />
@@ -456,7 +454,7 @@ const SinglePosition: React.FC<SinglePositionProps> = ({
                                     <ColumnDirectionInfo>
                                         <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
                                         <CollateralSelector
-                                            collateralArray={getCollaterals(networkId, isAA)}
+                                            collateralArray={getCollaterals(networkId)}
                                             selectedItem={selectedCollateralIndex}
                                             onChangeCollateral={() => {}}
                                         />

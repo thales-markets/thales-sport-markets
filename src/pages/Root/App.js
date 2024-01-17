@@ -1,8 +1,10 @@
+import { ParticleNetwork } from '@particle-network/auth';
 import { ParticleProvider } from '@particle-network/provider';
 import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
 import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
 import ROUTES from 'constants/routes';
+import { Network } from 'enums/network';
 import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
 import LandingPageLayout from 'layouts/LandingPageLayout';
@@ -10,7 +12,7 @@ import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
 import Wizard from 'pages/Wizard';
-import { Suspense, lazy, useContext, useEffect } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,7 +33,6 @@ import networkConnector from 'utils/networkConnector';
 import queryConnector from 'utils/queryConnector';
 import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
-import { ParticleContext } from './Provider/ParticleProvider/ParticleProvider';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
@@ -47,6 +48,26 @@ const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
 const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
 const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
 
+const particle = new ParticleNetwork({
+    projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
+    clientKey: process.env.REACT_APP_CLIENT_KEY,
+    appId: process.env.REACT_APP_PARTICLE_APP_ID,
+    chainName: 'optimism',
+    chainId: 10,
+    wallet: {
+        //optional: by default, the wallet entry is displayed in the bottom right corner of the webpage.
+        displayWalletEntry: false, //show wallet entry when connect particle.
+        uiMode: 'dark', //optional: light or dark, if not set, the default is the same as web auth.
+        supportChains: [
+            { id: Network.OptimismMainnet, name: 'optimism' },
+            { id: Network.Arbitrum, name: 'arbitrum' },
+            { id: Network.Base, name: 'base' },
+            { id: Network.OptimismGoerli, name: 'optimism' },
+        ], // optional: web wallet support chains.
+        customStyle: {}, //optional: custom wallet style
+    },
+});
+
 const App = () => {
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
@@ -61,8 +82,6 @@ const App = () => {
 
     queryConnector.setQueryClient();
 
-    const particle = useContext(ParticleContext);
-
     useEffect(() => {
         const init = async () => {
             try {
@@ -70,7 +89,7 @@ const App = () => {
                 const providerNetworkId = !!address ? chainIdFromProvider : switchedToNetworkId;
                 let web3Provider;
 
-                if (particle && particle?.auth?.isLogin()) {
+                if (particle?.auth?.isLogin()) {
                     const particleProvider = new ParticleProvider(particle.auth);
                     web3Provider = new ethers.providers.Web3Provider(particleProvider, 'any');
                 }
@@ -94,8 +113,7 @@ const App = () => {
             }
         };
         init();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, provider, signer, switchedToNetworkId, address, particle?.auth]);
+    }, [dispatch, provider, signer, switchedToNetworkId, address]);
 
     useEffect(() => {
         dispatch(updateWallet({ walletAddress: address }));
@@ -103,7 +121,7 @@ const App = () => {
 
     useEffect(() => {
         dispatch(updateParticleState({ connectedViaParticle: !!particle?.auth?.isLogin() }));
-    }, [dispatch, particle, address, signer]);
+    }, [dispatch, address, signer]);
 
     useEffect(() => {
         const handlePageResized = () => {

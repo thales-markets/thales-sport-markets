@@ -1,6 +1,5 @@
 import CollateralSelector from 'components/CollateralSelector';
 import { getErrorToastOptions, getInfoToastOptions } from 'config/toast';
-import { COLLATERALS_AA } from 'constants/currency';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -34,6 +33,7 @@ import BalanceDetails from './components/BalanceDetails';
 import QRCodeModal from './components/QRCodeModal';
 import { navigateTo } from 'utils/routes';
 import ROUTES from 'constants/routes';
+import { COLLATERALS } from 'constants/currency';
 
 const Deposit: React.FC = () => {
     const { t } = useTranslation();
@@ -79,7 +79,7 @@ const Deposit: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
+                getCollaterals(networkId).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
                 return total;
@@ -88,7 +88,7 @@ const Deposit: React.FC = () => {
         } catch (e) {
             return undefined;
         }
-    }, [exchangeRates, multipleCollateralBalances.data, networkId, isConnectedViaParticle]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     useEffect(() => {
         if (totalValue === undefined) {
@@ -160,7 +160,7 @@ const Deposit: React.FC = () => {
                     <InputContainer ref={inputRef}>
                         <CollateralContainer ref={inputRef}>
                             <CollateralSelector
-                                collateralArray={lowBalanceAlert ? ['ETH'] : COLLATERALS_AA[networkId]}
+                                collateralArray={lowBalanceAlert ? ['ETH'] : COLLATERALS[networkId]}
                                 selectedItem={selectedToken}
                                 onChangeCollateral={(index) => handleChangeCollateral(index)}
                                 disabled={false}
@@ -185,7 +185,7 @@ const Deposit: React.FC = () => {
                     <DepositAddressFormContainer>
                         <InputLabel>
                             {t('deposit.address-input-label', {
-                                token: getCollaterals(networkId, true)[selectedToken],
+                                token: getCollaterals(networkId)[selectedToken],
                                 network: getNetworkNameByNetworkId(networkId),
                             })}
                         </InputLabel>
@@ -209,7 +209,7 @@ const Deposit: React.FC = () => {
                         <WarningContainer>
                             <WarningIcon className={'icon icon--warning'} />
                             {t('deposit.send', {
-                                token: getCollaterals(networkId, true)[selectedToken],
+                                token: getCollaterals(networkId)[selectedToken],
                                 network: getNetworkNameByNetworkId(networkId, true),
                             })}
                         </WarningContainer>

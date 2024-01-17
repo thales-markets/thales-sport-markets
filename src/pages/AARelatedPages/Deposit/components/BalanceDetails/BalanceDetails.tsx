@@ -5,7 +5,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivEnd } from 'styles/common';
@@ -18,7 +18,6 @@ const BalanceDetails: React.FC = () => {
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
@@ -37,7 +36,7 @@ const BalanceDetails: React.FC = () => {
         let total = 0;
         try {
             if (exchangeRates && multipleCollateralBalances.data) {
-                getCollaterals(networkId, isConnectedViaParticle).forEach((token) => {
+                getCollaterals(networkId).forEach((token) => {
                     total += multipleCollateralBalances.data[token] * (exchangeRates[token] ? exchangeRates[token] : 1);
                 });
             }
@@ -46,7 +45,7 @@ const BalanceDetails: React.FC = () => {
         } catch (e) {
             return 'N/A';
         }
-    }, [exchangeRates, isConnectedViaParticle, multipleCollateralBalances.data, networkId]);
+    }, [exchangeRates, multipleCollateralBalances.data, networkId]);
 
     const getUSDForCollateral = useCallback(
         (token: Coins) =>
@@ -60,7 +59,7 @@ const BalanceDetails: React.FC = () => {
             <SectionLabel>{t('my-portfolio.estimated-balance')}</SectionLabel>
             <TotalBalance>{formatCurrencyWithSign(USD_SIGN, totalBalanceValue)}</TotalBalance>
             <TokenBalancesWrapper>
-                {getCollaterals(networkId, isConnectedViaParticle)
+                {getCollaterals(networkId)
                     .sort((a, b) => {
                         return getUSDForCollateral(b) - getUSDForCollateral(a);
                     })

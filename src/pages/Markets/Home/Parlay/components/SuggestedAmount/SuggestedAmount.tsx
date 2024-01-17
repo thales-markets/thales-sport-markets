@@ -3,7 +3,7 @@ import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsConnectedViaParticle, getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -26,9 +26,8 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     insertedAmount,
 }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
-    const collateral = getCollateral(networkId, collateralIndex, isParticle);
+    const collateral = getCollateral(networkId, collateralIndex);
 
     const convertFromStable = useCallback(
         (value: number) => {
