@@ -345,7 +345,8 @@
                 "rebounds": "Подборы",
                 "assists": "помогает",
                 "triple double": "Трипл-дабл",
-                "double double": "Дабл-дабл"
+                "double double": "Дабл-дабл",
+                "receptions": "Приемы"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -411,7 +412,9 @@
                     "double-double-no": "{{team}} не забьет дабл-дабл",
                     "triple-double-yes": "{{team}} забьет трипл-дабл",
                     "double-double-yes": "{{team}} забьет дабл-дабл",
-                    "triple-double-no": "{{team}} не забьет трипл-дабл"
+                    "triple-double-no": "{{team}} не забьет трипл-дабл",
+                    "receptions-under": "У {{team}} будет меньше приёмов, чем у {{scoring}}",
+                    "receptions-over": "У {{team}} будет больше приёмов, чем у {{scoring}}"
                 }
             },
             "starts-in": "Начинается через",

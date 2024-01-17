@@ -1,5 +1,5 @@
 import { BetType } from 'enums/markets';
-import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
+import { SportsMap, SportsTagsMap, Tags } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
     {
@@ -580,6 +580,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_ASSISTS]: 'assists',
     [BetType.PLAYER_PROPS_DOUBLE_DOUBLE]: 'double double',
     [BetType.PLAYER_PROPS_TRIPLE_DOUBLE]: 'triple double',
+    [BetType.PLAYER_PROPS_RECEPTIONS]: 'receptions',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
@@ -604,6 +605,7 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_ASSISTS]: '',
     [BetType.PLAYER_PROPS_DOUBLE_DOUBLE]: '',
     [BetType.PLAYER_PROPS_TRIPLE_DOUBLE]: '',
+    [BetType.PLAYER_PROPS_RECEPTIONS]: '',
 };
 
 export const SCORING_MAP: SportsMap = {
