@@ -432,7 +432,9 @@
                 "assists": "Assists",
                 "double double": "Double-double",
                 "triple double": "Triple-double",
-                "receptions": "Receptions"
+                "receptions": "Receptions",
+                "first touchdown": "Who will score the first touchdown in the game? (incl. OT)",
+                "last touchdown": "Who will score the last touchdown in the game?"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -497,6 +499,8 @@
                     "triple-double-no": "{{team}} will not score a triple-double",
                     "receptions-over": "{{team}} will have more receptions than {{scoring}}",
                     "receptions-under": "{{team}} will have less receptions than {{scoring}}",
+                    "first-touchdown": "{{team}} will score the first touchdown in the game",
+                    "last-touchdown": "{{team}} will score the last touchdown in the game",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }

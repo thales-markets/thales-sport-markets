@@ -346,7 +346,9 @@
                 "assists": "помогает",
                 "triple double": "Трипл-дабл",
                 "double double": "Дабл-дабл",
-                "receptions": "Приемы"
+                "receptions": "Приемы",
+                "last touchdown": "Кто забьет последний тачдаун в игре?",
+                "first touchdown": "Кто забьет первый тачдаун в игре? (включая ОТ)"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -414,7 +416,9 @@
                     "double-double-yes": "{{team}} забьет дабл-дабл",
                     "triple-double-no": "{{team}} не забьет трипл-дабл",
                     "receptions-under": "У {{team}} будет меньше приёмов, чем у {{scoring}}",
-                    "receptions-over": "У {{team}} будет больше приёмов, чем у {{scoring}}"
+                    "receptions-over": "У {{team}} будет больше приёмов, чем у {{scoring}}",
+                    "first-touchdown": "{{team}} забьет первый тачдаун в игре",
+                    "last-touchdown": "{{team}} забьет последний тачдаун в игре"
                 }
             },
             "starts-in": "Начинается через",

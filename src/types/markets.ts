@@ -122,6 +122,8 @@ export type SportMarketChildMarkets = {
     doubleDoubleMarkets: SportMarketInfo[];
     tripleDoubleMarkets: SportMarketInfo[];
     receptionsMarkets: SportMarketInfo[];
+    firstTouchdownMarkets: SportMarketInfo[];
+    lastTouchdownMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {
