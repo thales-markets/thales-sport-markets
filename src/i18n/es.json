@@ -346,7 +346,9 @@
                 "rebounds": "Rebotes",
                 "double double": "Doble doble",
                 "triple double": "Triple doble",
-                "receptions": "Recepciones"
+                "receptions": "Recepciones",
+                "first touchdown": "¿Quién anotará el primer touchdown del juego? (incluido tiempo extra)",
+                "last touchdown": "¿Quién anotará el último touchdown del juego?"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -414,7 +416,9 @@
                     "double-double-yes": "{{team}} anotará un doble-doble",
                     "triple-double-no": "{{team}} no conseguirá un triple-doble",
                     "receptions-over": "{{team}} tendrá más recepciones que {{scoring}}",
-                    "receptions-under": "{{team}} tendrá menos recepciones que {{scoring}}"
+                    "receptions-under": "{{team}} tendrá menos recepciones que {{scoring}}",
+                    "first-touchdown": "{{team}} anotará el primer touchdown del juego",
+                    "last-touchdown": "{{team}} anotará el último touchdown del juego"
                 }
             },
             "starts-in": "Empieza en",

@@ -346,7 +346,9 @@
                 "rebounds": "รีบาวด์",
                 "double double": "ดับเบิ้ลดับเบิ้ล",
                 "triple double": "ทริปเปิ้ล-ดับเบิ้ล",
-                "receptions": "แผนกต้อนรับ"
+                "receptions": "แผนกต้อนรับ",
+                "last touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ครั้งสุดท้ายในเกม?",
+                "first touchdown": "ใครจะเป็นผู้ทำทัชดาวน์แรกในเกม? (รวมโอที)"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -414,7 +416,9 @@
                     "triple-double-no": "{{team}} จะไม่ทำแต้มทริปเปิล-ดับเบิ้ล",
                     "double-double-no": "{{team}} จะไม่ทำคะแนนดับเบิ้ล-ดับเบิ้ล",
                     "receptions-under": "{{team}} จะมีการรับน้อยกว่า {{scoring}}",
-                    "receptions-over": "{{team}} จะมีการรับมากกว่า {{scoring}}"
+                    "receptions-over": "{{team}} จะมีการรับมากกว่า {{scoring}}",
+                    "last-touchdown": "{{team}} จะทำคะแนนทัชดาวน์สุดท้ายของเกม",
+                    "first-touchdown": "{{team}} จะทำทัชดาวน์แรกในเกม"
                 }
             },
             "starts-in": "เริ่มเข้า",

@@ -102,6 +102,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         receptionsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RECEPTIONS
         ),
+        firstTouchdownMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_FIRST_TOUCHDOWN
+        ),
+        lastTouchdownMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_LAST_TOUCHDOWN
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -535,6 +541,20 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions
                             markets={childMarkets.receptionsMarkets}
                             betType={BetType.PLAYER_PROPS_RECEPTIONS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.firstTouchdownMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.firstTouchdownMarkets}
+                            betType={BetType.PLAYER_PROPS_FIRST_TOUCHDOWN}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.lastTouchdownMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.lastTouchdownMarkets}
+                            betType={BetType.PLAYER_PROPS_LAST_TOUCHDOWN}
                             showOdds={showAMM}
                         />
                     )}

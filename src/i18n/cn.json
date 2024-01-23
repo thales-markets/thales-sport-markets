@@ -346,7 +346,9 @@
                 "rebounds": "篮板球",
                 "triple double": "三双",
                 "double double": "双双",
-                "receptions": "招待会"
+                "receptions": "招待会",
+                "first touchdown": "谁将获得本场比赛的第一个达阵？ （包括加班）",
+                "last touchdown": "谁将获得比赛最后一次达阵？"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -414,7 +416,9 @@
                     "triple-double-yes": "{{team}}将获得三双",
                     "triple-double-no": "{{team}}不会拿下三双",
                     "receptions-over": "{{team}} 的接球次数将多于 {{scoring}}",
-                    "receptions-under": "{{team}} 的接球次数将少于 {{scoring}}"
+                    "receptions-under": "{{team}} 的接球次数将少于 {{scoring}}",
+                    "first-touchdown": "{{team}} 将获得比赛中的第一个达阵",
+                    "last-touchdown": "{{team}} 将获得本场比赛的最后一次达阵"
                 }
             },
             "starts-in": "开始于",

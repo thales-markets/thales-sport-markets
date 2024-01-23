@@ -346,7 +346,9 @@
                 "assists": "Assist",
                 "double double": "Doppio-doppio",
                 "triple double": "Tripla-doppia",
-                "receptions": "Ricevimenti"
+                "receptions": "Ricevimenti",
+                "last touchdown": "Chi segnerà l'ultimo touchdown della partita?",
+                "first touchdown": "Chi segnerà il primo touchdown della partita? (incluso OT)"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -414,7 +416,9 @@
                     "double-double-yes": "{{team}} segnerà una doppia doppia",
                     "triple-double-yes": "{{team}} segnerà una tripla doppia",
                     "receptions-over": "{{team}} avrà più ricezioni di {{scoring}}",
-                    "receptions-under": "{{team}} avrà meno ricezioni di {{scoring}}"
+                    "receptions-under": "{{team}} avrà meno ricezioni di {{scoring}}",
+                    "first-touchdown": "{{team}} segnerà il primo touchdown della partita",
+                    "last-touchdown": "{{team}} segnerà l'ultimo touchdown della partita"
                 }
             },
             "starts-in": "Inizia tra",
