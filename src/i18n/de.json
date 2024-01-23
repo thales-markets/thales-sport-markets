@@ -23,7 +23,15 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Wallet-Info",
             "approve-parlay": "ParlayAMM genehmigen",
-            "approve-sports": "Genehmigen Sie SportsAMM"
+            "approve-sports": "Genehmigen Sie SportsAMM",
+            "view-more-options": "Weitere Optionen anzeigen",
+            "view-less-options": "Weniger Optionen anzeigen",
+            "please-connect": "Bitte verbinden Sie Ihr Wallet, um overtime.xyz nutzen zu können",
+            "wallet-connect": "Wallet Connect",
+            "or-connect-with": "oder verbinden Sie sich mit",
+            "metamask": "Metamaske",
+            "connect-with-wallet": "Mit Wallet verbinden",
+            "connect-wallet-modal-title": "Melden Sie sich bei OvertimeMarkets an"
         },
         "voucher": {
             "remaining-amount": "Verbleibender Betrag",
@@ -159,7 +167,19 @@
         "fifa-tooltip": "Die Ergebnisse der FIFA-Weltmeisterschaftsmärkte basieren auf den regulären Ergebnissen. Sollte es in die Verlängerung gehen, ist das reguläre Ergebnis dasjenige, zu dem der Markt entscheidet.",
         "tennis-tooltip": "Im Falle eines Walkovers wird das Spiel als abgebrochen behandelt. Im Falle einer Aufgabe / Disqualifikation während des Spiels wird dies als Gewinn für den Spieler gewertet, der in die nächste Runde aufsteigt",
         "iihf-tooltip": "Die Ergebnisse der IIHF-Weltmeisterschaftsmärkte basieren auf den regulären Ergebnissen. Sollten sie in die Verlängerung gehen, ist das reguläre Ergebnis dasjenige, das der Markt zugrunde legt.",
-        "football-tooltip": "Marktergebnisse basieren auf Regulierungsergebnissen. Sollten sie in die Verlängerung gehen, ist das Regulierungsergebnis dasjenige, zu dem der Markt auflösen wird."
+        "football-tooltip": "Marktergebnisse basieren auf Regulierungsergebnissen. Sollten sie in die Verlängerung gehen, ist das Regulierungsergebnis dasjenige, zu dem der Markt auflösen wird.",
+        "login-with": {
+            "github": "GitHub",
+            "gmail": "Google Mail",
+            "linkedin": "Linkedin",
+            "twitch": "Zucken",
+            "twitter": "Twitter",
+            "facebook": "Facebook",
+            "microsoft": "Microsoft",
+            "x": "X",
+            "apple": "Apfel",
+            "discord": "Zwietracht"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -271,7 +291,9 @@
             "no-results-for-wallet": "Mit diesen Wallet sind keine Transaktionen verbunden.",
             "result-col": "Ergebnis",
             "usd-value-col": "USD-Wert",
-            "game-col": "Spiel"
+            "game-col": "Spiel",
+            "parlay-title": "Aktuelle Parlay-Aktivität",
+            "single-title": "Letzte Einzelaktivität"
         },
         "tooltip": {
             "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
@@ -323,7 +345,10 @@
                 "assists": "Unterstützt",
                 "rebounds": "Rebounds",
                 "double double": "Doppelt-doppelt",
-                "triple double": "Triple-Double"
+                "triple double": "Triple-Double",
+                "receptions": "Empfänge",
+                "first touchdown": "Wer erzielt den ersten Touchdown im Spiel? (inkl. OT)",
+                "last touchdown": "Wer erzielt den letzten Touchdown im Spiel?"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -389,7 +414,11 @@
                     "double-double-no": "{{team}} wird kein Double-Double erzielen",
                     "triple-double-no": "{{team}} wird kein Triple-Double erzielen",
                     "triple-double-yes": "{{team}} wird ein Triple-Double erzielen",
-                    "double-double-yes": "{{team}} wird ein Double-Double erzielen"
+                    "double-double-yes": "{{team}} wird ein Double-Double erzielen",
+                    "receptions-under": "{{team}} wird weniger Empfänge haben als {{scoring}}",
+                    "receptions-over": "{{team}} wird mehr Empfänge haben als {{scoring}}",
+                    "first-touchdown": "{{team}} erzielt den ersten Touchdown im Spiel",
+                    "last-touchdown": "{{team}} erzielt den letzten Touchdown im Spiel"
                 }
             },
             "starts-in": "Beginnt in",
@@ -496,7 +525,9 @@
             },
             "in-wallet": "Im Portemonnaie",
             "pay-with-voucher": "Bezahlen Sie mit Gutschein",
-            "total-to-pay": "Gesamtbetrag"
+            "total-to-pay": "Gesamtbetrag",
+            "gas-tooltip": "Aktuelle Gasgebühr, die von der Blockchain zur Abwicklung der Transaktion benötigt wird",
+            "total-gas": "Gasgebühr (GESCHÄTZT)"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -525,7 +556,8 @@
         },
         "incentivized-markets": "ANREIZMÄRKTE",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-tennis": "Wimbledon wird einen Anreiz erhalten, da das Turnier am 3. Juli beginnt. Die Märkte werden bis zum Ende des Turniers am 16. Juli mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen."
+        "incentivized-tooltip-tennis": "Wimbledon wird einen Anreiz erhalten, da das Turnier am 3. Juli beginnt. Die Märkte werden bis zum Ende des Turniers am 16. Juli mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen.",
+        "incentivized-tooltip-nfl-playoffs": "Während der NFL-Playoffs werden insgesamt {{rewards}} verteilt. Weitere Details finden Sie <detailsLink>hier</detailsLink>."
     },
     "rewards": {
         "header": "Preise",
@@ -706,7 +738,11 @@
         "go-to-single-lp": "Gehen Sie zu Single LP",
         "parlay-lp-title": "Parlay-Liquiditätspool",
         "single-lp-title": "Einzelner Liquiditätspool",
-        "go-to-parlay-lp": "Gehen Sie zu Parlay LP"
+        "go-to-parlay-lp": "Gehen Sie zu Parlay LP",
+        "wrapper-nav": {
+            "my-tickets": "Meine Tickets",
+            "my-portfolio": "Mein Portfolio"
+        }
     },
     "referral": {
         "generate-link": "Link generieren",
@@ -850,7 +886,8 @@
         },
         "parlay-lp": {
             "title": "Parlay-LP"
-        }
+        },
+        "deprecated-info": "Veraltet, bitte heben Sie Ihr Geld ab!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1041,5 +1078,92 @@
             "description": "{{dynamicTitle}}: Genießen Sie die besten Web3-Sportwetten-Quoten auf dem Markt. Keine Registrierung erforderlich. Vollständig dezentralisierte Sportmärkte.",
             "title": "Overtime Markets Web3 Sportwetten: {{dynamicTitle}}"
         }
+    },
+    "deposit": {
+        "tutorials": {
+            "title": "Einzahlungsleitfäden",
+            "coinbase": "Einzahlung von Coinbase",
+            "binance-mobile": "Einzahlung über die Binance Mobile App",
+            "binance": "Einzahlung über die Binance-Website"
+        },
+        "address-input-label": "Ihre persönliche {{ token }}-Einzahlungsadresse im {{ network }}",
+        "all-set": "Sie sind bereit!",
+        "qr-modal-title": "Senden Sie {{ token }} ({{ network }})",
+        "go": "Lass uns gehen!",
+        "description": "Um mit Overtime handeln zu können, müssen Sie Ihr Konto aufladen. Befolgen Sie sorgfältig die folgenden Schritte und zahlen Sie die ausgewählte Kryptowährung an der generierten Adresse ein.",
+        "or-buy-with": "Oder mit kaufen",
+        "send": "Stellen Sie sicher, dass Sie {{ network }} {{ token }} an die oben genannte Adresse einzahlen!",
+        "deposit-crypto": "Krypto einzahlen",
+        "copying-address": "Bitte warten",
+        "warning": "Ihr ETH-Guthaben ist niedrig. Bitte laden Sie Ihr ETH-Guthaben auf, um Overtime weiterhin nutzen zu können",
+        "copied": "Adresse kopiert!",
+        "select-token": "Token auswählen",
+        "ready-to-use": "Ihr Konto ist aufgeladen und Sie können Overtime Markets nutzen! Sie können Geschäfte mit ETH tätigen oder andere Token einzahlen, die jetzt auf der Einzahlungsseite sichtbar sind."
+    },
+    "withdraw": {
+        "confirmation-modal": {
+            "address": "Adresse",
+            "correct-address": "Stellen Sie sicher, dass die Adresse korrekt ist und {{ token }} im {{ network }} akzeptiert.",
+            "withdrawal-fee": "Abhebegebühr",
+            "title": "Auszahlung beantragt",
+            "confirm": "Bestätigen",
+            "network": "Netzwerk",
+            "withdrawal-transaction-warning": "Auszahlungstransaktionen können nicht storniert werden"
+        },
+        "toast-messages": {
+            "success": "Erfolgreicher Rückzug",
+            "pending": "Transaktion ausstehend...",
+            "error": "Beim Abheben von Geldern ist ein Fehler aufgetreten."
+        },
+        "validation": {
+            "wallet-address": "Die Wallet-Adresse ist ungültig",
+            "amount": "Betrag ist ungültig"
+        },
+        "warning": "Überprüfen Sie die Auszahlungsadresse noch einmal und stellen Sie sicher, dass sie {{ token }} im {{ network }} akzeptiert.",
+        "button-label-withdraw": "Zurückziehen",
+        "description": "Verwenden Sie diese Seite, um Geld von Ihrem Überstundenkonto abzuheben. Befolgen Sie die folgenden Schritte sorgfältig und überprüfen Sie alles noch einmal.",
+        "paste-address": "Fügen Sie hier Ihre Wallet-Adresse ein",
+        "address-input-label": "Ihre persönliche {{ token }}-Abhebungsadresse im {{ network }}",
+        "amount": "Menge",
+        "heading-withdraw": "Krypto abheben"
+    },
+    "my-portfolio": {
+        "withdraw": "Zurückziehen",
+        "top-up-eth-tooltip": "Ihr ETH-Gassaldo ist niedrig.\n\nBitte zahlen Sie mehr ETH ein oder tauschen Sie andere hinterlegte Token gegen mehr ETH",
+        "deposit": "Kaution",
+        "top-up-eth": "ETH aufladen",
+        "estimated-balance": "Geschätzter Saldo"
+    },
+    "get-started": {
+        "steps": {
+            "title": {
+                "trade": "Beginnen Sie mit der Nutzung von Overtime-Märkten!",
+                "deposit": "ETH einzahlen",
+                "logged-in": "Eingeloggt",
+                "sign-up": "Melden Sie sich an"
+            },
+            "description": {
+                "trade": "Ihr Konto ist jetzt aufgeladen und Sie können Ihre Positionen in Überstunden platzieren!",
+                "sign-up": "Klicken Sie auf die Schaltfläche „Anmelden“ und wählen Sie die Anmeldemethode Ihrer Wahl.",
+                "logged-in": "Sie haben Ihr Overtime Smart Account erfolgreich auf der Blockchain erstellt und sind angemeldet.",
+                "deposit": "Um Overtime nutzen zu können, müssen Sie Ihr neues Konto bei ETH aufladen. Klicken Sie auf die Schaltfläche „Jetzt einzahlen“ und wählen Sie zwischen einer direkten Einzahlung an die Adresse oder dem Kauf mit Kreditkarte."
+            },
+            "action": {
+                "trade": "Handeln Sie mit Überstunden",
+                "connected": "In Verbindung gebracht",
+                "connect-wallet": "Wallet verbinden",
+                "sign-up": "Melden Sie sich an",
+                "deposit": "Kaution",
+                "logged-in": "Eingeloggt"
+            }
+        },
+        "sign-up": "Melden Sie sich an",
+        "title": "Beginnen Sie mit Überstunden",
+        "log-in": "Anmeldung",
+        "get-started": "Loslegen",
+        "sign-out": "Abmelden"
+    },
+    "banner": {
+        "arb-distribution-message": "Die ARB-Verteilung hat begonnen. Verdienen Sie ARB-Tokens, indem Sie Überstunden nutzen. Schauen Sie sich die Details hier an."
     }
 }

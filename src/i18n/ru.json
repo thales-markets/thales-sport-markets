@@ -14,7 +14,15 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Информация о кошельке",
             "approve-parlay": "Одобрить ParlayAMM",
-            "approve-sports": "Утвердить SportsAMM"
+            "approve-sports": "Утвердить SportsAMM",
+            "connect-with-wallet": "Подключиться к кошельку",
+            "or-connect-with": "или свяжитесь с",
+            "connect-wallet-modal-title": "Войдите в OvertimeMarkets",
+            "please-connect": "пожалуйста, подключите кошелек, чтобы начать использовать overtime.xyz",
+            "view-less-options": "Посмотреть меньше вариантов",
+            "wallet-connect": "Подключение кошелька",
+            "metamask": "Метамаска",
+            "view-more-options": "Посмотреть больше вариантов"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -159,7 +167,19 @@
         "fifa-tooltip": "Результаты рынков чемпионата мира по футболу FIFA основаны на результатах регламента, и если они перейдут в овертайм, то рынок примет решение по регламенту.",
         "tennis-tooltip": "В случае отказа матч считается отмененным. В случае выхода/дисквалификации во время матча это будет считаться победой игрока, прошедшего в следующий раунд.",
         "iihf-tooltip": "Рыночные результаты чемпионата мира по хоккею с шайбой основаны на результатах регламента, и если они перейдут в овертайм, то рынок примет решение по регламенту.",
-        "football-tooltip": "Рыночные результаты основаны на результатах регулирования, и если они перейдут к овертайму, результатом регулирования будет тот результат, который примет рынок."
+        "football-tooltip": "Рыночные результаты основаны на результатах регулирования, и если они перейдут к овертайму, результатом регулирования будет тот результат, который примет рынок.",
+        "login-with": {
+            "twitch": "Твич",
+            "discord": "Раздор",
+            "gmail": "Gmail",
+            "github": "GitHub",
+            "linkedin": "Линкедин",
+            "apple": "Яблоко",
+            "facebook": "Фейсбук",
+            "twitter": "Твиттер",
+            "microsoft": "Майкрософт",
+            "x": "Икс"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -271,7 +291,9 @@
             "no-results-for-wallet": "No transactions associated with this wallet.",
             "usd-value-col": "стоимость в долларах",
             "game-col": "игра",
-            "result-col": "результат"
+            "result-col": "результат",
+            "single-title": "Недавнее одиночное действие",
+            "parlay-title": "Недавние экспресс-активности"
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
@@ -323,7 +345,10 @@
                 "rebounds": "Подборы",
                 "assists": "помогает",
                 "triple double": "Трипл-дабл",
-                "double double": "Дабл-дабл"
+                "double double": "Дабл-дабл",
+                "receptions": "Приемы",
+                "last touchdown": "Кто забьет последний тачдаун в игре?",
+                "first touchdown": "Кто забьет первый тачдаун в игре? (включая ОТ)"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -389,7 +414,11 @@
                     "double-double-no": "{{team}} не забьет дабл-дабл",
                     "triple-double-yes": "{{team}} забьет трипл-дабл",
                     "double-double-yes": "{{team}} забьет дабл-дабл",
-                    "triple-double-no": "{{team}} не забьет трипл-дабл"
+                    "triple-double-no": "{{team}} не забьет трипл-дабл",
+                    "receptions-under": "У {{team}} будет меньше приёмов, чем у {{scoring}}",
+                    "receptions-over": "У {{team}} будет больше приёмов, чем у {{scoring}}",
+                    "first-touchdown": "{{team}} забьет первый тачдаун в игре",
+                    "last-touchdown": "{{team}} забьет последний тачдаун в игре"
                 }
             },
             "starts-in": "Начинается через",
@@ -496,7 +525,9 @@
             },
             "pay-with-voucher": "Оплатить ваучером",
             "total-to-pay": "Итого к оплате",
-            "in-wallet": "В кошельке"
+            "in-wallet": "В кошельке",
+            "total-gas": "Плата за газ (ОЦЕНОЧНАЯ)",
+            "gas-tooltip": "Текущая комиссия за газ, требуемая блокчейном для проведения транзакции"
         },
         "discounted-per": "Со скидкой согласно",
         "nav-menu": {
@@ -525,7 +556,8 @@
         },
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "СТИМУЛИРОВАННЫЕ РЫНКИ",
-        "incentivized-tooltip-tennis": "Ролан Гаррос будет поощрен, так как турнир стартует 29 мая. Рынки будут получать {{rewards}} до конца турнира 12 июня. Вознаграждения будут распределяться в зависимости от вашего объема продаж на этих рынках. Вы можете отслеживать распределение вознаграждений на нашей <detailsLink>панели управления Dune</detailsLink>."
+        "incentivized-tooltip-tennis": "Ролан Гаррос будет поощрен, так как турнир стартует 29 мая. Рынки будут получать {{rewards}} до конца турнира 12 июня. Вознаграждения будут распределяться в зависимости от вашего объема продаж на этих рынках. Вы можете отслеживать распределение вознаграждений на нашей <detailsLink>панели управления Dune</detailsLink>.",
+        "incentivized-tooltip-nfl-playoffs": "Во время плей-офф НФЛ будет роздано колоссальное количество {{rewards}}. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -706,7 +738,11 @@
         "parlay-lp-title": "Экспресс-пул ликвидности",
         "go-to-single-lp": "Перейти к синглу",
         "single-lp-title": "Единый пул ликвидности",
-        "go-to-parlay-lp": "Перейти на Parlay LP"
+        "go-to-parlay-lp": "Перейти на Parlay LP",
+        "wrapper-nav": {
+            "my-tickets": "Мои билеты",
+            "my-portfolio": "Мое Портфолио"
+        }
     },
     "referral": {
         "nav-items": {
@@ -850,7 +886,8 @@
         },
         "parlay-lp": {
             "title": "Парлай ЛП"
-        }
+        },
+        "deprecated-info": "Устарело, пожалуйста, выведите свои средства!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1041,5 +1078,92 @@
             "title": "Букмекерская контора Overtime Markets Web3: {{dynamicTitle}}",
             "description": "{{dynamicTitle}}: наслаждайтесь лучшими на рынке букмекерскими коэффициентами Web3. Никакой регистрации не требуется. Полностью децентрализованные спортивные рынки."
         }
+    },
+    "deposit": {
+        "tutorials": {
+            "binance": "Депозит с сайта Binance",
+            "binance-mobile": "Депозит через мобильное приложение Binance",
+            "title": "Депозитные руководства",
+            "coinbase": "Депозит от Coinbase"
+        },
+        "description": "Чтобы торговать в сверхурочную работу, вам необходимо пополнить свой счет. Внимательно следуйте инструкциям ниже и внесите выбранную криптовалюту на сгенерированный адрес.",
+        "all-set": "У вас все настроено!",
+        "copied": "Адрес скопирован!",
+        "go": "Пойдем!",
+        "send": "Убедитесь, что вы вносите {{ network }} {{ token }} на указанный выше адрес!",
+        "or-buy-with": "Или купить с",
+        "select-token": "Выберите токен",
+        "ready-to-use": "Ваш счет пополнен и готов начать использовать рынки сверхурочной работы! Вы можете совершать сделки с ETH или вносить другие токены, которые теперь отображаются на странице депозита.",
+        "copying-address": "пожалуйста, подождите",
+        "address-input-label": "Ваш личный депозитный адрес {{ token }} в {{ network }}",
+        "warning": "Ваш баланс ETH низкий. Пожалуйста, пополните свой баланс ETH, чтобы продолжить использование Overtime.",
+        "qr-modal-title": "Отправить {{ token }} ({{ network }})",
+        "deposit-crypto": "Депозит криптовалюты"
+    },
+    "withdraw": {
+        "confirmation-modal": {
+            "address": "Адрес",
+            "correct-address": "Убедитесь, что адрес правильный и что он принимает {{ token }} в {{ network }}.",
+            "title": "Запрошен вывод средств",
+            "network": "Сеть",
+            "confirm": "Подтверждать",
+            "withdrawal-fee": "Комиссия за снятие средств",
+            "withdrawal-transaction-warning": "Транзакции вывода не могут быть отменены"
+        },
+        "toast-messages": {
+            "pending": "Ожидается транзакция...",
+            "error": "При выводе средств произошла ошибка.",
+            "success": "Успешный вывод"
+        },
+        "validation": {
+            "wallet-address": "Адрес кошелька недействителен.",
+            "amount": "Сумма недействительна."
+        },
+        "address-input-label": "Ваш личный адрес вывода {{ token }} в {{ network }}",
+        "button-label-withdraw": "Отзывать",
+        "paste-address": "Вставьте сюда адрес своего кошелька",
+        "heading-withdraw": "Вывод криптовалюты",
+        "amount": "Количество",
+        "description": "Используйте эту страницу для вывода средств со своего счета сверхурочной работы. Внимательно следуйте инструкциям ниже и обязательно все перепроверьте.",
+        "warning": "Дважды проверьте адрес вывода и убедитесь, что он принимает {{ token }} в {{ network }}"
+    },
+    "my-portfolio": {
+        "deposit": "Депозит",
+        "top-up-eth-tooltip": "Ваш газовый баланс ETH низкий.\n\nПожалуйста, внесите больше ETH или замените другие внесенные токены на больше ETH.",
+        "estimated-balance": "Предполагаемый баланс",
+        "top-up-eth": "Пополните ETH",
+        "withdraw": "Отзывать"
+    },
+    "get-started": {
+        "steps": {
+            "title": {
+                "trade": "Начните использовать рынки сверхурочной работы!",
+                "sign-up": "Зарегистрироваться",
+                "logged-in": "Вошёл в систему",
+                "deposit": "Депозит ETH"
+            },
+            "description": {
+                "trade": "Ваш счет теперь пополнен, и вы готовы разместить свои позиции в сверхурочной работе!",
+                "logged-in": "Вы успешно создали свою учетную запись Overtime Smart Account в блокчейне и вошли в систему.",
+                "deposit": "Чтобы начать использовать Overtime, вам необходимо пополнить свой новый счет с помощью ETH. Нажмите кнопку «Внести депозит сейчас» и выберите между прямым депозитом на адрес или покупкой с помощью кредитной карты.",
+                "sign-up": "Нажмите кнопку «Зарегистрироваться» и выберите способ входа в систему."
+            },
+            "action": {
+                "deposit": "Депозит",
+                "connect-wallet": "Подключить кошелек",
+                "connected": "Связанный",
+                "trade": "Торговля в сверхурочную работу",
+                "logged-in": "Вошёл в систему",
+                "sign-up": "Зарегистрироваться"
+            }
+        },
+        "sign-out": "выход",
+        "sign-up": "Зарегистрироваться",
+        "title": "Начнём со сверхурочной работы",
+        "get-started": "Начать",
+        "log-in": "Авторизоваться"
+    },
+    "banner": {
+        "arb-distribution-message": "Распространение ARB началось. Зарабатывайте токены ARB, используя сверхурочную работу. Подробности уточняйте здесь."
     }
 }

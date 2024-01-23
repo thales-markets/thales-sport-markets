@@ -18,12 +18,12 @@ import {
     FlexDivRow,
     FlexDivRowCentered,
 } from 'styles/common';
-import { ParlaysMarket } from 'types/markets';
 import { formatCurrencyWithSign } from 'thales-utils';
-import { formatMarketOdds } from 'utils/markets';
+import { ParlaysMarket } from 'types/markets';
+import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
+import { formatParlayOdds } from 'utils/parlay';
 import { buildReffererLink } from 'utils/routes';
 import MatchInfo from '../../../MatchInfo';
-import { extractCombinedMarketsFromParlayMarkets, removeCombinedMarketFromParlayMarkets } from 'utils/combinedMarkets';
 import MatchInfoOfCombinedMarket from '../../../MatchInfoOfCombinedMarket/MatchInfoOfCombinedMarket';
 
 type MyTicketProps = {
@@ -34,7 +34,7 @@ type MyTicketProps = {
     payout: number;
 };
 
-const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, totalQuote, paid, payout }) => {
+const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, paid, payout }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
@@ -143,7 +143,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, totalQuote, p
                     <>
                         <InfoDiv>
                             <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
-                            <InfoValue>{formatMarketOdds(selectedOddsType, totalQuote)}</InfoValue>
+                            <InfoValue>{formatParlayOdds(selectedOddsType, paid, payout)}</InfoValue>
                         </InfoDiv>
                     </>
                 )}

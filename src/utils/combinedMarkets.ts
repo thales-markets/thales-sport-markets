@@ -1,4 +1,12 @@
 import {
+    COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS,
+    POSITION_TO_ODDS_OBJECT_PROPERTY_NAME,
+    SGPCombinationsFromContractOrderMapping,
+} from 'constants/markets';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { BetType, CombinedPositionsMatchingCode, ContractSGPOrder, Position } from 'enums/markets';
+import { bigNumberFormatter, localStore } from 'thales-utils';
+import {
     CombinedMarket,
     CombinedMarketContractData,
     CombinedMarketPosition,
@@ -20,15 +28,6 @@ import {
     isParentMarketSameForSportMarkets,
     isPlayerProps,
 } from './markets';
-import {
-    COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS,
-    POSITION_TO_ODDS_OBJECT_PROPERTY_NAME,
-    SGPCombinationsFromContractOrderMapping,
-} from 'constants/markets';
-import { bigNumberFormatter, localStore } from 'thales-utils';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { BetType, CombinedPositionsMatchingCode, ContractSGPOrder, Position } from 'enums/markets';
-import _ from 'lodash';
 
 export const isSpecificCombinedPositionAddedToParlay = (
     parlayData: ParlaysMarketPosition[],
@@ -424,39 +423,53 @@ export const filterMarketsByTagsArray = (sportMarkets: SportMarkets, tags: numbe
     return sportMarkets.filter((market) => market.tags.findIndex((tag) => tags.includes(Number(tag))) !== -1);
 };
 
-export const compareCombinedPositionsFromParlayData = (
-    combinedPositions: CombinedMarketPosition,
-    combinedPositionsParlay: CombinedMarketPosition
+export const checkIfCombinedPositionAlreadyInParlay = (
+    combinedPosition: CombinedMarketPosition,
+    existingCombinedPositions: CombinedMarketPosition[]
 ) => {
-    if (_.isEqual(combinedPositions.markets, combinedPositionsParlay.markets))
-        return CombinedPositionsMatchingCode.SAME_POSITIONS;
+    let sameMarketAddresses = 0;
+    let samePositions = 0;
 
-    let numberOfEqualParentMarketsNotPositions = 0;
-    let numberOfEqualMarketsAndPositions = 0;
+    let existingMarketIndex: number | undefined = undefined;
 
-    combinedPositions.markets.every((market) => {
-        combinedPositionsParlay.markets.every((_market) => {
-            if (
-                market.sportMarketAddress == _market.sportMarketAddress ||
-                market.parentMarket == _market.parentMarket
-            ) {
-                if (market.position !== _market.position) {
-                    numberOfEqualParentMarketsNotPositions++;
-                } else {
-                    numberOfEqualMarketsAndPositions++;
+    let matchingCode: CombinedPositionsMatchingCode = CombinedPositionsMatchingCode.NOTHING_COMMON;
+
+    for (let i = 0; i < existingCombinedPositions.length; i++) {
+        const existingPosition = existingCombinedPositions[i];
+        for (let j = 0; j < existingPosition.markets.length; j++) {
+            const market = combinedPosition.markets[j];
+            const _market = existingPosition.markets[j];
+
+            if (market.parentMarket !== market.parentMarket) {
+                continue;
+            }
+
+            if (market.sportMarketAddress == _market.sportMarketAddress) {
+                sameMarketAddresses++;
+                if (market.position == _market.position) {
+                    samePositions++;
                 }
             }
-        });
-    });
+        }
 
-    if (numberOfEqualMarketsAndPositions > 0) return CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS;
+        if (
+            sameMarketAddresses == combinedPosition.markets.length &&
+            samePositions == combinedPosition.markets.length
+        ) {
+            matchingCode = CombinedPositionsMatchingCode.SAME_POSITIONS;
+            existingMarketIndex = i;
+            break;
+        }
 
-    if (
-        combinedPositions.markets.length == combinedPositionsParlay.markets.length &&
-        combinedPositions.markets.length == numberOfEqualParentMarketsNotPositions
-    )
-        return CombinedPositionsMatchingCode.SAME_MARKET_ADDRESSES_NOT_POSITIONS;
+        if (
+            sameMarketAddresses == combinedPosition.markets.length &&
+            samePositions !== combinedPosition.markets.length
+        ) {
+            matchingCode = CombinedPositionsMatchingCode.SAME_MARKETS;
+            existingMarketIndex = i;
+            break;
+        }
+    }
 
-    if (numberOfEqualParentMarketsNotPositions > 0) return CombinedPositionsMatchingCode.SAME_PARENT_MARKET;
-    return CombinedPositionsMatchingCode.NOTHING_COMMON;
+    return { matchingCode, existingMarketIndex };
 };

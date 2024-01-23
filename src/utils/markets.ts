@@ -13,8 +13,18 @@ import {
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
     UEFA_TAGS,
 } from 'constants/tags';
+import {
+    BetType,
+    DoubleChanceMarketType,
+    ONE_SIDER_PLAYER_PROPS_BET_TYPES,
+    OddsType,
+    PLAYER_PROPS_BET_TYPES,
+    Position,
+    SPECIAL_YES_NO_BET_TYPES,
+} from 'enums/markets';
 import i18n from 'i18n';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
+import { addDaysToEnteredTimestamp, formatCurrency } from 'thales-utils';
 import {
     CombinedMarketsPositionName,
     MarketData,
@@ -26,18 +36,8 @@ import {
     PositionData,
     SportMarketInfo,
 } from 'types/markets';
-import { addDaysToEnteredTimestamp, formatCurrency } from 'thales-utils';
-import { fixOneSideMarketCompetitorName } from './formatters/string';
-import {
-    BetType,
-    DoubleChanceMarketType,
-    ONE_SIDER_PLAYER_PROPS_BET_TYPES,
-    OddsType,
-    PLAYER_PROPS_BET_TYPES,
-    Position,
-    SPECIAL_YES_NO_BET_TYPES,
-} from 'enums/markets';
 import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
+import { fixOneSideMarketCompetitorName } from './formatters/string';
 
 const EXPIRE_SINGLE_SPORT_MARKET_PERIOD_IN_DAYS = 90;
 
@@ -396,6 +396,15 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.PLAYER_PROPS_TRIPLE_DOUBLE:
                     translationKey = 'player-props.triple-double-yes';
                     break;
+                case BetType.PLAYER_PROPS_RECEPTIONS:
+                    translationKey = 'player-props.receptions-over';
+                    break;
+                case BetType.PLAYER_PROPS_FIRST_TOUCHDOWN:
+                    translationKey = 'player-props.first-touchdown';
+                    break;
+                case BetType.PLAYER_PROPS_LAST_TOUCHDOWN:
+                    translationKey = 'player-props.last-touchdown';
+                    break;
                 default:
                     translationKey = market.isOneSideMarket
                         ? Number(market.tags[0]) == GOLF_TOURNAMENT_WINNER_TAG
@@ -456,6 +465,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_TRIPLE_DOUBLE:
                     translationKey = 'player-props.triple-double-no';
+                    break;
+                case BetType.PLAYER_PROPS_RECEPTIONS:
+                    translationKey = 'player-props.receptions-under';
                     break;
                 default:
                     translationKey = market.isOneSideMarket
@@ -662,4 +674,17 @@ export const isSpecialYesNoProp = (betType: BetType) => {
 
 export const fixPlayerPropsLinesFromContract = (market: SportMarketInfo | MarketData) => {
     Number(market.playerPropsLine) % 1 == 0 ? (market.playerPropsLine = Number(market.playerPropsLine) / 100) : '';
+};
+
+export const getUpdatedQuote = (
+    updateQuotes: number[],
+    positionIndex: number,
+    isCombinedPosition: boolean,
+    combinedPositionsCount: number
+) => {
+    const startIndex = isCombinedPosition ? positionIndex * 2 : positionIndex;
+
+    return isCombinedPosition
+        ? updateQuotes?.[startIndex] * updateQuotes?.[startIndex + 1]
+        : updateQuotes?.[combinedPositionsCount * 2 + startIndex];
 };

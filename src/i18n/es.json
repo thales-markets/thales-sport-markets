@@ -23,7 +23,15 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Información de la billetera",
             "approve-sports": "Aprobar DeportesAMM",
-            "approve-parlay": "Aprobar ParlayAMM"
+            "approve-parlay": "Aprobar ParlayAMM",
+            "metamask": "Metamáscara",
+            "view-less-options": "Ver menos opciones",
+            "wallet-connect": "Conexión de billetera",
+            "connect-wallet-modal-title": "Inicie sesión en OvertimeMarkets",
+            "or-connect-with": "o conectarse con",
+            "connect-with-wallet": "Conectar con billetera",
+            "view-more-options": "Ver más opciones",
+            "please-connect": "por favor, conecte su billetera para comenzar a usar horas extras.xyz"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -159,7 +167,19 @@
         "fifa-tooltip": "Los resultados de los mercados de la Copa Mundial de la FIFA se basan en los resultados reglamentarios; en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado.",
         "tennis-tooltip": "En caso de un walkover, el partido se considerará cancelado. En caso de retiro/descalificación durante el partido, se tratará como una victoria para el jugador que avanza a la siguiente ronda.",
         "iihf-tooltip": "Los resultados de los mercados del Campeonato Mundial de la IIHF se basan en los resultados reglamentarios, en caso de que vayan a la prórroga, el resultado reglamentario es el que resolverá el mercado.",
-        "football-tooltip": "Los resultados de los mercados se basan en los resultados de la regulación, en caso de que vayan a tiempo extra, el resultado de la regulación es el que resolverá el mercado."
+        "football-tooltip": "Los resultados de los mercados se basan en los resultados de la regulación, en caso de que vayan a tiempo extra, el resultado de la regulación es el que resolverá el mercado.",
+        "login-with": {
+            "x": "X",
+            "linkedin": "LinkedIn",
+            "twitch": "Contracción nerviosa",
+            "discord": "Discordia",
+            "microsoft": "microsoft",
+            "apple": "Manzana",
+            "gmail": "Gmail",
+            "twitter": "Gorjeo",
+            "github": "GitHub",
+            "facebook": "Facebook"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -271,7 +291,9 @@
             "no-results-for-wallet": "No hay transacciones asociadas con esta billetera.",
             "usd-value-col": "valor usd",
             "game-col": "juego",
-            "result-col": "resultado"
+            "result-col": "resultado",
+            "parlay-title": "Actividad parlay reciente",
+            "single-title": "Actividad única reciente"
         },
         "tooltip": {
             "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
@@ -323,7 +345,10 @@
                 "assists": "Asistencias",
                 "rebounds": "Rebotes",
                 "double double": "Doble doble",
-                "triple double": "Triple doble"
+                "triple double": "Triple doble",
+                "receptions": "Recepciones",
+                "first touchdown": "¿Quién anotará el primer touchdown del juego? (incluido tiempo extra)",
+                "last touchdown": "¿Quién anotará el último touchdown del juego?"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -389,7 +414,11 @@
                     "triple-double-yes": "{{team}} anotará un triple-doble",
                     "double-double-no": "{{team}} no anotará un doble-doble",
                     "double-double-yes": "{{team}} anotará un doble-doble",
-                    "triple-double-no": "{{team}} no conseguirá un triple-doble"
+                    "triple-double-no": "{{team}} no conseguirá un triple-doble",
+                    "receptions-over": "{{team}} tendrá más recepciones que {{scoring}}",
+                    "receptions-under": "{{team}} tendrá menos recepciones que {{scoring}}",
+                    "first-touchdown": "{{team}} anotará el primer touchdown del juego",
+                    "last-touchdown": "{{team}} anotará el último touchdown del juego"
                 }
             },
             "starts-in": "Empieza en",
@@ -496,7 +525,9 @@
             },
             "pay-with-voucher": "Pagar con bono",
             "total-to-pay": "Total a pagar",
-            "in-wallet": "en billetera"
+            "in-wallet": "en billetera",
+            "total-gas": "Tarifa de gas (ESTIMADA)",
+            "gas-tooltip": "Tarifa de gas actual requerida por blockchain para liquidar la transacción"
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {
@@ -525,7 +556,8 @@
         },
         "incentivized-markets": "MERCADOS INCENTIVIZADOS",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-tennis": "Wimbledon será incentivado, ya que el torneo comienza el 3 de julio. Los mercados se potenciarán con {{rewards}} hasta el final del torneo el 16 de julio. Las recompensas se distribuirán en función de su volumen impulsado a través de estos mercados. Puede realizar un seguimiento de la asignación de sus recompensas en nuestro <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip-tennis": "Wimbledon será incentivado, ya que el torneo comienza el 3 de julio. Los mercados se potenciarán con {{rewards}} hasta el final del torneo el 16 de julio. Las recompensas se distribuirán en función de su volumen impulsado a través de estos mercados. Puede realizar un seguimiento de la asignación de sus recompensas en nuestro <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip-nfl-playoffs": "Se distribuirá un total enorme de {{rewards}} durante los playoffs de la NFL. Consulta más detalles <detailsLink>aquí</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -706,7 +738,11 @@
         "go-to-single-lp": "Ir a LP individual",
         "single-lp-title": "Fondo único de liquidez",
         "go-to-parlay-lp": "Ir a Parlay LP",
-        "parlay-lp-title": "Fondo de liquidez parlay"
+        "parlay-lp-title": "Fondo de liquidez parlay",
+        "wrapper-nav": {
+            "my-portfolio": "Mi portafolio",
+            "my-tickets": "Mis entradas"
+        }
     },
     "referral": {
         "generate-link": "Generar enlace",
@@ -850,7 +886,8 @@
         },
         "parlay-lp": {
             "title": "Parlay LP"
-        }
+        },
+        "deprecated-info": "En desuso, ¡retire sus fondos!"
     },
     "parlay-leaderboard": {
         "title": "Leaderboard de incentivos en Parlays",
@@ -1041,5 +1078,92 @@
             "title": "Apuestas deportivas Web3 de mercados de tiempo extra: {{dynamicTitle}}",
             "description": "{{dynamicTitle}}: disfrute de las mejores cuotas de apuestas deportivas Web3 del mercado. No es necesario registrarse. Mercados deportivos totalmente descentralizados."
         }
+    },
+    "deposit": {
+        "tutorials": {
+            "binance-mobile": "Deposite desde la aplicación móvil de Binance",
+            "binance": "Depósito desde el sitio web de Binance",
+            "title": "Guías de depósito",
+            "coinbase": "Depositar desde Coinbase"
+        },
+        "copied": "¡Dirección copiada!",
+        "address-input-label": "Su dirección de depósito personal de {{ token }} en {{ network }}",
+        "send": "¡Asegúrate de depositar {{ network }} {{ token }} en la dirección anterior!",
+        "deposit-crypto": "Depositar criptografía",
+        "go": "¡Vamos!",
+        "select-token": "Seleccionar ficha",
+        "description": "Para operar en horas extras, debe depositar fondos en su cuenta. Siga cuidadosamente los pasos a continuación y deposite la criptomoneda seleccionada en la dirección generada.",
+        "warning": "Su saldo de ETH es bajo. Recargue su saldo de ETH para continuar usando horas extras",
+        "or-buy-with": "O comprar con",
+        "copying-address": "Espere por favor",
+        "all-set": "¡Estas listo!",
+        "qr-modal-title": "Enviar {{ token }} ({{ network }})",
+        "ready-to-use": "¡Su cuenta está recargada y lista para comenzar a usar Overtime Markets! Puede realizar transacciones con ETH o depositar otros tokens que ahora están visibles en la página de depósito."
+    },
+    "withdraw": {
+        "confirmation-modal": {
+            "title": "Retiro solicitado",
+            "address": "DIRECCIÓN",
+            "withdrawal-fee": "Cargo por retiro",
+            "correct-address": "Asegúrese de que la dirección sea correcta y que acepte {{ token }} en {{ network }}",
+            "confirm": "Confirmar",
+            "withdrawal-transaction-warning": "Las transacciones de retiro no se pueden cancelar",
+            "network": "Red"
+        },
+        "toast-messages": {
+            "success": "Retiro exitoso",
+            "error": "Se produjo algún error al retirar fondos.",
+            "pending": "Transacción pendiente..."
+        },
+        "validation": {
+            "amount": "El importe no es válido",
+            "wallet-address": "La dirección de la billetera no es válida"
+        },
+        "address-input-label": "Su dirección de retiro personal de {{ token }} en {{ network }}",
+        "heading-withdraw": "Retirar criptomonedas",
+        "description": "Utilice esta página para retirar fondos de su cuenta de horas extras. Siga cuidadosamente los pasos a continuación y asegúrese de verificar todo.",
+        "amount": "Cantidad",
+        "paste-address": "Pega aquí la dirección de tu billetera",
+        "button-label-withdraw": "Retirar",
+        "warning": "Verifique dos veces la dirección de retiro y asegúrese de que acepte {{ token }} en {{ network }}"
+    },
+    "my-portfolio": {
+        "deposit": "Depósito",
+        "withdraw": "Retirar",
+        "top-up-eth-tooltip": "Su saldo de gas ETH es bajo.\n\nDeposite más ETH o intercambie otros tokens depositados por más ETH",
+        "estimated-balance": "Balance estimado",
+        "top-up-eth": "Recargar ETH"
+    },
+    "get-started": {
+        "steps": {
+            "title": {
+                "sign-up": "Inscribirse",
+                "trade": "¡Empiece a utilizar los mercados de horas extras!",
+                "logged-in": "Conectado",
+                "deposit": "Depositar ETH"
+            },
+            "description": {
+                "sign-up": "Haga clic en el botón Registrarse y elija el método de inicio de sesión que prefiera.",
+                "deposit": "Para comenzar a usar horas extras, debe depositar fondos en su nueva cuenta con ETH. Haga clic en el botón Depositar ahora y elija entre Depósito directo a domicilio o Comprar con tarjeta de crédito.",
+                "trade": "¡Su cuenta ahora está financiada y está listo para colocar sus posiciones en horas extras!",
+                "logged-in": "Ha creado con éxito su cuenta inteligente de horas extras en la cadena de bloques y ha iniciado sesión."
+            },
+            "action": {
+                "connected": "Conectado",
+                "connect-wallet": "Conectar billetera",
+                "logged-in": "Conectado",
+                "sign-up": "Inscribirse",
+                "deposit": "Depósito",
+                "trade": "Opere en horas extras"
+            }
+        },
+        "get-started": "Empezar",
+        "log-in": "Acceso",
+        "title": "Comience con las horas extras",
+        "sign-up": "Inscribirse",
+        "sign-out": "desconectar"
+    },
+    "banner": {
+        "arb-distribution-message": "La distribución de ARB ha comenzado. Gana tokens ARB usando horas extras. Echa un vistazo a los detalles aquí."
     }
 }

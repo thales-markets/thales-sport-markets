@@ -1,6 +1,6 @@
 import { BetType, DoubleChanceMarketType, Position, PositionName } from 'enums/markets';
-import { Network } from '../enums/network';
 import { ethers } from 'ethers';
+import { Network } from '../enums/network';
 
 export type SportMarketInfo = {
     id: string;
@@ -121,6 +121,9 @@ export type SportMarketChildMarkets = {
     assistsMarkets: SportMarketInfo[];
     doubleDoubleMarkets: SportMarketInfo[];
     tripleDoubleMarkets: SportMarketInfo[];
+    receptionsMarkets: SportMarketInfo[];
+    firstTouchdownMarkets: SportMarketInfo[];
+    lastTouchdownMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {

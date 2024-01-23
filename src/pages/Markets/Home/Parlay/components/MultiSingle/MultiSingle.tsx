@@ -1,4 +1,3 @@
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
@@ -29,7 +28,14 @@ import {
     setMultiSingle,
     setPaymentAmountToBuy,
 } from 'redux/modules/parlay';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsAA,
+    getIsConnectedViaParticle,
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
@@ -93,7 +99,6 @@ type MultiSingleProps = {
 
 const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const { t } = useTranslation();
-    const { openConnectModal } = useConnectModal();
     const theme: ThemeInterface = useTheme();
 
     const dispatch = useDispatch();
@@ -102,6 +107,8 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const multiSingleAmounts = useSelector(getMultiSingle);
     const parlayPayment = useSelector(getParlayPayment);
     const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
@@ -577,10 +584,11 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                                 parsedAmount,
                                 ammQuote,
                                 referralId,
-                                ethers.utils.parseEther('0.02')
+                                ethers.utils.parseEther('0.02'),
+                                isAA
                             );
 
-                            const txResult = await tx.wait();
+                            const txResult = isAA ? tx : await tx.wait();
 
                             if (txResult && txResult.transactionHash) {
                                 resolve(
@@ -664,7 +672,16 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
 
         if (!isWalletConnected) {
             return (
-                <Button onClick={() => openConnectModal?.()} {...defaultButtonProps}>
+                <Button
+                    onClick={() =>
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: true,
+                            })
+                        )
+                    }
+                    {...defaultButtonProps}
+                >
                     {t('common.wallet.connect-your-wallet')}
                 </Button>
             );
@@ -672,7 +689,13 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
 
         if (!hasAllowance) {
             return (
-                <Button disabled={submitDisabled} onClick={() => setOpenApprovalModal(true)} {...defaultButtonProps}>
+                <Button
+                    disabled={submitDisabled}
+                    onClick={() =>
+                        isParticle ? handleAllowance(ethers.constants.MaxUint256) : setOpenApprovalModal(true)
+                    }
+                    {...defaultButtonProps}
+                >
                     {t('common.wallet.approve')}
                 </Button>
             );

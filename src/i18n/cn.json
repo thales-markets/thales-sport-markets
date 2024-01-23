@@ -23,7 +23,15 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "钱包信息",
             "approve-parlay": "批准 ParlayAMM",
-            "approve-sports": "批准 SportsAMM"
+            "approve-sports": "批准 SportsAMM",
+            "wallet-connect": "钱包连接",
+            "view-more-options": "查看更多选项",
+            "connect-wallet-modal-title": "登录 OvertimeMarkets",
+            "please-connect": "请连接钱包开始使用overtime.xyz",
+            "connect-with-wallet": "与钱包连接",
+            "view-less-options": "查看更少的选项",
+            "or-connect-with": "或连接",
+            "metamask": "元掩模"
         },
         "voucher": {
             "remaining-amount": "余额",
@@ -159,7 +167,19 @@
         "fifa-tooltip": "FIFA世界杯的盘口结果以规则结果为准，如果他们进入加时赛，规则结果将由盘口决定。",
         "tennis-tooltip": "如果出现超车，比赛将被视为取消。如果在比赛中退赛/取消资格，将被视为晋级下一轮的球员获胜",
         "iihf-tooltip": "IIHF世界锦标赛的盘口结果是基于监管结果，如果他们进入加时赛，监管结果将由市场决定。",
-        "football-tooltip": "市场结果以监管结果为准，如果超时，监管结果由市场决定。"
+        "football-tooltip": "市场结果以监管结果为准，如果超时，监管结果由市场决定。",
+        "login-with": {
+            "discord": "不和谐",
+            "twitch": "抽搐",
+            "microsoft": "微软",
+            "linkedin": "领英",
+            "facebook": "Facebook",
+            "x": "X",
+            "twitter": "推特",
+            "apple": "苹果",
+            "gmail": "邮箱",
+            "github": "GitHub"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -271,7 +291,9 @@
             "no-results-for-wallet": "没有与此钱包相关的交易。",
             "game-col": "游戏",
             "usd-value-col": "美元价值",
-            "result-col": "结果"
+            "result-col": "结果",
+            "parlay-title": "最近的连本带利活动",
+            "single-title": "近期单一活动"
         },
         "tooltip": {
             "amount-exceeded": "金额超过AMM的余额。",
@@ -323,7 +345,10 @@
                 "assists": "助攻",
                 "rebounds": "篮板球",
                 "triple double": "三双",
-                "double double": "双双"
+                "double double": "双双",
+                "receptions": "招待会",
+                "first touchdown": "谁将获得本场比赛的第一个达阵？ （包括加班）",
+                "last touchdown": "谁将获得比赛最后一次达阵？"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -389,7 +414,11 @@
                     "double-double-yes": "{{team}} 将得分两双",
                     "double-double-no": "{{team}} 不会得分两双",
                     "triple-double-yes": "{{team}}将获得三双",
-                    "triple-double-no": "{{team}}不会拿下三双"
+                    "triple-double-no": "{{team}}不会拿下三双",
+                    "receptions-over": "{{team}} 的接球次数将多于 {{scoring}}",
+                    "receptions-under": "{{team}} 的接球次数将少于 {{scoring}}",
+                    "first-touchdown": "{{team}} 将获得比赛中的第一个达阵",
+                    "last-touchdown": "{{team}} 将获得本场比赛的最后一次达阵"
                 }
             },
             "starts-in": "开始于",
@@ -496,7 +525,9 @@
             },
             "in-wallet": "在钱包里",
             "total-to-pay": "总共支付",
-            "pay-with-voucher": "使用优惠券付款"
+            "pay-with-voucher": "使用优惠券付款",
+            "total-gas": "汽油费（预估）",
+            "gas-tooltip": "区块链结算交易所需的当前 Gas 费"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -525,7 +556,8 @@
         },
         "incentivized-markets": "激励市场",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-tennis": "温网将受到激励，因为比赛将于 7 月 3 日开始。市场将通过 {{rewards}} 得到提振，直至 7 月 16 日锦标赛结束。奖励将根据您在这些市场上的交易量进行分配。您可以在我们的<detailsLink>Dune Dashboard</detailsLink>上跟踪您的奖励分配。"
+        "incentivized-tooltip-tennis": "温网将受到激励，因为比赛将于 7 月 3 日开始。市场将通过 {{rewards}} 得到提振，直至 7 月 16 日锦标赛结束。奖励将根据您在这些市场上的交易量进行分配。您可以在我们的<detailsLink>Dune Dashboard</detailsLink>上跟踪您的奖励分配。",
+        "incentivized-tooltip-nfl-playoffs": "NFL 季后赛期间将发放总计高达 {{rewards}} 的奖励。查看更多详细信息<detailsLink>此处</detailsLink>。"
     },
     "rewards": {
         "header": "奖励",
@@ -706,7 +738,11 @@
         "go-to-parlay-lp": "前往 Parlay LP",
         "go-to-single-lp": "前往单曲唱片",
         "parlay-lp-title": "连本带利流动资金池",
-        "single-lp-title": "单一流动性池"
+        "single-lp-title": "单一流动性池",
+        "wrapper-nav": {
+            "my-tickets": "我的门票",
+            "my-portfolio": "我的投资组合"
+        }
     },
     "referral": {
         "generate-link": "生成链接",
@@ -850,7 +886,8 @@
         },
         "parlay-lp": {
             "title": "连本带利LP"
-        }
+        },
+        "deprecated-info": "已弃用，请撤回资金！"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1041,5 +1078,92 @@
             "title": "加时赛市场 Web3 体育博彩：{{dynamicTitle}}",
             "description": "{{dynamicTitle}}：享受市场上最好的 Web3 体育博彩赔率。无需注册。完全去中心化的体育市场。"
         }
+    },
+    "deposit": {
+        "tutorials": {
+            "title": "存款指南",
+            "binance": "从币安网站充值",
+            "coinbase": "来自 Coinbase 的存款",
+            "binance-mobile": "通过币安移动应用程序存款"
+        },
+        "description": "要进行加时交易，您必须为您的账户存入资金。仔细按照以下步骤操作，将所选的加密货币存入生成的地址。",
+        "go": "我们走吧！",
+        "all-set": "你都准备好了！",
+        "deposit-crypto": "存入加密货币",
+        "address-input-label": "您在 {{ network }} 上的个人 {{ token }} 充值地址",
+        "qr-modal-title": "发送 {{ token }}（{{ network }}）",
+        "ready-to-use": "您的帐户已充值并准备好开始使用加时市场！您可以使用 ETH 进行交易，也可以存入存款页面上现在可见的其他代币。",
+        "copying-address": "请稍等",
+        "copied": "地址已复制！",
+        "select-token": "选择代币",
+        "or-buy-with": "或者购买",
+        "warning": "您的 ETH 余额不足。请充值您的 ETH 余额以继续使用 Overtime",
+        "send": "确保您将 {{ network }} {{ token }} 存入上述地址！"
+    },
+    "withdraw": {
+        "confirmation-modal": {
+            "withdrawal-transaction-warning": "提现交易不可取消",
+            "withdrawal-fee": "提款费",
+            "correct-address": "确保地址正确并且接受 {{ network }} 上的 {{ token }}",
+            "confirm": "确认",
+            "network": "网络",
+            "address": "地址",
+            "title": "请求提款"
+        },
+        "toast-messages": {
+            "pending": "交易待处理...",
+            "success": "提现成功",
+            "error": "提款时出现一些错误。"
+        },
+        "validation": {
+            "amount": "金额无效",
+            "wallet-address": "钱包地址无效"
+        },
+        "description": "使用此页面从您的 Overtime 帐户中提取资金。仔细按照以下步骤进行操作，并确保仔细检查所有内容。",
+        "amount": "数量",
+        "warning": "仔细检查提款地址并确保它接受 {{ network }} 上的 {{ token }}",
+        "address-input-label": "您在 {{ network }} 上的个人 {{ token }} 提现地址",
+        "paste-address": "在此粘贴您的钱包地址",
+        "button-label-withdraw": "提取",
+        "heading-withdraw": "提取加密货币"
+    },
+    "my-portfolio": {
+        "top-up-eth-tooltip": "您的 ETH 气体余额很低。\n\n请存入更多 ETH 或将其他存入的代币兑换成更多 ETH",
+        "estimated-balance": "预计余额",
+        "deposit": "订金",
+        "withdraw": "提取",
+        "top-up-eth": "充值 ETH"
+    },
+    "get-started": {
+        "steps": {
+            "title": {
+                "sign-up": "报名",
+                "logged-in": "登录",
+                "trade": "开始使用加时市场！",
+                "deposit": "存入以太币"
+            },
+            "description": {
+                "logged-in": "您已在区块链上成功创建加班智能账户并登录。",
+                "sign-up": "单击“注册”按钮并选择您选择的登录方式。",
+                "trade": "您的账户现已注资，您可以准备在加时赛中放置您的头寸了！",
+                "deposit": "要开始使用 Overtime，您必须使用 ETH 为您的新账户充值。单击“立即存款”按钮，然后选择直接存款到地址或使用信用卡购买。"
+            },
+            "action": {
+                "sign-up": "报名",
+                "connected": "连接的",
+                "logged-in": "登录",
+                "deposit": "订金",
+                "connect-wallet": "连接钱包",
+                "trade": "加时交易"
+            }
+        },
+        "get-started": "开始使用",
+        "sign-out": "登出",
+        "sign-up": "报名",
+        "log-in": "登录",
+        "title": "开始加班"
+    },
+    "banner": {
+        "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。"
     }
 }

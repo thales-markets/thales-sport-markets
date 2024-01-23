@@ -2,15 +2,18 @@ import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg'
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE } from 'constants/markets';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_PLAYOFFS } from 'constants/markets';
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
+import { BetType } from 'enums/markets';
+import { Network } from 'enums/network';
 import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
+import queryString from 'query-string';
 import React, { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -20,18 +23,16 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
-import { Network } from 'enums/network';
+import { ThemeInterface } from 'types/ui';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
+import useQueryParam from 'utils/useQueryParams';
 import Web3 from 'web3';
 import Transactions from '../Transactions';
 import CombinedPositions from './components/CombinedPositions';
 import MatchInfo from './components/MatchInfo';
+import ParlayTransactions from './components/ParlayTransactions';
 import Positions from './components/Positions';
-import { BetType } from 'enums/markets';
-import { ThemeInterface } from 'types/ui';
-import queryString from 'query-string';
-import useQueryParam from 'utils/useQueryParams';
 
 type MarketDetailsPropType = {
     market: SportMarketInfo;
@@ -98,6 +99,15 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         oneSiderGoalsMarkets: market.childMarkets.filter(
             (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_GOALS
         ),
+        receptionsMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RECEPTIONS
+        ),
+        firstTouchdownMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_FIRST_TOUCHDOWN
+        ),
+        lastTouchdownMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_LAST_TOUCHDOWN
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -142,6 +152,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.tags[0], {
         enabled: isAppReady && isEnetpulseSport,
     });
+
     useEffect(() => {
         if (isEnetpulseSport) {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
@@ -207,7 +218,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         )}
                     {INCENTIVIZED_GRAND_SLAM.ids.includes(Number(market.tags[0])) &&
                         new Date(market.maturityDate) > INCENTIVIZED_GRAND_SLAM.startDate &&
-                        new Date(market.maturityDate) < INCENTIVIZED_GRAND_SLAM.endDate && (
+                        new Date(market.maturityDate) < INCENTIVIZED_GRAND_SLAM.endDate &&
+                        networkId == Network.Arbitrum && (
                             <Tooltip
                                 overlay={
                                     <Trans
@@ -222,22 +234,43 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             ),
                                         }}
                                         values={{
-                                            rewards:
-                                                networkId == Network.OptimismMainnet
-                                                    ? INCENTIVIZED_LEAGUE.opRewards
-                                                    : networkId == Network.Arbitrum
-                                                    ? INCENTIVIZED_LEAGUE.thalesRewards
-                                                    : '',
+                                            rewards: INCENTIVIZED_GRAND_SLAM.arbRewards,
                                         }}
                                     />
                                 }
                                 component={
                                     <IncentivizedLeague>
-                                        {networkId !== Network.Base ? (
-                                            <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        ) : (
-                                            ''
-                                        )}
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        {getNetworkLogo(networkId)}
+                                    </IncentivizedLeague>
+                                }
+                            ></Tooltip>
+                        )}
+                    {INCENTIVIZED_NFL_PLAYOFFS.ids.includes(Number(market.tags[0])) &&
+                        new Date(market.maturityDate) > INCENTIVIZED_NFL_PLAYOFFS.startDate &&
+                        new Date(market.maturityDate) < INCENTIVIZED_NFL_PLAYOFFS.endDate &&
+                        networkId == Network.Arbitrum && (
+                            <Tooltip
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.incentivized-tooltip-nfl-playoffs"
+                                        components={{
+                                            detailsLink: (
+                                                <a
+                                                    href={INCENTIVIZED_NFL_PLAYOFFS.link}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                />
+                                            ),
+                                        }}
+                                        values={{
+                                            rewards: INCENTIVIZED_NFL_PLAYOFFS.arbRewards,
+                                        }}
+                                    />
+                                }
+                                component={
+                                    <IncentivizedLeague>
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
                                         {getNetworkLogo(networkId)}
                                     </IncentivizedLeague>
                                 }
@@ -504,8 +537,30 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             showOdds={showAMM}
                         />
                     )}
+                    {childMarkets.receptionsMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.receptionsMarkets}
+                            betType={BetType.PLAYER_PROPS_RECEPTIONS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.firstTouchdownMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.firstTouchdownMarkets}
+                            betType={BetType.PLAYER_PROPS_FIRST_TOUCHDOWN}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.lastTouchdownMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.lastTouchdownMarkets}
+                            betType={BetType.PLAYER_PROPS_LAST_TOUCHDOWN}
+                            showOdds={showAMM}
+                        />
+                    )}
                 </>
                 <Transactions market={market} />
+                <ParlayTransactions market={market} />
             </MainContainer>
             {showAMM && (
                 <SidebarContainer>

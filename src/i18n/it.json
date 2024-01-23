@@ -14,7 +14,15 @@
             "disclaimer": "By connecting a wallet you acknowledge that you have read and understand the Overtime Markets <disclaimer>disclaimer</disclaimer> and agree to its <terms>Terms of Use</terms>.",
             "wallet-info": "Informazioni sul portafoglio",
             "approve-sports": "Approva SportsAMM",
-            "approve-parlay": "Approva ParlayAMM"
+            "approve-parlay": "Approva ParlayAMM",
+            "view-less-options": "Visualizza meno opzioni",
+            "wallet-connect": "Portafoglio Connetti",
+            "view-more-options": "Visualizza più opzioni",
+            "connect-with-wallet": "Connettiti con il portafoglio",
+            "or-connect-with": "o connettersi con",
+            "connect-wallet-modal-title": "Accedi a OvertimeMarkets",
+            "please-connect": "per favore, collega il portafoglio per iniziare a utilizzare overtime.xyz",
+            "metamask": "Metamaschera"
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -159,7 +167,19 @@
         "fifa-tooltip": "I risultati dei mercati della Coppa del Mondo FIFA si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale si risolverà il mercato.",
         "tennis-tooltip": "In caso di walkover, la partita sarà considerata annullata. In caso di ritiro/squalifica durante la partita, verrà considerata come una vittoria per il giocatore che avanza al turno successivo",
         "iihf-tooltip": "I risultati dei mercati del campionato mondiale IIHF si basano sui risultati regolamentari, se dovessero andare ai tempi supplementari il risultato regolamentare è quello in base al quale il mercato si risolverà.",
-        "football-tooltip": "I risultati dei mercati si basano sui risultati della regolamentazione, se dovessero andare oltre il tempo il risultato della regolamentazione è quello in cui si risolverà il mercato."
+        "football-tooltip": "I risultati dei mercati si basano sui risultati della regolamentazione, se dovessero andare oltre il tempo il risultato della regolamentazione è quello in cui si risolverà il mercato.",
+        "login-with": {
+            "linkedin": "Linkedin",
+            "x": "X",
+            "twitter": "Twitter",
+            "github": "GitHub",
+            "microsoft": "Microsoft",
+            "twitch": "Contrazione",
+            "facebook": "Facebook",
+            "discord": "Discordia",
+            "gmail": "Gmail",
+            "apple": "Mela"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -271,7 +291,9 @@
             "no-results-for-wallet": "No transactions associated with this wallet.",
             "result-col": "risultato",
             "usd-value-col": "valore in usd",
-            "game-col": "gioco"
+            "game-col": "gioco",
+            "single-title": "Singola attività recente",
+            "parlay-title": "Attività parlay recente"
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
@@ -323,7 +345,10 @@
                 "rebounds": "Rimbalzi",
                 "assists": "Assist",
                 "double double": "Doppio-doppio",
-                "triple double": "Tripla-doppia"
+                "triple double": "Tripla-doppia",
+                "receptions": "Ricevimenti",
+                "last touchdown": "Chi segnerà l'ultimo touchdown della partita?",
+                "first touchdown": "Chi segnerà il primo touchdown della partita? (incluso OT)"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -389,7 +414,11 @@
                     "triple-double-no": "{{team}} non segnerà una tripla doppia",
                     "double-double-no": "{{team}} non segnerà una doppia doppia",
                     "double-double-yes": "{{team}} segnerà una doppia doppia",
-                    "triple-double-yes": "{{team}} segnerà una tripla doppia"
+                    "triple-double-yes": "{{team}} segnerà una tripla doppia",
+                    "receptions-over": "{{team}} avrà più ricezioni di {{scoring}}",
+                    "receptions-under": "{{team}} avrà meno ricezioni di {{scoring}}",
+                    "first-touchdown": "{{team}} segnerà il primo touchdown della partita",
+                    "last-touchdown": "{{team}} segnerà l'ultimo touchdown della partita"
                 }
             },
             "starts-in": "Inizia tra",
@@ -496,7 +525,9 @@
             },
             "total-to-pay": "Totale da pagare",
             "pay-with-voucher": "Paga con voucher",
-            "in-wallet": "Nel portafoglio"
+            "in-wallet": "Nel portafoglio",
+            "gas-tooltip": "Commissione gas attuale richiesta dalla blockchain per regolare la transazione",
+            "total-gas": "Tariffa gas (STIMATA)"
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {
@@ -525,7 +556,8 @@
         },
         "incentivized-markets": "MERCATI INCENTIVATI",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-tennis": "Il Roland Garros sarà incentivato, dato che il torneo inizierà il 29 maggio. I mercati saranno potenziati con {{rewards}} fino alla fine del torneo il 12 giugno. I premi verranno distribuiti in base al tuo volume guidato attraverso questi mercati. Puoi monitorare l'assegnazione dei tuoi premi sulla nostra <detailsLink>Dune Dashboard</detailsLink>."
+        "incentivized-tooltip-tennis": "Il Roland Garros sarà incentivato, dato che il torneo inizierà il 29 maggio. I mercati saranno potenziati con {{rewards}} fino alla fine del torneo il 12 giugno. I premi verranno distribuiti in base al tuo volume guidato attraverso questi mercati. Puoi monitorare l'assegnazione dei tuoi premi sulla nostra <detailsLink>Dune Dashboard</detailsLink>.",
+        "incentivized-tooltip-nfl-playoffs": "Un totale enorme di {{rewards}} verrà distribuito durante i playoff della NFL. Controlla maggiori dettagli <detailsLink>qui</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -706,7 +738,11 @@
         "parlay-lp-title": "Piscina di liquidità Parlay",
         "single-lp-title": "Unico pool di liquidità",
         "go-to-single-lp": "Vai a LP singolo",
-        "go-to-parlay-lp": "Vai a Parlay LP"
+        "go-to-parlay-lp": "Vai a Parlay LP",
+        "wrapper-nav": {
+            "my-tickets": "I miei biglietti",
+            "my-portfolio": "Il mio portfolio"
+        }
     },
     "referral": {
         "nav-items": {
@@ -850,7 +886,8 @@
         },
         "parlay-lp": {
             "title": "Parlay LP"
-        }
+        },
+        "deprecated-info": "Deprecato, ritira i tuoi fondi!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1041,5 +1078,92 @@
             "title": "Mercati straordinari Scommesse sportive Web3: {{dynamicTitle}}",
             "description": "{{dynamicTitle}}: goditi le migliori quote per scommesse sportive Web3 sul mercato. Non è necessaria alcuna registrazione. Mercati sportivi completamente decentralizzati."
         }
+    },
+    "deposit": {
+        "tutorials": {
+            "binance-mobile": "Deposita dall'app mobile Binance",
+            "title": "Guide ai depositi",
+            "coinbase": "Deposito da Coinbase",
+            "binance": "Deposito dal sito web di Binance"
+        },
+        "copying-address": "attendere prego",
+        "go": "Andiamo!",
+        "or-buy-with": "Oppure acquista con",
+        "all-set": "Siete a posto!",
+        "copied": "Indirizzo copiato!",
+        "address-input-label": "Il tuo indirizzo di deposito personale {{ token }} su {{ network }}",
+        "select-token": "Seleziona gettone",
+        "description": "Per fare trading sugli straordinari devi finanziare il tuo conto. Segui attentamente i passaggi seguenti e deposita la criptovaluta selezionata nell'indirizzo generato.",
+        "warning": "Il tuo saldo ETH è basso. Ricarica il tuo saldo ETH per continuare a utilizzare gli straordinari",
+        "qr-modal-title": "Invia {{ token }} ({{ network }})",
+        "send": "Assicurati di depositare {{ network }} {{ token }} all'indirizzo sopra!",
+        "deposit-crypto": "Deposita criptovalute",
+        "ready-to-use": "Il tuo account è ricaricato e pronto per iniziare a utilizzare Overtime Markets! Puoi effettuare operazioni con ETH oppure depositare altri token ora visibili nella pagina di deposito."
+    },
+    "withdraw": {
+        "confirmation-modal": {
+            "withdrawal-fee": "Commissione di prelievo",
+            "network": "Rete",
+            "address": "Indirizzo",
+            "title": "Richiesto ritiro",
+            "withdrawal-transaction-warning": "Le transazioni di prelievo non possono essere annullate",
+            "confirm": "Confermare",
+            "correct-address": "Assicurati che l'indirizzo sia corretto e che accetti {{ token }} su {{ network }}"
+        },
+        "toast-messages": {
+            "error": "Si è verificato un errore durante il prelievo dei fondi.",
+            "success": "Ritiro avvenuto con successo",
+            "pending": "Transazione in sospeso..."
+        },
+        "validation": {
+            "wallet-address": "L'indirizzo del portafoglio non è valido",
+            "amount": "L'importo non è valido"
+        },
+        "button-label-withdraw": "Ritirare",
+        "amount": "Quantità",
+        "heading-withdraw": "Preleva criptovaluta",
+        "description": "Utilizza questa pagina per prelevare fondi dal tuo conto Straordinari. Segui attentamente i passaggi seguenti e assicurati di ricontrollare tutto.",
+        "address-input-label": "Il tuo indirizzo personale per il prelievo di {{ token }} su {{ network }}",
+        "warning": "Ricontrolla l'indirizzo di prelievo e assicurati che accetti {{ token }} su {{ network }}",
+        "paste-address": "Incolla qui l'indirizzo del tuo portafoglio"
+    },
+    "my-portfolio": {
+        "deposit": "Depositare",
+        "withdraw": "Ritirare",
+        "top-up-eth": "Ricarica ETH",
+        "top-up-eth-tooltip": "Il tuo saldo del gas ETH è basso.\n\nDeposita più ETH o scambia altri token depositati con più ETH",
+        "estimated-balance": "Saldo stimato"
+    },
+    "get-started": {
+        "steps": {
+            "title": {
+                "deposit": "Deposita ETH",
+                "sign-up": "Iscrizione",
+                "logged-in": "Connesso",
+                "trade": "Inizia a utilizzare i mercati straordinari!"
+            },
+            "description": {
+                "deposit": "Per iniziare a utilizzare gli straordinari, devi finanziare il tuo nuovo account con ETH. Fai clic sul pulsante Deposita ora e scegli tra Deposito diretto all'indirizzo o Acquista con carta di credito.",
+                "trade": "Il tuo conto è ora finanziato e sei pronto per posizionare le tue posizioni su Overtime!",
+                "logged-in": "Hai creato con successo il tuo account Smart Overtime sulla blockchain e hai effettuato l'accesso.",
+                "sign-up": "Fai clic sul pulsante Iscriviti e scegli il metodo di accesso preferito."
+            },
+            "action": {
+                "deposit": "Depositare",
+                "sign-up": "Iscrizione",
+                "connected": "Collegato",
+                "logged-in": "Connesso",
+                "trade": "Fai trading sugli straordinari",
+                "connect-wallet": "Connetti il portafoglio"
+            }
+        },
+        "sign-up": "Iscrizione",
+        "title": "Inizia con gli straordinari",
+        "log-in": "Login",
+        "sign-out": "disconnessione",
+        "get-started": "Iniziare"
+    },
+    "banner": {
+        "arb-distribution-message": "La distribuzione ARB è iniziata. Guadagna token ARB utilizzando gli straordinari. Scopri i dettagli qui."
     }
 }

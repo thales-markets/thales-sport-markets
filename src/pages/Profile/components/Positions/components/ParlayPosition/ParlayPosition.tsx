@@ -1,25 +1,62 @@
+import ApprovalModal from 'components/ApprovalModal';
+import Button from 'components/Button/Button';
+import CollateralSelector from 'components/CollateralSelector';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { USD_SIGN } from 'constants/currency';
+import { APPROVAL_BUFFER } from 'constants/markets';
+import { ZERO_ADDRESS } from 'constants/network';
+import { Position } from 'enums/markets';
+import { BigNumber, ethers } from 'ethers';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
+import { getParlayPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsAA,
+    getIsConnectedViaParticle,
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import { useTheme } from 'styled-components';
+import { coinParser, formatCurrencyWithSign, getEtherscanTxLink, truncateAddress } from 'thales-utils';
 import { ParlayMarket, ParlaysMarket } from 'types/markets';
-import { getEtherscanTxLink, formatCurrencyWithSign, truncateAddress, coinParser } from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
+import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
+import {
+    extractCombinedMarketsFromParlayMarketType,
+    removeCombinedMarketsFromParlayMarketType,
+} from 'utils/combinedMarkets';
 import {
     convertPositionNameToPosition,
     convertPositionNameToPositionType,
-    formatMarketOdds,
     isParlayClaimable,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
+import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
+import { formatParlayOdds, getParlayQuote } from 'utils/parlay';
 import { refetchAfterClaim } from 'utils/queryConnector';
+import {
+    ClaimContainer,
+    ClaimLabel,
+    ClaimValue,
+    ExternalLink,
+    ExternalLinkArrow,
+    ExternalLinkContainer,
+    Label,
+    PayoutLabel,
+    additionalClaimButtonStyle,
+    additionalClaimButtonStyleMobile,
+} from '../../styled-components';
+import { CollateralSelectorContainer } from '../SinglePosition/styled-components';
+import ParlayCombinedItem from './components/ParlayCombinedItem';
 import ParlayItem from './components/ParlayItem';
 import {
     ArrowIcon,
@@ -39,37 +76,7 @@ import {
     WinLabel,
     WinValue,
 } from './styled-components';
-import {
-    ClaimContainer,
-    ClaimLabel,
-    ClaimValue,
-    ExternalLink,
-    ExternalLinkArrow,
-    ExternalLinkContainer,
-    Label,
-    PayoutLabel,
-    additionalClaimButtonStyle,
-    additionalClaimButtonStyleMobile,
-} from '../../styled-components';
-import {
-    extractCombinedMarketsFromParlayMarketType,
-    removeCombinedMarketsFromParlayMarketType,
-} from 'utils/combinedMarkets';
-import ParlayCombinedItem from './components/ParlayCombinedItem';
-import { Position } from 'enums/markets';
-import Button from 'components/Button/Button';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
-import CollateralSelector from 'components/CollateralSelector';
-import { getParlayPayment } from 'redux/modules/parlay';
-import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
-import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
-import { ZERO_ADDRESS } from 'constants/network';
-import ApprovalModal from 'components/ApprovalModal';
-import { BigNumber, ethers } from 'ethers';
-import { APPROVAL_BUFFER } from 'constants/markets';
-import Tooltip from 'components/Tooltip';
-import { CollateralSelectorContainer } from '../SinglePosition/styled-components';
+import { executeBiconomyTransaction } from 'utils/biconomy';
 
 type ParlayPosition = {
     parlayMarket: ParlayMarket;
@@ -87,6 +94,8 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const parlayPayment = useSelector(getParlayPayment);
@@ -166,15 +175,25 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             setIsAllowing(true);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
+                let txResult;
                 const collateralContractWithSigner = sUSDContract?.connect(signer);
                 const addressToApprove = parlayMarketsAMMContract.address;
 
-                const tx = (await collateralContractWithSigner?.approve(
-                    addressToApprove,
-                    approveAmount
-                )) as ethers.ContractTransaction;
-                setOpenApprovalModal(false);
-                const txResult = await tx.wait();
+                if (isAA) {
+                    txResult = await executeBiconomyTransaction(
+                        collateralAddress,
+                        collateralContractWithSigner,
+                        'approve',
+                        [addressToApprove, approveAmount]
+                    );
+                } else {
+                    const tx = (await collateralContractWithSigner?.approve(
+                        addressToApprove,
+                        approveAmount
+                    )) as ethers.ContractTransaction;
+                    setOpenApprovalModal(false);
+                    txResult = await tx.wait();
+                }
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
@@ -195,16 +214,32 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
         if (signer && parlayMarketsAMMContract) {
             setIsSubmitting(true);
             try {
+                let txResult;
                 const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
-
-                const tx = isDefaultCollateral
-                    ? await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress)
-                    : await parlayMarketsAMMContractWithSigner?.exerciseParlayWithOfframp(
-                          parlayAddress,
-                          collateralAddress,
-                          isEth
-                      );
-                const txResult = await tx.wait();
+                if (isAA) {
+                    txResult = isDefaultCollateral
+                        ? await executeBiconomyTransaction(
+                              collateralAddress,
+                              parlayMarketsAMMContractWithSigner,
+                              'exerciseParlay',
+                              [parlayAddress]
+                          )
+                        : await executeBiconomyTransaction(
+                              collateralAddress,
+                              parlayMarketsAMMContractWithSigner,
+                              'exerciseParlayWithOfframp',
+                              [parlayAddress, collateralAddress, isEth]
+                          );
+                } else {
+                    const tx = isDefaultCollateral
+                        ? await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress)
+                        : await parlayMarketsAMMContractWithSigner?.exerciseParlayWithOfframp(
+                              parlayAddress,
+                              collateralAddress,
+                              isEth
+                          );
+                    txResult = await tx.wait();
+                }
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
@@ -244,7 +279,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             } as ParlaysMarket;
         }),
         multiSingle: false,
-        totalQuote: parlayMarket.totalQuote,
+        totalQuote: getParlayQuote(parlayMarket.sUSDPaid, parlayMarket.totalAmount),
         paid: parlayMarket.sUSDPaid,
         payout: parlayMarket.totalAmount,
         onClose: () => {
@@ -266,7 +301,11 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
             onClick={(e: any) => {
                 e.preventDefault();
                 e.stopPropagation();
-                hasAllowance || isDefaultCollateral ? claimParlay(parlayMarket.id) : setOpenApprovalModal(true);
+                hasAllowance || isDefaultCollateral
+                    ? claimParlay(parlayMarket.id)
+                    : isParticle
+                    ? handleAllowance(ethers.constants.MaxUint256)
+                    : setOpenApprovalModal(true);
             }}
         >
             {hasAllowance || isDefaultCollateral
@@ -405,7 +444,9 @@ const ParlayPosition: React.FC<ParlayPosition> = ({
                 <CollapseFooterContainer>
                     <TotalQuoteContainer>
                         <Label>{t('profile.card.total-quote')}:</Label>
-                        <Value>{formatMarketOdds(selectedOddsType, parlayMarket.totalQuote)}</Value>
+                        <Value>
+                            {formatParlayOdds(selectedOddsType, parlayMarket.sUSDPaid, parlayMarket.totalAmount)}
+                        </Value>
                     </TotalQuoteContainer>
                     <ProfitContainer>
                         {isClaimable ? (

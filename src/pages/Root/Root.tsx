@@ -1,3 +1,4 @@
+import { particleWallet } from '@particle-network/rainbowkit-ext';
 import { RainbowKitProvider, connectorsForWallets, darkTheme } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/dist/index.css';
 import {
@@ -25,11 +26,10 @@ import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { arbitrum, optimism, optimismGoerli } from 'wagmi/chains';
-import { infuraProvider } from 'wagmi/providers/infura';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { publicProvider } from 'wagmi/providers/public';
-
+import { arbitrum, optimism, optimismGoerli } from 'wagmi/dist/chains';
+import { infuraProvider } from 'wagmi/dist/providers/infura';
+import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
+import { publicProvider } from 'wagmi/dist/providers/public';
 dotenv.config();
 
 type RootProps = {
@@ -42,6 +42,9 @@ type RpcProvider = {
     blast: string;
 };
 
+const STALL_TIMEOUT = 2000;
+const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
+
 const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
     [Network.OptimismMainnet]: {
         ankr: 'optimism',
@@ -53,22 +56,19 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
     [Network.Base]: { ankr: 'base', chainnode: '', blast: '' },
 };
 
-const STALL_TIMEOUT = 2000;
+const theme = getDefaultTheme();
+const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
 const { chains, provider } = configureChains(
     [optimism, optimismGoerli, arbitrum, base],
     [
         jsonRpcProvider({
             rpc: (chain) => ({
-                http:
-                    chain.id === Network.Base
-                        ? // Use Ankr as primary RPC provider on Base as Chainnode isn't available
-                          `https://rpc.ankr.com/base/${process.env.REACT_APP_ANKR_PROJECT_ID}`
-                        : !CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode
-                        ? chain.rpcUrls.default.http[0]
-                        : `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode}.chainnodes.org/${
-                              process.env.REACT_APP_CHAINNODE_PROJECT_ID
-                          }`,
+                http: !!CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode
+                    ? `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode}.chainnodes.org/${
+                          process.env.REACT_APP_CHAINNODE_PROJECT_ID
+                      }`
+                    : chain.rpcUrls.default.http[0],
             }),
             stallTimeout: STALL_TIMEOUT,
             priority: 1,
@@ -82,7 +82,6 @@ const { chains, provider } = configureChains(
     ]
 );
 
-const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
 const connectors = connectorsForWallets([
     {
         groupName: 'Recommended',
@@ -97,6 +96,11 @@ const connectors = connectorsForWallets([
             coinbaseWallet({ appName: 'Overtime', chains }),
             rainbowWallet({ projectId, chains }),
             imTokenWallet({ projectId, chains }),
+            particleWallet({ chains, authType: 'google' }),
+            particleWallet({ chains, authType: 'github' }),
+            particleWallet({ chains, authType: 'apple' }),
+            particleWallet({ chains, authType: 'twitter' }),
+            particleWallet({ chains, authType: 'discord' }),
         ],
     },
 ]);
@@ -106,9 +110,6 @@ const wagmiClient = createClient({
     connectors,
     provider,
 });
-
-const theme = getDefaultTheme();
-const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
 const Root: React.FC<RootProps> = ({ store }) => {
     PLAUSIBLE.enableAutoPageviews();

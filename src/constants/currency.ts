@@ -1,7 +1,7 @@
-import { keyBy } from 'lodash';
-import { Coins } from 'types/tokens';
 import { Network } from 'enums/network';
+import { keyBy } from 'lodash';
 import { SupportedNetwork } from 'types/network';
+import { Coins } from 'types/tokens';
 
 export const CURRENCY_MAP = {
     sUSD: 'sUSD',
@@ -20,11 +20,11 @@ const CRYPTO_CURRENCY = ['sUSD', 'DAI', 'USDCe', 'USDC', 'USDT', 'OP', 'WETH', '
 export const CRYPTO_CURRENCY_MAP = keyBy(CRYPTO_CURRENCY);
 
 export const STABLE_COINS = [
-    CRYPTO_CURRENCY_MAP.sUSD,
-    CRYPTO_CURRENCY_MAP.DAI,
-    CRYPTO_CURRENCY_MAP.USDCe,
-    CRYPTO_CURRENCY_MAP.USDC,
-    CRYPTO_CURRENCY_MAP.USDT,
+    CRYPTO_CURRENCY_MAP.sUSD as Coins,
+    CRYPTO_CURRENCY_MAP.DAI as Coins,
+    CRYPTO_CURRENCY_MAP.USDCe as Coins,
+    CRYPTO_CURRENCY_MAP.USDC as Coins,
+    CRYPTO_CURRENCY_MAP.USDT as Coins,
 ];
 
 export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
@@ -53,6 +53,33 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
         CRYPTO_CURRENCY_MAP.ETH as Coins,
     ],
 };
+
+// export const COLLATERALS_AA: Record<SupportedNetwork, Coins[]> = {
+//     [Network.OptimismMainnet]: [
+//         CRYPTO_CURRENCY_MAP.ETH as Coins,
+//         CRYPTO_CURRENCY_MAP.sUSD as Coins,
+//         CRYPTO_CURRENCY_MAP.USDC as Coins,
+//         CRYPTO_CURRENCY_MAP.USDT as Coins,
+//         CRYPTO_CURRENCY_MAP.DAI as Coins,
+//         CRYPTO_CURRENCY_MAP.OP as Coins,
+//         CRYPTO_CURRENCY_MAP.WETH as Coins,
+//     ],
+//     [Network.OptimismGoerli]: [CRYPTO_CURRENCY_MAP.sUSD as Coins],
+//     [Network.Arbitrum]: [
+//         CRYPTO_CURRENCY_MAP.ETH as Coins,
+//         CRYPTO_CURRENCY_MAP.USDCe as Coins,
+//         CRYPTO_CURRENCY_MAP.USDC as Coins,
+//         CRYPTO_CURRENCY_MAP.DAI as Coins,
+//         CRYPTO_CURRENCY_MAP.USDT as Coins,
+//         CRYPTO_CURRENCY_MAP.ARB as Coins,
+//         CRYPTO_CURRENCY_MAP.WETH as Coins,
+//     ],
+//     [Network.Base]: [
+//         CRYPTO_CURRENCY_MAP.ETH as Coins,
+//         CRYPTO_CURRENCY_MAP.USDC as Coins,
+//         CRYPTO_CURRENCY_MAP.WETH as Coins,
+//     ],
+// };
 
 export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     sUSD: 18,

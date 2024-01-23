@@ -173,6 +173,10 @@
     content: '\006C';
 }
 
+.icon--warning::before {
+    content: '\0052';
+}
+
 .icon--arrow-down::before {
     content: '\006D';
 }

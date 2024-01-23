@@ -1,5 +1,5 @@
 import { BetType } from 'enums/markets';
-import { Tags, SportsMap, SportsTagsMap } from 'types/markets';
+import { SportsMap, SportsTagsMap, Tags } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
     {
@@ -580,11 +580,16 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_ASSISTS]: 'assists',
     [BetType.PLAYER_PROPS_DOUBLE_DOUBLE]: 'double double',
     [BetType.PLAYER_PROPS_TRIPLE_DOUBLE]: 'triple double',
+    [BetType.PLAYER_PROPS_RECEPTIONS]: 'receptions',
+    [BetType.PLAYER_PROPS_FIRST_TOUCHDOWN]: 'first touchdown',
+    [BetType.PLAYER_PROPS_LAST_TOUCHDOWN]: 'last touchdown',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_TOUCHDOWNS]: 'Who will score a touchdown in the game?',
     [BetType.PLAYER_PROPS_GOALS]: 'Who will score a goal in the game',
+    [BetType.PLAYER_PROPS_FIRST_TOUCHDOWN]: 'Who will score the first touchdown in the game? (incl. OT)',
+    [BetType.PLAYER_PROPS_LAST_TOUCHDOWN]: 'Who will score the last touchdown in the game?',
     [BetType.WINNER]: '',
     [BetType.SPREAD]: '',
     [BetType.TOTAL]: '',
@@ -604,6 +609,7 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_ASSISTS]: '',
     [BetType.PLAYER_PROPS_DOUBLE_DOUBLE]: '',
     [BetType.PLAYER_PROPS_TRIPLE_DOUBLE]: '',
+    [BetType.PLAYER_PROPS_RECEPTIONS]: '',
 };
 
 export const SCORING_MAP: SportsMap = {

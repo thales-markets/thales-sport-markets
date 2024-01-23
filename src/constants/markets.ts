@@ -12,8 +12,10 @@ export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, B
     [ContractSGPOrder.SPREADTOTALS]: [10001, 10002],
 };
 
+export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.05; // 5%
+
 export const INCENTIVIZED_LEAGUE = {
-    ids: [9011, 9002, 9004],
+    ids: [9011, 9004],
     startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
     endDate: new Date(Date.UTC(2024, 4, 16, 23, 59, 59)),
     link:
@@ -25,11 +27,20 @@ export const INCENTIVIZED_LEAGUE = {
 
 export const INCENTIVIZED_GRAND_SLAM = {
     ids: [9153],
-    startDate: new Date(Date.UTC(2023, 5, 30, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2023, 6, 16, 23, 59, 59)),
-    link: 'https://dune.com/leifu/overtime-wimbledon-campaign-2003',
-    opRewards: '5000 OP',
+    startDate: new Date(Date.UTC(2024, 0, 10, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 0, 26, 23, 59, 59)),
+    link: 'https://medium.com/@OvertimeMarkets.xyz/2f5b1bdc4fc9',
+    opRewards: '',
     arbRewards: '5000 ARB',
+};
+
+export const INCENTIVIZED_NFL_PLAYOFFS = {
+    ids: [9002],
+    startDate: new Date(Date.UTC(2024, 0, 10, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 1, 11, 23, 59, 59)),
+    link: 'https://medium.com/@OvertimeMarkets.xyz/2f5b1bdc4fc9',
+    opRewards: '',
+    arbRewards: '40000 ARB',
 };
 
 export const MIN_LIQUIDITY = 10;
@@ -40,12 +51,17 @@ export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC = new Date(Date.UTC(2023
 // Base leaderboard starts
 export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE = new Date(2023, 9, 11, 0, 0, 0);
 export const PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC_BASE = new Date(Date.UTC(2023, 9, 11, 0, 0, 0));
+export const PARLAY_LEADERBOARD_END_PERIOD_BASE = 3;
 
 export const PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS = 6;
 
 // New rewards distribution from 11/10/2023
 export const PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM = 15;
 export const PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000 = [500, 350, 250, 200, 170, 140, 120, 100, 90, 80];
+
+// New rewards distribution from 03/01/2024
+export const PARLAY_LEADERBOARD_NEW_REWARDS_1000_OP_PERIOD_FROM = 22;
+
 // ------------------------------
 
 export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20 = [

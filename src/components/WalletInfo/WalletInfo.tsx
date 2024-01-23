@@ -1,40 +1,37 @@
-import React, { useMemo, useState } from 'react';
+import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
+import ConnectWalletModal from 'components/ConnectWalletModal';
+import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
-import { getIsWalletConnected, getNetworkId, getWalletAddress, switchToNetworkId } from 'redux/modules/wallet';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import {
+    getIsConnectedViaParticle,
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    getWalletConnectModalVisibility,
+    setWalletConnectModalVisibility,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { truncateAddress, changeNetwork, formatCurrency } from 'thales-utils';
-import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
-import OutsideClickHandler from 'react-outside-click-handler';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
+import { formatCurrency, truncateAddress } from 'thales-utils';
+
+import NetworkSwitcher from 'components/NetworkSwitcher';
 import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
-import { useSwitchNetwork } from 'wagmi';
 import { getDefaultCollateral } from 'utils/collaterals';
-import { SupportedNetwork } from 'types/network';
 
-const WalletInfo: React.FC = () => {
+const WalletInfo: React.FC = ({}) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { switchNetwork } = useSwitchNetwork();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
-
-    const [dropDownOpen, setDropDownOpen] = useState(false);
-
-    const stableCointBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
-    const stableCoinBalance = useMemo(() => {
-        return stableCointBalanceQuery?.data || 0;
-    }, [stableCointBalanceQuery.data]);
+    const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
 
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -46,44 +43,40 @@ const WalletInfo: React.FC = () => {
         return undefined;
     }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
 
+    const stableCointBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+    const stableCoinBalance = useMemo(() => {
+        return stableCointBalanceQuery?.data || 0;
+    }, [stableCointBalanceQuery.data]);
+
     const walletBalance = overtimeVoucher ? overtimeVoucher.remainingAmount : stableCoinBalance;
-
-    const selectedNetwork = useMemo(
-        () => SUPPORTED_NETWORKS_PARAMS[networkId] || SUPPORTED_NETWORKS_PARAMS[DEFAULT_NETWORK.networkId],
-        [networkId]
-    );
-
-    // currently not supported network synchronization between browser without integrated wallet and wallet app on mobile
-    const hideNetworkSwitcher =
-        isMobile &&
-        !window.ethereum?.isMetaMask &&
-        !window.ethereum?.isBraveWallet &&
-        !window.ethereum?.isCoinbaseWallet &&
-        !window.ethereum?.isTrust;
 
     return (
         <Container>
             <FlexDivColumn>
                 <RainbowConnectButton.Custom>
-                    {({ openConnectModal, openAccountModal }) => {
+                    {({ openAccountModal }) => {
                         return (
-                            <Wrapper>
-                                <WalletAddressInfo
-                                    isWalletConnected={isWalletConnected}
-                                    isClickable={true}
-                                    onClick={isWalletConnected ? openAccountModal : openConnectModal}
-                                >
-                                    <Text className="wallet-info">
-                                        {isWalletConnected
-                                            ? truncateAddress(walletAddress, 5, 5)
-                                            : t('common.wallet.connect-your-wallet')}
-                                    </Text>
-                                    {isWalletConnected && (
-                                        <Text className="wallet-info-hover">{t('common.wallet.wallet-options')}</Text>
-                                    )}
-                                </WalletAddressInfo>
-                                {!isMobile &&
-                                    isWalletConnected &&
+                            <Wrapper displayPadding={isWalletConnected}>
+                                {isWalletConnected && (
+                                    <WalletAddressInfo
+                                        isWalletConnected={isWalletConnected}
+                                        isClickable={true}
+                                        onClick={
+                                            !isConnectedViaParticle
+                                                ? () => openAccountModal()
+                                                : () => window.open(PARTICLE_WALLET, '_blank')
+                                        }
+                                    >
+                                        <Text className="wallet-info">
+                                            {isWalletConnected
+                                                ? truncateAddress(walletAddress, 5, 5)
+                                                : t('common.wallet.connect-your-wallet')}
+                                        </Text>
+                                    </WalletAddressInfo>
+                                )}
+                                {isWalletConnected &&
                                     (overtimeVoucher ? (
                                         <WalletBalanceInfo>
                                             <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
@@ -96,55 +89,24 @@ const WalletInfo: React.FC = () => {
                                             <Currency>{getDefaultCollateral(networkId)}</Currency>
                                         </WalletBalanceInfo>
                                     ))}
-                                <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
-                                    <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)}>
-                                        <NetworkIcon className={selectedNetwork.iconClassName} />
-                                        {!hideNetworkSwitcher && <DownIcon className={`icon icon--arrow-down`} />}
-                                    </NetworkIconWrapper>
-                                    {dropDownOpen && !hideNetworkSwitcher && (
-                                        <NetworkDropDown>
-                                            {Object.keys(SUPPORTED_NETWORKS_PARAMS)
-                                                .map((key) => {
-                                                    return {
-                                                        id: Number(key),
-                                                        ...SUPPORTED_NETWORKS_PARAMS[Number(key)],
-                                                    };
-                                                })
-                                                .sort((a, b) => a.order - b.order)
-                                                .map((network, index) => (
-                                                    <NetworkWrapper
-                                                        key={index}
-                                                        onClick={async () => {
-                                                            setDropDownOpen(false);
-                                                            await changeNetwork(network, () => {
-                                                                switchNetwork?.(network.id);
-                                                                // Trigger App.js init
-                                                                // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
-                                                                dispatch(
-                                                                    switchToNetworkId({
-                                                                        networkId: Number(
-                                                                            network.id
-                                                                        ) as SupportedNetwork,
-                                                                    })
-                                                                );
-                                                            });
-                                                        }}
-                                                    >
-                                                        <NetworkIcon className={network.iconClassName} />
-                                                        <NetworkText>
-                                                            {networkId === network.id && <NetworkSelectedIndicator />}
-                                                            {network.shortChainName}
-                                                        </NetworkText>
-                                                    </NetworkWrapper>
-                                                ))}
-                                        </NetworkDropDown>
-                                    )}
-                                </OutsideClickHandler>
+                                <NetworkSwitcher />
                             </Wrapper>
                         );
                     }}
                 </RainbowConnectButton.Custom>
             </FlexDivColumn>
+            {connectWalletModalVisibility && (
+                <ConnectWalletModal
+                    isOpen={connectWalletModalVisibility}
+                    onClose={() => {
+                        dispatch(
+                            setWalletConnectModalVisibility({
+                                visibility: false,
+                            })
+                        );
+                    }}
+                />
+            )}
         </Container>
     );
 };
@@ -160,15 +122,14 @@ const Container = styled(FlexDivCentered)`
     }
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
     border-radius: 20px;
-    border: 2px solid ${(props) => props.theme.borderColor.quaternary};
-    min-width: 160px;
+    border: 1px solid ${(props) => props.theme.borderColor.quaternary};
     height: 28px;
     justify-content: space-between;
     align-items: center;
-    padding-left: 10px;
+    padding-left: ${(props) => (props.displayPadding ? '10px' : '')};
 `;
 
 const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
@@ -182,9 +143,6 @@ const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?:
         display: none;
     }
     :hover {
-        .wallet-info {
-            ${(props) => (props.isWalletConnected ? ' display: none;' : '')}
-        }
         .wallet-info-hover {
             display: inline;
             width: fit-content;
@@ -206,20 +164,6 @@ const WalletBalanceInfo = styled.div`
     display: flex;
 `;
 
-const NetworkIconWrapper = styled.div`
-    background: ${(props) => props.theme.background.quaternary};
-    height: 28px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    align-items: center;
-    max-width: 65px;
-    min-width: 65px;
-    cursor: pointer;
-    margin-right: -1px;
-`;
-
 const Text = styled.span`
     font-family: 'Roboto';
     font-style: normal;
@@ -239,62 +183,6 @@ const Currency = styled(Text)`
     margin-left: 2px;
 `;
 
-const NetworkText = styled.span`
-    position: relative;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 800;
-    font-size: 10.8px;
-    line-height: 13px;
-    cursor: pointer;
-    color: ${(props) => props.theme.button.textColor.primary};
-    text-align: left;
-`;
-
-const NetworkIcon = styled.i`
-    font-size: 24px;
-    color: ${(props) => props.theme.button.textColor.primary};
-`;
-
-const DownIcon = styled.i`
-    font-size: 12px;
-    color: ${(props) => props.theme.button.textColor.primary};
-`;
-
-const NetworkDropDown = styled.div`
-    z-index: 1000;
-    position: absolute;
-    top: 30px;
-    right: 0px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 20px;
-    background: ${(props) => props.theme.background.quaternary};
-    width: 130px;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-`;
-
-const NetworkWrapper = styled.div`
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    width: 100%;
-    margin-left: 32px;
-`;
-
-const NetworkSelectedIndicator = styled.div`
-    position: absolute;
-    background: ${(props) => props.theme.background.primary};
-    border-radius: 20px;
-    width: 6px;
-    height: 6px;
-    left: -45px;
-    top: 3px;
-`;
+const PARTICLE_WALLET = 'https://wallet.particle.network/';
 
 export default WalletInfo;

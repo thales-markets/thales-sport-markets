@@ -26,6 +26,14 @@ export const getErrorToastOptions = (message: string | React.ReactNode, options?
     };
 };
 
+export const getInfoToastOptions = (message: string | React.ReactNode, options?: UpdateOptions) => {
+    return {
+        ...{ ...defaultToastOptions, ...options },
+        render: message,
+        type: 'info' as TypeOptions,
+    };
+};
+
 export const oddToastOptions = {
     ...defaultToastOptions,
     autoClose: 3000,

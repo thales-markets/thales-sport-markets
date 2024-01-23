@@ -17,6 +17,8 @@ const ROUTES = {
     LiquidityPool: '/liquidity-pool',
     SingleLiquidityPool: '/liquidity-pool?pool-type=single',
     ParlayLiquidityPool: '/liquidity-pool?pool-type=parlay',
+    Deposit: '/deposit',
+    Withdraw: '/withdraw',
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {
