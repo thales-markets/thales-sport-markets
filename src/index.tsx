@@ -5,6 +5,7 @@ import store from 'redux/store';
 import 'i18n';
 import 'styles/main.css';
 import 'styles/overrides.css';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 ReactDOM.render(
     <React.Fragment>
@@ -12,3 +13,5 @@ ReactDOM.render(
     </React.Fragment>,
     document.getElementById('root')
 );
+
+serviceWorkerRegistration.register();
