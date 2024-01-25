@@ -3,7 +3,7 @@
     "name": "OvertimeMarkets",
     "short_name": "Overtime",
     "description": "Join the Web3 sports markets revolution",
-    "start_url": "/",
+    "start_url": "/markets",
     "background_color": "#303656",
     "theme_color": "#303656",
     "orientation": "any",
