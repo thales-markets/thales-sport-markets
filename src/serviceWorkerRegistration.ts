@@ -1,4 +1,3 @@
-
 const publicVapidKey = 'BCafw6fkkZll8BEesV3KjFjqpj7CtCgNDLpkUmPKmHxqPIt1GrYW5g6Xgr_BiGgkk5WlXDG-uUH31lhdqd4hJ1c'; // REPLACE_WITH_YOUR_KEY
 
 // Register SW, Register Push, Send Push
