@@ -10,6 +10,7 @@ export let installPrompt: any;
 window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     console.log('event: ', event);
+    console.log(navigator);
     installPrompt = event;
 });
 
