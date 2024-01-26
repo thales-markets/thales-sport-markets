@@ -5,7 +5,13 @@ import store from 'redux/store';
 import 'i18n';
 import 'styles/main.css';
 import 'styles/overrides.css';
-// import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+export let installPrompt: any;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    console.log('event: ', event);
+    installPrompt = event;
+});
 
 ReactDOM.render(
     <React.Fragment>
@@ -13,5 +19,3 @@ ReactDOM.render(
     </React.Fragment>,
     document.getElementById('root')
 );
-
-// serviceWorkerRegistration.register();
