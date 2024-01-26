@@ -46,6 +46,8 @@ import {
     SubSection,
     Zebro,
 } from './styled-components';
+import { installPrompt } from 'index';
+import { isMobile } from 'utils/device';
 
 const LandingPage: React.FC = () => {
     const { t } = useTranslation();
@@ -68,7 +70,16 @@ const LandingPage: React.FC = () => {
             <Section className="first">
                 <Zebro className="baseball" src={ZebraBaseball} alt="Zebro Baseball" />
                 <LargeText className="first">{t('landing-page.best-odds')}</LargeText>
-                <CallToAction className="first">
+                <CallToAction
+                    onClick={() => {
+                        if (isMobile() && installPrompt) {
+                            installPrompt.prompt().then((success: string) => {
+                                console.log('status: ', success);
+                            });
+                        }
+                    }}
+                    className="first"
+                >
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
                         {t('landing-page.try-now')} <ArrowIcon className={`icon icon--arrow`} />
                     </SPAAnchor>
