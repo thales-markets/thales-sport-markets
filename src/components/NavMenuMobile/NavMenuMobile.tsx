@@ -38,6 +38,8 @@ import {
     WalletWrapper,
     Wrapper,
 } from './styled-components';
+import Button from 'components/Button';
+import { installPrompt } from 'index';
 
 type NavMenuMobileProps = {
     visibility?: boolean | null;
@@ -62,8 +64,37 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                         </Network>
                         <LanguageSelector />
                     </FlexDivCentered>
+                    {isWalletConnected && (
+                        <WalletWrapper>
+                            <WalletInfo />
+                        </WalletWrapper>
+                    )}
                     <WalletWrapper>
-                        <WalletInfo />
+                        {installPrompt && (
+                            <Button
+                                backgroundColor={theme.button.background.quaternary}
+                                textColor={theme.button.textColor.primary}
+                                borderColor={theme.button.borderColor.secondary}
+                                fontWeight="400"
+                                additionalStyles={{
+                                    maxWidth: 400,
+                                    borderRadius: '15.5px',
+                                    fontWeight: '700',
+                                    fontSize: '14px',
+                                    textTransform: 'capitalize',
+                                }}
+                                width="100%"
+                                height="28px"
+                                onClick={() =>
+                                    installPrompt.prompt().then((status: string) => {
+                                        console.log('status: ', status);
+                                    })
+                                }
+                            >
+                                {t('get-started.install-app')}
+                                <i className="icon icon--esports" />
+                            </Button>
+                        )}
                     </WalletWrapper>
                 </HeaderContainer>
                 <ItemsContainer>

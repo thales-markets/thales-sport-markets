@@ -32,6 +32,7 @@ import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import TopUp from './components/TopUp';
+import { installPrompt } from 'index';
 
 const PULSING_COUNT = 10;
 
@@ -263,30 +264,58 @@ const DappHeader: React.FC = () => {
                                     {t('get-started.log-in')}
                                 </Button>
 
-                                <Button
-                                    backgroundColor={theme.button.background.quaternary}
-                                    textColor={theme.button.textColor.primary}
-                                    borderColor={theme.button.borderColor.secondary}
-                                    fontWeight="400"
-                                    additionalStyles={{
-                                        maxWidth: 400,
-                                        borderRadius: '15.5px',
-                                        fontWeight: '700',
-                                        fontSize: '14px',
-                                        textTransform: 'capitalize',
-                                    }}
-                                    width="100%"
-                                    height="28px"
-                                    onClick={() =>
-                                        dispatch(
-                                            setWalletConnectModalVisibility({
-                                                visibility: true,
+                                {installPrompt ? (
+                                    <Button
+                                        backgroundColor={theme.button.background.quaternary}
+                                        textColor={theme.button.textColor.primary}
+                                        borderColor={theme.button.borderColor.secondary}
+                                        fontWeight="400"
+                                        additionalStyles={{
+                                            maxWidth: 400,
+                                            borderRadius: '15.5px',
+                                            fontWeight: '700',
+                                            fontSize: '14px',
+                                            textTransform: 'capitalize',
+                                        }}
+                                        width="100%"
+                                        height="28px"
+                                        padding="3px 24px"
+                                        onClick={() =>
+                                            installPrompt.prompt().then((status: string) => {
+                                                console.log('status: ', status);
                                             })
-                                        )
-                                    }
-                                >
-                                    {t('get-started.sign-up')}
-                                </Button>
+                                        }
+                                    >
+                                        {t('get-started.install-app')}
+                                        <i className="icon icon--esports" />
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        backgroundColor={theme.button.background.quaternary}
+                                        textColor={theme.button.textColor.primary}
+                                        borderColor={theme.button.borderColor.secondary}
+                                        fontWeight="400"
+                                        additionalStyles={{
+                                            maxWidth: 400,
+                                            borderRadius: '15.5px',
+                                            fontWeight: '700',
+                                            fontSize: '14px',
+                                            textTransform: 'capitalize',
+                                        }}
+                                        width="100%"
+                                        height="28px"
+                                        onClick={() =>
+                                            dispatch(
+                                                setWalletConnectModalVisibility({
+                                                    visibility: true,
+                                                })
+                                            )
+                                        }
+                                    >
+                                        {t('get-started.sign-up')}
+                                    </Button>
+                                )}
+
                                 <TopUp />
                                 <NetworkSwitcher />
                             </>
