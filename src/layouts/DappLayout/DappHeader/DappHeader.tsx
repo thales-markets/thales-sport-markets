@@ -249,7 +249,7 @@ const DappHeader: React.FC = () => {
                                     width="100%"
                                     fontWeight="400"
                                     additionalStyles={{
-                                        maxWidth: 400,
+                                        minWidth: 140,
                                         borderRadius: '15.5px',
                                         fontWeight: '800',
                                         fontSize: '14px',
@@ -274,11 +274,11 @@ const DappHeader: React.FC = () => {
                                         borderColor={theme.button.borderColor.secondary}
                                         fontWeight="400"
                                         additionalStyles={{
-                                            maxWidth: 400,
                                             borderRadius: '15.5px',
                                             fontWeight: '700',
                                             fontSize: '14px',
                                             textTransform: 'capitalize',
+                                            padding: '3px 20px',
                                         }}
                                         width="100%"
                                         height="28px"
@@ -302,7 +302,6 @@ const DappHeader: React.FC = () => {
                                         borderColor={theme.button.borderColor.secondary}
                                         fontWeight="400"
                                         additionalStyles={{
-                                            maxWidth: 400,
                                             borderRadius: '15.5px',
                                             fontWeight: '700',
                                             fontSize: '14px',
@@ -472,6 +471,9 @@ const MobileButtonWrapper = styled(FlexDivRowCentered)`
     margin-top: 10px;
     gap: 20px;
     min-height: 32px;
+    @media (max-width: 400px) {
+        gap: 10px;
+    }
 `;
 
 export default DappHeader;
