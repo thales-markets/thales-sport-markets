@@ -5,11 +5,11 @@ import store from 'redux/store';
 import 'i18n';
 import 'styles/main.css';
 import 'styles/overrides.css';
-export let installPrompt: any;
+import PWA from 'utils/PWA';
 
 window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
-    installPrompt = event;
+    PWA.setEvent(event);
 });
 
 ReactDOM.render(

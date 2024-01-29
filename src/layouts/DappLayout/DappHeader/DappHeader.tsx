@@ -32,7 +32,7 @@ import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import TopUp from './components/TopUp';
-import { installPrompt } from 'index';
+import PWA from 'utils/PWA';
 
 const PULSING_COUNT = 10;
 
@@ -253,18 +253,19 @@ const DappHeader: React.FC = () => {
                                         textTransform: 'capitalize',
                                     }}
                                     height="28px"
-                                    onClick={() =>
+                                    onClick={() => {
+                                        console.log('hello');
                                         dispatch(
                                             setWalletConnectModalVisibility({
                                                 visibility: true,
                                             })
-                                        )
-                                    }
+                                        );
+                                    }}
                                 >
                                     {t('get-started.log-in')}
                                 </Button>
 
-                                {installPrompt ? (
+                                {PWA.beforeInstallEvent ? (
                                     <Button
                                         backgroundColor={theme.button.background.quaternary}
                                         textColor={theme.button.textColor.primary}
@@ -281,8 +282,9 @@ const DappHeader: React.FC = () => {
                                         height="28px"
                                         padding="3px 24px"
                                         onClick={() =>
-                                            installPrompt.prompt().then((status: string) => {
+                                            PWA.beforeInstallEvent?.prompt().then((status: string) => {
                                                 console.log('status: ', status);
+                                                PWA.disableBeforeInstallEvent();
                                             })
                                         }
                                     >

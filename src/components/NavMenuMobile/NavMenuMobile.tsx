@@ -39,7 +39,7 @@ import {
     Wrapper,
 } from './styled-components';
 import Button from 'components/Button';
-import { installPrompt } from 'index';
+import PWA from 'utils/PWA';
 
 type NavMenuMobileProps = {
     visibility?: boolean | null;
@@ -70,7 +70,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                         </WalletWrapper>
                     )}
                     <WalletWrapper>
-                        {installPrompt && (
+                        {PWA.beforeInstallEvent && (
                             <Button
                                 backgroundColor={theme.button.background.quaternary}
                                 textColor={theme.button.textColor.primary}
@@ -86,8 +86,9 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                                 width="100%"
                                 height="28px"
                                 onClick={() =>
-                                    installPrompt.prompt().then((status: string) => {
+                                    PWA.beforeInstallEvent?.prompt().then((status: string) => {
                                         console.log('status: ', status);
+                                        PWA.disableBeforeInstallEvent();
                                     })
                                 }
                             >

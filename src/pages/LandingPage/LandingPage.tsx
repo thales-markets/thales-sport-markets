@@ -46,8 +46,8 @@ import {
     SubSection,
     Zebro,
 } from './styled-components';
-import { installPrompt } from 'index';
 import { isMobile } from 'utils/device';
+import PWA from 'utils/PWA';
 
 const LandingPage: React.FC = () => {
     const { t } = useTranslation();
@@ -72,9 +72,10 @@ const LandingPage: React.FC = () => {
                 <LargeText className="first">{t('landing-page.best-odds')}</LargeText>
                 <CallToAction
                     onClick={() => {
-                        if (isMobile() && installPrompt) {
-                            installPrompt.prompt().then((success: string) => {
+                        if (isMobile() && PWA.beforeInstallEvent) {
+                            PWA.beforeInstallEvent.prompt().then((success: string) => {
                                 console.log('status: ', success);
+                                PWA.disableBeforeInstallEvent();
                             });
                         }
                     }}
