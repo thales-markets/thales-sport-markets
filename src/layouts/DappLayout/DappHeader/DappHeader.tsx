@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
+import { getBeforeInstallEvent, getStopPulsing, setBeforeInstallEvent, setStopPulsing } from 'redux/modules/ui';
 import {
     getIsWalletConnected,
     getNetworkId,
@@ -62,12 +62,12 @@ const DappHeader: React.FC = () => {
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const beforeInstallEvent = useSelector((state: RootState) => getBeforeInstallEvent(state));
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
@@ -263,30 +263,59 @@ const DappHeader: React.FC = () => {
                                     {t('get-started.log-in')}
                                 </Button>
 
-                                <Button
-                                    backgroundColor={theme.button.background.quaternary}
-                                    textColor={theme.button.textColor.primary}
-                                    borderColor={theme.button.borderColor.secondary}
-                                    fontWeight="400"
-                                    additionalStyles={{
-                                        maxWidth: 400,
-                                        borderRadius: '15.5px',
-                                        fontWeight: '700',
-                                        fontSize: '14px',
-                                        textTransform: 'capitalize',
-                                    }}
-                                    width="100%"
-                                    height="28px"
-                                    onClick={() =>
-                                        dispatch(
-                                            setWalletConnectModalVisibility({
-                                                visibility: true,
-                                            })
-                                        )
-                                    }
-                                >
-                                    {t('get-started.sign-up')}
-                                </Button>
+                                {beforeInstallEvent ? (
+                                    <Button
+                                        backgroundColor={theme.button.background.quaternary}
+                                        textColor={theme.button.textColor.primary}
+                                        borderColor={theme.button.borderColor.secondary}
+                                        fontWeight="400"
+                                        additionalStyles={{
+                                            maxWidth: 400,
+                                            borderRadius: '15.5px',
+                                            fontWeight: '700',
+                                            fontSize: '14px',
+                                            textTransform: 'capitalize',
+                                        }}
+                                        width="100%"
+                                        height="28px"
+                                        onClick={async () => {
+                                            const response = await beforeInstallEvent.prompt();
+                                            if (response.outcome === 'accepted') {
+                                                // disable event as PWA was already installed
+                                                dispatch(setBeforeInstallEvent(null));
+                                            }
+                                        }}
+                                    >
+                                        {t('get-started.install-app')}
+                                        <i className="icon icon--esports" />
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        backgroundColor={theme.button.background.quaternary}
+                                        textColor={theme.button.textColor.primary}
+                                        borderColor={theme.button.borderColor.secondary}
+                                        fontWeight="400"
+                                        additionalStyles={{
+                                            maxWidth: 400,
+                                            borderRadius: '15.5px',
+                                            fontWeight: '700',
+                                            fontSize: '14px',
+                                            textTransform: 'capitalize',
+                                        }}
+                                        width="100%"
+                                        height="28px"
+                                        onClick={() =>
+                                            dispatch(
+                                                setWalletConnectModalVisibility({
+                                                    visibility: true,
+                                                })
+                                            )
+                                        }
+                                    >
+                                        {t('get-started.sign-up')}
+                                    </Button>
+                                )}
+
                                 <TopUp />
                                 <NetworkSwitcher />
                             </>

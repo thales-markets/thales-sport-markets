@@ -8,6 +8,7 @@ import { Tags } from 'types/markets';
 import { uniqBy } from 'lodash';
 import { OddsType } from 'enums/markets';
 import { Theme } from 'enums/ui';
+import { BeforeInstallEvent } from 'types/ui';
 
 const sliceName = 'ui';
 
@@ -36,6 +37,7 @@ type UISliceState = {
     oddsType: OddsType;
     stopPulsing: boolean;
     favouriteLeagues: Tags;
+    beforeInstallEvent: BeforeInstallEvent | null;
 };
 
 const initialState: UISliceState = {
@@ -43,6 +45,7 @@ const initialState: UISliceState = {
     oddsType: getDefaultOddsType(),
     stopPulsing: getDefaultStopPulsing(),
     favouriteLeagues: getDefaultFavouriteLeagues(),
+    beforeInstallEvent: null,
 };
 
 const uiSlice = createSlice({
@@ -65,15 +68,19 @@ const uiSlice = createSlice({
             state.favouriteLeagues = uniqBy(action.payload, 'id');
             localStore.set(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES, action.payload);
         },
+        setBeforeInstallEvent: (state, action: PayloadAction<BeforeInstallEvent | null>) => {
+            state.beforeInstallEvent = action.payload;
+        },
     },
 });
 
-export const { setTheme, setOddsType, setStopPulsing, setFavouriteLeagues } = uiSlice.actions;
+export const { setTheme, setOddsType, setStopPulsing, setFavouriteLeagues, setBeforeInstallEvent } = uiSlice.actions;
 
 const getUIState = (state: RootState) => state[sliceName];
 export const getTheme = (state: RootState) => getUIState(state).theme;
 export const getOddsType = (state: RootState) => getUIState(state).oddsType;
 export const getStopPulsing = (state: RootState) => getUIState(state).stopPulsing;
 export const getFavouriteLeagues = (state: RootState) => getUIState(state).favouriteLeagues;
+export const getBeforeInstallEvent = (state: RootState) => getUIState(state).beforeInstallEvent;
 
 export default uiSlice.reducer;
