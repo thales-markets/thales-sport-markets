@@ -10,7 +10,7 @@ import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +32,6 @@ import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import TopUp from './components/TopUp';
-
 const PULSING_COUNT = 10;
 
 const customModalStyles = {
@@ -69,9 +68,10 @@ const DappHeader: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const beforeInstallEvent = useSelector((state: RootState) => getBeforeInstallEvent(state));
 
-    const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
+    const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+    const [showInstallAPP, setShowInstallAPP] = useState<boolean>(false);
 
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
@@ -94,6 +94,10 @@ const DappHeader: React.FC = () => {
             }
         }
     }, 1000);
+
+    useEffect(() => {
+        setShowInstallAPP(beforeInstallEvent !== null);
+    }, [beforeInstallEvent]);
 
     return (
         <>
@@ -263,7 +267,7 @@ const DappHeader: React.FC = () => {
                                     {t('get-started.log-in')}
                                 </Button>
 
-                                {beforeInstallEvent ? (
+                                {showInstallAPP ? (
                                     <Button
                                         backgroundColor={theme.button.background.quaternary}
                                         textColor={theme.button.textColor.primary}
@@ -279,10 +283,12 @@ const DappHeader: React.FC = () => {
                                         width="100%"
                                         height="28px"
                                         onClick={async () => {
-                                            const response = await beforeInstallEvent.prompt();
-                                            if (response.outcome === 'accepted') {
-                                                // disable event as PWA was already installed
-                                                dispatch(setBeforeInstallEvent(null));
+                                            if (beforeInstallEvent) {
+                                                const response = await beforeInstallEvent.prompt();
+                                                if (response.outcome === 'accepted') {
+                                                    // disable event as PWA was already installed
+                                                    dispatch(setBeforeInstallEvent(null));
+                                                }
                                             }
                                         }}
                                     >
