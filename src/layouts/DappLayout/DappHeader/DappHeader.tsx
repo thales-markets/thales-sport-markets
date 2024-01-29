@@ -302,6 +302,7 @@ const DappHeader: React.FC = () => {
                                         borderColor={theme.button.borderColor.secondary}
                                         fontWeight="400"
                                         additionalStyles={{
+                                            minWidth: 140,
                                             borderRadius: '15.5px',
                                             fontWeight: '700',
                                             fontSize: '14px',
