@@ -557,7 +557,8 @@
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "СТИМУЛИРОВАННЫЕ РЫНКИ",
         "incentivized-tooltip-tennis": "Ролан Гаррос будет поощрен, так как турнир стартует 29 мая. Рынки будут получать {{rewards}} до конца турнира 12 июня. Вознаграждения будут распределяться в зависимости от вашего объема продаж на этих рынках. Вы можете отслеживать распределение вознаграждений на нашей <detailsLink>панели управления Dune</detailsLink>.",
-        "incentivized-tooltip-nfl-playoffs": "Во время плей-офф НФЛ будет роздано колоссальное количество {{rewards}}. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>."
+        "incentivized-tooltip-nfl-playoffs": "Во время плей-офф НФЛ будет роздано колоссальное количество {{rewards}}. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
+        "superbowl-incentive": "10 000 АРБ В СТИМУЛИРОВАНИИ"
     },
     "rewards": {
         "header": "Rewards",

@@ -557,7 +557,8 @@
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "ตลาดที่สร้างแรงจูงใจ",
         "incentivized-tooltip-tennis": "วิมเบิลดันจะได้รับแรงจูงใจ เนื่องจากทัวร์นาเมนต์จะเริ่มในวันที่ 3 กรกฎาคม ตลาดจะได้รับการกระตุ้นด้วย {{rewards}} จนกว่าจะสิ้นสุดทัวร์นาเมนต์ในวันที่ 16 กรกฎาคม รางวัลจะกระจายตามปริมาณของคุณที่ขับเคลื่อนผ่านตลาดเหล่านี้ คุณสามารถติดตามการจัดสรรรางวัลได้ที่ <detailsLink>Dune Dashboard</detailsLink>",
-        "incentivized-tooltip-nfl-playoffs": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในระหว่างรอบตัดเชือก NFL ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
+        "incentivized-tooltip-nfl-playoffs": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในระหว่างรอบตัดเชือก NFL ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
+        "superbowl-incentive": "10,000 ARB เป็นสิ่งจูงใจ"
     },
     "rewards": {
         "header": "รางวัล",
