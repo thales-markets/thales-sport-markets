@@ -557,7 +557,8 @@
         "incentivized-markets": "ANREIZMÄRKTE",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-tennis": "Wimbledon wird einen Anreiz erhalten, da das Turnier am 3. Juli beginnt. Die Märkte werden bis zum Ende des Turniers am 16. Juli mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen.",
-        "incentivized-tooltip-nfl-playoffs": "Während der NFL-Playoffs werden insgesamt {{rewards}} verteilt. Weitere Details finden Sie <detailsLink>hier</detailsLink>."
+        "incentivized-tooltip-nfl-playoffs": "Während der NFL-Playoffs werden insgesamt {{rewards}} verteilt. Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
+        "superbowl-incentive": "10.000 ARB an Anreizen"
     },
     "rewards": {
         "header": "Preise",

@@ -1,7 +1,7 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_PLAYOFFS } from 'constants/markets';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_SUPERBOWL } from 'constants/markets';
 import { Network } from 'enums/network';
 import React from 'react';
 import { Trans } from 'react-i18next';
@@ -12,6 +12,7 @@ import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { NetworkId } from 'thales-utils';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 
@@ -173,10 +174,9 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 }
                                             ></Tooltip>
                                         )}
-                                    {INCENTIVIZED_NFL_PLAYOFFS.ids.includes(tag.id) &&
-                                        new Date() > INCENTIVIZED_NFL_PLAYOFFS.startDate &&
-                                        new Date() < INCENTIVIZED_NFL_PLAYOFFS.endDate &&
-                                        networkId == Network.Arbitrum && (
+                                    {INCENTIVIZED_NFL_SUPERBOWL.ids.includes(tag.id) &&
+                                        new Date() > INCENTIVIZED_NFL_SUPERBOWL.startDate &&
+                                        new Date() < INCENTIVIZED_NFL_SUPERBOWL.endDate && (
                                             <Tooltip
                                                 overlay={
                                                     <Trans
@@ -184,19 +184,21 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         components={{
                                                             detailsLink: (
                                                                 <a
-                                                                    href={INCENTIVIZED_NFL_PLAYOFFS.link}
+                                                                    href={INCENTIVIZED_NFL_SUPERBOWL.link}
                                                                     target="_blank"
                                                                     rel="noreferrer"
                                                                 />
                                                             ),
                                                         }}
                                                         values={{
-                                                            rewards: INCENTIVIZED_NFL_PLAYOFFS.arbRewards,
+                                                            rewards: INCENTIVIZED_NFL_SUPERBOWL.arbRewards,
                                                         }}
                                                     />
                                                 }
                                                 component={
-                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
+                                                    <IncentivizedLeague>
+                                                        {getNetworkLogo(NetworkId.Arbitrum)}
+                                                    </IncentivizedLeague>
                                                 }
                                             ></Tooltip>
                                         )}

@@ -34,13 +34,14 @@ export const INCENTIVIZED_GRAND_SLAM = {
     arbRewards: '5000 ARB',
 };
 
-export const INCENTIVIZED_NFL_PLAYOFFS = {
+export const INCENTIVIZED_NFL_SUPERBOWL = {
     ids: [9002],
-    startDate: new Date(Date.UTC(2024, 0, 10, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 1, 11, 23, 59, 59)),
-    link: 'https://medium.com/@OvertimeMarkets.xyz/2f5b1bdc4fc9',
+    startDate: new Date(Date.UTC(2024, 0, 30, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 1, 13, 23, 59, 59)),
+    link:
+        'https://medium.com/@OvertimeMarkets.xyz/overtimes-nfl-playoffs-australian-open-grab-your-share-of-45-000-arb-tokens-2f5b1bdc4fc9',
     opRewards: '',
-    arbRewards: '40000 ARB',
+    arbRewards: '10,000 ARB',
 };
 
 export const MIN_LIQUIDITY = 10;
