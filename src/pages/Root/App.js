@@ -34,6 +34,7 @@ import queryConnector from 'utils/queryConnector';
 import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
+import { setBeforeInstallEvent } from 'redux/modules/ui';
 
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
@@ -128,11 +129,16 @@ const App = () => {
             dispatch(setMobileState(isMobile()));
         };
 
+        const handleBeforeInstallEvent = (event) => {
+            event.preventDefault();
+            dispatch(setBeforeInstallEvent(event));
+        };
         if (typeof window !== 'undefined') {
             window.addEventListener('resize', handlePageResized);
             window.addEventListener('orientationchange', handlePageResized);
             window.addEventListener('load', handlePageResized);
             window.addEventListener('reload', handlePageResized);
+            window.addEventListener('beforeinstallprompt', handleBeforeInstallEvent);
         }
 
         return () => {
@@ -141,6 +147,7 @@ const App = () => {
                 window.removeEventListener('orientationchange', handlePageResized);
                 window.removeEventListener('load', handlePageResized);
                 window.removeEventListener('reload', handlePageResized);
+                window.removeEventListener('beforeinstallprompt', handleBeforeInstallEvent);
             }
         };
     }, [dispatch]);

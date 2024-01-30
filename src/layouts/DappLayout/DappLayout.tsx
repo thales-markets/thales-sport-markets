@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getIsAppReady } from 'redux/modules/app';
-import { setBeforeInstallEvent, setTheme } from 'redux/modules/ui';
+import { setTheme } from 'redux/modules/ui';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
@@ -57,10 +57,6 @@ const DappLayout: React.FC = ({ children }) => {
     }, [queryParams.referralId, queryParams.referrerId]);
 
     useEffect(() => {
-        window.addEventListener('beforeinstallprompt', (event) => {
-            event.preventDefault();
-            dispatch(setBeforeInstallEvent(event as any));
-        });
         dispatch(setTheme(Theme.DARK));
     }, [dispatch]);
 
