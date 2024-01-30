@@ -2,7 +2,7 @@ import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg'
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_PLAYOFFS } from 'constants/markets';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_SUPERBOWL } from 'constants/markets';
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
@@ -22,6 +22,7 @@ import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { NetworkId } from 'thales-utils';
 import { SportMarketChildMarkets, SportMarketInfo, SportMarketLiveResult } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { buildHref, navigateTo } from 'utils/routes';
@@ -246,10 +247,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 }
                             ></Tooltip>
                         )}
-                    {INCENTIVIZED_NFL_PLAYOFFS.ids.includes(Number(market.tags[0])) &&
-                        new Date(market.maturityDate) > INCENTIVIZED_NFL_PLAYOFFS.startDate &&
-                        new Date(market.maturityDate) < INCENTIVIZED_NFL_PLAYOFFS.endDate &&
-                        networkId == Network.Arbitrum && (
+                    {INCENTIVIZED_NFL_SUPERBOWL.ids.includes(Number(market.tags[0])) &&
+                        new Date(market.maturityDate) > INCENTIVIZED_NFL_SUPERBOWL.startDate &&
+                        new Date(market.maturityDate) < INCENTIVIZED_NFL_SUPERBOWL.endDate && (
                             <Tooltip
                                 overlay={
                                     <Trans
@@ -257,21 +257,21 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         components={{
                                             detailsLink: (
                                                 <a
-                                                    href={INCENTIVIZED_NFL_PLAYOFFS.link}
+                                                    href={INCENTIVIZED_NFL_SUPERBOWL.link}
                                                     target="_blank"
                                                     rel="noreferrer"
                                                 />
                                             ),
                                         }}
                                         values={{
-                                            rewards: INCENTIVIZED_NFL_PLAYOFFS.arbRewards,
+                                            rewards: INCENTIVIZED_NFL_SUPERBOWL.arbRewards,
                                         }}
                                     />
                                 }
                                 component={
                                     <IncentivizedLeague>
-                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {getNetworkLogo(networkId)}
+                                        <IncentivizedTitle>{t('markets.superbowl-incentive')}</IncentivizedTitle>
+                                        {getNetworkLogo(NetworkId.Arbitrum)}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>

@@ -1,7 +1,7 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_PLAYOFFS } from 'constants/markets';
+import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_SUPERBOWL } from 'constants/markets';
 import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_LIST } from 'constants/tags';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
+import { NetworkId } from 'thales-utils';
 import { SportMarkets, TagInfo } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import MarketListCard from '../MarketListCard';
@@ -113,28 +114,31 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                             }
                         ></Tooltip>
                     )}
-                {INCENTIVIZED_NFL_PLAYOFFS.ids.includes(Number(league)) &&
-                    new Date() > INCENTIVIZED_NFL_PLAYOFFS.startDate &&
-                    new Date() < INCENTIVIZED_NFL_PLAYOFFS.endDate &&
-                    networkId == Network.Arbitrum && (
+                {INCENTIVIZED_NFL_SUPERBOWL.ids.includes(Number(league)) &&
+                    new Date() > INCENTIVIZED_NFL_SUPERBOWL.startDate &&
+                    new Date() < INCENTIVIZED_NFL_SUPERBOWL.endDate && (
                         <Tooltip
                             overlay={
                                 <Trans
                                     i18nKey="markets.incentivized-tooltip-nfl-playoffs"
                                     components={{
                                         detailsLink: (
-                                            <a href={INCENTIVIZED_NFL_PLAYOFFS.link} target="_blank" rel="noreferrer" />
+                                            <a
+                                                href={INCENTIVIZED_NFL_SUPERBOWL.link}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            />
                                         ),
                                     }}
                                     values={{
-                                        rewards: INCENTIVIZED_NFL_PLAYOFFS.arbRewards,
+                                        rewards: INCENTIVIZED_NFL_SUPERBOWL.arbRewards,
                                     }}
                                 />
                             }
                             component={
                                 <IncentivizedLeague>
-                                    <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {getNetworkLogo(networkId)}
+                                    <IncentivizedTitle>{t('markets.superbowl-incentive')}</IncentivizedTitle>
+                                    {getNetworkLogo(NetworkId.Arbitrum)}
                                 </IncentivizedLeague>
                             }
                         ></Tooltip>
