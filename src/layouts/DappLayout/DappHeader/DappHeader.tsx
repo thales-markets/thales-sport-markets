@@ -10,14 +10,14 @@ import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
+import { getBeforeInstallEvent, getStopPulsing, setBeforeInstallEvent, setStopPulsing } from 'redux/modules/ui';
 import {
     getIsWalletConnected,
     getNetworkId,
@@ -32,7 +32,6 @@ import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import TopUp from './components/TopUp';
-
 const PULSING_COUNT = 10;
 
 const customModalStyles = {
@@ -62,16 +61,17 @@ const DappHeader: React.FC = () => {
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const beforeInstallEvent = useSelector((state: RootState) => getBeforeInstallEvent(state));
 
-    const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
+    const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+    const [showInstallAPP, setShowInstallAPP] = useState<boolean>(false);
 
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
@@ -94,6 +94,10 @@ const DappHeader: React.FC = () => {
             }
         }
     }, 1000);
+
+    useEffect(() => {
+        setShowInstallAPP(beforeInstallEvent !== null);
+    }, [beforeInstallEvent]);
 
     return (
         <>
@@ -245,7 +249,7 @@ const DappHeader: React.FC = () => {
                                     width="100%"
                                     fontWeight="400"
                                     additionalStyles={{
-                                        maxWidth: 400,
+                                        minWidth: 140,
                                         borderRadius: '15.5px',
                                         fontWeight: '800',
                                         fontSize: '14px',
@@ -263,30 +267,61 @@ const DappHeader: React.FC = () => {
                                     {t('get-started.log-in')}
                                 </Button>
 
-                                <Button
-                                    backgroundColor={theme.button.background.quaternary}
-                                    textColor={theme.button.textColor.primary}
-                                    borderColor={theme.button.borderColor.secondary}
-                                    fontWeight="400"
-                                    additionalStyles={{
-                                        maxWidth: 400,
-                                        borderRadius: '15.5px',
-                                        fontWeight: '700',
-                                        fontSize: '14px',
-                                        textTransform: 'capitalize',
-                                    }}
-                                    width="100%"
-                                    height="28px"
-                                    onClick={() =>
-                                        dispatch(
-                                            setWalletConnectModalVisibility({
-                                                visibility: true,
-                                            })
-                                        )
-                                    }
-                                >
-                                    {t('get-started.sign-up')}
-                                </Button>
+                                {showInstallAPP ? (
+                                    <Button
+                                        backgroundColor={theme.button.background.quaternary}
+                                        textColor={theme.button.textColor.primary}
+                                        borderColor={theme.button.borderColor.secondary}
+                                        fontWeight="400"
+                                        additionalStyles={{
+                                            borderRadius: '15.5px',
+                                            fontWeight: '700',
+                                            fontSize: '14px',
+                                            textTransform: 'capitalize',
+                                            padding: '3px 20px',
+                                        }}
+                                        width="100%"
+                                        height="28px"
+                                        onClick={async () => {
+                                            if (beforeInstallEvent) {
+                                                const response = await beforeInstallEvent.prompt();
+                                                if (response.outcome === 'accepted') {
+                                                    // disable event as PWA was already installed
+                                                    dispatch(setBeforeInstallEvent(null));
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        {t('get-started.install-app')}
+                                        <i className="icon icon--esports" />
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        backgroundColor={theme.button.background.quaternary}
+                                        textColor={theme.button.textColor.primary}
+                                        borderColor={theme.button.borderColor.secondary}
+                                        fontWeight="400"
+                                        additionalStyles={{
+                                            minWidth: 140,
+                                            borderRadius: '15.5px',
+                                            fontWeight: '700',
+                                            fontSize: '14px',
+                                            textTransform: 'capitalize',
+                                        }}
+                                        width="100%"
+                                        height="28px"
+                                        onClick={() =>
+                                            dispatch(
+                                                setWalletConnectModalVisibility({
+                                                    visibility: true,
+                                                })
+                                            )
+                                        }
+                                    >
+                                        {t('get-started.sign-up')}
+                                    </Button>
+                                )}
+
                                 <TopUp />
                                 <NetworkSwitcher />
                             </>
@@ -437,6 +472,9 @@ const MobileButtonWrapper = styled(FlexDivRowCentered)`
     margin-top: 10px;
     gap: 20px;
     min-height: 32px;
+    @media (max-width: 400px) {
+        gap: 10px;
+    }
 `;
 
 export default DappHeader;

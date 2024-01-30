@@ -78,6 +78,8 @@ const Wrapper = styled.button<{
     font-weight: ${(props) => props.fontWeight || '700'};
     font-size: ${(props) => props.fontSize || '15px'};
     line-height: ${(props) => props.lineHeight || 'initial'};
+    text-wrap: nowrap;
+    gap: 4px;
     cursor: pointer;
     color: ${(props) => props.textColor || props.theme.button.textColor.primary};
     background: ${(props) => props.backgroundColor || props.theme.button.background.primary};

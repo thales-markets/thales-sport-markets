@@ -10,3 +10,12 @@ export type NavMenuItem = {
     route: string;
     supportedNetworks: Network[];
 };
+
+type PromptEventResponse = {
+    outcome: 'dismissed' | 'accepted';
+    platform: string;
+};
+
+export type BeforeInstallEvent = Event & {
+    prompt: () => Promise<PromptEventResponse>;
+};
