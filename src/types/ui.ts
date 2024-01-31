@@ -10,3 +10,26 @@ export type NavMenuItem = {
     route: string;
     supportedNetworks: Network[];
 };
+
+export type PromotionCardProps = {
+    title: string;
+    description: string;
+    startDate: number;
+    endDate: number;
+    promotionUrl: string;
+    backgroundImageUrl: string;
+    callToActionButton?: string;
+};
+
+export type PromotionItem = PromotionCardProps & {
+    coverImageUrl: string;
+    headerHtml: string;
+    tldrSection: {
+        sectionHtml: string;
+        ctaButtonLink: string;
+        ctaButtonName: string;
+    };
+    contentHtml: string;
+};
+
+export type PromotionCardStatus = 'ongoing' | 'finished';
