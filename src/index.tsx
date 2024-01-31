@@ -5,6 +5,12 @@ import store from 'redux/store';
 import 'i18n';
 import 'styles/main.css';
 import 'styles/overrides.css';
+import PWA from 'utils/PWA';
+
+window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    PWA.setEvent(event);
+});
 
 ReactDOM.render(
     <React.Fragment>

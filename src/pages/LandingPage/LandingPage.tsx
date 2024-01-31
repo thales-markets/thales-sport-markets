@@ -46,6 +46,8 @@ import {
     SubSection,
     Zebro,
 } from './styled-components';
+import { isMobile } from 'utils/device';
+import PWA from 'utils/PWA';
 
 const LandingPage: React.FC = () => {
     const { t } = useTranslation();
@@ -68,7 +70,17 @@ const LandingPage: React.FC = () => {
             <Section className="first">
                 <Zebro className="baseball" src={ZebraBaseball} alt="Zebro Baseball" />
                 <LargeText className="first">{t('landing-page.best-odds')}</LargeText>
-                <CallToAction className="first">
+                <CallToAction
+                    onClick={() => {
+                        if (isMobile() && PWA.beforeInstallEvent) {
+                            PWA.beforeInstallEvent.prompt().then((success: string) => {
+                                console.log('status: ', success);
+                                PWA.disableBeforeInstallEvent();
+                            });
+                        }
+                    }}
+                    className="first"
+                >
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
                         {t('landing-page.try-now')} <ArrowIcon className={`icon icon--arrow`} />
                     </SPAAnchor>

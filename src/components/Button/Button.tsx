@@ -67,6 +67,8 @@ const Wrapper = styled.button<{
     fontWeight?: string;
     lineHeight?: string;
 }>`
+    text-wrap: nowrap;
+    gap: 4px;
     display: flex;
     text-transform: uppercase;
     align-items: center;

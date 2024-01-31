@@ -147,4 +147,6 @@ export const WalletWrapper = styled(FlexDiv)`
     align-self: center;
     justify-self: center;
     margin-top: 15px;
+    width: 100%;
+    max-width: 203px;
 `;
