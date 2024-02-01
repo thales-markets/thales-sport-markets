@@ -5,7 +5,7 @@
 	    "startDate": 1702236692,
 	    "endDate": 1704915092,
         "promotionId": "test-test",
-	    "promotionUrl": "/test-test",
+	    "promotionUrl": "/promotions/test-test",
 	    "backgroundImageUrl": "/promotions/cover-card.png",
 	    "callToActionButton": "Test",
 	    "article": {
