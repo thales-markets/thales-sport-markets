@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import Loader from 'components/Loader';
+import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
+import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
+import useQueryParam from 'utils/useQueryParams';
 import Navigation, { NavigationItem } from '../components/Navigation/Navigation';
 import PromotionCard from '../components/PromotionCard/PromotionCard';
 
@@ -23,55 +29,62 @@ const NavItems: NavigationItem[] = [
 const Promotions: React.FC = () => {
     const { t } = useTranslation();
 
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+
     const [selectedNavItem, setSelectedNavItem] = useState<number>(0);
+
+    const [branchName] = useQueryParam('branch-name', 'page/promotional-pages-and-simple-cms');
+
+    const promotionsQuery = usePromotionsQuery(branchName, {
+        enabled: isAppReady,
+    });
+
+    const promotions = useMemo(() => {
+        if (promotionsQuery.isSuccess && promotionsQuery.data) return promotionsQuery.data;
+        return [];
+    }, [promotionsQuery.data, promotionsQuery.isSuccess]);
 
     return (
         <Wrapper>
-            <HeadingWrapper>
-                <Heading>
-                    <Trans
-                        i18nKey={t('promotions.title')}
-                        components={{
-                            br: <br />,
-                        }}
+            {promotionsQuery.isLoading && <Loader />}
+            {!promotionsQuery.isLoading && (
+                <>
+                    <HeadingWrapper>
+                        <Heading>
+                            <Trans
+                                i18nKey={t('promotions.title')}
+                                components={{
+                                    br: <br />,
+                                }}
+                            />
+                        </Heading>
+                        <Description>{t('promotions.description')}</Description>
+                    </HeadingWrapper>
+                    <Navigation
+                        items={NavItems}
+                        selectedItemIndex={selectedNavItem}
+                        onChangeNavItem={(index: number) => setSelectedNavItem(index)}
                     />
-                </Heading>
-                <Description>{t('promotions.description')}</Description>
-            </HeadingWrapper>
-            <Navigation
-                items={NavItems}
-                selectedItemIndex={selectedNavItem}
-                onChangeNavItem={(index: number) => setSelectedNavItem(index)}
-            />
-            <CardsWrapper>
-                <PromotionCard
-                    title="The Biggest ARB Incentives Program on Overtime Ever"
-                    description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
-                    startDate={1702236692}
-                    endDate={1704915092}
-                    backgroundImageUrl="/cover-card.png"
-                    promotionUrl="/test-djsakdjsakdjskadjskajda"
-                    callToActionButton="Test"
-                />
-                <PromotionCard
-                    title="The Biggest ARB Incentives Program on Overtime Ever"
-                    description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
-                    startDate={1702236692}
-                    endDate={1704915092}
-                    promotionUrl="/test-djsakdjsakdjskadjskajda"
-                    backgroundImageUrl="public/cover-card.png"
-                    callToActionButton="Test"
-                />
-                <PromotionCard
-                    title="The Biggest ARB Incentives Program on Overtime Ever"
-                    description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
-                    startDate={1702236692}
-                    endDate={1704915092}
-                    backgroundImageUrl="/promotions/cover-card.png"
-                    promotionUrl="/test-djsakdjsakdjskadjskajda"
-                    callToActionButton="Test"
-                />
-            </CardsWrapper>
+                    <CardsWrapper>
+                        {promotions.length > 0 &&
+                            promotions.map((promotion, index) => {
+                                return (
+                                    <PromotionCard
+                                        key={`${index}-${promotion.promotionUrl}`}
+                                        title={promotion.title}
+                                        description={promotion.description}
+                                        startDate={promotion.startDate}
+                                        endDate={promotion.endDate}
+                                        backgroundImageUrl={promotion.backgroundImageUrl}
+                                        promotionId={promotion.promotionId}
+                                        promotionUrl={promotion.promotionUrl}
+                                        callToActionButton={promotion.callToActionButton}
+                                    />
+                                );
+                            })}
+                    </CardsWrapper>
+                </>
+            )}
         </Wrapper>
     );
 };
