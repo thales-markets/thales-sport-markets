@@ -45,7 +45,7 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
 
 export const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string }>`
     flex-direction: column;
-    flex: 1;
+    flex: 0 0 33%;
     cursor: pointer;
     border-radius: 5px;
     border: 2px ${(props) => props.theme.borderColor.primary} solid;
