@@ -47,7 +47,8 @@ const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
 const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
 const GetStarted = lazy(() => import('pages/AARelatedPages/GetStarted'));
-const Promotions = lazy(() => import('pages/Promotions'));
+const Promotions = lazy(() => import('pages/Promotions/Home'));
+const Promotion = lazy(() => import('pages/Promotions/Promotion'));
 
 const particle = new ParticleNetwork({
     projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
@@ -269,11 +270,20 @@ const App = () => {
                                         </DappLayout>
                                     </Route>
                                 )}
-                                <Route exact path={ROUTES.Promotions}>
+                                <Route exact path={ROUTES.Promotions.Home}>
                                     <DappLayout>
                                         <Promotions />
                                     </DappLayout>
                                 </Route>
+                                <Route
+                                    exact
+                                    path={ROUTES.Promotions.Promotion}
+                                    render={(routeProps) => (
+                                        <DappLayout>
+                                            <Promotion {...routeProps} />
+                                        </DappLayout>
+                                    )}
+                                />
                                 <Route exact path={ROUTES.Home}>
                                     <LandingPageLayout>
                                         <LandingPage />

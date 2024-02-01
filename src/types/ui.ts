@@ -21,15 +21,19 @@ export type PromotionCardProps = {
     callToActionButton?: string;
 };
 
-export type PromotionItem = PromotionCardProps & {
+export type PromotionArticleProps = {
     coverImageUrl: string;
     headerHtml: string;
-    tldrSection: {
+    ctaSection: {
         sectionHtml: string;
         ctaButtonLink: string;
         ctaButtonName: string;
     };
     contentHtml: string;
+};
+
+export type PromotionItem = PromotionCardProps & {
+    article: PromotionArticleProps;
 };
 
 export type PromotionCardStatus = 'ongoing' | 'finished';
