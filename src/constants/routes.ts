@@ -19,7 +19,10 @@ const ROUTES = {
     ParlayLiquidityPool: '/liquidity-pool?pool-type=parlay',
     Deposit: '/deposit',
     Withdraw: '/withdraw',
-    Promotions: '/promotions',
+    Promotions: {
+        Home: '/promotions',
+        Promotion: '/promotions/:promotionId',
+    },
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {
