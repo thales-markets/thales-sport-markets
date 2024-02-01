@@ -16,6 +16,7 @@ export type PromotionCardProps = {
     description: string;
     startDate: number;
     endDate: number;
+    promotionId: string;
     promotionUrl: string;
     backgroundImageUrl: string;
     callToActionButton?: string;
@@ -27,7 +28,7 @@ export type PromotionArticleProps = {
     ctaSection: {
         sectionHtml: string;
         ctaButtonLink: string;
-        ctaButtonName: string;
+        ctaButtonLabel: string;
     };
     contentHtml: string;
 };
