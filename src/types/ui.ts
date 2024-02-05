@@ -37,4 +37,9 @@ export type PromotionItem = PromotionCardProps & {
     article: PromotionArticleProps;
 };
 
-export type PromotionCardStatus = 'ongoing' | 'finished';
+export enum PromotionStatus {
+    ONGOING = 'ongoing',
+    FINISHED = 'finished',
+}
+
+export type PromotionCardStatus = PromotionStatus;

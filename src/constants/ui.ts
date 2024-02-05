@@ -1,8 +1,8 @@
-import { NavMenuItem, ThemeInterface } from 'types/ui';
-import darkTheme from 'styles/themes/dark';
-import ROUTES from './routes';
-import { Theme } from 'enums/ui';
 import { Network } from 'enums/network';
+import { Theme } from 'enums/ui';
+import darkTheme from 'styles/themes/dark';
+import { NavMenuItem, ThemeInterface } from 'types/ui';
+import ROUTES from './routes';
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,

@@ -9,6 +9,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
 import { PromotionCardProps, PromotionCardStatus, ThemeInterface } from 'types/ui';
 import { formatTimestampForPromotionDate } from 'utils/formatters/date';
+import { getPromotionStatus } from 'utils/ui';
 
 const PromotionCard: React.FC<PromotionCardProps> = ({
     title,
@@ -27,7 +28,9 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
         <Wrapper backgroundImageUrl={backgroundImageUrl} isMobile={isMobile}>
             <SPAAnchor href={promotionUrl}>
                 <HeaderContainer>
-                    <PromotionStatusBadge status="ongoing">{t('promotions.nav-items.ongoing')}</PromotionStatusBadge>
+                    <PromotionStatusBadge status={getPromotionStatus(startDate, endDate)}>
+                        {t(`promotions.nav-items.${getPromotionStatus(startDate, endDate)}`)}
+                    </PromotionStatusBadge>
                     <DateRangeLabel>{`${formatTimestampForPromotionDate(startDate)} - ${formatTimestampForPromotionDate(
                         endDate
                     )}`}</DateRangeLabel>
