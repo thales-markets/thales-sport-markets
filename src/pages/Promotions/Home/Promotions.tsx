@@ -117,9 +117,10 @@ const Description = styled.p`
 
 const CardsWrapper = styled(FlexDiv)`
     flex-direction: row;
-    gap: 10px;
+    gap: 20px;
+    margin: 0 auto;
     flex-wrap: wrap;
-    flex-basis: 33%;
+    align-items: center;
 `;
 
 export default Promotions;

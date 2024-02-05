@@ -2,6 +2,9 @@ import Button from 'components/Button';
 import SPAAnchor from 'components/SPAAnchor';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
+import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
 import { PromotionCardProps, PromotionCardStatus, ThemeInterface } from 'types/ui';
@@ -18,9 +21,10 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     return (
-        <Wrapper backgroundImageUrl={backgroundImageUrl}>
+        <Wrapper backgroundImageUrl={backgroundImageUrl} isMobile={isMobile}>
             <SPAAnchor href={promotionUrl}>
                 <HeaderContainer>
                     <PromotionStatusBadge status="ongoing">{t('promotions.nav-items.ongoing')}</PromotionStatusBadge>
@@ -43,15 +47,16 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
     );
 };
 
-export const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string }>`
+export const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string; isMobile: boolean }>`
     flex-direction: column;
-    flex: 0 0 33%;
+    flex: 0 0 ${(props) => (props.isMobile ? '100%' : '32%')};
     cursor: pointer;
     border-radius: 5px;
     border: 2px ${(props) => props.theme.borderColor.primary} solid;
     padding: 15px;
     background: url(${(props) => props.backgroundImageUrl});
     background-size: cover;
+    background-position: center;
 `;
 
 export const HeaderContainer = styled(FlexDivRow)`
