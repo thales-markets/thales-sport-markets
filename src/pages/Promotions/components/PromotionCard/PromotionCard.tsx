@@ -19,6 +19,7 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
     promotionUrl,
     backgroundImageUrl,
     callToActionButton,
+    branchName,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
@@ -26,7 +27,7 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
 
     return (
         <Wrapper backgroundImageUrl={backgroundImageUrl} isMobile={isMobile}>
-            <SPAAnchor href={promotionUrl}>
+            <SPAAnchor href={`${promotionUrl}${branchName ? `branch-name=${branchName}` : ''}`}>
                 <HeaderContainer>
                     <PromotionStatusBadge status={getPromotionStatus(startDate, endDate)}>
                         {t(`promotions.nav-items.${getPromotionStatus(startDate, endDate)}`)}

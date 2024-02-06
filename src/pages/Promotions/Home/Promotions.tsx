@@ -33,7 +33,7 @@ const Promotions: React.FC = () => {
 
     const [selectedNavItem, setSelectedNavItem] = useState<number>(0);
 
-    const [branchName] = useQueryParam('branch-name', 'page/promotional-pages-and-simple-cms');
+    const [branchName] = useQueryParam('branch-name', '');
 
     const promotionsQuery = usePromotionsQuery(branchName, {
         enabled: isAppReady,
@@ -79,6 +79,7 @@ const Promotions: React.FC = () => {
                                         promotionId={promotion.promotionId}
                                         promotionUrl={promotion.promotionUrl}
                                         callToActionButton={promotion.callToActionButton}
+                                        branchName={branchName ? branchName : undefined}
                                     />
                                 );
                             })}

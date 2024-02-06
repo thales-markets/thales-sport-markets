@@ -20,6 +20,7 @@ export type PromotionCardProps = {
     promotionUrl: string;
     backgroundImageUrl: string;
     callToActionButton?: string;
+    branchName?: string;
 };
 
 export type PromotionArticleProps = {
