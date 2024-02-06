@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import SPAAnchor from 'components/SPAAnchor';
+import { PROMOTION_SANITIZE_PROPS } from 'constants/ui';
 import DOMPurify from 'dompurify';
 import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
 import React, { useMemo } from 'react';
@@ -49,12 +50,17 @@ const Promotion: React.FC<PromotionProps> = (props) => {
                 <>
                     <CoverImageWrapper imageUrl={promotion.article.coverImageUrl}></CoverImageWrapper>
                     <HeaderContainer
-                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(promotion.article.headerHtml) }}
+                        dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(promotion.article.headerHtml, PROMOTION_SANITIZE_PROPS),
+                        }}
                     ></HeaderContainer>
                     <CTAContainer>
                         <CTAContent
                             dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(promotion.article.ctaSection.sectionHtml),
+                                __html: DOMPurify.sanitize(
+                                    promotion.article.ctaSection.sectionHtml,
+                                    PROMOTION_SANITIZE_PROPS
+                                ),
                             }}
                         ></CTAContent>
                         <SPAAnchor href={promotion.article.ctaSection.ctaButtonLink}>
@@ -68,7 +74,9 @@ const Promotion: React.FC<PromotionProps> = (props) => {
                         </SPAAnchor>
                     </CTAContainer>
                     <MainContent
-                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(promotion.article.contentHtml) }}
+                        dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(promotion.article.contentHtml, PROMOTION_SANITIZE_PROPS),
+                        }}
                     ></MainContent>
                 </>
             )}

@@ -81,3 +81,27 @@ export const NAV_MENU: NavMenuItem[] = [
     NAV_MENU_THIRD_SECTION,
     NAV_MENU_FOURTH_SECTION,
 ].flat();
+
+export const PROMOTION_SANITIZE_PROPS = {
+    ALLOWED_TAGS: [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'span',
+        'strong',
+        'i',
+        'u',
+        'p',
+        'a',
+        'img',
+        'ol',
+        'ul',
+        'li',
+        'br',
+        'hr',
+    ],
+    ALLOWED_ATTR: ['href', 'target', 'style', 'src', 'alt'],
+};
