@@ -21,9 +21,6 @@ export const getNavItemFromRoute = (route: string): NavMenuItem | null => {
 };
 
 export const getPromotionStatus = (startDate: number, endDate: number): PromotionCardStatus => {
-    console.log('startDate ', startDate);
-    console.log('endDate ', endDate);
-    console.log('Date.now ', Date.now() / 1000);
     if (endDate > Date.now() / 1000 && Date.now() / 1000 > startDate) return PromotionStatus.ONGOING;
     return PromotionStatus.FINISHED;
 };
