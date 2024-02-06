@@ -105,10 +105,7 @@ const Home: React.FC = () => {
     const [tagFilter, setTagFilter] = useLocalStorage<Tags>(LOCAL_STORAGE_KEYS.FILTER_TAGS, []);
     const [availableTags, setAvailableTags] = useState<Tags>(tagsList);
 
-    const [dateFilter, setDateFilter] = useLocalStorage<Date | number>(
-        LOCAL_STORAGE_KEYS.FILTER_DATE,
-        !isMobile ? addHoursToCurrentDate(72, true).getTime() : 0
-    );
+    const [dateFilter, setDateFilter] = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
 
     const [sportParam, setSportParam] = useQueryParam('sport', '');
     const [globalFilterParam, setGlobalFilterParam] = useQueryParam('globalFilter', '');
