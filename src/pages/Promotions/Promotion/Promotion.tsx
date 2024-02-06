@@ -25,7 +25,7 @@ const Promotion: React.FC<PromotionProps> = (props) => {
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
-    const [branchName] = useQueryParam('branch-name', 'page/promotional-pages-and-simple-cms');
+    const [branchName] = useQueryParam('branch-name', '');
 
     const promotionsQuery = usePromotionsQuery(branchName, {
         enabled: isAppReady,

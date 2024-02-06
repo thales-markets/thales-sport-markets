@@ -27,7 +27,7 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
 
     return (
         <Wrapper backgroundImageUrl={backgroundImageUrl} isMobile={isMobile}>
-            <SPAAnchor href={`${promotionUrl}${branchName ? `branch-name=${branchName}` : ''}`}>
+            <SPAAnchor href={`${promotionUrl}${branchName ? `?branch-name=${branchName}` : ''}`}>
                 <HeaderContainer>
                     <PromotionStatusBadge status={getPromotionStatus(startDate, endDate)}>
                         {t(`promotions.nav-items.${getPromotionStatus(startDate, endDate)}`)}
