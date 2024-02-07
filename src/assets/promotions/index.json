@@ -2,12 +2,12 @@
 	{
 		"title": "The Smallest ARB Incentives Program on Overtime Ever",
 	    "description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-	    "startDate": 1702236692,
-	    "endDate": 1704915092,
-        "promotionId": "test-test",
-	    "promotionUrl": "/promotions/test-test",
+	    "startDate": 1701437500,
+	    "endDate": 1708867900,
+        "promotionId": "test-small",
+	    "promotionUrl": "/promotions/test-small",
 	    "backgroundImageUrl": "/promotions/cover-card.png",
-	    "callToActionButton": "Test",
+	    "callToActionButton": "NEW CTA",
 	    "article": {
 	    	"coverImageUrl": "/promotions/cover-article-image.jpeg",
 	        "headerHtml": "<h1><span style='font-size:20pt'><span style='font-family:Arial,sans-serif'><span>Win a share of 500,000 ARB using Overtime Markets until March 31, 2024</span></span></span></h1>",
