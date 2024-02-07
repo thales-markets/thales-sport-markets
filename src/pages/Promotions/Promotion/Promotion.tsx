@@ -99,7 +99,7 @@ const CoverImageWrapper = styled(FlexDiv)<{ imageUrl: string }>`
 `;
 
 const HeaderContainer = styled(FlexDiv)`
-    font-family: Nunito;
+    font-family: 'Nunito' !important;
     font-weight: 900;
     text-align: center !important;
     align-items: center;
@@ -107,12 +107,12 @@ const HeaderContainer = styled(FlexDiv)`
     margin: 50px 0px;
     justify-content: center;
     color: ${(props) => props.theme.textColor.primary} !important;
-    /* > h2 {
+    > h3 {
         font-size: 28px;
     }
     > h1 {
-        font-size: 38px
-    } */
+        font-size: 38px;
+    }
 `;
 
 const CTAContainer = styled(FlexDiv)`
@@ -129,14 +129,34 @@ const CTAContent = styled(FlexDiv)`
     font-weight: 500;
     font-size: 22px;
     margin-bottom: 40px;
+    font-family: 'Roboto';
+    > a {
+        font-weight: 800;
+        text-decoration: none;
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 const MainContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 20px;
-    font-family: Roboto;
+    font-family: 'Roboto';
+    line-height: 26px;
+    font-weight: 400;
     line-height: 26px;
     flex-direction: column;
+    > h2 {
+        font-size: 36px;
+        font-weight: 600;
+    }
+    > strong {
+        font-weight: 700;
+    }
+    > a {
+        font-weight: 700;
+        text-decoration: none;
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export default Promotion;
