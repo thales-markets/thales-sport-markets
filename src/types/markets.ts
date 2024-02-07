@@ -341,3 +341,57 @@ export type SGPItem = { tags: number[]; combination: BetType[]; SGPFee: number }
 type SGPContractDataItem = [number, number, number, number];
 
 export type SGPContractData = SGPContractDataItem[];
+
+export type PlayerProps = {
+    playerId: number;
+    playerName: string;
+    line: string;
+    type: string;
+    outcome: number;
+    score: number;
+};
+
+export type SportMarketInfoV2 = {
+    gameId: string;
+    sport: string;
+    leagueId: number;
+    leagueName: string;
+    typeId: number;
+    type: string;
+    maturityDate: Date;
+    homeTeam: string;
+    awayTeam: string;
+    homeScore: number | string;
+    awayScore: number | string;
+    finalResult: number;
+    status: number;
+    isResolved: boolean;
+    isOpen: boolean;
+    isCanceled: boolean;
+    isPaused: boolean;
+    spread: number;
+    total: number;
+    isOneSideMarket: boolean;
+    isPlayerPropsMarket: boolean;
+    isOneSidePlayerPropsMarket: boolean;
+    playerProps: PlayerProps;
+    odds: number[];
+    proof: string[];
+    childMarkets?: SportMarketInfoV2[];
+};
+
+export type SportMarketsV2 = SportMarketInfoV2[];
+
+export type TicketPosition = {
+    gameId: string;
+    leagueId: number;
+    typeId: number;
+    playerPropsId: number;
+    maturity: number;
+    status: number;
+    line: number;
+    playerId: number;
+    odds: number[];
+    proof: string[];
+    position: number;
+};

@@ -13,6 +13,11 @@ const QUERY_KEYS = {
     MarketParlays: (networkId: Network, marketAddress: string) => ['marketParlays', networkId, marketAddress],
     ParlayLeaderboard: (networkId: Network, period: number) => ['parlayLeaderboard', period, networkId],
     SportMarkets: (globalFilter: GlobalFiltersEnum, networkId: Network) => ['sportMarkets', globalFilter, networkId],
+    SportMarketsV2: (globalFilter: GlobalFiltersEnum, networkId: Network) => [
+        'sportMarketsV2',
+        globalFilter,
+        networkId,
+    ],
     SportMarket: (address: string, networkId: Network) => ['sportMarket', address, networkId],
     ParlayAmmData: (networkId: Network) => ['parlayAmmData', networkId],
     LiveResult: (marketId: string) => ['liveResult', marketId],
