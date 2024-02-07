@@ -7,6 +7,8 @@ import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
+import { PromotionStatus } from 'types/ui';
+import { getPromotionStatus } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
 import Navigation, { NavigationItem } from '../components/Navigation/Navigation';
 import PromotionCard from '../components/PromotionCard/PromotionCard';
@@ -40,9 +42,26 @@ const Promotions: React.FC = () => {
     });
 
     const promotions = useMemo(() => {
-        if (promotionsQuery.isSuccess && promotionsQuery.data) return promotionsQuery.data;
-        return [];
-    }, [promotionsQuery.data, promotionsQuery.isSuccess]);
+        try {
+            const promotions = promotionsQuery.isSuccess && promotionsQuery.data ? promotionsQuery.data : [];
+            if (selectedNavItem == 1) {
+                return promotions.filter((item) => {
+                    const status = getPromotionStatus(item.startDate, item.endDate);
+                    if (status == PromotionStatus.ONGOING) return item;
+                });
+            }
+            if (selectedNavItem == 2) {
+                return promotions.filter((item) => {
+                    const status = getPromotionStatus(item.startDate, item.endDate);
+                    if (status == PromotionStatus.FINISHED) return item;
+                });
+            }
+            return promotions;
+        } catch (e) {
+            console.log('Error ', e);
+            return [];
+        }
+    }, [promotionsQuery.data, promotionsQuery.isSuccess, selectedNavItem]);
 
     return (
         <Wrapper>
