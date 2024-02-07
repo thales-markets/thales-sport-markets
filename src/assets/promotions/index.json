@@ -6,7 +6,7 @@
 	    "endDate": 1708867900,
         "promotionId": "test-small",
 	    "promotionUrl": "/promotions/test-small",
-	    "backgroundImageUrl": "/promotions/cover-card.png",
+	    "backgroundImageUrl": "/promotions/cover-article-image.jpeg",
 	    "callToActionButton": "NEW CTA",
 	    "article": {
 	    	"coverImageUrl": "/promotions/cover-article-image.jpeg",
