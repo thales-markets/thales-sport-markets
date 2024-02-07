@@ -29,6 +29,10 @@
     content: '\0041';
 }
 
+.icon--promotions:before {
+    content: '\0040';
+}
+
 .icon--logo:before {
     content: '\0042';
 }
