@@ -67,11 +67,11 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
 
 export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
     {
-        i18label: 'markets.nav-menu.items.sports-trivia',
-        iconClass: 'icon icon--trivia',
-        name: 'sports-trivia',
-        route: ROUTES.Quiz,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli],
+        i18label: 'markets.nav-menu.items.promotions',
+        iconClass: 'icon icon--promotions',
+        name: 'promotions',
+        route: ROUTES.Promotions.Home,
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum, Network.Base],
     },
 ];
 

@@ -547,7 +547,8 @@
                 "fee-rebates": "Fee rebates",
                 "become-affiliate": "Become affiliate",
                 "vaults": "Vaults",
-                "liquidity-pool": "Provide Liquidity"
+                "liquidity-pool": "Provide Liquidity",
+                "promotions": "Promotions"
             },
             "buttons": {
                 "switch": "Switch",
