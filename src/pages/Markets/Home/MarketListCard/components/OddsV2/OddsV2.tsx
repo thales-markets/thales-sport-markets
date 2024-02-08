@@ -19,13 +19,13 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
 
     const areOddsValid = market.odds.every((odd) => odd < 1 && odd != 0);
 
-    const showContainer = !showOdds || market.typeId == BetType.DOUBLE_CHANCE || areOddsValid;
+    const showContainer = !showOdds || market.typeId === BetType.DOUBLE_CHANCE || areOddsValid;
 
     return showContainer ? (
         <Container>
             <Title>
                 {BetTypeNameMap[market.typeId as BetType]}
-                {lineInfo && ` ${lineInfo}`}
+                {lineInfo && market.typeId !== BetType.COMBINED_POSITIONS && ` ${lineInfo}`}
             </Title>
             {
                 <OddsContainer>

@@ -378,6 +378,7 @@ export type SportMarketInfoV2 = {
     isPaused: boolean;
     spread: number;
     total: number;
+    line: number;
     isOneSideMarket: boolean;
     isPlayerPropsMarket: boolean;
     isOneSidePlayerPropsMarket: boolean;

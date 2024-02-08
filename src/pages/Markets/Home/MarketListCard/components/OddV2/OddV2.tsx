@@ -1,5 +1,6 @@
 import PositionSymbol from 'components/PositionSymbol';
 import { oddToastOptions } from 'config/toast';
+import { BetType } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +9,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarketInfoV2, TicketPosition } from 'types/markets';
-import { formatMarketOdds, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/markets';
+import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/markets';
 
 type OddProps = {
     market: SportMarketInfoV2;
@@ -22,6 +23,7 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
     const isMobile = useSelector(getIsMobile);
     const ticket = useSelector(getTicket);
     const addedToTicket = ticket.filter((position: any) => position.gameId == market.gameId)[0];
+    const lineInfo = getLineInfoV2(market, 0);
 
     const odd = market.odds[position];
     const isAddedToTicket = addedToTicket && addedToTicket.position == position;
@@ -61,6 +63,7 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
                 text: formatMarketOdds(selectedOddsType, odd),
                 tooltip: noOdd ? t('markets.zero-odds-tooltip') : undefined,
             }}
+            symbolUpperText={lineInfo && market.typeId === BetType.COMBINED_POSITIONS ? { text: lineInfo } : undefined}
             disabled={noOdd}
             flexDirection="column"
             symbolText={getSymbolTextV2(position, market)}

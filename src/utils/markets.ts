@@ -1,4 +1,5 @@
 import {
+    BetTypeMap,
     BetTypeNameMap,
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
@@ -727,27 +728,57 @@ export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) =
     return getSimpleSymbolText(position, betType);
 };
 
-export const getLineInfoV2 = (market: SportMarketInfoV2, position: Position) => {
-    if (market.typeId === BetType.SPREAD)
+export const getLineInfo = (typeId: number, position: Position, line: number, market: SportMarketInfoV2) => {
+    if (typeId === BetType.SPREAD)
         return position === Position.HOME
-            ? `${Number(market.spread) > 0 ? '+' : '-'}${Math.abs(Number(market.spread))}`
-            : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread))}`;
+            ? `${Number(line) > 0 ? '+' : '-'}${Math.abs(line)}`
+            : `${Number(line) > 0 ? '-' : '+'}${Math.abs(line)}`;
 
-    if (market.typeId === BetType.TOTAL) return `${Number(market.total)}`;
-    if (market.isPlayerPropsMarket) return `${Number(market.playerProps.line)}`;
+    if (typeId === BetType.TOTAL) return `${Number(line)}`;
+    if (market.isPlayerPropsMarket) return `${Number(line)}`;
     return undefined;
 };
 
-export const getOddTooltipTextV2 = (position: Position, market: SportMarketInfoV2) => {
-    const spread = Math.abs(Number(market.spread));
-    const total = Number(market.total);
-    const team =
-        position === Position.AWAY
-            ? market.awayTeam
-            : market.isOneSideMarket
-            ? fixOneSideMarketCompetitorName(market.homeTeam)
-            : market.homeTeam;
+export const getCombinedPositionsgetLineInfo = (position: Position, market: SportMarketInfoV2) => {
+    const combinedPositions = market.combinedPositions[position];
+
+    const position1LineInfo = getLineInfo(
+        combinedPositions.position1.typeId,
+        combinedPositions.position1.position,
+        combinedPositions.position1.line,
+        market
+    );
+
+    const position2LineInfo = getLineInfo(
+        combinedPositions.position2.typeId,
+        combinedPositions.position2.position,
+        combinedPositions.position2.line,
+        market
+    );
+
+    const lineInfo =
+        position1LineInfo && position2LineInfo
+            ? `${position1LineInfo}/${position2LineInfo}`
+            : position1LineInfo || position2LineInfo;
+
+    return lineInfo;
+};
+
+export const getLineInfoV2 = (market: SportMarketInfoV2, position: Position) =>
+    market.typeId === BetType.COMBINED_POSITIONS
+        ? getCombinedPositionsgetLineInfo(position, market)
+        : getLineInfo(market.typeId, position, market.line, market);
+
+export const getTooltipText = (typeId: number, position: Position, line: number, market: SportMarketInfoV2) => {
+    const team = market.isPlayerPropsMarket
+        ? market.playerProps.playerName
+        : position === Position.AWAY
+        ? market.awayTeam
+        : market.isOneSideMarket
+        ? fixOneSideMarketCompetitorName(market.homeTeam)
+        : market.homeTeam;
     const team2 = market.awayTeam;
+
     const scoring =
         SCORING_MAP[market.leagueId] !== ''
             ? i18n.t(`markets.market-card.odd-tooltip-v2.scoring.${SCORING_MAP[market.leagueId]}`)
@@ -756,22 +787,60 @@ export const getOddTooltipTextV2 = (position: Position, market: SportMarketInfoV
         MATCH_RESOLVE_MAP[market.leagueId] !== ''
             ? i18n.t(`markets.market-card.odd-tooltip-v2.match-resolve.${MATCH_RESOLVE_MAP[market.leagueId]}`)
             : '';
+
     let translationKey = '';
 
     if (market.isOneSideMarket) {
-        translationKey = Number(market.leagueId) == GOLF_TOURNAMENT_WINNER_TAG ? 'tournament-winner' : 'race-winner';
-    } else if (market.typeId === BetType.SPREAD) {
-        translationKey = Number(market.spread) < 0 ? `spread-${position}` : `spread-${position === 1 ? 0 : 1}`;
+        translationKey = market.leagueId == GOLF_TOURNAMENT_WINNER_TAG ? 'tournament-winner' : 'race-winner';
+    } else if (typeId === BetType.SPREAD) {
+        translationKey = line < 0 ? `spread-${position}` : `spread-${position === 1 ? 0 : 1}`;
     } else {
-        translationKey = `${market.type}-${position}`;
+        translationKey = `${BetTypeMap[typeId as BetType]}-${position}`;
     }
 
     return i18n.t(`markets.market-card.odd-tooltip-v2.${translationKey}`, {
-        team: market.isPlayerPropsMarket ? market.playerProps.playerName : team,
+        team,
         team2,
-        spread,
-        total,
-        scoring: market.isPlayerPropsMarket ? market.playerProps.line : scoring,
+        line: Math.abs(line),
+        scoring,
         matchResolve,
     });
 };
+
+export const getCombinedPositionsOddTooltipText = (position: Position, market: SportMarketInfoV2) => {
+    const combinedPositions = market.combinedPositions[position];
+
+    let tooltipText = '';
+
+    let position1TooltipText = getTooltipText(
+        combinedPositions.position1.typeId,
+        combinedPositions.position1.position,
+        combinedPositions.position1.line,
+        market
+    );
+
+    if (position1TooltipText.trim().endsWith('.')) {
+        position1TooltipText = position1TooltipText.slice(0, -1);
+    }
+
+    tooltipText = position1TooltipText;
+    if (position1TooltipText !== '') {
+        tooltipText = `${tooltipText} ${i18n.t('markets.market-card.odd-tooltip.and')} `;
+    }
+
+    const position2TooltipText = getTooltipText(
+        combinedPositions.position2.typeId,
+        combinedPositions.position2.position,
+        combinedPositions.position2.line,
+        market
+    );
+
+    tooltipText = `${tooltipText}${position2TooltipText.charAt(0).toLowerCase()}${position2TooltipText.slice(1)}`;
+
+    return tooltipText;
+};
+
+export const getOddTooltipTextV2 = (position: Position, market: SportMarketInfoV2) =>
+    market.typeId === BetType.COMBINED_POSITIONS
+        ? getCombinedPositionsOddTooltipText(position, market)
+        : getTooltipText(market.typeId, position, market.line, market);

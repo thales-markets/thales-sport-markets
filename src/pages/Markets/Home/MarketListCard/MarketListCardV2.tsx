@@ -113,8 +113,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         enabled: isAppReady && isJsonOddsSport && (isPendingResolution || !localStorage.getItem(market.gameId)),
     });
 
-    console.log(spreadTotalMarkets.length);
-
     useEffect(() => {
         if (isEnetpulseSport) {
             if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
