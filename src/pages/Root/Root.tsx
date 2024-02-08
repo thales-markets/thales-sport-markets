@@ -53,7 +53,7 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
     },
     [Network.OptimismGoerli]: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
     [Network.Arbitrum]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
-    [Network.Base]: { ankr: 'base', chainnode: '', blast: '' },
+    [Network.Base]: { ankr: 'base', chainnode: 'base-mainnet', blast: '' },
 };
 
 const theme = getDefaultTheme();
