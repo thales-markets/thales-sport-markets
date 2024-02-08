@@ -1,11 +1,11 @@
 import Tooltip from 'components/Tooltip';
-import { BetTypeNameMap, BetTypeTitleMap } from 'constants/tags';
+import { BetTypeTitleMap } from 'constants/tags';
 import { BetType } from 'enums/markets';
+import { groupBy } from 'lodash';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { SportMarketChildMarketsV2, SportMarketInfoV2 } from 'types/markets';
-import { isOneSidePlayerProps, isSpecialYesNoProp } from 'utils/markets';
+import { SportMarketInfoV2 } from 'types/markets';
 import OddV2 from '../OddV2';
 import { Container, OddsContainer } from './styled-components';
 
@@ -15,147 +15,31 @@ type PlayerPropsOdds = {
 
 const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
     const { t } = useTranslation();
-    const marketsUI: SportMarketInfoV2[][] = useMemo(() => {
-        const lastValidChildMarkets: SportMarketChildMarketsV2 = {
-            spreadMarkets: [],
-            totalMarkets: [],
-            doubleChanceMarkets: [],
-            strikeOutsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_STRIKEOUTS),
-            homeRunsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_HOMERUNS),
-            passingYardsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_PASSING_YARDS),
-            rushingYardsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_RUSHING_YARDS),
-            receivingYardsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_RECEIVING_YARDS),
-            oneSiderTouchdownsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_TOUCHDOWNS),
-            passingTouchdownsMarkets: markets.filter(
-                (market) => market.typeId == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
-            ),
-            fieldGoalsMadeMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_FIELD_GOALS_MADE),
-            pitcherHitsAllowedMarkets: markets.filter(
-                (market) => market.typeId == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED
-            ),
-            hitsRecordedMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_HITS_RECORDED),
-            pointsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_POINTS),
-            shotsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_SHOTS),
-            oneSiderGoalsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_GOALS),
-            reboundsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_REBOUNDS),
-            assistsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_ASSISTS),
-            doubleDoubleMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_DOUBLE_DOUBLE),
-            tripleDoubleMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_TRIPLE_DOUBLE),
-            receptionsMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_RECEPTIONS),
-            firstTouchdownMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_FIRST_TOUCHDOWN),
-            lastTouchdownMarkets: markets.filter((market) => market.typeId == BetType.PLAYER_PROPS_LAST_TOUCHDOWN),
-        };
-
-        const result = [];
-        if (lastValidChildMarkets.strikeOutsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.strikeOutsMarkets);
-        }
-        if (lastValidChildMarkets.homeRunsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.homeRunsMarkets);
-        }
-        if (lastValidChildMarkets.passingTouchdownsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.passingTouchdownsMarkets);
-        }
-        if (lastValidChildMarkets.rushingYardsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.rushingYardsMarkets);
-        }
-        if (lastValidChildMarkets.passingYardsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.passingYardsMarkets);
-        }
-        if (lastValidChildMarkets.receivingYardsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.receivingYardsMarkets);
-        }
-
-        if (lastValidChildMarkets.fieldGoalsMadeMarkets.length > 0) {
-            result.push(lastValidChildMarkets.fieldGoalsMadeMarkets);
-        }
-
-        if (lastValidChildMarkets.pitcherHitsAllowedMarkets.length > 0) {
-            result.push(lastValidChildMarkets.pitcherHitsAllowedMarkets);
-        }
-
-        if (lastValidChildMarkets.hitsRecordedMarkets.length > 0) {
-            result.push(lastValidChildMarkets.hitsRecordedMarkets);
-        }
-
-        if (lastValidChildMarkets.pointsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.pointsMarkets);
-        }
-
-        if (lastValidChildMarkets.reboundsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.reboundsMarkets);
-        }
-
-        if (lastValidChildMarkets.assistsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.assistsMarkets);
-        }
-
-        if (lastValidChildMarkets.doubleDoubleMarkets.length > 0) {
-            result.push(lastValidChildMarkets.doubleDoubleMarkets);
-        }
-
-        if (lastValidChildMarkets.tripleDoubleMarkets.length > 0) {
-            result.push(lastValidChildMarkets.tripleDoubleMarkets);
-        }
-
-        if (lastValidChildMarkets.shotsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.shotsMarkets);
-        }
-
-        if (lastValidChildMarkets.oneSiderTouchdownsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.oneSiderTouchdownsMarkets);
-        }
-
-        if (lastValidChildMarkets.oneSiderGoalsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.oneSiderGoalsMarkets);
-        }
-
-        if (lastValidChildMarkets.receptionsMarkets.length > 0) {
-            result.push(lastValidChildMarkets.receptionsMarkets);
-        }
-
-        if (lastValidChildMarkets.firstTouchdownMarkets.length > 0) {
-            result.push(lastValidChildMarkets.firstTouchdownMarkets);
-        }
-
-        if (lastValidChildMarkets.lastTouchdownMarkets.length > 0) {
-            result.push(lastValidChildMarkets.lastTouchdownMarkets);
-        }
-
-        return result;
-    }, [markets]);
+    const groupedPlayerPropsMarkets = useMemo(() => groupBy(markets, (market) => market.typeId), [markets]);
 
     return (
         <Container>
-            {marketsUI.map((ppMarkets, index) => {
+            {Object.keys(groupedPlayerPropsMarkets).map((key, index) => {
+                const typeId = Number(key);
+                const ppMarkets = groupedPlayerPropsMarkets[typeId];
                 return (
                     <SectionContainer key={index} dark={index % 2 === 0}>
                         <SectionTitle>
-                            {BetTypeTitleMap[ppMarkets[0].typeId as BetType]
-                                ? BetTypeTitleMap[ppMarkets[0].typeId as BetType]
-                                : BetTypeNameMap[ppMarkets[0].typeId as BetType]}
-                            {(ppMarkets[0].typeId as BetType) == BetType.PLAYER_PROPS_TOUCHDOWNS && (
+                            {BetTypeTitleMap[typeId as BetType]}
+                            {typeId == BetType.PLAYER_PROPS_TOUCHDOWNS && (
                                 <Tooltip
-                                    overlay={
-                                        <>
-                                            {t(
-                                                `markets.market-card.odd-tooltip.player-props.info.${
-                                                    BetTypeNameMap[ppMarkets[0].typeId as BetType]
-                                                }`
-                                            )}
-                                        </>
-                                    }
+                                    overlay={<>{t(`markets.market-card.type-tooltip.${typeId}`)}</>}
                                     iconFontSize={13}
                                     marginLeft={3}
                                 />
                             )}
                         </SectionTitle>
                         <OddsWrapper>
-                            {ppMarkets.map((ppMarket, ind) => {
+                            {ppMarkets.map((ppMarket, index) => {
                                 return (
-                                    <MarketContainer key={ind}>
+                                    <MarketContainer key={index}>
                                         <Player>{`${ppMarket.playerProps.playerName} ${
-                                            isOneSidePlayerProps(ppMarket.typeId) || isSpecialYesNoProp(ppMarket.typeId)
+                                            ppMarket.isOneSidePlayerPropsMarket || ppMarket.isSpecialYesNoPropsMarket
                                                 ? ''
                                                 : ppMarket.playerProps.line
                                         }`}</Player>

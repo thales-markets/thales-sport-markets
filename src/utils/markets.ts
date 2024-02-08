@@ -690,6 +690,23 @@ export const getUpdatedQuote = (
         : updateQuotes?.[combinedPositionsCount * 2 + startIndex];
 };
 
+export const getSimpleSymbolText = (position: Position, betType: number) => {
+    if (betType === BetType.SPREAD) return `H${position + 1}`;
+    if (betType === BetType.TOTAL) return position === 0 ? 'O' : 'U';
+    if (betType === BetType.DOUBLE_CHANCE) return position === 0 ? '1X' : position === 1 ? '12' : 'X2';
+
+    return position === 0 ? '1' : position === 1 ? '2' : 'X';
+};
+
+export const getCombinedPositionsSymbolText = (position: Position, market: SportMarketInfoV2) => {
+    const combinedPositions = market.combinedPositions[position];
+
+    return `${getSimpleSymbolText(
+        combinedPositions.position1.position,
+        combinedPositions.position1.typeId
+    )}&${getSimpleSymbolText(combinedPositions.position2.position, combinedPositions.position2.typeId)}`;
+};
+
 export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) => {
     const betType = market.typeId;
 
@@ -701,15 +718,16 @@ export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) =
         return position === 0 ? 'YES' : 'NO';
     }
 
-    if (betType === BetType.SPREAD) return `H${position + 1}`;
-    if (betType === BetType.TOTAL || market.isPlayerPropsMarket) return position === 0 ? 'O' : 'U';
-    if (betType === BetType.DOUBLE_CHANCE) return position === 0 ? '1X' : position === 1 ? '12' : 'X2';
+    if (market.isPlayerPropsMarket) {
+        return position === 0 ? 'O' : 'U';
+    }
+
     if (betType === BetType.COMBINED_POSITIONS) return getCombinedPositionsSymbolText(position, market);
 
-    return position === 0 ? '1' : position === 1 ? '2' : 'X';
+    return getSimpleSymbolText(position, betType);
 };
 
-export const getSpreadTotalTextV2 = (market: SportMarketInfoV2, position: Position) => {
+export const getLineInfoV2 = (market: SportMarketInfoV2, position: Position) => {
     if (market.typeId === BetType.SPREAD)
         return position === Position.HOME
             ? `${Number(market.spread) > 0 ? '+' : '-'}${Math.abs(Number(market.spread))}`
@@ -756,21 +774,4 @@ export const getOddTooltipTextV2 = (position: Position, market: SportMarketInfoV
         scoring: market.isPlayerPropsMarket ? market.playerProps.line : scoring,
         matchResolve,
     });
-};
-
-export const getSingleSymbolText = (position: Position, betType: number) => {
-    if (betType === BetType.SPREAD) return `H${position + 1}`;
-    if (betType === BetType.TOTAL) return position === 0 ? 'O' : 'U';
-    if (betType === BetType.DOUBLE_CHANCE) return position === 0 ? '1X' : position === 1 ? '12' : 'X2';
-
-    return position === 0 ? '1' : position === 1 ? '2' : 'X';
-};
-
-export const getCombinedPositionsSymbolText = (position: Position, market: SportMarketInfoV2) => {
-    const combinedPositions = market.combinedPositions[position];
-
-    return `${getSingleSymbolText(
-        combinedPositions.position1.position,
-        combinedPositions.position1.childId
-    )}&${getSingleSymbolText(combinedPositions.position2.position, combinedPositions.position2.childId)}`;
 };

@@ -2,6 +2,7 @@ import axios from 'axios';
 import QUERY_KEYS from 'constants/queryKeys';
 import { GlobalFiltersEnum } from 'enums/markets';
 import { Network } from 'enums/network';
+import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarketsV2 } from 'types/markets';
 
@@ -65,13 +66,17 @@ const useSportsMarketsV2Query = (
                         ...market,
                         maturityDate: new Date(market.maturityDate),
                         odds: market.odds.map((odd: any) => odd.normalizedImplied),
-                        childMarkets: market.childMarkets.map((childMarket: any) => {
-                            return {
-                                ...childMarket,
-                                maturityDate: new Date(childMarket.maturityDate),
-                                odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
-                            };
-                        }),
+                        childMarkets: orderBy(
+                            market.childMarkets.map((childMarket: any) => {
+                                return {
+                                    ...childMarket,
+                                    maturityDate: new Date(childMarket.maturityDate),
+                                    odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
+                                };
+                            }),
+                            ['typeId'],
+                            ['asc']
+                        ),
                     };
                 });
             } catch (e) {

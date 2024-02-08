@@ -413,8 +413,8 @@
                 "winner": "Winner",
                 "spread": "Handicap",
                 "total": "Total",
-                "double-chance": "Double chance",
-                "combined-positions": "Combined positions",
+                "double chance": "Double chance",
+                "combined positions": "Combined positions",
                 "strikeouts": "Strikeouts",
                 "home runs": "Home runs",
                 "rushing yards": "Rushing yards",
@@ -543,7 +543,7 @@
                 "receivingYards-1": "{{team}} will have less receiving yards than {{scoring}}",
                 "passingTouchdowns-0": "{{team}} will have more passing touchdowns than {{scoring}}",
                 "passingTouchdowns-1": "{{team}} will have less passing touchdowns than {{scoring}}",
-                "touchdowns": "{{team}} will score a touchdown in the game",
+                "touchdowns-0": "{{team}} will score a touchdown in the game",
                 "fieldGoalsMade-0": "{{team}} will have more field goals made than {{scoring}}",
                 "fieldGoalsMade-1": "{{team}} will have less field goals made than {{scoring}}",
                 "pitcherHitsAllowed-0": "{{team}} will have more hits allowed than {{scoring}}",
@@ -552,7 +552,7 @@
                 "shots-1": "{{team}} will have less shots than {{scoring}}",
                 "points-0": "{{team}} will have more points than {{scoring}}",
                 "points-1": "{{team}} will have less points than {{scoring}}",
-                "goals": "{{team}} will score a goal in the game",
+                "goals-0": "{{team}} will score a goal in the game",
                 "hitsRecorded-0": "{{team}} will have more hits recorded than {{scoring}}",
                 "hitsRecorded-1": "{{team}} will have less hits recorded than {{scoring}}",
                 "rebounds-0": "{{team}} will have more rebounds than {{scoring}}",
@@ -565,12 +565,12 @@
                 "tripleDouble-1": "{{team}} will not score a triple-double",
                 "receptions-0": "{{team}} will have more receptions than {{scoring}}",
                 "receptions-1": "{{team}} will have less receptions than {{scoring}}",
-                "firstTouchdown": "{{team}} will score the first touchdown in the game",
-                "lastTouchdown": "{{team}} will score the last touchdown in the game",
-                "info": {
-                    "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
-                },
+                "firstTouchdown-0": "{{team}} will score the first touchdown in the game",
+                "lastTouchdown-0": "{{team}} will score the last touchdown in the game",
                 "bonus": "{{bonus}} added bonus on win!"
+            },
+            "type-tooltip": {
+                "11055": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
             },
             "player-props": "Player props",
             "total-markets": "Total markets",

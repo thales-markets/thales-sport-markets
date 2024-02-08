@@ -1,15 +1,15 @@
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType } from 'enums/markets';
 import React, { useState } from 'react';
 import { CombinedMarket } from 'types/markets';
-import { useTranslation } from 'react-i18next';
-import { Container, Header, Title, ContentContianer, Arrow, ContentRow } from '../Positions/styled-components';
 import CombinedMarketPositions from '../CombinedMarketPositions';
+import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from '../Positions/styled-components';
 
 type CombinedPositionsProps = {
     combinedMarkets: CombinedMarket[];
 };
 
 const CombinedPositions: React.FC<CombinedPositionsProps> = ({ combinedMarkets }) => {
-    const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
     const MAX_POSITIONS_PER_ROW = 4;
@@ -21,7 +21,7 @@ const CombinedPositions: React.FC<CombinedPositionsProps> = ({ combinedMarkets }
     return (
         <Container>
             <Header>
-                <Title isExpanded={isExpanded}>{t(`markets.market-card.bet-type.combined-positions`)}</Title>
+                <Title isExpanded={isExpanded}>{BetTypeNameMap[BetType.COMBINED_POSITIONS]}</Title>
             </Header>
             <Arrow
                 className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}

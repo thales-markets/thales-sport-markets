@@ -351,9 +351,11 @@ export type PlayerProps = {
     score: number;
 };
 
-export type CombinedPosition = {
-    position1: { childId: number; position: number };
-    position2: { childId: number; position: number };
+export type CombinedPositionInfo = { typeId: number; position: number; line: number };
+
+export type CombinedPositions = {
+    position1: CombinedPositionInfo;
+    position2: CombinedPositionInfo;
 };
 
 export type SportMarketInfoV2 = {
@@ -384,7 +386,7 @@ export type SportMarketInfoV2 = {
     odds: number[];
     proof: string[];
     childMarkets: SportMarketInfoV2[];
-    combinedPositions: CombinedPosition[];
+    combinedPositions: CombinedPositions[];
 };
 
 export type SportMarketsV2 = SportMarketInfoV2[];
@@ -427,4 +429,10 @@ export type SportMarketChildMarketsV2 = {
     receptionsMarkets: SportMarketInfoV2[];
     firstTouchdownMarkets: SportMarketInfoV2[];
     lastTouchdownMarkets: SportMarketInfoV2[];
+};
+
+export type BetTypeInfo = {
+    name: string;
+    title: string;
+    showTooltip: boolean;
 };

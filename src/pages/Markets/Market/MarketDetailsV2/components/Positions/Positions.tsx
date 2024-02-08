@@ -1,14 +1,14 @@
+import Tooltip from 'components/Tooltip';
 import { BetTypeNameMap } from 'constants/tags';
+import { BetType } from 'enums/markets';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 import { SportMarketInfo } from 'types/markets';
 import { isGolf, isMotosport, isOneSidePlayerProps, isPlayerProps } from 'utils/markets';
 import DoubleChanceMarketPositions from '../DoubleChanceMarketPositions';
 import MarketPositions from '../MarketPositions';
 import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
-import { BetType } from 'enums/markets';
-import styled from 'styled-components';
-import Tooltip from 'components/Tooltip';
 
 type PositionsProps = {
     markets: SportMarketInfo[];
@@ -46,7 +46,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, areDoubleChance
         <Container onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')}>
             <Header>
                 <Title isExpanded={isExpanded}>
-                    {t(`markets.market-card.bet-type.${BetTypeNameMap[betType]}`)}
+                    {BetTypeNameMap[betType]}
                     {(markets[0].betType as BetType) == BetType.PLAYER_PROPS_TOUCHDOWNS && (
                         <Tooltip
                             overlay={

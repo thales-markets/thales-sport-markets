@@ -1,11 +1,13 @@
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from 'styled-components';
 import { SportMarketInfo } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
 import CombinedOdd from '../CombinedOdd';
 import { Status } from '../MatchStatus/MatchStatus';
 import { CombinedOddsContainer, Container, Title } from '../Odds/styled-components';
-import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
 type CombinedOddsProps = {
     market: SportMarketInfo;
@@ -24,7 +26,7 @@ const CombinedMarketsOdds: React.FC<CombinedOddsProps> = ({ market, isShownInSec
 
     return (
         <Container>
-            <Title>{t(`markets.market-card.bet-type.combined-positions`)}</Title>
+            <Title>{BetTypeNameMap[BetType.COMBINED_POSITIONS]}</Title>
             {noOdds ? (
                 <Status color={theme.status.comingSoon}>{t('markets.market-card.coming-soon')}</Status>
             ) : (

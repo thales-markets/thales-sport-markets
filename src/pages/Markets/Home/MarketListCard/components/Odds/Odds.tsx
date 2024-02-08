@@ -1,7 +1,6 @@
 import { BetTypeNameMap } from 'constants/tags';
 import { BetType, DoubleChanceMarketType, Position } from 'enums/markets';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { DoubleChanceMarketsInfo, SportMarketInfo } from 'types/markets';
 import { getSpreadTotalText, getVisibilityOfDrawOption, isGolf, isMotosport } from 'utils/markets';
 import Odd from '../Odd';
@@ -14,8 +13,6 @@ type OddsProps = {
 };
 
 const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecondRow }) => {
-    const { t } = useTranslation();
-
     const isGameStarted = market.maturityDate < new Date();
     const isGameResolved = market.isResolved || market.isCanceled;
     const showOdds = !isGameResolved && !isGameStarted && !market.isPaused;
@@ -45,7 +42,7 @@ const Odds: React.FC<OddsProps> = ({ market, doubleChanceMarkets, isShownInSecon
     return showContainer ? (
         <Container>
             <Title>
-                {t(`markets.market-card.bet-type.${BetTypeNameMap[market.betType as BetType]}`)}
+                {BetTypeNameMap[market.betType as BetType]}
                 {spreadTotalText && ` ${spreadTotalText}`}
             </Title>
             {

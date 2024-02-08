@@ -1,5 +1,5 @@
 import { BetType } from 'enums/markets';
-import { SportsMap, SportsTagsMap, Tags } from 'types/markets';
+import { BetTypeInfo, SportsMap, SportsTagsMap, Tags } from 'types/markets';
 
 export const TAGS_LIST: Tags = [
     {
@@ -560,10 +560,10 @@ export const INTERNATIONAL_SPORTS = [18821, 19199, 9409, 9033, 9050, 9288, 18806
 
 export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.WINNER]: 'winner',
-    [BetType.SPREAD]: 'spread',
+    [BetType.SPREAD]: 'handicap',
     [BetType.TOTAL]: 'total',
-    [BetType.DOUBLE_CHANCE]: 'double-chance',
-    [BetType.COMBINED_POSITIONS]: 'combined-positions',
+    [BetType.DOUBLE_CHANCE]: 'double chance',
+    [BetType.COMBINED_POSITIONS]: 'combined positions',
     [BetType.PLAYER_PROPS_STRIKEOUTS]: 'strikeouts',
     [BetType.PLAYER_PROPS_HOMERUNS]: 'home runs',
     [BetType.PLAYER_PROPS_PASSING_YARDS]: 'passing yards',
@@ -587,31 +587,159 @@ export const BetTypeNameMap: Record<BetType, string> = {
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
+    [BetType.WINNER]: 'winner',
+    [BetType.SPREAD]: 'handicap',
+    [BetType.TOTAL]: 'total',
+    [BetType.DOUBLE_CHANCE]: 'double chance',
+    [BetType.COMBINED_POSITIONS]: 'combined positions',
+    [BetType.PLAYER_PROPS_STRIKEOUTS]: 'strikeouts',
+    [BetType.PLAYER_PROPS_HOMERUNS]: 'home runs',
+    [BetType.PLAYER_PROPS_PASSING_YARDS]: 'passing yards',
+    [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: 'passing touchdowns',
+    [BetType.PLAYER_PROPS_RUSHING_YARDS]: 'rushing yards',
+    [BetType.PLAYER_PROPS_RECEIVING_YARDS]: 'receiving yards',
     [BetType.PLAYER_PROPS_TOUCHDOWNS]: 'Who will score a touchdown in the game?',
-    [BetType.PLAYER_PROPS_GOALS]: 'Who will score a goal in the game',
+    [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: 'field goals made',
+    [BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED]: 'pitcher hits allowed',
+    [BetType.PLAYER_PROPS_POINTS]: 'points',
+    [BetType.PLAYER_PROPS_SHOTS]: 'shots',
+    [BetType.PLAYER_PROPS_GOALS]: 'Who will score a goal in the game?',
+    [BetType.PLAYER_PROPS_HITS_RECORDED]: 'hits recorded',
+    [BetType.PLAYER_PROPS_REBOUNDS]: 'rebounds',
+    [BetType.PLAYER_PROPS_ASSISTS]: 'assists',
+    [BetType.PLAYER_PROPS_DOUBLE_DOUBLE]: 'double double',
+    [BetType.PLAYER_PROPS_TRIPLE_DOUBLE]: 'triple double',
+    [BetType.PLAYER_PROPS_RECEPTIONS]: 'receptions',
     [BetType.PLAYER_PROPS_FIRST_TOUCHDOWN]: 'Who will score the first touchdown in the game? (incl. OT)',
     [BetType.PLAYER_PROPS_LAST_TOUCHDOWN]: 'Who will score the last touchdown in the game?',
-    [BetType.WINNER]: '',
-    [BetType.SPREAD]: '',
-    [BetType.TOTAL]: '',
-    [BetType.DOUBLE_CHANCE]: '',
-    [BetType.COMBINED_POSITIONS]: '',
-    [BetType.PLAYER_PROPS_HOMERUNS]: '',
-    [BetType.PLAYER_PROPS_STRIKEOUTS]: '',
-    [BetType.PLAYER_PROPS_PASSING_YARDS]: '',
-    [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: '',
-    [BetType.PLAYER_PROPS_RUSHING_YARDS]: '',
-    [BetType.PLAYER_PROPS_RECEIVING_YARDS]: '',
-    [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: '',
-    [BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED]: '',
-    [BetType.PLAYER_PROPS_POINTS]: '',
-    [BetType.PLAYER_PROPS_SHOTS]: '',
-    [BetType.PLAYER_PROPS_HITS_RECORDED]: '',
-    [BetType.PLAYER_PROPS_REBOUNDS]: '',
-    [BetType.PLAYER_PROPS_ASSISTS]: '',
-    [BetType.PLAYER_PROPS_DOUBLE_DOUBLE]: '',
-    [BetType.PLAYER_PROPS_TRIPLE_DOUBLE]: '',
-    [BetType.PLAYER_PROPS_RECEPTIONS]: '',
+};
+
+export const BetTypeInfoMap: Record<BetType, BetTypeInfo> = {
+    [BetType.WINNER]: {
+        name: 'Winner',
+        title: 'Winner',
+        showTooltip: false,
+    },
+    [BetType.SPREAD]: {
+        name: 'Handicap',
+        title: 'Handicap',
+        showTooltip: false,
+    },
+    [BetType.TOTAL]: {
+        name: 'Total',
+        title: 'Total',
+        showTooltip: false,
+    },
+    [BetType.DOUBLE_CHANCE]: {
+        name: 'Double chance',
+        title: 'Double chance',
+        showTooltip: false,
+    },
+    [BetType.COMBINED_POSITIONS]: {
+        name: 'Combined positions',
+        title: 'Combined positions',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_STRIKEOUTS]: {
+        name: 'Strikeouts',
+        title: 'Strikeouts',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_HOMERUNS]: {
+        name: 'Home runs',
+        title: 'Home runs',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_PASSING_YARDS]: {
+        name: 'Passing yards',
+        title: 'Passing yards',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS]: {
+        name: 'Passing touchdowns',
+        title: 'Passing touchdowns',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_RUSHING_YARDS]: {
+        name: 'Rushing yards',
+        title: 'Rushing yards',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_RECEIVING_YARDS]: {
+        name: 'Receiving yards',
+        title: 'Receiving yards',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_TOUCHDOWNS]: {
+        name: 'Scoring touchdown',
+        title: 'Who will score a touchdown in the game?',
+        showTooltip: true,
+    },
+    [BetType.PLAYER_PROPS_FIELD_GOALS_MADE]: {
+        name: 'Field goals made',
+        title: 'Field goals made',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED]: {
+        name: 'Pitcher hits allowed',
+        title: 'Pitcher hits allowed',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_POINTS]: {
+        name: 'Points',
+        title: 'Points',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_SHOTS]: {
+        name: 'Shots',
+        title: 'Shots',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_GOALS]: {
+        name: 'Goals',
+        title: 'Who will score a goal in the game',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_HITS_RECORDED]: {
+        name: 'Hits recorded',
+        title: 'Hits recorded',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_REBOUNDS]: {
+        name: 'Rebounds',
+        title: 'Rebounds',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_ASSISTS]: {
+        name: 'Assists',
+        title: 'Assists',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_DOUBLE_DOUBLE]: {
+        name: 'Double double',
+        title: 'Double double',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_TRIPLE_DOUBLE]: {
+        name: 'Triple double',
+        title: 'Triple double',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_RECEPTIONS]: {
+        name: 'Receptions',
+        title: 'Receptions',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_FIRST_TOUCHDOWN]: {
+        name: 'Last touchdown',
+        title: 'Who will score the first touchdown in the game? (incl. OT)',
+        showTooltip: false,
+    },
+    [BetType.PLAYER_PROPS_LAST_TOUCHDOWN]: {
+        name: 'First touchdown',
+        title: 'Who will score the last touchdown in the game?',
+        showTooltip: false,
+    },
 };
 
 export const SCORING_MAP: SportsMap = {
