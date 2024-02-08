@@ -1,6 +1,6 @@
 import { BetType, ContractSGPOrder, OddsType, Position } from 'enums/markets';
 
-export const ODDS_TYPES = [OddsType.AMM, OddsType.Decimal, OddsType.American];
+export const ODDS_TYPES = [OddsType.American, OddsType.AMM, OddsType.Decimal];
 
 export const MIN_COLLATERAL_MULTIPLIER = 1.01;
 export const MAX_COLLATERAL_MULTIPLIER = 0.99;
