@@ -434,7 +434,11 @@
             "player-props": "อุปกรณ์ประกอบฉากของผู้เล่น",
             "see-more-markets": "ดูตลาดอุปกรณ์ประกอบฉากของผู้เล่น",
             "see-more-markets-mobile": "อุปกรณ์ประกอบฉากของผู้เล่น",
-            "resolved": "แก้ไขแล้ว"
+            "resolved": "แก้ไขแล้ว",
+            "toggle": {
+                "hide-paused-markets": "ซ่อนตลาดที่หยุดชั่วคราว",
+                "show-paused-markets": "แสดงตลาดที่หยุดชั่วคราว"
+            }
         },
         "market-details": {
             "price": "ราคา",

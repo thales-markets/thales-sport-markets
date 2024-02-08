@@ -434,7 +434,11 @@
             "see-more-markets-mobile": "accessoires de joueur",
             "see-more-markets": "voir les marchés d'accessoires de joueurs",
             "player-props": "Accessoires de joueur",
-            "resolved": "Résolu"
+            "resolved": "Résolu",
+            "toggle": {
+                "show-paused-markets": "Afficher les marchés en pause",
+                "hide-paused-markets": "Masquer les marchés en pause"
+            }
         },
         "market-details": {
             "wallet-info": {
