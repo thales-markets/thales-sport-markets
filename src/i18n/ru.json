@@ -434,7 +434,11 @@
             "see-more-markets": "посмотреть рынки реквизита игроков",
             "see-more-markets-mobile": "реквизит игрока",
             "player-props": "Реквизит игрока",
-            "resolved": "Решено"
+            "resolved": "Решено",
+            "toggle": {
+                "hide-paused-markets": "Скрыть приостановленные рынки",
+                "show-paused-markets": "Показать приостановленные рынки"
+            }
         },
         "market-details": {
             "price": "Price",

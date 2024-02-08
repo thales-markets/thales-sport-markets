@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { ThemeMap } from 'constants/ui';
-import { localStore } from 'thales-utils';
-import { RootState } from '../rootReducer';
 import { TAGS_LIST } from 'constants/tags';
-import { Tags } from 'types/markets';
-import { uniqBy } from 'lodash';
+import { ThemeMap } from 'constants/ui';
 import { OddsType } from 'enums/markets';
 import { Theme } from 'enums/ui';
+import { uniqBy } from 'lodash';
+import { localStore } from 'thales-utils';
+import { Tags } from 'types/markets';
+import { RootState } from '../rootReducer';
 
 const sliceName = 'ui';
 
 const getDefaultOddsType = (): OddsType => {
     const oddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
-    return (oddsType !== undefined ? oddsType : OddsType.Decimal) as OddsType;
+    return (oddsType !== undefined ? oddsType : OddsType.American) as OddsType;
 };
 
 export const getDefaultTheme = (): Theme => {
