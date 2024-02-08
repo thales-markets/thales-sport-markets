@@ -8,7 +8,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarketInfoV2, TicketPosition } from 'types/markets';
-import { formatMarketOdds } from 'utils/markets';
+import { formatMarketOdds, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/markets';
 
 type OddProps = {
     market: SportMarketInfoV2;
@@ -23,13 +23,11 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
     const ticket = useSelector(getTicket);
     const addedToTicket = ticket.filter((position: any) => position.gameId == market.gameId)[0];
 
-    console.log(market.odds, position);
     const odd = market.odds[position];
     const isAddedToTicket = addedToTicket && addedToTicket.position == position;
     const noOdd = !odd || odd == 0;
 
-    // const oddTooltipText = getOddTooltipText(position, market);
-    const oddTooltipText = '';
+    const oddTooltipText = getOddTooltipTextV2(position, market);
 
     const onClick = () => {
         if (noOdd) return;
@@ -65,8 +63,7 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
             }}
             disabled={noOdd}
             flexDirection="column"
-            // symbolText={getSymbolText(position, market)}
-            symbolText=""
+            symbolText={getSymbolTextV2(position, market)}
             additionalStyle={market.isOneSideMarket ? { fontSize: 11 } : {}}
             onClick={onClick}
             selected={isAddedToTicket}

@@ -35,6 +35,7 @@ import {
     ParlaysMarketPosition,
     PositionData,
     SportMarketInfo,
+    SportMarketInfoV2,
 } from 'types/markets';
 import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
@@ -687,4 +688,89 @@ export const getUpdatedQuote = (
     return isCombinedPosition
         ? updateQuotes?.[startIndex] * updateQuotes?.[startIndex + 1]
         : updateQuotes?.[combinedPositionsCount * 2 + startIndex];
+};
+
+export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) => {
+    const betType = market.typeId;
+
+    if (market.isOneSideMarket || market.isOneSidePlayerPropsMarket) {
+        return 'YES';
+    }
+
+    if (market.isSpecialYesNoPropsMarket) {
+        return position === 0 ? 'YES' : 'NO';
+    }
+
+    if (betType === BetType.SPREAD) return `H${position + 1}`;
+    if (betType === BetType.TOTAL || market.isPlayerPropsMarket) return position === 0 ? 'O' : 'U';
+    if (betType === BetType.DOUBLE_CHANCE) return position === 0 ? '1X' : position === 1 ? '12' : 'X2';
+    if (betType === BetType.COMBINED_POSITIONS) return getCombinedPositionsSymbolText(position, market);
+
+    return position === 0 ? '1' : position === 1 ? '2' : 'X';
+};
+
+export const getSpreadTotalTextV2 = (market: SportMarketInfoV2, position: Position) => {
+    if (market.typeId === BetType.SPREAD)
+        return position === Position.HOME
+            ? `${Number(market.spread) > 0 ? '+' : '-'}${Math.abs(Number(market.spread))}`
+            : `${Number(market.spread) > 0 ? '-' : '+'}${Math.abs(Number(market.spread))}`;
+
+    if (market.typeId === BetType.TOTAL) return `${Number(market.total)}`;
+    if (market.isPlayerPropsMarket) return `${Number(market.playerProps.line)}`;
+    return undefined;
+};
+
+export const getOddTooltipTextV2 = (position: Position, market: SportMarketInfoV2) => {
+    const spread = Math.abs(Number(market.spread));
+    const total = Number(market.total);
+    const team =
+        position === Position.AWAY
+            ? market.awayTeam
+            : market.isOneSideMarket
+            ? fixOneSideMarketCompetitorName(market.homeTeam)
+            : market.homeTeam;
+    const team2 = market.awayTeam;
+    const scoring =
+        SCORING_MAP[market.leagueId] !== ''
+            ? i18n.t(`markets.market-card.odd-tooltip-v2.scoring.${SCORING_MAP[market.leagueId]}`)
+            : '';
+    const matchResolve =
+        MATCH_RESOLVE_MAP[market.leagueId] !== ''
+            ? i18n.t(`markets.market-card.odd-tooltip-v2.match-resolve.${MATCH_RESOLVE_MAP[market.leagueId]}`)
+            : '';
+    let translationKey = '';
+
+    if (market.isOneSideMarket) {
+        translationKey = Number(market.leagueId) == GOLF_TOURNAMENT_WINNER_TAG ? 'tournament-winner' : 'race-winner';
+    } else if (market.typeId === BetType.SPREAD) {
+        translationKey = Number(market.spread) < 0 ? `spread-${position}` : `spread-${position === 1 ? 0 : 1}`;
+    } else {
+        translationKey = `${market.type}-${position}`;
+    }
+
+    return i18n.t(`markets.market-card.odd-tooltip-v2.${translationKey}`, {
+        team: market.isPlayerPropsMarket ? market.playerProps.playerName : team,
+        team2,
+        spread,
+        total,
+        scoring: market.isPlayerPropsMarket ? market.playerProps.line : scoring,
+        matchResolve,
+    });
+};
+
+export const getSingleSymbolText = (position: Position, betType: number) => {
+    if (betType === BetType.SPREAD) return `H${position + 1}`;
+    if (betType === BetType.TOTAL) return position === 0 ? 'O' : 'U';
+    if (betType === BetType.DOUBLE_CHANCE) return position === 0 ? '1X' : position === 1 ? '12' : 'X2';
+
+    return position === 0 ? '1' : position === 1 ? '2' : 'X';
+};
+
+export const getCombinedPositionsSymbolText = (position: Position, market: SportMarketInfoV2) => {
+    const combinedPositions = market.combinedPositions[position];
+
+    return `${getSingleSymbolText(
+        combinedPositions.position1.position,
+        combinedPositions.position1.childId
+    )}&${getSingleSymbolText(combinedPositions.position2.position, combinedPositions.position2.childId)}`;
 };

@@ -1,6 +1,9 @@
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SportMarketInfoV2 } from 'types/markets';
+import { getSpreadTotalTextV2 } from 'utils/markets';
 import OddV2 from '../OddV2';
 import { Container, OddsContainer, Title } from './styled-components';
 
@@ -15,22 +18,16 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
     const isGameStarted = market.maturityDate < new Date();
     const isGameResolved = market.isResolved || market.isCanceled;
     const showOdds = !isGameResolved && !isGameStarted && !market.isPaused;
-    // const spreadTotalText = getSpreadTotalText(market, Position.HOME);
-    const spreadTotalText = 'vvv';
+    const spreadTotalText = getSpreadTotalTextV2(market, 0);
 
     const areOddsValid = market.odds.every((odd) => odd < 1 && odd != 0);
 
-    const showContainer =
-        !showOdds ||
-        // isMotosport(Number(market.tags[0])) ||
-        // isGolf(Number(market.tags[0])) ||
-        // market.betType == BetType.DOUBLE_CHANCE ||
-        areOddsValid;
+    const showContainer = !showOdds || market.typeId == BetType.DOUBLE_CHANCE || areOddsValid;
 
     return showContainer ? (
         <Container>
             <Title>
-                {/* {t(`markets.market-card.bet-type.${BetTypeNameMap[market.betType as BetType]}`)} */}
+                {t(`markets.market-card.bet-type.${BetTypeNameMap[market.typeId as BetType]}`)}
                 {spreadTotalText && ` ${spreadTotalText}`}
             </Title>
             {

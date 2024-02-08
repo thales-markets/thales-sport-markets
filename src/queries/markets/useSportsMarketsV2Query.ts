@@ -60,11 +60,18 @@ const useSportsMarketsV2Query = (
                         break;
                 }
 
-                marketsCache[globalFilter] = markets.map((market) => {
+                marketsCache[globalFilter] = markets.map((market: any) => {
                     return {
                         ...market,
-                        maturityDate: 1707589493000,
-                        odds: market.odds.map((odd) => odd.normalizedImplied),
+                        maturityDate: new Date(market.maturityDate),
+                        odds: market.odds.map((odd: any) => odd.normalizedImplied),
+                        childMarkets: market.childMarkets.map((childMarket: any) => {
+                            return {
+                                ...childMarket,
+                                maturityDate: new Date(childMarket.maturityDate),
+                                odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
+                            };
+                        }),
                     };
                 });
             } catch (e) {

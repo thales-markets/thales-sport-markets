@@ -224,6 +224,7 @@ const Home: React.FC = () => {
 
                 if (dateFilter !== 0) {
                     if (typeof dateFilter === 'number') {
+                        console.log(market.maturityDate);
                         if (market.maturityDate.getTime() > dateFilter) {
                             return false;
                         }

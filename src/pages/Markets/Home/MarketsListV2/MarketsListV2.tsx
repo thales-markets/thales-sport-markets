@@ -2,8 +2,9 @@ import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg'
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_SUPERBOWL } from 'constants/markets';
-import { TAGS_LIST } from 'constants/tags';
+import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_LIST } from 'constants/tags';
 import { Network } from 'enums/network';
+import { orderBy } from 'lodash';
 import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,8 +32,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
     const isFavourite = favouriteLeague && favouriteLeague.favourite;
 
-    const sortedMarkets = markets;
-    // const sortedMarkets = sortWinnerMarkets(markets, league);
+    const sortedMarkets = sortWinnerMarkets(markets, league);
 
     return (
         <>
@@ -170,12 +170,12 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     );
 };
 
-// const sortWinnerMarkets = (markets: SportMarketsV2, leagueId: number) => {
-//     if (leagueId == GOLF_TOURNAMENT_WINNER_TAG || MOTOSPORT_TAGS.includes(leagueId)) {
-//         return orderBy(markets, ['maturityDate', 'homeOdds'], ['asc', 'desc']);
-//     }
-//     return markets;
-// };
+const sortWinnerMarkets = (markets: SportMarketsV2, leagueId: number) => {
+    if (leagueId == GOLF_TOURNAMENT_WINNER_TAG || MOTOSPORT_TAGS.includes(leagueId)) {
+        return orderBy(markets, ['maturityDate', 'odds[0]'], ['asc', 'desc']);
+    }
+    return markets;
+};
 
 const getNetworkLogo = (networkId: number) => {
     switch (networkId) {

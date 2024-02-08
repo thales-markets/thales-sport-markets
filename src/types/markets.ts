@@ -351,6 +351,11 @@ export type PlayerProps = {
     score: number;
 };
 
+export type CombinedPosition = {
+    position1: { childId: number; position: number };
+    position2: { childId: number; position: number };
+};
+
 export type SportMarketInfoV2 = {
     gameId: string;
     sport: string;
@@ -374,10 +379,12 @@ export type SportMarketInfoV2 = {
     isOneSideMarket: boolean;
     isPlayerPropsMarket: boolean;
     isOneSidePlayerPropsMarket: boolean;
+    isSpecialYesNoPropsMarket: boolean;
     playerProps: PlayerProps;
     odds: number[];
     proof: string[];
-    childMarkets?: SportMarketInfoV2[];
+    childMarkets: SportMarketInfoV2[];
+    combinedPositions: CombinedPosition[];
 };
 
 export type SportMarketsV2 = SportMarketInfoV2[];
@@ -394,4 +401,30 @@ export type TicketPosition = {
     odds: number[];
     proof: string[];
     position: number;
+};
+
+export type SportMarketChildMarketsV2 = {
+    spreadMarkets: SportMarketInfoV2[];
+    totalMarkets: SportMarketInfoV2[];
+    doubleChanceMarkets: SportMarketInfoV2[];
+    strikeOutsMarkets: SportMarketInfoV2[];
+    homeRunsMarkets: SportMarketInfoV2[];
+    rushingYardsMarkets: SportMarketInfoV2[];
+    passingYardsMarkets: SportMarketInfoV2[];
+    receivingYardsMarkets: SportMarketInfoV2[];
+    passingTouchdownsMarkets: SportMarketInfoV2[];
+    oneSiderTouchdownsMarkets: SportMarketInfoV2[];
+    fieldGoalsMadeMarkets: SportMarketInfoV2[];
+    pitcherHitsAllowedMarkets: SportMarketInfoV2[];
+    oneSiderGoalsMarkets: SportMarketInfoV2[];
+    shotsMarkets: SportMarketInfoV2[];
+    pointsMarkets: SportMarketInfoV2[];
+    hitsRecordedMarkets: SportMarketInfoV2[];
+    reboundsMarkets: SportMarketInfoV2[];
+    assistsMarkets: SportMarketInfoV2[];
+    doubleDoubleMarkets: SportMarketInfoV2[];
+    tripleDoubleMarkets: SportMarketInfoV2[];
+    receptionsMarkets: SportMarketInfoV2[];
+    firstTouchdownMarkets: SportMarketInfoV2[];
+    lastTouchdownMarkets: SportMarketInfoV2[];
 };

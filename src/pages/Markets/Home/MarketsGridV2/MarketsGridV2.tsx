@@ -1,5 +1,5 @@
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { SPORTS_MAP, TAGS_LIST } from 'constants/tags';
+import { EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
@@ -27,17 +27,10 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     const marketsMap: Record<number, SportMarketInfoV2[]> = groupBy(markets, (market) => Number(market.leagueId));
     // UNIFYING EUROPA LEAGUE MARKETS FROM BOTH ENETPULSE & RUNDOWNS PROVIDERS
-    // const unifiedMarketsMap = unifyEuropaLeagueMarkets(marketsMap);
-    // const marketsKeys = sortMarketKeys(
-    //     Object.keys(marketsMap).map((key) => Number(key)),
-    //     unifiedMarketsMap,
-    //     favouriteLeagues,
-    //     dateFilter
-    // );
-
+    const unifiedMarketsMap = unifyEuropaLeagueMarkets(marketsMap);
     const marketsKeys = sortMarketKeys(
         Object.keys(marketsMap).map((key) => Number(key)),
-        marketsMap,
+        unifiedMarketsMap,
         favouriteLeagues,
         dateFilter
     );
@@ -191,15 +184,15 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     ];
 };
 
-// const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarketInfo[]>) => {
-//     const rundownEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[0]] ? marketsMap[EUROPA_LEAGUE_TAGS[0]] : [];
-//     const enetpulseEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[1]] ? marketsMap[EUROPA_LEAGUE_TAGS[1]] : [];
-//     if (rundownEuropaLeagueGames.length > 0 || enetpulseEuropaLeagueGames.length > 0) {
-//         marketsMap[EUROPA_LEAGUE_TAGS[0]] = [...rundownEuropaLeagueGames, ...enetpulseEuropaLeagueGames];
-//         delete marketsMap[EUROPA_LEAGUE_TAGS[1]];
-//     }
-//     return marketsMap;
-// };
+const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarketInfoV2[]>) => {
+    const rundownEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[0]] ? marketsMap[EUROPA_LEAGUE_TAGS[0]] : [];
+    const enetpulseEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[1]] ? marketsMap[EUROPA_LEAGUE_TAGS[1]] : [];
+    if (rundownEuropaLeagueGames.length > 0 || enetpulseEuropaLeagueGames.length > 0) {
+        marketsMap[EUROPA_LEAGUE_TAGS[0]] = [...rundownEuropaLeagueGames, ...enetpulseEuropaLeagueGames];
+        delete marketsMap[EUROPA_LEAGUE_TAGS[1]];
+    }
+    return marketsMap;
+};
 
 const Container = styled(FlexDiv)`
     margin: 10px 10px 0 0;
