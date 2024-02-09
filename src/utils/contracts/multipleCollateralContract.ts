@@ -1,5 +1,5 @@
-import { Network } from 'enums/network';
 import { ZERO_ADDRESS } from 'constants/network';
+import { Network } from 'enums/network';
 
 const abi = [
     { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
@@ -633,7 +633,7 @@ const multipleCollateral = {
             [Network.OptimismMainnet]: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
             [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
-            [Network.Base]: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
+            [Network.Base]: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
         },
         abi,
     },
@@ -679,6 +679,15 @@ const multipleCollateral = {
             [Network.OptimismGoerli]: ZERO_ADDRESS,
             [Network.Arbitrum]: ZERO_ADDRESS,
             [Network.Base]: ZERO_ADDRESS,
+        },
+        abi,
+    },
+    USDbC: {
+        addresses: {
+            [Network.OptimismMainnet]: '',
+            [Network.OptimismGoerli]: '',
+            [Network.Arbitrum]: '',
+            [Network.Base]: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
         },
         abi,
     },

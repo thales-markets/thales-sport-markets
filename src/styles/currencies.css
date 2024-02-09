@@ -50,6 +50,10 @@
     content: '\0057';
 }
 
+.currency-icon--usdbc::before {
+    content: '\0057';
+}
+
 .currency-icon--s::before {
     content: '\005A';
 }
