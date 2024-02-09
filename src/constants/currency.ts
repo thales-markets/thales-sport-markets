@@ -15,7 +15,7 @@ export const DEFAULT_CURRENCY_DECIMALS = 2;
 export const SHORT_CURRENCY_DECIMALS = 4;
 export const LONG_CURRENCY_DECIMALS = 8;
 
-const CRYPTO_CURRENCY = ['sUSD', 'DAI', 'USDCe', 'USDC', 'USDT', 'OP', 'WETH', 'ETH', 'ARB'];
+const CRYPTO_CURRENCY = ['sUSD', 'DAI', 'USDCe', 'USDC', 'USDT', 'OP', 'WETH', 'ETH', 'ARB', 'USDbC'];
 
 export const CRYPTO_CURRENCY_MAP = keyBy(CRYPTO_CURRENCY);
 
@@ -25,6 +25,7 @@ export const STABLE_COINS = [
     CRYPTO_CURRENCY_MAP.USDCe as Coins,
     CRYPTO_CURRENCY_MAP.USDC as Coins,
     CRYPTO_CURRENCY_MAP.USDT as Coins,
+    CRYPTO_CURRENCY_MAP.USDbC as Coins,
 ];
 
 export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
@@ -49,6 +50,7 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
     [Network.Base]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
+        CRYPTO_CURRENCY_MAP.USDbC as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
     ],
@@ -86,6 +88,7 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     DAI: 18,
     USDCe: 6,
     USDC: 6,
+    USDbC: 6,
     USDT: 6,
     OP: 18,
     WETH: 18,
