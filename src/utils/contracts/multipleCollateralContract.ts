@@ -677,6 +677,7 @@ const multipleCollateral = {
             [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
             [Network.Base]: '0x4200000000000000000000000000000000000006',
+            [Network.OptimismSepolia]: '',
         },
         abi,
     },
