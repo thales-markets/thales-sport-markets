@@ -51,7 +51,7 @@
 }
 
 .currency-icon--usdbc::before {
-    content: '\0057';
+    content: '\0070';
 }
 
 .currency-icon--s::before {
