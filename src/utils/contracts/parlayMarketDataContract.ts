@@ -6,6 +6,7 @@ const parlayMarketDataContract = {
         [Network.OptimismGoerli]: '0x54822552F51cd15c09bF360958A8e417989a925b',
         [Network.Arbitrum]: '0xff9d1B34f369CAf91c6b69761e2A06f78ed3cd9d',
         [Network.Base]: '0x6286E16e22B14c840e71852c81f50E5e3001753a',
+        [Network.OptimismSepolia]: '',
     },
     abi: [
         {

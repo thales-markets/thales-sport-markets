@@ -6,6 +6,7 @@ const sportVaultDataContract = {
         [Network.OptimismGoerli]: '',
         [Network.Arbitrum]: '0x4830853AC480A7ee1a86E1B4Fa909f0665858f01',
         [Network.Base]: '',
+        [Network.OptimismSepolia]: '',
     },
     abi: [
         {

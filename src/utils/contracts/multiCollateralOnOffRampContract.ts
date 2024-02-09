@@ -6,6 +6,7 @@ const multiCollateralOnOffRampContract = {
         [Network.OptimismGoerli]: '',
         [Network.Arbitrum]: '0x7b065dE3fd7190A6C2CB6D51E946e82B6b2C4358',
         [Network.Base]: '0x0946BfE3c543e0B770B7F7e508c8A566947C4278',
+        [Network.OptimismSepolia]: '',
     },
     abi: [
         {

@@ -6,6 +6,7 @@ const sportPositionalMarketManagerContract = {
         [Network.OptimismGoerli]: '0xae56177e405929c95E5d4b04C0C87E428cB6432B',
         [Network.Arbitrum]: '0x72ca0765d4bE0529377d656c9645600606214610',
         [Network.Base]: '0xB0EE5C967F209f24f7eF30c2C6Da38346a87E089',
+        [Network.OptimismSepolia]: '',
     },
     abi: [
         {

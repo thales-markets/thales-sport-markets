@@ -6,6 +6,7 @@ const overtimeVoucherContract = {
         [Network.OptimismGoerli]: '0x9483eFf448042c366a4297dB465FaE108d2e6ea6',
         [Network.Arbitrum]: '0x9Ee26dcb9A3F1104B37A5dCc8573c8b144c7ce42',
         [Network.Base]: '0x58050F0c63ad9ecaeEbbB002F305aF1dF0C92333',
+        [Network.OptimismSepolia]: '',
     },
     abi: [
         {

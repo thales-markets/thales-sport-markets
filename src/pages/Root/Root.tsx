@@ -15,7 +15,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
-import { base } from 'constants/network';
+import { base, optimismSepolia } from 'constants/network';
 import { ThemeMap } from 'constants/ui';
 import dotenv from 'dotenv';
 import { Network } from 'enums/network';
@@ -54,13 +54,14 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
     [Network.OptimismGoerli]: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
     [Network.Arbitrum]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
     [Network.Base]: { ankr: 'base', chainnode: '', blast: '' },
+    [Network.OptimismSepolia]: { ankr: '', chainnode: '', blast: '' },
 };
 
 const theme = getDefaultTheme();
 const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
 const { chains, provider } = configureChains(
-    [optimism, optimismGoerli, arbitrum, base],
+    [optimism, optimismGoerli, arbitrum, base, optimismSepolia],
     [
         jsonRpcProvider({
             rpc: (chain) => ({

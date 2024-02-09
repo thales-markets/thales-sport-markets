@@ -1,8 +1,8 @@
-import { NavMenuItem, ThemeInterface } from 'types/ui';
-import darkTheme from 'styles/themes/dark';
-import ROUTES from './routes';
-import { Theme } from 'enums/ui';
 import { Network } from 'enums/network';
+import { Theme } from 'enums/ui';
+import darkTheme from 'styles/themes/dark';
+import { NavMenuItem, ThemeInterface } from 'types/ui';
+import ROUTES from './routes';
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
@@ -20,7 +20,13 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--profile',
         name: 'profile',
         route: ROUTES.Profile,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum, Network.Base],
+        supportedNetworks: [
+            Network.OptimismMainnet,
+            Network.OptimismGoerli,
+            Network.Arbitrum,
+            Network.Base,
+            Network.OptimismSepolia,
+        ],
     },
 ];
 
@@ -30,7 +36,13 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--logo',
         name: 'markets',
         route: ROUTES.Markets.Home,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum, Network.Base],
+        supportedNetworks: [
+            Network.OptimismMainnet,
+            Network.OptimismGoerli,
+            Network.Arbitrum,
+            Network.Base,
+            Network.OptimismSepolia,
+        ],
     },
     {
         i18label: 'markets.nav-menu.items.vaults',

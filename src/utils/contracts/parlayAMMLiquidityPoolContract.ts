@@ -6,6 +6,7 @@ const parlayAMMLiquidityPoolContract = {
         [Network.OptimismGoerli]: '0xA5D52005df7C457B014A54b3cF9812c861Ea9dF9',
         [Network.Arbitrum]: '0x6848f7C1B5aa2da86F6529bed9d641A67663f0bE',
         [Network.Base]: '0x46005F3C5a6BD95df00CfA53988C79A17E56D060',
+        [Network.OptimismSepolia]: '',
     },
     abi: [
         {

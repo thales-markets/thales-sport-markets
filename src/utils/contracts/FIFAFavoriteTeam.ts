@@ -6,6 +6,7 @@ export const FIFAFavoriteTeam = {
         [Network.OptimismGoerli]: '0xD66eE2D0F8810304402F6bE0E57E7C0a261b54A3',
         [Network.Arbitrum]: '',
         [Network.Base]: '',
+        [Network.OptimismSepolia]: '',
     },
     abi: [
         {

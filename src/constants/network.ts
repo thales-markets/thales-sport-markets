@@ -9,6 +9,7 @@ export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismGoerli]: 'GOERLI-OPTIMISM',
     [Network.Arbitrum]: 'ARBITRUM-ONE',
     [Network.Base]: 'BASE',
+    [Network.OptimismSepolia]: 'SEPOLIA-OPTIMISM',
 };
 
 export const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
@@ -16,6 +17,7 @@ export const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
     [Network.OptimismGoerli]: 'OPTIMISM GOERLI',
     [Network.Arbitrum]: 'ARBITRUM ONE',
     [Network.Base]: 'BASE',
+    [Network.OptimismSepolia]: 'OPTIMISM SEPOLIA',
 };
 
 export const DEFAULT_NETWORK: { name: string; networkId: SupportedNetwork } = {
@@ -106,6 +108,34 @@ export const base = {
         multicall3: {
             address: '0xca11bde05977b3631167028862be2a173976ca11',
             blockCreated: 5022,
+        },
+    },
+} as Chain;
+
+export const optimismSepolia = {
+    id: 11155420,
+    network: 'OP Sepolia',
+    name: 'OP Sepolia',
+    nativeCurrency: { name: 'Sepolia Ether', symbol: 'ETH', decimals: 18 },
+    rpcUrls: {
+        default: {
+            http: ['https://sepolia.optimism.io'],
+        },
+        public: {
+            http: ['https://sepolia.optimism.io'],
+        },
+    },
+    blockExplorers: {
+        default: {
+            name: 'Blockscout',
+            url: 'https://optimism-sepolia.blockscout.com',
+            apiUrl: 'https://optimism-sepolia.blockscout.com/api',
+        },
+    },
+    contracts: {
+        multicall3: {
+            address: '0xca11bde05977b3631167028862be2a173976ca11',
+            blockCreated: 1620204,
         },
     },
 } as Chain;

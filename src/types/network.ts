@@ -26,5 +26,5 @@ export type NetworkParams = {
 
 export type SupportedNetwork = Exclude<
     Network,
-    Network.Mainnet | Network.PolygonMainnet | Network.ZkSyncSepolia | Network.ZkSync | Network.OptimismSepolia
+    Network.Mainnet | Network.PolygonMainnet | Network.ZkSyncSepolia | Network.ZkSync
 >;
