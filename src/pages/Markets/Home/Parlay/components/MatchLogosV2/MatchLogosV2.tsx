@@ -18,7 +18,6 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, isHighlighted })
     );
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
 
-    console.log();
     useEffect(() => {
         if (market.isPlayerPropsMarket) {
             setHomeLogoSrc(getTeamImageSource(market.playerProps.playerName, market.leagueId));

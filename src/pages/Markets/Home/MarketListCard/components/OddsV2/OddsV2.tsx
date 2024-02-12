@@ -1,8 +1,8 @@
 import { BetTypeNameMap } from 'constants/tags';
-import { BetType } from 'enums/markets';
+import { BetType, Position } from 'enums/markets';
 import React from 'react';
 import { SportMarketInfoV2 } from 'types/markets';
-import { getLineInfoV2 } from 'utils/markets';
+import { getLineInfoV2, isOddValid } from 'utils/markets';
 import OddV2 from '../OddV2';
 import { Container, OddsContainer, Title } from './styled-components';
 
@@ -15,11 +15,11 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
     const isGameStarted = market.maturityDate < new Date();
     const isGameResolved = market.isResolved || market.isCanceled;
     const showOdds = !isGameResolved && !isGameStarted && !market.isPaused;
-    const lineInfo = getLineInfoV2(market, 0);
+    const lineInfo = getLineInfoV2(market, Position.HOME);
 
-    const areOddsValid = market.odds.every((odd) => odd < 1 && odd != 0);
+    const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
-    const showContainer = !showOdds || market.typeId === BetType.DOUBLE_CHANCE || areOddsValid;
+    const showContainer = !showOdds || areOddsValid;
 
     return showContainer ? (
         <Container>

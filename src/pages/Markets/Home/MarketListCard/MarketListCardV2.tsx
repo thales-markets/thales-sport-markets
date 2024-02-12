@@ -14,7 +14,7 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarketInfoV2, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame, isGolf, isIIHFWCGame, isMotosport, isUEFAGame } from 'utils/markets';
+import { isFifaWCGame, isIIHFWCGame, isOddValid, isUEFAGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
 import Web3 from 'web3';
 import { BetType } from '../../../../enums/markets';
@@ -150,24 +150,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         isJsonOddsSport,
     ]);
 
-    // const areDoubleChanceMarketsOddsValid =
-    //     doubleChanceMarkets && doubleChanceMarkets.length > 0
-    //         ? doubleChanceMarkets.map((item) => item.homeOdds).every((odd) => odd < 1 && odd != 0)
-    //         : false;
+    const areChildMarketsOddsValid = market.childMarkets.some((childMarket) =>
+        childMarket.odds.some((odd) => isOddValid(odd))
+    );
 
-    // const areSpreadTotalsMarketsOddsValid =
-    //     spreadTotalMarkets && spreadTotalMarkets.length > 0
-    //         ? spreadTotalMarkets
-    //               .map((item) => [item.homeOdds, item.awayOdds])
-    //               .every((oddsArray) => oddsArray[0] < 1 && oddsArray[0] != 0 && oddsArray[1] < 1 && oddsArray[1] != 0)
-    //         : false;
+    const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
-    const areOddsValid = market.odds.every((odd) => odd < 1 && odd != 0);
-
-    const hideGame =
-        // !areDoubleChanceMarketsOddsValid &&
-        // !areSpreadTotalsMarketsOddsValid &&
-        !areOddsValid && !isMotosport(Number(market.leagueId)) && !isGolf(Number(market.leagueId)) && showOdds;
+    const hideGame = showOdds && !areOddsValid && !areChildMarketsOddsValid;
 
     return (
         <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved}>

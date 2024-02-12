@@ -400,12 +400,8 @@ export type TicketPosition = {
     leagueId: number;
     childId: number;
     playerPropsId: number;
-    maturity: number;
-    status: number;
-    line: number;
     playerId: number;
-    odds: number[];
-    proof: string[];
+    line: number;
     position: number;
 };
 

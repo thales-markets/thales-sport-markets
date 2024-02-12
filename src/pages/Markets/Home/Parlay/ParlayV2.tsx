@@ -25,11 +25,7 @@ import MatchInfoV2 from './components/MatchInfoV2';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
-type ParylayProps = {
-    onBuySuccess?: () => void;
-};
-
-const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
+const Parlay: React.FC = () => {
     const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -39,7 +35,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const hasTicketError = useSelector(getHasTicketError);
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
-    const [updatedQuotes, setUpdatedQuotes] = useState<number[]>([]);
 
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
@@ -80,11 +75,9 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
             );
 
             const ticketMarkets: TicketMarket[] = ticket
-                .filter((ticketPosition) => {
-                    return sportOpenMarkets.some((market: SportMarketInfoV2) => {
-                        return isSameMarket(market, ticketPosition);
-                    });
-                })
+                .filter((ticketPosition) =>
+                    sportOpenMarkets.some((market: SportMarketInfoV2) => isSameMarket(market, ticketPosition))
+                )
                 .map((ticketPosition) => {
                     const openMarket: SportMarketInfoV2 = sportOpenMarkets.filter((market: SportMarketInfoV2) =>
                         isSameMarket(market, ticketPosition)
@@ -95,13 +88,11 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                     };
                 });
 
-            // If market is not opened any more remove it
+            // if market is not opened anymore remove it
             if (ticket.length > ticketMarkets.length) {
-                const notOpenedMarkets = ticket.filter((ticketPosition) => {
-                    return sportOpenMarkets.some((market: SportMarketInfoV2) => {
-                        return !isSameMarket(market, ticketPosition);
-                    });
-                });
+                const notOpenedMarkets = ticket.filter((ticketPosition) =>
+                    sportOpenMarkets.every((market: SportMarketInfoV2) => !isSameMarket(market, ticketPosition))
+                );
 
                 if (notOpenedMarkets.length > 0) dispatch(removeAll());
             }
@@ -109,10 +100,6 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
             setTicketMarkets(ticketMarkets);
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch]);
-
-    useEffect(() => {
-        setUpdatedQuotes([]);
-    }, [setUpdatedQuotes, ticketMarkets]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
@@ -127,22 +114,13 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                     const outOfLiquidity = outOfLiquidityMarkets.includes(index);
                                     return (
                                         <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                            <MatchInfoV2
-                                                updatedQuote={updatedQuotes[index]}
-                                                market={market}
-                                                isHighlighted={true}
-                                            />
+                                            <MatchInfoV2 market={market} isHighlighted={true} />
                                         </RowMarket>
                                     );
                                 })}
                         </ListContainer>
                         <HorizontalLine />
-                        <TicketV2
-                            markets={ticketMarkets}
-                            setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
-                            onBuySuccess={onBuySuccess}
-                            setUpdatedQuotes={setUpdatedQuotes}
-                        />
+                        <TicketV2 markets={ticketMarkets} setMarketsOutOfLiquidity={setOutOfLiquidityMarkets} />
                     </>
                 </>
             ) : (

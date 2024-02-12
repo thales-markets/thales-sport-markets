@@ -1,6 +1,6 @@
 import PositionSymbol from 'components/PositionSymbol';
 import { oddToastOptions } from 'config/toast';
-import { BetType } from 'enums/markets';
+import { BetType, Position } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
     const isMobile = useSelector(getIsMobile);
     const ticket = useSelector(getTicket);
     const addedToTicket = ticket.filter((position: any) => isSameMarket(market, position))[0];
-    const lineInfo = getLineInfoV2(market, 0);
+    const lineInfo = getLineInfoV2(market, Position.HOME);
 
     const odd = market.odds[position];
     const isAddedToTicket = addedToTicket && addedToTicket.position == position;
@@ -42,12 +42,8 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
                 leagueId: market.leagueId,
                 childId: market.childId,
                 playerPropsId: market.playerPropsId,
-                maturity: market.maturity,
-                status: market.status,
-                line: market.line,
                 playerId: market.playerProps.playerId,
-                odds: market.odds,
-                proof: market.proof,
+                line: market.line,
                 position: position,
             };
             dispatch(updateTicket(ticket));

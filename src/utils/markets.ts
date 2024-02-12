@@ -882,3 +882,5 @@ export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
             position: market.position,
         };
     });
+
+export const isOddValid = (odd: number) => odd < 1 && odd != 0;

@@ -89,8 +89,6 @@ import SuggestedAmount from '../SuggestedAmount';
 type TicketProps = {
     markets: TicketMarket[];
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
-    onBuySuccess?: () => void;
-    setUpdatedQuotes: (quotes: number[]) => void;
 };
 
 const TicketErrorMessage = {
@@ -98,7 +96,7 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess, setUpdatedQuotes }) => {
+const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -462,7 +460,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     setIsBuying(false);
                     setCollateralAmount('');
                     dispatch(removeAll());
-                    onBuySuccess && onBuySuccess();
                 }
             } catch (e) {
                 setIsBuying(false);
@@ -662,7 +659,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     setMarketsOutOfLiquidity(marketsOutOfLiquidity);
 
                     setFinalQuotes(fetchedFinalQuotes);
-                    setUpdatedQuotes(fetchedFinalQuotes);
 
                     // const baseQuote = bigNumberFormatter(parlayAmmQuote['minimumCollateralAmountTotalQuote']);
 
@@ -691,7 +687,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         networkId,
         usdAmountValue,
         isStableCollateral,
-        setUpdatedQuotes,
     ]);
 
     useEffect(() => {
