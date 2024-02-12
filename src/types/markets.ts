@@ -409,6 +409,7 @@ export type SportMarketChildMarketsV2 = {
     spreadMarkets: SportMarketInfoV2[];
     totalMarkets: SportMarketInfoV2[];
     doubleChanceMarkets: SportMarketInfoV2[];
+    combinedPositionsMarkets: SportMarketInfoV2[];
     strikeOutsMarkets: SportMarketInfoV2[];
     homeRunsMarkets: SportMarketInfoV2[];
     rushingYardsMarkets: SportMarketInfoV2[];
