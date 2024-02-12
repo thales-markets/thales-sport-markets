@@ -107,11 +107,52 @@ const HeaderContainer = styled(FlexDiv)`
     margin: 50px 0px;
     justify-content: center;
     color: ${(props) => props.theme.textColor.primary} !important;
+    > h1 {
+        font-size: 36px;
+        font-weight: 900;
+        line-height: 43px;
+    }
+    > h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-top: 10px;
+    }
     > h3 {
         font-size: 28px;
+        font-weight: 900;
     }
-    > h1 {
-        font-size: 38px;
+    > h4 {
+        font-size: 22px;
+        font-weight: 700;
+        color: ${(props) => props.theme.textColor.quaternary};
+        margin-top: 10px;
+    }
+    > p {
+        padding: 15px 0px;
+    }
+    > strong {
+        font-weight: 700;
+    }
+    > a {
+        font-weight: 700;
+        text-decoration: none;
+        color: ${(props) => props.theme.textColor.quaternary};
+        :active {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+        :visited {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+        :hover {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+        :link {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
     }
 `;
 
@@ -135,6 +176,53 @@ const CTAContent = styled(FlexDiv)`
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
     }
+    > h1 {
+        font-size: 36px;
+        font-weight: 900;
+        line-height: 43px;
+    }
+    > h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-top: 10px;
+    }
+    > h3 {
+        font-size: 28px;
+        font-weight: 900;
+    }
+    > h4 {
+        font-size: 22px;
+        font-weight: 700;
+        color: ${(props) => props.theme.textColor.quaternary};
+        margin-top: 10px;
+    }
+    > p {
+        padding: 15px 0px;
+    }
+    > strong {
+        font-weight: 700;
+    }
+    > a {
+        font-weight: 700;
+        text-decoration: none;
+        color: ${(props) => props.theme.textColor.quaternary};
+        :active {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+        :visited {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+        :hover {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+        :link {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+    }
 `;
 
 const MainContent = styled(FlexDiv)`
@@ -145,9 +233,28 @@ const MainContent = styled(FlexDiv)`
     font-weight: 400;
     line-height: 26px;
     flex-direction: column;
+    > h1 {
+        font-size: 36px;
+        font-weight: 900;
+        line-height: 43px;
+    }
     > h2 {
         font-size: 36px;
-        font-weight: 600;
+        font-weight: 700;
+        margin-top: 10px;
+    }
+    > h3 {
+        font-size: 28px;
+        font-weight: 900;
+    }
+    > h4 {
+        font-size: 22px;
+        font-weight: 700;
+        color: ${(props) => props.theme.textColor.quaternary};
+        margin-top: 10px;
+    }
+    > p {
+        padding: 15px 0px;
     }
     > strong {
         font-weight: 700;
@@ -156,6 +263,22 @@ const MainContent = styled(FlexDiv)`
         font-weight: 700;
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
+        :active {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+        :visited {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+        :hover {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+        :link {
+            text-decoration: none;
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
     }
 `;
 
