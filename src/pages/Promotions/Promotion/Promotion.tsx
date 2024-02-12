@@ -262,22 +262,22 @@ const MainContent = styled(FlexDiv)`
     > a {
         font-weight: 700;
         text-decoration: none;
-        color: ${(props) => props.theme.textColor.quaternary};
+        color: ${(props) => props.theme.textColor.quaternary} !important;
         :active {
             text-decoration: none;
-            color: ${(props) => props.theme.textColor.quaternary};
+            color: ${(props) => props.theme.textColor.quaternary} !important;
         }
         :visited {
             text-decoration: none;
-            color: ${(props) => props.theme.textColor.quaternary};
+            color: ${(props) => props.theme.textColor.quaternary} !important;
         }
         :hover {
             text-decoration: none;
-            color: ${(props) => props.theme.textColor.quaternary};
+            color: ${(props) => props.theme.textColor.quaternary} !important;
         }
         :link {
             text-decoration: none;
-            color: ${(props) => props.theme.textColor.quaternary};
+            color: ${(props) => props.theme.textColor.quaternary} !important;
         }
     }
 `;
