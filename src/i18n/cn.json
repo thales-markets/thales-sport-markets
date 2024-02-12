@@ -434,7 +434,11 @@
             "see-more-markets": "查看玩家道具市场",
             "see-more-markets-mobile": "玩家道具",
             "player-props": "玩家道具",
-            "resolved": "解决"
+            "resolved": "解决",
+            "toggle": {
+                "hide-paused-markets": "隐藏暂停的市场",
+                "show-paused-markets": "显示暂停的市场"
+            }
         },
         "market-details": {
             "price": "价格",

@@ -1,10 +1,10 @@
-import networkConnector from 'utils/networkConnector';
-import { useQuery, UseQueryOptions } from 'react-query';
-import QUERY_KEYS from 'constants/queryKeys';
 import { COLLATERAL_DECIMALS, CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
+import { UseQueryOptions, useQuery } from 'react-query';
 import { bigNumberFormatter } from 'thales-utils';
 import { Coins } from 'types/tokens';
+import networkConnector from 'utils/networkConnector';
 
 const useMultipleCollateralBalanceQuery = (
     walletAddress: string,
@@ -28,6 +28,7 @@ const useMultipleCollateralBalanceQuery = (
                         ETH: 0,
                         ARB: 0,
                         USDC: 0,
+                        USDbC: 0,
                     };
                 }
 
@@ -41,6 +42,7 @@ const useMultipleCollateralBalanceQuery = (
                     WETHBalance,
                     ETHBalance,
                     ARBBalance,
+                    USDbCBalance,
                 ] = await Promise.all([
                     multipleCollateral
                         ? multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.balanceOf(walletAddress)
@@ -67,7 +69,11 @@ const useMultipleCollateralBalanceQuery = (
                     multipleCollateral
                         ? multipleCollateral[CRYPTO_CURRENCY_MAP.ARB as Coins]?.balanceOf(walletAddress)
                         : undefined,
+                    multipleCollateral
+                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDbC as Coins]?.balanceOf(walletAddress)
+                        : undefined,
                 ]);
+
                 return {
                     sUSD: sUSDBalance ? bigNumberFormatter(sUSDBalance, COLLATERAL_DECIMALS.sUSD) : 0,
                     DAI: DAIBalance ? bigNumberFormatter(DAIBalance, COLLATERAL_DECIMALS.DAI) : 0,
@@ -78,6 +84,7 @@ const useMultipleCollateralBalanceQuery = (
                     WETH: WETHBalance ? bigNumberFormatter(WETHBalance, COLLATERAL_DECIMALS.WETH) : 0,
                     ETH: ETHBalance ? bigNumberFormatter(ETHBalance, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
+                    USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
                 };
             } catch (e) {
                 console.log('e ', e);
@@ -91,6 +98,7 @@ const useMultipleCollateralBalanceQuery = (
                     ETH: 0,
                     ARB: 0,
                     USDC: 0,
+                    USDbC: 0,
                 };
             }
         },

@@ -1,24 +1,24 @@
+import { Network } from 'enums/network';
 import { ethers, Signer } from 'ethers';
 import { NetworkSettings } from 'types/network';
-import sportMarketManagerContract from 'utils/contracts/sportPositionalMarketManagerContract';
-import sportPositionalMarketDataContract from 'utils/contracts/sportPositionalMarketDataContract';
-import sportsAMMContract from 'utils/contracts/sportsAMMContract';
-import sUSDContract from 'utils/contracts/sUSDContract';
-import multipleCollateral from './contracts/multipleCollateralContract';
-import overtimeVoucherContract from './contracts/overtimeVoucherContract';
-import parlayMarketsAMMContract from './contracts/parlayMarketsAMMContract';
-import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
+import { Coins } from 'types/tokens';
 import liquidityPoolContract from 'utils/contracts/liquidityPoolContract';
-import { overtimeVoucherEscrowContract } from './contracts/overtimeVoucherEscrowContract';
-import sportVaultDataContract from 'utils/contracts/sportVaultDataContract';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContract';
-import parlayMarketDataContract from 'utils/contracts/parlayMarketDataContract';
 import parlayAMMLiquidityPoolContract from 'utils/contracts/parlayAMMLiquidityPoolContract';
 import parlayAMMLiquidityPoolDataContract from 'utils/contracts/parlayAMMLiquidityPoolDataContract';
-import priceFeedContract from './contracts/priceFeedContract';
+import parlayMarketDataContract from 'utils/contracts/parlayMarketDataContract';
+import sportPositionalMarketDataContract from 'utils/contracts/sportPositionalMarketDataContract';
+import sportMarketManagerContract from 'utils/contracts/sportPositionalMarketManagerContract';
+import sportsAMMContract from 'utils/contracts/sportsAMMContract';
+import sportVaultDataContract from 'utils/contracts/sportVaultDataContract';
+import sUSDContract from 'utils/contracts/sUSDContract';
+import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
 import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
-import { Network } from 'enums/network';
-import { Coins } from 'types/tokens';
+import multipleCollateral from './contracts/multipleCollateralContract';
+import overtimeVoucherContract from './contracts/overtimeVoucherContract';
+import { overtimeVoucherEscrowContract } from './contracts/overtimeVoucherEscrowContract';
+import parlayMarketsAMMContract from './contracts/parlayMarketsAMMContract';
+import priceFeedContract from './contracts/priceFeedContract';
 
 type NetworkConnector = {
     initialized: boolean;
@@ -85,6 +85,7 @@ const networkConnector: NetworkConnector = {
             WETH: initializeContract(multipleCollateral.WETH, networkSettings),
             ETH: initializeContract(multipleCollateral.ETH, networkSettings),
             ARB: initializeContract(multipleCollateral.ARB, networkSettings),
+            USDbC: initializeContract(multipleCollateral.USDbC, networkSettings),
         };
     },
 };

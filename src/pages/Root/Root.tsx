@@ -53,7 +53,7 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
     },
     [Network.OptimismGoerli]: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
     [Network.Arbitrum]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
-    [Network.Base]: { ankr: 'base', chainnode: '', blast: '' },
+    [Network.Base]: { ankr: 'base', chainnode: 'base-mainnet', blast: '' },
 };
 
 const theme = getDefaultTheme();
@@ -63,13 +63,18 @@ const { chains, provider } = configureChains(
     [optimism, optimismGoerli, arbitrum, base],
     [
         jsonRpcProvider({
-            rpc: (chain) => ({
-                http: !!CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode
-                    ? `https://${CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id].chainnode}.chainnodes.org/${
-                          process.env.REACT_APP_CHAINNODE_PROJECT_ID
-                      }`
-                    : chain.rpcUrls.default.http[0],
-            }),
+            rpc: (chain) => {
+                const chainnodeNetworkName = CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode;
+                return {
+                    http:
+                        process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' && chain.id === Network.Base
+                            ? // For Base use Ankr when Infura is primary as Infura doesn't support it
+                              `https://rpc.ankr.com/base/${process.env.REACT_APP_ANKR_PROJECT_ID}`
+                            : !!chainnodeNetworkName
+                            ? `https://${chainnodeNetworkName}.chainnodes.org/${process.env.REACT_APP_CHAINNODE_PROJECT_ID}`
+                            : chain.rpcUrls.default.http[0],
+                };
+            },
             stallTimeout: STALL_TIMEOUT,
             priority: 1,
         }),
