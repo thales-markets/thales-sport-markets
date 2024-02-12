@@ -23,6 +23,7 @@ import {
     Position,
     SPECIAL_YES_NO_BET_TYPES,
 } from 'enums/markets';
+import { ethers } from 'ethers';
 import i18n from 'i18n';
 import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import { addDaysToEnteredTimestamp, formatCurrency } from 'thales-utils';
@@ -37,6 +38,9 @@ import {
     PositionData,
     SportMarketInfo,
     SportMarketInfoV2,
+    TicketMarket,
+    TicketPosition,
+    TradeData,
 } from 'types/markets';
 import { PARLAY_MAXIMUM_QUOTE } from '../constants/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
@@ -715,7 +719,7 @@ export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) =
         return 'YES';
     }
 
-    if (market.isSpecialYesNoPropsMarket) {
+    if (market.isYesNoPlayerPropsMarket) {
         return position === 0 ? 'YES' : 'NO';
     }
 
@@ -844,3 +848,37 @@ export const getOddTooltipTextV2 = (position: Position, market: SportMarketInfoV
     market.typeId === BetType.COMBINED_POSITIONS
         ? getCombinedPositionsOddTooltipText(position, market)
         : getTooltipText(market.typeId, position, market.line, market);
+
+export const getMarketNameV2 = (market: SportMarketInfoV2, position?: Position) => {
+    if (market.isOneSideMarket) return fixOneSideMarketCompetitorName(market.homeTeam);
+    if (market.isPlayerPropsMarket)
+        return `${market.playerProps.playerName} \n(${BetTypeNameMap[market.typeId as BetType]})`;
+    return position === Position.HOME ? market.homeTeam : market.awayTeam;
+};
+
+export const getPositionOddsV2 = (market: TicketMarket) => market.odds[market.position];
+
+export const isSameMarket = (market: SportMarketInfoV2, ticketPosition: TicketPosition) =>
+    market.gameId === ticketPosition.gameId &&
+    market.leagueId === ticketPosition.leagueId &&
+    market.childId === ticketPosition.childId &&
+    market.playerPropsId === ticketPosition.playerPropsId &&
+    market.playerProps.playerId === ticketPosition.playerId &&
+    market.line === ticketPosition.line;
+
+export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
+    markets.map((market) => {
+        return {
+            gameId: market.gameId,
+            sportId: market.leagueId,
+            childId: market.childId,
+            playerPropsId: market.playerPropsId,
+            maturity: market.maturity,
+            status: market.status,
+            line: market.line * 100,
+            playerId: market.playerProps.playerId,
+            odds: market.odds.map((odd) => ethers.utils.parseEther(odd.toString()).toString()),
+            merkleProof: market.proof,
+            position: market.position,
+        };
+    });

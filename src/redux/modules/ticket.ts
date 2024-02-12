@@ -8,6 +8,8 @@ import { RootState } from '../rootReducer';
 
 const sliceName = 'ticket';
 
+const DEFAULT_MAX_TICKET_SIZE = 10;
+
 const getDefaultTicket = (): TicketPosition[] => {
     const lsParlay = localStore.get(LOCAL_STORAGE_KEYS.PARLAY);
     return lsParlay !== undefined ? (lsParlay as TicketPosition[]) : [];
@@ -34,12 +36,14 @@ const getDefaultError = () => {
 type TicketSliceState = {
     ticket: TicketPosition[];
     payment: ParlayPayment;
+    maxTicketSize: number;
     error: { code: ParlayErrorCode; data: string };
 };
 
 const initialState: TicketSliceState = {
     ticket: getDefaultTicket(),
     payment: getDefaultPayment(),
+    maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
     error: getDefaultError(),
 };
 
@@ -52,10 +56,17 @@ const ticketSlice = createSlice({
             const existingPositionIndex = state.ticket.findIndex((el) => el.gameId === action.payload.gameId);
 
             // UPDATE market position
-            ticketCopy[existingPositionIndex] = action.payload;
-            state.ticket = [...ticketCopy];
+            if (existingPositionIndex === -1) {
+                state.ticket.push(action.payload);
+            } else {
+                ticketCopy[existingPositionIndex] = action.payload;
+                state.ticket = [...ticketCopy];
+            }
 
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.ticket);
+        },
+        setMaxTicketSize: (state, action: PayloadAction<number>) => {
+            state.maxTicketSize = action.payload;
         },
         removeFromTicket: (state, action: PayloadAction<string>) => {
             state.ticket = state.ticket.filter((market) => market.gameId !== action.payload);
@@ -103,7 +114,7 @@ const ticketSlice = createSlice({
         setPaymentAmountToBuy: (state, action: PayloadAction<number | string>) => {
             state.payment = { ...state.payment, amountToBuy: action.payload };
         },
-        resetParlayError: (state) => {
+        resetTicketError: (state) => {
             state.error = getDefaultError();
         },
     },
@@ -118,12 +129,14 @@ export const {
     setPaymentIsVoucherSelected,
     setPaymentIsVoucherAvailable,
     setPaymentAmountToBuy,
-    resetParlayError,
+    resetTicketError,
+    setMaxTicketSize,
 } = ticketSlice.actions;
 
 const getTicketState = (state: RootState) => state[sliceName];
 export const getTicket = (state: RootState) => getTicketState(state).ticket;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
+export const getMaxTicketSize = (state: RootState) => getTicketState(state).maxTicketSize;
 export const getTicketError = (state: RootState) => getTicketState(state).error;
 export const getHasTicketError = createSelector(getTicketError, (error) => error.code != ParlayErrorCode.NO_ERROS);
 

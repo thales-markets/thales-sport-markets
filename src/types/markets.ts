@@ -363,8 +363,11 @@ export type SportMarketInfoV2 = {
     sport: string;
     leagueId: number;
     leagueName: string;
+    childId: number;
     typeId: number;
+    playerPropsId: number;
     type: string;
+    maturity: number;
     maturityDate: Date;
     homeTeam: string;
     awayTeam: string;
@@ -382,7 +385,7 @@ export type SportMarketInfoV2 = {
     isOneSideMarket: boolean;
     isPlayerPropsMarket: boolean;
     isOneSidePlayerPropsMarket: boolean;
-    isSpecialYesNoPropsMarket: boolean;
+    isYesNoPlayerPropsMarket: boolean;
     playerProps: PlayerProps;
     odds: number[];
     proof: string[];
@@ -395,7 +398,7 @@ export type SportMarketsV2 = SportMarketInfoV2[];
 export type TicketPosition = {
     gameId: string;
     leagueId: number;
-    typeId: number;
+    childId: number;
     playerPropsId: number;
     maturity: number;
     status: number;
@@ -436,4 +439,31 @@ export type BetTypeInfo = {
     name: string;
     title: string;
     showTooltip: boolean;
+};
+
+export type TicketMarket = SportMarketInfoV2 & {
+    position: Position;
+    winning?: boolean;
+};
+
+export type SportsAmmData = {
+    minBuyInAmount: number;
+    maxTicketSize: number;
+    maxSupportedAmount: number;
+    maxSupportedOdds: number;
+    safeBoxFee: number;
+};
+
+export type TradeData = {
+    gameId: string;
+    sportId: number;
+    childId: number;
+    playerPropsId: number;
+    maturity: number;
+    status: number;
+    line: number;
+    playerId: number;
+    odds: string[];
+    merkleProof: string[];
+    position: number;
 };

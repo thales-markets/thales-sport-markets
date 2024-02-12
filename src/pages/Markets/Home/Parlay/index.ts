@@ -1,1 +1,1 @@
-export { default } from './Parlay';
+export { default } from './ParlayV2';

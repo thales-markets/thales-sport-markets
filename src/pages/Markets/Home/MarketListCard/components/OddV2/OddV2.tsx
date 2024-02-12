@@ -9,7 +9,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarketInfoV2, TicketPosition } from 'types/markets';
-import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/markets';
+import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2, isSameMarket } from 'utils/markets';
 
 type OddProps = {
     market: SportMarketInfoV2;
@@ -22,7 +22,7 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const ticket = useSelector(getTicket);
-    const addedToTicket = ticket.filter((position: any) => position.gameId == market.gameId)[0];
+    const addedToTicket = ticket.filter((position: any) => isSameMarket(market, position))[0];
     const lineInfo = getLineInfoV2(market, 0);
 
     const odd = market.odds[position];
@@ -40,11 +40,11 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
             const ticket: TicketPosition = {
                 gameId: market.gameId,
                 leagueId: market.leagueId,
-                typeId: market.typeId,
-                playerPropsId: market.typeId,
-                maturity: market.maturityDate.getTime(),
+                childId: market.childId,
+                playerPropsId: market.playerPropsId,
+                maturity: market.maturity,
                 status: market.status,
-                line: market.total,
+                line: market.line,
                 playerId: market.playerProps.playerId,
                 odds: market.odds,
                 proof: market.proof,

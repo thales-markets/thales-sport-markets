@@ -1,0 +1,1857 @@
+import { Network } from 'enums/network';
+
+const sportsAMMV2Contract = {
+    addresses: {
+        [Network.OptimismMainnet]: '',
+        [Network.OptimismGoerli]: '',
+        [Network.Arbitrum]: '',
+        [Network.Base]: '',
+        [Network.OptimismSepolia]: '0x1792c3bc342d785a24a72f55e80aB40193d4d916',
+    },
+    abi: [
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'target',
+                    type: 'address',
+                },
+            ],
+            name: 'AddressEmptyCode',
+            type: 'error',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'account',
+                    type: 'address',
+                },
+            ],
+            name: 'AddressInsufficientBalance',
+            type: 'error',
+        },
+        {
+            inputs: [],
+            name: 'ERC1167FailedCreateClone',
+            type: 'error',
+        },
+        {
+            inputs: [],
+            name: 'FailedInnerCall',
+            type: 'error',
+        },
+        {
+            inputs: [],
+            name: 'InvalidInitialization',
+            type: 'error',
+        },
+        {
+            inputs: [],
+            name: 'NotInitializing',
+            type: 'error',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'token',
+                    type: 'address',
+                },
+            ],
+            name: 'SafeERC20FailedOperation',
+            type: 'error',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'contract IERC20',
+                    name: 'defaultCollateral',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'manager',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'riskManager',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'referrals',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'stakingThales',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'safeBox',
+                    type: 'address',
+                },
+            ],
+            name: 'AddressesUpdated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'safeBoxFee',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'minBuyInAmount',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'maxTicketSize',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'maxSupportedAmount',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'maxSupportedOdds',
+                    type: 'uint256',
+                },
+            ],
+            name: 'AmountsUpdated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'bytes32',
+                    name: 'gameId',
+                    type: 'bytes32',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint16',
+                    name: 'sportId',
+                    type: 'uint16',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint16',
+                    name: 'childId',
+                    type: 'uint16',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint16',
+                    name: 'playerPropsId',
+                    type: 'uint16',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint16',
+                    name: 'playerId',
+                    type: 'uint16',
+                },
+            ],
+            name: 'GameCancelled',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'bytes32',
+                    name: 'game',
+                    type: 'bytes32',
+                },
+                {
+                    indexed: false,
+                    internalType: 'bytes32',
+                    name: 'root',
+                    type: 'bytes32',
+                },
+            ],
+            name: 'GameRootUpdated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'uint64',
+                    name: 'version',
+                    type: 'uint64',
+                },
+            ],
+            name: 'Initialized',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    components: [
+                        {
+                            internalType: 'bytes32',
+                            name: 'gameId',
+                            type: 'bytes32',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'sportId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'childId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'playerPropsId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'maturity',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint8',
+                            name: 'status',
+                            type: 'uint8',
+                        },
+                        {
+                            internalType: 'int24',
+                            name: 'line',
+                            type: 'int24',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'playerId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint8',
+                            name: 'position',
+                            type: 'uint8',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'odd',
+                            type: 'uint256',
+                        },
+                    ],
+                    indexed: false,
+                    internalType: 'struct Ticket.GameData[]',
+                    name: 'tradeData',
+                    type: 'tuple[]',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'ticket',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'buyInAmountAfterFees',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'payout',
+                    type: 'uint256',
+                },
+            ],
+            name: 'NewTicket',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'oldOwner',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'newOwner',
+                    type: 'address',
+                },
+            ],
+            name: 'OwnerChanged',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'newOwner',
+                    type: 'address',
+                },
+            ],
+            name: 'OwnerNominated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'bool',
+                    name: 'isPaused',
+                    type: 'bool',
+                },
+            ],
+            name: 'PauseChanged',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'refferer',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'trader',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'amount',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'volume',
+                    type: 'uint256',
+                },
+            ],
+            name: 'ReferrerPaid',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'safeBoxFee',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'safeBoxAmount',
+                    type: 'uint256',
+                },
+            ],
+            name: 'SafeBoxFeePaid',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'bytes32',
+                    name: 'gameId',
+                    type: 'bytes32',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint16',
+                    name: 'playerPropsId',
+                    type: 'uint16',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint16',
+                    name: 'playerId',
+                    type: 'uint16',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint24',
+                    name: 'homeScore',
+                    type: 'uint24',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint24',
+                    name: 'awayScore',
+                    type: 'uint24',
+                },
+            ],
+            name: 'ScoreSetForGame',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'liquidityPool',
+                    type: 'address',
+                },
+            ],
+            name: 'SetLiquidityPool',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'onOffRamper',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'bool',
+                    name: 'enabled',
+                    type: 'bool',
+                },
+            ],
+            name: 'SetMultiCollateralOnOffRamp',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'ticket',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'differentRecipient',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'buyInAmount',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'buyInAmountAfterFees',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'payout',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'totalQuote',
+                    type: 'uint256',
+                },
+            ],
+            name: 'TicketCreated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'ticketMastercopy',
+                    type: 'address',
+                },
+            ],
+            name: 'TicketMastercopyUpdated',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'ticket',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'ticketOwner',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'bool',
+                    name: 'isUserTheWinner',
+                    type: 'bool',
+                },
+            ],
+            name: 'TicketResolved',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'minimalTimeLeftToMaturity',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'expiryDuration',
+                    type: 'uint256',
+                },
+            ],
+            name: 'TimesUpdated',
+            type: 'event',
+        },
+        {
+            inputs: [],
+            name: 'CHILD_ID_PLAYER_PROPS',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'CHILD_ID_SPREAD',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'CHILD_ID_TOTAL',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'acceptOwnership',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '_gameId',
+                    type: 'bytes32',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_sportId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_childId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_playerPropsId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'int16',
+                    name: '_lineId',
+                    type: 'int16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_playerId',
+                    type: 'uint16',
+                },
+            ],
+            name: 'cancelGame',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'defaultCollateral',
+            outputs: [
+                {
+                    internalType: 'contract IERC20',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_ticket',
+                    type: 'address',
+                },
+            ],
+            name: 'exerciseTicket',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address[]',
+                    name: '_tickets',
+                    type: 'address[]',
+                },
+            ],
+            name: 'expireTickets',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'expiryDuration',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '',
+                    type: 'bytes32',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            name: 'gameScores',
+            outputs: [
+                {
+                    internalType: 'uint24',
+                    name: 'homeScore',
+                    type: 'uint24',
+                },
+                {
+                    internalType: 'uint24',
+                    name: 'awayScore',
+                    type: 'uint24',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '_index',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_pageSize',
+                    type: 'uint256',
+                },
+            ],
+            name: 'getActiveTickets',
+            outputs: [
+                {
+                    internalType: 'address[]',
+                    name: '',
+                    type: 'address[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '_gameId',
+                    type: 'bytes32',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_sportId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_childId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_playerPropsId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_playerId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'int24',
+                    name: '_line',
+                    type: 'int24',
+                },
+            ],
+            name: 'getGameResult',
+            outputs: [
+                {
+                    internalType: 'enum ISportsAMMV2.GameResult',
+                    name: 'result',
+                    type: 'uint8',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'initNonReentrant',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_owner',
+                    type: 'address',
+                },
+                {
+                    internalType: 'contract IERC20',
+                    name: '_defaultCollateral',
+                    type: 'address',
+                },
+                {
+                    internalType: 'contract ISportsAMMV2Manager',
+                    name: '_manager',
+                    type: 'address',
+                },
+                {
+                    internalType: 'contract ISportsAMMV2RiskManager',
+                    name: '_riskManager',
+                    type: 'address',
+                },
+                {
+                    internalType: 'contract IReferrals',
+                    name: '_referrals',
+                    type: 'address',
+                },
+                {
+                    internalType: 'contract IStakingThales',
+                    name: '_stakingThales',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_safeBox',
+                    type: 'address',
+                },
+            ],
+            name: 'initialize',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_ticket',
+                    type: 'address',
+                },
+            ],
+            name: 'isActiveTicket',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '',
+                    type: 'bytes32',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'int256',
+                    name: '',
+                    type: 'int256',
+                },
+            ],
+            name: 'isGameCancelled',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '_gameId',
+                    type: 'bytes32',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_sportId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_childId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_playerPropsId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_playerId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'int24',
+                    name: '_line',
+                    type: 'int24',
+                },
+            ],
+            name: 'isGameResolved',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '',
+                    type: 'bytes32',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            name: 'isScoreSetForGame',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'lastPauseTime',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'liquidityPool',
+            outputs: [
+                {
+                    internalType: 'contract ISportsAMMV2LiquidityPool',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'manager',
+            outputs: [
+                {
+                    internalType: 'contract ISportsAMMV2Manager',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'maxSupportedAmount',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'maxSupportedOdds',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'maxTicketSize',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'minBuyInAmount',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'minimalTimeLeftToMaturity',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'multiCollateralOnOffRamp',
+            outputs: [
+                {
+                    internalType: 'contract IMultiCollateralOnOffRamp',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'multicollateralEnabled',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_owner',
+                    type: 'address',
+                },
+            ],
+            name: 'nominateNewOwner',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'nominatedOwner',
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'numOfActiveTickets',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'owner',
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'paused',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'referrals',
+            outputs: [
+                {
+                    internalType: 'contract IReferrals',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_ticketOwner',
+                    type: 'address',
+                },
+                {
+                    internalType: 'bool',
+                    name: '_hasUserWon',
+                    type: 'bool',
+                },
+                {
+                    internalType: 'bool',
+                    name: '_cancelled',
+                    type: 'bool',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_buyInAmount',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'address',
+                    name: '_ticketCreator',
+                    type: 'address',
+                },
+            ],
+            name: 'resolveTicket',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'riskManager',
+            outputs: [
+                {
+                    internalType: 'contract ISportsAMMV2RiskManager',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '',
+                    type: 'bytes32',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'int256',
+                    name: '',
+                    type: 'int256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            name: 'riskPerGameAndPosition',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '',
+                    type: 'bytes32',
+                },
+            ],
+            name: 'rootPerGame',
+            outputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '',
+                    type: 'bytes32',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'safeBox',
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'safeBoxFee',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            name: 'safeBoxFeePerAddress',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'contract IERC20',
+                    name: '_defaultCollateral',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_manager',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_riskManager',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_referrals',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_stakingThales',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_safeBox',
+                    type: 'address',
+                },
+            ],
+            name: 'setAddresses',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '_safeBoxFee',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_minBuyInAmount',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_maxTicketSize',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_maxSupportedAmount',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_maxSupportedOdds',
+                    type: 'uint256',
+                },
+            ],
+            name: 'setAmounts',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_liquidityPool',
+                    type: 'address',
+                },
+            ],
+            name: 'setLiquidityPool',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_onOffRamper',
+                    type: 'address',
+                },
+                {
+                    internalType: 'bool',
+                    name: '_enabled',
+                    type: 'bool',
+                },
+            ],
+            name: 'setMultiCollateralOnOffRamp',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_owner',
+                    type: 'address',
+                },
+            ],
+            name: 'setOwner',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bool',
+                    name: '_paused',
+                    type: 'bool',
+                },
+            ],
+            name: 'setPaused',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address[]',
+                    name: '_tickets',
+                    type: 'address[]',
+                },
+                {
+                    internalType: 'bool',
+                    name: '_paused',
+                    type: 'bool',
+                },
+            ],
+            name: 'setPausedTickets',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '_game',
+                    type: 'bytes32',
+                },
+                {
+                    internalType: 'bytes32',
+                    name: '_root',
+                    type: 'bytes32',
+                },
+            ],
+            name: 'setRootPerGame',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '_gameId',
+                    type: 'bytes32',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_playerPropsId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint16',
+                    name: '_playerId',
+                    type: 'uint16',
+                },
+                {
+                    internalType: 'uint24',
+                    name: '_homeScore',
+                    type: 'uint24',
+                },
+                {
+                    internalType: 'uint24',
+                    name: '_awayScore',
+                    type: 'uint24',
+                },
+            ],
+            name: 'setScoreForGame',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_ticketMastercopy',
+                    type: 'address',
+                },
+            ],
+            name: 'setTicketMastercopy',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '_minimalTimeLeftToMaturity',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_expiryDuration',
+                    type: 'uint256',
+                },
+            ],
+            name: 'setTimes',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '',
+                    type: 'bytes32',
+                },
+            ],
+            name: 'spentPerParent',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'stakingThales',
+            outputs: [
+                {
+                    internalType: 'contract IStakingThales',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'ticketMastercopy',
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    components: [
+                        {
+                            internalType: 'bytes32',
+                            name: 'gameId',
+                            type: 'bytes32',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'sportId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'childId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'playerPropsId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'maturity',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint8',
+                            name: 'status',
+                            type: 'uint8',
+                        },
+                        {
+                            internalType: 'int24',
+                            name: 'line',
+                            type: 'int24',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'playerId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint256[]',
+                            name: 'odds',
+                            type: 'uint256[]',
+                        },
+                        {
+                            internalType: 'bytes32[]',
+                            name: 'merkleProof',
+                            type: 'bytes32[]',
+                        },
+                        {
+                            internalType: 'uint8',
+                            name: 'position',
+                            type: 'uint8',
+                        },
+                    ],
+                    internalType: 'struct SportsAMMV2.TradeData[]',
+                    name: '_tradeData',
+                    type: 'tuple[]',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_buyInAmount',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_expectedPayout',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_additionalSlippage',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'address',
+                    name: '_differentRecipient',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_referrer',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_collateral',
+                    type: 'address',
+                },
+                {
+                    internalType: 'bool',
+                    name: '_isEth',
+                    type: 'bool',
+                },
+            ],
+            name: 'trade',
+            outputs: [],
+            stateMutability: 'payable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    components: [
+                        {
+                            internalType: 'bytes32',
+                            name: 'gameId',
+                            type: 'bytes32',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'sportId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'childId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'playerPropsId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'maturity',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint8',
+                            name: 'status',
+                            type: 'uint8',
+                        },
+                        {
+                            internalType: 'int24',
+                            name: 'line',
+                            type: 'int24',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'playerId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint256[]',
+                            name: 'odds',
+                            type: 'uint256[]',
+                        },
+                        {
+                            internalType: 'bytes32[]',
+                            name: 'merkleProof',
+                            type: 'bytes32[]',
+                        },
+                        {
+                            internalType: 'uint8',
+                            name: 'position',
+                            type: 'uint8',
+                        },
+                    ],
+                    internalType: 'struct SportsAMMV2.TradeData[]',
+                    name: '_tradeData',
+                    type: 'tuple[]',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_buyInAmount',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'address',
+                    name: '_collateral',
+                    type: 'address',
+                },
+            ],
+            name: 'tradeQuote',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'collateralQuote',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'buyInAmountAfterFees',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'payout',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'totalQuote',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256[]',
+                    name: 'finalQuotes',
+                    type: 'uint256[]',
+                },
+                {
+                    internalType: 'uint256[]',
+                    name: 'amountsToBuy',
+                    type: 'uint256[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'proxyAddress',
+                    type: 'address',
+                },
+            ],
+            name: 'transferOwnershipAtInit',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+    ],
+};
+
+export default sportsAMMV2Contract;
