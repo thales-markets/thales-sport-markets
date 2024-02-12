@@ -65,14 +65,12 @@ const useSportsMarketsV2Query = (
                     return {
                         ...market,
                         maturityDate: new Date(market.maturityDate),
-                        maturity: Math.round(market.maturityDate / 1000),
                         odds: market.odds.map((odd: any) => odd.normalizedImplied),
                         childMarkets: orderBy(
                             market.childMarkets.map((childMarket: any) => {
                                 return {
                                     ...childMarket,
                                     maturityDate: new Date(childMarket.maturityDate),
-                                    maturity: Math.round(childMarket.maturityDate / 1000),
                                     odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
                                 };
                             }),

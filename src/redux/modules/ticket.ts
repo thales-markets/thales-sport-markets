@@ -78,6 +78,7 @@ const ticketSlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.ticket);
         },
         removeAll: (state) => {
+            state.ticket = [];
             state.payment.amountToBuy = getDefaultPayment().amountToBuy;
             state.error = getDefaultError();
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.ticket);
