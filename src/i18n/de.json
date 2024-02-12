@@ -434,7 +434,11 @@
             "see-more-markets-mobile": "Spieler-Requisiten",
             "player-props": "Spieler-Requisiten",
             "see-more-markets": "siehe Märkte für Spieler-Requisiten",
-            "resolved": "Gelöst"
+            "resolved": "Gelöst",
+            "toggle": {
+                "hide-paused-markets": "Pausierte Märkte ausblenden",
+                "show-paused-markets": "Pausierte Märkte anzeigen"
+            }
         },
         "market-details": {
             "price": "Preis",

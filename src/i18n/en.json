@@ -436,6 +436,10 @@
                 "first touchdown": "Who will score the first touchdown in the game? (incl. OT)",
                 "last touchdown": "Who will score the last touchdown in the game?"
             },
+            "toggle": {
+                "show-paused-markets": "Show paused markets",
+                "hide-paused-markets": "Hide paused markets"
+            },
             "odd-tooltip": {
                 "scoring": {
                     "goals": "goals",
