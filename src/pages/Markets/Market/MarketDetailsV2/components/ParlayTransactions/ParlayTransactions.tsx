@@ -23,6 +23,7 @@ import {
     formatCurrencyWithSign,
     formatDateWithTime,
     formatTxTimestamp,
+    getEtherscanTxLink,
     truncateAddress,
 } from 'thales-utils';
 import {
@@ -181,7 +182,14 @@ const ParlayTransactions: React.FC<{ market: SportMarketInfo }> = ({ market }) =
                         Cell: (cellProps: any) => {
                             return (
                                 <FlexCenter>
-                                    <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
+                                    <SPAAnchor
+                                        href={getEtherscanTxLink(
+                                            networkId,
+                                            (cellProps.row.original as ParlayMarket).txHash
+                                        )}
+                                    >
+                                        <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
+                                    </SPAAnchor>
                                 </FlexCenter>
                             );
                         },
