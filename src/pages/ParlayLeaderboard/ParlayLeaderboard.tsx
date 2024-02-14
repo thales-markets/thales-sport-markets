@@ -270,7 +270,7 @@ const ParlayLeaderboard: React.FC = () => {
                     color: theme.textColor.secondary,
                 }}
                 tableRowCellStyles={TableRowStyle}
-                columnsDeps={[rewards]}
+                columnsDeps={[rewards, rewardCurrencyRate]}
                 columns={[
                     {
                         accessor: 'rank',
