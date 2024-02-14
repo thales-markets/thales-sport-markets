@@ -5,7 +5,12 @@ import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, MIN_COLLATERAL_MULTIPLIER, PARLAY_LEADERBOARD_MINIMUM_GAMES } from 'constants/markets';
+import {
+    APPROVAL_BUFFER,
+    MIN_COLLATERAL_MULTIPLIER,
+    PARLAY_LEADERBOARD_MINIMUM_GAMES,
+    PARLAY_LEADERBOARD_WEEKLY_START_DATE,
+} from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
 import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
@@ -86,8 +91,11 @@ import {
 } from '../styled-components';
 
 import Tooltip from 'components/Tooltip';
+import { differenceInDays } from 'date-fns';
 import { Network } from 'enums/network';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
+import { useParlayLeaderboardQuery } from '../../../../../../queries/markets/useParlayLeaderboardQuery';
+import { getRewardsArray } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import SuggestedAmount from '../SuggestedAmount';
 
 type TicketProps = {
@@ -156,6 +164,17 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         buyinBonus: 0,
         numberOfGamesBonus: 0,
     });
+    const [currentLeaderboardRank, setCurrentLeaderboardRank] = useState<number>(0);
+
+    const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
+
+    const query = useParlayLeaderboardQuery(networkId, latestPeriodWeekly, { enabled: isAppReady });
+
+    const parlaysData = useMemo(() => {
+        return query.isSuccess ? query.data : [];
+    }, [query.isSuccess, query.data]);
+
+    const rewards = getRewardsArray(networkId);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
@@ -882,8 +901,20 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 buyinBonus,
                 numberOfGamesBonus,
             });
+
+            const current = parlaysData.findIndex((data) => data.points < points);
+            console.log(current, parlaysData);
+            if (parlaysData.length === 0) {
+                setCurrentLeaderboardRank(1);
+            } else {
+                if (current === -1) {
+                    setCurrentLeaderboardRank(parlaysData.length + 1);
+                } else {
+                    setCurrentLeaderboardRank(current + 1);
+                }
+            }
         }
-    }, [usdAmountValue, totalQuote, markets.length]);
+    }, [usdAmountValue, totalQuote, markets.length, parlaysData]);
 
     const getPointsTooltip = () => (
         <TooltipContainer>
@@ -1085,7 +1116,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                             :
                         </SummaryLabel>
                         <SummaryValue isCollateralInfo={true}>
-                            {hidePayout || !isMinimumParlayGames ? '-' : `10. (500 ARB)`}
+                            {hidePayout || !isMinimumParlayGames
+                                ? '-'
+                                : `${currentLeaderboardRank}. (${
+                                      rewards[currentLeaderboardRank - 1] ? rewards[currentLeaderboardRank - 1] : 0
+                                  } ${networkId == Network.OptimismMainnet ? 'OP' : 'ARB'})`}
                         </SummaryValue>
                     </RowSummary>
                 </>

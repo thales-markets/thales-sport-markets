@@ -82,9 +82,9 @@ const SidebarLeaderboard: React.FC = () => {
 
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
-    const latestPeriodBiweekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
+    const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
 
-    const query = useParlayLeaderboardQuery(networkId, latestPeriodBiweekly, { enabled: isAppReady });
+    const query = useParlayLeaderboardQuery(networkId, latestPeriodWeekly, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
