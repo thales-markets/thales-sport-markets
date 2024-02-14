@@ -1,22 +1,25 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SPAAnchor from 'components/SPAAnchor';
 import SimpleLoader from 'components/SimpleLoader';
-import { PARLAY_LEADERBOARD_BIWEEKLY_START_DATE, PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE } from 'constants/markets';
+import Tooltip from 'components/Tooltip';
+import { USD_SIGN } from 'constants/currency';
+import { PARLAY_LEADERBOARD_WEEKLY_START_DATE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
 import { BetTypeNameMap } from 'constants/tags';
 import { differenceInDays } from 'date-fns';
 import { BetType, OddsType } from 'enums/markets';
-import { Network } from 'enums/network';
 import {
     getOpacity,
     getParlayItemStatus,
     getPositionStatus,
     getPositionStatusForCombinedMarket,
     getRewardsArray,
+    getRewardsCurrency,
 } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
 import { getOpacityForCombinedMarket } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -25,7 +28,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { formatCurrency, truncateAddress } from 'thales-utils';
+import { formatCurrency, formatCurrencyWithSign, truncateAddress } from 'thales-utils';
 import { CombinedMarket, ParlayMarket, ParlayMarketWithQuotes, PositionData } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import {
@@ -47,10 +50,8 @@ import {
     isSpecialYesNoProp,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
-import { formatParlayOdds } from 'utils/parlay';
 import { buildHref } from 'utils/routes';
 import {
-    ArbitrumLogoWrapper,
     ArrowIcon,
     ColumnLabel,
     ColumnWrapper,
@@ -63,13 +64,11 @@ import {
     LeaderboardWrapper,
     LoaderContainer,
     NoResultContainer,
-    OPLogoWrapper,
     ParlayRow,
     ParlayRowMatch,
     ParlayRowResult,
     ParlayRowTeam,
     Rank,
-    ThalesLogoWrapper,
     Title,
     TitleLabel,
 } from './styled-components';
@@ -83,22 +82,24 @@ const SidebarLeaderboard: React.FC = () => {
 
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
-    const latestPeriodBiweekly = Math.trunc(
-        differenceInDays(
-            new Date(),
-            networkId == Network.Base
-                ? PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE
-                : PARLAY_LEADERBOARD_BIWEEKLY_START_DATE
-        ) / 14
-    );
+    const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
 
-    const query = useParlayLeaderboardQuery(networkId, latestPeriodBiweekly, { enabled: isAppReady });
+    const query = useParlayLeaderboardQuery(networkId, latestPeriodWeekly, { enabled: isAppReady });
 
     const parlaysData = useMemo(() => {
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
     }, [query.isSuccess, query.data]);
 
-    const rewards = getRewardsArray(networkId, latestPeriodBiweekly);
+    const rewards = getRewardsArray(networkId);
+    const rewardsCurrency = getRewardsCurrency(networkId);
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
 
     return (
         <LeaderboardWrapper>
@@ -115,12 +116,7 @@ const SidebarLeaderboard: React.FC = () => {
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.wallet')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
-                            <ColumnLabel style={{ paddingLeft: 5 }}>
-                                {t('parlay-leaderboard.sidebar.positions')}
-                            </ColumnLabel>
-                        </ColumnWrapper>
-                        <ColumnWrapper>
-                            <ColumnLabel>{t('parlay-leaderboard.sidebar.quote')}</ColumnLabel>
+                            <ColumnLabel>{t('parlay-leaderboard.sidebar.points')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.reward')}</ColumnLabel>
@@ -152,30 +148,25 @@ const SidebarLeaderboard: React.FC = () => {
                                             </DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
-                                            <DataLabel>{parlay.numberOfPositions}</DataLabel>
+                                            <DataLabel>{formatCurrency(parlay.points)}</DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
-                                            <DataLabel>
-                                                {formatParlayOdds(
-                                                    selectedOddsType,
-                                                    parlay.sUSDPaid,
-                                                    parlay.totalAmount
-                                                )}
-                                            </DataLabel>
-                                        </ColumnWrapper>
-                                        <ColumnWrapper>
-                                            <DataLabel>
-                                                {formatCurrency(rewards[parlay.rank - 1], 0)}
-                                                {networkId == Network.OptimismMainnet ? (
-                                                    <OPLogoWrapper />
-                                                ) : networkId == Network.Arbitrum ? (
-                                                    <ArbitrumLogoWrapper />
-                                                ) : networkId == Network.Base ? (
-                                                    <ThalesLogoWrapper />
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </DataLabel>
+                                            <Tooltip
+                                                overlay={
+                                                    <>
+                                                        {rewards[parlay.rank - 1]} {rewardsCurrency}
+                                                    </>
+                                                }
+                                                component={
+                                                    <DataLabel>
+                                                        {formatCurrencyWithSign(
+                                                            USD_SIGN,
+                                                            (rewards[parlay.rank - 1] || 0) * rewardCurrencyRate,
+                                                            0
+                                                        )}
+                                                    </DataLabel>
+                                                }
+                                            ></Tooltip>
                                         </ColumnWrapper>
                                         <ArrowIcon
                                             className={
