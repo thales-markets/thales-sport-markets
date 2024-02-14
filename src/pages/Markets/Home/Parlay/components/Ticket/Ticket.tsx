@@ -874,15 +874,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     ]);
 
     useEffect(() => {
-        if (usdAmountValue > 0 && totalQuote > 0 && minUsdAmountValue > 0) {
+        if (usdAmountValue > 0 && totalQuote > 0) {
             const buyInPow = Math.pow(usdAmountValue, 1 / 3);
-            const minBuyInPow = Math.pow(minUsdAmountValue, 1 / 3);
+            const minBuyInPow = 1;
 
-            const basicPoints = (1 / totalQuote) * (1 + 0.1 * PARLAY_LEADERBOARD_MINIMUM_GAMES) * minBuyInPow;
+            const basicPoints = 1 / totalQuote;
             const points = (1 / totalQuote) * (1 + 0.1 * markets.length) * buyInPow;
-            const buyinBonus = (buyInPow - minBuyInPow) / minBuyInPow;
-            const numberOfPositionsBonus =
-                (markets.length - PARLAY_LEADERBOARD_MINIMUM_GAMES) / PARLAY_LEADERBOARD_MINIMUM_GAMES;
+            const buyinBonus = buyInPow - minBuyInPow;
+            const numberOfPositionsBonus = 0.1 * markets.length;
             setLeaderBoardPoints({
                 basicPoints,
                 points,
@@ -890,7 +889,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 numberOfPositionsBonus,
             });
         }
-    }, [usdAmountValue, totalQuote, markets.length, minUsdAmountValue]);
+    }, [usdAmountValue, totalQuote, markets.length]);
 
     const getPointsTooltip = () => (
         <TooltipContainer>
@@ -899,22 +898,15 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 <TooltipInfo>{formatCurrency(leaderboardPoints.basicPoints)}</TooltipInfo>
             </TooltipInfoContianer>
             <TooltipInfoContianer>
-                <TooltipInfoLabel>Number of games bonus:</TooltipInfoLabel>
-                <TooltipInfo>
-                    {formatCurrency(leaderboardPoints.basicPoints * leaderboardPoints.numberOfPositionsBonus)}
-                    <TooltipBonusText>{` (+${formatPercentage(
-                        leaderboardPoints.numberOfPositionsBonus,
-                        0
-                    )})`}</TooltipBonusText>
-                </TooltipInfo>
+                <TooltipInfoLabel>Buy-in bonus:</TooltipInfoLabel>
+                <TooltipBonusInfo>{` (+${formatPercentage(leaderboardPoints.buyinBonus, 0)})`}</TooltipBonusInfo>
             </TooltipInfoContianer>
             <TooltipInfoContianer>
-                <TooltipInfoLabel>Buy-in bonus:</TooltipInfoLabel>
-                <TooltipInfo>
-                    {formatCurrency(leaderboardPoints.basicPoints * leaderboardPoints.buyinBonus)}
-
-                    <TooltipBonusText>{` (+${formatPercentage(leaderboardPoints.buyinBonus, 0)})`}</TooltipBonusText>
-                </TooltipInfo>
+                <TooltipInfoLabel>Number of games bonus:</TooltipInfoLabel>
+                <TooltipBonusInfo>{` (+${formatPercentage(
+                    leaderboardPoints.numberOfPositionsBonus,
+                    0
+                )})`}</TooltipBonusInfo>
             </TooltipInfoContianer>
             <TooltipFooter>
                 <TooltipInfoContianer>
@@ -1043,7 +1035,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             </RowSummary>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
-                <SummaryValue>{hidePayout ? '-' : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}</SummaryValue>
+                <SummaryValue isInfo={true}>
+                    {hidePayout ? '-' : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}
+                </SummaryValue>
             </RowSummary>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
@@ -1078,9 +1072,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                         <>
                             {`${formatCurrency(leaderboardPoints.points)}`}
                             <SummaryValue isInfo={true}>{` +${formatPercentage(
-                                leaderboardPoints.numberOfPositionsBonus,
+                                leaderboardPoints.buyinBonus,
                                 0
-                            )} +${formatPercentage(leaderboardPoints.buyinBonus, 0)}`}</SummaryValue>
+                            )} +${formatPercentage(leaderboardPoints.numberOfPositionsBonus, 0)}`}</SummaryValue>
                             <Tooltip overlay={getPointsTooltip()} iconFontSize={13} marginLeft={3} />
                         </>
                     )}
@@ -1133,11 +1127,6 @@ const TooltipContainer = styled(FlexDivColumn)``;
 
 const TooltipText = styled.span``;
 
-const TooltipBonusText = styled(TooltipText)`
-    font-weight: 700;
-    color: ${(props) => props.theme.status.win};
-`;
-
 const TooltipFooter = styled(FlexDivRow)`
     border-top: 1px solid ${(props) => props.theme.background.secondary};
     margin-top: 10px;
@@ -1152,6 +1141,10 @@ const TooltipInfoLabel = styled(TooltipText)`
 
 const TooltipInfo = styled(TooltipText)`
     font-weight: 600;
+`;
+
+const TooltipBonusInfo = styled(TooltipInfo)`
+    color: ${(props) => props.theme.status.win};
 `;
 
 export default Ticket;
