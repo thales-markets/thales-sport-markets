@@ -8,13 +8,14 @@ import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP 
 import { GAME_STATUS } from 'constants/ui';
 import { BetType } from 'enums/markets';
 import { Network } from 'enums/network';
+import { groupBy } from 'lodash';
 import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import queryString from 'query-string';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -23,7 +24,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { NetworkId } from 'thales-utils';
-import { SportMarketChildMarketsV2, SportMarketInfoV2 } from 'types/markets';
+import { SportMarketInfoV2 } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
@@ -47,68 +48,10 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const [metaTitle, setMetaTitle] = useQueryParam('title', queryParams?.title ? queryParams?.title : '');
     const [showParlayMobileModal, setShowParlayMobileModal] = useState(false);
-    const lastValidChildMarkets: SportMarketChildMarketsV2 = {
-        spreadMarkets: market.childMarkets.filter((childMarket) => childMarket.typeId == BetType.SPREAD),
-        totalMarkets: market.childMarkets.filter((childMarket) => childMarket.typeId == BetType.TOTAL),
-        doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.typeId == BetType.DOUBLE_CHANCE),
-        combinedPositionsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.COMBINED_POSITIONS
-        ),
-        strikeOutsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_STRIKEOUTS
-        ),
-        homeRunsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_HOMERUNS
-        ),
-        passingYardsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_PASSING_YARDS
-        ),
-        rushingYardsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_RUSHING_YARDS
-        ),
-        receivingYardsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_RECEIVING_YARDS
-        ),
-        passingTouchdownsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
-        ),
-        fieldGoalsMadeMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_FIELD_GOALS_MADE
-        ),
-        pitcherHitsAllowedMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED
-        ),
-        hitsRecordedMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_HITS_RECORDED
-        ),
-        pointsMarkets: market.childMarkets.filter((childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_POINTS),
-        reboundsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_REBOUNDS
-        ),
-        assistsMarkets: market.childMarkets.filter((childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_ASSISTS),
-        doubleDoubleMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_DOUBLE_DOUBLE
-        ),
-        tripleDoubleMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_TRIPLE_DOUBLE
-        ),
-        shotsMarkets: market.childMarkets.filter((childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_SHOTS),
-        oneSiderTouchdownsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_TOUCHDOWNS
-        ),
-        oneSiderGoalsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_GOALS
-        ),
-        receptionsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_RECEPTIONS
-        ),
-        firstTouchdownMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_FIRST_TOUCHDOWN
-        ),
-        lastTouchdownMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.typeId == BetType.PLAYER_PROPS_LAST_TOUCHDOWN
-        ),
-    };
+
+    const groupedChildMarkets = useMemo(() => groupBy(market.childMarkets, (childMarket) => childMarket.typeId), [
+        market.childMarkets,
+    ]);
 
     useEffect(() => {
         if (!metaTitle) {
@@ -126,8 +69,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
             isMounted.current = true;
         }
     }, [networkId]);
-
-    const childMarkets: SportMarketChildMarketsV2 = lastValidChildMarkets;
 
     const isGameStarted = market.maturityDate < new Date();
     const showAMM = !market.isResolved && !market.isCanceled && !isGameStarted && !market.isPaused;
@@ -400,166 +341,11 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                 )}
                 <>
                     <PositionsV2 markets={[market]} betType={BetType.WINNER} showOdds={showAMM} />
-                    {childMarkets.doubleChanceMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.doubleChanceMarkets}
-                            betType={BetType.DOUBLE_CHANCE}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.combinedPositionsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.combinedPositionsMarkets}
-                            betType={BetType.COMBINED_POSITIONS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.spreadMarkets.length > 0 && (
-                        <PositionsV2 markets={childMarkets.spreadMarkets} betType={BetType.SPREAD} showOdds={showAMM} />
-                    )}
-                    {childMarkets.totalMarkets.length > 0 && (
-                        <PositionsV2 markets={childMarkets.totalMarkets} betType={BetType.TOTAL} showOdds={showAMM} />
-                    )}
-                    {childMarkets.strikeOutsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.strikeOutsMarkets}
-                            betType={BetType.PLAYER_PROPS_STRIKEOUTS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.homeRunsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.homeRunsMarkets}
-                            betType={BetType.PLAYER_PROPS_HOMERUNS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.rushingYardsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.rushingYardsMarkets}
-                            betType={BetType.PLAYER_PROPS_RUSHING_YARDS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.passingYardsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.passingYardsMarkets}
-                            betType={BetType.PLAYER_PROPS_PASSING_YARDS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.receivingYardsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.receivingYardsMarkets}
-                            betType={BetType.PLAYER_PROPS_RECEIVING_YARDS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.passingTouchdownsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.passingTouchdownsMarkets}
-                            betType={BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.fieldGoalsMadeMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.fieldGoalsMadeMarkets}
-                            betType={BetType.PLAYER_PROPS_FIELD_GOALS_MADE}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.pitcherHitsAllowedMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.pitcherHitsAllowedMarkets}
-                            betType={BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.hitsRecordedMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.hitsRecordedMarkets}
-                            betType={BetType.PLAYER_PROPS_HITS_RECORDED}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.pointsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.pointsMarkets}
-                            betType={BetType.PLAYER_PROPS_POINTS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.reboundsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.reboundsMarkets}
-                            betType={BetType.PLAYER_PROPS_REBOUNDS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.assistsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.assistsMarkets}
-                            betType={BetType.PLAYER_PROPS_ASSISTS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.doubleDoubleMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.doubleDoubleMarkets}
-                            betType={BetType.PLAYER_PROPS_DOUBLE_DOUBLE}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.tripleDoubleMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.tripleDoubleMarkets}
-                            betType={BetType.PLAYER_PROPS_TRIPLE_DOUBLE}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.shotsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.shotsMarkets}
-                            betType={BetType.PLAYER_PROPS_SHOTS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.oneSiderTouchdownsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.oneSiderTouchdownsMarkets}
-                            betType={BetType.PLAYER_PROPS_TOUCHDOWNS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.oneSiderGoalsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.oneSiderGoalsMarkets}
-                            betType={BetType.PLAYER_PROPS_GOALS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.receptionsMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.receptionsMarkets}
-                            betType={BetType.PLAYER_PROPS_RECEPTIONS}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.firstTouchdownMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.firstTouchdownMarkets}
-                            betType={BetType.PLAYER_PROPS_FIRST_TOUCHDOWN}
-                            showOdds={showAMM}
-                        />
-                    )}
-                    {childMarkets.lastTouchdownMarkets.length > 0 && (
-                        <PositionsV2
-                            markets={childMarkets.lastTouchdownMarkets}
-                            betType={BetType.PLAYER_PROPS_LAST_TOUCHDOWN}
-                            showOdds={showAMM}
-                        />
-                    )}
+                    {Object.keys(groupedChildMarkets).map((key, index) => {
+                        const typeId = Number(key);
+                        const childMarkets = groupedChildMarkets[typeId];
+                        return <PositionsV2 key={index} markets={childMarkets} betType={typeId} showOdds={showAMM} />;
+                    })}
                 </>
                 {/* <Transactions market={market} />
                 <ParlayTransactions market={market} /> */}
