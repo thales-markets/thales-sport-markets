@@ -154,3 +154,5 @@ export const POSITION_TO_ODDS_OBJECT_PROPERTY_NAME: Record<Position, 'homeOdds' 
 };
 
 export const PARLAY_MAXIMUM_QUOTE = 0.01;
+
+export const PARLAY_LEADERBOARD_MINIMUM_GAMES = 3;

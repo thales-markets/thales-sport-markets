@@ -5,7 +5,7 @@ import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, MIN_COLLATERAL_MULTIPLIER } from 'constants/markets';
+import { APPROVAL_BUFFER, MIN_COLLATERAL_MULTIPLIER, PARLAY_LEADERBOARD_MINIMUM_GAMES } from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
 import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
@@ -30,13 +30,14 @@ import {
     setWalletConnectModalVisibility,
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { useTheme } from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
+import styled, { useTheme } from 'styled-components';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import {
     bigNumberFormatter,
     ceilNumberToDecimals,
     coinFormatter,
     coinParser,
+    formatCurrency,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
     formatPercentage,
@@ -67,6 +68,7 @@ import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
     GasSummary,
+    HorizontalLine,
     InfoContainer,
     InfoLabel,
     InfoTooltip,
@@ -97,6 +99,13 @@ type TicketProps = {
 const TicketErrorMessage = {
     RISK_PER_COMB: 'RiskPerComb exceeded',
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
+};
+
+type LeaderboardPoints = {
+    basicPoints: number;
+    points: number;
+    buyinBonus: number;
+    numberOfPositionsBonus: number;
 };
 
 const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess, setUpdatedQuotes }) => {
@@ -147,6 +156,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     });
 
     const [gas, setGas] = useState(0);
+    const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
+        basicPoints: 0,
+        points: 0,
+        buyinBonus: 0,
+        numberOfPositionsBonus: 0,
+    });
+
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
@@ -165,6 +181,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     const isStableCollateral = isStableCurrency(selectedCollateral);
 
     const hasParlayCombinedMarkets = isSGPInParlayMarkets(markets);
+
+    const isMinimumParlayGames = markets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES;
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -855,6 +873,58 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         selectedCollateral,
     ]);
 
+    useEffect(() => {
+        if (usdAmountValue > 0 && totalQuote > 0 && minUsdAmountValue > 0) {
+            const buyInPow = Math.pow(usdAmountValue, 1 / 3);
+            const minBuyInPow = Math.pow(minUsdAmountValue, 1 / 3);
+
+            const basicPoints = (1 / totalQuote) * (1 + 0.1 * PARLAY_LEADERBOARD_MINIMUM_GAMES) * minBuyInPow;
+            const points = (1 / totalQuote) * (1 + 0.1 * markets.length) * buyInPow;
+            const buyinBonus = (buyInPow - minBuyInPow) / minBuyInPow;
+            const numberOfPositionsBonus =
+                (markets.length - PARLAY_LEADERBOARD_MINIMUM_GAMES) / PARLAY_LEADERBOARD_MINIMUM_GAMES;
+            setLeaderBoardPoints({
+                basicPoints,
+                points,
+                buyinBonus,
+                numberOfPositionsBonus,
+            });
+        }
+    }, [usdAmountValue, totalQuote, markets.length, minUsdAmountValue]);
+
+    const getPointsTooltip = () => (
+        <TooltipContainer>
+            <TooltipInfoContianer>
+                <TooltipInfoLabel>Basic points:</TooltipInfoLabel>
+                <TooltipInfo>{formatCurrency(leaderboardPoints.basicPoints)}</TooltipInfo>
+            </TooltipInfoContianer>
+            <TooltipInfoContianer>
+                <TooltipInfoLabel>Number of games bonus:</TooltipInfoLabel>
+                <TooltipInfo>
+                    {formatCurrency(leaderboardPoints.basicPoints * leaderboardPoints.numberOfPositionsBonus)}
+                    <TooltipBonusText>{` (+${formatPercentage(
+                        leaderboardPoints.numberOfPositionsBonus,
+                        0
+                    )})`}</TooltipBonusText>
+                </TooltipInfo>
+            </TooltipInfoContianer>
+            <TooltipInfoContianer>
+                <TooltipInfoLabel>Buy-in bonus:</TooltipInfoLabel>
+                <TooltipInfo>
+                    {formatCurrency(leaderboardPoints.basicPoints * leaderboardPoints.buyinBonus)}
+
+                    <TooltipBonusText>{` (+${formatPercentage(leaderboardPoints.buyinBonus, 0)})`}</TooltipBonusText>
+                </TooltipInfo>
+            </TooltipInfoContianer>
+            <TooltipFooter>
+                <TooltipInfoContianer>
+                    <TooltipInfoLabel>Total points:</TooltipInfoLabel>
+                    <TooltipInfo>{formatCurrency(leaderboardPoints.points)}</TooltipInfo>
+                </TooltipInfoContianer>
+            </TooltipFooter>
+        </TooltipContainer>
+    );
+
     return (
         <>
             <RowSummary columnDirection={true}>
@@ -973,9 +1043,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             </RowSummary>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.payout')}:</SummaryLabel>
-                <SummaryValue isInfo={true}>
-                    {hidePayout ? '-' : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}
-                </SummaryValue>
+                <SummaryValue>{hidePayout ? '-' : formatCurrencyWithSign(USD_SIGN, totalBuyAmount, 2)}</SummaryValue>
             </RowSummary>
             <RowSummary>
                 <SummaryLabel>{t('markets.parlay.potential-profit')}:</SummaryLabel>
@@ -987,6 +1055,49 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                               totalBuyAmount - Number(usdAmountValue) - gas,
                               2
                           )} (${formatPercentage(profitPercentage)})`}
+                </SummaryValue>
+            </RowSummary>
+            <HorizontalLine />
+            <RowSummary>
+                <SummaryLabel>{'Parlay leaderboard (minimum 3 games)'}:</SummaryLabel>
+            </RowSummary>
+            <RowSummary>
+                <SummaryLabel>
+                    {'Points'}
+                    <Tooltip
+                        overlay={<>{t('Calculated total points with bonuses for parlay leaderboard')}</>}
+                        iconFontSize={13}
+                        marginLeft={3}
+                    />
+                    :
+                </SummaryLabel>
+                <SummaryValue isCollateralInfo={true}>
+                    {hidePayout || !isMinimumParlayGames ? (
+                        '-'
+                    ) : (
+                        <>
+                            {`${formatCurrency(leaderboardPoints.points)}`}
+                            <SummaryValue isInfo={true}>{` +${formatPercentage(
+                                leaderboardPoints.numberOfPositionsBonus,
+                                0
+                            )} +${formatPercentage(leaderboardPoints.buyinBonus, 0)}`}</SummaryValue>
+                            <Tooltip overlay={getPointsTooltip()} iconFontSize={13} marginLeft={3} />
+                        </>
+                    )}
+                </SummaryValue>
+            </RowSummary>
+            <RowSummary>
+                <SummaryLabel>
+                    {'Position'}
+                    <Tooltip
+                        overlay={<>{t('Position on the current parlay leaderboard if parlay is winning')}</>}
+                        iconFontSize={13}
+                        marginLeft={3}
+                    />
+                    :
+                </SummaryLabel>
+                <SummaryValue isCollateralInfo={true}>
+                    {hidePayout || !isMinimumParlayGames ? '-' : `10. (500 ARB)`}
                 </SummaryValue>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
@@ -1017,5 +1128,30 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         </>
     );
 };
+
+const TooltipContainer = styled(FlexDivColumn)``;
+
+const TooltipText = styled.span``;
+
+const TooltipBonusText = styled(TooltipText)`
+    font-weight: 700;
+    color: ${(props) => props.theme.status.win};
+`;
+
+const TooltipFooter = styled(FlexDivRow)`
+    border-top: 1px solid ${(props) => props.theme.background.secondary};
+    margin-top: 10px;
+    padding-top: 8px;
+`;
+
+const TooltipInfoContianer = styled(FlexDiv)``;
+
+const TooltipInfoLabel = styled(TooltipText)`
+    margin-right: 4px;
+`;
+
+const TooltipInfo = styled(TooltipText)`
+    font-weight: 600;
+`;
 
 export default Ticket;
