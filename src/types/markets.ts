@@ -149,7 +149,7 @@ export type ParlayMarket = {
 
 export type ParlayMarketWithQuotes = ParlayMarket & { quotes: number[] };
 
-export type ParlayMarketWithRank = ParlayMarket & { rank: number; numberOfPositions: number };
+export type ParlayMarketWithRank = ParlayMarket & { rank: number; numberOfPositions: number; points: number };
 export type ParlayMarketWithRound = ParlayMarket & { round: number };
 
 type PositionNameType = 'HOME' | 'AWAY' | 'DRAW';
@@ -341,3 +341,10 @@ export type SGPItem = { tags: number[]; combination: BetType[]; SGPFee: number }
 type SGPContractDataItem = [number, number, number, number];
 
 export type SGPContractData = SGPContractDataItem[];
+
+export type LeaderboardPoints = {
+    basicPoints: number;
+    points: number;
+    buyinBonus: number;
+    numberOfGamesBonus: number;
+};

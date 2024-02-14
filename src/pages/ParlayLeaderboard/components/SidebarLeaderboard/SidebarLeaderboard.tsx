@@ -1,7 +1,7 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SPAAnchor from 'components/SPAAnchor';
 import SimpleLoader from 'components/SimpleLoader';
-import { PARLAY_LEADERBOARD_BIWEEKLY_START_DATE, PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE } from 'constants/markets';
+import { PARLAY_LEADERBOARD_WEEKLY_START_DATE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
 import { BetTypeNameMap } from 'constants/tags';
@@ -47,7 +47,6 @@ import {
     isSpecialYesNoProp,
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
-import { formatParlayOdds } from 'utils/parlay';
 import { buildHref } from 'utils/routes';
 import {
     ArbitrumLogoWrapper,
@@ -83,14 +82,7 @@ const SidebarLeaderboard: React.FC = () => {
 
     const [expandedRowIndex, setExpandedRowIndex] = useState(-1);
 
-    const latestPeriodBiweekly = Math.trunc(
-        differenceInDays(
-            new Date(),
-            networkId == Network.Base
-                ? PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE
-                : PARLAY_LEADERBOARD_BIWEEKLY_START_DATE
-        ) / 14
-    );
+    const latestPeriodBiweekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
 
     const query = useParlayLeaderboardQuery(networkId, latestPeriodBiweekly, { enabled: isAppReady });
 
@@ -98,7 +90,7 @@ const SidebarLeaderboard: React.FC = () => {
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
     }, [query.isSuccess, query.data]);
 
-    const rewards = getRewardsArray(networkId, latestPeriodBiweekly);
+    const rewards = getRewardsArray(networkId);
 
     return (
         <LeaderboardWrapper>
@@ -116,11 +108,11 @@ const SidebarLeaderboard: React.FC = () => {
                         </ColumnWrapper>
                         <ColumnWrapper>
                             <ColumnLabel style={{ paddingLeft: 5 }}>
-                                {t('parlay-leaderboard.sidebar.positions')}
+                                {t('parlay-leaderboard.sidebar.points')}
                             </ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
-                            <ColumnLabel>{t('parlay-leaderboard.sidebar.quote')}</ColumnLabel>
+                            <ColumnLabel>{t('parlay-leaderboard.sidebar.positions')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
                             <ColumnLabel>{t('parlay-leaderboard.sidebar.reward')}</ColumnLabel>
@@ -152,16 +144,10 @@ const SidebarLeaderboard: React.FC = () => {
                                             </DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
-                                            <DataLabel>{parlay.numberOfPositions}</DataLabel>
+                                            <DataLabel>{formatCurrency(parlay.points)}</DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
-                                            <DataLabel>
-                                                {formatParlayOdds(
-                                                    selectedOddsType,
-                                                    parlay.sUSDPaid,
-                                                    parlay.totalAmount
-                                                )}
-                                            </DataLabel>
+                                            <DataLabel>{parlay.numberOfPositions}</DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
                                             <DataLabel>

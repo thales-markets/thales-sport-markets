@@ -44,7 +44,7 @@ import {
     getPrecision,
     roundNumberToDecimals,
 } from 'thales-utils';
-import { ParlaysMarket } from 'types/markets';
+import { LeaderboardPoints, ParlaysMarket } from 'types/markets';
 import { Coins } from 'types/tokens';
 import { ThemeInterface } from 'types/ui';
 import {
@@ -86,6 +86,7 @@ import {
 } from '../styled-components';
 
 import Tooltip from 'components/Tooltip';
+import { Network } from 'enums/network';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import SuggestedAmount from '../SuggestedAmount';
 
@@ -99,13 +100,6 @@ type TicketProps = {
 const TicketErrorMessage = {
     RISK_PER_COMB: 'RiskPerComb exceeded',
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
-};
-
-type LeaderboardPoints = {
-    basicPoints: number;
-    points: number;
-    buyinBonus: number;
-    numberOfPositionsBonus: number;
 };
 
 const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess, setUpdatedQuotes }) => {
@@ -160,7 +154,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         basicPoints: 0,
         points: 0,
         buyinBonus: 0,
-        numberOfPositionsBonus: 0,
+        numberOfGamesBonus: 0,
     });
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -881,12 +875,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             const basicPoints = 1 / totalQuote;
             const points = (1 / totalQuote) * (1 + 0.1 * markets.length) * buyInPow;
             const buyinBonus = buyInPow - minBuyInPow;
-            const numberOfPositionsBonus = 0.1 * markets.length;
+            const numberOfGamesBonus = 0.1 * markets.length;
             setLeaderBoardPoints({
                 basicPoints,
                 points,
                 buyinBonus,
-                numberOfPositionsBonus,
+                numberOfGamesBonus,
             });
         }
     }, [usdAmountValue, totalQuote, markets.length]);
@@ -894,23 +888,20 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     const getPointsTooltip = () => (
         <TooltipContainer>
             <TooltipInfoContianer>
-                <TooltipInfoLabel>Basic points:</TooltipInfoLabel>
+                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.basic-points-label`)}:</TooltipInfoLabel>
                 <TooltipInfo>{formatCurrency(leaderboardPoints.basicPoints)}</TooltipInfo>
             </TooltipInfoContianer>
             <TooltipInfoContianer>
-                <TooltipInfoLabel>Buy-in bonus:</TooltipInfoLabel>
+                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.buy-in-bonus-label`)}:</TooltipInfoLabel>
                 <TooltipBonusInfo>{`+${formatPercentage(leaderboardPoints.buyinBonus, 0)}`}</TooltipBonusInfo>
             </TooltipInfoContianer>
             <TooltipInfoContianer>
-                <TooltipInfoLabel>Number of games bonus:</TooltipInfoLabel>
-                <TooltipBonusInfo>{`+${formatPercentage(
-                    leaderboardPoints.numberOfPositionsBonus,
-                    0
-                )}`}</TooltipBonusInfo>
+                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.number-of-games-bonus-label`)}:</TooltipInfoLabel>
+                <TooltipBonusInfo>{`+${formatPercentage(leaderboardPoints.numberOfGamesBonus, 0)}`}</TooltipBonusInfo>
             </TooltipInfoContianer>
             <TooltipFooter>
                 <TooltipInfoContianer>
-                    <TooltipInfoLabel>Total points:</TooltipInfoLabel>
+                    <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.total-points-label`)}:</TooltipInfoLabel>
                     <TooltipInfo>{formatCurrency(leaderboardPoints.points)}</TooltipInfo>
                 </TooltipInfoContianer>
             </TooltipFooter>
@@ -1051,49 +1042,54 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                           )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
-            <HorizontalLine />
-            <RowSummary>
-                <SummaryLabel>{'Parlay leaderboard (minimum 3 games)'}:</SummaryLabel>
-            </RowSummary>
-            <RowSummary>
-                <SummaryLabel>
-                    {'Points'}
-                    <Tooltip
-                        overlay={<>{t('Calculated total points with bonuses for parlay leaderboard')}</>}
-                        iconFontSize={13}
-                        marginLeft={3}
-                    />
-                    :
-                </SummaryLabel>
-                <SummaryValue isCollateralInfo={true}>
-                    {hidePayout || !isMinimumParlayGames ? (
-                        '-'
-                    ) : (
-                        <>
-                            {`${formatCurrency(leaderboardPoints.points)}`}
-                            <SummaryValue isInfo={true}>{` +${formatPercentage(
-                                leaderboardPoints.buyinBonus,
-                                0
-                            )} +${formatPercentage(leaderboardPoints.numberOfPositionsBonus, 0)}`}</SummaryValue>
-                            <Tooltip overlay={getPointsTooltip()} iconFontSize={13} marginLeft={3} />
-                        </>
-                    )}
-                </SummaryValue>
-            </RowSummary>
-            <RowSummary>
-                <SummaryLabel>
-                    {'Position'}
-                    <Tooltip
-                        overlay={<>{t('Position on the current parlay leaderboard if parlay is winning')}</>}
-                        iconFontSize={13}
-                        marginLeft={3}
-                    />
-                    :
-                </SummaryLabel>
-                <SummaryValue isCollateralInfo={true}>
-                    {hidePayout || !isMinimumParlayGames ? '-' : `10. (500 ARB)`}
-                </SummaryValue>
-            </RowSummary>
+            {networkId !== Network.Base && (
+                <>
+                    <HorizontalLine />
+                    <RowSummary>
+                        <SummaryLabel>{t(`parlay-leaderboard.ticket-info.title`)}:</SummaryLabel>
+                    </RowSummary>
+                    <RowSummary>
+                        <SummaryLabel>
+                            {t(`parlay-leaderboard.ticket-info.points-label`)}
+                            <Tooltip
+                                overlay={<>{t(`parlay-leaderboard.ticket-info.points-tooltip`)}</>}
+                                iconFontSize={13}
+                                marginLeft={3}
+                            />
+                            :
+                        </SummaryLabel>
+                        <SummaryValue isCollateralInfo={true}>
+                            {hidePayout || !isMinimumParlayGames ? (
+                                '-'
+                            ) : (
+                                <>
+                                    {`${formatCurrency(leaderboardPoints.basicPoints)}`}
+                                    <SummaryValue isInfo={true}>{` + ${formatPercentage(
+                                        leaderboardPoints.buyinBonus,
+                                        0
+                                    )} + ${formatPercentage(leaderboardPoints.numberOfGamesBonus, 0)}`}</SummaryValue>
+                                    {` = ${formatCurrency(leaderboardPoints.points)}`}
+                                    <Tooltip overlay={getPointsTooltip()} iconFontSize={13} marginLeft={3} />
+                                </>
+                            )}
+                        </SummaryValue>
+                    </RowSummary>
+                    <RowSummary>
+                        <SummaryLabel>
+                            {t(`parlay-leaderboard.ticket-info.rank-label`)}
+                            <Tooltip
+                                overlay={<>{t(`parlay-leaderboard.ticket-info.rank-tooltip`)}</>}
+                                iconFontSize={13}
+                                marginLeft={3}
+                            />
+                            :
+                        </SummaryLabel>
+                        <SummaryValue isCollateralInfo={true}>
+                            {hidePayout || !isMinimumParlayGames ? '-' : `10. (500 ARB)`}
+                        </SummaryValue>
+                    </RowSummary>
+                </>
+            )}
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
