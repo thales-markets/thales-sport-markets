@@ -1,7 +1,6 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SPAAnchor from 'components/SPAAnchor';
 import SimpleLoader from 'components/SimpleLoader';
-import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { PARLAY_LEADERBOARD_WEEKLY_START_DATE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
@@ -151,22 +150,15 @@ const SidebarLeaderboard: React.FC = () => {
                                             <DataLabel>{formatCurrency(parlay.points)}</DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
-                                            <Tooltip
-                                                overlay={
-                                                    <>
-                                                        {rewards[parlay.rank - 1]} {rewardsCurrency}
-                                                    </>
-                                                }
-                                                component={
-                                                    <DataLabel>
-                                                        {formatCurrencyWithSign(
-                                                            USD_SIGN,
-                                                            (rewards[parlay.rank - 1] || 0) * rewardCurrencyRate,
-                                                            0
-                                                        )}
-                                                    </DataLabel>
-                                                }
-                                            ></Tooltip>
+                                            <DataLabel>
+                                                {`${
+                                                    rewards[parlay.rank - 1]
+                                                } ${rewardsCurrency} (${formatCurrencyWithSign(
+                                                    USD_SIGN,
+                                                    (rewards[parlay.rank - 1] || 0) * rewardCurrencyRate,
+                                                    0
+                                                )})`}
+                                            </DataLabel>
                                         </ColumnWrapper>
                                         <ArrowIcon
                                             className={
