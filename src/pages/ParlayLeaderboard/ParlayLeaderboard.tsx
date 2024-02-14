@@ -5,18 +5,10 @@ import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import {
-    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10,
     PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
-    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE,
-    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE,
-    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
-    PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC_BASE,
-    PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS,
-    PARLAY_LEADERBOARD_NEW_REWARDS_1000_OP_PERIOD_FROM,
-    PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM,
-    PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
-    PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000,
+    PARLAY_LEADERBOARD_WEEKLY_START_DATE,
+    PARLAY_LEADERBOARD_WEEKLY_START_DATE_UTC,
 } from 'constants/markets';
 import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
@@ -37,6 +29,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 import {
+    formatCurrency,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
     formatDateWithTime,
@@ -57,6 +50,7 @@ import {
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
 import { formatParlayOdds } from 'utils/parlay';
+import useExchangeRatesQuery, { Rates } from '../../queries/rates/useExchangeRatesQuery';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -72,38 +66,23 @@ const ParlayLeaderboard: React.FC = () => {
 
     const periodOptions: Array<{ value: number; label: string }> = [];
 
-    const latestPeriodBiweekly = Math.trunc(
-        differenceInDays(
-            new Date(),
-            networkId == Network.Base
-                ? PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_BASE
-                : PARLAY_LEADERBOARD_BIWEEKLY_START_DATE
-        ) / 14
-    );
+    const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
 
-    for (let index = 0; index <= latestPeriodBiweekly; index++) {
+    for (let index = 0; index <= latestPeriodWeekly; index++) {
         periodOptions.push({
             value: index,
-            label: `${t(`parlay-leaderboard.periods.bi-weekly-period`)} ${index + 1}`,
+            label: `${t(`parlay-leaderboard.periods.weekly-period`)} ${index + 1}`,
         });
     }
 
-    const [period, setPeriod] = useState<number>(latestPeriodBiweekly);
+    const [period, setPeriod] = useState<number>(latestPeriodWeekly);
 
-    useEffect(() => setPeriod(latestPeriodBiweekly), [latestPeriodBiweekly]);
+    useEffect(() => setPeriod(latestPeriodWeekly), [latestPeriodWeekly]);
 
     useEffect(
         () =>
             setPeriodEnd(
-                subMilliseconds(
-                    addDays(
-                        networkId == Network.Base
-                            ? PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC_BASE
-                            : PARLAY_LEADERBOARD_BIWEEKLY_START_DATE_UTC,
-                        (period + 1) * 14
-                    ),
-                    1
-                ).getTime()
+                subMilliseconds(addDays(PARLAY_LEADERBOARD_WEEKLY_START_DATE_UTC, (period + 1) * 7), 1).getTime()
             ),
         [period, networkId]
     );
@@ -119,9 +98,17 @@ const ParlayLeaderboard: React.FC = () => {
         return parlays.filter((parlay) => parlay.account.toLowerCase().includes(searchText.toLowerCase()));
     }, [searchText, parlays]);
 
-    const rewards = getRewardsArray(networkId, period);
+    const rewards = getRewardsArray(networkId);
+    const rewardsAmount = getRewardsAmount(networkId);
+    const rewardsCurrency = getRewardsCurrency(networkId);
 
-    const rewardsAmount = getRewardsAmount(networkId, period);
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
 
     const stickyRow = useMemo(() => {
         const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
@@ -134,12 +121,7 @@ const ParlayLeaderboard: React.FC = () => {
                             <Tooltip
                                 overlay={
                                     <>
-                                        {rewards[data.rank - 1]}{' '}
-                                        {networkId !== Network.Arbitrum
-                                            ? 'OP'
-                                            : period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS
-                                            ? 'ARB'
-                                            : 'THALES'}
+                                        {rewards[data.rank - 1]} {rewardsCurrency}
                                     </>
                                 }
                                 component={
@@ -161,7 +143,31 @@ const ParlayLeaderboard: React.FC = () => {
                             <TableText>{data.rank}</TableText>
                         )}
                     </StickyCell>
+                    <StickyCell>
+                        {data.rank <= rewards.length ? (
+                            <Tooltip
+                                overlay={
+                                    <>
+                                        {rewards[data.rank - 1]} {rewardsCurrency}
+                                    </>
+                                }
+                                component={
+                                    <>
+                                        {formatCurrencyWithSign(
+                                            USD_SIGN,
+                                            (rewards[data.rank - 1] || 0) * rewardCurrencyRate,
+                                            0
+                                        )}
+                                    </>
+                                }
+                            ></Tooltip>
+                        ) : (
+                            <TableText></TableText>
+                        )}
+                    </StickyCell>
                     <StickyCell>{truncateAddress(data.account, 5)}</StickyCell>
+                    <StickyCell>{formatCurrency(data.points)}</StickyCell>
+                    <StickyCell>{formatCurrency(data.numberOfPositions)}</StickyCell>
                     <StickyCell>{formatParlayOdds(selectedOddsType, data.sUSDPaid, data.totalAmount)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.sUSDPaid, 2)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.totalAmount, 2)}</StickyCell>
@@ -175,7 +181,18 @@ const ParlayLeaderboard: React.FC = () => {
                 </ExpandedContainer>
             </StickyRow>
         );
-    }, [parlays, rewards, networkId, period, selectedOddsType, expandStickyRow, language, walletAddress, theme]);
+    }, [
+        parlays,
+        rewards,
+        networkId,
+        selectedOddsType,
+        expandStickyRow,
+        language,
+        walletAddress,
+        theme,
+        rewardsCurrency,
+        rewardCurrencyRate,
+    ]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -205,6 +222,7 @@ const ParlayLeaderboard: React.FC = () => {
                         }}
                     />
                 </Description>
+                <Description>{t('parlay-leaderboard.info')}</Description>
                 <Description>
                     <Trans
                         i18nKey="parlay-leaderboard.distribution-note"
@@ -213,12 +231,6 @@ const ParlayLeaderboard: React.FC = () => {
                         }}
                     />
                 </Description>
-                <Description>{t('parlay-leaderboard.info')}</Description>
-                <ul style={{ paddingLeft: 10 }}>
-                    <Description>{t('parlay-leaderboard.info1')}</Description>
-                    <Description>{t('parlay-leaderboard.info2')}</Description>
-                </ul>
-                <Description>{t('parlay-leaderboard.info3')}</Description>
                 <Warning>{t('parlay-leaderboard.warning')}</Warning>
                 <Warning>{t('parlay-leaderboard.warning2')}</Warning>
                 <LeaderboardHeader>
@@ -258,7 +270,7 @@ const ParlayLeaderboard: React.FC = () => {
                     color: theme.textColor.secondary,
                 }}
                 tableRowCellStyles={TableRowStyle}
-                columnsDeps={[rewards]}
+                columnsDeps={[rewards, rewardCurrencyRate]}
                 columns={[
                     {
                         accessor: 'rank',
@@ -293,6 +305,33 @@ const ParlayLeaderboard: React.FC = () => {
                         sortable: true,
                     },
                     {
+                        Header: <>{t('parlay-leaderboard.sidebar.reward')}</>,
+                        accessor: 'id',
+                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['id']>) => {
+                            return cellProps.row.original.rank <= rewards.length ? (
+                                <Tooltip
+                                    overlay={
+                                        <>
+                                            {rewards[cellProps.row.original.rank - 1]} {getRewardsCurrency(networkId)}
+                                        </>
+                                    }
+                                    component={
+                                        <TableText>
+                                            {formatCurrencyWithSign(
+                                                USD_SIGN,
+                                                (rewards[cellProps.row.original.rank - 1] || 0) * rewardCurrencyRate,
+                                                0
+                                            )}
+                                        </TableText>
+                                    }
+                                ></Tooltip>
+                            ) : (
+                                <TableText></TableText>
+                            );
+                        },
+                        sortable: true,
+                    },
+                    {
                         Header: <>{t('rewards.table.wallet-address')}</>,
                         accessor: 'account',
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['account']>) => (
@@ -305,6 +344,12 @@ const ParlayLeaderboard: React.FC = () => {
                                 {truncateAddress(cellProps.cell.value, 5)}
                             </AddressLink>
                         ),
+                    },
+                    {
+                        accessor: 'points',
+                        Header: <>{t('parlay-leaderboard.sidebar.points')}</>,
+                        Cell: (cellProps: any) => <TableText>{formatCurrency(cellProps.cell.value)}</TableText>,
+                        sortable: true,
                     },
                     {
                         accessor: 'numberOfPositions',
@@ -738,42 +783,18 @@ const AddressLink = styled.a`
     }
 `;
 
-export const getRewardsArray = (networkId: Network, period: number): number[] => {
-    if (networkId == Network.Base) {
-        return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
-    }
-    if (period > PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM) {
-        if (
-            networkId == Network.Arbitrum ||
-            (networkId == Network.OptimismMainnet && period < PARLAY_LEADERBOARD_NEW_REWARDS_1000_OP_PERIOD_FROM)
-        )
-            return PARLAY_LEADERBOARD_TOP_10_REWARDS_DISTRIBUTION_2000;
-        return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
-    } else if (period >= PARLAY_LEADERBOARD_FIRST_PERIOD_TOP_10_REWARDS) {
-        if (networkId !== Network.Arbitrum) return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_10;
-        return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_10;
-    } else {
-        if (networkId == Network.Arbitrum) return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
-        return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20;
-    }
+export const getRewardsArray = (networkId: Network): number[] => {
+    if (networkId == Network.Arbitrum) return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
+    return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20;
 };
 
-const getRewardsAmount = (networkId: Network, period: number) => {
-    if (
-        period <= PARLAY_LEADERBOARD_NEW_REWARDS_PERIOD_FROM ||
-        (networkId == Network.OptimismMainnet && period >= PARLAY_LEADERBOARD_NEW_REWARDS_1000_OP_PERIOD_FROM)
-    ) {
-        if (networkId == Network.Arbitrum) return '1,000 ARB';
-        if (networkId == Network.OptimismMainnet) return '1,000 OP';
-        return '1,000 THALES';
-    }
-
-    if (networkId == Network.Arbitrum) return '2,000 ARB';
-    if (networkId == Network.OptimismMainnet) return '2,000 OP';
+const getRewardsAmount = (networkId: Network) => {
+    if (networkId == Network.Arbitrum) return '2,500 ARB';
+    if (networkId == Network.OptimismMainnet) return '500 OP';
     return '1,000 THALES';
 };
 
-const getRewardsCurrency = (networkId: Network) => {
+export const getRewardsCurrency = (networkId: Network) => {
     if (networkId == Network.Arbitrum) return 'ARB';
     if (networkId == Network.OptimismMainnet) return 'OP';
     return 'THALES';
