@@ -145,22 +145,13 @@ const ParlayLeaderboard: React.FC = () => {
                     </StickyCell>
                     <StickyCell>
                         {data.rank <= rewards.length ? (
-                            <Tooltip
-                                overlay={
-                                    <>
-                                        {rewards[data.rank - 1]} {rewardsCurrency}
-                                    </>
-                                }
-                                component={
-                                    <>
-                                        {formatCurrencyWithSign(
-                                            USD_SIGN,
-                                            (rewards[data.rank - 1] || 0) * rewardCurrencyRate,
-                                            0
-                                        )}
-                                    </>
-                                }
-                            ></Tooltip>
+                            <>
+                                {`${rewards[data.rank - 1]} ${rewardsCurrency} (${formatCurrencyWithSign(
+                                    USD_SIGN,
+                                    (rewards[data.rank - 1] || 0) * rewardCurrencyRate,
+                                    0
+                                )})`}
+                            </>
                         ) : (
                             <TableText></TableText>
                         )}
@@ -309,22 +300,15 @@ const ParlayLeaderboard: React.FC = () => {
                         accessor: 'id',
                         Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['id']>) => {
                             return cellProps.row.original.rank <= rewards.length ? (
-                                <Tooltip
-                                    overlay={
-                                        <>
-                                            {rewards[cellProps.row.original.rank - 1]} {getRewardsCurrency(networkId)}
-                                        </>
-                                    }
-                                    component={
-                                        <TableText>
-                                            {formatCurrencyWithSign(
-                                                USD_SIGN,
-                                                (rewards[cellProps.row.original.rank - 1] || 0) * rewardCurrencyRate,
-                                                0
-                                            )}
-                                        </TableText>
-                                    }
-                                ></Tooltip>
+                                <TableText>
+                                    {`${
+                                        rewards[cellProps.row.original.rank - 1]
+                                    } ${rewardsCurrency} (${formatCurrencyWithSign(
+                                        USD_SIGN,
+                                        (rewards[cellProps.row.original.rank - 1] || 0) * rewardCurrencyRate,
+                                        0
+                                    )})`}
+                                </TableText>
                             ) : (
                                 <TableText></TableText>
                             );
