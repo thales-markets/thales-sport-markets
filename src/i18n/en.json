@@ -1045,12 +1045,12 @@
             "points-tooltip": "Calculated total points with bonuses for parlay leaderboard. Points are derived by multiplying the total odds of the parlay with cube (3rd) root of the buy-in and then adding 10% bonus for each game on the ticket.",
             "rank-label": "Rank",
             "rank-tooltip": "Tentative ranking based on current state of the leaderboard. Final ranking are known at round's end. Rounds are weekly Wednesday to Wednesday.",
+            "rewards-label": "Rewards",
+            "rewards-tooltip": "Potential rewards if your parlay assumes the rank above at round's end.",
             "basic-points-label": "Basic points",
             "buy-in-bonus-label": "Buy-in bonus",
             "number-of-games-bonus-label": "Number of games bonus",
-            "total-points-label": "Total points",
-            "tentative-rank-label": "Tentative rank",
-            "tentative-reward-label": "Tentative reward"
+            "total-points-label": "Total points"
         }
     },
     "liquidity-pool": {
