@@ -942,23 +942,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         </TooltipContainer>
     );
 
-    const getRankTooltip = () => (
-        <TooltipContainer>
-            <TooltipInfoContianer>
-                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.tentative-rank-label`)}:</TooltipInfoLabel>
-                <TooltipInfo>{currentLeaderboardRank}.</TooltipInfo>
-            </TooltipInfoContianer>
-            <TooltipInfoContianer>
-                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.tentative-reward-label`)}:</TooltipInfoLabel>
-                <TooltipInfo>{`${formatCurrencyWithSign(
-                    USD_SIGN,
-                    (rewards[currentLeaderboardRank - 1] || 0) * rewardCurrencyRate,
-                    0
-                )} (${rewards[currentLeaderboardRank - 1] || 0} ${rewardsCurrency})`}</TooltipInfo>
-            </TooltipInfoContianer>
-        </TooltipContainer>
-    );
-
     return (
         <>
             <RowSummary columnDirection={true}>
@@ -1136,18 +1119,31 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                             :
                         </SummaryLabel>
                         <SummaryValue isCollateralInfo={true}>
+                            {hidePayout || !isMinimumParlayGames ? '-' : <>{`${currentLeaderboardRank}.`}</>}
+                        </SummaryValue>
+                    </RowSummary>
+                    <RowSummary>
+                        <SummaryLabel>
+                            {t(`parlay-leaderboard.ticket-info.rewards-label`)}
+                            <Tooltip
+                                overlay={<>{t(`parlay-leaderboard.ticket-info.rewards-tooltip`)}</>}
+                                iconFontSize={13}
+                                marginLeft={3}
+                            />
+                            :
+                        </SummaryLabel>
+                        <SummaryValue isCollateralInfo={true}>
                             {hidePayout || !isMinimumParlayGames ? (
                                 '-'
                             ) : (
                                 <>
-                                    {`${currentLeaderboardRank}. (${formatCurrencyWithSign(
+                                    {`${
+                                        rewards[currentLeaderboardRank - 1] || 0
+                                    } ${rewardsCurrency} (${formatCurrencyWithSign(
                                         USD_SIGN,
-                                        rewards[currentLeaderboardRank - 1]
-                                            ? rewardCurrencyRate * rewards[currentLeaderboardRank - 1]
-                                            : 0,
+                                        (rewards[currentLeaderboardRank - 1] || 0) * rewardCurrencyRate,
                                         0
                                     )})`}
-                                    <Tooltip overlay={getRankTooltip()} iconFontSize={13} marginLeft={3} />
                                 </>
                             )}
                         </SummaryValue>
