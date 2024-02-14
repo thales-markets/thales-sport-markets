@@ -1048,7 +1048,9 @@
             "basic-points-label": "Basic points",
             "buy-in-bonus-label": "Buy-in bonus",
             "number-of-games-bonus-label": "Number of games bonus",
-            "total-points-label": "Total points"
+            "total-points-label": "Total points",
+            "tentative-rank-label": "Tentative rank",
+            "tentative-reward-label": "Tentative reward"
         }
     },
     "liquidity-pool": {

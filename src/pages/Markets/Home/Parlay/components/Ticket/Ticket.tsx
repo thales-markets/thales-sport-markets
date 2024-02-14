@@ -93,9 +93,9 @@ import {
 import Tooltip from 'components/Tooltip';
 import { differenceInDays } from 'date-fns';
 import { Network } from 'enums/network';
+import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
-import { useParlayLeaderboardQuery } from '../../../../../../queries/markets/useParlayLeaderboardQuery';
-import { getRewardsArray } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
+import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import SuggestedAmount from '../SuggestedAmount';
 
 type TicketProps = {
@@ -175,6 +175,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     }, [query.isSuccess, query.data]);
 
     const rewards = getRewardsArray(networkId);
+    const rewardsCurrency = getRewardsCurrency(networkId);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
@@ -266,6 +267,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
     });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
 
     useEffect(() => {
         setMinUsdAmountValue(parlayAmmData?.minUsdAmount || 0);
@@ -939,6 +942,23 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         </TooltipContainer>
     );
 
+    const getRankTooltip = () => (
+        <TooltipContainer>
+            <TooltipInfoContianer>
+                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.tentative-rank-label`)}:</TooltipInfoLabel>
+                <TooltipInfo>{currentLeaderboardRank}.</TooltipInfo>
+            </TooltipInfoContianer>
+            <TooltipInfoContianer>
+                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.tentative-reward-label`)}:</TooltipInfoLabel>
+                <TooltipInfo>{`${formatCurrencyWithSign(
+                    USD_SIGN,
+                    (rewards[currentLeaderboardRank - 1] || 0) * rewardCurrencyRate,
+                    0
+                )} (${rewards[currentLeaderboardRank - 1] || 0} ${rewardsCurrency})`}</TooltipInfo>
+            </TooltipInfoContianer>
+        </TooltipContainer>
+    );
+
     return (
         <>
             <RowSummary columnDirection={true}>
@@ -1116,11 +1136,20 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                             :
                         </SummaryLabel>
                         <SummaryValue isCollateralInfo={true}>
-                            {hidePayout || !isMinimumParlayGames
-                                ? '-'
-                                : `${currentLeaderboardRank}. (${
-                                      rewards[currentLeaderboardRank - 1] ? rewards[currentLeaderboardRank - 1] : 0
-                                  } ${networkId == Network.OptimismMainnet ? 'OP' : 'ARB'})`}
+                            {hidePayout || !isMinimumParlayGames ? (
+                                '-'
+                            ) : (
+                                <>
+                                    {`${currentLeaderboardRank}. (${formatCurrencyWithSign(
+                                        USD_SIGN,
+                                        rewards[currentLeaderboardRank - 1]
+                                            ? rewardCurrencyRate * rewards[currentLeaderboardRank - 1]
+                                            : 0,
+                                        0
+                                    )})`}
+                                    <Tooltip overlay={getRankTooltip()} iconFontSize={13} marginLeft={3} />
+                                </>
+                            )}
                         </SummaryValue>
                     </RowSummary>
                 </>

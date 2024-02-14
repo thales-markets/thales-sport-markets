@@ -50,6 +50,7 @@ import {
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
 import { formatParlayOdds } from 'utils/parlay';
+import useExchangeRatesQuery, { Rates } from '../../queries/rates/useExchangeRatesQuery';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -98,8 +99,16 @@ const ParlayLeaderboard: React.FC = () => {
     }, [searchText, parlays]);
 
     const rewards = getRewardsArray(networkId);
-
     const rewardsAmount = getRewardsAmount(networkId);
+    const rewardsCurrency = getRewardsCurrency(networkId);
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
 
     const stickyRow = useMemo(() => {
         const data = parlays.find((parlay) => parlay.account.toLowerCase() == walletAddress?.toLowerCase());
@@ -112,7 +121,7 @@ const ParlayLeaderboard: React.FC = () => {
                             <Tooltip
                                 overlay={
                                     <>
-                                        {rewards[data.rank - 1]} {networkId !== Network.Arbitrum ? 'OP' : 'ARB'}
+                                        {rewards[data.rank - 1]} {rewardsCurrency}
                                     </>
                                 }
                                 component={
@@ -134,7 +143,31 @@ const ParlayLeaderboard: React.FC = () => {
                             <TableText>{data.rank}</TableText>
                         )}
                     </StickyCell>
+                    <StickyCell>
+                        {data.rank <= rewards.length ? (
+                            <Tooltip
+                                overlay={
+                                    <>
+                                        {rewards[data.rank - 1]} {rewardsCurrency}
+                                    </>
+                                }
+                                component={
+                                    <>
+                                        {formatCurrencyWithSign(
+                                            USD_SIGN,
+                                            (rewards[data.rank - 1] || 0) * rewardCurrencyRate,
+                                            0
+                                        )}
+                                    </>
+                                }
+                            ></Tooltip>
+                        ) : (
+                            <TableText></TableText>
+                        )}
+                    </StickyCell>
                     <StickyCell>{truncateAddress(data.account, 5)}</StickyCell>
+                    <StickyCell>{formatCurrency(data.points)}</StickyCell>
+                    <StickyCell>{formatCurrency(data.numberOfPositions)}</StickyCell>
                     <StickyCell>{formatParlayOdds(selectedOddsType, data.sUSDPaid, data.totalAmount)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.sUSDPaid, 2)}</StickyCell>
                     <StickyCell>{formatCurrencyWithSign(USD_SIGN, data.totalAmount, 2)}</StickyCell>
@@ -148,7 +181,18 @@ const ParlayLeaderboard: React.FC = () => {
                 </ExpandedContainer>
             </StickyRow>
         );
-    }, [parlays, rewards, networkId, selectedOddsType, expandStickyRow, language, walletAddress, theme]);
+    }, [
+        parlays,
+        rewards,
+        networkId,
+        selectedOddsType,
+        expandStickyRow,
+        language,
+        walletAddress,
+        theme,
+        rewardsCurrency,
+        rewardCurrencyRate,
+    ]);
 
     const [page, setPage] = useState(0);
     const handleChangePage = (_event: unknown, newPage: number) => {
@@ -256,6 +300,33 @@ const ParlayLeaderboard: React.FC = () => {
                                 ></Tooltip>
                             ) : (
                                 <TableText>{cellProps.cell.value}</TableText>
+                            );
+                        },
+                        sortable: true,
+                    },
+                    {
+                        Header: <>{t('parlay-leaderboard.sidebar.reward')}</>,
+                        accessor: 'id',
+                        Cell: (cellProps: CellProps<ParlayMarketWithRank, ParlayMarketWithRank['id']>) => {
+                            return cellProps.row.original.rank <= rewards.length ? (
+                                <Tooltip
+                                    overlay={
+                                        <>
+                                            {rewards[cellProps.row.original.rank - 1]} {getRewardsCurrency(networkId)}
+                                        </>
+                                    }
+                                    component={
+                                        <TableText>
+                                            {formatCurrencyWithSign(
+                                                USD_SIGN,
+                                                (rewards[cellProps.row.original.rank - 1] || 0) * rewardCurrencyRate,
+                                                0
+                                            )}
+                                        </TableText>
+                                    }
+                                ></Tooltip>
+                            ) : (
+                                <TableText></TableText>
                             );
                         },
                         sortable: true,
@@ -723,7 +794,7 @@ const getRewardsAmount = (networkId: Network) => {
     return '1,000 THALES';
 };
 
-const getRewardsCurrency = (networkId: Network) => {
+export const getRewardsCurrency = (networkId: Network) => {
     if (networkId == Network.Arbitrum) return 'ARB';
     if (networkId == Network.OptimismMainnet) return 'OP';
     return 'THALES';
