@@ -39,6 +39,9 @@ const Label = styled.span`
     font-style: normal;
     font-weight: 800;
     text-transform: uppercase;
+    @media (max-width: 1260px) {
+        font-size: 16px;
+    }
 `;
 
 export default ElectionsBanner;
