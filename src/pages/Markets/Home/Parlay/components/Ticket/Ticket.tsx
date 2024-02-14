@@ -899,14 +899,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
             </TooltipInfoContianer>
             <TooltipInfoContianer>
                 <TooltipInfoLabel>Buy-in bonus:</TooltipInfoLabel>
-                <TooltipBonusInfo>{` (+${formatPercentage(leaderboardPoints.buyinBonus, 0)})`}</TooltipBonusInfo>
+                <TooltipBonusInfo>{`+${formatPercentage(leaderboardPoints.buyinBonus, 0)}`}</TooltipBonusInfo>
             </TooltipInfoContianer>
             <TooltipInfoContianer>
                 <TooltipInfoLabel>Number of games bonus:</TooltipInfoLabel>
-                <TooltipBonusInfo>{` (+${formatPercentage(
+                <TooltipBonusInfo>{`+${formatPercentage(
                     leaderboardPoints.numberOfPositionsBonus,
                     0
-                )})`}</TooltipBonusInfo>
+                )}`}</TooltipBonusInfo>
             </TooltipInfoContianer>
             <TooltipFooter>
                 <TooltipInfoContianer>
