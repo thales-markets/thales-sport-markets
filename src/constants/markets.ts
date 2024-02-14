@@ -25,23 +25,13 @@ export const INCENTIVIZED_LEAGUE = {
     thalesRewards: '30,000 THALES',
 };
 
-export const INCENTIVIZED_GRAND_SLAM = {
-    ids: [9153],
-    startDate: new Date(Date.UTC(2024, 0, 10, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 0, 26, 23, 59, 59)),
-    link: 'https://medium.com/@OvertimeMarkets.xyz/2f5b1bdc4fc9',
+export const INCENTIVIZED_UEFA = {
+    ids: [9016, 9017, 19216],
+    startDate: new Date(Date.UTC(2024, 1, 13, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 4, 25, 23, 59, 59)),
+    link: 'https://dune.com/leifu/overtime-uefa-competitions-13-feb-25-may-24',
     opRewards: '',
-    arbRewards: '5000 ARB',
-};
-
-export const INCENTIVIZED_NFL_SUPERBOWL = {
-    ids: [9002],
-    startDate: new Date(Date.UTC(2024, 0, 30, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 1, 13, 23, 59, 59)),
-    link:
-        'https://medium.com/@OvertimeMarkets.xyz/overtimes-nfl-playoffs-australian-open-grab-your-share-of-45-000-arb-tokens-2f5b1bdc4fc9',
-    opRewards: '',
-    arbRewards: '10,000 ARB',
+    arbRewards: '20,000 ARB',
 };
 
 export const MIN_LIQUIDITY = 10;

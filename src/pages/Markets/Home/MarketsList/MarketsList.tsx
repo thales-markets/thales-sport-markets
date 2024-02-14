@@ -1,7 +1,7 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_SUPERBOWL } from 'constants/markets';
+import { INCENTIVIZED_LEAGUE, INCENTIVIZED_UEFA } from 'constants/markets';
 import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_LIST } from 'constants/tags';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
@@ -88,56 +88,26 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                             }
                         ></Tooltip>
                     )}
-                {INCENTIVIZED_GRAND_SLAM.ids.includes(Number(league)) &&
-                    new Date() > INCENTIVIZED_GRAND_SLAM.startDate &&
-                    new Date() < INCENTIVIZED_GRAND_SLAM.endDate &&
-                    networkId == Network.Arbitrum && (
+                {INCENTIVIZED_UEFA.ids.includes(Number(league)) &&
+                    new Date() > INCENTIVIZED_UEFA.startDate &&
+                    new Date() < INCENTIVIZED_UEFA.endDate && (
                         <Tooltip
                             overlay={
                                 <Trans
-                                    i18nKey="markets.incentivized-tooltip-tennis"
+                                    i18nKey="markets.incentivized-tooltip-uefa"
                                     components={{
                                         detailsLink: (
-                                            <a href={INCENTIVIZED_GRAND_SLAM.link} target="_blank" rel="noreferrer" />
+                                            <a href={INCENTIVIZED_UEFA.link} target="_blank" rel="noreferrer" />
                                         ),
                                     }}
                                     values={{
-                                        rewards: INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                        rewards: INCENTIVIZED_UEFA.arbRewards,
                                     }}
                                 />
                             }
                             component={
                                 <IncentivizedLeague>
                                     <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
-                                    {getNetworkLogo(networkId)}
-                                </IncentivizedLeague>
-                            }
-                        ></Tooltip>
-                    )}
-                {INCENTIVIZED_NFL_SUPERBOWL.ids.includes(Number(league)) &&
-                    new Date() > INCENTIVIZED_NFL_SUPERBOWL.startDate &&
-                    new Date() < INCENTIVIZED_NFL_SUPERBOWL.endDate && (
-                        <Tooltip
-                            overlay={
-                                <Trans
-                                    i18nKey="markets.incentivized-tooltip-nfl-playoffs"
-                                    components={{
-                                        detailsLink: (
-                                            <a
-                                                href={INCENTIVIZED_NFL_SUPERBOWL.link}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            />
-                                        ),
-                                    }}
-                                    values={{
-                                        rewards: INCENTIVIZED_NFL_SUPERBOWL.arbRewards,
-                                    }}
-                                />
-                            }
-                            component={
-                                <IncentivizedLeague>
-                                    <IncentivizedTitle>{t('markets.superbowl-incentive')}</IncentivizedTitle>
                                     {getNetworkLogo(NetworkId.Arbitrum)}
                                 </IncentivizedLeague>
                             }
