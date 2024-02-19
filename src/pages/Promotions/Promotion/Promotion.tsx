@@ -107,34 +107,35 @@ const HeaderContainer = styled(FlexDiv)`
     margin: 50px 0px;
     justify-content: center;
     color: ${(props) => props.theme.textColor.primary} !important;
-    > h1 {
+    h1 {
         font-size: 30px;
         font-weight: 900;
         line-height: 36px;
     }
-    > h2 {
-        font-size: 36px;
+    h2 {
+        font-size: 26px;
         font-weight: 700;
         margin: 10px 0px;
+        margin: 15px 0px;
     }
-    > h3 {
+    h3 {
         font-size: 20px;
         font-weight: 700;
-        margin: 10px 0px;
+        margin: 15px 0px;
     }
-    > h4 {
+    h4 {
         font-size: 16px;
         font-weight: 700;
         color: ${(props) => props.theme.textColor.quaternary};
-        margin-top: 10px;
+        margin: 15px 0px;
     }
-    > p {
-        padding: 15px 0px;
+    p {
+        padding: 10px 0px;
     }
-    > strong {
+    strong {
         font-weight: 700;
     }
-    & > a {
+    a {
         font-weight: 700;
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
@@ -163,43 +164,44 @@ const CTAContainer = styled(FlexDiv)`
     padding: 20px;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 `;
 
 const CTAContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
     font-weight: 500;
     font-size: 16px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     font-family: 'Roboto';
-    > h1 {
+    h1 {
         font-size: 30px;
         font-weight: 900;
         line-height: 36px;
     }
-    > h2 {
-        font-size: 36px;
+    h2 {
+        font-size: 26px;
         font-weight: 700;
         margin: 10px 0px;
+        margin: 15px 0px;
     }
-    > h3 {
+    h3 {
         font-size: 20px;
         font-weight: 700;
-        margin: 10px 0px;
+        margin: 15px 0px;
     }
-    > h4 {
+    h4 {
         font-size: 16px;
         font-weight: 700;
         color: ${(props) => props.theme.textColor.quaternary};
-        margin-top: 10px;
+        margin: 15px 0px;
     }
-    > p {
-        padding: 15px 0px;
+    p {
+        padding: 10px 0px;
     }
-    > strong {
+    strong {
         font-weight: 700;
     }
-    & > a {
+    a {
         font-weight: 700;
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
@@ -224,40 +226,40 @@ const CTAContent = styled(FlexDiv)`
 
 const MainContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 20px;
+    font-size: 16px;
     font-family: 'Roboto';
-    line-height: 16px;
     font-weight: 400;
     line-height: 20px;
     flex-direction: column;
-    > h1 {
+    h1 {
         font-size: 30px;
         font-weight: 900;
         line-height: 36px;
     }
-    > h2 {
+    h2 {
         font-size: 26px;
         font-weight: 700;
         margin: 10px 0px;
+        margin: 15px 0px;
     }
-    > h3 {
+    h3 {
         font-size: 20px;
         font-weight: 700;
-        margin: 10px 0px;
+        margin: 15px 0px;
     }
-    > h4 {
+    h4 {
         font-size: 16px;
         font-weight: 700;
         color: ${(props) => props.theme.textColor.quaternary};
-        margin-top: 10px;
+        margin: 15px 0px;
     }
-    > p {
-        padding: 15px 0px;
+    p {
+        padding: 10px 0px;
     }
-    > strong {
+    strong {
         font-weight: 700;
     }
-    & > a {
+    a {
         font-weight: 700;
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
