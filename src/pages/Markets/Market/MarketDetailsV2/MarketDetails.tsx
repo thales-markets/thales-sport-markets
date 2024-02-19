@@ -1,13 +1,15 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
+import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_GRAND_SLAM, INCENTIVIZED_LEAGUE, INCENTIVIZED_NFL_SUPERBOWL } from 'constants/markets';
+import { INCENTIVIZED_LEAGUE, INCENTIVIZED_UEFA } from 'constants/markets';
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
 import { BetType } from 'enums/markets';
 import { Network } from 'enums/network';
+import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
 import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -49,65 +51,115 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const [metaTitle, setMetaTitle] = useQueryParam('title', queryParams?.title ? queryParams?.title : '');
     const [showParlayMobileModal, setShowParlayMobileModal] = useState(false);
+    const [hidePausedMarkets, setHidePausedMarkets] = useState(true);
+
     const lastValidChildMarkets: SportMarketChildMarkets = {
-        spreadMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.SPREAD),
-        totalMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.TOTAL),
-        doubleChanceMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.DOUBLE_CHANCE),
+        spreadMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.SPREAD && (hidePausedMarkets ? !childMarket.isPaused : true)
+        ),
+        totalMarkets: market.childMarkets.filter(
+            (childMarket) => childMarket.betType == BetType.TOTAL && (hidePausedMarkets ? !childMarket.isPaused : true)
+        ),
+        doubleChanceMarkets: market.childMarkets.filter(
+            (childMarket) =>
+                childMarket.betType == BetType.DOUBLE_CHANCE && (hidePausedMarkets ? !childMarket.isPaused : true)
+        ),
         strikeOutsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_STRIKEOUTS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_STRIKEOUTS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         homeRunsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_HOMERUNS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_HOMERUNS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         passingYardsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PASSING_YARDS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_PASSING_YARDS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         rushingYardsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RUSHING_YARDS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_RUSHING_YARDS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         receivingYardsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RECEIVING_YARDS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_RECEIVING_YARDS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         passingTouchdownsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         fieldGoalsMadeMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_FIELD_GOALS_MADE
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_FIELD_GOALS_MADE &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         pitcherHitsAllowedMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         hitsRecordedMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_HITS_RECORDED
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_HITS_RECORDED &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
-        pointsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_POINTS),
+        pointsMarkets: market.childMarkets.filter(
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_POINTS && (hidePausedMarkets ? !childMarket.isPaused : true)
+        ),
         reboundsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_REBOUNDS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_REBOUNDS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         assistsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_ASSISTS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_ASSISTS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         doubleDoubleMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_DOUBLE_DOUBLE
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_DOUBLE_DOUBLE &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         tripleDoubleMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TRIPLE_DOUBLE
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_TRIPLE_DOUBLE &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
-        shotsMarkets: market.childMarkets.filter((childMarket) => childMarket.betType == BetType.PLAYER_PROPS_SHOTS),
+        shotsMarkets: market.childMarkets.filter(
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_SHOTS && (hidePausedMarkets ? !childMarket.isPaused : true)
+        ),
         oneSiderTouchdownsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         oneSiderGoalsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_GOALS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_GOALS && (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         receptionsMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_RECEPTIONS
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_RECEPTIONS &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         firstTouchdownMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_FIRST_TOUCHDOWN
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_FIRST_TOUCHDOWN &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
         lastTouchdownMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.PLAYER_PROPS_LAST_TOUCHDOWN
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_LAST_TOUCHDOWN &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
     };
 
@@ -217,60 +269,26 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 }
                             ></Tooltip>
                         )}
-                    {INCENTIVIZED_GRAND_SLAM.ids.includes(Number(market.tags[0])) &&
-                        new Date(market.maturityDate) > INCENTIVIZED_GRAND_SLAM.startDate &&
-                        new Date(market.maturityDate) < INCENTIVIZED_GRAND_SLAM.endDate &&
-                        networkId == Network.Arbitrum && (
+                    {INCENTIVIZED_UEFA.ids.includes(Number(market.tags[0])) &&
+                        new Date() > INCENTIVIZED_UEFA.startDate &&
+                        new Date() < INCENTIVIZED_UEFA.endDate && (
                             <Tooltip
                                 overlay={
                                     <Trans
-                                        i18nKey="markets.incentivized-tooltip-tennis"
+                                        i18nKey="markets.incentivized-tooltip-uefa"
                                         components={{
                                             detailsLink: (
-                                                <a
-                                                    href={INCENTIVIZED_GRAND_SLAM.link}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                />
+                                                <a href={INCENTIVIZED_UEFA.link} target="_blank" rel="noreferrer" />
                                             ),
                                         }}
                                         values={{
-                                            rewards: INCENTIVIZED_GRAND_SLAM.arbRewards,
+                                            rewards: INCENTIVIZED_UEFA.arbRewards,
                                         }}
                                     />
                                 }
                                 component={
                                     <IncentivizedLeague>
                                         <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {getNetworkLogo(networkId)}
-                                    </IncentivizedLeague>
-                                }
-                            ></Tooltip>
-                        )}
-                    {INCENTIVIZED_NFL_SUPERBOWL.ids.includes(Number(market.tags[0])) &&
-                        new Date(market.maturityDate) > INCENTIVIZED_NFL_SUPERBOWL.startDate &&
-                        new Date(market.maturityDate) < INCENTIVIZED_NFL_SUPERBOWL.endDate && (
-                            <Tooltip
-                                overlay={
-                                    <Trans
-                                        i18nKey="markets.incentivized-tooltip-nfl-playoffs"
-                                        components={{
-                                            detailsLink: (
-                                                <a
-                                                    href={INCENTIVIZED_NFL_SUPERBOWL.link}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                />
-                                            ),
-                                        }}
-                                        values={{
-                                            rewards: INCENTIVIZED_NFL_SUPERBOWL.arbRewards,
-                                        }}
-                                    />
-                                }
-                                component={
-                                    <IncentivizedLeague>
-                                        <IncentivizedTitle>{t('markets.superbowl-incentive')}</IncentivizedTitle>
                                         {getNetworkLogo(NetworkId.Arbitrum)}
                                     </IncentivizedLeague>
                                 }
@@ -402,6 +420,21 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     </Status>
                 )}
                 <>
+                    <ToggleContainer>
+                        <Toggle
+                            label={{
+                                firstLabel: t('markets.market-card.toggle.hide-paused-markets'),
+                                secondLabel: t('markets.market-card.toggle.show-paused-markets'),
+                            }}
+                            active={!hidePausedMarkets}
+                            dotSize="18px"
+                            dotBackground={theme.background.secondary}
+                            dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                            handleClick={() => {
+                                setHidePausedMarkets(!hidePausedMarkets);
+                            }}
+                        />
+                    </ToggleContainer>
                     <Positions markets={[market]} betType={BetType.WINNER} showOdds={showAMM} />
                     {childMarkets.doubleChanceMarkets.length > 0 && (
                         <Positions

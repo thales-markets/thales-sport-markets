@@ -9,8 +9,6 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
-import { isMobile } from 'utils/device';
-import { addHoursToCurrentDate } from 'thales-utils';
 import MarketsList from '../MarketsList';
 
 type MarketsGridProps = {
@@ -20,10 +18,7 @@ type MarketsGridProps = {
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
-    const dateFilter = useLocalStorage<Date | number>(
-        LOCAL_STORAGE_KEYS.FILTER_DATE,
-        !isMobile ? addHoursToCurrentDate(72, true).getTime() : 0
-    );
+    const dateFilter = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
 
     const marketsMap: Record<number, SportMarketInfo[]> = groupBy(markets, (market) => Number(market.tags[0]));
     // UNIFYING EUROPA LEAGUE MARKETS FROM BOTH ENETPULSE & RUNDOWNS PROVIDERS
@@ -170,8 +165,8 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     });
 
     return [
-        ...soccerKeys,
         ...footballKeys,
+        ...soccerKeys,
         ...basketballKeys,
         ...baseballKeys,
         ...hockeyKeys,

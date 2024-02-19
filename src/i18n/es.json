@@ -434,7 +434,11 @@
             "player-props": "Accesorios de jugador",
             "see-more-markets": "ver mercados de accesorios para jugadores",
             "see-more-markets-mobile": "accesorios de jugador",
-            "resolved": "Resuelto"
+            "resolved": "Resuelto",
+            "toggle": {
+                "hide-paused-markets": "Ocultar mercados pausados",
+                "show-paused-markets": "Mostrar mercados pausados"
+            }
         },
         "market-details": {
             "price": "Precio",
@@ -891,34 +895,31 @@
         "deprecated-info": "En desuso, ¡retire sus fondos!"
     },
     "parlay-leaderboard": {
-        "title": "Leaderboard de incentivos en Parlays",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays on a <bold>bi-weekly basis</bold> starting from March 1st. The tickets will be ranked based on the number of positions on the parlays, followed by total quote.",
-        "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every 2 weeks</bold>!",
+        "title": "Parlay Incentives Leaderboard",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best winning parlays on a <bold>weekly basis</bold>. The tickets will be ranked based on a points system. The points are calculated by taking the odds of the parlay, multiplying it with the 3rd root of the buy-in and adding 10% bonus for each game on the ticket.",
+        "info": "Points = parlayOdds * 3√buyin * (1+0.1*numberOfGames).",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 20 parlays every week</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
-        "info": "If multiple parlays have the same number of positions and total quote the following will be used as tie-breakers in respective order:",
-        "info1": "- The amount paid",
-        "info2": "- Actual total quote (gotten by multiplying positions individually)",
-        "info3": "*1 winning parlay eligible per wallet",
+        "warning2": "Users that have covered 50% or more of potential combinations of their winning tickets will be disqualified.",
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
+            "wallet": "Wallet",
             "quote": "Quote",
             "paid": "Paid",
             "won": "Won",
+            "reward": "Reward",
             "total-quote": "Total Quote",
             "total-amount": "Total Amount",
-            "reward": "Premio",
-            "wallet": "Billetera",
-            "positions": "Posiciones"
+            "positions": "Positions",
+            "points": "Points"
         },
         "periods": {
-            "february": "February",
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
-            "bi-weekly-period": "Bi-weekly period"
-        },
-        "warning2": "Los usuarios que hayan cubierto el 50% o más de las posibles combinaciones de sus boletos ganadores serán descalificados."
+            "weekly-period": "Weekly period"
+        }
     },
     "wizard": {
         "title": "Get Started!",
