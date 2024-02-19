@@ -95,7 +95,7 @@ const CoverImageWrapper = styled(FlexDiv)<{ imageUrl: string }>`
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
-    height: 300px;
+    height: 210px;
 `;
 
 const HeaderContainer = styled(FlexDiv)`
@@ -113,21 +113,17 @@ const HeaderContainer = styled(FlexDiv)`
         line-height: 36px;
     }
     h2 {
-        font-size: 26px;
+        font-size: 20px;
         font-weight: 700;
+        line-height: 26px;
         margin: 10px 0px;
         margin: 15px 0px;
     }
     h3 {
-        font-size: 20px;
+        font-size: 14px;
         font-weight: 700;
         margin: 15px 0px;
-    }
-    h4 {
-        font-size: 16px;
-        font-weight: 700;
         color: ${(props) => props.theme.textColor.quaternary};
-        margin: 15px 0px;
     }
     p {
         padding: 10px 0px;
@@ -170,7 +166,8 @@ const CTAContainer = styled(FlexDiv)`
 const CTAContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 18px;
     margin-bottom: 20px;
     font-family: 'Roboto';
     h1 {
@@ -179,21 +176,17 @@ const CTAContent = styled(FlexDiv)`
         line-height: 36px;
     }
     h2 {
-        font-size: 26px;
+        font-size: 20px;
         font-weight: 700;
+        line-height: 26px;
         margin: 10px 0px;
         margin: 15px 0px;
     }
     h3 {
-        font-size: 20px;
+        font-size: 14px;
         font-weight: 700;
         margin: 15px 0px;
-    }
-    h4 {
-        font-size: 16px;
-        font-weight: 700;
         color: ${(props) => props.theme.textColor.quaternary};
-        margin: 15px 0px;
     }
     p {
         padding: 10px 0px;
@@ -226,38 +219,33 @@ const CTAContent = styled(FlexDiv)`
 
 const MainContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 18px;
     font-family: 'Roboto';
     font-weight: 400;
-    line-height: 20px;
     flex-direction: column;
     ul {
         list-style: circle !important;
         list-style-position: inside !important;
         margin-left: 15px !important;
     }
-
     h1 {
         font-size: 30px;
         font-weight: 900;
         line-height: 36px;
     }
     h2 {
-        font-size: 26px;
+        font-size: 20px;
         font-weight: 700;
+        line-height: 26px;
         margin: 10px 0px;
         margin: 15px 0px;
     }
     h3 {
-        font-size: 20px;
+        font-size: 14px;
         font-weight: 700;
         margin: 15px 0px;
-    }
-    h4 {
-        font-size: 16px;
-        font-weight: 700;
         color: ${(props) => props.theme.textColor.quaternary};
-        margin: 15px 0px;
     }
     p {
         padding: 10px 0px;
