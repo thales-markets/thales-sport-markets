@@ -231,6 +231,12 @@ const MainContent = styled(FlexDiv)`
     font-weight: 400;
     line-height: 20px;
     flex-direction: column;
+    ul {
+        list-style: circle !important;
+        list-style-position: inside !important;
+        margin-left: 15px !important;
+    }
+
     h1 {
         font-size: 30px;
         font-weight: 900;
@@ -279,6 +285,11 @@ const MainContent = styled(FlexDiv)`
             text-decoration: none;
             color: ${(props) => props.theme.textColor.quaternary};
         }
+    }
+    hr {
+        border-top: 1px solid ${(props) => props.theme.borderColor.primary};
+        width: 100%;
+        margin: 15px 0px;
     }
 `;
 
