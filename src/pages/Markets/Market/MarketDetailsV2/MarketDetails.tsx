@@ -54,113 +54,207 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const [hidePausedMarkets, setHidePausedMarkets] = useState(true);
 
     const lastValidChildMarkets: SportMarketChildMarkets = {
-        spreadMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.SPREAD && (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        totalMarkets: market.childMarkets.filter(
-            (childMarket) => childMarket.betType == BetType.TOTAL && (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        doubleChanceMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.DOUBLE_CHANCE && (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        strikeOutsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.PLAYER_PROPS_STRIKEOUTS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        homeRunsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.PLAYER_PROPS_HOMERUNS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        passingYardsMarkets: market.childMarkets.filter(
-            (childMarket) =>
+        spreadMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+
+            return childMarket.betType == BetType.SPREAD && (hidePausedMarkets ? showChildMarket : true);
+        }),
+        totalMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return childMarket.betType == BetType.TOTAL && (hidePausedMarkets ? showChildMarket : true);
+        }),
+        doubleChanceMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return childMarket.betType == BetType.DOUBLE_CHANCE && (hidePausedMarkets ? showChildMarket : true);
+        }),
+        strikeOutsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
+                childMarket.betType == BetType.PLAYER_PROPS_STRIKEOUTS && (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        homeRunsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return childMarket.betType == BetType.PLAYER_PROPS_HOMERUNS && (hidePausedMarkets ? showChildMarket : true);
+        }),
+        passingYardsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_PASSING_YARDS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        rushingYardsMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        rushingYardsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_RUSHING_YARDS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        receivingYardsMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        receivingYardsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_RECEIVING_YARDS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        passingTouchdownsMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        passingTouchdownsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_PASSING_TOUCHDOWNS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        fieldGoalsMadeMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        fieldGoalsMadeMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_FIELD_GOALS_MADE &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        pitcherHitsAllowedMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        pitcherHitsAllowedMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_PITCHER_HITS_ALLOWED &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        hitsRecordedMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        hitsRecordedMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_HITS_RECORDED &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        pointsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.PLAYER_PROPS_POINTS && (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        reboundsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.PLAYER_PROPS_REBOUNDS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        assistsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.PLAYER_PROPS_ASSISTS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        doubleDoubleMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        pointsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return childMarket.betType == BetType.PLAYER_PROPS_POINTS && (hidePausedMarkets ? showChildMarket : true);
+        }),
+        reboundsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return childMarket.betType == BetType.PLAYER_PROPS_REBOUNDS && (hidePausedMarkets ? showChildMarket : true);
+        }),
+        assistsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return childMarket.betType == BetType.PLAYER_PROPS_ASSISTS && (hidePausedMarkets ? showChildMarket : true);
+        }),
+        doubleDoubleMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_DOUBLE_DOUBLE &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        tripleDoubleMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        tripleDoubleMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_TRIPLE_DOUBLE &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        shotsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.PLAYER_PROPS_SHOTS && (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        oneSiderTouchdownsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        oneSiderGoalsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.PLAYER_PROPS_GOALS && (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        receptionsMarkets: market.childMarkets.filter(
-            (childMarket) =>
-                childMarket.betType == BetType.PLAYER_PROPS_RECEPTIONS &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        firstTouchdownMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        shotsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return childMarket.betType == BetType.PLAYER_PROPS_SHOTS && (hidePausedMarkets ? showChildMarket : true);
+        }),
+        oneSiderTouchdownsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
+                childMarket.betType == BetType.PLAYER_PROPS_TOUCHDOWNS && (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        oneSiderGoalsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return childMarket.betType == BetType.PLAYER_PROPS_GOALS && (hidePausedMarkets ? showChildMarket : true);
+        }),
+        receptionsMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
+                childMarket.betType == BetType.PLAYER_PROPS_RECEPTIONS && (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        firstTouchdownMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_FIRST_TOUCHDOWN &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
-        lastTouchdownMarkets: market.childMarkets.filter(
-            (childMarket) =>
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
+        lastTouchdownMarkets: market.childMarkets.filter((childMarket) => {
+            const isGameStarted = childMarket.maturityDate < new Date();
+            const isGameResolved = childMarket.isResolved || childMarket.isCanceled;
+            const isPendingResolution = isGameStarted && !isGameResolved;
+            const showChildMarket = (!childMarket.isPaused || isPendingResolution) && !childMarket.isCanceled;
+            return (
                 childMarket.betType == BetType.PLAYER_PROPS_LAST_TOUCHDOWN &&
-                (hidePausedMarkets ? !childMarket.isPaused : true)
-        ),
+                (hidePausedMarkets ? showChildMarket : true)
+            );
+        }),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
