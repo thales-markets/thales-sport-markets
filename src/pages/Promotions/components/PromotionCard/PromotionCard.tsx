@@ -58,6 +58,7 @@ export const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string; isMobile: b
     border-radius: 5px;
     border: 2px ${(props) => props.theme.borderColor.primary} solid;
     padding: 15px;
+    height: 415px;
     background: url(${(props) => props.backgroundImageUrl});
     background-size: cover;
     background-position: center;
