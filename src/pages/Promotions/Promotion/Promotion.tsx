@@ -108,21 +108,22 @@ const HeaderContainer = styled(FlexDiv)`
     justify-content: center;
     color: ${(props) => props.theme.textColor.primary} !important;
     > h1 {
-        font-size: 36px;
+        font-size: 30px;
         font-weight: 900;
-        line-height: 43px;
+        line-height: 36px;
     }
     > h2 {
         font-size: 36px;
         font-weight: 700;
-        margin-top: 10px;
+        margin: 10px 0px;
     }
     > h3 {
-        font-size: 28px;
-        font-weight: 900;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 10px 0px;
     }
     > h4 {
-        font-size: 22px;
+        font-size: 16px;
         font-weight: 700;
         color: ${(props) => props.theme.textColor.quaternary};
         margin-top: 10px;
@@ -133,7 +134,7 @@ const HeaderContainer = styled(FlexDiv)`
     > strong {
         font-weight: 700;
     }
-    > a {
+    & > a {
         font-weight: 700;
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
@@ -168,30 +169,26 @@ const CTAContainer = styled(FlexDiv)`
 const CTAContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
     font-weight: 500;
-    font-size: 22px;
+    font-size: 16px;
     margin-bottom: 40px;
     font-family: 'Roboto';
-    > a {
-        font-weight: 800;
-        text-decoration: none;
-        color: ${(props) => props.theme.textColor.quaternary};
-    }
     > h1 {
-        font-size: 36px;
+        font-size: 30px;
         font-weight: 900;
-        line-height: 43px;
+        line-height: 36px;
     }
     > h2 {
         font-size: 36px;
         font-weight: 700;
-        margin-top: 10px;
+        margin: 10px 0px;
     }
     > h3 {
-        font-size: 28px;
-        font-weight: 900;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 10px 0px;
     }
     > h4 {
-        font-size: 22px;
+        font-size: 16px;
         font-weight: 700;
         color: ${(props) => props.theme.textColor.quaternary};
         margin-top: 10px;
@@ -202,7 +199,7 @@ const CTAContent = styled(FlexDiv)`
     > strong {
         font-weight: 700;
     }
-    > a {
+    & > a {
         font-weight: 700;
         text-decoration: none;
         color: ${(props) => props.theme.textColor.quaternary};
@@ -229,26 +226,27 @@ const MainContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 20px;
     font-family: 'Roboto';
-    line-height: 26px;
+    line-height: 16px;
     font-weight: 400;
-    line-height: 26px;
+    line-height: 20px;
     flex-direction: column;
     > h1 {
-        font-size: 36px;
+        font-size: 30px;
         font-weight: 900;
-        line-height: 43px;
+        line-height: 36px;
     }
     > h2 {
-        font-size: 36px;
+        font-size: 26px;
         font-weight: 700;
-        margin-top: 10px;
+        margin: 10px 0px;
     }
     > h3 {
-        font-size: 28px;
-        font-weight: 900;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 10px 0px;
     }
     > h4 {
-        font-size: 22px;
+        font-size: 16px;
         font-weight: 700;
         color: ${(props) => props.theme.textColor.quaternary};
         margin-top: 10px;
@@ -259,25 +257,25 @@ const MainContent = styled(FlexDiv)`
     > strong {
         font-weight: 700;
     }
-    > a {
+    & > a {
         font-weight: 700;
         text-decoration: none;
-        color: ${(props) => props.theme.textColor.quaternary} !important;
+        color: ${(props) => props.theme.textColor.quaternary};
         :active {
             text-decoration: none;
-            color: ${(props) => props.theme.textColor.quaternary} !important;
+            color: ${(props) => props.theme.textColor.quaternary};
         }
         :visited {
             text-decoration: none;
-            color: ${(props) => props.theme.textColor.quaternary} !important;
+            color: ${(props) => props.theme.textColor.quaternary};
         }
         :hover {
             text-decoration: none;
-            color: ${(props) => props.theme.textColor.quaternary} !important;
+            color: ${(props) => props.theme.textColor.quaternary};
         }
         :link {
             text-decoration: none;
-            color: ${(props) => props.theme.textColor.quaternary} !important;
+            color: ${(props) => props.theme.textColor.quaternary};
         }
     }
 `;
