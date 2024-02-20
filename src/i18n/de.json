@@ -184,8 +184,8 @@
             "save": "Speichern",
             "decimal-odds": "Dezimalquote (z. B. 2,5)",
             "american-odds": "Amerikanische Quoten (z. B. +150)",
-            "description": "Wie möchten Sie die Quoten anzeigen?",
             "normalized-odds": "Normalisierte implizite Quote (z. B. 0,40)",
+            "description": "Wählen Sie das Anzeigeformat für die Quoten",
             "info": "*Sie können den Quotentyp jederzeit in den Filtern über der Spieleliste ändern"
         }
     },
