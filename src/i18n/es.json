@@ -562,7 +562,8 @@
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-tennis": "Wimbledon será incentivado, ya que el torneo comienza el 3 de julio. Los mercados se potenciarán con {{rewards}} hasta el final del torneo el 16 de julio. Las recompensas se distribuirán en función de su volumen impulsado a través de estos mercados. Puede realizar un seguimiento de la asignación de sus recompensas en nuestro <detailsLink>Dune Dashboard</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "Se distribuirá un total enorme de {{rewards}} durante los playoffs de la NFL. Consulta más detalles <detailsLink>aquí</detailsLink>.",
-        "superbowl-incentive": "10.000 ARB EN INCENTIVOS"
+        "superbowl-incentive": "10.000 ARB EN INCENTIVOS",
+        "incentivized-tooltip-uefa": "Se distribuirá un total enorme de {{rewards}} para las competiciones de la UEFA. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -919,6 +920,19 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "weekly-period": "Weekly period"
+        },
+        "ticket-info": {
+            "points-label": "Puntos",
+            "basic-points-label": "Puntos basicos",
+            "rank-label": "Rango",
+            "title": "Tabla de clasificación combinada",
+            "rewards-label": "Recompensas",
+            "points-tooltip": "Puntos totales calculados con bonificaciones para la tabla de clasificación parlay. Los puntos se obtienen multiplicando las probabilidades totales del parlay por la raíz cúbica (tercera) del buy-in y luego sumando una bonificación del 10 % por cada juego del billete.",
+            "rank-tooltip": "Clasificación provisional basada en el estado actual de la clasificación. La clasificación final se conoce al final de la ronda. Las rondas son semanales de miércoles a miércoles.",
+            "total-points-label": "Puntos totales",
+            "number-of-games-bonus-label": "Bono por número de juegos",
+            "rewards-tooltip": "Recompensas potenciales si tu combinación asume el rango superior al final de la ronda.",
+            "buy-in-bonus-label": "Bono de compra"
         }
     },
     "wizard": {

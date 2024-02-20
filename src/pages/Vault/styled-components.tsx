@@ -35,6 +35,9 @@ export const DeprecatedContainer = styled(FlexDiv)`
     align-items: center;
     justify-content: center;
     font-size: 20px;
+    @media (max-width: 767px) {
+        font-size: 16px;
+    }
 `;
 
 const ContentContainer = styled(FlexDivColumn)`
