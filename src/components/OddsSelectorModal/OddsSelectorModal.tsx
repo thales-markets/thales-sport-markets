@@ -33,6 +33,7 @@ const OddsSelectorModal: React.FC<OddsSelectorModalProps> = ({ onClose }) => {
         >
             <Container>
                 <Description>{t('common.odds-modal.description')}</Description>
+                <Note>{t('common.odds-modal.info')}</Note>
                 <Container>
                     <Button
                         margin="5px"
@@ -82,11 +83,16 @@ const Description = styled.div`
     font-weight: 400;
     font-size: 18px;
     line-height: 20px;
-    margin-bottom: 15px;
     color: ${(props) => props.theme.textColor.primary};
-    p {
-        margin-bottom: 10px;
-    }
+`;
+
+const Note = styled.div`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    margin-bottom: 15px;
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 const ButtonContainer = styled(FlexDivCentered)`

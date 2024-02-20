@@ -185,7 +185,8 @@
             "american-odds": "American odds (ex: +150)",
             "decimal-odds": "Decimal odds (ex: 2.5)",
             "normalized-odds": "Normalized implied odds (ex: 0.40)",
-            "save": "Save"
+            "save": "Save",
+            "info": "*You can always change the odds type in filters above the games list"
         }
     },
     "footer": {

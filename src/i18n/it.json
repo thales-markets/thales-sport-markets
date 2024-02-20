@@ -185,7 +185,8 @@
             "normalized-odds": "Quote implicite normalizzate (es: 0,40)",
             "description": "Come desideri visualizzare le quote?",
             "american-odds": "Quote americane (es: +150)",
-            "decimal-odds": "Quote decimali (es: 2,5)"
+            "decimal-odds": "Quote decimali (es: 2,5)",
+            "info": "*Puoi sempre modificare il tipo di quote nei filtri sopra l'elenco dei giochi"
         }
     },
     "footer": {

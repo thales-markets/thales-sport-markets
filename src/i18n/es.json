@@ -185,7 +185,8 @@
             "american-odds": "Cuotas americanas (ej: +150)",
             "decimal-odds": "Cuotas decimales (ej: 2,5)",
             "normalized-odds": "Cuotas implícitas normalizadas (ej: 0,40)",
-            "description": "¿Cómo le gustaría mostrar las probabilidades?"
+            "description": "¿Cómo le gustaría mostrar las probabilidades?",
+            "info": "*Siempre puedes cambiar el tipo de probabilidades en los filtros encima de la lista de juegos."
         }
     },
     "footer": {

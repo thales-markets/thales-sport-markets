@@ -185,7 +185,8 @@
             "american-odds": "Cote américaine (ex : +150)",
             "description": "Comment souhaitez-vous afficher les cotes ?",
             "normalized-odds": "Cotes implicites normalisées (ex : 0,40)",
-            "decimal-odds": "Cotes décimales (ex : 2,5)"
+            "decimal-odds": "Cotes décimales (ex : 2,5)",
+            "info": "*Vous pouvez toujours modifier le type de cotes dans les filtres au-dessus de la liste des jeux"
         }
     },
     "footer": {
