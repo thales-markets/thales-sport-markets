@@ -1178,6 +1178,8 @@
             "all": "All",
             "ongoing": "Ongoing",
             "finished": "Finished"
-        }
+        },
+        "from-label": "From",
+        "to-label": "to"
     }
 }

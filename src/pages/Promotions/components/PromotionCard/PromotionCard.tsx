@@ -27,37 +27,53 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
 
     return (
         <Wrapper backgroundImageUrl={backgroundImageUrl} isMobile={isMobile}>
-            <SPAAnchor href={`${promotionUrl}${branchName ? `?branch-name=${branchName}` : ''}`}>
-                <HeaderContainer>
-                    <PromotionStatusBadge status={getPromotionStatus(startDate, endDate)}>
-                        {t(`promotions.nav-items.${getPromotionStatus(startDate, endDate)}`)}
-                    </PromotionStatusBadge>
-                    <DateRangeLabel>{`${formatTimestampForPromotionDate(startDate)} - ${formatTimestampForPromotionDate(
-                        endDate
-                    )}`}</DateRangeLabel>
-                </HeaderContainer>
-                <Title>{title}</Title>
-                <Description>{description}</Description>
-                <ButtonContainer>
-                    <Button
-                        textColor={theme.button.textColor.primary}
-                        backgroundColor={theme.button.background.quaternary}
-                    >
-                        {callToActionButton}
-                    </Button>
-                </ButtonContainer>
+            <SPAAnchor
+                href={`${promotionUrl}${branchName ? `?branch-name=${branchName}` : ''}`}
+                style={{ height: '100%' }}
+            >
+                <FlexDiv
+                    style={{
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        alignContent: 'space-between',
+                        height: '100%',
+                    }}
+                >
+                    <HeaderContainer>
+                        <PromotionStatusBadge status={getPromotionStatus(startDate, endDate)}>
+                            {t(`promotions.nav-items.${getPromotionStatus(startDate, endDate)}`)}
+                        </PromotionStatusBadge>
+                        <DateRangeLabel>{`${t('promotions.from-label')} ${formatTimestampForPromotionDate(
+                            startDate
+                        )} ${t('promotions.to-label')} ${formatTimestampForPromotionDate(endDate)}`}</DateRangeLabel>
+                    </HeaderContainer>
+                    <Title>{title}</Title>
+                    <BottomContainer>
+                        <Description>{description}</Description>
+                        <ButtonContainer>
+                            <Button
+                                textColor={theme.button.textColor.primary}
+                                backgroundColor={theme.button.background.quaternary}
+                            >
+                                {callToActionButton}
+                            </Button>
+                        </ButtonContainer>
+                    </BottomContainer>
+                </FlexDiv>
             </SPAAnchor>
         </Wrapper>
     );
 };
 
 export const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string; isMobile: boolean }>`
+    font-size: 14px;
     flex-direction: column;
-    flex: 0 0 ${(props) => (props.isMobile ? '100%' : '32%')};
+    flex: 0 0 ${(props) => (props.isMobile ? '100%' : '24%')};
     cursor: pointer;
     border-radius: 5px;
     border: 2px ${(props) => props.theme.borderColor.primary} solid;
     padding: 15px;
+    justify-content: space-between;
     height: 415px;
     background: url(${(props) => props.backgroundImageUrl});
     background-size: cover;
@@ -75,6 +91,7 @@ export const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatu
     color: ${(props) => props.status == 'ongoing' && props.theme.promotion.textColor.primary};
     color: ${(props) => props.status == 'finished' && props.theme.promotion.textColor.secondary};
     border-radius: 30px;
+    font-size: 14px;
     padding: 5px 20px;
     font-weight: 500;
     text-transform: uppercase;
@@ -83,20 +100,26 @@ export const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatu
 export const DateRangeLabel = styled.span`
     color: ${(props) => props.theme.textColor.primary};
     font-weight: 700;
-    font-size: 16px;
+    font-size: 12px;
     text-transform: uppercase;
 `;
 
 export const Title = styled.h2`
-    font-size: 30px;
+    font-size: 20px;
+    line-height: 22px;
     font-weight: 800;
     color: ${(props) => props.theme.textColor.primary};
     text-align: center;
     margin-bottom: 16px;
 `;
 
+export const BottomContainer = styled(FlexDiv)`
+    flex-direction: column;
+`;
+
 export const Description = styled.div`
     flex: 0.8;
+    font-size: 14px;
     align-items: center;
     color: ${(props) => props.theme.textColor.primary};
 `;

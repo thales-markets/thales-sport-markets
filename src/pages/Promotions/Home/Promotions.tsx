@@ -122,22 +122,23 @@ const HeadingWrapper = styled(FlexDiv)`
 `;
 
 const Heading = styled.h1`
-    margin: 70px 0px;
-    font-size: 56px;
+    margin: 30px 0px;
+    font-size: 36px;
+    line-height: 43px;
     font-weight: 900;
     font-family: Nunito;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Description = styled.p`
-    font-size: 20px;
+    font-size: 14px;
     font-family: Roboto;
     font-weight: 400;
 `;
 
 const CardsWrapper = styled(FlexDiv)`
     flex-direction: row;
-    gap: 20px;
+    gap: 15px;
     margin: 0 auto;
     flex-wrap: wrap;
     align-items: center;
