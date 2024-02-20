@@ -38,7 +38,7 @@ export const VAULT_MAP: Record<string, any> = {
     },
 };
 
-export const DEPRECATED_VAULTS: [string] = ['parlay-discount-vault'];
+export const DEPRECATED_VAULTS: string[] = ['parlay-discount-vault', 'upsettoor-vault'];
 
 export const isParlayVault = (vaultAddress: string, networkId: Network) => {
     return vaultAddress === VAULT_MAP['parlay-discount-vault'].addresses[networkId];

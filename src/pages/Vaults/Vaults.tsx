@@ -1,10 +1,10 @@
+import ROUTES from 'constants/routes';
+import BackToLink from 'pages/Markets/components/BackToLink';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import BackToLink from 'pages/Markets/components/BackToLink';
-import ROUTES from 'constants/routes';
 import { buildHref } from 'utils/routes';
-import { Container, Note, Title, Wrapper } from './styled-components';
 import VaultOverview from './VaultOverview';
+import { Container, Note, Title, Wrapper } from './styled-components';
 
 const Vault: React.FC = () => {
     const { t } = useTranslation();
@@ -28,7 +28,6 @@ const Vault: React.FC = () => {
             </Container>
             <Container>
                 <VaultOverview vaultId="upsettoor-vault" />
-                <VaultOverview vaultId="parlay-discount-vault" />
             </Container>
         </Wrapper>
     );
