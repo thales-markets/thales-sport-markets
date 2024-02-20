@@ -186,7 +186,8 @@
             "american-odds": "Amerikanische Quoten (z. B. +150)",
             "normalized-odds": "Normalisierte implizite Quote (z. B. 0,40)",
             "description": "Wählen Sie das Anzeigeformat für die Quoten",
-            "info": "*Sie können den Quotentyp jederzeit in den Filtern über der Spieleliste ändern"
+            "info": "*Sie können den Quotentyp jederzeit in den Filtern über der Spieleliste ändern",
+            "title": "Willkommen zu Overtime Markets"
         }
     },
     "footer": {

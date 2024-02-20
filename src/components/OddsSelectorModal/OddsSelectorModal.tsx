@@ -26,7 +26,7 @@ const OddsSelectorModal: React.FC<OddsSelectorModalProps> = ({ onClose }) => {
 
     return (
         <Modal
-            title={'Welcome to Overtime Markets'}
+            title={t('common.odds-modal.title')}
             onClose={onClose}
             shouldCloseOnOverlayClick={false}
             customStyle={{ overlay: { zIndex: 201 } }}

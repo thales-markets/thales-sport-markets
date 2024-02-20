@@ -186,7 +186,8 @@
             "normalized-odds": "Cotes implicites normalisées (ex : 0,40)",
             "decimal-odds": "Cotes décimales (ex : 2,5)",
             "info": "*Vous pouvez toujours modifier le type de cotes dans les filtres au-dessus de la liste des jeux",
-            "description": "Choisir le format d'affichage des cotes"
+            "description": "Choisir le format d'affichage des cotes",
+            "title": "Bienvenue à Overtime Markets"
         }
     },
     "footer": {

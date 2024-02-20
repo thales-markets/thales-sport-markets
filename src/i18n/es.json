@@ -186,7 +186,8 @@
             "decimal-odds": "Cuotas decimales (ej: 2,5)",
             "normalized-odds": "Cuotas implícitas normalizadas (ej: 0,40)",
             "info": "*Siempre puedes cambiar el tipo de probabilidades en los filtros encima de la lista de juegos.",
-            "description": "Elija el formato de visualización de probabilidades"
+            "description": "Elija el formato de visualización de probabilidades",
+            "title": "Bienvenido a Overtime Markets"
         }
     },
     "footer": {

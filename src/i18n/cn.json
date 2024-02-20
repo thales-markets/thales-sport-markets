@@ -186,7 +186,8 @@
             "normalized-odds": "标准化隐含赔率（例如：0.40）",
             "american-odds": "美国赔率（例如：+150）",
             "info": "*您可以随时更改游戏列表上方过滤器中的赔率类型",
-            "description": "选择赔率显示格式"
+            "description": "选择赔率显示格式",
+            "title": "欢迎来到 Overtime Markets"
         }
     },
     "footer": {
