@@ -179,6 +179,13 @@
             "facebook": "Facebook",
             "apple": "Pomme",
             "github": "GitHub"
+        },
+        "odds-modal": {
+            "save": "Sauvegarder",
+            "american-odds": "Cote américaine (ex : +150)",
+            "description": "Comment souhaitez-vous afficher les cotes ?",
+            "normalized-odds": "Cotes implicites normalisées (ex : 0,40)",
+            "decimal-odds": "Cotes décimales (ex : 2,5)"
         }
     },
     "footer": {

@@ -179,6 +179,13 @@
             "discord": "Discordia",
             "gmail": "Gmail",
             "apple": "Mela"
+        },
+        "odds-modal": {
+            "save": "Salva",
+            "normalized-odds": "Quote implicite normalizzate (es: 0,40)",
+            "description": "Come desideri visualizzare le quote?",
+            "american-odds": "Quote americane (es: +150)",
+            "decimal-odds": "Quote decimali (es: 2,5)"
         }
     },
     "footer": {

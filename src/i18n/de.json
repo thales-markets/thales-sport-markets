@@ -179,6 +179,13 @@
             "x": "X",
             "apple": "Apfel",
             "discord": "Zwietracht"
+        },
+        "odds-modal": {
+            "save": "Speichern",
+            "decimal-odds": "Dezimalquote (z. B. 2,5)",
+            "american-odds": "Amerikanische Quoten (z. B. +150)",
+            "description": "Wie möchten Sie die Quoten anzeigen?",
+            "normalized-odds": "Normalisierte implizite Quote (z. B. 0,40)"
         }
     },
     "footer": {

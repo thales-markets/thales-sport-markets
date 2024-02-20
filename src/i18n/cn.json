@@ -179,6 +179,13 @@
             "apple": "苹果",
             "gmail": "邮箱",
             "github": "GitHub"
+        },
+        "odds-modal": {
+            "save": "节省",
+            "decimal-odds": "小数赔率（例如：2.5）",
+            "normalized-odds": "标准化隐含赔率（例如：0.40）",
+            "american-odds": "美国赔率（例如：+150）",
+            "description": "您希望如何显示赔率？"
         }
     },
     "footer": {
