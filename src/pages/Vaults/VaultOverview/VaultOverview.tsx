@@ -80,7 +80,7 @@ const VaultOverview: React.FC<VaultOverviewProps> = ({ vaultId }) => {
                             </LoaderContainer>
                         ) : (
                             <FlexDivColumn>
-                                <VaultTopWrapper deprecatedVault={vaultId == 'parlay-discount-vault'}>
+                                <VaultTopWrapper deprecatedVault={DEPRECATED_VAULTS.includes(vaultId)}>
                                     <VaultSectionDescription>
                                         <Trans
                                             i18nKey={`vault.${vaultId}.description`}
