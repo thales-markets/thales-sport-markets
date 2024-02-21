@@ -906,7 +906,7 @@
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best winning parlays on a <bold>weekly basis</bold>. The tickets will be ranked based on a points system. The points are calculated by taking the odds of the parlay, multiplying it with the 3rd root of the buy-in and adding 10% bonus for each game on the ticket.",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best winning parlays on a <bold>weekly basis</bold>. The tickets will be ranked based on a points system. The points are calculated by taking the odds of the parlay, multiplying it with the square root of the buy-in and adding 10% bonus for each game on the ticket.",
         "info": "Points = parlayOdds * 3√buyin * (1+0.1*numberOfGames).",
         "distribution-note": "Rewards will be distributed to the <bold>TOP 30 parlays every week</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
