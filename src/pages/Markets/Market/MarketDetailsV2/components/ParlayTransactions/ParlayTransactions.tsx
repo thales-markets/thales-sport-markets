@@ -1,6 +1,7 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
+import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import { USD_SIGN } from 'constants/currency';
 import { BetTypeNameMap } from 'constants/tags';
 import { BetType, OddsType, Position } from 'enums/markets';
@@ -23,7 +24,6 @@ import {
     formatCurrencyWithSign,
     formatDateWithTime,
     formatTxTimestamp,
-    getEtherscanTxLink,
     truncateAddress,
 } from 'thales-utils';
 import {
@@ -182,14 +182,7 @@ const ParlayTransactions: React.FC<{ market: SportMarketInfo }> = ({ market }) =
                         Cell: (cellProps: any) => {
                             return (
                                 <FlexCenter>
-                                    <SPAAnchor
-                                        href={getEtherscanTxLink(
-                                            networkId,
-                                            (cellProps.row.original as ParlayMarket).txHash
-                                        )}
-                                    >
-                                        <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
-                                    </SPAAnchor>
+                                    <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
                                 </FlexCenter>
                             );
                         },
@@ -215,6 +208,7 @@ const ParlayTransactions: React.FC<{ market: SportMarketInfo }> = ({ market }) =
                                 </FlexCenter>
                             );
                         },
+                        width: '50px',
                     },
                     {
                         id: 'paid',
@@ -253,6 +247,13 @@ const ParlayTransactions: React.FC<{ market: SportMarketInfo }> = ({ market }) =
                                 );
                             }
                         },
+                        width: '100px',
+                    },
+                    {
+                        Header: <>{t('market.table.tx-status-col')}</>,
+                        accessor: 'txHash',
+                        Cell: (cellProps: any) => <ViewEtherscanLink hash={cellProps.cell.value} />,
+                        width: '100px',
                     },
                 ]}
                 initialState={{

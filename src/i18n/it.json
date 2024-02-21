@@ -179,6 +179,15 @@
             "discord": "Discordia",
             "gmail": "Gmail",
             "apple": "Mela"
+        },
+        "odds-modal": {
+            "save": "Salva",
+            "normalized-odds": "Quote implicite normalizzate (es: 0,40)",
+            "description": "Come desideri visualizzare le quote?",
+            "american-odds": "Quote americane (es: +150)",
+            "decimal-odds": "Quote decimali (es: 2,5)",
+            "info": "*Puoi sempre modificare il tipo di quote nei filtri sopra l'elenco dei giochi",
+            "title": "Benvenuti nei mercati degli straordinari"
         }
     },
     "footer": {
@@ -562,7 +571,8 @@
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-tennis": "Il Roland Garros sarà incentivato, dato che il torneo inizierà il 29 maggio. I mercati saranno potenziati con {{rewards}} fino alla fine del torneo il 12 giugno. I premi verranno distribuiti in base al tuo volume guidato attraverso questi mercati. Puoi monitorare l'assegnazione dei tuoi premi sulla nostra <detailsLink>Dune Dashboard</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "Un totale enorme di {{rewards}} verrà distribuito durante i playoff della NFL. Controlla maggiori dettagli <detailsLink>qui</detailsLink>.",
-        "superbowl-incentive": "10.000 ARB IN INCENTIVI"
+        "superbowl-incentive": "10.000 ARB IN INCENTIVI",
+        "incentivized-tooltip-uefa": "Un totale enorme di {{rewards}} sarà distribuito per le competizioni UEFA. Solo il volume sulla rete Arbitrum verrà calcolato ai fini dei premi! Controlla maggiori dettagli <detailsLink>qui</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -919,6 +929,19 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "weekly-period": "Weekly period"
+        },
+        "ticket-info": {
+            "title": "Classifica Parlay",
+            "rank-label": "Rango",
+            "buy-in-bonus-label": "Bonus di acquisto",
+            "basic-points-label": "Punti fondamentali",
+            "total-points-label": "Punti totali",
+            "rewards-label": "Premi",
+            "points-label": "Punti",
+            "points-tooltip": "Punti totali calcolati con bonus per la classifica parlay. I punti vengono ottenuti moltiplicando le quote totali del parlay per la radice cubica (3°) del buy-in e quindi aggiungendo il 10% di bonus per ogni gioco sul biglietto.",
+            "number-of-games-bonus-label": "Bonus sul numero di giochi",
+            "rank-tooltip": "Classifica provvisoria basata sullo stato attuale della classifica. La classifica finale sarà resa nota alla fine del turno. I turni sono settimanali dal mercoledì al mercoledì.",
+            "rewards-tooltip": "Potenziali ricompense se il tuo parlay assume il rango superiore alla fine del round."
         }
     },
     "wizard": {
