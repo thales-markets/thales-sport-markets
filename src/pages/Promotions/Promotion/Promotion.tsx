@@ -105,7 +105,7 @@ const HeaderContainer = styled(FlexDiv)`
     text-align: center !important;
     align-items: center;
     width: 100%;
-    margin: 20px 0px;
+    margin: 40px 0px 30px 0px;
     justify-content: center;
     color: ${(props) => props.theme.textColor.primary} !important;
     h1 {
@@ -163,7 +163,7 @@ const CTAContainer = styled(FlexDiv)`
     padding: 20px;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 `;
 
 const CTAContent = styled(FlexDiv)`
