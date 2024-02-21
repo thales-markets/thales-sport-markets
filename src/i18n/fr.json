@@ -179,6 +179,15 @@
             "facebook": "Facebook",
             "apple": "Pomme",
             "github": "GitHub"
+        },
+        "odds-modal": {
+            "save": "Sauvegarder",
+            "american-odds": "Cote américaine (ex : +150)",
+            "normalized-odds": "Cotes implicites normalisées (ex : 0,40)",
+            "decimal-odds": "Cotes décimales (ex : 2,5)",
+            "info": "*Vous pouvez toujours modifier le type de cotes dans les filtres au-dessus de la liste des jeux",
+            "description": "Choisir le format d'affichage des cotes",
+            "title": "Bienvenue à Overtime Markets"
         }
     },
     "footer": {
@@ -562,7 +571,8 @@
         "incentivized-markets": "MARCHÉS RÉCOMPENSÉS",
         "incentivized-tooltip-tennis": "Wimbledon sera incité, car le tournoi commence le 3 juillet. Les marchés seront boostés avec {{rewards}} jusqu'à la fin du tournoi le 16 juillet. Les récompenses seront distribuées en fonction de votre volume généré par ces marchés. Vous pouvez suivre l'attribution de vos récompenses sur notre <detailsLink>Dune Dashboard</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "Un total énorme de {{rewards}} sera distribué pendant les séries éliminatoires de la NFL. Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
-        "superbowl-incentive": "10 000 ARB EN INCITATIONS"
+        "superbowl-incentive": "10 000 ARB EN INCITATIONS",
+        "incentivized-tooltip-uefa": "Un total énorme de {{rewards}} sera distribué pour les compétitions de l'UEFA. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>."
     },
     "rewards": {
         "table": {
@@ -919,6 +929,19 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "weekly-period": "Weekly period"
+        },
+        "ticket-info": {
+            "rank-label": "Rang",
+            "basic-points-label": "Points de base",
+            "total-points-label": "Points totaux",
+            "rewards-label": "Récompenses",
+            "title": "Classement Parlay",
+            "points-label": "Points",
+            "buy-in-bonus-label": "Bonus d'entrée",
+            "rewards-tooltip": "Récompenses potentielles si votre parlay prend le rang supérieur à la fin du tour.",
+            "number-of-games-bonus-label": "Nombre de jeux bonus",
+            "rank-tooltip": "Classement provisoire basé sur l’état actuel du classement. Le classement final est connu à la fin de la manche. Les rondes sont hebdomadaires du mercredi au mercredi.",
+            "points-tooltip": "Total de points calculé avec bonus pour le classement Parlay. Les points sont calculés en multipliant les cotes totales du parlay par la racine cubique (3e) du buy-in, puis en ajoutant 10 % de bonus pour chaque jeu sur le ticket."
         }
     },
     "wizard": {
