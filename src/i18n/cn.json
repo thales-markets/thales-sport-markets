@@ -179,15 +179,6 @@
             "apple": "苹果",
             "gmail": "邮箱",
             "github": "GitHub"
-        },
-        "odds-modal": {
-            "save": "节省",
-            "decimal-odds": "小数赔率（例如：2.5）",
-            "normalized-odds": "标准化隐含赔率（例如：0.40）",
-            "american-odds": "美国赔率（例如：+150）",
-            "info": "*您可以随时更改游戏列表上方过滤器中的赔率类型",
-            "description": "选择赔率显示格式",
-            "title": "欢迎来到 Overtime Markets"
         }
     },
     "footer": {
@@ -571,8 +562,7 @@
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-tennis": "温网将受到激励，因为比赛将于 7 月 3 日开始。市场将通过 {{rewards}} 得到提振，直至 7 月 16 日锦标赛结束。奖励将根据您在这些市场上的交易量进行分配。您可以在我们的<detailsLink>Dune Dashboard</detailsLink>上跟踪您的奖励分配。",
         "incentivized-tooltip-nfl-playoffs": "NFL 季后赛期间将发放总计高达 {{rewards}} 的奖励。查看更多详细信息<detailsLink>此处</detailsLink>。",
-        "superbowl-incentive": "10,000 ARB 奖励",
-        "incentivized-tooltip-uefa": "欧足联比赛将发放总计高达 {{rewards}} 的奖金。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。"
+        "superbowl-incentive": "10,000 ARB 奖励"
     },
     "rewards": {
         "header": "奖励",
@@ -929,19 +919,6 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "weekly-period": "Weekly period"
-        },
-        "ticket-info": {
-            "basic-points-label": "基本要点",
-            "rewards-label": "奖励",
-            "number-of-games-bonus-label": "游戏奖金数量",
-            "points-label": "积分",
-            "rank-label": "秩",
-            "total-points-label": "总积分",
-            "title": "连本带利排行榜",
-            "buy-in-bonus-label": "买入奖金",
-            "points-tooltip": "计算总分以及连赢排行榜的奖金。积分的计算方法是将连本投注的总赔率乘以买入金额的立方（第三）根，然后为彩票上的每场比赛加上 10% 的奖金。",
-            "rewards-tooltip": "如果您的连赢在回合结束时排名高于此，则可能获得奖励。",
-            "rank-tooltip": "根据排行榜当前状态的暂定排名。最终排名在回合结束时公布。回合每周三至周三进行。"
         }
     },
     "wizard": {
