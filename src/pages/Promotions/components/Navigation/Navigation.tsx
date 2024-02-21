@@ -55,7 +55,7 @@ const Wrapper = styled(FlexDivRow)`
     border: 2px ${(props) => props.theme.borderColor.primary} solid;
     justify-content: flex-start;
     padding: 10px;
-    margin: 40px 0px 15px 0px;
+    margin: 20px 0px 15px 0px;
 `;
 
 const NavItemsWrapper = styled(FlexDiv)`

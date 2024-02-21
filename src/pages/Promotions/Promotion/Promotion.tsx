@@ -109,9 +109,11 @@ const HeaderContainer = styled(FlexDiv)`
     justify-content: center;
     color: ${(props) => props.theme.textColor.primary} !important;
     h1 {
+        font-family: 'Nunito' !important;
         font-size: 30px;
         font-weight: 900;
         line-height: 36px;
+        width: 100%;
     }
     h2 {
         font-size: 20px;

@@ -111,7 +111,7 @@ const Promotions: React.FC = () => {
 
 const Wrapper = styled(FlexDiv)`
     flex-direction: column;
-    margin-top: 50px;
+    margin-top: 10px;
 `;
 
 const HeadingWrapper = styled(FlexDiv)`
