@@ -5,8 +5,9 @@ import { PROMOTION_SANITIZE_PROPS } from 'constants/ui';
 import DOMPurify from 'dompurify';
 import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
@@ -20,6 +21,8 @@ type PromotionProps = RouteComponentProps<{
 
 const Promotion: React.FC<PromotionProps> = (props) => {
     const theme: ThemeInterface = useTheme();
+    const history = useHistory();
+    const { t } = useTranslation();
 
     const promotionId = props?.match?.params?.promotionId;
 
@@ -48,6 +51,9 @@ const Promotion: React.FC<PromotionProps> = (props) => {
             {(!promotion || promotionsQuery.isLoading) && <Loader />}
             {promotion !== undefined && (
                 <>
+                    <BackContainer>
+                        <Back onClick={() => history.goBack()}>{t('promotions.back')}</Back>
+                    </BackContainer>
                     <CoverImageWrapper imageUrl={promotion.article.coverImageUrl}></CoverImageWrapper>
                     <HeaderContainer
                         dangerouslySetInnerHTML={{
@@ -97,6 +103,20 @@ const CoverImageWrapper = styled(FlexDiv)<{ imageUrl: string }>`
     background-repeat: no-repeat;
     width: 100%;
     height: 210px;
+`;
+
+const BackContainer = styled(FlexDiv)`
+    align-items: center;
+    justify-content: flex-start;
+    margin: 10px 0px;
+`;
+
+const Back = styled.span`
+    font-family: 'Roboto';
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 14px;
+    text-transform: uppercase;
 `;
 
 const HeaderContainer = styled(FlexDiv)`
