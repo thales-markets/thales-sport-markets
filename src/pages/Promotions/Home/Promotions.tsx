@@ -85,7 +85,7 @@ const Promotions: React.FC = () => {
                         onChangeNavItem={(index: number) => setSelectedNavItem(index)}
                     />
                     <CardsWrapper>
-                        {promotions.length > 0 &&
+                        {promotions.length > 0 ? (
                             promotions.map((promotion, index) => {
                                 return (
                                     <PromotionCard
@@ -101,7 +101,10 @@ const Promotions: React.FC = () => {
                                         branchName={branchName ? branchName : undefined}
                                     />
                                 );
-                            })}
+                            })
+                        ) : (
+                            <EmptyContainer>{t('promotions.no-promotions')}</EmptyContainer>
+                        )}
                     </CardsWrapper>
                 </>
             )}
@@ -112,6 +115,7 @@ const Promotions: React.FC = () => {
 const Wrapper = styled(FlexDiv)`
     flex-direction: column;
     margin-top: 10px;
+    min-height: 620px;
 `;
 
 const HeadingWrapper = styled(FlexDiv)`
@@ -142,6 +146,14 @@ const CardsWrapper = styled(FlexDiv)`
     margin: 0 auto;
     flex-wrap: wrap;
     align-items: center;
+`;
+
+const EmptyContainer = styled(FlexDiv)`
+    margin: 100px 0px;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 `;
 
 export default Promotions;
