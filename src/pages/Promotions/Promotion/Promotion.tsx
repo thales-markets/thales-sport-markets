@@ -68,6 +68,7 @@ const Promotion: React.FC<PromotionProps> = (props) => {
                                 width={'150px'}
                                 backgroundColor={theme.button.background.quaternary}
                                 textColor={theme.button.textColor.primary}
+                                borderColor={theme.button.borderColor.secondary}
                             >
                                 {promotion.article.ctaSection.ctaButtonLabel}
                             </Button>

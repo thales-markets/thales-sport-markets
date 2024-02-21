@@ -54,6 +54,7 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
                             <Button
                                 textColor={theme.button.textColor.primary}
                                 backgroundColor={theme.button.background.quaternary}
+                                borderColor={theme.button.borderColor.secondary}
                             >
                                 {callToActionButton}
                             </Button>
