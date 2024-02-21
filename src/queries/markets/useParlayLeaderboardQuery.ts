@@ -1,9 +1,9 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { ParlayMarketWithRank } from 'types/markets';
-import { Network } from 'enums/network';
-import { generalConfig } from 'config/general';
-import axios from 'axios';
 
 export const useParlayLeaderboardQuery = (
     networkId: Network,

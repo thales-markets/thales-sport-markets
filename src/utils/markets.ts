@@ -38,6 +38,7 @@ import {
     PositionData,
     SportMarketInfo,
     SportMarketInfoV2,
+    Ticket,
     TicketMarket,
     TicketPosition,
     TradeData,
@@ -884,3 +885,16 @@ export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     });
 
 export const isOddValid = (odd: number) => odd < 1 && odd != 0;
+
+export const isParlayWonV2 = (ticket: Ticket) =>
+    ticket.sportMarkets.every((position) => position.position + 1 === position.finalResult || position.isCanceled);
+
+export const isParlayLostV2 = (ticket: Ticket) =>
+    ticket.sportMarkets.some(
+        (position) => position.position + 1 !== position.finalResult && position.isResolved && !position.isCanceled
+    );
+
+export const isParlayOpenV2 = (ticket: Ticket) => {
+    const parlayHasOpenMarkets = ticket.sportMarkets.some((position) => position.isOpen);
+    return parlayHasOpenMarkets && !isParlayLostV2(ticket);
+};

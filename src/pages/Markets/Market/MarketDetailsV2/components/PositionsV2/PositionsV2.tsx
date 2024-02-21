@@ -1,7 +1,7 @@
 import Tooltip from 'components/Tooltip';
 import { BetTypeNameMap } from 'constants/tags';
 import { BetType } from 'enums/markets';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SportMarketInfoV2 } from 'types/markets';
@@ -22,6 +22,14 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds }) => 
     const areOddsValid = markets.some((market) => market.odds.some((odd) => isOddValid(odd)));
 
     const showContainer = !showOdds || areOddsValid;
+
+    const sortedMarkets = useMemo(
+        () =>
+            markets.sort((marketA: SportMarketInfoV2, marketB: SportMarketInfoV2) => {
+                return sortMarketsByDisabled(marketA, marketB);
+            }),
+        [markets]
+    );
 
     return showContainer ? (
         <Container onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')}>
@@ -45,24 +53,20 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds }) => 
             />
             {isExpanded && (
                 <ContentContianer>
-                    {markets
-                        .sort((marketA: SportMarketInfoV2, marketB: SportMarketInfoV2) => {
-                            return sortMarketsByDisabled(marketA, marketB);
-                        })
-                        .map((market, index) => {
-                            return (
-                                <div key={index}>
-                                    {market.isPlayerPropsMarket && (
-                                        <PropsTextContainer>
-                                            <PropsText>{`${market.playerProps.playerName}`}</PropsText>
-                                        </PropsTextContainer>
-                                    )}
-                                    <ContentRow>
-                                        <MarketPositionsV2 market={market} />
-                                    </ContentRow>
-                                </div>
-                            );
-                        })}
+                    {sortedMarkets.map((market, index) => {
+                        return (
+                            <div key={index}>
+                                {market.isPlayerPropsMarket && (
+                                    <PropsTextContainer>
+                                        <PropsText>{`${market.playerProps.playerName}`}</PropsText>
+                                    </PropsTextContainer>
+                                )}
+                                <ContentRow>
+                                    <MarketPositionsV2 market={market} />
+                                </ContentRow>
+                            </div>
+                        );
+                    })}
                 </ContentContianer>
             )}
         </Container>

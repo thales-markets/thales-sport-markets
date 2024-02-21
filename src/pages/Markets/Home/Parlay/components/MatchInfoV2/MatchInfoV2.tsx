@@ -58,7 +58,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 }}
                 symbolText={symbolText}
                 symbolUpperText={
-                    lineInfo && !market.isPlayerPropsMarket
+                    lineInfo && !market.isOneSidePlayerPropsMarket && !market.isYesNoPlayerPropsMarket
                         ? {
                               text: lineInfo,
                               textStyle: {
@@ -71,7 +71,9 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         : undefined
                 }
                 tooltip={!readOnly && <>{getOddTooltipTextV2(market.position, market)}</>}
-                additionalStyle={market.isOneSideMarket && market.isPlayerPropsMarket ? { fontSize: 10 } : {}}
+                additionalStyle={
+                    market.isOneSidePlayerPropsMarket && market.isYesNoPlayerPropsMarket ? { fontSize: 10 } : {}
+                }
             />
             {readOnly ? (
                 market?.isCanceled ? (

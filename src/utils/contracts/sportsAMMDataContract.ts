@@ -98,6 +98,380 @@ const sportsAMMDataContract = {
             type: 'function',
         },
         {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'user',
+                    type: 'address',
+                },
+            ],
+            name: 'getActiveTicketsDataPerUser',
+            outputs: [
+                {
+                    components: [
+                        {
+                            internalType: 'address',
+                            name: 'id',
+                            type: 'address',
+                        },
+                        {
+                            components: [
+                                {
+                                    internalType: 'bytes32',
+                                    name: 'gameId',
+                                    type: 'bytes32',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'sportId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'childId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'playerPropsId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint256',
+                                    name: 'maturity',
+                                    type: 'uint256',
+                                },
+                                {
+                                    internalType: 'int24',
+                                    name: 'line',
+                                    type: 'int24',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'playerId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint8',
+                                    name: 'position',
+                                    type: 'uint8',
+                                },
+                                {
+                                    internalType: 'uint256',
+                                    name: 'odd',
+                                    type: 'uint256',
+                                },
+                            ],
+                            internalType: 'struct SportsAMMV2Data.GameData[]',
+                            name: 'gamesData',
+                            type: 'tuple[]',
+                        },
+                        {
+                            components: [
+                                {
+                                    internalType: 'bool',
+                                    name: 'isResolved',
+                                    type: 'bool',
+                                },
+                                {
+                                    internalType: 'bool',
+                                    name: 'isCancelled',
+                                    type: 'bool',
+                                },
+                                {
+                                    components: [
+                                        {
+                                            internalType: 'uint24',
+                                            name: 'homeScore',
+                                            type: 'uint24',
+                                        },
+                                        {
+                                            internalType: 'uint24',
+                                            name: 'awayScore',
+                                            type: 'uint24',
+                                        },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.GameScore',
+                                    name: 'score',
+                                    type: 'tuple',
+                                },
+                                {
+                                    internalType: 'enum ISportsAMMV2.GameResult',
+                                    name: 'result',
+                                    type: 'uint8',
+                                },
+                            ],
+                            internalType: 'struct SportsAMMV2Data.GameStatus[]',
+                            name: 'gamesStatus',
+                            type: 'tuple[]',
+                        },
+                        {
+                            internalType: 'address',
+                            name: 'ticketOwner',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'address',
+                            name: 'ticketCreator',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'buyInAmount',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'buyInAmountAfterFees',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'totalQuote',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'numOfGames',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'expiry',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'createdAt',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'resolved',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'paused',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'cancelled',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isLost',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isUserTheWinner',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isExercisable',
+                            type: 'bool',
+                        },
+                    ],
+                    internalType: 'struct SportsAMMV2Data.TicketData[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'user',
+                    type: 'address',
+                },
+            ],
+            name: 'getResolvedTicketsDataPerUser',
+            outputs: [
+                {
+                    components: [
+                        {
+                            internalType: 'address',
+                            name: 'id',
+                            type: 'address',
+                        },
+                        {
+                            components: [
+                                {
+                                    internalType: 'bytes32',
+                                    name: 'gameId',
+                                    type: 'bytes32',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'sportId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'childId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'playerPropsId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint256',
+                                    name: 'maturity',
+                                    type: 'uint256',
+                                },
+                                {
+                                    internalType: 'int24',
+                                    name: 'line',
+                                    type: 'int24',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'playerId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint8',
+                                    name: 'position',
+                                    type: 'uint8',
+                                },
+                                {
+                                    internalType: 'uint256',
+                                    name: 'odd',
+                                    type: 'uint256',
+                                },
+                            ],
+                            internalType: 'struct SportsAMMV2Data.GameData[]',
+                            name: 'gamesData',
+                            type: 'tuple[]',
+                        },
+                        {
+                            components: [
+                                {
+                                    internalType: 'bool',
+                                    name: 'isResolved',
+                                    type: 'bool',
+                                },
+                                {
+                                    internalType: 'bool',
+                                    name: 'isCancelled',
+                                    type: 'bool',
+                                },
+                                {
+                                    components: [
+                                        {
+                                            internalType: 'uint24',
+                                            name: 'homeScore',
+                                            type: 'uint24',
+                                        },
+                                        {
+                                            internalType: 'uint24',
+                                            name: 'awayScore',
+                                            type: 'uint24',
+                                        },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.GameScore',
+                                    name: 'score',
+                                    type: 'tuple',
+                                },
+                                {
+                                    internalType: 'enum ISportsAMMV2.GameResult',
+                                    name: 'result',
+                                    type: 'uint8',
+                                },
+                            ],
+                            internalType: 'struct SportsAMMV2Data.GameStatus[]',
+                            name: 'gamesStatus',
+                            type: 'tuple[]',
+                        },
+                        {
+                            internalType: 'address',
+                            name: 'ticketOwner',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'address',
+                            name: 'ticketCreator',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'buyInAmount',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'buyInAmountAfterFees',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'totalQuote',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'numOfGames',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'expiry',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'createdAt',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'resolved',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'paused',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'cancelled',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isLost',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isUserTheWinner',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isExercisable',
+                            type: 'bool',
+                        },
+                    ],
+                    internalType: 'struct SportsAMMV2Data.TicketData[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'getSportsAMMParameters',
             outputs: [
@@ -132,6 +506,380 @@ const sportsAMMDataContract = {
                     internalType: 'struct SportsAMMV2Data.SportsAMMParameters',
                     name: '',
                     type: 'tuple',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address[]',
+                    name: 'ticketsArray',
+                    type: 'address[]',
+                },
+            ],
+            name: 'getTicketsData',
+            outputs: [
+                {
+                    components: [
+                        {
+                            internalType: 'address',
+                            name: 'id',
+                            type: 'address',
+                        },
+                        {
+                            components: [
+                                {
+                                    internalType: 'bytes32',
+                                    name: 'gameId',
+                                    type: 'bytes32',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'sportId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'childId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'playerPropsId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint256',
+                                    name: 'maturity',
+                                    type: 'uint256',
+                                },
+                                {
+                                    internalType: 'int24',
+                                    name: 'line',
+                                    type: 'int24',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'playerId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint8',
+                                    name: 'position',
+                                    type: 'uint8',
+                                },
+                                {
+                                    internalType: 'uint256',
+                                    name: 'odd',
+                                    type: 'uint256',
+                                },
+                            ],
+                            internalType: 'struct SportsAMMV2Data.GameData[]',
+                            name: 'gamesData',
+                            type: 'tuple[]',
+                        },
+                        {
+                            components: [
+                                {
+                                    internalType: 'bool',
+                                    name: 'isResolved',
+                                    type: 'bool',
+                                },
+                                {
+                                    internalType: 'bool',
+                                    name: 'isCancelled',
+                                    type: 'bool',
+                                },
+                                {
+                                    components: [
+                                        {
+                                            internalType: 'uint24',
+                                            name: 'homeScore',
+                                            type: 'uint24',
+                                        },
+                                        {
+                                            internalType: 'uint24',
+                                            name: 'awayScore',
+                                            type: 'uint24',
+                                        },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.GameScore',
+                                    name: 'score',
+                                    type: 'tuple',
+                                },
+                                {
+                                    internalType: 'enum ISportsAMMV2.GameResult',
+                                    name: 'result',
+                                    type: 'uint8',
+                                },
+                            ],
+                            internalType: 'struct SportsAMMV2Data.GameStatus[]',
+                            name: 'gamesStatus',
+                            type: 'tuple[]',
+                        },
+                        {
+                            internalType: 'address',
+                            name: 'ticketOwner',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'address',
+                            name: 'ticketCreator',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'buyInAmount',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'buyInAmountAfterFees',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'totalQuote',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'numOfGames',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'expiry',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'createdAt',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'resolved',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'paused',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'cancelled',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isLost',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isUserTheWinner',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isExercisable',
+                            type: 'bool',
+                        },
+                    ],
+                    internalType: 'struct SportsAMMV2Data.TicketData[]',
+                    name: '',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: 'gameId',
+                    type: 'bytes32',
+                },
+            ],
+            name: 'getTicketsDataPerGame',
+            outputs: [
+                {
+                    components: [
+                        {
+                            internalType: 'address',
+                            name: 'id',
+                            type: 'address',
+                        },
+                        {
+                            components: [
+                                {
+                                    internalType: 'bytes32',
+                                    name: 'gameId',
+                                    type: 'bytes32',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'sportId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'childId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'playerPropsId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint256',
+                                    name: 'maturity',
+                                    type: 'uint256',
+                                },
+                                {
+                                    internalType: 'int24',
+                                    name: 'line',
+                                    type: 'int24',
+                                },
+                                {
+                                    internalType: 'uint16',
+                                    name: 'playerId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint8',
+                                    name: 'position',
+                                    type: 'uint8',
+                                },
+                                {
+                                    internalType: 'uint256',
+                                    name: 'odd',
+                                    type: 'uint256',
+                                },
+                            ],
+                            internalType: 'struct SportsAMMV2Data.GameData[]',
+                            name: 'gamesData',
+                            type: 'tuple[]',
+                        },
+                        {
+                            components: [
+                                {
+                                    internalType: 'bool',
+                                    name: 'isResolved',
+                                    type: 'bool',
+                                },
+                                {
+                                    internalType: 'bool',
+                                    name: 'isCancelled',
+                                    type: 'bool',
+                                },
+                                {
+                                    components: [
+                                        {
+                                            internalType: 'uint24',
+                                            name: 'homeScore',
+                                            type: 'uint24',
+                                        },
+                                        {
+                                            internalType: 'uint24',
+                                            name: 'awayScore',
+                                            type: 'uint24',
+                                        },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.GameScore',
+                                    name: 'score',
+                                    type: 'tuple',
+                                },
+                                {
+                                    internalType: 'enum ISportsAMMV2.GameResult',
+                                    name: 'result',
+                                    type: 'uint8',
+                                },
+                            ],
+                            internalType: 'struct SportsAMMV2Data.GameStatus[]',
+                            name: 'gamesStatus',
+                            type: 'tuple[]',
+                        },
+                        {
+                            internalType: 'address',
+                            name: 'ticketOwner',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'address',
+                            name: 'ticketCreator',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'buyInAmount',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'buyInAmountAfterFees',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'totalQuote',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'numOfGames',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'expiry',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'createdAt',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'resolved',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'paused',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'cancelled',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isLost',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isUserTheWinner',
+                            type: 'bool',
+                        },
+                        {
+                            internalType: 'bool',
+                            name: 'isExercisable',
+                            type: 'bool',
+                        },
+                    ],
+                    internalType: 'struct SportsAMMV2Data.TicketData[]',
+                    name: '',
+                    type: 'tuple[]',
                 },
             ],
             stateMutability: 'view',

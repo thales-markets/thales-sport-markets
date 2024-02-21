@@ -11,6 +11,8 @@ const QUERY_KEYS = {
         maxTimestamp,
     ],
     MarketParlays: (networkId: Network, marketAddress: string) => ['marketParlays', networkId, marketAddress],
+    GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
+    UserTickets: (networkId: Network, user: string) => ['userTickets', networkId, user],
     ParlayLeaderboard: (networkId: Network, period: number) => ['parlayLeaderboard', period, networkId],
     SportMarkets: (globalFilter: GlobalFiltersEnum, networkId: Network) => ['sportMarkets', globalFilter, networkId],
     SportMarketsV2: (globalFilter: GlobalFiltersEnum, networkId: Network) => [

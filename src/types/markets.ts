@@ -412,33 +412,6 @@ export type TicketPosition = {
     position: number;
 };
 
-export type SportMarketChildMarketsV2 = {
-    spreadMarkets: SportMarketInfoV2[];
-    totalMarkets: SportMarketInfoV2[];
-    doubleChanceMarkets: SportMarketInfoV2[];
-    combinedPositionsMarkets: SportMarketInfoV2[];
-    strikeOutsMarkets: SportMarketInfoV2[];
-    homeRunsMarkets: SportMarketInfoV2[];
-    rushingYardsMarkets: SportMarketInfoV2[];
-    passingYardsMarkets: SportMarketInfoV2[];
-    receivingYardsMarkets: SportMarketInfoV2[];
-    passingTouchdownsMarkets: SportMarketInfoV2[];
-    oneSiderTouchdownsMarkets: SportMarketInfoV2[];
-    fieldGoalsMadeMarkets: SportMarketInfoV2[];
-    pitcherHitsAllowedMarkets: SportMarketInfoV2[];
-    oneSiderGoalsMarkets: SportMarketInfoV2[];
-    shotsMarkets: SportMarketInfoV2[];
-    pointsMarkets: SportMarketInfoV2[];
-    hitsRecordedMarkets: SportMarketInfoV2[];
-    reboundsMarkets: SportMarketInfoV2[];
-    assistsMarkets: SportMarketInfoV2[];
-    doubleDoubleMarkets: SportMarketInfoV2[];
-    tripleDoubleMarkets: SportMarketInfoV2[];
-    receptionsMarkets: SportMarketInfoV2[];
-    firstTouchdownMarkets: SportMarketInfoV2[];
-    lastTouchdownMarkets: SportMarketInfoV2[];
-};
-
 export type BetTypeInfo = {
     name: string;
     title: string;
@@ -447,6 +420,7 @@ export type BetTypeInfo = {
 
 export type TicketMarket = SportMarketInfoV2 & {
     position: Position;
+    odd: number;
     winning?: boolean;
 };
 
@@ -470,4 +444,24 @@ export type TradeData = {
     odds: string[];
     merkleProof: string[];
     position: number;
+};
+
+export type Ticket = {
+    id: string;
+    timestamp: number;
+    txHash: string;
+    sportMarkets: TicketMarket[];
+    account: string;
+    buyInAmount: number;
+    buyInAmountAfterFees: number;
+    totalQuote: number;
+    payout: number;
+    numOfGames: number;
+    expiry: number;
+    isResolved: boolean;
+    isPaused: boolean;
+    isCancelled: boolean;
+    isLost: boolean;
+    isUserTheWinner: boolean;
+    isExercisable: boolean;
 };

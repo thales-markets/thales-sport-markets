@@ -33,6 +33,7 @@ import Web3 from 'web3';
 import { SportMarketLiveResult } from '../../../../types/markets';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
+import TicketTransactions from './components/TicketTransactions';
 
 type MarketDetailsPropType = {
     market: SportMarketInfoV2;
@@ -313,8 +314,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         return <PositionsV2 key={index} markets={childMarkets} betType={typeId} showOdds={showAMM} />;
                     })}
                 </>
-                {/* <Transactions market={market} />
-                <ParlayTransactions market={market} /> */}
+                {/* <Transactions market={market} /> */}
+                <TicketTransactions market={market} />
             </MainContainer>
             {showAMM && (
                 <SidebarContainer>

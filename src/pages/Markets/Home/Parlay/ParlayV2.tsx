@@ -85,6 +85,7 @@ const Parlay: React.FC = () => {
                     return {
                         ...openMarket,
                         position: ticketPosition.position,
+                        odd: openMarket.odds[ticketPosition.position],
                     };
                 });
 

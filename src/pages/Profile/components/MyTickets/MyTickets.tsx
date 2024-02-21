@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import Positions from '../../components/Positions';
-import { navItems } from '../../components/NavigationBar/NavigationBar';
-import TransactionsHistory from '../../components/TransactionsHistory';
-import UserStats from '../../components/UserStats';
-import { getQueryStringVal } from 'utils/useQueryParams';
-import SearchField from '../../components/SearchField';
-import { useTranslation } from 'react-i18next';
-import { navigateTo } from 'utils/routes';
 import ROUTES from 'constants/routes';
+import { NavigationWrapper } from 'pages/Profile/styled-components';
+import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { setSGPFees } from 'redux/modules/parlay';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
+import { navigateTo } from 'utils/routes';
+import { getQueryStringVal } from 'utils/useQueryParams';
+import { navItems } from '../../components/NavigationBar/NavigationBar';
+import Positions from '../../components/Positions';
+import SearchField from '../../components/SearchField';
+import UserStats from '../../components/UserStats';
 import UserVaults from '../../components/UserVaults';
 import Voucher from '../../components/Voucher';
-import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
-import { setSGPFees } from 'redux/modules/parlay';
-import { NavigationWrapper } from 'pages/Profile/styled-components';
 import NavigationBar from '../NavigationBar';
+import TicketTransactions from '../TicketTransactions';
 
 const MyTickets: React.FC = () => {
     const { t } = useTranslation();
@@ -56,7 +56,7 @@ const MyTickets: React.FC = () => {
                 />
             </NavigationWrapper>
             {navItems[0].id == navItem && <Positions searchText={searchText} />}
-            {navItems[1].id == navItem && <TransactionsHistory searchText={searchText} />}
+            {navItems[1].id == navItem && <TicketTransactions searchText={searchText} />}
             {navItems[2].id == navItem && <UserVaults />}
             {navItems[3].id == navItem && <Voucher searchText={searchText} />}
         </>
