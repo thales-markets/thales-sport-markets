@@ -179,15 +179,6 @@
             "x": "X",
             "apple": "Apfel",
             "discord": "Zwietracht"
-        },
-        "odds-modal": {
-            "save": "Speichern",
-            "decimal-odds": "Dezimalquote (z. B. 2,5)",
-            "american-odds": "Amerikanische Quoten (z. B. +150)",
-            "normalized-odds": "Normalisierte implizite Quote (z. B. 0,40)",
-            "description": "Wählen Sie das Anzeigeformat für die Quoten",
-            "info": "*Sie können den Quotentyp jederzeit in den Filtern über der Spieleliste ändern",
-            "title": "Willkommen zu Overtime Markets"
         }
     },
     "footer": {
@@ -571,8 +562,7 @@
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-tennis": "Wimbledon wird einen Anreiz erhalten, da das Turnier am 3. Juli beginnt. Die Märkte werden bis zum Ende des Turniers am 16. Juli mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen.",
         "incentivized-tooltip-nfl-playoffs": "Während der NFL-Playoffs werden insgesamt {{rewards}} verteilt. Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
-        "superbowl-incentive": "10.000 ARB an Anreizen",
-        "incentivized-tooltip-uefa": "Für die UEFA-Wettbewerbe wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>."
+        "superbowl-incentive": "10.000 ARB an Anreizen"
     },
     "rewards": {
         "header": "Preise",
@@ -929,19 +919,6 @@
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
             "weekly-period": "Weekly period"
-        },
-        "ticket-info": {
-            "title": "Parlay-Bestenliste",
-            "rewards-label": "Belohnung",
-            "rank-label": "Rang",
-            "points-tooltip": "Berechnete Gesamtpunkte mit Boni für die Parlay-Bestenliste. Punkte werden durch Multiplikation der Gesamtquote des Einsatzes mit der Kubikwurzel (3. Wurzel) des Buy-Ins und der anschließenden Addition eines Bonus von 10 % für jedes Spiel auf dem Ticket ermittelt.",
-            "points-label": "Punkte",
-            "rewards-tooltip": "Potenzielle Belohnungen, wenn Ihr Einsatz am Ende der Runde den oben genannten Rang annimmt.",
-            "rank-tooltip": "Vorläufige Rangliste basierend auf dem aktuellen Stand der Bestenliste. Die endgültige Platzierung wird am Ende der Runde bekannt gegeben. Die Runden finden wöchentlich von Mittwoch bis Mittwoch statt.",
-            "number-of-games-bonus-label": "Anzahl der Spielebonus",
-            "total-points-label": "Gesamtpunktzahl",
-            "buy-in-bonus-label": "Einkaufsbonus",
-            "basic-points-label": "Grundlegende Punkte"
         }
     },
     "wizard": {

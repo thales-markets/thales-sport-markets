@@ -1,8 +1,8 @@
 import React, { CSSProperties, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from '../../styles/common';
+import OutsideClickHandler from 'react-outside-click-handler';
+import { useTranslation } from 'react-i18next';
 
 type DropdownProperties<T> = {
     disabled?: boolean;
@@ -76,7 +76,7 @@ const DropdownButton = styled.button`
     height: 24px;
     border: none;
     background: transparent;
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.textColor.secondary};
     text-transform: uppercase;
     font-weight: 600;
     font-size: 12px;

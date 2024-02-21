@@ -2,7 +2,6 @@ import Button from 'components/Button';
 import GetUsd from 'components/GetUsd';
 import Loader from 'components/Loader';
 import Logo from 'components/Logo';
-import OddsSelectorModal from 'components/OddsSelectorModal';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
 import { RESET_STATE } from 'constants/routes';
@@ -28,7 +27,7 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { addHoursToCurrentDate, localStore } from 'thales-utils';
+import { addHoursToCurrentDate } from 'thales-utils';
 import { SportMarketInfo, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
@@ -82,8 +81,6 @@ const Home: React.FC = () => {
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
-    const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
-    const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
     const tagsList = orderBy(
         TAGS_LIST.filter((tag) => !tag.hidden),
@@ -102,12 +99,6 @@ const Home: React.FC = () => {
             dispatch(setSGPFees(sgpFees.data));
         }
     }, [dispatch, sgpFees.data, sgpFees.isSuccess]);
-
-    useEffect(() => {
-        if (getSelectedOddsType == undefined) {
-            setShowOddsSelectorModal(true);
-        }
-    }, [getSelectedOddsType]);
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
 
@@ -368,7 +359,6 @@ const Home: React.FC = () => {
 
     return (
         <Container>
-            {showOddsSelectorModal && <OddsSelectorModal onClose={() => setShowOddsSelectorModal(false)} />}
             <ReactModal
                 isOpen={showBurger && isMobile}
                 onRequestClose={() => {
