@@ -87,7 +87,7 @@ const Promotion: React.FC<PromotionProps> = (props) => {
 
 const Wrapper = styled(FlexDivColumn)`
     width: 100%;
-    margin-top: 50px;
+    margin-top: 20px;
 `;
 
 const CoverImageWrapper = styled(FlexDiv)<{ imageUrl: string }>`
@@ -105,7 +105,7 @@ const HeaderContainer = styled(FlexDiv)`
     text-align: center !important;
     align-items: center;
     width: 100%;
-    margin: 50px 0px;
+    margin: 20px 0px;
     justify-content: center;
     color: ${(props) => props.theme.textColor.primary} !important;
     h1 {
@@ -163,7 +163,7 @@ const CTAContainer = styled(FlexDiv)`
     padding: 20px;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 `;
 
 const CTAContent = styled(FlexDiv)`

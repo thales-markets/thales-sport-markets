@@ -72,5 +72,5 @@ export const formattedDurationFull = (
 };
 
 export const formatTimestampForPromotionDate = (timestamp: number) => {
-    return format(new Date(timestamp * 1000), 'd-M-Y');
+    return format(new Date(timestamp * 1000), 'd MMM Y');
 };

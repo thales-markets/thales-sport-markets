@@ -43,9 +43,9 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
                         <PromotionStatusBadge status={getPromotionStatus(startDate, endDate)}>
                             {t(`promotions.nav-items.${getPromotionStatus(startDate, endDate)}`)}
                         </PromotionStatusBadge>
-                        <DateRangeLabel>{`${t('promotions.from-label')} ${formatTimestampForPromotionDate(
+                        <DateRangeLabel>{`${formatTimestampForPromotionDate(
                             startDate
-                        )} ${t('promotions.to-label')} ${formatTimestampForPromotionDate(endDate)}`}</DateRangeLabel>
+                        )} - ${formatTimestampForPromotionDate(endDate)}`}</DateRangeLabel>
                     </HeaderContainer>
                     <Title>{title}</Title>
                     <BottomContainer>
