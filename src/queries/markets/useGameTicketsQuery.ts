@@ -45,7 +45,7 @@ export const useGameTicketsQuery = (
                             isResolved: ticket.resolved,
                             isPaused: ticket.paused,
                             isCancelled: ticket.gamesStatus.every(
-                                (gameStatus) => gameStatus.isResolved && gameStatus.isCancelled
+                                (gameStatus: any) => gameStatus.isResolved && gameStatus.isCancelled
                             ),
                             isLost: ticket.isLost,
                             isUserTheWinner: ticket.isUserTheWinner,
