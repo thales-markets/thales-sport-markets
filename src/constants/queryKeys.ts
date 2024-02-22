@@ -60,6 +60,7 @@ const QUERY_KEYS = {
     WinningInfo: (walletAddress: string, networkId: Network) => ['user', 'winningInfo', walletAddress, networkId],
     ClaimTx: (market: string, networkId: Network) => ['claim', 'transactions', market, networkId],
     ClaimableCount: (walletAddress: string, networkId: Network) => ['claimable', 'count', walletAddress, networkId],
+    ClaimableCountV2: (walletAddress: string, networkId: Network) => ['claimable', 'countV2', walletAddress, networkId],
     AccountPositions: (walletAddress: string, networkId: Network) => ['accountPosition', walletAddress, networkId],
     ReferralTransaction: (walletAddress: string, networkId: Network) => [
         'referralTransaction',
@@ -102,6 +103,7 @@ const QUERY_KEYS = {
             networkId,
         ],
         Stats: (networkId: Network, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
+        StatsV2: (networkId: Network, walletAddress: string) => ['wallet', 'statsV2', networkId, walletAddress],
         VaultsAndLpTxs: (networkId: Network, walletAddress: string) => [
             'wallet',
             'vaultsAndLpTxs',

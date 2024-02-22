@@ -2,7 +2,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
 import { countries } from 'constants/worldCup';
 import useFavoriteTeamDataQuery from 'queries/favoriteTeam/useFavoriteTeamDataQuery';
-import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
+import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -47,7 +47,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
     const favoriteTeamData =
         favoriteTeamDataQuery.isSuccess && favoriteTeamDataQuery.data ? favoriteTeamDataQuery.data : null;
 
-    const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
+    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
     const claimablePositionCount =

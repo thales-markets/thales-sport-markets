@@ -41,6 +41,8 @@ export const useGameTicketsQuery = (
                             isLost: ticket.isLost,
                             isUserTheWinner: ticket.isUserTheWinner,
                             isExercisable: ticket.isExercisable,
+                            isClaimable: ticket.isUserTheWinner && !ticket.resolved,
+                            isOpen: !ticket.isResolved && !ticket.isExercisable,
 
                             sportMarkets: ticket.gamesData.map((market: any, index: number) => {
                                 const leagueId = Number(market.sportId);

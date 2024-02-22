@@ -3,13 +3,13 @@ import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
+import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
-import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
-
+import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -30,7 +30,6 @@ import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
-import NetworkSwitcher from 'components/NetworkSwitcher';
 import TopUp from './components/TopUp';
 
 const PULSING_COUNT = 10;
@@ -77,7 +76,7 @@ const DappHeader: React.FC = () => {
 
     const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
 
-    const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
+    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
 

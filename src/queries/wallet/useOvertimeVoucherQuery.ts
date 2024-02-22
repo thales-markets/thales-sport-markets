@@ -1,10 +1,10 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
-import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
-import { OvertimeVoucher, OvertimeVouchers } from 'types/tokens';
+import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
+import { OvertimeVoucher, OvertimeVouchers } from 'types/tokens';
+import networkConnector from 'utils/networkConnector';
+import QUERY_KEYS from '../../constants/queryKeys';
 
 const useOvertimeVoucherQuery = (
     walletAddress: string,
@@ -39,6 +39,7 @@ const useOvertimeVoucherQuery = (
         },
         {
             ...options,
+            enabled: options?.enabled && networkId !== Network.OptimismSepolia,
         }
     );
 };

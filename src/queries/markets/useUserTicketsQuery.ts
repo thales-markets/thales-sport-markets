@@ -19,7 +19,12 @@ export const useUserTicketsQuery = (
             try {
                 const { sportsAMMDataContract } = networkConnector;
                 if (sportsAMMDataContract) {
-                    const tickets = await sportsAMMDataContract.getActiveTicketsDataPerUser(user);
+                    const [activeTickets, resolvedTickets] = await Promise.all([
+                        sportsAMMDataContract.getActiveTicketsDataPerUser(user),
+                        sportsAMMDataContract.getResolvedTicketsDataPerUser(user),
+                    ]);
+
+                    const tickets = [...activeTickets, ...resolvedTickets];
 
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) => {
                         return {
@@ -41,6 +46,8 @@ export const useUserTicketsQuery = (
                             isLost: ticket.isLost,
                             isUserTheWinner: ticket.isUserTheWinner,
                             isExercisable: ticket.isExercisable,
+                            isClaimable: ticket.isUserTheWinner && !ticket.resolved,
+                            isOpen: !ticket.isResolved && !ticket.isExercisable,
 
                             sportMarkets: ticket.gamesData.map((market: any, index: number) => {
                                 const leagueId = Number(market.sportId);

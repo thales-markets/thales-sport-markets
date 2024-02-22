@@ -464,4 +464,14 @@ export type Ticket = {
     isLost: boolean;
     isUserTheWinner: boolean;
     isExercisable: boolean;
+    isClaimable: boolean;
+    isOpen: boolean;
+};
+
+export type UserStats = {
+    id: string;
+    volume: number;
+    trades: number;
+    highestWin: number;
+    lifetimeWins: number;
 };

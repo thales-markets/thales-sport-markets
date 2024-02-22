@@ -11,12 +11,12 @@ import { navigateTo } from 'utils/routes';
 import { getQueryStringVal } from 'utils/useQueryParams';
 import { navItems } from '../../components/NavigationBar/NavigationBar';
 import SearchField from '../../components/SearchField';
-import UserStats from '../../components/UserStats';
 import UserVaults from '../../components/UserVaults';
 import Voucher from '../../components/Voucher';
 import NavigationBar from '../NavigationBar';
 import PositionsV2 from '../PositionsV2';
 import TicketTransactions from '../TicketTransactions';
+import UserStatsV2 from '../UserStatsV2';
 
 const MyTickets: React.FC = () => {
     const { t } = useTranslation();
@@ -44,7 +44,7 @@ const MyTickets: React.FC = () => {
 
     return (
         <>
-            <UserStats />
+            <UserStatsV2 />
             <NavigationWrapper>
                 <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />
 

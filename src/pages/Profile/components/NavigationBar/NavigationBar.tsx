@@ -1,4 +1,4 @@
-import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
+import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +38,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ itemSelected, onSelectIte
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
 
-    const claimablePositionsCountQuery = useClaimablePositionCountQuery(walletAddress, networkId, {
+    const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
     const claimablePositionCount =

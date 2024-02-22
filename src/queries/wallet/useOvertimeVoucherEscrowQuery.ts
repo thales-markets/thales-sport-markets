@@ -1,7 +1,7 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
 import { Network } from 'enums/network';
-import { getDefaultDecimalsForNetwork, bigNumberFormatter } from 'thales-utils';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
 
 type OvertimeVoucherEscrowData = {
@@ -66,7 +66,10 @@ const useOvertimeVoucherEscrowQuery = (walletAddress: string, networkId: Network
                 return overtimeVoucherEscrowData;
             }
         },
-        options
+        {
+            ...options,
+            enabled: options?.enabled && networkId !== Network.OptimismSepolia,
+        }
     );
 };
 
