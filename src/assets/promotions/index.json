@@ -7,7 +7,7 @@
             "promotionId": "arb-stip-rewards",
 	    "promotionUrl": "/promotions/arb-stip-rewards",
 	    "backgroundImageUrl": "/promotions/arb-tile.png",
-	    "callToActionButton": "How to qualify",
+	    "callToActionButton": "How to earn",
 	    "article": {
 	    	"coverImageUrl": "/promotions/arb-update-big.png",
 	        "headerHtml": "<h1><span><span><span>Win a share of 500,000 ARB using Overtime Markets until March 31, 2024</span></span></span></h1>",
@@ -27,7 +27,7 @@
         "promotionId": "big-leagues",
 	    "promotionUrl": "/promotions/big-leagues",
 	    "backgroundImageUrl": "/promotions/big-leagues-tile.png",
-	    "callToActionButton": "How to qualify",
+	    "callToActionButton": "How to earn",
 	    "article": {
 	    	"coverImageUrl": "/promotions/big-leagues-update-big.png",
 	        "headerHtml":"<h1><span><span><span>Overtime’s Big League Program for the NFL, EPL, and NBA</span></span></span></h1>",
@@ -47,7 +47,7 @@
         "promotionId": "parlay-competition",
 	    "promotionUrl": "/promotions/parlay-competition",
 	    "backgroundImageUrl": "/promotions/weekly-parlay-small.png",
-	    "callToActionButton": "How to qualify",
+	    "callToActionButton": "How to earn",
 	    "article": {
 	    	"coverImageUrl": "/promotions/parlay-update-big.png",
 	        "headerHtml": "<h1><span><span><span>Weekly Parlay Competition: Earn 2,500 ARB and 500 OP Every Week</span></span></span></h1>",
