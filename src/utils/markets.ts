@@ -898,3 +898,29 @@ export const isParlayOpenV2 = (ticket: Ticket) => {
     const parlayHasOpenMarkets = ticket.sportMarkets.some((position) => position.isOpen);
     return parlayHasOpenMarkets && !isParlayLostV2(ticket);
 };
+
+export const updateTotalQuoteAndPayout = (tickets: Ticket[]): Ticket[] => {
+    const modifiedTickets = tickets.map((ticket: Ticket) => {
+        let totalQuote = ticket.totalQuote;
+        let payout = ticket.payout;
+
+        if (ticket.isCancelled) {
+            totalQuote = 1;
+            payout = ticket.buyInAmount;
+        } else {
+            ticket.sportMarkets.forEach((market) => {
+                if (market.isCanceled) {
+                    totalQuote = totalQuote / market.odd;
+                    payout = payout * market.odd;
+                }
+            });
+        }
+
+        return {
+            ...ticket,
+            totalQuote,
+            payout,
+        };
+    });
+    return modifiedTickets;
+};

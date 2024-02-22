@@ -1,11 +1,18 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
+import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, coinFormatter } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { BetTypeMap, SPORTS_MAP } from '../../constants/tags';
 import { BetType } from '../../enums/markets';
-import { getIsOneSideMarket, isOneSidePlayerProps, isPlayerProps, isSpecialYesNoProp } from '../../utils/markets';
+import {
+    getIsOneSideMarket,
+    isOneSidePlayerProps,
+    isPlayerProps,
+    isSpecialYesNoProp,
+    updateTotalQuoteAndPayout,
+} from '../../utils/markets';
 import networkConnector from '../../utils/networkConnector';
 
 export const useUserTicketsQuery = (
@@ -42,7 +49,9 @@ export const useUserTicketsQuery = (
                             expiry: Number(ticket.expiry) * 1000,
                             isResolved: ticket.resolved,
                             isPaused: ticket.paused,
-                            isCancelled: ticket.cancelled,
+                            isCancelled: ticket.gamesStatus.every(
+                                (gameStatus) => gameStatus.isResolved && gameStatus.isCancelled
+                            ),
                             isLost: ticket.isLost,
                             isUserTheWinner: ticket.isUserTheWinner,
                             isExercisable: ticket.isExercisable,
@@ -72,7 +81,7 @@ export const useUserTicketsQuery = (
                                     homeTeam: 'Home Team',
                                     awayTeam: 'Away Team',
                                     homeScore: Number(ticket.gamesStatus[index].score.homeScore),
-                                    awayScore: Number(ticket.gamesStatus[index].score.homeScore),
+                                    awayScore: Number(ticket.gamesStatus[index].score.awayScore),
                                     finalResult: Number(ticket.gamesStatus[index].result),
                                     status: 0,
                                     isOpen:
@@ -107,7 +116,7 @@ export const useUserTicketsQuery = (
                         };
                     });
 
-                    return mappedTickets;
+                    return orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);
                 }
                 return undefined;
             } catch (e) {

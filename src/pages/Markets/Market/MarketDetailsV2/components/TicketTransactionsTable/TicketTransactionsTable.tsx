@@ -148,11 +148,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         sortable: false,
                         Cell: (cellProps: any) => {
                             return (
-                                <FlexCenter>
-                                    <SPAAnchor href={getEtherscanAddressLink(networkId, cellProps.cell.value)}>
+                                <ExternalLink
+                                    href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
+                                    target={'_blank'}
+                                >
+                                    <FlexCenter>
                                         <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
-                                    </SPAAnchor>
-                                </FlexCenter>
+                                    </FlexCenter>
+                                </ExternalLink>
                             );
                         },
                     },
@@ -193,8 +196,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         accessor: 'status',
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            if (cellProps.row.original.isUserTheWinner) {
-                                return <StatusWrapper color={theme.status.win}>WON </StatusWrapper>;
+                            if (cellProps.row.original.isCancelled) {
+                                return <StatusWrapper color={theme.status.sold}>CANCELED</StatusWrapper>;
+                            } else if (cellProps.row.original.isUserTheWinner) {
+                                return <StatusWrapper color={theme.status.win}>WON</StatusWrapper>;
                             } else {
                                 return cellProps.row.original.isLost ? (
                                     <StatusWrapper color={theme.status.loss}>LOSS</StatusWrapper>
@@ -388,7 +393,7 @@ const TableText = styled.span`
 `;
 
 const StatusWrapper = styled.div`
-    width: 62px;
+    min-width: 62px;
     height: 25px;
     border: 2px solid ${(props) => props.color || props.theme.status.open};
     border-radius: 5px;
@@ -401,7 +406,7 @@ const StatusWrapper = styled.div`
     text-transform: uppercase;
     text-align: center;
     color: ${(props) => props.color || props.theme.status.open};
-    padding-top: 3px;
+    padding: 3px 4px 0 4px;
 `;
 
 const QuoteText = styled.span`
@@ -503,7 +508,7 @@ const FirstExpandedSection = styled(FlexDivColumnCentered)`
 const LastExpandedSection = styled(FlexDivColumnCentered)`
     position: relative;
     flex: 1;
-    gap: 20px;
+    gap: 10px;
     @media (max-width: 600px) {
         flex-direction: row;
         margin: 10px 0;
@@ -518,6 +523,10 @@ const TwitterWrapper = styled.div`
         bottom: -2px;
         right: 2px;
     }
+`;
+
+export const ExternalLink = styled.a`
+    color: ${(props) => props.theme.link.textColor.secondary};
 `;
 
 export default TicketTransactionsTable;

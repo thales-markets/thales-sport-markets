@@ -2,6 +2,7 @@ import PositionSymbol from 'components/PositionSymbol';
 import { BetTypeNameMap, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
 import { BetType } from 'enums/markets';
+import i18n from 'i18n';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -19,6 +20,8 @@ import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/markets';
 import { getOrdinalNumberLabel } from 'utils/ui';
+import SPAAnchor from '../../../../../../../../components/SPAAnchor';
+import { buildMarketLink } from '../../../../../../../../utils/routes';
 import {
     MatchPeriodContainer,
     MatchPeriodLabel,
@@ -34,6 +37,7 @@ const ParlayItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
+    const language = i18n.language;
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         market.isPlayerPropsMarket
@@ -97,48 +101,52 @@ const ParlayItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
     const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
     return (
         <Wrapper style={{ opacity: market.isCanceled ? 0.5 : 1 }}>
-            <MatchInfo>
-                <MatchLogo>
-                    {market.isPlayerPropsMarket ? (
-                        <ClubLogo
-                            alt={market.playerProps.playerName}
-                            src={homeLogoSrc}
-                            losingTeam={false}
-                            onError={getOnPlayerImageError(setHomeLogoSrc)}
-                            customMobileSize={'30px'}
-                        />
-                    ) : (
-                        <ClubLogo
-                            alt={market.homeTeam}
-                            src={homeLogoSrc}
-                            losingTeam={false}
-                            onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
-                            customMobileSize={'30px'}
-                        />
-                    )}
+            <SPAAnchor href={buildMarketLink(market.gameId, language)}>
+                <MatchInfo style={{ cursor: 'pointer' }}>
+                    <MatchLogo>
+                        {market.isPlayerPropsMarket ? (
+                            <ClubLogo
+                                alt={market.playerProps.playerName}
+                                src={homeLogoSrc}
+                                losingTeam={false}
+                                onError={getOnPlayerImageError(setHomeLogoSrc)}
+                                customMobileSize={'30px'}
+                            />
+                        ) : (
+                            <ClubLogo
+                                alt={market.homeTeam}
+                                src={homeLogoSrc}
+                                losingTeam={false}
+                                onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
+                                customMobileSize={'30px'}
+                            />
+                        )}
 
-                    {!market.isOneSideMarket && !market.isPlayerPropsMarket && (
-                        <ClubLogo
-                            awayTeam={true}
-                            alt={market.awayTeam}
-                            src={awayLogoSrc}
-                            losingTeam={false}
-                            onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
-                            customMobileSize={'30px'}
-                        />
-                    )}
-                </MatchLogo>
-                <MatchLabel>
-                    <ClubName isOneSided={market.isOneSideMarket}>
-                        {!market.isPlayerPropsMarket
-                            ? market.isOneSideMarket
-                                ? fixOneSideMarketCompetitorName(market.homeTeam)
-                                : market.homeTeam
-                            : `${market.playerProps.playerName} (${BetTypeNameMap[market.typeId as BetType]})`}
-                    </ClubName>
-                    {!market.isOneSideMarket && !market.isPlayerPropsMarket && <ClubName>{market.awayTeam}</ClubName>}
-                </MatchLabel>
-            </MatchInfo>
+                        {!market.isOneSideMarket && !market.isPlayerPropsMarket && (
+                            <ClubLogo
+                                awayTeam={true}
+                                alt={market.awayTeam}
+                                src={awayLogoSrc}
+                                losingTeam={false}
+                                onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
+                                customMobileSize={'30px'}
+                            />
+                        )}
+                    </MatchLogo>
+                    <MatchLabel>
+                        <ClubName isOneSided={market.isOneSideMarket}>
+                            {!market.isPlayerPropsMarket
+                                ? market.isOneSideMarket
+                                    ? fixOneSideMarketCompetitorName(market.homeTeam)
+                                    : market.homeTeam
+                                : `${market.playerProps.playerName} (${BetTypeNameMap[market.typeId as BetType]})`}
+                        </ClubName>
+                        {!market.isOneSideMarket && !market.isPlayerPropsMarket && (
+                            <ClubName>{market.awayTeam}</ClubName>
+                        )}
+                    </MatchLabel>
+                </MatchInfo>
+            </SPAAnchor>
             <StatusContainer>
                 <PositionSymbol
                     symbolAdditionalText={{

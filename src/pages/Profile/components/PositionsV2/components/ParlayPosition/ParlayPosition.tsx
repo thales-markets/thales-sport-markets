@@ -24,7 +24,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { coinParser, formatCurrencyWithSign, getEtherscanTxLink, truncateAddress } from 'thales-utils';
+import { coinParser, formatCurrencyWithSign, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction } from 'utils/biconomy';
@@ -370,7 +370,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
                 )}
                 {isClaimable && !isMobile && getButton(isMobile)}
                 {!isClaimable && (
-                    <ExternalLink href={getEtherscanTxLink(networkId, ticket.txHash)} target={'_blank'}>
+                    <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
                         <ExternalLinkContainer>
                             <ExternalLinkArrow style={{ right: '7px' }} />
                         </ExternalLinkContainer>
