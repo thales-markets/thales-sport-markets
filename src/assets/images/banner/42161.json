@@ -6,5 +6,13 @@
     {
         "image": "banner_leagues.png",
         "url": "https://www.overtimemarkets.xyz/markets?lang=en&sport=Soccer&globalFilter=OpenMarkets&showActive=true&tag=UEFA+Champions+League%2CUEFA+Europa+League%2CUEFA+Conference+League"
+    },
+    {
+        "image": "parlay-competition-banner2.png",
+        "url": "https://www.overtimemarkets.xyz/parlay-leaderboard"
+    },
+    {
+        "image": "big-leagues.png",
+        "url": "https://medium.com/@OvertimeMarkets.xyz/get-ready-for-the-big-leagues-season-overtimes-biggest-reward-program-to-date-2d3949a06338"
     }
 ]
