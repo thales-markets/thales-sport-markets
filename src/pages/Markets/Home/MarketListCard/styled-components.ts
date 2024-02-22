@@ -183,6 +183,7 @@ export const ArrowRight = styled.i`
 
 export const OddsWrapper = styled(FlexDivRow)`
     position: relative;
+    justify-content: flex-start;
     flex-wrap: wrap;
     gap: 10px;
 `;
