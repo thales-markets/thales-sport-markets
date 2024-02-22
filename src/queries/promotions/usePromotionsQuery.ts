@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { PromotionItem } from 'types/ui';
@@ -9,9 +10,7 @@ export const usePromotionsQuery = (branchName: string, options?: UseQueryOptions
         async () => {
             try {
                 const response = await axios.get(
-                    `https://raw.githubusercontent.com/thales-markets/thales-sport-markets/${
-                        branchName ? branchName : 'main'
-                    }/src/assets/promotions/index.json`
+                    `${generalConfig.API_URL}/promotions${branchName ? `?branch-name=${branchName}` : ''}`
                 );
 
                 if (!response.data) return [];
