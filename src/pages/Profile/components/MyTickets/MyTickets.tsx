@@ -10,12 +10,12 @@ import { RootState } from 'redux/rootReducer';
 import { navigateTo } from 'utils/routes';
 import { getQueryStringVal } from 'utils/useQueryParams';
 import { navItems } from '../../components/NavigationBar/NavigationBar';
-import Positions from '../../components/Positions';
 import SearchField from '../../components/SearchField';
 import UserStats from '../../components/UserStats';
 import UserVaults from '../../components/UserVaults';
 import Voucher from '../../components/Voucher';
 import NavigationBar from '../NavigationBar';
+import PositionsV2 from '../PositionsV2';
 import TicketTransactions from '../TicketTransactions';
 
 const MyTickets: React.FC = () => {
@@ -55,7 +55,7 @@ const MyTickets: React.FC = () => {
                     handleChange={(value) => setSearchText(value)}
                 />
             </NavigationWrapper>
-            {navItems[0].id == navItem && <Positions searchText={searchText} />}
+            {navItems[0].id == navItem && <PositionsV2 searchText={searchText} />}
             {navItems[1].id == navItem && <TicketTransactions searchText={searchText} />}
             {navItems[2].id == navItem && <UserVaults />}
             {navItems[3].id == navItem && <Voucher searchText={searchText} />}
