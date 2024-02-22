@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
@@ -14,7 +15,7 @@ const useSportMarketQuery = (
         QUERY_KEYS.SportMarketV2(marketAddress, networkId),
         async () => {
             try {
-                const response = await axios.get(`http://localhost:3002/overtime-v2/markets/${marketAddress}`);
+                const response = await axios.get(`${generalConfig.API_URL}/overtime-v2/markets/${marketAddress}`);
                 const market = response.data;
 
                 return {

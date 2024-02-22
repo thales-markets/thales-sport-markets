@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { GlobalFiltersEnum } from 'enums/markets';
 import { Network } from 'enums/network';
@@ -33,27 +34,27 @@ const useSportsMarketsV2Query = (
                 switch (globalFilter) {
                     case GlobalFiltersEnum.OpenMarkets:
                         response = await axios.get(
-                            `http://localhost:3002/overtime-v2/markets/?status=open&ungroup=true`
+                            `${generalConfig.API_URL}/overtime-v2/markets/?status=open&ungroup=true`
                         );
                         markets = response.data;
                         break;
                     case GlobalFiltersEnum.ResolvedMarkets:
                         response = await axios.get(
-                            `http://localhost:3002/overtime-v2/markets/?status=resolved&ungroup=true`
+                            `${generalConfig.API_URL}/overtime-v2/markets/?status=resolved&ungroup=true`
                         );
                         markets = response.data;
                         break;
                     case GlobalFiltersEnum.Canceled:
                         const [canceledMarkets, pausedMarkets] = await Promise.all([
-                            axios.get(`http://localhost:3002/overtime-v2/markets/?status=paused&ungroup=true`),
-                            axios.get(`http://localhost:3002/overtime-v2/markets/?status=canceled&ungroup=true`),
+                            axios.get(`${generalConfig.API_URL}/overtime-v2/markets/?status=paused&ungroup=true`),
+                            axios.get(`${generalConfig.API_URL}/overtime-v2/markets/?status=canceled&ungroup=true`),
                         ]);
                         markets = [...canceledMarkets.data, ...pausedMarkets.data];
                         // markets = uniqBy([...canceledMarkets, ...pausedMarkets], 'address');
                         break;
                     case GlobalFiltersEnum.PendingMarkets:
                         response = await axios.get(
-                            `http://localhost:3002/overtime-v2/markets/?status=ongoing&ungroup=true`
+                            `${generalConfig.API_URL}/overtime-v2/markets/?status=ongoing&ungroup=true`
                         );
                         markets = response.data;
                         break;

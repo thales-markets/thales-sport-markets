@@ -1,7 +1,13 @@
 import styled from 'styled-components';
-import { FlexDivRow, FlexDivColumn, FlexDiv } from 'styles/common';
+import { FlexDiv, FlexDivRow } from 'styles/common';
 
-export const Container = styled(FlexDivColumn)`
+export const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    flex-basis: 23%;
     padding: 0 9px;
     :not(:last-of-type) {
         border-right: 3px solid ${(props) => props.theme.borderColor.primary};
