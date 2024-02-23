@@ -4,8 +4,8 @@
 	    "description":"Every action you take on Overtime on Arbitrum is incentivized! Win a share of 500,000 ARB for playing Singles and Parlays. This promotion lasts until Mar 31, so make sure to make the most of it and start earning now.",
 	    "startDate": 1711185400,
 	    "endDate": 0,
-            "promotionId": "arb-stip-rewards",
-	    "promotionUrl": "/promotions/arb-stip-rewards",
+            "promotionId": "arb-stip-rewards-1",
+	    "promotionUrl": "/promotions/arb-stip-rewards-1",
 	    "backgroundImageUrl": "/promotions/arb-tile.png",
 	    "callToActionButton": "How to earn",
 	    "article": {
@@ -24,8 +24,8 @@
 	    "description":"Every action you take on Overtime on Arbitrum is incentivized! Win a share of 500,000 ARB for playing Singles and Parlays. This promotion lasts until Mar 31, so make sure to make the most of it and start earning now.",
 	    "startDate": 1701437500,
 	    "endDate": 0,
-            "promotionId": "arb-stip-rewards",
-	    "promotionUrl": "/promotions/arb-stip-rewards",
+            "promotionId": "arb-stip-rewards-2",
+	    "promotionUrl": "/promotions/arb-stip-rewards-2",
 	    "backgroundImageUrl": "/promotions/arb-tile.png",
 	    "callToActionButton": "How to earn",
 	    "article": {
