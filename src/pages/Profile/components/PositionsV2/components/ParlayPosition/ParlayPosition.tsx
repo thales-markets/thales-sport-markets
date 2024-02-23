@@ -237,21 +237,22 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
     };
 
     const shareParlayData = {
-        ticket: {
-            ...ticket,
-            sportMarkets: ticket.sportMarkets.map((sportMarket) => {
-                return {
-                    ...sportMarket,
-                    odd: getTicketMarketOdd(sportMarket),
-                    winning: getTicketMarketWinStatus(sportMarket),
-                };
-            }),
-        },
+        markets: ticket.sportMarkets.map((sportMarket) => {
+            return {
+                ...sportMarket,
+                odd: getTicketMarketOdd(sportMarket),
+                winning: getTicketMarketWinStatus(sportMarket),
+            };
+        }),
+        paid: ticket.buyInAmount,
+        payout: ticket.payout,
         multiSingle: false,
         onClose: () => {
             refetchAfterClaim(walletAddress, networkId);
             setShowShareTicketModal ? setShowShareTicketModal(false) : null;
         },
+        isTicketLost: ticket.isLost,
+        isTicketResolved: !ticket.isOpen,
     };
 
     const getClaimButton = (isMobile: boolean) => (

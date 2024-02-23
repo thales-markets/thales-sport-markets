@@ -19,23 +19,25 @@ import {
     FlexDivRowCentered,
 } from 'styles/common';
 import { formatCurrencyWithSign } from 'thales-utils';
-import { Ticket } from 'types/markets';
 import { buildReffererLink } from 'utils/routes';
 import { formatTicketOdds } from 'utils/tickets';
+import { TicketMarket } from '../../../../../../../../types/markets';
 import MatchInfoV2 from '../../../MatchInfoV2';
 
 type MyTicketProps = {
-    ticket: Ticket;
+    markets: TicketMarket[];
     multiSingle: boolean;
+    paid: number;
+    payout: number;
+    isTicketLost: boolean;
+    isTicketResolved: boolean;
 };
 
-const MyTicket: React.FC<MyTicketProps> = ({ ticket, multiSingle }) => {
+const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, paid, payout, isTicketLost, isTicketResolved }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
 
-    const isTicketLost = ticket.isLost;
-    const isTicketResolved = !ticket.isOpen;
     const isTicket = !multiSingle;
 
     const matchInfoStyle = isMobile
@@ -82,14 +84,14 @@ const MyTicket: React.FC<MyTicketProps> = ({ ticket, multiSingle }) => {
                     </PayoutRow>
                     <PayoutRow>
                         <PayoutValue isLost={isTicketLost} isResolved={isTicketResolved}>
-                            {formatCurrencyWithSign(USD_SIGN, ticket.payout)}
+                            {formatCurrencyWithSign(USD_SIGN, payout)}
                         </PayoutValue>
                     </PayoutRow>
                 </PayoutWrapper>
             </ContentRow>
             <HorizontalLine />
             <MarketsContainer>
-                {ticket.sportMarkets.map((market, index) => {
+                {markets.map((market, index) => {
                     return (
                         <React.Fragment key={index}>
                             <RowMarket>
@@ -100,7 +102,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ ticket, multiSingle }) => {
                                     customStyle={matchInfoStyle}
                                 />
                             </RowMarket>
-                            {ticket.sportMarkets.length !== index + 1 && <HorizontalDashedLine />}
+                            {markets.length !== index + 1 && <HorizontalDashedLine />}
                         </React.Fragment>
                     );
                 })}
@@ -111,22 +113,20 @@ const MyTicket: React.FC<MyTicketProps> = ({ ticket, multiSingle }) => {
                     <>
                         <InfoDiv>
                             <InfoLabel>{t('markets.parlay.share-ticket.positions')}:</InfoLabel>
-                            <InfoValue>{ticket.sportMarkets.length}</InfoValue>
+                            <InfoValue>{markets.length}</InfoValue>
                         </InfoDiv>
                     </>
                 ) : (
                     <>
                         <InfoDiv>
                             <InfoLabel>{t('markets.parlay.share-ticket.total-quote')}:</InfoLabel>
-                            <InfoValue>
-                                {formatTicketOdds(selectedOddsType, ticket.buyInAmount, ticket.payout)}
-                            </InfoValue>
+                            <InfoValue>{formatTicketOdds(selectedOddsType, paid, payout)}</InfoValue>
                         </InfoDiv>
                     </>
                 )}
                 <InfoDiv>
                     <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
-                    <InfoValue>{formatCurrencyWithSign(USD_SIGN, ticket.buyInAmount, 2)}</InfoValue>
+                    <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid, 2)}</InfoValue>
                 </InfoDiv>
             </InfoWrapper>
         </Container>

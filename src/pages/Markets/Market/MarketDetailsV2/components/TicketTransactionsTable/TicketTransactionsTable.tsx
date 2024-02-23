@@ -86,9 +86,13 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         });
 
         const modalData: ShareTicketModalProps = {
-            ticket: ticket,
+            markets: ticket.sportMarkets,
             multiSingle: false,
+            paid: ticket.buyInAmount,
+            payout: ticket.payout,
             onClose: () => setShowShareTicketModal(false),
+            isTicketLost: ticket.isLost,
+            isTicketResolved: !ticket.isOpen,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(true);
@@ -217,9 +221,13 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             ></Table>
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2
-                    ticket={shareTicketModalData.ticket}
+                    markets={shareTicketModalData.markets}
                     multiSingle={false}
+                    paid={shareTicketModalData.paid}
+                    payout={shareTicketModalData.payout}
                     onClose={shareTicketModalData.onClose}
+                    isTicketLost={shareTicketModalData.isTicketLost}
+                    isTicketResolved={shareTicketModalData.isTicketResolved}
                 />
             )}
         </>

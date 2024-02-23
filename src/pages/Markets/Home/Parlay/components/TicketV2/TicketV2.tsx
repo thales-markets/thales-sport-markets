@@ -56,8 +56,6 @@ import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
-import ShareTicketModal from '../ShareTicketModal';
-import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
@@ -84,6 +82,7 @@ import { SportsAmmData, TicketMarket } from 'types/markets';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import useSportsAmmDataQuery from '../../../../../../queries/markets/useSportsAmmDataQuery';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from '../../../../../../utils/sportsAmmV2';
+import ShareTicketModalV2, { ShareTicketModalProps } from '../ShareTicketModal copy/ShareTicketModalV2';
 import SuggestedAmount from '../SuggestedAmount';
 
 type TicketProps = {
@@ -131,14 +130,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketModalData /*, setShareTicketModalData*/] = useState<ShareTicketModalProps>({
-        markets: [],
-        multiSingle: false,
-        totalQuote: 0,
-        paid: 0,
-        payout: 0,
-        onClose: () => {},
-    });
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
 
     const [gas, setGas] = useState(0);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -727,16 +719,17 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
 
     const twitterShareDisabled = submitDisabled || !hasAllowance;
     const onTwitterIconClick = () => {
-        // create data copy to avoid modal re-render while opened
-        // const modalData: ShareTicketModalProps = {
-        //     markets: [...markets],
-        //     multiSingle: false,
-        //     totalQuote,
-        //     paid: Number(usdAmountValue),
-        //     payout: totalBuyAmount,
-        //     onClose: onModalClose,
-        // };
-        // setShareTicketModalData(modalData);
+        //create data copy to avoid modal re-render while opened
+        const modalData: ShareTicketModalProps = {
+            markets: [...markets],
+            multiSingle: false,
+            paid: Number(usdAmountValue),
+            payout: totalBuyAmount,
+            onClose: onModalClose,
+            isTicketLost: false,
+            isTicketResolved: false,
+        };
+        setShareTicketModalData(modalData);
         setShowShareTicketModal(!twitterShareDisabled);
     };
 
@@ -916,14 +909,15 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>
-            {showShareTicketModal && (
-                <ShareTicketModal
+            {showShareTicketModal && shareTicketModalData && (
+                <ShareTicketModalV2
                     markets={shareTicketModalData.markets}
                     multiSingle={false}
-                    totalQuote={shareTicketModalData.totalQuote}
                     paid={shareTicketModalData.paid}
                     payout={shareTicketModalData.payout}
                     onClose={onModalClose}
+                    isTicketLost={shareTicketModalData.isTicketLost}
+                    isTicketResolved={shareTicketModalData.isTicketResolved}
                 />
             )}
             {openApprovalModal && (

@@ -11,21 +11,33 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { isFirefox, isIos, isMetamask } from 'thales-utils';
-import { Ticket } from '../../../../../../types/markets';
+import { TicketMarket } from '../../../../../../types/markets';
 import { TwitterIcon } from '../styled-components';
 import MyTicket from './components/MyTicket';
 
 export type ShareTicketModalProps = {
-    ticket: Ticket;
+    markets: TicketMarket[];
     multiSingle: boolean;
+    paid: number;
+    payout: number;
     onClose: () => void;
+    isTicketLost: boolean;
+    isTicketResolved: boolean;
 };
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
 const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${PARLAY_IMAGE_NAME}>`;
 
-const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ ticket, multiSingle, onClose }) => {
+const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
+    markets,
+    multiSingle,
+    paid,
+    payout,
+    onClose,
+    isTicketLost,
+    isTicketResolved,
+}) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [isLoading, setIsLoading] = useState(false);
@@ -220,7 +232,14 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ ticket, multiSingle
         >
             <Container ref={ref}>
                 {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
-                <MyTicket ticket={ticket} multiSingle={multiSingle} />
+                <MyTicket
+                    markets={markets}
+                    multiSingle={multiSingle}
+                    paid={paid}
+                    payout={payout}
+                    isTicketLost={isTicketLost}
+                    isTicketResolved={isTicketResolved}
+                />
 
                 <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
                     <TwitterIcon disabled={isLoading} fontSize={'30px'} />
