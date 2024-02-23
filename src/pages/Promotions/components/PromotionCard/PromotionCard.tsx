@@ -1,5 +1,6 @@
 import Button from 'components/Button';
 import SPAAnchor from 'components/SPAAnchor';
+import TimeRemaining from 'components/TimeRemaining';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -8,14 +9,15 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
 import { PromotionCardProps, PromotionCardStatus, ThemeInterface } from 'types/ui';
-import { formatTimestampForPromotionDate } from 'utils/formatters/date';
-import { getPromotionStatus } from 'utils/ui';
+import { getPromotionDateRange, getPromotionStatus } from 'utils/ui';
 
 const PromotionCard: React.FC<PromotionCardProps> = ({
     title,
     description,
     startDate,
     endDate,
+    displayCountdown,
+    finished,
     promotionUrl,
     backgroundImageUrl,
     callToActionButton,
@@ -40,12 +42,16 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
                     }}
                 >
                     <HeaderContainer>
-                        <PromotionStatusBadge status={getPromotionStatus(startDate, endDate)}>
-                            {t(`promotions.nav-items.${getPromotionStatus(startDate, endDate)}`)}
+                        <PromotionStatusBadge status={getPromotionStatus(startDate, endDate, finished)}>
+                            {t(`promotions.nav-items.${getPromotionStatus(startDate, endDate, finished)}`)}
                         </PromotionStatusBadge>
-                        <DateRangeLabel>{`${formatTimestampForPromotionDate(
-                            startDate
-                        )} - ${formatTimestampForPromotionDate(endDate)}`}</DateRangeLabel>
+                        <DateRangeLabel>
+                            {!displayCountdown ? (
+                                getPromotionDateRange(startDate, endDate)
+                            ) : (
+                                <TimeRemaining end={endDate * 1000} fontSize={12} fontWeight={700} />
+                            )}
+                        </DateRangeLabel>
                     </HeaderContainer>
                     <Title>{title}</Title>
                     <BottomContainer>
@@ -87,8 +93,10 @@ export const HeaderContainer = styled(FlexDivRow)`
 `;
 
 export const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatus }>`
+    background-color: ${(props) => props.status == 'coming-soon' && props.theme.promotion.background.primary};
     background-color: ${(props) => props.status == 'ongoing' && props.theme.promotion.background.primary};
     background-color: ${(props) => props.status == 'finished' && props.theme.promotion.background.secondary};
+    color: ${(props) => props.status == 'coming-soon' && props.theme.promotion.textColor.primary};
     color: ${(props) => props.status == 'ongoing' && props.theme.promotion.textColor.primary};
     color: ${(props) => props.status == 'finished' && props.theme.promotion.textColor.secondary};
     border-radius: 30px;

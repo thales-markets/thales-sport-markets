@@ -47,7 +47,7 @@ const Promotions: React.FC = () => {
             if (selectedNavItem == 1) {
                 return promotions.filter((item) => {
                     const status = getPromotionStatus(item.startDate, item.endDate);
-                    if (status == PromotionStatus.ONGOING) return item;
+                    if (status == PromotionStatus.ONGOING || status == PromotionStatus.COMING_SOON) return item;
                 });
             }
             if (selectedNavItem == 2) {
@@ -93,6 +93,8 @@ const Promotions: React.FC = () => {
                                         title={promotion.title}
                                         description={promotion.description}
                                         startDate={promotion.startDate}
+                                        displayCountdown={promotion.displayCountdown}
+                                        finished={promotion.finished}
                                         endDate={promotion.endDate}
                                         backgroundImageUrl={promotion.backgroundImageUrl}
                                         promotionId={promotion.promotionId}

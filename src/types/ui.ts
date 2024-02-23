@@ -16,6 +16,8 @@ export type PromotionCardProps = {
     description: string;
     startDate: number;
     endDate: number;
+    displayCountdown?: boolean;
+    finished?: boolean;
     promotionId: string;
     promotionUrl: string;
     backgroundImageUrl: string;
@@ -30,6 +32,7 @@ export type PromotionArticleProps = {
         sectionHtml: string;
         ctaButtonLink: string;
         ctaButtonLabel: string;
+        forceChangeNetworkOnClick?: string;
     };
     contentHtml: string;
 };
@@ -41,6 +44,7 @@ export type PromotionItem = PromotionCardProps & {
 export enum PromotionStatus {
     ONGOING = 'ongoing',
     FINISHED = 'finished',
+    COMING_SOON = 'coming-soon',
 }
 
 export type PromotionCardStatus = PromotionStatus;

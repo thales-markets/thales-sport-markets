@@ -1,19 +1,24 @@
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import SPAAnchor from 'components/SPAAnchor';
+import { SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import { PROMOTION_SANITIZE_PROPS } from 'constants/ui';
 import DOMPurify from 'dompurify';
 import { usePromotionsQuery } from 'queries/promotions/usePromotionsQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
+import { switchToNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
+import { changeNetwork } from 'thales-utils';
+import { SupportedNetwork } from 'types/network';
 import { ThemeInterface } from 'types/ui';
 import useQueryParam from 'utils/useQueryParams';
+import { useSwitchNetwork } from 'wagmi';
 
 type PromotionProps = RouteComponentProps<{
     promotionId: string;
@@ -21,8 +26,11 @@ type PromotionProps = RouteComponentProps<{
 
 const Promotion: React.FC<PromotionProps> = (props) => {
     const theme: ThemeInterface = useTheme();
+    const dispatch = useDispatch();
+
     const history = useHistory();
     const { t } = useTranslation();
+    const { switchNetwork } = useSwitchNetwork();
 
     const promotionId = props?.match?.params?.promotionId;
 
@@ -45,6 +53,16 @@ const Promotion: React.FC<PromotionProps> = (props) => {
         }
         return undefined;
     }, [promotionId, promotions]);
+
+    const network = Object.keys(SUPPORTED_NETWORKS_PARAMS)
+        .map((key) => {
+            return {
+                id: Number(key),
+                ...SUPPORTED_NETWORKS_PARAMS[Number(key)],
+            };
+        })
+        .sort((a, b) => a.order - b.order)
+        .find((item) => item.chainKey == promotion?.article.ctaSection.forceChangeNetworkOnClick);
 
     return (
         <Wrapper>
@@ -69,7 +87,23 @@ const Promotion: React.FC<PromotionProps> = (props) => {
                                 ),
                             }}
                         ></CTAContent>
-                        <SPAAnchor href={promotion.article.ctaSection.ctaButtonLink}>
+                        <SPAAnchor
+                            href={promotion.article.ctaSection.ctaButtonLink}
+                            onClick={async () => {
+                                if (promotion?.article.ctaSection.forceChangeNetworkOnClick && network) {
+                                    await changeNetwork(network, () => {
+                                        switchNetwork?.(network.id);
+                                        // Trigger App.js init
+                                        // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
+                                        dispatch(
+                                            switchToNetworkId({
+                                                networkId: Number(network.id) as SupportedNetwork,
+                                            })
+                                        );
+                                    });
+                                }
+                            }}
+                        >
                             <Button
                                 width={'150px'}
                                 backgroundColor={theme.button.background.quaternary}

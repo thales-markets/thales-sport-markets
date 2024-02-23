@@ -1,5 +1,6 @@
 import { NAV_MENU } from 'constants/ui';
 import { NavMenuItem, PromotionCardStatus, PromotionStatus } from 'types/ui';
+import { formatTimestampForPromotionDate } from './formatters/date';
 
 export const getOrdinalNumberLabel = (num: number): string => {
     switch (num) {
@@ -20,7 +21,17 @@ export const getNavItemFromRoute = (route: string): NavMenuItem | null => {
     return null;
 };
 
-export const getPromotionStatus = (startDate: number, endDate: number): PromotionCardStatus => {
+export const getPromotionStatus = (startDate: number, endDate: number, finished?: boolean): PromotionCardStatus => {
     if (endDate > Date.now() / 1000 && Date.now() / 1000 > startDate) return PromotionStatus.ONGOING;
+    if (endDate == 0 && Date.now() / 1000 > startDate) return PromotionStatus.ONGOING;
+    if (Date.now() / 1000 < startDate) return PromotionStatus.COMING_SOON;
+    if (finished) return PromotionStatus.FINISHED;
     return PromotionStatus.FINISHED;
+};
+
+export const getPromotionDateRange = (startDate: number, endDate: number): string => {
+    if (startDate && endDate == 0) {
+        return `${formatTimestampForPromotionDate(startDate)} - TBD`;
+    }
+    return `${formatTimestampForPromotionDate(startDate)} - ${formatTimestampForPromotionDate(endDate)}`;
 };
