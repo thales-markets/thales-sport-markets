@@ -26,7 +26,12 @@ import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/markets';
 import { formatParlayOdds } from 'utils/parlay';
 import { buildMarketLink } from 'utils/routes';
-import { getTicketMarketStatus } from 'utils/tickets';
+import {
+    getTicketMarketOdd,
+    getTicketMarketStatus,
+    getTicketMarketWinStatus,
+    isWinningTicketMarket,
+} from 'utils/tickets';
 import ShareTicketModalV2, {
     ShareTicketModalProps,
 } from '../../../../Home/Parlay/components/ShareTicketModal copy/ShareTicketModalV2';
@@ -75,8 +80,8 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         ticket.sportMarkets = ticket.sportMarkets.map((sportMarket) => {
             return {
                 ...sportMarket,
-                odd: sportMarket.isCanceled ? 1 : sportMarket.odd,
-                winning: getMarketWinStatus(sportMarket),
+                odd: getTicketMarketOdd(sportMarket),
+                winning: getTicketMarketWinStatus(sportMarket),
             };
         });
 
@@ -221,15 +226,8 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     );
 };
 
-const getMarketWinStatus = (market: TicketMarket) =>
-    market.isResolved && !market.isCanceled
-        ? // win only if not canceled
-          market.position + 1 === market.finalResult
-        : // open or canceled
-          undefined;
-
 const getTicketMarketStatusIcon = (market: TicketMarket, theme: ThemeInterface) => {
-    const winStatus = getMarketWinStatus(market);
+    const winStatus = getTicketMarketWinStatus(market);
 
     return winStatus === undefined ? (
         <StatusIcon color={theme.status.open} className={`icon icon--open`} />
@@ -240,17 +238,7 @@ const getTicketMarketStatusIcon = (market: TicketMarket, theme: ThemeInterface) 
     );
 };
 
-const getOpacity = (market: TicketMarket) => {
-    if (market.isResolved) {
-        if (market.position + 1 === market.finalResult) {
-            return 1;
-        } else {
-            return 0.5;
-        }
-    } else {
-        return 1;
-    }
-};
+const getOpacity = (market: TicketMarket) => (market.isResolved && isWinningTicketMarket(market) ? 0.5 : 1);
 
 export const getTicketMarkets = (
     ticket: Ticket,
@@ -260,7 +248,7 @@ export const getTicketMarkets = (
     market?: SportMarketInfoV2
 ) => {
     return ticket.sportMarkets.map((ticketMarket, index) => {
-        const quote = ticketMarket.isCanceled ? 1 : ticketMarket.odd;
+        const quote = getTicketMarketOdd(ticketMarket);
         const symbolText = getSymbolTextV2(ticketMarket.position, ticketMarket);
         const lineInfo = getLineInfoV2(ticketMarket, ticketMarket.position);
 

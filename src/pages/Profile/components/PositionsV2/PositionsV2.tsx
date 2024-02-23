@@ -87,7 +87,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
     const marketDurationQuery = useMarketDurationQuery(networkId);
 
-    const userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : null;
+    const userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
 
     const marketDuration =
         marketDurationQuery.isSuccess && marketDurationQuery.data ? Math.floor(marketDurationQuery.data) : 30;
@@ -97,17 +97,15 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
             open: [] as Ticket[],
             claimable: [] as Ticket[],
         };
-        if (userTickets) {
-            userTickets.forEach((ticket: Ticket) => {
-                if (ticket.isUserTheWinner && !ticket.isResolved) {
-                    data.claimable.push(ticket);
-                }
+        userTickets.forEach((ticket: Ticket) => {
+            if (ticket.isClaimable) {
+                data.claimable.push(ticket);
+            }
 
-                if (!ticket.isResolved && !ticket.isExercisable) {
-                    data.open.push(ticket);
-                }
-            });
-        }
+            if (ticket.isOpen) {
+                data.open.push(ticket);
+            }
+        });
 
         if (searchText && !ethers.utils.isAddress(searchText)) {
             data.open = data.open.filter((item) => {
@@ -136,10 +134,10 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     );
 
     useEffect(() => {
-        const { parlayMarketsAMMContract, sUSDContract, signer } = networkConnector;
-        if (parlayMarketsAMMContract && signer && sUSDContract) {
+        const { sportsAMMV2Contract, sUSDContract, signer } = networkConnector;
+        if (sportsAMMV2Contract && signer && sUSDContract) {
             const collateralContractWithSigner = sUSDContract?.connect(signer);
-            const addressToApprove = parlayMarketsAMMContract.address;
+            const addressToApprove = sportsAMMV2Contract.address;
 
             const getAllowance = async () => {
                 try {
@@ -182,23 +180,24 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const isLoading = userTicketsQuery.isLoading;
 
     const claimAllRewards = async () => {
-        const { signer, parlayMarketsAMMContract } = networkConnector;
+        const { signer, sportsAMMV2Contract } = networkConnector;
         if (signer) {
             const transactions: any = [];
 
             if (userTicketsByStatus.claimable.length) {
-                if (parlayMarketsAMMContract) {
+                if (sportsAMMV2Contract) {
                     userTicketsByStatus.claimable.forEach(async (market) => {
                         transactions.push(
                             new Promise(async (resolve, reject) => {
                                 const id = toast.loading(t('market.toast-message.transaction-pending'));
 
                                 try {
-                                    const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
+                                    const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
 
                                     const tx = isDefaultCollateral
-                                        ? await parlayMarketsAMMContractWithSigner?.exerciseParlay(market.id)
-                                        : await parlayMarketsAMMContractWithSigner?.exerciseParlayWithOfframp(
+                                        ? await sportsAMMV2ContractWithSigner?.exerciseTicket(market.id)
+                                        : // TODO: not available yet
+                                          await sportsAMMV2ContractWithSigner?.exerciseTicketWithOfframp(
                                               market.id,
                                               collateralAddress,
                                               isEth

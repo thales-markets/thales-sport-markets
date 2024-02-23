@@ -60,20 +60,6 @@ export const QuoteWrapper = styled.div`
     }
 `;
 
-export const TableHeaderStyle: React.CSSProperties = {
-    fontWeight: 600,
-    fontSize: '10px',
-    lineHeight: '12px',
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    justifyContent: 'center',
-};
-
-export const TableRowStyle: React.CSSProperties = {
-    justifyContent: 'center',
-    padding: '0',
-};
-
 export const ExpandedRowWrapper = styled.div`
     display: flex;
     padding-left: 30px;
@@ -141,3 +127,17 @@ export const TwitterWrapper = styled.div`
 export const ExternalLink = styled.a`
     color: ${(props) => props.theme.link.textColor.secondary};
 `;
+
+export const TableHeaderStyle: React.CSSProperties = {
+    fontWeight: 600,
+    fontSize: '10px',
+    lineHeight: '12px',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    justifyContent: 'center',
+};
+
+export const TableRowStyle: React.CSSProperties = {
+    justifyContent: 'center',
+    padding: '0',
+};

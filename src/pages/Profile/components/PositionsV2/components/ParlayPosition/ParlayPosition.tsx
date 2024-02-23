@@ -32,6 +32,7 @@ import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { formatParlayOdds } from 'utils/parlay';
 import { refetchAfterClaim } from '../../../../../../utils/queryConnector';
+import { getTicketMarketOdd, getTicketMarketWinStatus } from '../../../../../../utils/tickets';
 import { ShareTicketModalProps } from '../../../../../Markets/Home/Parlay/components/ShareTicketModal copy/ShareTicketModalV2';
 import { CollateralSelectorContainer } from '../../../Positions/components/SinglePosition/styled-components';
 import {
@@ -105,15 +106,15 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const isEth = collateralAddress === ZERO_ADDRESS;
 
-    const isClaimable = ticket.isUserTheWinner && !ticket.isResolved;
+    const isClaimable = ticket.isClaimable;
 
     const NUMBER_OF_GAMES = ticket.sportMarkets.length;
 
     useEffect(() => {
-        const { parlayMarketsAMMContract, sUSDContract, signer } = networkConnector;
-        if (parlayMarketsAMMContract && signer && sUSDContract) {
+        const { sportsAMMV2Contract, sUSDContract, signer } = networkConnector;
+        if (sportsAMMV2Contract && signer && sUSDContract) {
             const collateralContractWithSigner = sUSDContract?.connect(signer);
-            const addressToApprove = parlayMarketsAMMContract.address;
+            const addressToApprove = sportsAMMV2Contract.address;
 
             const getAllowance = async () => {
                 try {
@@ -149,14 +150,14 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
     ]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { parlayMarketsAMMContract, sUSDContract, signer } = networkConnector;
-        if (parlayMarketsAMMContract && signer) {
+        const { sportsAMMV2Contract, sUSDContract, signer } = networkConnector;
+        if (sportsAMMV2Contract && signer) {
             setIsAllowing(true);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             try {
                 let txResult;
                 const collateralContractWithSigner = sUSDContract?.connect(signer);
-                const addressToApprove = parlayMarketsAMMContract.address;
+                const addressToApprove = sportsAMMV2Contract.address;
 
                 if (isAA) {
                     txResult = await executeBiconomyTransaction(
@@ -176,7 +177,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
 
                 if (txResult && txResult.transactionHash) {
                     setIsAllowing(false);
-                    claimParlay(ticket.id);
+                    claimTicket(ticket.id);
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
                 }
             } catch (e) {
@@ -187,32 +188,32 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
         }
     };
 
-    const claimParlay = async (parlayAddress: string) => {
+    const claimTicket = async (parlayAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
-        const { parlayMarketsAMMContract, signer } = networkConnector;
-        if (signer && parlayMarketsAMMContract) {
+        const { sportsAMMV2Contract, signer } = networkConnector;
+        if (signer && sportsAMMV2Contract) {
             setIsSubmitting(true);
             try {
                 let txResult;
-                const parlayMarketsAMMContractWithSigner = parlayMarketsAMMContract.connect(signer);
+                const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
                 if (isAA) {
                     txResult = isDefaultCollateral
                         ? await executeBiconomyTransaction(
                               collateralAddress,
-                              parlayMarketsAMMContractWithSigner,
-                              'exerciseParlay',
+                              sportsAMMV2ContractWithSigner,
+                              'exerciseTicket',
                               [parlayAddress]
                           )
                         : await executeBiconomyTransaction(
                               collateralAddress,
-                              parlayMarketsAMMContractWithSigner,
-                              'exerciseParlayWithOfframp',
+                              sportsAMMV2ContractWithSigner,
+                              'exerciseTicketWithOfframp',
                               [parlayAddress, collateralAddress, isEth]
                           );
                 } else {
                     const tx = isDefaultCollateral
-                        ? await parlayMarketsAMMContractWithSigner?.exerciseParlay(parlayAddress)
-                        : await parlayMarketsAMMContractWithSigner?.exerciseParlayWithOfframp(
+                        ? await sportsAMMV2ContractWithSigner?.exerciseTicket(parlayAddress)
+                        : await sportsAMMV2ContractWithSigner?.exerciseTicketWithOfframp(
                               parlayAddress,
                               collateralAddress,
                               isEth
@@ -241,8 +242,8 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
             sportMarkets: ticket.sportMarkets.map((sportMarket) => {
                 return {
                     ...sportMarket,
-                    odd: sportMarket.isCanceled ? 1 : sportMarket.odd,
-                    winning: isClaimable,
+                    odd: getTicketMarketOdd(sportMarket),
+                    winning: getTicketMarketWinStatus(sportMarket),
                 };
             }),
         },
@@ -267,7 +268,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
                 e.preventDefault();
                 e.stopPropagation();
                 hasAllowance || isDefaultCollateral
-                    ? claimParlay(ticket.id)
+                    ? claimTicket(ticket.id)
                     : isParticle
                     ? handleAllowance(ethers.constants.MaxUint256)
                     : setOpenApprovalModal(true);

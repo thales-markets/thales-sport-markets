@@ -1,4 +1,5 @@
 import PositionSymbol from 'components/PositionSymbol';
+import SPAAnchor from 'components/SPAAnchor';
 import { BetTypeNameMap, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
 import { BetType } from 'enums/markets';
@@ -18,10 +19,9 @@ import { ThemeInterface } from 'types/ui';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/markets';
+import { buildMarketLink } from 'utils/routes';
+import { getTicketMarketStatus } from 'utils/tickets';
 import { getOrdinalNumberLabel } from 'utils/ui';
-import SPAAnchor from '../../../../../../../../components/SPAAnchor';
-import { buildMarketLink } from '../../../../../../../../utils/routes';
-import { getTicketMarketStatus } from '../../../../../../../../utils/tickets';
 import {
     MatchPeriodContainer,
     MatchPeriodLabel,
