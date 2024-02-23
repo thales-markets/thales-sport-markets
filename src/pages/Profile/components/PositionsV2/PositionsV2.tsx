@@ -23,10 +23,8 @@ import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { useUserTicketsQuery } from '../../../../queries/markets/useUserTicketsQuery';
-import ShareTicketModalV2, {
-    ShareTicketModalProps,
-} from '../../../Markets/Home/Parlay/components/ShareTicketModal copy/ShareTicketModalV2';
-import ParlayPosition from './components/ParlayPosition';
+import ShareTicketModalV2, { ShareTicketModalProps } from '../../../Markets/Home/Parlay/components/ShareTicketModalV2';
+import TicketPosition from './components/TicketPosition';
 import {
     Arrow,
     CategoryContainer,
@@ -87,12 +85,12 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
     const marketDurationQuery = useMarketDurationQuery(networkId);
 
-    const userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
-
     const marketDuration =
         marketDurationQuery.isSuccess && marketDurationQuery.data ? Math.floor(marketDurationQuery.data) : 30;
 
     const userTicketsByStatus = useMemo(() => {
+        const userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
+
         const data = {
             open: [] as Ticket[],
             claimable: [] as Ticket[],
@@ -126,7 +124,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
             });
         }
         return data;
-    }, [userTickets, searchText]);
+    }, [userTicketsQuery.isSuccess, userTicketsQuery.data, searchText]);
 
     const totalParlayClaimableAmount = useMemo(
         () => userTicketsByStatus.claimable.reduce((partialSum, ticket) => partialSum + ticket.payout, 0),
@@ -282,7 +280,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                     </ClaimAllContainer>
                                     {userTicketsByStatus.claimable.map((parlayMarket, index) => {
                                         return (
-                                            <ParlayPosition
+                                            <TicketPosition
                                                 ticket={parlayMarket}
                                                 key={index}
                                                 setShareTicketModalData={setShareTicketData}
@@ -320,7 +318,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                             {userTicketsByStatus.open.length ? (
                                 <>
                                     {userTicketsByStatus.open.map((parlayMarket, index) => {
-                                        return <ParlayPosition ticket={parlayMarket} key={index} />;
+                                        return <TicketPosition ticket={parlayMarket} key={index} />;
                                     })}
                                 </>
                             ) : (
@@ -336,9 +334,13 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
             )}
             {showShareTicketModal && shareTicketData && (
                 <ShareTicketModalV2
-                    ticket={shareTicketData.ticket}
+                    markets={shareTicketData.markets}
                     multiSingle={false}
+                    paid={shareTicketData.paid}
+                    payout={shareTicketData.payout}
                     onClose={shareTicketData.onClose}
+                    isTicketLost={shareTicketData.isTicketLost}
+                    isTicketResolved={shareTicketData.isTicketResolved}
                 />
             )}
         </Container>

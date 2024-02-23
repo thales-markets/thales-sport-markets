@@ -32,9 +32,7 @@ import {
     getTicketMarketWinStatus,
     isWinningTicketMarket,
 } from 'utils/tickets';
-import ShareTicketModalV2, {
-    ShareTicketModalProps,
-} from '../../../../Home/Parlay/components/ShareTicketModal copy/ShareTicketModalV2';
+import ShareTicketModalV2, { ShareTicketModalProps } from '../../../../Home/Parlay/components/ShareTicketModalV2';
 import {
     ExpandedRowWrapper,
     ExternalLink,

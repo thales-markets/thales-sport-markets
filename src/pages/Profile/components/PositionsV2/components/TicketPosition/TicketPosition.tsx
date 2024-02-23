@@ -33,7 +33,7 @@ import networkConnector from 'utils/networkConnector';
 import { formatParlayOdds } from 'utils/parlay';
 import { refetchAfterClaim } from '../../../../../../utils/queryConnector';
 import { getTicketMarketOdd, getTicketMarketWinStatus } from '../../../../../../utils/tickets';
-import { ShareTicketModalProps } from '../../../../../Markets/Home/Parlay/components/ShareTicketModal copy/ShareTicketModalV2';
+import { ShareTicketModalProps } from '../../../../../Markets/Home/Parlay/components/ShareTicketModalV2';
 import { CollateralSelectorContainer } from '../../../Positions/components/SinglePosition/styled-components';
 import {
     ClaimContainer,
@@ -47,7 +47,7 @@ import {
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
 } from '../../styled-components';
-import ParlayItem from './components/ParlayItem';
+import TicketItem from './components/TicketItem';
 import {
     ArrowIcon,
     CollapsableContainer,
@@ -67,13 +67,17 @@ import {
     WinValue,
 } from './styled-components';
 
-type ParlayPosition = {
+type TicketPositionProps = {
     ticket: Ticket;
     setShareTicketModalData?: (shareTicketData: ShareTicketModalProps) => void;
     setShowShareTicketModal?: (show: boolean) => void;
 };
 
-const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalData, setShowShareTicketModal }) => {
+const TicketPosition: React.FC<TicketPositionProps> = ({
+    ticket,
+    setShareTicketModalData,
+    setShowShareTicketModal,
+}) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
@@ -384,7 +388,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
                 <Divider />
                 <ParlayDetailContainer>
                     {ticket.sportMarkets.map((market, index) => {
-                        return <ParlayItem market={market} key={index} />;
+                        return <TicketItem market={market} key={index} />;
                     })}
                 </ParlayDetailContainer>
                 <CollapseFooterContainer>
@@ -420,4 +424,4 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
     );
 };
 
-export default ParlayPosition;
+export default TicketPosition;

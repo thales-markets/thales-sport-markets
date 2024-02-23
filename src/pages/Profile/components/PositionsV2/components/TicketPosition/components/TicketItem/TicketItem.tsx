@@ -32,7 +32,7 @@ import {
 import { ClubLogo, ClubName, MatchInfo, MatchLabel, MatchLogo, StatusContainer } from '../../../../styled-components';
 import { ParlayStatus, Wrapper } from './styled-components';
 
-const ParlayItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
+const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -232,4 +232,4 @@ const ParlayItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
     );
 };
 
-export default ParlayItem;
+export default TicketItem;
