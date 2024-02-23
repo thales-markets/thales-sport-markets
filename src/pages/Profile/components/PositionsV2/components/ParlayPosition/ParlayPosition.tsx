@@ -7,7 +7,6 @@ import { USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER } from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
-import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -32,6 +31,8 @@ import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollater
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { formatParlayOdds } from 'utils/parlay';
+import { refetchAfterClaim } from '../../../../../../utils/queryConnector';
+import { ShareTicketModalProps } from '../../../../../Markets/Home/Parlay/components/ShareTicketModal copy/ShareTicketModalV2';
 import { CollateralSelectorContainer } from '../../../Positions/components/SinglePosition/styled-components';
 import {
     ClaimContainer,
@@ -222,7 +223,7 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                     if (setShareTicketModalData && setShowShareTicketModal) {
-                        // setShareTicketModalData(shareParlayData);
+                        setShareTicketModalData(shareParlayData);
                         setShowShareTicketModal(true);
                     }
                 }
@@ -234,23 +235,23 @@ const ParlayPosition: React.FC<ParlayPosition> = ({ ticket, setShareTicketModalD
         }
     };
 
-    // const shareParlayData = {
-    //     markets: ticket.sportMarkets.map((market: TicketMarket) => {
-    //         return {
-    //             ...market,
-    //             odds: market.odds.map((odd) => (market.isCanceled ? 1 : odd)),
-    //             winning: isClaimable,
-    //         } as TicketMarket;
-    //     }),
-    //     multiSingle: false,
-    //     totalQuote: getParlayQuote(ticket.buyInAmount, ticket.payout),
-    //     paid: ticket.buyInAmount,
-    //     payout: ticket.payout,
-    //     onClose: () => {
-    //         refetchAfterClaim(walletAddress, networkId);
-    //         setShowShareTicketModal ? setShowShareTicketModal(false) : null;
-    //     },
-    // };
+    const shareParlayData = {
+        ticket: {
+            ...ticket,
+            sportMarkets: ticket.sportMarkets.map((sportMarket) => {
+                return {
+                    ...sportMarket,
+                    odd: sportMarket.isCanceled ? 1 : sportMarket.odd,
+                    winning: isClaimable,
+                };
+            }),
+        },
+        multiSingle: false,
+        onClose: () => {
+            refetchAfterClaim(walletAddress, networkId);
+            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
+        },
+    };
 
     const getClaimButton = (isMobile: boolean) => (
         <Button

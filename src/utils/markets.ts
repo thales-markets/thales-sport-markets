@@ -857,7 +857,7 @@ export const getMarketNameV2 = (market: SportMarketInfoV2, position?: Position) 
     return position === Position.HOME ? market.homeTeam : market.awayTeam;
 };
 
-export const getPositionOddsV2 = (market: TicketMarket) => market.odds[market.position];
+export const getPositionOddsV2 = (market: TicketMarket) => market.odd;
 
 export const isSameMarket = (market: SportMarketInfoV2, ticketPosition: TicketPosition) =>
     market.gameId === ticketPosition.gameId &&

@@ -289,6 +289,7 @@
             "title": "Recent activity",
             "single-title": "Recent single activity",
             "parlay-title": "Recent parlay activity",
+            "ticket-title": "Recent ticket activity",
             "date-time-col": "date | time",
             "type-col": "type",
             "position-col": "position",

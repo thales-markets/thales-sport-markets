@@ -3,35 +3,51 @@ import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
 import { BetTypeNameMap } from 'constants/tags';
-import { BetType, OddsType, Position } from 'enums/markets';
+import { BetType, OddsType } from 'enums/markets';
 import i18n from 'i18n';
-import { t } from 'i18next';
-import ShareTicketModal from 'pages/Markets/Home/Parlay/components/ShareTicketModal';
-import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
-import styled, { useTheme } from 'styled-components';
-import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { useTheme } from 'styled-components';
 import {
     formatCurrencyWithKey,
     formatCurrencyWithSign,
-    formatDateWithTime,
     formatTxTimestamp,
     getEtherscanAddressLink,
     truncateAddress,
 } from 'thales-utils';
-import { ParlaysMarket, PositionData, SportMarketInfo, SportMarketInfoV2, Ticket, TicketMarket } from 'types/markets';
+import { SportMarketInfoV2, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/markets';
 import { formatParlayOdds } from 'utils/parlay';
 import { buildMarketLink } from 'utils/routes';
+import { getTicketMarketStatus } from 'utils/tickets';
+import ShareTicketModalV2, {
+    ShareTicketModalProps,
+} from '../../../../Home/Parlay/components/ShareTicketModal copy/ShareTicketModalV2';
+import {
+    ExpandedRowWrapper,
+    ExternalLink,
+    FirstExpandedSection,
+    LastExpandedSection,
+    QuoteLabel,
+    QuoteText,
+    QuoteWrapper,
+    StatusIcon,
+    StatusWrapper,
+    TableHeaderStyle,
+    TableRowStyle,
+    TableText,
+    TicketRow,
+    TicketRowTeam,
+    TicketRowText,
+    TwitterWrapper,
+} from './styled-components';
 
 type TicketTransactionsTableProps = {
     ticketTransactions: Ticket[];
@@ -50,73 +66,23 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     const language = i18n.language;
     const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const networkId = useSelector(getNetworkId);
 
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps>({
-        markets: [],
-        multiSingle: false,
-        totalQuote: 0,
-        paid: 0,
-        payout: 0,
-        onClose: () => {},
-    });
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
 
-    const onTwitterIconClick = (data: any) => {
-        const sportMarkets: SportMarketInfo[] = data.sportMarkets;
-
-        const parlaysMarket: ParlaysMarket[] = sportMarkets
-            .map((sportMarket) => {
-                const sportMarketFromContractIndex = data.sportMarketsFromContract.findIndex(
-                    (address: string) => address === sportMarket.address
-                );
-                const position: Position = Number(data.positionsFromContract[sportMarketFromContractIndex]);
-
-                // Update odds with values from contract when position was bought
-                const sportMarketWithBuyQuotes = {
-                    ...sportMarket,
-                    homeOdds:
-                        position === Position.HOME
-                            ? sportMarket.isCanceled
-                                ? 1
-                                : data.marketQuotes[sportMarketFromContractIndex]
-                            : sportMarket.homeOdds,
-                    drawOdds:
-                        position === Position.DRAW
-                            ? sportMarket.isCanceled
-                                ? 1
-                                : data.marketQuotes[sportMarketFromContractIndex]
-                            : sportMarket.drawOdds,
-                    awayOdds:
-                        position === Position.AWAY
-                            ? sportMarket.isCanceled
-                                ? 1
-                                : data.marketQuotes[sportMarketFromContractIndex]
-                            : sportMarket.awayOdds,
-                };
-
-                const positionsIndex = data.positions.findIndex(
-                    (positionData: PositionData) => positionData.market.address === sportMarket.address
-                );
-
-                return {
-                    ...sportMarketWithBuyQuotes,
-                    position,
-                    winning: getMarketWinStatus(data.positions[positionsIndex]),
-                };
-            })
-            .sort(
-                (a, b) =>
-                    data.sportMarketsFromContract.findIndex((address: string) => address === a.address) -
-                    data.sportMarketsFromContract.findIndex((address: string) => address === b.address)
-            );
+    const onTwitterIconClick = (ticket: Ticket) => {
+        ticket.sportMarkets = ticket.sportMarkets.map((sportMarket) => {
+            return {
+                ...sportMarket,
+                odd: sportMarket.isCanceled ? 1 : sportMarket.odd,
+                winning: getMarketWinStatus(sportMarket),
+            };
+        });
 
         const modalData: ShareTicketModalProps = {
-            markets: parlaysMarket,
+            ticket: ticket,
             multiSingle: false,
-            totalQuote: data.totalQuote,
-            paid: data.sUSDPaid,
-            payout: data.totalAmount,
             onClose: () => setShowShareTicketModal(false),
         };
         setShareTicketModalData(modalData);
@@ -152,9 +118,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                     href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
                                     target={'_blank'}
                                 >
-                                    <FlexCenter>
-                                        <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
-                                    </FlexCenter>
+                                    <TableText>{truncateAddress(cellProps.cell.value)}</TableText>
                                 </ExternalLink>
                             );
                         },
@@ -164,11 +128,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         accessor: 'numOfGames',
                         sortable: true,
                         Cell: (cellProps: any) => {
-                            return (
-                                <FlexCenter>
-                                    <TableText>{cellProps.cell.value}</TableText>
-                                </FlexCenter>
-                            );
+                            return <TableText>{cellProps.cell.value}</TableText>;
                         },
                     },
                     {
@@ -219,14 +179,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     ],
                 }}
                 isLoading={isLoading}
-                data={ticketTransactions ?? []}
+                data={ticketTransactions}
                 noResultsMessage={t('market.table.no-results')}
                 expandedRow={(row) => {
-                    const toRender = getParlayRow(row.original, selectedOddsType, language, theme, market);
+                    const ticketMarkets = getTicketMarkets(row.original, selectedOddsType, language, theme, market);
 
                     return (
                         <ExpandedRowWrapper>
-                            <FirstExpandedSection>{toRender}</FirstExpandedSection>
+                            <FirstExpandedSection>{ticketMarkets}</FirstExpandedSection>
                             <LastExpandedSection>
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('profile.table.total-quote')}:</QuoteLabel>
@@ -250,13 +210,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     );
                 }}
             ></Table>
-            {showShareTicketModal && (
-                <ShareTicketModal
-                    markets={shareTicketModalData.markets}
+            {showShareTicketModal && shareTicketModalData && (
+                <ShareTicketModalV2
+                    ticket={shareTicketModalData.ticket}
                     multiSingle={false}
-                    totalQuote={shareTicketModalData.totalQuote}
-                    paid={shareTicketModalData.paid}
-                    payout={shareTicketModalData.payout}
                     onClose={shareTicketModalData.onClose}
                 />
             )}
@@ -265,7 +222,11 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 };
 
 const getMarketWinStatus = (market: TicketMarket) =>
-    market.isResolved && !market.isCanceled ? market.position + 1 === market.finalResult : undefined; // open or canceled
+    market.isResolved && !market.isCanceled
+        ? // win only if not canceled
+          market.position + 1 === market.finalResult
+        : // open or canceled
+          undefined;
 
 const getTicketMarketStatusIcon = (market: TicketMarket, theme: ThemeInterface) => {
     const winStatus = getMarketWinStatus(market);
@@ -277,17 +238,6 @@ const getTicketMarketStatusIcon = (market: TicketMarket, theme: ThemeInterface) 
     ) : (
         <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />
     );
-};
-
-const getTicketMarketStatus = (market: TicketMarket) => {
-    if (market.isCanceled) return t('profile.card.canceled');
-    if (market.isResolved) {
-        if (market.isPlayerPropsMarket) {
-            return market.playerProps.score;
-        }
-        return `${market.homeScore} : ${market.awayScore}`;
-    }
-    return formatDateWithTime(Number(market.maturityDate));
 };
 
 const getOpacity = (market: TicketMarket) => {
@@ -302,40 +252,28 @@ const getOpacity = (market: TicketMarket) => {
     }
 };
 
-const StatusIcon = styled.i`
-    font-size: 14px;
-    margin-right: 4px;
-    &::before {
-        color: ${(props) => props.color || 'white'};
-    }
-`;
-
-export const getParlayRow = (
+export const getTicketMarkets = (
     ticket: Ticket,
     selectedOddsType: OddsType,
     language: string,
     theme: ThemeInterface,
     market?: SportMarketInfoV2
 ) => {
-    const render: any = [];
-    if (!ticket.sportMarkets.length) return render;
-
-    ticket.sportMarkets.forEach((ticketMarket, index) => {
+    return ticket.sportMarkets.map((ticketMarket, index) => {
         const quote = ticketMarket.isCanceled ? 1 : ticketMarket.odd;
-
         const symbolText = getSymbolTextV2(ticketMarket.position, ticketMarket);
         const lineInfo = getLineInfoV2(ticketMarket, ticketMarket.position);
 
-        render.push(
-            <ParlayRow
+        return (
+            <TicketRow
                 highlighted={market && ticketMarket.gameId === market.gameId}
                 style={{ opacity: getOpacity(ticketMarket) }}
                 key={`m-${index}`}
             >
                 <SPAAnchor href={buildMarketLink(ticketMarket.gameId, language)}>
-                    <ParlayRowText style={{ cursor: 'pointer' }}>
+                    <TicketRowText style={{ cursor: 'pointer' }}>
                         {getTicketMarketStatusIcon(ticketMarket, theme)}
-                        <ParlayRowTeam>
+                        <TicketRowTeam>
                             {ticketMarket.isOneSideMarket
                                 ? fixOneSideMarketCompetitorName(ticketMarket.homeTeam)
                                 : !ticketMarket.isPlayerPropsMarket
@@ -343,8 +281,8 @@ export const getParlayRow = (
                                 : `${ticketMarket.playerProps.playerName} (${
                                       BetTypeNameMap[ticketMarket.typeId as BetType]
                                   }) `}
-                        </ParlayRowTeam>
-                    </ParlayRowText>
+                        </TicketRowTeam>
+                    </TicketRowText>
                 </SPAAnchor>
                 <PositionSymbol
                     symbolAdditionalText={{
@@ -372,161 +310,9 @@ export const getParlayRow = (
                     tooltip={<>{getOddTooltipTextV2(ticketMarket.position, ticketMarket)}</>}
                 />
                 <QuoteText>{getTicketMarketStatus(ticketMarket)}</QuoteText>
-            </ParlayRow>
+            </TicketRow>
         );
     });
-
-    return render;
 };
-
-const TableText = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 12px;
-    text-align: left;
-    @media (max-width: 600px) {
-        font-size: 10px;
-        white-space: pre-wrap;
-    }
-    white-space: nowrap;
-`;
-
-const StatusWrapper = styled.div`
-    min-width: 62px;
-    height: 25px;
-    border: 2px solid ${(props) => props.color || props.theme.status.open};
-    border-radius: 5px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 16px;
-    text-align: justify;
-    text-transform: uppercase;
-    text-align: center;
-    color: ${(props) => props.color || props.theme.status.open};
-    padding: 3px 4px 0 4px;
-`;
-
-const QuoteText = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 10px;
-    text-align: left;
-    white-space: nowrap;
-`;
-
-const QuoteLabel = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 10px;
-
-    letter-spacing: 0.025em;
-    text-transform: uppercase;
-`;
-
-const QuoteWrapper = styled.div`
-    display: flex;
-    flex: flex-start;
-    align-items: center;
-    gap: 6px;
-    margin-left: 30px;
-    @media (max-width: 600px) {
-        margin-left: 0;
-    }
-`;
-
-const TableHeaderStyle: React.CSSProperties = {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '10px',
-    lineHeight: '12px',
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    justifyContent: 'center',
-};
-
-const TableRowStyle: React.CSSProperties = {
-    justifyContent: 'center',
-    padding: '0',
-};
-
-const FlexCenter = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const ExpandedRowWrapper = styled.div`
-    display: flex;
-    padding-left: 30px;
-    @media (max-width: 600px) {
-        flex-direction: column;
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-    @media (max-width: 400px) {
-        padding: 0;
-    }
-    border-bottom: 2px dotted ${(props) => props.theme.borderColor.primary};
-`;
-
-const ParlayRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
-    margin-top: 10px;
-    background: ${(props) => (props.highlighted ? props.theme.background.secondary : 'initial')};
-    border-radius: 10px;
-    & > div {
-        flex: 1;
-    }
-    &:last-child {
-        margin-bottom: 10px;
-    }
-`;
-
-const ParlayRowText = styled(QuoteText)`
-    max-width: 220px;
-    width: 300px;
-    display: flex;
-    align-items: center;
-`;
-
-const ParlayRowTeam = styled.span`
-    white-space: nowrap;
-    width: 190px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
-const FirstExpandedSection = styled(FlexDivColumnCentered)`
-    flex: 2;
-`;
-
-const LastExpandedSection = styled(FlexDivColumnCentered)`
-    position: relative;
-    flex: 1;
-    gap: 10px;
-    @media (max-width: 600px) {
-        flex-direction: row;
-        margin: 10px 0;
-    }
-`;
-
-const TwitterWrapper = styled.div`
-    position: absolute;
-    bottom: 10px;
-    right: 5px;
-    @media (max-width: 600px) {
-        bottom: -2px;
-        right: 2px;
-    }
-`;
-
-export const ExternalLink = styled.a`
-    color: ${(props) => props.theme.link.textColor.secondary};
-`;
 
 export default TicketTransactionsTable;

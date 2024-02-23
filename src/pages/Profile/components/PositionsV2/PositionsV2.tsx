@@ -5,9 +5,6 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/Home';
-import ShareTicketModal, {
-    ShareTicketModalProps,
-} from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -26,6 +23,9 @@ import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { useUserTicketsQuery } from '../../../../queries/markets/useUserTicketsQuery';
+import ShareTicketModalV2, {
+    ShareTicketModalProps,
+} from '../../../Markets/Home/Parlay/components/ShareTicketModal copy/ShareTicketModalV2';
 import ParlayPosition from './components/ParlayPosition';
 import {
     Arrow,
@@ -50,14 +50,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketData, setShareTicketData] = useState<ShareTicketModalProps>({
-        markets: [],
-        multiSingle: false,
-        totalQuote: 0,
-        paid: 0,
-        payout: 0,
-        onClose: () => {},
-    });
+    const [shareTicketData, setShareTicketData] = useState<ShareTicketModalProps | undefined>(undefined);
     const [hasAllowance, setHasAllowance] = useState(false);
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -342,13 +335,10 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                     )}
                 </ListContainer>
             )}
-            {showShareTicketModal && (
-                <ShareTicketModal
-                    markets={shareTicketData.markets}
+            {showShareTicketModal && shareTicketData && (
+                <ShareTicketModalV2
+                    ticket={shareTicketData.ticket}
                     multiSingle={false}
-                    totalQuote={shareTicketData.totalQuote}
-                    paid={shareTicketData.paid}
-                    payout={shareTicketData.payout}
                     onClose={shareTicketData.onClose}
                 />
             )}

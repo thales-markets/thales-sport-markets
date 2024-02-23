@@ -13,7 +13,6 @@ import { getOddsType } from 'redux/modules/ui';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
-import { formatDateWithTime } from 'thales-utils';
 import { SportMarketLiveResult, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
@@ -22,6 +21,7 @@ import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 }
 import { getOrdinalNumberLabel } from 'utils/ui';
 import SPAAnchor from '../../../../../../../../components/SPAAnchor';
 import { buildMarketLink } from '../../../../../../../../utils/routes';
+import { getTicketMarketStatus } from '../../../../../../../../utils/tickets';
 import {
     MatchPeriodContainer,
     MatchPeriodLabel,
@@ -230,17 +230,6 @@ const ParlayItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
             </StatusContainer>
         </Wrapper>
     );
-};
-
-const getTicketMarketStatus = (market: TicketMarket) => {
-    if (market.isCanceled) return t('profile.card.canceled');
-    if (market.isResolved) {
-        if (market.isPlayerPropsMarket) {
-            return market.playerProps.score;
-        }
-        return `${market.homeScore} : ${market.awayScore}`;
-    }
-    return formatDateWithTime(Number(market.maturityDate));
 };
 
 export default ParlayItem;
