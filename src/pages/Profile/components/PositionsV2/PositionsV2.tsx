@@ -23,7 +23,7 @@ import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { useUserTicketsQuery } from '../../../../queries/markets/useUserTicketsQuery';
-import ShareTicketModalV2, { ShareTicketModalProps } from '../../../Markets/Home/Parlay/components/ShareTicketModalV2';
+import ShareTicketModalV2 from '../../../Markets/Home/Parlay/components/ShareTicketModalV2';
 import TicketPosition from './components/TicketPosition';
 import {
     Arrow,
@@ -40,6 +40,7 @@ import {
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
 } from './styled-components';
+import { ShareTicketModalProps } from '../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();

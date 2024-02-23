@@ -33,7 +33,6 @@ import networkConnector from 'utils/networkConnector';
 import { formatParlayOdds } from 'utils/parlay';
 import { refetchAfterClaim } from '../../../../../../utils/queryConnector';
 import { getTicketMarketOdd, getTicketMarketWinStatus } from '../../../../../../utils/tickets';
-import { ShareTicketModalProps } from '../../../../../Markets/Home/Parlay/components/ShareTicketModalV2';
 import { CollateralSelectorContainer } from '../../../Positions/components/SinglePosition/styled-components';
 import {
     ClaimContainer,
@@ -66,6 +65,7 @@ import {
     WinLabel,
     WinValue,
 } from './styled-components';
+import { ShareTicketModalProps } from '../../../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 
 type TicketPositionProps = {
     ticket: Ticket;

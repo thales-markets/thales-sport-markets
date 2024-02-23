@@ -82,7 +82,8 @@ import { SportsAmmData, TicketMarket } from 'types/markets';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import useSportsAmmDataQuery from '../../../../../../queries/markets/useSportsAmmDataQuery';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from '../../../../../../utils/sportsAmmV2';
-import ShareTicketModalV2, { ShareTicketModalProps } from '../ShareTicketModalV2';
+import ShareTicketModalV2 from '../ShareTicketModalV2';
+import { ShareTicketModalProps } from '../ShareTicketModalV2/ShareTicketModalV2';
 import SuggestedAmount from '../SuggestedAmount';
 
 type TicketProps = {
