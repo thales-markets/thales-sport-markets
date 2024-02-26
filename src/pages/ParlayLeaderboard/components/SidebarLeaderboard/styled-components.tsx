@@ -100,7 +100,8 @@ export const ArrowIcon = styled.i`
     font-size: 9px;
     display: flex;
     align-items: center;
-    margin-right: 6px;
+    margin-right: 2px;
+    margin-left: 4px;
 `;
 
 export const ExpandedRow = styled(FlexDivColumnCentered)``;

@@ -179,7 +179,16 @@
         "top10": "TOP 10",
         "yes": "YES",
         "no": "NO",
-        "tennis-tooltip": "In case of a walkover, match will be treated as canceled. In case of retirement / disqualification during the match, it will be treated as a win for the player advancing to the next round"
+        "tennis-tooltip": "In case of a walkover, match will be treated as canceled. In case of retirement / disqualification during the match, it will be treated as a win for the player advancing to the next round",
+        "odds-modal": {
+            "description": "Choose odds display format",
+            "american-odds": "American odds (e.g. +150)",
+            "decimal-odds": "Decimal odds (e.g. 2.5)",
+            "normalized-odds": "Normalized implied odds (e.g. 0.40)",
+            "save": "Save",
+            "info": "*You can always change the odds type in filters above the games list",
+            "title": "Welcome to Overtime Markets"
+        }
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Markets ALL RIGHTS RESERVED.",
@@ -630,8 +639,8 @@
                 }
             },
             "toggle-parlay": {
-                "multi-single": "Single",
-                "parlay": "Parlay"
+                "multi-single": "Multi single",
+                "parlay": "Ticket"
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
@@ -640,6 +649,7 @@
         "incentivized-markets": "INCENTIVIZED MARKETS",
         "incentivized-tooltip-tennis": "A total of {{rewards}} will be distributed during the Australian Open. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "A whopping total of {{rewards}} will be distributed for the NFL Superbowl. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-uefa": "A whopping total of {{rewards}} will be distributed for the UEFA competitions. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "superbowl-incentive": "10,000 ARB IN INCENTIVES"
     },
     "rewards": {
@@ -1015,15 +1025,12 @@
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best parlays with minimum 3 games on a <bold>bi-weekly basis</bold>. The tickets will be ranked based on a total quote, followed by the number of positions on the parlays.",
-        "distribution-note": "Rewards will be distributed to the <bold>TOP 10 parlays every 2 weeks</bold>!",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best winning parlays on a <bold>weekly basis</bold>. The tickets will be ranked based on a points system. The points are calculated by taking the odds of the parlay, multiplying it with the square root of the buy-in and adding 10% bonus for each game on the ticket.",
+        "info": "Points = parlayOdds * √buyin * (1+0.1*numberOfGames).",
+        "distribution-note": "Rewards will be distributed to the <bold>TOP 20 parlays every week</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
         "warning2": "Users that have covered 50% or more of potential combinations of their winning tickets will be disqualified.",
-        "info": "If multiple parlays have the same total quote and the number of positions the following will be used as tie-breakers in respective order:",
-        "info1": "- The amount paid",
-        "info2": "- Actual total quote (gotten by multiplying positions individually)",
-        "info3": "*1 winning parlay eligible per wallet",
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
@@ -1034,13 +1041,26 @@
             "reward": "Reward",
             "total-quote": "Total Quote",
             "total-amount": "Total Amount",
-            "positions": "Positions"
+            "positions": "Positions",
+            "points": "Points"
         },
         "periods": {
-            "february": "February",
             "period-end-label": "The period ends in",
             "period-ended-label": "Period ended",
-            "bi-weekly-period": "Bi-weekly period"
+            "weekly-period": "Weekly period"
+        },
+        "ticket-info": {
+            "title": "Parlay leaderboard",
+            "points-label": "Points",
+            "points-tooltip": "Calculated total points with bonuses for parlay leaderboard. Points are derived by multiplying the total odds of the parlay with cube (3rd) root of the buy-in and then adding 10% bonus for each game on the ticket.",
+            "rank-label": "Rank",
+            "rank-tooltip": "Tentative ranking based on current state of the leaderboard. Final ranking are known at round's end. Rounds are weekly Wednesday to Wednesday.",
+            "rewards-label": "Rewards",
+            "rewards-tooltip": "Potential rewards if your parlay assumes the rank above at round's end.",
+            "basic-points-label": "Basic points",
+            "buy-in-bonus-label": "Buy-in bonus",
+            "number-of-games-bonus-label": "Number of games bonus",
+            "total-points-label": "Total points"
         }
     },
     "liquidity-pool": {

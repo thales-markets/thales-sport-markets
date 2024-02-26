@@ -1,6 +1,7 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
+import ViewEtherscanLink from 'components/ViewEtherscanLink';
 import { USD_SIGN } from 'constants/currency';
 import { BetTypeNameMap } from 'constants/tags';
 import { BetType, OddsType, Position } from 'enums/markets';
@@ -189,29 +190,31 @@ const ParlayTransactions: React.FC<{ market: SportMarketInfo }> = ({ market }) =
                     {
                         id: 'position',
                         Header: <>{t('profile.table.games')}</>,
-                        accessor: 'positions',
-                        sortable: false,
-                        Cell: (cellProps: any) => {
-                            const parlay = syncPositionsAndMarketsPerContractOrderInParlay(
-                                cellProps.row.original as ParlayMarket
-                            );
+                        accessor: (originalRow: any) => {
+                            const parlay = syncPositionsAndMarketsPerContractOrderInParlay(originalRow as ParlayMarket);
                             const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
                             const numberOfMarketsModifiedWithCombinedPositions =
                                 combinedMarkets.length > 0
                                     ? parlay.sportMarkets.length - combinedMarkets.length
                                     : parlay.sportMarkets.length;
+
+                            return numberOfMarketsModifiedWithCombinedPositions;
+                        },
+                        sortable: true,
+                        Cell: (cellProps: any) => {
                             return (
                                 <FlexCenter>
-                                    <TableText>{numberOfMarketsModifiedWithCombinedPositions}</TableText>
+                                    <TableText>{cellProps.cell.value}</TableText>
                                 </FlexCenter>
                             );
                         },
+                        width: '50px',
                     },
                     {
                         id: 'paid',
                         Header: <>{t('profile.table.paid')}</>,
                         accessor: 'sUSDPaid',
-                        sortable: false,
+                        sortable: true,
                         Cell: (cellProps: any) => {
                             return (
                                 <TableText>
@@ -224,7 +227,7 @@ const ParlayTransactions: React.FC<{ market: SportMarketInfo }> = ({ market }) =
                         id: 'amount',
                         Header: <>{t('profile.table.amount')}</>,
                         accessor: 'totalAmount',
-                        sortable: false,
+                        sortable: true,
                         Cell: (cellProps: any) => {
                             return <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>;
                         },
@@ -244,6 +247,13 @@ const ParlayTransactions: React.FC<{ market: SportMarketInfo }> = ({ market }) =
                                 );
                             }
                         },
+                        width: '100px',
+                    },
+                    {
+                        Header: <>{t('market.table.tx-status-col')}</>,
+                        accessor: 'txHash',
+                        Cell: (cellProps: any) => <ViewEtherscanLink hash={cellProps.cell.value} />,
+                        width: '100px',
                     },
                 ]}
                 initialState={{

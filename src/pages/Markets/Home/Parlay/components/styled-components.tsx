@@ -1,6 +1,6 @@
+import MuiTooltip from '@material-ui/core/Tooltip';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
-import MuiTooltip from '@material-ui/core/Tooltip';
 
 export const RowSummary = styled.div<{ columnDirection?: boolean }>`
     position: relative;
@@ -243,4 +243,11 @@ export const CollateralContainer = styled.div`
     border-radius: 5px;
     padding: 3px;
     background: ${(props) => props.theme.input.background.primary};
+`;
+
+export const HorizontalLine = styled.hr`
+    width: 100%;
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    border-radius: 2px;
+    background: ${(props) => props.theme.background.tertiary};
 `;

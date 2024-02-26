@@ -33,6 +33,9 @@ export const DeprecatedInfo = styled(FlexDiv)`
     align-items: center;
     justify-content: center;
     font-size: 20px;
+    @media (max-width: 767px) {
+        font-size: 16px;
+    }
 `;
 
 export const VaultContainer = styled(FlexDivColumn)`
