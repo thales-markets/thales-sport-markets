@@ -94,7 +94,7 @@
 	    "backgroundImageUrl": "/promotions/new-parlay-small.png",
 	    "callToActionButton": "How to earn",
 	    "article": {
-	    	"coverImageUrl": "/promotions/parlay-comp-banner.png",
+	    	"coverImageUrl": "/promotions/parlay-comp-cover.png",
 	        "headerHtml": "<h1><span><span><span>Weekly Parlay Competition: Earn 2,500 ARB and 500 OP Every Week</span></span></span></h1>",
 	        "ctaSection": {
 	            "sectionHtml": "<p> <span> <span> <span>Win 500 OP or 2,500 ARB every two weeks by being in the top 20 highest-odd parlays on Optimism and Arbitrum respectively. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://www.overtimemarkets.xyz/parlay-leaderboard' target='_blank'> <span> <span> <span> <strong> <u>Parlay Leaderboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
