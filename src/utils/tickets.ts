@@ -30,7 +30,7 @@ export const mapTicket = (ticket: any, networkId: number): Ticket => {
         isUserTheWinner: ticket.isUserTheWinner,
         isExercisable: ticket.isExercisable,
         isClaimable: ticket.isUserTheWinner && !ticket.resolved,
-        isOpen: !ticket.isResolved && !ticket.isExercisable,
+        isOpen: !ticket.resolved && !ticket.isExercisable,
 
         sportMarkets: ticket.gamesData.map((market: any, index: number) => {
             const leagueId = Number(market.sportId);
