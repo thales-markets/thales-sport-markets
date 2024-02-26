@@ -2,8 +2,9 @@
 	{
 	    "title": "10,000 ARB every two weeks for all Singles and Parlay users on Arbitrum!",
 	    "description":"Biweekly rewards of 5,000 ARB to all Single buyers and 5,000 ARB to all Parlay buyers until March 31st. Airdropped every two weeks to all users based on volume driven.",
-	    "startDate": 1711185400,
-	    "endDate": 0,
+	    "startDate": 1701437500,
+	    "endDate": 1711879200,
+		"displayCountdown": true,
             "promotionId": "arb-stip-rewards-1",
 	    "promotionUrl": "/promotions/arb-stip-rewards-1",
 	    "backgroundImageUrl": "/promotions/arb-tile.png",
