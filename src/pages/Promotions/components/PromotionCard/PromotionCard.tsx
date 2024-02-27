@@ -8,7 +8,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
-import { PromotionCardProps, PromotionCardStatus, ThemeInterface } from 'types/ui';
+import { PromotionCardProps, PromotionCardStatus, PromotionStatus, ThemeInterface } from 'types/ui';
 import { getPromotionDateRange, getPromotionStatus } from 'utils/ui';
 
 const PromotionCard: React.FC<PromotionCardProps> = ({
@@ -49,7 +49,13 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
                             {!displayCountdown ? (
                                 getPromotionDateRange(startDate, endDate)
                             ) : (
-                                <TimeRemaining end={endDate * 1000} fontSize={12} fontWeight={700} />
+                                <>
+                                    {getPromotionStatus(startDate, endDate, finished) == PromotionStatus.COMING_SOON &&
+                                        `${t('promotions.starts-in')} `}
+                                    {getPromotionStatus(startDate, endDate, finished) == PromotionStatus.ONGOING &&
+                                        `${t('promotions.ends-in')} `}
+                                    <TimeRemaining end={endDate * 1000} fontSize={12} fontWeight={700} />
+                                </>
                             )}
                         </DateRangeLabel>
                     </HeaderContainer>

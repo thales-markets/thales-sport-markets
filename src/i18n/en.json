@@ -1203,6 +1203,8 @@
         "back": "Back",
         "from-label": "From",
         "to-label": "to",
+        "starts-in": "starts in",
+        "ends-in": "ends in",
         "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
     }
 }

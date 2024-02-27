@@ -1,10 +1,10 @@
+import differenceInWeeks from 'date-fns/differenceInWeeks';
+import intervalToDuration from 'date-fns/intervalToDuration';
+import useInterval from 'hooks/useInterval';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import intervalToDuration from 'date-fns/intervalToDuration';
-import differenceInWeeks from 'date-fns/differenceInWeeks';
-import { formattedDuration, formattedDurationFull } from 'utils/formatters/date';
-import useInterval from 'hooks/useInterval';
 import styled from 'styled-components';
+import { formattedDuration, formattedDurationFull } from 'utils/formatters/date';
 
 type TimeRemainingProps = {
     end: Date | number;
@@ -20,7 +20,7 @@ const TimeRemaining: React.FC<TimeRemainingProps> = ({ end, onEnded, fontSize, f
     const now = Date.now();
     const [timeElapsed, setTimeElapsed] = useState(now >= Number(end));
     const [weeksDiff, setWeekDiff] = useState(Math.abs(differenceInWeeks(now, end)));
-    const [showRemainingInWeeks, setShowRemainingInWeeks] = useState(weeksDiff > 4);
+    const [showRemainingInWeeks, setShowRemainingInWeeks] = useState(weeksDiff > 2);
     const [countdownDisabled, setCountdownDisabled] = useState(timeElapsed || showRemainingInWeeks);
 
     const [timeInterval, setTimeInterval] = useState<number | null>(countdownDisabled ? null : ONE_SECOND_IN_MS);
@@ -58,7 +58,7 @@ const TimeRemaining: React.FC<TimeRemainingProps> = ({ end, onEnded, fontSize, f
         const today = Date.now();
         setTimeElapsed(today >= Number(end));
         setWeekDiff(Math.abs(differenceInWeeks(today, end)));
-        setShowRemainingInWeeks(Math.abs(differenceInWeeks(today, end)) > 4);
+        setShowRemainingInWeeks(Math.abs(differenceInWeeks(today, end)) > 2);
         setCountdownDisabled(today >= Number(end) || Math.abs(differenceInWeeks(today, end)) > 4);
         setDuration(intervalToDuration({ start: today, end }));
     }, [end]);
