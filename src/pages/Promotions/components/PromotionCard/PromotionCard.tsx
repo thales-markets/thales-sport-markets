@@ -51,9 +51,9 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
                             ) : (
                                 <>
                                     {getPromotionStatus(startDate, endDate, finished) == PromotionStatus.COMING_SOON &&
-                                        `${t('promotions.starts-in')} `}
+                                        `${t('promotions.starts-in')}: `}
                                     {getPromotionStatus(startDate, endDate, finished) == PromotionStatus.ONGOING &&
-                                        `${t('promotions.ends-in')} `}
+                                        `${t('promotions.ends-in')}: `}
                                     <TimeRemaining end={endDate * 1000} fontSize={12} fontWeight={700} />
                                 </>
                             )}
