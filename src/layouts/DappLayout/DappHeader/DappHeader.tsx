@@ -1,15 +1,17 @@
 import burger from 'assets/images/burger.svg';
+import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
+import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
 import NavMenuMobile from 'components/NavMenuMobile';
+import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
-
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -30,7 +32,6 @@ import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
-import NetworkSwitcher from 'components/NetworkSwitcher';
 import TopUp from './components/TopUp';
 
 const PULSING_COUNT = 10;
@@ -124,6 +125,26 @@ const DappHeader: React.FC = () => {
                         )}
                     </LeftContainer>
                     <RightContainer>
+                        {location.pathname !== ROUTES.MarchMadness && (
+                            <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.MarchMadness)}>
+                                <Button
+                                    fontSize="18px"
+                                    additionalStyles={{
+                                        background: `url(${marchMadnessLeftIcon}) left 20px center no-repeat, url(${marchMadnessRightIcon}) right 20px center no-repeat`,
+                                        backgroundColor: '#005EB8', // TODO: mm
+                                        backgroundSize: '28px, 28px',
+                                        border: 'none',
+                                        fontFamily: "'NCAA' !important",
+                                        letterSpacing: '2px',
+                                        textTransform: 'uppercase',
+                                        color: theme.button.textColor.secondary,
+                                        width: '290px',
+                                    }}
+                                >
+                                    {t('markets.nav-menu.labels.march-madness')}
+                                </Button>
+                            </SPAAnchor>
+                        )}
                         {!isWalletConnected && (
                             <Button
                                 backgroundColor={'transparent'}

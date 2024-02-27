@@ -197,6 +197,7 @@ export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; pad
     cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
+    text-transform: lowercase;
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0061';

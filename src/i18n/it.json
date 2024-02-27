@@ -1190,5 +1190,99 @@
     },
     "banner": {
         "arb-distribution-message": "La distribuzione ARB è iniziata. Guadagna token ARB utilizzando gli straordinari. Scopri i dettagli qui."
+    },
+    "march-madness": {
+        "tabs": {
+            "brackets": "Parentesi",
+            "leaderboard": "Classifica",
+            "home": "Casa"
+        },
+        "home": {
+            "title": "Benvenuti al torneo March Madness",
+            "text-1": "<bold>March Madness</bold> è qui e con <bold>Overtime</bold> puoi coniare il tuo girone. Per festeggiare stiamo premiando gli utenti con <bold>{{reward}}</bold> per tutta la durata del torneo NCAAB. Il girone NFT aiuterà i titolari ad aumentare i loro premi in termini di volume garantendo loro un ingresso nella classifica del girone. Il conio è gratuito e aperto dal 12 al 16 marzo, quando inizia il primo turno.",
+            "time-info": "Ti restano {{days}} {{hours}} per coniare la tua staffa",
+            "text-3a": "Campionato - 20%",
+            "text-2": "Il conio del tuo <bold>branch March Madness</bold> viene effettuato completamente in catena. Sebbene l'NFT coniato sia legato all'anima, dà al titolare l'accesso a un aumento della ricompensa oltre alla partecipazione alla classifica del girone. La campagna March Madness è incentivata con {{reward}} e divisa in 2 gruppi.",
+            "text-3e": "Secondo turno - 2%",
+            "button-connect": "Collega il portafoglio",
+            "text-3c": "Otto d'élite - 7%",
+            "text-3d": "Dolce 16 - 4%",
+            "text-5": "Maggiori dettagli nel nostro <mediumLink>post sul blog Medium</mediumLink>.",
+            "text-3b": "Finali Quattro - 10%",
+            "button-create": "Come parentesi",
+            "text-3": "Per il <bold>Primo pool</bold>, {{reward}} sarà diviso tra tutto il volume generato dai giochi March Madness, inclusi tutti i tipi di mercato e parlay con almeno un gioco NCAAB. I titolari della fascia NFT di March Madness hanno diritto a un potenziamento del trading. Ogni gioco corretto ha diritto a un potenziamento a livelli, con un massimo del 164%.",
+            "text-3f": "Primo turno - 1%",
+            "text-4": "Il <bold>secondo gruppo</bold> sarà diviso tra i detentori della fascia più accurata con un benchmark di volume di {{volume}} sui giochi March Madness. I titolari che soddisfano i requisiti di volume possono monitorare la loro posizione nella classifica del girone migliore dove i vincitori si divideranno un montepremi di {{reward}}."
+        },
+        "leaderboard": {
+            "rewards": "Premi",
+            "by-guessed-correctly": "Indovinato correttamente",
+            "tooltip-correct-correct-table": "Numero di giochi indovinati correttamente nel tuo girone",
+            "my-rewards": "Le mie ricompense",
+            "rank": "Rango",
+            "no-data": "Nessun dato attualmente disponibile",
+            "tooltip-base-volume-table": "Volume determinato dalle partite di basket NCAA",
+            "search-placeholder": "CERCA INDIRIZZO DEL PORTAFOGLIO",
+            "address": "Indirizzo",
+            "base-volume": "Base",
+            "tooltip-rewards-correct-table": "3.000 OP (10.000 THALES su Arbitrum) saranno divisi tra i primi 10",
+            "guessed-games": "Giochi indovinati",
+            "bonus-volume": "Bonus",
+            "owner": "Proprietario",
+            "volume": "Volume",
+            "tooltip-bonus-volume-table": "Volume bonus calcolato in base alle selezioni della fascia",
+            "player": "Giocatore",
+            "tooltip-rewards-volume-table": "10.000 OP (30.000 THALES su Arbitrum) saranno divisi in base al volume pro-rata"
+        },
+        "brackets": {
+            "stats": {
+                "my-stats": "Le mie statistiche",
+                "bonus": "Bonus",
+                "my-total-score": "Il mio punteggio totale",
+                "rank-games": "Classifica per giochi indovinati",
+                "points": "Punti",
+                "rank-volume": "Classifica per volume"
+            },
+            "modal-mint": {
+                "finish-text-1": "Ben fatto!",
+                "update-text-1": "Ben fatto!",
+                "button-updating": "In aggiornamento...",
+                "finish-text-2-success": "Hai appena coniato il tuo supporto March Madness!",
+                "button-update": "Staffa di aggiornamento",
+                "update-text-2": "Abbiamo salvato la tua previsione del girone, aggiorna il tuo girone adesso!",
+                "finish-info": "*L'NFT del girone March Madness è un NFT Overtime che consente ai titolari di partecipare alla campagna Overtime March Madness creando il proprio girone del torneo di pronostici.",
+                "button-minting": "Conio...",
+                "finish-text-1-success": "Congratulazioni!",
+                "button-mint": "Come NFT",
+                "finish-text-3-success": "Vai ai <marketsLink>mercati NCAAB</marketsLink> e inizia a guadagnare premi!",
+                "finish-text-2": "Hai creato con successo la tua staffa!<br /> Ora puoi coniare la tua staffa March Madness nft!",
+                "update-text-2-success": "Il tuo NFT del girone March Madness è stato aggiornato!"
+            },
+            "modal-share": {
+                "share": "Condividere",
+                "user-selection": "Ho scelto il {{team}} per tagliare le reti a Houston!",
+                "header": "Le mie ultime 4 scelte"
+            },
+            "round-3": "Elite 8",
+            "team-1": "Squadra 1",
+            "team-2": "Squadra 2",
+            "round-2": "Dolce 16",
+            "round-4": "Finale 4",
+            "round-0": "1° turno",
+            "round-1": "2° turno",
+            "submit-modify": "Staffa di aggiornamento",
+            "round-5": "Finale",
+            "submit": "Staffa di finitura",
+            "share": "Condividi questa parentesi"
+        },
+        "regions": {
+            "west": "ovest",
+            "east": "Est",
+            "south": "Sud",
+            "midwest": "Midwest"
+        },
+        "test-info": "È ora aperta la fase di testing con le squadre 2022, la selezione 2023 si apre il 12 marzo!",
+        "mobile-message": "La pagina è disponibile solo su schermi più grandi. Si prega di utilizzare la versione desktop!",
+        "back-to-markets": "Ritorniamo ai mercati"
     }
 }

@@ -1190,5 +1190,99 @@
     },
     "banner": {
         "arb-distribution-message": "La distribution d'ARB a commencé. Gagnez des jetons ARB en utilisant les heures supplémentaires. Consultez les détails ici."
+    },
+    "march-madness": {
+        "tabs": {
+            "brackets": "Supports",
+            "home": "Maison",
+            "leaderboard": "Classement"
+        },
+        "home": {
+            "text-3f": "Premier tour - 1%",
+            "title": "Bienvenue au tournoi March Madness",
+            "button-create": "Comme des parenthèses",
+            "text-3b": "Quatre derniers - 10 %",
+            "button-connect": "Connecter le portefeuille",
+            "text-5": "Plus de détails dans notre <mediumLink>article de blog Medium</mediumLink>.",
+            "text-2": "La création de votre <bold>support March Madness</bold> se fait entièrement en chaîne. Bien que le NFT créé soit lié à l'âme, il donne à son détenteur l'accès à un bonus de récompense ainsi qu'à la participation au classement des tranches. La campagne March Madness est incitée par {{reward}} et séparée en 2 pools.",
+            "text-3d": "Bonbon 16 - 4%",
+            "text-1": "La <bold>March Madness</bold> est là, et avec les <bold>Heures supplémentaires</bold>, vous pouvez créer votre parenthèse. Pour fêter cela, nous récompensons les utilisateurs avec <bold>{{reward}}</bold> pour la durée du tournoi NCAAB. Le bracket NFT aidera les détenteurs à augmenter leurs récompenses en volume tout en leur accordant une entrée dans le classement du bracket. La frappe est gratuite et ouverte du 12 au 16 mars, date du début du premier tour.",
+            "text-4": "Le <bold>deuxième pool</bold> sera réparti entre les détenteurs de la tranche la plus précise avec un benchmark de volume de {{volume}} sur les jeux March Madness. Les détenteurs qui satisfont aux exigences de volume peuvent suivre leur position dans le classement des meilleures tranches où les gagnants se partageront un pool de récompenses {{reward}}.",
+            "text-3a": "Championnat - 20%",
+            "text-3c": "Élite Huit - 7%",
+            "text-3e": "Deuxième tour - 2%",
+            "time-info": "Il vous reste {{days}} {{hours}} pour créer votre bracket",
+            "text-3": "Pour le <bold>Premier pool</bold>, {{reward}} sera divisé entre tous les volumes générés par les jeux March Madness, y compris tous les types de marché et les négociations avec au moins un jeu NCAAB. Les détenteurs de la tranche March Madness NFT sont éligibles à une augmentation des échanges. Chaque jeu correct est éligible à un boost progressif, avec un maximum de 164 %."
+        },
+        "leaderboard": {
+            "rewards": "Récompenses",
+            "player": "Joueur",
+            "search-placeholder": "RECHERCHER L'ADRESSE DU PORTEFEUILLE",
+            "guessed-games": "Jeux devinés",
+            "tooltip-correct-correct-table": "Nombre de jeux correctement devinés dans votre tranche",
+            "tooltip-base-volume-table": "Volume généré par les matchs de basket-ball de la NCAA",
+            "tooltip-bonus-volume-table": "Volume bonus calculé en fonction de vos sélections de tranches",
+            "base-volume": "Base",
+            "address": "Adresse",
+            "bonus-volume": "Prime",
+            "tooltip-rewards-volume-table": "10 000 OP (30 000 THALES sur Arbitrum) seront répartis en fonction du volume au prorata",
+            "volume": "Volume",
+            "by-guessed-correctly": "En devinant correctement",
+            "no-data": "Aucune donnée disponible actuellement",
+            "owner": "Propriétaire",
+            "tooltip-rewards-correct-table": "3 000 OP (10 000 THALES sur Arbitrum) seront répartis entre les 10 premiers",
+            "rank": "Rang",
+            "my-rewards": "Mes récompenses"
+        },
+        "brackets": {
+            "stats": {
+                "rank-volume": "Classement par volume",
+                "rank-games": "Classement par jeux devinés",
+                "bonus": "Prime",
+                "points": "Points",
+                "my-stats": "Mes stats",
+                "my-total-score": "Mon score total"
+            },
+            "modal-mint": {
+                "update-text-1": "Bien fait!",
+                "finish-text-2-success": "Vous venez de créer votre support March Madness !",
+                "update-text-2-success": "Votre bracket NFT March Madness a été mis à jour !",
+                "update-text-2": "Nous avons enregistré votre prédiction de bracket, veuillez mettre à jour votre bracket maintenant !",
+                "finish-text-3-success": "Rendez-vous sur les <marketsLink>marchés NCAAB</marketsLink> et commencez à gagner des récompenses !",
+                "finish-text-1": "Bien joué!",
+                "button-updating": "Mise à jour...",
+                "button-minting": "Frappe...",
+                "finish-text-2": "Vous avez créé votre support avec succès !<br /> Vous pouvez maintenant créer votre support de folie de mars nft !",
+                "finish-info": "*Le support NFT March Madness est un NFT Overtime qui permet aux détenteurs de participer à la campagne Overtime March Madness en créant leur propre support de tournoi de pronostics.",
+                "button-update": "Mettre à jour le support",
+                "button-mint": "Comme NFT",
+                "finish-text-1-success": "Toutes nos félicitations!"
+            },
+            "modal-share": {
+                "header": "Mes 4 derniers choix",
+                "user-selection": "J'ai choisi l'{{team}} pour couper les filets à Houston !",
+                "share": "Partager"
+            },
+            "round-0": "1er tour",
+            "team-2": "Équipe 2",
+            "round-2": "Doux 16",
+            "round-5": "Final",
+            "team-1": "Équipe 1",
+            "submit": "Finition du support",
+            "submit-modify": "Mettre à jour le support",
+            "round-1": "2e tour",
+            "round-4": "Finale 4",
+            "share": "Partager cette parenthèse",
+            "round-3": "Élite 8"
+        },
+        "regions": {
+            "south": "Sud",
+            "midwest": "Midwest",
+            "east": "Est",
+            "west": "Ouest"
+        },
+        "back-to-markets": "Retour aux marchés",
+        "mobile-message": "La page n'est disponible que sur des écrans plus grands. Veuillez utiliser la version de bureau !",
+        "test-info": "La phase de tests est désormais ouverte avec les équipes 2022, la sélection 2023 s'ouvre le 12 mars !"
     }
 }

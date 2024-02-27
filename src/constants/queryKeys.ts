@@ -121,6 +121,14 @@ const QUERY_KEYS = {
     Bungee: {
         Tokens: () => ['bungee', 'tokens'],
     },
+    MarchMadness: (walletAddress: string, networkId: Network) => ['marchMadness', walletAddress, networkId],
+    MarchMadnessCompetition: {
+        LeaderboardByVolume: (networkId: Network) => ['marchMadnessLeaderboardByVolume ', networkId],
+        LeaderboardByNumberOfCorrectPredictions: (networkId: Network) => [
+            'marchMadnessLeaderboardByCorrectPred',
+            networkId,
+        ],
+    },
     Banners: (networkId: Network) => ['banners', networkId],
     LiquidityPool: {
         Data: (networkId: Network) => ['liquidityPool', 'data', networkId],

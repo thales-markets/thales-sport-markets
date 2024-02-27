@@ -1190,5 +1190,99 @@
     },
     "banner": {
         "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。"
+    },
+    "march-madness": {
+        "tabs": {
+            "leaderboard": "排行榜",
+            "home": "家",
+            "brackets": "括号"
+        },
+        "home": {
+            "text-3c": "精英八强 - 7%",
+            "text-3e": "第二轮 - 2%",
+            "time-info": "您还剩 {{days}} {{hours}} 来铸造您的支架",
+            "text-3d": "甜 16 - 4%",
+            "button-connect": "连接钱包",
+            "text-4": "<bold>第二个池</bold>将在疯狂三月游戏中以 {{volume}} 成交量为基准的最准确分组的持有者之间进行分配。满足数量要求的持有者可以跟踪他们在最佳分组排行榜中的位置，获胜者将瓜分 {{reward}} 奖励池。",
+            "text-3a": "冠军 - 20%",
+            "text-3f": "第一轮 - 1%",
+            "text-3b": "四强 - 10%",
+            "text-1": "<bold>疯狂三月</bold>来了，通过<bold>加时赛</bold>你可以铸造你的支架。为了庆祝，我们在 NCAAB 锦标赛期间奖励用户 <bold>{{reward}}</bold>。括号内 NFT 将帮助持有者提高交易量奖励，同时让他们进入括号内排行榜。 3 月 12 日至 16 日第一轮开始时免费开放铸币。",
+            "text-3": "对于<bold>第一池</bold>，{{reward}}将分配给疯狂三月比赛带来的所有交易量，包括所有市场类型和至少一场 NCAAB 比赛的连赢投注。疯狂三月 NFT 的持有者有资格获得交易提升。每场正确的游戏都有资格获得分级提升，最高可达 164%。",
+            "title": "欢迎来到疯狂三月锦标赛",
+            "button-create": "像括号一样",
+            "text-2": "<bold>疯狂三月支架</bold>的铸造完全在链上完成。虽然铸造的 NFT 是灵魂绑定的，但它的持有者可以获得奖励提升以及参与排行榜的机会。疯狂三月活动采用 {{reward}} 进行激励，并分为 2 个池。",
+            "text-5": "更多详细信息，请参阅我们的 <mediumLink>Medium 博客文章</mediumLink>。"
+        },
+        "leaderboard": {
+            "bonus-volume": "奖金",
+            "rewards": "奖励",
+            "owner": "所有者",
+            "guessed-games": "猜谜游戏",
+            "by-guessed-correctly": "通过猜对",
+            "tooltip-base-volume-table": "通过 NCAA 篮球比赛带动销量",
+            "my-rewards": "我的奖励",
+            "no-data": "目前没有可用数据",
+            "search-placeholder": "搜索钱包地址",
+            "player": "玩家",
+            "tooltip-bonus-volume-table": "根据您的分组选择计算奖金数额",
+            "tooltip-rewards-correct-table": "3,000 OP（Arbitrum 上为 10,000 THALES）将分配给前 10 名",
+            "volume": "体积",
+            "address": "地址",
+            "base-volume": "根据",
+            "rank": "秩",
+            "tooltip-correct-correct-table": "您所在组中猜对的游戏数量",
+            "tooltip-rewards-volume-table": "10,000 OP（Arbitrum 为 30,000 THALES）将根据数量按比例分配"
+        },
+        "brackets": {
+            "stats": {
+                "rank-games": "按猜对游戏排名",
+                "points": "积分",
+                "my-stats": "我的统计数据",
+                "my-total-score": "我的总分",
+                "bonus": "奖金",
+                "rank-volume": "按数量排名"
+            },
+            "modal-mint": {
+                "button-updating": "更新中...",
+                "update-text-1": "做得很好！",
+                "button-minting": "铸币...",
+                "button-update": "更新支架",
+                "finish-info": "*疯狂三月括号NFT是一种加时NFT，允许持有者通过创建自己的预测锦标赛括号来参与加时疯狂三月活动。",
+                "finish-text-1-success": "恭喜！",
+                "finish-text-3-success": "前往 <marketsLink>NCAAB 市场</marketsLink> 并开始赚取奖励！",
+                "update-text-2": "我们保存了您的分组预测，请立即更新您的分组！",
+                "finish-text-2": "您已成功创建支架！<br />您现在可以铸造您的疯狂游行支架 nft！",
+                "update-text-2-success": "您的疯狂三月支架 NFT 已更新！",
+                "button-mint": "像NFT一样",
+                "finish-text-1": "做得好！",
+                "finish-text-2-success": "您刚刚铸造了疯狂三月支架！"
+            },
+            "modal-share": {
+                "header": "我的最后 4 个选择",
+                "user-selection": "我选择了{{team}}去休斯顿砍网！",
+                "share": "分享"
+            },
+            "round-3": "精英8号",
+            "share": "分享这个支架",
+            "round-2": "甜蜜16",
+            "round-4": "决赛 4",
+            "round-1": "第二轮",
+            "team-1": "1队",
+            "submit-modify": "更新支架",
+            "round-0": "第一轮",
+            "submit": "饰面支架",
+            "team-2": "2队",
+            "round-5": "最终的"
+        },
+        "regions": {
+            "west": "西方",
+            "south": "南",
+            "midwest": "中西部",
+            "east": "东方"
+        },
+        "test-info": "2022 年团队测试阶段现已开放，2023 年选拔将于 3 月 12 日开放！",
+        "back-to-markets": "回到市场",
+        "mobile-message": "页面仅在较大的屏幕上可用。请使用桌面版！"
     }
 }

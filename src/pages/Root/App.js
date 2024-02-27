@@ -9,6 +9,7 @@ import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import Theme from 'layouts/Theme';
+import MarchMadness from 'pages/MarchMadness';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
 import Wizard from 'pages/Wizard';
@@ -28,6 +29,7 @@ import {
     updateWallet,
 } from 'redux/modules/wallet';
 import { isMobile } from 'utils/device';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import queryConnector from 'utils/queryConnector';
@@ -258,6 +260,13 @@ const App = () => {
                                     <Route exact path={ROUTES.QuizLeaderboard}>
                                         <DappLayout>
                                             <QuizLeaderboard />
+                                        </DappLayout>
+                                    </Route>
+                                )}
+                                {isMarchMadnessAvailableForNetworkId(networkId) && (
+                                    <Route exact path={ROUTES.MarchMadness}>
+                                        <DappLayout>
+                                            <MarchMadness />
                                         </DappLayout>
                                     </Route>
                                 )}
