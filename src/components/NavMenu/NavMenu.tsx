@@ -40,9 +40,10 @@ import {
 type NavMenuProps = {
     visibility?: boolean | null;
     setNavMenuVisibility: (value: boolean | null) => void;
+    skipOutsideClickOnElement?: React.RefObject<HTMLImageElement>;
 };
 
-const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) => {
+const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, skipOutsideClickOnElement }) => {
     const { t } = useTranslation();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
@@ -53,7 +54,13 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
     return (
-        <OutsideClickHandler onOutsideClick={() => visibility == true && setNavMenuVisibility(false)}>
+        <OutsideClickHandler
+            onOutsideClick={(e: MouseEvent) =>
+                (e.target as HTMLImageElement) !== skipOutsideClickOnElement?.current &&
+                visibility == true &&
+                setNavMenuVisibility(false)
+            }
+        >
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <Network>

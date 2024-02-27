@@ -12,7 +12,7 @@ import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountQuery from 'queries/markets/useClaimablePositionCountQuery';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -95,6 +95,21 @@ const DappHeader: React.FC = () => {
             }
         }
     }, 1000);
+
+    useEffect(() => {
+        // Discord Widget bot
+        const crate = (window as any).crate;
+        if (crate && !isMobile) {
+            const moveRightCss = '&:not(.open) .button { right: 275px; }';
+            if (navMenuVisibility) {
+                crate.options.css = moveRightCss + crate.options.css;
+            } else {
+                crate.options.css = crate.options.css.replace(moveRightCss, '');
+            }
+        }
+    }, [isMobile, navMenuVisibility]);
+
+    const menuImageRef = useRef<HTMLImageElement>(null);
 
     return (
         <>
@@ -199,10 +214,11 @@ const DappHeader: React.FC = () => {
                         <TopUp />
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
-                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                        <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
                         <NavMenu
                             visibility={navMenuVisibility}
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
+                            skipOutsideClickOnElement={menuImageRef}
                         />
                     </RightContainer>
                 </Container>
