@@ -13,17 +13,23 @@ import useQueryParam from 'utils/useQueryParams';
 import Navigation, { NavigationItem } from '../components/Navigation/Navigation';
 import PromotionCard from '../components/PromotionCard/PromotionCard';
 
+enum NavigationEnum {
+    'ALL',
+    'ONGOING',
+    'COMING_SOON',
+}
+
 const NavItems: NavigationItem[] = [
     {
-        index: 0,
+        index: NavigationEnum.ALL,
         i18Label: 'promotions.nav-items.all',
     },
     {
-        index: 1,
+        index: NavigationEnum.ONGOING,
         i18Label: 'promotions.nav-items.ongoing',
     },
     {
-        index: 2,
+        index: NavigationEnum.COMING_SOON,
         i18Label: 'promotions.nav-items.finished',
     },
 ];
@@ -44,13 +50,13 @@ const Promotions: React.FC = () => {
     const promotions = useMemo(() => {
         try {
             const promotions = promotionsQuery.isSuccess && promotionsQuery.data ? promotionsQuery.data : [];
-            if (selectedNavItem == 1) {
+            if (selectedNavItem == NavigationEnum.ONGOING) {
                 return promotions.filter((item) => {
                     const status = getPromotionStatus(item.startDate, item.endDate);
                     if (status == PromotionStatus.ONGOING || status == PromotionStatus.COMING_SOON) return item;
                 });
             }
-            if (selectedNavItem == 2) {
+            if (selectedNavItem == NavigationEnum.COMING_SOON) {
                 return promotions.filter((item) => {
                     const status = getPromotionStatus(item.startDate, item.endDate);
                     if (status == PromotionStatus.FINISHED) return item;
