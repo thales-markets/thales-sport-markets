@@ -1,17 +1,18 @@
 import background from 'assets/images/march-madness/flexcard-background.png';
-import twitterIcon from 'assets/images/march-madness/twitter-icon.svg'; // TODO: mm new icon
 import Button from 'components/Button';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LINKS } from 'constants/links';
 import { teamsData } from 'constants/marchMadness';
 import { TAGS_FLAGS } from 'enums/tags';
 import { toPng } from 'html-to-image';
-import React, { CSSProperties, useCallback, useRef, useState } from 'react';
+import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
+import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { toast } from 'react-toastify';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { isFirefox } from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import Match from '../Match';
 import { MatchProps } from '../Match/Match';
@@ -28,6 +29,7 @@ const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${IMAGE_NAME}>`;
 
 const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
 
     const semiFinalFirst = final4Matches[0];
     const semiFinalSecond = final4Matches[1];
@@ -146,7 +148,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
     };
 
     return (
-        <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={onModalClose} style={customStyle}>
+        <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={onModalClose} style={getCustomStyle(theme)}>
             <Container ref={ref}>
                 <CloseIcon className={`icon icon--close`} onClick={handleClose} />
                 <ContentWrapper>
@@ -196,16 +198,35 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
                         {t('march-madness.brackets.modal-share.user-selection', { team: winnerTeamName })}
                     </Text>
                 </ContentWrapper>
-                <Button additionalStyles={buttonStyle} onClick={onTwitterShareClickHandler}>
+                <Button
+                    additionalStyles={{
+                        position: 'absolute',
+                        bottom: '-50px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontFamily: "'NCAA' !important",
+                        fontSize: '22px',
+                        color: theme.marchMadness.button.textColor.primary,
+                        textTransform: 'uppercase',
+                        background: theme.marchMadness.button.background.primary,
+                        border: `1px solid ${theme.marchMadness.button.borderColor.tertiary}`,
+                        borderRadius: '0',
+                        width: '186px',
+                        height: '38px',
+                        marginTop: '11px',
+                    }}
+                    onClick={onTwitterShareClickHandler}
+                >
                     {t('march-madness.brackets.modal-share.share')}
-                    <TwitterIcon alt="Twitter icon" src={twitterIcon} />
+                    <TwitterIcon color={theme.marchMadness.textColor.tertiary} padding="0 0 2px 10px" />
                 </Button>
             </Container>
         </ReactModal>
     );
 };
 
-const customStyle = {
+const getCustomStyle = (theme: ThemeInterface) => ({
     content: {
         top: '50%',
         left: '50%',
@@ -217,7 +238,7 @@ const customStyle = {
         background: 'transparent',
         border: 'none',
         borderRadius: '20px',
-        boxShadow: '0px 0px 59px 11px #1A1C2B',
+        boxShadow: `0px 0px 59px 11px ${theme.marchMadness.button.textColor.tertiary}`,
         overflow: 'visibile',
     },
     overlay: {
@@ -225,25 +246,7 @@ const customStyle = {
         backdropFilter: 'blur(10px)',
         zIndex: '1501',
     },
-};
-
-const buttonStyle: CSSProperties = {
-    position: 'absolute',
-    bottom: '-50px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: "'NCAA' !important",
-    fontSize: '22px',
-    color: '#021631', // TODO: mm
-    textTransform: 'uppercase',
-    background: '#FFFFFF', // TODO: mm
-    border: '1px solid #000000', // TODO: mm
-    borderRadius: '0',
-    width: '186px',
-    height: '38px',
-    marginTop: '11px',
-};
+});
 
 const Container = styled.div`
     display: flex;
@@ -261,7 +264,7 @@ const CloseIcon = styled.i`
     right: -20px;
     font-size: 20px;
     cursor: pointer;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
 `;
 
 const ContentWrapper = styled.div`
@@ -270,7 +273,7 @@ const ContentWrapper = styled.div`
     width: 323px;
     height: 325px;
     margin-top: 99px;
-    background: #ffffff1a; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.status.share};
     border-radius: 6px;
 `;
 
@@ -282,7 +285,7 @@ const Text = styled.span<{ margin?: string }>`
     line-height: 21px;
     text-align: center;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     opacity: 1;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
@@ -303,10 +306,6 @@ const Logo = styled.div`
 
 const TeamLogo = styled.img`
     width: 80px;
-`;
-
-const TwitterIcon = styled.img`
-    margin-left: 5px;
 `;
 
 export default React.memo(ShareModal);

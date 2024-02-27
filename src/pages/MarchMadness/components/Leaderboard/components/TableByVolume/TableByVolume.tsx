@@ -25,8 +25,8 @@ import {
     TableRow,
     TableRowCell,
 } from './styled-components';
-
-export const TooltipStyle = { backgroundColor: '#021631', border: '1px solid #005EB8' };
+import { ThemeInterface } from 'types/ui';
+import { useTheme } from 'styled-components';
 
 type TableByVolumeProps = {
     searchText: string;
@@ -34,6 +34,8 @@ type TableByVolumeProps = {
 
 const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
+
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
 
@@ -71,7 +73,10 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     <>
                         {t('march-madness.leaderboard.base-volume')}
                         <Tooltip
-                            overlayInnerStyle={TooltipStyle}
+                            overlayInnerStyle={{
+                                backgroundColor: theme.marchMadness.background.tertiary,
+                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
+                            }}
                             overlay={
                                 <OverlayContainer>
                                     {t('march-madness.leaderboard.tooltip-base-volume-table')}
@@ -93,7 +98,10 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     <>
                         {t('march-madness.leaderboard.bonus-volume')}
                         <Tooltip
-                            overlayInnerStyle={TooltipStyle}
+                            overlayInnerStyle={{
+                                backgroundColor: theme.marchMadness.background.tertiary,
+                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
+                            }}
                             overlay={
                                 <OverlayContainer>
                                     {t('march-madness.leaderboard.tooltip-bonus-volume-table')}
@@ -115,7 +123,10 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     <>
                         {t('march-madness.leaderboard.rewards')}
                         <Tooltip
-                            overlayInnerStyle={TooltipStyle}
+                            overlayInnerStyle={{
+                                backgroundColor: theme.marchMadness.background.tertiary,
+                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
+                            }}
                             overlay={
                                 <OverlayContainer>
                                     {t('march-madness.leaderboard.tooltip-rewards-volume-table')}
@@ -130,7 +141,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 accessor: 'rewards',
             },
         ];
-    }, [networkId, t]);
+    }, [networkId, t, theme.marchMadness.borderColor.primary, theme.marchMadness.background.tertiary]);
 
     const leaderboardQuery = useLeaderboardByVolumeQuery(networkId);
 

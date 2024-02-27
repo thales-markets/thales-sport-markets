@@ -25,6 +25,7 @@ export default {
             secondary: Colors.GRAY,
             tertiary: Colors.GRAY_LIGHT,
             quaternary: Colors.BLUE,
+            quinary: Colors.BLUE,
         },
         textColor: {
             primary: Colors.GRAY_DARK,
@@ -144,5 +145,68 @@ export default {
     progressBar: {
         selected: Colors.BLUE,
         unselected: Colors.WHITE,
+    },
+    marchMadness: {
+        background: {
+            primary: '',
+            secondary: '',
+            tertiary: '',
+            quaternary: '',
+            quinary: '',
+        },
+        textColor: {
+            primary: '',
+            secondary: '',
+            tertiary: '',
+            quaternary: '',
+            quinary: '',
+        },
+        borderColor: {
+            primary: '',
+            secondary: '',
+            tertiary: '',
+            quaternary: '',
+            quinary: '',
+        },
+        button: {
+            background: {
+                primary: '',
+                secondary: '',
+                tertiary: '',
+                quaternary: '',
+                quinary: '',
+            },
+            textColor: {
+                primary: '',
+                secondary: '',
+                tertiary: '',
+                quaternary: '',
+                quinary: '',
+            },
+            borderColor: {
+                primary: '',
+                secondary: '',
+                tertiary: '',
+            },
+        },
+        link: {
+            textColor: {
+                primary: '',
+                secondary: '',
+            },
+        },
+        shadow: {
+            modal: '',
+            image: '',
+        },
+        status: {
+            notSelected: '',
+            win: '',
+            loss: '',
+            started: '',
+            wrong: '',
+            selected: '',
+            share: '',
+        },
     },
 };

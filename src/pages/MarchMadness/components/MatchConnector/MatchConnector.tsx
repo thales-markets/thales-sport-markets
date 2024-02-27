@@ -82,7 +82,7 @@ const MatchConnector: React.FC<MatchConnectorProps> = ({ id }) => {
 
 const SecondRoundConnector = styled.div<{ isLeft: boolean; isUpper: boolean; noTop?: boolean; noBottom?: boolean }>`
     position: absolute;
-    border: 3px solid #0e94cb;
+    border: 3px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     ${(props) => (props.isLeft ? 'border-left: none;' : 'border-right: none;')}
     ${(props) => (props.noTop ? 'border-top: none;' : '')}
     ${(props) => (props.noBottom ? 'border-bottom: none;' : '')}
@@ -95,7 +95,7 @@ const SecondRoundConnector = styled.div<{ isLeft: boolean; isUpper: boolean; noT
 
 const Sweet16Connector = styled.div<{ isLeft: boolean; noTop?: boolean; noBottom?: boolean }>`
     position: absolute;
-    border: 3px solid #0e94cb; // TODO: mm
+    border: 3px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     ${(props) => (props.isLeft ? 'border-left: none;' : 'border-right: none;')}
     ${(props) => (props.noTop ? 'border-top: none;' : '')}
     ${(props) => (props.noBottom ? 'border-bottom: none;' : '')}
@@ -107,7 +107,7 @@ const Sweet16Connector = styled.div<{ isLeft: boolean; noTop?: boolean; noBottom
 
 const Elite8Connector = styled.div<{ isLeft: boolean; isUpper: boolean }>`
     position: absolute;
-    border: 3px solid #0e94cb; // TODO: mm
+    border: 3px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     ${(props) => (props.isLeft ? 'border-left: none;' : 'border-right: none;')}
     ${(props) => (props.isUpper ? 'border-top: none;' : 'border-bottom: none;')}
     height: 100px;

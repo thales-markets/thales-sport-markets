@@ -125,8 +125,8 @@ const Container = styled.div<{ showBackground: boolean }>`
 `;
 
 const TextWrapper = styled(FlexDivColumn)`
-    background: #0e94cb; // TODO: mm
-    border: 2px solid #0e94cb; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.background.secondary};
+    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     padding: 6px 12px;
     margin-top: 10px;
 `;
@@ -137,7 +137,7 @@ const Text = styled.span`
     font-weight: 400;
     font-size: 14px;
     line-height: 21px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
 `;
 
 export default MarchMadness;

@@ -28,25 +28,28 @@ export const NoDataContainer = styled.div`
     justify-content: center;
     width: 300px;
     height: 60px;
-    background-color: #ffffff; // TODO: mm
+    background-color: ${(props) => props.theme.marchMadness.button.background.primary};
     margin-top: 100px;
 `;
 
 export const NoDataLabel = styled.span`
     font-family: 'NCAA' !important;
     font-size: 25px;
-    color: #021631; // TODO: mm
+    color: ${(props) => props.theme.marchMadness.textColor.tertiary};
 `;
 
 export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean; myScore?: boolean }>`
     font-family: 'Oswald' !important;
     font-size: 14px;
     font-weight: 600;
-    ${(_props) => (_props?.hideBorder == true ? `border-bottom: '';` : ``)}
-    ${(_props) => (!_props?.hideBorder ? `border-bottom: 2px dotted rgba(0, 94, 184, 1);` : ``)}  // TODO: mm
-    ${(_props) => (_props?.topTen == true ? `background-color: #C12B34;` : ``)}  // TODO: mm
-    ${(_props) => (_props?.topTen == true ? `border-bottom: 2px dotted #FFFFFF;` : ``)}  // TODO: mm
-    ${(_props) => (_props?.myScore == true ? `background-color: #005EB8;` : ``)} // TODO: mm
+    ${(props) => (props?.hideBorder == true ? `border-bottom: '';` : ``)}
+    ${(props) =>
+        !props?.hideBorder ? `border-bottom: 2px dotted ${props.theme.marchMadness.borderColor.primary};` : ``}
+    ${(props) =>
+        props?.topTen == true ? `background-color: ${props.theme.marchMadness.background.quaternary};` : ``}  
+    ${(props) =>
+        props?.topTen == true ? `border-bottom: 2px dotted ${props.theme.marchMadness.borderColor.tertiary};` : ``}  
+    ${(props) => (props?.myScore == true ? `background-color: ${props.theme.marchMadness.borderColor.primary};` : ``)}
 `;
 
 export const TableRowCell = styled.td`
@@ -70,7 +73,7 @@ export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean; inv
     border-image: ${(_props) =>
         _props.inverseBorderGradient == true
             ? 'linear-gradient(100.41deg, #DA252F -0.79%, #5C2C3B 29.78%, #021630 47.85%, #0C99D0 75.56%, #02223E 110.04%) 1'
-            : `linear-gradient(268.11deg, #DA252F 0.03%, #5C2C3B 21.05%, #021630 41.08%, #0C99D0 71.72%, #02223E 104.1%) 1`}; // TODO: mm
+            : `linear-gradient(268.11deg, #DA252F 0.03%, #5C2C3B 21.05%, #021630 41.08%, #0C99D0 71.72%, #02223E 104.1%) 1`};
     width: 100%;
 `;
 
@@ -117,16 +120,16 @@ export const PaginationWrapper = styled(TablePagination)`
     display: flex;
     width: 100%;
     height: auto;
-    color: #f6f6fe !important; // TODO: mm
+    color: ${(props) => props.theme.marchMadness.button.textColor.quinary} !important;
     .MuiToolbar-root {
         padding: 0;
         display: flex;
         .MuiSelect-icon {
-            color: #f6f6fe; // TODO: mm
+            color: ${(props) => props.theme.marchMadness.button.textColor.quinary};
         }
     }
     .MuiIconButton-root.Mui-disabled {
-        color: #5f6180; // TODO: mm
+        color: ${(props) => props.theme.marchMadness.button.background.tertiary};
     }
     .MuiTablePagination-toolbar > .MuiTablePagination-caption:last-of-type {
         display: block;

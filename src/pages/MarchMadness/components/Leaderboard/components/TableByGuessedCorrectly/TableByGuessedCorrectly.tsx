@@ -8,10 +8,10 @@ import { useSelector } from 'react-redux';
 import { Column, usePagination, useTable } from 'react-table';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { getEtherscanAddressLink } from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
 import { truncateAddress } from 'utils/formatters/string';
-import { TooltipStyle } from '../TableByVolume/TableByVolume';
 import {
     Arrow,
     NoDataContainer,
@@ -34,6 +34,8 @@ type TableByGuessedCorrectlyProps = {
 
 const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
+
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
 
@@ -64,7 +66,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     <>
                         {t('march-madness.leaderboard.guessed-games')}
                         <Tooltip
-                            overlayInnerStyle={TooltipStyle}
+                            overlayInnerStyle={{
+                                backgroundColor: theme.marchMadness.background.tertiary,
+                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
+                            }}
                             overlay={
                                 <OverlayContainer>
                                     {t('march-madness.leaderboard.tooltip-correct-correct-table')}
@@ -83,7 +88,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     <>
                         {t('march-madness.leaderboard.rewards')}
                         <Tooltip
-                            overlayInnerStyle={TooltipStyle}
+                            overlayInnerStyle={{
+                                backgroundColor: theme.marchMadness.background.tertiary,
+                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
+                            }}
                             overlay={
                                 <OverlayContainer>
                                     {t('march-madness.leaderboard.tooltip-rewards-correct-table')}
@@ -98,7 +106,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 accessor: 'rewards',
             },
         ];
-    }, [t, networkId]);
+    }, [t, networkId, theme.marchMadness.borderColor.primary, theme.marchMadness.background.tertiary]);
 
     const leaderboardQuery = useLoeaderboardByGuessedCorrectlyQuery(networkId);
 

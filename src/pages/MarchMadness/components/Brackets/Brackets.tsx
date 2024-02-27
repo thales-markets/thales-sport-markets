@@ -597,10 +597,10 @@ const Brackets: React.FC = () => {
                                         fontSize: '14px',
                                         fontFamily: "'NCAA' !important",
                                         textTransform: 'uppercase',
-                                        background: theme.textColor.primary, // TODO: mm
-                                        border: '2px solid #005EB8', // TODO: mm
+                                        background: theme.marchMadness.button.background.primary,
+                                        border: `2px solid ${theme.marchMadness.borderColor.primary}`,
                                         borderRadius: '4px',
-                                        color: '#021631', // TODO: mm
+                                        color: theme.marchMadness.button.textColor.primary,
                                         width: '142px',
                                         marginTop: '82px',
                                     }}
@@ -799,7 +799,7 @@ const SubmitWrapper = styled(Final)``;
 const Region = styled.div<{ isSideLeft: boolean; isVertical: boolean }>`
     width: ${(props) => (props.isVertical ? '30px' : '81px')};
     height: ${(props) => (props.isVertical ? '472px' : '52px')};
-    background: #0e94cb; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.background.secondary};
     ${(props) => `${props.isSideLeft ? 'margin-right: ' : 'margin-left: '}${props.isVertical ? '5' : '1'}`}px;
     ${(props) => (props.isVertical ? 'writing-mode: vertical-rl;' : '')}
     ${(props) => (props.isVertical ? 'text-orientation: upright;' : '')}
@@ -811,7 +811,7 @@ const Region = styled.div<{ isSideLeft: boolean; isVertical: boolean }>`
     font-style: normal;
     font-weight: 400;
     font-size: ${(props) => (props.isVertical ? '30px' : '20px')};
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     letter-spacing: ${(props) => (props.isVertical ? '15px' : '2px')};
 }
 `;
@@ -830,7 +830,7 @@ const RoundName = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 94, 184, 0.4); // TODO: mm
+    background: ${(props) => props.theme.marchMadness.button.background.quaternary};
     font-family: 'Oswald' !important;
     font-style: normal;
     font-weight: 600;
@@ -838,7 +838,7 @@ const RoundName = styled.div`
     line-height: 14px;
     text-align: center;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     margin-top: 14px;
 `;
 
@@ -846,8 +846,8 @@ const MyStats = styled.div`
     display: flex;
     width: 312px;
     height: 80px;
-    background: #c12b34; // TODO: mm
-    border: 1px solid #c12b34; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.background.quaternary};
+    border: 1px solid ${(props) => props.theme.marchMadness.background.quaternary};
 `;
 
 const StatsColumn = styled.div<{ width?: string; margin?: string; justify?: string }>`
@@ -863,7 +863,7 @@ const StatsRow = styled.div<{ justify?: string; margin?: string; hasBorder?: boo
     flex-direction: row;
     justify-content: ${(props) => (props.justify ? props.justify : 'space-between')};
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
-    ${(props) => (props.hasBorder ? 'border-bottom: 1px solid #0E94CB;' : '')} // TODO: mm
+    ${(props) => (props.hasBorder ? `border-bottom: 1px solid ${props.theme.marchMadness.borderColor.secondary};` : '')}
 `;
 
 const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; lineHeight?: number; margin?: string }>`
@@ -873,7 +873,7 @@ const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; lineHeig
     font-size: ${(props) => (props.fontSize ? props.fontSize : '16')}px;
     line-height: ${(props) => (props.lineHeight ? props.lineHeight : '14')}px;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
 
@@ -881,8 +881,8 @@ const MyTotalScore = styled.div`
     width: 930px;
     height: 80px;
     display: flex;
-    background: #021631; // TODO: mm
-    border: 1px solid #0e94cb; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.background.tertiary};
+    border: 1px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
 `;
 
 const WildCardsContainer = styled.div`
@@ -900,7 +900,7 @@ const WildCardsHeader = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid #0e94cb; // TODO: mm
+    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     margin-bottom: 6px;
     font-family: 'NCAA' !important;
     font-style: normal;
@@ -909,7 +909,7 @@ const WildCardsHeader = styled.div`
     line-height: 23px;
     letter-spacing: 5px;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
 `;
 
 const WildCardsRow = styled.div`
@@ -921,7 +921,7 @@ const WildCardsRow = styled.div`
 `;
 
 const VerticalLine = styled.div`
-    border-left: 2px solid #0e94cb; // TODO: mm
+    border-left: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     height: 70px;
     margin: 4px 0;
 `;
@@ -938,7 +938,7 @@ const Share = styled.div`
     font-size: 12px;
     line-height: 14px;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     margin-top: 116px;
 `;
 

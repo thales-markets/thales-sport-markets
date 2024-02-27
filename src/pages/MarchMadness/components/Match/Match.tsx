@@ -181,12 +181,12 @@ const Match: React.FC<MatchProps> = ({
 };
 
 const Container = styled.div<{ height: number; margin?: string }>`
-    background: #ffffff; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.button.background.primary};
     position: relative;
     width: 142px;
     height: ${(props) => props.height}px;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
-    border: 1px solid #0E94CB; // TODO: mm
+    border: 1px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     border-radius: 4px;
 `;
 
@@ -194,12 +194,13 @@ const TeamSeparator = styled.hr<{ isActive: boolean }>`
     width: 122px;
     height: 1px;
     border: none;
-    background-color: ${(props) => (props.isActive ? '#0e94cb' : '#9AAEB1')}; // TODO: mm
+    background-color: ${(props) =>
+        props.isActive ? props.theme.marchMadness.background.secondary : props.theme.marchMadness.background.quinary};
     margin: auto;
 `;
 
 const TeamRow = styled.div<{ isClickable: boolean; isHomeTeam: boolean }>`
-    background: #ffffff; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.button.background.primary};
     border-radius: 4px;
     width: 100%;
     height: 24.5px;
@@ -214,7 +215,7 @@ const TeamRow = styled.div<{ isClickable: boolean; isHomeTeam: boolean }>`
     ${(props) =>
         props.isClickable
             ? `:hover {
-                    background: #c4def2; // TODO: mm
+                    background: ${props.theme.marchMadness.button.background.quinary};
                     border-radius: ${props.isHomeTeam ? '4px 4px 0 0' : '0 0 4px 4px'};
                 }`
             : ''}
@@ -246,7 +247,7 @@ const TeamPositionValue = styled.span`
     line-height: 14px;
     text-transform: uppercase;
     vertical-align: top;
-    color: #9aaeb1; // TODO: mm
+    color: ${(props) => props.theme.marchMadness.textColor.quinary};
 `;
 
 const TeamName = styled.div<{
@@ -268,15 +269,15 @@ const TeamName = styled.div<{
             ? props.isBracketsLocked
                 ? props.isSelected
                     ? props.isWon === undefined
-                        ? '#0E94CB' // TODO: mm
+                        ? props.theme.marchMadness.status.selected // locked selected
                         : props.isWon
-                        ? '#00957E' // TODO: mm
-                        : '#606A78' // TODO: mm
-                    : '#9AAEB1'
+                        ? props.theme.marchMadness.status.win
+                        : props.theme.marchMadness.status.loss
+                    : props.theme.marchMadness.status.notSelected // locked not selected
                 : props.isSelected
-                ? '#0E94CB' // TODO: mm
-                : '#021631' // TODO: mm
-            : '#9AAEB1'}; // TODO: mm
+                ? props.theme.marchMadness.status.selected // open selected
+                : props.theme.marchMadness.status.started // open not selected
+            : props.theme.marchMadness.status.notSelected};
     ${(props) => (props.isLeftSide ? 'margin-left: 2px;' : 'margin-right: 2px;')}
     text-align: ${(props) => (props.isLeftSide ? 'left' : 'right')};
     white-space: nowrap;
@@ -284,7 +285,7 @@ const TeamName = styled.div<{
     text-overflow: ellipsis;
     ${(props) =>
         props.hasName && props.isBracketsLocked && props.isSelected && props.isWon === false
-            ? 'text-decoration: line-through #CA4C53;' // TODO: mm
+            ? `text-decoration: line-through ${props.theme.marchMadness.status.wrong};`
             : ''}
 `;
 

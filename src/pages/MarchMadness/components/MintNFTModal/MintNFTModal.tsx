@@ -8,7 +8,8 @@ import { TAGS_FLAGS } from 'enums/tags';
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 
 type MintNFTModalProps = {
@@ -30,6 +31,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
     handleClose,
 }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [isUpdate] = useState(isMinted);
@@ -51,7 +53,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
         TAGS_LIST.find((tag) => tag.id === TAGS_FLAGS.NCAA_BASKETBALL)?.label;
 
     return (
-        <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={handleClose} style={customStyle}>
+        <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={handleClose} style={getCustomStyle(theme)}>
             {isImageLoaded && (
                 <Container>
                     <Wrapper>
@@ -103,9 +105,9 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
                                         fontSize: '30px',
                                         lineHeight: '35px',
                                         letterSpacing: '2px',
-                                        color: '#1A1C2B', // TODO: mm
+                                        color: theme.marchMadness.button.textColor.tertiary,
                                         textTransform: 'uppercase',
-                                        background: '#FFFFFF', // TODO: mm
+                                        background: theme.marchMadness.button.background.primary,
                                         border: 'none',
                                         borderRadius: '0',
                                         width: '314px',
@@ -156,7 +158,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
     );
 };
 
-const customStyle = {
+const getCustomStyle = (theme: ThemeInterface) => ({
     content: {
         top: '50%',
         left: '50%',
@@ -168,7 +170,7 @@ const customStyle = {
         background: 'transparent',
         border: 'none',
         borderRadius: '20px',
-        boxShadow: '0px 0px 59px 11px #1A1C2B', // TODO: mm
+        boxShadow: theme.marchMadness.shadow.modal,
         overflow: 'visibile',
     },
     overlay: {
@@ -176,12 +178,11 @@ const customStyle = {
         backdropFilter: 'blur(10px)',
         zIndex: '1501',
     },
-};
+});
 
 const Container = styled.div`
     width: 690px;
     background: linear-gradient(
-        // TODO: mm
         284.91deg,
         #da252f -3.75%,
         #5c2c3b 11.81%,
@@ -189,7 +190,7 @@ const Container = styled.div`
         #0c99d0 66.39%,
         #02223e 98.43%
     );
-    border: 3px solid #021631; // TODO: mm
+    border: 3px solid ${(props) => props.theme.marchMadness.borderColor.quaternary};
     border-radius: 8px;
 `;
 
@@ -209,7 +210,7 @@ const CloseIcon = styled.i`
     right: 36px;
     font-size: 15px;
     cursor: pointer;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
 `;
 
 const TextWrapper = styled.div`
@@ -228,7 +229,7 @@ const Text = styled.span<{ fontSize?: number; lineHeight?: number; letterSpacing
     letter-spacing: ${(props) => (props.letterSpacing ? props.letterSpacing : -1)}px;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
     text-align: center;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
 `;
 
 const TextInfo = styled.span`
@@ -237,19 +238,12 @@ const TextInfo = styled.span`
     font-weight: 400;
     font-size: 16px;
     line-height: 20px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     margin: 0 25px 35px 25px;
 `;
 
 const BorderGradient = styled.div`
-    background: linear-gradient(
-        270deg,
-        #da252f -3.75%,
-        #5c2c3b 11.81%,
-        #021630 33.38%,
-        #0c99d0 66.39%,
-        #02223e 98.43%
-    ); // TODO: mm
+    background: linear-gradient(270deg, #da252f -3.75%, #5c2c3b 11.81%, #021630 33.38%, #0c99d0 66.39%, #02223e 98.43%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -264,7 +258,7 @@ const NFTImageWrapper = styled(BorderGradient)`
     width: 347px;
     height: 478px;
     margin-top: 20px;
-    box-shadow: 0px 0px 100px -2px #4d21db; // TODO: mm
+    box-shadow: ${(props) => props.theme.marchMadness.shadow.image};
 `;
 
 const ButtonWrapper = styled(BorderGradient)`
@@ -281,9 +275,9 @@ const Link = styled.a`
     font-size: 30px;
     line-height: 40px;
     text-decoration: underline;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.link.textColor.primary};
     :hover {
-        color: #0e94cb; // TODO: mm
+        color: ${(props) => props.theme.marchMadness.link.textColor.secondary};
     }
 `;
 

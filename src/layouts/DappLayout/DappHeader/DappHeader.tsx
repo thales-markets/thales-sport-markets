@@ -131,13 +131,13 @@ const DappHeader: React.FC = () => {
                                     fontSize="18px"
                                     additionalStyles={{
                                         background: `url(${marchMadnessLeftIcon}) left 20px center no-repeat, url(${marchMadnessRightIcon}) right 20px center no-repeat`,
-                                        backgroundColor: '#005EB8', // TODO: mm
+                                        backgroundColor: theme.marchMadness.button.background.secondary,
                                         backgroundSize: '28px, 28px',
                                         border: 'none',
                                         fontFamily: "'NCAA' !important",
                                         letterSpacing: '2px',
                                         textTransform: 'uppercase',
-                                        color: theme.button.textColor.secondary,
+                                        color: theme.marchMadness.button.textColor.secondary,
                                         width: '290px',
                                     }}
                                 >

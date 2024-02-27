@@ -33,24 +33,30 @@ const Container = styled.div<{ isResolved: boolean; isSelected: boolean; margin:
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
     ${(props) => (!props.isResolved ? 'border-radius: 50%;' : '')}
     ${(props) =>
-        !props.isResolved ? `border: 1px solid ${props.isSelected ? '#0e94cb' : '#9aaeb1'};` : ''} // TODO: mm
+        !props.isResolved
+            ? `border: 1px solid ${
+                  props.isSelected
+                      ? props.theme.marchMadness.borderColor.secondary
+                      : props.theme.marchMadness.borderColor.quinary
+              };`
+            : ''}
 `;
 
 const TeamSelected = styled.div`
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #0e94cb; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.background.secondary};
 `;
 
 const Icon = styled.i`
     font-size: 10px;
 `;
 const Correct = styled(Icon)`
-    color: #00957e; // TODO: mm
+    color: ${(props) => props.theme.marchMadness.status.win};
 `;
 const Wrong = styled(Icon)`
-    color: #ca4c53; // TODO: mm
+    color: ${(props) => props.theme.marchMadness.status.wrong};
 `;
 
 export default TeamStatus;

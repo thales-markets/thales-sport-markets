@@ -74,7 +74,7 @@ const Container = styled.div`
     flex-direction: row;
     margin: 20px 0 20px auto;
     justify-content: end;
-    border-bottom: 2px solid #005eb8; // TODO: mm
+    border-bottom: 2px solid ${(props) => props.theme.marchMadness.borderColor.primary};
 `;
 
 const Tab = styled.div<{ active: boolean; isClickable: boolean }>`
@@ -89,7 +89,8 @@ const Tab = styled.div<{ active: boolean; isClickable: boolean }>`
     font-weight: 700;
     font-size: 16px;
     line-height: 24px;
-    color: ${(props) => (props.active ? '#c12b34' : props.theme.textColor.primary)}; // TODO: mm
+    color: ${(props) =>
+        props.active ? props.theme.marchMadness.textColor.quaternary : props.theme.marchMadness.textColor.primary};
 `;
 
 const TabSelected = styled.div`
@@ -98,7 +99,7 @@ const TabSelected = styled.div`
     right: 0;
     width: 100%;
     height: 5px;
-    background: #c12b34; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.background.quaternary};
     border-radius: 5px;
 `;
 

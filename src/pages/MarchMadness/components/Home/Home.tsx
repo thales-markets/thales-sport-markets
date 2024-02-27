@@ -185,12 +185,12 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 width: '653px',
                                 height: '64px',
                                 marginTop: '16px',
-                                background: theme.textColor.primary, // TODO: mm
-                                border: '3px solid #0E94CB', // TODO: mm
+                                background: theme.marchMadness.button.background.primary,
+                                border: `3px solid ${theme.marchMadness.button.borderColor.primary}`,
                                 fontSize: '30px',
                                 fontFamily: "'NCAA' !important",
                                 textTransform: 'uppercase',
-                                color: '#021631', // TODO: mm
+                                color: theme.marchMadness.button.textColor.primary,
                             }}
                             disabled={isButtonDisabled}
                             onClick={buttonClickHandler}
@@ -221,7 +221,7 @@ const RowTitle = styled.div`
     font-weight: 400;
     font-size: 50px;
     line-height: 58px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     margin-top: 10px;
 `;
 
@@ -232,14 +232,7 @@ const RowTimeInfo = styled.div`
     align-items: center;
     width: 90%;
     min-height: 70px;
-    background: linear-gradient(
-        270deg,
-        #da252f -1.63%,
-        #5c2c3b 18.12%,
-        #021630 36.93%,
-        #0c99d0 65.71%,
-        #02223e 96.12%
-    ); // TODO: mm
+    background: linear-gradient(270deg, #da252f -1.63%, #5c2c3b 18.12%, #021630 36.93%, #0c99d0 65.71%, #02223e 96.12%);
     margin-top: 16px;
     font-family: 'NCAA' !important;
     font-style: normal;
@@ -249,14 +242,14 @@ const RowTimeInfo = styled.div`
     text-align: center;
     letter-spacing: 8px;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     padding: 10px 20px;
 `;
 
 const TextWrapper = styled(FlexDivColumn)<{ marginTop: number; padding: string }>`
     width: 90%;
-    background: #0e94cb; // TODO: mm
-    border: 2px solid #0e94cb; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.background.secondary};
+    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     margin-top: ${(props) => props.marginTop}px;
     padding: ${(props) => props.padding};
 `;
@@ -267,7 +260,7 @@ const Text = styled.span`
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
 `;
 
 const BoldText = styled(Text)`
@@ -282,9 +275,9 @@ const Link = styled.a`
     font-size: 16px;
     line-height: 24px;
     text-decoration: underline;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.marchMadness.link.textColor.primary};
     :hover {
-        color: #021631; // TODO: mm
+        color: ${(props) => props.theme.marchMadness.textColor.tertiary};
     }
 `;
 

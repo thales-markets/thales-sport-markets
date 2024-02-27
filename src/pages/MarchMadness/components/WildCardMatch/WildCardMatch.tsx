@@ -23,11 +23,11 @@ const WildCardMatch: React.FC<WildCardMatchProps> = ({ homeTeam, awayTeam, isHom
 };
 
 const Container = styled.div<{ margin?: string }>`
-    background: #ffffff; // TODO: mm
+    background: ${(props) => props.theme.marchMadness.button.background.primary};
     position: relative;
     width: 135px;
     height: 52px;
-    border: 1px solid #0e94cb; // TODO: mm
+    border: 1px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
     border-radius: 4px;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
@@ -51,7 +51,10 @@ const TeamName = styled.div<{ isWinner?: boolean }>`
     font-size: 14px;
     line-height: 14px;
     text-transform: uppercase;
-    color: ${(props) => (props.isWinner === undefined || props.isWinner ? '#021631' : '#9AAEB1')}; // TODO: mm
+    color: ${(props) =>
+        props.isWinner === undefined || props.isWinner
+            ? props.theme.marchMadness.textColor.tertiary
+            : props.theme.marchMadness.textColor.quinary};
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
@@ -62,7 +65,7 @@ const TeamSeparator = styled.hr`
     width: 122px;
     height: 1px;
     border: none;
-    background-color: #0e94cb; // TODO: mm
+    background-color: ${(props) => props.theme.marchMadness.background.secondary};
     margin: auto;
 `;
 
