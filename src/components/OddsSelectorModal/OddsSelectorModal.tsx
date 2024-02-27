@@ -1,10 +1,10 @@
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { OddsType } from 'enums/markets';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { getOddsType, setOddsType } from 'redux/modules/ui';
+import { useDispatch } from 'react-redux';
+import { setOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 
@@ -15,8 +15,8 @@ type OddsSelectorModalProps = {
 const OddsSelectorModal: React.FC<OddsSelectorModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const [selectedOdds, setSelectedOdds] = useState<OddsType>(OddsType.Decimal);
 
-    const selectedOddsType = useSelector(getOddsType);
     const setSelectedOddsType = useCallback(
         (oddsType: OddsType) => {
             return dispatch(setOddsType(oddsType));
@@ -38,33 +38,40 @@ const OddsSelectorModal: React.FC<OddsSelectorModalProps> = ({ onClose }) => {
                     <Button
                         margin="5px"
                         backgroundColor={Colors.GRAY}
-                        borderColor={selectedOddsType == OddsType.American ? Colors.BLUE : Colors.GRAY}
-                        textColor={selectedOddsType == OddsType.American ? Colors.BLUE : Colors.WHITE}
-                        onClick={() => setSelectedOddsType(OddsType.American)}
+                        borderColor={selectedOdds == OddsType.American ? Colors.BLUE : Colors.GRAY}
+                        textColor={selectedOdds == OddsType.American ? Colors.BLUE : Colors.WHITE}
+                        onClick={() => setSelectedOdds(OddsType.American)}
                     >
                         {t('common.odds-modal.american-odds')}
                     </Button>
                     <Button
                         margin="5px"
                         backgroundColor={Colors.GRAY}
-                        borderColor={selectedOddsType == OddsType.Decimal ? Colors.BLUE : Colors.GRAY}
-                        textColor={selectedOddsType == OddsType.Decimal ? Colors.BLUE : Colors.WHITE}
-                        onClick={() => setSelectedOddsType(OddsType.Decimal)}
+                        borderColor={selectedOdds == OddsType.Decimal ? Colors.BLUE : Colors.GRAY}
+                        textColor={selectedOdds == OddsType.Decimal ? Colors.BLUE : Colors.WHITE}
+                        onClick={() => setSelectedOdds(OddsType.Decimal)}
                     >
                         {t('common.odds-modal.decimal-odds')}
                     </Button>
                     <Button
                         margin="5px"
                         backgroundColor={Colors.GRAY}
-                        borderColor={selectedOddsType == OddsType.AMM ? Colors.BLUE : Colors.GRAY}
-                        textColor={selectedOddsType == OddsType.AMM ? Colors.BLUE : Colors.WHITE}
-                        onClick={() => setSelectedOddsType(OddsType.AMM)}
+                        borderColor={selectedOdds == OddsType.AMM ? Colors.BLUE : Colors.GRAY}
+                        textColor={selectedOdds == OddsType.AMM ? Colors.BLUE : Colors.WHITE}
+                        onClick={() => setSelectedOdds(OddsType.AMM)}
                     >
                         {t('common.odds-modal.normalized-odds')}
                     </Button>
                 </Container>
                 <ButtonContainer>
-                    <Button onClick={onClose}>{t('common.odds-modal.save')}</Button>
+                    <Button
+                        onClick={() => {
+                            setSelectedOddsType(selectedOdds);
+                            onClose();
+                        }}
+                    >
+                        {t('common.odds-modal.save')}
+                    </Button>
                 </ButtonContainer>
             </Container>
         </Modal>
