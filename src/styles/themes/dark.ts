@@ -182,14 +182,14 @@ export default {
         button: {
             background: {
                 primary: '',
-                secondary: '',
+                secondary: Colors.BLUE_GRADIENT_1,
                 tertiary: '',
                 quaternary: '',
                 quinary: '',
             },
             textColor: {
                 primary: '',
-                secondary: '',
+                secondary: Colors.WHITE,
                 tertiary: '',
                 quaternary: '',
                 quinary: '',
