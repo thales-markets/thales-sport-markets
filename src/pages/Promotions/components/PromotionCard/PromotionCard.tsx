@@ -9,14 +9,14 @@ import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
-import { PromotionCardProps, PromotionCardStatus, PromotionStatus, ThemeInterface } from 'types/ui';
+import { PromotionCardData, PromotionCardStatus, PromotionStatus, ThemeInterface } from 'types/ui';
 import { getPromotionDateRange, getPromotionStatus } from 'utils/ui';
 
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as BaseLogo } from 'assets/images/base-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 
-const PromotionCard: React.FC<PromotionCardProps> = ({
+const PromotionCard: React.FC<PromotionCardData> = ({
     title,
     description,
     startDate,
@@ -75,14 +75,7 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
                 href={`${promotionUrl}${branchName ? `?branch-name=${branchName}` : ''}`}
                 style={{ height: '100%' }}
             >
-                <FlexDiv
-                    style={{
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        alignContent: 'space-between',
-                        height: '100%',
-                    }}
-                >
+                <ContentWrapper>
                     <HeaderContainer>
                         <NetworkIconsWrapper>
                             {availableOnNetworks?.length ? (
@@ -110,7 +103,7 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
                             </Button>
                         </ButtonContainer>
                     </BottomContainer>
-                </FlexDiv>
+                </ContentWrapper>
             </SPAAnchor>
         </Wrapper>
     );
@@ -129,7 +122,7 @@ const getNetworkLogo = (networkId: number) => {
     }
 };
 
-export const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string; isMobile: boolean }>`
+const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string; isMobile: boolean }>`
     font-size: 14px;
     flex-direction: column;
     flex: 0 0 ${(props) => (props.isMobile ? '100%' : '24%')};
@@ -142,6 +135,13 @@ export const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string; isMobile: b
     background: url(${(props) => props.backgroundImageUrl});
     background-size: cover;
     background-position: center;
+`;
+
+const ContentWrapper = styled(FlexDiv)`
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: space-between;
+    height: 100%;
 `;
 
 export const HeaderContainer = styled(FlexDivRow)`

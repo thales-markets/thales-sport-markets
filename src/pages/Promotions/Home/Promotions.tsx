@@ -53,13 +53,13 @@ const Promotions: React.FC = () => {
             if (selectedNavItem == NavigationEnum.ONGOING) {
                 return promotions.filter((item) => {
                     const status = getPromotionStatus(item.startDate, item.endDate);
-                    if (status == PromotionStatus.ONGOING || status == PromotionStatus.COMING_SOON) return item;
+                    return status == PromotionStatus.ONGOING || status == PromotionStatus.COMING_SOON;
                 });
             }
             if (selectedNavItem == NavigationEnum.COMING_SOON) {
                 return promotions.filter((item) => {
                     const status = getPromotionStatus(item.startDate, item.endDate);
-                    if (status == PromotionStatus.FINISHED) return item;
+                    return status == PromotionStatus.FINISHED;
                 });
             }
             return promotions;
