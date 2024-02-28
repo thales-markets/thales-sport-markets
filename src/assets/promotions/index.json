@@ -7,11 +7,11 @@
         "displayCountdown": true,
         "promotionId": "arb-stip-rewards-1",
         "promotionUrl": "/promotions/arb-stip-rewards-1",
-        "backgroundImageUrl": "/promotions/arb-tile.png",
+        "backgroundImageUrl": "/promotions/arb-jump-small.webp",
         "callToActionButton": "How to earn",
         "availableOnNetworks": [42161],
         "article": {
-            "coverImageUrl": "/promotions/arb-update-big.png",
+            "coverImageUrl": "/promotions/arb-jump-big.webp",
             "headerHtml": "<h1><span><span><span>10,000 ARB every two weeks for all Singles and Parlay users on Arbitrum!</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "Biweekly rewards of 5,000 ARB to all Single buyers and 5,000 ARB to all Parlay buyers until March 31st. Airdropped every two weeks to all users based on volume driven. </span></span></span><span><span><span>Track your rewards: </span></span></span><a href='https://dune.com/leifu/arb-incentive-program-dashboard' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
@@ -29,11 +29,11 @@
         "displayCountdown": true,
         "promotionId": "arb-stip-rewards-2",
         "promotionUrl": "/promotions/arb-stip-rewards-2",
-        "backgroundImageUrl": "/promotions/new-big-league-small.png",
+        "backgroundImageUrl": "/promotions/stip-small.webp",
         "callToActionButton": "How to get rebates",
         "availableOnNetworks": [10, 42161],
         "article": {
-            "coverImageUrl": "/promotions/loss-rebates-cover.png",
+            "coverImageUrl": "/promotions/stip-big.webp",
             "headerHtml": "<h1><span><span><span>90% refund in ARB tokens for all SportsAMM and ParlayAMM LPs on losing weeks!</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p><span><span><span>Every two weeks, all AMM LPs that had a negative performance will be airdropped ARB equal to 90% of their negative PnL in dollar value. Capped at 10,000 ARB per two weeks. </span></span></span><span><span><span></p>",
@@ -51,11 +51,11 @@
         "displayCountdown": true,
         "promotionId": "big-leagues",
         "promotionUrl": "/promotions/big-leagues",
-        "backgroundImageUrl": "/promotions/big-leagues-tile.png",
+        "backgroundImageUrl": "/promotions/big-leagues-small.webp",
         "callToActionButton": "How to earn",
         "availableOnNetworks": [10, 42161],
         "article": {
-            "coverImageUrl": "/promotions/big-leagues-update-big.png",
+            "coverImageUrl": "/promotions/big-leagues-big.webp",
             "headerHtml": "<h1><span><span><span>100,000 OP, 100,000 ARB and 180,000 THALES for all users of NBA, NFL and EPL throughout the season!</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p><span><span><span>Play matches in the NFL, EPL, and NBA regular season to earn a share of 100k OP, 100k ARB, and 180k THALES rewards airdropped to you at the end of the season. The higher your trading volume and the higher the odds of winning positions, the higher your rewards.</span></span></span><span><span><span> Track your rewards: </span></span></span><a href='https://dune.com/leifu/overtime-big-leagues-campaign-23-24' target='_blank'><span><span><span><u>Dune dashboard.</u></span></span></span></a><spa><span></span></span></p>",
@@ -72,11 +72,11 @@
         "endDate": 0,
         "promotionId": "parlay-competition",
         "promotionUrl": "/promotions/parlay-competition",
-        "backgroundImageUrl": "/promotions/new-parlay-small.png",
+        "backgroundImageUrl": "/promotions/parlay-small.webp",
         "callToActionButton": "How to earn",
         "availableOnNetworks": [10, 42161],
         "article": {
-            "coverImageUrl": "/promotions/parlay-comp-cover.png",
+            "coverImageUrl": "/promotions/parlay-big.webp",
             "headerHtml": "<h1><span><span><span>Weekly Parlay Competition: Earn 2,500 ARB and 500 OP Every Week</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Win 500 OP or 2,500 ARB every two weeks by being in the top 20 highest-odd parlays on Optimism and Arbitrum respectively. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://www.overtimemarkets.xyz/parlay-leaderboard' target='_blank'> <span> <span> <span> <strong> <u>Parlay Leaderboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
