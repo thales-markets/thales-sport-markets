@@ -8,7 +8,6 @@ import { GAME_STATUS } from 'constants/ui';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
 import { ShareTicketModalProps } from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useMarketTransactionsQuery from 'queries/markets/useMarketTransactionsQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -19,9 +18,9 @@ import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
-import { ParlaysMarket, SportMarketLiveResult } from 'types/markets';
+import { formatCurrencyWithSign, formatDateWithTime } from 'thales-utils';
+import { AccountPositionProfile, ParlaysMarket, SportMarketLiveResult } from 'types/markets';
 import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { formatDateWithTime, formatCurrencyWithSign } from 'thales-utils';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import {
     convertPositionNameToPosition,
@@ -42,6 +41,7 @@ import { BetType } from 'enums/markets';
 import { getParlayPayment } from 'redux/modules/parlay';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
+import { executeBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getIsMultiCollateralSupported } from 'utils/network';
@@ -80,7 +80,6 @@ import {
     TeamScoreLabel,
     Wrapper,
 } from './styled-components';
-import { executeBiconomyTransaction } from 'utils/biconomy';
 
 type SinglePositionProps = {
     position: AccountPositionProfile;

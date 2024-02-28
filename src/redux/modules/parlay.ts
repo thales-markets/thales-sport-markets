@@ -13,7 +13,6 @@ import {
 import { checkIfCombinedPositionAlreadyInParlay, getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { RootState } from '../rootReducer';
-// import { canPlayerBeAddedToParlay } from 'utils/markets';
 import { BetType, CombinedPositionsMatchingCode, ParlayErrorCode, PLAYER_PROPS_BET_TYPES } from 'enums/markets';
 import {
     getHasCombinedMarketsParentMarketAddress,

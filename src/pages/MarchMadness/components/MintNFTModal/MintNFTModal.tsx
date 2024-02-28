@@ -249,7 +249,7 @@ const BorderGradient = styled.div`
     align-items: center;
 `;
 
-export const NftImage = styled.img`
+const NftImage = styled.img`
     width: 337px;
     height: 468px;
 `;

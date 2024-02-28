@@ -113,8 +113,6 @@ export const StickyRowTopTable = styled(TableRow)`
     width: 100%;
 `;
 
-export const StickyCell = styled.div``;
-
 export const PaginationWrapper = styled(TablePagination)`
     border: none !important;
     display: flex;

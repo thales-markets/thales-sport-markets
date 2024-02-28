@@ -191,6 +191,17 @@ export type CombinedMarketsPositionName =
     | 'H2&U'
     | '';
 
+export type AccountPositionProfile = {
+    sUSDPaid: number;
+    id: string;
+    account: string;
+    amount: number;
+    claimable: boolean;
+    open: boolean;
+    market: SportMarketInfo;
+    side: PositionName;
+};
+
 type AccountPositionGraph = {
     id: string;
     market: SportMarketInfo;
