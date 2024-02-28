@@ -9,6 +9,7 @@
         "promotionUrl": "/promotions/arb-stip-rewards-1",
         "backgroundImageUrl": "/promotions/arb-tile.png",
         "callToActionButton": "How to earn",
+        "availableOnNetworks": [42161],
         "article": {
             "coverImageUrl": "/promotions/arb-update-big.png",
             "headerHtml": "<h1><span><span><span>10,000 ARB every two weeks for all Singles and Parlay users on Arbitrum!</span></span></span></h1>",
@@ -30,6 +31,7 @@
         "promotionUrl": "/promotions/arb-stip-rewards-2",
         "backgroundImageUrl": "/promotions/new-big-league-small.png",
         "callToActionButton": "How to get rebates",
+        "availableOnNetworks": [10, 42161],
         "article": {
             "coverImageUrl": "/promotions/loss-rebates-cover.png",
             "headerHtml": "<h1><span><span><span>90% refund in ARB tokens for all SportsAMM and ParlayAMM LPs on losing weeks!</span></span></span></h1>",
@@ -51,6 +53,7 @@
         "promotionUrl": "/promotions/big-leagues",
         "backgroundImageUrl": "/promotions/big-leagues-tile.png",
         "callToActionButton": "How to earn",
+        "availableOnNetworks": [10, 42161],
         "article": {
             "coverImageUrl": "/promotions/big-leagues-update-big.png",
             "headerHtml": "<h1><span><span><span>100,000 OP, 100,000 ARB and 180,000 THALES for all users of NBA, NFL and EPL throughout the season!</span></span></span></h1>",
@@ -71,6 +74,7 @@
         "promotionUrl": "/promotions/parlay-competition",
         "backgroundImageUrl": "/promotions/new-parlay-small.png",
         "callToActionButton": "How to earn",
+        "availableOnNetworks": [10, 42161],
         "article": {
             "coverImageUrl": "/promotions/parlay-comp-cover.png",
             "headerHtml": "<h1><span><span><span>Weekly Parlay Competition: Earn 2,500 ARB and 500 OP Every Week</span></span></span></h1>",
