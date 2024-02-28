@@ -1,4 +1,4 @@
-import { Duration } from 'date-fns';
+import { Duration, format } from 'date-fns';
 
 export const formattedDuration = (
     duration: Duration,
@@ -69,4 +69,8 @@ export const formattedDurationFull = (
     formatted.push(`${duration.hours}${dateTimeTranslationMap['hours-short']}`);
     formatted.push(`${duration.minutes}${dateTimeTranslationMap['minutes-short']}`);
     return (firstTwo ? formatted.slice(0, 2) : formatted).join(delimiter);
+};
+
+export const formatTimestampForPromotionDate = (timestamp: number) => {
+    return format(new Date(timestamp * 1000), 'd MMM Y');
 };
