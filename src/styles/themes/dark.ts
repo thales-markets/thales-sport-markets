@@ -116,6 +116,17 @@ export default {
         paused: Colors.RED,
         sold: Colors.GRAY_LIGHT,
         comingSoon: Colors.ORANGE,
+        finished: Colors.GRAY_LIGHT,
+    },
+    promotion: {
+        background: {
+            primary: Colors.GREEN,
+            secondary: Colors.GRAY_LIGHT,
+        },
+        textColor: {
+            primary: Colors.GRAY_DARK,
+            secondary: Colors.WHITE,
+        },
     },
     oddsContainerBackground: {
         primary: Colors.GRAY,

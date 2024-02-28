@@ -555,7 +555,8 @@
                 "fifa-campaign": "斑马FIFA活动",
                 "fee-rebates": "费用回扣",
                 "vaults": "金库",
-                "liquidity-pool": "提供流动性"
+                "liquidity-pool": "提供流动性",
+                "promotions": "促销活动"
             },
             "buttons": {
                 "disconnect": "断开",
@@ -1284,5 +1285,21 @@
         "test-info": "2022 年团队测试阶段现已开放，2023 年选拔将于 3 月 12 日开放！",
         "back-to-markets": "回到市场",
         "mobile-message": "页面仅在较大的屏幕上可用。请使用桌面版！"
+    },
+    "promotions": {
+        "nav-items": {
+            "all": "全部",
+            "finished": "完成的",
+            "coming-soon": "即将推出",
+            "ongoing": "进行中"
+        },
+        "ends-in": "结束于",
+        "from-label": "从",
+        "starts-in": "开始于",
+        "no-promotions": "哎呀！看起来给定的过滤器目前没有可用的促销活动。",
+        "description": "Overtime Markets 定期为您提供各种类型的回扣、奖励以及类似的 Optimism、Arbitrum 和 Base 激励措施。您可以使用此页面来跟踪正在进行的促销活动，并了解如何有资格获得这些促销活动。祝你好运！",
+        "title": "促销和奖励",
+        "to-label": "到",
+        "back": "后退"
     }
 }

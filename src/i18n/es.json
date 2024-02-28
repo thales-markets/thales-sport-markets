@@ -555,7 +555,8 @@
                 "fee-rebates": "Reembolsos de tarifas",
                 "fifa-campaign": "Campaña Zebro FIFA",
                 "vaults": "Bóvedas",
-                "liquidity-pool": "Proporcionar Liquidez"
+                "liquidity-pool": "Proporcionar Liquidez",
+                "promotions": "Promociones"
             },
             "buttons": {
                 "disconnect": "Desconectar",
@@ -1284,5 +1285,21 @@
         "test-info": "¡La fase de pruebas ya está abierta con los equipos de 2022, la selección de 2023 se abre el 12 de marzo!",
         "back-to-markets": "Volver a los mercados",
         "mobile-message": "La página solo está disponible en pantallas más grandes. ¡Utilice la versión de escritorio!"
+    },
+    "promotions": {
+        "nav-items": {
+            "coming-soon": "Muy pronto",
+            "all": "Todo",
+            "ongoing": "En curso",
+            "finished": "Finalizado"
+        },
+        "title": "Promociones e incentivos",
+        "to-label": "a",
+        "no-promotions": "¡Ups! Parece que no hay promociones disponibles en este momento para este filtro.",
+        "from-label": "De",
+        "description": "Overtime Markets le ofrece periódicamente varios tipos de sobornos, recompensas e incentivos similares en Optimism, Arbitrum y Base. Puede utilizar esta página para realizar un seguimiento de las promociones en curso y ver cómo puede calificar para ellas. ¡Buena suerte!",
+        "ends-in": "termina en",
+        "back": "Atrás",
+        "starts-in": "empieza en"
     }
 }

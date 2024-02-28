@@ -555,7 +555,8 @@
                 "fee-rebates": "Remises sur les frais",
                 "fifa-campaign": "Campagne Zebro FIFA",
                 "vaults": "coffres",
-                "liquidity-pool": "Fournir des liquidités"
+                "liquidity-pool": "Fournir des liquidités",
+                "promotions": "Promotions"
             },
             "buttons": {
                 "disconnect": "Déconnecter",
@@ -1284,5 +1285,21 @@
         "back-to-markets": "Retour aux marchés",
         "mobile-message": "La page n'est disponible que sur des écrans plus grands. Veuillez utiliser la version de bureau !",
         "test-info": "La phase de tests est désormais ouverte avec les équipes 2022, la sélection 2023 s'ouvre le 12 mars !"
+    },
+    "promotions": {
+        "nav-items": {
+            "ongoing": "En cours",
+            "coming-soon": "À venir",
+            "finished": "Fini",
+            "all": "Tous"
+        },
+        "back": "Dos",
+        "title": "Promotions et incitations",
+        "starts-in": "commence dans",
+        "no-promotions": "Oops! Il semble qu’aucune promotion ne soit disponible pour le moment pour un filtre donné.",
+        "ends-in": "fini dans",
+        "to-label": "à",
+        "from-label": "Depuis",
+        "description": "Overtime Markets vous propose régulièrement divers types de pots-de-vin, de récompenses et d'incitations similaires sur Optimism, Arbitrum et Base. Vous pouvez utiliser cette page pour suivre les promotions en cours et voir comment vous pouvez y bénéficier. Bonne chance!"
     }
 }

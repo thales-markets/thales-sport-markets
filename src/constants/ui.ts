@@ -69,11 +69,11 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
 
 export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
     {
-        i18label: 'markets.nav-menu.items.sports-trivia',
-        iconClass: 'icon icon--trivia',
-        name: 'sports-trivia',
-        route: ROUTES.Quiz,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli],
+        i18label: 'markets.nav-menu.items.promotions',
+        iconClass: 'icon icon--promotions',
+        name: 'promotions',
+        route: ROUTES.Promotions.Home,
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum, Network.Base],
     },
 ];
 
@@ -83,3 +83,27 @@ export const NAV_MENU: NavMenuItem[] = [
     NAV_MENU_THIRD_SECTION,
     NAV_MENU_FOURTH_SECTION,
 ].flat();
+
+export const PROMOTION_SANITIZE_PROPS = {
+    ALLOWED_TAGS: [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'span',
+        'strong',
+        'i',
+        'u',
+        'p',
+        'a',
+        'img',
+        'ol',
+        'ul',
+        'li',
+        'br',
+        'hr',
+    ],
+    ALLOWED_ATTR: ['href', 'target', 'style', 'src', 'alt'],
+};

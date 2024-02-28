@@ -555,7 +555,8 @@
                 "fee-rebates": "Gebührenrückerstattungen",
                 "fifa-campaign": "Zebro FIFA-Kampagne",
                 "vaults": "Gewölbe",
-                "liquidity-pool": "Liquidität bereitstellen"
+                "liquidity-pool": "Liquidität bereitstellen",
+                "promotions": "Werbeaktionen"
             },
             "buttons": {
                 "switch": "Schalter",
@@ -1284,5 +1285,21 @@
         "mobile-message": "Die Seite ist nur auf größeren Bildschirmen verfügbar. Bitte verwenden Sie die Desktop-Version!",
         "test-info": "Die Testphase mit den Teams 2022 ist jetzt eröffnet, die Auswahl 2023 startet am 12. März!",
         "back-to-markets": "Zurück zu den Märkten"
+    },
+    "promotions": {
+        "nav-items": {
+            "all": "Alle",
+            "coming-soon": "Demnächst",
+            "finished": "Fertig",
+            "ongoing": "Laufend"
+        },
+        "ends-in": "endet in",
+        "description": "Overtime Markets bietet Ihnen regelmäßig verschiedene Arten von Rückschlägen, Belohnungen und ähnlichen Anreizen für Optimism, Arbitrum und Base. Auf dieser Seite können Sie den Überblick über laufende Werbeaktionen behalten und sehen, wie Sie sich dafür qualifizieren können. Viel Glück!",
+        "starts-in": "Beginnt in",
+        "back": "Zurück",
+        "to-label": "Zu",
+        "no-promotions": "Hoppla! Es sieht so aus, als ob derzeit für den angegebenen Filter keine Werbeaktionen verfügbar sind.",
+        "from-label": "Aus",
+        "title": "Werbeaktionen und Anreize"
     }
 }
