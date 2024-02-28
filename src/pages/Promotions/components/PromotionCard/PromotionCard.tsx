@@ -138,12 +138,12 @@ const ContentWrapper = styled(FlexDiv)`
     height: 100%;
 `;
 
-export const HeaderContainer = styled(FlexDivRow)`
+const HeaderContainer = styled(FlexDivRow)`
     margin-bottom: 120px;
     align-items: center;
 `;
 
-export const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatus }>`
+const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatus }>`
     background-color: ${(props) => props.status == 'coming-soon' && props.theme.promotion.background.primary};
     background-color: ${(props) => props.status == 'ongoing' && props.theme.promotion.background.primary};
     background-color: ${(props) => props.status == 'finished' && props.theme.promotion.background.secondary};
@@ -161,7 +161,7 @@ export const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatu
     }
 `;
 
-export const NetworkIconsWrapper = styled(FlexDiv)`
+const NetworkIconsWrapper = styled(FlexDiv)`
     flex-direction: row;
     svg {
         width: 24px;
@@ -170,7 +170,7 @@ export const NetworkIconsWrapper = styled(FlexDiv)`
     gap: 5px;
 `;
 
-export const Title = styled.h2`
+const Title = styled.h2`
     font-size: 20px;
     line-height: 22px;
     font-weight: 800;
@@ -179,18 +179,18 @@ export const Title = styled.h2`
     margin-bottom: 16px;
 `;
 
-export const BottomContainer = styled(FlexDiv)`
+const BottomContainer = styled(FlexDiv)`
     flex-direction: column;
 `;
 
-export const Description = styled.div`
+const Description = styled.div`
     flex: 0.8;
     font-size: 14px;
     align-items: center;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-export const ButtonContainer = styled(FlexDivCentered)`
+const ButtonContainer = styled(FlexDivCentered)`
     align-items: center;
     justify-content: center;
     margin-top: 20px;
