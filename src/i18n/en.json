@@ -560,7 +560,8 @@
                 "fee-rebates": "Fee rebates",
                 "become-affiliate": "Become affiliate",
                 "vaults": "Vaults",
-                "liquidity-pool": "Provide Liquidity"
+                "liquidity-pool": "Provide Liquidity",
+                "promotions": "Promotions"
             },
             "buttons": {
                 "switch": "Switch",
@@ -1189,5 +1190,21 @@
     },
     "banner": {
         "arb-distribution-message": "ARB distribution has started. Earn ARB tokens by using Overtime. Checkout the details here."
+    },
+    "promotions": {
+        "title": "Promotions and Incentives",
+        "description": "Overtime Markets regularly offers you various types of kickbacks, rewards, and similar incentives on Optimism, Arbitrum, and Base. You can use this page to keep track of ongoing promotions and see how you can qualify for them. Good luck!",
+        "nav-items": {
+            "all": "All",
+            "ongoing": "Ongoing",
+            "finished": "Finished",
+            "coming-soon": "Coming soon"
+        },
+        "back": "Back",
+        "from-label": "From",
+        "to-label": "to",
+        "starts-in": "starts in",
+        "ends-in": "ends in",
+        "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
     }
 }
