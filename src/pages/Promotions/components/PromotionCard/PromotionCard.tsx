@@ -9,14 +9,14 @@ import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
-import { PromotionCardData, PromotionCardStatus, PromotionStatus, ThemeInterface } from 'types/ui';
+import { PromotionCardStatus, PromotionItem, PromotionStatus, ThemeInterface } from 'types/ui';
 import { getPromotionDateRange, getPromotionStatus } from 'utils/ui';
 
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as BaseLogo } from 'assets/images/base-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 
-const PromotionCard: React.FC<PromotionCardData> = ({
+const PromotionCard: React.FC<PromotionItem> = ({
     title,
     description,
     startDate,

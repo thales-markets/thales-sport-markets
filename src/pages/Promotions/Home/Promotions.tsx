@@ -96,17 +96,12 @@ const Promotions: React.FC = () => {
                                 return (
                                     <PromotionCard
                                         key={`${index}-${promotion.promotionUrl}`}
-                                        title={promotion.title}
-                                        description={promotion.description}
-                                        startDate={promotion.startDate}
-                                        displayCountdown={promotion.displayCountdown}
-                                        endDate={promotion.endDate}
-                                        backgroundImageUrl={promotion.backgroundImageUrl}
-                                        promotionId={promotion.promotionId}
-                                        promotionUrl={promotion.promotionUrl}
-                                        callToActionButton={promotion.callToActionButton}
-                                        availableOnNetworks={promotion.availableOnNetworks}
-                                        branchName={branchName ? branchName : undefined}
+                                        {...promotion}
+                                        promotionUrl={
+                                            branchName
+                                                ? `${promotion.promotionUrl}?branch-name=${branchName}`
+                                                : promotion.promotionUrl
+                                        }
                                     />
                                 );
                             })
