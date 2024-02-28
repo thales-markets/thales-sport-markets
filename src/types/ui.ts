@@ -23,6 +23,7 @@ export type PromotionCardProps = {
     backgroundImageUrl: string;
     callToActionButton?: string;
     branchName?: string;
+    availableOnNetworks: [Network];
 };
 
 export type PromotionArticleProps = {

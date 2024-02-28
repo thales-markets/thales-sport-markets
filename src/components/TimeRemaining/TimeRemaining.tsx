@@ -11,12 +11,20 @@ type TimeRemainingProps = {
     onEnded?: () => void;
     fontSize?: number;
     fontWeight?: number;
+    color?: string;
     showFullCounter?: boolean;
 };
 
 const ONE_SECOND_IN_MS = 1000;
 
-const TimeRemaining: React.FC<TimeRemainingProps> = ({ end, onEnded, fontSize, fontWeight, showFullCounter }) => {
+const TimeRemaining: React.FC<TimeRemainingProps> = ({
+    end,
+    onEnded,
+    fontSize,
+    fontWeight,
+    color,
+    showFullCounter,
+}) => {
     const now = Date.now();
     const [timeElapsed, setTimeElapsed] = useState(now >= Number(end));
     const [weeksDiff, setWeekDiff] = useState(Math.abs(differenceInWeeks(now, end)));
@@ -73,7 +81,7 @@ const TimeRemaining: React.FC<TimeRemainingProps> = ({ end, onEnded, fontSize, f
     }, timeInterval);
 
     return (
-        <Container fontSize={fontSize} fontWeight={fontWeight} duration={duration}>
+        <Container fontSize={fontSize} fontWeight={fontWeight} duration={duration} color={color}>
             {timeElapsed
                 ? t('common.time-remaining.ended')
                 : showRemainingInWeeks
@@ -88,7 +96,7 @@ const TimeRemaining: React.FC<TimeRemainingProps> = ({ end, onEnded, fontSize, f
 const Container = styled.span<{ fontSize?: number; fontWeight?: number; duration: Duration; showBorder?: boolean }>`
     font-size: ${(props) => props.fontSize || 20}px;
     font-weight: ${(props) => props.fontWeight || 400};
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => (props?.color ? props.color : props.theme.textColor.primary)};
     text-align: center;
 `;
 

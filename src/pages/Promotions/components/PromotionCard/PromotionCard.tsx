@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
+import { Network } from 'enums/network';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -10,6 +11,10 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
 import { PromotionCardProps, PromotionCardStatus, PromotionStatus, ThemeInterface } from 'types/ui';
 import { getPromotionDateRange, getPromotionStatus } from 'utils/ui';
+
+import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
+import { ReactComponent as BaseLogo } from 'assets/images/base-logo.svg';
+import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 
 const PromotionCard: React.FC<PromotionCardProps> = ({
     title,
@@ -21,11 +26,48 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
     promotionUrl,
     backgroundImageUrl,
     callToActionButton,
+    availableOnNetworks,
     branchName,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
+    const getPromotionStatusLabel = (
+        startDate: number,
+        endDate: number,
+        displayCountdown?: boolean,
+        finished?: boolean
+    ) => {
+        if (!displayCountdown) return <>{getPromotionDateRange(startDate, endDate)}</>;
+        if (getPromotionStatus(startDate, endDate, finished) == PromotionStatus.ONGOING) {
+            return (
+                <>
+                    <span>{t('promotions.ends-in')}</span>
+                    <TimeRemaining
+                        end={endDate * 1000}
+                        fontSize={14}
+                        fontWeight={700}
+                        color={theme.promotion.textColor.primary}
+                    />
+                </>
+            );
+        }
+        if (getPromotionStatus(startDate, endDate, finished) == PromotionStatus.COMING_SOON) {
+            return (
+                <>
+                    {t('promotions.starts-in')}{' '}
+                    <TimeRemaining
+                        end={endDate * 1000}
+                        fontSize={14}
+                        fontWeight={700}
+                        color={theme.promotion.textColor.primary}
+                    />
+                </>
+            );
+        }
+        return <>{getPromotionStatus(startDate, endDate, finished)}</>;
+    };
 
     return (
         <Wrapper backgroundImageUrl={backgroundImageUrl} isMobile={isMobile}>
@@ -42,22 +84,14 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
                     }}
                 >
                     <HeaderContainer>
+                        <NetworkIconsWrapper>
+                            {availableOnNetworks.map((item) => {
+                                return getNetworkLogo(item as Network);
+                            })}
+                        </NetworkIconsWrapper>
                         <PromotionStatusBadge status={getPromotionStatus(startDate, endDate, finished)}>
-                            {t(`promotions.nav-items.${getPromotionStatus(startDate, endDate, finished)}`)}
+                            {getPromotionStatusLabel(startDate, endDate, displayCountdown, finished)}
                         </PromotionStatusBadge>
-                        <DateRangeLabel>
-                            {!displayCountdown ? (
-                                getPromotionDateRange(startDate, endDate)
-                            ) : (
-                                <>
-                                    {getPromotionStatus(startDate, endDate, finished) == PromotionStatus.COMING_SOON &&
-                                        `${t('promotions.starts-in')}: `}
-                                    {getPromotionStatus(startDate, endDate, finished) == PromotionStatus.ONGOING &&
-                                        `${t('promotions.ends-in')}: `}
-                                    <TimeRemaining end={endDate * 1000} fontSize={12} fontWeight={700} />
-                                </>
-                            )}
-                        </DateRangeLabel>
                     </HeaderContainer>
                     <Title>{title}</Title>
                     <BottomContainer>
@@ -76,6 +110,19 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
             </SPAAnchor>
         </Wrapper>
     );
+};
+
+const getNetworkLogo = (networkId: number) => {
+    switch (networkId) {
+        case Network.OptimismMainnet:
+            return <OPLogo />;
+        case Network.Arbitrum:
+            return <ArbitrumLogo />;
+        case Network.Base:
+            return <BaseLogo />;
+        default:
+            return <></>;
+    }
 };
 
 export const Wrapper = styled(FlexDiv)<{ backgroundImageUrl: string; isMobile: boolean }>`
@@ -108,15 +155,21 @@ export const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatu
     border-radius: 30px;
     font-size: 14px;
     padding: 5px 20px;
-    font-weight: 500;
+    font-weight: 700;
     text-transform: uppercase;
+    justify-content: space-between;
+    > span:first-child {
+        margin-right: 4px;
+    }
 `;
 
-export const DateRangeLabel = styled.span`
-    color: ${(props) => props.theme.textColor.primary};
-    font-weight: 700;
-    font-size: 12px;
-    text-transform: uppercase;
+export const NetworkIconsWrapper = styled(FlexDiv)`
+    flex-direction: row;
+    svg {
+        width: 24px;
+        height: 24px;
+    }
+    gap: 5px;
 `;
 
 export const Title = styled.h2`

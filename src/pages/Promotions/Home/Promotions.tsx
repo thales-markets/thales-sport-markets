@@ -106,6 +106,7 @@ const Promotions: React.FC = () => {
                                         promotionId={promotion.promotionId}
                                         promotionUrl={promotion.promotionUrl}
                                         callToActionButton={promotion.callToActionButton}
+                                        availableOnNetworks={promotion.availableOnNetworks}
                                         branchName={branchName ? branchName : undefined}
                                     />
                                 );
