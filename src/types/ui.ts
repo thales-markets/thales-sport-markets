@@ -17,7 +17,6 @@ export type PromotionCardData = {
     startDate: number;
     endDate: number;
     displayCountdown?: boolean;
-    finished?: boolean;
     promotionId: string;
     promotionUrl: string;
     backgroundImageUrl: string;

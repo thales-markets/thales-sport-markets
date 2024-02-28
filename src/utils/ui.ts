@@ -21,11 +21,13 @@ export const getNavItemFromRoute = (route: string): NavMenuItem | null => {
     return null;
 };
 
-export const getPromotionStatus = (startDate: number, endDate: number, finished?: boolean): PromotionCardStatus => {
-    if (endDate > Date.now() / 1000 && Date.now() / 1000 > startDate) return PromotionStatus.ONGOING;
-    if (endDate == 0 && Date.now() / 1000 > startDate) return PromotionStatus.ONGOING;
+export const getPromotionStatus = (startDate: number, endDate: number): PromotionCardStatus => {
+    if (
+        (endDate > Date.now() / 1000 && Date.now() / 1000 > startDate) ||
+        (endDate == 0 && Date.now() / 1000 > startDate)
+    )
+        return PromotionStatus.ONGOING;
     if (Date.now() / 1000 < startDate) return PromotionStatus.COMING_SOON;
-    if (finished) return PromotionStatus.FINISHED;
     return PromotionStatus.FINISHED;
 };
 

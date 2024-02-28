@@ -100,7 +100,6 @@ const Promotions: React.FC = () => {
                                         description={promotion.description}
                                         startDate={promotion.startDate}
                                         displayCountdown={promotion.displayCountdown}
-                                        finished={promotion.finished}
                                         endDate={promotion.endDate}
                                         backgroundImageUrl={promotion.backgroundImageUrl}
                                         promotionId={promotion.promotionId}

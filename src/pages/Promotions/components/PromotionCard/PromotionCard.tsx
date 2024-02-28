@@ -22,7 +22,6 @@ const PromotionCard: React.FC<PromotionCardData> = ({
     startDate,
     endDate,
     displayCountdown,
-    finished,
     promotionUrl,
     backgroundImageUrl,
     callToActionButton,
@@ -33,14 +32,9 @@ const PromotionCard: React.FC<PromotionCardData> = ({
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const getPromotionStatusLabel = (
-        startDate: number,
-        endDate: number,
-        displayCountdown?: boolean,
-        finished?: boolean
-    ) => {
+    const getPromotionStatusLabel = (startDate: number, endDate: number, displayCountdown?: boolean) => {
         if (!displayCountdown) return <>{getPromotionDateRange(startDate, endDate)}</>;
-        if (getPromotionStatus(startDate, endDate, finished) == PromotionStatus.ONGOING) {
+        if (getPromotionStatus(startDate, endDate) == PromotionStatus.ONGOING) {
             return (
                 <>
                     <span>{t('promotions.ends-in')}</span>
@@ -53,7 +47,7 @@ const PromotionCard: React.FC<PromotionCardData> = ({
                 </>
             );
         }
-        if (getPromotionStatus(startDate, endDate, finished) == PromotionStatus.COMING_SOON) {
+        if (getPromotionStatus(startDate, endDate) == PromotionStatus.COMING_SOON) {
             return (
                 <>
                     {t('promotions.starts-in')}{' '}
@@ -66,7 +60,7 @@ const PromotionCard: React.FC<PromotionCardData> = ({
                 </>
             );
         }
-        return <>{getPromotionStatus(startDate, endDate, finished)}</>;
+        return <>{getPromotionStatus(startDate, endDate)}</>;
     };
 
     return (
@@ -86,8 +80,8 @@ const PromotionCard: React.FC<PromotionCardData> = ({
                                 <></>
                             )}
                         </NetworkIconsWrapper>
-                        <PromotionStatusBadge status={getPromotionStatus(startDate, endDate, finished)}>
-                            {getPromotionStatusLabel(startDate, endDate, displayCountdown, finished)}
+                        <PromotionStatusBadge status={getPromotionStatus(startDate, endDate)}>
+                            {getPromotionStatusLabel(startDate, endDate, displayCountdown)}
                         </PromotionStatusBadge>
                     </HeaderContainer>
                     <Title>{title}</Title>
