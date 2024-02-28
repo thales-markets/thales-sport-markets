@@ -626,7 +626,8 @@
                 "fee-rebates": "Fee rebates",
                 "become-affiliate": "Become affiliate",
                 "vaults": "Vaults",
-                "liquidity-pool": "Provide Liquidity"
+                "liquidity-pool": "Provide Liquidity",
+                "promotions": "Promotions"
             },
             "buttons": {
                 "switch": "Switch",
@@ -1090,8 +1091,8 @@
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
-        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best winning parlays on a <bold>weekly basis</bold>. The tickets will be ranked based on a points system. The points are calculated by taking the odds of the parlay, multiplying it with the 3rd root of the buy-in and adding 10% bonus for each game on the ticket.",
-        "info": "Points = parlayOdds * 3√buyin * (1+0.1*numberOfGames).",
+        "description": "A total of <bold>{{amount}}</bold> will be distributed to the best winning parlays on a <bold>weekly basis</bold>. The tickets will be ranked based on a points system. The points are calculated by taking the odds of the parlay, multiplying it with the square root of the buy-in and adding 10% bonus for each game on the ticket.",
+        "info": "Points = parlayOdds * √buyin * (1+0.1*numberOfGames).",
         "distribution-note": "Rewards will be distributed to the <bold>TOP 20 parlays every week</bold>!",
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
@@ -1255,5 +1256,21 @@
     },
     "banner": {
         "arb-distribution-message": "ARB distribution has started. Earn ARB tokens by using Overtime. Checkout the details here."
+    },
+    "promotions": {
+        "title": "Promotions and Incentives",
+        "description": "Overtime Markets regularly offers you various types of kickbacks, rewards, and similar incentives on Optimism, Arbitrum, and Base. You can use this page to keep track of ongoing promotions and see how you can qualify for them. Good luck!",
+        "nav-items": {
+            "all": "All",
+            "ongoing": "Ongoing",
+            "finished": "Finished",
+            "coming-soon": "Coming soon"
+        },
+        "back": "Back",
+        "from-label": "From",
+        "to-label": "to",
+        "starts-in": "starts in",
+        "ends-in": "ends in",
+        "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
     }
 }

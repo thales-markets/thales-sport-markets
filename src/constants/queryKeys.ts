@@ -167,6 +167,7 @@ const QUERY_KEYS = {
     Rates: {
         ExchangeRates: (networkId: Network) => ['rates', 'exchangeRates', networkId],
     },
+    Promotions: (branchName: string) => [branchName, 'promotions'],
 };
 
 export default QUERY_KEYS;

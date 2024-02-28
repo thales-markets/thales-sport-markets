@@ -891,7 +891,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
 
     useEffect(() => {
         if (usdAmountValue > 0 && totalQuote > 0) {
-            const buyInPow = Math.pow(usdAmountValue, 1 / 3);
+            const buyInPow = Math.pow(usdAmountValue, 1 / 2);
             const minBuyInPow = 1;
 
             const basicPoints = 1 / totalQuote;
@@ -905,8 +905,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                 numberOfGamesBonus,
             });
 
-            const current = parlaysData.findIndex((data) => data.points < points);
-            console.log(current, parlaysData);
+            const current = !!parlaysData ? parlaysData.findIndex((data) => data.points < points) : 0;
             if (parlaysData.length === 0) {
                 setCurrentLeaderboardRank(1);
             } else {
