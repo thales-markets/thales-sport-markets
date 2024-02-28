@@ -85,9 +85,13 @@ const PromotionCard: React.FC<PromotionCardProps> = ({
                 >
                     <HeaderContainer>
                         <NetworkIconsWrapper>
-                            {availableOnNetworks.map((item) => {
-                                return getNetworkLogo(item as Network);
-                            })}
+                            {availableOnNetworks?.length ? (
+                                availableOnNetworks.map((item) => {
+                                    return getNetworkLogo(item as Network);
+                                })
+                            ) : (
+                                <></>
+                            )}
                         </NetworkIconsWrapper>
                         <PromotionStatusBadge status={getPromotionStatus(startDate, endDate, finished)}>
                             {getPromotionStatusLabel(startDate, endDate, displayCountdown, finished)}
