@@ -2,7 +2,7 @@ import { BetTypeMap, SPORTS_MAP } from 'constants/tags';
 import { BetType, OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
-import { Ticket, TicketMarket } from 'types/markets';
+import { Team, Ticket, TicketMarket } from 'types/markets';
 import {
     formatMarketOdds,
     getIsOneSideMarket,
@@ -11,7 +11,7 @@ import {
     isSpecialYesNoProp,
 } from './markets';
 
-export const mapTicket = (ticket: any, networkId: number): Ticket => {
+export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticket => {
     const mappedTicket: Ticket = {
         id: ticket.id,
         txHash: '',
@@ -40,6 +40,11 @@ export const mapTicket = (ticket: any, networkId: number): Ticket => {
             const type = BetTypeMap[typeId as BetType];
             const line = Number(market.line);
 
+            const homeTeam = !!teamNames[market.gameId] && teamNames[market.gameId].find((team: Team) => team.isHome);
+            const homeTeamName = homeTeam ? homeTeam.name : 'Home Team';
+            const awayTeam = !!teamNames[market.gameId] && teamNames[market.gameId].find((team: Team) => !team.isHome);
+            const awayTeamName = awayTeam ? awayTeam.name : 'Away Team';
+
             return {
                 gameId: market.gameId,
                 sport: SPORTS_MAP[leagueId],
@@ -52,8 +57,8 @@ export const mapTicket = (ticket: any, networkId: number): Ticket => {
                 type: type,
                 maturity: Number(market.maturity) * 1000,
                 maturityDate: new Date(market.maturity * 1000),
-                homeTeam: 'Home Team',
-                awayTeam: 'Away Team',
+                homeTeam: homeTeamName,
+                awayTeam: awayTeamName,
                 homeScore: Number(ticket.gamesStatus[index].score.homeScore),
                 awayScore: Number(ticket.gamesStatus[index].score.awayScore),
                 finalResult: Number(ticket.gamesStatus[index].result),

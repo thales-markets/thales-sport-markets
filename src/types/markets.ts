@@ -475,3 +475,8 @@ export type UserStats = {
     highestWin: number;
     lifetimeWins: number;
 };
+
+export type Team = {
+    name: string;
+    isHome: boolean;
+};
