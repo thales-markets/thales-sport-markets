@@ -555,7 +555,8 @@
                 "fee-rebates": "Remises sur les frais",
                 "fifa-campaign": "Campagne Zebro FIFA",
                 "vaults": "coffres",
-                "liquidity-pool": "Fournir des liquidités"
+                "liquidity-pool": "Fournir des liquidités",
+                "promotions": "Promotions"
             },
             "buttons": {
                 "disconnect": "Déconnecter",
@@ -1190,5 +1191,21 @@
     },
     "banner": {
         "arb-distribution-message": "La distribution d'ARB a commencé. Gagnez des jetons ARB en utilisant les heures supplémentaires. Consultez les détails ici."
+    },
+    "promotions": {
+        "nav-items": {
+            "finished": "Fini",
+            "all": "Tous",
+            "coming-soon": "À venir",
+            "ongoing": "En cours"
+        },
+        "from-label": "Depuis",
+        "description": "Overtime Markets vous propose régulièrement divers types de pots-de-vin, de récompenses et d'incitations similaires sur Optimism, Arbitrum et Base. Vous pouvez utiliser cette page pour suivre les promotions en cours et voir comment vous pouvez y bénéficier. Bonne chance!",
+        "ends-in": "fini dans",
+        "back": "Dos",
+        "title": "Promotions et incitations",
+        "starts-in": "commence dans",
+        "to-label": "à",
+        "no-promotions": "Oops! Il semble qu’aucune promotion ne soit disponible pour le moment pour un filtre donné."
     }
 }

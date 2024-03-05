@@ -555,7 +555,8 @@
                 "fifa-campaign": "斑马FIFA活动",
                 "fee-rebates": "费用回扣",
                 "vaults": "金库",
-                "liquidity-pool": "提供流动性"
+                "liquidity-pool": "提供流动性",
+                "promotions": "促销活动"
             },
             "buttons": {
                 "disconnect": "断开",
@@ -1190,5 +1191,21 @@
     },
     "banner": {
         "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。"
+    },
+    "promotions": {
+        "nav-items": {
+            "coming-soon": "即将推出",
+            "finished": "完成的",
+            "all": "全部",
+            "ongoing": "进行中"
+        },
+        "starts-in": "开始于",
+        "from-label": "从",
+        "back": "后退",
+        "title": "促销和奖励",
+        "ends-in": "结束于",
+        "to-label": "到",
+        "description": "Overtime Markets 定期为您提供各种类型的回扣、奖励以及类似的 Optimism、Arbitrum 和 Base 激励措施。您可以使用此页面来跟踪正在进行的促销活动，并了解如何有资格获得这些促销活动。祝你好运！",
+        "no-promotions": "哎呀！看起来给定的过滤器目前没有可用的促销活动。"
     }
 }
