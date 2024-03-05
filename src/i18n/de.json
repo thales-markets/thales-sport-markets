@@ -555,7 +555,8 @@
                 "fee-rebates": "Gebührenrückerstattungen",
                 "fifa-campaign": "Zebro FIFA-Kampagne",
                 "vaults": "Gewölbe",
-                "liquidity-pool": "Liquidität bereitstellen"
+                "liquidity-pool": "Liquidität bereitstellen",
+                "promotions": "Werbeaktionen"
             },
             "buttons": {
                 "switch": "Schalter",
@@ -1190,5 +1191,21 @@
     },
     "banner": {
         "arb-distribution-message": "Die ARB-Verteilung hat begonnen. Verdienen Sie ARB-Tokens, indem Sie Überstunden nutzen. Schauen Sie sich die Details hier an."
+    },
+    "promotions": {
+        "nav-items": {
+            "all": "Alle",
+            "finished": "Fertig",
+            "coming-soon": "Demnächst",
+            "ongoing": "Laufend"
+        },
+        "ends-in": "endet in",
+        "to-label": "Zu",
+        "starts-in": "Beginnt in",
+        "no-promotions": "Hoppla! Es sieht so aus, als ob derzeit für den angegebenen Filter keine Werbeaktionen verfügbar sind.",
+        "title": "Werbeaktionen und Anreize",
+        "from-label": "Aus",
+        "back": "Zurück",
+        "description": "Overtime Markets bietet Ihnen regelmäßig verschiedene Arten von Rückschlägen, Belohnungen und ähnlichen Anreizen für Optimism, Arbitrum und Base. Auf dieser Seite können Sie den Überblick über laufende Werbeaktionen behalten und sehen, wie Sie sich dafür qualifizieren können. Viel Glück!"
     }
 }

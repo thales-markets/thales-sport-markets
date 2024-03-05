@@ -1,5 +1,5 @@
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
@@ -22,7 +22,8 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     const marketsMap: Record<number, SportMarketInfo[]> = groupBy(markets, (market) => Number(market.tags[0]));
     // UNIFYING EUROPA LEAGUE MARKETS FROM BOTH ENETPULSE & RUNDOWNS PROVIDERS
-    const unifiedMarketsMap = unifyEuropaLeagueMarkets(marketsMap);
+    const unifiedMarketsMapEuropaLeague = unifyEuropaLeagueMarkets(marketsMap);
+    const unifiedMarketsMap = unifyBoxingMarkets(unifiedMarketsMapEuropaLeague);
     const marketsKeys = sortMarketKeys(
         Object.keys(marketsMap).map((key) => Number(key)),
         unifiedMarketsMap,
@@ -185,6 +186,16 @@ const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarketInfo[]>)
     if (rundownEuropaLeagueGames.length > 0 || enetpulseEuropaLeagueGames.length > 0) {
         marketsMap[EUROPA_LEAGUE_TAGS[0]] = [...rundownEuropaLeagueGames, ...enetpulseEuropaLeagueGames];
         delete marketsMap[EUROPA_LEAGUE_TAGS[1]];
+    }
+    return marketsMap;
+};
+
+const unifyBoxingMarkets = (marketsMap: Record<number, SportMarketInfo[]>) => {
+    const boxingMarkets = marketsMap[BOXING_TAGS[0]] ? marketsMap[BOXING_TAGS[0]] : [];
+    const boxingNonTitleMarkets = marketsMap[BOXING_TAGS[1]] ? marketsMap[BOXING_TAGS[1]] : [];
+    if (boxingMarkets.length > 0 || boxingNonTitleMarkets.length > 0) {
+        marketsMap[BOXING_TAGS[0]] = [...boxingMarkets, ...boxingNonTitleMarkets];
+        delete marketsMap[BOXING_TAGS[1]];
     }
     return marketsMap;
 };
