@@ -1288,18 +1288,18 @@
     },
     "promotions": {
         "nav-items": {
-            "ongoing": "En cours",
-            "coming-soon": "À venir",
             "finished": "Fini",
-            "all": "Tous"
+            "all": "Tous",
+            "coming-soon": "À venir",
+            "ongoing": "En cours"
         },
+        "from-label": "Depuis",
+        "description": "Overtime Markets vous propose régulièrement divers types de pots-de-vin, de récompenses et d'incitations similaires sur Optimism, Arbitrum et Base. Vous pouvez utiliser cette page pour suivre les promotions en cours et voir comment vous pouvez y bénéficier. Bonne chance!",
+        "ends-in": "fini dans",
         "back": "Dos",
         "title": "Promotions et incitations",
         "starts-in": "commence dans",
-        "no-promotions": "Oops! Il semble qu’aucune promotion ne soit disponible pour le moment pour un filtre donné.",
-        "ends-in": "fini dans",
         "to-label": "à",
-        "from-label": "Depuis",
-        "description": "Overtime Markets vous propose régulièrement divers types de pots-de-vin, de récompenses et d'incitations similaires sur Optimism, Arbitrum et Base. Vous pouvez utiliser cette page pour suivre les promotions en cours et voir comment vous pouvez y bénéficier. Bonne chance!"
+        "no-promotions": "Oops! Il semble qu’aucune promotion ne soit disponible pour le moment pour un filtre donné."
     }
 }

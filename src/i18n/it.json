@@ -1289,17 +1289,17 @@
     "promotions": {
         "nav-items": {
             "ongoing": "In corso",
-            "coming-soon": "Prossimamente",
             "finished": "Finito",
-            "all": "Tutto"
+            "all": "Tutto",
+            "coming-soon": "Prossimamente"
         },
+        "back": "Indietro",
         "title": "Promozioni e incentivi",
         "starts-in": "inizia tra",
-        "back": "Indietro",
         "ends-in": "finisce dentro",
-        "no-promotions": "Ops! Sembra che non ci siano promozioni disponibili al momento per il filtro specificato.",
         "from-label": "Da",
         "to-label": "A",
-        "description": "Overtime Markets ti offre regolarmente vari tipi di tangenti, premi e incentivi simili su Optimism, Arbitrum e Base. Puoi utilizzare questa pagina per tenere traccia delle promozioni in corso e vedere come puoi qualificarti per ottenerle. Buona fortuna!"
+        "description": "Overtime Markets ti offre regolarmente vari tipi di tangenti, premi e incentivi simili su Optimism, Arbitrum e Base. Puoi utilizzare questa pagina per tenere traccia delle promozioni in corso e vedere come puoi qualificarti per ottenerle. Buona fortuna!",
+        "no-promotions": "Ops! Sembra che non ci siano promozioni disponibili al momento per il filtro specificato."
     }
 }

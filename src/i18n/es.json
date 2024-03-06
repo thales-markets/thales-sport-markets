@@ -1288,18 +1288,18 @@
     },
     "promotions": {
         "nav-items": {
-            "coming-soon": "Muy pronto",
             "all": "Todo",
-            "ongoing": "En curso",
-            "finished": "Finalizado"
+            "finished": "Finalizado",
+            "coming-soon": "Muy pronto",
+            "ongoing": "En curso"
         },
-        "title": "Promociones e incentivos",
-        "to-label": "a",
-        "no-promotions": "¡Ups! Parece que no hay promociones disponibles en este momento para este filtro.",
-        "from-label": "De",
-        "description": "Overtime Markets le ofrece periódicamente varios tipos de sobornos, recompensas e incentivos similares en Optimism, Arbitrum y Base. Puede utilizar esta página para realizar un seguimiento de las promociones en curso y ver cómo puede calificar para ellas. ¡Buena suerte!",
         "ends-in": "termina en",
+        "no-promotions": "¡Ups! Parece que no hay promociones disponibles en este momento para este filtro.",
+        "starts-in": "empieza en",
+        "description": "Overtime Markets le ofrece periódicamente varios tipos de sobornos, recompensas e incentivos similares en Optimism, Arbitrum y Base. Puede utilizar esta página para realizar un seguimiento de las promociones en curso y ver cómo puede calificar para ellas. ¡Buena suerte!",
         "back": "Atrás",
-        "starts-in": "empieza en"
+        "to-label": "a",
+        "from-label": "De",
+        "title": "Promociones e incentivos"
     }
 }
