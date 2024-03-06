@@ -22,6 +22,7 @@ import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 }
 import { buildMarketLink } from 'utils/routes';
 import { getTicketMarketStatus } from 'utils/tickets';
 import { getOrdinalNumberLabel } from 'utils/ui';
+import web3 from 'web3';
 import {
     MatchPeriodContainer,
     MatchPeriodLabel,
@@ -68,15 +69,16 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
     const isGameResolved = market.isResolved || market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
 
+    const gameIdString = web3.utils.hexToAscii(market.gameId);
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
-    const useLiveResultQuery = useSportMarketLiveResultQuery(market.gameId, {
+    const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
     });
 
-    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(market.gameId, gameDate, market.leagueId, {
+    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.leagueId, {
         enabled: isAppReady && isEnetpulseSport,
     });
 

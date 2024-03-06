@@ -29,7 +29,7 @@ import { ThemeInterface } from 'types/ui';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
-import Web3 from 'web3';
+import web3 from 'web3';
 import { SportMarketLiveResult } from '../../../../types/markets';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
@@ -79,7 +79,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isGamePaused = market.isPaused && !isGameResolved;
     const showStatus = market.isResolved || market.isCanceled || isGameStarted || market.isPaused;
-    const gameIdString = Web3.utils.hexToAscii(market.gameId);
+    const gameIdString = web3.utils.hexToAscii(market.gameId);
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];

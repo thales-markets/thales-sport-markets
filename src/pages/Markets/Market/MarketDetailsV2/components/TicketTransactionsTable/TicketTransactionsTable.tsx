@@ -245,7 +245,7 @@ const getTicketMarketStatusIcon = (market: TicketMarket, theme: ThemeInterface) 
     );
 };
 
-const getOpacity = (market: TicketMarket) => (market.isResolved && isWinningTicketMarket(market) ? 0.5 : 1);
+const getOpacity = (market: TicketMarket) => (market.isResolved && !isWinningTicketMarket(market) ? 0.5 : 1);
 
 export const getTicketMarkets = (
     ticket: Ticket,

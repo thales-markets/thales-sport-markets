@@ -16,7 +16,7 @@ import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isOddValid, isUEFAGame } from 'utils/markets';
 import { buildMarketLink } from 'utils/routes';
-import Web3 from 'web3';
+import web3 from 'web3';
 import { BetType } from '../../../../enums/markets';
 import MatchStatus from './components/MatchStatus';
 import OddsV2 from './components/OddsV2';
@@ -76,7 +76,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused;
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
-    const gameIdString = Web3.utils.hexToAscii(market.gameId);
+    const gameIdString = web3.utils.hexToAscii(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const doubleChanceMarkets = market.childMarkets.filter((market) => market.typeId === BetType.DOUBLE_CHANCE);
