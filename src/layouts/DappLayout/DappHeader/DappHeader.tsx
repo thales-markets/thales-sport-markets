@@ -30,6 +30,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import TopUp from './components/TopUp';
@@ -127,7 +128,7 @@ const DappHeader: React.FC = () => {
                         )}
                     </LeftContainer>
                     <RightContainer>
-                        {location.pathname !== ROUTES.MarchMadness && (
+                        {location.pathname !== ROUTES.MarchMadness && isMarchMadnessAvailableForNetworkId(networkId) && (
                             <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.MarchMadness)}>
                                 <Button
                                     fontSize="18px"
