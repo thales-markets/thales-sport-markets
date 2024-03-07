@@ -358,12 +358,9 @@ export type PlayerProps = {
     score: number;
 };
 
-export type CombinedPositionInfo = { typeId: number; position: number; line: number };
+export type CombinedPosition = { childId: number; position: number; line: number };
 
-export type CombinedPositions = {
-    position1: CombinedPositionInfo;
-    position2: CombinedPositionInfo;
-};
+export type CombinedPositions = CombinedPosition[];
 
 export type SportMarketInfoV2 = {
     gameId: string;
@@ -398,6 +395,7 @@ export type SportMarketInfoV2 = {
     proof: string[];
     childMarkets: SportMarketInfoV2[];
     combinedPositions: CombinedPositions[];
+    selectedCombinedPositions?: CombinedPositions;
 };
 
 export type SportMarketsV2 = SportMarketInfoV2[];
@@ -444,6 +442,7 @@ export type TradeData = {
     odds: string[];
     merkleProof: string[];
     position: number;
+    combinedPositions: CombinedPositions[];
 };
 
 export type Ticket = {

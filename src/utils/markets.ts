@@ -705,12 +705,16 @@ export const getSimpleSymbolText = (position: Position, betType: number) => {
 };
 
 export const getCombinedPositionsSymbolText = (position: Position, market: SportMarketInfoV2) => {
-    const combinedPositions = market.combinedPositions[position];
+    const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
+    if (!combinedPositions) return '';
 
-    return `${getSimpleSymbolText(
-        combinedPositions.position1.position,
-        combinedPositions.position1.typeId
-    )}&${getSimpleSymbolText(combinedPositions.position2.position, combinedPositions.position2.typeId)}`;
+    const position1 = combinedPositions[0];
+    const position2 = combinedPositions[1];
+
+    return `${getSimpleSymbolText(position1.position, position1.childId)}&${getSimpleSymbolText(
+        position2.position,
+        position2.childId
+    )}`;
 };
 
 export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) => {
@@ -744,22 +748,16 @@ export const getLineInfo = (typeId: number, position: Position, line: number, ma
     return undefined;
 };
 
-export const getCombinedPositionsgetLineInfo = (position: Position, market: SportMarketInfoV2) => {
-    const combinedPositions = market.combinedPositions[position];
+export const getCombinedPositionsLineInfo = (position: Position, market: SportMarketInfoV2) => {
+    const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
+    if (!combinedPositions) return undefined;
 
-    const position1LineInfo = getLineInfo(
-        combinedPositions.position1.typeId,
-        combinedPositions.position1.position,
-        combinedPositions.position1.line,
-        market
-    );
+    const position1 = combinedPositions[0];
+    const position2 = combinedPositions[1];
 
-    const position2LineInfo = getLineInfo(
-        combinedPositions.position2.typeId,
-        combinedPositions.position2.position,
-        combinedPositions.position2.line,
-        market
-    );
+    const position1LineInfo = getLineInfo(position1.childId, position1.position, position1.line, market);
+
+    const position2LineInfo = getLineInfo(position2.childId, position2.position, position2.line, market);
 
     const lineInfo =
         position1LineInfo && position2LineInfo
@@ -771,7 +769,7 @@ export const getCombinedPositionsgetLineInfo = (position: Position, market: Spor
 
 export const getLineInfoV2 = (market: SportMarketInfoV2, position: Position) =>
     market.typeId === BetType.COMBINED_POSITIONS
-        ? getCombinedPositionsgetLineInfo(position, market)
+        ? getCombinedPositionsLineInfo(position, market)
         : getLineInfo(market.typeId, position, market.line, market);
 
 export const getTooltipText = (typeId: number, position: Position, line: number, market: SportMarketInfoV2) => {
@@ -813,16 +811,15 @@ export const getTooltipText = (typeId: number, position: Position, line: number,
 };
 
 export const getCombinedPositionsOddTooltipText = (position: Position, market: SportMarketInfoV2) => {
-    const combinedPositions = market.combinedPositions[position];
+    const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
+    if (!combinedPositions) return '';
+
+    const position1 = combinedPositions[0];
+    const position2 = combinedPositions[1];
 
     let tooltipText = '';
 
-    let position1TooltipText = getTooltipText(
-        combinedPositions.position1.typeId,
-        combinedPositions.position1.position,
-        combinedPositions.position1.line,
-        market
-    );
+    let position1TooltipText = getTooltipText(position1.childId, position1.position, position1.line, market);
 
     if (position1TooltipText.trim().endsWith('.')) {
         position1TooltipText = position1TooltipText.slice(0, -1);
@@ -833,12 +830,7 @@ export const getCombinedPositionsOddTooltipText = (position: Position, market: S
         tooltipText = `${tooltipText} ${i18n.t('markets.market-card.odd-tooltip.and')} `;
     }
 
-    const position2TooltipText = getTooltipText(
-        combinedPositions.position2.typeId,
-        combinedPositions.position2.position,
-        combinedPositions.position2.line,
-        market
-    );
+    const position2TooltipText = getTooltipText(position2.childId, position2.position, position2.line, market);
 
     tooltipText = `${tooltipText}${position2TooltipText.charAt(0).toLowerCase()}${position2TooltipText.slice(1)}`;
 
@@ -881,6 +873,13 @@ export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
             odds: market.odds.map((odd) => ethers.utils.parseEther(odd.toString()).toString()),
             merkleProof: market.proof,
             position: market.position,
+            combinedPositions: market.combinedPositions.map((combinedPositions) =>
+                combinedPositions.map((combinedPosition) => ({
+                    childId: combinedPosition.childId,
+                    position: combinedPosition.position,
+                    line: combinedPosition.line * 100,
+                }))
+            ),
         };
     });
 

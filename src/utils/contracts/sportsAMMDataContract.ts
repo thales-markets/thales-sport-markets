@@ -161,6 +161,28 @@ const sportsAMMDataContract = {
                                     name: 'odd',
                                     type: 'uint256',
                                 },
+                                {
+                                    components: [
+                                        {
+                                            internalType: 'uint16',
+                                            name: 'childId',
+                                            type: 'uint16',
+                                        },
+                                        {
+                                            internalType: 'uint8',
+                                            name: 'position',
+                                            type: 'uint8',
+                                        },
+                                        {
+                                            internalType: 'int24',
+                                            name: 'line',
+                                            type: 'int24',
+                                        },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.CombinedPosition[]',
+                                    name: 'combinedPositions',
+                                    type: 'tuple[]',
+                                },
                             ],
                             internalType: 'struct SportsAMMV2Data.GameData[]',
                             name: 'gamesData',
@@ -347,6 +369,28 @@ const sportsAMMDataContract = {
                                     internalType: 'uint256',
                                     name: 'odd',
                                     type: 'uint256',
+                                },
+                                {
+                                    components: [
+                                        {
+                                            internalType: 'uint16',
+                                            name: 'childId',
+                                            type: 'uint16',
+                                        },
+                                        {
+                                            internalType: 'uint8',
+                                            name: 'position',
+                                            type: 'uint8',
+                                        },
+                                        {
+                                            internalType: 'int24',
+                                            name: 'line',
+                                            type: 'int24',
+                                        },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.CombinedPosition[]',
+                                    name: 'combinedPositions',
+                                    type: 'tuple[]',
                                 },
                             ],
                             internalType: 'struct SportsAMMV2Data.GameData[]',
@@ -575,6 +619,28 @@ const sportsAMMDataContract = {
                                     name: 'odd',
                                     type: 'uint256',
                                 },
+                                {
+                                    components: [
+                                        {
+                                            internalType: 'uint16',
+                                            name: 'childId',
+                                            type: 'uint16',
+                                        },
+                                        {
+                                            internalType: 'uint8',
+                                            name: 'position',
+                                            type: 'uint8',
+                                        },
+                                        {
+                                            internalType: 'int24',
+                                            name: 'line',
+                                            type: 'int24',
+                                        },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.CombinedPosition[]',
+                                    name: 'combinedPositions',
+                                    type: 'tuple[]',
+                                },
                             ],
                             internalType: 'struct SportsAMMV2Data.GameData[]',
                             name: 'gamesData',
@@ -761,6 +827,28 @@ const sportsAMMDataContract = {
                                     internalType: 'uint256',
                                     name: 'odd',
                                     type: 'uint256',
+                                },
+                                {
+                                    components: [
+                                        {
+                                            internalType: 'uint16',
+                                            name: 'childId',
+                                            type: 'uint16',
+                                        },
+                                        {
+                                            internalType: 'uint8',
+                                            name: 'position',
+                                            type: 'uint8',
+                                        },
+                                        {
+                                            internalType: 'int24',
+                                            name: 'line',
+                                            type: 'int24',
+                                        },
+                                    ],
+                                    internalType: 'struct ISportsAMMV2.CombinedPosition[]',
+                                    name: 'combinedPositions',
+                                    type: 'tuple[]',
                                 },
                             ],
                             internalType: 'struct SportsAMMV2Data.GameData[]',

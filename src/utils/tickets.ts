@@ -2,7 +2,7 @@ import { BetTypeMap, SPORTS_MAP } from 'constants/tags';
 import { BetType, OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
-import { Team, Ticket, TicketMarket } from 'types/markets';
+import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
 import {
     formatMarketOdds,
     getIsOneSideMarket,
@@ -84,6 +84,11 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
                 combinedPositions: [],
                 odds: [],
                 proof: [],
+                selectedCombinedPositions: market.combinedPositions.map((combinedPosition: CombinedPosition) => ({
+                    childId: combinedPosition.childId,
+                    position: combinedPosition.position,
+                    line: combinedPosition.line / 100,
+                })),
 
                 position: Number(market.position),
                 odd: bigNumberFormatter(market.odd),
