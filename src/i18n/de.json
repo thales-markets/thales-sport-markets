@@ -1284,7 +1284,8 @@
         },
         "mobile-message": "Die Seite ist nur auf größeren Bildschirmen verfügbar. Bitte verwenden Sie die Desktop-Version!",
         "test-info": "Die Testphase mit den Teams 2022 ist jetzt eröffnet, die Auswahl 2023 startet am 12. März!",
-        "back-to-markets": "Zurück zu den Märkten"
+        "back-to-markets": "Zurück zu den Märkten",
+        "header-button-tooltip": "Nur im Arbitrum-Netzwerk verfügbar."
     },
     "promotions": {
         "nav-items": {

@@ -1064,7 +1064,7 @@
         }
     },
     "march-madness": {
-        "test-info": "The testing phase is now open with the 2022 teams, the 2023 selection opens up on March 12th!",
+        "header-button-tooltip": "Only available on Arbitrum network.",
         "back-to-markets": "Back to markets",
         "tabs": {
             "home": "Home",

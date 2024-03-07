@@ -15,7 +15,7 @@ export const getFirstMatchIndexInRound = (round: number) => {
 };
 
 export const isMarchMadnessAvailableForNetworkId = (networkId: NetworkId) => {
-    return [NetworkId.OptimismMainnet, NetworkId.Arbitrum, NetworkId.OptimismGoerli].includes(networkId);
+    return [NetworkId.Arbitrum].includes(networkId);
 };
 
 const getRoundNameById = (roundId: number) => {

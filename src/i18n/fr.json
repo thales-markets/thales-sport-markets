@@ -1284,7 +1284,8 @@
         },
         "back-to-markets": "Retour aux marchés",
         "mobile-message": "La page n'est disponible que sur des écrans plus grands. Veuillez utiliser la version de bureau !",
-        "test-info": "La phase de tests est désormais ouverte avec les équipes 2022, la sélection 2023 s'ouvre le 12 mars !"
+        "test-info": "La phase de tests est désormais ouverte avec les équipes 2022, la sélection 2023 s'ouvre le 12 mars !",
+        "header-button-tooltip": "Uniquement disponible sur le réseau Arbitrum."
     },
     "promotions": {
         "nav-items": {

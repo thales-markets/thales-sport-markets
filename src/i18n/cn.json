@@ -1284,7 +1284,8 @@
         },
         "test-info": "2022 年团队测试阶段现已开放，2023 年选拔将于 3 月 12 日开放！",
         "back-to-markets": "回到市场",
-        "mobile-message": "页面仅在较大的屏幕上可用。请使用桌面版！"
+        "mobile-message": "页面仅在较大的屏幕上可用。请使用桌面版！",
+        "header-button-tooltip": "仅在 Arbitrum 网络上可用。"
     },
     "promotions": {
         "nav-items": {

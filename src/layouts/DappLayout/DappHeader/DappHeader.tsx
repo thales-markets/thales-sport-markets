@@ -34,6 +34,7 @@ import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import TopUp from './components/TopUp';
+import Tooltip from 'components/Tooltip';
 
 const PULSING_COUNT = 10;
 
@@ -99,12 +100,45 @@ const DappHeader: React.FC = () => {
 
     const menuImageRef = useRef<HTMLImageElement>(null);
 
+    const getMarchMadnessButton = () => (
+        <MarchMadnessWrapper>
+            <SPAAnchor href={buildHref(ROUTES.MarchMadness)}>
+                <Button
+                    disabled={!isMarchMadnessAvailableForNetworkId(networkId)}
+                    fontSize="18px"
+                    width="290px"
+                    additionalStyles={{
+                        background: `url(${marchMadnessLeftIcon}) left 20px center no-repeat, url(${marchMadnessRightIcon}) right 20px center no-repeat`,
+                        backgroundColor: theme.marchMadness.button.background.secondary,
+                        backgroundSize: '28px, 28px',
+                        border: 'none',
+                        fontFamily: "'NCAA' !important",
+                        letterSpacing: '2px',
+                        textTransform: 'uppercase',
+                        color: theme.marchMadness.button.textColor.secondary,
+                    }}
+                >
+                    {t('markets.nav-menu.labels.march-madness')}
+                </Button>
+            </SPAAnchor>
+        </MarchMadnessWrapper>
+    );
+
     return (
         <>
             {!isMobile && (
                 <Container>
                     <LeftContainer>
                         <Logo />
+                        {location.pathname !== ROUTES.MarchMadness &&
+                            (isMarchMadnessAvailableForNetworkId(networkId) ? (
+                                getMarchMadnessButton()
+                            ) : (
+                                <Tooltip
+                                    overlay={t('march-madness.header-button-tooltip')}
+                                    component={getMarchMadnessButton()}
+                                />
+                            ))}
                         {isWalletConnected && isMarketsPage && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
                                 <Button
@@ -128,26 +162,6 @@ const DappHeader: React.FC = () => {
                         )}
                     </LeftContainer>
                     <RightContainer>
-                        {location.pathname !== ROUTES.MarchMadness && isMarchMadnessAvailableForNetworkId(networkId) && (
-                            <SPAAnchor style={{ marginRight: 20 }} href={buildHref(ROUTES.MarchMadness)}>
-                                <Button
-                                    fontSize="18px"
-                                    additionalStyles={{
-                                        background: `url(${marchMadnessLeftIcon}) left 20px center no-repeat, url(${marchMadnessRightIcon}) right 20px center no-repeat`,
-                                        backgroundColor: theme.marchMadness.button.background.secondary,
-                                        backgroundSize: '28px, 28px',
-                                        border: 'none',
-                                        fontFamily: "'NCAA' !important",
-                                        letterSpacing: '2px',
-                                        textTransform: 'uppercase',
-                                        color: theme.marchMadness.button.textColor.secondary,
-                                        width: '290px',
-                                    }}
-                                >
-                                    {t('markets.nav-menu.labels.march-madness')}
-                                </Button>
-                            </SPAAnchor>
-                        )}
                         {!isWalletConnected && (
                             <Button
                                 backgroundColor={'transparent'}
@@ -462,6 +476,10 @@ const MobileButtonWrapper = styled(FlexDivRowCentered)`
     margin-top: 10px;
     gap: 20px;
     min-height: 32px;
+`;
+
+const MarchMadnessWrapper = styled.div`
+    margin-left: 20px;
 `;
 
 export default DappHeader;

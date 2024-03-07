@@ -1284,7 +1284,8 @@
         },
         "test-info": "È ora aperta la fase di testing con le squadre 2022, la selezione 2023 si apre il 12 marzo!",
         "mobile-message": "La pagina è disponibile solo su schermi più grandi. Si prega di utilizzare la versione desktop!",
-        "back-to-markets": "Ritorniamo ai mercati"
+        "back-to-markets": "Ritorniamo ai mercati",
+        "header-button-tooltip": "Disponibile solo sulla rete Arbitrum."
     },
     "promotions": {
         "nav-items": {
