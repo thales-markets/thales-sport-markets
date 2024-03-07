@@ -1,5 +1,6 @@
 import { NUMBER_OF_MATCHES, NUMBER_OF_ROUNDS } from 'constants/marchMadness';
 import QUERY_KEYS from 'constants/queryKeys';
+import { millisecondsToHours, secondsToMilliseconds } from 'date-fns';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { NetworkId } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
@@ -45,7 +46,7 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
                         pointsPerRound,
                     ] = await Promise.all([
                         await marchMadnessContract.addressAlreadyMinted(walletAddress),
-                        await marchMadnessContract.canNotMintOrUpdateAfter(), // timestamp in milis
+                        await marchMadnessContract.canNotMintOrUpdateAfter(), // timestamp in seconds
                         await marchMadnessContract.getBracketsByMinter(walletAddress),
                         await marchMadnessContract.getResults(),
                         await marchMadnessContract.getCorrectPositionsByRound(walletAddress),
@@ -58,9 +59,10 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
                     const bonusesPerRound = pointsPerRound.map((value: any) => Number(value));
 
                     marchMadnessData.isAddressAlreadyMinted = addressAlreadyMinted;
-                    marchMadnessData.isMintAvailable = Date.now() < Number(canNotMintOrUpdateAfter) * 1000;
+                    const now = Date.now();
+                    marchMadnessData.isMintAvailable = now < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
                     marchMadnessData.hoursLeftToMint = Math.floor(
-                        (Number(canNotMintOrUpdateAfter) * 1000 - Date.now()) / 1000 / 60 / 60
+                        millisecondsToHours(secondsToMilliseconds(Number(canNotMintOrUpdateAfter)) - now)
                     );
                     marchMadnessData.brackets = brackets;
                     marchMadnessData.tokenId = tokenId;

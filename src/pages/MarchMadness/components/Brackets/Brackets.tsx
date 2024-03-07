@@ -13,6 +13,7 @@ import {
     FIRST_ROUND_MIDWEST_MATCH_IDS,
     FIRST_ROUND_SOUTH_MATCH_IDS,
     FIRST_ROUND_WEST_MATCH_IDS,
+    NUMBER_OF_MATCHES,
     NUMBER_OF_ROUNDS,
     SECOND_ROUND_EAST_MATCH_IDS,
     SECOND_ROUND_MATCH_IDS,
@@ -43,6 +44,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { localStore } from 'thales-utils';
 import { BracketMatch } from 'types/marchMadness';
+import { ThemeInterface } from 'types/ui';
 import { getFirstMatchIndexInRound, getNumberOfMatchesPerRound } from 'utils/marchMadness';
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterMarchMadnessMint } from 'utils/queryConnector';
@@ -51,7 +53,6 @@ import { MatchProps } from '../Match/Match';
 import MintNFTModal from '../MintNFTModal';
 import ShareModal from '../ShareModal';
 import WildCardMatch from '../WildCardMatch';
-import { ThemeInterface } from 'types/ui';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -63,7 +64,7 @@ const Brackets: React.FC = () => {
 
     const [isBracketMinted, setIsBracketMinted] = useState(false);
     const [bracketsData, setBracketsData] = useState(initialBracketsData);
-    const [winnerTeamIds, setWinnerTeamIds] = useState(Array<number>(63).fill(0));
+    const [winnerTeamIds, setWinnerTeamIds] = useState(Array<number>(NUMBER_OF_MATCHES).fill(0));
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
     const [showMintNFTModal, setShowMintNFTModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
@@ -603,6 +604,7 @@ const Brackets: React.FC = () => {
                                         color: theme.marchMadness.button.textColor.primary,
                                         width: '142px',
                                         marginTop: '82px',
+                                        padding: '3px 10px',
                                     }}
                                     disabled={isSubmitDisabled}
                                     onClick={() => setShowMintNFTModal(true)}
