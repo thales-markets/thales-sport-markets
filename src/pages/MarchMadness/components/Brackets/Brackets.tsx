@@ -306,6 +306,7 @@ const Brackets: React.FC = () => {
         selectedCollateral,
         isEth,
         isDefaultCollateral,
+        isBracketMinted,
         convertFromStable,
     ]);
 
@@ -826,10 +827,10 @@ const Brackets: React.FC = () => {
                                         hasAllowance ? setShowMintNFTModal(true) : setOpenApprovalModal(true)
                                     }
                                 >
-                                    {hasAllowance
-                                        ? isBracketMinted
-                                            ? t('march-madness.brackets.submit-modify')
-                                            : t('march-madness.brackets.submit')
+                                    {isBracketMinted
+                                        ? t('march-madness.brackets.submit-modify')
+                                        : hasAllowance
+                                        ? t('march-madness.brackets.submit')
                                         : t('common.wallet.approve')}
                                 </Button>
                             </SubmitWrapper>

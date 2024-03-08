@@ -112,6 +112,7 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({
                                         borderRadius: '0',
                                         width: '314px',
                                         height: '44px',
+                                        padding: '3px 10px',
                                     }}
                                     disabled={isMinting || isUpdating}
                                     onClick={handleSubmit}

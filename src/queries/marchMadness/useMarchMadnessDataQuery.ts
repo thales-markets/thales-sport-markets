@@ -31,34 +31,25 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
             try {
                 const { marchMadnessContract } = networkConnector;
 
-                if (marchMadnessContract && walletAddress !== '') {
-                    const TESTING = false; // TODO: remove
-                    const tokenIds: BigNumber[] = TESTING
-                        ? []
-                        : await marchMadnessContract.getAddressToTokenIds(walletAddress);
+                if (marchMadnessContract) {
+                    const now = Date.now();
+                    if (walletAddress !== '') {
+                        const tokenIds: BigNumber[] = await marchMadnessContract.getAddressToTokenIds(walletAddress);
 
-                    const [mintingPrice, canNotMintOrUpdateAfter, results, correctPositionsByRound] = await Promise.all(
-                        [
+                        const [
+                            mintingPrice,
+                            canNotMintOrUpdateAfter,
+                            results,
+                            correctPositionsByRound,
+                        ] = await Promise.all([
                             await marchMadnessContract.mintingPrice(),
                             await marchMadnessContract.canNotMintOrUpdateAfter(), // timestamp in seconds
                             await marchMadnessContract.getResults(),
                             await marchMadnessContract.getCorrectPositionsByRound(walletAddress),
-                        ]
-                    );
+                        ]);
 
-                    if (TESTING) {
-                        const now = Date.now();
-                        const gameStart = 1711037437000;
-                        marchMadnessData.mintingPrice = 50;
-                        marchMadnessData.isMintAvailable = now < gameStart;
-                        marchMadnessData.minutesLeftToMint = millisecondsToMinutes(gameStart - now);
-                        marchMadnessData.bracketsIds = [];
-                        marchMadnessData.winnerTeamIdsPerMatch = Array<number>(NUMBER_OF_MATCHES).fill(0);
-                        marchMadnessData.winningsPerRound = Array<number>(NUMBER_OF_ROUNDS).fill(0);
-                    } else {
                         marchMadnessData.mintingPrice = coinFormatter(mintingPrice, networkId);
 
-                        const now = Date.now();
                         marchMadnessData.isMintAvailable = now < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
                         marchMadnessData.minutesLeftToMint = millisecondsToMinutes(
                             secondsToMilliseconds(Number(canNotMintOrUpdateAfter)) - now
@@ -70,6 +61,11 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
 
                         marchMadnessData.winnerTeamIdsPerMatch = winnerTeamIdsPerMatch;
                         marchMadnessData.winningsPerRound = winningsPerRound;
+                    } else {
+                        const canNotMintOrUpdateAfter = await marchMadnessContract.canNotMintOrUpdateAfter(); // timestamp in seconds
+                        marchMadnessData.minutesLeftToMint = millisecondsToMinutes(
+                            secondsToMilliseconds(Number(canNotMintOrUpdateAfter)) - now
+                        );
                     }
                 }
 
