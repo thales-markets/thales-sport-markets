@@ -17,7 +17,7 @@ const useLoeaderboardByGuessedCorrectlyQuery = (
     options?: UseQueryOptions<LeaderboardByGuessedCorrectlyResponse | undefined>
 ) => {
     return useQuery<LeaderboardByGuessedCorrectlyResponse | undefined>(
-        QUERY_KEYS.MarchMadnessCompetition.LeaderboardByNumberOfCorrectPredictions(networkId),
+        QUERY_KEYS.MarchMadness.Competition.LeaderboardByNumberOfCorrectPredictions(networkId),
         async () => {
             try {
                 const rawResponse = await fetch(`https://api.thalesmarket.io/march-madness/1/${networkId}`);

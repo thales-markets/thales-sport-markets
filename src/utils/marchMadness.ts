@@ -1,5 +1,9 @@
 import { FINAL_MATCH_ID, initialBracketsData, NUMBER_OF_TEAMS } from 'constants/marchMadness';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { NetworkId } from 'thales-utils';
+
+export const getLocalStorageKey = (bracketId: number, networkId: NetworkId, walletAddress: string) =>
+    `${LOCAL_STORAGE_KEYS.BRACKETS}id=${bracketId}network=${networkId}wallet=${walletAddress}`;
 
 export const isMatchInRegion = (matchId: number, region: string) => {
     return initialBracketsData.find((match) => match.id === matchId && match.region.includes(region)) !== undefined;

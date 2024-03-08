@@ -30,7 +30,7 @@ const useLeaderboardByVolumeQuery = (
     options?: UseQueryOptions<LeaderboardByVolumeResponse | undefined>
 ) => {
     return useQuery<LeaderboardByVolumeResponse | undefined>(
-        QUERY_KEYS.MarchMadnessCompetition.LeaderboardByVolume(networkId),
+        QUERY_KEYS.MarchMadness.Competition.LeaderboardByVolume(networkId),
         async () => {
             try {
                 const rawResponse = await fetch(`https://api.thalesmarket.io/march-madness/0/${networkId}`);

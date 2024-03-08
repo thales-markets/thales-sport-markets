@@ -2,19 +2,38 @@ import { Network } from 'enums/network';
 
 export const marchMadnessContract = {
     addresses: {
-        [Network.OptimismMainnet]: '0x3b05d4C58De4E96Ea093032c6D70C7e4212a4c31',
-        [Network.OptimismGoerli]: '0x81FB5DAb46Ba7fb5b85D7fcBbF019a400a2000FD',
-        [Network.Arbitrum]: '0x29bd4ceDb94C4dC37B4D9c52Ac98Eb4967BFAaa3',
+        [Network.OptimismMainnet]: 'TBD',
+        [Network.OptimismGoerli]: 'TBD',
+        [Network.Arbitrum]: '0x62e60328f13334B9cCdE47963d67A99Ed66BC01a',
         [Network.Base]: 'TBD',
     },
     abi: [
-        { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
+        {
+            inputs: [],
+            stateMutability: 'nonpayable',
+            type: 'constructor',
+        },
         {
             anonymous: false,
             inputs: [
-                { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
-                { indexed: true, internalType: 'address', name: 'approved', type: 'address' },
-                { indexed: true, internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+                {
+                    indexed: true,
+                    internalType: 'address',
+                    name: 'owner',
+                    type: 'address',
+                },
+                {
+                    indexed: true,
+                    internalType: 'address',
+                    name: 'approved',
+                    type: 'address',
+                },
+                {
+                    indexed: true,
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256',
+                },
             ],
             name: 'Approval',
             type: 'event',
@@ -22,24 +41,56 @@ export const marchMadnessContract = {
         {
             anonymous: false,
             inputs: [
-                { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
-                { indexed: true, internalType: 'address', name: 'operator', type: 'address' },
-                { indexed: false, internalType: 'bool', name: 'approved', type: 'bool' },
+                {
+                    indexed: true,
+                    internalType: 'address',
+                    name: 'owner',
+                    type: 'address',
+                },
+                {
+                    indexed: true,
+                    internalType: 'address',
+                    name: 'operator',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'bool',
+                    name: 'approved',
+                    type: 'bool',
+                },
             ],
             name: 'ApprovalForAll',
             type: 'event',
         },
         {
             anonymous: false,
-            inputs: [{ indexed: false, internalType: 'uint256', name: '_toDate', type: 'uint256' }],
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: '_toDate',
+                    type: 'uint256',
+                },
+            ],
             name: 'FinalPositioningDateUpdated',
             type: 'event',
         },
         {
             anonymous: false,
             inputs: [
-                { indexed: false, internalType: 'uint256', name: '_roundId', type: 'uint256' },
-                { indexed: false, internalType: 'uint256[]', name: '_gameIds', type: 'uint256[]' },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: '_roundId',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256[]',
+                    name: '_gameIds',
+                    type: 'uint256[]',
+                },
             ],
             name: 'GameIdsAssignedToRound',
             type: 'event',
@@ -47,9 +98,24 @@ export const marchMadnessContract = {
         {
             anonymous: false,
             inputs: [
-                { indexed: false, internalType: 'address', name: '_recipient', type: 'address' },
-                { indexed: false, internalType: 'uint256', name: '_id', type: 'uint256' },
-                { indexed: false, internalType: 'uint256[63]', name: '_brackets', type: 'uint256[63]' },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: '_recipient',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: '_id',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256[63]',
+                    name: '_brackets',
+                    type: 'uint256[63]',
+                },
             ],
             name: 'Mint',
             type: 'event',
@@ -57,32 +123,50 @@ export const marchMadnessContract = {
         {
             anonymous: false,
             inputs: [
-                { indexed: true, internalType: 'address', name: 'previousOwner', type: 'address' },
-                { indexed: true, internalType: 'address', name: 'newOwner', type: 'address' },
+                {
+                    indexed: true,
+                    internalType: 'address',
+                    name: 'previousOwner',
+                    type: 'address',
+                },
+                {
+                    indexed: true,
+                    internalType: 'address',
+                    name: 'newOwner',
+                    type: 'address',
+                },
             ],
             name: 'OwnershipTransferred',
             type: 'event',
         },
         {
             anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: 'account', type: 'address' }],
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'account',
+                    type: 'address',
+                },
+            ],
             name: 'Paused',
             type: 'event',
         },
         {
             anonymous: false,
             inputs: [
-                { indexed: false, internalType: 'uint256', name: '_roundId', type: 'uint256' },
-                { indexed: false, internalType: 'uint256', name: '_points', type: 'uint256' },
-            ],
-            name: 'PointsSettledForRound',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [
-                { indexed: false, internalType: 'uint256', name: '_gameIndex', type: 'uint256' },
-                { indexed: false, internalType: 'uint256', name: '_teamId', type: 'uint256' },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: '_gameIndex',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: '_teamId',
+                    type: 'uint256',
+                },
             ],
             name: 'ResultForGameAdded',
             type: 'event',
@@ -90,25 +174,139 @@ export const marchMadnessContract = {
         {
             anonymous: false,
             inputs: [
-                { indexed: true, internalType: 'address', name: 'from', type: 'address' },
-                { indexed: true, internalType: 'address', name: 'to', type: 'address' },
-                { indexed: true, internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'mintingPrice',
+                    type: 'uint256',
+                },
+            ],
+            name: 'SetMintingPrice',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: '_onramper',
+                    type: 'address',
+                },
+            ],
+            name: 'SetMultiCollateralOnOffRamp',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: '_safeBox',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: '_sbFee',
+                    type: 'uint256',
+                },
+            ],
+            name: 'SetSafeBox',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'whitelisted',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'bool',
+                    name: 'enabled',
+                    type: 'bool',
+                },
+            ],
+            name: 'SetWhitelistedAddress',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: '_address',
+                    type: 'address',
+                },
+            ],
+            name: 'SetsUSD',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: true,
+                    internalType: 'address',
+                    name: 'from',
+                    type: 'address',
+                },
+                {
+                    indexed: true,
+                    internalType: 'address',
+                    name: 'to',
+                    type: 'address',
+                },
+                {
+                    indexed: true,
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256',
+                },
             ],
             name: 'Transfer',
             type: 'event',
         },
         {
             anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: 'account', type: 'address' }],
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'account',
+                    type: 'address',
+                },
+            ],
             name: 'Unpaused',
             type: 'event',
         },
         {
             anonymous: false,
             inputs: [
-                { indexed: false, internalType: 'address', name: '_minter', type: 'address' },
-                { indexed: false, internalType: 'uint256', name: 'itemIndex', type: 'uint256' },
-                { indexed: false, internalType: 'uint256[63]', name: '_newBrackets', type: 'uint256[63]' },
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: '_minter',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256',
+                    name: 'itemIndex',
+                    type: 'uint256',
+                },
+                {
+                    indexed: false,
+                    internalType: 'uint256[63]',
+                    name: '_newBrackets',
+                    type: 'uint256[63]',
+                },
             ],
             name: 'UpdateBracketsForAlreadyMintedItem',
             type: 'event',
@@ -116,35 +314,65 @@ export const marchMadnessContract = {
         {
             inputs: [],
             name: '_name',
-            outputs: [{ internalType: 'string', name: '', type: 'string' }],
+            outputs: [
+                {
+                    internalType: 'string',
+                    name: '',
+                    type: 'string',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [],
             name: '_symbol',
-            outputs: [{ internalType: 'string', name: '', type: 'string' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '', type: 'address' }],
-            name: 'addressAlreadyMinted',
-            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '', type: 'address' }],
-            name: 'addressToTokenId',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            outputs: [
+                {
+                    internalType: 'string',
+                    name: '',
+                    type: 'string',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [
-                { internalType: 'address', name: 'to', type: 'address' },
-                { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            name: 'addressToTokenIds',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'to',
+                    type: 'address',
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256',
+                },
             ],
             name: 'approve',
             outputs: [],
@@ -153,8 +381,16 @@ export const marchMadnessContract = {
         },
         {
             inputs: [
-                { internalType: 'uint256', name: '_roundId', type: 'uint256' },
-                { internalType: 'uint256[]', name: '_gameIds', type: 'uint256[]' },
+                {
+                    internalType: 'uint256',
+                    name: '_roundId',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256[]',
+                    name: '_gameIds',
+                    type: 'uint256[]',
+                },
             ],
             name: 'assignGameIdsToRound',
             outputs: [],
@@ -162,197 +398,484 @@ export const marchMadnessContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'address', name: 'owner', type: 'address' }],
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'owner',
+                    type: 'address',
+                },
+            ],
             name: 'balanceOf',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [],
             name: 'canNotMintOrUpdateAfter',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
-            name: 'getApproved',
-            outputs: [{ internalType: 'address', name: '', type: 'address' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '_minter', type: 'address' }],
-            name: 'getBracketsByMinter',
-            outputs: [{ internalType: 'uint256[63]', name: 'brackets', type: 'uint256[63]' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '_minter', type: 'address' }],
-            name: 'getCorrectPositionsByMinterAddress',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '_minter', type: 'address' }],
-            name: 'getCorrectPositionsByRound',
-            outputs: [{ internalType: 'uint256[6]', name: 'correctPositionsByRound', type: 'uint256[6]' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
-            name: 'getCorrectPositionsByTokenId',
-            outputs: [{ internalType: 'uint256', name: 'correctPredictions', type: 'uint256' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                { internalType: 'uint256', name: '_roundId', type: 'uint256' },
-                { internalType: 'address', name: '_minter', type: 'address' },
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
             ],
-            name: 'getCorrectPositionsPerRoundByMinterAddress',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [
-                { internalType: 'uint256', name: '_roundId', type: 'uint256' },
-                { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
+                {
+                    internalType: 'address',
+                    name: 'addressToFetchFor',
+                    type: 'address',
+                },
+            ],
+            name: 'getAddressToTokenIds',
+            outputs: [
+                {
+                    internalType: 'uint256[]',
+                    name: '',
+                    type: 'uint256[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256',
+                },
+            ],
+            name: 'getApproved',
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '_tokenId',
+                    type: 'uint256',
+                },
+            ],
+            name: 'getCorrectPositionsByRound',
+            outputs: [
+                {
+                    internalType: 'uint256[6]',
+                    name: 'correctPositionsByRound',
+                    type: 'uint256[6]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '_roundId',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_tokenId',
+                    type: 'uint256',
+                },
             ],
             name: 'getCorrectPositionsPerRoundByTokenId',
-            outputs: [{ internalType: 'uint256', name: 'correctPredictions', type: 'uint256' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '_minter', type: 'address' }],
-            name: 'getPointsPerRound',
-            outputs: [{ internalType: 'uint256[6]', name: 'pointsPerRound', type: 'uint256[6]' }],
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'correctPredictions',
+                    type: 'uint256',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [],
             name: 'getResults',
-            outputs: [{ internalType: 'uint256[63]', name: '', type: 'uint256[63]' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '_minter', type: 'address' }],
-            name: 'getTotalPointsByMinterAddress',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
-            name: 'getTotalPointsByTokenId',
-            outputs: [{ internalType: 'uint256', name: 'totalPoints', type: 'uint256' }],
+            outputs: [
+                {
+                    internalType: 'uint256[63]',
+                    name: '',
+                    type: 'uint256[63]',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [
-                { internalType: 'address', name: 'owner', type: 'address' },
-                { internalType: 'address', name: 'operator', type: 'address' },
+                {
+                    internalType: 'uint256',
+                    name: '_tokenId',
+                    type: 'uint256',
+                },
+            ],
+            name: 'getTotalPointsByTokenId',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'totalPoints',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'owner',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: 'operator',
+                    type: 'address',
+                },
             ],
             name: 'isApprovedForAll',
-            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [
-                { internalType: 'uint256', name: '_gameId', type: 'uint256' },
-                { internalType: 'uint256', name: '_teamId', type: 'uint256' },
+                {
+                    internalType: 'uint256',
+                    name: '_gameId',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_teamId',
+                    type: 'uint256',
+                },
             ],
             name: 'isTeamWinnerOfGameId',
-            outputs: [{ internalType: 'bool', name: '_flag', type: 'bool' }],
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '_flag',
+                    type: 'bool',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [
-                { internalType: 'uint256', name: '', type: 'uint256' },
-                { internalType: 'uint256', name: '', type: 'uint256' },
+                {
+                    internalType: 'address',
+                    name: '_address',
+                    type: 'address',
+                },
             ],
-            name: 'itemToBrackets',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            name: 'isWhitelistedAddress',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256[63]', name: '_brackets', type: 'uint256[63]' }],
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            name: 'itemToBrackets',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256[63]',
+                    name: '_brackets',
+                    type: 'uint256[63]',
+                },
+            ],
             name: 'mint',
-            outputs: [{ internalType: 'uint256', name: 'newItemId', type: 'uint256' }],
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'newItemId',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'collateral',
+                    type: 'address',
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'collateralAmount',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'bool',
+                    name: 'isEth',
+                    type: 'bool',
+                },
+                {
+                    internalType: 'uint256[63]',
+                    name: '_brackets',
+                    type: 'uint256[63]',
+                },
+            ],
+            name: 'mintWithDiffCollateral',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'newItemId',
+                    type: 'uint256',
+                },
+            ],
             stateMutability: 'nonpayable',
             type: 'function',
         },
         {
             inputs: [],
+            name: 'mintingPrice',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'multiCollateralOnOffRamp',
+            outputs: [
+                {
+                    internalType: 'contract IMultiCollateralOnOffRamp',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'name',
-            outputs: [{ internalType: 'string', name: '', type: 'string' }],
+            outputs: [
+                {
+                    internalType: 'string',
+                    name: '',
+                    type: 'string',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [],
             name: 'owner',
-            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256',
+                },
+            ],
             name: 'ownerOf',
-            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [],
             name: 'paused',
-            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
-        { inputs: [], name: 'renounceOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
-            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            inputs: [],
+            name: 'renounceOwnership',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
             name: 'results',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [
-                { internalType: 'uint256', name: '', type: 'uint256' },
-                { internalType: 'uint256', name: '', type: 'uint256' },
+                {
+                    internalType: 'uint256',
+                    name: 'amount',
+                    type: 'uint256',
+                },
+            ],
+            name: 'retrieveSUSDAmount',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
             ],
             name: 'roundToGameIds',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-            name: 'roundToPoints',
-            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            inputs: [],
+            name: 'sUSD',
+            outputs: [
+                {
+                    internalType: 'contract IERC20Upgradeable',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'safeBox',
+            outputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [
-                { internalType: 'address', name: 'from', type: 'address' },
-                { internalType: 'address', name: 'to', type: 'address' },
-                { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+                {
+                    internalType: 'address',
+                    name: 'from',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: 'to',
+                    type: 'address',
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256',
+                },
             ],
             name: 'safeTransferFrom',
             outputs: [],
@@ -361,10 +884,26 @@ export const marchMadnessContract = {
         },
         {
             inputs: [
-                { internalType: 'address', name: 'from', type: 'address' },
-                { internalType: 'address', name: 'to', type: 'address' },
-                { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-                { internalType: 'bytes', name: 'data', type: 'bytes' },
+                {
+                    internalType: 'address',
+                    name: 'from',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: 'to',
+                    type: 'address',
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'bytes',
+                    name: 'data',
+                    type: 'bytes',
+                },
             ],
             name: 'safeTransferFrom',
             outputs: [],
@@ -372,9 +911,30 @@ export const marchMadnessContract = {
             type: 'function',
         },
         {
+            inputs: [],
+            name: 'sbFee',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [
-                { internalType: 'address', name: 'operator', type: 'address' },
-                { internalType: 'bool', name: 'approved', type: 'bool' },
+                {
+                    internalType: 'address',
+                    name: 'operator',
+                    type: 'address',
+                },
+                {
+                    internalType: 'bool',
+                    name: 'approved',
+                    type: 'bool',
+                },
             ],
             name: 'setApprovalForAll',
             outputs: [],
@@ -382,14 +942,52 @@ export const marchMadnessContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'uint256', name: '_toDate', type: 'uint256' }],
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '_toDate',
+                    type: 'uint256',
+                },
+            ],
             name: 'setFinalDateForPositioning',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'bool', name: 'paused', type: 'bool' }],
+            inputs: [
+                {
+                    internalType: 'uint256',
+                    name: '_mintingPrice',
+                    type: 'uint256',
+                },
+            ],
+            name: 'setMintingPrice',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_onramper',
+                    type: 'address',
+                },
+            ],
+            name: 'setMultiCollateralOnOffRamp',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bool',
+                    name: 'paused',
+                    type: 'bool',
+                },
+            ],
             name: 'setPaused',
             outputs: [],
             stateMutability: 'nonpayable',
@@ -397,18 +995,29 @@ export const marchMadnessContract = {
         },
         {
             inputs: [
-                { internalType: 'uint256', name: '_roundId', type: 'uint256' },
-                { internalType: 'uint256', name: '_points', type: 'uint256' },
+                {
+                    internalType: 'uint256[63]',
+                    name: '_results',
+                    type: 'uint256[63]',
+                },
             ],
-            name: 'setPointsToRound',
+            name: 'setResultArray',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
         },
         {
             inputs: [
-                { internalType: 'uint256', name: '_gameId', type: 'uint256' },
-                { internalType: 'uint256', name: '_teamId', type: 'uint256' },
+                {
+                    internalType: 'uint256',
+                    name: '_gameId',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_teamId',
+                    type: 'uint256',
+                },
             ],
             name: 'setResultForGame',
             outputs: [],
@@ -417,40 +1026,134 @@ export const marchMadnessContract = {
         },
         {
             inputs: [
-                { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
-                { internalType: 'string', name: '_tokenURI', type: 'string' },
+                {
+                    internalType: 'address',
+                    name: '_safeBox',
+                    type: 'address',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_sbFee',
+                    type: 'uint256',
+                },
             ],
-            name: 'setTokenURI',
+            name: 'setSafeBox',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'bytes4', name: 'interfaceId', type: 'bytes4' }],
+            inputs: [
+                {
+                    internalType: 'string',
+                    name: '_urlToUse',
+                    type: 'string',
+                },
+            ],
+            name: 'setURLToUse',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_address',
+                    type: 'address',
+                },
+                {
+                    internalType: 'bool',
+                    name: 'enabled',
+                    type: 'bool',
+                },
+            ],
+            name: 'setWhitelistedAddress',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_address',
+                    type: 'address',
+                },
+            ],
+            name: 'setsUSD',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes4',
+                    name: 'interfaceId',
+                    type: 'bytes4',
+                },
+            ],
             name: 'supportsInterface',
-            outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [],
             name: 'symbol',
-            outputs: [{ internalType: 'string', name: '', type: 'string' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
-            name: 'tokenURI',
-            outputs: [{ internalType: 'string', name: '', type: 'string' }],
+            outputs: [
+                {
+                    internalType: 'string',
+                    name: '',
+                    type: 'string',
+                },
+            ],
             stateMutability: 'view',
             type: 'function',
         },
         {
             inputs: [
-                { internalType: 'address', name: 'from', type: 'address' },
-                { internalType: 'address', name: 'to', type: 'address' },
-                { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+                {
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256',
+                },
+            ],
+            name: 'tokenURI',
+            outputs: [
+                {
+                    internalType: 'string',
+                    name: '',
+                    type: 'string',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'from',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: 'to',
+                    type: 'address',
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'tokenId',
+                    type: 'uint256',
+                },
             ],
             name: 'transferFrom',
             outputs: [],
@@ -458,7 +1161,13 @@ export const marchMadnessContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: 'newOwner',
+                    type: 'address',
+                },
+            ],
             name: 'transferOwnership',
             outputs: [],
             stateMutability: 'nonpayable',
@@ -466,12 +1175,52 @@ export const marchMadnessContract = {
         },
         {
             inputs: [
-                { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
-                { internalType: 'uint256[63]', name: '_brackets', type: 'uint256[63]' },
+                {
+                    internalType: 'uint256',
+                    name: '_tokenId',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256[63]',
+                    name: '_brackets',
+                    type: 'uint256[63]',
+                },
             ],
             name: 'updateBracketsForAlreadyMintedItem',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'urlToUse',
+            outputs: [
+                {
+                    internalType: 'string',
+                    name: '',
+                    type: 'string',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            name: 'whitelistedAddresses',
+            outputs: [
+                {
+                    internalType: 'bool',
+                    name: '',
+                    type: 'bool',
+                },
+            ],
+            stateMutability: 'view',
             type: 'function',
         },
     ],

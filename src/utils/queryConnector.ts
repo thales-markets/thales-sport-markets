@@ -34,7 +34,7 @@ export const refetchAfterVoucherClaim = (walletAddress: string, networkId: Netwo
 };
 
 export const refetchAfterMarchMadnessMint = (walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.MarchMadness(walletAddress, networkId));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.MarchMadness.Data(walletAddress, networkId));
 };
 
 export const refetchVaultData = (vaultAddress: string, walletAddress: string, networkId: Network) => {

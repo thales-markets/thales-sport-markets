@@ -2,8 +2,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import { LINKS } from 'constants/links';
-import { initialBracketsData } from 'constants/marchMadness';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { DEFAULT_BRACKET_ID, initialBracketsData } from 'constants/marchMadness';
 import { Network } from 'enums/network';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
@@ -18,6 +17,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { localStore } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
+import { getLocalStorageKey } from 'utils/marchMadness';
 import { history } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
 
@@ -37,7 +37,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const lsBrackets = localStore.get(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress);
+    const lsBrackets = localStore.get(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress));
     const [isButtonDisabled, setIsButtonDisabled] = useState(lsBrackets !== undefined);
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
@@ -52,7 +52,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
 
     const buttonClickHandler = () => {
         if (isWalletConnected) {
-            localStore.set(LOCAL_STORAGE_KEYS.BRACKETS + networkId + walletAddress, initialBracketsData);
+            localStore.set(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress), initialBracketsData);
             setIsButtonDisabled(true);
             history.push({
                 pathname: location.pathname,
@@ -68,12 +68,12 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
 
     const timeLeftToMint = useMemo(() => {
         return {
-            days: Math.floor((marchMadnessData?.hoursLeftToMint || 0) / 24),
+            days: Math.floor((marchMadnessData?.minutesLeftToMint || 0) / 24),
             hours:
-                (marchMadnessData?.hoursLeftToMint || 0) -
-                Math.floor((marchMadnessData?.hoursLeftToMint || 0) / 24) * 24,
+                (marchMadnessData?.minutesLeftToMint || 0) -
+                Math.floor((marchMadnessData?.minutesLeftToMint || 0) / 24) * 24,
         };
-    }, [marchMadnessData?.hoursLeftToMint]);
+    }, [marchMadnessData?.minutesLeftToMint]);
 
     const reward = networkId === Network.Arbitrum ? '40,000 THALES' : '13,000 OP';
     const firstPoolReward = networkId === Network.Arbitrum ? '30,000 THALES' : '10,000 OP';

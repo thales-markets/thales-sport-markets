@@ -1196,3 +1196,5 @@ export const wildCardTeams: MarchMadTeam[] = [
         position: 4,
     },
 ];
+
+export const DEFAULT_BRACKET_ID = -1;
