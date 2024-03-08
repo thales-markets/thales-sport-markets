@@ -83,6 +83,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     ]);
 
     const buttonClickHandler = () => {
+        console.log('jes please');
         if (isWalletConnected) {
             localStore.set(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress), initialBracketsData);
             setIsButtonDisabled(true);
@@ -309,6 +310,7 @@ const Text = styled.span`
     line-height: normal;
     margin-top: 30px;
     margin-bottom: 50px;
+    letter-spacing: 1.4px;
 `;
 
 const DropdownWrapper = styled.div`
