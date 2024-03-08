@@ -1301,7 +1301,10 @@
             "round-1": "2. Runde",
             "new-bracket": "Neue Halterung",
             "nft-id": "NFT-ID #{{id}}",
-            "error-minting-price": "Prägepreis kann nicht abgerufen werden!"
+            "error-minting-price": "Prägepreis kann nicht abgerufen werden!",
+            "my-brackets": "Meine Klammern",
+            "bracket-id": "Klammer-ID #{{id}}",
+            "confirmation-message": "Klammer erfolgreich geprägt"
         },
         "regions": {
             "east": "Ost",

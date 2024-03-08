@@ -33,8 +33,11 @@ export const refetchAfterVoucherClaim = (walletAddress: string, networkId: Netwo
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucherEscrow(walletAddress, networkId));
 };
 
-export const refetchAfterMarchMadnessMint = (walletAddress: string, tokenId: number, networkId: Network) => {
+export const refetchMarchMadnessData = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.MarchMadness.Data(walletAddress, networkId));
+};
+
+export const refetchMarchMadnessBracket = (tokenId: number, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.MarchMadness.Bracket(tokenId, networkId));
 };
 

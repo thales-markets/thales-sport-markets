@@ -7,6 +7,7 @@ import SelectInput from 'components/SelectInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import {
+    APPROVE_MULTIPLIER,
     DEFAULT_BRACKET_ID,
     ELITE8_ROUND_EAST_MATCH_ID,
     ELITE8_ROUND_MIDWEST_MATCH_ID,
@@ -37,13 +38,14 @@ import {
     initialBracketsData,
     wildCardTeams,
 } from 'constants/marchMadness';
-import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, APPROVAL_BUFFER } from 'constants/markets';
+import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import { BigNumber } from 'ethers';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import useLeaderboardByVolumeQuery from 'queries/marchMadness/useLeaderboardByVolumeQuery';
 import useLoeaderboardByGuessedCorrectlyQuery from 'queries/marchMadness/useLoeaderboardByGuessedCorrectlyQuery';
 import useMarchMadnessBracketQuery from 'queries/marchMadness/useMarchMadnessBracketQuery';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -54,7 +56,7 @@ import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'r
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
-import { COLLATERAL_DECIMALS, coinParser, localStore, roundNumberToDecimals, truncToDecimals } from 'thales-utils';
+import { COLLATERAL_DECIMALS, coinParser, localStore, truncToDecimals } from 'thales-utils';
 import { BracketMatch } from 'types/marchMadness';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction } from 'utils/biconomy';
@@ -62,13 +64,12 @@ import { getCollateral, getDefaultCollateral, isStableCurrency } from 'utils/col
 import { getFirstMatchIndexInRound, getLocalStorageKey, getNumberOfMatchesPerRound } from 'utils/marchMadness';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { refetchAfterMarchMadnessMint } from 'utils/queryConnector';
+import { refetchMarchMadnessData } from 'utils/queryConnector';
 import Match from '../Match';
 import { MatchProps } from '../Match/Match';
 import MintNFTModal from '../MintNFTModal';
 import ShareModal from '../ShareModal';
 import WildCardMatch from '../WildCardMatch';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -233,13 +234,16 @@ const Brackets: React.FC = () => {
         }
     }, [networkId, marchMadnessData, winnerTeamIds, selectedBracketId]);
 
-    // set initial bracket ID to last one if it exists
+    // set initial bracket ID to last one if it exists and not modified
     useEffect(() => {
-        if (marchMadnessData && marchMadnessData.bracketsIds.length) {
+        const isDefaultBracketPresent =
+            localStore.get(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress)) !== undefined;
+
+        if (marchMadnessData && marchMadnessData.bracketsIds.length && !isDefaultBracketPresent) {
             const lastBracketId = Math.max(...marchMadnessData.bracketsIds);
             setSelectedBracketId(lastBracketId);
         }
-    }, [marchMadnessData]);
+    }, [marchMadnessData, networkId, walletAddress]);
 
     // check if submit bracket is disabled and set it
     useEffect(() => {
@@ -270,12 +274,7 @@ const Brackets: React.FC = () => {
             const getAllowance = async () => {
                 try {
                     const parsedAmount = coinParser(
-                        isStableCurrency(selectedCollateral)
-                            ? marchMadnessData.mintingPrice.toString()
-                            : roundNumberToDecimals(
-                                  convertFromStable(marchMadnessData.mintingPrice),
-                                  COLLATERAL_DECIMALS[selectedCollateral]
-                              ).toString(),
+                        marchMadnessData.mintingPrice.toString(),
                         networkId,
                         selectedCollateral
                     );
@@ -394,14 +393,17 @@ const Brackets: React.FC = () => {
                     const txResult = await tx.wait();
 
                     if (txResult && txResult.transactionHash) {
-                        console.log(tx); // TODO: remove
+                        window.localStorage.removeItem(
+                            getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress)
+                        ); // TODO: move to thales-utils
+                        toastId &&
+                            toast.update(
+                                toastId,
+                                getSuccessToastOptions(t(`march-madness.brackets.confirmation-message`))
+                            );
+                        refetchMarchMadnessData(walletAddress, networkId);
                         if (isBracketMinted) {
-                            refetchAfterMarchMadnessMint(walletAddress, selectedBracketId, networkId);
                             setIsUpdated(true);
-                        } else {
-                            const newBracketId = Number(tx);
-                            refetchAfterMarchMadnessMint(walletAddress, newBracketId, networkId);
-                            setSelectedBracketId(newBracketId);
                         }
                         setIsBracketMinted(true);
                         setIsSubmitDisabled(true);
@@ -665,19 +667,11 @@ const Brackets: React.FC = () => {
         );
     };
 
-    const resetBracketsData = (bracketId: number) => {
-        setSelectedBracketId(bracketId);
-        localStore.set(getLocalStorageKey(bracketId, networkId, walletAddress), initialBracketsData);
-        setBracketsData(initialBracketsData);
-    };
-
     const getMyTotalScore = () => {
         const totalPoints = marchMadnessData?.winningsPerRound.reduce((a, b) => a + b, 0) || 0;
 
-        const bracketsIdsOptions: Array<{ value: number; label: string }> = [
-            { value: DEFAULT_BRACKET_ID, label: t('march-madness.brackets.new-bracket') },
-        ];
-        let defaultOption = 0;
+        const bracketsIdsOptions: Array<{ value: number; label: string }> = [];
+        let defaultOptionIndex = -1;
 
         if (marchMadnessData && marchMadnessData.bracketsIds.length) {
             const bracketsIdsDesc = [...marchMadnessData.bracketsIds].sort((a, b) => b - a);
@@ -685,13 +679,14 @@ const Brackets: React.FC = () => {
                 const bracketId = bracketsIdsDesc[i];
                 bracketsIdsOptions.push({
                     value: bracketId,
-                    label: t('march-madness.brackets.nft-id', { id: bracketsIdsDesc[i] }),
+                    label: t('march-madness.brackets.bracket-id', { id: bracketsIdsDesc[i] }),
                 });
                 if (selectedBracketId === bracketId) {
-                    defaultOption = bracketId;
+                    defaultOptionIndex = i;
                 }
             }
         }
+
         return (
             <MyTotalScore>
                 <StatsColumn width="13%">
@@ -706,14 +701,32 @@ const Brackets: React.FC = () => {
                     .map((_round, index) => getScorePerRound(index))}
                 <DropdownContainer>
                     <SelectInput
-                        defaultValue={defaultOption}
+                        placeholder={t('march-madness.brackets.my-brackets')}
+                        defaultValue={defaultOptionIndex}
                         options={bracketsIdsOptions}
-                        handleChange={(value) => resetBracketsData(Number(value))}
-                        width={150}
+                        handleChange={(value) => setSelectedBracketId(Number(value))}
+                        width={170}
                     />
                 </DropdownContainer>
             </MyTotalScore>
         );
+    };
+
+    const createAsBracket = (bracketId: number) => {
+        const lsBrackets = localStore.get(getLocalStorageKey(bracketId, networkId, walletAddress));
+        const currentBracketData =
+            lsBrackets !== undefined && (lsBrackets as BracketMatch[]).length
+                ? (lsBrackets as BracketMatch[])
+                : initialBracketsData;
+
+        localStore.set(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress), currentBracketData);
+        setBracketsData(currentBracketData);
+        setSelectedBracketId(DEFAULT_BRACKET_ID);
+    };
+
+    const resetBracket = () => {
+        localStore.set(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress), initialBracketsData);
+        setBracketsData(initialBracketsData);
     };
 
     const onTwitterIconClick = () => {
@@ -773,6 +786,31 @@ const Brackets: React.FC = () => {
                             <RoundName>{t('march-madness.brackets.round-1')}</RoundName>
                             <RoundName>{t('march-madness.brackets.round-0')}</RoundName>
                         </RowHeader>
+                        {!!marchMadnessData?.bracketsIds.length && (
+                            <CreateNewBracketWrapper>
+                                <Button
+                                    additionalStyles={{
+                                        fontSize: '14px',
+                                        fontFamily: "'NCAA' !important",
+                                        textTransform: 'uppercase',
+                                        background: theme.marchMadness.button.background.primary,
+                                        border: `2px solid ${theme.marchMadness.borderColor.primary}`,
+                                        borderRadius: '4px',
+                                        color: theme.marchMadness.button.textColor.primary,
+                                        width: '160px',
+                                        padding: '3px 10px',
+                                    }}
+                                    onClick={() =>
+                                        selectedBracketId === DEFAULT_BRACKET_ID
+                                            ? resetBracket()
+                                            : createAsBracket(selectedBracketId)
+                                    }
+                                >
+                                    {/* TODO:  */}
+                                    {selectedBracketId === DEFAULT_BRACKET_ID ? 'Clear all' : 'Create new as...'}
+                                </Button>
+                            </CreateNewBracketWrapper>
+                        )}
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
                                 {t('march-madness.regions.south')}
@@ -935,8 +973,7 @@ const Brackets: React.FC = () => {
                     )}
                     {openApprovalModal && marchMadnessData && (
                         <ApprovalModal
-                            // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                            defaultAmount={marchMadnessData.mintingPrice * (1 + APPROVAL_BUFFER)}
+                            defaultAmount={marchMadnessData.mintingPrice * APPROVE_MULTIPLIER}
                             collateralIndex={selectedCollateralIndex}
                             tokenSymbol={selectedCollateral}
                             isAllowing={isAllowing}
@@ -964,12 +1001,19 @@ const Container = styled.div`
 `;
 
 const BracketsWrapper = styled.div`
+    position: relative;
     width: 1350px;
     height: 1010px;
     background-image: url('${background}'), url('${backgrounBall}');
     background-size: auto;
     background-position: 0 71px, -291px -162px;
     background-repeat: no-repeat;
+`;
+
+const CreateNewBracketWrapper = styled.div`
+    position: absolute;
+    left: calc(50% - 80px);
+    margin-top: 20px;
 `;
 
 const RowHalf = styled.div`

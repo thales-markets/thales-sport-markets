@@ -1301,7 +1301,10 @@
             "share": "Condividi questa parentesi",
             "new-bracket": "Nuova staffa",
             "error-minting-price": "Il prezzo di conio non può essere recuperato!",
-            "nft-id": "ID NFT n.{{id}}"
+            "nft-id": "ID NFT n.{{id}}",
+            "my-brackets": "Le mie parentesi",
+            "confirmation-message": "Staffa coniata con successo",
+            "bracket-id": "ID parentesi #{{id}}"
         },
         "regions": {
             "west": "ovest",

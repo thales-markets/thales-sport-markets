@@ -1301,7 +1301,10 @@
             "round-5": "最终的",
             "error-minting-price": "铸币价格无法获取！",
             "nft-id": "NFT ID #{{id}}",
-            "new-bracket": "新支架"
+            "new-bracket": "新支架",
+            "bracket-id": "支架 ID #{{id}}",
+            "confirmation-message": "支架铸造成功",
+            "my-brackets": "我的括号"
         },
         "regions": {
             "west": "西方",

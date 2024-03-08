@@ -1143,9 +1143,10 @@
             "round-3": "Elite 8",
             "round-4": "Final 4",
             "round-5": "Final",
-            "nft-id": "NFT ID #{{id}}",
-            "new-bracket": "New bracket",
+            "bracket-id": "Bracket ID #{{id}}",
+            "my-brackets": "My brackets",
             "error-minting-price": "Minting price can't be fetched!",
+            "confirmation-message": "Bracket successfully minted",
             "stats": {
                 "my-stats": "My stats",
                 "rank-volume": "Rank by volume",

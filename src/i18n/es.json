@@ -1301,7 +1301,10 @@
             "round-1": "2da ronda",
             "nft-id": "N.º de identificación de NFT{{id}}",
             "new-bracket": "Nuevo soporte",
-            "error-minting-price": "¡El precio de acuñación no se puede recuperar!"
+            "error-minting-price": "¡El precio de acuñación no se puede recuperar!",
+            "my-brackets": "Mis corchetes",
+            "bracket-id": "Número de identificación del grupo {{id}}",
+            "confirmation-message": "Soporte acuñado con éxito"
         },
         "regions": {
             "west": "Oeste",

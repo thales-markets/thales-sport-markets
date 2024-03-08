@@ -1301,7 +1301,10 @@
             "team-1": "ทีม 1",
             "nft-id": "รหัส NFT #{{id}}",
             "new-bracket": "วงเล็บใหม่",
-            "error-minting-price": "ราคาเหรียญกษาปณ์หาไม่ได้แล้ว!"
+            "error-minting-price": "ราคาเหรียญกษาปณ์หาไม่ได้แล้ว!",
+            "my-brackets": "วงเล็บของฉัน",
+            "bracket-id": "รหัสวงเล็บ #{{id}}",
+            "confirmation-message": "สร้างวงเล็บสำเร็จแล้ว"
         },
         "regions": {
             "midwest": "มิดเวสต์",

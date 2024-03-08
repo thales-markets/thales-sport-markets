@@ -1301,7 +1301,10 @@
             "round-3": "Élite 8",
             "nft-id": "N° d'identification NFT {{id}}",
             "new-bracket": "Nouveau support",
-            "error-minting-price": "Le prix de frappe ne peut pas être récupéré !"
+            "error-minting-price": "Le prix de frappe ne peut pas être récupéré !",
+            "my-brackets": "Mes supports",
+            "confirmation-message": "Support frappé avec succès",
+            "bracket-id": "Numéro d'identification du support {{id}}"
         },
         "regions": {
             "south": "Sud",

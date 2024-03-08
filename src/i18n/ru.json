@@ -1301,7 +1301,10 @@
             "round-5": "Финал",
             "nft-id": "NFT-идентификатор #{{id}}",
             "new-bracket": "Новый кронштейн",
-            "error-minting-price": "Невозможно получить цену чеканки!"
+            "error-minting-price": "Невозможно получить цену чеканки!",
+            "confirmation-message": "Кронштейн успешно отчеканен",
+            "bracket-id": "Идентификатор скобки #{{id}}",
+            "my-brackets": "Мои брекеты"
         },
         "regions": {
             "west": "Запад",

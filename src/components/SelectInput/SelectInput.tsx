@@ -9,11 +9,19 @@ type SelectInputProps = {
     options: SelectOptions;
     handleChange: (value: number | undefined | null) => void;
     defaultValue?: number;
+    placeholder?: string;
     width?: number;
     isDisabled?: boolean;
 };
 
-const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaultValue, width, isDisabled }) => {
+const SelectInput: React.FC<SelectInputProps> = ({
+    options,
+    handleChange,
+    defaultValue,
+    placeholder,
+    width,
+    isDisabled,
+}) => {
     const theme: ThemeInterface = useTheme();
     const defaultOption = options[defaultValue ? defaultValue : 0];
 
@@ -70,6 +78,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, handleChange, defaul
     return (
         <Select
             value={defaultOption}
+            placeholder={placeholder}
             options={options}
             styles={customStyled}
             onChange={(props) => {
