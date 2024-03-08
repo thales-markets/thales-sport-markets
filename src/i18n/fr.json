@@ -1274,7 +1274,10 @@
             "round-1": "2e tour",
             "round-4": "Finale 4",
             "share": "Partager cette parenthèse",
-            "round-3": "Élite 8"
+            "round-3": "Élite 8",
+            "nft-id": "N° d'identification NFT {{id}}",
+            "new-bracket": "Nouveau support",
+            "error-minting-price": "Le prix de frappe ne peut pas être récupéré !"
         },
         "regions": {
             "south": "Sud",

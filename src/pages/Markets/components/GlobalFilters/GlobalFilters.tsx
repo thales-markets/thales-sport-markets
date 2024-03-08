@@ -110,7 +110,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         <DropdownContrainer>
                             <Dropdown<OddsType>
                                 list={ODDS_TYPES}
-                                selectedItem={selectedOddsType}
+                                selectedItem={t(`common.odds.${selectedOddsType}`)}
                                 onSelect={setSelectedOddsType}
                             />
                         </DropdownContrainer>

@@ -1274,7 +1274,10 @@
             "round-4": "Finale 4",
             "share": "Teilen Sie diese Klammer",
             "team-1": "Mannschaft 1",
-            "round-1": "2. Runde"
+            "round-1": "2. Runde",
+            "new-bracket": "Neue Halterung",
+            "nft-id": "NFT-ID #{{id}}",
+            "error-minting-price": "Prägepreis kann nicht abgerufen werden!"
         },
         "regions": {
             "east": "Ost",

@@ -1119,13 +1119,15 @@
             "round-3": "Elite 8",
             "round-4": "Final 4",
             "round-5": "Final",
+            "nft-id": "NFT ID #{{id}}",
+            "new-bracket": "New bracket",
+            "error-minting-price": "Minting price can't be fetched!",
             "stats": {
                 "my-stats": "My stats",
                 "rank-volume": "Rank by volume",
                 "rank-games": "Rank by guessed games",
                 "my-total-score": "My total score",
-                "points": "Points",
-                "bonus": "Bonus"
+                "points": "Points"
             },
             "modal-mint": {
                 "finish-text-1": "Well done!",

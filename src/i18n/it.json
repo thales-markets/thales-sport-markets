@@ -1274,7 +1274,10 @@
             "submit-modify": "Staffa di aggiornamento",
             "round-5": "Finale",
             "submit": "Staffa di finitura",
-            "share": "Condividi questa parentesi"
+            "share": "Condividi questa parentesi",
+            "new-bracket": "Nuova staffa",
+            "error-minting-price": "Il prezzo di conio non può essere recuperato!",
+            "nft-id": "ID NFT n.{{id}}"
         },
         "regions": {
             "west": "ovest",

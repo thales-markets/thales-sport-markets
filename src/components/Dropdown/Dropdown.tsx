@@ -33,7 +33,7 @@ function Dropdown<T>({ list, onSelect, disabled, itemRenderer, selectedItem, sty
                         }}
                         className={disabled ? 'disabled' : ''}
                     >
-                        {t(`common.odds.${selectedItem}`)}
+                        {selectedItem}
                         <FlexDiv>
                             <ArrowDownIcon className={`icon-exotic icon-exotic--down`} />
                         </FlexDiv>

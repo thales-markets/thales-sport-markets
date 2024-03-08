@@ -1,7 +1,11 @@
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
 import background from 'assets/images/march-madness/background-marchmadness.svg';
+import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
+import SelectInput from 'components/SelectInput';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import {
     DEFAULT_BRACKET_ID,
     ELITE8_ROUND_EAST_MATCH_ID,
@@ -14,8 +18,10 @@ import {
     FIRST_ROUND_MIDWEST_MATCH_IDS,
     FIRST_ROUND_SOUTH_MATCH_IDS,
     FIRST_ROUND_WEST_MATCH_IDS,
+    MAX_TOTAL_POINTS,
     NUMBER_OF_MATCHES,
     NUMBER_OF_ROUNDS,
+    POINTS_PER_ROUND,
     SECOND_ROUND_EAST_MATCH_IDS,
     SECOND_ROUND_MATCH_IDS,
     SECOND_ROUND_MIDWEST_MATCH_IDS,
@@ -31,22 +37,30 @@ import {
     initialBracketsData,
     wildCardTeams,
 } from 'constants/marchMadness';
+import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, APPROVAL_BUFFER } from 'constants/markets';
+import { BigNumber } from 'ethers';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import useLeaderboardByVolumeQuery from 'queries/marchMadness/useLeaderboardByVolumeQuery';
 import useLoeaderboardByGuessedCorrectlyQuery from 'queries/marchMadness/useLoeaderboardByGuessedCorrectlyQuery';
 import useMarchMadnessBracketQuery from 'queries/marchMadness/useMarchMadnessBracketQuery';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getParlayPayment } from 'redux/modules/parlay';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { localStore } from 'thales-utils';
+import { FlexDivColumnCentered } from 'styles/common';
+import { COLLATERAL_DECIMALS, coinParser, localStore, roundNumberToDecimals, truncToDecimals } from 'thales-utils';
 import { BracketMatch } from 'types/marchMadness';
 import { ThemeInterface } from 'types/ui';
+import { executeBiconomyTransaction } from 'utils/biconomy';
+import { getCollateral, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
 import { getFirstMatchIndexInRound, getLocalStorageKey, getNumberOfMatchesPerRound } from 'utils/marchMadness';
+import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterMarchMadnessMint } from 'utils/queryConnector';
 import Match from '../Match';
@@ -54,6 +68,7 @@ import { MatchProps } from '../Match/Match';
 import MintNFTModal from '../MintNFTModal';
 import ShareModal from '../ShareModal';
 import WildCardMatch from '../WildCardMatch';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -62,6 +77,10 @@ const Brackets: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isAA = useSelector((state: RootState) => getIsAA(state));
+    const parlayPayment = useSelector(getParlayPayment);
+    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
 
     const [selectedBracketId, setSelectedBracketId] = useState<number>(DEFAULT_BRACKET_ID);
     const [isBracketMinted, setIsBracketMinted] = useState(false);
@@ -74,6 +93,9 @@ const Brackets: React.FC = () => {
     const [isUpdating, setIsUpdating] = useState(false);
     const [isUpdated, setIsUpdated] = useState(false);
     const [isMintError, setIsMintError] = useState(false);
+    const [hasAllowance, setHasAllowance] = useState(false);
+    const [isAllowing, setIsAllowing] = useState(false);
+    const [openApprovalModal, setOpenApprovalModal] = useState(false);
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
         enabled: isAppReady,
@@ -94,6 +116,38 @@ const Brackets: React.FC = () => {
     const isBracketMintedOnContract = useMemo(
         () => marchMadnessData && marchMadnessData.bracketsIds.includes(selectedBracketId),
         [marchMadnessData, selectedBracketId]
+    );
+
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+        networkId,
+        selectedCollateralIndex,
+    ]);
+    const collateralAddress =
+        networkConnector.multipleCollateral && networkConnector.multipleCollateral[selectedCollateral]?.address;
+    const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
+    const isDefaultCollateral = selectedCollateral === defaultCollateral;
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const convertFromStable = useCallback(
+        (value: number) => {
+            if (isStableCurrency(selectedCollateral)) {
+                return value;
+            } else {
+                const rate = exchangeRates?.[selectedCollateral];
+                const priceFeedBuffer = 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE;
+                return rate
+                    ? Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[selectedCollateral]) /
+                          10 ** COLLATERAL_DECIMALS[selectedCollateral]
+                    : 0;
+            }
+        },
+        [selectedCollateral, exchangeRates]
     );
 
     // populate bracket
@@ -181,13 +235,11 @@ const Brackets: React.FC = () => {
 
     // set initial bracket ID to last one if it exists
     useEffect(() => {
-        if (marchMadnessData) {
-            const lastBracketId = Math.max(...marchMadnessData.bracketsIds, DEFAULT_BRACKET_ID);
-            if (selectedBracketId === DEFAULT_BRACKET_ID && lastBracketId !== DEFAULT_BRACKET_ID) {
-                setSelectedBracketId(lastBracketId);
-            }
+        if (marchMadnessData && marchMadnessData.bracketsIds.length) {
+            const lastBracketId = Math.max(...marchMadnessData.bracketsIds);
+            setSelectedBracketId(lastBracketId);
         }
-    }, [marchMadnessData, selectedBracketId]);
+    }, [marchMadnessData]);
 
     // check if submit bracket is disabled and set it
     useEffect(() => {
@@ -208,6 +260,166 @@ const Brackets: React.FC = () => {
             setIsSubmitDisabled(submitDisabled);
         }
     }, [isBracketMinted, bracketsData, marchMadnessBracket, isBracketMintedOnContract]);
+
+    // check allowance
+    useEffect(() => {
+        const { marchMadnessContract, multipleCollateral, signer } = networkConnector;
+        if (marchMadnessContract && multipleCollateral && signer && marchMadnessData) {
+            const collateralContractWithSigner = multipleCollateral[selectedCollateral]?.connect(signer);
+
+            const getAllowance = async () => {
+                try {
+                    const parsedAmount = coinParser(
+                        isStableCurrency(selectedCollateral)
+                            ? marchMadnessData.mintingPrice.toString()
+                            : roundNumberToDecimals(
+                                  convertFromStable(marchMadnessData.mintingPrice),
+                                  COLLATERAL_DECIMALS[selectedCollateral]
+                              ).toString(),
+                        networkId,
+                        selectedCollateral
+                    );
+                    const allowance = await checkAllowance(
+                        parsedAmount,
+                        collateralContractWithSigner,
+                        walletAddress,
+                        marchMadnessContract.address
+                    );
+
+                    setHasAllowance(allowance);
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+            if (isWalletConnected && marchMadnessData.mintingPrice) {
+                isEth ? setHasAllowance(true) : getAllowance();
+            }
+        }
+    }, [
+        walletAddress,
+        isWalletConnected,
+        hasAllowance,
+        isAllowing,
+        marchMadnessData,
+        selectedCollateralIndex,
+        networkId,
+        selectedCollateral,
+        isEth,
+        isDefaultCollateral,
+        convertFromStable,
+    ]);
+
+    const handleAllowance = async (approveAmount: BigNumber) => {
+        const { marchMadnessContract, sUSDContract, signer, multipleCollateral } = networkConnector;
+        if (marchMadnessContract && multipleCollateral && signer) {
+            setIsAllowing(true);
+            const id = toast.loading(t('market.toast-message.transaction-pending'));
+            try {
+                const collateralContractWithSigner = isDefaultCollateral
+                    ? sUSDContract?.connect(signer)
+                    : multipleCollateral[selectedCollateral]?.connect(signer);
+
+                const addressToApprove = marchMadnessContract.address;
+                let txResult;
+                if (isAA) {
+                    txResult = await executeBiconomyTransaction(
+                        collateralContractWithSigner?.address ?? '',
+                        collateralContractWithSigner,
+                        'approve',
+                        [addressToApprove, approveAmount]
+                    );
+                } else {
+                    const tx = await collateralContractWithSigner?.approve(addressToApprove, approveAmount);
+                    setOpenApprovalModal(false);
+                    txResult = await tx.wait();
+                }
+
+                if (txResult && txResult.transactionHash) {
+                    setIsAllowing(false);
+                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+                }
+            } catch (e) {
+                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                console.log(e);
+                setIsAllowing(false);
+            }
+        }
+    };
+
+    const handleSubmit = async () => {
+        setIsMintError(false);
+        const { marchMadnessContract, signer } = networkConnector;
+        if (marchMadnessContract && signer) {
+            let toastId: string | number = '';
+            if (marchMadnessData) {
+                const marchMadnessContractWithSigner = marchMadnessContract.connect(signer);
+                const bracketsContractData = bracketsData.map((match) =>
+                    match.isHomeTeamSelected ? match.homeTeamId : match.awayTeamId
+                );
+
+                try {
+                    let tx;
+                    if (isBracketMinted) {
+                        setIsUpdating(true);
+                        tx = await marchMadnessContractWithSigner.updateBracketsForAlreadyMintedItem(
+                            selectedBracketId,
+                            bracketsContractData
+                        );
+                    } else {
+                        setIsMinting(true);
+                        toastId = toast.loading(t('market.toast-message.transaction-pending'));
+
+                        if (isDefaultCollateral) {
+                            tx = await marchMadnessContractWithSigner.mint(bracketsContractData);
+                        } else {
+                            const collateralAmount = coinParser(
+                                truncToDecimals(
+                                    convertFromStable(marchMadnessData.mintingPrice),
+                                    COLLATERAL_DECIMALS[selectedCollateral]
+                                ),
+                                networkId,
+                                selectedCollateral
+                            );
+
+                            tx = await marchMadnessContractWithSigner.mintWithDiffCollateral(
+                                collateralAddress,
+                                collateralAmount,
+                                isEth,
+                                bracketsContractData
+                            );
+                        }
+                    }
+
+                    const txResult = await tx.wait();
+
+                    if (txResult && txResult.transactionHash) {
+                        console.log(tx); // TODO: remove
+                        if (isBracketMinted) {
+                            refetchAfterMarchMadnessMint(walletAddress, selectedBracketId, networkId);
+                            setIsUpdated(true);
+                        } else {
+                            const newBracketId = Number(tx);
+                            refetchAfterMarchMadnessMint(walletAddress, newBracketId, networkId);
+                            setSelectedBracketId(newBracketId);
+                        }
+                        setIsBracketMinted(true);
+                        setIsSubmitDisabled(true);
+                        setIsUpdating(false);
+                        setIsMinting(false);
+                    }
+                } catch (e) {
+                    toastId && toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                    console.log('Error ', e);
+                    setIsUpdating(false);
+                    setIsMinting(false);
+                    setIsMintError(true);
+                }
+            } else {
+                toast.update(toastId, getErrorToastOptions(t('march-madness.brackets.error-minting-price')));
+                setIsMintError(true);
+            }
+        }
+    };
 
     const isTeamLostInPreviousRounds = (teamId: number | undefined) => {
         if (teamId === undefined) {
@@ -380,49 +592,6 @@ const Brackets: React.FC = () => {
         );
     };
 
-    const handleSubmit = async () => {
-        setIsMintError(false);
-        const { marchMadnessContract, signer } = networkConnector;
-        if (marchMadnessContract && signer) {
-            const marchMadnessContractWithSigner = marchMadnessContract.connect(signer);
-            const bracketsContractData = bracketsData.map((match) =>
-                match.isHomeTeamSelected ? match.homeTeamId : match.awayTeamId
-            );
-
-            try {
-                let tx;
-                if (isBracketMinted) {
-                    setIsUpdating(true);
-                    tx = await marchMadnessContractWithSigner.updateBracketsForAlreadyMintedItem(
-                        marchMadnessData?.bracketsIds,
-                        bracketsContractData
-                    );
-                } else {
-                    setIsMinting(true);
-                    tx = await marchMadnessContractWithSigner.mint(bracketsContractData);
-                }
-
-                const txResult = await tx.wait();
-
-                if (txResult && txResult.transactionHash) {
-                    refetchAfterMarchMadnessMint(walletAddress, networkId);
-                    if (isBracketMinted) {
-                        setIsUpdated(true);
-                    }
-                    setIsBracketMinted(true);
-                    setIsSubmitDisabled(true);
-                    setIsUpdating(false);
-                    setIsMinting(false);
-                }
-            } catch (e) {
-                setIsUpdating(false);
-                setIsMinting(false);
-                setIsMintError(true);
-                console.log('Error ', e);
-            }
-        }
-    };
-
     const leaderboardByVolumeQuery = useLeaderboardByVolumeQuery(networkId);
     const leaderboardByGuessedGamesQuery = useLoeaderboardByGuessedCorrectlyQuery(networkId);
 
@@ -488,39 +657,60 @@ const Brackets: React.FC = () => {
                 <StatsRow margin="0 0 5px 0">
                     <StatsText fontSize={14}>{t('march-madness.brackets.stats.points')}</StatsText>
                     <StatsText fontWeight={600} fontSize={14}>
-                        {roundPoints + '/' + getNumberOfMatchesPerRound(round)}
+                        {roundPoints + '/' + POINTS_PER_ROUND}
                     </StatsText>
-                </StatsRow>
-                <StatsRow>
-                    <StatsText fontSize={14}>{t('march-madness.brackets.stats.bonus')}</StatsText>
                 </StatsRow>
             </StatsColumn>
         );
     };
 
+    const resetBracketsData = (bracketId: number) => {
+        setSelectedBracketId(bracketId);
+        localStore.set(getLocalStorageKey(bracketId, networkId, walletAddress), initialBracketsData);
+        setBracketsData(initialBracketsData);
+    };
+
     const getMyTotalScore = () => {
         const totalPoints = marchMadnessData?.winningsPerRound.reduce((a, b) => a + b, 0) || 0;
 
+        const bracketsIdsOptions: Array<{ value: number; label: string }> = [
+            { value: DEFAULT_BRACKET_ID, label: t('march-madness.brackets.new-bracket') },
+        ];
+        let defaultOption = 0;
+
+        if (marchMadnessData && marchMadnessData.bracketsIds.length) {
+            const bracketsIdsDesc = [...marchMadnessData.bracketsIds].sort((a, b) => b - a);
+            for (let i = 0; i < bracketsIdsDesc.length; i++) {
+                const bracketId = bracketsIdsDesc[i];
+                bracketsIdsOptions.push({
+                    value: bracketId,
+                    label: t('march-madness.brackets.nft-id', { id: bracketsIdsDesc[i] }),
+                });
+                if (selectedBracketId === bracketId) {
+                    defaultOption = bracketId;
+                }
+            }
+        }
         return (
             <MyTotalScore>
-                <StatsColumn width="15%">
-                    <StatsText fontWeight={700} lineHeight={24} margin="0 0 0 13px">
-                        {t('march-madness.brackets.stats.my-total-score')}
-                    </StatsText>
-                </StatsColumn>
                 <StatsColumn width="13%">
-                    <StatsRow margin="0 20px 7px 0">
+                    <StatsRow margin="0 20px 7px 13px">
                         <StatsText>{t('march-madness.brackets.stats.points')}</StatsText>
-                        <StatsText fontWeight={700}>{totalPoints + ' / 63'}</StatsText>
-                    </StatsRow>
-                    <StatsRow margin="7px 20px 0 0">
-                        <StatsText>{t('march-madness.brackets.stats.bonus')}</StatsText>
+                        <StatsText fontWeight={700}>{`${totalPoints}  / ${MAX_TOTAL_POINTS}`}</StatsText>
                     </StatsRow>
                 </StatsColumn>
                 <VerticalLine />
                 {Array(NUMBER_OF_ROUNDS)
                     .fill(0)
                     .map((_round, index) => getScorePerRound(index))}
+                <DropdownContainer>
+                    <SelectInput
+                        defaultValue={defaultOption}
+                        options={bracketsIdsOptions}
+                        handleChange={(value) => resetBracketsData(Number(value))}
+                        width={150}
+                    />
+                </DropdownContainer>
             </MyTotalScore>
         );
     };
@@ -566,12 +756,12 @@ const Brackets: React.FC = () => {
                 <Loader />
             ) : (
                 <>
-                    <RowHeader marginBottom={0}>
+                    <RowStats>
                         {getMyStats()}
                         {getMyTotalScore()}
-                    </RowHeader>
+                    </RowStats>
                     <BracketsWrapper>
-                        <RowHeader marginBottom={6}>
+                        <RowHeader>
                             <RoundName>{t('march-madness.brackets.round-0')}</RoundName>
                             <RoundName>{t('march-madness.brackets.round-1')}</RoundName>
                             <RoundName>{t('march-madness.brackets.round-2')}</RoundName>
@@ -632,11 +822,15 @@ const Brackets: React.FC = () => {
                                         padding: '3px 10px',
                                     }}
                                     disabled={isSubmitDisabled}
-                                    onClick={() => setShowMintNFTModal(true)}
+                                    onClick={() =>
+                                        hasAllowance ? setShowMintNFTModal(true) : setOpenApprovalModal(true)
+                                    }
                                 >
-                                    {isBracketMinted
-                                        ? t('march-madness.brackets.submit-modify')
-                                        : t('march-madness.brackets.submit')}
+                                    {hasAllowance
+                                        ? isBracketMinted
+                                            ? t('march-madness.brackets.submit-modify')
+                                            : t('march-madness.brackets.submit')
+                                        : t('common.wallet.approve')}
                                 </Button>
                             </SubmitWrapper>
                         )}
@@ -737,6 +931,17 @@ const Brackets: React.FC = () => {
                     )}
                     {showShareModal && (
                         <ShareModal final4Matches={shareData} handleClose={() => setShowShareModal(false)} />
+                    )}
+                    {openApprovalModal && marchMadnessData && (
+                        <ApprovalModal
+                            // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
+                            defaultAmount={marchMadnessData.mintingPrice * (1 + APPROVAL_BUFFER)}
+                            collateralIndex={selectedCollateralIndex}
+                            tokenSymbol={selectedCollateral}
+                            isAllowing={isAllowing}
+                            onSubmit={handleAllowance}
+                            onClose={() => setOpenApprovalModal(false)}
+                        />
                     )}
                 </>
             )}
@@ -844,12 +1049,20 @@ const Region = styled.div<{ isSideLeft: boolean; isVertical: boolean }>`
 }
 `;
 
-const RowHeader = styled.div<{ marginBottom: number }>`
+const RowStats = styled.div`
+    width: 1322px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 14px;
+`;
+
+const RowHeader = styled.div`
     width: 1252px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: ${(props) => `0 49px ${props.marginBottom}px 49px`};
+    margin: 0 49px 6px 49px;
 `;
 
 const RoundName = styled.div`
@@ -872,7 +1085,7 @@ const RoundName = styled.div`
 
 const MyStats = styled.div`
     display: flex;
-    width: 312px;
+    width: 304px;
     height: 80px;
     background: ${(props) => props.theme.marchMadness.background.quaternary};
     border: 1px solid ${(props) => props.theme.marchMadness.background.quaternary};
@@ -906,11 +1119,15 @@ const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; lineHeig
 `;
 
 const MyTotalScore = styled.div`
-    width: 930px;
+    width: 1007px;
     height: 80px;
     display: flex;
     background: ${(props) => props.theme.marchMadness.background.tertiary};
     border: 1px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+`;
+
+const DropdownContainer = styled(FlexDivColumnCentered)`
+    z-index: 100;
 `;
 
 const WildCardsContainer = styled.div`

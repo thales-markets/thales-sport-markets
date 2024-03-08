@@ -1274,7 +1274,10 @@
             "round-0": "第一轮",
             "submit": "饰面支架",
             "team-2": "2队",
-            "round-5": "最终的"
+            "round-5": "最终的",
+            "error-minting-price": "铸币价格无法获取！",
+            "nft-id": "NFT ID #{{id}}",
+            "new-bracket": "新支架"
         },
         "regions": {
             "west": "西方",

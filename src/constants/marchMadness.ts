@@ -1198,3 +1198,5 @@ export const wildCardTeams: MarchMadTeam[] = [
 ];
 
 export const DEFAULT_BRACKET_ID = -1;
+export const POINTS_PER_ROUND = FIRST_ROUND_MATCH_IDS.length;
+export const MAX_TOTAL_POINTS = NUMBER_OF_ROUNDS * POINTS_PER_ROUND;

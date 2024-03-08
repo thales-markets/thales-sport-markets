@@ -1274,7 +1274,10 @@
             "share": "Comparte este soporte",
             "round-2": "Dulces 16",
             "submit-modify": "Soporte de actualización",
-            "round-1": "2da ronda"
+            "round-1": "2da ronda",
+            "nft-id": "N.º de identificación de NFT{{id}}",
+            "new-bracket": "Nuevo soporte",
+            "error-minting-price": "¡El precio de acuñación no se puede recuperar!"
         },
         "regions": {
             "west": "Oeste",
