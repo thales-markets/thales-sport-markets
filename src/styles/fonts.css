@@ -87,3 +87,8 @@
     font-family: 'SocialIcons';
     src: local('SocialIcons'), url(../assets/fonts/SocialLogin/SocialIcons.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'Legacy';
+    src: local('Legacy'), url(../assets/fonts/Legacy/Legacy.ttf) format('truetype');
+}

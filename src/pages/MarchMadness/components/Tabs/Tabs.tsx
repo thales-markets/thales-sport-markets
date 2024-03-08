@@ -40,79 +40,54 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
 
     return (
         <Container>
-            <TabHome
+            <Tab
                 active={selectedTab === MarchMadTabs.HOME}
                 isClickable={true}
                 onClick={() => tabClickHandler(MarchMadTabs.HOME)}
             >
-                {selectedTab === MarchMadTabs.HOME && <TabSelected />}
+                {selectedTab === MarchMadTabs.HOME}
                 {t('march-madness.tabs.home')}
-            </TabHome>
-            <TabBrackets
+            </Tab>
+            <Tab
                 active={selectedTab === MarchMadTabs.BRACKETS}
                 isClickable={isWalletConnected}
                 onClick={() => tabClickHandler(MarchMadTabs.BRACKETS)}
             >
-                {selectedTab === MarchMadTabs.BRACKETS && <TabSelected />}
                 {t('march-madness.tabs.brackets')}
-            </TabBrackets>
-            <TabLeaderboard
+            </Tab>
+            <Tab
                 active={selectedTab === MarchMadTabs.LEADERBOARD}
                 isClickable={true}
                 onClick={() => tabClickHandler(MarchMadTabs.LEADERBOARD)}
             >
-                {selectedTab === MarchMadTabs.LEADERBOARD && <TabSelected />}
                 {t('march-madness.tabs.leaderboard')}
-            </TabLeaderboard>
+            </Tab>
         </Container>
     );
 };
 
 const Container = styled.div`
-    width: 70%;
+    width: 100%;
+    max-width: 494px;
     display: flex;
     flex-direction: row;
-    margin: 20px 0 20px auto;
-    justify-content: end;
-    border-bottom: 2px solid ${(props) => props.theme.marchMadness.borderColor.primary};
+    margin: 20px auto;
+    justify-content: space-around;
+    border-bottom: 2px solid ${(props) => props.theme.marchMadness.borderColor.senary};
 `;
 
 const Tab = styled.div<{ active: boolean; isClickable: boolean }>`
     position: relative;
     text-transform: uppercase;
-    padding-bottom: 6px;
-    padding-left: 40px;
     cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
     opacity: ${(props) => (props.isClickable ? '1' : '0.4')};
     font-family: 'Oswald' !important;
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 32px;
     color: ${(props) =>
-        props.active ? props.theme.marchMadness.textColor.quaternary : props.theme.marchMadness.textColor.primary};
-`;
-
-const TabSelected = styled.div`
-    position: absolute;
-    bottom: -3.25px;
-    right: 0;
-    width: 100%;
-    height: 5px;
-    background: ${(props) => props.theme.marchMadness.background.quaternary};
-    border-radius: 5px;
-`;
-
-const TabHome = styled(Tab)`
-    width: 30%;
-`;
-
-const TabBrackets = styled(Tab)`
-    width: 30%;
-`;
-
-const TabLeaderboard = styled(Tab)`
-    width: 40%;
+        props.active ? props.theme.marchMadness.textColor.senary : props.theme.marchMadness.textColor.primary};
 `;
 
 export default Tabs;

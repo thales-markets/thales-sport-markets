@@ -164,6 +164,7 @@ export default {
             tertiary: '',
             quaternary: '',
             quinary: '',
+            senary: '',
         },
         textColor: {
             primary: '',
@@ -171,6 +172,7 @@ export default {
             tertiary: '',
             quaternary: '',
             quinary: '',
+            senary: '',
         },
         borderColor: {
             primary: '',
@@ -178,6 +180,7 @@ export default {
             tertiary: '',
             quaternary: '',
             quinary: '',
+            senary: '',
         },
         button: {
             background: {
@@ -186,6 +189,7 @@ export default {
                 tertiary: '',
                 quaternary: '',
                 quinary: '',
+                senary: '',
             },
             textColor: {
                 primary: '',
