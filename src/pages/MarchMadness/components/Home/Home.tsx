@@ -1,9 +1,7 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
-import { LINKS } from 'constants/links';
 import { DEFAULT_BRACKET_ID, initialBracketsData } from 'constants/marchMadness';
-import { Network } from 'enums/network';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
 import React, { useMemo, useState } from 'react';
@@ -14,19 +12,49 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
 import { localStore } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { getLocalStorageKey } from 'utils/marchMadness';
 import { history } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
+import { hoursToMinutes } from 'date-fns';
+import { FlexDivSpaceBetween } from 'styles/common';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
 };
 
+const COMP_RULES = [
+    'march-madness.home.comp-rules-1',
+    'march-madness.home.comp-rules-2',
+    'march-madness.home.comp-rules-3',
+    'march-madness.home.comp-rules-4',
+    'march-madness.home.comp-rules-5',
+    'march-madness.home.comp-rules-6',
+    'march-madness.home.comp-rules-7',
+    'march-madness.home.comp-rules-8',
+    'march-madness.home.comp-rules-9',
+];
+
+const VOLUME__INCETIVES_RULES = [
+    'march-madness.home.volume-incetives-1',
+    'march-madness.home.volume-incetives-2',
+    'march-madness.home.volume-incetives-3',
+];
+
+const BRACKETS_INCETIVES_RULES = [
+    'march-madness.home.brackets-points-rules-1',
+    'march-madness.home.brackets-points-rules-2',
+    'march-madness.home.brackets-points-rules-3',
+    'march-madness.home.brackets-points-rules-4',
+    'march-madness.home.brackets-points-rules-5',
+    'march-madness.home.brackets-points-rules-6',
+    'march-madness.home.brackets-points-rules-7',
+];
+
 const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const { t } = useTranslation();
+
     const theme: ThemeInterface = useTheme();
 
     const { openConnectModal } = useConnectModal();
@@ -40,6 +68,10 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const lsBrackets = localStore.get(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress));
     const [isButtonDisabled, setIsButtonDisabled] = useState(lsBrackets !== undefined);
 
+    const [showCompRules, setShowCompRules] = useState(false);
+    const [showVolumeIncentives, setShowVolumeIncentives] = useState(false);
+    const [showPointsSystem, setShowPointsSystem] = useState(false);
+
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
         enabled: isAppReady,
     });
@@ -51,6 +83,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     ]);
 
     const buttonClickHandler = () => {
+        console.log('jes please');
         if (isWalletConnected) {
             localStore.set(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress), initialBracketsData);
             setIsButtonDisabled(true);
@@ -66,19 +99,26 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
         }
     };
 
+    const switchToLeaderboard = () => {
+        history.push({
+            pathname: location.pathname,
+            search: queryString.stringify({
+                tab: MarchMadTabs.LEADERBOARD,
+            }),
+        });
+        setSelectedTab && setSelectedTab(MarchMadTabs.LEADERBOARD);
+    };
+
     const timeLeftToMint = useMemo(() => {
+        const daysToMint = Math.floor((marchMadnessData?.minutesLeftToMint || 0) / hoursToMinutes(24));
+        const hoursToMint = Math.floor(((marchMadnessData?.minutesLeftToMint || 0) - daysToMint * 24 * 60) / 60);
+        const minutesToMint = (marchMadnessData?.minutesLeftToMint || 0) - daysToMint * 24 * 60 - hoursToMint * 60;
         return {
-            days: Math.floor((marchMadnessData?.minutesLeftToMint || 0) / 24),
-            hours:
-                (marchMadnessData?.minutesLeftToMint || 0) -
-                Math.floor((marchMadnessData?.minutesLeftToMint || 0) / 24) * 24,
+            days: daysToMint,
+            hours: hoursToMint,
+            minutes: minutesToMint,
         };
     }, [marchMadnessData?.minutesLeftToMint]);
-
-    const reward = networkId === Network.Arbitrum ? '40,000 THALES' : '13,000 OP';
-    const firstPoolReward = networkId === Network.Arbitrum ? '30,000 THALES' : '10,000 OP';
-    const secondPoolReward = networkId === Network.Arbitrum ? '10,000 THALES' : '3,000 OP';
-    const volume = networkId === Network.Arbitrum ? '10 USDC' : '10 sUSD';
 
     return (
         <Container>
@@ -86,107 +126,117 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                 <Loader />
             ) : (
                 <>
-                    <RowTitle>{t('march-madness.home.title')}</RowTitle>
+                    <PageTitle>{t('march-madness.home.title')}</PageTitle>
                     {!isBracketsLocked && (
-                        <RowTimeInfo>
-                            {t('march-madness.home.time-info', {
-                                days:
-                                    timeLeftToMint.days +
-                                    ' ' +
-                                    (timeLeftToMint.days === 1
-                                        ? t('common.time-remaining.day')
-                                        : t('common.time-remaining.days')),
-                                hours:
-                                    timeLeftToMint.hours +
-                                    ' ' +
-                                    (timeLeftToMint.hours === 1
-                                        ? t('common.time-remaining.hour')
-                                        : t('common.time-remaining.hours')),
-                            })}
-                        </RowTimeInfo>
+                        <>
+                            <TimeLeft>
+                                {`${timeLeftToMint.days}D:${timeLeftToMint.hours}H:${timeLeftToMint.minutes}M`}
+                            </TimeLeft>
+                            <TimeLeftDescription>{t('march-madness.home.time-info')}</TimeLeftDescription>
+                        </>
                     )}
-                    <TextWrapper marginTop={10} padding="14px 23px">
-                        <Text>
-                            <Trans
-                                i18nKey="march-madness.home.text-1"
-                                components={{
-                                    bold: <BoldText />,
-                                    reward,
-                                }}
-                            />
-                        </Text>
-                    </TextWrapper>
-                    <TextWrapper marginTop={10} padding="20px 23px">
-                        <Text>
-                            <Trans
-                                i18nKey="march-madness.home.text-2"
-                                components={{
-                                    bold: <BoldText />,
-                                    reward,
-                                }}
-                            />
-                        </Text>
-                        <br />
-                        <Text>
-                            <Trans
-                                i18nKey="march-madness.home.text-3"
-                                components={{
-                                    bold: <BoldText />,
-                                    reward: firstPoolReward,
-                                }}
-                            />
-                        </Text>
-                        <TextList>
-                            <TextBullet>
-                                <Text>{t('march-madness.home.text-3a')}</Text>
-                            </TextBullet>
-                            <TextBullet>
-                                <Text>{t('march-madness.home.text-3b')}</Text>
-                            </TextBullet>
-                            <TextBullet>
-                                <Text>{t('march-madness.home.text-3c')}</Text>
-                            </TextBullet>
-                            <TextBullet>
-                                <Text>{t('march-madness.home.text-3d')}</Text>
-                            </TextBullet>
-                            <TextBullet>
-                                <Text>{t('march-madness.home.text-3e')}</Text>
-                            </TextBullet>
-                            <TextBullet>
-                                <Text>{t('march-madness.home.text-3f')}</Text>
-                            </TextBullet>
-                        </TextList>
-                        <br />
-                        <Text>
-                            <Trans
-                                i18nKey="march-madness.home.text-4"
-                                components={{
-                                    bold: <BoldText />,
-                                    reward: secondPoolReward,
-                                    volume,
-                                }}
-                            />
-                        </Text>
-                        <br />
-                        <Text>
-                            <Trans
-                                i18nKey="march-madness.home.text-5"
-                                components={{
-                                    mediumLink: (
-                                        <Link target="_blank" rel="noreferrer" href={LINKS.MarchMadness.Medium} />
-                                    ),
-                                }}
-                            />
-                        </Text>
-                    </TextWrapper>
+                    <Text>{t('march-madness.home.description')}</Text>
+
+                    <DropdownWrapper>
+                        <LabelArrowWrapper
+                            onClick={() => {
+                                setShowCompRules(!showCompRules);
+                            }}
+                        >
+                            <DropdownLabel>{t('march-madness.home.bracket-comp-rules-label')}</DropdownLabel>
+                            <i className={`icon icon--arrow-${showCompRules ? 'up' : 'down'}`} />
+                        </LabelArrowWrapper>
+                        {showCompRules && (
+                            <ListWrapper>
+                                {COMP_RULES.map((text: string, index: number) => (
+                                    <ListItem key={index}>
+                                        <Trans
+                                            i18nKey={text}
+                                            components={{
+                                                b: <BoldContent />,
+                                                a: <Link onClick={buttonClickHandler} />,
+                                                c: <Link onClick={switchToLeaderboard} />,
+                                                d: (
+                                                    <Link
+                                                        onClick={() =>
+                                                            window.open(
+                                                                'https://medium.com/@OvertimeMarkets.xyz/weekly-match-preview-460e8ad462ac'
+                                                            )
+                                                        }
+                                                    />
+                                                ),
+                                            }}
+                                        />
+                                    </ListItem>
+                                ))}
+                            </ListWrapper>
+                        )}
+                    </DropdownWrapper>
+
+                    <DropdownWrapper
+                        onClick={() => {
+                            setShowPointsSystem(!showPointsSystem);
+                        }}
+                    >
+                        <LabelArrowWrapper>
+                            <DropdownLabel>{t('march-madness.home.brackets-points-system-label')}</DropdownLabel>
+                            <i className={`icon icon--arrow-${showPointsSystem ? 'up' : 'down'}`} />
+                        </LabelArrowWrapper>
+                        {showPointsSystem && (
+                            <>
+                                <Text style={{ margin: '12px 0', display: 'block' }}>
+                                    {t('march-madness.home.brackets-points-explanation')}
+                                </Text>
+                                <ListWrapper>
+                                    {BRACKETS_INCETIVES_RULES.map((text: string, index: number) => (
+                                        <ListItem key={index}>
+                                            <Trans
+                                                i18nKey={text}
+                                                components={{
+                                                    b: <BoldContent />,
+                                                }}
+                                            />
+                                        </ListItem>
+                                    ))}
+                                </ListWrapper>
+                            </>
+                        )}
+                    </DropdownWrapper>
+
+                    <DropdownWrapper
+                        onClick={() => {
+                            setShowVolumeIncentives(!showVolumeIncentives);
+                        }}
+                    >
+                        <LabelArrowWrapper>
+                            <DropdownLabel>{t('march-madness.home.volume-incetives-label')}</DropdownLabel>
+                            <i className={`icon icon--arrow-${showVolumeIncentives ? 'up' : 'down'}`} />
+                        </LabelArrowWrapper>
+                        {showVolumeIncentives && (
+                            <ListWrapper>
+                                {VOLUME__INCETIVES_RULES.map((text: string, index: number) => (
+                                    <ListItem key={index}>
+                                        <Trans
+                                            i18nKey={text}
+                                            components={{
+                                                b: <BoldContent />,
+                                                a: <Link onClick={switchToLeaderboard} />,
+                                            }}
+                                        />
+                                    </ListItem>
+                                ))}
+                            </ListWrapper>
+                        )}
+                    </DropdownWrapper>
+
                     {(!isWalletConnected || !isBracketsLocked) && (
                         <Button
                             additionalStyles={{
-                                width: '653px',
+                                width: '100%',
                                 height: '64px',
                                 marginTop: '16px',
-                                background: theme.marchMadness.button.background.primary,
-                                border: `3px solid ${theme.marchMadness.button.borderColor.primary}`,
+                                background: theme.marchMadness.button.background.senary,
+                                border: `none`,
                                 fontSize: '30px',
                                 fontFamily: "'NCAA' !important",
                                 textTransform: 'uppercase',
@@ -207,86 +257,109 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
 };
 
 const Container = styled.div`
+    margin: auto;
     display: flex;
     align-items: center;
     flex-direction: column;
     margin-bottom: 200px;
+    max-width: 494px;
 `;
 
-const RowTitle = styled.div`
-    display: flex;
-    flex-direction: row;
-    font-family: 'NCAA' !important;
-    font-style: normal;
-    font-weight: 400;
+const PageTitle = styled.h1`
+    color: #f25623;
+    font-family: Legacy !important;
     font-size: 50px;
-    line-height: 58px;
-    color: ${(props) => props.theme.marchMadness.textColor.primary};
-    margin-top: 10px;
-`;
-
-const RowTimeInfo = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 90%;
-    min-height: 70px;
-    background: linear-gradient(270deg, #da252f -1.63%, #5c2c3b 18.12%, #021630 36.93%, #0c99d0 65.71%, #02223e 96.12%);
-    margin-top: 16px;
-    font-family: 'NCAA' !important;
     font-style: normal;
     font-weight: 400;
-    font-size: 30px;
-    line-height: 35px;
-    text-align: center;
-    letter-spacing: 8px;
+    line-height: normal;
     text-transform: uppercase;
-    color: ${(props) => props.theme.marchMadness.textColor.primary};
-    padding: 10px 20px;
 `;
 
-const TextWrapper = styled(FlexDivColumn)<{ marginTop: number; padding: string }>`
-    width: 90%;
-    background: ${(props) => props.theme.marchMadness.background.secondary};
-    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
-    margin-top: ${(props) => props.marginTop}px;
-    padding: ${(props) => props.padding};
+const TimeLeft = styled.h2`
+    color: #fff;
+    text-align: center;
+    font-family: Legacy !important;
+    font-size: 97px;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 11.8px;
+    text-transform: uppercase;
+    max-width: 494px;
+    margin: 6px auto;
+`;
+
+const TimeLeftDescription = styled.h3`
+    color: #f25623;
+
+    text-align: center;
+    font-family: Legacy !important;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 4.8px;
+    text-transform: uppercase;
 `;
 
 const Text = styled.span`
-    font-family: 'Oswald' !important;
+    color: #fff;
+    text-align: justify;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: ${(props) => props.theme.marchMadness.textColor.primary};
+    line-height: normal;
+    margin-top: 30px;
+    margin-bottom: 50px;
+    letter-spacing: 1.4px;
 `;
 
-const BoldText = styled(Text)`
-    font-weight: 700;
-    text-transform: uppercase;
+const DropdownWrapper = styled.div`
+    width: 100%;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid ${(props) => props.theme.marchMadness.borderColor.senary};
 `;
 
-const Link = styled.a`
-    font-family: 'Oswald' !important;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    text-decoration: underline;
-    color: ${(props) => props.theme.marchMadness.link.textColor.primary};
-    :hover {
-        color: ${(props) => props.theme.marchMadness.textColor.tertiary};
+const LabelArrowWrapper = styled(FlexDivSpaceBetween)`
+    cursor: pointer;
+    i {
+        font-size: 30px;
     }
 `;
 
-const TextList = styled.ul`
-    list-style-type: disc;
+const DropdownLabel = styled.h3`
+    color: #fff;
+    font-family: Roboto;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 157%; /* 34.54px */
+    letter-spacing: 2px;
 `;
-const TextBullet = styled.li`
-    color: ${(props) => props.theme.textColor.primary};
-    margin-left: 30px;
+
+const ListWrapper = styled.ul`
+    list-style-type: disc;
+    padding-left: 16px;
+`;
+
+const ListItem = styled.li`
+    color: #fff;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 157%; /* 34.54px */
+    letter-spacing: 1.2px;
+    margin-top: 8px;
+`;
+
+const BoldContent = styled.span`
+    font-weight: bold;
+`;
+
+const Link = styled.span`
+    text-decoration: underline;
+    cursor: pointer;
 `;
 
 export default Home;

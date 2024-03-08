@@ -967,7 +967,7 @@ const BracketsWrapper = styled.div`
     height: 1010px;
     background-image: url('${background}'), url('${backgrounBall}');
     background-size: auto;
-    background-position: 0 71px, -354px -162px;
+    background-position: 0 71px, -291px -162px;
     background-repeat: no-repeat;
 `;
 

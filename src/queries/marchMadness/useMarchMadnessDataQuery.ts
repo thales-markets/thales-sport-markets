@@ -1,6 +1,6 @@
 import { NUMBER_OF_MATCHES, NUMBER_OF_ROUNDS } from 'constants/marchMadness';
 import QUERY_KEYS from 'constants/queryKeys';
-import { millisecondsToHours, millisecondsToMinutes, secondsToMilliseconds } from 'date-fns';
+import { millisecondsToMinutes, secondsToMilliseconds } from 'date-fns';
 import { BigNumber } from 'ethers';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { NetworkId, coinFormatter } from 'thales-utils';
@@ -60,7 +60,7 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
 
                         const now = Date.now();
                         marchMadnessData.isMintAvailable = now < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
-                        marchMadnessData.minutesLeftToMint = millisecondsToHours(
+                        marchMadnessData.minutesLeftToMint = millisecondsToMinutes(
                             secondsToMilliseconds(Number(canNotMintOrUpdateAfter)) - now
                         );
                         marchMadnessData.bracketsIds = tokenIds.map((tokenId) => Number(tokenId));

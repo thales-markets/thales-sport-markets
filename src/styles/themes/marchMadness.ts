@@ -18,6 +18,7 @@ export default {
             tertiary: Colors.BLUE_DARK,
             quaternary: Colors.RED_GRADIENT_1,
             quinary: Colors.GRAY_GRADIENT_5,
+            senary: Colors.ORANGE_MARCH_MADNESS,
         },
         textColor: {
             primary: Colors.WHITE,
@@ -25,6 +26,7 @@ export default {
             tertiary: Colors.BLUE_DARK,
             quaternary: Colors.RED_GRADIENT_1,
             quinary: Colors.GRAY_GRADIENT_5,
+            senary: Colors.ORANGE_MARCH_MADNESS,
         },
         borderColor: {
             primary: Colors.BLUE_GRADIENT_1,
@@ -32,6 +34,7 @@ export default {
             tertiary: Colors.WHITE,
             quaternary: Colors.BLUE_DARK,
             quinary: Colors.GRAY_GRADIENT_5,
+            senary: Colors.ORANGE_MARCH_MADNESS,
         },
         button: {
             background: {
@@ -40,6 +43,7 @@ export default {
                 tertiary: Colors.GRAY_LIGHT,
                 quaternary: Colors.BLUE_GRADIENT_1_DISABLED,
                 quinary: Colors.BLUE_LIGHT,
+                senary: Colors.ORANGE_MARCH_MADNESS,
             },
             textColor: {
                 primary: Colors.BLUE_DARK,

@@ -76,6 +76,7 @@ export const Colors = {
     RED_GRADIENT_2: '#CA4C53', // used for March Madness
 
     ORANGE: '#FAC439',
+    ORANGE_MARCH_MADNESS: '#F25623',
 
     PURPLE: '#8884d8',
     PURPLE_GRADIENT_1: '#4d21db', // used for March Madness
