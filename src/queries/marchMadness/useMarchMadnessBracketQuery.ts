@@ -11,6 +11,7 @@ const useMarchMadnessBracketQuery = (tokenId: number, networkId: NetworkId, opti
             let bracketsData: number[] = [];
 
             try {
+                // TODO: will be moved to main contract
                 const { marchMadnessDataContract } = networkConnector;
 
                 if (marchMadnessDataContract) {

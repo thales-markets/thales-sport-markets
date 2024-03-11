@@ -1147,14 +1147,19 @@
             "round-5": "Final",
             "bracket-id": "Bracket ID #{{id}}",
             "my-brackets": "My brackets",
+            "create-as": "Create new as...",
+            "clear-all": "Clear all",
             "error-minting-price": "Minting price can't be fetched!",
             "confirmation-message": "Bracket successfully minted",
             "stats": {
                 "my-stats": "My stats",
-                "rank-volume": "Rank by volume",
-                "rank-games": "Rank by guessed games",
+                "bracket": "Bracket",
+                "rank": "Rank",
+                "incomplete": "Incomplete",
+                "complete": "Complete",
                 "my-total-score": "My total score",
-                "points": "Points"
+                "points": "Points",
+                "total-points": "My total points"
             },
             "modal-mint": {
                 "finish-text-1": "Well done!",

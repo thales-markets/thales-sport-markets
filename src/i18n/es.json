@@ -1237,7 +1237,9 @@
             "comp-rules-9": "Para obtener información más detallada sobre la campaña March Madness 2024 en Overtime, visite la <d>publicación oficial del blog</d>.",
             "brackets-points-system-label": "Sistema de puntos entre corchetes",
             "brackets-points-rules-1": "1.ª Ronda: 1 punto por elección correcta",
-            "volume-incetives-2": "Cualquier volumen de compra que involucre posiciones de March Madness contará como volumen, incluidos los parlays con un mínimo de 1 posición de March Madness."
+            "volume-incetives-2": "Cualquier volumen de compra que involucre posiciones de March Madness contará como volumen, incluidos los parlays con un mínimo de 1 posición de March Madness.",
+            "comp-rules-0": "La acuñación de grupos comenzará después de que finalice el domingo de selección y se conozca el calendario de la primera ronda, a principios del 18 de marzo UTC.",
+            "comp-rules-0-a": "La acuñación de grupos durará hasta que los juegos de la primera ronda comiencen el 21 de marzo."
         },
         "leaderboard": {
             "owner": "Dueño",
@@ -1266,7 +1268,12 @@
                 "bonus": "Prima",
                 "rank-games": "Clasificación por juegos adivinados",
                 "my-total-score": "mi puntuación total",
-                "my-stats": "Mis estadísticas"
+                "my-stats": "Mis estadísticas",
+                "bracket": "Soporte",
+                "incomplete": "Incompleto",
+                "rank": "Rango",
+                "complete": "Completo",
+                "total-points": "mis puntos totales"
             },
             "modal-mint": {
                 "finish-text-2-success": "¡Acabas de crear tu categoría March Madness!",
@@ -1304,7 +1311,9 @@
             "error-minting-price": "¡El precio de acuñación no se puede recuperar!",
             "my-brackets": "Mis corchetes",
             "bracket-id": "Número de identificación del grupo {{id}}",
-            "confirmation-message": "Soporte acuñado con éxito"
+            "confirmation-message": "Soporte acuñado con éxito",
+            "create-as": "Crear nuevo como...",
+            "clear-all": "Limpiar todo"
         },
         "regions": {
             "west": "Oeste",

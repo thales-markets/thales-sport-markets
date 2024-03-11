@@ -12,7 +12,7 @@ export type LeaderboardByGuessedCorrectlyResponse = {
     rewards: string;
 }[];
 
-const useLoeaderboardByGuessedCorrectlyQuery = (
+const useLeaderboardByGuessedCorrectlyQuery = (
     networkId: NetworkId,
     options?: UseQueryOptions<LeaderboardByGuessedCorrectlyResponse | undefined>
 ) => {
@@ -35,4 +35,4 @@ const useLoeaderboardByGuessedCorrectlyQuery = (
     );
 };
 
-export default useLoeaderboardByGuessedCorrectlyQuery;
+export default useLeaderboardByGuessedCorrectlyQuery;

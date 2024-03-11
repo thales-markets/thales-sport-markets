@@ -28,25 +28,18 @@ const Container = styled.div<{ isResolved: boolean; isSelected: boolean; margin:
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
     ${(props) => (!props.isResolved ? 'border-radius: 50%;' : '')}
-    ${(props) =>
-        !props.isResolved
-            ? `border: 1px solid ${
-                  props.isSelected
-                      ? props.theme.marchMadness.borderColor.secondary
-                      : props.theme.marchMadness.borderColor.quinary
-              };`
-            : ''}
+    ${(props) => (!props.isResolved ? `border: 2px solid ${props.theme.marchMadness.borderColor.quinary};` : '')}
 `;
 
 const TeamSelected = styled.div`
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: ${(props) => props.theme.marchMadness.background.secondary};
+    background: ${(props) => props.theme.marchMadness.background.quinary};
 `;
 
 const Icon = styled.i`

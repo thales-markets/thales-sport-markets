@@ -1237,7 +1237,9 @@
             "comp-rules-7": "Il montepremi a costo pari sarà distribuito ai vincitori come voucher per gli straordinari, mentre i premi ARB verranno consegnati direttamente. Il rapporto dei premi per i primi 20 posizionamenti è disponibile nella <c>pagina Leaderboard.</c>",
             "volume-incetives-3": "Puoi trovare la classifica attuale dei premi degli incentivi volume per portafoglio nella <a>pagina Classifica<a/></a>",
             "comp-rules-2": "Il costo minimo per fascia è di <b>50 USDC</b> , dove 45 USDC vanno al montepremi mentre 5 USDC vanno al montepremi del protocollo Thales per la settimana in corso",
-            "volume-incetives-label": "Incentivi sul volume"
+            "volume-incetives-label": "Incentivi sul volume",
+            "comp-rules-0-a": "Il conio dei gironi durerà fino all'inizio delle partite del primo turno, il 21 marzo.",
+            "comp-rules-0": "Il conio dei bracket inizierà dopo che la domenica di selezione sarà terminata e il programma del primo round sarà noto, all'inizio del 18 marzo UTC."
         },
         "leaderboard": {
             "rewards": "Premi",
@@ -1266,7 +1268,12 @@
                 "my-total-score": "Il mio punteggio totale",
                 "rank-games": "Classifica per giochi indovinati",
                 "points": "Punti",
-                "rank-volume": "Classifica per volume"
+                "rank-volume": "Classifica per volume",
+                "complete": "Completare",
+                "bracket": "Staffa",
+                "incomplete": "Incompleto",
+                "total-points": "I miei punti totali",
+                "rank": "Rango"
             },
             "modal-mint": {
                 "finish-text-1": "Ben fatto!",
@@ -1304,7 +1311,9 @@
             "nft-id": "ID NFT n.{{id}}",
             "my-brackets": "Le mie parentesi",
             "confirmation-message": "Staffa coniata con successo",
-            "bracket-id": "ID parentesi #{{id}}"
+            "bracket-id": "ID parentesi #{{id}}",
+            "clear-all": "Cancella tutto",
+            "create-as": "Crea nuovo come..."
         },
         "regions": {
             "west": "ovest",

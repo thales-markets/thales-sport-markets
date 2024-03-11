@@ -126,8 +126,8 @@ const Container = styled.div<{ showBackground: boolean }>`
 `;
 
 const TextWrapper = styled(FlexDivColumn)`
-    background: ${(props) => props.theme.marchMadness.background.secondary};
-    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+    background: ${(props) => props.theme.marchMadness.background.quinary};
+    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.quinary};
     padding: 6px 12px;
     margin-top: 10px;
 `;
