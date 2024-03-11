@@ -66,6 +66,7 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
                         marchMadnessData.minutesLeftToMint = millisecondsToMinutes(
                             secondsToMilliseconds(Number(canNotMintOrUpdateAfter)) - now
                         );
+                        marchMadnessData.isMintAvailable = now < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
                     }
                 }
 
