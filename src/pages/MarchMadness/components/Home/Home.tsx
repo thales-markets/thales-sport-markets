@@ -1,7 +1,6 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
-import { DEFAULT_BRACKET_ID, initialBracketsData } from 'constants/marchMadness';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -12,16 +11,14 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { localStore } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { getLocalStorageKey } from 'utils/marchMadness';
 import { history } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
 import { hoursToSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
 import { FlexDivSpaceBetween } from 'styles/common';
 import useInterval from 'hooks/useInterval';
-
-const START_MINTING_DATE = Date.UTC(2024, 2, 18); // 18. mart 2024.
+import { START_MINTING_DATE } from 'pages/MarchMadness/MarchMadness';
+import { Network } from 'enums/network';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -70,9 +67,6 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const lsBrackets = localStore.get(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress));
-    const [isButtonDisabled, setIsButtonDisabled] = useState(lsBrackets !== undefined);
-
     const [showCompRules, setShowCompRules] = useState(false);
     const [showVolumeIncentives, setShowVolumeIncentives] = useState(false);
     const [showPointsSystem, setShowPointsSystem] = useState(false);
@@ -95,28 +89,30 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
 
     const buttonClickHandler = () => {
         if (isWalletConnected) {
-            localStore.set(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress), initialBracketsData);
-            setIsButtonDisabled(true);
-            history.push({
-                pathname: location.pathname,
-                search: queryString.stringify({
-                    tab: MarchMadTabs.BRACKETS,
-                }),
-            });
-            setSelectedTab && setSelectedTab(MarchMadTabs.BRACKETS);
+            if (Date.now() > START_MINTING_DATE) {
+                history.push({
+                    pathname: location.pathname,
+                    search: queryString.stringify({
+                        tab: MarchMadTabs.BRACKETS,
+                    }),
+                });
+                setSelectedTab && setSelectedTab(MarchMadTabs.BRACKETS);
+            }
         } else {
             openConnectModal?.();
         }
     };
 
     const switchToLeaderboard = () => {
-        history.push({
-            pathname: location.pathname,
-            search: queryString.stringify({
-                tab: MarchMadTabs.LEADERBOARD,
-            }),
-        });
-        setSelectedTab && setSelectedTab(MarchMadTabs.LEADERBOARD);
+        if (Date.now() > START_MINTING_DATE) {
+            history.push({
+                pathname: location.pathname,
+                search: queryString.stringify({
+                    tab: MarchMadTabs.LEADERBOARD,
+                }),
+            });
+            setSelectedTab && setSelectedTab(MarchMadTabs.LEADERBOARD);
+        }
     };
 
     // setting default time for cooldown to not show zeroes
@@ -172,6 +168,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
             ) : (
                 <>
                     <PageTitle>{t('march-madness.home.title')}</PageTitle>
+                    {networkId !== Network.Arbitrum && <OnlyOnArbitrum>Available only on Arbitrum</OnlyOnArbitrum>}
                     {!isBracketsLocked && (
                         <>
                             <TimeLeft>
@@ -183,6 +180,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                             </TimeLeftDescription>
                         </>
                     )}
+
                     <Text>{t('march-madness.home.description')}</Text>
 
                     <DropdownWrapper>
@@ -290,7 +288,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 textTransform: 'uppercase',
                                 color: theme.marchMadness.button.textColor.primary,
                             }}
-                            disabled={isButtonDisabled}
+                            disabled={Date.now() < START_MINTING_DATE}
                             onClick={buttonClickHandler}
                         >
                             {isWalletConnected
@@ -351,8 +349,12 @@ const TimeLeftDescription = styled.h3`
     white-space: nowrap;
 `;
 
+const OnlyOnArbitrum = styled(TimeLeftDescription)`
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
+`;
+
 const Text = styled.span`
-    color: #fff;
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     text-align: justify;
     font-size: 14px;
     font-style: normal;

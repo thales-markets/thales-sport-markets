@@ -10,12 +10,11 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsAppReady } from 'redux/modules/app';
 import { setTheme } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
 import { localStore } from 'thales-utils';
 import { getLocalStorageKey } from 'utils/marchMadness';
 import { buildHref, history } from 'utils/routes';
@@ -24,6 +23,8 @@ import Home from './components/Home';
 import Leaderboard from './components/Leaderboard';
 import Tabs from './components/Tabs';
 import { MarchMadTabs } from './components/Tabs/Tabs';
+
+export const START_MINTING_DATE = Date.UTC(2024, 2, 18); // 18. mart 2024.
 
 const MarchMadness: React.FC = () => {
     const { t } = useTranslation();
@@ -34,7 +35,6 @@ const MarchMadness: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const queryParamTab: MarchMadTabs = queryString.parse(location.search).tab as MarchMadTabs;
     const isTabAvailable = Object.values(MarchMadTabs).includes(queryParamTab);
@@ -87,11 +87,7 @@ const MarchMadness: React.FC = () => {
 
     return (
         <Container showBackground={selectedTab !== MarchMadTabs.BRACKETS}>
-            {isMobile ? (
-                <TextWrapper>
-                    <Text>{t('march-madness.mobile-message')}</Text>
-                </TextWrapper>
-            ) : marchMadnessDataQuery.isLoading ? (
+            {marchMadnessDataQuery.isLoading ? (
                 <Loader />
             ) : (
                 <>
@@ -123,22 +119,6 @@ const Container = styled.div<{ showBackground: boolean }>`
     ${(props) => (props.showBackground ? 'background-size: 1900px;' : '')}
     ${(props) => (props.showBackground ? 'background-position: -277px -58px;' : '')}
     ${(props) => (props.showBackground ? 'background-repeat: no-repeat;' : '')}
-`;
-
-const TextWrapper = styled(FlexDivColumn)`
-    background: ${(props) => props.theme.marchMadness.background.secondary};
-    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
-    padding: 6px 12px;
-    margin-top: 10px;
-`;
-
-const Text = styled.span`
-    font-family: 'Oswald' !important;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
-    color: ${(props) => props.theme.marchMadness.textColor.primary};
 `;
 
 export default MarchMadness;
