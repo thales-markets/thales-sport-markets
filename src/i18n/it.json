@@ -1239,7 +1239,8 @@
             "comp-rules-2": "Il costo minimo per fascia è di <b>50 USDC</b> , dove 45 USDC vanno al montepremi mentre 5 USDC vanno al montepremi del protocollo Thales per la settimana in corso",
             "volume-incetives-label": "Incentivi sul volume",
             "comp-rules-0-a": "Il conio dei gironi durerà fino all'inizio delle partite del primo turno, il 21 marzo.",
-            "comp-rules-0": "Il conio dei bracket inizierà dopo che la domenica di selezione sarà terminata e il programma del primo round sarà noto, all'inizio del 18 marzo UTC."
+            "comp-rules-0": "Il conio dei bracket inizierà dopo che la domenica di selezione sarà terminata e il programma del primo round sarà noto, all'inizio del 18 marzo UTC.",
+            "time-info-a": "Fino all'inizio del conio delle parentesi"
         },
         "leaderboard": {
             "rewards": "Premi",

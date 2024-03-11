@@ -1074,6 +1074,7 @@
         "home": {
             "title": "Overtime March Madness",
             "time-info": "Left to create your brackets",
+            "time-info-a": "Until bracket minting starts",
             "text-1": "<bold>March Madness</bold> is here, and with <bold>Overtime</bold> you can mint your bracket. To celebrate we are rewarding users with <bold>{{reward}}</bold> for the duration of the NCAAB tournament. The bracket NFT will help holders boost their volume rewards while granting them an entry in the bracket leaderboard. Minting is free and open from March 12th to 16th, when the first round starts.",
             "text-2": "Minting your <bold>March Madness bracket</bold> is done fully on-chain. While the NFT minted is soulbound, it gives the holder access to a reward boost plus participation to the bracket leaderboard. The March Madness campaign is incentivized with {{reward}} and separated into 2 pools.",
             "text-3": "For the <bold>First pool</bold>, {{reward}} will be divided between all volume driven through March Madness games, including all market type and parlay with at least one NCAAB game. Holders of the March Madness bracket NFT are eligible for a trading boost. Each correct game is eligible for a tiered boost, with a maximum of 164%.",

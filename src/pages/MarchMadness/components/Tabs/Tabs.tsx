@@ -1,3 +1,4 @@
+import { START_MINTING_DATE } from 'pages/MarchMadness/MarchMadness';
 import queryString from 'query-string';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,15 +51,15 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
             </Tab>
             <Tab
                 active={selectedTab === MarchMadTabs.BRACKETS}
-                isClickable={isWalletConnected}
-                onClick={() => tabClickHandler(MarchMadTabs.BRACKETS)}
+                isClickable={isWalletConnected && Date.now() > START_MINTING_DATE}
+                onClick={() => Date.now() > START_MINTING_DATE && tabClickHandler(MarchMadTabs.BRACKETS)}
             >
                 {t('march-madness.tabs.brackets')}
             </Tab>
             <Tab
                 active={selectedTab === MarchMadTabs.LEADERBOARD}
-                isClickable={true}
-                onClick={() => tabClickHandler(MarchMadTabs.LEADERBOARD)}
+                isClickable={Date.now() > START_MINTING_DATE}
+                onClick={() => Date.now() > START_MINTING_DATE && tabClickHandler(MarchMadTabs.LEADERBOARD)}
             >
                 {t('march-madness.tabs.leaderboard')}
             </Tab>

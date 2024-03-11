@@ -1239,7 +1239,8 @@
             "brackets-points-rules-1": "1.ª Ronda: 1 punto por elección correcta",
             "volume-incetives-2": "Cualquier volumen de compra que involucre posiciones de March Madness contará como volumen, incluidos los parlays con un mínimo de 1 posición de March Madness.",
             "comp-rules-0": "La acuñación de grupos comenzará después de que finalice el domingo de selección y se conozca el calendario de la primera ronda, a principios del 18 de marzo UTC.",
-            "comp-rules-0-a": "La acuñación de grupos durará hasta que los juegos de la primera ronda comiencen el 21 de marzo."
+            "comp-rules-0-a": "La acuñación de grupos durará hasta que los juegos de la primera ronda comiencen el 21 de marzo.",
+            "time-info-a": "Hasta que comience la acuñación de soportes"
         },
         "leaderboard": {
             "owner": "Dueño",

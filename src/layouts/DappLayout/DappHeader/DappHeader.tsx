@@ -104,7 +104,6 @@ const DappHeader: React.FC = () => {
         <MarchMadnessWrapper>
             <SPAAnchor href={buildHref(ROUTES.MarchMadness)}>
                 <Button
-                    disabled={!isMarchMadnessAvailableForNetworkId(networkId)}
                     fontSize="18px"
                     width="290px"
                     additionalStyles={{

@@ -1239,7 +1239,8 @@
             "brackets-points-rules-2": "2e tour : 2 points par choix correct",
             "comp-rules-5": "Les supports identiques émis par le même portefeuille seront comptés pour un.",
             "comp-rules-0": "La frappe des brackets commencera une fois la sélection dimanche terminée et le calendrier du 1er tour connu, début le 18 mars UTC.",
-            "comp-rules-0-a": "La frappe des brackets durera jusqu'au début des matchs du 1er tour le 21 mars."
+            "comp-rules-0-a": "La frappe des brackets durera jusqu'au début des matchs du 1er tour le 21 mars.",
+            "time-info-a": "Jusqu'au début de la frappe des brackets"
         },
         "leaderboard": {
             "rewards": "Récompenses",

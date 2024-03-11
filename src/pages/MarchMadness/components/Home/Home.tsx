@@ -1,10 +1,9 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
-import { DEFAULT_BRACKET_ID, initialBracketsData } from 'constants/marchMadness';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -12,13 +11,14 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { localStore } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { getLocalStorageKey } from 'utils/marchMadness';
 import { history } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
-import { hoursToMinutes } from 'date-fns';
+import { hoursToSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
 import { FlexDivSpaceBetween } from 'styles/common';
+import useInterval from 'hooks/useInterval';
+import { START_MINTING_DATE } from 'pages/MarchMadness/MarchMadness';
+import { Network } from 'enums/network';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -67,12 +67,15 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const lsBrackets = localStore.get(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress));
-    const [isButtonDisabled, setIsButtonDisabled] = useState(lsBrackets !== undefined);
-
     const [showCompRules, setShowCompRules] = useState(false);
     const [showVolumeIncentives, setShowVolumeIncentives] = useState(false);
     const [showPointsSystem, setShowPointsSystem] = useState(false);
+    const [timeLeft, setTimeLeft] = useState({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+    });
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
         enabled: isAppReady,
@@ -85,42 +88,78 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     ]);
 
     const buttonClickHandler = () => {
-        console.log('jes please');
         if (isWalletConnected) {
-            localStore.set(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress), initialBracketsData);
-            setIsButtonDisabled(true);
-            history.push({
-                pathname: location.pathname,
-                search: queryString.stringify({
-                    tab: MarchMadTabs.BRACKETS,
-                }),
-            });
-            setSelectedTab && setSelectedTab(MarchMadTabs.BRACKETS);
+            if (Date.now() > START_MINTING_DATE) {
+                history.push({
+                    pathname: location.pathname,
+                    search: queryString.stringify({
+                        tab: MarchMadTabs.BRACKETS,
+                    }),
+                });
+                setSelectedTab && setSelectedTab(MarchMadTabs.BRACKETS);
+            }
         } else {
             openConnectModal?.();
         }
     };
 
     const switchToLeaderboard = () => {
-        history.push({
-            pathname: location.pathname,
-            search: queryString.stringify({
-                tab: MarchMadTabs.LEADERBOARD,
-            }),
-        });
-        setSelectedTab && setSelectedTab(MarchMadTabs.LEADERBOARD);
+        if (Date.now() > START_MINTING_DATE) {
+            history.push({
+                pathname: location.pathname,
+                search: queryString.stringify({
+                    tab: MarchMadTabs.LEADERBOARD,
+                }),
+            });
+            setSelectedTab && setSelectedTab(MarchMadTabs.LEADERBOARD);
+        }
     };
 
-    const timeLeftToMint = useMemo(() => {
-        const daysToMint = Math.floor((marchMadnessData?.minutesLeftToMint || 0) / hoursToMinutes(24));
-        const hoursToMint = Math.floor(((marchMadnessData?.minutesLeftToMint || 0) - daysToMint * 24 * 60) / 60);
-        const minutesToMint = (marchMadnessData?.minutesLeftToMint || 0) - daysToMint * 24 * 60 - hoursToMint * 60;
-        return {
+    // setting default time for cooldown to not show zeroes
+    useEffect(() => {
+        if (START_MINTING_DATE > Date.now()) {
+            const secondsLeftToMint = millisecondsToSeconds(START_MINTING_DATE - Date.now());
+            const daysToMint = Math.floor((secondsLeftToMint || 0) / hoursToSeconds(24));
+            const hoursToMint = Math.floor(((secondsLeftToMint || 0) - daysToMint * 24 * 60 * 60) / 3600);
+            const minutesToMint = Math.floor(
+                ((secondsLeftToMint || 0) - daysToMint * 24 * 60 * 60 - hoursToMint * 60 * 60) / 60
+            );
+            const secondsToMint =
+                (secondsLeftToMint || 0) - daysToMint * 24 * 60 * 60 - hoursToMint * 60 * 60 - minutesToMint * 60;
+            setTimeLeft({
+                days: daysToMint,
+                hours: hoursToMint,
+                minutes: minutesToMint,
+                seconds: secondsToMint,
+            });
+        }
+    }, []);
+
+    useInterval(() => {
+        let secondsLeftToMint = 0;
+        if (START_MINTING_DATE > Date.now()) {
+            secondsLeftToMint = millisecondsToSeconds(START_MINTING_DATE - Date.now());
+        } else if (marchMadnessData) {
+            secondsLeftToMint = millisecondsToSeconds(
+                secondsToMilliseconds(marchMadnessData.mintEndingDate) - Date.now()
+            );
+        }
+        const daysToMint = Math.floor((secondsLeftToMint || 0) / hoursToSeconds(24));
+        const hoursToMint = Math.floor(((secondsLeftToMint || 0) - daysToMint * 24 * 60 * 60) / 3600);
+        const minutesToMint = Math.floor(
+            ((secondsLeftToMint || 0) - daysToMint * 24 * 60 * 60 - hoursToMint * 60 * 60) / 60
+        );
+        const secondsToMint =
+            (secondsLeftToMint || 0) - daysToMint * 24 * 60 * 60 - hoursToMint * 60 * 60 - minutesToMint * 60;
+        setTimeLeft({
             days: daysToMint,
             hours: hoursToMint,
             minutes: minutesToMint,
-        };
-    }, [marchMadnessData?.minutesLeftToMint]);
+            seconds: secondsToMint,
+        });
+    }, 1000);
+
+    const mintingStarted = Date.now() > START_MINTING_DATE;
 
     return (
         <Container>
@@ -129,14 +168,19 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
             ) : (
                 <>
                     <PageTitle>{t('march-madness.home.title')}</PageTitle>
+                    {networkId !== Network.Arbitrum && <OnlyOnArbitrum>Available only on Arbitrum</OnlyOnArbitrum>}
                     {!isBracketsLocked && (
                         <>
                             <TimeLeft>
-                                {`${timeLeftToMint.days}d ${timeLeftToMint.hours}h ${timeLeftToMint.minutes}m`}
+                                {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
                             </TimeLeft>
-                            <TimeLeftDescription>{t('march-madness.home.time-info')}</TimeLeftDescription>
+
+                            <TimeLeftDescription>
+                                {t(mintingStarted ? 'march-madness.home.time-info' : 'march-madness.home.time-info-a')}
+                            </TimeLeftDescription>
                         </>
                     )}
+
                     <Text>{t('march-madness.home.description')}</Text>
 
                     <DropdownWrapper>
@@ -244,7 +288,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 textTransform: 'uppercase',
                                 color: theme.marchMadness.button.textColor.primary,
                             }}
-                            disabled={isButtonDisabled}
+                            disabled={Date.now() < START_MINTING_DATE}
                             onClick={buttonClickHandler}
                         >
                             {isWalletConnected
@@ -281,7 +325,7 @@ const TimeLeft = styled.h2`
     color: #fff;
     text-align: center;
     font-family: Legacy !important;
-    font-size: 97px;
+    font-size: 59px;
     font-style: normal;
     font-weight: 400;
     letter-spacing: 11.8px;
@@ -302,10 +346,15 @@ const TimeLeftDescription = styled.h3`
     line-height: normal;
     letter-spacing: 4.8px;
     text-transform: uppercase;
+    white-space: nowrap;
+`;
+
+const OnlyOnArbitrum = styled(TimeLeftDescription)`
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
 `;
 
 const Text = styled.span`
-    color: #fff;
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     text-align: justify;
     font-size: 14px;
     font-style: normal;

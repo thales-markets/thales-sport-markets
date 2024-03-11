@@ -29,7 +29,6 @@ import {
     updateWallet,
 } from 'redux/modules/wallet';
 import { isMobile } from 'utils/device';
-import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { isNetworkSupported, isRouteAvailableForNetwork } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import queryConnector from 'utils/queryConnector';
@@ -265,13 +264,13 @@ const App = () => {
                                         </DappLayout>
                                     </Route>
                                 )}
-                                {isMarchMadnessAvailableForNetworkId(networkId) && (
-                                    <Route exact path={ROUTES.MarchMadness}>
-                                        <DappLayout>
-                                            <MarchMadness />
-                                        </DappLayout>
-                                    </Route>
-                                )}
+
+                                <Route exact path={ROUTES.MarchMadness}>
+                                    <DappLayout>
+                                        <MarchMadness />
+                                    </DappLayout>
+                                </Route>
+
                                 {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                                     <Route exact path={ROUTES.LiquidityPool}>
                                         <DappLayout>
