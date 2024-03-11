@@ -26,6 +26,7 @@ type HomeProps = {
 
 const COMP_RULES = [
     'march-madness.home.comp-rules-0',
+    'march-madness.home.comp-rules-0-a',
     'march-madness.home.comp-rules-1',
     'march-madness.home.comp-rules-2',
     'march-madness.home.comp-rules-3',
