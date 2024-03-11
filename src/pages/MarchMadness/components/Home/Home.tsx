@@ -25,6 +25,7 @@ type HomeProps = {
 };
 
 const COMP_RULES = [
+    'march-madness.home.comp-rules-0',
     'march-madness.home.comp-rules-1',
     'march-madness.home.comp-rules-2',
     'march-madness.home.comp-rules-3',
@@ -130,7 +131,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                     {!isBracketsLocked && (
                         <>
                             <TimeLeft>
-                                {`${timeLeftToMint.days}D:${timeLeftToMint.hours}H:${timeLeftToMint.minutes}M`}
+                                {`${timeLeftToMint.days}d ${timeLeftToMint.hours}h ${timeLeftToMint.minutes}m`}
                             </TimeLeft>
                             <TimeLeftDescription>{t('march-madness.home.time-info')}</TimeLeftDescription>
                         </>
@@ -173,12 +174,12 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         )}
                     </DropdownWrapper>
 
-                    <DropdownWrapper
-                        onClick={() => {
-                            setShowPointsSystem(!showPointsSystem);
-                        }}
-                    >
-                        <LabelArrowWrapper>
+                    <DropdownWrapper>
+                        <LabelArrowWrapper
+                            onClick={() => {
+                                setShowPointsSystem(!showPointsSystem);
+                            }}
+                        >
                             <DropdownLabel>{t('march-madness.home.brackets-points-system-label')}</DropdownLabel>
                             <i className={`icon icon--arrow-${showPointsSystem ? 'up' : 'down'}`} />
                         </LabelArrowWrapper>
@@ -203,12 +204,12 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         )}
                     </DropdownWrapper>
 
-                    <DropdownWrapper
-                        onClick={() => {
-                            setShowVolumeIncentives(!showVolumeIncentives);
-                        }}
-                    >
-                        <LabelArrowWrapper>
+                    <DropdownWrapper>
+                        <LabelArrowWrapper
+                            onClick={() => {
+                                setShowVolumeIncentives(!showVolumeIncentives);
+                            }}
+                        >
                             <DropdownLabel>{t('march-madness.home.volume-incetives-label')}</DropdownLabel>
                             <i className={`icon icon--arrow-${showVolumeIncentives ? 'up' : 'down'}`} />
                         </LabelArrowWrapper>
@@ -286,6 +287,7 @@ const TimeLeft = styled.h2`
     text-transform: uppercase;
     max-width: 494px;
     margin: 6px auto;
+    white-space: nowrap;
 `;
 
 const TimeLeftDescription = styled.h3`
@@ -307,10 +309,11 @@ const Text = styled.span`
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: normal;
+    line-height: 18px;
     margin-top: 30px;
     margin-bottom: 50px;
     letter-spacing: 1.4px;
+    white-space: break-spaces;
 `;
 
 const DropdownWrapper = styled.div`
