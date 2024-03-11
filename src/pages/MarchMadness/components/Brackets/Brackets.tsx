@@ -1,13 +1,15 @@
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
-import background from 'assets/images/march-madness/background-marchmadness.svg';
+import backgroundCourt from 'assets/images/march-madness/background-marchmadness-court.svg';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
+import CollateralSelector from 'components/CollateralSelector';
 import Loader from 'components/Loader';
 import SelectInput from 'components/SelectInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import {
     APPROVE_MULTIPLIER,
+    CONVERSION_BUFFER_PERCENTAGE,
     DEFAULT_BRACKET_ID,
     ELITE8_ROUND_EAST_MATCH_ID,
     ELITE8_ROUND_MIDWEST_MATCH_ID,
@@ -38,14 +40,13 @@ import {
     initialBracketsData,
     wildCardTeams,
 } from 'constants/marchMadness';
-import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import { BigNumber } from 'ethers';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
-import useLeaderboardByVolumeQuery from 'queries/marchMadness/useLeaderboardByVolumeQuery';
-import useLoeaderboardByGuessedCorrectlyQuery from 'queries/marchMadness/useLoeaderboardByGuessedCorrectlyQuery';
+import useLeaderboardByGuessedCorrectlyQuery from 'queries/marchMadness/useLeaderboardByGuessedCorrectlyQuery';
 import useMarchMadnessBracketQuery from 'queries/marchMadness/useMarchMadnessBracketQuery';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -55,12 +56,12 @@ import { getParlayPayment } from 'redux/modules/parlay';
 import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumnCentered } from 'styles/common';
-import { COLLATERAL_DECIMALS, coinParser, localStore, truncToDecimals } from 'thales-utils';
+import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { COLLATERAL_DECIMALS, coinParser, localStore, roundNumberToDecimals, truncToDecimals } from 'thales-utils';
 import { BracketMatch } from 'types/marchMadness';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction } from 'utils/biconomy';
-import { getCollateral, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
+import { getCollateral, getCollaterals, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
 import { getFirstMatchIndexInRound, getLocalStorageKey, getNumberOfMatchesPerRound } from 'utils/marchMadness';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
@@ -119,6 +120,10 @@ const Brackets: React.FC = () => {
         [marchMadnessData, selectedBracketId]
     );
 
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
@@ -141,7 +146,7 @@ const Brackets: React.FC = () => {
                 return value;
             } else {
                 const rate = exchangeRates?.[selectedCollateral];
-                const priceFeedBuffer = 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE;
+                const priceFeedBuffer = 1 - CONVERSION_BUFFER_PERCENTAGE; // TODO: use getMinimumNeeded from contract
                 return rate
                     ? Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[selectedCollateral]) /
                           10 ** COLLATERAL_DECIMALS[selectedCollateral]
@@ -239,11 +244,11 @@ const Brackets: React.FC = () => {
         const isDefaultBracketPresent =
             localStore.get(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress)) !== undefined;
 
-        if (marchMadnessData && marchMadnessData.bracketsIds.length && !isDefaultBracketPresent) {
+        if (marchMadnessData && marchMadnessData.bracketsIds.length && (!isDefaultBracketPresent || isBracketsLocked)) {
             const lastBracketId = Math.max(...marchMadnessData.bracketsIds);
             setSelectedBracketId(lastBracketId);
         }
-    }, [marchMadnessData, networkId, walletAddress]);
+    }, [marchMadnessData, networkId, walletAddress, isBracketsLocked]);
 
     // check if submit bracket is disabled and set it
     useEffect(() => {
@@ -274,7 +279,12 @@ const Brackets: React.FC = () => {
             const getAllowance = async () => {
                 try {
                     const parsedAmount = coinParser(
-                        marchMadnessData.mintingPrice.toString(),
+                        isStableCurrency(selectedCollateral)
+                            ? marchMadnessData.mintingPrice.toString()
+                            : roundNumberToDecimals(
+                                  convertFromStable(marchMadnessData.mintingPrice),
+                                  COLLATERAL_DECIMALS[selectedCollateral]
+                              ).toString(),
                         networkId,
                         selectedCollateral
                     );
@@ -353,7 +363,7 @@ const Brackets: React.FC = () => {
             let toastId: string | number = '';
             if (marchMadnessData) {
                 const marchMadnessContractWithSigner = marchMadnessContract.connect(signer);
-                const bracketsContractData = bracketsData.map((match) =>
+                const bracketsForContract = bracketsData.map((match) =>
                     match.isHomeTeamSelected ? match.homeTeamId : match.awayTeamId
                 );
 
@@ -363,14 +373,14 @@ const Brackets: React.FC = () => {
                         setIsUpdating(true);
                         tx = await marchMadnessContractWithSigner.updateBracketsForAlreadyMintedItem(
                             selectedBracketId,
-                            bracketsContractData
+                            bracketsForContract
                         );
                     } else {
                         setIsMinting(true);
                         toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
                         if (isDefaultCollateral) {
-                            tx = await marchMadnessContractWithSigner.mint(bracketsContractData);
+                            tx = await marchMadnessContractWithSigner.mint(bracketsForContract);
                         } else {
                             const collateralAmount = coinParser(
                                 truncToDecimals(
@@ -380,13 +390,17 @@ const Brackets: React.FC = () => {
                                 networkId,
                                 selectedCollateral
                             );
-
-                            tx = await marchMadnessContractWithSigner.mintWithDiffCollateral(
-                                collateralAddress,
-                                collateralAmount,
-                                isEth,
-                                bracketsContractData
-                            );
+                            console.log(collateralAmount);
+                            tx = isEth
+                                ? await marchMadnessContractWithSigner.mintWithEth(bracketsForContract, {
+                                      value: collateralAmount,
+                                  })
+                                : await marchMadnessContractWithSigner.mintWithDiffCollateral(
+                                      collateralAddress,
+                                      collateralAmount,
+                                      isEth,
+                                      bracketsForContract
+                                  );
                         }
                     }
 
@@ -395,7 +409,7 @@ const Brackets: React.FC = () => {
                     if (txResult && txResult.transactionHash) {
                         window.localStorage.removeItem(
                             getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress)
-                        ); // TODO: move to thales-utils
+                        );
                         toastId &&
                             toast.update(
                                 toastId,
@@ -595,18 +609,7 @@ const Brackets: React.FC = () => {
         );
     };
 
-    const leaderboardByVolumeQuery = useLeaderboardByVolumeQuery(networkId);
-    const leaderboardByGuessedGamesQuery = useLoeaderboardByGuessedCorrectlyQuery(networkId);
-
-    const rankByVolume = useMemo(() => {
-        if (leaderboardByVolumeQuery.isSuccess && leaderboardByVolumeQuery.data) {
-            const leaderboardData = leaderboardByVolumeQuery.data?.leaderboard.find(
-                (data) => data.walletAddress.toLowerCase() === walletAddress.toLowerCase()
-            );
-            return leaderboardData ? leaderboardData.rank : 0;
-        }
-        return 0;
-    }, [leaderboardByVolumeQuery.data, leaderboardByVolumeQuery.isSuccess, walletAddress]);
+    const leaderboardByGuessedGamesQuery = useLeaderboardByGuessedCorrectlyQuery(networkId);
 
     const rankByGames = useMemo(() => {
         if (leaderboardByGuessedGamesQuery.isSuccess && leaderboardByGuessedGamesQuery.data) {
@@ -623,20 +626,22 @@ const Brackets: React.FC = () => {
 
         return (
             <MyStats>
-                <StatsColumn width="35%">
+                <StatsColumn width="40%">
                     <StatsText fontWeight={600} margin="0 0 0 21px">
                         {t('march-madness.brackets.stats.my-stats')}
                     </StatsText>
                 </StatsColumn>
-                <StatsColumn width="65%">
-                    <StatsRow margin="0 0 10px 0" justify="normal">
-                        <StatsText>{t('march-madness.brackets.stats.rank-volume')}:</StatsText>
+                <StatsColumn width="60%">
+                    <StatsRow justify="normal">
+                        <StatsText>{t('march-madness.brackets.stats.bracket')}:</StatsText>
                         <StatsText margin="0 15px 0 auto" fontWeight={700}>
-                            {isFirstMatchFinished ? (rankByVolume ? rankByVolume : '-') : 'N/A'}
+                            {isSubmitDisabled
+                                ? t('march-madness.brackets.stats.incomplete')
+                                : t('march-madness.brackets.stats.complete')}
                         </StatsText>
                     </StatsRow>
-                    <StatsRow margin="10px 0 0 0" justify="normal">
-                        <StatsText>{t('march-madness.brackets.stats.rank-games')}:</StatsText>
+                    <StatsRow justify="normal">
+                        <StatsText>{t('march-madness.brackets.stats.rank')}:</StatsText>
                         <StatsText margin="0 15px 0 auto" fontWeight={700}>
                             {isFirstMatchFinished ? (rankByGames ? rankByGames : '-') : 'N/A'}
                         </StatsText>
@@ -651,14 +656,16 @@ const Brackets: React.FC = () => {
         const roundNameKey = 'march-madness.brackets.round-' + round;
 
         return (
-            <StatsColumn width="9%" margin="4px 15px 0 15px" justify="initial" key={round}>
-                <StatsRow margin="0 0 10px 0" justify="center" hasBorder={true}>
-                    <StatsText fontWeight={700} fontSize={14} lineHeight={21} margin="0 0 2px 0">
+            <StatsColumn width="8%" margin="0 10px" key={round}>
+                <StatsRow>
+                    <StatsText fontWeight={700} fontSize={14} margin="0 0 2px 0">
                         {t(roundNameKey)}
                     </StatsText>
                 </StatsRow>
-                <StatsRow margin="0 0 5px 0">
-                    <StatsText fontSize={14}>{t('march-madness.brackets.stats.points')}</StatsText>
+                <StatsRow justify="initial">
+                    <StatsText fontSize={14} margin="0 5px 0 0">
+                        {t('march-madness.brackets.stats.points')}
+                    </StatsText>
                     <StatsText fontWeight={600} fontSize={14}>
                         {roundPoints + '/' + POINTS_PER_ROUND}
                     </StatsText>
@@ -689,9 +696,11 @@ const Brackets: React.FC = () => {
 
         return (
             <MyTotalScore>
-                <StatsColumn width="13%">
-                    <StatsRow margin="0 20px 7px 13px">
-                        <StatsText>{t('march-madness.brackets.stats.points')}</StatsText>
+                <StatsColumn width="12%" margin="0 0 0 25px">
+                    <StatsRow>
+                        <StatsText>{t('march-madness.brackets.stats.total-points')}</StatsText>
+                    </StatsRow>
+                    <StatsRow>
                         <StatsText fontWeight={700}>{`${totalPoints}  / ${MAX_TOTAL_POINTS}`}</StatsText>
                     </StatsRow>
                 </StatsColumn>
@@ -705,7 +714,6 @@ const Brackets: React.FC = () => {
                         defaultValue={defaultOptionIndex}
                         options={bracketsIdsOptions}
                         handleChange={(value) => setSelectedBracketId(Number(value))}
-                        width={170}
                     />
                 </DropdownContainer>
             </MyTotalScore>
@@ -786,7 +794,7 @@ const Brackets: React.FC = () => {
                             <RoundName>{t('march-madness.brackets.round-1')}</RoundName>
                             <RoundName>{t('march-madness.brackets.round-0')}</RoundName>
                         </RowHeader>
-                        {!!marchMadnessData?.bracketsIds.length && (
+                        {!isBracketsLocked && !!marchMadnessData?.bracketsIds.length && (
                             <CreateNewBracketWrapper>
                                 <Button
                                     additionalStyles={{
@@ -806,8 +814,9 @@ const Brackets: React.FC = () => {
                                             : createAsBracket(selectedBracketId)
                                     }
                                 >
-                                    {/* TODO:  */}
-                                    {selectedBracketId === DEFAULT_BRACKET_ID ? 'Clear all' : 'Create new as...'}
+                                    {selectedBracketId === DEFAULT_BRACKET_ID
+                                        ? t('march-madness.brackets.clear-all')
+                                        : t('march-madness.brackets.create-as')}
                                 </Button>
                             </CreateNewBracketWrapper>
                         )}
@@ -847,30 +856,44 @@ const Brackets: React.FC = () => {
 
                         {!isBracketsLocked && (
                             <SubmitWrapper>
-                                <Button
-                                    additionalStyles={{
-                                        fontSize: '14px',
-                                        fontFamily: "'NCAA' !important",
-                                        textTransform: 'uppercase',
-                                        background: theme.marchMadness.button.background.primary,
-                                        border: `2px solid ${theme.marchMadness.borderColor.primary}`,
-                                        borderRadius: '4px',
-                                        color: theme.marchMadness.button.textColor.primary,
-                                        width: '142px',
-                                        marginTop: '82px',
-                                        padding: '3px 10px',
-                                    }}
-                                    disabled={isSubmitDisabled}
-                                    onClick={() =>
-                                        hasAllowance ? setShowMintNFTModal(true) : setOpenApprovalModal(true)
-                                    }
-                                >
-                                    {isBracketMinted
-                                        ? t('march-madness.brackets.submit-modify')
-                                        : hasAllowance
-                                        ? t('march-madness.brackets.submit')
-                                        : t('common.wallet.approve')}
-                                </Button>
+                                <ButtonWrrapper>
+                                    <Button
+                                        additionalStyles={{
+                                            fontSize: '14px',
+                                            fontFamily: "'NCAA' !important",
+                                            textTransform: 'uppercase',
+                                            background: theme.marchMadness.button.background.primary,
+                                            border: `2px solid ${theme.marchMadness.borderColor.primary}`,
+                                            borderRadius: '4px',
+                                            color: theme.marchMadness.button.textColor.primary,
+                                            width: isBracketMinted ? '245px' : '180px',
+                                            padding: '3px 10px',
+                                        }}
+                                        disabled={isSubmitDisabled}
+                                        onClick={() =>
+                                            hasAllowance ? setShowMintNFTModal(true) : setOpenApprovalModal(true)
+                                        }
+                                    >
+                                        {isBracketMinted
+                                            ? t('march-madness.brackets.submit-modify')
+                                            : hasAllowance
+                                            ? t('march-madness.brackets.submit')
+                                            : t('common.wallet.approve')}
+                                    </Button>
+                                    {!isBracketMinted && (
+                                        <CollateralWrapper>
+                                            <CollateralSelector
+                                                collateralArray={getCollaterals(networkId)}
+                                                selectedItem={selectedCollateralIndex}
+                                                onChangeCollateral={() => {}}
+                                                isDetailedView
+                                                collateralBalances={multipleCollateralBalances.data}
+                                                exchangeRates={exchangeRates}
+                                                dropDownWidth="300px"
+                                            />
+                                        </CollateralWrapper>
+                                    )}
+                                </ButtonWrrapper>
                             </SubmitWrapper>
                         )}
                         <ShareWrapper>
@@ -973,7 +996,7 @@ const Brackets: React.FC = () => {
                     )}
                     {openApprovalModal && marchMadnessData && (
                         <ApprovalModal
-                            defaultAmount={marchMadnessData.mintingPrice * APPROVE_MULTIPLIER}
+                            defaultAmount={convertFromStable(marchMadnessData.mintingPrice) * APPROVE_MULTIPLIER}
                             collateralIndex={selectedCollateralIndex}
                             tokenSymbol={selectedCollateral}
                             isAllowing={isAllowing}
@@ -1004,9 +1027,9 @@ const BracketsWrapper = styled.div`
     position: relative;
     width: 1350px;
     height: 1010px;
-    background-image: url('${background}'), url('${backgrounBall}');
+    background-image: url('${backgroundCourt}'), url('${backgrounBall}');
     background-size: auto;
-    background-position: 0 71px, -291px -162px;
+    background-position: 0 64px, -291px -162px;
     background-repeat: no-repeat;
 `;
 
@@ -1074,10 +1097,30 @@ const Final = styled.div`
 
 const SubmitWrapper = styled(Final)``;
 
+const ButtonWrrapper = styled.div`
+    position: relative;
+    width: 245px;
+    margin-top: 82px;
+`;
+
+const CollateralWrapper = styled(FlexDivCentered)`
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 76px;
+    height: 28px;
+    padding: 3px;
+    background: ${(props) => props.theme.marchMadness.button.background.primary};
+    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.primary};
+    border-radius: 0 4px 4px 0;
+    z-index: 11;
+`;
+
 const Region = styled.div<{ isSideLeft: boolean; isVertical: boolean }>`
     width: ${(props) => (props.isVertical ? '30px' : '81px')};
     height: ${(props) => (props.isVertical ? '472px' : '52px')};
-    background: ${(props) => props.theme.marchMadness.background.secondary};
+    border-radius: 5px;
+    background: ${(props) => props.theme.marchMadness.background.tertiary};
     ${(props) => `${props.isSideLeft ? 'margin-right: ' : 'margin-left: '}${props.isVertical ? '5' : '1'}`}px;
     ${(props) => (props.isVertical ? 'writing-mode: vertical-rl;' : '')}
     ${(props) => (props.isVertical ? 'text-orientation: upright;' : '')}
@@ -1116,7 +1159,6 @@ const RoundName = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: ${(props) => props.theme.marchMadness.button.background.quaternary};
     font-family: 'Oswald' !important;
     font-style: normal;
     font-weight: 600;
@@ -1132,24 +1174,24 @@ const MyStats = styled.div`
     display: flex;
     width: 304px;
     height: 80px;
-    background: ${(props) => props.theme.marchMadness.background.quaternary};
-    border: 1px solid ${(props) => props.theme.marchMadness.background.quaternary};
+    background: ${(props) => props.theme.marchMadness.background.senary};
+    border-radius: 8px;
 `;
 
 const StatsColumn = styled.div<{ width?: string; margin?: string; justify?: string }>`
     display: flex;
     flex-direction: column;
+    gap: 10px;
     justify-content: ${(props) => (props.justify ? props.justify : 'center')};
     ${(props) => (props.width ? `width: ${props.width};` : '')}
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
 
-const StatsRow = styled.div<{ justify?: string; margin?: string; hasBorder?: boolean }>`
+const StatsRow = styled.div<{ justify?: string; margin?: string }>`
     display: flex;
     flex-direction: row;
     justify-content: ${(props) => (props.justify ? props.justify : 'space-between')};
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
-    ${(props) => (props.hasBorder ? `border-bottom: 1px solid ${props.theme.marchMadness.borderColor.secondary};` : '')}
 `;
 
 const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; lineHeight?: number; margin?: string }>`
@@ -1168,10 +1210,11 @@ const MyTotalScore = styled.div`
     height: 80px;
     display: flex;
     background: ${(props) => props.theme.marchMadness.background.tertiary};
-    border: 1px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+    border-radius: 8px;
 `;
 
 const DropdownContainer = styled(FlexDivColumnCentered)`
+    margin: 0 10px;
     z-index: 100;
 `;
 
@@ -1190,7 +1233,8 @@ const WildCardsHeader = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.senary};
+    border-radius: 5px;
     margin-bottom: 6px;
     font-family: 'NCAA' !important;
     font-style: normal;
@@ -1211,9 +1255,9 @@ const WildCardsRow = styled.div`
 `;
 
 const VerticalLine = styled.div`
-    border-left: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+    border-left: 2px solid ${(props) => props.theme.marchMadness.borderColor.quaternary};
     height: 70px;
-    margin: 4px 0;
+    margin: 4px 15px;
 `;
 
 const ShareWrapper = styled(Final)``;

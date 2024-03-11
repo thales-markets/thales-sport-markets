@@ -27,7 +27,7 @@ const Container = styled.div<{ margin?: string }>`
     position: relative;
     width: 135px;
     height: 52px;
-    border: 1px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+    border: 1px solid ${(props) => props.theme.marchMadness.borderColor.quinary};
     border-radius: 4px;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
@@ -53,7 +53,7 @@ const TeamName = styled.div<{ isWinner?: boolean }>`
     text-transform: uppercase;
     color: ${(props) =>
         props.isWinner === undefined || props.isWinner
-            ? props.theme.marchMadness.textColor.tertiary
+            ? props.theme.marchMadness.textColor.secondary
             : props.theme.marchMadness.textColor.quinary};
     text-align: center;
     white-space: nowrap;
@@ -65,7 +65,7 @@ const TeamSeparator = styled.hr`
     width: 122px;
     height: 1px;
     border: none;
-    background-color: ${(props) => props.theme.marchMadness.background.secondary};
+    background-color: ${(props) => props.theme.marchMadness.background.quinary};
     margin: auto;
 `;
 

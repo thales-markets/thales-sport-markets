@@ -125,7 +125,7 @@ const Container = styled(FlexDivCentered)`
 const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
     border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.borderColor.quaternary};
+    border: 1px solid ${(props) => props.theme.background.quaternary}; // TODO: March Madness fix, revert background to borderColor
     height: 28px;
     justify-content: space-between;
     align-items: center;
@@ -156,7 +156,7 @@ const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?:
 `;
 
 const WalletBalanceInfo = styled.div`
-    border-left: 2px solid ${(props) => props.theme.borderColor.quaternary};
+    border-left: 2px solid ${(props) => props.theme.background.quaternary}; // TODO: March Madness fix, revert background to borderColor
     padding-left: 7px;
     padding-right: 6px;
     height: 70%;

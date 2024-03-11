@@ -37,10 +37,6 @@ export const refetchMarchMadnessData = (walletAddress: string, networkId: Networ
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.MarchMadness.Data(walletAddress, networkId));
 };
 
-export const refetchMarchMadnessBracket = (tokenId: number, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.MarchMadness.Bracket(tokenId, networkId));
-};
-
 export const refetchVaultData = (vaultAddress: string, walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.Data(vaultAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.UserData(vaultAddress, walletAddress, networkId));

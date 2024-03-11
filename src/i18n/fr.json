@@ -1237,7 +1237,10 @@
             "comp-rules-2": "Un coût de menthe par Bracket est <b>de 50 USDC</b> , où 45 USDC vont au prize pool tandis que 5 USDC vont au pool de frais de protocole Thales pour la semaine en cours.",
             "comp-rules-9": "Pour des informations plus détaillées sur la campagne March Madness 2024 sur les heures supplémentaires, visitez le <d>article de blog officiel</d>.",
             "brackets-points-rules-2": "2e tour : 2 points par choix correct",
-            "comp-rules-5": "Les supports identiques émis par le même portefeuille seront comptés pour un."
+            "comp-rules-5": "Les supports identiques émis par le même portefeuille seront comptés pour un.",
+            "comp-rules-0": "La frappe des brackets commencera une fois la sélection dimanche terminée et le calendrier du 1er tour connu, début le 18 mars UTC.",
+            "comp-rules-0-a": "La frappe des brackets durera jusqu'au début des matchs du 1er tour le 21 mars.",
+            "time-info-a": "Jusqu'au début de la frappe des brackets"
         },
         "leaderboard": {
             "rewards": "Récompenses",
@@ -1266,7 +1269,12 @@
                 "bonus": "Prime",
                 "points": "Points",
                 "my-stats": "Mes stats",
-                "my-total-score": "Mon score total"
+                "my-total-score": "Mon score total",
+                "incomplete": "Incomplet",
+                "total-points": "Mon total de points",
+                "bracket": "Support",
+                "complete": "Complet",
+                "rank": "Rang"
             },
             "modal-mint": {
                 "update-text-1": "Bien fait!",
@@ -1304,7 +1312,9 @@
             "error-minting-price": "Le prix de frappe ne peut pas être récupéré !",
             "my-brackets": "Mes supports",
             "confirmation-message": "Support frappé avec succès",
-            "bracket-id": "Numéro d'identification du support {{id}}"
+            "bracket-id": "Numéro d'identification du support {{id}}",
+            "create-as": "Créer nouveau en tant que...",
+            "clear-all": "Tout effacer"
         },
         "regions": {
             "south": "Sud",

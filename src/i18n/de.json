@@ -1237,7 +1237,10 @@
             "brackets-points-rules-2": "2. Runde: 2 Punkte pro richtiger Wahl",
             "comp-rules-4": "Identische Klammern werden nach Klammer-ID geordnet, wobei eine niedrigere ID (frühere Prägung) einen Vorteil gegenüber einer höheren ID (spätere Prägung) hat.",
             "brackets-points-rules-1": "1. Runde: 1 Punkt pro richtiger Wahl",
-            "brackets-points-rules-6": "Letztes Spiel: 32 Punkte für die richtige Wahl"
+            "brackets-points-rules-6": "Letztes Spiel: 32 Punkte für die richtige Wahl",
+            "comp-rules-0-a": "Die Prägung der Brackets dauert bis zum Beginn der Spiele der 1. Runde am 21. März.",
+            "comp-rules-0": "Die Prägung der Brackets beginnt am 18. März (UTC), nachdem der Auswahlsonntag beendet ist und der Zeitplan für die erste Runde bekannt ist.",
+            "time-info-a": "Bis die Klammerprägung beginnt"
         },
         "leaderboard": {
             "tooltip-rewards-volume-table": "10.000 OP (30.000 THALES auf Arbitrum) werden auf der Grundlage des anteiligen Volumens aufgeteilt",
@@ -1266,7 +1269,12 @@
                 "points": "Punkte",
                 "rank-volume": "Nach Volumen ordnen",
                 "my-total-score": "Meine Gesamtpunktzahl",
-                "my-stats": "Meine Statistiken"
+                "my-stats": "Meine Statistiken",
+                "rank": "Rang",
+                "incomplete": "Unvollständig",
+                "total-points": "Meine Gesamtpunktzahl",
+                "complete": "Vollständig",
+                "bracket": "Halterung"
             },
             "modal-mint": {
                 "update-text-1": "Schön gemacht!",
@@ -1304,7 +1312,9 @@
             "error-minting-price": "Prägepreis kann nicht abgerufen werden!",
             "my-brackets": "Meine Klammern",
             "bracket-id": "Klammer-ID #{{id}}",
-            "confirmation-message": "Klammer erfolgreich geprägt"
+            "confirmation-message": "Klammer erfolgreich geprägt",
+            "create-as": "Neu erstellen als...",
+            "clear-all": "Alles löschen"
         },
         "regions": {
             "east": "Ost",

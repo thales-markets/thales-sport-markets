@@ -1237,7 +1237,10 @@
             "comp-rules-4": "相同的括号将按括号 ID 进行排名，其中较低 ID（较早铸造）将比较高 ID（较晚铸造）具有优势。",
             "comp-rules-2": "每个支架的铸币成本为<b>50 USDC</b> ，其中 45 USDC 用于奖金池，5 USDC 用于当前一周的泰雷兹协议费用池",
             "brackets-points-rules-4": "精英八强：每次正确选择得 8 分",
-            "brackets-points-rules-5": "四强赛：每次正确选择得 16 分"
+            "brackets-points-rules-5": "四强赛：每次正确选择得 16 分",
+            "comp-rules-0": "括号铸币将于周日选拔赛结束且第一轮赛程已知后（世界标准时间 3 月 18 日上旬）开始。",
+            "comp-rules-0-a": "括号铸造将持续到 3 月 21 日第一轮比赛开始。",
+            "time-info-a": "直到支架铸造开始"
         },
         "leaderboard": {
             "bonus-volume": "奖金",
@@ -1266,7 +1269,12 @@
                 "my-stats": "我的统计数据",
                 "my-total-score": "我的总分",
                 "bonus": "奖金",
-                "rank-volume": "按数量排名"
+                "rank-volume": "按数量排名",
+                "bracket": "括号",
+                "incomplete": "不完整",
+                "complete": "完全的",
+                "total-points": "我的总积分",
+                "rank": "秩"
             },
             "modal-mint": {
                 "button-updating": "更新中...",
@@ -1304,7 +1312,9 @@
             "new-bracket": "新支架",
             "bracket-id": "支架 ID #{{id}}",
             "confirmation-message": "支架铸造成功",
-            "my-brackets": "我的括号"
+            "my-brackets": "我的括号",
+            "clear-all": "全部清除",
+            "create-as": "新建为..."
         },
         "regions": {
             "west": "西方",

@@ -102,108 +102,151 @@ const Match: React.FC<MatchProps> = ({
 
     return (
         <Container height={height} margin={margin}>
-            <TeamRow isClickable={isTeamClickable} isHomeTeam={true} onClick={() => teamClickHandler(true)}>
-                {/* HOME TEAM */}
-                {isBracketsLeftSide ? (
-                    /* LEFT HALF */
-                    <>
-                        <Logo>
-                            <TeamLogo
-                                alt="Home team logo"
-                                src={homeLogoSrc}
-                                onError={getOnImageError(setHomeLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
+            <TeamRowWrapper isSelected={!!isHomeTeamSelected}>
+                <TeamRow
+                    isClickable={isTeamClickable}
+                    isHomeTeam={true}
+                    isWon={homeTeamWonStatus}
+                    isSelected={!!isHomeTeamSelected}
+                    onClick={() => teamClickHandler(true)}
+                >
+                    {/* HOME TEAM */}
+                    {isBracketsLeftSide ? (
+                        /* LEFT HALF */
+                        <>
+                            <Logo>
+                                <TeamLogo
+                                    alt="Home team logo"
+                                    src={homeLogoSrc}
+                                    onError={getOnImageError(setHomeLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
+                                />
+                            </Logo>
+                            <TeamPosition isLeftSide={true}>
+                                <TeamPositionValue>{homeTeam?.position}</TeamPositionValue>
+                            </TeamPosition>
+                            {getTeamName(true, true)}
+                            <TeamStatus
+                                isSelected={!!isHomeTeamSelected}
+                                isWon={homeTeamWonStatus}
+                                margin="0 4px 0 0"
                             />
-                        </Logo>
-                        <TeamPosition isLeftSide={true}>
-                            <TeamPositionValue>{homeTeam?.position}</TeamPositionValue>
-                        </TeamPosition>
-                        {getTeamName(true, true)}
-                        <TeamStatus isSelected={!!isHomeTeamSelected} isWon={homeTeamWonStatus} margin="0 5px 0 0" />
-                    </>
-                ) : (
-                    /* RIGHT HALF */
-                    <>
-                        <TeamStatus isSelected={!!isHomeTeamSelected} isWon={homeTeamWonStatus} margin="0 0 0 5px" />
-                        {getTeamName(true, false)}
-                        <TeamPosition isLeftSide={false}>
-                            <TeamPositionValue>{homeTeam?.position}</TeamPositionValue>
-                        </TeamPosition>
-                        <Logo>
-                            <TeamLogo
-                                alt="Home team logo"
-                                src={homeLogoSrc}
-                                onError={getOnImageError(setHomeLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
+                        </>
+                    ) : (
+                        /* RIGHT HALF */
+                        <>
+                            <TeamStatus
+                                isSelected={!!isHomeTeamSelected}
+                                isWon={homeTeamWonStatus}
+                                margin="0 0 0 4px"
                             />
-                        </Logo>
-                    </>
-                )}
-            </TeamRow>
-            <TeamSeparator isActive={!!homeTeam?.displayName || !!awayTeam?.displayName} />
-            <TeamRow isClickable={isTeamClickable} isHomeTeam={false} onClick={() => teamClickHandler(false)}>
-                {/* AWAY TEAM */}
-                {isBracketsLeftSide ? (
-                    /* LEFT HALF */
-                    <>
-                        <Logo>
-                            <TeamLogo
-                                alt="Away team logo"
-                                src={awayLogoSrc}
-                                onError={getOnImageError(setAwayLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
+                            {getTeamName(true, false)}
+                            <TeamPosition isLeftSide={false}>
+                                <TeamPositionValue>{homeTeam?.position}</TeamPositionValue>
+                            </TeamPosition>
+                            <Logo>
+                                <TeamLogo
+                                    alt="Home team logo"
+                                    src={homeLogoSrc}
+                                    onError={getOnImageError(setHomeLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
+                                />
+                            </Logo>
+                        </>
+                    )}
+                </TeamRow>
+            </TeamRowWrapper>
+            <TeamRowWrapper isSelected={isHomeTeamSelected === false}>
+                <TeamRow
+                    isClickable={isTeamClickable}
+                    isHomeTeam={false}
+                    isWon={awayTeamWonStatus}
+                    isSelected={isHomeTeamSelected === false}
+                    onClick={() => teamClickHandler(false)}
+                >
+                    {/* AWAY TEAM */}
+                    {isBracketsLeftSide ? (
+                        /* LEFT HALF */
+                        <>
+                            <Logo>
+                                <TeamLogo
+                                    alt="Away team logo"
+                                    src={awayLogoSrc}
+                                    onError={getOnImageError(setAwayLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
+                                />
+                            </Logo>
+                            <TeamPosition isLeftSide={true}>
+                                <TeamPositionValue>{awayTeam?.position}</TeamPositionValue>
+                            </TeamPosition>
+                            {getTeamName(false, true)}
+                            <TeamStatus
+                                isSelected={!!isAwayTeamSelected}
+                                isWon={awayTeamWonStatus}
+                                margin="0 4px 0 0"
                             />
-                        </Logo>
-                        <TeamPosition isLeftSide={true}>
-                            <TeamPositionValue>{awayTeam?.position}</TeamPositionValue>
-                        </TeamPosition>
-                        {getTeamName(false, true)}
-                        <TeamStatus isSelected={!!isAwayTeamSelected} isWon={awayTeamWonStatus} margin="0 5px 0 0" />
-                    </>
-                ) : (
-                    /* RIGHT HALF */
-                    <>
-                        <TeamStatus isSelected={!!isAwayTeamSelected} isWon={awayTeamWonStatus} margin="0 0 0 5px" />
-                        {getTeamName(false, false)}
-                        <TeamPosition isLeftSide={false}>
-                            <TeamPositionValue>{awayTeam?.position}</TeamPositionValue>
-                        </TeamPosition>
-                        <Logo>
-                            <TeamLogo
-                                alt="Away team logo"
-                                src={awayLogoSrc}
-                                onError={getOnImageError(setAwayLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
+                        </>
+                    ) : (
+                        /* RIGHT HALF */
+                        <>
+                            <TeamStatus
+                                isSelected={!!isAwayTeamSelected}
+                                isWon={awayTeamWonStatus}
+                                margin="0 0 0 4px"
                             />
-                        </Logo>
-                    </>
-                )}
-            </TeamRow>
+                            {getTeamName(false, false)}
+                            <TeamPosition isLeftSide={false}>
+                                <TeamPositionValue>{awayTeam?.position}</TeamPositionValue>
+                            </TeamPosition>
+                            <Logo>
+                                <TeamLogo
+                                    alt="Away team logo"
+                                    src={awayLogoSrc}
+                                    onError={getOnImageError(setAwayLogoSrc, TAGS_FLAGS.NCAA_BASKETBALL, true)}
+                                />
+                            </Logo>
+                        </>
+                    )}
+                </TeamRow>
+            </TeamRowWrapper>
             <MatchConnector id={matchData.id} />
         </Container>
     );
 };
 
 const Container = styled.div<{ height: number; margin?: string }>`
-    background: ${(props) => props.theme.marchMadness.button.background.primary};
     position: relative;
     width: 142px;
     height: ${(props) => props.height}px;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
-    border: 1px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+`;
+
+const TeamRowWrapper = styled.div<{ isSelected: boolean }>`
+    ${(props) => (props.isSelected ? '' : `background: ${props.theme.marchMadness.button.background.quaternary};`)}
     border-radius: 4px;
+    position: relative;
+    z-index: 100;
 `;
 
-const TeamSeparator = styled.hr<{ isActive: boolean }>`
-    width: 122px;
-    height: 1px;
-    border: none;
-    background-color: ${(props) =>
-        props.isActive ? props.theme.marchMadness.background.secondary : props.theme.marchMadness.background.quinary};
-    margin: auto;
-`;
-
-const TeamRow = styled.div<{ isClickable: boolean; isHomeTeam: boolean }>`
+const TeamRow = styled.div<{
+    isClickable: boolean;
+    isHomeTeam: boolean;
+    isWon: boolean | undefined;
+    isSelected: boolean;
+}>`
+    opacity: ${(props) => (props.isSelected ? '1' : '0.2')};
     background: ${(props) => props.theme.marchMadness.button.background.primary};
+    border: ${(props) =>
+        props.isSelected
+            ? `1px solid
+        ${
+            props.isWon === undefined
+                ? props.theme.marchMadness.borderColor.quinary
+                : props.isWon
+                ? props.theme.marchMadness.status.win
+                : props.theme.marchMadness.button.background.primary
+        }`
+            : 'none'};
     border-radius: 4px;
     width: 100%;
-    height: 24.5px;
+    height: 26px;
     position: relative;
     display: flex;
     flex-direction: row;
@@ -216,7 +259,6 @@ const TeamRow = styled.div<{ isClickable: boolean; isHomeTeam: boolean }>`
         props.isClickable
             ? `:hover {
                     background: ${props.theme.marchMadness.button.background.quinary};
-                    border-radius: ${props.isHomeTeam ? '4px 4px 0 0' : '0 0 4px 4px'};
                 }`
             : ''}
 `;

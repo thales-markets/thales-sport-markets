@@ -1,7 +1,7 @@
 import Tooltip from 'components/Tooltip';
-import useLoeaderboardByGuessedCorrectlyQuery, {
+import useLeaderboardByGuessedCorrectlyQuery, {
     LeaderboardByGuessedCorrectlyResponse,
-} from 'queries/marchMadness/useLoeaderboardByGuessedCorrectlyQuery';
+} from 'queries/marchMadness/useLeaderboardByGuessedCorrectlyQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -67,7 +67,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         {t('march-madness.leaderboard.guessed-games')}
                         <Tooltip
                             overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.tertiary,
+                                backgroundColor: theme.marchMadness.background.secondary,
                                 border: `1px solid ${theme.marchMadness.borderColor.primary}`,
                             }}
                             overlay={
@@ -89,7 +89,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         {t('march-madness.leaderboard.rewards')}
                         <Tooltip
                             overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.tertiary,
+                                backgroundColor: theme.marchMadness.background.secondary,
                                 border: `1px solid ${theme.marchMadness.borderColor.primary}`,
                             }}
                             overlay={
@@ -106,9 +106,9 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 accessor: 'rewards',
             },
         ];
-    }, [t, networkId, theme.marchMadness.borderColor.primary, theme.marchMadness.background.tertiary]);
+    }, [t, networkId, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
 
-    const leaderboardQuery = useLoeaderboardByGuessedCorrectlyQuery(networkId);
+    const leaderboardQuery = useLeaderboardByGuessedCorrectlyQuery(networkId);
 
     const data = useMemo(() => {
         if (leaderboardQuery.isSuccess && leaderboardQuery.data) return leaderboardQuery.data;

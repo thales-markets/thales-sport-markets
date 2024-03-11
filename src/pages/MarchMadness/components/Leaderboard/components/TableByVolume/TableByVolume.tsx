@@ -74,7 +74,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         {t('march-madness.leaderboard.base-volume')}
                         <Tooltip
                             overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.tertiary,
+                                backgroundColor: theme.marchMadness.background.secondary,
                                 border: `1px solid ${theme.marchMadness.borderColor.primary}`,
                             }}
                             overlay={
@@ -99,7 +99,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         {t('march-madness.leaderboard.bonus-volume')}
                         <Tooltip
                             overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.tertiary,
+                                backgroundColor: theme.marchMadness.background.secondary,
                                 border: `1px solid ${theme.marchMadness.borderColor.primary}`,
                             }}
                             overlay={
@@ -124,7 +124,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         {t('march-madness.leaderboard.rewards')}
                         <Tooltip
                             overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.tertiary,
+                                backgroundColor: theme.marchMadness.background.secondary,
                                 border: `1px solid ${theme.marchMadness.borderColor.primary}`,
                             }}
                             overlay={
@@ -141,7 +141,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 accessor: 'rewards',
             },
         ];
-    }, [networkId, t, theme.marchMadness.borderColor.primary, theme.marchMadness.background.tertiary]);
+    }, [networkId, t, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
 
     const leaderboardQuery = useLeaderboardByVolumeQuery(networkId);
 
