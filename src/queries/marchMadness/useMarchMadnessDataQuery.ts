@@ -1,6 +1,6 @@
 import { NUMBER_OF_MATCHES, NUMBER_OF_ROUNDS } from 'constants/marchMadness';
 import QUERY_KEYS from 'constants/queryKeys';
-import { millisecondsToMinutes, secondsToMilliseconds } from 'date-fns';
+import { secondsToMilliseconds } from 'date-fns';
 import { BigNumber } from 'ethers';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { NetworkId, coinFormatter } from 'thales-utils';
@@ -9,7 +9,7 @@ import networkConnector from 'utils/networkConnector';
 type MarchMadnessData = {
     mintingPrice: number;
     isMintAvailable: boolean;
-    minutesLeftToMint: number;
+    mintEndingDate: number;
     bracketsIds: number[];
     winnerTeamIdsPerMatch: number[];
     winningsPerRound: number[];
@@ -22,7 +22,7 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
             const marchMadnessData: MarchMadnessData = {
                 mintingPrice: 0,
                 isMintAvailable: false,
-                minutesLeftToMint: 0,
+                mintEndingDate: 0,
                 bracketsIds: [],
                 winnerTeamIdsPerMatch: Array<number>(NUMBER_OF_MATCHES).fill(0),
                 winningsPerRound: Array<number>(NUMBER_OF_ROUNDS).fill(0),
@@ -49,11 +49,9 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
                         ]);
 
                         marchMadnessData.mintingPrice = coinFormatter(mintingPrice, networkId);
+                        marchMadnessData.mintEndingDate = Number(canNotMintOrUpdateAfter);
 
                         marchMadnessData.isMintAvailable = now < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
-                        marchMadnessData.minutesLeftToMint = millisecondsToMinutes(
-                            secondsToMilliseconds(Number(canNotMintOrUpdateAfter)) - now
-                        );
                         marchMadnessData.bracketsIds = tokenIds.map((tokenId) => Number(tokenId));
 
                         const winnerTeamIdsPerMatch = results.map((value: any) => Number(value));
@@ -63,10 +61,8 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
                         marchMadnessData.winningsPerRound = winningsPerRound;
                     } else {
                         const canNotMintOrUpdateAfter = await marchMadnessContract.canNotMintOrUpdateAfter(); // timestamp in seconds
-                        marchMadnessData.minutesLeftToMint = millisecondsToMinutes(
-                            secondsToMilliseconds(Number(canNotMintOrUpdateAfter)) - now
-                        );
                         marchMadnessData.isMintAvailable = now < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
+                        marchMadnessData.mintEndingDate = Number(canNotMintOrUpdateAfter);
                     }
                 }
 
