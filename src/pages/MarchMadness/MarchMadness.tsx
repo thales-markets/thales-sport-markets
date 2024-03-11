@@ -1,6 +1,5 @@
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
 import Loader from 'components/Loader';
-import { DEFAULT_BRACKET_ID } from 'constants/marchMadness';
 import ROUTES from 'constants/routes';
 import { Theme } from 'enums/ui';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -15,8 +14,6 @@ import { setTheme } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { localStore } from 'thales-utils';
-import { getLocalStorageKey } from 'utils/marchMadness';
 import { buildHref, history } from 'utils/routes';
 import Brackets from './components/Brackets';
 import Home from './components/Home';
@@ -38,7 +35,6 @@ const MarchMadness: React.FC = () => {
 
     const queryParamTab: MarchMadTabs = queryString.parse(location.search).tab as MarchMadTabs;
     const isTabAvailable = Object.values(MarchMadTabs).includes(queryParamTab);
-    const lsBrackets = localStore.get(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress));
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
         enabled: isAppReady,
@@ -46,11 +42,7 @@ const MarchMadness: React.FC = () => {
     const marchMadnessData =
         marchMadnessDataQuery.isSuccess && marchMadnessDataQuery.data ? marchMadnessDataQuery.data : null;
 
-    const defaultTab = isTabAvailable
-        ? queryParamTab
-        : lsBrackets !== undefined || marchMadnessData?.bracketsIds.length
-        ? MarchMadTabs.BRACKETS
-        : MarchMadTabs.HOME;
+    const defaultTab = isTabAvailable ? queryParamTab : MarchMadTabs.HOME;
 
     const [selectedTab, setSelectedTab] = useState(defaultTab);
 
@@ -63,14 +55,6 @@ const MarchMadness: React.FC = () => {
             }
             setSelectedTab(MarchMadTabs.HOME);
             return;
-        }
-        const lsBrackets = localStore.get(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress));
-        if (queryParamTab === undefined) {
-            if (lsBrackets !== undefined || marchMadnessData?.bracketsIds.length) {
-                setSelectedTab(MarchMadTabs.BRACKETS);
-            } else {
-                setSelectedTab(MarchMadTabs.HOME);
-            }
         }
     }, [
         walletAddress,

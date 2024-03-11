@@ -288,7 +288,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 textTransform: 'uppercase',
                                 color: theme.marchMadness.button.textColor.primary,
                             }}
-                            disabled={Date.now() < START_MINTING_DATE}
+                            disabled={isWalletConnected && Date.now() < START_MINTING_DATE}
                             onClick={buttonClickHandler}
                         >
                             {isWalletConnected
