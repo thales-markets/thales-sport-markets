@@ -17,8 +17,9 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { getIsMintingStarted } from 'utils/marchMadness';
-import { history } from 'utils/routes';
+import { history, navigateTo } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
+import ROUTES from 'constants/routes';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -267,6 +268,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                             components={{
                                                 b: <BoldContent />,
                                                 a: <Link onClick={switchToLeaderboard} />,
+                                                p: <LinkAvailable onClick={() => navigateTo(ROUTES.Promotions.Home)} />,
                                             }}
                                         />
                                     </ListItem>
@@ -420,6 +422,11 @@ const BoldContent = styled.span`
 const Link = styled.span`
     /* text-decoration: underline;
     cursor: pointer; */
+`;
+
+const LinkAvailable = styled.span`
+    text-decoration: underline;
+    cursor: pointer;
 `;
 
 export default Home;
