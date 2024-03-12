@@ -124,6 +124,7 @@ export type SportMarketChildMarkets = {
     receptionsMarkets: SportMarketInfo[];
     firstTouchdownMarkets: SportMarketInfo[];
     lastTouchdownMarkets: SportMarketInfo[];
+    threePointsMadeMarkets: SportMarketInfo[];
 };
 
 export type ParlayMarket = {
@@ -190,6 +191,17 @@ export type CombinedMarketsPositionName =
     | 'H2&O'
     | 'H2&U'
     | '';
+
+export type AccountPositionProfile = {
+    sUSDPaid: number;
+    id: string;
+    account: string;
+    amount: number;
+    claimable: boolean;
+    open: boolean;
+    market: SportMarketInfo;
+    side: PositionName;
+};
 
 type AccountPositionGraph = {
     id: string;

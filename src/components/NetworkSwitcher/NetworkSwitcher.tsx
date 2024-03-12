@@ -20,13 +20,7 @@ const NetworkSwitcher: React.FC = () => {
         () => SUPPORTED_NETWORKS_PARAMS[networkId] || SUPPORTED_NETWORKS_PARAMS[DEFAULT_NETWORK.networkId],
         [networkId]
     );
-    // // currently not supported network synchronization between browser without integrated wallet and wallet app on mobile
-    // const hideNetworkSwitcher =
-    //     isMobile &&
-    //     !window.ethereum?.isMetaMask &&
-    //     !window.ethereum?.isBraveWallet &&
-    //     !window.ethereum?.isCoinbaseWallet &&
-    //     !window.ethereum?.isTrust;
+
     return (
         <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
             <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)} isConnected={isWalletConnected}>

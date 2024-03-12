@@ -1,52 +1,52 @@
+import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
+import Button from 'components/Button';
+import SimpleLoader from 'components/SimpleLoader';
+import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { ZERO_ADDRESS } from 'constants/network';
+import { ethers } from 'ethers';
+import { LoaderContainer } from 'pages/Markets/Home/Home';
+import ShareTicketModal, {
+    ShareTicketModalProps,
+} from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
+import useAccountMarketsQuery from 'queries/markets/useAccountMarketsQuery';
+import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
+import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
 import React, { useEffect, useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getIsMobile } from 'redux/modules/app';
+import { getParlayPayment } from 'redux/modules/parlay';
 import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { Trans, useTranslation } from 'react-i18next';
-import { useParlayMarketsQuery } from 'queries/markets/useParlayMarketsQuery';
-import useAccountMarketsQuery, { AccountPositionProfile } from 'queries/markets/useAccountMarketsQuery';
-import { ParlayMarket } from 'types/markets';
+import { useTheme } from 'styled-components';
+import { FlexDivCentered } from 'styles/common';
+import { coinParser } from 'thales-utils';
+import { AccountPositionProfile, ParlayMarket } from 'types/markets';
+import { ThemeInterface } from 'types/ui';
+import { executeBiconomyTransaction } from 'utils/biconomy';
+import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils/collaterals';
+import sportsMarketContract from 'utils/contracts/sportsMarketContract';
+import { isParlayClaimable, isParlayOpen, isSportMarketExpired } from 'utils/markets';
+import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
+import networkConnector from 'utils/networkConnector';
+import ParlayPosition from './components/ParlayPosition';
+import SinglePosition from './components/SinglePosition';
 import {
     Arrow,
     CategoryContainer,
     CategoryDisclaimer,
     CategoryIcon,
     CategoryLabel,
+    ClaimAllContainer,
     Container,
     EmptyContainer,
     EmptySubtitle,
     EmptyTitle,
     ListContainer,
-    ClaimAllContainer,
-    additionalClaimButtonStyleMobile,
     additionalClaimButtonStyle,
+    additionalClaimButtonStyleMobile,
 } from './styled-components';
-import { isParlayClaimable, isParlayOpen, isSportMarketExpired } from 'utils/markets';
-import networkConnector from 'utils/networkConnector';
-import sportsMarketContract from 'utils/contracts/sportsMarketContract';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import ParlayPosition from './components/ParlayPosition';
-import SimpleLoader from 'components/SimpleLoader';
-import { LoaderContainer } from 'pages/Markets/Home/Home';
-import SinglePosition from './components/SinglePosition';
-import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
-import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
-import { FlexDivCentered } from 'styles/common';
-import ShareTicketModal, {
-    ShareTicketModalProps,
-} from 'pages/Markets/Home/Parlay/components/ShareTicketModal/ShareTicketModal';
-import { ethers } from 'ethers';
-import Button from 'components/Button';
-import { useTheme } from 'styled-components';
-import { ThemeInterface } from 'types/ui';
-import { getIsMobile } from 'redux/modules/app';
-import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils/collaterals';
-import { ZERO_ADDRESS } from 'constants/network';
-import { getParlayPayment } from 'redux/modules/parlay';
-import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
-import { coinParser } from 'thales-utils';
-import { executeBiconomyTransaction } from 'utils/biconomy';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();

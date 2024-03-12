@@ -9,7 +9,7 @@ import {
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
@@ -40,9 +40,10 @@ import {
 type NavMenuProps = {
     visibility?: boolean | null;
     setNavMenuVisibility: (value: boolean | null) => void;
+    skipOutsideClickOnElement?: React.RefObject<HTMLImageElement>;
 };
 
-const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) => {
+const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, skipOutsideClickOnElement }) => {
     const { t } = useTranslation();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
@@ -52,8 +53,27 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility }) =
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
 
+    useEffect(() => {
+        // Discord Widget bot: move with nav menu
+        const crate = (window as any).crate;
+        if (crate) {
+            const moveRightCss = '&:not(.open) .button { right: 275px; }';
+            if (visibility) {
+                crate.options.css = moveRightCss + crate.options.css;
+            } else {
+                crate.options.css = crate.options.css.replace(moveRightCss, '');
+            }
+        }
+    }, [visibility]);
+
     return (
-        <OutsideClickHandler onOutsideClick={() => visibility == true && setNavMenuVisibility(false)}>
+        <OutsideClickHandler
+            onOutsideClick={(e: MouseEvent) =>
+                (e.target as HTMLImageElement) !== skipOutsideClickOnElement?.current &&
+                visibility == true &&
+                setNavMenuVisibility(false)
+            }
+        >
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <Network>

@@ -29,48 +29,6 @@ import {
     isPlayerProps,
 } from './markets';
 
-export const isSpecificCombinedPositionAddedToParlay = (
-    parlayData: ParlaysMarketPosition[],
-    markets: SportMarketInfo[],
-    positions: Position[]
-): boolean => {
-    const firstMarket = {
-        parentMarketAddress: markets[0].parentMarket == null ? markets[0].address : markets[0].parentMarket,
-        sportMarketAddress: markets[0].address,
-        position: positions[0],
-    };
-
-    const secondMarket = {
-        parentMarketAddress: markets[1].parentMarket == null ? markets[1].address : markets[1].parentMarket,
-        sportMarketAddress: markets[1].address,
-        position: positions[1],
-    };
-
-    let firstMarketFlag = false;
-    let secondMarketFlag = false;
-
-    parlayData.forEach((data) => {
-        if (
-            data.parentMarket == firstMarket.parentMarketAddress &&
-            data.sportMarketAddress == firstMarket.sportMarketAddress &&
-            data.position == firstMarket.position
-        ) {
-            firstMarketFlag = true;
-        }
-
-        if (
-            data.parentMarket == secondMarket.parentMarketAddress &&
-            data.sportMarketAddress == secondMarket.sportMarketAddress &&
-            data.position == secondMarket.position
-        ) {
-            secondMarketFlag = true;
-        }
-    });
-
-    if (firstMarketFlag && secondMarketFlag) return true;
-    return false;
-};
-
 const isMarketCombinationInSGP = (markets: SportMarketInfo[]): SGPItem | undefined => {
     const COMBINED_MARKETS_SGP = localStore.get(LOCAL_STORAGE_KEYS.SGP_FEES) as SGPItem[];
 
