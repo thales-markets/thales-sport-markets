@@ -357,7 +357,9 @@
                 "double double": "双双",
                 "receptions": "招待会",
                 "first touchdown": "谁将获得本场比赛的第一个达阵？ （包括加班）",
-                "last touchdown": "谁将获得比赛最后一次达阵？"
+                "last touchdown": "谁将获得比赛最后一次达阵？",
+                "3pts made": "取得3分",
+                "3-points made": "取得3分"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -427,7 +429,9 @@
                     "receptions-over": "{{team}} 的接球次数将多于 {{scoring}}",
                     "receptions-under": "{{team}} 的接球次数将少于 {{scoring}}",
                     "first-touchdown": "{{team}} 将获得比赛中的第一个达阵",
-                    "last-touchdown": "{{team}} 将获得本场比赛的最后一次达阵"
+                    "last-touchdown": "{{team}} 将获得本场比赛的最后一次达阵",
+                    "3pts-made-under": "{{team}} 的 3 分将少于 {{scoring}}",
+                    "3pts-made-over": "{{team}} 将比 {{scoring}} 获得更多 3 分"
                 }
             },
             "starts-in": "开始于",
