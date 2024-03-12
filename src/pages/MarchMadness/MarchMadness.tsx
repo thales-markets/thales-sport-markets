@@ -39,7 +39,7 @@ const MarchMadness: React.FC = () => {
         Object.values(MarchMadTabs).includes(queryParamTab);
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
-        enabled: isAppReady,
+        enabled: isAppReady && isMarchMadnessAvailableForNetworkId(networkId),
     });
     const marchMadnessData =
         marchMadnessDataQuery.isSuccess && marchMadnessDataQuery.data ? marchMadnessDataQuery.data : null;

@@ -69,7 +69,12 @@ import { BracketMatch } from 'types/marchMadness';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollaterals, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
-import { getFirstMatchIndexInRound, getLocalStorageKey, getNumberOfMatchesPerRound } from 'utils/marchMadness';
+import {
+    getFirstMatchIndexInRound,
+    getLocalStorageKey,
+    getNumberOfMatchesPerRound,
+    isMarchMadnessAvailableForNetworkId,
+} from 'utils/marchMadness';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchMarchMadnessData } from 'utils/queryConnector';
@@ -107,13 +112,14 @@ const Brackets: React.FC = () => {
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
-        enabled: isAppReady,
+        enabled: isAppReady && isMarchMadnessAvailableForNetworkId(networkId),
     });
     const marchMadnessData =
         marchMadnessDataQuery.isSuccess && marchMadnessDataQuery.data ? marchMadnessDataQuery.data : null;
 
     const marchMadnessBracketQuery = useMarchMadnessBracketQuery(selectedBracketId, networkId, {
-        enabled: isAppReady && selectedBracketId !== DEFAULT_BRACKET_ID,
+        enabled:
+            isAppReady && isMarchMadnessAvailableForNetworkId(networkId) && selectedBracketId !== DEFAULT_BRACKET_ID,
     });
     const marchMadnessBracket = useMemo(
         () =>
