@@ -1314,7 +1314,8 @@
             "bracket-id": "Klammer-ID #{{id}}",
             "confirmation-message": "Klammer erfolgreich geprägt",
             "create-as": "Neu erstellen als...",
-            "clear-all": "Alles löschen"
+            "clear-all": "Alles löschen",
+            "submit-info": "*Prägepreis {{value}}"
         },
         "regions": {
             "east": "Ost",

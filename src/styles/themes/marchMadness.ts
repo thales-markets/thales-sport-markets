@@ -11,10 +11,29 @@ export default {
     textColor: {
         ...darkTheme.textColor,
         secondary: Colors.BLUE_GRADIENT_1,
+        quaternary: Colors.WHITE,
     },
     borderColor: {
         ...darkTheme.borderColor,
         quaternary: Colors.ORANGE_MARCH_MADNESS,
+    },
+    input: {
+        ...darkTheme.input,
+        background: {
+            ...darkTheme.input.background,
+            primary: Colors.ORANGE_MARCH_MADNESS,
+        },
+        textColor: {
+            ...darkTheme.input.textColor,
+            primary: Colors.WHITE,
+        },
+        borderColor: {
+            ...darkTheme.input.borderColor,
+            tertiary: Colors.ORANGE_MARCH_MADNESS,
+            focus: {
+                primary: Colors.ORANGE_MARCH_MADNESS,
+            },
+        },
     },
     marchMadness: {
         background: {
