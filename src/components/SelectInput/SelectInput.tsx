@@ -23,7 +23,13 @@ const SelectInput: React.FC<SelectInputProps> = ({
     isDisabled,
 }) => {
     const theme: ThemeInterface = useTheme();
-    const defaultOption = options[defaultValue ? defaultValue : 0];
+    let defaultOption = options[defaultValue ? defaultValue : 0];
+
+    // when there are no options but there is placeholder
+    if (!defaultOption && placeholder) {
+        defaultOption = { value: Number(defaultValue), label: placeholder };
+        handleChange(Number(defaultValue));
+    }
 
     const customStyled = {
         menu: (provided: any, state: any) => ({
