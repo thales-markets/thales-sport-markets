@@ -75,6 +75,9 @@ const Container = styled.div`
     margin: 20px auto;
     justify-content: space-around;
     border-bottom: 2px solid ${(props) => props.theme.marchMadness.borderColor.senary};
+    @media (max-width: 800px) {
+        padding-top: 30px;
+    }
 `;
 
 const Tab = styled.div<{ active: boolean; isClickable: boolean }>`
