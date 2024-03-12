@@ -50,9 +50,9 @@ const PromotionCard: React.FC<PromotionItem> = ({
         if (getPromotionStatus(startDate, endDate) == PromotionStatus.COMING_SOON) {
             return (
                 <>
-                    {t('promotions.starts-in')}{' '}
+                    <span>{t('promotions.starts-in')}</span>
                     <TimeRemaining
-                        end={endDate * 1000}
+                        end={startDate * 1000}
                         fontSize={14}
                         fontWeight={700}
                         color={theme.promotion.textColor.primary}
