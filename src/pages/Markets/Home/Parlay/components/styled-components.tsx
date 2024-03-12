@@ -194,7 +194,7 @@ export const ShareWrapper = styled(FlexDivCentered)`
 export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
     font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
     color: ${(props) => (props.color ? props.color : props.theme.textColor.primary)};
-    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
     text-transform: lowercase;
