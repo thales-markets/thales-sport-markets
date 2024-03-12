@@ -3,7 +3,6 @@ import Button from 'components/Button';
 import Loader from 'components/Loader';
 import { START_MINTING_DATE } from 'constants/marchMadness';
 import { hoursToSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
-import { Network } from 'enums/network';
 import useInterval from 'hooks/useInterval';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
@@ -168,18 +167,17 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
             ) : (
                 <>
                     <PageTitle>{t('march-madness.home.title')}</PageTitle>
-                    {networkId !== Network.Arbitrum && <OnlyOnArbitrum>Available only on Arbitrum</OnlyOnArbitrum>}
-                    {!isBracketsLocked && (
-                        <>
-                            <TimeLeft>
-                                {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
-                            </TimeLeft>
+                    {/* {!isBracketsLocked && ( */}
+                    <>
+                        <TimeLeft>
+                            {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
+                        </TimeLeft>
 
-                            <TimeLeftDescription>
-                                {t(mintingStarted ? 'march-madness.home.time-info' : 'march-madness.home.time-info-a')}
-                            </TimeLeftDescription>
-                        </>
-                    )}
+                        <TimeLeftDescription>
+                            {t(mintingStarted ? 'march-madness.home.time-info' : 'march-madness.home.time-info-a')}
+                        </TimeLeftDescription>
+                    </>
+                    {/* )} */}
 
                     <Text>{t('march-madness.home.description')}</Text>
 
@@ -313,17 +311,22 @@ const Container = styled.div`
 
 const PageTitle = styled.h1`
     color: #f25623;
+    white-space: nowrap;
     font-family: Legacy !important;
     font-size: 50px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     text-transform: uppercase;
+    @media (max-width: 500px) {
+        font-size: 39px;
+    }
 `;
 
 const TimeLeft = styled.h2`
     color: #fff;
     text-align: center;
+    white-space: nowrap;
     font-family: Legacy !important;
     font-size: 59px;
     font-style: normal;
@@ -331,14 +334,18 @@ const TimeLeft = styled.h2`
     letter-spacing: 11.8px;
     text-transform: uppercase;
     max-width: 494px;
-    margin: 6px auto;
+    margin: 6px 0;
     white-space: nowrap;
+    @media (max-width: 500px) {
+        font-size: 39px;
+        letter-spacing: 10px;
+    }
 `;
 
 const TimeLeftDescription = styled.h3`
     color: #f25623;
-
     text-align: center;
+    white-space: nowrap;
     font-family: Legacy !important;
     font-size: 30px;
     font-style: normal;
@@ -347,10 +354,10 @@ const TimeLeftDescription = styled.h3`
     letter-spacing: 4.8px;
     text-transform: uppercase;
     white-space: nowrap;
-`;
-
-const OnlyOnArbitrum = styled(TimeLeftDescription)`
-    color: ${(props) => props.theme.marchMadness.textColor.primary};
+    @media (max-width: 500px) {
+        font-size: 26px;
+        letter-spacing: 2px;
+    }
 `;
 
 const Text = styled.span`
