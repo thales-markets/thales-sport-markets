@@ -555,7 +555,8 @@
                 "fifa-campaign": "Campagna Zebro FIFA",
                 "fee-rebates": "Riduzioni sulle commissioni",
                 "vaults": "Volte",
-                "liquidity-pool": "Fornire liquidità"
+                "liquidity-pool": "Fornire liquidità",
+                "promotions": "Promozioni"
             },
             "buttons": {
                 "switch": "Interruttore",
@@ -1190,5 +1191,21 @@
     },
     "banner": {
         "arb-distribution-message": "La distribuzione ARB è iniziata. Guadagna token ARB utilizzando gli straordinari. Scopri i dettagli qui."
+    },
+    "promotions": {
+        "nav-items": {
+            "ongoing": "In corso",
+            "finished": "Finito",
+            "all": "Tutto",
+            "coming-soon": "Prossimamente"
+        },
+        "back": "Indietro",
+        "title": "Promozioni e incentivi",
+        "starts-in": "inizia tra",
+        "ends-in": "finisce dentro",
+        "from-label": "Da",
+        "to-label": "A",
+        "description": "Overtime Markets ti offre regolarmente vari tipi di tangenti, premi e incentivi simili su Optimism, Arbitrum e Base. Puoi utilizzare questa pagina per tenere traccia delle promozioni in corso e vedere come puoi qualificarti per ottenerle. Buona fortuna!",
+        "no-promotions": "Ops! Sembra che non ci siano promozioni disponibili al momento per il filtro specificato."
     }
 }

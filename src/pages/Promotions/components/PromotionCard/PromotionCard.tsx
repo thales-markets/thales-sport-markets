@@ -50,9 +50,9 @@ const PromotionCard: React.FC<PromotionItem> = ({
         if (getPromotionStatus(startDate, endDate) == PromotionStatus.COMING_SOON) {
             return (
                 <>
-                    {t('promotions.starts-in')}{' '}
+                    <span>{t('promotions.starts-in')}</span>
                     <TimeRemaining
-                        end={endDate * 1000}
+                        end={startDate * 1000}
                         fontSize={14}
                         fontWeight={700}
                         color={theme.promotion.textColor.primary}
@@ -87,14 +87,16 @@ const PromotionCard: React.FC<PromotionItem> = ({
                     <Title>{title}</Title>
                     <BottomContainer>
                         <Description>{description}</Description>
-                        <ButtonContainer>
-                            <Button
-                                textColor={theme.button.textColor.primary}
-                                backgroundColor={theme.button.background.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
-                            >
-                                {callToActionButton}
-                            </Button>
+                        <ButtonContainer marginBottom={callToActionButton ? '' : '28px'}>
+                            {callToActionButton && (
+                                <Button
+                                    textColor={theme.button.textColor.primary}
+                                    backgroundColor={theme.button.background.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                >
+                                    {callToActionButton}
+                                </Button>
+                            )}
                         </ButtonContainer>
                     </BottomContainer>
                 </ContentWrapper>
@@ -190,10 +192,11 @@ export const Description = styled.div`
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-export const ButtonContainer = styled(FlexDivCentered)`
+export const ButtonContainer = styled(FlexDivCentered)<{ marginBottom?: string }>`
     align-items: center;
     justify-content: center;
     margin-top: 20px;
+    margin-bottom: ${(props) => props.marginBottom};
 `;
 
 export default PromotionCard;

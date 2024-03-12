@@ -7,7 +7,7 @@ import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { EUROPA_LEAGUE_TAGS, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -226,6 +226,13 @@ const Home: React.FC = () => {
                         ) {
                             return false;
                         }
+                    } else if (BOXING_TAGS.includes(market.tags.map((tag) => Number(tag))[0])) {
+                        if (
+                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[0]) &&
+                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[1])
+                        ) {
+                            return false;
+                        }
                     } else if (!tagFilter.map((tag) => tag.id).includes(market.tags.map((tag) => Number(tag))[0])) {
                         return false;
                     }
@@ -300,6 +307,8 @@ const Home: React.FC = () => {
         Object.keys(groupedMarkets).forEach((key: string) => {
             if (EUROPA_LEAGUE_TAGS.includes(Number(key))) {
                 openMarketsCountPerTag[EUROPA_LEAGUE_TAGS[0].toString()] = groupedMarkets[key].length;
+            } else if (BOXING_TAGS.includes(Number(key))) {
+                openMarketsCountPerTag[BOXING_TAGS[0].toString()] = groupedMarkets[key].length;
             } else {
                 openMarketsCountPerTag[key] = groupedMarkets[key].length;
             }
