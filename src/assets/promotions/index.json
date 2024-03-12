@@ -120,7 +120,7 @@
         "callToActionButton": "Stake now",
         "availableOnNetworks": [10, 42161],
         "article": {
-            "coverImageUrl": "public/promotions/gamified-big.webp",
+            "coverImageUrl": "/promotions/thales-stakers.webp",
             "headerHtml": "<h1><span><span><span>Stake THALES and play Overtime to earn a rewards multiplier!</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Overtime is built on the Thales Protocol. Staking THALES and using other products built on the Thales Protocol gives you two types of rewards: Staking rewards in THALES tokens and Protocol Rewards in stablecoins. These rewards are multiplied using the Gamified Staking mechanism.</span> </span> </span> <span> <span> <span> <span> <span></span> </span> </p>",
