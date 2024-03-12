@@ -1,4 +1,4 @@
-import { FINAL_MATCH_ID, initialBracketsData, NUMBER_OF_TEAMS } from 'constants/marchMadness';
+import { FINAL_MATCH_ID, initialBracketsData, NUMBER_OF_TEAMS, START_MINTING_DATE } from 'constants/marchMadness';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { NetworkId } from 'thales-utils';
 
@@ -93,3 +93,5 @@ export const getMatchIdByRoundAndTeamIds = (roundId: number, team1Id: number, te
     }
     return -1;
 };
+
+export const getIsMintingStarted = () => Date.now() > START_MINTING_DATE;

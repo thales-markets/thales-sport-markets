@@ -871,9 +871,9 @@ const Brackets: React.FC = () => {
                                             textTransform: 'uppercase',
                                             background: theme.marchMadness.button.background.senary,
                                             border: `2px solid ${theme.marchMadness.borderColor.senary}`,
-                                            borderRadius: '4px',
+                                            borderRadius: isBracketMinted ? '4px' : '4px 0 0 4px',
                                             color: theme.marchMadness.button.textColor.secondary,
-                                            width: isBracketMinted ? '245px' : '180px',
+                                            width: isBracketMinted ? '245px' : '169px',
                                             height: '32px',
                                             padding: '3px 10px',
                                         }}
@@ -889,11 +889,12 @@ const Brackets: React.FC = () => {
                                             : t('common.wallet.approve')}
                                     </Button>
                                     {!isBracketMinted && (
-                                        <CollateralWrapper>
-                                            <CollateralSeparator />
+                                        <CollateralWrapper isDisabled={isSubmitDisabled}>
+                                            <CollateralSeparator isDisabled={isSubmitDisabled} />
                                             <CollateralSelector
                                                 collateralArray={getCollaterals(networkId)}
                                                 selectedItem={selectedCollateralIndex}
+                                                disabled={isSubmitDisabled}
                                                 onChangeCollateral={() => {}}
                                                 isDetailedView
                                                 collateralBalances={multipleCollateralBalances.data}
@@ -1135,7 +1136,7 @@ const ButtonWrrapper = styled.div`
     margin-top: 100px;
 `;
 
-const CollateralWrapper = styled(FlexDivCentered)`
+const CollateralWrapper = styled(FlexDivCentered)<{ isDisabled: boolean }>`
     position: absolute;
     right: 0;
     top: 0;
@@ -1145,12 +1146,14 @@ const CollateralWrapper = styled(FlexDivCentered)`
     background: ${(props) => props.theme.marchMadness.button.background.senary};
     border: 2px solid ${(props) => props.theme.marchMadness.borderColor.senary};
     border-radius: 0 4px 4px 0;
+    opacity: ${(props) => (props.isDisabled ? '0.5' : '1')};
     z-index: 11;
 `;
 
-const CollateralSeparator = styled.div`
+const CollateralSeparator = styled.div<{ isDisabled: boolean }>`
     border-left: 2px solid ${(props) => props.theme.marchMadness.borderColor.tertiary};
     height: 22px;
+    opacity: ${(props) => (props.isDisabled ? '0.5' : '1')};
 `;
 
 const Region = styled.div<{ isSideLeft: boolean; isVertical: boolean }>`

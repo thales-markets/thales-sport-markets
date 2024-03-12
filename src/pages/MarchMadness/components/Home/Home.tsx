@@ -16,6 +16,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
+import { getIsMintingStarted } from 'utils/marchMadness';
 import { history } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
 
@@ -86,9 +87,11 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
         marchMadnessData,
     ]);
 
+    const isMintingStarted = getIsMintingStarted();
+
     const buttonClickHandler = () => {
         if (isWalletConnected) {
-            if (Date.now() > START_MINTING_DATE) {
+            if (isMintingStarted) {
                 history.push({
                     pathname: location.pathname,
                     search: queryString.stringify({
@@ -103,7 +106,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     };
 
     const switchToLeaderboard = () => {
-        if (Date.now() > START_MINTING_DATE) {
+        if (isMintingStarted) {
             history.push({
                 pathname: location.pathname,
                 search: queryString.stringify({
@@ -158,8 +161,6 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
         });
     }, 1000);
 
-    const mintingStarted = Date.now() > START_MINTING_DATE;
-
     return (
         <Container>
             {marchMadnessDataQuery.isLoading ? (
@@ -174,7 +175,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         </TimeLeft>
 
                         <TimeLeftDescription>
-                            {t(mintingStarted ? 'march-madness.home.time-info' : 'march-madness.home.time-info-a')}
+                            {t(isMintingStarted ? 'march-madness.home.time-info' : 'march-madness.home.time-info-a')}
                         </TimeLeftDescription>
                     </>
                     {/* )} */}

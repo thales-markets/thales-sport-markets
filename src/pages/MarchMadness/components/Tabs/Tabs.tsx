@@ -1,4 +1,3 @@
-import { START_MINTING_DATE } from 'constants/marchMadness';
 import queryString from 'query-string';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { getIsMintingStarted } from 'utils/marchMadness';
 import { history } from 'utils/routes';
 
 export enum MarchMadTabs {
@@ -39,6 +39,8 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
         setSelectedTab(tab);
     };
 
+    const isMintingStarted = getIsMintingStarted();
+
     return (
         <Container>
             <Tab
@@ -51,15 +53,15 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
             </Tab>
             <Tab
                 active={selectedTab === MarchMadTabs.BRACKETS}
-                isClickable={isWalletConnected && Date.now() > START_MINTING_DATE}
-                onClick={() => Date.now() > START_MINTING_DATE && tabClickHandler(MarchMadTabs.BRACKETS)}
+                isClickable={isWalletConnected && isMintingStarted}
+                onClick={() => isMintingStarted && tabClickHandler(MarchMadTabs.BRACKETS)}
             >
                 {t('march-madness.tabs.brackets')}
             </Tab>
             <Tab
                 active={selectedTab === MarchMadTabs.LEADERBOARD}
-                isClickable={Date.now() > START_MINTING_DATE}
-                onClick={() => Date.now() > START_MINTING_DATE && tabClickHandler(MarchMadTabs.LEADERBOARD)}
+                isClickable={isMintingStarted}
+                onClick={() => isMintingStarted && tabClickHandler(MarchMadTabs.LEADERBOARD)}
             >
                 {t('march-madness.tabs.leaderboard')}
             </Tab>

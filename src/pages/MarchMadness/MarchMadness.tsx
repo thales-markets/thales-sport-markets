@@ -14,6 +14,7 @@ import { setTheme } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { getIsMintingStarted } from 'utils/marchMadness';
 import { buildHref, history } from 'utils/routes';
 import Brackets from './components/Brackets';
 import Home from './components/Home';
@@ -32,7 +33,7 @@ const MarchMadness: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
     const queryParamTab: MarchMadTabs = queryString.parse(location.search).tab as MarchMadTabs;
-    const isTabAvailable = Object.values(MarchMadTabs).includes(queryParamTab);
+    const isTabAvailable = Object.values(MarchMadTabs).includes(queryParamTab) && getIsMintingStarted();
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
         enabled: isAppReady,
