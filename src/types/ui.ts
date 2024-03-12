@@ -11,7 +11,7 @@ export type NavMenuItem = {
     supportedNetworks: Network[];
 };
 
-export type PromotionCardData = {
+type PromotionCardData = {
     title: string;
     description: string;
     startDate: number;
@@ -25,7 +25,7 @@ export type PromotionCardData = {
     availableOnNetworks: [Network];
 };
 
-export type PromotionArticle = {
+type PromotionArticle = {
     coverImageUrl: string;
     headerHtml: string;
     ctaSection: {

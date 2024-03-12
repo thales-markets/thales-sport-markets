@@ -106,12 +106,6 @@ export const Status = styled.span<{ color: string }>`
     justify-content: space-evenly;
 `;
 
-export const PlayerIcon = styled.i`
-    font-size: 40px;
-    color: ${(props) => props.theme.textColor.secondary};
-    margin-left: 24px;
-`;
-
 export const CollateralSelectorContainer = styled(FlexDivRow)`
     margin-top: 5px;
 `;

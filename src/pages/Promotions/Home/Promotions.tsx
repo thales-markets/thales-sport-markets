@@ -10,8 +10,9 @@ import { FlexDiv } from 'styles/common';
 import { PromotionStatus } from 'types/ui';
 import { getPromotionStatus } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
-import Navigation, { NavigationItem } from '../components/Navigation/Navigation';
-import PromotionCard from '../components/PromotionCard/PromotionCard';
+import Navigation from '../components/Navigation';
+import { NavigationItem } from '../components/Navigation/Navigation';
+import PromotionCard from '../components/PromotionCard';
 
 enum NavigationEnum {
     'ALL',

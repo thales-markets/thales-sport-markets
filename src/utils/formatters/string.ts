@@ -21,3 +21,6 @@ export const fixDuplicatedTeamName = (name: string, isEnetpulseSport: boolean) =
 export const fixOneSideMarketCompetitorName = (team: string) => {
     return team.endsWith('YES') ? (team !== null ? team.slice(0, team.length - 4).trim() : '') : team;
 };
+
+export const truncateAddress = (address: string, first = 5, last = 5) =>
+    address ? `${address.slice(0, first)}...${address.slice(-last, address.length)}` : null;

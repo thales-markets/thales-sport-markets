@@ -2,6 +2,7 @@ import axios from 'axios';
 import Loader from 'components/Loader';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
+import ROUTES from 'constants/routes';
 import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
@@ -57,8 +58,10 @@ const DappLayout: React.FC = ({ children }) => {
     }, [queryParams.referralId, queryParams.referrerId]);
 
     useEffect(() => {
-        dispatch(setTheme(Theme.DARK));
-    }, [dispatch]);
+        if (location.pathname !== ROUTES.MarchMadness) {
+            dispatch(setTheme(Theme.DARK));
+        }
+    }, [dispatch, location.pathname]);
 
     useEffect(() => {
         const checkMetamaskBrowser = async () => {

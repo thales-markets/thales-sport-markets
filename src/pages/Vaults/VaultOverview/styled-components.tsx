@@ -72,14 +72,6 @@ export const VaultTitle = styled.span`
     text-align: center;
 `;
 
-export const VaultSectionTitle = styled.span`
-    text-align: start;
-    font-weight: 600;
-    font-size: 20px;
-    margin-bottom: 20px;
-    margin-top: 20px;
-`;
-
 export const VaultSectionDescription = styled.span`
     font-weight: 400;
     font-size: 14px;

@@ -121,7 +121,7 @@ const Link = styled.a``;
 
 const DisclaimerLink = styled.a`
     display: contents;
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.link.textColor.primary};
 `;
 
 const ThalesLink = styled.a<{ mobile?: boolean }>`
