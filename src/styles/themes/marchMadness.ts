@@ -19,16 +19,13 @@ export default {
     },
     input: {
         ...darkTheme.input,
-        background: {
-            ...darkTheme.input.background,
-            primary: Colors.ORANGE_MARCH_MADNESS,
-        },
         textColor: {
             ...darkTheme.input.textColor,
             primary: Colors.WHITE,
         },
         borderColor: {
             ...darkTheme.input.borderColor,
+            primary: Colors.ORANGE_MARCH_MADNESS,
             tertiary: Colors.ORANGE_MARCH_MADNESS,
             focus: {
                 primary: Colors.ORANGE_MARCH_MADNESS,

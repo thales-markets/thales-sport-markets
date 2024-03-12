@@ -1201,7 +1201,7 @@ export const DEFAULT_BRACKET_ID = -1;
 export const POINTS_PER_ROUND = FIRST_ROUND_MATCH_IDS.length;
 export const MAX_TOTAL_POINTS = NUMBER_OF_ROUNDS * POINTS_PER_ROUND;
 export const APPROVE_MULTIPLIER = 10;
-export const CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
+export const DEFAULT_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
 
-export const START_MINTING_DATE = Date.UTC(2024, 2, 18); // 18th March 2024. - after selection Sunday
+export const START_MINTING_DATE = Date.UTC(2024, 2, 11); // 18th March 2024. - after selection Sunday
 export const ENDING_MINTING_DATE = 1711037437; // timestamp from marchMadness contract in seconds

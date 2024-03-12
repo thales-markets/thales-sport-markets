@@ -167,7 +167,7 @@ export default {
             senary: '',
         },
         textColor: {
-            primary: '',
+            primary: Colors.GRAY_DARK,
             secondary: '',
             tertiary: '',
             quaternary: '',
@@ -189,7 +189,7 @@ export default {
                 tertiary: '',
                 quaternary: '',
                 quinary: '',
-                senary: '',
+                senary: Colors.GREEN,
             },
             textColor: {
                 primary: '',

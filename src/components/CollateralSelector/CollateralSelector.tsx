@@ -192,7 +192,7 @@ const Text = styled.span<{
 const TextCollateral = styled(Text)`
     color: ${(props) =>
         props.isDetailedView
-            ? props.theme.input.textColor.primary
+            ? props.theme.marchMadness.textColor.primary // TODO: March Madness fix, revert marchMadness to input
             : props.isSelectedCollateral
             ? props.theme.textColor.quaternary
             : props.theme.textColor.tertiary};
@@ -244,7 +244,8 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
     width: ${(props) => (props.width ? props.width : '350px')};
     padding: 5px 3px;
     border-radius: 8px;
-    background: ${(props) => props.theme.input.background.primary};
+    background: ${(props) =>
+        props.theme.input.borderColor.primary}; // TODO: March Madness fix, revert borderColor to background
     z-index: 100;
     border: 2px solid ${(props) => props.theme.input.borderColor.tertiary};
 `;

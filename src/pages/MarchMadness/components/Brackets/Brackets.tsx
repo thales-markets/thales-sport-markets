@@ -9,8 +9,8 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
     APPROVE_MULTIPLIER,
-    CONVERSION_BUFFER_PERCENTAGE,
     DEFAULT_BRACKET_ID,
+    DEFAULT_CONVERSION_BUFFER_PERCENTAGE,
     ELITE8_ROUND_EAST_MATCH_ID,
     ELITE8_ROUND_MIDWEST_MATCH_ID,
     ELITE8_ROUND_SOUTH_MATCH_ID,
@@ -59,6 +59,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import {
     COLLATERAL_DECIMALS,
+    coinFormatter,
     coinParser,
     formatCurrencyWithSign,
     localStore,
@@ -110,6 +111,7 @@ const Brackets: React.FC = () => {
     const [hasAllowance, setHasAllowance] = useState(false);
     const [isAllowing, setIsAllowing] = useState(false);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
+    const [minimumNeededForConversion, setMinimumNeededForConversion] = useState(0);
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
         enabled: isAppReady && isMarchMadnessAvailableForNetworkId(networkId),
@@ -159,15 +161,42 @@ const Brackets: React.FC = () => {
                 return value;
             } else {
                 const rate = exchangeRates?.[selectedCollateral];
-                const priceFeedBuffer = 1 - CONVERSION_BUFFER_PERCENTAGE; // TODO: use getMinimumNeeded from contract
-                return rate
+                const priceFeedBuffer = 1 - DEFAULT_CONVERSION_BUFFER_PERCENTAGE;
+                const convertedFromStable = rate
                     ? Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[selectedCollateral]) /
-                          10 ** COLLATERAL_DECIMALS[selectedCollateral]
+                      10 ** COLLATERAL_DECIMALS[selectedCollateral]
                     : 0;
+
+                return minimumNeededForConversion || convertedFromStable;
             }
         },
-        [selectedCollateral, exchangeRates]
+        [selectedCollateral, exchangeRates, minimumNeededForConversion]
     );
+
+    // set minimum needed for collateral conversion
+    useEffect(() => {
+        const fetchMinimumNeeded = async () => {
+            const { multiCollateralOnOffRampContract } = networkConnector;
+
+            if (multiCollateralOnOffRampContract && marchMadnessData) {
+                try {
+                    const minimumNeeded = await multiCollateralOnOffRampContract.getMinimumNeeded(
+                        collateralAddress,
+                        coinParser(marchMadnessData.mintingPrice.toString(), networkId)
+                    );
+
+                    const minimumAmountForConversion = coinFormatter(minimumNeeded, networkId, selectedCollateral);
+                    setMinimumNeededForConversion(minimumAmountForConversion);
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        };
+
+        if (!isDefaultCollateral) {
+            fetchMinimumNeeded();
+        }
+    }, [isDefaultCollateral, collateralAddress, marchMadnessData, networkId, selectedCollateral]);
 
     // populate bracket
     useEffect(() => {
@@ -403,7 +432,7 @@ const Brackets: React.FC = () => {
                                 networkId,
                                 selectedCollateral
                             );
-                            console.log(collateralAmount);
+
                             tx = isEth
                                 ? await marchMadnessContractWithSigner.mintWithEth(bracketsForContract, {
                                       value: collateralAmount,
