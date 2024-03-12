@@ -40,7 +40,7 @@ const Promotions: React.FC = () => {
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
-    const [selectedNavItem, setSelectedNavItem] = useState<number>(0);
+    const [selectedNavItem, setSelectedNavItem] = useState<number>(NavigationEnum.ONGOING);
 
     const [branchName] = useQueryParam('branch-name', '');
 
