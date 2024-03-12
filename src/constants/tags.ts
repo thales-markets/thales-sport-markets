@@ -595,7 +595,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_RECEPTIONS]: 'receptions',
     [BetType.PLAYER_PROPS_FIRST_TOUCHDOWN]: 'first touchdown',
     [BetType.PLAYER_PROPS_LAST_TOUCHDOWN]: 'last touchdown',
-    [BetType.PLAYER_PROPS_3PTS_MADE]: '3pts made',
+    [BetType.PLAYER_PROPS_3PTS_MADE]: '3-points made',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {

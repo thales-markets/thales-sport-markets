@@ -358,7 +358,8 @@
                 "receptions": "招待会",
                 "first touchdown": "谁将获得本场比赛的第一个达阵？ （包括加班）",
                 "last touchdown": "谁将获得比赛最后一次达阵？",
-                "3pts made": "取得3分"
+                "3pts made": "取得3分",
+                "3-points made": "取得3分"
             },
             "odd-tooltip": {
                 "scoring": {

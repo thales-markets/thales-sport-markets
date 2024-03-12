@@ -358,7 +358,8 @@
                 "receptions": "Recepciones",
                 "first touchdown": "¿Quién anotará el primer touchdown del juego? (incluido tiempo extra)",
                 "last touchdown": "¿Quién anotará el último touchdown del juego?",
-                "3pts made": "3 puntos hechos"
+                "3pts made": "3 puntos hechos",
+                "3-points made": "3 puntos hechos"
             },
             "odd-tooltip": {
                 "scoring": {

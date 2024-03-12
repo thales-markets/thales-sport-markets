@@ -358,7 +358,8 @@
                 "receptions": "Ricevimenti",
                 "last touchdown": "Chi segnerà l'ultimo touchdown della partita?",
                 "first touchdown": "Chi segnerà il primo touchdown della partita? (incluso OT)",
-                "3pts made": "3 punti fatti"
+                "3pts made": "3 punti fatti",
+                "3-points made": "3 punti fatti"
             },
             "odd-tooltip": {
                 "scoring": {

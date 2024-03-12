@@ -444,7 +444,7 @@
                 "receptions": "Receptions",
                 "first touchdown": "Who will score the first touchdown in the game? (incl. OT)",
                 "last touchdown": "Who will score the last touchdown in the game?",
-                "3pts made": "3-points made"
+                "3-points made": "3-points made"
             },
             "toggle": {
                 "show-paused-markets": "Show paused markets",
