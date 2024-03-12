@@ -278,7 +278,7 @@ const Brackets: React.FC = () => {
                 setIsSubmitDisabled(submitDisabled);
             }
         } else {
-            submitDisabled = bracketsData.find((match) => match.isHomeTeamSelected === undefined) !== undefined;
+            submitDisabled = bracketsData.some((match) => match.isHomeTeamSelected === undefined);
             setIsSubmitDisabled(submitDisabled);
         }
     }, [isBracketMinted, bracketsData, marchMadnessBracket, isBracketMintedOnContract]);
@@ -783,7 +783,10 @@ const Brackets: React.FC = () => {
         },
     ];
 
-    const isShareDisabled = bracketsData.find((match) => match.isHomeTeamSelected === undefined) !== undefined;
+    const isShareDisabled = bracketsData.some((match) => match.isHomeTeamSelected === undefined);
+    const isClearAllDisabled =
+        selectedBracketId === DEFAULT_BRACKET_ID &&
+        bracketsData.every((match) => match.isHomeTeamSelected === undefined);
 
     return (
         <Container>
@@ -821,6 +824,7 @@ const Brackets: React.FC = () => {
                                         width: '160px',
                                         padding: '3px 10px',
                                     }}
+                                    disabled={isClearAllDisabled}
                                     onClick={() =>
                                         selectedBracketId === DEFAULT_BRACKET_ID
                                             ? resetBracket()

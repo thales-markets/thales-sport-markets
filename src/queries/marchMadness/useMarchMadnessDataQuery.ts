@@ -1,10 +1,10 @@
 import { ENDING_MINTING_DATE, NUMBER_OF_MATCHES, NUMBER_OF_ROUNDS } from 'constants/marchMadness';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
-import { Network } from 'enums/network';
 import { BigNumber } from 'ethers';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { NetworkId, coinFormatter } from 'thales-utils';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import networkConnector from 'utils/networkConnector';
 
 type MarchMadnessData = {
@@ -29,7 +29,7 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
                 winningsPerRound: Array<number>(NUMBER_OF_ROUNDS).fill(0),
             };
 
-            if (networkId === Network.Arbitrum) {
+            if (isMarchMadnessAvailableForNetworkId(networkId)) {
                 try {
                     const { marchMadnessContract } = networkConnector;
 
