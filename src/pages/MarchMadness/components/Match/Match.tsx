@@ -102,11 +102,12 @@ const Match: React.FC<MatchProps> = ({
 
     return (
         <Container height={height} margin={margin}>
-            <TeamRowWrapper isSelected={!!isHomeTeamSelected}>
+            <TeamRowWrapper>
                 <TeamRow
                     isClickable={isTeamClickable}
                     isHomeTeam={true}
                     isWon={homeTeamWonStatus}
+                    isDefault={isHomeTeamSelected === undefined}
                     isSelected={!!isHomeTeamSelected}
                     onClick={() => teamClickHandler(true)}
                 >
@@ -154,11 +155,12 @@ const Match: React.FC<MatchProps> = ({
                     )}
                 </TeamRow>
             </TeamRowWrapper>
-            <TeamRowWrapper isSelected={isHomeTeamSelected === false}>
+            <TeamRowWrapper>
                 <TeamRow
                     isClickable={isTeamClickable}
                     isHomeTeam={false}
                     isWon={awayTeamWonStatus}
+                    isDefault={isHomeTeamSelected === undefined}
                     isSelected={isHomeTeamSelected === false}
                     onClick={() => teamClickHandler(false)}
                 >
@@ -218,8 +220,8 @@ const Container = styled.div<{ height: number; margin?: string }>`
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
 
-const TeamRowWrapper = styled.div<{ isSelected: boolean }>`
-    ${(props) => (props.isSelected ? '' : `background: ${props.theme.marchMadness.button.background.quaternary};`)}
+const TeamRowWrapper = styled.div`
+    background: ${(props) => props.theme.marchMadness.button.background.quaternary};
     border-radius: 4px;
     position: relative;
     z-index: 100;
@@ -229,21 +231,21 @@ const TeamRow = styled.div<{
     isClickable: boolean;
     isHomeTeam: boolean;
     isWon: boolean | undefined;
+    isDefault: boolean;
     isSelected: boolean;
 }>`
-    opacity: ${(props) => (props.isSelected ? '1' : '0.2')};
+    opacity: ${(props) => (!props.isDefault && !props.isSelected ? '0.2' : '1')};
     background: ${(props) => props.theme.marchMadness.button.background.primary};
     border: ${(props) =>
-        props.isSelected
-            ? `1px solid
-        ${
-            props.isWon === undefined
-                ? props.theme.marchMadness.borderColor.quinary
-                : props.isWon
-                ? props.theme.marchMadness.status.win
-                : props.theme.marchMadness.button.background.primary
-        }`
-            : 'none'};
+        !props.isDefault && !props.isSelected
+            ? 'none'
+            : `1px solid ${
+                  props.isWon === undefined
+                      ? props.theme.marchMadness.borderColor.quinary
+                      : props.isWon
+                      ? props.theme.marchMadness.status.win
+                      : props.theme.marchMadness.button.background.primary
+              }`};
     border-radius: 4px;
     width: 100%;
     height: 26px;
