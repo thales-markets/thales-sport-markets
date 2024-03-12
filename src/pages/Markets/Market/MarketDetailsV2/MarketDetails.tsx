@@ -161,6 +161,11 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                 childMarket.betType == BetType.PLAYER_PROPS_LAST_TOUCHDOWN &&
                 (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
+        threePointsMadeMarkets: market.childMarkets.filter(
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_3PTS_MADE &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -532,6 +537,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions
                             markets={childMarkets.assistsMarkets}
                             betType={BetType.PLAYER_PROPS_ASSISTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.threePointsMadeMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.threePointsMadeMarkets}
+                            betType={BetType.PLAYER_PROPS_3PTS_MADE}
                             showOdds={showAMM}
                         />
                     )}

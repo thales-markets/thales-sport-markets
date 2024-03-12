@@ -357,7 +357,8 @@
                 "triple double": "ทริปเปิ้ล-ดับเบิ้ล",
                 "receptions": "แผนกต้อนรับ",
                 "last touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ครั้งสุดท้ายในเกม?",
-                "first touchdown": "ใครจะเป็นผู้ทำทัชดาวน์แรกในเกม? (รวมโอที)"
+                "first touchdown": "ใครจะเป็นผู้ทำทัชดาวน์แรกในเกม? (รวมโอที)",
+                "3pts made": "ได้ 3 แต้มแล้ว"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -427,7 +428,9 @@
                     "receptions-under": "{{team}} จะมีการรับน้อยกว่า {{scoring}}",
                     "receptions-over": "{{team}} จะมีการรับมากกว่า {{scoring}}",
                     "last-touchdown": "{{team}} จะทำคะแนนทัชดาวน์สุดท้ายของเกม",
-                    "first-touchdown": "{{team}} จะทำทัชดาวน์แรกในเกม"
+                    "first-touchdown": "{{team}} จะทำทัชดาวน์แรกในเกม",
+                    "3pts-made-under": "{{team}} จะมี 3 แต้มน้อยกว่า {{scoring}}",
+                    "3pts-made-over": "{{team}} จะมี 3 แต้มมากกว่า {{scoring}}"
                 }
             },
             "starts-in": "เริ่มเข้า",

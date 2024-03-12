@@ -399,6 +399,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                 case BetType.PLAYER_PROPS_RECEPTIONS:
                     translationKey = 'player-props.receptions-over';
                     break;
+                case BetType.PLAYER_PROPS_3PTS_MADE:
+                    translationKey = 'player-props.3pts-made-over';
+                    break;
                 case BetType.PLAYER_PROPS_FIRST_TOUCHDOWN:
                     translationKey = 'player-props.first-touchdown';
                     break;
@@ -468,6 +471,9 @@ export const getOddTooltipText = (position: Position, market: SportMarketInfo | 
                     break;
                 case BetType.PLAYER_PROPS_RECEPTIONS:
                     translationKey = 'player-props.receptions-under';
+                    break;
+                case BetType.PLAYER_PROPS_3PTS_MADE:
+                    translationKey = 'player-props.3pts-made-under';
                     break;
                 default:
                     translationKey = market.isOneSideMarket

@@ -357,7 +357,8 @@
                 "double double": "Дабл-дабл",
                 "receptions": "Приемы",
                 "last touchdown": "Кто забьет последний тачдаун в игре?",
-                "first touchdown": "Кто забьет первый тачдаун в игре? (включая ОТ)"
+                "first touchdown": "Кто забьет первый тачдаун в игре? (включая ОТ)",
+                "3pts made": "3 очка заработано"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -427,7 +428,9 @@
                     "receptions-under": "У {{team}} будет меньше приёмов, чем у {{scoring}}",
                     "receptions-over": "У {{team}} будет больше приёмов, чем у {{scoring}}",
                     "first-touchdown": "{{team}} забьет первый тачдаун в игре",
-                    "last-touchdown": "{{team}} забьет последний тачдаун в игре"
+                    "last-touchdown": "{{team}} забьет последний тачдаун в игре",
+                    "3pts-made-under": "{{team}} наберет меньше 3 очков, чем {{scoring}}",
+                    "3pts-made-over": "{{team}} наберет больше 3-х очков, чем {{scoring}}"
                 }
             },
             "starts-in": "Начинается через",
