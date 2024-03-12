@@ -92,3 +92,8 @@
     font-family: 'Legacy';
     src: local('Legacy'), url(../assets/fonts/Legacy/Legacy.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'Geogrotesque';
+    src: local('Geogrotesque'), url(../assets/fonts/Geogrotesque/Geogrotesque.ttf) format('truetype');
+}

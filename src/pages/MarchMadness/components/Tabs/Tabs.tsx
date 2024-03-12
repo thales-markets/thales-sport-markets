@@ -57,6 +57,7 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
                 onClick={() => isMintingStarted && tabClickHandler(MarchMadTabs.BRACKETS)}
             >
                 {t('march-madness.tabs.brackets')}
+                <ComingSoon>soon</ComingSoon>
             </Tab>
             <Tab
                 active={selectedTab === MarchMadTabs.LEADERBOARD}
@@ -64,6 +65,7 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
                 onClick={() => isMintingStarted && tabClickHandler(MarchMadTabs.LEADERBOARD)}
             >
                 {t('march-madness.tabs.leaderboard')}
+                <ComingSoon>soon</ComingSoon>
             </Tab>
         </Container>
     );
@@ -94,6 +96,16 @@ const Tab = styled.div<{ active: boolean; isClickable: boolean }>`
     line-height: 32px;
     color: ${(props) =>
         props.active ? props.theme.marchMadness.textColor.senary : props.theme.marchMadness.textColor.primary};
+`;
+
+const ComingSoon = styled.div`
+    position: absolute;
+    top: -14px;
+    right: -20px;
+
+    font-size: 10px;
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
+    white-space: nowrap;
 `;
 
 export default Tabs;

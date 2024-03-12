@@ -42,6 +42,7 @@ const VOLUME__INCETIVES_RULES = [
     'march-madness.home.volume-incetives-1',
     'march-madness.home.volume-incetives-2',
     'march-madness.home.volume-incetives-3',
+    'march-madness.home.volume-incetives-4',
 ];
 
 const BRACKETS_INCETIVES_RULES = [
@@ -203,11 +204,11 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                                 c: <Link onClick={switchToLeaderboard} />,
                                                 d: (
                                                     <Link
-                                                        onClick={() =>
-                                                            window.open(
-                                                                'https://medium.com/@OvertimeMarkets.xyz/weekly-match-preview-460e8ad462ac'
-                                                            )
-                                                        }
+                                                    // onClick={() =>
+                                                    //     window.open(
+                                                    //         'https://medium.com/@OvertimeMarkets.xyz/weekly-match-preview-460e8ad462ac'
+                                                    //     )
+                                                    // }
                                                     />
                                                 ),
                                             }}
@@ -328,18 +329,16 @@ const TimeLeft = styled.h2`
     color: #fff;
     text-align: center;
     white-space: nowrap;
-    font-family: Legacy !important;
+    font-family: Geogrotesque !important;
     font-size: 53px;
     font-style: normal;
     font-weight: 400;
-    letter-spacing: 11.8px;
-    text-transform: uppercase;
+    letter-spacing: 6.8px;
     max-width: 494px;
     margin: 6px 0;
     white-space: nowrap;
     @media (max-width: 500px) {
         font-size: 39px;
-        letter-spacing: 10px;
     }
 `;
 
@@ -419,8 +418,8 @@ const BoldContent = styled.span`
 `;
 
 const Link = styled.span`
-    text-decoration: underline;
-    cursor: pointer;
+    /* text-decoration: underline;
+    cursor: pointer; */
 `;
 
 export default Home;
