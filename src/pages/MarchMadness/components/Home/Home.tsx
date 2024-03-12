@@ -16,7 +16,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
-import { getIsMintingStarted, isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
+import { getIsMintingStarted } from 'utils/marchMadness';
 import { history } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
 
@@ -78,7 +78,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     });
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
-        enabled: isAppReady && isMarchMadnessAvailableForNetworkId(networkId),
+        enabled: isAppReady,
     });
     const marchMadnessData =
         marchMadnessDataQuery.isSuccess && marchMadnessDataQuery.data ? marchMadnessDataQuery.data : null;
