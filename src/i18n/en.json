@@ -443,7 +443,8 @@
                 "triple double": "Triple-double",
                 "receptions": "Receptions",
                 "first touchdown": "Who will score the first touchdown in the game? (incl. OT)",
-                "last touchdown": "Who will score the last touchdown in the game?"
+                "last touchdown": "Who will score the last touchdown in the game?",
+                "3-points made": "3-points made"
             },
             "toggle": {
                 "show-paused-markets": "Show paused markets",
@@ -514,6 +515,8 @@
                     "receptions-under": "{{team}} will have less receptions than {{scoring}}",
                     "first-touchdown": "{{team}} will score the first touchdown in the game",
                     "last-touchdown": "{{team}} will score the last touchdown in the game",
+                    "3pts-made-over": "{{team}} will have more 3-points made than {{scoring}}",
+                    "3pts-made-under": "{{team}} will have less 3-points made than {{scoring}}",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }
