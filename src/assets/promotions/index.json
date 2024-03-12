@@ -8,7 +8,6 @@
         "promotionId": "march-madness-2024",
         "promotionUrl": "/promotions/march-madness-2024",
         "backgroundImageUrl": "/promotions/mm-small.webp",
-        "callToActionButton": "",
         "availableOnNetworks": [42161],
         "article": {
             "coverImageUrl": "/promotions/mm-big.webp",
