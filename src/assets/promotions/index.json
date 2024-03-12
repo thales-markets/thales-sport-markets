@@ -116,7 +116,7 @@
         "endDate": 0,
         "promotionId": "gamified-staking-rewards",
         "promotionUrl": "/promotions/gamified-staking-rewards",
-        "backgroundImageUrl": "public/promotions/gamified-small.webp",
+        "backgroundImageUrl": "/promotions/thales-new.webp",
         "callToActionButton": "Stake now",
         "availableOnNetworks": [10, 42161],
         "article": {
