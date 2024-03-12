@@ -1240,7 +1240,8 @@
             "volume-incetives-2": "Cualquier volumen de compra que involucre posiciones de March Madness contará como volumen, incluidos los parlays con un mínimo de 1 posición de March Madness.",
             "comp-rules-0": "La acuñación de grupos comenzará después de que finalice el domingo de selección y se conozca el calendario de la primera ronda, a principios del 18 de marzo UTC.",
             "comp-rules-0-a": "La acuñación de grupos durará hasta que los juegos de la primera ronda comiencen el 21 de marzo.",
-            "time-info-a": "Hasta que comience la acuñación de soportes"
+            "time-info-a": "Hasta que comience la acuñación de soportes",
+            "volume-incetives-4": "Los operadores de March Madness también son elegibles para 2500 ARB por semana de Competencia Parlay y 10,000 ARB por dos semanas de Recompensas por Volumen consecutivas del programa STIP. Visita<p> esta página de promoción</p> para informacion adicional."
         },
         "leaderboard": {
             "owner": "Dueño",

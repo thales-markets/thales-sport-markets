@@ -648,9 +648,9 @@ const Brackets: React.FC = () => {
                     <StatsRow justify="normal">
                         <StatsText>{t('march-madness.brackets.stats.bracket')}:</StatsText>
                         <StatsText margin="0 15px 0 auto" fontWeight={700}>
-                            {isSubmitDisabled
-                                ? t('march-madness.brackets.stats.incomplete')
-                                : t('march-madness.brackets.stats.complete')}
+                            {isStatusComplete
+                                ? t('march-madness.brackets.stats.complete')
+                                : t('march-madness.brackets.stats.incomplete')}
                         </StatsText>
                     </StatsRow>
                     <StatsRow justify="normal">
@@ -787,6 +787,7 @@ const Brackets: React.FC = () => {
     const isClearAllDisabled =
         selectedBracketId === DEFAULT_BRACKET_ID &&
         bracketsData.every((match) => match.isHomeTeamSelected === undefined);
+    const isStatusComplete = bracketsData.every((match) => match.isHomeTeamSelected !== undefined);
 
     return (
         <Container>
@@ -810,7 +811,7 @@ const Brackets: React.FC = () => {
                             <RoundName>{t('march-madness.brackets.round-1')}</RoundName>
                             <RoundName>{t('march-madness.brackets.round-0')}</RoundName>
                         </RowHeader>
-                        {!isBracketsLocked && !!marchMadnessData?.bracketsIds.length && (
+                        {!isBracketsLocked && (
                             <CreateNewBracketWrapper>
                                 <Button
                                     additionalStyles={{
@@ -894,7 +895,7 @@ const Brackets: React.FC = () => {
                                     >
                                         {isBracketMinted
                                             ? t('march-madness.brackets.submit-modify')
-                                            : hasAllowance
+                                            : hasAllowance || !isStatusComplete
                                             ? t('march-madness.brackets.submit')
                                             : t('common.wallet.approve')}
                                     </Button>
