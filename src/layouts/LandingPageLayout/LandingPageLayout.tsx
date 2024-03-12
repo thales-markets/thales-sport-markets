@@ -1,14 +1,22 @@
 import Loader from 'components/Loader';
+import { Theme } from 'enums/ui';
 import DappFooter from 'layouts/DappLayout/DappFooter';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
+import { setTheme } from 'redux/modules/ui';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 
 const LandingPageLayout: React.FC = ({ children }) => {
+    const dispatch = useDispatch();
+
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+
+    useEffect(() => {
+        dispatch(setTheme(Theme.DARK));
+    }, [dispatch]);
 
     return (
         <>
