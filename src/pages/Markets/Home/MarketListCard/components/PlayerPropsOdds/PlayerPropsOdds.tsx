@@ -44,6 +44,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
             receptionsMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_RECEPTIONS),
             firstTouchdownMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_FIRST_TOUCHDOWN),
             lastTouchdownMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_LAST_TOUCHDOWN),
+            threePointsMadeMarkets: markets.filter((market) => market.betType == BetType.PLAYER_PROPS_3PTS_MADE),
         };
 
         const result = [];
@@ -88,6 +89,10 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
 
         if (lastValidChildMarkets.assistsMarkets.length > 0) {
             result.push(lastValidChildMarkets.assistsMarkets);
+        }
+
+        if (lastValidChildMarkets.threePointsMadeMarkets.length > 0) {
+            result.push(lastValidChildMarkets.threePointsMadeMarkets);
         }
 
         if (lastValidChildMarkets.doubleDoubleMarkets.length > 0) {

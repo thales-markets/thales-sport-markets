@@ -443,7 +443,8 @@
                 "triple double": "Triple-double",
                 "receptions": "Receptions",
                 "first touchdown": "Who will score the first touchdown in the game? (incl. OT)",
-                "last touchdown": "Who will score the last touchdown in the game?"
+                "last touchdown": "Who will score the last touchdown in the game?",
+                "3-points made": "3-points made"
             },
             "toggle": {
                 "show-paused-markets": "Show paused markets",
@@ -514,6 +515,8 @@
                     "receptions-under": "{{team}} will have less receptions than {{scoring}}",
                     "first-touchdown": "{{team}} will score the first touchdown in the game",
                     "last-touchdown": "{{team}} will score the last touchdown in the game",
+                    "3pts-made-over": "{{team}} will have more 3-points made than {{scoring}}",
+                    "3pts-made-under": "{{team}} will have less 3-points made than {{scoring}}",
                     "info": {
                         "scoring touchdown": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
                     }
@@ -1106,7 +1109,7 @@
             "volume-incetives-1": "30,000 ARB will be distributed to all traders of March Madness games on Overtime based on total volume.",
             "volume-incetives-2": "Any buy-in volume that involves March Madness positions will count as volume, including parlays with a minimum of 1 March Madness position.",
             "volume-incetives-3": "You can find the current standings of Volume Incentives rewards per wallet on the <a>Leaderboard page after Selection Sunday<a/>.",
-            "volume-incetives-4": "March Madness traders are also eligible for 2,500 ARB per week Parlay Competition and 10,000 ARB per two weeks of straight Volume Rewards from the STIP program. Visit <p>this Promotion Page</p> for additional information.",
+            "volume-incetives-4": "March Madness traders are also eligible for 2,500 ARB per week Parlay Competition and 10,000 ARB per two weeks of straight Volume Rewards from the STIP program. Visit <p>this Promotions Page</p> for additional information.",
             "brackets-points-explanation": "The brackets will be ranked by points which are gained by predicting game winners correctly.",
             "brackets-points-rules-1": "1st Round: 1 point per correct pick",
             "brackets-points-rules-2": "2nd Round: 2 points per correct pick",

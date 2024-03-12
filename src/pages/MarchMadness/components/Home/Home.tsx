@@ -204,12 +204,12 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                                 a: <Link onClick={buttonClickHandler} />,
                                                 c: <Link onClick={switchToLeaderboard} />,
                                                 d: (
-                                                    <Link
-                                                    // onClick={() =>
-                                                    //     window.open(
-                                                    //         'https://medium.com/@OvertimeMarkets.xyz/weekly-match-preview-460e8ad462ac'
-                                                    //     )
-                                                    // }
+                                                    <LinkAvailable
+                                                        onClick={() =>
+                                                            window.open(
+                                                                'https://medium.com/@OvertimeMarkets.xyz/37663de78d28'
+                                                            )
+                                                        }
                                                     />
                                                 ),
                                             }}
