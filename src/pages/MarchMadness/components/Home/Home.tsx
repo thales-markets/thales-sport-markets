@@ -71,10 +71,10 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const [showVolumeIncentives, setShowVolumeIncentives] = useState(false);
     const [showPointsSystem, setShowPointsSystem] = useState(false);
     const [timeLeft, setTimeLeft] = useState({
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
+        days: '00',
+        hours: '00',
+        minutes: '00',
+        seconds: '00',
     });
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
@@ -129,10 +129,10 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
             const secondsToMint =
                 (secondsLeftToMint || 0) - daysToMint * 24 * 60 * 60 - hoursToMint * 60 * 60 - minutesToMint * 60;
             setTimeLeft({
-                days: daysToMint,
-                hours: hoursToMint,
-                minutes: minutesToMint,
-                seconds: secondsToMint,
+                days: daysToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
+                hours: hoursToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
+                minutes: minutesToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
+                seconds: secondsToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
             });
         }
     }, []);
@@ -154,10 +154,10 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
         const secondsToMint =
             (secondsLeftToMint || 0) - daysToMint * 24 * 60 * 60 - hoursToMint * 60 * 60 - minutesToMint * 60;
         setTimeLeft({
-            days: daysToMint,
-            hours: hoursToMint,
-            minutes: minutesToMint,
-            seconds: secondsToMint,
+            days: daysToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
+            hours: hoursToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
+            minutes: minutesToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
+            seconds: secondsToMint.toLocaleString(undefined, { minimumIntegerDigits: 2 }),
         });
     }, 1000);
 
@@ -329,7 +329,7 @@ const TimeLeft = styled.h2`
     text-align: center;
     white-space: nowrap;
     font-family: Legacy !important;
-    font-size: 59px;
+    font-size: 53px;
     font-style: normal;
     font-weight: 400;
     letter-spacing: 11.8px;
