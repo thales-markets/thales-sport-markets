@@ -1314,7 +1314,8 @@
             "confirmation-message": "Support frappé avec succès",
             "bracket-id": "Numéro d'identification du support {{id}}",
             "create-as": "Créer nouveau en tant que...",
-            "clear-all": "Tout effacer"
+            "clear-all": "Tout effacer",
+            "submit-info": "*prix de frappe {{value}}"
         },
         "regions": {
             "south": "Sud",

@@ -1140,6 +1140,7 @@
             "team-2": "Team 2",
             "submit": "Finish Bracket",
             "submit-modify": "Update Bracket",
+            "submit-info": "*minting price {{value}}",
             "round-0": "1st Round",
             "round-1": "2nd Round",
             "round-2": "Sweet 16",

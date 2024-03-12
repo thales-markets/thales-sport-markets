@@ -1314,7 +1314,8 @@
             "bracket-id": "รหัสวงเล็บ #{{id}}",
             "confirmation-message": "สร้างวงเล็บสำเร็จแล้ว",
             "clear-all": "ลบทั้งหมด",
-            "create-as": "สร้างใหม่เป็น..."
+            "create-as": "สร้างใหม่เป็น...",
+            "submit-info": "*ราคาการทำเหรียญกษาปณ์ {{value}}"
         },
         "regions": {
             "midwest": "มิดเวสต์",

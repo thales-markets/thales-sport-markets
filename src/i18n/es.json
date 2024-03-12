@@ -1314,7 +1314,8 @@
             "bracket-id": "Número de identificación del grupo {{id}}",
             "confirmation-message": "Soporte acuñado con éxito",
             "create-as": "Crear nuevo como...",
-            "clear-all": "Limpiar todo"
+            "clear-all": "Limpiar todo",
+            "submit-info": "*precio de acuñación {{value}}"
         },
         "regions": {
             "west": "Oeste",

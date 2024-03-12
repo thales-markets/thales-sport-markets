@@ -1314,7 +1314,8 @@
             "confirmation-message": "支架铸造成功",
             "my-brackets": "我的括号",
             "clear-all": "全部清除",
-            "create-as": "新建为..."
+            "create-as": "新建为...",
+            "submit-info": "*铸造价格{{value}}"
         },
         "regions": {
             "west": "西方",

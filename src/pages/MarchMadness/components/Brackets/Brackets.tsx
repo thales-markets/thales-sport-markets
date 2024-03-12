@@ -6,7 +6,7 @@ import CollateralSelector from 'components/CollateralSelector';
 import Loader from 'components/Loader';
 import SelectInput from 'components/SelectInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
     APPROVE_MULTIPLIER,
     CONVERSION_BUFFER_PERCENTAGE,
@@ -57,7 +57,14 @@ import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'r
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import { COLLATERAL_DECIMALS, coinParser, localStore, roundNumberToDecimals, truncToDecimals } from 'thales-utils';
+import {
+    COLLATERAL_DECIMALS,
+    coinParser,
+    formatCurrencyWithSign,
+    localStore,
+    roundNumberToDecimals,
+    truncToDecimals,
+} from 'thales-utils';
 import { BracketMatch } from 'types/marchMadness';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction } from 'utils/biconomy';
@@ -801,10 +808,10 @@ const Brackets: React.FC = () => {
                                         fontSize: '14px',
                                         fontFamily: "'NCAA' !important",
                                         textTransform: 'uppercase',
-                                        background: theme.marchMadness.button.background.primary,
-                                        border: `2px solid ${theme.marchMadness.borderColor.primary}`,
+                                        background: theme.marchMadness.button.background.senary,
+                                        border: `2px solid ${theme.marchMadness.borderColor.senary}`,
                                         borderRadius: '4px',
-                                        color: theme.marchMadness.button.textColor.primary,
+                                        color: theme.marchMadness.button.textColor.secondary,
                                         width: '160px',
                                         padding: '3px 10px',
                                     }}
@@ -862,11 +869,12 @@ const Brackets: React.FC = () => {
                                             fontSize: '14px',
                                             fontFamily: "'NCAA' !important",
                                             textTransform: 'uppercase',
-                                            background: theme.marchMadness.button.background.primary,
-                                            border: `2px solid ${theme.marchMadness.borderColor.primary}`,
+                                            background: theme.marchMadness.button.background.senary,
+                                            border: `2px solid ${theme.marchMadness.borderColor.senary}`,
                                             borderRadius: '4px',
-                                            color: theme.marchMadness.button.textColor.primary,
+                                            color: theme.marchMadness.button.textColor.secondary,
                                             width: isBracketMinted ? '245px' : '180px',
+                                            height: '32px',
                                             padding: '3px 10px',
                                         }}
                                         disabled={isSubmitDisabled}
@@ -882,6 +890,7 @@ const Brackets: React.FC = () => {
                                     </Button>
                                     {!isBracketMinted && (
                                         <CollateralWrapper>
+                                            <CollateralSeparator />
                                             <CollateralSelector
                                                 collateralArray={getCollaterals(networkId)}
                                                 selectedItem={selectedCollateralIndex}
@@ -893,17 +902,27 @@ const Brackets: React.FC = () => {
                                             />
                                         </CollateralWrapper>
                                     )}
+                                    <SubmitInfo>
+                                        <SubmitInfoText>
+                                            {t('march-madness.brackets.submit-info', {
+                                                value: formatCurrencyWithSign(
+                                                    USD_SIGN,
+                                                    marchMadnessData?.mintingPrice || '...'
+                                                ),
+                                            })}
+                                        </SubmitInfoText>
+                                    </SubmitInfo>
                                 </ButtonWrrapper>
                             </SubmitWrapper>
                         )}
                         <ShareWrapper>
                             <Share>
-                                {t('march-madness.brackets.share')}
                                 <TwitterIcon
                                     disabled={isShareDisabled}
-                                    padding="8px 0 0 0"
+                                    padding="0 0 8px 0"
                                     onClick={onTwitterIconClick}
                                 />
+                                {t('march-madness.brackets.share')}
                             </Share>
                         </ShareWrapper>
 
@@ -1029,7 +1048,7 @@ const BracketsWrapper = styled.div`
     height: 1010px;
     background-image: url('${backgroundCourt}'), url('${backgrounBall}');
     background-size: auto;
-    background-position: 0 64px, -291px -162px;
+    background-position: -8px 64px, -291px -162px;
     background-repeat: no-repeat;
 `;
 
@@ -1097,10 +1116,23 @@ const Final = styled.div`
 
 const SubmitWrapper = styled(Final)``;
 
+const SubmitInfo = styled(FlexDivCentered)`
+    margin-top: 5px;
+`;
+
+const SubmitInfoText = styled.span`
+    font-family: 'Oswald' !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
+`;
+
 const ButtonWrrapper = styled.div`
     position: relative;
     width: 245px;
-    margin-top: 82px;
+    margin-top: 100px;
 `;
 
 const CollateralWrapper = styled(FlexDivCentered)`
@@ -1108,12 +1140,17 @@ const CollateralWrapper = styled(FlexDivCentered)`
     right: 0;
     top: 0;
     width: 76px;
-    height: 28px;
+    height: 32px;
     padding: 3px;
-    background: ${(props) => props.theme.marchMadness.button.background.primary};
-    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.primary};
+    background: ${(props) => props.theme.marchMadness.button.background.senary};
+    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.senary};
     border-radius: 0 4px 4px 0;
     z-index: 11;
+`;
+
+const CollateralSeparator = styled.div`
+    border-left: 2px solid ${(props) => props.theme.marchMadness.borderColor.tertiary};
+    height: 22px;
 `;
 
 const Region = styled.div<{ isSideLeft: boolean; isVertical: boolean }>`
@@ -1273,7 +1310,7 @@ const Share = styled.div`
     line-height: 14px;
     text-transform: uppercase;
     color: ${(props) => props.theme.marchMadness.textColor.primary};
-    margin-top: 116px;
+    margin-top: 180px;
 `;
 
 export default Brackets;

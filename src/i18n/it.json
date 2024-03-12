@@ -1314,7 +1314,8 @@
             "confirmation-message": "Staffa coniata con successo",
             "bracket-id": "ID parentesi #{{id}}",
             "clear-all": "Cancella tutto",
-            "create-as": "Crea nuovo come..."
+            "create-as": "Crea nuovo come...",
+            "submit-info": "*prezzo di conio {{value}}"
         },
         "regions": {
             "west": "ovest",

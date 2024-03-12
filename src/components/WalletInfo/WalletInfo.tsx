@@ -170,7 +170,7 @@ const Text = styled.span`
     font-weight: 800;
     font-size: 10.8px;
     line-height: 12px;
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.background.quaternary}; // TODO: March Madness fix, revert background to textColor
 `;
 
 const VoucherText = styled(Text)`
