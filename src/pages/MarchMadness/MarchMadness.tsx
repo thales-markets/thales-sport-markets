@@ -21,8 +21,6 @@ import Leaderboard from './components/Leaderboard';
 import Tabs from './components/Tabs';
 import { MarchMadTabs } from './components/Tabs/Tabs';
 
-export const START_MINTING_DATE = Date.UTC(2024, 2, 18); // 18. mart 2024.
-
 const MarchMadness: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();

@@ -1,6 +1,10 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
+import { START_MINTING_DATE } from 'constants/marchMadness';
+import { hoursToSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
+import { Network } from 'enums/network';
+import useInterval from 'hooks/useInterval';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -11,14 +15,10 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
+import { FlexDivSpaceBetween } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
-import { hoursToSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
-import { FlexDivSpaceBetween } from 'styles/common';
-import useInterval from 'hooks/useInterval';
-import { START_MINTING_DATE } from 'pages/MarchMadness/MarchMadness';
-import { Network } from 'enums/network';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;

@@ -1202,3 +1202,5 @@ export const POINTS_PER_ROUND = FIRST_ROUND_MATCH_IDS.length;
 export const MAX_TOTAL_POINTS = NUMBER_OF_ROUNDS * POINTS_PER_ROUND;
 export const APPROVE_MULTIPLIER = 10;
 export const CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
+
+export const START_MINTING_DATE = Date.UTC(2024, 2, 18); // 18th March 2024. - after selection Sunday

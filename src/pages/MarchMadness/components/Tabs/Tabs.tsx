@@ -1,4 +1,4 @@
-import { START_MINTING_DATE } from 'pages/MarchMadness/MarchMadness';
+import { START_MINTING_DATE } from 'constants/marchMadness';
 import queryString from 'query-string';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
