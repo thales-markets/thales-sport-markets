@@ -24,7 +24,7 @@ import {
     MAX_TOTAL_POINTS,
     NUMBER_OF_MATCHES,
     NUMBER_OF_ROUNDS,
-    POINTS_PER_ROUND,
+    MAX_POINTS_PER_ROUND,
     SECOND_ROUND_EAST_MATCH_IDS,
     SECOND_ROUND_MATCH_IDS,
     SECOND_ROUND_MIDWEST_MATCH_IDS,
@@ -123,7 +123,7 @@ const Brackets: React.FC = () => {
         enabled:
             isAppReady && isMarchMadnessAvailableForNetworkId(networkId) && selectedBracketId !== DEFAULT_BRACKET_ID,
     });
-    const marchMadnessBracket = useMemo(
+    const marchMadnessBracketData = useMemo(
         () =>
             marchMadnessBracketQuery.isSuccess && marchMadnessBracketQuery.data ? marchMadnessBracketQuery.data : null,
         [marchMadnessBracketQuery]
@@ -208,7 +208,7 @@ const Brackets: React.FC = () => {
                     ? (lsBrackets as BracketMatch[])
                     : initialBracketsData
             );
-        } else if (isBracketMintedOnContract && marchMadnessBracket !== null) {
+        } else if (isBracketMintedOnContract && marchMadnessBracketData !== null) {
             // existing bracket
             let bracketsMapped: BracketMatch[] = [];
             for (let i = 0; i < NUMBER_OF_ROUNDS; i++) {
@@ -243,7 +243,7 @@ const Brackets: React.FC = () => {
                         const awayTeamId =
                             awayTeamParentMatch !== undefined ? selectedTeamFromParentAway : match.awayTeamId;
 
-                        const isHomeTeamSelected = homeTeamId === marchMadnessBracket[match.id];
+                        const isHomeTeamSelected = homeTeamId === marchMadnessBracketData.bracketsData[match.id];
                         return {
                             ...match,
                             homeTeamId,
@@ -261,7 +261,7 @@ const Brackets: React.FC = () => {
         networkId,
         walletAddress,
         isBracketMintedOnContract,
-        marchMadnessBracket,
+        marchMadnessBracketData,
         isBracketMinted,
         isBracketsLocked,
         selectedBracketId,
@@ -295,14 +295,14 @@ const Brackets: React.FC = () => {
     // check if submit bracket is disabled and set it
     useEffect(() => {
         let submitDisabled = false;
-        if (isBracketMinted && marchMadnessBracket !== null) {
+        if (isBracketMinted && marchMadnessBracketData !== null) {
             // if already minted compare selction on contract and on UI
             if (isBracketMinted === isBracketMintedOnContract) {
                 submitDisabled =
                     bracketsData.find(
                         (match) =>
                             (match.isHomeTeamSelected ? match.homeTeamId : match.awayTeamId) !==
-                            marchMadnessBracket[match.id]
+                            marchMadnessBracketData.bracketsData[match.id]
                     ) === undefined;
                 setIsSubmitDisabled(submitDisabled);
             }
@@ -310,7 +310,7 @@ const Brackets: React.FC = () => {
             submitDisabled = bracketsData.some((match) => match.isHomeTeamSelected === undefined);
             setIsSubmitDisabled(submitDisabled);
         }
-    }, [isBracketMinted, bracketsData, marchMadnessBracket, isBracketMintedOnContract]);
+    }, [isBracketMinted, bracketsData, marchMadnessBracketData, isBracketMintedOnContract]);
 
     // check allowance
     useEffect(() => {
@@ -694,7 +694,10 @@ const Brackets: React.FC = () => {
     };
 
     const getScorePerRound = (round: number) => {
-        const roundPoints = marchMadnessData?.winningsPerRound[round] || 0;
+        const winningPointsPerRound = 2 ** round; // 1, 2, 4, 8, 16, 32
+        const roundPoints = marchMadnessBracketData
+            ? marchMadnessBracketData.winningsPerRound[round] * winningPointsPerRound
+            : 0;
         const roundNameKey = 'march-madness.brackets.round-' + round;
 
         return (
@@ -709,7 +712,7 @@ const Brackets: React.FC = () => {
                         {t('march-madness.brackets.stats.points')}
                     </StatsText>
                     <StatsText fontWeight={600} fontSize={14}>
-                        {roundPoints + '/' + POINTS_PER_ROUND}
+                        {roundPoints + '/' + MAX_POINTS_PER_ROUND}
                     </StatsText>
                 </StatsRow>
             </StatsColumn>
@@ -717,7 +720,7 @@ const Brackets: React.FC = () => {
     };
 
     const getMyTotalScore = () => {
-        const totalPoints = marchMadnessData?.winningsPerRound.reduce((a, b) => a + b, 0) || 0;
+        const totalPoints = marchMadnessBracketData?.totalPoints || 0;
 
         const bracketsIdsOptions: Array<{ value: number; label: string }> = [];
         let defaultOptionIndex = -1;
