@@ -54,7 +54,7 @@
         "promotionUrl": "/promotions/big-leagues",
         "backgroundImageUrl": "/promotions/big-leagues-small.webp",
         "callToActionButton": "How to earn",
-        "availableOnNetworks": [10, 42161],
+        "availableOnNetworks": [10, 42161, 8453],
         "article": {
             "coverImageUrl": "/promotions/big-leagues-big.webp",
             "headerHtml": "<h1><span><span><span>100,000 OP, 100,000 ARB and 180,000 THALES for all users of NBA, NFL and EPL throughout the season!</span></span></span></h1>",
