@@ -34,6 +34,15 @@ export const INCENTIVIZED_UEFA = {
     arbRewards: '20,000 ARB',
 };
 
+export const INCENTIVIZED_NHL = {
+    ids: [9006],
+    startDate: new Date(Date.UTC(2024, 2, 5, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 3, 18, 23, 59, 59)),
+    link: 'https://dune.com/leifu/overtime-nhl-campaign',
+    opRewards: '',
+    arbRewards: '20,000 ARB',
+};
+
 export const MIN_LIQUIDITY = 10;
 
 export const PARLAY_LEADERBOARD_WEEKLY_START_DATE = new Date(2024, 1, 14, 0, 0, 0);
