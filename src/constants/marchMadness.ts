@@ -1204,4 +1204,4 @@ export const APPROVE_MULTIPLIER = 10;
 export const DEFAULT_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
 
 export const START_MINTING_DATE = Date.UTC(2024, 2, 18); // 18th March 2024. - after Selection Sunday
-export const ENDING_MINTING_DATE = 1711037437; // timestamp from marchMadness contract in seconds
+export const END_MINTING_DATE = 1711037437; // timestamp from marchMadness contract in seconds TODO: take from new contract

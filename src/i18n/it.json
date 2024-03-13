@@ -1200,7 +1200,8 @@
         "tabs": {
             "brackets": "Parentesi",
             "leaderboard": "Classifica",
-            "home": "Casa"
+            "home": "Casa",
+            "soon": "Presto"
         },
         "home": {
             "title": "Benvenuti al torneo March Madness",

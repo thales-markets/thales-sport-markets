@@ -1,4 +1,4 @@
-import { ENDING_MINTING_DATE, NUMBER_OF_MATCHES } from 'constants/marchMadness';
+import { END_MINTING_DATE, NUMBER_OF_MATCHES } from 'constants/marchMadness';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
 import { BigNumber } from 'ethers';
@@ -58,87 +58,13 @@ const useMarchMadnessDataQuery = (walletAddress: string, networkId: NetworkId, o
                         }
                     }
 
-                    // TODO: testing data
-                    // return {
-                    //     mintingPrice: 1,
-                    //     isMintAvailable: false,
-                    //     mintEndingDate: 1710979200,
-                    //     minutesLeftToMint: 0,
-                    //     bracketsIds: [1],
-                    //     winnerTeamIdsPerMatch: [
-                    //         1,
-                    //         8,
-                    //         5,
-                    //         4,
-                    //         6,
-                    //         3,
-                    //         7,
-                    //         2,
-                    //         17,
-                    //         24,
-                    //         21,
-                    //         20,
-                    //         22,
-                    //         19,
-                    //         23,
-                    //         18,
-                    //         33,
-                    //         40,
-                    //         37,
-                    //         36,
-                    //         38,
-                    //         35,
-                    //         39,
-                    //         34,
-                    //         49,
-                    //         56,
-                    //         53,
-                    //         52,
-                    //         54,
-                    //         51,
-                    //         55,
-                    //         50,
-                    //         1,
-                    //         4,
-                    //         3,
-                    //         2,
-                    //         17,
-                    //         20,
-                    //         19,
-                    //         18,
-                    //         33,
-                    //         36,
-                    //         35,
-                    //         34,
-                    //         49,
-                    //         52,
-                    //         51,
-                    //         50,
-                    //         1,
-                    //         2,
-                    //         17,
-                    //         18,
-                    //         33,
-                    //         34,
-                    //         49,
-                    //         50,
-                    //         1,
-                    //         17,
-                    //         33,
-                    //         49,
-                    //         17,
-                    //         33,
-                    //         17,
-                    //     ],
-                    // };
-
                     return marchMadnessData;
                 } catch (e) {
                     console.log(e);
                     return marchMadnessData;
                 }
             } else {
-                const canNotMintOrUpdateAfter = ENDING_MINTING_DATE; // timestamp in seconds
+                const canNotMintOrUpdateAfter = END_MINTING_DATE; // timestamp in seconds
                 marchMadnessData.isMintAvailable = Date.now() < secondsToMilliseconds(Number(canNotMintOrUpdateAfter));
                 marchMadnessData.mintEndingDate = Number(canNotMintOrUpdateAfter);
                 return marchMadnessData;

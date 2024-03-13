@@ -1200,7 +1200,8 @@
         "tabs": {
             "brackets": "Supports",
             "home": "Maison",
-            "leaderboard": "Classement"
+            "leaderboard": "Classement",
+            "soon": "bientôt"
         },
         "home": {
             "text-3f": "Premier tour - 1%",

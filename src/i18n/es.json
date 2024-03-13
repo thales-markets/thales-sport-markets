@@ -1200,7 +1200,8 @@
         "tabs": {
             "brackets": "Soportes",
             "home": "Hogar",
-            "leaderboard": "Tabla de clasificación"
+            "leaderboard": "Tabla de clasificación",
+            "soon": "pronto"
         },
         "home": {
             "text-3d": "Dulce 16 - 4%",

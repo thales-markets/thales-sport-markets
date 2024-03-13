@@ -1200,7 +1200,8 @@
         "tabs": {
             "leaderboard": "Bestenliste",
             "home": "Heim",
-            "brackets": "Klammern"
+            "brackets": "Klammern",
+            "soon": "bald"
         },
         "home": {
             "button-create": "Wie Klammern",

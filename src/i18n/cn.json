@@ -1200,7 +1200,8 @@
         "tabs": {
             "leaderboard": "排行榜",
             "home": "家",
-            "brackets": "括号"
+            "brackets": "括号",
+            "soon": "很快"
         },
         "home": {
             "text-3c": "精英八强 - 7%",

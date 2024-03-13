@@ -1072,7 +1072,8 @@
         "tabs": {
             "home": "Home",
             "brackets": "Brackets",
-            "leaderboard": "Leaderboard"
+            "leaderboard": "Leaderboard",
+            "soon": "soon"
         },
         "home": {
             "title": "Overtime March Madness",
@@ -1194,8 +1195,7 @@
             "west": "West",
             "south": "South",
             "midwest": "Midwest"
-        },
-        "mobile-message": "Page is only available on bigger screens. Please use desktop version!"
+        }
     },
     "liquidity-pool": {
         "title": "Provide Liquidity",
