@@ -577,7 +577,8 @@
         "incentivized-tooltip-tennis": "Wimbledon será incentivado, ya que el torneo comienza el 3 de julio. Los mercados se potenciarán con {{rewards}} hasta el final del torneo el 16 de julio. Las recompensas se distribuirán en función de su volumen impulsado a través de estos mercados. Puede realizar un seguimiento de la asignación de sus recompensas en nuestro <detailsLink>Dune Dashboard</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "Se distribuirá un total enorme de {{rewards}} durante los playoffs de la NFL. Consulta más detalles <detailsLink>aquí</detailsLink>.",
         "superbowl-incentive": "10.000 ARB EN INCENTIVOS",
-        "incentivized-tooltip-uefa": "Se distribuirá un total enorme de {{rewards}} para las competiciones de la UEFA. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>."
+        "incentivized-tooltip-uefa": "Se distribuirá un total enorme de {{rewards}} para las competiciones de la UEFA. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
+        "incentivized-tooltip-nhl": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la NHL, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
