@@ -1,7 +1,7 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_LEAGUE, INCENTIVIZED_UEFA } from 'constants/markets';
+import { INCENTIVIZED_LEAGUE, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
 import { Network } from 'enums/network';
 import React from 'react';
 import { Trans } from 'react-i18next';
@@ -165,6 +165,34 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         }}
                                                         values={{
                                                             rewards: INCENTIVIZED_UEFA.arbRewards,
+                                                        }}
+                                                    />
+                                                }
+                                                component={
+                                                    <IncentivizedLeague>
+                                                        {getNetworkLogo(NetworkId.Arbitrum)}
+                                                    </IncentivizedLeague>
+                                                }
+                                            ></Tooltip>
+                                        )}
+                                    {INCENTIVIZED_NHL.ids.includes(tag.id) &&
+                                        new Date() > INCENTIVIZED_NHL.startDate &&
+                                        new Date() < INCENTIVIZED_NHL.endDate && (
+                                            <Tooltip
+                                                overlay={
+                                                    <Trans
+                                                        i18nKey="markets.incentivized-tooltip-nhl"
+                                                        components={{
+                                                            detailsLink: (
+                                                                <a
+                                                                    href={INCENTIVIZED_NHL.link}
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                />
+                                                            ),
+                                                        }}
+                                                        values={{
+                                                            rewards: INCENTIVIZED_NHL.arbRewards,
                                                         }}
                                                     />
                                                 }

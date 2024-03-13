@@ -577,7 +577,8 @@
         "incentivized-tooltip-tennis": "温网将受到激励，因为比赛将于 7 月 3 日开始。市场将通过 {{rewards}} 得到提振，直至 7 月 16 日锦标赛结束。奖励将根据您在这些市场上的交易量进行分配。您可以在我们的<detailsLink>Dune Dashboard</detailsLink>上跟踪您的奖励分配。",
         "incentivized-tooltip-nfl-playoffs": "NFL 季后赛期间将发放总计高达 {{rewards}} 的奖励。查看更多详细信息<detailsLink>此处</detailsLink>。",
         "superbowl-incentive": "10,000 ARB 奖励",
-        "incentivized-tooltip-uefa": "欧足联比赛将发放总计高达 {{rewards}} 的奖金。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。"
+        "incentivized-tooltip-uefa": "欧足联比赛将发放总计高达 {{rewards}} 的奖金。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
+        "incentivized-tooltip-nhl": "NHL 赛季剩余时间（包括季后赛）将发放总计高达 {{rewards}} 的奖励。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。"
     },
     "rewards": {
         "header": "奖励",
