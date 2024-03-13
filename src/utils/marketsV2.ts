@@ -15,8 +15,8 @@ export const getSimpleSymbolText = (
     if (betType === BetType.TOTAL) {
         return isCombinedPosition && line
             ? position === 0
-                ? Math.ceil(line)
-                : Math.floor(line)
+                ? Math.ceil(line).toString()
+                : Math.floor(line).toString()
             : position === 0
             ? 'O'
             : 'U';
