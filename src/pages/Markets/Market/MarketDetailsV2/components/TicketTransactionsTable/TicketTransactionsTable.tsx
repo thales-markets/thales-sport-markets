@@ -23,15 +23,11 @@ import { SportMarketInfoV2, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/markets';
+import { formatMarketOdds } from 'utils/markets';
+import { getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/marketsV2';
 import { formatParlayOdds } from 'utils/parlay';
 import { buildMarketLink } from 'utils/routes';
-import {
-    getTicketMarketOdd,
-    getTicketMarketStatus,
-    getTicketMarketWinStatus,
-    isWinningTicketMarket,
-} from 'utils/tickets';
+import { getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
 import ShareTicketModalV2 from '../../../../Home/Parlay/components/ShareTicketModalV2';
 import { ShareTicketModalProps } from '../../../../Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 import {
@@ -80,7 +76,6 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             return {
                 ...sportMarket,
                 odd: getTicketMarketOdd(sportMarket),
-                winning: getTicketMarketWinStatus(sportMarket),
             };
         });
 
@@ -234,18 +229,16 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 };
 
 const getTicketMarketStatusIcon = (market: TicketMarket, theme: ThemeInterface) => {
-    const winStatus = getTicketMarketWinStatus(market);
-
-    return winStatus === undefined ? (
+    return market.isOpen || market.isCanceled ? (
         <StatusIcon color={theme.status.open} className={`icon icon--open`} />
-    ) : winStatus ? (
+    ) : market.isWinning ? (
         <StatusIcon color={theme.status.win} className={`icon icon--win`} />
     ) : (
         <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />
     );
 };
 
-const getOpacity = (market: TicketMarket) => (market.isResolved && !isWinningTicketMarket(market) ? 0.5 : 1);
+const getOpacity = (market: TicketMarket) => (market.isResolved && !market.isWinning ? 0.5 : 1);
 
 export const getTicketMarkets = (
     ticket: Ticket,

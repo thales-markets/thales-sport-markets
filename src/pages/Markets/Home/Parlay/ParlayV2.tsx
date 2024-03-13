@@ -19,7 +19,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import { SportMarketInfoV2, TicketMarket } from 'types/markets';
-import { isSameMarket } from 'utils/markets';
+import { isSameMarket } from 'utils/marketsV2';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import MatchInfoV2 from './components/MatchInfoV2';
 import TicketV2 from './components/TicketV2';

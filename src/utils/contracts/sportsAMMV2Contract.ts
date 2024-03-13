@@ -6,7 +6,7 @@ const sportsAMMV2Contract = {
         [Network.OptimismGoerli]: '',
         [Network.Arbitrum]: '',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '0x1792c3bc342d785a24a72f55e80aB40193d4d916',
+        [Network.OptimismSepolia]: '0x31Dc91D82316d5ba9f476b3F370FDa79BD38ea41',
     },
     abi: [
         {
@@ -148,49 +148,6 @@ const sportsAMMV2Contract = {
                 {
                     indexed: false,
                     internalType: 'bytes32',
-                    name: 'gameId',
-                    type: 'bytes32',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint16',
-                    name: 'sportId',
-                    type: 'uint16',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint16',
-                    name: 'childId',
-                    type: 'uint16',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint16',
-                    name: 'playerPropsId',
-                    type: 'uint16',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint16',
-                    name: 'playerId',
-                    type: 'uint16',
-                },
-                {
-                    indexed: false,
-                    internalType: 'int16',
-                    name: 'line',
-                    type: 'int16',
-                },
-            ],
-            name: 'GameCancelled',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [
-                {
-                    indexed: false,
-                    internalType: 'bytes32',
                     name: 'game',
                     type: 'bytes32',
                 },
@@ -234,12 +191,7 @@ const sportsAMMV2Contract = {
                         },
                         {
                             internalType: 'uint16',
-                            name: 'childId',
-                            type: 'uint16',
-                        },
-                        {
-                            internalType: 'uint16',
-                            name: 'playerPropsId',
+                            name: 'typeId',
                             type: 'uint16',
                         },
                         {
@@ -276,7 +228,7 @@ const sportsAMMV2Contract = {
                             components: [
                                 {
                                     internalType: 'uint16',
-                                    name: 'childId',
+                                    name: 'typeId',
                                     type: 'uint16',
                                 },
                                 {
@@ -296,8 +248,8 @@ const sportsAMMV2Contract = {
                         },
                     ],
                     indexed: false,
-                    internalType: 'struct Ticket.GameData[]',
-                    name: 'tradeData',
+                    internalType: 'struct Ticket.MarketData[]',
+                    name: 'markets',
                     type: 'tuple[]',
                 },
                 {
@@ -415,43 +367,6 @@ const sportsAMMV2Contract = {
                 },
             ],
             name: 'SafeBoxFeePaid',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [
-                {
-                    indexed: false,
-                    internalType: 'bytes32',
-                    name: 'gameId',
-                    type: 'bytes32',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint16',
-                    name: 'playerPropsId',
-                    type: 'uint16',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint16',
-                    name: 'playerId',
-                    type: 'uint16',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint24',
-                    name: 'homeScore',
-                    type: 'uint24',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint24',
-                    name: 'awayScore',
-                    type: 'uint24',
-                },
-            ],
-            name: 'ScoreSetForGame',
             type: 'event',
         },
         {
@@ -588,97 +503,7 @@ const sportsAMMV2Contract = {
         },
         {
             inputs: [],
-            name: 'CHILD_ID_COMBINED_POSITIONS',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'CHILD_ID_PLAYER_PROPS',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'CHILD_ID_SPREAD',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'CHILD_ID_TOTAL',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
             name: 'acceptOwnership',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
-                    internalType: 'bytes32[]',
-                    name: '_gameIds',
-                    type: 'bytes32[]',
-                },
-                {
-                    internalType: 'uint16[]',
-                    name: '_sportIds',
-                    type: 'uint16[]',
-                },
-                {
-                    internalType: 'uint16[]',
-                    name: '_childIds',
-                    type: 'uint16[]',
-                },
-                {
-                    internalType: 'uint16[]',
-                    name: '_playerPropsIds',
-                    type: 'uint16[]',
-                },
-                {
-                    internalType: 'uint16[]',
-                    name: '_playerIds',
-                    type: 'uint16[]',
-                },
-                {
-                    internalType: 'int16[]',
-                    name: '_lines',
-                    type: 'int16[]',
-                },
-            ],
-            name: 'cancelGames',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -738,40 +563,6 @@ const sportsAMMV2Contract = {
         {
             inputs: [
                 {
-                    internalType: 'bytes32',
-                    name: '',
-                    type: 'bytes32',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            name: 'gameScores',
-            outputs: [
-                {
-                    internalType: 'uint24',
-                    name: 'homeScore',
-                    type: 'uint24',
-                },
-                {
-                    internalType: 'uint24',
-                    name: 'awayScore',
-                    type: 'uint24',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
                     internalType: 'uint256',
                     name: '_index',
                     type: 'uint256',
@@ -817,50 +608,6 @@ const sportsAMMV2Contract = {
                     internalType: 'address[]',
                     name: '',
                     type: 'address[]',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
-                    internalType: 'bytes32',
-                    name: '_gameId',
-                    type: 'bytes32',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_sportId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_childId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_playerPropsId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_playerId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'int24',
-                    name: '_line',
-                    type: 'int24',
-                },
-            ],
-            name: 'getGameResult',
-            outputs: [
-                {
-                    internalType: 'enum ISportsAMMV2.GameResult',
-                    name: 'result',
-                    type: 'uint8',
                 },
             ],
             stateMutability: 'view',
@@ -954,6 +701,11 @@ const sportsAMMV2Contract = {
                     type: 'address',
                 },
                 {
+                    internalType: 'contract ISportsAMMV2ResultManager',
+                    name: '_resultManager',
+                    type: 'address',
+                },
+                {
                     internalType: 'contract IReferrals',
                     name: '_referrals',
                     type: 'address',
@@ -983,123 +735,6 @@ const sportsAMMV2Contract = {
                 },
             ],
             name: 'isActiveTicket',
-            outputs: [
-                {
-                    internalType: 'bool',
-                    name: '',
-                    type: 'bool',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
-                    internalType: 'bytes32',
-                    name: '',
-                    type: 'bytes32',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'int256',
-                    name: '',
-                    type: 'int256',
-                },
-            ],
-            name: 'isGameCancelled',
-            outputs: [
-                {
-                    internalType: 'bool',
-                    name: '',
-                    type: 'bool',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
-                    internalType: 'bytes32',
-                    name: '_gameId',
-                    type: 'bytes32',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_sportId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_childId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_playerPropsId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_playerId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'int24',
-                    name: '_line',
-                    type: 'int24',
-                },
-            ],
-            name: 'isGameResolved',
-            outputs: [
-                {
-                    internalType: 'bool',
-                    name: '',
-                    type: 'bool',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
-                    internalType: 'bytes32',
-                    name: '',
-                    type: 'bytes32',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            name: 'isScoreSetForGame',
             outputs: [
                 {
                     internalType: 'bool',
@@ -1410,6 +1045,19 @@ const sportsAMMV2Contract = {
         },
         {
             inputs: [],
+            name: 'resultManager',
+            outputs: [
+                {
+                    internalType: 'contract ISportsAMMV2ResultManager',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'riskManager',
             outputs: [
                 {
@@ -1444,11 +1092,6 @@ const sportsAMMV2Contract = {
                     type: 'uint256',
                 },
                 {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
                     internalType: 'int256',
                     name: '',
                     type: 'int256',
@@ -1459,7 +1102,7 @@ const sportsAMMV2Contract = {
                     type: 'uint256',
                 },
             ],
-            name: 'riskPerGameAndPosition',
+            name: 'riskPerMarketAndPosition',
             outputs: [
                 {
                     internalType: 'uint256',
@@ -1701,39 +1344,6 @@ const sportsAMMV2Contract = {
         {
             inputs: [
                 {
-                    internalType: 'bytes32[]',
-                    name: '_gameIds',
-                    type: 'bytes32[]',
-                },
-                {
-                    internalType: 'uint16[]',
-                    name: '_playerPropsIds',
-                    type: 'uint16[]',
-                },
-                {
-                    internalType: 'uint16[]',
-                    name: '_playerIds',
-                    type: 'uint16[]',
-                },
-                {
-                    internalType: 'uint24[]',
-                    name: '_homeScores',
-                    type: 'uint24[]',
-                },
-                {
-                    internalType: 'uint24[]',
-                    name: '_awayScores',
-                    type: 'uint24[]',
-                },
-            ],
-            name: 'setScoresForGames',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
                     internalType: 'address',
                     name: '_ticketMastercopy',
                     type: 'address',
@@ -1823,12 +1433,7 @@ const sportsAMMV2Contract = {
                         },
                         {
                             internalType: 'uint16',
-                            name: 'childId',
-                            type: 'uint16',
-                        },
-                        {
-                            internalType: 'uint16',
-                            name: 'playerPropsId',
+                            name: 'typeId',
                             type: 'uint16',
                         },
                         {
@@ -1870,7 +1475,7 @@ const sportsAMMV2Contract = {
                             components: [
                                 {
                                     internalType: 'uint16',
-                                    name: 'childId',
+                                    name: 'typeId',
                                     type: 'uint16',
                                 },
                                 {
@@ -1950,12 +1555,7 @@ const sportsAMMV2Contract = {
                         },
                         {
                             internalType: 'uint16',
-                            name: 'childId',
-                            type: 'uint16',
-                        },
-                        {
-                            internalType: 'uint16',
-                            name: 'playerPropsId',
+                            name: 'typeId',
                             type: 'uint16',
                         },
                         {
@@ -1997,7 +1597,7 @@ const sportsAMMV2Contract = {
                             components: [
                                 {
                                     internalType: 'uint16',
-                                    name: 'childId',
+                                    name: 'typeId',
                                     type: 'uint16',
                                 },
                                 {

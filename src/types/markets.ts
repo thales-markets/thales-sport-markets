@@ -358,7 +358,7 @@ export type PlayerProps = {
     score: number;
 };
 
-export type CombinedPosition = { childId: number; position: number; line: number };
+export type CombinedPosition = { typeId: number; position: number; line: number };
 
 export type CombinedPositions = CombinedPosition[];
 
@@ -367,9 +367,7 @@ export type SportMarketInfoV2 = {
     sport: string;
     leagueId: number;
     leagueName: string;
-    childId: number;
     typeId: number;
-    playerPropsId: number;
     type: string;
     maturity: number;
     maturityDate: Date;
@@ -403,8 +401,7 @@ export type SportMarketsV2 = SportMarketInfoV2[];
 export type TicketPosition = {
     gameId: string;
     leagueId: number;
-    childId: number;
-    playerPropsId: number;
+    typeId: number;
     playerId: number;
     line: number;
     position: number;
@@ -419,7 +416,7 @@ export type BetTypeInfo = {
 export type TicketMarket = SportMarketInfoV2 & {
     position: Position;
     odd: number;
-    winning?: boolean;
+    isWinning?: boolean;
 };
 
 export type SportsAmmData = {
@@ -433,8 +430,7 @@ export type SportsAmmData = {
 export type TradeData = {
     gameId: string;
     sportId: number;
-    childId: number;
-    playerPropsId: number;
+    typeId: number;
     maturity: number;
     status: number;
     line: number;
@@ -455,7 +451,7 @@ export type Ticket = {
     buyInAmountAfterFees: number;
     totalQuote: number;
     payout: number;
-    numOfGames: number;
+    numOfMarkets: number;
     expiry: number;
     isResolved: boolean;
     isPaused: boolean;

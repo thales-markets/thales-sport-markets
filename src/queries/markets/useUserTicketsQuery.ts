@@ -5,7 +5,7 @@ import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Ticket } from 'types/markets';
 import { generalConfig } from '../../config/general';
-import { updateTotalQuoteAndPayout } from '../../utils/markets';
+import { updateTotalQuoteAndPayout } from '../../utils/marketsV2';
 import networkConnector from '../../utils/networkConnector';
 import { mapTicket } from '../../utils/tickets';
 

@@ -14,7 +14,8 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarketInfoV2, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame, isIIHFWCGame, isOddValid, isUEFAGame } from 'utils/markets';
+import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
+import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import web3 from 'web3';
 import { BetType } from '../../../../enums/markets';
@@ -84,7 +85,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         (market) => market.typeId === BetType.SPREAD || market.typeId === BetType.TOTAL
     );
     const combinedPositionsMarkets = market.childMarkets.filter(
-        (market) => market.typeId === BetType.COMBINED_POSITIONS
+        (market) =>
+            market.typeId === BetType.COMBINED_POSITIONS ||
+            market.typeId === BetType.HALFTIME ||
+            market.typeId === BetType.HALFTIME_FULLTIME ||
+            market.typeId === BetType.GOALS ||
+            market.typeId === BetType.HALFTIME_FULLTIME_GOALS
     );
     const playerPropsMarkets = market.childMarkets.filter((market) => market.isPlayerPropsMarket);
 

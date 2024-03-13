@@ -5,7 +5,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SportMarketInfoV2 } from 'types/markets';
-import { isOddValid } from 'utils/markets';
+import { isOddValid } from 'utils/marketsV2';
 import MarketPositionsV2 from '../MarketPositionsV2';
 import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
 

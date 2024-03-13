@@ -91,7 +91,8 @@ const Symbol = styled(FlexDivCentered)<{
     flexDirection?: string;
 }>`
     position: relative;
-    width: 30px;
+    min-width: 30px;
+    width: max-content;
     height: 30px;
     border-radius: 60%;
     color: ${(props) =>

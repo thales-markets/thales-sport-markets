@@ -3,6 +3,7 @@ import { BetType, OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
+import { TicketMarketStatus } from '../enums/tickets';
 import {
     formatMarketOdds,
     getIsOneSideMarket,
@@ -21,22 +22,24 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
         buyInAmountAfterFees: coinFormatter(ticket.buyInAmountAfterFees, networkId),
         totalQuote: bigNumberFormatter(ticket.totalQuote),
         payout: coinFormatter(ticket.buyInAmountAfterFees, networkId) / bigNumberFormatter(ticket.totalQuote),
-        numOfGames: Number(ticket.numOfGames),
+        numOfMarkets: Number(ticket.numOfGames),
         expiry: Number(ticket.expiry) * 1000,
         isResolved: ticket.resolved,
         isPaused: ticket.paused,
-        isCancelled: ticket.gamesStatus.every((gameStatus: any) => gameStatus.isResolved && gameStatus.isCancelled),
+        isCancelled: ticket.marketsResult.every(
+            (marketResult: any) => Number(marketResult.status) === TicketMarketStatus.Cancelled
+        ),
         isLost: ticket.isLost,
         isUserTheWinner: ticket.isUserTheWinner,
         isExercisable: ticket.isExercisable,
         isClaimable: ticket.isUserTheWinner && !ticket.resolved,
         isOpen: !ticket.resolved && !ticket.isExercisable,
 
-        sportMarkets: ticket.gamesData.map((market: any, index: number) => {
+        sportMarkets: ticket.marketsData.map((market: any, index: number) => {
             const leagueId = Number(market.sportId);
             // const isEnetpulseSport = ENETPULSE_SPORTS.includes(leagueId);
-            const isPlayerPropsMarket = isPlayerProps(Number(market.playerPropsId));
-            const typeId = Number(isPlayerPropsMarket ? market.playerPropsId : market.childId);
+            const typeId = Number(market.typeId);
+            const isPlayerPropsMarket = isPlayerProps(typeId);
             const type = BetTypeMap[typeId as BetType];
             const line = Number(market.line);
 
@@ -45,47 +48,49 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
             const awayTeam = !!teamNames[market.gameId] && teamNames[market.gameId].find((team: Team) => !team.isHome);
             const awayTeamName = awayTeam ? awayTeam.name : 'Away Team';
 
+            const marketResult = ticket.marketsResult[index];
+            const marketStatus = Number(marketResult.status);
+
             return {
                 gameId: market.gameId,
                 sport: SPORTS_MAP[leagueId],
                 leagueId: leagueId,
                 // leagueName: getLeagueNameById(leagueId),
                 leagueName: '',
-                childId: Number(market.childId),
-                playerPropsId: Number(market.playerPropsId),
                 typeId: typeId,
                 type: type,
                 maturity: Number(market.maturity) * 1000,
                 maturityDate: new Date(market.maturity * 1000),
                 homeTeam: homeTeamName,
                 awayTeam: awayTeamName,
-                homeScore: Number(ticket.gamesStatus[index].score.homeScore),
-                awayScore: Number(ticket.gamesStatus[index].score.awayScore),
-                finalResult: Number(ticket.gamesStatus[index].result),
+                homeScore: Number(marketResult.results[0]),
+                awayScore: Number(marketResult.results[0]),
+                finalResult: Number(marketResult.results[0]),
                 status: 0,
-                isOpen: !ticket.gamesStatus[index].isResolved && !ticket.gamesStatus[index].isCanceled,
-                isResolved: ticket.gamesStatus[index].isResolved,
-                isCanceled: ticket.gamesStatus[index].isCancelled,
+                isOpen: marketStatus === TicketMarketStatus.Open,
+                isResolved: marketStatus !== TicketMarketStatus.Open,
+                isCanceled: marketStatus === TicketMarketStatus.Cancelled,
+                isWinning: marketStatus === TicketMarketStatus.Winning,
                 isPaused: false,
                 isOneSideMarket: getIsOneSideMarket(leagueId),
                 spread: line / 100,
                 total: line / 100,
                 line: line / 100,
                 isPlayerPropsMarket: isPlayerPropsMarket,
-                isOneSidePlayerPropsMarket: isOneSidePlayerProps(market.playerPropsId),
-                isYesNoPlayerPropsMarket: isSpecialYesNoProp(market.playerPropsId),
+                isOneSidePlayerPropsMarket: isOneSidePlayerProps(typeId),
+                isYesNoPlayerPropsMarket: isSpecialYesNoProp(typeId),
                 playerProps: {
                     playerId: Number(market.playerId),
                     playerName: 'Player Name',
                     line: line / 100,
-                    outcome: isPlayerPropsMarket ? Number(ticket.gamesStatus[index].result) : 0,
-                    score: isPlayerPropsMarket ? Number(ticket.gamesStatus[index].score.homeScore) : 0,
+                    outcome: isPlayerPropsMarket ? Number(marketResult.results[0]) : 0,
+                    score: isPlayerPropsMarket ? Number(marketResult.results[0]) : 0,
                 },
                 combinedPositions: [],
                 odds: [],
                 proof: [],
                 selectedCombinedPositions: market.combinedPositions.map((combinedPosition: CombinedPosition) => ({
-                    childId: combinedPosition.childId,
+                    typeId: combinedPosition.typeId,
                     position: combinedPosition.position,
                     line: combinedPosition.line / 100,
                 })),

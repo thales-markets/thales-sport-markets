@@ -69,21 +69,6 @@ export const getSportsAMMV2Transaction: any = async (
             isEth,
         ]);
     } else {
-        if (networkId === Network.OptimismMainnet) {
-            const estimation = await sportsAMMV2Contract.estimateGas.trade(
-                tradeData,
-                sUSDPaid,
-                expectedPayout,
-                additionalSlippage,
-                ZERO_ADDRESS,
-                referralAddress,
-                isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-                isEth,
-                { value: isEth ? collateralPaid : 0 }
-            );
-
-            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER);
-        }
         return sportsAMMV2Contract.trade(
             tradeData,
             sUSDPaid,
@@ -93,7 +78,7 @@ export const getSportsAMMV2Transaction: any = async (
             referralAddress,
             isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
             isEth,
-            { value: isEth ? collateralPaid : 0, gasLimit: finalEstimation }
+            { value: isEth ? collateralPaid : 0 }
         );
     }
 };
@@ -105,5 +90,6 @@ export const getSportsAMMV2QuoteMethod: any = (
     tradeData: TradeData[],
     sUSDPaid: BigNumber
 ) => {
+    console.log(tradeData);
     return sportsAMMV2Contract.tradeQuote(tradeData, sUSDPaid, isDefaultCollateral ? ZERO_ADDRESS : collateralAddress);
 };

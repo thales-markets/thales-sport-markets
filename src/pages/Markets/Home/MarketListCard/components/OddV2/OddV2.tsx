@@ -9,7 +9,8 @@ import { getIsMobile } from 'redux/modules/app';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarketInfoV2, TicketPosition } from 'types/markets';
-import { formatMarketOdds, getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2, isSameMarket } from 'utils/markets';
+import { formatMarketOdds } from 'utils/markets';
+import { getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2, isSameMarket } from 'utils/marketsV2';
 
 type OddProps = {
     market: SportMarketInfoV2;
@@ -40,8 +41,7 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
             const ticket: TicketPosition = {
                 gameId: market.gameId,
                 leagueId: market.leagueId,
-                childId: market.childId,
-                playerPropsId: market.playerPropsId,
+                typeId: market.typeId,
                 playerId: market.playerProps.playerId,
                 line: market.line,
                 position: position,

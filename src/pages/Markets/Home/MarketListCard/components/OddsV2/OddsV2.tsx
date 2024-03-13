@@ -2,7 +2,7 @@ import { BetTypeNameMap } from 'constants/tags';
 import { BetType, Position } from 'enums/markets';
 import React from 'react';
 import { SportMarketInfoV2 } from 'types/markets';
-import { getLineInfoV2, isOddValid } from 'utils/markets';
+import { getLineInfoV2, isOddValid } from 'utils/marketsV2';
 import OddV2 from '../OddV2';
 import { Container, OddsContainer, Title } from './styled-components';
 

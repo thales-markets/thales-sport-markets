@@ -4,7 +4,7 @@ import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketInfoV2, Ticket } from 'types/markets';
-import { updateTotalQuoteAndPayout } from 'utils/markets';
+import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
 import { generalConfig } from '../../config/general';

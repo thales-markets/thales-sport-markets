@@ -51,7 +51,8 @@ import {
     getDefaultCollateral,
     isStableCurrency,
 } from 'utils/collaterals';
-import { formatMarketOdds, getTradeData } from 'utils/markets';
+import { formatMarketOdds } from 'utils/markets';
+import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';

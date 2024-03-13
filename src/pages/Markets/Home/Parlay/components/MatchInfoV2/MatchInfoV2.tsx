@@ -7,14 +7,14 @@ import { getOddsType } from 'redux/modules/ui';
 import styled, { useTheme } from 'styled-components';
 import { TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { formatMarketOdds } from 'utils/markets';
 import {
-    formatMarketOdds,
     getLineInfoV2,
     getMarketNameV2,
     getOddTooltipTextV2,
     getPositionOddsV2,
     getSymbolTextV2,
-} from 'utils/markets';
+} from 'utils/marketsV2';
 import MatchLogosV2 from '../MatchLogosV2';
 import { XButton } from '../styled-components';
 
@@ -79,7 +79,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                 market.isCanceled ? (
                     <Canceled className={`icon icon--open`} />
                 ) : market.isResolved ? (
-                    market.winning ? (
+                    market.isWinning ? (
                         <Correct className={`icon icon--correct`} />
                     ) : (
                         <Wrong className={`icon icon--wrong`} />

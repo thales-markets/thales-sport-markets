@@ -6,7 +6,7 @@ const sportsAMMDataContract = {
         [Network.OptimismGoerli]: '',
         [Network.Arbitrum]: '',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '0x86e1b303ad6bff1641add957872f28585cc11b0b',
+        [Network.OptimismSepolia]: '0xd375572a9d6f6F464dd315D53053Cf8183FB392E',
     },
     abi: [
         {
@@ -128,12 +128,7 @@ const sportsAMMDataContract = {
                                 },
                                 {
                                     internalType: 'uint16',
-                                    name: 'childId',
-                                    type: 'uint16',
-                                },
-                                {
-                                    internalType: 'uint16',
-                                    name: 'playerPropsId',
+                                    name: 'typeId',
                                     type: 'uint16',
                                 },
                                 {
@@ -165,7 +160,7 @@ const sportsAMMDataContract = {
                                     components: [
                                         {
                                             internalType: 'uint16',
-                                            name: 'childId',
+                                            name: 'typeId',
                                             type: 'uint16',
                                         },
                                         {
@@ -184,47 +179,25 @@ const sportsAMMDataContract = {
                                     type: 'tuple[]',
                                 },
                             ],
-                            internalType: 'struct SportsAMMV2Data.GameData[]',
-                            name: 'gamesData',
+                            internalType: 'struct SportsAMMV2Data.MarketData[]',
+                            name: 'marketsData',
                             type: 'tuple[]',
                         },
                         {
                             components: [
                                 {
-                                    internalType: 'bool',
-                                    name: 'isResolved',
-                                    type: 'bool',
-                                },
-                                {
-                                    internalType: 'bool',
-                                    name: 'isCancelled',
-                                    type: 'bool',
-                                },
-                                {
-                                    components: [
-                                        {
-                                            internalType: 'uint24',
-                                            name: 'homeScore',
-                                            type: 'uint24',
-                                        },
-                                        {
-                                            internalType: 'uint24',
-                                            name: 'awayScore',
-                                            type: 'uint24',
-                                        },
-                                    ],
-                                    internalType: 'struct ISportsAMMV2.GameScore',
-                                    name: 'score',
-                                    type: 'tuple',
-                                },
-                                {
-                                    internalType: 'enum ISportsAMMV2.GameResult',
-                                    name: 'result',
+                                    internalType: 'enum ISportsAMMV2ResultManager.MarketPositionStatus',
+                                    name: 'status',
                                     type: 'uint8',
                                 },
+                                {
+                                    internalType: 'int24[]',
+                                    name: 'results',
+                                    type: 'int24[]',
+                                },
                             ],
-                            internalType: 'struct SportsAMMV2Data.GameStatus[]',
-                            name: 'gamesStatus',
+                            internalType: 'struct SportsAMMV2Data.MarketResult[]',
+                            name: 'marketsResult',
                             type: 'tuple[]',
                         },
                         {
@@ -254,7 +227,7 @@ const sportsAMMDataContract = {
                         },
                         {
                             internalType: 'uint256',
-                            name: 'numOfGames',
+                            name: 'numOfMarkets',
                             type: 'uint256',
                         },
                         {
@@ -337,12 +310,7 @@ const sportsAMMDataContract = {
                                 },
                                 {
                                     internalType: 'uint16',
-                                    name: 'childId',
-                                    type: 'uint16',
-                                },
-                                {
-                                    internalType: 'uint16',
-                                    name: 'playerPropsId',
+                                    name: 'typeId',
                                     type: 'uint16',
                                 },
                                 {
@@ -374,7 +342,7 @@ const sportsAMMDataContract = {
                                     components: [
                                         {
                                             internalType: 'uint16',
-                                            name: 'childId',
+                                            name: 'typeId',
                                             type: 'uint16',
                                         },
                                         {
@@ -393,47 +361,25 @@ const sportsAMMDataContract = {
                                     type: 'tuple[]',
                                 },
                             ],
-                            internalType: 'struct SportsAMMV2Data.GameData[]',
-                            name: 'gamesData',
+                            internalType: 'struct SportsAMMV2Data.MarketData[]',
+                            name: 'marketsData',
                             type: 'tuple[]',
                         },
                         {
                             components: [
                                 {
-                                    internalType: 'bool',
-                                    name: 'isResolved',
-                                    type: 'bool',
-                                },
-                                {
-                                    internalType: 'bool',
-                                    name: 'isCancelled',
-                                    type: 'bool',
-                                },
-                                {
-                                    components: [
-                                        {
-                                            internalType: 'uint24',
-                                            name: 'homeScore',
-                                            type: 'uint24',
-                                        },
-                                        {
-                                            internalType: 'uint24',
-                                            name: 'awayScore',
-                                            type: 'uint24',
-                                        },
-                                    ],
-                                    internalType: 'struct ISportsAMMV2.GameScore',
-                                    name: 'score',
-                                    type: 'tuple',
-                                },
-                                {
-                                    internalType: 'enum ISportsAMMV2.GameResult',
-                                    name: 'result',
+                                    internalType: 'enum ISportsAMMV2ResultManager.MarketPositionStatus',
+                                    name: 'status',
                                     type: 'uint8',
                                 },
+                                {
+                                    internalType: 'int24[]',
+                                    name: 'results',
+                                    type: 'int24[]',
+                                },
                             ],
-                            internalType: 'struct SportsAMMV2Data.GameStatus[]',
-                            name: 'gamesStatus',
+                            internalType: 'struct SportsAMMV2Data.MarketResult[]',
+                            name: 'marketsResult',
                             type: 'tuple[]',
                         },
                         {
@@ -463,7 +409,7 @@ const sportsAMMDataContract = {
                         },
                         {
                             internalType: 'uint256',
-                            name: 'numOfGames',
+                            name: 'numOfMarkets',
                             type: 'uint256',
                         },
                         {
@@ -586,12 +532,7 @@ const sportsAMMDataContract = {
                                 },
                                 {
                                     internalType: 'uint16',
-                                    name: 'childId',
-                                    type: 'uint16',
-                                },
-                                {
-                                    internalType: 'uint16',
-                                    name: 'playerPropsId',
+                                    name: 'typeId',
                                     type: 'uint16',
                                 },
                                 {
@@ -623,7 +564,7 @@ const sportsAMMDataContract = {
                                     components: [
                                         {
                                             internalType: 'uint16',
-                                            name: 'childId',
+                                            name: 'typeId',
                                             type: 'uint16',
                                         },
                                         {
@@ -642,47 +583,25 @@ const sportsAMMDataContract = {
                                     type: 'tuple[]',
                                 },
                             ],
-                            internalType: 'struct SportsAMMV2Data.GameData[]',
-                            name: 'gamesData',
+                            internalType: 'struct SportsAMMV2Data.MarketData[]',
+                            name: 'marketsData',
                             type: 'tuple[]',
                         },
                         {
                             components: [
                                 {
-                                    internalType: 'bool',
-                                    name: 'isResolved',
-                                    type: 'bool',
-                                },
-                                {
-                                    internalType: 'bool',
-                                    name: 'isCancelled',
-                                    type: 'bool',
-                                },
-                                {
-                                    components: [
-                                        {
-                                            internalType: 'uint24',
-                                            name: 'homeScore',
-                                            type: 'uint24',
-                                        },
-                                        {
-                                            internalType: 'uint24',
-                                            name: 'awayScore',
-                                            type: 'uint24',
-                                        },
-                                    ],
-                                    internalType: 'struct ISportsAMMV2.GameScore',
-                                    name: 'score',
-                                    type: 'tuple',
-                                },
-                                {
-                                    internalType: 'enum ISportsAMMV2.GameResult',
-                                    name: 'result',
+                                    internalType: 'enum ISportsAMMV2ResultManager.MarketPositionStatus',
+                                    name: 'status',
                                     type: 'uint8',
                                 },
+                                {
+                                    internalType: 'int24[]',
+                                    name: 'results',
+                                    type: 'int24[]',
+                                },
                             ],
-                            internalType: 'struct SportsAMMV2Data.GameStatus[]',
-                            name: 'gamesStatus',
+                            internalType: 'struct SportsAMMV2Data.MarketResult[]',
+                            name: 'marketsResult',
                             type: 'tuple[]',
                         },
                         {
@@ -712,7 +631,7 @@ const sportsAMMDataContract = {
                         },
                         {
                             internalType: 'uint256',
-                            name: 'numOfGames',
+                            name: 'numOfMarkets',
                             type: 'uint256',
                         },
                         {
@@ -795,12 +714,7 @@ const sportsAMMDataContract = {
                                 },
                                 {
                                     internalType: 'uint16',
-                                    name: 'childId',
-                                    type: 'uint16',
-                                },
-                                {
-                                    internalType: 'uint16',
-                                    name: 'playerPropsId',
+                                    name: 'typeId',
                                     type: 'uint16',
                                 },
                                 {
@@ -832,7 +746,7 @@ const sportsAMMDataContract = {
                                     components: [
                                         {
                                             internalType: 'uint16',
-                                            name: 'childId',
+                                            name: 'typeId',
                                             type: 'uint16',
                                         },
                                         {
@@ -851,47 +765,25 @@ const sportsAMMDataContract = {
                                     type: 'tuple[]',
                                 },
                             ],
-                            internalType: 'struct SportsAMMV2Data.GameData[]',
-                            name: 'gamesData',
+                            internalType: 'struct SportsAMMV2Data.MarketData[]',
+                            name: 'marketsData',
                             type: 'tuple[]',
                         },
                         {
                             components: [
                                 {
-                                    internalType: 'bool',
-                                    name: 'isResolved',
-                                    type: 'bool',
-                                },
-                                {
-                                    internalType: 'bool',
-                                    name: 'isCancelled',
-                                    type: 'bool',
-                                },
-                                {
-                                    components: [
-                                        {
-                                            internalType: 'uint24',
-                                            name: 'homeScore',
-                                            type: 'uint24',
-                                        },
-                                        {
-                                            internalType: 'uint24',
-                                            name: 'awayScore',
-                                            type: 'uint24',
-                                        },
-                                    ],
-                                    internalType: 'struct ISportsAMMV2.GameScore',
-                                    name: 'score',
-                                    type: 'tuple',
-                                },
-                                {
-                                    internalType: 'enum ISportsAMMV2.GameResult',
-                                    name: 'result',
+                                    internalType: 'enum ISportsAMMV2ResultManager.MarketPositionStatus',
+                                    name: 'status',
                                     type: 'uint8',
                                 },
+                                {
+                                    internalType: 'int24[]',
+                                    name: 'results',
+                                    type: 'int24[]',
+                                },
                             ],
-                            internalType: 'struct SportsAMMV2Data.GameStatus[]',
-                            name: 'gamesStatus',
+                            internalType: 'struct SportsAMMV2Data.MarketResult[]',
+                            name: 'marketsResult',
                             type: 'tuple[]',
                         },
                         {
@@ -921,7 +813,7 @@ const sportsAMMDataContract = {
                         },
                         {
                             internalType: 'uint256',
-                            name: 'numOfGames',
+                            name: 'numOfMarkets',
                             type: 'uint256',
                         },
                         {
