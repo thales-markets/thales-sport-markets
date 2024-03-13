@@ -19,10 +19,6 @@ export default {
     },
     input: {
         ...darkTheme.input,
-        textColor: {
-            ...darkTheme.input.textColor,
-            primary: Colors.WHITE,
-        },
         borderColor: {
             ...darkTheme.input.borderColor,
             primary: Colors.ORANGE_MARCH_MADNESS,
