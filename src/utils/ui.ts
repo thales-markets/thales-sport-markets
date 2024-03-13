@@ -33,7 +33,7 @@ export const getPromotionStatus = (startDate: number, endDate: number): Promotio
 
 export const getPromotionDateRange = (startDate: number, endDate: number): string => {
     if (startDate && endDate == 0) {
-        return `${formatTimestampForPromotionDate(startDate)} - TBD`;
+        return `${formatTimestampForPromotionDate(startDate)} - ${String.fromCharCode(0x0221e)}`;
     }
     return `${formatTimestampForPromotionDate(startDate)} - ${formatTimestampForPromotionDate(endDate)}`;
 };
