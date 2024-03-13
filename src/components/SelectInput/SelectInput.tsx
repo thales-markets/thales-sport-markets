@@ -46,6 +46,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             backgroundColor: state?.isFocused || state.isSelected ? theme.background.primary : 'transparent',
             opacity: state.isSelected && !state?.isFocused ? 0.7 : 0.9,
             cursor: 'pointer',
+            fontFamily: theme.fontFamily.primary,
         }),
         control: (provided: any, state: any) => ({
             ...provided,
@@ -69,6 +70,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         singleValue: (provided: any) => ({
             ...provided,
             color: theme.textColor.primary,
+            fontFamily: theme.fontFamily.primary,
         }),
         dropdownIndicator: (provided: any) => ({
             ...provided,

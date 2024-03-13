@@ -848,7 +848,7 @@ const Brackets: React.FC = () => {
                                 <Button
                                     additionalStyles={{
                                         fontSize: '14px',
-                                        fontFamily: "'NCAA' !important",
+                                        fontFamily: "'Geogrotesque' !important",
                                         textTransform: 'uppercase',
                                         background: theme.marchMadness.button.background.senary,
                                         border: `2px solid ${theme.marchMadness.borderColor.senary}`,
@@ -910,7 +910,7 @@ const Brackets: React.FC = () => {
                                     <Button
                                         additionalStyles={{
                                             fontSize: '14px',
-                                            fontFamily: "'NCAA' !important",
+                                            fontFamily: "'Geogrotesque' !important",
                                             textTransform: 'uppercase',
                                             background: theme.marchMadness.button.background.senary,
                                             border: `2px solid ${theme.marchMadness.borderColor.senary}`,
@@ -960,7 +960,7 @@ const Brackets: React.FC = () => {
                             </SubmitWrapper>
                         )}
                         <ShareWrapper>
-                            <Share>
+                            <Share marginTop={isBracketsLocked ? 100 : 180}>
                                 <TwitterIcon
                                     disabled={isShareDisabled}
                                     padding="0 0 8px 0"
@@ -1278,7 +1278,7 @@ const StatsRow = styled.div<{ justify?: string; margin?: string }>`
 `;
 
 const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; lineHeight?: number; margin?: string }>`
-    font-family: 'Oswald' !important;
+    font-family: 'Geogrotesque' !important;
     font-style: normal;
     font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '400')};
     font-size: ${(props) => (props.fontSize ? props.fontSize : '16')}px;
@@ -1345,7 +1345,7 @@ const VerticalLine = styled.div`
 
 const ShareWrapper = styled(Final)``;
 
-const Share = styled.div`
+const Share = styled.div<{ marginTop: number }>`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1356,7 +1356,7 @@ const Share = styled.div`
     line-height: 14px;
     text-transform: uppercase;
     color: ${(props) => props.theme.marchMadness.textColor.primary};
-    margin-top: 180px;
+    margin-top: ${(props) => props.marginTop}px;
 `;
 
 export default Brackets;

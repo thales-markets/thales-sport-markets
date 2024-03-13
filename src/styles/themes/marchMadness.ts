@@ -3,6 +3,10 @@ import darkTheme from './dark';
 
 export default {
     ...darkTheme,
+    fontFamily: {
+        ...darkTheme.fontFamily,
+        primary: "'Geogrotesque' !important",
+    },
     background: {
         ...darkTheme.background,
         primary: Colors.BLACK_GRADIENT_1,

@@ -327,10 +327,6 @@ const TeamName = styled.div<{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    ${(props) =>
-        props.hasName && props.isBracketsLocked && props.isSelected && props.isWon === false
-            ? `text-decoration: line-through ${props.theme.marchMadness.status.wrong};`
-            : ''}
 `;
 
 export default Match;

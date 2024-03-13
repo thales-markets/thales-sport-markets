@@ -286,7 +286,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 background: theme.marchMadness.button.background.senary,
                                 border: `none`,
                                 fontSize: '30px',
-                                fontFamily: "'NCAA' !important",
+                                fontFamily: "'Geogrotesque' !important",
                                 textTransform: 'uppercase',
                                 color: theme.marchMadness.button.textColor.primary,
                             }}
