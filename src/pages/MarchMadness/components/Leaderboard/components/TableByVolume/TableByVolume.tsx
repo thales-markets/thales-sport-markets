@@ -27,6 +27,7 @@ import {
 } from './styled-components';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { USD_SIGN } from 'constants/currency';
 
 type TableByVolumeProps = {
     searchText: string;
@@ -89,6 +90,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     </>
                 ),
                 accessor: 'estimatedRewards',
+                Cell: (cellProps) => <>{formatCurrencyWithKey(USD_SIGN, cellProps.cell.value, 2)}</>,
             },
         ];
     }, [networkId, t, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
@@ -167,7 +169,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     <TableRowCell>
                         {formatCurrencyWithKey(getDefaultCollateral(networkId), myScore[0].volume, 2)}
                     </TableRowCell>
-                    <TableRowCell>{myScore[0].estimatedRewards}</TableRowCell>
+                    <TableRowCell> {formatCurrencyWithKey(USD_SIGN, myScore[0].estimatedRewards, 2)}</TableRowCell>
                 </StickyRow>
             );
         }
