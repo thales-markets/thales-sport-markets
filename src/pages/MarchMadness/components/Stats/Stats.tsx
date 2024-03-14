@@ -1,10 +1,35 @@
+import { USD_SIGN } from 'constants/currency';
+import { PRIZE_POOL_BONUS } from 'constants/marchMadness';
+import { minutesToMilliseconds } from 'date-fns';
+import useMarchMadnessStatsQuery from 'queries/marchMadness/useMarchMadnessStatsQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
+import { formatCurrencyWithKey } from 'thales-utils';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 
 const Stats: React.FC = () => {
     const { t } = useTranslation();
+
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
+
+    const marchMadnessStatsQuery = useMarchMadnessStatsQuery(networkId, {
+        enabled: isAppReady && isMarchMadnessAvailableForNetworkId(networkId),
+        refetchInterval: minutesToMilliseconds(1),
+    });
+    const marchMadnessStatsData =
+        marchMadnessStatsQuery.isSuccess && marchMadnessStatsQuery.data
+            ? marchMadnessStatsQuery.data
+            : {
+                  totalBracketsMinted: 0,
+                  poolSize: 0,
+              };
 
     return (
         <Container>
@@ -15,12 +40,15 @@ const Stats: React.FC = () => {
             <Data>
                 <Pair>
                     <Text>{t('march-madness.stats.brackets-minted')}:</Text>
-                    <Value>999</Value>
+                    <Value>{marchMadnessStatsData.totalBracketsMinted}</Value>
                 </Pair>
                 <Separator />
                 <Pair>
                     <Text>{t('march-madness.stats.pool-size')}:</Text>
-                    <Value>50.000$ + 5,000 ARB</Value>
+                    <Value>{`${formatCurrencyWithKey(
+                        USD_SIGN,
+                        marchMadnessStatsData.poolSize
+                    )} + ${PRIZE_POOL_BONUS}`}</Value>
                 </Pair>
             </Data>
         </Container>

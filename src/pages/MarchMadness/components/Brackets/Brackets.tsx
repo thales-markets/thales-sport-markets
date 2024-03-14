@@ -76,7 +76,7 @@ import {
 } from 'utils/marchMadness';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { refetchMarchMadnessData } from 'utils/queryConnector';
+import { refetchAfterMarchMadnessMint } from 'utils/queryConnector';
 import Match from '../Match';
 import { MatchProps } from '../Match/Match';
 import MintNFTModal from '../MintNFTModal';
@@ -497,7 +497,7 @@ const Brackets: React.FC = () => {
                                 toastId,
                                 getSuccessToastOptions(t(`march-madness.brackets.confirmation-message`))
                             );
-                        refetchMarchMadnessData(walletAddress, networkId);
+                        refetchAfterMarchMadnessMint(walletAddress, networkId);
 
                         setShowMintNFTModal(true);
                         setIsBracketMinted(true);
