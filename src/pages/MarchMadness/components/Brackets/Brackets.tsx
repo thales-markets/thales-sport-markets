@@ -383,7 +383,7 @@ const Brackets: React.FC = () => {
                 }
             };
             if (isWalletConnected && marchMadnessData.mintingPrice) {
-                isEth ? setHasAllowance(true) : getAllowance();
+                isEth || isBracketMinted ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
