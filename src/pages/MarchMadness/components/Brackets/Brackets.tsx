@@ -867,7 +867,7 @@ const Brackets: React.FC = () => {
             ) : (
                 <>
                     <RowStats>
-                        <Stats />
+                        <Stats disableMobileView />
                     </RowStats>
                     <RowStats>
                         {getMyStats()}

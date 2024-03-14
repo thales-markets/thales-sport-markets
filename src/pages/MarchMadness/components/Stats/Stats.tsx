@@ -13,7 +13,7 @@ import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 
-const Stats: React.FC = () => {
+const Stats: React.FC<{ disableMobileView?: boolean }> = ({ disableMobileView }) => {
     const { t } = useTranslation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -33,16 +33,16 @@ const Stats: React.FC = () => {
 
     return (
         <Container>
-            <Label>
+            <Label disableMobileView={disableMobileView}>
                 <Icon className={'icon icon--stats'} />
                 <Text fontWeight={600}>{t('march-madness.stats.live-stats')}</Text>
             </Label>
-            <Data>
+            <Data disableMobileView={disableMobileView}>
                 <Pair>
                     <Text>{t('march-madness.stats.brackets-minted')}:</Text>
                     <Value>{marchMadnessStatsData.totalBracketsMinted}</Value>
                 </Pair>
-                <Separator />
+                <Separator disableMobileView={disableMobileView} />
                 <Pair>
                     <Text>{t('march-madness.stats.pool-size')}:</Text>
                     <Value>{`${formatCurrencyWithKey(
@@ -63,8 +63,8 @@ const Container = styled(FlexDivCentered)`
     margin-bottom: 12px;
 `;
 
-const Data = styled(FlexDivCentered)`
-    @media (max-width: 575px) {
+const Data = styled(FlexDivCentered)<{ disableMobileView?: boolean }>`
+    @media (max-width: ${(props) => (props.disableMobileView ? '0px' : '575px')}) {
         flex-direction: column;
         gap: 3px;
     }
@@ -74,9 +74,9 @@ const Pair = styled(FlexDivRowCentered)`
     align-items: baseline;
 `;
 
-const Label = styled(Data)`
+const Label = styled(Data)<{ disableMobileView?: boolean }>`
     margin: 0 250px 0 -250px;
-    @media (max-width: 575px) {
+    @media (max-width: ${(props) => (props.disableMobileView ? '0px' : '575px')}) {
         display: none;
     }
 `;
@@ -101,11 +101,11 @@ const Icon = styled.i`
     margin-right: 5px;
 `;
 
-const Separator = styled.div`
+const Separator = styled.div<{ disableMobileView?: boolean }>`
     border-left: 2px solid ${(props) => props.theme.marchMadness.borderColor.tertiary};
     height: 26px;
     margin: 0 30px;
-    @media (max-width: 575px) {
+    @media (max-width: ${(props) => (props.disableMobileView ? '0px' : '575px')}) {
         display: none;
     }
 `;
