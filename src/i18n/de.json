@@ -1267,7 +1267,8 @@
             "tooltip-base-volume-table": "Volumensteigerung durch NCAA-Basketballspiele",
             "my-rewards": "Meine Belohnungen",
             "guessed-games": "Erratene Spiele",
-            "search-placeholder": "WALLET-ADRESSE SUCHEN"
+            "search-placeholder": "WALLET-ADRESSE SUCHEN",
+            "bracket-id": "Klammer-ID"
         },
         "brackets": {
             "stats": {

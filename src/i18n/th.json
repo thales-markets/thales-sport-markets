@@ -1267,7 +1267,8 @@
             "tooltip-rewards-volume-table": "10,000 OP (30,000 THALES บน Arbitrum) จะถูกแบ่งตามปริมาณตามสัดส่วน",
             "rewards": "รางวัล",
             "guessed-games": "เกมเดา",
-            "no-data": "ไม่มีข้อมูลในขณะนี้"
+            "no-data": "ไม่มีข้อมูลในขณะนี้",
+            "bracket-id": "รหัสวงเล็บ"
         },
         "brackets": {
             "stats": {

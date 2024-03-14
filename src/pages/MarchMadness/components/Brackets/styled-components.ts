@@ -220,7 +220,7 @@ export const StatsIcon = styled.i`
 `;
 
 export const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; lineHeight?: number; margin?: string }>`
-    font-family: 'Geogrotesque' !important;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-style: normal;
     font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '400')};
     font-size: ${(props) => (props.fontSize ? props.fontSize : '16')}px;

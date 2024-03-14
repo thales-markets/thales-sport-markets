@@ -30,7 +30,9 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({ isUpdate, bracketId, handle
                     <Text></Text>
                 </TextWrapper>
                 <NFTImageWrapper>
-                    <BracketText>{t('march-madness.brackets.bracket-id', { id: bracketId })}</BracketText>
+                    <BracketText>
+                        {t('march-madness.brackets.bracket-id', { id: bracketId >= 0 ? bracketId : '...' })}
+                    </BracketText>
                     <NftImage alt="March Madness NFT" src={nftImage} />
                 </NFTImageWrapper>
                 <Text>{t('march-madness.brackets.modal-mint.footer-text')}</Text>

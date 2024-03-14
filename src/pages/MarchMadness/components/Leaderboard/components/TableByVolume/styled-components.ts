@@ -15,7 +15,7 @@ export const OverlayContainer = styled.div`
 
 export const TableHeaderCell = styled.th`
     color: #fff;
-    font-family: Geogrotesque !important;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     text-transform: uppercase;
     padding: 5px 0px;
     font-size: 12px;
@@ -58,7 +58,7 @@ export const TableRowCell = styled.td`
     padding: 10px 0px;
     color: #fff;
     text-align: center;
-    font-family: Geogrotesque !important;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
@@ -90,7 +90,7 @@ export const TableContainer = styled(TableHeaderContainer)`
 export const TableHeader = styled.span`
     color: #fff;
     text-align: center;
-    font-family: Geogrotesque !important;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
@@ -123,7 +123,7 @@ export const StickyRowTopTable = styled(TableRow)`
 
 export const PaginationWrapper = styled(TablePagination)`
     * {
-        font-family: Geogrotesque !important;
+        font-family: ${(props) => props.theme.fontFamily.primary};
     }
 
     border: none !important;

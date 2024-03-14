@@ -1267,7 +1267,8 @@
             "tooltip-correct-correct-table": "Количество правильно угаданных игр в вашей группе",
             "my-rewards": "Мои награды",
             "tooltip-bonus-volume-table": "Сумма бонуса рассчитывается на основе выбранного вами брекета",
-            "tooltip-rewards-volume-table": "10 000 OP (30 000 THALES на Arbitrum) будут разделены пропорционально объему"
+            "tooltip-rewards-volume-table": "10 000 OP (30 000 THALES на Arbitrum) будут разделены пропорционально объему",
+            "bracket-id": "Идентификатор кронштейна"
         },
         "brackets": {
             "stats": {

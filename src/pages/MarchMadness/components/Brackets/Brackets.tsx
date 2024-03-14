@@ -890,7 +890,7 @@ const Brackets: React.FC = () => {
                                 <Button
                                     additionalStyles={{
                                         fontSize: '14px',
-                                        fontFamily: "'Geogrotesque' !important",
+                                        fontFamily: theme.fontFamily.primary,
                                         textTransform: 'uppercase',
                                         background: theme.marchMadness.button.background.senary,
                                         border: `2px solid ${theme.marchMadness.borderColor.senary}`,
@@ -965,7 +965,7 @@ const Brackets: React.FC = () => {
                                     <Button
                                         additionalStyles={{
                                             fontSize: '14px',
-                                            fontFamily: "'Geogrotesque' !important",
+                                            fontFamily: theme.fontFamily.primary,
                                             textTransform: 'uppercase',
                                             background: theme.marchMadness.button.background.senary,
                                             border: `2px solid ${theme.marchMadness.borderColor.senary}`,

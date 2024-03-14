@@ -1267,7 +1267,8 @@
             "owner": "Propriétaire",
             "tooltip-rewards-correct-table": "3 000 OP (10 000 THALES sur Arbitrum) seront répartis entre les 10 premiers",
             "rank": "Rang",
-            "my-rewards": "Mes récompenses"
+            "my-rewards": "Mes récompenses",
+            "bracket-id": "ID du support"
         },
         "brackets": {
             "stats": {

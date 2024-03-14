@@ -1267,7 +1267,8 @@
             "base-volume": "根据",
             "rank": "秩",
             "tooltip-correct-correct-table": "您所在组中猜对的游戏数量",
-            "tooltip-rewards-volume-table": "10,000 OP（Arbitrum 为 30,000 THALES）将根据数量按比例分配"
+            "tooltip-rewards-volume-table": "10,000 OP（Arbitrum 为 30,000 THALES）将根据数量按比例分配",
+            "bracket-id": "支架编号"
         },
         "brackets": {
             "stats": {

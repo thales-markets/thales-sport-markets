@@ -205,7 +205,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontFamily: "'Geogrotesque' !important",
+                        fontFamily: theme.fontFamily.primary,
                         fontSize: '22px',
                         color: theme.marchMadness.button.textColor.secondary,
                         textTransform: 'uppercase',

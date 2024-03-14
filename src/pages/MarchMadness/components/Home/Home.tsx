@@ -286,7 +286,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 background: theme.marchMadness.button.background.senary,
                                 border: `none`,
                                 fontSize: '30px',
-                                fontFamily: "'Geogrotesque' !important",
+                                fontFamily: theme.fontFamily.primary,
                                 textTransform: 'uppercase',
                                 color: theme.marchMadness.button.textColor.primary,
                             }}
@@ -331,7 +331,7 @@ const TimeLeft = styled.h2`
     color: #fff;
     text-align: center;
     white-space: nowrap;
-    font-family: Geogrotesque !important;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 53px;
     font-style: normal;
     font-weight: 400;

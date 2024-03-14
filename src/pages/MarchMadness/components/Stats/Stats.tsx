@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
+import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 
 const Stats: React.FC = () => {
@@ -14,10 +15,17 @@ const Stats: React.FC = () => {
 
     console.log(t, theme, isMobile);
 
-    return <Container></Container>;
+    return (
+        <Container>
+            <FlexDivCentered>
+                <Icon className={'icon icon--stats'} />
+                <Text>{t('march-madness.stats.live-stats')}</Text>
+            </FlexDivCentered>
+        </Container>
+    );
 };
 
-const Container = styled.div`
+const Container = styled(FlexDivRowCentered)`
     width: 100%;
     height: 37px;
     background: ${(props) => props.theme.marchMadness.background.senary};
@@ -26,5 +34,9 @@ const Container = styled.div`
     @media (max-width: 575px) {
     }
 `;
+
+const Text = styled.span``;
+
+const Icon = styled.i``;
 
 export default Stats;
