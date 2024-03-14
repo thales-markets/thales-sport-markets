@@ -316,7 +316,7 @@ const Container = styled.div`
 const PageTitle = styled.h1`
     color: #f25623;
     white-space: nowrap;
-    font-family: ${(props) => props.theme.fontFamily.secondary};
+    font-family: ${(props) => props.theme.fontFamily.tertiary};
     font-size: 50px;
     font-style: normal;
     font-weight: 400;

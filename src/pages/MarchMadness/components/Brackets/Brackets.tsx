@@ -713,7 +713,7 @@ const Brackets: React.FC = () => {
                 </StatsColumn>
                 <StatsColumn width="60%">
                     <StatsRow justify="normal">
-                        <StatsText>{t('march-madness.brackets.stats.bracket')}:</StatsText>
+                        <StatsText lineHeight={16}>{t('march-madness.brackets.stats.bracket')}:</StatsText>
                         <StatsText margin="0 15px 0 auto" fontWeight={700}>
                             {isStatusComplete
                                 ? t('march-madness.brackets.stats.complete')
@@ -721,7 +721,7 @@ const Brackets: React.FC = () => {
                         </StatsText>
                     </StatsRow>
                     <StatsRow justify="normal">
-                        <StatsText>{t('march-madness.brackets.stats.rank')}:</StatsText>
+                        <StatsText lineHeight={16}>{t('march-madness.brackets.stats.rank')}:</StatsText>
                         <StatsText margin="0 15px 0 auto" fontWeight={700}>
                             {isFirstMatchFinished ? (rankByGames ? rankByGames : '-') : 'N/A'}
                         </StatsText>
@@ -749,7 +749,7 @@ const Brackets: React.FC = () => {
                     <StatsText fontSize={14} margin="0 5px 0 0">
                         {t('march-madness.brackets.stats.points')}
                     </StatsText>
-                    <StatsText fontWeight={600} fontSize={14}>
+                    <StatsText fontWeight={600} fontSize={14} lineHeight={10}>
                         {roundPoints + '/' + MAX_POINTS_PER_ROUND}
                     </StatsText>
                 </StatsRow>

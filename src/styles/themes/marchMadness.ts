@@ -6,7 +6,8 @@ export default {
     fontFamily: {
         ...darkTheme.fontFamily,
         primary: "'Geogrotesque' !important",
-        secondary: "'Legacy' !important",
+        secondary: "'GeogrotesqueReg' !important",
+        tertiary: "'Legacy' !important",
     },
     background: {
         ...darkTheme.background,

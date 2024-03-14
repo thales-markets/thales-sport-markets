@@ -97,3 +97,8 @@
     font-family: 'Geogrotesque';
     src: local('Geogrotesque'), url(../assets/fonts/Geogrotesque/Geogrotesque.ttf) format('truetype');
 }
+
+@font-face {
+    font-family: 'GeogrotesqueReg';
+    src: local('GeogrotesqueReg'), url(../assets/fonts/Geogrotesque/GeogrotesqueCyr-Regular.ttf) format('truetype');
+}

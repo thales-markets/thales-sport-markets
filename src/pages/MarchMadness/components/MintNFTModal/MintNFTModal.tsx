@@ -96,7 +96,7 @@ const TextWrapper = styled.div`
 `;
 
 const Text = styled.span`
-    font-family: ${(props) => props.theme.fontFamily.primary};
+    font-family: ${(props) => props.theme.fontFamily.secondary};
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
@@ -110,7 +110,7 @@ const Text = styled.span`
 `;
 
 const TextHeader = styled(Text)`
-    font-family: ${(props) => props.theme.fontFamily.secondary};
+    font-family: ${(props) => props.theme.fontFamily.tertiary};
     font-size: 40px;
     line-height: 60px;
     letter-spacing: 2px;

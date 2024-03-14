@@ -195,7 +195,7 @@ export const MyStats = styled.div`
     display: flex;
     width: 304px;
     height: 80px;
-    background: ${(props) => props.theme.marchMadness.background.senary};
+    background: ${(props) => props.theme.marchMadness.background.tertiary};
     border-radius: 8px;
 `;
 
@@ -220,7 +220,10 @@ export const StatsIcon = styled.i`
 `;
 
 export const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; lineHeight?: number; margin?: string }>`
-    font-family: ${(props) => props.theme.fontFamily.primary};
+    font-family: ${(props) =>
+        !props.fontWeight || props.fontWeight < 600
+            ? props.theme.fontFamily.secondary
+            : props.theme.fontFamily.primary};
     font-style: normal;
     font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '400')};
     font-size: ${(props) => (props.fontSize ? props.fontSize : '16')}px;
