@@ -215,6 +215,10 @@ export const StatsRow = styled.div<{ justify?: string; margin?: string }>`
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
 
+export const StatsIcon = styled.i`
+    margin-right: 5px;
+`;
+
 export const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; lineHeight?: number; margin?: string }>`
     font-family: 'Geogrotesque' !important;
     font-style: normal;

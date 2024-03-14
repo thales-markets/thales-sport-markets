@@ -112,6 +112,7 @@ import {
     Share,
     ShareWrapper,
     StatsColumn,
+    StatsIcon,
     StatsRow,
     StatsText,
     SubmitInfo,
@@ -123,6 +124,7 @@ import {
     WildCardsHeader,
     WildCardsRow,
 } from './styled-components';
+import { FlexDivCentered } from 'styles/common';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -703,9 +705,10 @@ const Brackets: React.FC = () => {
         return (
             <MyStats>
                 <StatsColumn width="40%">
-                    <StatsText fontWeight={600} margin="0 0 0 21px">
-                        {t('march-madness.brackets.stats.my-stats')}
-                    </StatsText>
+                    <FlexDivCentered>
+                        <StatsIcon className={'icon icon--stats'} />
+                        <StatsText fontWeight={600}>{t('march-madness.brackets.stats.my-stats')}</StatsText>
+                    </FlexDivCentered>
                 </StatsColumn>
                 <StatsColumn width="60%">
                     <StatsRow justify="normal">
