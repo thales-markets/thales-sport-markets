@@ -1,5 +1,4 @@
 import Tooltip from 'components/Tooltip';
-import { PaginationWrapper } from 'pages/Quiz/styled-components';
 import useLeaderboardByVolumeQuery, { LeaderboardByVolumeData } from 'queries/marchMadness/useLeaderboardByVolumeQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +15,7 @@ import {
     NoDataContainer,
     NoDataLabel,
     OverlayContainer,
+    PaginationWrapper,
     StickyRow,
     Table,
     TableContainer,

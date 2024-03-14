@@ -122,6 +122,10 @@ export const StickyRowTopTable = styled(TableRow)`
 `;
 
 export const PaginationWrapper = styled(TablePagination)`
+    * {
+        font-family: Geogrotesque !important;
+    }
+
     border: none !important;
     display: flex;
     width: 100%;
