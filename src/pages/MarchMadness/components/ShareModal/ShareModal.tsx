@@ -23,7 +23,7 @@ type ShareModalProps = {
 };
 
 const IMAGE_NAME = 'BracketImage.png';
-const TWITTER_MESSAGE = '%0AI picked the {{winnerTeam}} to cut the nets down in Houston! How about you, anon?';
+const TWITTER_MESSAGE = '%0AI picked the {{winnerTeam}} to cut the nets down in Phoenix! How about you, anon?';
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
 const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${IMAGE_NAME}>`;
 
@@ -205,13 +205,13 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontFamily: "'NCAA' !important",
+                        fontFamily: "'Geogrotesque' !important",
                         fontSize: '22px',
-                        color: theme.marchMadness.button.textColor.primary,
+                        color: theme.marchMadness.button.textColor.secondary,
                         textTransform: 'uppercase',
-                        background: theme.marchMadness.button.background.primary,
-                        border: `1px solid ${theme.marchMadness.button.borderColor.tertiary}`,
-                        borderRadius: '0',
+                        background: theme.marchMadness.button.background.senary,
+                        border: `2px solid ${theme.marchMadness.borderColor.senary}`,
+                        borderRadius: '4px',
                         width: '186px',
                         height: '38px',
                         marginTop: '11px',
@@ -219,7 +219,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ final4Matches, handleClose }) =
                     onClick={onTwitterShareClickHandler}
                 >
                     {t('march-madness.brackets.modal-share.share')}
-                    <TwitterIcon color={theme.marchMadness.textColor.tertiary} padding="0 0 2px 10px" />
+                    <TwitterIcon padding="0 0 2px 10px" />
                 </Button>
             </Container>
         </ReactModal>

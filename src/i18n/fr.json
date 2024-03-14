@@ -1295,7 +1295,12 @@
                 "finish-info": "*Le support NFT March Madness est un NFT Overtime qui permet aux détenteurs de participer à la campagne Overtime March Madness en créant leur propre support de tournoi de pronostics.",
                 "button-update": "Mettre à jour le support",
                 "button-mint": "Comme NFT",
-                "finish-text-1-success": "Toutes nos félicitations!"
+                "finish-text-1-success": "Toutes nos félicitations!",
+                "footer-info": "*Le support NFT March Madness est un NFT Overtime qui permet aux détenteurs de participer à la campagne Overtime March Madness en créant leur propre support de tournoi de pronostics.",
+                "hedaer": "Toutes nos félicitations!",
+                "footer-text": "Rendez-vous sur les <marketsLink>marchés NCAAB</marketsLink> et commencez à gagner des récompenses !",
+                "mint-text": "Vous venez de créer votre support March Madness !",
+                "update-text": "Votre bracket NFT March Madness a été mis à jour !"
             },
             "modal-share": {
                 "header": "Mes 4 derniers choix",
@@ -1321,7 +1326,11 @@
             "bracket-id": "Numéro d'identification du support {{id}}",
             "create-as": "Créer nouveau en tant que...",
             "clear-all": "Tout effacer",
-            "submit-info": "*prix de frappe {{value}}"
+            "submit-info": "*prix de frappe {{value}}",
+            "create-new": "Créer un nouveau",
+            "submit-modify-progress": "Mise à jour...",
+            "submit-progress": "Frappe...",
+            "keep-current": "Conserver la sélection actuelle"
         },
         "regions": {
             "south": "Sud",

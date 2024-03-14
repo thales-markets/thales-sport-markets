@@ -185,7 +185,7 @@ export default {
         },
         button: {
             background: {
-                primary: '',
+                primary: Colors.ORANGE_MARCH_MADNESS,
                 secondary: Colors.BLUE_GRADIENT_1,
                 tertiary: '',
                 quaternary: '',
@@ -204,6 +204,9 @@ export default {
                 secondary: '',
                 tertiary: '',
             },
+        },
+        dropdown: {
+            textColor: { primary: Colors.GRAY_DARK },
         },
         link: {
             textColor: {

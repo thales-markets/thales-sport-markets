@@ -1295,7 +1295,12 @@
                 "button-mint": "Come NFT",
                 "finish-text-3-success": "Vai ai <marketsLink>mercati NCAAB</marketsLink> e inizia a guadagnare premi!",
                 "finish-text-2": "Hai creato con successo la tua staffa!<br /> Ora puoi coniare la tua staffa March Madness nft!",
-                "update-text-2-success": "Il tuo NFT del girone March Madness è stato aggiornato!"
+                "update-text-2-success": "Il tuo NFT del girone March Madness è stato aggiornato!",
+                "footer-text": "Vai ai <marketsLink>mercati NCAAB</marketsLink> e inizia a guadagnare premi!",
+                "update-text": "Il tuo NFT del girone March Madness è stato aggiornato!",
+                "footer-info": "*L'NFT del girone March Madness è un NFT Overtime che consente ai titolari di partecipare alla campagna Overtime March Madness creando il proprio girone del torneo di pronostici.",
+                "mint-text": "Hai appena coniato il tuo supporto March Madness!",
+                "hedaer": "Congratulazioni!"
             },
             "modal-share": {
                 "share": "Condividere",
@@ -1321,7 +1326,11 @@
             "bracket-id": "ID parentesi #{{id}}",
             "clear-all": "Cancella tutto",
             "create-as": "Crea nuovo come...",
-            "submit-info": "*prezzo di conio {{value}}"
+            "submit-info": "*prezzo di conio {{value}}",
+            "create-new": "Creare nuovo",
+            "keep-current": "Mantieni la selezione corrente",
+            "submit-progress": "Conio...",
+            "submit-modify-progress": "In aggiornamento..."
         },
         "regions": {
             "west": "ovest",

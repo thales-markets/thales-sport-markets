@@ -1295,7 +1295,12 @@
                 "finish-text-1": "ทำได้ดี!",
                 "finish-text-2": "คุณสร้างวงเล็บของคุณสำเร็จแล้ว!<br /> ตอนนี้คุณสามารถสร้าง March Madness Bracket nft ได้แล้ว!",
                 "button-updating": "กำลังอัปเดต...",
-                "button-update": "อัปเดตวงเล็บ"
+                "button-update": "อัปเดตวงเล็บ",
+                "update-text": "NFT ของวงเล็บ March Madness ของคุณได้รับการอัปเดตแล้ว!",
+                "mint-text": "คุณเพิ่งสร้าง March Madness Bracket ของคุณสำเร็จ!",
+                "hedaer": "ยินดีด้วย!",
+                "footer-info": "*NFT ของกลุ่ม March Madness คือ NFT การต่อเวลาที่ช่วยให้ผู้ถือสามารถเข้าร่วมในแคมเปญ Overtime March Madness โดยการสร้างกลุ่มทัวร์นาเมนต์การทำนายของตนเอง",
+                "footer-text": "ไปที่ <marketsLink>ตลาด NCAAB</marketsLink> และเริ่มรับรางวัลได้เลย!"
             },
             "modal-share": {
                 "user-selection": "ฉันเลือก {{team}} เพื่อตัดตาข่ายในฮูสตัน!",
@@ -1321,7 +1326,11 @@
             "confirmation-message": "สร้างวงเล็บสำเร็จแล้ว",
             "clear-all": "ลบทั้งหมด",
             "create-as": "สร้างใหม่เป็น...",
-            "submit-info": "*ราคาการทำเหรียญกษาปณ์ {{value}}"
+            "submit-info": "*ราคาการทำเหรียญกษาปณ์ {{value}}",
+            "keep-current": "เก็บการเลือกปัจจุบันไว้",
+            "create-new": "สร้างใหม่",
+            "submit-modify-progress": "กำลังอัปเดต...",
+            "submit-progress": "โรงกษาปณ์..."
         },
         "regions": {
             "midwest": "มิดเวสต์",

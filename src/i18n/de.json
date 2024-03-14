@@ -1295,7 +1295,12 @@
                 "button-mint": "Wie NFT",
                 "button-updating": "Aktualisierung...",
                 "button-update": "Klammer aktualisieren",
-                "update-text-2-success": "Ihr NFT der March Madness-Reihe wurde aktualisiert!"
+                "update-text-2-success": "Ihr NFT der March Madness-Reihe wurde aktualisiert!",
+                "footer-info": "*Das March Madness-Bracket-NFT ist ein Overtime-NFT, das es Inhabern ermöglicht, an der Overtime-March-Madness-Kampagne teilzunehmen, indem sie ihr eigenes Tippturnier-Bracket erstellen.",
+                "hedaer": "Glückwunsch!",
+                "mint-text": "Du hast gerade dein March Madness Bracket geprägt!",
+                "update-text": "Ihr NFT der March Madness-Reihe wurde aktualisiert!",
+                "footer-text": "Besuchen Sie die <marketsLink>NCAAB-Märkte</marketsLink> und verdienen Sie Prämien!"
             },
             "modal-share": {
                 "share": "Aktie",
@@ -1321,7 +1326,11 @@
             "confirmation-message": "Klammer erfolgreich geprägt",
             "create-as": "Neu erstellen als...",
             "clear-all": "Alles löschen",
-            "submit-info": "*Prägepreis {{value}}"
+            "submit-info": "*Prägepreis {{value}}",
+            "submit-modify-progress": "Aktualisierung...",
+            "create-new": "Erstelle neu",
+            "submit-progress": "Prägung...",
+            "keep-current": "Aktuelle Auswahl beibehalten"
         },
         "regions": {
             "east": "Ost",

@@ -234,7 +234,7 @@ const TeamRow = styled.div<{
     isDefault: boolean;
     isSelected: boolean;
 }>`
-    opacity: ${(props) => (!props.isDefault && !props.isSelected ? '0.2' : '1')};
+    opacity: ${(props) => (!props.isDefault && !props.isSelected ? '0.5' : '1')};
     background: ${(props) => props.theme.marchMadness.button.background.primary};
     border: ${(props) =>
         !props.isDefault && !props.isSelected

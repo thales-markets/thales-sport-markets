@@ -5,6 +5,10 @@
     font-size: 20px;
 }
 
+.icon--stats:before {
+    content: '\002F';
+}
+
 .icon--hide:before {
     content: '\0030';
 }

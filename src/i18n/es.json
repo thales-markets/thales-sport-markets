@@ -1295,7 +1295,12 @@
                 "button-mint": "Como NFT",
                 "update-text-2": "Guardamos su predicción de grupo, ¡actualice su grupo ahora!",
                 "finish-text-1": "¡Bien hecho!",
-                "finish-text-3-success": "Dirígete a <marketsLink>Mercados de la NCAAB</marketsLink> y comienza a ganar recompensas."
+                "finish-text-3-success": "Dirígete a <marketsLink>Mercados de la NCAAB</marketsLink> y comienza a ganar recompensas.",
+                "hedaer": "¡Felicidades!",
+                "footer-text": "Dirígete a <marketsLink>Mercados de la NCAAB</marketsLink> y comienza a ganar recompensas.",
+                "mint-text": "¡Acabas de crear tu categoría March Madness!",
+                "footer-info": "*El NFT del grupo March Madness es un NFT de tiempo extra que permite a los poseedores participar en la campaña March Madness de tiempo extra creando su propio grupo de torneo de predicción.",
+                "update-text": "¡Tu NFT de soporte de March Madness ha sido actualizado!"
             },
             "modal-share": {
                 "header": "Mis últimas 4 elecciones",
@@ -1321,7 +1326,11 @@
             "confirmation-message": "Soporte acuñado con éxito",
             "create-as": "Crear nuevo como...",
             "clear-all": "Limpiar todo",
-            "submit-info": "*precio de acuñación {{value}}"
+            "submit-info": "*precio de acuñación {{value}}",
+            "create-new": "Crear nuevo",
+            "submit-modify-progress": "Actualizando...",
+            "keep-current": "Mantener la selección actual",
+            "submit-progress": "Acuñación..."
         },
         "regions": {
             "west": "Oeste",

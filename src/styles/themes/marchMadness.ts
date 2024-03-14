@@ -79,6 +79,9 @@ export default {
                 tertiary: Colors.BLACK,
             },
         },
+        dropdown: {
+            textColor: { primary: Colors.WHITE },
+        },
         link: {
             textColor: {
                 primary: Colors.WHITE,

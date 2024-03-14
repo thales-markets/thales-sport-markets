@@ -1143,8 +1143,10 @@
         "brackets": {
             "team-1": "Team 1",
             "team-2": "Team 2",
-            "submit": "Finish Bracket",
+            "submit": "Mint Bracket",
+            "submit-progress": "Minting...",
             "submit-modify": "Update Bracket",
+            "submit-modify-progress": "Updating...",
             "submit-info": "*minting price {{value}}",
             "round-0": "1st Round",
             "round-1": "2nd Round",
@@ -1154,7 +1156,8 @@
             "round-5": "Final",
             "bracket-id": "Bracket ID #{{id}}",
             "my-brackets": "My brackets",
-            "create-as": "Create new as...",
+            "create-new": "Create new",
+            "keep-current": "Keep current selection",
             "clear-all": "Clear all",
             "error-minting-price": "Minting price can't be fetched!",
             "confirmation-message": "Bracket successfully minted",
@@ -1169,24 +1172,16 @@
                 "total-points": "My total points"
             },
             "modal-mint": {
-                "finish-text-1": "Well done!",
-                "finish-text-1-success": "Congratulations!",
-                "finish-text-2": "You have successfully created your bracket!<br />You can now mint your march madness bracket nft!",
-                "finish-text-2-success": "You just minted your March Madness Bracket!",
-                "finish-text-3-success": "Head over to the <marketsLink>NCAAB markets</marketsLink> and start earning rewards!",
-                "finish-info": "*The March Madness bracket NFT is an Overtime NFT that allows holders to participate in the Overtime March Madness campaign by creating their own prediction tournament bracket.",
-                "update-text-1": "Nicely done!",
-                "update-text-2": "We saved your bracket prediction, please update your bracket now!",
-                "update-text-2-success": "Your March Madness bracket NFT has been updated!",
-                "button-mint": "Mint NFT",
-                "button-minting": "Minting...",
-                "button-update": "Update Bracket",
-                "button-updating": "Updating..."
+                "hedaer": "Congratulations!",
+                "mint-text": "You just minted your March Madness Bracket!",
+                "footer-text": "Head over to the <marketsLink>NCAAB markets</marketsLink> and start earning rewards!",
+                "footer-info": "*The March Madness bracket NFT is an Overtime NFT that allows holders to participate in the Overtime March Madness campaign by creating their own prediction tournament bracket.",
+                "update-text": "Your March Madness bracket NFT has been updated!"
             },
             "share": "Share this bracket",
             "modal-share": {
                 "header": "My final 4 picks",
-                "user-selection": "I picked the {{team}} to cut the nets down in Houston!",
+                "user-selection": "I picked the {{team}} to cut the nets down in Phoenix!",
                 "share": "Share"
             }
         },
