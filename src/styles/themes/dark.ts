@@ -1,7 +1,7 @@
 import { Colors } from 'styles/common';
 
 export default {
-    fontFamily: { primary: "'Roboto' !important" },
+    fontFamily: { primary: "'Roboto' !important", secondary: "'Roboto' !important" },
     background: {
         primary: Colors.GRAY_DARK,
         secondary: Colors.GRAY,

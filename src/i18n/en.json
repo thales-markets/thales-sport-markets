@@ -1155,7 +1155,7 @@
             "round-3": "Elite 8",
             "round-4": "Final 4",
             "round-5": "Final",
-            "bracket-id": "Bracket ID #{{id}}",
+            "bracket-id": "Bracket ID: #{{id}}",
             "my-brackets": "My brackets",
             "create-new": "Create new",
             "keep-current": "Keep current selection",
@@ -1175,9 +1175,9 @@
             "modal-mint": {
                 "hedaer": "Congratulations!",
                 "mint-text": "You just minted your March Madness Bracket!",
-                "footer-text": "Head over to the <marketsLink>NCAAB markets</marketsLink> and start earning rewards!",
-                "footer-info": "*The March Madness bracket NFT is an Overtime NFT that allows holders to participate in the Overtime March Madness campaign by creating their own prediction tournament bracket.",
-                "update-text": "Your March Madness bracket NFT has been updated!"
+                "footer-text": "You can always mint more to increase your chances.",
+                "update-text": "Your March Madness bracket NFT has been updated!",
+                "back": "Go back to brackets page"
             },
             "share": "Share this bracket",
             "modal-share": {
@@ -1185,6 +1185,11 @@
                 "user-selection": "I picked the {{team}} to cut the nets down in Phoenix!",
                 "share": "Share"
             }
+        },
+        "stats": {
+            "live-stats": "Live stats",
+            "brackets-minted": "Brackets minted",
+            "pool-size": "Prize pool size"
         },
         "regions": {
             "east": "East",

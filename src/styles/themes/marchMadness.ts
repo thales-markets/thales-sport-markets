@@ -6,6 +6,7 @@ export default {
     fontFamily: {
         ...darkTheme.fontFamily,
         primary: "'Geogrotesque' !important",
+        secondary: "'Legacy' !important",
     },
     background: {
         ...darkTheme.background,
@@ -90,7 +91,7 @@ export default {
         },
         shadow: {
             modal: `0px 0px 59px 11px ${Colors.GRAY_DARK}`,
-            image: `0px 0px 100px -2px ${Colors.PURPLE_GRADIENT_1}`,
+            image: `0px 0px 50px ${Colors.PURPLE_GRADIENT_1}`,
         },
         status: {
             notSelected: Colors.BLACK,

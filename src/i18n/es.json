@@ -1301,7 +1301,8 @@
                 "footer-text": "Dirígete a <marketsLink>Mercados de la NCAAB</marketsLink> y comienza a ganar recompensas.",
                 "mint-text": "¡Acabas de crear tu categoría March Madness!",
                 "footer-info": "*El NFT del grupo March Madness es un NFT de tiempo extra que permite a los poseedores participar en la campaña March Madness de tiempo extra creando su propio grupo de torneo de predicción.",
-                "update-text": "¡Tu NFT de soporte de March Madness ha sido actualizado!"
+                "update-text": "¡Tu NFT de soporte de March Madness ha sido actualizado!",
+                "back": "Volver a la página de corchetes"
             },
             "modal-share": {
                 "header": "Mis últimas 4 elecciones",
@@ -1342,7 +1343,12 @@
         "test-info": "¡La fase de pruebas ya está abierta con los equipos de 2022, la selección de 2023 se abre el 12 de marzo!",
         "back-to-markets": "Volver a los mercados",
         "mobile-message": "La página solo está disponible en pantallas más grandes. ¡Utilice la versión de escritorio!",
-        "header-button-tooltip": "Sólo disponible en la red Arbitrum."
+        "header-button-tooltip": "Sólo disponible en la red Arbitrum.",
+        "stats": {
+            "pool-size": "Tamaño del premio acumulado",
+            "live-stats": "Estadísticas en vivo",
+            "brackets-minted": "Soportes acuñados"
+        }
     },
     "promotions": {
         "nav-items": {

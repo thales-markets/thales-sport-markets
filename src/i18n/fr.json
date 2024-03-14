@@ -1301,7 +1301,8 @@
                 "hedaer": "Toutes nos félicitations!",
                 "footer-text": "Rendez-vous sur les <marketsLink>marchés NCAAB</marketsLink> et commencez à gagner des récompenses !",
                 "mint-text": "Vous venez de créer votre support March Madness !",
-                "update-text": "Votre bracket NFT March Madness a été mis à jour !"
+                "update-text": "Votre bracket NFT March Madness a été mis à jour !",
+                "back": "Revenir à la page des parenthèses"
             },
             "modal-share": {
                 "header": "Mes 4 derniers choix",
@@ -1342,7 +1343,12 @@
         "back-to-markets": "Retour aux marchés",
         "mobile-message": "La page n'est disponible que sur des écrans plus grands. Veuillez utiliser la version de bureau !",
         "test-info": "La phase de tests est désormais ouverte avec les équipes 2022, la sélection 2023 s'ouvre le 12 mars !",
-        "header-button-tooltip": "Uniquement disponible sur le réseau Arbitrum."
+        "header-button-tooltip": "Uniquement disponible sur le réseau Arbitrum.",
+        "stats": {
+            "live-stats": "Statistiques en direct",
+            "brackets-minted": "Supports frappés",
+            "pool-size": "Taille de la cagnotte"
+        }
     },
     "promotions": {
         "nav-items": {

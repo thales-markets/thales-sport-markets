@@ -1301,7 +1301,8 @@
                 "update-text": "Il tuo NFT del girone March Madness è stato aggiornato!",
                 "footer-info": "*L'NFT del girone March Madness è un NFT Overtime che consente ai titolari di partecipare alla campagna Overtime March Madness creando il proprio girone del torneo di pronostici.",
                 "mint-text": "Hai appena coniato il tuo supporto March Madness!",
-                "hedaer": "Congratulazioni!"
+                "hedaer": "Congratulazioni!",
+                "back": "Torna alla pagina delle parentesi"
             },
             "modal-share": {
                 "share": "Condividere",
@@ -1342,7 +1343,12 @@
         "test-info": "È ora aperta la fase di testing con le squadre 2022, la selezione 2023 si apre il 12 marzo!",
         "mobile-message": "La pagina è disponibile solo su schermi più grandi. Si prega di utilizzare la versione desktop!",
         "back-to-markets": "Ritorniamo ai mercati",
-        "header-button-tooltip": "Disponibile solo sulla rete Arbitrum."
+        "header-button-tooltip": "Disponibile solo sulla rete Arbitrum.",
+        "stats": {
+            "live-stats": "Statistiche in tempo reale",
+            "pool-size": "Dimensioni del montepremi",
+            "brackets-minted": "Staffe coniate"
+        }
     },
     "promotions": {
         "nav-items": {

@@ -125,6 +125,7 @@ import {
     WildCardsRow,
 } from './styled-components';
 import { FlexDivCentered } from 'styles/common';
+import Stats from '../Stats';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -866,6 +867,9 @@ const Brackets: React.FC = () => {
             ) : (
                 <>
                     <RowStats>
+                        <Stats />
+                    </RowStats>
+                    <RowStats>
                         {getMyStats()}
                         {getMyTotalScore()}
                     </RowStats>
@@ -1098,6 +1102,7 @@ const Brackets: React.FC = () => {
                     {showMintNFTModal && (
                         <MintNFTModal
                             isUpdate={selectedBracketId !== DEFAULT_BRACKET_ID}
+                            bracketId={selectedBracketId}
                             handleClose={() => setShowMintNFTModal(false)}
                         />
                     )}

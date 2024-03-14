@@ -231,7 +231,7 @@ export const StatsText = styled.span<{ fontWeight?: number; fontSize?: number; l
 `;
 
 export const MyTotalScore = styled.div`
-    width: 1007px;
+    width: 1006px;
     height: 80px;
     display: flex;
     background: ${(props) => props.theme.marchMadness.background.tertiary};

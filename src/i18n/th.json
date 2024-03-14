@@ -1301,7 +1301,8 @@
                 "mint-text": "คุณเพิ่งสร้าง March Madness Bracket ของคุณสำเร็จ!",
                 "hedaer": "ยินดีด้วย!",
                 "footer-info": "*NFT ของกลุ่ม March Madness คือ NFT การต่อเวลาที่ช่วยให้ผู้ถือสามารถเข้าร่วมในแคมเปญ Overtime March Madness โดยการสร้างกลุ่มทัวร์นาเมนต์การทำนายของตนเอง",
-                "footer-text": "ไปที่ <marketsLink>ตลาด NCAAB</marketsLink> และเริ่มรับรางวัลได้เลย!"
+                "footer-text": "ไปที่ <marketsLink>ตลาด NCAAB</marketsLink> และเริ่มรับรางวัลได้เลย!",
+                "back": "กลับไปที่หน้าวงเล็บ"
             },
             "modal-share": {
                 "user-selection": "ฉันเลือก {{team}} เพื่อตัดตาข่ายในฮูสตัน!",
@@ -1342,7 +1343,12 @@
         "back-to-markets": "กลับไปสู่ตลาด",
         "mobile-message": "หน้าจะมีเฉพาะในหน้าจอที่ใหญ่กว่าเท่านั้น กรุณาใช้เวอร์ชันเดสก์ท็อป!",
         "test-info": "ขณะนี้ขั้นตอนการทดสอบเปิดสำหรับทีมปี 2022 ส่วนการคัดเลือกปี 2023 จะเปิดในวันที่ 12 มีนาคม!",
-        "header-button-tooltip": "ใช้ได้เฉพาะในเครือข่าย Arbitrum เท่านั้น"
+        "header-button-tooltip": "ใช้ได้เฉพาะในเครือข่าย Arbitrum เท่านั้น",
+        "stats": {
+            "brackets-minted": "วงเล็บมิ้นต์",
+            "live-stats": "สถิติสด",
+            "pool-size": "ขนาดพูลรางวัล"
+        }
     },
     "promotions": {
         "nav-items": {

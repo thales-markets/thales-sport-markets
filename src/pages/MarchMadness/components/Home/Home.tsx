@@ -316,7 +316,7 @@ const Container = styled.div`
 const PageTitle = styled.h1`
     color: #f25623;
     white-space: nowrap;
-    font-family: Legacy !important;
+    font-family: ${(props) => props.theme.fontFamily.secondary};
     font-size: 50px;
     font-style: normal;
     font-weight: 400;
@@ -348,7 +348,7 @@ const TimeLeftDescription = styled.h3`
     color: #f25623;
     text-align: center;
     white-space: nowrap;
-    font-family: Legacy !important;
+    font-family: ${(props) => props.theme.fontFamily.secondary};
     font-size: 30px;
     font-style: normal;
     font-weight: 400;

@@ -1301,7 +1301,8 @@
                 "hedaer": "恭喜！",
                 "footer-info": "*疯狂三月括号NFT是一种加时NFT，允许持有者通过创建自己的预测锦标赛括号来参与加时疯狂三月活动。",
                 "update-text": "您的疯狂三月支架 NFT 已更新！",
-                "mint-text": "您刚刚铸造了疯狂三月支架！"
+                "mint-text": "您刚刚铸造了疯狂三月支架！",
+                "back": "返回括号页面"
             },
             "modal-share": {
                 "header": "我的最后 4 个选择",
@@ -1342,7 +1343,12 @@
         "test-info": "2022 年团队测试阶段现已开放，2023 年选拔将于 3 月 12 日开放！",
         "back-to-markets": "回到市场",
         "mobile-message": "页面仅在较大的屏幕上可用。请使用桌面版！",
-        "header-button-tooltip": "仅在 Arbitrum 网络上可用。"
+        "header-button-tooltip": "仅在 Arbitrum 网络上可用。",
+        "stats": {
+            "brackets-minted": "铸造括号",
+            "live-stats": "实时统计",
+            "pool-size": "奖池大小"
+        }
     },
     "promotions": {
         "nav-items": {
