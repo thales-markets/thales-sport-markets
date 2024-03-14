@@ -71,56 +71,6 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
             {
                 Header: () => (
                     <>
-                        {t('march-madness.leaderboard.base-volume')}
-                        <Tooltip
-                            overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.secondary,
-                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
-                            }}
-                            overlay={
-                                <OverlayContainer>
-                                    {t('march-madness.leaderboard.tooltip-base-volume-table')}
-                                </OverlayContainer>
-                            }
-                            iconFontSize={14}
-                            marginLeft={2}
-                            top={0}
-                        />
-                    </>
-                ),
-                accessor: 'baseVolume',
-                Cell: (cellProps) => (
-                    <>{formatCurrencyWithKey(getDefaultCollateral(networkId), cellProps.cell.value, 2)}</>
-                ),
-            },
-            {
-                Header: () => (
-                    <>
-                        {t('march-madness.leaderboard.bonus-volume')}
-                        <Tooltip
-                            overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.secondary,
-                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
-                            }}
-                            overlay={
-                                <OverlayContainer>
-                                    {t('march-madness.leaderboard.tooltip-bonus-volume-table')}
-                                </OverlayContainer>
-                            }
-                            iconFontSize={14}
-                            marginLeft={2}
-                            top={0}
-                        />
-                    </>
-                ),
-                accessor: 'bonusVolume',
-                Cell: (cellProps) => (
-                    <>{formatCurrencyWithKey(getDefaultCollateral(networkId), cellProps.cell.value, 2)}</>
-                ),
-            },
-            {
-                Header: () => (
-                    <>
                         {t('march-madness.leaderboard.rewards')}
                         <Tooltip
                             overlayInnerStyle={{
@@ -138,7 +88,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         />
                     </>
                 ),
-                accessor: 'rewards',
+                accessor: 'estimatedRewards',
             },
         ];
     }, [networkId, t, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
@@ -146,7 +96,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
     const leaderboardQuery = useLeaderboardByVolumeQuery(networkId);
 
     const data = useMemo(() => {
-        if (leaderboardQuery.isSuccess && leaderboardQuery.data) return leaderboardQuery.data?.leaderboard;
+        if (leaderboardQuery.isSuccess && leaderboardQuery.data) return leaderboardQuery.data;
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
@@ -217,13 +167,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     <TableRowCell>
                         {formatCurrencyWithKey(getDefaultCollateral(networkId), myScore[0].volume, 2)}
                     </TableRowCell>
-                    <TableRowCell>
-                        {formatCurrencyWithKey(getDefaultCollateral(networkId), myScore[0].baseVolume, 2)}
-                    </TableRowCell>
-                    <TableRowCell>
-                        {formatCurrencyWithKey(getDefaultCollateral(networkId), myScore[0].bonusVolume, 2)}
-                    </TableRowCell>
-                    <TableRowCell>{myScore[0].rewards}</TableRowCell>
+                    <TableRowCell>{myScore[0].estimatedRewards}</TableRowCell>
                 </StickyRow>
             );
         }
@@ -231,7 +175,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
 
     return (
         <Container>
-            <TableHeaderContainer hideBottomBorder={true}>
+            <TableHeaderContainer>
                 <TableHeader>{'By volume'}</TableHeader>
             </TableHeaderContainer>
             <TableContainer>

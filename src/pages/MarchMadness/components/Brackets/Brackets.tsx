@@ -692,7 +692,7 @@ const Brackets: React.FC = () => {
     const rankByGames = useMemo(() => {
         if (leaderboardByGuessedGamesQuery.isSuccess && leaderboardByGuessedGamesQuery.data) {
             const leaderboardData = leaderboardByGuessedGamesQuery.data.find(
-                (data) => data.walletAddress.toLowerCase() === walletAddress.toLowerCase()
+                (data) => data.owner.toLowerCase() === walletAddress.toLowerCase()
             );
             return leaderboardData ? leaderboardData.rank : 0;
         }

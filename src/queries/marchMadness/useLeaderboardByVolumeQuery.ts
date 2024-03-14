@@ -2,41 +2,25 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { NetworkId } from 'thales-utils';
 
-type LeaderboardByVolumeResponse = {
-    globalVolume: number;
-    leaderboard: {
-        walletAddress: string;
-        volume: number;
-        baseVolume: number;
-        bonusVolume: number;
-        totalCorrectedPredictions: number;
-        rank: number;
-        rewards: string;
-    }[];
-};
-
 export type LeaderboardByVolumeData = {
     walletAddress: string;
     volume: number;
-    baseVolume: number;
-    bonusVolume: number;
-    totalCorrectedPredictions: number;
     rank: number;
-    rewards: string;
+    estimatedRewards: number;
 }[];
 
 const useLeaderboardByVolumeQuery = (
     networkId: NetworkId,
-    options?: UseQueryOptions<LeaderboardByVolumeResponse | undefined>
+    options?: UseQueryOptions<LeaderboardByVolumeData | undefined>
 ) => {
-    return useQuery<LeaderboardByVolumeResponse | undefined>(
+    return useQuery<LeaderboardByVolumeData | undefined>(
         QUERY_KEYS.MarchMadness.Competition.LeaderboardByVolume(networkId),
         async () => {
             try {
-                const rawResponse = await fetch(`https://api.thalesmarket.io/march-madness/0/${networkId}`);
+                const rawResponse = await fetch(`https://api.thalesmarket.io/march-madness/${networkId}`);
                 const response = JSON.parse(await rawResponse.text());
 
-                return response;
+                return response.dataByVolume;
             } catch (e) {
                 console.log('E ', e);
                 return;
