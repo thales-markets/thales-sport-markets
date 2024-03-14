@@ -20,8 +20,8 @@ const Leaderboard: React.FC = () => {
                 />
             </SearchContainer>
             <TablesContainer>
-                <TableByVolume searchText={searchText} />
                 <TableByGuessedCorrectly searchText={searchText} />
+                <TableByVolume searchText={searchText} />
             </TablesContainer>
         </>
     );
@@ -39,6 +39,7 @@ const TablesContainer = styled.div`
     flex-direction: row;
     height: auto;
     width: 100%;
+    gap: 10px;
 `;
 
 export default Leaderboard;

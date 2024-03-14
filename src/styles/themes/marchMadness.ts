@@ -52,7 +52,7 @@ export default {
         },
         borderColor: {
             primary: Colors.BLUE_GRADIENT_1,
-            secondary: '',
+            secondary: Colors.GRAY_SECOND,
             tertiary: Colors.WHITE,
             quaternary: Colors.BLUE_DARK,
             quinary: Colors.GRAY_GRADIENT_5,

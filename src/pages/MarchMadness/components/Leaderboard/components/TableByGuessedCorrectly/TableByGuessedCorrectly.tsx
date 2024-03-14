@@ -45,9 +45,15 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 Header: '',
                 accessor: 'rank',
             },
+
             {
-                Header: <>{t('march-madness.leaderboard.address')}</>,
-                accessor: 'walletAddress',
+                Header: <>{t('march-madness.leaderboard.bracket-id')}</>,
+                accessor: 'bracketId',
+                Cell: (cellProps) => <>#{cellProps.cell.value}</>,
+            },
+            {
+                Header: <>{t('march-madness.leaderboard.owner')}</>,
+                accessor: 'owner',
                 Cell: (cellProps) => (
                     <>
                         {truncateAddress(cellProps.cell.value, 5)}
@@ -81,7 +87,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         />
                     </>
                 ),
-                accessor: 'totalCorrectedPredictions',
+                accessor: 'totalPoints',
             },
             {
                 Header: () => (
@@ -117,7 +123,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
 
     const myScore = useMemo(() => {
         if (data) {
-            return data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
+            return data.filter((user) => user.owner.toLowerCase() == walletAddress?.toLowerCase());
         }
         return [];
     }, [data, walletAddress]);
@@ -126,20 +132,16 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
         let finalData: LeaderboardByGuessedCorrectlyResponse = [];
         if (data) {
             finalData = data;
-            const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
-            if (myScore.length) {
-                finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
-            }
 
             if (searchText?.trim() !== '') {
-                finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
+                finalData = data.filter((user) => user.owner.toLowerCase().includes(searchText.toLowerCase()));
             }
 
             return finalData;
         }
 
         return [];
-    }, [data, searchText, walletAddress]);
+    }, [data, searchText]);
 
     const {
         getTableProps,
@@ -177,8 +179,9 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             return (
                 <StickyRowTopTable myScore={true}>
                     <TableRowCell>{myScore[0].rank}</TableRowCell>
+                    <TableRowCell>#{myScore[0].bracketId}</TableRowCell>
                     <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
-                    <TableRowCell>{myScore[0].totalCorrectedPredictions}</TableRowCell>
+                    <TableRowCell>{myScore[0].totalPoints}</TableRowCell>
                     <TableRowCell>{myScore[0].rewards}</TableRowCell>
                 </StickyRowTopTable>
             );
@@ -187,10 +190,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
 
     return (
         <Container>
-            <TableHeaderContainer hideBottomBorder={true} inverseBorderGradient={true}>
+            <TableHeaderContainer>
                 <TableHeader>{t('march-madness.leaderboard.by-guessed-correctly')}</TableHeader>
             </TableHeaderContainer>
-            <TableContainer inverseBorderGradient={true}>
+            <TableContainer>
                 {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
@@ -253,8 +256,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
 };
 
 const Container = styled.div`
-    width: 40%;
-    padding-left: 10px;
+    flex: 8;
 `;
 
 export default TableByGuessedCorrectly;
