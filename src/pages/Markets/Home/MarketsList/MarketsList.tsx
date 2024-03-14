@@ -1,7 +1,7 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_LEAGUE, INCENTIVIZED_UEFA } from 'constants/markets';
+import { INCENTIVIZED_LEAGUE, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
 import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_LIST } from 'constants/tags';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
@@ -102,6 +102,31 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                     }}
                                     values={{
                                         rewards: INCENTIVIZED_UEFA.arbRewards,
+                                    }}
+                                />
+                            }
+                            component={
+                                <IncentivizedLeague>
+                                    <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
+                                    {getNetworkLogo(NetworkId.Arbitrum)}
+                                </IncentivizedLeague>
+                            }
+                        ></Tooltip>
+                    )}
+                {INCENTIVIZED_NHL.ids.includes(Number(league)) &&
+                    new Date() > INCENTIVIZED_NHL.startDate &&
+                    new Date() < INCENTIVIZED_NHL.endDate && (
+                        <Tooltip
+                            overlay={
+                                <Trans
+                                    i18nKey="markets.incentivized-tooltip-nhl"
+                                    components={{
+                                        detailsLink: (
+                                            <a href={INCENTIVIZED_NHL.link} target="_blank" rel="noreferrer" />
+                                        ),
+                                    }}
+                                    values={{
+                                        rewards: INCENTIVIZED_NHL.arbRewards,
                                     }}
                                 />
                             }

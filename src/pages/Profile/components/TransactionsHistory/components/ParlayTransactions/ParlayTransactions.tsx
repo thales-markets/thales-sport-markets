@@ -356,7 +356,7 @@ const getPositionStatus = (position: PositionData, theme: ThemeInterface) => {
     );
 };
 
-export const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket, theme: ThemeInterface) => {
+const getPositionStatusForCombinedMarket = (combinedMarket: CombinedMarket, theme: ThemeInterface) => {
     const isOpen = combinedMarket.markets[0].isOpen || combinedMarket.markets[1].isOpen;
     if (isOpen) return <StatusIcon color={theme.status.open} className={`icon icon--open`} />;
     if (isCombinedMarketWinner(combinedMarket.markets, combinedMarket.positions))

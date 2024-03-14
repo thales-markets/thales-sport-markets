@@ -1,4 +1,6 @@
 import burger from 'assets/images/burger.svg';
+import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
+import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -9,8 +11,8 @@ import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
+import React, { useRef, useState } from 'react';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,9 +30,11 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
+import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import TopUp from './components/TopUp';
+import Tooltip from 'components/Tooltip';
 
 const PULSING_COUNT = 10;
 
@@ -94,12 +98,46 @@ const DappHeader: React.FC = () => {
         }
     }, 1000);
 
+    const menuImageRef = useRef<HTMLImageElement>(null);
+
+    const getMarchMadnessButton = () => (
+        <MarchMadnessWrapper>
+            <SPAAnchor href={buildHref(ROUTES.MarchMadness)}>
+                <Button
+                    fontSize="18px"
+                    width="290px"
+                    additionalStyles={{
+                        background: `url(${marchMadnessLeftIcon}) left 20px center no-repeat, url(${marchMadnessRightIcon}) right 20px center no-repeat`,
+                        backgroundColor: theme.marchMadness.button.background.secondary,
+                        backgroundSize: '28px, 28px',
+                        border: 'none',
+                        fontFamily: "'NCAA' !important",
+                        letterSpacing: '2px',
+                        textTransform: 'uppercase',
+                        color: theme.marchMadness.button.textColor.secondary,
+                    }}
+                >
+                    {t('markets.nav-menu.labels.march-madness')}
+                </Button>
+            </SPAAnchor>
+        </MarchMadnessWrapper>
+    );
+
     return (
         <>
             {!isMobile && (
                 <Container>
                     <LeftContainer>
                         <Logo />
+                        {location.pathname !== ROUTES.MarchMadness &&
+                            (isMarchMadnessAvailableForNetworkId(networkId) ? (
+                                getMarchMadnessButton()
+                            ) : (
+                                <Tooltip
+                                    overlay={t('march-madness.header-button-tooltip')}
+                                    component={getMarchMadnessButton()}
+                                />
+                            ))}
                         {isWalletConnected && isMarketsPage && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
                                 <Button
@@ -177,10 +215,11 @@ const DappHeader: React.FC = () => {
                         <TopUp />
                         <WalletInfo />
                         {isWalletConnected && <ProfileItem />}
-                        <MenuIcon onClick={() => setNavMenuVisibility(true)} />
+                        <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
                         <NavMenu
                             visibility={navMenuVisibility}
                             setNavMenuVisibility={(value: boolean | null) => setNavMenuVisibility(value)}
+                            skipOutsideClickOnElement={menuImageRef}
                         />
                     </RightContainer>
                 </Container>
@@ -436,6 +475,10 @@ const MobileButtonWrapper = styled(FlexDivRowCentered)`
     margin-top: 10px;
     gap: 20px;
     min-height: 32px;
+`;
+
+const MarchMadnessWrapper = styled.div`
+    margin-left: 20px;
 `;
 
 export default DappHeader;

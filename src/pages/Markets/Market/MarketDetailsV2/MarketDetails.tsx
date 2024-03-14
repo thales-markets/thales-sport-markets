@@ -3,7 +3,7 @@ import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_LEAGUE, INCENTIVIZED_UEFA } from 'constants/markets';
+import { INCENTIVIZED_LEAGUE, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
@@ -161,6 +161,11 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                 childMarket.betType == BetType.PLAYER_PROPS_LAST_TOUCHDOWN &&
                 (hidePausedMarkets ? !childMarket.isPaused : true)
         ),
+        threePointsMadeMarkets: market.childMarkets.filter(
+            (childMarket) =>
+                childMarket.betType == BetType.PLAYER_PROPS_3PTS_MADE &&
+                (hidePausedMarkets ? !childMarket.isPaused : true)
+        ),
     };
 
     const combinedMarkets = market.combinedMarketsData ? market.combinedMarketsData : [];
@@ -283,6 +288,31 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards: INCENTIVIZED_UEFA.arbRewards,
+                                        }}
+                                    />
+                                }
+                                component={
+                                    <IncentivizedLeague>
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        {getNetworkLogo(NetworkId.Arbitrum)}
+                                    </IncentivizedLeague>
+                                }
+                            ></Tooltip>
+                        )}
+                    {INCENTIVIZED_NHL.ids.includes(Number(market.tags[0])) &&
+                        new Date() > INCENTIVIZED_NHL.startDate &&
+                        new Date() < INCENTIVIZED_NHL.endDate && (
+                            <Tooltip
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.incentivized-tooltip-nhl"
+                                        components={{
+                                            detailsLink: (
+                                                <a href={INCENTIVIZED_NHL.link} target="_blank" rel="noreferrer" />
+                                            ),
+                                        }}
+                                        values={{
+                                            rewards: INCENTIVIZED_NHL.arbRewards,
                                         }}
                                     />
                                 }
@@ -532,6 +562,13 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         <Positions
                             markets={childMarkets.assistsMarkets}
                             betType={BetType.PLAYER_PROPS_ASSISTS}
+                            showOdds={showAMM}
+                        />
+                    )}
+                    {childMarkets.threePointsMadeMarkets.length > 0 && (
+                        <Positions
+                            markets={childMarkets.threePointsMadeMarkets}
+                            betType={BetType.PLAYER_PROPS_3PTS_MADE}
                             showOdds={showAMM}
                         />
                     )}

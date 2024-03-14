@@ -10,8 +10,9 @@ import { FlexDiv } from 'styles/common';
 import { PromotionStatus } from 'types/ui';
 import { getPromotionStatus } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
-import Navigation, { NavigationItem } from '../components/Navigation/Navigation';
-import PromotionCard from '../components/PromotionCard/PromotionCard';
+import Navigation from '../components/Navigation';
+import { NavigationItem } from '../components/Navigation/Navigation';
+import PromotionCard from '../components/PromotionCard';
 
 enum NavigationEnum {
     'ALL',
@@ -39,7 +40,7 @@ const Promotions: React.FC = () => {
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
-    const [selectedNavItem, setSelectedNavItem] = useState<number>(0);
+    const [selectedNavItem, setSelectedNavItem] = useState<number>(NavigationEnum.ONGOING);
 
     const [branchName] = useQueryParam('branch-name', '');
 

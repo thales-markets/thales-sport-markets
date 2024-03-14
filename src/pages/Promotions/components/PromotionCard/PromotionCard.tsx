@@ -50,9 +50,9 @@ const PromotionCard: React.FC<PromotionItem> = ({
         if (getPromotionStatus(startDate, endDate) == PromotionStatus.COMING_SOON) {
             return (
                 <>
-                    {t('promotions.starts-in')}{' '}
+                    <span>{t('promotions.starts-in')}</span>
                     <TimeRemaining
-                        end={endDate * 1000}
+                        end={startDate * 1000}
                         fontSize={14}
                         fontWeight={700}
                         color={theme.promotion.textColor.primary}
@@ -87,14 +87,16 @@ const PromotionCard: React.FC<PromotionItem> = ({
                     <Title>{title}</Title>
                     <BottomContainer>
                         <Description>{description}</Description>
-                        <ButtonContainer>
-                            <Button
-                                textColor={theme.button.textColor.primary}
-                                backgroundColor={theme.button.background.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
-                            >
-                                {callToActionButton}
-                            </Button>
+                        <ButtonContainer marginBottom={callToActionButton ? '' : '28px'}>
+                            {callToActionButton && (
+                                <Button
+                                    textColor={theme.button.textColor.primary}
+                                    backgroundColor={theme.button.background.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                >
+                                    {callToActionButton}
+                                </Button>
+                            )}
                         </ButtonContainer>
                     </BottomContainer>
                 </ContentWrapper>
@@ -138,12 +140,12 @@ const ContentWrapper = styled(FlexDiv)`
     height: 100%;
 `;
 
-export const HeaderContainer = styled(FlexDivRow)`
+const HeaderContainer = styled(FlexDivRow)`
     margin-bottom: 120px;
     align-items: center;
 `;
 
-export const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatus }>`
+const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatus }>`
     background-color: ${(props) => props.status == 'coming-soon' && props.theme.promotion.background.primary};
     background-color: ${(props) => props.status == 'ongoing' && props.theme.promotion.background.primary};
     background-color: ${(props) => props.status == 'finished' && props.theme.promotion.background.secondary};
@@ -161,7 +163,7 @@ export const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatu
     }
 `;
 
-export const NetworkIconsWrapper = styled(FlexDiv)`
+const NetworkIconsWrapper = styled(FlexDiv)`
     flex-direction: row;
     svg {
         width: 24px;
@@ -170,7 +172,7 @@ export const NetworkIconsWrapper = styled(FlexDiv)`
     gap: 5px;
 `;
 
-export const Title = styled.h2`
+const Title = styled.h2`
     font-size: 20px;
     line-height: 22px;
     font-weight: 800;
@@ -179,21 +181,22 @@ export const Title = styled.h2`
     margin-bottom: 16px;
 `;
 
-export const BottomContainer = styled(FlexDiv)`
+const BottomContainer = styled(FlexDiv)`
     flex-direction: column;
 `;
 
-export const Description = styled.div`
+const Description = styled.div`
     flex: 0.8;
     font-size: 14px;
     align-items: center;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-export const ButtonContainer = styled(FlexDivCentered)`
+export const ButtonContainer = styled(FlexDivCentered)<{ marginBottom?: string }>`
     align-items: center;
     justify-content: center;
     margin-top: 20px;
+    margin-bottom: ${(props) => props.marginBottom};
 `;
 
 export default PromotionCard;

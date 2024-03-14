@@ -22,9 +22,3 @@ export const ParlayStatus = styled.span`
         min-width: 50px;
     }
 `;
-
-export const PlayerIcon = styled.i`
-    font-size: 40px;
-    color: ${(props) => props.theme.textColor.secondary};
-    margin-left: 24px;
-`;

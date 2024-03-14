@@ -240,6 +240,14 @@ export const TAGS_LIST: Tags = [
         priority: 602,
     },
     {
+        id: 19595,
+        label: 'Boxing',
+        logoClass: 'icon-league league--boxing',
+        favourite: false,
+        hidden: true,
+        priority: 603,
+    },
+    {
         id: 9057,
         label: 'Eredivisie',
         logoClass: 'icon-league league--eredivisie',
@@ -430,6 +438,7 @@ export const SPORTS_MAP: SportsMap = {
     9020: 'Cricket',
     9399: 'Basketball',
     18196: 'MMA',
+    19595: 'MMA',
     9057: 'Soccer',
     9061: 'Soccer',
     9045: 'Soccer',
@@ -475,6 +484,7 @@ export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
     109021,
     109121,
     9409,
+    19595,
 ];
 
 export const SPORTS_TAGS_MAP: SportsTagsMap = {
@@ -509,7 +519,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
         9268,
         19199,
     ],
-    MMA: [9007, 18196],
+    MMA: [9007, 18196, 19595],
     Motosport: [9445, 9497],
     Tennis: [9153, 9156],
     eSports: [18977, 18983, 19138],
@@ -544,6 +554,7 @@ export const ENETPULSE_SPORTS = [
     9536,
     9268,
     19199,
+    19595,
 ];
 
 export const JSON_ODDS_SPORTS = [109021, 109121];
@@ -557,6 +568,7 @@ export const GOLF_TAGS = [109021, 109121];
 export const GOLF_TOURNAMENT_WINNER_TAG = 109121;
 export const EUROPA_LEAGUE_TAGS = [9017, 9073];
 export const INTERNATIONAL_SPORTS = [18821, 19199, 9409, 9033, 9050, 9288, 18806, 9018, 9296, 9076];
+export const BOXING_TAGS = [18196, 19595];
 
 export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.WINNER]: 'winner',
@@ -588,6 +600,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_RECEPTIONS]: 'receptions',
     [BetType.PLAYER_PROPS_FIRST_TOUCHDOWN]: 'first touchdown',
     [BetType.PLAYER_PROPS_LAST_TOUCHDOWN]: 'last touchdown',
+    [BetType.PLAYER_PROPS_3PTS_MADE]: '3-points made',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
@@ -620,6 +633,7 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_RECEPTIONS]: 'receptions',
     [BetType.PLAYER_PROPS_FIRST_TOUCHDOWN]: 'Who will score the first touchdown in the game? (incl. OT)',
     [BetType.PLAYER_PROPS_LAST_TOUCHDOWN]: 'Who will score the last touchdown in the game?',
+    [BetType.PLAYER_PROPS_3PTS_MADE]: '3-points made',
 };
 
 export const BetTypeMap: Record<BetType, string> = {
@@ -652,6 +666,7 @@ export const BetTypeMap: Record<BetType, string> = {
     [BetType.PLAYER_PROPS_RECEPTIONS]: 'receptions',
     [BetType.PLAYER_PROPS_FIRST_TOUCHDOWN]: 'firstTouchdown',
     [BetType.PLAYER_PROPS_LAST_TOUCHDOWN]: 'lastTouchdown',
+    [BetType.PLAYER_PROPS_3PTS_MADE]: 'threePointsMade',
 };
 
 export const SCORING_MAP: SportsMap = {
@@ -703,6 +718,7 @@ export const SCORING_MAP: SportsMap = {
     9536: 'goals',
     9268: 'goals',
     19199: 'goals',
+    19595: 'rounds',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -754,6 +770,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9536: 'regular',
     9268: 'regular',
     19199: 'regular',
+    19595: '',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -803,4 +820,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9536: 'half',
     9268: 'half',
     19199: 'half',
+    19595: 'round',
 };
