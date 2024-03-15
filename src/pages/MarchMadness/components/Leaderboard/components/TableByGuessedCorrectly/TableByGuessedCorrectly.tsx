@@ -187,7 +187,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             );
         }
     }, [myScore, t]);
-    console.log(rows.length);
+
     return (
         <Container>
             <TableHeaderContainer>
