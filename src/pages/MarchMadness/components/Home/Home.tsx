@@ -16,7 +16,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
-import { getIsMintingStarted } from 'utils/marchMadness';
+import { getIsMintingStarted, isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { history, navigateTo } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
 import ROUTES from 'constants/routes';
@@ -290,7 +290,10 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 textTransform: 'uppercase',
                                 color: theme.marchMadness.button.textColor.primary,
                             }}
-                            disabled={isWalletConnected && Date.now() < START_MINTING_DATE}
+                            disabled={
+                                isWalletConnected &&
+                                (!isMintingStarted || !isMarchMadnessAvailableForNetworkId(networkId))
+                            }
                             onClick={buttonClickHandler}
                         >
                             {isWalletConnected
