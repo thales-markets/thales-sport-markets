@@ -207,7 +207,11 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                                     <TableRow {...row.getRowProps()} key={index} hideBorder={index === page.length - 1}>
                                         {row.cells.map((cell, cellIndex) => {
                                             return (
-                                                <TableRowCell {...cell.getCellProps()} key={cellIndex}>
+                                                <TableRowCell
+                                                    {...cell.getCellProps()}
+                                                    key={cellIndex}
+                                                    noTextTransform={cell.column.id === 'volume'}
+                                                >
                                                     {cell.render('Cell')}
                                                 </TableRowCell>
                                             );

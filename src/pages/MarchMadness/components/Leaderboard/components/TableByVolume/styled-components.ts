@@ -56,7 +56,7 @@ export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean; mySc
     ${(props) => (props?.myScore == true ? `background-color: ${props.theme.marchMadness.borderColor.secondary};` : ``)}
 `;
 
-export const TableRowCell = styled.td`
+export const TableRowCell = styled.td<{ noTextTransform?: boolean }>`
     padding: 10px 0px;
     color: #fff;
     text-align: center;
@@ -66,7 +66,7 @@ export const TableRowCell = styled.td`
     font-weight: 600;
     line-height: 150%; /* 21px */
     letter-spacing: 0.21px;
-    text-transform: uppercase;
+    ${(props) => (props.noTextTransform ? '' : 'text-transform: uppercase;')}
 `;
 
 export const Container = styled.div`
