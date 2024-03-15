@@ -38,6 +38,7 @@ import {
     formatCurrencyWithKey,
     formatCurrencyWithSign,
     formatPercentage,
+    getDefaultDecimalsForNetwork,
     getPrecision,
     roundNumberToDecimals,
 } from 'thales-utils';
@@ -417,7 +418,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 const tradeData = getTradeData(markets);
                 const collateralPaid = coinParser(collateralAmountValue.toString(), networkId, selectedCollateral);
                 const usdPaid = coinParser(usdAmountValue.toString(), networkId);
-                const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(totalBuyAmount).toString());
+                const expectedPayout = coinParser(totalBuyAmount.toString(), networkId);
                 const additionalSlippage = ethers.utils.parseEther('0.02');
 
                 const tx = await getSportsAMMV2Transaction(
@@ -634,7 +635,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
 
                 if (!parlayAmmQuote.error) {
                     // const parlayAmmTotalQuote = bigNumberFormatter(parlayAmmQuote['totalQuote']);
-                    const parlayAmmTotalBuyAmount = bigNumberFormatter(parlayAmmQuote['payout']);
+                    const parlayAmmTotalBuyAmount = bigNumberFormatter(
+                        parlayAmmQuote['payout'],
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
 
                     setTotalQuote(
                         1 /
@@ -644,7 +648,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     setTotalBuyAmount(parlayAmmTotalBuyAmount);
 
                     const fetchedFinalQuotes: number[] = (parlayAmmQuote['finalQuotes'] || []).map((quote: BigNumber) =>
-                        bigNumberFormatter(quote)
+                        bigNumberFormatter(quote, getDefaultDecimalsForNetwork(networkId))
                     );
                     // Update markets (using order index) which are out of liquidity
                     const marketsOutOfLiquidity = fetchedFinalQuotes

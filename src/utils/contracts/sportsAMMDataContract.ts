@@ -4,7 +4,7 @@ const sportsAMMDataContract = {
     addresses: {
         [Network.OptimismMainnet]: '0xF2E220439A984C167476165238249e6338d86e61',
         [Network.OptimismGoerli]: '',
-        [Network.Arbitrum]: '',
+        [Network.Arbitrum]: '0x1fe010d0393A3082bda4d6A269D85133dE985935',
         [Network.Base]: '',
         [Network.OptimismSepolia]: '0xd375572a9d6f6F464dd315D53053Cf8183FB392E',
     },

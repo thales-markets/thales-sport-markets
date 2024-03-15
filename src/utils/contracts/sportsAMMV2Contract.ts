@@ -4,7 +4,7 @@ const sportsAMMV2Contract = {
     addresses: {
         [Network.OptimismMainnet]: '0x1fe010d0393A3082bda4d6A269D85133dE985935',
         [Network.OptimismGoerli]: '',
-        [Network.Arbitrum]: '',
+        [Network.Arbitrum]: '0x4301086e455f4b0535C8f2CC5A6190debCb7F50f',
         [Network.Base]: '',
         [Network.OptimismSepolia]: '0x31Dc91D82316d5ba9f476b3F370FDa79BD38ea41',
     },

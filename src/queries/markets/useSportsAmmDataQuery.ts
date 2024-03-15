@@ -27,7 +27,10 @@ const useSportsAmmDataQuery = (networkId: Network, options?: UseQueryOptions<Spo
                         getDefaultDecimalsForNetwork(networkId)
                     );
                     sportsAmmData.maxTicketSize = Number(sportsAMMParameters.maxTicketSize);
-                    sportsAmmData.maxSupportedAmount = bigNumberFormatter(sportsAMMParameters.maxSupportedAmount);
+                    sportsAmmData.maxSupportedAmount = bigNumberFormatter(
+                        sportsAMMParameters.maxSupportedAmount,
+                        getDefaultDecimalsForNetwork(networkId)
+                    );
                     sportsAmmData.maxSupportedOdds = bigNumberFormatter(sportsAMMParameters.maxSupportedOdds);
                     sportsAmmData.safeBoxFee = bigNumberFormatter(sportsAMMParameters.safeBoxFee);
                 }
