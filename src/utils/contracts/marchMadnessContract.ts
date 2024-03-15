@@ -6,6 +6,7 @@ export const marchMadnessContract = {
         [Network.OptimismGoerli]: 'TBD',
         [Network.Arbitrum]: '0x62e60328f13334B9cCdE47963d67A99Ed66BC01a',
         [Network.Base]: 'TBD',
+        [Network.OptimismSepolia]: '',
     },
     abi: [
         {

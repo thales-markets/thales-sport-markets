@@ -41,7 +41,7 @@ const PlayerPropsOdds: React.FC<PlayerPropsOdds> = ({ markets }) => {
                                         <Player>{`${ppMarket.playerProps.playerName} ${
                                             ppMarket.isOneSidePlayerPropsMarket || ppMarket.isYesNoPlayerPropsMarket
                                                 ? ''
-                                                : ppMarket.playerProps.line
+                                                : ppMarket.line
                                         }`}</Player>
                                         <OddsContainer>
                                             {ppMarket.odds.map((_, index) => (

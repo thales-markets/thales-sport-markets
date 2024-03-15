@@ -364,10 +364,6 @@ export type LeaderboardPoints = {
 export type PlayerProps = {
     playerId: number;
     playerName: string;
-    line: string;
-    type: string;
-    outcome: number;
-    score: number;
 };
 
 export type CombinedPosition = { typeId: number; position: number; line: number };
@@ -393,8 +389,6 @@ export type SportMarketInfoV2 = {
     isOpen: boolean;
     isCanceled: boolean;
     isPaused: boolean;
-    spread: number;
-    total: number;
     line: number;
     isOneSideMarket: boolean;
     isPlayerPropsMarket: boolean;

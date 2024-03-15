@@ -82,9 +82,6 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
                 playerProps: {
                     playerId: Number(market.playerId),
                     playerName: 'Player Name',
-                    line: line / 100,
-                    outcome: isPlayerPropsMarket ? Number(marketResult.results[0]) : 0,
-                    score: isPlayerPropsMarket ? Number(marketResult.results[0]) : 0,
                 },
                 combinedPositions: [],
                 odds: [],
@@ -108,7 +105,7 @@ export const getTicketMarketStatus = (market: TicketMarket) => {
     if (market.isCanceled) return t('profile.card.canceled');
     if (market.isResolved) {
         if (market.isPlayerPropsMarket) {
-            return market.playerProps.score;
+            return market.homeScore;
         }
         return `${market.homeScore} : ${market.awayScore}`;
     }
