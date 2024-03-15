@@ -1131,6 +1131,7 @@
             "rewards": "Rewards",
             "search-placeholder": "SEARCH WALLET ADDRESS",
             "by-guessed-correctly": "Points Leaderboard",
+            "by-volume": "Volume rewards",
             "player": "Player",
             "guessed-games": "Points",
             "rank": "Rank",
@@ -1138,9 +1139,9 @@
             "my-rewards": "My rewards",
             "tooltip-base-volume-table": "Volume driven through NCAA Basketball games",
             "tooltip-bonus-volume-table": "Bonus volume calculated based on your bracket selections",
-            "tooltip-rewards-volume-table": "10,000 OP (30,000 THALES on Arbitrum) will be divided based on pro-rata volume",
-            "tooltip-correct-correct-table": "Number of games guessed properly in your bracket",
-            "tooltip-rewards-correct-table": "3,000 OP (10,000 THALES on Arbitrum) will be divided amongst the top 10"
+            "tooltip-rewards-volume-table": "Estimated rewards based on current volume numbers. This number is subject to change until March Madness tournament is over. ",
+            "tooltip-correct-correct-table": "Total points accrued from correct predictions.",
+            "tooltip-rewards-correct-table": "Total rewards for this leaderboard placement"
         },
         "brackets": {
             "team-1": "Team 1",
