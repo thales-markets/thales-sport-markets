@@ -7,7 +7,6 @@ import { Column, usePagination, useTable } from 'react-table';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { formatCurrencyWithKey, getEtherscanAddressLink } from 'thales-utils';
-import { getDefaultCollateral } from 'utils/collaterals';
 import { truncateAddress } from 'utils/formatters/string';
 import {
     Arrow,
@@ -65,9 +64,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
             {
                 Header: <>{t('march-madness.leaderboard.volume')}</>,
                 accessor: 'volume',
-                Cell: (cellProps) => (
-                    <>{formatCurrencyWithKey(getDefaultCollateral(networkId), cellProps.cell.value, 2)}</>
-                ),
+                Cell: (cellProps) => <>{formatCurrencyWithKey(USD_SIGN, cellProps.cell.value, 2)}</>,
             },
             {
                 Header: () => (
@@ -166,19 +163,17 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 <StickyRow myScore={true}>
                     <TableRowCell>{myScore[0].rank}</TableRowCell>
                     <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
-                    <TableRowCell>
-                        {formatCurrencyWithKey(getDefaultCollateral(networkId), myScore[0].volume, 2)}
-                    </TableRowCell>
+                    <TableRowCell>{formatCurrencyWithKey(USD_SIGN, myScore[0].volume, 2)}</TableRowCell>
                     <TableRowCell> {formatCurrencyWithKey(USD_SIGN, myScore[0].estimatedRewards, 2)}</TableRowCell>
                 </StickyRow>
             );
         }
-    }, [myScore, networkId, t]);
+    }, [myScore, t]);
 
     return (
         <Container>
             <TableHeaderContainer>
-                <TableHeader>{'By volume'}</TableHeader>
+                <TableHeader>{t('march-madness.leaderboard.by-volume')}</TableHeader>
             </TableHeaderContainer>
             <TableContainer isEmpty={!filteredData?.length}>
                 {!filteredData?.length && (
