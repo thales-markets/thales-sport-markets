@@ -32,6 +32,8 @@ type TableByGuessedCorrectlyProps = {
     searchText: string;
 };
 
+const NUMBER_OF_POSITIONS_TO_HIGHLIGHT = 20; // highlight first 20
+
 const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
@@ -216,7 +218,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                             {myScore ? stickyRow : <></>}
                             {(page.length ? page : rows).map((row, index) => {
                                 prepareRow(row);
-                                const isTopTen = index < 10;
+                                const isTopTen = (row.original as any).rank <= NUMBER_OF_POSITIONS_TO_HIGHLIGHT;
                                 return (
                                     <TableRow
                                         {...row.getRowProps()}
