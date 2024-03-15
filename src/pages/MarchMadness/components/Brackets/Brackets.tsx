@@ -747,7 +747,7 @@ const Brackets: React.FC = () => {
             return leaderboardData ? leaderboardData.rank : 0;
         }
         return 0;
-    }, [leaderboardByGuessedGamesQuery.data, leaderboardByGuessedGamesQuery.isSuccess, walletAddress]);
+    }, [leaderboardByGuessedGamesQuery.data, leaderboardByGuessedGamesQuery.isSuccess, selectedBracketId]);
 
     const getMyStats = () => {
         const isFirstMatchFinished = winnerTeamIds.find((id) => id !== 0) !== undefined;
