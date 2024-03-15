@@ -211,17 +211,19 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
             ) : (
                 <>
                     <PageTitle>{t('march-madness.home.title')}</PageTitle>
-                    {/* {!isBracketsLocked && ( */}
-                    <>
-                        <TimeLeft>
-                            {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
-                        </TimeLeft>
+                    {!isBracketsLocked && (
+                        <>
+                            <TimeLeft>
+                                {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
+                            </TimeLeft>
 
-                        <TimeLeftDescription>
-                            {t(isMintingStarted ? 'march-madness.home.time-info' : 'march-madness.home.time-info-a')}
-                        </TimeLeftDescription>
-                    </>
-                    {/* )} */}
+                            <TimeLeftDescription>
+                                {t(
+                                    isMintingStarted ? 'march-madness.home.time-info' : 'march-madness.home.time-info-a'
+                                )}
+                            </TimeLeftDescription>
+                        </>
+                    )}
 
                     <Text>{t('march-madness.home.description')}</Text>
 
