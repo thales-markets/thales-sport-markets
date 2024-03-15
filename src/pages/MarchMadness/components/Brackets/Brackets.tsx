@@ -1151,6 +1151,7 @@ const Brackets: React.FC = () => {
                     </WildCardsContainer>
                     {showMintNFTModal && (
                         <MintNFTModal
+                            onTwitterIconClick={onTwitterIconClick}
                             isUpdate={isUpdate}
                             bracketId={selectedBracketId}
                             handleClose={() => setShowMintNFTModal(false)}

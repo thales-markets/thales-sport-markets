@@ -1,18 +1,21 @@
 import nftImage from 'assets/images/march-madness/march-madness-nft.png';
+import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
+import { Share } from '../Brackets/styled-components';
 
 type MintNFTModalProps = {
     isUpdate: boolean;
     bracketId: number;
     handleClose: () => void;
+    onTwitterIconClick: () => void;
 };
 
-const MintNFTModal: React.FC<MintNFTModalProps> = ({ isUpdate, bracketId, handleClose }) => {
+const MintNFTModal: React.FC<MintNFTModalProps> = ({ isUpdate, bracketId, handleClose, onTwitterIconClick }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -43,7 +46,14 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({ isUpdate, bracketId, handle
                     </BracketText>
                     <NftImage alt="March Madness NFT" src={nftImage} />
                 </NFTImageWrapper>
+                <ShareWrapper>
+                    <ShareCont onClick={onTwitterIconClick} marginTop={0}>
+                        <TwitterIcon padding="0 0 8px 0" />
+                        {t('march-madness.brackets.share')}
+                    </ShareCont>
+                </ShareWrapper>
                 <Text>{t('march-madness.brackets.modal-mint.footer-text')}</Text>
+
                 <GoBack onClick={handleClose}>{t('march-madness.brackets.modal-mint.back')}</GoBack>
             </Container>
         </ReactModal>
@@ -163,6 +173,17 @@ const GoBack = styled(FlexDivCentered)`
     @media (max-width: 575px) {
         margin: 10px 0 20px 0;
     }
+`;
+
+const ShareWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 10px;
+`;
+
+const ShareCont = styled(Share)`
+    cursor: pointer;
 `;
 
 export default MintNFTModal;
