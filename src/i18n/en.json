@@ -1164,6 +1164,7 @@
             "create-new": "Create new",
             "keep-current": "Keep current selection",
             "clear-all": "Clear all",
+            "random": "Random teams",
             "error-minting-price": "Minting price can't be fetched!",
             "confirmation-message": "Bracket successfully minted",
             "update-message": "Bracket successfully updated",

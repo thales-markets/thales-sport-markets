@@ -11,6 +11,7 @@ import {
     DEFAULT_BRACKET_ID,
     DEFAULT_CONVERSION_BUFFER_PERCENTAGE,
     ELITE8_ROUND_EAST_MATCH_ID,
+    ELITE8_ROUND_MATCH_IDS,
     ELITE8_ROUND_MIDWEST_MATCH_ID,
     ELITE8_ROUND_SOUTH_MATCH_ID,
     ELITE8_ROUND_WEST_MATCH_ID,
@@ -29,6 +30,7 @@ import {
     SECOND_ROUND_MIDWEST_MATCH_IDS,
     SECOND_ROUND_SOUTH_MATCH_IDS,
     SECOND_ROUND_WEST_MATCH_IDS,
+    SEMI_FINAL_MATCH_IDS,
     SEMI_FINAL_MIDWEST_WEST_MATCH_ID,
     SEMI_FINAL_SOUTH_EAST_MATCH_ID,
     SWEET16_ROUND_EAST_MATCH_IDS,
@@ -55,7 +57,7 @@ import { getParlayPayment } from 'redux/modules/parlay';
 import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 import {
     COLLATERAL_DECIMALS,
     coinFormatter,
@@ -870,6 +872,51 @@ const Brackets: React.FC = () => {
         setSelectedBracketId(DEFAULT_BRACKET_ID);
     };
 
+    const getRandomBoolean = () => Math.random() < 0.5;
+
+    const populateRandomBracket = () => {
+        const firstRoundRandomBracketData = initialBracketsData.map((match) => {
+            return FIRST_ROUND_MATCH_IDS.includes(match.id)
+                ? { ...match, isHomeTeamSelected: getRandomBoolean() }
+                : match;
+        });
+
+        let currentRoundRandomBracketData = firstRoundRandomBracketData;
+        for (let round = 1; round < NUMBER_OF_ROUNDS; round++) {
+            const currentRoundMatchIDs =
+                round === 1
+                    ? SECOND_ROUND_MATCH_IDS
+                    : round === 2
+                    ? SWEET16_ROUND_MATCH_IDS
+                    : round === 3
+                    ? ELITE8_ROUND_MATCH_IDS
+                    : round === 4
+                    ? SEMI_FINAL_MATCH_IDS
+                    : [FINAL_MATCH_ID];
+
+            currentRoundRandomBracketData = currentRoundRandomBracketData.map((match) => {
+                if (currentRoundMatchIDs.includes(match.id)) {
+                    const homeParent = currentRoundRandomBracketData.filter(
+                        (m) => m.id === match.homeTeamParentMatchId
+                    )[0];
+                    const awayParent = currentRoundRandomBracketData.filter(
+                        (m) => m.id === match.awayTeamParentMatchId
+                    )[0];
+
+                    const homeTeamId = homeParent.isHomeTeamSelected ? homeParent.homeTeamId : homeParent.awayTeamId;
+                    const awayTeamId = awayParent.isHomeTeamSelected ? awayParent.homeTeamId : awayParent.awayTeamId;
+
+                    return { ...match, isHomeTeamSelected: getRandomBoolean(), homeTeamId, awayTeamId };
+                } else {
+                    return match;
+                }
+            });
+        }
+
+        localStore.set(getLocalStorageKey(DEFAULT_BRACKET_ID, networkId, walletAddress), currentRoundRandomBracketData);
+        setBracketsData(currentRoundRandomBracketData);
+    };
+
     const onTwitterIconClick = () => {
         if (!isShareDisabled) {
             setShowShareModal(true);
@@ -937,8 +984,8 @@ const Brackets: React.FC = () => {
                             <RoundName>{t('march-madness.brackets.round-0')}</RoundName>
                         </RowHeader>
                         {!isBracketsLocked && (
-                            <>
-                                <CreateNewBracketWrapper>
+                            <CreateNewBracketWrapper>
+                                <FlexDivRowCentered>
                                     <Button
                                         additionalStyles={{
                                             fontSize: '14px',
@@ -975,8 +1022,27 @@ const Brackets: React.FC = () => {
                                             />
                                         </CheckboxWrapper>
                                     )}
-                                </CreateNewBracketWrapper>
-                            </>
+                                </FlexDivRowCentered>
+                                {selectedBracketId === DEFAULT_BRACKET_ID && (
+                                    <Button
+                                        additionalStyles={{
+                                            fontSize: '14px',
+                                            fontFamily: theme.fontFamily.primary,
+                                            textTransform: 'uppercase',
+                                            background: theme.marchMadness.button.background.senary,
+                                            border: `2px solid ${theme.marchMadness.borderColor.senary}`,
+                                            borderRadius: '4px',
+                                            color: theme.marchMadness.button.textColor.secondary,
+                                            width: '160px',
+                                            padding: '3px 10px',
+                                            margin: '10px 0 0 0',
+                                        }}
+                                        onClick={populateRandomBracket}
+                                    >
+                                        {t('march-madness.brackets.random')}
+                                    </Button>
+                                )}
+                            </CreateNewBracketWrapper>
                         )}
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>

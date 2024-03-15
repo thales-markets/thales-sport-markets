@@ -183,6 +183,13 @@ const ShareWrapper = styled.div`
 `;
 
 const ShareCont = styled(Share)`
+    font-family: ${(props) => props.theme.fontFamily.primary};
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
     cursor: pointer;
 `;
 
