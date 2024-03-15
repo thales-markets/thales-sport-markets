@@ -1,7 +1,7 @@
 import backgrounBall from 'assets/images/march-madness/background-marchmadness-ball.png';
 import backgroundCourt from 'assets/images/march-madness/background-marchmadness-court.svg';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 
 export const MATCH_HEIGHT = 52;
 export const FIRST_ROUND_MATCH_GAP = 8;
@@ -26,7 +26,7 @@ export const BracketsWrapper = styled.div`
     background-repeat: no-repeat;
 `;
 
-export const CreateNewBracketWrapper = styled(FlexDivRowCentered)`
+export const CreateNewBracketWrapper = styled(FlexDivColumnCentered)`
     position: absolute;
     left: calc(50% - 80px);
     margin-top: 20px;
