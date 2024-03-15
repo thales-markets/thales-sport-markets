@@ -1338,7 +1338,8 @@
             "submit-modify-progress": "Mise à jour...",
             "submit-progress": "Frappe...",
             "keep-current": "Conserver la sélection actuelle",
-            "update-message": "Support mis à jour avec succès"
+            "update-message": "Support mis à jour avec succès",
+            "random": "aléatoire"
         },
         "regions": {
             "south": "Sud",

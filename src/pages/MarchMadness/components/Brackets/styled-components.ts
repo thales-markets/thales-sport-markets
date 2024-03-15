@@ -295,6 +295,10 @@ export const Share = styled.div<{ marginTop: number }>`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: ${(props) => props.marginTop}px;
+`;
+
+export const ShareText = styled.span<{ disabled?: boolean }>`
     font-family: 'Oswald' !important;
     font-style: normal;
     font-weight: 600;
@@ -302,5 +306,6 @@ export const Share = styled.div<{ marginTop: number }>`
     line-height: 14px;
     text-transform: uppercase;
     color: ${(props) => props.theme.marchMadness.textColor.primary};
-    margin-top: ${(props) => props.marginTop}px;
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
 `;

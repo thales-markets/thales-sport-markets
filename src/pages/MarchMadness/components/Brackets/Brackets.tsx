@@ -112,6 +112,7 @@ import {
     SecondRound,
     SemiFinals,
     Share,
+    ShareText,
     ShareWrapper,
     StatsColumn,
     StatsIcon,
@@ -371,7 +372,9 @@ const Brackets: React.FC = () => {
 
     // validations
     useEffect(() => {
-        if (!isBracketMinted) {
+        if (isBracketMinted) {
+            setInsufficientBalance(false);
+        } else {
             let insufficientBalance = false;
             if (multipleCollateralBalancesData && marchMadnessData) {
                 const balance = multipleCollateralBalancesData[selectedCollateral];
@@ -934,44 +937,46 @@ const Brackets: React.FC = () => {
                             <RoundName>{t('march-madness.brackets.round-0')}</RoundName>
                         </RowHeader>
                         {!isBracketsLocked && (
-                            <CreateNewBracketWrapper>
-                                <Button
-                                    additionalStyles={{
-                                        fontSize: '14px',
-                                        fontFamily: theme.fontFamily.primary,
-                                        textTransform: 'uppercase',
-                                        background: theme.marchMadness.button.background.senary,
-                                        border: `2px solid ${theme.marchMadness.borderColor.senary}`,
-                                        borderRadius: '4px',
-                                        color: theme.marchMadness.button.textColor.secondary,
-                                        width: '160px',
-                                        padding: '3px 10px',
-                                    }}
-                                    disabled={isClearAllDisabled}
-                                    onClick={() =>
-                                        selectedBracketId === DEFAULT_BRACKET_ID
-                                            ? resetBracket()
-                                            : createNewBracketClone
-                                            ? createNewBracket(selectedBracketId)
-                                            : resetBracket()
-                                    }
-                                >
-                                    {selectedBracketId === DEFAULT_BRACKET_ID
-                                        ? t('march-madness.brackets.clear-all')
-                                        : t('march-madness.brackets.create-new')}
-                                </Button>
-                                {selectedBracketId !== DEFAULT_BRACKET_ID && (
-                                    <CheckboxWrapper>
-                                        <Checkbox
-                                            checked={createNewBracketClone}
-                                            value={createNewBracketClone.toString()}
-                                            onChange={() => setCreateNewBracketClone(!createNewBracketClone)}
-                                            label={t('march-madness.brackets.keep-current')}
-                                            className="checkbox"
-                                        />
-                                    </CheckboxWrapper>
-                                )}
-                            </CreateNewBracketWrapper>
+                            <>
+                                <CreateNewBracketWrapper>
+                                    <Button
+                                        additionalStyles={{
+                                            fontSize: '14px',
+                                            fontFamily: theme.fontFamily.primary,
+                                            textTransform: 'uppercase',
+                                            background: theme.marchMadness.button.background.senary,
+                                            border: `2px solid ${theme.marchMadness.borderColor.senary}`,
+                                            borderRadius: '4px',
+                                            color: theme.marchMadness.button.textColor.secondary,
+                                            width: '160px',
+                                            padding: '3px 10px',
+                                        }}
+                                        disabled={isClearAllDisabled}
+                                        onClick={() =>
+                                            selectedBracketId === DEFAULT_BRACKET_ID
+                                                ? resetBracket()
+                                                : createNewBracketClone
+                                                ? createNewBracket(selectedBracketId)
+                                                : resetBracket()
+                                        }
+                                    >
+                                        {selectedBracketId === DEFAULT_BRACKET_ID
+                                            ? t('march-madness.brackets.clear-all')
+                                            : t('march-madness.brackets.create-new')}
+                                    </Button>
+                                    {selectedBracketId !== DEFAULT_BRACKET_ID && (
+                                        <CheckboxWrapper>
+                                            <Checkbox
+                                                checked={createNewBracketClone}
+                                                value={createNewBracketClone.toString()}
+                                                onChange={() => setCreateNewBracketClone(!createNewBracketClone)}
+                                                label={t('march-madness.brackets.keep-current')}
+                                                className="checkbox"
+                                            />
+                                        </CheckboxWrapper>
+                                    )}
+                                </CreateNewBracketWrapper>
+                            </>
                         )}
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
@@ -1075,7 +1080,12 @@ const Brackets: React.FC = () => {
                                     padding="0 0 8px 0"
                                     onClick={onTwitterIconClick}
                                 />
-                                {t('march-madness.brackets.share')}
+                                <ShareText
+                                    disabled={isShareDisabled}
+                                    onClick={() => (isShareDisabled ? {} : onTwitterIconClick())}
+                                >
+                                    {t('march-madness.brackets.share')}
+                                </ShareText>
                             </Share>
                         </ShareWrapper>
 
@@ -1161,7 +1171,9 @@ const Brackets: React.FC = () => {
                     )}
                     {openApprovalModal && marchMadnessData && (
                         <ApprovalModal
-                            defaultAmount={convertFromStable(marchMadnessData.mintingPrice) * APPROVE_MULTIPLIER}
+                            defaultAmount={roundNumberToDecimals(
+                                convertFromStable(marchMadnessData.mintingPrice) * APPROVE_MULTIPLIER
+                            )}
                             collateralIndex={selectedCollateralIndex}
                             tokenSymbol={selectedCollateral}
                             isAllowing={isAllowing}

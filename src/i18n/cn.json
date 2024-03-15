@@ -1338,7 +1338,8 @@
             "keep-current": "保留当前选择",
             "create-new": "创建新的",
             "submit-modify-progress": "更新中...",
-            "update-message": "支架更新成功"
+            "update-message": "支架更新成功",
+            "random": "随机的"
         },
         "regions": {
             "west": "西方",

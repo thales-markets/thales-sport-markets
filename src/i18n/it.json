@@ -1338,7 +1338,8 @@
             "keep-current": "Mantieni la selezione corrente",
             "submit-progress": "Conio...",
             "submit-modify-progress": "In aggiornamento...",
-            "update-message": "Staffa aggiornata con successo"
+            "update-message": "Staffa aggiornata con successo",
+            "random": "casuale"
         },
         "regions": {
             "west": "ovest",

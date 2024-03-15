@@ -1338,7 +1338,8 @@
             "submit-modify-progress": "Actualizando...",
             "keep-current": "Mantener la selección actual",
             "submit-progress": "Acuñación...",
-            "update-message": "Soporte actualizado con éxito"
+            "update-message": "Soporte actualizado con éxito",
+            "random": "aleatorio"
         },
         "regions": {
             "west": "Oeste",

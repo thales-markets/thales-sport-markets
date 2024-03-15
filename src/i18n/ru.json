@@ -1338,7 +1338,8 @@
             "create-new": "Создавать новое",
             "keep-current": "Сохранить текущий выбор",
             "submit-modify-progress": "Обновление...",
-            "update-message": "Кронштейн успешно обновлен."
+            "update-message": "Кронштейн успешно обновлен.",
+            "random": "случайный"
         },
         "regions": {
             "west": "Запад",

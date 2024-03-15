@@ -1338,7 +1338,8 @@
             "create-new": "Erstelle neu",
             "submit-progress": "Prägung...",
             "keep-current": "Aktuelle Auswahl beibehalten",
-            "update-message": "Halterung erfolgreich aktualisiert"
+            "update-message": "Halterung erfolgreich aktualisiert",
+            "random": "zufällig"
         },
         "regions": {
             "east": "Ost",
