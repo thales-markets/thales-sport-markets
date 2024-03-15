@@ -1333,7 +1333,8 @@
             "submit-modify-progress": "Aktualisierung...",
             "create-new": "Erstelle neu",
             "submit-progress": "Prägung...",
-            "keep-current": "Aktuelle Auswahl beibehalten"
+            "keep-current": "Aktuelle Auswahl beibehalten",
+            "update-message": "Halterung erfolgreich aktualisiert"
         },
         "regions": {
             "east": "Ost",

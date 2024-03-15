@@ -1333,7 +1333,8 @@
             "create-new": "Crear nuevo",
             "submit-modify-progress": "Actualizando...",
             "keep-current": "Mantener la selección actual",
-            "submit-progress": "Acuñación..."
+            "submit-progress": "Acuñación...",
+            "update-message": "Soporte actualizado con éxito"
         },
         "regions": {
             "west": "Oeste",

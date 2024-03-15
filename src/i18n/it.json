@@ -1333,7 +1333,8 @@
             "create-new": "Creare nuovo",
             "keep-current": "Mantieni la selezione corrente",
             "submit-progress": "Conio...",
-            "submit-modify-progress": "In aggiornamento..."
+            "submit-modify-progress": "In aggiornamento...",
+            "update-message": "Staffa aggiornata con successo"
         },
         "regions": {
             "west": "ovest",

@@ -1333,7 +1333,8 @@
             "keep-current": "เก็บการเลือกปัจจุบันไว้",
             "create-new": "สร้างใหม่",
             "submit-modify-progress": "กำลังอัปเดต...",
-            "submit-progress": "โรงกษาปณ์..."
+            "submit-progress": "โรงกษาปณ์...",
+            "update-message": "อัปเดตวงเล็บสำเร็จแล้ว"
         },
         "regions": {
             "midwest": "มิดเวสต์",

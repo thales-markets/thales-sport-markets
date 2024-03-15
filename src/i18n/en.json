@@ -1163,6 +1163,7 @@
             "clear-all": "Clear all",
             "error-minting-price": "Minting price can't be fetched!",
             "confirmation-message": "Bracket successfully minted",
+            "update-message": "Bracket successfully updated",
             "stats": {
                 "my-stats": "My stats",
                 "bracket": "Bracket",
