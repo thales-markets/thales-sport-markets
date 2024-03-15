@@ -4,7 +4,7 @@ export const marchMadnessContract = {
     addresses: {
         [Network.OptimismMainnet]: 'TBD',
         [Network.OptimismGoerli]: 'TBD',
-        [Network.Arbitrum]: '0x62e60328f13334B9cCdE47963d67A99Ed66BC01a',
+        [Network.Arbitrum]: '0x6e598eebF9Aba224c59F0C9Aa2AFe38d51933B51',
         [Network.Base]: 'TBD',
     },
     abi: [
@@ -471,6 +471,25 @@ export const marchMadnessContract = {
             inputs: [
                 {
                     internalType: 'uint256',
+                    name: 'itemId',
+                    type: 'uint256',
+                },
+            ],
+            name: 'getBracketsByItemId',
+            outputs: [
+                {
+                    internalType: 'uint256[63]',
+                    name: 'brackets',
+                    type: 'uint256[63]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256',
                     name: '_tokenId',
                     type: 'uint256',
                 },
@@ -512,6 +531,19 @@ export const marchMadnessContract = {
         },
         {
             inputs: [],
+            name: 'getCurrentTokenId',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: '',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
             name: 'getResults',
             outputs: [
                 {
@@ -537,6 +569,25 @@ export const marchMadnessContract = {
                     internalType: 'uint256',
                     name: 'totalPoints',
                     type: 'uint256',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256[]',
+                    name: '_tokenIds',
+                    type: 'uint256[]',
+                },
+            ],
+            name: 'getTotalPointsByTokenIds',
+            outputs: [
+                {
+                    internalType: 'uint256[]',
+                    name: 'totalPoints',
+                    type: 'uint256[]',
                 },
             ],
             stateMutability: 'view',
@@ -665,11 +716,6 @@ export const marchMadnessContract = {
                     type: 'uint256',
                 },
                 {
-                    internalType: 'bool',
-                    name: 'isEth',
-                    type: 'bool',
-                },
-                {
                     internalType: 'uint256[63]',
                     name: '_brackets',
                     type: 'uint256[63]',
@@ -684,6 +730,25 @@ export const marchMadnessContract = {
                 },
             ],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'uint256[63]',
+                    name: '_brackets',
+                    type: 'uint256[63]',
+                },
+            ],
+            name: 'mintWithEth',
+            outputs: [
+                {
+                    internalType: 'uint256',
+                    name: 'newItemId',
+                    type: 'uint256',
+                },
+            ],
+            stateMutability: 'payable',
             type: 'function',
         },
         {
@@ -1222,6 +1287,10 @@ export const marchMadnessContract = {
             ],
             stateMutability: 'view',
             type: 'function',
+        },
+        {
+            stateMutability: 'payable',
+            type: 'receive',
         },
     ],
 };
