@@ -42,6 +42,9 @@ const TablesContainer = styled.div`
     height: auto;
     width: 100%;
     gap: 10px;
+    @media (max-width: 900px) {
+        flex-direction: column;
+    }
 `;
 
 export default Leaderboard;
