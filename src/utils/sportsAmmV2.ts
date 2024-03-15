@@ -90,6 +90,5 @@ export const getSportsAMMV2QuoteMethod: any = (
     tradeData: TradeData[],
     sUSDPaid: BigNumber
 ) => {
-    console.log(tradeData);
     return sportsAMMV2Contract.tradeQuote(tradeData, sUSDPaid, isDefaultCollateral ? ZERO_ADDRESS : collateralAddress);
 };
