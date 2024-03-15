@@ -1,4 +1,3 @@
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import { START_MINTING_DATE } from 'constants/marchMadness';
@@ -11,7 +10,13 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress, switchToNetworkId } from 'redux/modules/wallet';
+import {
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+    switchToNetworkId,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
@@ -67,7 +72,6 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const dispatch = useDispatch();
     const { switchNetwork } = useSwitchNetwork();
 
-    const { openConnectModal } = useConnectModal();
     const location = useLocation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -136,7 +140,11 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                 }
             }
         } else {
-            openConnectModal?.();
+            dispatch(
+                setWalletConnectModalVisibility({
+                    visibility: true,
+                })
+            );
         }
     };
 
