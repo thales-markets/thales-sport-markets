@@ -187,7 +187,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             );
         }
     }, [myScore, t]);
-
+    console.log(rows.length);
     return (
         <Container>
             <TableHeaderContainer>
@@ -216,9 +216,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                             {myScore ? stickyRow : <></>}
                             {(page.length ? page : rows).map((row, index) => {
                                 prepareRow(row);
-                                const isTopTen =
-                                    state.pageIndex === 0 &&
-                                    (myScore.length && myScore[0].rank <= 10 ? index < 9 : index < 10);
+                                const isTopTen = index < 10;
                                 return (
                                     <TableRow
                                         {...row.getRowProps()}
