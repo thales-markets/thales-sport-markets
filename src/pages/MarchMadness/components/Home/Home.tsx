@@ -8,18 +8,22 @@ import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQu
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId, getWalletAddress, switchToNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
-import { getIsMintingStarted, isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
+import { getIsMintingStarted } from 'utils/marchMadness';
 import { history, navigateTo } from 'utils/routes';
 import { MarchMadTabs } from '../Tabs/Tabs';
 import ROUTES from 'constants/routes';
+import { Network } from 'enums/network';
+import { changeNetwork } from 'thales-utils';
+import { useSwitchNetwork } from 'wagmi';
+import { SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -60,6 +64,8 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const { t } = useTranslation();
 
     const theme: ThemeInterface = useTheme();
+    const dispatch = useDispatch();
+    const { switchNetwork } = useSwitchNetwork();
 
     const { openConnectModal } = useConnectModal();
     const location = useLocation();
@@ -91,16 +97,43 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
 
     const isMintingStarted = getIsMintingStarted();
 
-    const buttonClickHandler = () => {
+    const buttonTitle = () => {
         if (isWalletConnected) {
-            if (isMintingStarted) {
-                history.push({
-                    pathname: location.pathname,
-                    search: queryString.stringify({
-                        tab: MarchMadTabs.BRACKETS,
-                    }),
+            if (networkId === Network.Arbitrum) {
+                return t('march-madness.home.button-create');
+            } else {
+                return t('march-madness.home.button-switch');
+            }
+        } else {
+            return t('march-madness.home.button-connect');
+        }
+    };
+
+    const buttonClickHandler = async () => {
+        if (isWalletConnected) {
+            if (networkId !== Network.Arbitrum) {
+                console.log('change network');
+                SUPPORTED_NETWORKS_PARAMS;
+                await changeNetwork(SUPPORTED_NETWORKS_PARAMS[Network.Arbitrum], () => {
+                    switchNetwork?.(Network.Arbitrum);
+                    // Trigger App.js init
+                    // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
+                    dispatch(
+                        switchToNetworkId({
+                            networkId: Network.Arbitrum,
+                        })
+                    );
                 });
-                setSelectedTab && setSelectedTab(MarchMadTabs.BRACKETS);
+            } else {
+                if (isMintingStarted) {
+                    history.push({
+                        pathname: location.pathname,
+                        search: queryString.stringify({
+                            tab: MarchMadTabs.BRACKETS,
+                        }),
+                    });
+                    setSelectedTab && setSelectedTab(MarchMadTabs.BRACKETS);
+                }
             }
         } else {
             openConnectModal?.();
@@ -290,15 +323,10 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 textTransform: 'uppercase',
                                 color: theme.marchMadness.button.textColor.primary,
                             }}
-                            disabled={
-                                isWalletConnected &&
-                                (!isMintingStarted || !isMarchMadnessAvailableForNetworkId(networkId))
-                            }
+                            disabled={isWalletConnected && !isMintingStarted}
                             onClick={buttonClickHandler}
                         >
-                            {isWalletConnected
-                                ? t('march-madness.home.button-create')
-                                : t('march-madness.home.button-connect')}
+                            {buttonTitle()}
                         </Button>
                     )}
                 </>
