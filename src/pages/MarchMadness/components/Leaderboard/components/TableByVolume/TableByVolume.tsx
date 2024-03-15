@@ -87,7 +87,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     </>
                 ),
                 accessor: 'estimatedRewards',
-                Cell: (cellProps) => <>{formatCurrencyWithKey(USD_SIGN, cellProps.cell.value, 2)}</>,
+                Cell: (cellProps) => <>{formatCurrencyWithKey('ARB', cellProps.cell.value, 2)}</>,
             },
         ];
     }, [networkId, t, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
@@ -112,11 +112,6 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
 
             finalData = data;
 
-            const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
-            if (myScore.length) {
-                finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
-            }
-
             if (searchText.trim() !== '') {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
             }
@@ -124,7 +119,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
             return finalData;
         }
         return [];
-    }, [data, searchText, walletAddress]);
+    }, [data, searchText]);
 
     const {
         getTableProps,
