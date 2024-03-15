@@ -1270,7 +1270,8 @@
             "player": "Giocatore",
             "tooltip-rewards-volume-table": "10.000 OP (30.000 THALES su Arbitrum) saranno divisi in base al volume pro-rata",
             "bracket-id": "ID della staffa",
-            "by-volume": "Premi in volume"
+            "by-volume": "Premi in volume",
+            "my-rewards-bracket": "La tua migliore staffa"
         },
         "brackets": {
             "stats": {

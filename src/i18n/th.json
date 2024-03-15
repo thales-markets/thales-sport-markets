@@ -1270,7 +1270,8 @@
             "guessed-games": "เกมเดา",
             "no-data": "ไม่มีข้อมูลในขณะนี้",
             "bracket-id": "รหัสวงเล็บ",
-            "by-volume": "รางวัลปริมาณ"
+            "by-volume": "รางวัลปริมาณ",
+            "my-rewards-bracket": "วงเล็บที่ดีที่สุดของคุณ"
         },
         "brackets": {
             "stats": {

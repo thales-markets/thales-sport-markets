@@ -1270,7 +1270,8 @@
             "tooltip-bonus-volume-table": "Сумма бонуса рассчитывается на основе выбранного вами брекета",
             "tooltip-rewards-volume-table": "10 000 OP (30 000 THALES на Arbitrum) будут разделены пропорционально объему",
             "bracket-id": "Идентификатор кронштейна",
-            "by-volume": "Объемные награды"
+            "by-volume": "Объемные награды",
+            "my-rewards-bracket": "Ваш лучший кронштейн"
         },
         "brackets": {
             "stats": {

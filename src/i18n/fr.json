@@ -1270,7 +1270,8 @@
             "rank": "Rang",
             "my-rewards": "Mes récompenses",
             "bracket-id": "ID du support",
-            "by-volume": "Récompenses de volume"
+            "by-volume": "Récompenses de volume",
+            "my-rewards-bracket": "Votre meilleure tranche"
         },
         "brackets": {
             "stats": {

@@ -143,7 +143,7 @@ const Brackets: React.FC = () => {
     const [isBracketMinted, setIsBracketMinted] = useState(false);
     const [bracketsData, setBracketsData] = useState(initialBracketsData);
     const [winnerTeamIds, setWinnerTeamIds] = useState(Array<number>(NUMBER_OF_MATCHES).fill(0));
-    const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+    const [isBracketReady, setIsBracketReady] = useState(false);
     const [insufficientBalance, setInsufficientBalance] = useState(false);
     const [showMintNFTModal, setShowMintNFTModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
@@ -352,22 +352,20 @@ const Brackets: React.FC = () => {
 
     // check if submit bracket is disabled and set it
     useEffect(() => {
-        let submitDisabled = false;
         if (isBracketMinted && marchMadnessBracketData !== null) {
             // if already minted compare selction on contract and on UI
             if (isBracketMinted === isBracketMintedOnContract) {
-                submitDisabled =
-                    bracketsData.find(
-                        (match) =>
-                            (match.isHomeTeamSelected ? match.homeTeamId : match.awayTeamId) !==
-                            marchMadnessBracketData.bracketsData[match.id]
-                    ) === undefined;
-                setIsSubmitDisabled(submitDisabled);
+                const isBracketModified = bracketsData.some(
+                    (match) =>
+                        (match.isHomeTeamSelected ? match.homeTeamId : match.awayTeamId) !==
+                        marchMadnessBracketData.bracketsData[match.id]
+                );
+                setIsBracketReady(isBracketModified);
             }
         } else {
             // new bracket to mint
-            const incompleteBracket = bracketsData.some((match) => match.isHomeTeamSelected === undefined);
-            setIsSubmitDisabled(incompleteBracket);
+            const isBracketIncomplete = bracketsData.some((match) => match.isHomeTeamSelected === undefined);
+            setIsBracketReady(!isBracketIncomplete);
         }
     }, [isBracketMinted, bracketsData, marchMadnessBracketData, isBracketMintedOnContract]);
 
@@ -385,9 +383,6 @@ const Brackets: React.FC = () => {
             }
 
             setInsufficientBalance(insufficientBalance);
-            if (insufficientBalance) {
-                setIsSubmitDisabled(true);
-            }
         }
     }, [
         isBracketMinted,
@@ -507,7 +502,6 @@ const Brackets: React.FC = () => {
                     } else {
                         setIsUpdate(false);
                         setIsMinting(true);
-
                         if (isDefaultCollateral) {
                             tx = await marchMadnessContractWithSigner.mint(bracketsForContract);
                         } else {
@@ -527,7 +521,6 @@ const Brackets: React.FC = () => {
                                 : await marchMadnessContractWithSigner.mintWithDiffCollateral(
                                       collateralAddress,
                                       collateralAmount,
-                                      isEth,
                                       bracketsForContract
                                   );
                         }
@@ -552,7 +545,7 @@ const Brackets: React.FC = () => {
 
                         setShowMintNFTModal(true);
                         setIsBracketMinted(true);
-                        setIsSubmitDisabled(true);
+                        setIsBracketReady(false);
                         setIsUpdating(false);
                         setIsMinting(false);
                     }
@@ -912,7 +905,8 @@ const Brackets: React.FC = () => {
         selectedBracketId === DEFAULT_BRACKET_ID &&
         bracketsData.every((match) => match.isHomeTeamSelected === undefined);
     const isStatusComplete = bracketsData.every((match) => match.isHomeTeamSelected !== undefined);
-    const isCollateralDropdownDisabled = isSubmitDisabled && !insufficientBalance;
+    const isSubmitDisabled = !isBracketReady || insufficientBalance;
+    const isCollateralDropdownDisabled = !isBracketReady;
 
     return (
         <Container>

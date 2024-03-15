@@ -1270,7 +1270,8 @@
             "tooltip-rewards-correct-table": "3.000 OP (10.000 THALES en Arbitrum) se dividirán entre los 10 primeros",
             "address": "DIRECCIÓN",
             "bracket-id": "ID de soporte",
-            "by-volume": "Recompensas por volumen"
+            "by-volume": "Recompensas por volumen",
+            "my-rewards-bracket": "Tu mejor bracket"
         },
         "brackets": {
             "stats": {

@@ -1,5 +1,5 @@
 import nftImage from 'assets/images/march-madness/march-madness-nft.png';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import styled, { useTheme } from 'styled-components';
@@ -16,6 +16,12 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({ isUpdate, bracketId, handle
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
+    const [selectedBracketId, setSelectedBracketId] = useState(bracketId);
+
+    useEffect(() => {
+        setSelectedBracketId(bracketId);
+    }, [bracketId]);
+
     return (
         <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={handleClose} style={getCustomStyle(theme)}>
             <Container>
@@ -31,7 +37,9 @@ const MintNFTModal: React.FC<MintNFTModalProps> = ({ isUpdate, bracketId, handle
                 </TextWrapper>
                 <NFTImageWrapper>
                     <BracketText>
-                        {t('march-madness.brackets.bracket-id', { id: bracketId >= 0 ? bracketId : '...' })}
+                        {t('march-madness.brackets.bracket-id', {
+                            id: selectedBracketId >= 0 ? selectedBracketId : '...',
+                        })}
                     </BracketText>
                     <NftImage alt="March Madness NFT" src={nftImage} />
                 </NFTImageWrapper>
