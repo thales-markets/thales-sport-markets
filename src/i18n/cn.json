@@ -1284,7 +1284,8 @@
                 "incomplete": "不完整",
                 "complete": "完全的",
                 "total-points": "我的总积分",
-                "rank": "秩"
+                "rank": "秩",
+                "duplicate": "重复的"
             },
             "modal-mint": {
                 "button-updating": "更新中...",

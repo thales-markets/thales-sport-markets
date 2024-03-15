@@ -1172,6 +1172,7 @@
                 "rank": "Rank",
                 "incomplete": "Incomplete",
                 "complete": "Complete",
+                "duplicate": "Duplicated",
                 "my-total-score": "My total score",
                 "points": "Points",
                 "total-points": "My total points"

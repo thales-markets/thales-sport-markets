@@ -1284,7 +1284,8 @@
                 "total-points": "Mon total de points",
                 "bracket": "Support",
                 "complete": "Complet",
-                "rank": "Rang"
+                "rank": "Rang",
+                "duplicate": "Dupliqué"
             },
             "modal-mint": {
                 "update-text-1": "Bien fait!",

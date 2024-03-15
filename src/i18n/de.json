@@ -1284,7 +1284,8 @@
                 "incomplete": "Unvollständig",
                 "total-points": "Meine Gesamtpunktzahl",
                 "complete": "Vollständig",
-                "bracket": "Halterung"
+                "bracket": "Halterung",
+                "duplicate": "Dupliziert"
             },
             "modal-mint": {
                 "update-text-1": "Schön gemacht!",

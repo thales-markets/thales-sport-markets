@@ -1284,7 +1284,8 @@
                 "incomplete": "Incompleto",
                 "rank": "Rango",
                 "complete": "Completo",
-                "total-points": "mis puntos totales"
+                "total-points": "mis puntos totales",
+                "duplicate": "Duplicado"
             },
             "modal-mint": {
                 "finish-text-2-success": "¡Acabas de crear tu categoría March Madness!",

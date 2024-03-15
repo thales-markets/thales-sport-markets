@@ -22,12 +22,11 @@ const useMarchMadnessBracketQuery = (bracketId: number, networkId: NetworkId, op
             };
 
             try {
-                // TODO: marchMadnessDataContract will be moved to main contract
-                const { marchMadnessContract, marchMadnessDataContract } = networkConnector;
+                const { marchMadnessContract } = networkConnector;
 
-                if (marchMadnessContract && marchMadnessDataContract) {
+                if (marchMadnessContract) {
                     const [brackets, correctPositionsByRound, totalPoints] = await Promise.all([
-                        marchMadnessDataContract.getBracketsByItemId(bracketId),
+                        marchMadnessContract.getBracketsByItemId(bracketId),
                         marchMadnessContract.getCorrectPositionsByRound(bracketId),
                         marchMadnessContract.getTotalPointsByTokenId(bracketId),
                     ]);
