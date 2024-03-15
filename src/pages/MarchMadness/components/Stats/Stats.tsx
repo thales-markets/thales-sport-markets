@@ -20,7 +20,7 @@ const Stats: React.FC<{ disableMobileView?: boolean }> = ({ disableMobileView })
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const marchMadnessStatsQuery = useMarchMadnessStatsQuery(networkId, {
-        enabled: isAppReady && isMarchMadnessAvailableForNetworkId(networkId),
+        enabled: isAppReady && isMarchMadnessAvailableForNetworkId(networkId) && false, // TODO: remove false
         refetchInterval: minutesToMilliseconds(1),
     });
     const marchMadnessStatsData =
