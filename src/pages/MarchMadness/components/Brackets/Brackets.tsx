@@ -146,6 +146,7 @@ const Brackets: React.FC = () => {
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
     const [showMintNFTModal, setShowMintNFTModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
     const [isMinting, setIsMinting] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
@@ -451,15 +452,17 @@ const Brackets: React.FC = () => {
 
                 try {
                     let tx;
+                    toastId = toast.loading(t('market.toast-message.transaction-pending'));
                     if (isBracketMinted) {
+                        setIsUpdate(true);
                         setIsUpdating(true);
                         tx = await marchMadnessContractWithSigner.updateBracketsForAlreadyMintedItem(
                             selectedBracketId,
                             bracketsForContract
                         );
                     } else {
+                        setIsUpdate(false);
                         setIsMinting(true);
-                        toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
                         if (isDefaultCollateral) {
                             tx = await marchMadnessContractWithSigner.mint(bracketsForContract);
@@ -495,7 +498,11 @@ const Brackets: React.FC = () => {
                         toastId &&
                             toast.update(
                                 toastId,
-                                getSuccessToastOptions(t(`march-madness.brackets.confirmation-message`))
+                                getSuccessToastOptions(
+                                    isBracketMinted
+                                        ? t(`march-madness.brackets.update-message`)
+                                        : t(`march-madness.brackets.confirmation-message`)
+                                )
                             );
                         refetchAfterMarchMadnessMint(walletAddress, networkId);
 
@@ -1101,7 +1108,7 @@ const Brackets: React.FC = () => {
                     </WildCardsContainer>
                     {showMintNFTModal && (
                         <MintNFTModal
-                            isUpdate={selectedBracketId !== DEFAULT_BRACKET_ID}
+                            isUpdate={isUpdate}
                             bracketId={selectedBracketId}
                             handleClose={() => setShowMintNFTModal(false)}
                         />
