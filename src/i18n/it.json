@@ -1284,7 +1284,8 @@
                 "bracket": "Staffa",
                 "incomplete": "Incompleto",
                 "total-points": "I miei punti totali",
-                "rank": "Rango"
+                "rank": "Rango",
+                "duplicate": "Duplicato"
             },
             "modal-mint": {
                 "finish-text-1": "Ben fatto!",

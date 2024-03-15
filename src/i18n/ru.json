@@ -1284,7 +1284,8 @@
                 "incomplete": "Неполный",
                 "rank": "Классифицировать",
                 "total-points": "Моя общая сумма баллов",
-                "complete": "Полный"
+                "complete": "Полный",
+                "duplicate": "Дублированный"
             },
             "modal-mint": {
                 "finish-text-1-success": "Поздравляем!",

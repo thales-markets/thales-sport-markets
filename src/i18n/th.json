@@ -1284,7 +1284,8 @@
                 "rank": "อันดับ",
                 "bracket": "วงเล็บ",
                 "incomplete": "ไม่สมบูรณ์",
-                "total-points": "คะแนนรวมของฉัน"
+                "total-points": "คะแนนรวมของฉัน",
+                "duplicate": "ทำซ้ำ"
             },
             "modal-mint": {
                 "finish-info": "*NFT ของกลุ่ม March Madness คือ NFT การต่อเวลาที่ช่วยให้ผู้ถือสามารถเข้าร่วมในแคมเปญ Overtime March Madness โดยการสร้างกลุ่มทัวร์นาเมนต์การทำนายของตนเอง",

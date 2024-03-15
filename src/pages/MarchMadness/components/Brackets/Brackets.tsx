@@ -764,7 +764,9 @@ const Brackets: React.FC = () => {
                     <StatsRow justify="normal">
                         <StatsText lineHeight={16}>{t('march-madness.brackets.stats.bracket')}:</StatsText>
                         <StatsText margin="0 15px 0 auto" fontWeight={700}>
-                            {isStatusComplete
+                            {isBracketsLocked && !rankByGames
+                                ? t('march-madness.brackets.stats.duplicate')
+                                : isStatusComplete
                                 ? t('march-madness.brackets.stats.complete')
                                 : t('march-madness.brackets.stats.incomplete')}
                         </StatsText>
