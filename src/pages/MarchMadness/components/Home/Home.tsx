@@ -351,7 +351,7 @@ const TimeLeftDescription = styled.h3`
     color: #f25623;
     text-align: center;
     white-space: nowrap;
-    font-family: ${(props) => props.theme.fontFamily.secondary};
+    font-family: ${(props) => props.theme.fontFamily.tertiary};
     font-size: 30px;
     font-style: normal;
     font-weight: 400;
