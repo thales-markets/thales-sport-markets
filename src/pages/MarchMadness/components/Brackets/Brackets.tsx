@@ -55,6 +55,7 @@ import { getParlayPayment } from 'redux/modules/parlay';
 import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
+import { FlexDivCentered } from 'styles/common';
 import {
     COLLATERAL_DECIMALS,
     coinFormatter,
@@ -81,6 +82,7 @@ import Match from '../Match';
 import { MatchProps } from '../Match/Match';
 import MintNFTModal from '../MintNFTModal';
 import ShareModal from '../ShareModal';
+import Stats from '../Stats';
 import WildCardMatch from '../WildCardMatch';
 import {
     BracketsWrapper,
@@ -124,8 +126,6 @@ import {
     WildCardsHeader,
     WildCardsRow,
 } from './styled-components';
-import { FlexDivCentered } from 'styles/common';
-import Stats from '../Stats';
 
 const Brackets: React.FC = () => {
     const { t } = useTranslation();
@@ -144,6 +144,7 @@ const Brackets: React.FC = () => {
     const [bracketsData, setBracketsData] = useState(initialBracketsData);
     const [winnerTeamIds, setWinnerTeamIds] = useState(Array<number>(NUMBER_OF_MATCHES).fill(0));
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+    const [insufficientBalance, setInsufficientBalance] = useState(false);
     const [showMintNFTModal, setShowMintNFTModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
@@ -180,6 +181,13 @@ const Brackets: React.FC = () => {
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
+    const multipleCollateralBalancesData = useMemo(
+        () =>
+            multipleCollateralBalances.isSuccess && multipleCollateralBalances.data
+                ? multipleCollateralBalances.data
+                : null,
+        [multipleCollateralBalances]
+    );
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
@@ -222,15 +230,23 @@ const Brackets: React.FC = () => {
 
             if (multiCollateralOnOffRampContract && marchMadnessData) {
                 try {
-                    const minimumNeeded = await multiCollateralOnOffRampContract.getMinimumNeeded(
-                        collateralAddress,
-                        coinParser(marchMadnessData.mintingPrice.toString(), networkId)
+                    const isCollateralSupported = await multiCollateralOnOffRampContract.collateralSupported(
+                        collateralAddress
                     );
+                    if (isCollateralSupported) {
+                        const minimumNeeded = await multiCollateralOnOffRampContract.getMinimumNeeded(
+                            collateralAddress,
+                            coinParser(marchMadnessData.mintingPrice.toString(), networkId)
+                        );
 
-                    const minimumAmountForConversion = coinFormatter(minimumNeeded, networkId, selectedCollateral);
-                    setMinimumNeededForConversion(minimumAmountForConversion);
+                        const minimumAmountForConversion = coinFormatter(minimumNeeded, networkId, selectedCollateral);
+                        setMinimumNeededForConversion(minimumAmountForConversion);
+                    } else {
+                        setMinimumNeededForConversion(0);
+                    }
                 } catch (e) {
                     console.log(e);
+                    setMinimumNeededForConversion(0);
                 }
             }
         };
@@ -349,10 +365,36 @@ const Brackets: React.FC = () => {
                 setIsSubmitDisabled(submitDisabled);
             }
         } else {
-            submitDisabled = bracketsData.some((match) => match.isHomeTeamSelected === undefined);
-            setIsSubmitDisabled(submitDisabled);
+            // new bracket to mint
+            const incompleteBracket = bracketsData.some((match) => match.isHomeTeamSelected === undefined);
+            setIsSubmitDisabled(incompleteBracket);
         }
     }, [isBracketMinted, bracketsData, marchMadnessBracketData, isBracketMintedOnContract]);
+
+    // validations
+    useEffect(() => {
+        if (!isBracketMinted) {
+            let insufficientBalance = false;
+            if (multipleCollateralBalancesData && marchMadnessData) {
+                const balance = multipleCollateralBalancesData[selectedCollateral];
+                const collateralAmount = isDefaultCollateral
+                    ? marchMadnessData.mintingPrice
+                    : convertFromStable(marchMadnessData.mintingPrice);
+
+                insufficientBalance = balance < collateralAmount;
+            }
+
+            setInsufficientBalance(insufficientBalance);
+            setIsSubmitDisabled(insufficientBalance);
+        }
+    }, [
+        isBracketMinted,
+        multipleCollateralBalancesData,
+        marchMadnessData,
+        selectedCollateral,
+        convertFromStable,
+        isDefaultCollateral,
+    ]);
 
     // check allowance
     useEffect(() => {
@@ -866,6 +908,7 @@ const Brackets: React.FC = () => {
         selectedBracketId === DEFAULT_BRACKET_ID &&
         bracketsData.every((match) => match.isHomeTeamSelected === undefined);
     const isStatusComplete = bracketsData.every((match) => match.isHomeTeamSelected !== undefined);
+    const isCollateralDropdownDisabled = isSubmitDisabled && !insufficientBalance;
 
     return (
         <Container>
@@ -989,6 +1032,8 @@ const Brackets: React.FC = () => {
                                             ? isUpdating
                                                 ? t('march-madness.brackets.submit-modify-progress')
                                                 : t('march-madness.brackets.submit-modify')
+                                            : insufficientBalance
+                                            ? t('common.errors.insufficient-balance')
                                             : hasAllowance || !isStatusComplete
                                             ? isMinting
                                                 ? t('march-madness.brackets.submit-progress')
@@ -997,12 +1042,12 @@ const Brackets: React.FC = () => {
                                     </Button>
                                     {!isBracketMinted && (
                                         <>
-                                            <CollateralWrapper isDisabled={isSubmitDisabled}>
-                                                <CollateralSeparator isDisabled={isSubmitDisabled} />
+                                            <CollateralWrapper isDisabled={isCollateralDropdownDisabled}>
+                                                <CollateralSeparator isDisabled={isCollateralDropdownDisabled} />
                                                 <CollateralSelector
                                                     collateralArray={getCollaterals(networkId)}
                                                     selectedItem={selectedCollateralIndex}
-                                                    disabled={isSubmitDisabled}
+                                                    disabled={isCollateralDropdownDisabled}
                                                     onChangeCollateral={() => {}}
                                                     isDetailedView
                                                     collateralBalances={multipleCollateralBalances.data}

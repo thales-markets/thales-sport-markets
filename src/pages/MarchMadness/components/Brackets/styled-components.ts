@@ -135,6 +135,7 @@ export const CollateralSeparator = styled.div<{ isDisabled: boolean }>`
     border-left: 2px solid ${(props) => props.theme.marchMadness.borderColor.tertiary};
     height: 22px;
     opacity: ${(props) => (props.isDisabled ? '0.5' : '1')};
+    margin-right: 4px;
 `;
 
 export const Region = styled.div<{ isSideLeft: boolean; isVertical: boolean }>`
