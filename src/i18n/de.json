@@ -1247,7 +1247,8 @@
             "comp-rules-0-a": "Die Prägung der Brackets dauert bis zum Beginn der Spiele der 1. Runde am 21. März.",
             "comp-rules-0": "Die Prägung der Brackets beginnt am 18. März (UTC), nachdem der Auswahlsonntag beendet ist und der Zeitplan für die erste Runde bekannt ist.",
             "time-info-a": "Bis die Klammerprägung beginnt",
-            "volume-incetives-4": "March Madness-Händler haben außerdem Anspruch auf 2.500 ARB pro Woche im Parlay-Wettbewerb und 10.000 ARB pro zwei Wochen direkter Volumenprämien aus dem STIP-Programm. Besuchen<p> diese Werbeseite</p> für weitere Informationen."
+            "volume-incetives-4": "March Madness-Händler haben außerdem Anspruch auf 2.500 ARB pro Woche im Parlay-Wettbewerb und 10.000 ARB pro zwei Wochen direkter Volumenprämien aus dem STIP-Programm. Besuchen<p> diese Werbeseite</p> für weitere Informationen.",
+            "button-switch": "Wechseln Sie zu Arbitrum"
         },
         "leaderboard": {
             "tooltip-rewards-volume-table": "10.000 OP (30.000 THALES auf Arbitrum) werden auf der Grundlage des anteiligen Volumens aufgeteilt",
@@ -1268,7 +1269,8 @@
             "my-rewards": "Meine Belohnungen",
             "guessed-games": "Erratene Spiele",
             "search-placeholder": "WALLET-ADRESSE SUCHEN",
-            "bracket-id": "Klammer-ID"
+            "bracket-id": "Klammer-ID",
+            "by-volume": "Volumenprämien"
         },
         "brackets": {
             "stats": {

@@ -1247,7 +1247,8 @@
             "comp-rules-0": "La frappe des brackets commencera une fois la sélection dimanche terminée et le calendrier du 1er tour connu, début le 18 mars UTC.",
             "comp-rules-0-a": "La frappe des brackets durera jusqu'au début des matchs du 1er tour le 21 mars.",
             "time-info-a": "Jusqu'au début de la frappe des brackets",
-            "volume-incetives-4": "Les traders de March Madness sont également éligibles à 2 500 ARB par semaine de compétition Parlay et à 10 000 ARB toutes les deux semaines de récompenses de volume directes du programme STIP. Visite<p> cette page de promotion</p> pour des informations complémentaires."
+            "volume-incetives-4": "Les traders de March Madness sont également éligibles à 2 500 ARB par semaine de compétition Parlay et à 10 000 ARB toutes les deux semaines de récompenses de volume directes du programme STIP. Visite<p> cette page de promotion</p> pour des informations complémentaires.",
+            "button-switch": "Passer à l'arbitrage"
         },
         "leaderboard": {
             "rewards": "Récompenses",
@@ -1268,7 +1269,8 @@
             "tooltip-rewards-correct-table": "3 000 OP (10 000 THALES sur Arbitrum) seront répartis entre les 10 premiers",
             "rank": "Rang",
             "my-rewards": "Mes récompenses",
-            "bracket-id": "ID du support"
+            "bracket-id": "ID du support",
+            "by-volume": "Récompenses de volume"
         },
         "brackets": {
             "stats": {
