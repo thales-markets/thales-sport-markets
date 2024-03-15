@@ -193,7 +193,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             <TableHeaderContainer>
                 <TableHeader>{t('march-madness.leaderboard.by-guessed-correctly')}</TableHeader>
             </TableHeaderContainer>
-            <TableContainer>
+            <TableContainer isEmpty={!filteredData?.length}>
                 {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>

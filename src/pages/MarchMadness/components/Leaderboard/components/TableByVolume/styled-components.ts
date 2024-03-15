@@ -29,16 +29,18 @@ export const NoDataContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 300px;
+    width: 150px;
     height: 60px;
-    background-color: ${(props) => props.theme.marchMadness.button.background.primary};
     margin-top: 100px;
 `;
 
 export const NoDataLabel = styled.span`
-    font-family: 'NCAA' !important;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 25px;
-    color: ${(props) => props.theme.marchMadness.textColor.tertiary};
+    line-height: 40px;
+    color: ${(props) => props.theme.marchMadness.textColor.senary};
+    text-align: center;
+    text-transform: uppercase;
 `;
 
 export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean; myScore?: boolean }>`
@@ -81,10 +83,11 @@ export const TableHeaderContainer = styled.div`
     width: 100%;
 `;
 
-export const TableContainer = styled(TableHeaderContainer)`
+export const TableContainer = styled(TableHeaderContainer)<{ isEmpty: boolean }>`
     flex-direction: column;
     justify-content: flex-start;
     border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+    ${(props) => (props.isEmpty ? 'min-height: 450px;' : '')}
 `;
 
 export const TableHeader = styled.span`

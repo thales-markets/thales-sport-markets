@@ -180,7 +180,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
             <TableHeaderContainer>
                 <TableHeader>{'By volume'}</TableHeader>
             </TableHeaderContainer>
-            <TableContainer>
+            <TableContainer isEmpty={!filteredData?.length}>
                 {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
