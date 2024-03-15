@@ -385,7 +385,9 @@ const Brackets: React.FC = () => {
             }
 
             setInsufficientBalance(insufficientBalance);
-            setIsSubmitDisabled(insufficientBalance);
+            if (insufficientBalance) {
+                setIsSubmitDisabled(true);
+            }
         }
     }, [
         isBracketMinted,
