@@ -1146,7 +1146,7 @@
             "tooltip-rewards-correct-table": "Total rewards for this leaderboard placement"
         },
         "side-leaderboard": {
-            "title": "March Madness Leaderboard",
+            "title": "March Madness",
             "bracket-id": "Bracket ID",
             "points": "Points",
             "points-leaderboard": "Points Leaderboard",
