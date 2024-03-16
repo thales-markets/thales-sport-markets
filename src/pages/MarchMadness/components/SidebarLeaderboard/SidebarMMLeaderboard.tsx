@@ -11,6 +11,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { formatCurrency } from 'thales-utils';
+import { getFormattedRewardsAmount } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import {
     ColumnLabel,
@@ -87,7 +88,9 @@ const SidebarMMLeaderboard: React.FC = () => {
                                             <DataLabel textAlign="center">{formatCurrency(item.totalPoints)}</DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
-                                            <DataLabel textAlign={'left'}>{item.rewards}</DataLabel>
+                                            <DataLabel textAlign={'left'}>
+                                                {getFormattedRewardsAmount(item.stableRewards, item.tokenRewards)}
+                                            </DataLabel>
                                         </ColumnWrapper>
                                     </LeaderboardRow>
                                 </React.Fragment>
