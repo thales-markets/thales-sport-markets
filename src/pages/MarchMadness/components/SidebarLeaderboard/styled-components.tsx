@@ -77,9 +77,10 @@ export const Rank = styled(FlexDivCentered)`
 `;
 
 export const DataLabel = styled(FlexDivRowCentered)<{ textAlign?: string }>`
-    text-align: ${(props) => (props.textAlign ? props.textAlign : 'right')};
+    text-align: ${(props) => (props.textAlign ? props.textAlign : 'left')};
     font-weight: 400;
     font-size: 9px;
+    white-space: nowrap;
     line-height: 103.19%;
 `;
 
