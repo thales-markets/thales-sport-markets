@@ -1145,6 +1145,13 @@
             "tooltip-correct-correct-table": "Total points accrued from correct predictions.",
             "tooltip-rewards-correct-table": "Total rewards for this leaderboard placement"
         },
+        "side-leaderboard": {
+            "title": "March Madness Leaderboard",
+            "bracket-id": "Bracket ID",
+            "points": "Points",
+            "points-leaderboard": "Points Leaderboard",
+            "rewards": "Rewards"
+        },
         "brackets": {
             "team-1": "Team 1",
             "team-2": "Team 2",

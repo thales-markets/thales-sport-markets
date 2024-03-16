@@ -160,7 +160,7 @@ export default {
     },
     marchMadness: {
         background: {
-            primary: '',
+            primary: Colors.ORANGE_MARCH_MADNESS,
             secondary: '',
             tertiary: '',
             quaternary: '',
