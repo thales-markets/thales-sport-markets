@@ -7,7 +7,8 @@ export type LeaderboardByGuessedCorrectlyResponse = {
     totalPoints: number;
     bracketId: number;
     rank: number;
-    rewards: string;
+    tokenRewards: number;
+    stableRewards: number;
 }[];
 
 const useLeaderboardByGuessedCorrectlyQuery = (

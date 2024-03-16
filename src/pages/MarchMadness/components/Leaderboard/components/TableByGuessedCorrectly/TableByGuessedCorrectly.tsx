@@ -9,7 +9,7 @@ import { Column, usePagination, useTable } from 'react-table';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { getEtherscanAddressLink } from 'thales-utils';
+import { formatCurrencyWithKey, getEtherscanAddressLink } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { truncateAddress } from 'utils/formatters/string';
 import {
@@ -27,6 +27,7 @@ import {
     TableRow,
     TableRowCell,
 } from '../TableByVolume/styled-components';
+import { USD_SIGN } from 'constants/currency';
 
 type TableByGuessedCorrectlyProps = {
     searchText: string;
@@ -111,7 +112,16 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         />
                     </>
                 ),
-                accessor: 'rewards',
+                accessor: 'tokenRewards',
+                Cell: (cell) => {
+                    console.log(cell);
+                    return (
+                        <>
+                            {`${formatCurrencyWithKey('ARB', (cell.row.original as any).tokenRewards, 0, true)} +
+                                ${formatCurrencyWithKey(USD_SIGN, (cell.row.original as any).stableRewards, 2)}`}
+                        </>
+                    );
+                },
             },
         ];
     }, [t, networkId, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
@@ -184,7 +194,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     <TableRowCell>#{myScore[0].bracketId}</TableRowCell>
                     <TableRowCell>{t('march-madness.leaderboard.my-rewards-bracket').toUpperCase()}</TableRowCell>
                     <TableRowCell>{myScore[0].totalPoints}</TableRowCell>
-                    <TableRowCell>{myScore[0].rewards}</TableRowCell>
+                    <TableRowCell>
+                        {`${formatCurrencyWithKey('ARB', myScore[0].tokenRewards, 0, true)} +
+                           ${formatCurrencyWithKey(USD_SIGN, myScore[0].stableRewards, 2)}`}
+                    </TableRowCell>
                 </StickyRowTopTable>
             );
         }
