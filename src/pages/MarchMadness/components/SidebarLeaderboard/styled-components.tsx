@@ -32,19 +32,23 @@ export const Title = styled(FlexDiv)`
     justify-content: center;
     margin: 10px 0 15px 0;
     flex-direction: column;
-    &:hover {
-        color: ${(props) => props.theme.textColor.quaternary};
-        cursor: pointer;
-    }
 `;
 
 export const TitleLabel = styled.span<{ isBold?: boolean }>`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     font-weight: ${(props) => (props.isBold ? '700' : '300')};
-    font-size: 16px;
+    font-size: 14px;
     line-height: 18px;
-    letter-spacing: ${(props) => (props.isBold ? '1px' : '11px')};
     padding-left: ${(props) => (props.isBold ? '0' : '5px')};
     text-transform: uppercase;
+    span {
+        letter-spacing: 2px;
+        margin: 0 5px;
+        font-family: 'NCAA' !important;
+    }
 `;
 
 export const HeaderRow = styled(FlexDivRow)`
@@ -73,10 +77,9 @@ export const Rank = styled(FlexDivCentered)`
 `;
 
 export const DataLabel = styled(FlexDivRowCentered)<{ textAlign?: string }>`
-    text-align: ${(props) => (props.textAlign ? props.textAlign : '')};
+    text-align: ${(props) => (props.textAlign ? props.textAlign : 'right')};
     font-weight: 400;
     font-size: 9px;
-    width: 100%;
     line-height: 103.19%;
 `;
 
@@ -85,7 +88,6 @@ export const ColumnLabel = styled.span`
     font-size: 12px;
     font-weight: 700;
     line-height: 103.19%;
-    width: 100%;
 `;
 
 export const ColumnWrapper = styled(FlexDiv)<{ padding?: string }>`

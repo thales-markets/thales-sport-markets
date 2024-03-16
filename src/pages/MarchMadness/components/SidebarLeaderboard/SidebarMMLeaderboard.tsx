@@ -1,3 +1,5 @@
+import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
+import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
 import SPAAnchor from 'components/SPAAnchor';
 import SimpleLoader from 'components/SimpleLoader';
 import ROUTES from 'constants/routes';
@@ -36,7 +38,7 @@ const SidebarMMLeaderboard: React.FC = () => {
     });
 
     const dataByPoints = useMemo(() => {
-        return marchMadnessQuery.isSuccess && marchMadnessQuery.data ? marchMadnessQuery.data : [];
+        return marchMadnessQuery.isSuccess && marchMadnessQuery.data ? marchMadnessQuery.data.slice(0, 20) : [];
     }, [marchMadnessQuery.data, marchMadnessQuery.isSuccess]);
 
     return (
@@ -44,13 +46,17 @@ const SidebarMMLeaderboard: React.FC = () => {
             <Container>
                 <SPAAnchor href={buildHref(ROUTES.Leaderboard)}>
                     <Title>
-                        <TitleLabel>{t('march-madness.side-leaderboard.title')}</TitleLabel>
+                        <TitleLabel>
+                            <img src={marchMadnessLeftIcon} />
+                            <span>{t('march-madness.side-leaderboard.title')}</span>
+                            <img src={marchMadnessRightIcon} />
+                        </TitleLabel>
                         <TitleLabel isBold={true}>{t('march-madness.side-leaderboard.points-leaderboard')}</TitleLabel>
                     </Title>
                 </SPAAnchor>
                 <LeaderboardContainer>
                     <HeaderRow>
-                        <ColumnWrapper padding={'0 0 0 20px'}>
+                        <ColumnWrapper style={{ margin: '0 0 0 25px' }}>
                             <ColumnLabel>{t('march-madness.side-leaderboard.bracket-id')}</ColumnLabel>
                         </ColumnWrapper>
                         <ColumnWrapper>
@@ -71,14 +77,10 @@ const SidebarMMLeaderboard: React.FC = () => {
                             return (
                                 <React.Fragment key={index}>
                                     <LeaderboardRow className={index == 0 ? 'first' : ''}>
+                                        <Rank>{item.rank}</Rank>
                                         <ColumnWrapper>
-                                            <Rank>{item.rank}</Rank>
-                                            <DataLabel
-                                                title={`${item.bracketId}`}
-                                                textAlign="center"
-                                                style={{ width: 55 }}
-                                            >
-                                                {item.bracketId}
+                                            <DataLabel title={`${item.bracketId}`} textAlign="center">
+                                                {`#${item.bracketId}`}
                                             </DataLabel>
                                         </ColumnWrapper>
                                         <ColumnWrapper>
