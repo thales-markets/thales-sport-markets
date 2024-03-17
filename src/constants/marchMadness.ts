@@ -1206,4 +1206,4 @@ export const DEFAULT_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
 export const START_MINTING_DATE = Date.UTC(2024, 2, 12); // 18th March 2024. - after Selection Sunday TODO: update after testing
 export const END_MINTING_DATE = 1711037437; // timestamp from marchMadness contract in seconds
 
-export const PRIZE_POOL_BONUS = '5,000 ARB';
+export const PRIZE_POOL_BONUS = '5,450 ARB';

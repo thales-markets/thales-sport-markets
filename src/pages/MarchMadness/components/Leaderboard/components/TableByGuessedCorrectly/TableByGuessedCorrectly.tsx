@@ -9,7 +9,7 @@ import { Column, usePagination, useTable } from 'react-table';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { formatCurrencyWithKey, getEtherscanAddressLink } from 'thales-utils';
+import { getEtherscanAddressLink } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { truncateAddress } from 'utils/formatters/string';
 import {
@@ -27,7 +27,7 @@ import {
     TableRow,
     TableRowCell,
 } from '../TableByVolume/styled-components';
-import { USD_SIGN } from 'constants/currency';
+import { getFormattedRewardsAmount } from 'utils/marchMadness';
 
 type TableByGuessedCorrectlyProps = {
     searchText: string;
@@ -117,8 +117,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     console.log(cell);
                     return (
                         <>
-                            {`${formatCurrencyWithKey('ARB', (cell.row.original as any).tokenRewards, 0, true)} +
-                                ${formatCurrencyWithKey(USD_SIGN, (cell.row.original as any).stableRewards, 2)}`}
+                            {getFormattedRewardsAmount(
+                                (cell.row.original as any).stableRewards,
+                                (cell.row.original as any).tokenRewards
+                            )}
                         </>
                     );
                 },
@@ -195,8 +197,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     <TableRowCell>{t('march-madness.leaderboard.my-rewards-bracket').toUpperCase()}</TableRowCell>
                     <TableRowCell>{myScore[0].totalPoints}</TableRowCell>
                     <TableRowCell>
-                        {`${formatCurrencyWithKey('ARB', myScore[0].tokenRewards, 0, true)} +
-                           ${formatCurrencyWithKey(USD_SIGN, myScore[0].stableRewards, 2)}`}
+                        {getFormattedRewardsAmount(myScore[0].tokenRewards, myScore[0].stableRewards)}
                     </TableRowCell>
                 </StickyRowTopTable>
             );
