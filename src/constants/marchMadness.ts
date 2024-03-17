@@ -65,7 +65,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'East',
         round: 'First',
     },
     {
@@ -75,7 +75,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'East',
         round: 'First',
     },
     {
@@ -85,7 +85,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'East',
         round: 'First',
     },
     {
@@ -95,7 +95,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'East',
         round: 'First',
     },
     {
@@ -105,7 +105,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'East',
         round: 'First',
     },
     {
@@ -115,7 +115,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'East',
         round: 'First',
     },
     {
@@ -125,7 +125,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'East',
         round: 'First',
     },
     {
@@ -135,7 +135,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'South',
+        region: 'East',
         round: 'First',
     },
     {
@@ -145,7 +145,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'West',
         round: 'First',
     },
     {
@@ -155,7 +155,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'West',
         round: 'First',
     },
     {
@@ -165,7 +165,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'West',
         round: 'First',
     },
     {
@@ -175,7 +175,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'West',
         round: 'First',
     },
     {
@@ -185,7 +185,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'West',
         round: 'First',
     },
     {
@@ -195,7 +195,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'West',
         round: 'First',
     },
     {
@@ -205,7 +205,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'West',
         round: 'First',
     },
     {
@@ -215,7 +215,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'East',
+        region: 'West',
         round: 'First',
     },
     {
@@ -225,7 +225,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'South',
         round: 'First',
     },
     {
@@ -235,7 +235,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'South',
         round: 'First',
     },
     {
@@ -245,7 +245,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'South',
         round: 'First',
     },
     {
@@ -255,7 +255,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'South',
         round: 'First',
     },
     {
@@ -265,7 +265,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'South',
         round: 'First',
     },
     {
@@ -275,7 +275,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'South',
         round: 'First',
     },
     {
@@ -285,7 +285,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'South',
         round: 'First',
     },
     {
@@ -295,7 +295,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'Midwest',
+        region: 'South',
         round: 'First',
     },
     {
@@ -305,7 +305,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -315,7 +315,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -325,7 +325,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -335,7 +335,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -345,7 +345,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -355,7 +355,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -365,7 +365,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -375,7 +375,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: undefined,
         awayTeamParentMatchId: undefined,
-        region: 'West',
+        region: 'Midwest',
         round: 'First',
     },
     {
@@ -385,7 +385,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 0,
         awayTeamParentMatchId: 1,
-        region: 'South',
+        region: 'East',
         round: 'Second',
     },
     {
@@ -395,7 +395,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 2,
         awayTeamParentMatchId: 3,
-        region: 'South',
+        region: 'East',
         round: 'Second',
     },
     {
@@ -405,7 +405,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 4,
         awayTeamParentMatchId: 5,
-        region: 'South',
+        region: 'East',
         round: 'Second',
     },
     {
@@ -415,7 +415,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 6,
         awayTeamParentMatchId: 7,
-        region: 'South',
+        region: 'East',
         round: 'Second',
     },
     {
@@ -425,7 +425,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 8,
         awayTeamParentMatchId: 9,
-        region: 'East',
+        region: 'West',
         round: 'Second',
     },
     {
@@ -435,7 +435,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 10,
         awayTeamParentMatchId: 11,
-        region: 'East',
+        region: 'West',
         round: 'Second',
     },
     {
@@ -445,7 +445,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 12,
         awayTeamParentMatchId: 13,
-        region: 'East',
+        region: 'West',
         round: 'Second',
     },
     {
@@ -455,7 +455,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 14,
         awayTeamParentMatchId: 15,
-        region: 'East',
+        region: 'West',
         round: 'Second',
     },
     {
@@ -465,7 +465,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 16,
         awayTeamParentMatchId: 17,
-        region: 'Midwest',
+        region: 'South',
         round: 'Second',
     },
     {
@@ -475,7 +475,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 18,
         awayTeamParentMatchId: 19,
-        region: 'Midwest',
+        region: 'South',
         round: 'Second',
     },
     {
@@ -485,7 +485,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 20,
         awayTeamParentMatchId: 21,
-        region: 'Midwest',
+        region: 'South',
         round: 'Second',
     },
     {
@@ -495,7 +495,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 22,
         awayTeamParentMatchId: 23,
-        region: 'Midwest',
+        region: 'South',
         round: 'Second',
     },
     {
@@ -505,7 +505,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 24,
         awayTeamParentMatchId: 25,
-        region: 'West',
+        region: 'Midwest',
         round: 'Second',
     },
     {
@@ -515,7 +515,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 26,
         awayTeamParentMatchId: 27,
-        region: 'West',
+        region: 'Midwest',
         round: 'Second',
     },
     {
@@ -525,7 +525,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 28,
         awayTeamParentMatchId: 29,
-        region: 'West',
+        region: 'Midwest',
         round: 'Second',
     },
     {
@@ -535,7 +535,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 30,
         awayTeamParentMatchId: 31,
-        region: 'West',
+        region: 'Midwest',
         round: 'Second',
     },
     {
@@ -545,7 +545,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 32,
         awayTeamParentMatchId: 33,
-        region: 'South',
+        region: 'East',
         round: 'Sweet16',
     },
     {
@@ -555,7 +555,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 34,
         awayTeamParentMatchId: 35,
-        region: 'South',
+        region: 'East',
         round: 'Sweet16',
     },
     {
@@ -565,7 +565,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 36,
         awayTeamParentMatchId: 37,
-        region: 'East',
+        region: 'West',
         round: 'Sweet16',
     },
     {
@@ -575,7 +575,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 38,
         awayTeamParentMatchId: 39,
-        region: 'East',
+        region: 'West',
         round: 'Sweet16',
     },
     {
@@ -585,7 +585,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 40,
         awayTeamParentMatchId: 41,
-        region: 'Midwest',
+        region: 'South',
         round: 'Sweet16',
     },
     {
@@ -595,7 +595,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 42,
         awayTeamParentMatchId: 43,
-        region: 'Midwest',
+        region: 'South',
         round: 'Sweet16',
     },
     {
@@ -605,7 +605,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 44,
         awayTeamParentMatchId: 45,
-        region: 'West',
+        region: 'Midwest',
         round: 'Sweet16',
     },
     {
@@ -615,7 +615,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 46,
         awayTeamParentMatchId: 47,
-        region: 'West',
+        region: 'Midwest',
         round: 'Sweet16',
     },
     {
@@ -625,7 +625,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 48,
         awayTeamParentMatchId: 49,
-        region: 'South',
+        region: 'East',
         round: 'Elite8',
     },
     {
@@ -635,7 +635,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 50,
         awayTeamParentMatchId: 51,
-        region: 'East',
+        region: 'West',
         round: 'Elite8',
     },
     {
@@ -645,7 +645,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 52,
         awayTeamParentMatchId: 53,
-        region: 'Midwest',
+        region: 'South',
         round: 'Elite8',
     },
     {
@@ -655,7 +655,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 54,
         awayTeamParentMatchId: 55,
-        region: 'West',
+        region: 'Midwest',
         round: 'Elite8',
     },
     {
@@ -665,7 +665,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 56,
         awayTeamParentMatchId: 57,
-        region: 'South-East',
+        region: 'East-West',
         round: 'SemiFinal',
     },
     {
@@ -675,7 +675,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 58,
         awayTeamParentMatchId: 59,
-        region: 'Midwest-West',
+        region: 'South-Midwest',
         round: 'SemiFinal',
     },
     {
@@ -685,7 +685,7 @@ export const initialBracketsData: BracketMatch[] = [
         isHomeTeamSelected: undefined,
         homeTeamParentMatchId: 60,
         awayTeamParentMatchId: 61,
-        region: 'South-East-Midwest-West',
+        region: 'East-West-South-Midwest',
         round: 'Final',
     },
 ];
