@@ -1206,7 +1206,7 @@ export const MAX_TOTAL_POINTS = NUMBER_OF_ROUNDS * MAX_POINTS_PER_ROUND;
 export const APPROVE_MULTIPLIER = 1.1;
 export const DEFAULT_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
 
-export const START_MINTING_DATE = Date.UTC(2024, 2, 17); // 18th March 2024. - after Selection Sunday
+export const START_MINTING_DATE = Date.UTC(2024, 2, 18); // 18th March 2024. - after Selection Sunday
 export const END_MINTING_DATE = 1711037437; // timestamp from marchMadness contract in seconds - used only for unsupported networks 1711036800
 
 export const PRIZE_POOL_BONUS = '5,450 ARB';
