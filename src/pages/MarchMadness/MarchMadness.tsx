@@ -49,14 +49,13 @@ const MarchMadness: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState(defaultTab);
 
     useEffect(() => {
-        if (!isWalletConnected && queryParamTab === MarchMadTabs.BRACKETS) {
+        if ((!isWalletConnected || !isTabAvailable) && queryParamTab === MarchMadTabs.BRACKETS) {
             const queryParams = queryString.parse(location.search);
             if (queryParams.tab) {
                 delete queryParams.tab;
                 history.push({ search: queryString.stringify({ ...queryParams }) });
             }
             setSelectedTab(MarchMadTabs.HOME);
-            return;
         }
     }, [
         walletAddress,
@@ -65,6 +64,7 @@ const MarchMadness: React.FC = () => {
         queryParamTab,
         isWalletConnected,
         location.search,
+        isTabAvailable,
     ]);
 
     useEffect(() => {

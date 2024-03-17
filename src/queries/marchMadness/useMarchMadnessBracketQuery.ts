@@ -1,28 +1,47 @@
+import { NUMBER_OF_MATCHES, NUMBER_OF_ROUNDS } from 'constants/marchMadness';
 import QUERY_KEYS from 'constants/queryKeys';
 import { BigNumber } from 'ethers';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { NetworkId } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
 
-const useMarchMadnessBracketQuery = (tokenId: number, networkId: NetworkId, options?: UseQueryOptions<any>) => {
-    return useQuery<number[]>(
-        QUERY_KEYS.MarchMadness.Bracket(tokenId, networkId),
+type MarchMadnessBracketData = {
+    bracketsData: number[];
+    winningsPerRound: number[];
+    totalPoints: number;
+};
+
+const useMarchMadnessBracketQuery = (bracketId: number, networkId: NetworkId, options?: UseQueryOptions<any>) => {
+    return useQuery<MarchMadnessBracketData>(
+        QUERY_KEYS.MarchMadness.Bracket(bracketId, networkId),
         async () => {
-            let bracketsData: number[] = [];
+            const marchMadnessBracketData: MarchMadnessBracketData = {
+                bracketsData: Array<number>(NUMBER_OF_MATCHES).fill(0),
+                winningsPerRound: Array<number>(NUMBER_OF_ROUNDS).fill(0),
+                totalPoints: 0,
+            };
 
             try {
-                // TODO: will be moved to main contract
-                const { marchMadnessDataContract } = networkConnector;
+                const { marchMadnessContract } = networkConnector;
 
-                if (marchMadnessDataContract) {
-                    const brackets: BigNumber[] = await marchMadnessDataContract.getBracketsByItemId(tokenId);
-                    bracketsData = brackets.map((bracket) => Number(bracket));
+                if (marchMadnessContract) {
+                    const [brackets, correctPositionsByRound, totalPoints] = await Promise.all([
+                        marchMadnessContract.getBracketsByItemId(bracketId),
+                        marchMadnessContract.getCorrectPositionsByRound(bracketId),
+                        marchMadnessContract.getTotalPointsByTokenId(bracketId),
+                    ]);
+
+                    marchMadnessBracketData.bracketsData = brackets.map((bracket: BigNumber) => Number(bracket));
+                    marchMadnessBracketData.winningsPerRound = correctPositionsByRound.map((value: BigNumber) =>
+                        Number(value)
+                    );
+                    marchMadnessBracketData.totalPoints = totalPoints;
                 }
 
-                return bracketsData;
+                return marchMadnessBracketData;
             } catch (e) {
                 console.log(e);
-                return bracketsData;
+                return marchMadnessBracketData;
             }
         },
         options

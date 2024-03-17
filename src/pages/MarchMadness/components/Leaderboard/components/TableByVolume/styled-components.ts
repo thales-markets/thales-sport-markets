@@ -14,28 +14,33 @@ export const OverlayContainer = styled.div`
 `;
 
 export const TableHeaderCell = styled.th`
-    font-family: 'Oswald' !important;
+    color: #fff;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     text-transform: uppercase;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 18px;
     padding: 5px 0px;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 150%; /* 18px */
+    letter-spacing: 0.3px;
 `;
 
 export const NoDataContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 300px;
+    width: 150px;
     height: 60px;
-    background-color: ${(props) => props.theme.marchMadness.button.background.primary};
     margin-top: 100px;
 `;
 
 export const NoDataLabel = styled.span`
-    font-family: 'NCAA' !important;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 25px;
-    color: ${(props) => props.theme.marchMadness.textColor.tertiary};
+    line-height: 40px;
+    color: ${(props) => props.theme.marchMadness.textColor.senary};
+    text-align: center;
+    text-transform: uppercase;
 `;
 
 export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean; myScore?: boolean }>`
@@ -44,51 +49,57 @@ export const TableRow = styled.tr<{ hideBorder?: boolean; topTen?: boolean; mySc
     font-weight: 600;
     ${(props) => (props?.hideBorder == true ? `border-bottom: '';` : ``)}
     ${(props) =>
-        !props?.hideBorder ? `border-bottom: 2px dotted ${props.theme.marchMadness.borderColor.primary};` : ``}
+        !props?.hideBorder ? `border-bottom: 1px solid ${props.theme.marchMadness.borderColor.tertiary};` : ``}
+    ${(props) => (props?.topTen == true ? `background-color: ${props.theme.marchMadness.background.senary};` : ``)}  
     ${(props) =>
-        props?.topTen == true ? `background-color: ${props.theme.marchMadness.background.quaternary};` : ``}  
-    ${(props) =>
-        props?.topTen == true ? `border-bottom: 2px dotted ${props.theme.marchMadness.borderColor.tertiary};` : ``}  
-    ${(props) => (props?.myScore == true ? `background-color: ${props.theme.marchMadness.borderColor.primary};` : ``)}
+        props?.topTen == true ? `border-bottom: 1px solid ${props.theme.marchMadness.borderColor.tertiary};` : ``}  
+    ${(props) => (props?.myScore == true ? `background-color: ${props.theme.marchMadness.borderColor.secondary};` : ``)}
 `;
 
-export const TableRowCell = styled.td`
+export const TableRowCell = styled.td<{ noTextTransform?: boolean }>`
     padding: 10px 0px;
+    color: #fff;
     text-align: center;
+    font-family: ${(props) => props.theme.fontFamily.primary};
+    font-size: 14px;
+    font-style: normal;
     font-weight: 600;
+    line-height: 150%; /* 21px */
+    letter-spacing: 0.21px;
+    ${(props) => (props.noTextTransform ? '' : 'text-transform: uppercase;')}
 `;
 
 export const Container = styled.div`
     height: auto;
-    width: 60%;
+    flex: 5;
 `;
 
-export const TableHeaderContainer = styled.div<{ hideBottomBorder?: boolean; inverseBorderGradient?: boolean }>`
+export const TableHeaderContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px;
-    border-bottom: ${(_props) => (_props?.hideBottomBorder === true ? '0px' : '')};
-    border-style: solid;
-    border-image: ${(_props) =>
-        _props.inverseBorderGradient == true
-            ? 'linear-gradient(100.41deg, #DA252F -0.79%, #5C2C3B 29.78%, #021630 47.85%, #0C99D0 75.56%, #02223E 110.04%) 1'
-            : `linear-gradient(268.11deg, #DA252F 0.03%, #5C2C3B 21.05%, #021630 41.08%, #0C99D0 71.72%, #02223E 104.1%) 1`};
+    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+    border-bottom: 0px;
     width: 100%;
 `;
 
-export const TableContainer = styled(TableHeaderContainer)`
-    min-height: 600px;
+export const TableContainer = styled(TableHeaderContainer)<{ isEmpty: boolean }>`
     flex-direction: column;
     justify-content: flex-start;
+    border: 2px solid ${(props) => props.theme.marchMadness.borderColor.secondary};
+    ${(props) => (props.isEmpty ? 'min-height: 450px;' : '')}
 `;
 
 export const TableHeader = styled.span`
+    color: #fff;
+    text-align: center;
+    font-family: ${(props) => props.theme.fontFamily.primary};
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 33px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
-    font-size: 20px;
-    font-weight: 400;
-    padding: 6px 0px;
-    font-family: 'NCAA' !important;
 `;
 
 export const Arrow = styled.i`
@@ -114,6 +125,10 @@ export const StickyRowTopTable = styled(TableRow)`
 `;
 
 export const PaginationWrapper = styled(TablePagination)`
+    * {
+        font-family: ${(props) => props.theme.fontFamily.primary};
+    }
+
     border: none !important;
     display: flex;
     width: 100%;

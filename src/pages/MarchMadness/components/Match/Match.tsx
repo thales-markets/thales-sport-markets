@@ -33,7 +33,7 @@ const Match: React.FC<MatchProps> = ({
     const { t } = useTranslation();
 
     const isBracketsLeftSide = useMemo(
-        () => isMatchInRegion(matchData.id, 'South') || isMatchInRegion(matchData.id, 'East'),
+        () => isMatchInRegion(matchData.id, 'East') || isMatchInRegion(matchData.id, 'West'),
         [matchData.id]
     );
 
@@ -234,7 +234,7 @@ const TeamRow = styled.div<{
     isDefault: boolean;
     isSelected: boolean;
 }>`
-    opacity: ${(props) => (!props.isDefault && !props.isSelected ? '0.2' : '1')};
+    opacity: ${(props) => (!props.isDefault && !props.isSelected ? '0.5' : '1')};
     background: ${(props) => props.theme.marchMadness.button.background.primary};
     border: ${(props) =>
         !props.isDefault && !props.isSelected
@@ -327,10 +327,6 @@ const TeamName = styled.div<{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    ${(props) =>
-        props.hasName && props.isBracketsLocked && props.isSelected && props.isWon === false
-            ? `text-decoration: line-through ${props.theme.marchMadness.status.wrong};`
-            : ''}
 `;
 
 export default Match;

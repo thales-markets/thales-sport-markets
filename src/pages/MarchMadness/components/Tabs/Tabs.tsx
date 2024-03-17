@@ -3,10 +3,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getIsWalletConnected } from 'redux/modules/wallet';
+import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { getIsMintingStarted } from 'utils/marchMadness';
+import { getIsMintingStarted, isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { history } from 'utils/routes';
 
 export enum MarchMadTabs {
@@ -25,6 +25,7 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
     const location = useLocation();
 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const tabClickHandler = (tab: MarchMadTabs) => {
         if (tab === MarchMadTabs.BRACKETS && !isWalletConnected) {
@@ -40,6 +41,7 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
     };
 
     const isMintingStarted = getIsMintingStarted();
+    const isTabAvailable = isMarchMadnessAvailableForNetworkId(networkId) && isMintingStarted;
 
     return (
         <Container>
@@ -53,19 +55,19 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
             </Tab>
             <Tab
                 active={selectedTab === MarchMadTabs.BRACKETS}
-                isClickable={isWalletConnected && isMintingStarted}
-                onClick={() => isMintingStarted && tabClickHandler(MarchMadTabs.BRACKETS)}
+                isClickable={isWalletConnected && isTabAvailable}
+                onClick={() => isTabAvailable && tabClickHandler(MarchMadTabs.BRACKETS)}
             >
                 {t('march-madness.tabs.brackets')}
-                <ComingSoon>soon</ComingSoon>
+                {!isMintingStarted && <ComingSoon>{t('march-madness.tabs.soon')}</ComingSoon>}
             </Tab>
             <Tab
                 active={selectedTab === MarchMadTabs.LEADERBOARD}
-                isClickable={isMintingStarted}
-                onClick={() => isMintingStarted && tabClickHandler(MarchMadTabs.LEADERBOARD)}
+                isClickable={isTabAvailable}
+                onClick={() => isTabAvailable && tabClickHandler(MarchMadTabs.LEADERBOARD)}
             >
                 {t('march-madness.tabs.leaderboard')}
-                <ComingSoon>soon</ComingSoon>
+                {!isMintingStarted && <ComingSoon>{t('march-madness.tabs.soon')}</ComingSoon>}
             </Tab>
         </Container>
     );
