@@ -1355,6 +1355,13 @@
             "pool-size": "Tamaño del premio acumulado",
             "live-stats": "Estadísticas en vivo",
             "brackets-minted": "Soportes acuñados"
+        },
+        "side-leaderboard": {
+            "title": "locura de Marzo",
+            "points": "Puntos",
+            "rewards": "Recompensas",
+            "points-leaderboard": "Tabla de clasificación de puntos",
+            "bracket-id": "ID de soporte"
         }
     },
     "promotions": {

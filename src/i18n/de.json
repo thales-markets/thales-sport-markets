@@ -1355,6 +1355,13 @@
             "live-stats": "Live-Statistiken",
             "pool-size": "Größe des Preispools",
             "brackets-minted": "Klammern geprägt"
+        },
+        "side-leaderboard": {
+            "title": "März-Wahnsinn",
+            "points-leaderboard": "Punkte-Rangliste",
+            "points": "Punkte",
+            "bracket-id": "Klammer-ID",
+            "rewards": "Belohnung"
         }
     },
     "promotions": {

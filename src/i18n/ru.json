@@ -1355,6 +1355,13 @@
             "pool-size": "Размер призового фонда",
             "live-stats": "Текущая статистика",
             "brackets-minted": "Кронштейны отчеканены"
+        },
+        "side-leaderboard": {
+            "title": "мартовское безумие",
+            "points-leaderboard": "Таблица лидеров по очкам",
+            "points": "Точки",
+            "rewards": "Награды",
+            "bracket-id": "Идентификатор кронштейна"
         }
     },
     "promotions": {

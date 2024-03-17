@@ -1355,6 +1355,13 @@
             "brackets-minted": "วงเล็บมิ้นต์",
             "live-stats": "สถิติสด",
             "pool-size": "ขนาดพูลรางวัล"
+        },
+        "side-leaderboard": {
+            "rewards": "รางวัล",
+            "points-leaderboard": "ลีดเดอร์บอร์ดคะแนน",
+            "bracket-id": "รหัสวงเล็บ",
+            "points": "คะแนน",
+            "title": "มีนาคมบ้า"
         }
     },
     "promotions": {

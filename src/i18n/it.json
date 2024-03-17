@@ -1355,6 +1355,13 @@
             "live-stats": "Statistiche in tempo reale",
             "pool-size": "Dimensioni del montepremi",
             "brackets-minted": "Staffe coniate"
+        },
+        "side-leaderboard": {
+            "bracket-id": "ID della staffa",
+            "rewards": "Premi",
+            "points-leaderboard": "Classifica punti",
+            "title": "la follia di marzo",
+            "points": "Punti"
         }
     },
     "promotions": {

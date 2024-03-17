@@ -1355,6 +1355,13 @@
             "brackets-minted": "铸造括号",
             "live-stats": "实时统计",
             "pool-size": "奖池大小"
+        },
+        "side-leaderboard": {
+            "title": "疯狂三月",
+            "points": "积分",
+            "bracket-id": "支架编号",
+            "rewards": "奖励",
+            "points-leaderboard": "积分排行榜"
         }
     },
     "promotions": {

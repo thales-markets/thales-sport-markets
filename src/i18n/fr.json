@@ -1355,6 +1355,13 @@
             "live-stats": "Statistiques en direct",
             "brackets-minted": "Supports frappés",
             "pool-size": "Taille de la cagnotte"
+        },
+        "side-leaderboard": {
+            "points-leaderboard": "Classement des points",
+            "points": "Points",
+            "bracket-id": "ID du support",
+            "title": "La folie de mars",
+            "rewards": "Récompenses"
         }
     },
     "promotions": {

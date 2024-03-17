@@ -746,7 +746,7 @@ const Brackets: React.FC = () => {
             );
             return leaderboardData ? leaderboardData.rank : 0;
         }
-        return 0;
+        return undefined;
     }, [leaderboardByGuessedGamesQuery.data, leaderboardByGuessedGamesQuery.isSuccess, selectedBracketId]);
 
     const getMyStats = () => {
@@ -764,7 +764,7 @@ const Brackets: React.FC = () => {
                     <StatsRow justify="normal">
                         <StatsText lineHeight={16}>{t('march-madness.brackets.stats.bracket')}:</StatsText>
                         <StatsText margin="0 15px 0 auto" fontWeight={700}>
-                            {isBracketsLocked && !rankByGames
+                            {isBracketsLocked && rankByGames === 0
                                 ? t('march-madness.brackets.stats.duplicate')
                                 : isStatusComplete
                                 ? t('march-madness.brackets.stats.complete')
