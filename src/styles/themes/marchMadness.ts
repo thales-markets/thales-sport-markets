@@ -3,6 +3,12 @@ import darkTheme from './dark';
 
 export default {
     ...darkTheme,
+    fontFamily: {
+        ...darkTheme.fontFamily,
+        primary: "'Geogrotesque' !important",
+        secondary: "'GeogrotesqueReg' !important",
+        tertiary: "'Legacy' !important",
+    },
     background: {
         ...darkTheme.background,
         primary: Colors.BLACK_GRADIENT_1,
@@ -19,16 +25,9 @@ export default {
     },
     input: {
         ...darkTheme.input,
-        background: {
-            ...darkTheme.input.background,
-            primary: Colors.ORANGE_MARCH_MADNESS,
-        },
-        textColor: {
-            ...darkTheme.input.textColor,
-            primary: Colors.WHITE,
-        },
         borderColor: {
             ...darkTheme.input.borderColor,
+            primary: Colors.ORANGE_MARCH_MADNESS,
             tertiary: Colors.ORANGE_MARCH_MADNESS,
             focus: {
                 primary: Colors.ORANGE_MARCH_MADNESS,
@@ -54,7 +53,7 @@ export default {
         },
         borderColor: {
             primary: Colors.BLUE_GRADIENT_1,
-            secondary: '',
+            secondary: Colors.GRAY_SECOND,
             tertiary: Colors.WHITE,
             quaternary: Colors.BLUE_DARK,
             quinary: Colors.GRAY_GRADIENT_5,
@@ -82,6 +81,9 @@ export default {
                 tertiary: Colors.BLACK,
             },
         },
+        dropdown: {
+            textColor: { primary: Colors.WHITE },
+        },
         link: {
             textColor: {
                 primary: Colors.WHITE,
@@ -90,7 +92,7 @@ export default {
         },
         shadow: {
             modal: `0px 0px 59px 11px ${Colors.GRAY_DARK}`,
-            image: `0px 0px 100px -2px ${Colors.PURPLE_GRADIENT_1}`,
+            image: `0px 0px 50px ${Colors.PURPLE_GRADIENT_1}`,
         },
         status: {
             notSelected: Colors.BLACK,

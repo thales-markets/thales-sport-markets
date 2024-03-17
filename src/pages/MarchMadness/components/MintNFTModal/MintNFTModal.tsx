@@ -1,160 +1,61 @@
-import nftImage from 'assets/images/march-madness/march-madness-nft.svg';
-import nftBackground from 'assets/images/march-madness/mm-nft-background.svg';
-import Button from 'components/Button';
-import ROUTES from 'constants/routes';
-import { TAGS_LIST } from 'constants/tags';
-import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
-import { TAGS_FLAGS } from 'enums/tags';
+import nftImage from 'assets/images/march-madness/march-madness-nft.png';
+import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import React, { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import styled, { useTheme } from 'styled-components';
+import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
-import { buildHref } from 'utils/routes';
+import { Share } from '../Brackets/styled-components';
 
 type MintNFTModalProps = {
-    isMinted: boolean;
-    isMinting: boolean;
-    isUpdated: boolean;
-    isUpdating: boolean;
-    isError: boolean;
-    handleSubmit: () => void;
+    isUpdate: boolean;
+    bracketId: number;
     handleClose: () => void;
+    onTwitterIconClick: () => void;
 };
 
-const MintNFTModal: React.FC<MintNFTModalProps> = ({
-    isMinted,
-    isMinting,
-    isUpdated,
-    isUpdating,
-    handleSubmit,
-    handleClose,
-}) => {
+const MintNFTModal: React.FC<MintNFTModalProps> = ({ isUpdate, bracketId, handleClose, onTwitterIconClick }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-    const [isUpdate] = useState(isMinted);
-    const [isMintedInModal, setIsMintedInModal] = useState(isMinted);
+    const [selectedBracketId, setSelectedBracketId] = useState(bracketId);
 
     useEffect(() => {
-        if (isMinted) {
-            setIsMintedInModal(true);
-        }
-    }, [isMinted]);
-
-    const NCAABasketballLink =
-        ROUTES.Markets.Home +
-        '?globalFilter=' +
-        GlobalFiltersEnum.OpenMarkets +
-        '&sport=' +
-        SportFilterEnum.Basketball +
-        '&tag=' +
-        TAGS_LIST.find((tag) => tag.id === TAGS_FLAGS.NCAA_BASKETBALL)?.label;
+        setSelectedBracketId(bracketId);
+    }, [bracketId]);
 
     return (
         <ReactModal isOpen shouldCloseOnOverlayClick={true} onRequestClose={handleClose} style={getCustomStyle(theme)}>
-            {isImageLoaded && (
-                <Container>
-                    <Wrapper>
-                        <CloseIcon className={`icon icon--close`} onClick={handleClose} />
-                        <TextWrapper>
-                            <Text fontSize={50} lineHeight={60} letterSpacing={2} margin="30px 0 0 0">
-                                {isMintedInModal
-                                    ? isUpdated
-                                        ? t('march-madness.brackets.modal-mint.finish-text-1-success')
-                                        : isUpdate
-                                        ? t('march-madness.brackets.modal-mint.update-text-1')
-                                        : t('march-madness.brackets.modal-mint.finish-text-1-success')
-                                    : t('march-madness.brackets.modal-mint.finish-text-1')}
-                            </Text>
-                            <Text
-                                margin={
-                                    isMintedInModal
-                                        ? isUpdated
-                                            ? '-10px 0 0 0'
-                                            : isUpdate
-                                            ? '65px 0 0 0'
-                                            : '-10px 0 0 0'
-                                        : '70px 0 0 0'
-                                }
-                            >
-                                {isMintedInModal ? (
-                                    isUpdated ? (
-                                        t('march-madness.brackets.modal-mint.update-text-2-success')
-                                    ) : isUpdate ? (
-                                        t('march-madness.brackets.modal-mint.update-text-2')
-                                    ) : (
-                                        t('march-madness.brackets.modal-mint.finish-text-2-success')
-                                    )
-                                ) : (
-                                    <Trans i18nKey="march-madness.brackets.modal-mint.finish-text-2" />
-                                )}
-                            </Text>
-                        </TextWrapper>
-                        {((isMintedInModal && !isUpdate) || isUpdated) && (
-                            <NFTImageWrapper>
-                                <NftImage alt="March Madness NFT" src={nftImage} />
-                            </NFTImageWrapper>
-                        )}
-                        {(!isMintedInModal || isUpdate) && !isUpdated && (
-                            <ButtonWrapper>
-                                <Button
-                                    additionalStyles={{
-                                        fontFamily: "'NCAA' !important",
-                                        fontSize: '30px',
-                                        lineHeight: '35px',
-                                        letterSpacing: '2px',
-                                        color: theme.marchMadness.button.textColor.tertiary,
-                                        textTransform: 'uppercase',
-                                        background: theme.marchMadness.button.background.primary,
-                                        border: 'none',
-                                        borderRadius: '0',
-                                        width: '314px',
-                                        height: '44px',
-                                        padding: '3px 10px',
-                                    }}
-                                    disabled={isMinting || isUpdating}
-                                    onClick={handleSubmit}
-                                >
-                                    {isMintedInModal
-                                        ? isUpdating
-                                            ? t('march-madness.brackets.modal-mint.button-updating')
-                                            : t('march-madness.brackets.modal-mint.button-update')
-                                        : isMinting
-                                        ? t('march-madness.brackets.modal-mint.button-minting')
-                                        : t('march-madness.brackets.modal-mint.button-mint')}
-                                </Button>
-                            </ButtonWrapper>
-                        )}
-                        {!isMintedInModal && !isUpdate && (
-                            <TextInfo>{t('march-madness.brackets.modal-mint.finish-info')}</TextInfo>
-                        )}
-                        {((isMintedInModal && !isUpdate) || isUpdated) && (
-                            <Text margin="40px 0">
-                                <Trans
-                                    i18nKey="march-madness.brackets.modal-mint.finish-text-3-success"
-                                    components={{
-                                        marketsLink: (
-                                            <Link
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                href={buildHref(NCAABasketballLink)}
-                                            />
-                                        ),
-                                    }}
-                                />
-                            </Text>
-                        )}
-                    </Wrapper>
-                </Container>
-            )}
-            <img
-                alt="Wait to load"
-                src={nftBackground}
-                style={{ display: 'none' }}
-                onLoad={() => setIsImageLoaded(true)}
-            />
+            <Container>
+                <CloseIcon className={`icon icon--close`} onClick={handleClose} />
+                <TextWrapper>
+                    <TextHeader>{t('march-madness.brackets.modal-mint.hedaer')}</TextHeader>
+                    <Text>
+                        {isUpdate
+                            ? t('march-madness.brackets.modal-mint.update-text')
+                            : t('march-madness.brackets.modal-mint.mint-text')}
+                    </Text>
+                    <Text></Text>
+                </TextWrapper>
+                <NFTImageWrapper>
+                    <BracketText>
+                        {t('march-madness.brackets.bracket-id', {
+                            id: selectedBracketId >= 0 ? selectedBracketId : '...',
+                        })}
+                    </BracketText>
+                    <NftImage alt="March Madness NFT" src={nftImage} />
+                </NFTImageWrapper>
+                <ShareWrapper>
+                    <ShareCont onClick={onTwitterIconClick} marginTop={0}>
+                        <TwitterIcon padding="0 0 8px 0" />
+                        {t('march-madness.brackets.share')}
+                    </ShareCont>
+                </ShareWrapper>
+                <Text>{t('march-madness.brackets.modal-mint.footer-text')}</Text>
+
+                <GoBack onClick={handleClose}>{t('march-madness.brackets.modal-mint.back')}</GoBack>
+            </Container>
         </ReactModal>
     );
 };
@@ -181,28 +82,16 @@ const getCustomStyle = (theme: ThemeInterface) => ({
     },
 });
 
-const Container = styled.div`
+const Container = styled(FlexDivColumnCentered)`
+    align-items: center;
     width: 690px;
-    background: linear-gradient(
-        284.91deg,
-        #da252f -3.75%,
-        #5c2c3b 11.81%,
-        #021630 33.38%,
-        #0c99d0 66.39%,
-        #02223e 98.43%
-    );
+    background: ${(props) => props.theme.marchMadness.background.primary};
     border: 3px solid ${(props) => props.theme.marchMadness.borderColor.quaternary};
     border-radius: 8px;
-`;
-
-const Wrapper = styled.div`
-    width: 100%;
-    height: 100%;
-    background: url('${nftBackground}');
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @media (max-width: 575px) {
+        width: 100%;
+        padding: 5px;
+    }
 `;
 
 const CloseIcon = styled.i`
@@ -212,74 +101,96 @@ const CloseIcon = styled.i`
     font-size: 15px;
     cursor: pointer;
     color: ${(props) => props.theme.marchMadness.textColor.primary};
+    @media (max-width: 575px) {
+        top: 12px;
+        right: 12px;
+    }
 `;
 
 const TextWrapper = styled.div`
-    width: 575px;
     display: flex;
     flex-direction: column;
     align-items: center;
 `;
 
-const Text = styled.span<{ fontSize?: number; lineHeight?: number; letterSpacing?: number; margin?: string }>`
-    font-family: 'NCAA' !important;
+const Text = styled.span`
+    font-family: ${(props) => props.theme.fontFamily.secondary};
     font-style: normal;
     font-weight: 400;
-    font-size: ${(props) => (props.fontSize ? props.fontSize : 30)}px;
-    line-height: ${(props) => (props.lineHeight ? props.lineHeight : 40)}px;
-    letter-spacing: ${(props) => (props.letterSpacing ? props.letterSpacing : -1)}px;
-    ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+    font-size: 20px;
+    line-height: 30px;
     text-align: center;
     color: ${(props) => props.theme.marchMadness.textColor.primary};
+    @media (max-width: 575px) {
+        font-size: 16px;
+        line-height: 20px;
+    }
 `;
 
-const TextInfo = styled.span`
-    font-family: 'Oswald' !important;
-    font-style: normal;
-    font-weight: 400;
+const TextHeader = styled(Text)`
+    font-family: ${(props) => props.theme.fontFamily.tertiary};
+    font-size: 40px;
+    line-height: 60px;
+    letter-spacing: 2px;
+    color: ${(props) => props.theme.marchMadness.textColor.senary};
+    text-shadow: ${(props) => props.theme.marchMadness.shadow.image};
+    margin-top: 30px;
+    @media (max-width: 575px) {
+        font-size: 30px;
+        margin-top: 10px;
+    }
+`;
+
+const BracketText = styled(Text)`
     font-size: 16px;
-    line-height: 20px;
-    color: ${(props) => props.theme.marchMadness.textColor.primary};
-    margin: 0 25px 35px 25px;
+    color: ${(props) => props.theme.marchMadness.textColor.senary};
 `;
 
-const BorderGradient = styled.div`
-    background: linear-gradient(270deg, #da252f -3.75%, #5c2c3b 11.81%, #021630 33.38%, #0c99d0 66.39%, #02223e 98.43%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+const NFTImageWrapper = styled(FlexDivColumnCentered)`
+    margin: 20px 0 30px 0;
+    border-radius: 4px;
+    @media (max-width: 575px) {
+        margin: 20px 0;
+    }
 `;
 
 const NftImage = styled.img`
-    width: 337px;
-    height: 468px;
-`;
-
-const NFTImageWrapper = styled(BorderGradient)`
-    width: 347px;
-    height: 478px;
-    margin-top: 20px;
-    box-shadow: ${(props) => props.theme.marchMadness.shadow.image};
-`;
-
-const ButtonWrapper = styled(BorderGradient)`
-    width: 320px;
-    height: 50px;
-    margin-top: 140px;
-    margin-bottom: 50px;
-`;
-
-const Link = styled.a`
-    font-family: 'NCAA' !important;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 40px;
-    text-decoration: underline;
-    color: ${(props) => props.theme.marchMadness.link.textColor.primary};
-    :hover {
-        color: ${(props) => props.theme.marchMadness.link.textColor.secondary};
+    @media (max-width: 575px) {
+        width: 230px;
+        height: 230px;
     }
+`;
+
+const GoBack = styled(FlexDivCentered)`
+    font-family: ${(props) => props.theme.fontFamily.primary};
+    width: 281px;
+    height: 32px;
+    background: ${(props) => props.theme.marchMadness.background.senary};
+    border-radius: 4px;
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
+    cursor: pointer;
+    margin: 10px 0 30px 0;
+    @media (max-width: 575px) {
+        margin: 10px 0 20px 0;
+    }
+`;
+
+const ShareWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 10px;
+`;
+
+const ShareCont = styled(Share)`
+    font-family: ${(props) => props.theme.fontFamily.primary};
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.marchMadness.textColor.primary};
+    cursor: pointer;
 `;
 
 export default MintNFTModal;

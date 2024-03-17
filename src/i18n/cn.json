@@ -1201,7 +1201,8 @@
         "tabs": {
             "leaderboard": "排行榜",
             "home": "家",
-            "brackets": "括号"
+            "brackets": "括号",
+            "soon": "很快"
         },
         "home": {
             "text-3c": "精英八强 - 7%",
@@ -1246,7 +1247,8 @@
             "comp-rules-0": "括号铸币将于周日选拔赛结束且第一轮赛程已知后（世界标准时间 3 月 18 日上旬）开始。",
             "comp-rules-0-a": "括号铸造将持续到 3 月 21 日第一轮比赛开始。",
             "time-info-a": "直到支架铸造开始",
-            "volume-incetives-4": "March Madness 交易者还有资格参加 STIP 计划每周 2,500 ARB 的连本带利竞赛和每两周 10,000 ARB 的连续交易量奖励。访问<p>此促销页面</p>获取更多信息。"
+            "volume-incetives-4": "March Madness 交易者还有资格参加 STIP 计划每周 2,500 ARB 的连本带利竞赛和每两周 10,000 ARB 的连续交易量奖励。访问<p>此促销页面</p>获取更多信息。",
+            "button-switch": "切换到仲裁"
         },
         "leaderboard": {
             "bonus-volume": "奖金",
@@ -1266,7 +1268,10 @@
             "base-volume": "根据",
             "rank": "秩",
             "tooltip-correct-correct-table": "您所在组中猜对的游戏数量",
-            "tooltip-rewards-volume-table": "10,000 OP（Arbitrum 为 30,000 THALES）将根据数量按比例分配"
+            "tooltip-rewards-volume-table": "10,000 OP（Arbitrum 为 30,000 THALES）将根据数量按比例分配",
+            "bracket-id": "支架编号",
+            "by-volume": "批量奖励",
+            "my-rewards-bracket": "您最好的支架"
         },
         "brackets": {
             "stats": {
@@ -1280,7 +1285,8 @@
                 "incomplete": "不完整",
                 "complete": "完全的",
                 "total-points": "我的总积分",
-                "rank": "秩"
+                "rank": "秩",
+                "duplicate": "重复的"
             },
             "modal-mint": {
                 "button-updating": "更新中...",
@@ -1295,7 +1301,13 @@
                 "update-text-2-success": "您的疯狂三月支架 NFT 已更新！",
                 "button-mint": "像NFT一样",
                 "finish-text-1": "做得好！",
-                "finish-text-2-success": "您刚刚铸造了疯狂三月支架！"
+                "finish-text-2-success": "您刚刚铸造了疯狂三月支架！",
+                "footer-text": "前往 <marketsLink>NCAAB 市场</marketsLink> 并开始赚取奖励！",
+                "hedaer": "恭喜！",
+                "footer-info": "*疯狂三月括号NFT是一种加时NFT，允许持有者通过创建自己的预测锦标赛括号来参与加时疯狂三月活动。",
+                "update-text": "您的疯狂三月支架 NFT 已更新！",
+                "mint-text": "您刚刚铸造了疯狂三月支架！",
+                "back": "返回括号页面"
             },
             "modal-share": {
                 "header": "我的最后 4 个选择",
@@ -1321,7 +1333,13 @@
             "my-brackets": "我的括号",
             "clear-all": "全部清除",
             "create-as": "新建为...",
-            "submit-info": "*铸造价格{{value}}"
+            "submit-info": "*铸造价格{{value}}",
+            "submit-progress": "铸币...",
+            "keep-current": "保留当前选择",
+            "create-new": "创建新的",
+            "submit-modify-progress": "更新中...",
+            "update-message": "支架更新成功",
+            "random": "随机的"
         },
         "regions": {
             "west": "西方",
@@ -1332,7 +1350,19 @@
         "test-info": "2022 年团队测试阶段现已开放，2023 年选拔将于 3 月 12 日开放！",
         "back-to-markets": "回到市场",
         "mobile-message": "页面仅在较大的屏幕上可用。请使用桌面版！",
-        "header-button-tooltip": "仅在 Arbitrum 网络上可用。"
+        "header-button-tooltip": "仅在 Arbitrum 网络上可用。",
+        "stats": {
+            "brackets-minted": "铸造括号",
+            "live-stats": "实时统计",
+            "pool-size": "奖池大小"
+        },
+        "side-leaderboard": {
+            "title": "疯狂三月",
+            "points": "积分",
+            "bracket-id": "支架编号",
+            "rewards": "奖励",
+            "points-leaderboard": "积分排行榜"
+        }
     },
     "promotions": {
         "nav-items": {

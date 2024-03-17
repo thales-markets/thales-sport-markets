@@ -1201,7 +1201,8 @@
         "tabs": {
             "brackets": "Supports",
             "home": "Maison",
-            "leaderboard": "Classement"
+            "leaderboard": "Classement",
+            "soon": "bientôt"
         },
         "home": {
             "text-3f": "Premier tour - 1%",
@@ -1246,7 +1247,8 @@
             "comp-rules-0": "La frappe des brackets commencera une fois la sélection dimanche terminée et le calendrier du 1er tour connu, début le 18 mars UTC.",
             "comp-rules-0-a": "La frappe des brackets durera jusqu'au début des matchs du 1er tour le 21 mars.",
             "time-info-a": "Jusqu'au début de la frappe des brackets",
-            "volume-incetives-4": "Les traders de March Madness sont également éligibles à 2 500 ARB par semaine de compétition Parlay et à 10 000 ARB toutes les deux semaines de récompenses de volume directes du programme STIP. Visite<p> cette page de promotion</p> pour des informations complémentaires."
+            "volume-incetives-4": "Les traders de March Madness sont également éligibles à 2 500 ARB par semaine de compétition Parlay et à 10 000 ARB toutes les deux semaines de récompenses de volume directes du programme STIP. Visite<p> cette page de promotion</p> pour des informations complémentaires.",
+            "button-switch": "Passer à l'arbitrage"
         },
         "leaderboard": {
             "rewards": "Récompenses",
@@ -1266,7 +1268,10 @@
             "owner": "Propriétaire",
             "tooltip-rewards-correct-table": "3 000 OP (10 000 THALES sur Arbitrum) seront répartis entre les 10 premiers",
             "rank": "Rang",
-            "my-rewards": "Mes récompenses"
+            "my-rewards": "Mes récompenses",
+            "bracket-id": "ID du support",
+            "by-volume": "Récompenses de volume",
+            "my-rewards-bracket": "Votre meilleure tranche"
         },
         "brackets": {
             "stats": {
@@ -1280,7 +1285,8 @@
                 "total-points": "Mon total de points",
                 "bracket": "Support",
                 "complete": "Complet",
-                "rank": "Rang"
+                "rank": "Rang",
+                "duplicate": "Dupliqué"
             },
             "modal-mint": {
                 "update-text-1": "Bien fait!",
@@ -1295,7 +1301,13 @@
                 "finish-info": "*Le support NFT March Madness est un NFT Overtime qui permet aux détenteurs de participer à la campagne Overtime March Madness en créant leur propre support de tournoi de pronostics.",
                 "button-update": "Mettre à jour le support",
                 "button-mint": "Comme NFT",
-                "finish-text-1-success": "Toutes nos félicitations!"
+                "finish-text-1-success": "Toutes nos félicitations!",
+                "footer-info": "*Le support NFT March Madness est un NFT Overtime qui permet aux détenteurs de participer à la campagne Overtime March Madness en créant leur propre support de tournoi de pronostics.",
+                "hedaer": "Toutes nos félicitations!",
+                "footer-text": "Rendez-vous sur les <marketsLink>marchés NCAAB</marketsLink> et commencez à gagner des récompenses !",
+                "mint-text": "Vous venez de créer votre support March Madness !",
+                "update-text": "Votre bracket NFT March Madness a été mis à jour !",
+                "back": "Revenir à la page des parenthèses"
             },
             "modal-share": {
                 "header": "Mes 4 derniers choix",
@@ -1321,7 +1333,13 @@
             "bracket-id": "Numéro d'identification du support {{id}}",
             "create-as": "Créer nouveau en tant que...",
             "clear-all": "Tout effacer",
-            "submit-info": "*prix de frappe {{value}}"
+            "submit-info": "*prix de frappe {{value}}",
+            "create-new": "Créer un nouveau",
+            "submit-modify-progress": "Mise à jour...",
+            "submit-progress": "Frappe...",
+            "keep-current": "Conserver la sélection actuelle",
+            "update-message": "Support mis à jour avec succès",
+            "random": "aléatoire"
         },
         "regions": {
             "south": "Sud",
@@ -1332,7 +1350,19 @@
         "back-to-markets": "Retour aux marchés",
         "mobile-message": "La page n'est disponible que sur des écrans plus grands. Veuillez utiliser la version de bureau !",
         "test-info": "La phase de tests est désormais ouverte avec les équipes 2022, la sélection 2023 s'ouvre le 12 mars !",
-        "header-button-tooltip": "Uniquement disponible sur le réseau Arbitrum."
+        "header-button-tooltip": "Uniquement disponible sur le réseau Arbitrum.",
+        "stats": {
+            "live-stats": "Statistiques en direct",
+            "brackets-minted": "Supports frappés",
+            "pool-size": "Taille de la cagnotte"
+        },
+        "side-leaderboard": {
+            "points-leaderboard": "Classement des points",
+            "points": "Points",
+            "bracket-id": "ID du support",
+            "title": "La folie de mars",
+            "rewards": "Récompenses"
+        }
     },
     "promotions": {
         "nav-items": {
