@@ -1047,7 +1047,7 @@ const Brackets: React.FC = () => {
                         )}
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
-                                {t('march-madness.regions.south')}
+                                {t('march-madness.regions.east')}
                             </Region>
                             <LeftQuarter>
                                 <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_UPPER_LEFT_MATCH_IDS)}</FirstRound>
@@ -1070,7 +1070,7 @@ const Brackets: React.FC = () => {
                                 <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_UPPER_RIGHT_MATCH_IDS)}</FirstRound>
                             </RightQuarter>
                             <Region isSideLeft={false} isVertical={true}>
-                                {t('march-madness.regions.midwest')}
+                                {t('march-madness.regions.south')}
                             </Region>
                         </RowHalf>
                         <SemiFinals>
@@ -1158,7 +1158,7 @@ const Brackets: React.FC = () => {
 
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
-                                {t('march-madness.regions.east')}
+                                {t('march-madness.regions.west')}
                             </Region>
                             <LeftQuarter>
                                 <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_BOTTOM_LEFT_MATCH_IDS)}</FirstRound>
@@ -1181,7 +1181,7 @@ const Brackets: React.FC = () => {
                                 <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_BOTTOM_RIGHT_MATCH_IDS)}</FirstRound>
                             </RightQuarter>
                             <Region isSideLeft={false} isVertical={true}>
-                                {t('march-madness.regions.west')}
+                                {t('march-madness.regions.midwest')}
                             </Region>
                         </RowHalf>
                     </BracketsWrapper>
@@ -1189,40 +1189,40 @@ const Brackets: React.FC = () => {
                         <WildCardsHeader>{'Wild Cards'}</WildCardsHeader>
                         <WildCardsRow>
                             <Region isSideLeft={true} isVertical={false}>
-                                {t('march-madness.regions.south')}
+                                {t('march-madness.regions.west')}
                             </Region>
                             <WildCardMatch
                                 homeTeam={wildCardTeams[0].displayName}
                                 awayTeam={wildCardTeams[1].displayName}
-                                isHomeTeamWon={true}
+                                isHomeTeamWon={undefined}
                                 margin="0 2px 0 0"
                             />
                             <WildCardMatch
                                 homeTeam={wildCardTeams[4].displayName}
                                 awayTeam={wildCardTeams[5].displayName}
-                                isHomeTeamWon={false}
+                                isHomeTeamWon={undefined}
                             />
                             <Region isSideLeft={false} isVertical={false}>
-                                {t('march-madness.regions.midwest')}
+                                {t('march-madness.regions.south')}
                             </Region>
                         </WildCardsRow>
                         <WildCardsRow>
                             <Region isSideLeft={true} isVertical={false}>
-                                {t('march-madness.regions.east')}
+                                {t('march-madness.regions.midwest')}
                             </Region>
                             <WildCardMatch
                                 homeTeam={wildCardTeams[2].displayName}
                                 awayTeam={wildCardTeams[3].displayName}
-                                isHomeTeamWon={false}
+                                isHomeTeamWon={undefined}
                                 margin="0 2px 0 0"
                             />
                             <WildCardMatch
                                 homeTeam={wildCardTeams[6].displayName}
                                 awayTeam={wildCardTeams[7].displayName}
-                                isHomeTeamWon={true}
+                                isHomeTeamWon={undefined}
                             />
                             <Region isSideLeft={false} isVertical={false}>
-                                {t('march-madness.regions.west')}
+                                {t('march-madness.regions.midwest')}
                             </Region>
                         </WildCardsRow>
                     </WildCardsContainer>
