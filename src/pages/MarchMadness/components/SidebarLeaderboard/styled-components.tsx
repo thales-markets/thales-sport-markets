@@ -32,6 +32,7 @@ export const Title = styled(FlexDiv)`
     justify-content: center;
     margin: 10px 0 15px 0;
     flex-direction: column;
+    cursor: pointer;
 `;
 
 export const TitleLabel = styled.span<{ isBold?: boolean }>`
@@ -62,7 +63,6 @@ export const LeaderboardRow = styled(FlexDivRow)`
     height: 36px;
     flex: 0.2 1 1 1;
     align-items: center;
-    cursor: pointer;
     &.first {
         border-top: 2px solid ${(props) => props.theme.borderColor.primary};
         border-bottom: 2px solid ${(props) => props.theme.borderColor.primary};
