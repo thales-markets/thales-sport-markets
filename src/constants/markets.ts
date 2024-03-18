@@ -29,7 +29,7 @@ export const INCENTIVIZED_MARCH_MADNESS = {
     ids: [9005],
     startDate: new Date(Date.UTC(2023, 2, 18, 0, 0, 0)),
     endDate: new Date(Date.UTC(2024, 3, 9, 4, 0, 0)),
-    link: 'https://medium.com/@OvertimeMarkets.xyz/march-madness-on-overtime-37663de78d28',
+    link: 'https://www.overtimemarkets.xyz/promotions/march-madness-2024',
 };
 
 export const INCENTIVIZED_UEFA = {

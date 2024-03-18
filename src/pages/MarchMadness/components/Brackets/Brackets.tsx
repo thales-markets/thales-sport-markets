@@ -1128,10 +1128,12 @@ const Brackets: React.FC = () => {
                                             <SubmitInfo>
                                                 <SubmitInfoText>
                                                     {t('march-madness.brackets.submit-info', {
-                                                        value: formatCurrencyWithSign(
-                                                            USD_SIGN,
-                                                            marchMadnessData?.mintingPrice || '...'
-                                                        ),
+                                                        value: marchMadnessData
+                                                            ? formatCurrencyWithSign(
+                                                                  USD_SIGN,
+                                                                  marchMadnessData.mintingPrice
+                                                              )
+                                                            : '...',
                                                     })}
                                                 </SubmitInfoText>
                                             </SubmitInfo>
