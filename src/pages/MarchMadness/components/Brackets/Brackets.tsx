@@ -8,36 +8,37 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
     APPROVE_MULTIPLIER,
+    BUFFER_FOR_STABLES,
     DEFAULT_BRACKET_ID,
     DEFAULT_CONVERSION_BUFFER_PERCENTAGE,
     ELITE8_ROUND_BOTTOM_LEFT_MATCH_ID,
-    ELITE8_ROUND_MATCH_IDS,
-    ELITE8_ROUND_UPPER_RIGHT_MATCH_ID,
-    ELITE8_ROUND_UPPER_LEFT_MATCH_ID,
     ELITE8_ROUND_BOTTOM_RIGHT_MATCH_ID,
+    ELITE8_ROUND_MATCH_IDS,
+    ELITE8_ROUND_UPPER_LEFT_MATCH_ID,
+    ELITE8_ROUND_UPPER_RIGHT_MATCH_ID,
     FINAL_MATCH_ID,
     FIRST_ROUND_BOTTOM_LEFT_MATCH_IDS,
-    FIRST_ROUND_MATCH_IDS,
-    FIRST_ROUND_UPPER_RIGHT_MATCH_IDS,
-    FIRST_ROUND_UPPER_LEFT_MATCH_IDS,
     FIRST_ROUND_BOTTOM_RIGHT_MATCH_IDS,
+    FIRST_ROUND_MATCH_IDS,
+    FIRST_ROUND_UPPER_LEFT_MATCH_IDS,
+    FIRST_ROUND_UPPER_RIGHT_MATCH_IDS,
     MAX_POINTS_PER_ROUND,
     MAX_TOTAL_POINTS,
     NUMBER_OF_MATCHES,
     NUMBER_OF_ROUNDS,
     SECOND_ROUND_BOTTOM_LEFT_MATCH_IDS,
-    SECOND_ROUND_MATCH_IDS,
-    SECOND_ROUND_UPPER_RIGHT_MATCH_IDS,
-    SECOND_ROUND_UPPER_LEFT_MATCH_IDS,
     SECOND_ROUND_BOTTOM_RIGHT_MATCH_IDS,
+    SECOND_ROUND_MATCH_IDS,
+    SECOND_ROUND_UPPER_LEFT_MATCH_IDS,
+    SECOND_ROUND_UPPER_RIGHT_MATCH_IDS,
     SEMI_FINAL_MATCH_IDS,
-    SEMI_FINAL_UPPER_RIGHT_BOTTOM_RIGHT_MATCH_ID,
     SEMI_FINAL_UPPER_LEFT_BOTTOM_LEFT_MATCH_ID,
+    SEMI_FINAL_UPPER_RIGHT_BOTTOM_RIGHT_MATCH_ID,
     SWEET16_ROUND_BOTTOM_LEFT_MATCH_IDS,
-    SWEET16_ROUND_MATCH_IDS,
-    SWEET16_ROUND_UPPER_RIGHT_MATCH_IDS,
-    SWEET16_ROUND_UPPER_LEFT_MATCH_IDS,
     SWEET16_ROUND_BOTTOM_RIGHT_MATCH_IDS,
+    SWEET16_ROUND_MATCH_IDS,
+    SWEET16_ROUND_UPPER_LEFT_MATCH_IDS,
+    SWEET16_ROUND_UPPER_RIGHT_MATCH_IDS,
     initialBracketsData,
     wildCardTeams,
 } from 'constants/marchMadness';
@@ -60,6 +61,7 @@ import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 import {
     COLLATERAL_DECIMALS,
+    Coins,
     coinFormatter,
     coinParser,
     formatCurrencyWithSign,
@@ -211,6 +213,15 @@ const Brackets: React.FC = () => {
     const convertFromStable = useCallback(
         (value: number) => {
             if (isStableCurrency(selectedCollateral)) {
+                if (
+                    [
+                        CRYPTO_CURRENCY_MAP.USDC as Coins,
+                        CRYPTO_CURRENCY_MAP.DAI as Coins,
+                        CRYPTO_CURRENCY_MAP.USDT as Coins,
+                    ].includes(selectedCollateral)
+                ) {
+                    return value * (1 + BUFFER_FOR_STABLES);
+                }
                 return value;
             } else {
                 const rate = exchangeRates?.[selectedCollateral];
@@ -510,6 +521,10 @@ const Brackets: React.FC = () => {
                         if (isDefaultCollateral) {
                             tx = await marchMadnessContractWithSigner.mint(bracketsForContract);
                         } else {
+                            console.log(
+                                'convertFromStable(marchMadnessData.mintingPrice) ',
+                                convertFromStable(marchMadnessData.mintingPrice)
+                            );
                             const collateralAmount = coinParser(
                                 truncToDecimals(
                                     convertFromStable(marchMadnessData.mintingPrice),
@@ -519,6 +534,8 @@ const Brackets: React.FC = () => {
                                 selectedCollateral
                             );
 
+                            console.log('collateralAddress ', collateralAddress);
+                            console.log('bracketsForContract ', bracketsForContract);
                             tx = isEth
                                 ? await marchMadnessContractWithSigner.mintWithEth(bracketsForContract, {
                                       value: collateralAmount,
