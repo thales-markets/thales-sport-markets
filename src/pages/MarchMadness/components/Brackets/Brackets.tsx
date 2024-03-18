@@ -8,7 +8,6 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
     APPROVE_MULTIPLIER,
-    BUFFER_FOR_STABLES,
     DEFAULT_BRACKET_ID,
     DEFAULT_CONVERSION_BUFFER_PERCENTAGE,
     ELITE8_ROUND_BOTTOM_LEFT_MATCH_ID,
@@ -61,7 +60,6 @@ import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 import {
     COLLATERAL_DECIMALS,
-    Coins,
     coinFormatter,
     coinParser,
     formatCurrencyWithSign,
@@ -212,16 +210,7 @@ const Brackets: React.FC = () => {
 
     const convertFromStable = useCallback(
         (value: number) => {
-            if (isStableCurrency(selectedCollateral)) {
-                if (
-                    [
-                        CRYPTO_CURRENCY_MAP.USDC as Coins,
-                        CRYPTO_CURRENCY_MAP.DAI as Coins,
-                        CRYPTO_CURRENCY_MAP.USDT as Coins,
-                    ].includes(selectedCollateral)
-                ) {
-                    return value * (1 + BUFFER_FOR_STABLES);
-                }
+            if (isDefaultCollateral) {
                 return value;
             } else {
                 const rate = exchangeRates?.[selectedCollateral];
@@ -234,7 +223,7 @@ const Brackets: React.FC = () => {
                 return minimumNeededForConversion || convertedFromStable;
             }
         },
-        [selectedCollateral, exchangeRates, minimumNeededForConversion]
+        [selectedCollateral, exchangeRates, minimumNeededForConversion, isDefaultCollateral]
     );
 
     // set minimum needed for collateral conversion
@@ -521,10 +510,6 @@ const Brackets: React.FC = () => {
                         if (isDefaultCollateral) {
                             tx = await marchMadnessContractWithSigner.mint(bracketsForContract);
                         } else {
-                            console.log(
-                                'convertFromStable(marchMadnessData.mintingPrice) ',
-                                convertFromStable(marchMadnessData.mintingPrice)
-                            );
                             const collateralAmount = coinParser(
                                 truncToDecimals(
                                     convertFromStable(marchMadnessData.mintingPrice),
@@ -534,8 +519,6 @@ const Brackets: React.FC = () => {
                                 selectedCollateral
                             );
 
-                            console.log('collateralAddress ', collateralAddress);
-                            console.log('bracketsForContract ', bracketsForContract);
                             tx = isEth
                                 ? await marchMadnessContractWithSigner.mintWithEth(bracketsForContract, {
                                       value: collateralAmount,
@@ -1145,10 +1128,12 @@ const Brackets: React.FC = () => {
                                             <SubmitInfo>
                                                 <SubmitInfoText>
                                                     {t('march-madness.brackets.submit-info', {
-                                                        value: formatCurrencyWithSign(
-                                                            USD_SIGN,
-                                                            marchMadnessData?.mintingPrice || '...'
-                                                        ),
+                                                        value: marchMadnessData
+                                                            ? formatCurrencyWithSign(
+                                                                  USD_SIGN,
+                                                                  marchMadnessData.mintingPrice
+                                                              )
+                                                            : '...',
                                                     })}
                                                 </SubmitInfoText>
                                             </SubmitInfo>

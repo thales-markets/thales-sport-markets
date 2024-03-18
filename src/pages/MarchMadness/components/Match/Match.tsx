@@ -129,7 +129,7 @@ const Match: React.FC<MatchProps> = ({
                             <TeamStatus
                                 isSelected={!!isHomeTeamSelected}
                                 isWon={homeTeamWonStatus}
-                                margin="0 4px 0 0"
+                                margin="0 3px 0 0"
                             />
                         </>
                     ) : (
@@ -138,7 +138,7 @@ const Match: React.FC<MatchProps> = ({
                             <TeamStatus
                                 isSelected={!!isHomeTeamSelected}
                                 isWon={homeTeamWonStatus}
-                                margin="0 0 0 4px"
+                                margin="0 0 0 3px"
                             />
                             {getTeamName(true, false)}
                             <TeamPosition isLeftSide={false}>
@@ -182,7 +182,7 @@ const Match: React.FC<MatchProps> = ({
                             <TeamStatus
                                 isSelected={!!isAwayTeamSelected}
                                 isWon={awayTeamWonStatus}
-                                margin="0 4px 0 0"
+                                margin="0 3px 0 0"
                             />
                         </>
                     ) : (
@@ -191,7 +191,7 @@ const Match: React.FC<MatchProps> = ({
                             <TeamStatus
                                 isSelected={!!isAwayTeamSelected}
                                 isWon={awayTeamWonStatus}
-                                margin="0 0 0 4px"
+                                margin="0 0 0 3px"
                             />
                             {getTeamName(false, false)}
                             <TeamPosition isLeftSide={false}>

@@ -157,3 +157,7 @@ export const PaginationWrapper = styled(TablePagination)`
         }
     }
 `;
+
+export const WalletAddress = styled.span`
+    text-transform: lowercase;
+`;
