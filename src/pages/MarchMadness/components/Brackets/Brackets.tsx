@@ -521,10 +521,6 @@ const Brackets: React.FC = () => {
                         if (isDefaultCollateral) {
                             tx = await marchMadnessContractWithSigner.mint(bracketsForContract);
                         } else {
-                            console.log(
-                                'convertFromStable(marchMadnessData.mintingPrice) ',
-                                convertFromStable(marchMadnessData.mintingPrice)
-                            );
                             const collateralAmount = coinParser(
                                 truncToDecimals(
                                     convertFromStable(marchMadnessData.mintingPrice),
@@ -534,8 +530,6 @@ const Brackets: React.FC = () => {
                                 selectedCollateral
                             );
 
-                            console.log('collateralAddress ', collateralAddress);
-                            console.log('bracketsForContract ', bracketsForContract);
                             tx = isEth
                                 ? await marchMadnessContractWithSigner.mintWithEth(bracketsForContract, {
                                       value: collateralAmount,
