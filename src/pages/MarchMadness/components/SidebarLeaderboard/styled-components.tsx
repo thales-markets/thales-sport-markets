@@ -32,6 +32,7 @@ export const Title = styled(FlexDiv)`
     justify-content: center;
     margin: 10px 0 15px 0;
     flex-direction: column;
+    cursor: pointer;
 `;
 
 export const TitleLabel = styled.span<{ isBold?: boolean }>`
