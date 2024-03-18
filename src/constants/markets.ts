@@ -25,6 +25,13 @@ export const INCENTIVIZED_LEAGUE = {
     thalesRewards: '30,000 THALES',
 };
 
+export const INCENTIVIZED_MARCH_MADNESS = {
+    ids: [9005],
+    startDate: new Date(Date.UTC(2023, 2, 18, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 3, 9, 4, 0, 0)),
+    link: 'https://medium.com/@OvertimeMarkets.xyz/march-madness-on-overtime-37663de78d28',
+};
+
 export const INCENTIVIZED_UEFA = {
     ids: [9016, 9017, 19216],
     startDate: new Date(Date.UTC(2024, 1, 13, 0, 0, 0)),

@@ -3,7 +3,12 @@ import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_LEAGUE, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
+import {
+    INCENTIVIZED_LEAGUE,
+    INCENTIVIZED_MARCH_MADNESS,
+    INCENTIVIZED_NHL,
+    INCENTIVIZED_UEFA,
+} from 'constants/markets';
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
@@ -320,6 +325,37 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                     <IncentivizedLeague>
                                         <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
                                         {getNetworkLogo(NetworkId.Arbitrum)}
+                                    </IncentivizedLeague>
+                                }
+                            ></Tooltip>
+                        )}
+                    {INCENTIVIZED_MARCH_MADNESS.ids.includes(Number(market.tags[0])) &&
+                        new Date(market.maturityDate) > INCENTIVIZED_MARCH_MADNESS.startDate &&
+                        new Date(market.maturityDate) < INCENTIVIZED_MARCH_MADNESS.endDate && (
+                            <Tooltip
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.incentivized-tooltip-mm"
+                                        components={{
+                                            detailsLink: (
+                                                <a
+                                                    href={INCENTIVIZED_MARCH_MADNESS.link}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                />
+                                            ),
+                                        }}
+                                        values={{}}
+                                    />
+                                }
+                                component={
+                                    <IncentivizedLeague>
+                                        {networkId !== Network.Base ? (
+                                            <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        ) : (
+                                            ''
+                                        )}
+                                        {getNetworkLogo(networkId)}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
