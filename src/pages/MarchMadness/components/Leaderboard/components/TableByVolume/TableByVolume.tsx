@@ -160,7 +160,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                     <TableRowCell>{myScore[0].rank}</TableRowCell>
                     <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
                     <TableRowCell>{formatCurrencyWithKey(USD_SIGN, myScore[0].volume, 2)}</TableRowCell>
-                    <TableRowCell> {formatCurrencyWithKey(USD_SIGN, myScore[0].estimatedRewards, 2)}</TableRowCell>
+                    <TableRowCell> {formatCurrencyWithKey('ARB', myScore[0].estimatedRewards, 2)}</TableRowCell>
                 </StickyRow>
             );
         }
