@@ -1148,7 +1148,7 @@
         },
         "side-leaderboard": {
             "title": "March Madness",
-            "bracket-id": "Bracket ID",
+            "bracket-id": "Bracket",
             "points": "Points",
             "points-leaderboard": "Points Leaderboard",
             "rewards": "Rewards"

@@ -57,13 +57,13 @@ const SidebarMMLeaderboard: React.FC = () => {
                 </SPAAnchor>
                 <LeaderboardContainer>
                     <HeaderRow>
-                        <ColumnWrapper style={{ margin: '0 0 0 25px' }}>
+                        <ColumnWrapper style={{ margin: '0 0 0 25px' }} width={'20%'}>
                             <ColumnLabel>{t('march-madness.side-leaderboard.bracket-id')}</ColumnLabel>
                         </ColumnWrapper>
-                        <ColumnWrapper>
+                        <ColumnWrapper width={'20%'}>
                             <ColumnLabel>{t('march-madness.side-leaderboard.points')}</ColumnLabel>
                         </ColumnWrapper>
-                        <ColumnWrapper>
+                        <ColumnWrapper width={'40%'}>
                             <ColumnLabel>{t('march-madness.side-leaderboard.rewards')}</ColumnLabel>
                         </ColumnWrapper>
                     </HeaderRow>
@@ -79,15 +79,15 @@ const SidebarMMLeaderboard: React.FC = () => {
                                 <React.Fragment key={index}>
                                     <LeaderboardRow className={index == 0 ? 'first' : ''}>
                                         <Rank>{item.rank}</Rank>
-                                        <ColumnWrapper>
+                                        <ColumnWrapper width={'20%'}>
                                             <DataLabel title={`${item.bracketId}`} textAlign="center">
                                                 {`#${item.bracketId}`}
                                             </DataLabel>
                                         </ColumnWrapper>
-                                        <ColumnWrapper>
+                                        <ColumnWrapper width={'20%'}>
                                             <DataLabel textAlign="center">{formatCurrency(item.totalPoints)}</DataLabel>
                                         </ColumnWrapper>
-                                        <ColumnWrapper>
+                                        <ColumnWrapper width={'40%'}>
                                             <DataLabel textAlign={'left'}>
                                                 {getFormattedRewardsAmount(item.stableRewards, item.tokenRewards)}
                                             </DataLabel>
