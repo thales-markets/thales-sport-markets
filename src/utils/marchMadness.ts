@@ -99,8 +99,8 @@ export const getIsMintingStarted = () => Date.now() > START_MINTING_DATE;
 
 export const getFormattedRewardsAmount = (stableAmount: number, tokenAmount: number) => {
     if (!tokenAmount && !stableAmount) return 'N/A';
-    return `${formatCurrencyWithKey(USD_SIGN, stableAmount ? stableAmount : 0)} + ${formatCurrencyWithKey(
-        'ARB',
-        tokenAmount ? tokenAmount : 0
+    return ` ${formatCurrencyWithKey('ARB', tokenAmount ? tokenAmount : 0, 0, true)} + ${formatCurrencyWithKey(
+        USD_SIGN,
+        stableAmount ? stableAmount : 0
     )}`;
 };

@@ -10,34 +10,34 @@ import {
     APPROVE_MULTIPLIER,
     DEFAULT_BRACKET_ID,
     DEFAULT_CONVERSION_BUFFER_PERCENTAGE,
-    ELITE8_ROUND_EAST_MATCH_ID,
+    ELITE8_ROUND_BOTTOM_LEFT_MATCH_ID,
     ELITE8_ROUND_MATCH_IDS,
-    ELITE8_ROUND_MIDWEST_MATCH_ID,
-    ELITE8_ROUND_SOUTH_MATCH_ID,
-    ELITE8_ROUND_WEST_MATCH_ID,
+    ELITE8_ROUND_UPPER_RIGHT_MATCH_ID,
+    ELITE8_ROUND_UPPER_LEFT_MATCH_ID,
+    ELITE8_ROUND_BOTTOM_RIGHT_MATCH_ID,
     FINAL_MATCH_ID,
-    FIRST_ROUND_EAST_MATCH_IDS,
+    FIRST_ROUND_BOTTOM_LEFT_MATCH_IDS,
     FIRST_ROUND_MATCH_IDS,
-    FIRST_ROUND_MIDWEST_MATCH_IDS,
-    FIRST_ROUND_SOUTH_MATCH_IDS,
-    FIRST_ROUND_WEST_MATCH_IDS,
+    FIRST_ROUND_UPPER_RIGHT_MATCH_IDS,
+    FIRST_ROUND_UPPER_LEFT_MATCH_IDS,
+    FIRST_ROUND_BOTTOM_RIGHT_MATCH_IDS,
     MAX_POINTS_PER_ROUND,
     MAX_TOTAL_POINTS,
     NUMBER_OF_MATCHES,
     NUMBER_OF_ROUNDS,
-    SECOND_ROUND_EAST_MATCH_IDS,
+    SECOND_ROUND_BOTTOM_LEFT_MATCH_IDS,
     SECOND_ROUND_MATCH_IDS,
-    SECOND_ROUND_MIDWEST_MATCH_IDS,
-    SECOND_ROUND_SOUTH_MATCH_IDS,
-    SECOND_ROUND_WEST_MATCH_IDS,
+    SECOND_ROUND_UPPER_RIGHT_MATCH_IDS,
+    SECOND_ROUND_UPPER_LEFT_MATCH_IDS,
+    SECOND_ROUND_BOTTOM_RIGHT_MATCH_IDS,
     SEMI_FINAL_MATCH_IDS,
-    SEMI_FINAL_MIDWEST_WEST_MATCH_ID,
-    SEMI_FINAL_SOUTH_EAST_MATCH_ID,
-    SWEET16_ROUND_EAST_MATCH_IDS,
+    SEMI_FINAL_UPPER_RIGHT_BOTTOM_RIGHT_MATCH_ID,
+    SEMI_FINAL_UPPER_LEFT_BOTTOM_LEFT_MATCH_ID,
+    SWEET16_ROUND_BOTTOM_LEFT_MATCH_IDS,
     SWEET16_ROUND_MATCH_IDS,
-    SWEET16_ROUND_MIDWEST_MATCH_IDS,
-    SWEET16_ROUND_SOUTH_MATCH_IDS,
-    SWEET16_ROUND_WEST_MATCH_IDS,
+    SWEET16_ROUND_UPPER_RIGHT_MATCH_IDS,
+    SWEET16_ROUND_UPPER_LEFT_MATCH_IDS,
+    SWEET16_ROUND_BOTTOM_RIGHT_MATCH_IDS,
     initialBracketsData,
     wildCardTeams,
 } from 'constants/marchMadness';
@@ -663,14 +663,15 @@ const Brackets: React.FC = () => {
 
                 const isSecondRound = SECOND_ROUND_MATCH_IDS.includes(match.id);
                 const isSecondRoundLowerHalf = [
-                    ...SECOND_ROUND_EAST_MATCH_IDS,
-                    ...SECOND_ROUND_WEST_MATCH_IDS,
+                    ...SECOND_ROUND_BOTTOM_LEFT_MATCH_IDS,
+                    ...SECOND_ROUND_BOTTOM_RIGHT_MATCH_IDS,
                 ].includes(match.id);
 
                 const isSweet16 = SWEET16_ROUND_MATCH_IDS.includes(match.id);
-                const isSweet16LowerHalf = [...SWEET16_ROUND_EAST_MATCH_IDS, ...SWEET16_ROUND_WEST_MATCH_IDS].includes(
-                    match.id
-                );
+                const isSweet16LowerHalf = [
+                    ...SWEET16_ROUND_BOTTOM_LEFT_MATCH_IDS,
+                    ...SWEET16_ROUND_BOTTOM_RIGHT_MATCH_IDS,
+                ].includes(match.id);
 
                 const margin = isFirstRound
                     ? match.id === fromId
@@ -706,10 +707,10 @@ const Brackets: React.FC = () => {
     };
 
     const getMatchById = (id: number) => {
-        const isElite8UpperHalf = [ELITE8_ROUND_SOUTH_MATCH_ID, ELITE8_ROUND_MIDWEST_MATCH_ID].includes(id);
-        const isElite8LowerHalf = [ELITE8_ROUND_EAST_MATCH_ID, ELITE8_ROUND_WEST_MATCH_ID].includes(id);
-        const isSemiFinalLeft = id === SEMI_FINAL_SOUTH_EAST_MATCH_ID;
-        const isSemiFinalRight = id === SEMI_FINAL_MIDWEST_WEST_MATCH_ID;
+        const isElite8UpperHalf = [ELITE8_ROUND_UPPER_LEFT_MATCH_ID, ELITE8_ROUND_UPPER_RIGHT_MATCH_ID].includes(id);
+        const isElite8LowerHalf = [ELITE8_ROUND_BOTTOM_LEFT_MATCH_ID, ELITE8_ROUND_BOTTOM_RIGHT_MATCH_ID].includes(id);
+        const isSemiFinalLeft = id === SEMI_FINAL_UPPER_LEFT_BOTTOM_LEFT_MATCH_ID;
+        const isSemiFinalRight = id === SEMI_FINAL_UPPER_RIGHT_BOTTOM_RIGHT_MATCH_ID;
         const isFinal = id === FINAL_MATCH_ID;
 
         const margin = isElite8UpperHalf
@@ -746,7 +747,7 @@ const Brackets: React.FC = () => {
             );
             return leaderboardData ? leaderboardData.rank : 0;
         }
-        return 0;
+        return undefined;
     }, [leaderboardByGuessedGamesQuery.data, leaderboardByGuessedGamesQuery.isSuccess, selectedBracketId]);
 
     const getMyStats = () => {
@@ -764,7 +765,7 @@ const Brackets: React.FC = () => {
                     <StatsRow justify="normal">
                         <StatsText lineHeight={16}>{t('march-madness.brackets.stats.bracket')}:</StatsText>
                         <StatsText margin="0 15px 0 auto" fontWeight={700}>
-                            {isBracketsLocked && !rankByGames
+                            {isBracketsLocked && rankByGames === 0
                                 ? t('march-madness.brackets.stats.duplicate')
                                 : isStatusComplete
                                 ? t('march-madness.brackets.stats.complete')
@@ -925,16 +926,16 @@ const Brackets: React.FC = () => {
 
     const shareData: MatchProps[] = [
         {
-            matchData: bracketsData[SEMI_FINAL_SOUTH_EAST_MATCH_ID],
-            winnerTeamId: winnerTeamIds[SEMI_FINAL_SOUTH_EAST_MATCH_ID],
+            matchData: bracketsData[SEMI_FINAL_UPPER_LEFT_BOTTOM_LEFT_MATCH_ID],
+            winnerTeamId: winnerTeamIds[SEMI_FINAL_UPPER_LEFT_BOTTOM_LEFT_MATCH_ID],
             isBracketsLocked,
             isTeamLostInPreviousRounds,
             updateBrackets: () => {},
             height: MATCH_HEIGHT,
         },
         {
-            matchData: bracketsData[SEMI_FINAL_MIDWEST_WEST_MATCH_ID],
-            winnerTeamId: winnerTeamIds[SEMI_FINAL_MIDWEST_WEST_MATCH_ID],
+            matchData: bracketsData[SEMI_FINAL_UPPER_RIGHT_BOTTOM_RIGHT_MATCH_ID],
+            winnerTeamId: winnerTeamIds[SEMI_FINAL_UPPER_RIGHT_BOTTOM_RIGHT_MATCH_ID],
             isBracketsLocked,
             isTeamLostInPreviousRounds,
             updateBrackets: () => {},
@@ -1046,35 +1047,35 @@ const Brackets: React.FC = () => {
                         )}
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
-                                {t('march-madness.regions.south')}
+                                {t('march-madness.regions.east')}
                             </Region>
                             <LeftQuarter>
-                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_SOUTH_MATCH_IDS)}</FirstRound>
+                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_UPPER_LEFT_MATCH_IDS)}</FirstRound>
                                 <SecondRound isSideLeft={true}>
-                                    {getMatchesPerIdRange(SECOND_ROUND_SOUTH_MATCH_IDS)}
+                                    {getMatchesPerIdRange(SECOND_ROUND_UPPER_LEFT_MATCH_IDS)}
                                 </SecondRound>
                                 <Sweet16 isSideLeft={true}>
-                                    {getMatchesPerIdRange(SWEET16_ROUND_SOUTH_MATCH_IDS)}
+                                    {getMatchesPerIdRange(SWEET16_ROUND_UPPER_LEFT_MATCH_IDS)}
                                 </Sweet16>
-                                <Elite8 isSideLeft={true}>{getMatchById(ELITE8_ROUND_SOUTH_MATCH_ID)}</Elite8>
+                                <Elite8 isSideLeft={true}>{getMatchById(ELITE8_ROUND_UPPER_LEFT_MATCH_ID)}</Elite8>
                             </LeftQuarter>
                             <RightQuarter>
-                                <Elite8 isSideLeft={false}>{getMatchById(ELITE8_ROUND_MIDWEST_MATCH_ID)}</Elite8>
+                                <Elite8 isSideLeft={false}>{getMatchById(ELITE8_ROUND_UPPER_RIGHT_MATCH_ID)}</Elite8>
                                 <Sweet16 isSideLeft={false}>
-                                    {getMatchesPerIdRange(SWEET16_ROUND_MIDWEST_MATCH_IDS)}
+                                    {getMatchesPerIdRange(SWEET16_ROUND_UPPER_RIGHT_MATCH_IDS)}
                                 </Sweet16>
                                 <SecondRound isSideLeft={false}>
-                                    {getMatchesPerIdRange(SECOND_ROUND_MIDWEST_MATCH_IDS)}
+                                    {getMatchesPerIdRange(SECOND_ROUND_UPPER_RIGHT_MATCH_IDS)}
                                 </SecondRound>
-                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_MIDWEST_MATCH_IDS)}</FirstRound>
+                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_UPPER_RIGHT_MATCH_IDS)}</FirstRound>
                             </RightQuarter>
                             <Region isSideLeft={false} isVertical={true}>
-                                {t('march-madness.regions.midwest')}
+                                {t('march-madness.regions.south')}
                             </Region>
                         </RowHalf>
                         <SemiFinals>
-                            {getMatchById(SEMI_FINAL_SOUTH_EAST_MATCH_ID)}
-                            {getMatchById(SEMI_FINAL_MIDWEST_WEST_MATCH_ID)}
+                            {getMatchById(SEMI_FINAL_UPPER_LEFT_BOTTOM_LEFT_MATCH_ID)}
+                            {getMatchById(SEMI_FINAL_UPPER_RIGHT_BOTTOM_RIGHT_MATCH_ID)}
                         </SemiFinals>
                         <Final>{getMatchById(FINAL_MATCH_ID)}</Final>
 
@@ -1157,30 +1158,30 @@ const Brackets: React.FC = () => {
 
                         <RowHalf>
                             <Region isSideLeft={true} isVertical={true}>
-                                {t('march-madness.regions.east')}
+                                {t('march-madness.regions.west')}
                             </Region>
                             <LeftQuarter>
-                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_EAST_MATCH_IDS)}</FirstRound>
+                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_BOTTOM_LEFT_MATCH_IDS)}</FirstRound>
                                 <SecondRound isSideLeft={true}>
-                                    {getMatchesPerIdRange(SECOND_ROUND_EAST_MATCH_IDS)}
+                                    {getMatchesPerIdRange(SECOND_ROUND_BOTTOM_LEFT_MATCH_IDS)}
                                 </SecondRound>
                                 <Sweet16 isSideLeft={true}>
-                                    {getMatchesPerIdRange(SWEET16_ROUND_EAST_MATCH_IDS)}
+                                    {getMatchesPerIdRange(SWEET16_ROUND_BOTTOM_LEFT_MATCH_IDS)}
                                 </Sweet16>
-                                <Elite8 isSideLeft={true}>{getMatchById(ELITE8_ROUND_EAST_MATCH_ID)}</Elite8>
+                                <Elite8 isSideLeft={true}>{getMatchById(ELITE8_ROUND_BOTTOM_LEFT_MATCH_ID)}</Elite8>
                             </LeftQuarter>
                             <RightQuarter>
-                                <Elite8 isSideLeft={false}>{getMatchById(ELITE8_ROUND_WEST_MATCH_ID)}</Elite8>
+                                <Elite8 isSideLeft={false}>{getMatchById(ELITE8_ROUND_BOTTOM_RIGHT_MATCH_ID)}</Elite8>
                                 <Sweet16 isSideLeft={false}>
-                                    {getMatchesPerIdRange(SWEET16_ROUND_WEST_MATCH_IDS)}
+                                    {getMatchesPerIdRange(SWEET16_ROUND_BOTTOM_RIGHT_MATCH_IDS)}
                                 </Sweet16>
                                 <SecondRound isSideLeft={false}>
-                                    {getMatchesPerIdRange(SECOND_ROUND_WEST_MATCH_IDS)}
+                                    {getMatchesPerIdRange(SECOND_ROUND_BOTTOM_RIGHT_MATCH_IDS)}
                                 </SecondRound>
-                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_WEST_MATCH_IDS)}</FirstRound>
+                                <FirstRound>{getMatchesPerIdRange(FIRST_ROUND_BOTTOM_RIGHT_MATCH_IDS)}</FirstRound>
                             </RightQuarter>
                             <Region isSideLeft={false} isVertical={true}>
-                                {t('march-madness.regions.west')}
+                                {t('march-madness.regions.midwest')}
                             </Region>
                         </RowHalf>
                     </BracketsWrapper>
@@ -1188,40 +1189,40 @@ const Brackets: React.FC = () => {
                         <WildCardsHeader>{'Wild Cards'}</WildCardsHeader>
                         <WildCardsRow>
                             <Region isSideLeft={true} isVertical={false}>
-                                {t('march-madness.regions.south')}
+                                {t('march-madness.regions.west')}
                             </Region>
                             <WildCardMatch
                                 homeTeam={wildCardTeams[0].displayName}
                                 awayTeam={wildCardTeams[1].displayName}
-                                isHomeTeamWon={true}
+                                isHomeTeamWon={undefined}
                                 margin="0 2px 0 0"
                             />
                             <WildCardMatch
                                 homeTeam={wildCardTeams[4].displayName}
                                 awayTeam={wildCardTeams[5].displayName}
-                                isHomeTeamWon={false}
+                                isHomeTeamWon={undefined}
                             />
                             <Region isSideLeft={false} isVertical={false}>
-                                {t('march-madness.regions.midwest')}
+                                {t('march-madness.regions.south')}
                             </Region>
                         </WildCardsRow>
                         <WildCardsRow>
                             <Region isSideLeft={true} isVertical={false}>
-                                {t('march-madness.regions.east')}
+                                {t('march-madness.regions.midwest')}
                             </Region>
                             <WildCardMatch
                                 homeTeam={wildCardTeams[2].displayName}
                                 awayTeam={wildCardTeams[3].displayName}
-                                isHomeTeamWon={false}
+                                isHomeTeamWon={undefined}
                                 margin="0 2px 0 0"
                             />
                             <WildCardMatch
                                 homeTeam={wildCardTeams[6].displayName}
                                 awayTeam={wildCardTeams[7].displayName}
-                                isHomeTeamWon={true}
+                                isHomeTeamWon={undefined}
                             />
                             <Region isSideLeft={false} isVertical={false}>
-                                {t('march-madness.regions.west')}
+                                {t('march-madness.regions.midwest')}
                             </Region>
                         </WildCardsRow>
                     </WildCardsContainer>

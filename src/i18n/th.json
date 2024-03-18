@@ -578,7 +578,8 @@
         "incentivized-tooltip-nfl-playoffs": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในระหว่างรอบตัดเชือก NFL ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
         "superbowl-incentive": "10,000 ARB เป็นสิ่งจูงใจ",
         "incentivized-tooltip-uefa": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายสำหรับการแข่งขันยูฟ่า เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
-        "incentivized-tooltip-nhl": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในช่วงที่เหลือของฤดูกาล NHL รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
+        "incentivized-tooltip-nhl": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในช่วงที่เหลือของฤดูกาล NHL รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
+        "incentivized-tooltip-mm": ""
     },
     "rewards": {
         "header": "รางวัล",
@@ -1355,6 +1356,13 @@
             "brackets-minted": "วงเล็บมิ้นต์",
             "live-stats": "สถิติสด",
             "pool-size": "ขนาดพูลรางวัล"
+        },
+        "side-leaderboard": {
+            "rewards": "รางวัล",
+            "points-leaderboard": "ลีดเดอร์บอร์ดคะแนน",
+            "bracket-id": "รหัสวงเล็บ",
+            "points": "คะแนน",
+            "title": "มีนาคมบ้า"
         }
     },
     "promotions": {
