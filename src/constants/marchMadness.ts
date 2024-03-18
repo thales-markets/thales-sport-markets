@@ -806,7 +806,7 @@ export const teamsData: MarchMadTeam[] = [
     {
         id: 17,
         name: 'North Carolina Tar Heels',
-        displayName: 'North Carolina',
+        displayName: 'N. Carolina',
         region: 'West',
         position: 1,
     },
@@ -911,7 +911,7 @@ export const teamsData: MarchMadTeam[] = [
     {
         id: 32,
         name: '',
-        displayName: 'Wild Card',
+        displayName: 'HOW/WAGNR',
         region: 'West',
         position: 16,
     },
@@ -981,7 +981,7 @@ export const teamsData: MarchMadTeam[] = [
     {
         id: 42,
         name: '',
-        displayName: 'Wild Card',
+        displayName: 'COLO/BOISE',
         region: 'South',
         position: 10,
     },
@@ -1065,7 +1065,7 @@ export const teamsData: MarchMadTeam[] = [
     {
         id: 54,
         name: 'South Carolina Gamecocks',
-        displayName: 'South Carolina',
+        displayName: 'S. Carolina',
         region: 'Midwest',
         position: 6,
     },
@@ -1093,7 +1093,7 @@ export const teamsData: MarchMadTeam[] = [
     {
         id: 58,
         name: '',
-        displayName: 'Wild Card',
+        displayName: 'CSU/UVA',
         region: 'Midwest',
         position: 10,
     },
@@ -1135,7 +1135,7 @@ export const teamsData: MarchMadTeam[] = [
     {
         id: 64,
         name: '',
-        displayName: 'Wild Card',
+        displayName: 'GRAMB/MON ST',
         region: 'Midwest',
         position: 16,
     },
