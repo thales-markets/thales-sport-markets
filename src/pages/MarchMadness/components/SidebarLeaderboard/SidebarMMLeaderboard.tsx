@@ -45,7 +45,7 @@ const SidebarMMLeaderboard: React.FC = () => {
     return (
         <LeaderboardWrapper>
             <Container>
-                <SPAAnchor href={buildHref(ROUTES.Leaderboard)}>
+                <SPAAnchor href={buildHref(ROUTES.MarchMadness)}>
                     <Title>
                         <TitleLabel>
                             <img src={marchMadnessLeftIcon} />
