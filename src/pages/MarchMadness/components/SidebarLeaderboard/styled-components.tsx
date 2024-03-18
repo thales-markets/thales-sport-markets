@@ -61,7 +61,6 @@ export const HeaderRow = styled(FlexDivRow)`
 
 export const LeaderboardRow = styled(FlexDivRow)`
     height: 36px;
-    flex: 0.2 1 1 1;
     align-items: center;
     &.first {
         border-top: 2px solid ${(props) => props.theme.borderColor.primary};
@@ -79,7 +78,7 @@ export const Rank = styled(FlexDivCentered)`
 export const DataLabel = styled(FlexDivRowCentered)<{ textAlign?: string }>`
     text-align: ${(props) => (props.textAlign ? props.textAlign : 'left')};
     font-weight: 400;
-    font-size: 9px;
+    font-size: 12px;
     white-space: nowrap;
     line-height: 103.19%;
 `;
@@ -91,8 +90,8 @@ export const ColumnLabel = styled.span`
     line-height: 103.19%;
 `;
 
-export const ColumnWrapper = styled(FlexDiv)<{ padding?: string }>`
-    width: 32%;
+export const ColumnWrapper = styled(FlexDiv)<{ padding?: string; width?: string }>`
+    width: ${(props) => (props?.width ? props.width : '32%')};
     align-items: center;
     justify-content: center;
     text-align: center;

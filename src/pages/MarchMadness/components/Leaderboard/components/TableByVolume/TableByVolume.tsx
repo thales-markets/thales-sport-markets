@@ -23,6 +23,7 @@ import {
     TableHeaderContainer,
     TableRow,
     TableRowCell,
+    WalletAddress,
 } from './styled-components';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
@@ -49,7 +50,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 Header: <>{t('march-madness.leaderboard.address')}</>,
                 accessor: 'walletAddress',
                 Cell: (cellProps) => (
-                    <>
+                    <WalletAddress>
                         {truncateAddress(cellProps.cell.value, 5)}
                         <a
                             href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
@@ -58,7 +59,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         >
                             <Arrow />
                         </a>
-                    </>
+                    </WalletAddress>
                 ),
             },
             {

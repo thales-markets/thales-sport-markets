@@ -26,6 +26,7 @@ import {
     TableHeaderContainer,
     TableRow,
     TableRowCell,
+    WalletAddress,
 } from '../TableByVolume/styled-components';
 import { getFormattedRewardsAmount } from 'utils/marchMadness';
 
@@ -58,7 +59,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 Header: <>{t('march-madness.leaderboard.owner')}</>,
                 accessor: 'owner',
                 Cell: (cellProps) => (
-                    <>
+                    <WalletAddress>
                         {truncateAddress(cellProps.cell.value, 5)}
                         <a
                             href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
@@ -67,7 +68,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         >
                             <Arrow />
                         </a>
-                    </>
+                    </WalletAddress>
                 ),
             },
             {
@@ -114,7 +115,6 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 ),
                 accessor: 'tokenRewards',
                 Cell: (cell) => {
-                    console.log(cell);
                     return (
                         <>
                             {getFormattedRewardsAmount(
