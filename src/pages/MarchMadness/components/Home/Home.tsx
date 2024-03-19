@@ -116,7 +116,6 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const buttonClickHandler = async () => {
         if (isWalletConnected) {
             if (networkId !== Network.Arbitrum) {
-                console.log('change network');
                 SUPPORTED_NETWORKS_PARAMS;
                 await changeNetwork(SUPPORTED_NETWORKS_PARAMS[Network.Arbitrum], () => {
                     switchNetwork?.(Network.Arbitrum);
@@ -364,7 +363,7 @@ const PageTitle = styled.h1`
     line-height: normal;
     text-transform: uppercase;
     @media (max-width: 500px) {
-        font-size: 39px;
+        font-size: 34px;
     }
 `;
 
@@ -381,7 +380,7 @@ const TimeLeft = styled.h2`
     margin: 6px 0;
     white-space: nowrap;
     @media (max-width: 500px) {
-        font-size: 39px;
+        font-size: 31px;
     }
 `;
 
@@ -398,8 +397,8 @@ const TimeLeftDescription = styled.h3`
     text-transform: uppercase;
     white-space: nowrap;
     @media (max-width: 500px) {
-        font-size: 26px;
-        letter-spacing: 2px;
+        font-size: 25px;
+        letter-spacing: 1px;
     }
 `;
 
