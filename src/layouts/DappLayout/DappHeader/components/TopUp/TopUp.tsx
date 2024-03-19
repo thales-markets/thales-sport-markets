@@ -6,7 +6,6 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -17,7 +16,6 @@ import { buildHref } from 'utils/routes';
 
 const TopUp: React.FC = () => {
     const { t } = useTranslation();
-    const location = useLocation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -63,80 +61,62 @@ const TopUp: React.FC = () => {
 
     return (
         <>
-            {!isMobile ? (
-                <>
-                    {isConnectedViaParticle && ethBalanceValue !== undefined && showLowBalanceAlert && (
-                        <TopUpButtonContainer>
-                            <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
+            {isConnectedViaParticle &&
+                ethBalanceValue !== undefined &&
+                (!isMobile ? (
+                    <>
+                        {showLowBalanceAlert && (
+                            <TopUpButtonContainer>
+                                <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
+                                    <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
+                                </SPAAnchor>
+                            </TopUpButtonContainer>
+                        )}
+                        {!showLowBalanceAlert && (
+                            <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
+                                <Button
+                                    backgroundColor={theme.button.background.quaternary}
+                                    textColor={theme.button.textColor.primary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    width="150px"
+                                    fontWeight="400"
+                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '800', fontSize: '14px' }}
+                                    height="28px"
+                                >
+                                    {t('my-portfolio.deposit')}
+                                </Button>
+                            </SPAAnchor>
+                        )}
+                    </>
+                ) : (
+                    <>
+                        {showLowBalanceAlert && (
+                            <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Deposit)}>
                                 <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
                             </SPAAnchor>
-                        </TopUpButtonContainer>
-                    )}
-                    {isConnectedViaParticle && ethBalanceValue !== undefined && !showLowBalanceAlert && (
-                        <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
-                            <Button
-                                backgroundColor={theme.button.background.quaternary}
-                                textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.secondary}
-                                width="150px"
-                                fontWeight="400"
-                                additionalStyles={{ borderRadius: '15.5px', fontWeight: '800', fontSize: '14px' }}
-                                height="28px"
-                            >
-                                {t('my-portfolio.deposit')}
-                            </Button>
-                        </SPAAnchor>
-                    )}
-                </>
-            ) : (
-                <>
-                    {location.pathname !== ROUTES.Wizard && ethBalanceValue !== undefined && (
-                        <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Wizard)}>
-                            <Button
-                                backgroundColor={theme.background.primary}
-                                textColor={theme.button.textColor.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
-                                width="100%"
-                                fontWeight="400"
-                                additionalStyles={{
-                                    borderRadius: '20px',
-                                    fontWeight: '700',
-                                    fontSize: '14px',
-                                    textTransform: 'capitalize',
-                                }}
-                                height="28px"
-                            >
-                                {t('get-started.get-started')}
-                            </Button>
-                        </SPAAnchor>
-                    )}
-                    {isConnectedViaParticle && ethBalanceValue !== undefined && showLowBalanceAlert && (
-                        <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Deposit)}>
-                            <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
-                        </SPAAnchor>
-                    )}
-                    {isConnectedViaParticle && ethBalanceValue !== undefined && !showLowBalanceAlert && (
-                        <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Deposit)}>
-                            <Button
-                                backgroundColor={theme.button.background.quaternary}
-                                textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.secondary}
-                                width="100%"
-                                fontWeight="400"
-                                additionalStyles={{
-                                    maxWidth: 400,
-                                    borderRadius: '15.5px',
-                                    fontWeight: '800',
-                                    fontSize: '14px',
-                                }}
-                                height="28px"
-                            >
-                                {t('my-portfolio.deposit')}
-                            </Button>
-                        </SPAAnchor>
-                    )}
-                </>
-            )}
+                        )}
+                        {!showLowBalanceAlert && (
+                            <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Deposit)}>
+                                <Button
+                                    backgroundColor={theme.button.background.quaternary}
+                                    textColor={theme.button.textColor.primary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    width="100%"
+                                    fontWeight="400"
+                                    additionalStyles={{
+                                        maxWidth: 400,
+                                        borderRadius: '15.5px',
+                                        fontWeight: '800',
+                                        fontSize: '14px',
+                                    }}
+                                    height="28px"
+                                >
+                                    {t('my-portfolio.deposit')}
+                                </Button>
+                            </SPAAnchor>
+                        )}
+                    </>
+                ))}
         </>
     );
 };
