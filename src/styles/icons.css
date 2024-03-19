@@ -29,12 +29,56 @@
     content: '\0034';
 }
 
-.icon--overtime:before {
-    content: '\0041';
+.icon--wallet-connected::before {
+    content: '\0035';
+}
+
+.icon--wallet-disconnected::before {
+    content: '\0036';
+}
+
+.icon--odds::before {
+    content: '\0037';
+}
+
+.icon--filters::before {
+    content: '\0038';
+}
+
+.icon--pendingmarkets::before {
+    content: '\0039';
+}
+
+.icon--resolvedmarkets::before {
+    content: '\003A';
+}
+
+.icon--canceled::before {
+    content: '\003B';
+}
+
+.icon--cricket::before {
+    content: '\003C';
+}
+
+.icon--esports::before {
+    content: '\003D';
+}
+
+.icon--upsettoor-vault::before {
+    content: '\003E';
+}
+
+.icon--golf::before {
+    content: '\003F';
 }
 
 .icon--promotions:before {
     content: '\0040';
+}
+
+.icon--overtime:before {
+    content: '\0041';
 }
 
 .icon--logo:before {
@@ -89,16 +133,56 @@
     content: '\004E';
 }
 
-.icon--motogp:before {
-    content: '\0055';
+.icon--profile:before {
+    content: '\0050';
+}
+
+.icon--warning::before {
+    content: '\0052';
 }
 
 .icon--wallet:before {
     content: '\0054';
 }
 
-.icon--profile:before {
-    content: '\0050';
+.icon--motogp:before {
+    content: '\0055';
+}
+
+.icon--motosport:before {
+    content: '\0056';
+}
+
+.icon--star-full:before {
+    content: '\0057';
+}
+
+.icon--star-empty:before {
+    content: '\0058';
+}
+
+.icon--cross-button:before {
+    content: '\0059';
+}
+
+.icon--revert:before {
+    content: '\005A';
+}
+
+.icon--triple-arrow:before {
+    content: '\005B';
+}
+
+.icon--get-thales::before {
+    content: '\005C';
+}
+
+.icon--arrow:before {
+    content: '\005D';
+}
+
+.icon--stake-thales::before {
+    content: '\005F';
 }
 
 .icon--wizard:before {
@@ -141,48 +225,12 @@
     content: '\006A';
 }
 
-.icon--motosport:before {
-    content: '\0056';
-}
-
-.icon--star-full:before {
-    content: '\0057';
-}
-
-.icon--star-empty:before {
-    content: '\0058';
-}
-
-.icon--favourites:before {
-    content: '\0058';
-}
-
-.icon--cross-button:before {
-    content: '\0059';
-}
-
-.icon--revert:before {
-    content: '\005A';
-}
-
-.icon--triple-arrow:before {
-    content: '\005B';
-}
-
-.icon--arrow:before {
-    content: '\005D';
-}
-
 .icon--cross-button-arrow:before {
     content: '\006B';
 }
 
 .icon--arrow-external::before {
     content: '\006C';
-}
-
-.icon--warning::before {
-    content: '\0052';
 }
 
 .icon--arrow-down::before {
@@ -197,16 +245,12 @@
     content: '\006F';
 }
 
-.icon--fee-rebates::before {
-    content: '\0075';
-}
-
-.icon--fifa-world-cup::before {
-    content: '\0076';
-}
-
 .icon--discount-vault::before {
     content: '\0070';
+}
+
+.icon--risks::before {
+    content: '\0071';
 }
 
 .icon--degen-discount-vault::before {
@@ -217,16 +261,16 @@
     content: '\0073';
 }
 
-.icon--parlay-discount-vault::before {
-    content: '\007B';
-}
-
 .icon--strategy::before {
     content: '\0074';
 }
 
-.icon--risks::before {
-    content: '\0071';
+.icon--fee-rebates::before {
+    content: '\0075';
+}
+
+.icon--fifa-world-cup::before {
+    content: '\0076';
 }
 
 .icon--vaults::before {
@@ -243,34 +287,6 @@
 
 .icon--open::before {
     content: '\007A';
-}
-
-.icon--odds::before {
-    content: '\0037';
-}
-
-.icon--filters::before {
-    content: '\0038';
-}
-
-.icon--pendingmarkets::before {
-    content: '\0039';
-}
-
-.icon--resolvedmarkets::before {
-    content: '\003A';
-}
-
-.icon--canceled::before {
-    content: '\003B';
-}
-
-.icon--wallet-connected::before {
-    content: '\0035';
-}
-
-.icon--wallet-disconnected::before {
-    content: '\0036';
 }
 
 .icon--parlay::before {
@@ -297,6 +313,10 @@
     content: '\0081';
 }
 
+.icon--brackets::before {
+    content: '\0086';
+}
+
 .icon--op-rewards::before {
     content: '\00A9';
 }
@@ -307,30 +327,6 @@
 
 .icon--liquidity-pool::before {
     content: '\00AE';
-}
-
-.icon--get-thales::before {
-    content: '\005C';
-}
-
-.icon--stake-thales::before {
-    content: '\005F';
-}
-
-.icon--esports::before {
-    content: '\003D';
-}
-
-.icon--cricket::before {
-    content: '\003C';
-}
-
-.icon--upsettoor-vault::before {
-    content: '\003E';
-}
-
-.icon--golf::before {
-    content: '\003F';
 }
 
 .icon--base:before {

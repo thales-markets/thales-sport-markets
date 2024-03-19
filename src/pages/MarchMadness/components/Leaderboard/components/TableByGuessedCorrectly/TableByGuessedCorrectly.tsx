@@ -250,19 +250,19 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                                     </TableRow>
                                 );
                             })}
+                            <TableRow hideBorder>
+                                <PaginationWrapper
+                                    rowsPerPageOptions={[10, 20, 50, 100]}
+                                    count={filteredData?.length ? filteredData.length : 0}
+                                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                                    rowsPerPage={state.pageSize}
+                                    page={state.pageIndex}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </TableRow>
                         </tbody>
                     </Table>
-                )}
-                {filteredData?.length > 0 && (
-                    <PaginationWrapper
-                        rowsPerPageOptions={[10, 20, 50, 100]}
-                        count={filteredData?.length ? filteredData.length : 0}
-                        labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                        rowsPerPage={state.pageSize}
-                        page={state.pageIndex}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
                 )}
             </TableContainer>
         </Container>
