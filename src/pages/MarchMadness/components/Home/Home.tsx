@@ -116,7 +116,6 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const buttonClickHandler = async () => {
         if (isWalletConnected) {
             if (networkId !== Network.Arbitrum) {
-                console.log('change network');
                 SUPPORTED_NETWORKS_PARAMS;
                 await changeNetwork(SUPPORTED_NETWORKS_PARAMS[Network.Arbitrum], () => {
                     switchNetwork?.(Network.Arbitrum);
