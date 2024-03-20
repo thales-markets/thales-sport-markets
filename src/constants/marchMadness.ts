@@ -910,8 +910,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 32,
-        name: '',
-        displayName: 'HOW/WAGNR',
+        name: 'Wagner Seahawks',
+        displayName: 'Wagner',
         region: 'West',
         position: 16,
     },
@@ -1092,8 +1092,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 58,
-        name: '',
-        displayName: 'CSU/UVA',
+        name: 'Colorado State Rams',
+        displayName: 'Colorado St.',
         region: 'Midwest',
         position: 10,
     },
