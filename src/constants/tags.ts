@@ -10,6 +10,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 202,
+        live: false,
     },
     {
         id: 9002,
@@ -19,6 +20,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 201,
+        live: false,
     },
     {
         id: 9003,
@@ -28,6 +30,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 401,
+        live: false,
     },
     {
         id: 9004,
@@ -37,6 +40,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 301,
+        live: true,
     },
     {
         id: 9005,
@@ -45,6 +49,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 302,
+        live: false,
     },
     {
         id: 9006,
@@ -54,6 +59,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 501,
+        live: false,
     },
     {
         id: 9007,
@@ -63,8 +69,17 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 601,
+        live: false,
     },
-    { id: 9008, label: 'WNBA', logoClass: 'icon-league league--wnba', favourite: false, hidden: false, priority: 304 },
+    {
+        id: 9008,
+        label: 'WNBA',
+        logoClass: 'icon-league league--wnba',
+        favourite: false,
+        hidden: false,
+        priority: 304,
+        live: false,
+    },
     {
         id: 9010,
         label: 'MLS',
@@ -73,6 +88,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 106,
+        live: false,
     },
     {
         id: 9011,
@@ -82,6 +98,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 101,
+        live: true,
     },
     {
         id: 9012,
@@ -91,6 +108,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 105,
+        live: false,
     },
     {
         id: 9013,
@@ -100,6 +118,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 104,
+        live: false,
     },
     {
         id: 9014,
@@ -109,6 +128,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 102,
+        live: false,
     },
     {
         id: 9015,
@@ -118,6 +138,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 103,
+        live: false,
     },
     {
         id: 9016,
@@ -127,6 +148,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 110,
+        live: false,
     },
     {
         id: 9017,
@@ -136,6 +158,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 111,
+        live: false,
     },
     {
         id: 9018,
@@ -145,6 +168,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: true,
         priority: 0,
+        live: false,
     },
     {
         id: 9019,
@@ -154,6 +178,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 109,
+        live: false,
     },
     // {
     //     id: 9445,
@@ -181,6 +206,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 602,
+        live: false,
     },
     {
         id: 9156,
@@ -190,6 +216,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 603,
+        live: false,
     },
     {
         id: 18977,
@@ -198,6 +225,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 801,
+        live: false,
     },
     {
         id: 18983,
@@ -206,6 +234,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 802,
+        live: false,
     },
     {
         id: 19138,
@@ -214,6 +243,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 803,
+        live: false,
     },
     {
         id: 9020,
@@ -222,6 +252,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 901,
+        live: false,
     },
     {
         id: 9399,
@@ -230,6 +261,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 303,
+        live: false,
     },
     {
         id: 18196,
@@ -238,6 +270,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 602,
+        live: false,
     },
     {
         id: 19595,
@@ -246,6 +279,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: true,
         priority: 603,
+        live: false,
     },
     {
         id: 9057,
@@ -254,6 +288,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 107,
+        live: false,
     },
     {
         id: 9061,
@@ -262,6 +297,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 108,
+        live: false,
     },
     {
         id: 9045,
@@ -270,6 +306,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 112,
+        live: false,
     },
     {
         id: 9033,
@@ -278,6 +315,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 502,
+        live: false,
     },
     {
         id: 9296,
@@ -286,6 +324,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 121,
+        live: false,
     },
     {
         id: 9021,
@@ -294,6 +333,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 902,
+        live: false,
     },
     {
         id: 9050,
@@ -302,6 +342,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 113,
+        live: false,
     },
     {
         id: 109021,
@@ -310,6 +351,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 1001,
+        live: false,
     },
     {
         id: 109121,
@@ -318,6 +360,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 1002,
+        live: false,
     },
     {
         id: 18806,
@@ -326,6 +369,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 114,
+        live: false,
     },
     {
         id: 18821,
@@ -334,6 +378,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 115,
+        live: false,
     },
     {
         id: 9288,
@@ -342,6 +387,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 120,
+        live: false,
     },
     {
         id: 9042,
@@ -350,6 +396,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 111,
+        live: false,
     },
     {
         id: 19216,
@@ -358,6 +405,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 118,
+        live: false,
     },
     {
         id: 9076,
@@ -366,6 +414,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 119,
+        live: false,
     },
     {
         id: 9073,
@@ -374,6 +423,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: true,
         priority: 117,
+        live: false,
     },
     {
         id: 9409,
@@ -382,6 +432,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 303,
+        live: false,
     },
     {
         id: 9536,
@@ -390,6 +441,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 109,
+        live: false,
     },
     {
         id: 9268,
@@ -398,6 +450,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 109,
+        live: false,
     },
     {
         id: 19199,
@@ -406,6 +459,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 110,
+        live: false,
     },
 ];
 
@@ -822,3 +876,5 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     19199: 'half',
     19595: 'round',
 };
+
+export const LIVE_SUPPORTED_LEAGUES = [9004, 9011];

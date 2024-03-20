@@ -252,6 +252,7 @@
                 "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
+                "live": "Live",
                 "all": "All sports",
                 "favourites": "Favourites",
                 "basketball": "Basketball",

@@ -265,7 +265,8 @@
                 "cricket": "Cricket",
                 "boxing": "Boxe",
                 "mma": "MMA",
-                "golf": "Golf"
+                "golf": "Golf",
+                "live": "Vivere"
             },
             "all": "All",
             "datepicker": {
@@ -302,7 +303,8 @@
             "usd-value-col": "valore in usd",
             "game-col": "gioco",
             "single-title": "Singola attività recente",
-            "parlay-title": "Attività parlay recente"
+            "parlay-title": "Attività parlay recente",
+            "ticket-title": "Attività recente sui biglietti"
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
@@ -451,6 +453,71 @@
             "toggle": {
                 "hide-paused-markets": "Nascondi i mercati in pausa",
                 "show-paused-markets": "Mostra i mercati in pausa"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "rounds": "giri",
+                    "points": "punti",
+                    "goals": "obiettivi",
+                    "sets": "imposta"
+                },
+                "match-resolve": {
+                    "overtime": "compresi eventuali straordinari",
+                    "regular": "in orario regolare"
+                },
+                "moneyline-2": "La partita finirà con un pareggio {{matchResolve}}",
+                "lastTouchdown-0": "{{team}} segnerà l'ultimo touchdown della partita",
+                "doubleChance-1": "{{team}} o {{team2}} vinceranno la partita {{matchResolve}}",
+                "shots-1": "{{team}} avrà meno tiri di {{line}}",
+                "homeruns-1": "{{team}} avrà meno fuoricampo di {{line}}",
+                "receivingYards-1": "{{team}} avrà meno yard in ricezione rispetto a {{line}}",
+                "fieldGoalsMade-0": "{{team}} realizzerà più field goal rispetto a {{line}}",
+                "strikeouts-1": "{{team}} avrà meno strikeout di {{line}}",
+                "total-0": "Il numero totale di {{scoring}} nella partita {{matchResolve}} sarà superiore a {{line}}",
+                "doubleChance-0": "{{team}} vincerà la partita o la partita finirà con un pareggio {{matchResolve}}",
+                "doubleDouble-1": "{{team}} non segnerà una doppia doppia",
+                "and": "E",
+                "rebounds-1": "{{team}} avrà meno rimbalzi di {{line}}",
+                "tripleDouble-0": "{{team}} segnerà una tripla doppia",
+                "firstTouchdown-0": "{{team}} segnerà il primo touchdown della partita",
+                "rushingYards-1": "{{team}} avrà meno yard di corsa rispetto a {{line}}",
+                "points-1": "{{team}} avrà meno punti di {{line}}",
+                "moneyline-1": "{{team}} vincerà la partita {{matchResolve}}",
+                "strikeouts-0": "{{team}} avrà più strikeout di {{line}}",
+                "bonus": "{{bonus}} bonus aggiunto alla vincita!",
+                "tripleDouble-1": "{{team}} non segnerà una tripla doppia",
+                "pitcherHitsAllowed-0": "Al {{team}} saranno consentiti più risultati rispetto a {{line}}",
+                "passingYards-1": "{{team}} avrà meno yard di passaggio rispetto a {{line}}",
+                "pitcherHitsAllowed-1": "Al {{team}} saranno consentiti meno risultati rispetto a {{line}}",
+                "doubleDouble-0": "{{team}} segnerà una doppia doppia",
+                "homeruns-0": "{{team}} avrà più fuoricampo di {{line}}",
+                "total-1": "Il numero totale di {{scoring}} nella partita {{matchResolve}} sarà inferiore a {{line}}",
+                "spread-0": "{{team}} vincerà la partita con una differenza superiore a {{line}} {{scoring}} {{matchResolve}}",
+                "rushingYards-0": "{{team}} avrà più yard di corsa di {{line}}",
+                "rebounds-0": "{{team}} avrà più rimbalzi di {{line}}",
+                "doubleChance-2": "{{team}} vincerà la partita o la partita finirà con un pareggio {{matchResolve}}",
+                "receivingYards-0": "{{team}} avrà più yard in ricezione rispetto a {{line}}",
+                "moneyline-0": "{{team}} vincerà la partita {{matchResolve}}",
+                "receptions-0": "{{team}} avrà più ricezioni di {{line}}",
+                "hitsRecorded-1": "{{team}} avrà meno successi registrati rispetto a {{line}}",
+                "spread-1": "{{team}} vincerà la partita o perderà per meno di {{line}} {{scoring}} {{matchResolve}}",
+                "passingYards-0": "{{team}} avrà più yard di passaggio di {{line}}",
+                "fieldGoalsMade-1": "{{team}} avrà meno field goal realizzati rispetto a {{line}}",
+                "touchdowns-0": "{{team}} segnerà un touchdown nel gioco",
+                "race-winner": "{{team}} vincerà la gara {{matchResolve}}",
+                "tournament-winner": "{{team}} vincerà il torneo {{matchResolve}}",
+                "passingTouchdowns-0": "{{team}} avrà più touchdown di passaggio rispetto a {{line}}",
+                "assists-1": "{{team}} avrà meno assist di {{line}}",
+                "receptions-1": "{{team}} avrà meno ricezioni di {{line}}",
+                "assists-0": "{{team}} avrà più assist di {{line}}",
+                "shots-0": "{{team}} avrà più tiri di {{line}}",
+                "passingTouchdowns-1": "{{team}} avrà meno touchdown di passaggio rispetto a {{line}}",
+                "hitsRecorded-0": "{{team}} avrà più successi registrati rispetto a {{line}}",
+                "points-0": "{{team}} avrà più punti di {{line}}",
+                "goals-0": "{{team}} segnerà un goal nel gioco"
+            },
+            "type-tooltip": {
+                "11055": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato"
             }
         },
         "market-details": {

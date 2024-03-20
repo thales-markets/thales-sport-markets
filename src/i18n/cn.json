@@ -265,7 +265,8 @@
                 "cricket": "蟋蟀",
                 "mma": "格斗运动",
                 "boxing": "拳击",
-                "golf": "高尔夫球"
+                "golf": "高尔夫球",
+                "live": "居住"
             },
             "all": "所有",
             "datepicker": {
@@ -302,7 +303,8 @@
             "usd-value-col": "美元价值",
             "result-col": "结果",
             "parlay-title": "最近的连本带利活动",
-            "single-title": "近期单一活动"
+            "single-title": "近期单一活动",
+            "ticket-title": "近期购票活动"
         },
         "tooltip": {
             "amount-exceeded": "金额超过AMM的余额。",
@@ -451,6 +453,71 @@
             "toggle": {
                 "hide-paused-markets": "隐藏暂停的市场",
                 "show-paused-markets": "显示暂停的市场"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "goals": "目标",
+                    "sets": "套",
+                    "points": "点",
+                    "rounds": "回合"
+                },
+                "match-resolve": {
+                    "overtime": "包括可能的加班",
+                    "regular": "在正常时间"
+                },
+                "assists-0": "{{team}} 将比 {{line}} 获得更多助攻",
+                "spread-0": "{{team}} 将以超过 {{line}} {{scoring}} {{matchResolve}} 的差距赢得比赛",
+                "receptions-0": "{{team}} 的接待量将多于 {{line}}",
+                "tournament-winner": "{{team}} 将赢得锦标赛 {{matchResolve}}",
+                "receptions-1": "{{team}} 的接待量将少于 {{line}}",
+                "strikeouts-0": "{{team}} 的三振次数将多于 {{line}}",
+                "shots-0": "{{team}} 的射门次数将多于 {{line}}",
+                "fieldGoalsMade-0": "{{team}} 的射门数将多于 {{line}}",
+                "doubleDouble-1": "{{team}} 不会得分两双",
+                "rebounds-0": "{{team}} 的篮板数将多于 {{line}}",
+                "hitsRecorded-1": "{{team}} 记录的点击次数将少于 {{line}}",
+                "firstTouchdown-0": "{{team}} 将获得比赛中的第一个达阵",
+                "homeruns-0": "{{team}} 将比 {{line}} 打出更多本垒打",
+                "and": "和",
+                "race-winner": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "rushingYards-0": "{{team}} 的冲球码数将比 {{line}} 更多",
+                "doubleDouble-0": "{{team}} 将得分两双",
+                "doubleChance-0": "{{team}} 将赢得比赛，否则比赛将以平局结束 {{matchResolve}}",
+                "assists-1": "{{team}} 的助攻数将少于 {{line}}",
+                "moneyline-2": "比赛将以平局结束 {{matchResolve}}",
+                "doubleChance-1": "{{team}} 或 {{team2}} 将赢得比赛 {{matchResolve}}",
+                "pitcherHitsAllowed-0": "{{team}} 允许的点击数将多于 {{line}}",
+                "passingYards-0": "{{team}} 的传球码数将比 {{line}} 更多",
+                "spread-1": "{{team}} 将赢得比赛，或者以小于 {{line}} {{scoring}} {{matchResolve}} 的比分落败",
+                "moneyline-0": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "total-0": "比赛{{matchResolve}}中的{{scoring}}总数将超过{{line}}",
+                "total-1": "比赛 {{matchResolve}} 中的 {{scoring}} 总数将少于 {{line}}",
+                "moneyline-1": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "rebounds-1": "{{team}} 的篮板数将少于 {{line}}",
+                "passingYards-1": "{{team}} 的传球码数将少于 {{line}}",
+                "bonus": "{{bonus}} 获胜时增加奖金！",
+                "hitsRecorded-0": "{{team}} 记录的点击次数将多于 {{line}}",
+                "receivingYards-0": "{{team}} 将比 {{line}} 有更多的接球码数",
+                "doubleChance-2": "{{team}} 将赢得比赛，否则比赛将以平局结束 {{matchResolve}}",
+                "points-0": "{{team}} 将比 {{line}} 拥有更多积分",
+                "tripleDouble-0": "{{team}}将获得三双",
+                "tripleDouble-1": "{{team}}不会拿下三双",
+                "homeruns-1": "{{team}} 的本垒打数量将少于 {{line}}",
+                "goals-0": "{{team}} 将在比赛中进球",
+                "receivingYards-1": "{{team}} 的接球码数将少于 {{line}}",
+                "lastTouchdown-0": "{{team}} 将获得本场比赛的最后一次达阵",
+                "passingTouchdowns-0": "{{team}} 的传球达阵次数将多于 {{line}}",
+                "shots-1": "{{team}} 的射门次数将少于 {{line}}",
+                "points-1": "{{team}} 的积分将少于 {{line}}",
+                "touchdowns-0": "{{team}} 将在比赛中达阵得分",
+                "rushingYards-1": "{{team}} 的冲球码数将少于 {{line}}",
+                "pitcherHitsAllowed-1": "{{team}} 允许的点击次数将少于 {{line}}",
+                "passingTouchdowns-1": "{{team}} 的传球达阵次数将少于 {{line}}",
+                "fieldGoalsMade-1": "{{team}} 的射门数将少于 {{line}}",
+                "strikeouts-1": "{{team}} 的三振次数将少于 {{line}}"
+            },
+            "type-tooltip": {
+                "11055": "接球、冲球、弃踢回攻、踢回攻、防守和拦截达阵均计入结果"
             }
         },
         "market-details": {

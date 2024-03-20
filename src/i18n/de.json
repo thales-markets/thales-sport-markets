@@ -265,7 +265,8 @@
                 "cricket": "Kricket",
                 "boxing": "Boxen",
                 "mma": "Kampfsport",
-                "golf": "Golf"
+                "golf": "Golf",
+                "live": "Live"
             },
             "all": "Alle",
             "datepicker": {
@@ -302,7 +303,8 @@
             "usd-value-col": "USD-Wert",
             "game-col": "Spiel",
             "parlay-title": "Aktuelle Parlay-Aktivität",
-            "single-title": "Letzte Einzelaktivität"
+            "single-title": "Letzte Einzelaktivität",
+            "ticket-title": "Aktuelle Ticketaktivität"
         },
         "tooltip": {
             "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
@@ -451,6 +453,71 @@
             "toggle": {
                 "hide-paused-markets": "Pausierte Märkte ausblenden",
                 "show-paused-markets": "Pausierte Märkte anzeigen"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "sets": "Sätze",
+                    "points": "Punkte",
+                    "rounds": "Runden",
+                    "goals": "Ziele"
+                },
+                "match-resolve": {
+                    "overtime": "inklusive möglicher Überstunden",
+                    "regular": "in der regulären Zeit"
+                },
+                "and": "Und",
+                "firstTouchdown-0": "{{team}} erzielt den ersten Touchdown im Spiel",
+                "assists-1": "{{team}} wird weniger Assists haben als {{line}}",
+                "tripleDouble-0": "{{team}} wird ein Triple-Double erzielen",
+                "pitcherHitsAllowed-1": "{{team}} wird weniger Treffer haben als {{line}}",
+                "touchdowns-0": "{{team}} wird im Spiel einen Touchdown erzielen",
+                "receptions-0": "{{team}} wird mehr Empfänge haben als {{line}}",
+                "doubleDouble-1": "{{team}} wird kein Double-Double erzielen",
+                "race-winner": "{{team}} wird das Rennen gewinnen {{matchResolve}}",
+                "pitcherHitsAllowed-0": "{{team}} wird mehr Treffer haben als {{line}}",
+                "doubleDouble-0": "{{team}} wird ein Double-Double erzielen",
+                "spread-1": "{{team}} wird das Spiel gewinnen oder mit weniger als {{line}} {{scoring}} {{matchResolve}} verlieren.",
+                "fieldGoalsMade-0": "{{team}} wird mehr Field Goals erzielt haben als {{line}}",
+                "passingTouchdowns-1": "{{team}} wird weniger Pass-Touchdowns haben als {{line}}",
+                "assists-0": "{{team}} wird mehr Assists haben als {{line}}",
+                "points-0": "{{team}} wird mehr Punkte haben als {{line}}",
+                "tripleDouble-1": "{{team}} wird kein Triple-Double erzielen",
+                "doubleChance-0": "{{team}} gewinnt das Spiel oder das Spiel endet unentschieden {{matchResolve}}",
+                "rebounds-1": "{{team}} wird weniger Rebounds haben als {{line}}",
+                "shots-0": "{{team}} wird mehr Schüsse haben als {{line}}",
+                "hitsRecorded-0": "{{team}} wird mehr Treffer verzeichnet haben als {{line}}",
+                "rebounds-0": "{{team}} wird mehr Rebounds haben als {{line}}",
+                "points-1": "{{team}} wird weniger Punkte haben als {{line}}",
+                "shots-1": "{{team}} wird weniger Schüsse haben als {{line}}",
+                "hitsRecorded-1": "{{team}} wird weniger Treffer verzeichnet haben als {{line}}",
+                "passingTouchdowns-0": "{{team}} wird mehr Pass-Touchdowns haben als {{line}}",
+                "total-0": "Die Gesamtzahl der {{scoring}} im Match {{matchResolve}} wird mehr als {{line}} betragen.",
+                "receivingYards-0": "{{team}} wird mehr Empfangshöfe haben als {{line}}",
+                "fieldGoalsMade-1": "{{team}} wird weniger Field Goals erzielt haben als {{line}}",
+                "goals-0": "{{team}} wird im Spiel ein Tor erzielen",
+                "moneyline-1": "{{team}} wird das Match gewinnen {{matchResolve}}",
+                "tournament-winner": "{{team}} wird das Turnier gewinnen {{matchResolve}}",
+                "rushingYards-1": "{{team}} wird weniger Rushing Yards haben als {{line}}",
+                "lastTouchdown-0": "{{team}} erzielt den letzten Touchdown im Spiel",
+                "homeruns-1": "{{team}} wird weniger Homeruns haben als {{line}}",
+                "bonus": "{{bonus}} zusätzlicher Bonus bei Sieg!",
+                "receptions-1": "{{team}} wird weniger Empfänge haben als {{line}}",
+                "homeruns-0": "{{team}} wird mehr Homeruns haben als {{line}}",
+                "doubleChance-1": "{{team}} oder {{team2}} gewinnen das Match {{matchResolve}}",
+                "rushingYards-0": "{{team}} wird mehr Rushing Yards haben als {{line}}",
+                "doubleChance-2": "{{team}} gewinnt das Spiel oder das Spiel endet unentschieden {{matchResolve}}",
+                "total-1": "Die Gesamtzahl der {{scoring}} im Match {{matchResolve}} wird weniger als {{line}} betragen.",
+                "passingYards-1": "{{team}} wird weniger Passing Yards haben als {{line}}",
+                "strikeouts-0": "{{team}} wird mehr Strikeouts haben als {{line}}",
+                "strikeouts-1": "{{team}} wird weniger Strikeouts haben als {{line}}",
+                "moneyline-0": "{{team}} wird das Match gewinnen {{matchResolve}}",
+                "passingYards-0": "{{team}} wird mehr Passing Yards haben als {{line}}",
+                "moneyline-2": "Das Spiel endet unentschieden {{matchResolve}}",
+                "receivingYards-1": "{{team}} wird weniger Empfangshöfe haben als {{line}}",
+                "spread-0": "{{team}} wird das Spiel mit einer Differenz von mehr als {{line}} {{scoring}} {{matchResolve}} gewinnen."
+            },
+            "type-tooltip": {
+                "11055": "Receiving-, Rushing-, Punt-Return-, Kick-Return-, Defensive- und Interception-Touchdowns werden für das Ergebnis gezählt"
             }
         },
         "market-details": {

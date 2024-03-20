@@ -171,6 +171,7 @@ export type TagInfo = {
     favourite?: boolean;
     hidden?: boolean;
     priority?: number;
+    live?: boolean;
 };
 
 export type Tags = TagInfo[];

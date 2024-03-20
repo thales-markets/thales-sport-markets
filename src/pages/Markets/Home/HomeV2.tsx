@@ -87,7 +87,7 @@ const Home: React.FC = () => {
         ['priority', 'label'],
         ['asc', 'asc']
     ).map((tag) => {
-        return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
+        return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite, live: tag.live };
     });
 
     const sgpFees = useSGPFeesQuery(networkId, {
@@ -172,6 +172,9 @@ const Home: React.FC = () => {
             if (sportFilter == SportFilterEnum.Favourites) {
                 const filteredTags = tagsList.filter((tag: TagInfo) => tag.favourite);
                 setAvailableTags(filteredTags);
+            } else if (sportFilter == SportFilterEnum.Live) {
+                const filteredTags = tagsList.filter((tag: TagInfo) => tag.live);
+                setAvailableTags(filteredTags);
             } else {
                 const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
                 if (tagsPerSport) {
@@ -185,7 +188,9 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(globalFilter, networkId, { enabled: isAppReady });
+    const sportMarketsQueryNew = useSportsMarketsV2Query(globalFilter, networkId, sportFilter == SportFilterEnum.Live, {
+        enabled: isAppReady,
+    });
 
     const finalMarkets = useMemo(() => {
         const allMarkets: AllMarkets =
@@ -237,7 +242,7 @@ const Home: React.FC = () => {
                 }
 
                 if (sportFilter !== SportFilterEnum.All) {
-                    if (sportFilter != SportFilterEnum.Favourites) {
+                    if (sportFilter != SportFilterEnum.Favourites && sportFilter != SportFilterEnum.Live) {
                         if (market.sport !== sportFilter) {
                             return false;
                         }
@@ -276,9 +281,14 @@ const Home: React.FC = () => {
         }
     }, [favouriteLeagues, sportFilter]);
 
-    const openSportMarketsQuery = useSportsMarketsV2Query(GlobalFiltersEnum.OpenMarkets, networkId, {
-        enabled: isAppReady,
-    });
+    const openSportMarketsQuery = useSportsMarketsV2Query(
+        GlobalFiltersEnum.OpenMarkets,
+        networkId,
+        sportFilter == SportFilterEnum.Live,
+        {
+            enabled: isAppReady,
+        }
+    );
 
     const openMarketsCountPerTag = useMemo(() => {
         const openSportMarkets: SportMarketsV2 =
@@ -406,7 +416,8 @@ const Home: React.FC = () => {
                                     (showActive && openMarketsCountPerSport[filterItem] > 0) ||
                                     !showActive ||
                                     openSportMarketsQuery.isLoading ||
-                                    filterItem === SportFilterEnum.Favourites
+                                    filterItem === SportFilterEnum.Favourites ||
+                                    filterItem === SportFilterEnum.Live
                             )
                             .map((filterItem: any, index) => {
                                 return (
@@ -424,6 +435,11 @@ const Home: React.FC = () => {
                                                         setDateFilter(0);
                                                         setDateParam('');
                                                         setAvailableTags(tagsList);
+                                                    } else if (filterItem === SportFilterEnum.Live) {
+                                                        setDateFilter(0);
+                                                        setDateParam('');
+                                                        const filteredLiveTags = tagsList.filter((tag) => tag.live);
+                                                        setAvailableTags(filteredLiveTags);
                                                     } else {
                                                         const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
                                                         if (tagsPerSport) {
