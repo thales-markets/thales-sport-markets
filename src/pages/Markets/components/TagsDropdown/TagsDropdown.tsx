@@ -103,7 +103,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                         });
                                         dispatch(setFavouriteLeagues(newFavourites));
                                     }}
-                                    className={`icon icon--${isFavourite ? 'star-full selected' : 'star-empty'} `}
+                                    className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                                 />
                                 <LabelContainer
                                     className={`${tagFilterIds.includes(tag.id) ? 'selected' : ''}`}

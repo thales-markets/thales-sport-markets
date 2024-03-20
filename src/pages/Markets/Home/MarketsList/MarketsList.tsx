@@ -185,7 +185,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                         });
                         dispatch(setFavouriteLeagues(newFavourites));
                     }}
-                    className={`icon icon--${isFavourite ? 'star-full selected' : 'star-empty'} `}
+                    className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                 />
             </LeagueCard>
             <GamesContainer hidden={hideLeague}>
