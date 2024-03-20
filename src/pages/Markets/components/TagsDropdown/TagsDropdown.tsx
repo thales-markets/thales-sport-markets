@@ -228,7 +228,9 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                     />
                                                 }
                                                 component={
-                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
+                                                    <IncentivizedLeague>
+                                                        {getNetworkLogo(NetworkId.Arbitrum)}
+                                                    </IncentivizedLeague>
                                                 }
                                             ></Tooltip>
                                         )}

@@ -350,12 +350,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 }
                                 component={
                                     <IncentivizedLeague>
-                                        {networkId !== Network.Base ? (
-                                            <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        ) : (
-                                            ''
-                                        )}
-                                        {getNetworkLogo(networkId)}
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        {getNetworkLogo(NetworkId.Arbitrum)}
                                     </IncentivizedLeague>
                                 }
                             ></Tooltip>
