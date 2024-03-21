@@ -45,8 +45,11 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
 
             const homeTeam = !!teamNames[market.gameId] && teamNames[market.gameId].find((team: Team) => team.isHome);
             const homeTeamName = homeTeam ? homeTeam.name : 'Home Team';
+            const homeScore = homeTeam ? homeTeam.score : 0;
+
             const awayTeam = !!teamNames[market.gameId] && teamNames[market.gameId].find((team: Team) => !team.isHome);
             const awayTeamName = awayTeam ? awayTeam.name : 'Away Team';
+            const awayScore = awayTeam ? awayTeam.score : 0;
 
             const marketResult = ticket.marketsResult[index];
             const marketStatus = Number(marketResult.status);
@@ -63,8 +66,8 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
                 maturityDate: new Date(market.maturity * 1000),
                 homeTeam: homeTeamName,
                 awayTeam: awayTeamName,
-                homeScore: Number(marketResult.results[0]),
-                awayScore: Number(marketResult.results[0]),
+                homeScore: isPlayerPropsMarket ? Number(marketResult.results[0]) : homeScore,
+                awayScore: isPlayerPropsMarket ? 0 : awayScore,
                 finalResult: Number(marketResult.results[0]),
                 status: 0,
                 isOpen: marketStatus === TicketMarketStatus.Open,
