@@ -1,10 +1,11 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import Toggle from 'components/Toggle';
+import Checkbox from 'components/fields/Checkbox';
 import { GlobalFiltersEnum } from 'enums/markets';
-import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
@@ -22,7 +23,7 @@ import {
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { CombinedParlayMarket, ParlaysMarket, SportMarketInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getUpdatedQuote } from 'utils/markets';
@@ -38,14 +39,10 @@ type ParylayProps = {
     onBuySuccess?: () => void;
 };
 
-// type CombinedMarketsData = {
-//     combinedMarkets: CombinedParlayMarket[];
-//     parlaysWithoutCombinedMarkets: ParlaysMarket[];
-//     isCombinedMarketsInParlay: boolean;
-// };
-
 const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -62,6 +59,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const [combinedMarketsData, setCombinedMarketsData] = useState<CombinedParlayMarket[]>([]);
     const [aggregatedParlayMarkets, setAggregatedParlayMarkets] = useState<ParlaysMarket[]>([]);
     const [updatedQuotes, setUpdatedQuotes] = useState<number[]>([]);
+    const [persistGames, setPersistGames] = useState<boolean>(false);
 
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
@@ -191,6 +189,15 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
             {parlayMarkets.length > 0 || combinedMarketsData.length > 0 ? (
                 <>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={persistGames}
+                            value={persistGames.toString()}
+                            onChange={(e: any) => setPersistGames(e.target.checked || false)}
+                            label={t('markets.parlay.persist-games')}
+                        />
+                    </CheckboxContainer>
                     <Toggle
                         label={{
                             firstLabel: t('markets.parlay.toggle-parlay.parlay'),
@@ -252,6 +259,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                     market={aggregatedParlayMarkets[0]}
                                     onBuySuccess={onBuySuccess}
                                     setUpdatedQuotes={setUpdatedQuotes}
+                                    persistGamesAfterSubmit={persistGames}
                                 />
                             ) : (
                                 <Ticket
@@ -259,6 +267,7 @@ const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
                                     setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
                                     onBuySuccess={onBuySuccess}
                                     setUpdatedQuotes={setUpdatedQuotes}
+                                    persistGamesAfterSubmit={persistGames}
                                 />
                             )}
                         </>
@@ -294,6 +303,19 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
 `;
 
 const ListContainer = styled(FlexDivColumn)``;
+
+const CheckboxContainer = styled(FlexDiv)`
+    width: 100%;
+    justify-content: center;
+    margin: 10px 0px;
+    label {
+        font-size: 12px;
+    }
+    .checkmark {
+        height: 17px;
+        width: 17px;
+    }
+`;
 
 const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     display: flex;

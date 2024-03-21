@@ -91,9 +91,10 @@ type SingleProps = {
     market: ParlaysMarket;
     onBuySuccess?: () => void;
     setUpdatedQuotes: (quotes: number[]) => void;
+    persistGamesAfterSubmit?: boolean;
 };
 
-const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes }) => {
+const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes, persistGamesAfterSubmit }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -564,7 +565,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                     setIsBuying(false);
                     setCollateralAmount('');
                     setTokenAmount(0);
-                    dispatch(removeAll());
+                    if (!persistGamesAfterSubmit) dispatch(removeAll());
                     onBuySuccess && onBuySuccess();
 
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.singleBuy, {

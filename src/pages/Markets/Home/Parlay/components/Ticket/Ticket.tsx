@@ -103,6 +103,7 @@ type TicketProps = {
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
     onBuySuccess?: () => void;
     setUpdatedQuotes: (quotes: number[]) => void;
+    persistGamesAfterSubmit?: boolean;
 };
 
 const TicketErrorMessage = {
@@ -110,7 +111,13 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess, setUpdatedQuotes }) => {
+const Ticket: React.FC<TicketProps> = ({
+    markets,
+    setMarketsOutOfLiquidity,
+    onBuySuccess,
+    setUpdatedQuotes,
+    persistGamesAfterSubmit,
+}) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -503,7 +510,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
                     setCollateralAmount('');
-                    dispatch(removeAll());
+                    if (!persistGamesAfterSubmit) dispatch(removeAll());
                     onBuySuccess && onBuySuccess();
                 }
             } catch (e) {

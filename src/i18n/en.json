@@ -578,6 +578,7 @@
         "parlay": {
             "total-quote": "Total quote",
             "total-bonus": "Total bonus",
+            "persist-games": "Persist games after submit",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
