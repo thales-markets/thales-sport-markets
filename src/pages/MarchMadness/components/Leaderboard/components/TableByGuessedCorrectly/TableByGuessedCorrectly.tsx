@@ -197,7 +197,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                     <TableRowCell>{t('march-madness.leaderboard.my-rewards-bracket').toUpperCase()}</TableRowCell>
                     <TableRowCell>{myScore[0].totalPoints}</TableRowCell>
                     <TableRowCell>
-                        {getFormattedRewardsAmount(myScore[0].tokenRewards, myScore[0].stableRewards)}
+                        {getFormattedRewardsAmount(myScore[0].stableRewards, myScore[0].tokenRewards)}
                     </TableRowCell>
                 </StickyRowTopTable>
             );
