@@ -980,8 +980,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 42,
-        name: '',
-        displayName: 'COLO/BOISE',
+        name: 'Colorado Buffaloes',
+        displayName: 'Colorado',
         region: 'South',
         position: 10,
     },
@@ -1134,8 +1134,8 @@ export const teamsData: MarchMadTeam[] = [
     },
     {
         id: 64,
-        name: '',
-        displayName: 'GRAMB/MON ST',
+        name: 'Grambling Tigers',
+        displayName: 'Grambling',
         region: 'Midwest',
         position: 16,
     },
