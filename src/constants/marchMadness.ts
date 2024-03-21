@@ -1207,6 +1207,7 @@ export const APPROVE_MULTIPLIER = 1.1;
 export const DEFAULT_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
 
 export const START_MINTING_DATE = Date.UTC(2024, 2, 18); // 18th March 2024. - after Selection Sunday
-export const END_MINTING_DATE = 1711037437; // timestamp from marchMadness contract in seconds - used only for unsupported networks 1711036800
+export const END_MINTING_DATE = 1711038337; // timestamp from marchMadness contract in seconds - used only for unsupported networks
 
+export const PRIZE_POOL = 19428.57; // Used after minting is finished instead of contract balance in order to transfer all funds from contract
 export const PRIZE_POOL_BONUS = '5,000 ARB';
