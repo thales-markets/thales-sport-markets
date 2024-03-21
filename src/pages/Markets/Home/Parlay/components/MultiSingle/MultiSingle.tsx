@@ -95,9 +95,10 @@ import {
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
+    persistGamesAfterSubmit?: boolean;
 };
 
-const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
+const MultiSingle: React.FC<MultiSingleProps> = ({ markets, persistGamesAfterSubmit }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -594,7 +595,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                                 resolve(
                                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
                                 );
-                                dispatch(removeFromParlay(marketAddress));
+                                if (!persistGamesAfterSubmit) dispatch(removeFromParlay(marketAddress));
                                 refetchBalances(walletAddress, networkId);
                             } else {
                                 reject(
