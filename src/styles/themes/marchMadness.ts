@@ -97,7 +97,7 @@ export default {
         status: {
             notSelected: Colors.BLACK,
             win: Colors.GREEN_GRADIENT_1,
-            loss: Colors.GRAY_GRADIENT_4,
+            loss: Colors.BLACK,
             started: Colors.BLUE_DARK,
             wrong: Colors.RED_GRADIENT_2,
             selected: Colors.BLACK,
