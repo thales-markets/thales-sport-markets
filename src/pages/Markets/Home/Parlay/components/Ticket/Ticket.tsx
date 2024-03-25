@@ -1152,9 +1152,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     </RowSummary>
                 </>
             )}
+            <HorizontalLine />
             <RowSummary>
                 <RowContainer>
-                    <SummaryLabel>{t('markets.parlay.persist-games')}:</SummaryLabel>
+                    <SummaryLabel>{t('markets.parlay.persist-games')}</SummaryLabel>
                     <CheckboxContainer>
                         <Checkbox
                             disabled={false}

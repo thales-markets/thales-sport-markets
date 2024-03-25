@@ -250,13 +250,13 @@ export const CheckboxContainer = styled.div`
         }
     }
     .checkmark {
-        height: 18px;
-        width: 18px;
+        height: 14px;
+        width: 14px;
         border: 2px solid ${(props) => props.theme.borderColor.quaternary};
         :after {
-            left: 4px;
-            width: 4px;
-            height: 11px;
+            left: 2px;
+            width: 3px;
+            height: 8px;
             border: 2px solid ${(props) => props.theme.borderColor.quaternary};
             border-width: 0 2px 2px 0;
         }

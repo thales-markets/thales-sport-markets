@@ -81,6 +81,7 @@ import {
     AmountToBuyMultiPayoutValue,
     CheckboxContainer,
     CollateralContainer,
+    HorizontalLine,
     InfoContainer,
     InfoLabel,
     InfoValue,
@@ -976,9 +977,10 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                           )} (${formatPercentage(totalProfitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
+            <HorizontalLine />
             <RowSummary>
                 <RowContainer>
-                    <SummaryLabel>{t('markets.parlay.persist-games')}:</SummaryLabel>
+                    <SummaryLabel>{t('markets.parlay.persist-games')}</SummaryLabel>
                     <CheckboxContainer>
                         <Checkbox
                             disabled={false}

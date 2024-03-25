@@ -75,6 +75,7 @@ import {
     AmountToBuyContainer,
     CheckboxContainer,
     GasSummary,
+    HorizontalLine,
     InfoContainer,
     InfoLabel,
     InfoValue,
@@ -950,9 +951,10 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                           )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
+            <HorizontalLine />
             <RowSummary>
                 <RowContainer>
-                    <SummaryLabel>{t('markets.parlay.persist-games')}:</SummaryLabel>
+                    <SummaryLabel>{t('markets.parlay.persist-games')}</SummaryLabel>
                     <CheckboxContainer>
                         <Checkbox
                             disabled={false}
