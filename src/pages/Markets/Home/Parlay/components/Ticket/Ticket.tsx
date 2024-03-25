@@ -72,6 +72,7 @@ import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
+    CheckboxContainer,
     GasSummary,
     HorizontalLine,
     InfoContainer,
@@ -91,6 +92,7 @@ import {
 } from '../styled-components';
 
 import Tooltip from 'components/Tooltip';
+import Checkbox from 'components/fields/Checkbox';
 import { differenceInDays } from 'date-fns';
 import { Network } from 'enums/network';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
@@ -103,7 +105,6 @@ type TicketProps = {
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
     onBuySuccess?: () => void;
     setUpdatedQuotes: (quotes: number[]) => void;
-    persistGamesAfterSubmit?: boolean;
 };
 
 const TicketErrorMessage = {
@@ -111,13 +112,7 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const Ticket: React.FC<TicketProps> = ({
-    markets,
-    setMarketsOutOfLiquidity,
-    onBuySuccess,
-    setUpdatedQuotes,
-    persistGamesAfterSubmit,
-}) => {
+const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBuySuccess, setUpdatedQuotes }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -163,6 +158,7 @@ const Ticket: React.FC<TicketProps> = ({
         payout: 0,
         onClose: () => {},
     });
+    const [keepSelection, setKeepSelection] = useState<boolean>(false);
 
     const [gas, setGas] = useState(0);
     const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
@@ -510,7 +506,7 @@ const Ticket: React.FC<TicketProps> = ({
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
                     setCollateralAmount('');
-                    if (!persistGamesAfterSubmit) dispatch(removeAll());
+                    if (!keepSelection) dispatch(removeAll());
                     onBuySuccess && onBuySuccess();
                 }
             } catch (e) {
@@ -1156,6 +1152,21 @@ const Ticket: React.FC<TicketProps> = ({
                     </RowSummary>
                 </>
             )}
+            <RowSummary>
+                <RowContainer>
+                    <SummaryLabel>{t('markets.parlay.persist-games')}:</SummaryLabel>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={keepSelection}
+                            value={keepSelection.toString()}
+                            onChange={(e: any) => {
+                                setKeepSelection(e.target.checked || false);
+                            }}
+                        />
+                    </CheckboxContainer>
+                </RowContainer>
+            </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />

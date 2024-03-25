@@ -1,6 +1,7 @@
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
+import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
@@ -78,6 +79,7 @@ import {
     AmountToBuyMultiInfoLabel,
     AmountToBuyMultiPayoutLabel,
     AmountToBuyMultiPayoutValue,
+    CheckboxContainer,
     CollateralContainer,
     InfoContainer,
     InfoLabel,
@@ -95,10 +97,9 @@ import {
 
 type MultiSingleProps = {
     markets: ParlaysMarket[];
-    persistGamesAfterSubmit?: boolean;
 };
 
-const MultiSingle: React.FC<MultiSingleProps> = ({ markets, persistGamesAfterSubmit }) => {
+const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -139,6 +140,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, persistGamesAfterSub
     const [isBuying, setIsBuying] = useState(false);
     const [hasValidationError, setHasValidationError] = useState(false);
     const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState<Record<string, string>>({});
+    const [keepSelection, setKeepSelection] = useState<boolean>(false);
 
     const [availablePerPosition, setAvailablePerPosition] = useState<Record<string, AvailablePerPosition>>({});
     const [ammPosition, setAmmPosition] = useState<Record<string, AMMPosition>>({});
@@ -595,7 +597,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, persistGamesAfterSub
                                 resolve(
                                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
                                 );
-                                if (!persistGamesAfterSubmit) dispatch(removeFromParlay(marketAddress));
+                                if (!keepSelection) dispatch(removeFromParlay(marketAddress));
                                 refetchBalances(walletAddress, networkId);
                             } else {
                                 reject(
@@ -973,6 +975,21 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets, persistGamesAfterSub
                               2
                           )} (${formatPercentage(totalProfitPercentage)})`}
                 </SummaryValue>
+            </RowSummary>
+            <RowSummary>
+                <RowContainer>
+                    <SummaryLabel>{t('markets.parlay.persist-games')}:</SummaryLabel>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={keepSelection}
+                            value={keepSelection.toString()}
+                            onChange={(e: any) => {
+                                setKeepSelection(e.target.checked || false);
+                            }}
+                        />
+                    </CheckboxContainer>
+                </RowContainer>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
