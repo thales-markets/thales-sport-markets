@@ -240,7 +240,7 @@ const TeamRow = styled.div<{
         !props.isDefault && !props.isSelected
             ? 'none'
             : `1px solid ${
-                  props.isWon === undefined
+                  props.isWon === undefined || props.isDefault
                       ? props.theme.marchMadness.borderColor.quinary
                       : props.isWon
                       ? props.theme.marchMadness.status.win

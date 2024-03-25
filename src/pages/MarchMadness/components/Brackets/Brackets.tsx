@@ -317,6 +317,32 @@ const Brackets: React.FC = () => {
 
             localStore.set(getLocalStorageKey(selectedBracketId, networkId, walletAddress), bracketsMapped);
             setBracketsData(bracketsMapped);
+        } else {
+            // populate winning teams
+            const bracketWithResults = initialBracketsData.map((match) => {
+                let updatedMatch: BracketMatch = {
+                    ...match,
+                    isHomeTeamSelected: winnerTeamIds[match.id]
+                        ? match.homeTeamId === winnerTeamIds[match.id]
+                        : undefined,
+                };
+                if (match.homeTeamParentMatchId !== undefined && match.awayTeamParentMatchId !== undefined) {
+                    const homeParentId = initialBracketsData.filter((m) => m.id === match.homeTeamParentMatchId)[0].id;
+                    const awayParentId = initialBracketsData.filter((m) => m.id === match.awayTeamParentMatchId)[0].id;
+
+                    updatedMatch = {
+                        ...match,
+                        homeTeamId: winnerTeamIds[homeParentId],
+                        awayTeamId: winnerTeamIds[awayParentId],
+                        isHomeTeamSelected: winnerTeamIds[match.id]
+                            ? winnerTeamIds[homeParentId] === winnerTeamIds[match.id]
+                            : undefined,
+                    };
+                }
+                return updatedMatch;
+            });
+
+            setBracketsData(bracketWithResults);
         }
     }, [
         networkId,
@@ -326,6 +352,7 @@ const Brackets: React.FC = () => {
         isBracketMinted,
         isBracketsLocked,
         selectedBracketId,
+        winnerTeamIds,
     ]);
 
     // populate match winners
