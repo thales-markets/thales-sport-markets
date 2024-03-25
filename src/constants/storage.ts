@@ -21,4 +21,5 @@ export const LOCAL_STORAGE_KEYS = {
     BRACKETS: 'brackets',
     COLLATERAL_INDEX: 'collateralIndex',
     SGP_FEES: 'sgpFees',
+    KEEP_SELECTION: 'keepSelection',
 };

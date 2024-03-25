@@ -1,10 +1,10 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import Toggle from 'components/Toggle';
 import { GlobalFiltersEnum } from 'enums/markets';
-import { t } from 'i18next';
 import useParlayAmmDataQuery from 'queries/markets/useParlayAmmDataQuery';
 import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
@@ -38,14 +38,10 @@ type ParylayProps = {
     onBuySuccess?: () => void;
 };
 
-// type CombinedMarketsData = {
-//     combinedMarkets: CombinedParlayMarket[];
-//     parlaysWithoutCombinedMarkets: ParlaysMarket[];
-//     isCombinedMarketsInParlay: boolean;
-// };
-
 const Parlay: React.FC<ParylayProps> = ({ onBuySuccess }) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));

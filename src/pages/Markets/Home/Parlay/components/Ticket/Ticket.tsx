@@ -72,6 +72,7 @@ import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
+    CheckboxContainer,
     GasSummary,
     HorizontalLine,
     InfoContainer,
@@ -91,10 +92,12 @@ import {
 } from '../styled-components';
 
 import Tooltip from 'components/Tooltip';
+import Checkbox from 'components/fields/Checkbox';
 import { differenceInDays } from 'date-fns';
 import { Network } from 'enums/network';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
+import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import SuggestedAmount from '../SuggestedAmount';
 
@@ -156,6 +159,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         payout: 0,
         onClose: () => {},
     });
+    const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
 
     const [gas, setGas] = useState(0);
     const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
@@ -503,7 +507,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
                     setCollateralAmount('');
-                    dispatch(removeAll());
+                    if (!keepSelection) dispatch(removeAll());
                     onBuySuccess && onBuySuccess();
                 }
             } catch (e) {
@@ -1149,6 +1153,30 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                     </RowSummary>
                 </>
             )}
+            <HorizontalLine />
+            <RowSummary>
+                <RowContainer>
+                    <SummaryLabel>
+                        {t('markets.parlay.persist-games')}
+                        <Tooltip
+                            overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>}
+                            iconFontSize={13}
+                            marginLeft={3}
+                        />
+                    </SummaryLabel>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={keepSelection}
+                            value={keepSelection.toString()}
+                            onChange={(e: any) => {
+                                setKeepSelection(e.target.checked || false);
+                                setKeepSelectionToStorage(e.target.checked || false);
+                            }}
+                        />
+                    </CheckboxContainer>
+                </RowContainer>
+            </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
