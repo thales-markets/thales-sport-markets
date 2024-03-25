@@ -1,6 +1,7 @@
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
+import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -980,7 +981,14 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
             <HorizontalLine />
             <RowSummary>
                 <RowContainer>
-                    <SummaryLabel>{t('markets.parlay.persist-games')}</SummaryLabel>
+                    <SummaryLabel>
+                        {t('markets.parlay.persist-games')}
+                        <Tooltip
+                            overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>}
+                            iconFontSize={13}
+                            marginLeft={3}
+                        />
+                    </SummaryLabel>
                     <CheckboxContainer>
                         <Checkbox
                             disabled={false}

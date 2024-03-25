@@ -954,7 +954,14 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
             <HorizontalLine />
             <RowSummary>
                 <RowContainer>
-                    <SummaryLabel>{t('markets.parlay.persist-games')}</SummaryLabel>
+                    <SummaryLabel>
+                        {t('markets.parlay.persist-games')}
+                        <Tooltip
+                            overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>}
+                            iconFontSize={13}
+                            marginLeft={3}
+                        />
+                    </SummaryLabel>
                     <CheckboxContainer>
                         <Checkbox
                             disabled={false}
