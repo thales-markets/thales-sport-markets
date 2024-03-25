@@ -1,4 +1,6 @@
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { NAV_MENU } from 'constants/ui';
+import { localStore } from 'thales-utils';
 import { NavMenuItem, PromotionCardStatus, PromotionStatus } from 'types/ui';
 import { formatTimestampForPromotionDate } from './formatters/date';
 
@@ -36,4 +38,14 @@ export const getPromotionDateRange = (startDate: number, endDate: number): strin
         return `${formatTimestampForPromotionDate(startDate)} - ${String.fromCharCode(0x0221e)}`;
     }
     return `${formatTimestampForPromotionDate(startDate)} - ${formatTimestampForPromotionDate(endDate)}`;
+};
+
+export const getKeepSelectionFromStorage = (): boolean => {
+    return localStore.get(LOCAL_STORAGE_KEYS.KEEP_SELECTION)
+        ? (localStore.get(LOCAL_STORAGE_KEYS.KEEP_SELECTION) as boolean)
+        : false;
+};
+
+export const setKeepSelectionToStorage = (value: boolean) => {
+    localStore.set(LOCAL_STORAGE_KEYS.KEEP_SELECTION, value);
 };

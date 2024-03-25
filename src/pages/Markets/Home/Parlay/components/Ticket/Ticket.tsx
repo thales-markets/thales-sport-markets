@@ -97,6 +97,7 @@ import { differenceInDays } from 'date-fns';
 import { Network } from 'enums/network';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
+import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import SuggestedAmount from '../SuggestedAmount';
 
@@ -158,7 +159,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         payout: 0,
         onClose: () => {},
     });
-    const [keepSelection, setKeepSelection] = useState<boolean>(false);
+    const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
 
     const [gas, setGas] = useState(0);
     const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
@@ -1170,6 +1171,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                             value={keepSelection.toString()}
                             onChange={(e: any) => {
                                 setKeepSelection(e.target.checked || false);
+                                setKeepSelectionToStorage(e.target.checked || false);
                             }}
                         />
                     </CheckboxContainer>

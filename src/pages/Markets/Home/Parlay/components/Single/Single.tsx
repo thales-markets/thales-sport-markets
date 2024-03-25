@@ -67,6 +67,7 @@ import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
+import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import SuggestedAmount from '../SuggestedAmount';
@@ -129,7 +130,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState('');
-    const [keepSelection, setKeepSelection] = useState<boolean>(false);
+    const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage());
 
     const [availablePerPosition, setAvailablePerPosition] = useState<AvailablePerPosition>({
         [Position.HOME]: {
@@ -969,6 +970,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                             value={keepSelection.toString()}
                             onChange={(e: any) => {
                                 setKeepSelection(e.target.checked || false);
+                                setKeepSelectionToStorage(e.target.checked || false);
                             }}
                         />
                     </CheckboxContainer>

@@ -71,6 +71,7 @@ import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
+import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import MatchInfo from '../MatchInfo';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
@@ -142,7 +143,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const [isBuying, setIsBuying] = useState(false);
     const [hasValidationError, setHasValidationError] = useState(false);
     const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState<Record<string, string>>({});
-    const [keepSelection, setKeepSelection] = useState<boolean>(false);
+    const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage());
 
     const [availablePerPosition, setAvailablePerPosition] = useState<Record<string, AvailablePerPosition>>({});
     const [ammPosition, setAmmPosition] = useState<Record<string, AMMPosition>>({});
@@ -996,6 +997,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                             value={keepSelection.toString()}
                             onChange={(e: any) => {
                                 setKeepSelection(e.target.checked || false);
+                                setKeepSelectionToStorage(e.target.checked || false);
                             }}
                         />
                     </CheckboxContainer>
