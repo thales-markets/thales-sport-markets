@@ -1,7 +1,10 @@
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import { START_MINTING_DATE } from 'constants/marchMadness';
+import { SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
+import ROUTES from 'constants/routes';
 import { hoursToSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
+import { Network } from 'enums/network';
 import useInterval from 'hooks/useInterval';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
@@ -20,15 +23,12 @@ import {
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
-import { ThemeInterface } from 'types/ui';
-import { getIsMintingStarted } from 'utils/marchMadness';
-import { history, navigateTo } from 'utils/routes';
-import { MarchMadTabs } from '../Tabs/Tabs';
-import ROUTES from 'constants/routes';
-import { Network } from 'enums/network';
 import { changeNetwork } from 'thales-utils';
+import { ThemeInterface } from 'types/ui';
+import { getIsMintingStarted, isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
+import { history, navigateTo } from 'utils/routes';
 import { useSwitchNetwork } from 'wagmi';
-import { SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
+import { MarchMadTabs } from '../Tabs/Tabs';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -103,7 +103,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
 
     const buttonTitle = () => {
         if (isWalletConnected) {
-            if (networkId === Network.Arbitrum) {
+            if (isMarchMadnessAvailableForNetworkId(networkId)) {
                 return t('march-madness.home.button-create');
             } else {
                 return t('march-madness.home.button-switch');
@@ -319,7 +319,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         )}
                     </DropdownWrapper>
 
-                    {(!isWalletConnected || !isBracketsLocked) && (
+                    {(!isWalletConnected || !isBracketsLocked || !isMarchMadnessAvailableForNetworkId(networkId)) && (
                         <Button
                             additionalStyles={{
                                 width: '100%',
