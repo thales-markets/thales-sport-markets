@@ -33,7 +33,7 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, is
                         />
                     )}
                     <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
-                    {sport.toLowerCase() != 'all' && sport.toLowerCase() != 'live' ? (
+                    {sport.toLowerCase() != 'all' ? (
                         !selected ? (
                             <ArrowIcon className={`icon-exotic icon-exotic--right ${selected ? 'selected' : ''}`} />
                         ) : (

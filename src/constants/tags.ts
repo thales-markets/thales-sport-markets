@@ -579,6 +579,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
     eSports: [18977, 18983, 19138],
     Cricket: [9020, 9021],
     Golf: [109021, 109121],
+    Live: [9004, 9011],
 };
 
 export const ENETPULSE_SPORTS = [
