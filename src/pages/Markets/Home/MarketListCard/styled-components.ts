@@ -181,10 +181,10 @@ export const ArrowRight = styled.i`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-export const OddsWrapper = styled(FlexDivRow)`
+export const OddsWrapper = styled(FlexDivRow)<{ isFirstRow?: boolean }>`
     position: relative;
     justify-content: flex-start;
-    flex-wrap: wrap;
+    flex-wrap: ${(props) => (props.isFirstRow ? 'nowrap' : 'wrap')};
     gap: 10px;
 `;
 

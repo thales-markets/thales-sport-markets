@@ -262,7 +262,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         </TeamsInfoConatiner>
                     </SPAAnchor>
                 </MatchInfoConatiner>
-                <OddsWrapper>
+                <OddsWrapper isFirstRow={true}>
                     {showOdds && (
                         <>
                             <OddsV2 market={market} />

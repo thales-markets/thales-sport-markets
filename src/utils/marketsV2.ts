@@ -28,6 +28,7 @@ export const getSimpleSymbolText = (
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
 
+// TODO: needs refactoring for generic logic
 export const getCombinedPositionsSymbolText = (position: Position, market: SportMarketInfoV2) => {
     const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
     if (!combinedPositions) return '';
@@ -62,9 +63,14 @@ export const getCombinedPositionsSymbolText = (position: Position, market: Sport
         market.typeId === BetType.HALFTIME_FULLTIME_GOALS
             ? '-'
             : '&'
-    }${getSimpleSymbolText(position2.position, position2.typeId, true, position2.line)}${
-        market.typeId === BetType.HALFTIME_FULLTIME_GOALS ? '&' : ''
-    }${!position4 && market.typeId === BetType.HALFTIME_FULLTIME_GOALS ? position3Text : ''}${
+    }${getSimpleSymbolText(
+        position2.position,
+        position2.typeId,
+        true,
+        market.typeId === BetType.COMBINED_POSITIONS ? undefined : position2.line
+    )}${market.typeId === BetType.HALFTIME_FULLTIME_GOALS ? '&' : ''}${
+        !position4 && market.typeId === BetType.HALFTIME_FULLTIME_GOALS ? position3Text : ''
+    }${
         position4 && market.typeId === BetType.HALFTIME_FULLTIME_GOALS
             ? `${getSimpleSymbolText(position3.position, position3.typeId, true, position3.line)}-${getSimpleSymbolText(
                   position4.position,
