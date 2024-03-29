@@ -34,6 +34,7 @@ const Parlay: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const ticket = useSelector(getTicket);
     const hasTicketError = useSelector(getHasTicketError);
+    // TODO SWITCH CHECK TO LIVE WITH SPORTMARKETSV2 OBJECT FLAG
     const liveFilter = localStorage.getItem(LOCAL_STORAGE_KEYS.FILTER_SPORT);
     const isLiveFilterSelected = liveFilter != null ? JSON.parse(liveFilter) == SportFilterEnum.Live : false;
 

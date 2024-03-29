@@ -401,6 +401,7 @@ export type SportMarketInfoV2 = {
     childMarkets: SportMarketInfoV2[];
     combinedPositions: CombinedPositions[];
     selectedCombinedPositions?: CombinedPositions;
+    live?: boolean;
 };
 
 export type SportMarketsV2 = SportMarketInfoV2[];

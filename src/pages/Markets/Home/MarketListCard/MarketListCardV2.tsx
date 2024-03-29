@@ -76,6 +76,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const liveFilter = localStorage.getItem(LOCAL_STORAGE_KEYS.FILTER_SPORT);
+    // TODO SWITCH TO MARKET LIVE FLAG
     const isLiveMarket = liveFilter != null ? JSON.parse(liveFilter) == SportFilterEnum.Live && isGameStarted : false;
     const showOdds = (isLiveMarket || !isPendingResolution) && !isGameResolved && !market.isPaused;
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
