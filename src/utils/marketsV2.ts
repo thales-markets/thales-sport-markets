@@ -86,11 +86,7 @@ export const getCombinedPositionsSymbolText = (position: Position, market: Sport
 export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) => {
     const betType = market.typeId;
 
-    if (market.isOneSideMarket || market.isOneSidePlayerPropsMarket) {
-        return 'YES';
-    }
-
-    if (market.isYesNoPlayerPropsMarket) {
+    if (market.isOneSideMarket || market.isOneSidePlayerPropsMarket || market.isYesNoPlayerPropsMarket) {
         return position === 0 ? 'YES' : 'NO';
     }
 
