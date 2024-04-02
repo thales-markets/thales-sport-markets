@@ -38,15 +38,21 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
         if (isAddedToTicket) {
             dispatch(removeFromTicket(market.gameId));
         } else {
-            const ticket: TicketPosition = {
+            const ticketPosition: TicketPosition = {
                 gameId: market.gameId,
                 leagueId: market.leagueId,
                 typeId: market.typeId,
                 playerId: market.playerProps.playerId,
                 line: market.line,
                 position: position,
+                live: market.live,
             };
-            dispatch(updateTicket(ticket));
+            if (ticket.some((position) => position.live) || (ticket.length && market.live)) {
+                toast(t('markets.market-card.odds-live-limitation-message'), { type: 'error' });
+            } else {
+                dispatch(updateTicket(ticketPosition));
+            }
+
             if (isMobile) {
                 toast(oddTooltipText, oddToastOptions);
             }

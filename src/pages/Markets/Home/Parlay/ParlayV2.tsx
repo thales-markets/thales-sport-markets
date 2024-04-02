@@ -106,7 +106,7 @@ const Parlay: React.FC = () => {
 
             setTicketMarkets(ticketMarkets);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch, isLiveFilterSelected]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 

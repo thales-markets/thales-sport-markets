@@ -413,6 +413,7 @@ export type TicketPosition = {
     playerId: number;
     line: number;
     position: number;
+    live?: boolean;
 };
 
 export type BetTypeInfo = {
