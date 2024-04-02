@@ -409,7 +409,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 9132,
-        label: 'English Cup',
+        label: 'FA Cup',
         logoClass: '',
         favourite: false,
         hidden: false,
@@ -417,7 +417,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 9134,
-        label: 'French Cup',
+        label: 'Coupe de France',
         logoClass: '',
         favourite: false,
         hidden: false,
@@ -425,7 +425,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 9138,
-        label: 'Spanish Cup',
+        label: 'Copa del Rey',
         logoClass: '',
         favourite: false,
         hidden: false,
@@ -433,7 +433,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 9209,
-        label: 'German Cup',
+        label: 'DFB Pokal',
         logoClass: '',
         favourite: false,
         hidden: false,
@@ -441,7 +441,7 @@ export const TAGS_LIST: Tags = [
     },
     {
         id: 9141,
-        label: 'Italian Cup',
+        label: 'Coppa Italia',
         logoClass: '',
         favourite: false,
         hidden: false,
