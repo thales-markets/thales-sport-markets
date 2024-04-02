@@ -19,6 +19,16 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : isInternationalGame(Number(leagueTag))
         ? `/logos/Countries/${team.trim().replaceAll(' ', '-').toLowerCase()}.svg`
+        : leagueTag == 9132
+        ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueTag == 9134
+        ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueTag == 9138
+        ? `/logos/La Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueTag == 9141
+        ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueTag == 9209
+        ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')
@@ -119,6 +129,16 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/europe.svg`;
         case TAGS_FLAGS.EUROLEAGUE:
             return `/logos/Countries/europe.svg`;
+        case TAGS_FLAGS.ENGLAND_CUP:
+            return `/logos/Countries/england.svg`;
+        case TAGS_FLAGS.FRANCE_CUP:
+            return `/logos/Countries/france.svg`;
+        case TAGS_FLAGS.SPAIN_CUP:
+            return `/logos/Countries/spain.svg`;
+        case TAGS_FLAGS.GERMANY_CUP:
+            return `/logos/Countries/germany.svg`;
+        case TAGS_FLAGS.ITALY_CUP:
+            return `/logos/Countries/italy.svg`;
         default:
             return `/logos/Countries/world.svg`;
     }
