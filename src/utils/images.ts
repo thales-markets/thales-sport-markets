@@ -19,6 +19,16 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : isInternationalGame(Number(leagueTag))
         ? `/logos/Countries/${team.trim().replaceAll(' ', '-').toLowerCase()}.svg`
+        : leagueTag == 9132
+        ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueTag == 9134
+        ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueTag == 9138
+        ? `/logos/La Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueTag == 9141
+        ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : leagueTag == 9209
+        ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()
               .replaceAll(' ', '-')
