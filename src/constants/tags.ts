@@ -407,6 +407,46 @@ export const TAGS_LIST: Tags = [
         hidden: false,
         priority: 110,
     },
+    {
+        id: 9132,
+        label: 'English Cup',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 122,
+    },
+    {
+        id: 9134,
+        label: 'French Cup',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 124,
+    },
+    {
+        id: 9138,
+        label: 'Spanish Cup',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 123,
+    },
+    {
+        id: 9209,
+        label: 'German Cup',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 125,
+    },
+    {
+        id: 9141,
+        label: 'Italian Cup',
+        logoClass: '',
+        favourite: false,
+        hidden: false,
+        priority: 126,
+    },
 ];
 
 export const SPORTS_MAP: SportsMap = {
@@ -459,6 +499,11 @@ export const SPORTS_MAP: SportsMap = {
     9536: 'Soccer',
     9268: 'Soccer',
     19199: 'Soccer',
+    9132: 'Soccer',
+    9134: 'Soccer',
+    9138: 'Soccer',
+    9141: 'Soccer',
+    9208: 'Soccer',
 };
 
 export const TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS = [
@@ -518,6 +563,11 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
         9536,
         9268,
         19199,
+        9132,
+        9134,
+        9138,
+        9141,
+        9208,
     ],
     MMA: [9007, 18196, 19595],
     Motosport: [9445, 9497],
@@ -555,6 +605,11 @@ export const ENETPULSE_SPORTS = [
     9268,
     19199,
     19595,
+    9132,
+    9134,
+    9138,
+    9141,
+    9208,
 ];
 
 export const JSON_ODDS_SPORTS = [109021, 109121];
@@ -676,6 +731,11 @@ export const SCORING_MAP: SportsMap = {
     9268: 'goals',
     19199: 'goals',
     19595: 'rounds',
+    9132: 'goals',
+    9134: 'goals',
+    9138: 'goals',
+    9141: 'goals',
+    9208: 'goals',
 };
 
 export const MATCH_RESOLVE_MAP: SportsMap = {
@@ -728,6 +788,11 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     9268: 'regular',
     19199: 'regular',
     19595: '',
+    9132: 'regular',
+    9134: 'regular',
+    9138: 'regular',
+    9141: 'regular',
+    9208: 'regular',
 };
 
 export const SPORT_PERIODS_MAP: SportsMap = {
@@ -778,4 +843,9 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9268: 'half',
     19199: 'half',
     19595: 'round',
+    9132: 'half',
+    9134: 'half',
+    9138: 'half',
+    9141: 'half',
+    9208: 'half',
 };
