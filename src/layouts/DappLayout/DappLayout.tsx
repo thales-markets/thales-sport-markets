@@ -3,7 +3,6 @@ import Loader from 'components/Loader';
 import MetaData from 'components/MetaData';
 import { generalConfig } from 'config/general';
 import ROUTES from 'constants/routes';
-import { Network } from 'enums/network';
 import { Theme } from 'enums/ui';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
 import queryString from 'query-string';
@@ -20,8 +19,6 @@ import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
 import { isMobile } from 'utils/device';
 import { setReferralId } from 'utils/referral';
-import ElectionsBanner from '../../components/Banner';
-import { getNetworkId } from '../../redux/modules/wallet';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
 
@@ -29,7 +26,6 @@ const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const dispatch = useDispatch();
     const location = useLocation();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const queryParams: { referralId?: string; referrerId?: string } = queryString.parse(location.search);
 
@@ -79,7 +75,6 @@ const DappLayout: React.FC = ({ children }) => {
         <>
             {isAppReady ? (
                 <Background>
-                    {networkId === Network.Arbitrum && <ElectionsBanner />}
                     <Wrapper>
                         <MetaData />
                         <DappHeader />
