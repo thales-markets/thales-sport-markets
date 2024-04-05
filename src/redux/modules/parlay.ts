@@ -1,6 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { GOLF_TAGS } from 'constants/tags';
+import { BetType, CombinedPositionsMatchingCode, ParlayErrorCode, PLAYER_PROPS_BET_TYPES } from 'enums/markets';
 import { Network } from 'enums/network';
 import { localStore } from 'thales-utils';
 import {
@@ -12,13 +13,12 @@ import {
 } from 'types/markets';
 import { checkIfCombinedPositionAlreadyInParlay, getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { RootState } from '../rootReducer';
-import { BetType, CombinedPositionsMatchingCode, ParlayErrorCode, PLAYER_PROPS_BET_TYPES } from 'enums/markets';
 import {
     getHasCombinedMarketsParentMarketAddress,
     getParentMarketAddressFromCombinedMarketPositionType,
     hasParlayDataParentMarketAddress,
 } from 'utils/parlay';
+import { RootState } from '../rootReducer';
 
 const sliceName = 'parlay';
 
@@ -128,7 +128,8 @@ const parlaySlice = createSlice({
                 );
 
             const isIncomingPositionPlayerProps =
-                PLAYER_PROPS_BET_TYPES.includes(action.payload.betType as BetType) && action.payload.tag == 9004;
+                PLAYER_PROPS_BET_TYPES.includes(action.payload.betType as BetType) &&
+                (action.payload.tag == 9004 || action.payload.tag == 9005);
 
             // Check the case of multiple player props markets from same market
             if (isIncomingPositionPlayerProps && hasAddedSameParentMarket) {
