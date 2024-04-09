@@ -581,7 +581,8 @@
         "superbowl-incentive": "10 000 ARB EN INCITATIONS",
         "incentivized-tooltip-uefa": "Un total énorme de {{rewards}} sera distribué pour les compétitions de l'UEFA. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
         "incentivized-tooltip-nhl": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de la LNH, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
-        "incentivized-tooltip-mm": "Gagnez 45 000 ARB + 50 000 THALES pendant March Madness. Plus de détails <detailsLink>ici</detailsLink>."
+        "incentivized-tooltip-mm": "Gagnez 45 000 ARB + 50 000 THALES pendant March Madness. Plus de détails <detailsLink>ici</detailsLink>.",
+        "incentivized-tooltip-nhl-mlb": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de {{league}}, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>."
     },
     "rewards": {
         "table": {
