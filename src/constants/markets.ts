@@ -45,7 +45,7 @@ export const INCENTIVIZED_UEFA = {
 export const INCENTIVIZED_NHL = {
     ids: [9006],
     startDate: new Date(Date.UTC(2024, 2, 5, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 3, 18, 23, 59, 59)),
+    endDate: new Date(Date.UTC(2024, 5, 24, 23, 59, 59)),
     link: 'https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards',
     arbRewards: '20,000 ARB',
 };
@@ -53,7 +53,7 @@ export const INCENTIVIZED_NHL = {
 export const INCENTIVIZED_MLB = {
     ids: [TAGS_FLAGS.MLB],
     startDate: new Date(Date.UTC(2024, 3, 8, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 8, 29, 23, 59, 59)),
+    endDate: new Date(Date.UTC(2024, 10, 1, 23, 59, 59)),
     link: 'https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards',
     arbRewards: '30,000 ARB',
 };
