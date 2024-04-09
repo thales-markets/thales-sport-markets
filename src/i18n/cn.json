@@ -581,7 +581,8 @@
         "superbowl-incentive": "10,000 ARB 奖励",
         "incentivized-tooltip-uefa": "欧足联比赛将发放总计高达 {{rewards}} 的奖金。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
         "incentivized-tooltip-nhl": "NHL 赛季剩余时间（包括季后赛）将发放总计高达 {{rewards}} 的奖励。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
-        "incentivized-tooltip-mm": "在疯狂三月期间赢得 45,000 ARB + 50,000 THALES。更多详细信息<detailsLink>此处</detailsLink>。"
+        "incentivized-tooltip-mm": "在疯狂三月期间赢得 45,000 ARB + 50,000 THALES。更多详细信息<detailsLink>此处</detailsLink>。",
+        "incentivized-tooltip-nhl-mlb": "总计高达 {{rewards}} 的奖励将分发给 {{league}} 赛季的剩余比赛，包括季后赛。只有 Arbitrum 网络上的交易量才会计入奖励！查看<detailsLink>此处</detailsLink>了解更多详情。"
     },
     "rewards": {
         "header": "奖励",

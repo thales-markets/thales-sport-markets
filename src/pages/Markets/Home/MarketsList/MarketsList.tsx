@@ -4,6 +4,7 @@ import Tooltip from 'components/Tooltip';
 import {
     INCENTIVIZED_LEAGUE,
     INCENTIVIZED_MARCH_MADNESS,
+    INCENTIVIZED_MLB,
     INCENTIVIZED_NHL,
     INCENTIVIZED_UEFA,
 } from 'constants/markets';
@@ -124,14 +125,41 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                         <Tooltip
                             overlay={
                                 <Trans
-                                    i18nKey="markets.incentivized-tooltip-nhl"
+                                    i18nKey="markets.incentivized-tooltip-nhl-mlb"
                                     components={{
                                         detailsLink: (
                                             <a href={INCENTIVIZED_NHL.link} target="_blank" rel="noreferrer" />
                                         ),
                                     }}
                                     values={{
+                                        league: leagueName,
                                         rewards: INCENTIVIZED_NHL.arbRewards,
+                                    }}
+                                />
+                            }
+                            component={
+                                <IncentivizedLeague>
+                                    <IncentivizedTitle>{t('markets.incentivized-markets')}</IncentivizedTitle>
+                                    {getNetworkLogo(NetworkId.Arbitrum)}
+                                </IncentivizedLeague>
+                            }
+                        ></Tooltip>
+                    )}
+                {INCENTIVIZED_MLB.ids.includes(Number(league)) &&
+                    new Date() > INCENTIVIZED_MLB.startDate &&
+                    new Date() < INCENTIVIZED_MLB.endDate && (
+                        <Tooltip
+                            overlay={
+                                <Trans
+                                    i18nKey="markets.incentivized-tooltip-nhl-mlb"
+                                    components={{
+                                        detailsLink: (
+                                            <a href={INCENTIVIZED_MLB.link} target="_blank" rel="noreferrer" />
+                                        ),
+                                    }}
+                                    values={{
+                                        league: leagueName,
+                                        rewards: INCENTIVIZED_MLB.arbRewards,
                                     }}
                                 />
                             }

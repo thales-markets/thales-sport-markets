@@ -581,7 +581,8 @@
         "superbowl-incentive": "10 000 АРБ В СТИМУЛИРОВАНИИ",
         "incentivized-tooltip-uefa": "На соревнованиях УЕФА будет распределена колоссальная сумма {{rewards}}. В вознаграждение будет засчитываться только объем в сети Arbitrum! Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
         "incentivized-tooltip-nhl": "Огромная сумма {{rewards}} будет распределена до конца сезона НХЛ, включая плей-офф. В вознаграждение будет засчитываться только объем в сети Arbitrum! Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
-        "incentivized-tooltip-mm": "Выиграйте 45 000 ARB + 50 000 THALES в ходе «Мартовского безумия». Подробнее <detailsLink>здесь</detailsLink>."
+        "incentivized-tooltip-mm": "Выиграйте 45 000 ARB + 50 000 THALES в ходе «Мартовского безумия». Подробнее <detailsLink>здесь</detailsLink>.",
+        "incentivized-tooltip-nhl-mlb": "Огромная сумма {{rewards}} будет распределена до конца сезона {{league}}, включая плей-офф. В вознаграждение будет засчитываться только объем в сети Arbitrum! Более подробную информацию можно найти <detailsLink>здесь</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
