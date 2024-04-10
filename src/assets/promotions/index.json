@@ -160,11 +160,11 @@
         "endDate": 1713136815,
         "promotionId": "ufc-300",
         "promotionUrl": "/promotions/ufc-300",
-        "backgroundImageUrl": "/promotions/mlb-nhl-small.webp",
+        "backgroundImageUrl": "/promotions/ufc-small.webp",
         "callToActionButton": "Play now",
         "availableOnNetworks": [42161],
         "article": {
-            "coverImageUrl": "/promotions/mlb-nhl-big.webp",
+            "coverImageUrl": "/promotions/ufc-big.webp",
             "headerHtml": "<h1><span><span><span>Win 2,000 ARB in pro rata awards on UFC 300</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Compete for 2,000 ARB dedicated to UFC 300, one of the biggest events in the world of fighting! Rewards are distributed pro rata, meaning higher volume = higher rewards. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-ufc-300-campaign' target='_blank'> <span> <span> <span> <strong> <u>Dune Dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
