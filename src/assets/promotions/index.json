@@ -135,7 +135,7 @@
         "title": "Win 20,000 ARB in NHL and 30,000 ARB in MLB markets",
         "description": "Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.",
         "startDate": 1702236692,
-        "endDate": 1727571660,
+        "endDate": 1730549376,
         "promotionId": "mlb-nhl-rewards",
         "promotionUrl": "/promotions/mlb-nhl-rewards",
         "backgroundImageUrl": "/promotions/mlb-nhl-small.webp",
@@ -146,11 +146,33 @@
             "headerHtml": "<h1><span><span><span>Win 20,000 ARB in NHL and 30,000 ARB in MLB markets</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.</span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-mlb-campaign' target='_blank'> <span> <span> <span> <strong> <u>MLB dashboard.</u> </strong> </span> </span> </span> </a> and <a href='https://dune.com/leifu/overtime-nhl-campaign' target='_blank'> <span> <span> <span> <strong> <u>NHL dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
-                "ctaButtonLink": "/markets",
+                "ctaButtonLink": "/markets?lang=en&sport=Baseball&globalFilter=OpenMarkets&showActive=true&tag=MLB",
                 "ctaButtonLabel": "Play now",
                 "forceChangeNetworkOnClick": "arbitrum_mainnet"
             },
             "contentHtml": " <p> <span> <span> <span>User incentives on Overtime are getting more ridiculous by the day! If you are a fan of the NHL and MLB, prepare for great news: you can win 20,000 ARB and 30,000 ARB in each league respectively until the end of the season.</span> </span> </span> </p> <p> <span> <span> <span>The rewards are distributed pro rata, meaning the top wallets will share the prize pool based on how much volume they’ve generated.</span> </span> </span> </p> <p> <span> <span> <span>The MLB and NHL join the <a href='https://www.overtimemarkets.xyz/promotions/big-leagues' target='_blank'><u>NBA and NFL</u></a> on the list of US-based leagues with incredible additional rewards for users. But that’s not even remotely close to being the entire promo offering on Overtime!<br> </span> </span> </p> <p> <span> <span> <span> <strong>But that’s not even remotely close to being the entire promo offering on Overtime!</strong> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
+        }
+    },
+    {
+        "title": "Win 2,000 ARB in pro rata awards on UFC 300",
+        "description": "Compete for 2,000 ARB dedicated to UFC 300, one of the biggest events in the world of fighting! Rewards are distributed pro rata, meaning higher trading volume = higher rewards.",
+        "startDate": 1712748015,
+        "endDate": 1713136815,
+        "promotionId": "ufc-300",
+        "promotionUrl": "/promotions/ufc-300",
+        "backgroundImageUrl": "/promotions/ufc-small.png",
+        "callToActionButton": "Play now",
+        "availableOnNetworks": [42161],
+        "article": {
+            "coverImageUrl": "/promotions/ufc-big.png",
+            "headerHtml": "<h1><span><span><span>Win 2,000 ARB in pro rata awards on UFC 300</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "<p> <span> <span> <span>Compete for 2,000 ARB dedicated to UFC 300, one of the biggest events in the world of fighting! Rewards are distributed pro rata, meaning higher volume = higher rewards. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-ufc-300-campaign' target='_blank'> <span> <span> <span> <strong> <u>Dune Dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
+                "ctaButtonLink": "/markets?lang=en&sport=MMA&globalFilter=OpenMarkets&showActive=true&tag=UFC",
+                "ctaButtonLabel": "Play now",
+                "forceChangeNetworkOnClick": "arbitrum_mainnet"
+            },
+            "contentHtml": " <p> <span> <span> <span>DEGENS, WHAT IS YOUR PROFESSION? </span> </span> </span> </p> <p> <span> <span> <span>On Apr 13, all eyes will be on the historic UFC 300 event, boasting the best fight card ever assembled. </span> </span> </span> </p> <p> <span> <span> <span>That's not all – you can win up to 2000 ARB in rewards on Overtime! Rewards will be distributed pro rata, meaning the higher your volume, the higher the prizes. But that’s not even remotely close to being the entire promo offering on Overtime! </span> </span> </p> <p> <span> <span> <span> <strong>But that’s not even remotely close to being the entire promo offering on Overtime!</strong> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
         }
     },
     {
