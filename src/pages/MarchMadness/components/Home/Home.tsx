@@ -1,25 +1,34 @@
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 import { START_MINTING_DATE } from 'constants/marchMadness';
+import { SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
+import ROUTES from 'constants/routes';
 import { hoursToSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
+import { Network } from 'enums/network';
 import useInterval from 'hooks/useInterval';
 import useMarchMadnessDataQuery from 'queries/marchMadness/useMarchMadnessDataQuery';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady } from 'redux/modules/app';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import {
+    getIsWalletConnected,
+    getNetworkId,
+    getWalletAddress,
+    setWalletConnectModalVisibility,
+    switchToNetworkId,
+} from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivSpaceBetween } from 'styles/common';
+import { changeNetwork } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { getIsMintingStarted } from 'utils/marchMadness';
+import { getIsMintingStarted, isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { history, navigateTo } from 'utils/routes';
+import { useSwitchNetwork } from 'wagmi';
 import { MarchMadTabs } from '../Tabs/Tabs';
-import ROUTES from 'constants/routes';
 
 type HomeProps = {
     setSelectedTab?: (tab: MarchMadTabs) => void;
@@ -60,8 +69,9 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const { t } = useTranslation();
 
     const theme: ThemeInterface = useTheme();
+    const dispatch = useDispatch();
+    const { switchNetwork } = useSwitchNetwork();
 
-    const { openConnectModal } = useConnectModal();
     const location = useLocation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -73,10 +83,10 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
     const [showVolumeIncentives, setShowVolumeIncentives] = useState(false);
     const [showPointsSystem, setShowPointsSystem] = useState(false);
     const [timeLeft, setTimeLeft] = useState({
-        days: '00',
-        hours: '00',
-        minutes: '00',
-        seconds: '00',
+        days: '--',
+        hours: '--',
+        minutes: '--',
+        seconds: '--',
     });
 
     const marchMadnessDataQuery = useMarchMadnessDataQuery(walletAddress, networkId, {
@@ -91,19 +101,49 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
 
     const isMintingStarted = getIsMintingStarted();
 
-    const buttonClickHandler = () => {
+    const buttonTitle = () => {
         if (isWalletConnected) {
-            if (isMintingStarted) {
-                history.push({
-                    pathname: location.pathname,
-                    search: queryString.stringify({
-                        tab: MarchMadTabs.BRACKETS,
-                    }),
-                });
-                setSelectedTab && setSelectedTab(MarchMadTabs.BRACKETS);
+            if (isMarchMadnessAvailableForNetworkId(networkId)) {
+                return t('march-madness.home.button-create');
+            } else {
+                return t('march-madness.home.button-switch');
             }
         } else {
-            openConnectModal?.();
+            return t('march-madness.home.button-connect');
+        }
+    };
+
+    const buttonClickHandler = async () => {
+        if (isWalletConnected) {
+            if (networkId !== Network.Arbitrum) {
+                SUPPORTED_NETWORKS_PARAMS;
+                await changeNetwork(SUPPORTED_NETWORKS_PARAMS[Network.Arbitrum], () => {
+                    switchNetwork?.(Network.Arbitrum);
+                    // Trigger App.js init
+                    // do not use updateNetworkSettings(networkId) as it will trigger queries before provider in App.js is initialized
+                    dispatch(
+                        switchToNetworkId({
+                            networkId: Network.Arbitrum,
+                        })
+                    );
+                });
+            } else {
+                if (isMintingStarted) {
+                    history.push({
+                        pathname: location.pathname,
+                        search: queryString.stringify({
+                            tab: MarchMadTabs.BRACKETS,
+                        }),
+                    });
+                    setSelectedTab && setSelectedTab(MarchMadTabs.BRACKETS);
+                }
+            }
+        } else {
+            dispatch(
+                setWalletConnectModalVisibility({
+                    visibility: true,
+                })
+            );
         }
     };
 
@@ -170,17 +210,19 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
             ) : (
                 <>
                     <PageTitle>{t('march-madness.home.title')}</PageTitle>
-                    {/* {!isBracketsLocked && ( */}
-                    <>
-                        <TimeLeft>
-                            {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
-                        </TimeLeft>
+                    {!isBracketsLocked && (
+                        <>
+                            <TimeLeft>
+                                {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
+                            </TimeLeft>
 
-                        <TimeLeftDescription>
-                            {t(isMintingStarted ? 'march-madness.home.time-info' : 'march-madness.home.time-info-a')}
-                        </TimeLeftDescription>
-                    </>
-                    {/* )} */}
+                            <TimeLeftDescription>
+                                {t(
+                                    isMintingStarted ? 'march-madness.home.time-info' : 'march-madness.home.time-info-a'
+                                )}
+                            </TimeLeftDescription>
+                        </>
+                    )}
 
                     <Text>{t('march-madness.home.description')}</Text>
 
@@ -277,7 +319,7 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                         )}
                     </DropdownWrapper>
 
-                    {(!isWalletConnected || !isBracketsLocked) && (
+                    {(!isWalletConnected || !isBracketsLocked || !isMarchMadnessAvailableForNetworkId(networkId)) && (
                         <Button
                             additionalStyles={{
                                 width: '100%',
@@ -286,16 +328,14 @@ const Home: React.FC<HomeProps> = ({ setSelectedTab }) => {
                                 background: theme.marchMadness.button.background.senary,
                                 border: `none`,
                                 fontSize: '30px',
-                                fontFamily: "'NCAA' !important",
+                                fontFamily: theme.fontFamily.primary,
                                 textTransform: 'uppercase',
                                 color: theme.marchMadness.button.textColor.primary,
                             }}
-                            disabled={isWalletConnected && Date.now() < START_MINTING_DATE}
+                            disabled={isWalletConnected && !isMintingStarted}
                             onClick={buttonClickHandler}
                         >
-                            {isWalletConnected
-                                ? t('march-madness.home.button-create')
-                                : t('march-madness.home.button-connect')}
+                            {buttonTitle()}
                         </Button>
                     )}
                 </>
@@ -316,14 +356,14 @@ const Container = styled.div`
 const PageTitle = styled.h1`
     color: #f25623;
     white-space: nowrap;
-    font-family: Legacy !important;
+    font-family: ${(props) => props.theme.fontFamily.tertiary};
     font-size: 50px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     text-transform: uppercase;
     @media (max-width: 500px) {
-        font-size: 39px;
+        font-size: 34px;
     }
 `;
 
@@ -331,7 +371,7 @@ const TimeLeft = styled.h2`
     color: #fff;
     text-align: center;
     white-space: nowrap;
-    font-family: Geogrotesque !important;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 53px;
     font-style: normal;
     font-weight: 400;
@@ -340,7 +380,7 @@ const TimeLeft = styled.h2`
     margin: 6px 0;
     white-space: nowrap;
     @media (max-width: 500px) {
-        font-size: 39px;
+        font-size: 31px;
     }
 `;
 
@@ -348,7 +388,7 @@ const TimeLeftDescription = styled.h3`
     color: #f25623;
     text-align: center;
     white-space: nowrap;
-    font-family: Legacy !important;
+    font-family: ${(props) => props.theme.fontFamily.tertiary};
     font-size: 30px;
     font-style: normal;
     font-weight: 400;
@@ -357,8 +397,8 @@ const TimeLeftDescription = styled.h3`
     text-transform: uppercase;
     white-space: nowrap;
     @media (max-width: 500px) {
-        font-size: 26px;
-        letter-spacing: 2px;
+        font-size: 25px;
+        letter-spacing: 1px;
     }
 `;
 

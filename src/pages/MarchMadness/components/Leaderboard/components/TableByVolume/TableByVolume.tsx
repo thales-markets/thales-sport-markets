@@ -1,5 +1,4 @@
 import Tooltip from 'components/Tooltip';
-import { PaginationWrapper } from 'pages/Quiz/styled-components';
 import useLeaderboardByVolumeQuery, { LeaderboardByVolumeData } from 'queries/marchMadness/useLeaderboardByVolumeQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +7,6 @@ import { Column, usePagination, useTable } from 'react-table';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { formatCurrencyWithKey, getEtherscanAddressLink } from 'thales-utils';
-import { getDefaultCollateral } from 'utils/collaterals';
 import { truncateAddress } from 'utils/formatters/string';
 import {
     Arrow,
@@ -16,6 +14,7 @@ import {
     NoDataContainer,
     NoDataLabel,
     OverlayContainer,
+    PaginationWrapper,
     StickyRow,
     Table,
     TableContainer,
@@ -24,9 +23,11 @@ import {
     TableHeaderContainer,
     TableRow,
     TableRowCell,
+    WalletAddress,
 } from './styled-components';
 import { ThemeInterface } from 'types/ui';
 import { useTheme } from 'styled-components';
+import { USD_SIGN } from 'constants/currency';
 
 type TableByVolumeProps = {
     searchText: string;
@@ -49,7 +50,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 Header: <>{t('march-madness.leaderboard.address')}</>,
                 accessor: 'walletAddress',
                 Cell: (cellProps) => (
-                    <>
+                    <WalletAddress>
                         {truncateAddress(cellProps.cell.value, 5)}
                         <a
                             href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
@@ -58,65 +59,13 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         >
                             <Arrow />
                         </a>
-                    </>
+                    </WalletAddress>
                 ),
             },
             {
                 Header: <>{t('march-madness.leaderboard.volume')}</>,
                 accessor: 'volume',
-                Cell: (cellProps) => (
-                    <>{formatCurrencyWithKey(getDefaultCollateral(networkId), cellProps.cell.value, 2)}</>
-                ),
-            },
-            {
-                Header: () => (
-                    <>
-                        {t('march-madness.leaderboard.base-volume')}
-                        <Tooltip
-                            overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.secondary,
-                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
-                            }}
-                            overlay={
-                                <OverlayContainer>
-                                    {t('march-madness.leaderboard.tooltip-base-volume-table')}
-                                </OverlayContainer>
-                            }
-                            iconFontSize={14}
-                            marginLeft={2}
-                            top={0}
-                        />
-                    </>
-                ),
-                accessor: 'baseVolume',
-                Cell: (cellProps) => (
-                    <>{formatCurrencyWithKey(getDefaultCollateral(networkId), cellProps.cell.value, 2)}</>
-                ),
-            },
-            {
-                Header: () => (
-                    <>
-                        {t('march-madness.leaderboard.bonus-volume')}
-                        <Tooltip
-                            overlayInnerStyle={{
-                                backgroundColor: theme.marchMadness.background.secondary,
-                                border: `1px solid ${theme.marchMadness.borderColor.primary}`,
-                            }}
-                            overlay={
-                                <OverlayContainer>
-                                    {t('march-madness.leaderboard.tooltip-bonus-volume-table')}
-                                </OverlayContainer>
-                            }
-                            iconFontSize={14}
-                            marginLeft={2}
-                            top={0}
-                        />
-                    </>
-                ),
-                accessor: 'bonusVolume',
-                Cell: (cellProps) => (
-                    <>{formatCurrencyWithKey(getDefaultCollateral(networkId), cellProps.cell.value, 2)}</>
-                ),
+                Cell: (cellProps) => <>{formatCurrencyWithKey(USD_SIGN, cellProps.cell.value, 2)}</>,
             },
             {
                 Header: () => (
@@ -138,7 +87,8 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                         />
                     </>
                 ),
-                accessor: 'rewards',
+                accessor: 'estimatedRewards',
+                Cell: (cellProps) => <>{formatCurrencyWithKey('ARB', cellProps.cell.value, 2)}</>,
             },
         ];
     }, [networkId, t, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
@@ -146,7 +96,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
     const leaderboardQuery = useLeaderboardByVolumeQuery(networkId);
 
     const data = useMemo(() => {
-        if (leaderboardQuery.isSuccess && leaderboardQuery.data) return leaderboardQuery.data?.leaderboard;
+        if (leaderboardQuery.isSuccess && leaderboardQuery.data) return leaderboardQuery.data;
         return [];
     }, [leaderboardQuery.data, leaderboardQuery.isSuccess]);
 
@@ -163,11 +113,6 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
 
             finalData = data;
 
-            const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
-            if (myScore.length) {
-                finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
-            }
-
             if (searchText.trim() !== '') {
                 finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
             }
@@ -175,7 +120,7 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
             return finalData;
         }
         return [];
-    }, [data, searchText, walletAddress]);
+    }, [data, searchText]);
 
     const {
         getTableProps,
@@ -214,27 +159,19 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                 <StickyRow myScore={true}>
                     <TableRowCell>{myScore[0].rank}</TableRowCell>
                     <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
-                    <TableRowCell>
-                        {formatCurrencyWithKey(getDefaultCollateral(networkId), myScore[0].volume, 2)}
-                    </TableRowCell>
-                    <TableRowCell>
-                        {formatCurrencyWithKey(getDefaultCollateral(networkId), myScore[0].baseVolume, 2)}
-                    </TableRowCell>
-                    <TableRowCell>
-                        {formatCurrencyWithKey(getDefaultCollateral(networkId), myScore[0].bonusVolume, 2)}
-                    </TableRowCell>
-                    <TableRowCell>{myScore[0].rewards}</TableRowCell>
+                    <TableRowCell>{formatCurrencyWithKey(USD_SIGN, myScore[0].volume, 2)}</TableRowCell>
+                    <TableRowCell> {formatCurrencyWithKey('ARB', myScore[0].estimatedRewards, 2)}</TableRowCell>
                 </StickyRow>
             );
         }
-    }, [myScore, networkId, t]);
+    }, [myScore, t]);
 
     return (
         <Container>
-            <TableHeaderContainer hideBottomBorder={true}>
-                <TableHeader>{'By volume'}</TableHeader>
+            <TableHeaderContainer>
+                <TableHeader>{t('march-madness.leaderboard.by-volume')}</TableHeader>
             </TableHeaderContainer>
-            <TableContainer>
+            <TableContainer isEmpty={!filteredData?.length}>
                 {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
@@ -261,7 +198,11 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                                     <TableRow {...row.getRowProps()} key={index} hideBorder={index === page.length - 1}>
                                         {row.cells.map((cell, cellIndex) => {
                                             return (
-                                                <TableRowCell {...cell.getCellProps()} key={cellIndex}>
+                                                <TableRowCell
+                                                    {...cell.getCellProps()}
+                                                    key={cellIndex}
+                                                    noTextTransform={cell.column.id === 'volume'}
+                                                >
                                                     {cell.render('Cell')}
                                                 </TableRowCell>
                                             );
@@ -269,19 +210,19 @@ const TableByVolume: React.FC<TableByVolumeProps> = ({ searchText }) => {
                                     </TableRow>
                                 );
                             })}
+                            <TableRow hideBorder>
+                                <PaginationWrapper
+                                    rowsPerPageOptions={[10, 20, 50, 100]}
+                                    count={filteredData?.length ? filteredData.length : 0}
+                                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                                    rowsPerPage={state.pageSize}
+                                    page={state.pageIndex}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </TableRow>
                         </tbody>
                     </Table>
-                )}
-                {filteredData?.length > 0 && (
-                    <PaginationWrapper
-                        rowsPerPageOptions={[10, 20, 50, 100]}
-                        count={filteredData?.length ? filteredData.length : 0}
-                        labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                        rowsPerPage={state.pageSize}
-                        page={state.pageIndex}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
                 )}
             </TableContainer>
         </Container>

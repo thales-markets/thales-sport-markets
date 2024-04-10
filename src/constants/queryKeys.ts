@@ -124,6 +124,7 @@ const QUERY_KEYS = {
     MarchMadness: {
         Data: (walletAddress: string, networkId: Network) => ['marchMadness', 'data', walletAddress, networkId],
         Bracket: (tokenId: number, networkId: Network) => ['marchMadness', 'bracket', tokenId, networkId],
+        Stats: (networkId: Network) => ['marchMadness', 'stats', networkId],
         Competition: {
             LeaderboardByVolume: (networkId: Network) => ['marchMadness', 'leaderboardByVolume', networkId],
             LeaderboardByNumberOfCorrectPredictions: (networkId: Network) => [

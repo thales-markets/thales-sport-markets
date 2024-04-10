@@ -544,7 +544,9 @@
             "pay-with-voucher": "Bezahlen Sie mit Gutschein",
             "total-to-pay": "Gesamtbetrag",
             "gas-tooltip": "Aktuelle Gasgebühr, die von der Blockchain zur Abwicklung der Transaktion benötigt wird",
-            "total-gas": "Gasgebühr (GESCHÄTZT)"
+            "total-gas": "Gasgebühr (GESCHÄTZT)",
+            "persist-games": "Auswahl nach dem Absenden beibehalten",
+            "keep-selection-tooltip": "Standardmäßig wird der Parlay Builder nach erfolgreicher Übermittlung zurückgesetzt. Aktivieren Sie diese Option, wenn Sie den aktuellen Kontext nach der Übermittlung beibehalten möchten."
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -577,7 +579,10 @@
         "incentivized-tooltip-tennis": "Wimbledon wird einen Anreiz erhalten, da das Turnier am 3. Juli beginnt. Die Märkte werden bis zum Ende des Turniers am 16. Juli mit {{rewards}} angekurbelt. Die Prämien werden basierend auf Ihrem durch diese Märkte erzielten Volumen verteilt. Sie können Ihre Prämienzuteilung auf unserem <detailsLink>Dune Dashboard</detailsLink> verfolgen.",
         "incentivized-tooltip-nfl-playoffs": "Während der NFL-Playoffs werden insgesamt {{rewards}} verteilt. Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "superbowl-incentive": "10.000 ARB an Anreizen",
-        "incentivized-tooltip-uefa": "Für die UEFA-Wettbewerbe wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>."
+        "incentivized-tooltip-uefa": "Für die UEFA-Wettbewerbe wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-nhl": "Für den Rest der NHL-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-mm": "Gewinnen Sie 45.000 ARB + 50.000 THALES während March Madness. Weitere Details <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-nhl-mlb": "Für den Rest der {{league}}-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} ausgeschüttet. Nur das Volumen im Arbitrum-Netzwerk wird für die Belohnungen angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>."
     },
     "rewards": {
         "header": "Preise",
@@ -1200,7 +1205,8 @@
         "tabs": {
             "leaderboard": "Bestenliste",
             "home": "Heim",
-            "brackets": "Klammern"
+            "brackets": "Klammern",
+            "soon": "bald"
         },
         "home": {
             "button-create": "Wie Klammern",
@@ -1245,7 +1251,8 @@
             "comp-rules-0-a": "Die Prägung der Brackets dauert bis zum Beginn der Spiele der 1. Runde am 21. März.",
             "comp-rules-0": "Die Prägung der Brackets beginnt am 18. März (UTC), nachdem der Auswahlsonntag beendet ist und der Zeitplan für die erste Runde bekannt ist.",
             "time-info-a": "Bis die Klammerprägung beginnt",
-            "volume-incetives-4": "March Madness-Händler haben außerdem Anspruch auf 2.500 ARB pro Woche im Parlay-Wettbewerb und 10.000 ARB pro zwei Wochen direkter Volumenprämien aus dem STIP-Programm. Besuchen<p> diese Werbeseite</p> für weitere Informationen."
+            "volume-incetives-4": "March Madness-Händler haben außerdem Anspruch auf 2.500 ARB pro Woche im Parlay-Wettbewerb und 10.000 ARB pro zwei Wochen direkter Volumenprämien aus dem STIP-Programm. Besuchen<p> diese Werbeseite</p> für weitere Informationen.",
+            "button-switch": "Wechseln Sie zu Arbitrum"
         },
         "leaderboard": {
             "tooltip-rewards-volume-table": "10.000 OP (30.000 THALES auf Arbitrum) werden auf der Grundlage des anteiligen Volumens aufgeteilt",
@@ -1265,7 +1272,10 @@
             "tooltip-base-volume-table": "Volumensteigerung durch NCAA-Basketballspiele",
             "my-rewards": "Meine Belohnungen",
             "guessed-games": "Erratene Spiele",
-            "search-placeholder": "WALLET-ADRESSE SUCHEN"
+            "search-placeholder": "WALLET-ADRESSE SUCHEN",
+            "bracket-id": "Klammer-ID",
+            "by-volume": "Volumenprämien",
+            "my-rewards-bracket": "Ihre beste Halterung"
         },
         "brackets": {
             "stats": {
@@ -1279,7 +1289,8 @@
                 "incomplete": "Unvollständig",
                 "total-points": "Meine Gesamtpunktzahl",
                 "complete": "Vollständig",
-                "bracket": "Halterung"
+                "bracket": "Halterung",
+                "duplicate": "Dupliziert"
             },
             "modal-mint": {
                 "update-text-1": "Schön gemacht!",
@@ -1294,7 +1305,13 @@
                 "button-mint": "Wie NFT",
                 "button-updating": "Aktualisierung...",
                 "button-update": "Klammer aktualisieren",
-                "update-text-2-success": "Ihr NFT der March Madness-Reihe wurde aktualisiert!"
+                "update-text-2-success": "Ihr NFT der March Madness-Reihe wurde aktualisiert!",
+                "footer-info": "*Das March Madness-Bracket-NFT ist ein Overtime-NFT, das es Inhabern ermöglicht, an der Overtime-March-Madness-Kampagne teilzunehmen, indem sie ihr eigenes Tippturnier-Bracket erstellen.",
+                "hedaer": "Glückwunsch!",
+                "mint-text": "Du hast gerade dein March Madness Bracket geprägt!",
+                "update-text": "Ihr NFT der March Madness-Reihe wurde aktualisiert!",
+                "footer-text": "Besuchen Sie die <marketsLink>NCAAB-Märkte</marketsLink> und verdienen Sie Prämien!",
+                "back": "Gehen Sie zurück zur Seite mit den Klammern"
             },
             "modal-share": {
                 "share": "Aktie",
@@ -1320,7 +1337,13 @@
             "confirmation-message": "Klammer erfolgreich geprägt",
             "create-as": "Neu erstellen als...",
             "clear-all": "Alles löschen",
-            "submit-info": "*Prägepreis {{value}}"
+            "submit-info": "*Prägepreis {{value}}",
+            "submit-modify-progress": "Aktualisierung...",
+            "create-new": "Erstelle neu",
+            "submit-progress": "Prägung...",
+            "keep-current": "Aktuelle Auswahl beibehalten",
+            "update-message": "Halterung erfolgreich aktualisiert",
+            "random": "zufällig"
         },
         "regions": {
             "east": "Ost",
@@ -1331,7 +1354,19 @@
         "mobile-message": "Die Seite ist nur auf größeren Bildschirmen verfügbar. Bitte verwenden Sie die Desktop-Version!",
         "test-info": "Die Testphase mit den Teams 2022 ist jetzt eröffnet, die Auswahl 2023 startet am 12. März!",
         "back-to-markets": "Zurück zu den Märkten",
-        "header-button-tooltip": "Nur im Arbitrum-Netzwerk verfügbar."
+        "header-button-tooltip": "Nur im Arbitrum-Netzwerk verfügbar.",
+        "stats": {
+            "live-stats": "Live-Statistiken",
+            "pool-size": "Größe des Preispools",
+            "brackets-minted": "Klammern geprägt"
+        },
+        "side-leaderboard": {
+            "title": "März-Wahnsinn",
+            "points-leaderboard": "Punkte-Rangliste",
+            "points": "Punkte",
+            "bracket-id": "Klammer-ID",
+            "rewards": "Belohnung"
+        }
     },
     "promotions": {
         "nav-items": {

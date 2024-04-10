@@ -2,6 +2,7 @@ import Search from 'components/Search';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import Stats from '../Stats';
 import TableByGuessedCorrectly from './components/TableByGuessedCorrectly';
 import TableByVolume from './components/TableByVolume';
 
@@ -11,6 +12,7 @@ const Leaderboard: React.FC = () => {
 
     return (
         <>
+            <Stats />
             <SearchContainer>
                 <Search
                     text={searchText}
@@ -20,8 +22,8 @@ const Leaderboard: React.FC = () => {
                 />
             </SearchContainer>
             <TablesContainer>
-                <TableByVolume searchText={searchText} />
                 <TableByGuessedCorrectly searchText={searchText} />
+                <TableByVolume searchText={searchText} />
             </TablesContainer>
         </>
     );
@@ -39,6 +41,10 @@ const TablesContainer = styled.div`
     flex-direction: row;
     height: auto;
     width: 100%;
+    gap: 10px;
+    @media (max-width: 900px) {
+        flex-direction: column;
+    }
 `;
 
 export default Leaderboard;

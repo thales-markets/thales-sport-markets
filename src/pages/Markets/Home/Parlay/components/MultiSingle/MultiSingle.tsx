@@ -1,6 +1,8 @@
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
+import Tooltip from 'components/Tooltip';
+import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
@@ -69,6 +71,7 @@ import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
+import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import MatchInfo from '../MatchInfo';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
@@ -78,7 +81,9 @@ import {
     AmountToBuyMultiInfoLabel,
     AmountToBuyMultiPayoutLabel,
     AmountToBuyMultiPayoutValue,
+    CheckboxContainer,
     CollateralContainer,
+    HorizontalLine,
     InfoContainer,
     InfoLabel,
     InfoValue,
@@ -138,6 +143,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
     const [isBuying, setIsBuying] = useState(false);
     const [hasValidationError, setHasValidationError] = useState(false);
     const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState<Record<string, string>>({});
+    const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage());
 
     const [availablePerPosition, setAvailablePerPosition] = useState<Record<string, AvailablePerPosition>>({});
     const [ammPosition, setAmmPosition] = useState<Record<string, AMMPosition>>({});
@@ -594,7 +600,7 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                                 resolve(
                                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')))
                                 );
-                                dispatch(removeFromParlay(marketAddress));
+                                if (!keepSelection) dispatch(removeFromParlay(marketAddress));
                                 refetchBalances(walletAddress, networkId);
                             } else {
                                 reject(
@@ -972,6 +978,30 @@ const MultiSingle: React.FC<MultiSingleProps> = ({ markets }) => {
                               2
                           )} (${formatPercentage(totalProfitPercentage)})`}
                 </SummaryValue>
+            </RowSummary>
+            <HorizontalLine />
+            <RowSummary>
+                <RowContainer>
+                    <SummaryLabel>
+                        {t('markets.parlay.persist-games')}
+                        <Tooltip
+                            overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>}
+                            iconFontSize={13}
+                            marginLeft={3}
+                        />
+                    </SummaryLabel>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={keepSelection}
+                            value={keepSelection.toString()}
+                            onChange={(e: any) => {
+                                setKeepSelection(e.target.checked || false);
+                                setKeepSelectionToStorage(e.target.checked || false);
+                            }}
+                        />
+                    </CheckboxContainer>
+                </RowContainer>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
