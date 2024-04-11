@@ -90,7 +90,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             market.typeId === BetType.HALFTIME ||
             market.typeId === BetType.HALFTIME_FULLTIME ||
             market.typeId === BetType.GOALS ||
-            market.typeId === BetType.HALFTIME_FULLTIME_GOALS
+            market.typeId === BetType.HALFTIME_FULLTIME_GOALS ||
+            market.typeId === BetType.HALFTIME_SPREAD ||
+            market.typeId === BetType.HALFTIME_TOTAL ||
+            market.typeId === BetType.SPREAD2 ||
+            market.typeId === BetType.TOTAL2
     );
     const playerPropsMarkets = market.childMarkets.filter((market) => market.isPlayerPropsMarket);
 

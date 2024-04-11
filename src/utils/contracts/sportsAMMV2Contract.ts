@@ -6,7 +6,7 @@ const sportsAMMV2Contract = {
         [Network.OptimismGoerli]: '',
         [Network.Arbitrum]: '0x4301086e455f4b0535C8f2CC5A6190debCb7F50f',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '0x31Dc91D82316d5ba9f476b3F370FDa79BD38ea41',
+        [Network.OptimismSepolia]: '0xB397b1Ee4eDCBE82baEFDa2a176465b2D646E02d',
     },
     abi: [
         {
@@ -86,6 +86,12 @@ const sportsAMMV2Contract = {
                 {
                     indexed: false,
                     internalType: 'address',
+                    name: 'resultManager',
+                    type: 'address',
+                },
+                {
+                    indexed: false,
+                    internalType: 'address',
                     name: 'referrals',
                     type: 'address',
                 },
@@ -112,30 +118,6 @@ const sportsAMMV2Contract = {
                     indexed: false,
                     internalType: 'uint256',
                     name: 'safeBoxFee',
-                    type: 'uint256',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint256',
-                    name: 'minBuyInAmount',
-                    type: 'uint256',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint256',
-                    name: 'maxTicketSize',
-                    type: 'uint256',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint256',
-                    name: 'maxSupportedAmount',
-                    type: 'uint256',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint256',
-                    name: 'maxSupportedOdds',
                     type: 'uint256',
                 },
             ],
@@ -261,7 +243,7 @@ const sportsAMMV2Contract = {
                 {
                     indexed: false,
                     internalType: 'uint256',
-                    name: 'buyInAmountAfterFees',
+                    name: 'buyInAmount',
                     type: 'uint256',
                 },
                 {
@@ -388,6 +370,19 @@ const sportsAMMV2Contract = {
                 {
                     indexed: false,
                     internalType: 'address',
+                    name: 'liveTradingProcessor',
+                    type: 'address',
+                },
+            ],
+            name: 'SetLiveTradingProcessor',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
                     name: 'onOffRamper',
                     type: 'address',
                 },
@@ -425,7 +420,7 @@ const sportsAMMV2Contract = {
                 {
                     indexed: false,
                     internalType: 'uint256',
-                    name: 'buyInAmountAfterFees',
+                    name: 'fees',
                     type: 'uint256',
                 },
                 {
@@ -483,25 +478,6 @@ const sportsAMMV2Contract = {
             type: 'event',
         },
         {
-            anonymous: false,
-            inputs: [
-                {
-                    indexed: false,
-                    internalType: 'uint256',
-                    name: 'minimalTimeLeftToMaturity',
-                    type: 'uint256',
-                },
-                {
-                    indexed: false,
-                    internalType: 'uint256',
-                    name: 'expiryDuration',
-                    type: 'uint256',
-                },
-            ],
-            name: 'TimesUpdated',
-            type: 'event',
-        },
-        {
             inputs: [],
             name: 'acceptOwnership',
             outputs: [],
@@ -545,19 +521,6 @@ const sportsAMMV2Contract = {
             name: 'expireTickets',
             outputs: [],
             stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'expiryDuration',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
             type: 'function',
         },
         {
@@ -773,10 +736,10 @@ const sportsAMMV2Contract = {
         },
         {
             inputs: [],
-            name: 'manager',
+            name: 'liveTradingProcessor',
             outputs: [
                 {
-                    internalType: 'contract ISportsAMMV2Manager',
+                    internalType: 'address',
                     name: '',
                     type: 'address',
                 },
@@ -786,64 +749,12 @@ const sportsAMMV2Contract = {
         },
         {
             inputs: [],
-            name: 'maxSupportedAmount',
+            name: 'manager',
             outputs: [
                 {
-                    internalType: 'uint256',
+                    internalType: 'contract ISportsAMMV2Manager',
                     name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'maxSupportedOdds',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'maxTicketSize',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'minBuyInAmount',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'minimalTimeLeftToMaturity',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
+                    type: 'address',
                 },
             ],
             stateMutability: 'view',
@@ -1076,50 +987,6 @@ const sportsAMMV2Contract = {
                     name: '',
                     type: 'bytes32',
                 },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'int256',
-                    name: '',
-                    type: 'int256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            name: 'riskPerMarketAndPosition',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
-                    internalType: 'bytes32',
-                    name: '',
-                    type: 'bytes32',
-                },
             ],
             name: 'rootPerGame',
             outputs: [
@@ -1196,6 +1063,11 @@ const sportsAMMV2Contract = {
                 },
                 {
                     internalType: 'address',
+                    name: '_resultManager',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
                     name: '_referrals',
                     type: 'address',
                 },
@@ -1222,26 +1094,6 @@ const sportsAMMV2Contract = {
                     name: '_safeBoxFee',
                     type: 'uint256',
                 },
-                {
-                    internalType: 'uint256',
-                    name: '_minBuyInAmount',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '_maxTicketSize',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '_maxSupportedAmount',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '_maxSupportedOdds',
-                    type: 'uint256',
-                },
             ],
             name: 'setAmounts',
             outputs: [],
@@ -1257,6 +1109,19 @@ const sportsAMMV2Contract = {
                 },
             ],
             name: 'setLiquidityPool',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_liveTradingProcessor',
+                    type: 'address',
+                },
+            ],
+            name: 'setLiveTradingProcessor',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -1352,43 +1217,6 @@ const sportsAMMV2Contract = {
             name: 'setTicketMastercopy',
             outputs: [],
             stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
-                    internalType: 'uint256',
-                    name: '_minimalTimeLeftToMaturity',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '_expiryDuration',
-                    type: 'uint256',
-                },
-            ],
-            name: 'setTimes',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
-            inputs: [
-                {
-                    internalType: 'bytes32',
-                    name: '',
-                    type: 'bytes32',
-                },
-            ],
-            name: 'spentPerParent',
-            outputs: [
-                {
-                    internalType: 'uint256',
-                    name: '',
-                    type: 'uint256',
-                },
-            ],
-            stateMutability: 'view',
             type: 'function',
         },
         {
@@ -1621,6 +1449,123 @@ const sportsAMMV2Contract = {
                     type: 'tuple[]',
                 },
                 {
+                    internalType: 'address',
+                    name: '_requester',
+                    type: 'address',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_buyInAmount',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'uint256',
+                    name: '_expectedPayout',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'address',
+                    name: '_differentRecipient',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_referrer',
+                    type: 'address',
+                },
+                {
+                    internalType: 'address',
+                    name: '_collateral',
+                    type: 'address',
+                },
+            ],
+            name: 'tradeLive',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    components: [
+                        {
+                            internalType: 'bytes32',
+                            name: 'gameId',
+                            type: 'bytes32',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'sportId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'typeId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: 'maturity',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint8',
+                            name: 'status',
+                            type: 'uint8',
+                        },
+                        {
+                            internalType: 'int24',
+                            name: 'line',
+                            type: 'int24',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: 'playerId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint256[]',
+                            name: 'odds',
+                            type: 'uint256[]',
+                        },
+                        {
+                            internalType: 'bytes32[]',
+                            name: 'merkleProof',
+                            type: 'bytes32[]',
+                        },
+                        {
+                            internalType: 'uint8',
+                            name: 'position',
+                            type: 'uint8',
+                        },
+                        {
+                            components: [
+                                {
+                                    internalType: 'uint16',
+                                    name: 'typeId',
+                                    type: 'uint16',
+                                },
+                                {
+                                    internalType: 'uint8',
+                                    name: 'position',
+                                    type: 'uint8',
+                                },
+                                {
+                                    internalType: 'int24',
+                                    name: 'line',
+                                    type: 'int24',
+                                },
+                            ],
+                            internalType: 'struct ISportsAMMV2.CombinedPosition[][]',
+                            name: 'combinedPositions',
+                            type: 'tuple[][]',
+                        },
+                    ],
+                    internalType: 'struct ISportsAMMV2.TradeData[]',
+                    name: '_tradeData',
+                    type: 'tuple[]',
+                },
+                {
                     internalType: 'uint256',
                     name: '_buyInAmount',
                     type: 'uint256',
@@ -1635,12 +1580,7 @@ const sportsAMMV2Contract = {
             outputs: [
                 {
                     internalType: 'uint256',
-                    name: 'collateralQuote',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: 'buyInAmountAfterFees',
+                    name: 'totalQuote',
                     type: 'uint256',
                 },
                 {
@@ -1650,18 +1590,23 @@ const sportsAMMV2Contract = {
                 },
                 {
                     internalType: 'uint256',
-                    name: 'totalQuote',
+                    name: 'fees',
                     type: 'uint256',
-                },
-                {
-                    internalType: 'uint256[]',
-                    name: 'finalQuotes',
-                    type: 'uint256[]',
                 },
                 {
                     internalType: 'uint256[]',
                     name: 'amountsToBuy',
                     type: 'uint256[]',
+                },
+                {
+                    internalType: 'uint256',
+                    name: 'collateralQuote',
+                    type: 'uint256',
+                },
+                {
+                    internalType: 'enum ISportsAMMV2RiskManager.RiskStatus',
+                    name: 'riskStatus',
+                    type: 'uint8',
                 },
             ],
             stateMutability: 'view',

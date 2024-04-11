@@ -11,8 +11,9 @@ export const getSimpleSymbolText = (
     isCombinedPosition?: boolean,
     line?: number
 ) => {
-    if (betType === BetType.SPREAD) return `H${position + 1}`;
-    if (betType === BetType.TOTAL) {
+    if (betType === BetType.SPREAD || betType === BetType.SPREAD2 || betType === BetType.HALFTIME_SPREAD)
+        return `H${position + 1}`;
+    if (betType === BetType.TOTAL || betType === BetType.TOTAL2 || betType === BetType.HALFTIME_TOTAL) {
         return isCombinedPosition && line
             ? position === 0
                 ? Math.ceil(line).toString()
@@ -106,12 +107,13 @@ export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) =
 };
 
 export const getLineInfo = (typeId: number, position: Position, line: number, market: SportMarketInfoV2) => {
-    if (typeId === BetType.SPREAD)
+    if (typeId === BetType.SPREAD || typeId === BetType.SPREAD2 || typeId === BetType.HALFTIME_SPREAD)
         return position === Position.HOME
             ? `${Number(line) > 0 ? '+' : '-'}${Math.abs(line)}`
             : `${Number(line) > 0 ? '-' : '+'}${Math.abs(line)}`;
 
-    if (typeId === BetType.TOTAL) return `${Number(line)}`;
+    if (typeId === BetType.TOTAL || typeId === BetType.TOTAL2 || typeId === BetType.HALFTIME_TOTAL)
+        return `${Number(line)}`;
     if (market.isPlayerPropsMarket) return `${Number(line)}`;
     return undefined;
 };

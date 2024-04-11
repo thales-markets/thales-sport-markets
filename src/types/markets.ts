@@ -454,7 +454,7 @@ export type Ticket = {
     sportMarkets: TicketMarket[];
     account: string;
     buyInAmount: number;
-    buyInAmountAfterFees: number;
+    fees: number;
     totalQuote: number;
     payout: number;
     numOfMarkets: number;
