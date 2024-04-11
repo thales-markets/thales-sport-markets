@@ -644,6 +644,8 @@
         "parlay": {
             "total-quote": "Total quote",
             "total-bonus": "Total bonus",
+            "persist-games": "Keep selection after submit",
+            "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
@@ -719,7 +721,8 @@
         "incentivized-tooltip-tennis": "A total of {{rewards}} will be distributed during the Australian Open. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "A whopping total of {{rewards}} will be distributed for the NFL Superbowl. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-uefa": "A whopping total of {{rewards}} will be distributed for the UEFA competitions. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-nhl": "A whopping total of {{rewards}} will be distributed for the rest of the NHL season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the {{league}} season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-mm": "Win 45,000 ARB + 50,000 THALES during March Madness. Only volume on Arbitrum network will be calculated towards rewards! More details <detailsLink>here</detailsLink>.",
         "superbowl-incentive": "10,000 ARB IN INCENTIVES"
     },
     "rewards": {
@@ -1139,7 +1142,8 @@
         "tabs": {
             "home": "Home",
             "brackets": "Brackets",
-            "leaderboard": "Leaderboard"
+            "leaderboard": "Leaderboard",
+            "soon": "soon"
         },
         "home": {
             "title": "Overtime March Madness",
@@ -1157,7 +1161,8 @@
             "text-4": "The <bold>second pool</bold> will be divided between the holders of the most accurate bracket with a {{volume}} volume benchmark on March Madness games. Holders that meet the volume requirement can track their position in the best bracket leaderboard where winners will split a {{reward}} reward pool.",
             "text-5": "More detail in our <mediumLink>Medium blog post</mediumLink>.",
             "button-create": "Mint bracket",
-            "button-connect": "Connect wallet",
+            "button-connect": "Log in",
+            "button-switch": "Switch to Arbitrum",
             "description": "Overtime is hosting a massive onchain March Madness 2024 event! \nDrive volume on March Madness games on Overtime to earn a share of 30,000 ARB rewards based on your total March Madness volume.\nPredict the bracket results of the 2024 NCAA Men’s Division 1 Basketball Tournament by minting a Bracket NFT on the Arbitrum Network. Compete with other brackets for a massive prize pool with a bonus 5,000 ARB rewards on top!\nAdditionally, 50,000 THALES + 10,000 ARB are reserved as a special prize for anyone who manages to mint the Perfect Bracket!",
             "bracket-comp-rules-label": "Brackets Competition Details",
             "volume-incetives-label": "Volume Incentives",
@@ -1190,27 +1195,39 @@
             "owner": "Owner",
             "address": "Address",
             "volume": "Volume",
+            "bracket-id": "Bracket ID",
             "base-volume": "Base",
             "bonus-volume": "Bonus",
             "rewards": "Rewards",
             "search-placeholder": "SEARCH WALLET ADDRESS",
-            "by-guessed-correctly": "By guessed correctly",
+            "by-guessed-correctly": "Points Leaderboard",
+            "by-volume": "Volume rewards",
             "player": "Player",
-            "guessed-games": "Guessed games",
+            "guessed-games": "Points",
             "rank": "Rank",
             "no-data": "No data currently available",
-            "my-rewards": "My rewards",
+            "my-rewards": "YOU",
+            "my-rewards-bracket": "Your best bracket",
             "tooltip-base-volume-table": "Volume driven through NCAA Basketball games",
             "tooltip-bonus-volume-table": "Bonus volume calculated based on your bracket selections",
-            "tooltip-rewards-volume-table": "10,000 OP (30,000 THALES on Arbitrum) will be divided based on pro-rata volume",
-            "tooltip-correct-correct-table": "Number of games guessed properly in your bracket",
-            "tooltip-rewards-correct-table": "3,000 OP (10,000 THALES on Arbitrum) will be divided amongst the top 10"
+            "tooltip-rewards-volume-table": "Estimated rewards based on current volume numbers. This number is subject to change until March Madness tournament is over. ",
+            "tooltip-correct-correct-table": "Total points accrued from correct predictions.",
+            "tooltip-rewards-correct-table": "Total rewards for this leaderboard placement"
+        },
+        "side-leaderboard": {
+            "title": "March Madness",
+            "bracket-id": "Bracket",
+            "points": "Points",
+            "points-leaderboard": "Points Leaderboard",
+            "rewards": "Rewards"
         },
         "brackets": {
             "team-1": "Team 1",
             "team-2": "Team 2",
-            "submit": "Finish Bracket",
+            "submit": "Mint Bracket",
+            "submit-progress": "Minting...",
             "submit-modify": "Update Bracket",
+            "submit-modify-progress": "Updating...",
             "submit-info": "*minting price {{value}}",
             "round-0": "1st Round",
             "round-1": "2nd Round",
@@ -1218,51 +1235,51 @@
             "round-3": "Elite 8",
             "round-4": "Final 4",
             "round-5": "Final",
-            "bracket-id": "Bracket ID #{{id}}",
+            "bracket-id": "Bracket ID: #{{id}}",
             "my-brackets": "My brackets",
-            "create-as": "Create new as...",
+            "create-new": "Create new",
+            "keep-current": "Keep current selection",
             "clear-all": "Clear all",
+            "random": "Random teams",
             "error-minting-price": "Minting price can't be fetched!",
             "confirmation-message": "Bracket successfully minted",
+            "update-message": "Bracket successfully updated",
             "stats": {
                 "my-stats": "My stats",
                 "bracket": "Bracket",
                 "rank": "Rank",
                 "incomplete": "Incomplete",
                 "complete": "Complete",
+                "duplicate": "Duplicated",
                 "my-total-score": "My total score",
                 "points": "Points",
                 "total-points": "My total points"
             },
             "modal-mint": {
-                "finish-text-1": "Well done!",
-                "finish-text-1-success": "Congratulations!",
-                "finish-text-2": "You have successfully created your bracket!<br />You can now mint your march madness bracket nft!",
-                "finish-text-2-success": "You just minted your March Madness Bracket!",
-                "finish-text-3-success": "Head over to the <marketsLink>NCAAB markets</marketsLink> and start earning rewards!",
-                "finish-info": "*The March Madness bracket NFT is an Overtime NFT that allows holders to participate in the Overtime March Madness campaign by creating their own prediction tournament bracket.",
-                "update-text-1": "Nicely done!",
-                "update-text-2": "We saved your bracket prediction, please update your bracket now!",
-                "update-text-2-success": "Your March Madness bracket NFT has been updated!",
-                "button-mint": "Mint NFT",
-                "button-minting": "Minting...",
-                "button-update": "Update Bracket",
-                "button-updating": "Updating..."
+                "hedaer": "Congratulations!",
+                "mint-text": "You just minted your March Madness Bracket!",
+                "footer-text": "You can always mint more to increase your chances.",
+                "update-text": "Your March Madness bracket NFT has been updated!",
+                "back": "Go back to brackets page"
             },
             "share": "Share this bracket",
             "modal-share": {
                 "header": "My final 4 picks",
-                "user-selection": "I picked the {{team}} to cut the nets down in Houston!",
+                "user-selection": "I picked the {{team}} to cut the nets down in Phoenix!",
                 "share": "Share"
             }
+        },
+        "stats": {
+            "live-stats": "Live stats",
+            "brackets-minted": "Brackets minted",
+            "pool-size": "Prize pool size"
         },
         "regions": {
             "east": "East",
             "west": "West",
             "south": "South",
             "midwest": "Midwest"
-        },
-        "mobile-message": "Page is only available on bigger screens. Please use desktop version!"
+        }
     },
     "liquidity-pool": {
         "title": "Provide Liquidity",

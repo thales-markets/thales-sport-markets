@@ -179,6 +179,7 @@ const Text = styled.span<{
     isDetailedView?: boolean;
     isSelectedCollateral?: boolean;
 }>`
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-style: normal;
     font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '600')};
     font-size: ${(props) => (props.isDetailedView ? '14px' : '12px')};
@@ -192,7 +193,9 @@ const Text = styled.span<{
 const TextCollateral = styled(Text)`
     color: ${(props) =>
         props.isDetailedView
-            ? props.theme.input.textColor.primary
+            ? props.isSelectedCollateral
+                ? props.theme.marchMadness.dropdown.textColor.primary // TODO: March Madness fix, remove isSelectedCollateral
+                : props.theme.input.textColor.primary
             : props.isSelectedCollateral
             ? props.theme.textColor.quaternary
             : props.theme.textColor.tertiary};

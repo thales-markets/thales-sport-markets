@@ -1,7 +1,7 @@
 [
     {
-        "image": "arb-rewards-1.png",
-        "url": "https://dune.com/leifu/arb-incentive-program-dashboard"
+        "image": "ufc300.png",
+        "url": "https://www.overtimemarkets.xyz/promotions/ufc-300"
     },
     {
         "image": "banner_leagues.png",
@@ -11,8 +11,12 @@
         "image": "big-finished.png",
         "url": "https://medium.com/@OvertimeMarkets.xyz/get-ready-for-the-big-leagues-season-overtimes-biggest-reward-program-to-date-2d3949a06338"
     },
-{
+    {
+        "image": "nhl-mlb-new.png",
+        "url": "https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards"
+    },
+    {
     "image": "parlay-finished.png",
     "url": "https://www.overtimemarkets.xyz/parlay-leaderboard"
-}
+    }
 ]

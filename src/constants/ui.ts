@@ -47,6 +47,13 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         ],
     },
     {
+        i18label: 'markets.nav-menu.labels.march-madness',
+        iconClass: 'icon icon--brackets',
+        name: 'march-madness',
+        route: ROUTES.MarchMadness,
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum, Network.Base],
+    },
+    {
         i18label: 'markets.nav-menu.items.vaults',
         iconClass: 'icon icon--vaults',
         name: 'vaults',

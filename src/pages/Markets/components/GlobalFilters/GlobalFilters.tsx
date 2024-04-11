@@ -213,7 +213,7 @@ const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
 
 const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean; isMobile?: boolean }>`
     width: ${(props) => (props.isMobile ? '100%' : '70%')};
-    justify-content: 'space-around';
+    justify-content: space-around;
     align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
     flex-direction: ${(props) => (props.isMobile && !props.timeFilters ? 'column' : 'row')};
     height: ${(props) => (props.isMobile && props.timeFilters ? '120px' : '')};

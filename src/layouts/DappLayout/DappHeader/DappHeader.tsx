@@ -8,6 +8,7 @@ import NavMenuMobile from 'components/NavMenuMobile';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
+import Tooltip from 'components/Tooltip';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
@@ -21,6 +22,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import {
+    getIsConnectedViaParticle,
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
@@ -34,7 +36,6 @@ import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import TopUp from './components/TopUp';
-import Tooltip from 'components/Tooltip';
 
 const PULSING_COUNT = 10;
 
@@ -69,6 +70,7 @@ const DappHeader: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -105,12 +107,17 @@ const DappHeader: React.FC = () => {
             <SPAAnchor href={buildHref(ROUTES.MarchMadness)}>
                 <Button
                     fontSize="18px"
-                    width="290px"
+                    width={isMobile ? '100%' : '290px'}
                     additionalStyles={{
-                        background: `url(${marchMadnessLeftIcon}) left 20px center no-repeat, url(${marchMadnessRightIcon}) right 20px center no-repeat`,
-                        backgroundColor: theme.marchMadness.button.background.secondary,
+                        background: `url(${marchMadnessLeftIcon}) left ${
+                            isMobile ? 70 : 20
+                        }px center no-repeat, url(${marchMadnessRightIcon}) right ${
+                            isMobile ? 70 : 20
+                        }px center no-repeat`,
+                        backgroundColor: theme.marchMadness.button.background.primary,
                         backgroundSize: '28px, 28px',
                         border: 'none',
+                        borderRadius: isMobile ? '20px' : undefined,
                         fontFamily: "'NCAA' !important",
                         letterSpacing: '2px',
                         textTransform: 'uppercase',
@@ -121,6 +128,28 @@ const DappHeader: React.FC = () => {
                 </Button>
             </SPAAnchor>
         </MarchMadnessWrapper>
+    );
+
+    const showGetStartedButton = false; // TODO: show Get Started after March Madness
+    const getGetStartedButton = () => (
+        <SPAAnchor style={{ width: '100%', marginTop: '10px' }} href={buildHref(ROUTES.Wizard)}>
+            <Button
+                backgroundColor={theme.background.primary}
+                textColor={theme.button.textColor.quaternary}
+                borderColor={theme.button.borderColor.secondary}
+                width="100%"
+                fontWeight="400"
+                additionalStyles={{
+                    borderRadius: '20px',
+                    fontWeight: '700',
+                    fontSize: '14px',
+                    textTransform: 'capitalize',
+                }}
+                height="28px"
+            >
+                {t('get-started.get-started')}
+            </Button>
+        </SPAAnchor>
     );
 
     return (
@@ -273,67 +302,70 @@ const DappHeader: React.FC = () => {
                         </FlexDivCentered>
                     )}
 
-                    <MobileButtonWrapper>
-                        {!isWalletConnected ? (
-                            <>
-                                <Button
-                                    backgroundColor={'transparent'}
-                                    textColor={theme.button.textColor.quaternary}
-                                    borderColor={theme.button.borderColor.secondary}
-                                    width="100%"
-                                    fontWeight="400"
-                                    additionalStyles={{
-                                        maxWidth: 400,
-                                        borderRadius: '15.5px',
-                                        fontWeight: '800',
-                                        fontSize: '14px',
-                                        textTransform: 'capitalize',
-                                    }}
-                                    height="28px"
-                                    onClick={() =>
-                                        dispatch(
-                                            setWalletConnectModalVisibility({
-                                                visibility: true,
-                                            })
-                                        )
-                                    }
-                                >
-                                    {t('get-started.log-in')}
-                                </Button>
+                    {!isWalletConnected ? (
+                        <MobileButtonWrapper>
+                            <Button
+                                backgroundColor={'transparent'}
+                                textColor={theme.button.textColor.quaternary}
+                                borderColor={theme.button.borderColor.secondary}
+                                width="100%"
+                                fontWeight="400"
+                                additionalStyles={{
+                                    maxWidth: 400,
+                                    borderRadius: '15.5px',
+                                    fontWeight: '800',
+                                    fontSize: '14px',
+                                    textTransform: 'capitalize',
+                                }}
+                                height="28px"
+                                onClick={() =>
+                                    dispatch(
+                                        setWalletConnectModalVisibility({
+                                            visibility: true,
+                                        })
+                                    )
+                                }
+                            >
+                                {t('get-started.log-in')}
+                            </Button>
 
-                                <Button
-                                    backgroundColor={theme.button.background.quaternary}
-                                    textColor={theme.button.textColor.primary}
-                                    borderColor={theme.button.borderColor.secondary}
-                                    fontWeight="400"
-                                    additionalStyles={{
-                                        maxWidth: 400,
-                                        borderRadius: '15.5px',
-                                        fontWeight: '700',
-                                        fontSize: '14px',
-                                        textTransform: 'capitalize',
-                                    }}
-                                    width="100%"
-                                    height="28px"
-                                    onClick={() =>
-                                        dispatch(
-                                            setWalletConnectModalVisibility({
-                                                visibility: true,
-                                            })
-                                        )
-                                    }
-                                >
-                                    {t('get-started.sign-up')}
-                                </Button>
+                            <Button
+                                backgroundColor={theme.button.background.quaternary}
+                                textColor={theme.button.textColor.primary}
+                                borderColor={theme.button.borderColor.secondary}
+                                fontWeight="400"
+                                additionalStyles={{
+                                    maxWidth: 400,
+                                    borderRadius: '15.5px',
+                                    fontWeight: '700',
+                                    fontSize: '14px',
+                                    textTransform: 'capitalize',
+                                }}
+                                width="100%"
+                                height="28px"
+                                onClick={() =>
+                                    dispatch(
+                                        setWalletConnectModalVisibility({
+                                            visibility: true,
+                                        })
+                                    )
+                                }
+                            >
+                                {t('get-started.sign-up')}
+                            </Button>
+                            {showGetStartedButton && location.pathname !== ROUTES.Wizard && getGetStartedButton()}
+                            <NetworkSwitcher />
+                        </MobileButtonWrapper>
+                    ) : (
+                        (isConnectedViaParticle || showGetStartedButton) && ( // TODO: remove condition after March Madness
+                            <MobileButtonWrapper>
+                                {showGetStartedButton && location.pathname !== ROUTES.Wizard && getGetStartedButton()}
                                 <TopUp />
-                                <NetworkSwitcher />
-                            </>
-                        ) : (
-                            <>
-                                <TopUp />
-                            </>
-                        )}
-                    </MobileButtonWrapper>
+                            </MobileButtonWrapper>
+                        )
+                    )}
+
+                    {location.pathname !== ROUTES.MarchMadness && getMarchMadnessButton()}
                 </>
             )}
         </>
@@ -475,10 +507,17 @@ const MobileButtonWrapper = styled(FlexDivRowCentered)`
     margin-top: 10px;
     gap: 20px;
     min-height: 32px;
+    @media (max-width: 767px) {
+        min-height: 28px;
+    }
 `;
 
 const MarchMadnessWrapper = styled.div`
     margin-left: 20px;
+    @media (max-width: 767px) {
+        width: 100%;
+        margin: 10px 0 0 0;
+    }
 `;
 
 export default DappHeader;

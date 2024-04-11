@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Select from 'react-select';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -23,13 +23,12 @@ const SelectInput: React.FC<SelectInputProps> = ({
     isDisabled,
 }) => {
     const theme: ThemeInterface = useTheme();
-    let defaultOption = options[defaultValue ? defaultValue : 0];
 
-    // when there are no options but there is placeholder
-    if (!defaultOption && placeholder) {
-        defaultOption = { value: Number(defaultValue), label: placeholder };
-        handleChange(Number(defaultValue));
-    }
+    const defaultOption = options[defaultValue ? defaultValue : 0];
+    const defaultOptionWithPlaceholder = defaultOption || {
+        value: Number(defaultValue),
+        label: placeholder,
+    };
 
     const customStyled = {
         menu: (provided: any, state: any) => ({
@@ -47,6 +46,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             backgroundColor: state?.isFocused || state.isSelected ? theme.background.primary : 'transparent',
             opacity: state.isSelected && !state?.isFocused ? 0.7 : 0.9,
             cursor: 'pointer',
+            fontFamily: theme.fontFamily.primary,
         }),
         control: (provided: any, state: any) => ({
             ...provided,
@@ -70,6 +70,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
         singleValue: (provided: any) => ({
             ...provided,
             color: theme.textColor.primary,
+            fontFamily: theme.fontFamily.primary,
         }),
         dropdownIndicator: (provided: any) => ({
             ...provided,
@@ -81,16 +82,23 @@ const SelectInput: React.FC<SelectInputProps> = ({
         }),
     };
 
+    // when there are no options but there is a placeholder
+    useEffect(() => {
+        if (!defaultOption && placeholder) {
+            handleChange(Number(defaultValue));
+        }
+    }, [defaultOption, defaultValue, handleChange, placeholder]);
+
     return (
         <Select
-            value={defaultOption}
+            value={defaultOptionWithPlaceholder}
             placeholder={placeholder}
             options={options}
             styles={customStyled}
             onChange={(props) => {
                 handleChange(Number(props?.value));
             }}
-            defaultValue={defaultOption}
+            defaultValue={defaultOptionWithPlaceholder}
             isSearchable={false}
             isDisabled={isDisabled}
         />

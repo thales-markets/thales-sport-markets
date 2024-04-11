@@ -1,21 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FlexDivEnd } from 'styles/common';
 
 type WildCardMatchProps = {
     homeTeam: string;
     awayTeam: string;
+    position: number;
     isHomeTeamWon: boolean | undefined;
     margin?: string;
 };
 
-const WildCardMatch: React.FC<WildCardMatchProps> = ({ homeTeam, awayTeam, isHomeTeamWon, margin }) => {
+const WildCardMatch: React.FC<WildCardMatchProps> = ({ homeTeam, awayTeam, position, isHomeTeamWon, margin }) => {
     return (
         <Container margin={margin}>
             <TeamRow>
+                <TeamPosition>
+                    <TeamPositionValue>{position}</TeamPositionValue>
+                </TeamPosition>
                 <TeamName isWinner={isHomeTeamWon}>{homeTeam}</TeamName>
             </TeamRow>
             <TeamSeparator />
             <TeamRow>
+                <TeamPosition>
+                    <TeamPositionValue>{position}</TeamPositionValue>
+                </TeamPosition>
                 <TeamName isWinner={!isHomeTeamWon}>{awayTeam}</TeamName>
             </TeamRow>
         </Container>
@@ -67,6 +75,24 @@ const TeamSeparator = styled.hr`
     border: none;
     background-color: ${(props) => props.theme.marchMadness.background.quinary};
     margin: auto;
+`;
+
+const TeamPosition = styled(FlexDivEnd)`
+    position: absolute;
+    left: 0;
+    align-items: center;
+    width: 15px;
+    height: 100%;
+`;
+
+const TeamPositionValue = styled.span`
+    font-family: 'Oswald' !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.marchMadness.textColor.quinary};
 `;
 
 export default WildCardMatch;

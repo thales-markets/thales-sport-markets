@@ -544,7 +544,9 @@
             "total-to-pay": "Total a pagar",
             "in-wallet": "en billetera",
             "total-gas": "Tarifa de gas (ESTIMADA)",
-            "gas-tooltip": "Tarifa de gas actual requerida por blockchain para liquidar la transacción"
+            "gas-tooltip": "Tarifa de gas actual requerida por blockchain para liquidar la transacción",
+            "keep-selection-tooltip": "De forma predeterminada, el generador de parlay se restablece después de un envío exitoso. Marque esta opción si desea mantener el contexto actual después del envío.",
+            "persist-games": "Mantener la selección después de enviar"
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {
@@ -578,7 +580,9 @@
         "incentivized-tooltip-nfl-playoffs": "Se distribuirá un total enorme de {{rewards}} durante los playoffs de la NFL. Consulta más detalles <detailsLink>aquí</detailsLink>.",
         "superbowl-incentive": "10.000 ARB EN INCENTIVOS",
         "incentivized-tooltip-uefa": "Se distribuirá un total enorme de {{rewards}} para las competiciones de la UEFA. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-nhl": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la NHL, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>."
+        "incentivized-tooltip-nhl": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la NHL, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
+        "incentivized-tooltip-mm": "Gana 45 000 ARB + 50 000 THALES durante March Madness. Más detalles <detailsLink>aquí</detailsLink>.",
+        "incentivized-tooltip-nhl-mlb": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la {{league}}, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -1201,7 +1205,8 @@
         "tabs": {
             "brackets": "Soportes",
             "home": "Hogar",
-            "leaderboard": "Tabla de clasificación"
+            "leaderboard": "Tabla de clasificación",
+            "soon": "pronto"
         },
         "home": {
             "text-3d": "Dulce 16 - 4%",
@@ -1246,7 +1251,8 @@
             "comp-rules-0": "La acuñación de grupos comenzará después de que finalice el domingo de selección y se conozca el calendario de la primera ronda, a principios del 18 de marzo UTC.",
             "comp-rules-0-a": "La acuñación de grupos durará hasta que los juegos de la primera ronda comiencen el 21 de marzo.",
             "time-info-a": "Hasta que comience la acuñación de soportes",
-            "volume-incetives-4": "Los operadores de March Madness también son elegibles para 2500 ARB por semana de Competencia Parlay y 10,000 ARB por dos semanas de Recompensas por Volumen consecutivas del programa STIP. Visita<p> esta página de promoción</p> para informacion adicional."
+            "volume-incetives-4": "Los operadores de March Madness también son elegibles para 2500 ARB por semana de Competencia Parlay y 10,000 ARB por dos semanas de Recompensas por Volumen consecutivas del programa STIP. Visita<p> esta página de promoción</p> para informacion adicional.",
+            "button-switch": "Cambiar a arbitraje"
         },
         "leaderboard": {
             "owner": "Dueño",
@@ -1266,7 +1272,10 @@
             "bonus-volume": "Prima",
             "rank": "Rango",
             "tooltip-rewards-correct-table": "3.000 OP (10.000 THALES en Arbitrum) se dividirán entre los 10 primeros",
-            "address": "DIRECCIÓN"
+            "address": "DIRECCIÓN",
+            "bracket-id": "ID de soporte",
+            "by-volume": "Recompensas por volumen",
+            "my-rewards-bracket": "Tu mejor bracket"
         },
         "brackets": {
             "stats": {
@@ -1280,7 +1289,8 @@
                 "incomplete": "Incompleto",
                 "rank": "Rango",
                 "complete": "Completo",
-                "total-points": "mis puntos totales"
+                "total-points": "mis puntos totales",
+                "duplicate": "Duplicado"
             },
             "modal-mint": {
                 "finish-text-2-success": "¡Acabas de crear tu categoría March Madness!",
@@ -1295,7 +1305,13 @@
                 "button-mint": "Como NFT",
                 "update-text-2": "Guardamos su predicción de grupo, ¡actualice su grupo ahora!",
                 "finish-text-1": "¡Bien hecho!",
-                "finish-text-3-success": "Dirígete a <marketsLink>Mercados de la NCAAB</marketsLink> y comienza a ganar recompensas."
+                "finish-text-3-success": "Dirígete a <marketsLink>Mercados de la NCAAB</marketsLink> y comienza a ganar recompensas.",
+                "hedaer": "¡Felicidades!",
+                "footer-text": "Dirígete a <marketsLink>Mercados de la NCAAB</marketsLink> y comienza a ganar recompensas.",
+                "mint-text": "¡Acabas de crear tu categoría March Madness!",
+                "footer-info": "*El NFT del grupo March Madness es un NFT de tiempo extra que permite a los poseedores participar en la campaña March Madness de tiempo extra creando su propio grupo de torneo de predicción.",
+                "update-text": "¡Tu NFT de soporte de March Madness ha sido actualizado!",
+                "back": "Volver a la página de corchetes"
             },
             "modal-share": {
                 "header": "Mis últimas 4 elecciones",
@@ -1321,7 +1337,13 @@
             "confirmation-message": "Soporte acuñado con éxito",
             "create-as": "Crear nuevo como...",
             "clear-all": "Limpiar todo",
-            "submit-info": "*precio de acuñación {{value}}"
+            "submit-info": "*precio de acuñación {{value}}",
+            "create-new": "Crear nuevo",
+            "submit-modify-progress": "Actualizando...",
+            "keep-current": "Mantener la selección actual",
+            "submit-progress": "Acuñación...",
+            "update-message": "Soporte actualizado con éxito",
+            "random": "aleatorio"
         },
         "regions": {
             "west": "Oeste",
@@ -1332,7 +1354,19 @@
         "test-info": "¡La fase de pruebas ya está abierta con los equipos de 2022, la selección de 2023 se abre el 12 de marzo!",
         "back-to-markets": "Volver a los mercados",
         "mobile-message": "La página solo está disponible en pantallas más grandes. ¡Utilice la versión de escritorio!",
-        "header-button-tooltip": "Sólo disponible en la red Arbitrum."
+        "header-button-tooltip": "Sólo disponible en la red Arbitrum.",
+        "stats": {
+            "pool-size": "Tamaño del premio acumulado",
+            "live-stats": "Estadísticas en vivo",
+            "brackets-minted": "Soportes acuñados"
+        },
+        "side-leaderboard": {
+            "title": "locura de Marzo",
+            "points": "Puntos",
+            "rewards": "Recompensas",
+            "points-leaderboard": "Tabla de clasificación de puntos",
+            "bracket-id": "ID de soporte"
+        }
     },
     "promotions": {
         "nav-items": {

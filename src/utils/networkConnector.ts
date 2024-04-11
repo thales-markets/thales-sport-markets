@@ -16,7 +16,6 @@ import sportVaultDataContract from 'utils/contracts/sportVaultDataContract';
 import sUSDContract from 'utils/contracts/sUSDContract';
 import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
 import { marchMadnessContract } from './contracts/marchMadnessContract';
-import { marchMadnessDataContract } from './contracts/marchMadnessDataContract';
 import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
 import overtimeVoucherContract from './contracts/overtimeVoucherContract';
@@ -45,7 +44,6 @@ type NetworkConnector = {
     liquidityPoolContract?: ethers.Contract;
     sportVaultDataContract?: ethers.Contract;
     marchMadnessContract?: ethers.Contract;
-    marchMadnessDataContract?: ethers.Contract;
     liquidityPoolDataContract?: ethers.Contract;
     parlayMarketDataContract?: ethers.Contract;
     parlayAMMLiquidityPoolContract?: ethers.Contract;
@@ -72,7 +70,6 @@ const networkConnector: NetworkConnector = {
         this.parlayMarketsAMMContract = initializeContract(parlayMarketsAMMContract, networkSettings);
         this.favoriteTeamContract = initializeContract(FIFAFavoriteTeam, networkSettings);
         this.marchMadnessContract = initializeContract(marchMadnessContract, networkSettings);
-        this.marchMadnessDataContract = initializeContract(marchMadnessDataContract, networkSettings);
         this.liquidityPoolContract = initializeContract(liquidityPoolContract, networkSettings);
         this.sportVaultDataContract = initializeContract(sportVaultDataContract, networkSettings);
         this.liquidityPoolDataContract = initializeContract(liquidityPoolDataContract, networkSettings);

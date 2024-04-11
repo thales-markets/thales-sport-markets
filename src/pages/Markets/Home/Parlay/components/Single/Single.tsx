@@ -2,6 +2,7 @@ import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import Tooltip from 'components/Tooltip';
+import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
@@ -66,13 +67,16 @@ import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { fetchAmountOfTokensForXsUSDAmount } from 'utils/skewCalculator';
+import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import ShareTicketModal from '../ShareTicketModal';
 import { ShareTicketModalProps } from '../ShareTicketModal/ShareTicketModal';
 import SuggestedAmount from '../SuggestedAmount';
 import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
+    CheckboxContainer,
     GasSummary,
+    HorizontalLine,
     InfoContainer,
     InfoLabel,
     InfoValue,
@@ -126,6 +130,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState('');
+    const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage());
 
     const [availablePerPosition, setAvailablePerPosition] = useState<AvailablePerPosition>({
         [Position.HOME]: {
@@ -564,7 +569,7 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                     setIsBuying(false);
                     setCollateralAmount('');
                     setTokenAmount(0);
-                    dispatch(removeAll());
+                    if (!keepSelection) dispatch(removeAll());
                     onBuySuccess && onBuySuccess();
 
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.singleBuy, {
@@ -946,6 +951,30 @@ const Single: React.FC<SingleProps> = ({ market, onBuySuccess, setUpdatedQuotes 
                               2
                           )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
+            </RowSummary>
+            <HorizontalLine />
+            <RowSummary>
+                <RowContainer>
+                    <SummaryLabel>
+                        {t('markets.parlay.persist-games')}
+                        <Tooltip
+                            overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>}
+                            iconFontSize={13}
+                            marginLeft={3}
+                        />
+                    </SummaryLabel>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={keepSelection}
+                            value={keepSelection.toString()}
+                            onChange={(e: any) => {
+                                setKeepSelection(e.target.checked || false);
+                                setKeepSelectionToStorage(e.target.checked || false);
+                            }}
+                        />
+                    </CheckboxContainer>
+                </RowContainer>
             </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>

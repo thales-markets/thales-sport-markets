@@ -26,11 +26,15 @@ import {
     TableHeaderContainer,
     TableRow,
     TableRowCell,
+    WalletAddress,
 } from '../TableByVolume/styled-components';
+import { getFormattedRewardsAmount } from 'utils/marchMadness';
 
 type TableByGuessedCorrectlyProps = {
     searchText: string;
 };
+
+const NUMBER_OF_POSITIONS_TO_HIGHLIGHT = 20; // highlight first 20
 
 const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -45,11 +49,17 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                 Header: '',
                 accessor: 'rank',
             },
+
             {
-                Header: <>{t('march-madness.leaderboard.address')}</>,
-                accessor: 'walletAddress',
+                Header: <>{t('march-madness.leaderboard.bracket-id')}</>,
+                accessor: 'bracketId',
+                Cell: (cellProps) => <>#{cellProps.cell.value}</>,
+            },
+            {
+                Header: <>{t('march-madness.leaderboard.owner')}</>,
+                accessor: 'owner',
                 Cell: (cellProps) => (
-                    <>
+                    <WalletAddress>
                         {truncateAddress(cellProps.cell.value, 5)}
                         <a
                             href={getEtherscanAddressLink(networkId, cellProps.cell.value)}
@@ -58,7 +68,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         >
                             <Arrow />
                         </a>
-                    </>
+                    </WalletAddress>
                 ),
             },
             {
@@ -81,7 +91,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         />
                     </>
                 ),
-                accessor: 'totalCorrectedPredictions',
+                accessor: 'totalPoints',
             },
             {
                 Header: () => (
@@ -103,7 +113,17 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                         />
                     </>
                 ),
-                accessor: 'rewards',
+                accessor: 'tokenRewards',
+                Cell: (cell) => {
+                    return (
+                        <>
+                            {getFormattedRewardsAmount(
+                                (cell.row.original as any).stableRewards,
+                                (cell.row.original as any).tokenRewards
+                            )}
+                        </>
+                    );
+                },
             },
         ];
     }, [t, networkId, theme.marchMadness.borderColor.primary, theme.marchMadness.background.secondary]);
@@ -117,7 +137,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
 
     const myScore = useMemo(() => {
         if (data) {
-            return data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
+            return data.filter((user) => user.owner.toLowerCase() == walletAddress?.toLowerCase());
         }
         return [];
     }, [data, walletAddress]);
@@ -126,20 +146,16 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
         let finalData: LeaderboardByGuessedCorrectlyResponse = [];
         if (data) {
             finalData = data;
-            const myScore = data.filter((user) => user.walletAddress.toLowerCase() == walletAddress?.toLowerCase());
-            if (myScore.length) {
-                finalData = data.filter((user) => user.walletAddress.toLowerCase() !== walletAddress?.toLowerCase());
-            }
 
             if (searchText?.trim() !== '') {
-                finalData = data.filter((user) => user.walletAddress.toLowerCase().includes(searchText.toLowerCase()));
+                finalData = data.filter((user) => user.owner.toLowerCase().includes(searchText.toLowerCase()));
             }
 
             return finalData;
         }
 
         return [];
-    }, [data, searchText, walletAddress]);
+    }, [data, searchText]);
 
     const {
         getTableProps,
@@ -177,9 +193,12 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
             return (
                 <StickyRowTopTable myScore={true}>
                     <TableRowCell>{myScore[0].rank}</TableRowCell>
-                    <TableRowCell>{t('march-madness.leaderboard.my-rewards').toUpperCase()}</TableRowCell>
-                    <TableRowCell>{myScore[0].totalCorrectedPredictions}</TableRowCell>
-                    <TableRowCell>{myScore[0].rewards}</TableRowCell>
+                    <TableRowCell>#{myScore[0].bracketId}</TableRowCell>
+                    <TableRowCell>{t('march-madness.leaderboard.my-rewards-bracket').toUpperCase()}</TableRowCell>
+                    <TableRowCell>{myScore[0].totalPoints}</TableRowCell>
+                    <TableRowCell>
+                        {getFormattedRewardsAmount(myScore[0].stableRewards, myScore[0].tokenRewards)}
+                    </TableRowCell>
                 </StickyRowTopTable>
             );
         }
@@ -187,10 +206,10 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
 
     return (
         <Container>
-            <TableHeaderContainer hideBottomBorder={true} inverseBorderGradient={true}>
+            <TableHeaderContainer>
                 <TableHeader>{t('march-madness.leaderboard.by-guessed-correctly')}</TableHeader>
             </TableHeaderContainer>
-            <TableContainer inverseBorderGradient={true}>
+            <TableContainer isEmpty={!filteredData?.length}>
                 {!filteredData?.length && (
                     <NoDataContainer>
                         <NoDataLabel>{t('march-madness.leaderboard.no-data')}</NoDataLabel>
@@ -213,9 +232,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                             {myScore ? stickyRow : <></>}
                             {(page.length ? page : rows).map((row, index) => {
                                 prepareRow(row);
-                                const isTopTen =
-                                    state.pageIndex === 0 &&
-                                    (myScore.length && myScore[0].rank <= 10 ? index < 9 : index < 10);
+                                const isTopTen = (row.original as any).rank <= NUMBER_OF_POSITIONS_TO_HIGHLIGHT;
                                 return (
                                     <TableRow
                                         {...row.getRowProps()}
@@ -233,19 +250,19 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
                                     </TableRow>
                                 );
                             })}
+                            <TableRow hideBorder>
+                                <PaginationWrapper
+                                    rowsPerPageOptions={[10, 20, 50, 100]}
+                                    count={filteredData?.length ? filteredData.length : 0}
+                                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                                    rowsPerPage={state.pageSize}
+                                    page={state.pageIndex}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </TableRow>
                         </tbody>
                     </Table>
-                )}
-                {filteredData?.length > 0 && (
-                    <PaginationWrapper
-                        rowsPerPageOptions={[10, 20, 50, 100]}
-                        count={filteredData?.length ? filteredData.length : 0}
-                        labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                        rowsPerPage={state.pageSize}
-                        page={state.pageIndex}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
                 )}
             </TableContainer>
         </Container>
@@ -253,8 +270,7 @@ const TableByGuessedCorrectly: React.FC<TableByGuessedCorrectlyProps> = ({ searc
 };
 
 const Container = styled.div`
-    width: 40%;
-    padding-left: 10px;
+    flex: 8;
 `;
 
 export default TableByGuessedCorrectly;
