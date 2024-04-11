@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { LIVE_SUPPORTED_LEAGUES } from 'constants/tags';
 import { GlobalFiltersEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
@@ -19,7 +18,6 @@ const marketsCache = {
 const useSportsMarketsV2Query = (
     globalFilter: GlobalFiltersEnum,
     networkId: Network,
-    isLive: boolean,
     options?: UseQueryOptions<typeof marketsCache>
 ) => {
     return useQuery<typeof marketsCache>(
@@ -33,48 +31,35 @@ const useSportsMarketsV2Query = (
                 // const minMaturityDate = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
                 // const todaysDate = Math.round(today.getTime() / 1000);
 
-                if (isLive) {
-                    const promises: any[] = [];
-                    LIVE_SUPPORTED_LEAGUES.forEach((league: number) =>
-                        promises.push(
-                            axios.get(
-                                `${generalConfig.API_URL}/overtime-v2/markets/?status=ongoing&live=true&leagueId=${league}`
-                            )
-                        )
-                    );
-                    const responses = await Promise.all(promises);
-                    responses.forEach((response: any) => markets.concat(response.data));
-                } else {
-                    switch (globalFilter) {
-                        case GlobalFiltersEnum.OpenMarkets:
-                            response = await axios.get(
-                                `${generalConfig.API_URL}/overtime-v2/markets/?status=open&ungroup=true`
-                            );
-                            markets = response.data;
-                            break;
-                        case GlobalFiltersEnum.ResolvedMarkets:
-                            response = await axios.get(
-                                `${generalConfig.API_URL}/overtime-v2/markets/?status=resolved&ungroup=true`
-                            );
-                            markets = response.data;
-                            break;
-                        case GlobalFiltersEnum.Canceled:
-                            const [canceledMarkets, pausedMarkets] = await Promise.all([
-                                axios.get(`${generalConfig.API_URL}/overtime-v2/markets/?status=paused&ungroup=true`),
-                                axios.get(`${generalConfig.API_URL}/overtime-v2/markets/?status=canceled&ungroup=true`),
-                            ]);
-                            markets = [...canceledMarkets.data, ...pausedMarkets.data];
-                            // markets = uniqBy([...canceledMarkets, ...pausedMarkets], 'address');
-                            break;
-                        case GlobalFiltersEnum.PendingMarkets:
-                            response = await axios.get(
-                                `${generalConfig.API_URL}/overtime-v2/markets/?status=ongoing&ungroup=true`
-                            );
-                            markets = response.data;
-                            break;
-                        default:
-                            break;
-                    }
+                switch (globalFilter) {
+                    case GlobalFiltersEnum.OpenMarkets:
+                        response = await axios.get(
+                            `${generalConfig.API_URL}/overtime-v2/markets/?status=open&ungroup=true`
+                        );
+                        markets = response.data;
+                        break;
+                    case GlobalFiltersEnum.ResolvedMarkets:
+                        response = await axios.get(
+                            `${generalConfig.API_URL}/overtime-v2/markets/?status=resolved&ungroup=true`
+                        );
+                        markets = response.data;
+                        break;
+                    case GlobalFiltersEnum.Canceled:
+                        const [canceledMarkets, pausedMarkets] = await Promise.all([
+                            axios.get(`${generalConfig.API_URL}/overtime-v2/markets/?status=paused&ungroup=true`),
+                            axios.get(`${generalConfig.API_URL}/overtime-v2/markets/?status=canceled&ungroup=true`),
+                        ]);
+                        markets = [...canceledMarkets.data, ...pausedMarkets.data];
+                        // markets = uniqBy([...canceledMarkets, ...pausedMarkets], 'address');
+                        break;
+                    case GlobalFiltersEnum.PendingMarkets:
+                        response = await axios.get(
+                            `${generalConfig.API_URL}/overtime-v2/markets/?status=ongoing&ungroup=true`
+                        );
+                        markets = response.data;
+                        break;
+                    default:
+                        break;
                 }
 
                 marketsCache[globalFilter] = markets.map((market: any) => {

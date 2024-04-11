@@ -46,7 +46,7 @@ const Parlay: React.FC = () => {
         enabled: isAppReady,
     });
 
-    const sportMarketsQuery = useSportsMarketsV2Query(GlobalFiltersEnum.OpenMarkets, networkId, false, {
+    const sportMarketsQuery = useSportsMarketsV2Query(GlobalFiltersEnum.OpenMarkets, networkId, {
         enabled: isAppReady,
     });
 

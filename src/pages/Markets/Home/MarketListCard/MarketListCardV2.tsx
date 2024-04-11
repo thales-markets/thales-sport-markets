@@ -1,7 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
@@ -19,7 +18,7 @@ import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import web3 from 'web3';
-import { BetType, SportFilterEnum } from '../../../../enums/markets';
+import { BetType } from '../../../../enums/markets';
 import MatchStatus from './components/MatchStatus';
 import OddsV2 from './components/OddsV2';
 import PlayerPropsOddsV2 from './components/PlayerPropsOddsV2';
@@ -75,9 +74,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameResolved = market.isResolved || market.isCanceled;
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
-    const liveFilter = localStorage.getItem(LOCAL_STORAGE_KEYS.FILTER_SPORT);
-    // TODO SWITCH TO MARKET LIVE FLAG
-    const isLiveMarket = liveFilter != null ? JSON.parse(liveFilter) == SportFilterEnum.Live && isGameStarted : false;
+    const isLiveMarket = market.live && isGameStarted;
     const showOdds = (isLiveMarket || !isPendingResolution) && !isGameResolved && !market.isPaused;
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
