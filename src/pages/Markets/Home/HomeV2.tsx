@@ -2,17 +2,20 @@ import Button from 'components/Button';
 import GetUsd from 'components/GetUsd';
 import Loader from 'components/Loader';
 import Logo from 'components/Logo';
+import OddsSelectorModal from 'components/OddsSelectorModal';
 import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
+import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { EUROPA_LEAGUE_TAGS, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
 import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
+import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -26,13 +29,11 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { addHoursToCurrentDate } from 'thales-utils';
+import { addHoursToCurrentDate, localStore } from 'thales-utils';
 import { SportMarketInfoV2, SportMarketsV2, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
-import Checkbox from '../../../components/fields/Checkbox/Checkbox';
-import useSportsMarketsV2Query from '../../../queries/markets/useSportsMarketsV2Query';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import GlobalFilters from '../components/GlobalFilters';
 import SportFilter from '../components/SportFilter';
@@ -81,6 +82,8 @@ const Home: React.FC = () => {
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
+    const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
+    const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
     const tagsList = orderBy(
         TAGS_LIST.filter((tag) => !tag.hidden),
@@ -99,6 +102,12 @@ const Home: React.FC = () => {
             dispatch(setSGPFees(sgpFees.data));
         }
     }, [dispatch, sgpFees.data, sgpFees.isSuccess]);
+
+    useEffect(() => {
+        if (getSelectedOddsType == undefined) {
+            setShowOddsSelectorModal(true);
+        }
+    }, [getSelectedOddsType]);
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
 
@@ -217,6 +226,13 @@ const Home: React.FC = () => {
                         ) {
                             return false;
                         }
+                    } else if (BOXING_TAGS.includes(market.leagueId)) {
+                        if (
+                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[0]) &&
+                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[1])
+                        ) {
+                            return false;
+                        }
                     } else if (!tagFilter.map((tag) => tag.id).includes(market.leagueId)) {
                         return false;
                     }
@@ -292,6 +308,8 @@ const Home: React.FC = () => {
         Object.keys(groupedMarkets).forEach((key: string) => {
             if (EUROPA_LEAGUE_TAGS.includes(Number(key))) {
                 openMarketsCountPerTag[EUROPA_LEAGUE_TAGS[0].toString()] = groupedMarkets[key].length;
+            } else if (BOXING_TAGS.includes(Number(key))) {
+                openMarketsCountPerTag[BOXING_TAGS[0].toString()] = groupedMarkets[key].length;
             } else {
                 openMarketsCountPerTag[key] = groupedMarkets[key].length;
             }
@@ -360,6 +378,7 @@ const Home: React.FC = () => {
 
     return (
         <Container>
+            {showOddsSelectorModal && <OddsSelectorModal onClose={() => setShowOddsSelectorModal(false)} />}
             <ReactModal
                 isOpen={showBurger && isMobile}
                 onRequestClose={() => {

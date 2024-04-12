@@ -1,15 +1,26 @@
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
+import Tooltip from 'components/Tooltip';
+import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, MIN_COLLATERAL_MULTIPLIER } from 'constants/markets';
+import {
+    APPROVAL_BUFFER,
+    MIN_COLLATERAL_MULTIPLIER,
+    PARLAY_LEADERBOARD_MINIMUM_GAMES,
+    PARLAY_LEADERBOARD_WEEKLY_START_DATE,
+} from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
+import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
+import { Network } from 'enums/network';
 import { BigNumber, ethers } from 'ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
+import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
+import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
@@ -18,6 +29,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
+import { getTicketPayment, removeAll, setPaymentAmountToBuy } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import {
     getIsAA,
@@ -28,13 +40,14 @@ import {
     setWalletConnectModalVisibility,
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { useTheme } from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
+import styled, { useTheme } from 'styled-components';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import {
     bigNumberFormatter,
     ceilNumberToDecimals,
     coinFormatter,
     coinParser,
+    formatCurrency,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
     formatPercentage,
@@ -42,8 +55,10 @@ import {
     getPrecision,
     roundNumberToDecimals,
 } from 'thales-utils';
+import { LeaderboardPoints, SportsAmmData, TicketMarket } from 'types/markets';
 import { Coins } from 'types/tokens';
 import { ThemeInterface } from 'types/ui';
+import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import {
     getCollateral,
     getCollateralAddress,
@@ -58,10 +73,18 @@ import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
+import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
+import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
+import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
+import ShareTicketModalV2 from '../ShareTicketModalV2';
+import { ShareTicketModalProps } from '../ShareTicketModalV2/ShareTicketModalV2';
+import SuggestedAmount from '../SuggestedAmount';
 import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
+    CheckboxContainer,
     GasSummary,
+    HorizontalLine,
     InfoContainer,
     InfoLabel,
     InfoTooltip,
@@ -77,16 +100,6 @@ import {
     XButton,
     defaultButtonProps,
 } from '../styled-components';
-
-import Tooltip from 'components/Tooltip';
-import { getTicketPayment, removeAll, setPaymentAmountToBuy } from 'redux/modules/ticket';
-import { SportsAmmData, TicketMarket } from 'types/markets';
-import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
-import useSportsAmmDataQuery from '../../../../../../queries/markets/useSportsAmmDataQuery';
-import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from '../../../../../../utils/sportsAmmV2';
-import ShareTicketModalV2 from '../ShareTicketModalV2';
-import { ShareTicketModalProps } from '../ShareTicketModalV2/ShareTicketModalV2';
-import SuggestedAmount from '../SuggestedAmount';
 
 type TicketProps = {
     markets: TicketMarket[];
@@ -134,8 +147,28 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+    const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
 
     const [gas, setGas] = useState(0);
+    const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
+        basicPoints: 0,
+        points: 0,
+        buyinBonus: 0,
+        numberOfGamesBonus: 0,
+    });
+    const [currentLeaderboardRank, setCurrentLeaderboardRank] = useState<number>(0);
+
+    const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
+
+    const query = useParlayLeaderboardQuery(networkId, latestPeriodWeekly, { enabled: isAppReady });
+
+    const parlaysData = useMemo(() => {
+        return query.isSuccess ? query.data : [];
+    }, [query.isSuccess, query.data]);
+
+    const rewards = getRewardsArray(networkId);
+    const rewardsCurrency = getRewardsCurrency(networkId);
+
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
@@ -152,6 +185,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     );
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const isStableCollateral = isStableCurrency(selectedCollateral);
+
+    const isMinimumParlayGames = markets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES;
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -222,6 +257,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
 
     useEffect(() => {
         setMinUsdAmountValue(parlayAmmData?.minBuyInAmount || 0);
@@ -454,7 +491,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
                     setIsBuying(false);
                     setCollateralAmount('');
-                    dispatch(removeAll());
+                    if (!keepSelection) dispatch(removeAll());
                 }
             } catch (e) {
                 setIsBuying(false);
@@ -795,6 +832,57 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         selectedCollateral,
         isEth,
     ]);
+    useEffect(() => {
+        if (usdAmountValue > 0 && totalQuote > 0) {
+            const buyInPow = Math.pow(usdAmountValue, 1 / 2);
+            const minBuyInPow = 1;
+
+            const basicPoints = 1 / totalQuote;
+            const points = (1 / totalQuote) * (1 + 0.1 * markets.length) * buyInPow;
+            const buyinBonus = buyInPow - minBuyInPow;
+            const numberOfGamesBonus = 0.1 * markets.length;
+            setLeaderBoardPoints({
+                basicPoints,
+                points,
+                buyinBonus,
+                numberOfGamesBonus,
+            });
+
+            const current = !!parlaysData ? parlaysData.findIndex((data) => data.points < points) : 0;
+            if (parlaysData.length === 0) {
+                setCurrentLeaderboardRank(1);
+            } else {
+                if (current === -1) {
+                    setCurrentLeaderboardRank(parlaysData.length + 1);
+                } else {
+                    setCurrentLeaderboardRank(current + 1);
+                }
+            }
+        }
+    }, [usdAmountValue, totalQuote, markets.length, parlaysData]);
+
+    const getPointsTooltip = () => (
+        <TooltipContainer>
+            <TooltipInfoContianer>
+                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.basic-points-label`)}:</TooltipInfoLabel>
+                <TooltipInfo>{formatCurrency(leaderboardPoints.basicPoints)}</TooltipInfo>
+            </TooltipInfoContianer>
+            <TooltipInfoContianer>
+                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.buy-in-bonus-label`)}:</TooltipInfoLabel>
+                <TooltipBonusInfo>{`+${formatPercentage(leaderboardPoints.buyinBonus, 0)}`}</TooltipBonusInfo>
+            </TooltipInfoContianer>
+            <TooltipInfoContianer>
+                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.number-of-games-bonus-label`)}:</TooltipInfoLabel>
+                <TooltipBonusInfo>{`+${formatPercentage(leaderboardPoints.numberOfGamesBonus, 0)}`}</TooltipBonusInfo>
+            </TooltipInfoContianer>
+            <TooltipFooter>
+                <TooltipInfoContianer>
+                    <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.total-points-label`)}:</TooltipInfoLabel>
+                    <TooltipInfo>{formatCurrency(leaderboardPoints.points)}</TooltipInfo>
+                </TooltipInfoContianer>
+            </TooltipFooter>
+        </TooltipContainer>
+    );
 
     return (
         <>
@@ -911,6 +999,104 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                           )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
+            {networkId !== Network.Base && networkId !== Network.OptimismSepolia && (
+                <>
+                    <HorizontalLine />
+                    <RowSummary>
+                        <SummaryLabel>{t(`parlay-leaderboard.ticket-info.title`)}:</SummaryLabel>
+                    </RowSummary>
+                    <RowSummary>
+                        <SummaryLabel>
+                            {t(`parlay-leaderboard.ticket-info.points-label`)}
+                            <Tooltip
+                                overlay={<>{t(`parlay-leaderboard.ticket-info.points-tooltip`)}</>}
+                                iconFontSize={13}
+                                marginLeft={3}
+                            />
+                            :
+                        </SummaryLabel>
+                        <SummaryValue isCollateralInfo={true}>
+                            {hidePayout || !isMinimumParlayGames ? (
+                                '-'
+                            ) : (
+                                <>
+                                    {`${formatCurrency(leaderboardPoints.basicPoints)}`}
+                                    <SummaryValue isInfo={true}>{` + ${formatPercentage(
+                                        leaderboardPoints.buyinBonus,
+                                        0
+                                    )} + ${formatPercentage(leaderboardPoints.numberOfGamesBonus, 0)}`}</SummaryValue>
+                                    {` = ${formatCurrency(leaderboardPoints.points)}`}
+                                    <Tooltip overlay={getPointsTooltip()} iconFontSize={13} marginLeft={3} />
+                                </>
+                            )}
+                        </SummaryValue>
+                    </RowSummary>
+                    <RowSummary>
+                        <SummaryLabel>
+                            {t(`parlay-leaderboard.ticket-info.rank-label`)}
+                            <Tooltip
+                                overlay={<>{t(`parlay-leaderboard.ticket-info.rank-tooltip`)}</>}
+                                iconFontSize={13}
+                                marginLeft={3}
+                            />
+                            :
+                        </SummaryLabel>
+                        <SummaryValue isCollateralInfo={true}>
+                            {hidePayout || !isMinimumParlayGames ? '-' : <>{`${currentLeaderboardRank}.`}</>}
+                        </SummaryValue>
+                    </RowSummary>
+                    <RowSummary>
+                        <SummaryLabel>
+                            {t(`parlay-leaderboard.ticket-info.rewards-label`)}
+                            <Tooltip
+                                overlay={<>{t(`parlay-leaderboard.ticket-info.rewards-tooltip`)}</>}
+                                iconFontSize={13}
+                                marginLeft={3}
+                            />
+                            :
+                        </SummaryLabel>
+                        <SummaryValue isCollateralInfo={true}>
+                            {hidePayout || !isMinimumParlayGames ? (
+                                '-'
+                            ) : (
+                                <>
+                                    {`${
+                                        rewards[currentLeaderboardRank - 1] || 0
+                                    } ${rewardsCurrency} (${formatCurrencyWithSign(
+                                        USD_SIGN,
+                                        (rewards[currentLeaderboardRank - 1] || 0) * rewardCurrencyRate,
+                                        0
+                                    )})`}
+                                </>
+                            )}
+                        </SummaryValue>
+                    </RowSummary>
+                </>
+            )}
+            <HorizontalLine />
+            <RowSummary>
+                <RowContainer>
+                    <SummaryLabel>
+                        {t('markets.parlay.persist-games')}
+                        <Tooltip
+                            overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>}
+                            iconFontSize={13}
+                            marginLeft={3}
+                        />
+                    </SummaryLabel>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={keepSelection}
+                            value={keepSelection.toString()}
+                            onChange={(e: any) => {
+                                setKeepSelection(e.target.checked || false);
+                                setKeepSelectionToStorage(e.target.checked || false);
+                            }}
+                        />
+                    </CheckboxContainer>
+                </RowContainer>
+            </RowSummary>
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
@@ -940,5 +1126,29 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         </>
     );
 };
+
+const TooltipContainer = styled(FlexDivColumn)``;
+
+const TooltipText = styled.span``;
+
+const TooltipFooter = styled(FlexDivRow)`
+    border-top: 1px solid ${(props) => props.theme.background.secondary};
+    margin-top: 10px;
+    padding-top: 8px;
+`;
+
+const TooltipInfoContianer = styled(FlexDiv)``;
+
+const TooltipInfoLabel = styled(TooltipText)`
+    margin-right: 4px;
+`;
+
+const TooltipInfo = styled(TooltipText)`
+    font-weight: 600;
+`;
+
+const TooltipBonusInfo = styled(TooltipInfo)`
+    color: ${(props) => props.theme.status.win};
+`;
 
 export default Ticket;

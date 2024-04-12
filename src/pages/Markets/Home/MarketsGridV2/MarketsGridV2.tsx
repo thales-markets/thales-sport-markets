@@ -1,5 +1,5 @@
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
@@ -8,9 +8,7 @@ import { useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { addHoursToCurrentDate } from 'thales-utils';
 import { SportMarketInfoV2, SportMarketsV2, TagInfo, Tags } from 'types/markets';
-import { isMobile } from 'utils/device';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
@@ -20,14 +18,12 @@ type MarketsGridProps = {
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
-    const dateFilter = useLocalStorage<Date | number>(
-        LOCAL_STORAGE_KEYS.FILTER_DATE,
-        !isMobile ? addHoursToCurrentDate(72, true).getTime() : 0
-    );
+    const dateFilter = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
 
     const marketsMap: Record<number, SportMarketInfoV2[]> = groupBy(markets, (market) => Number(market.leagueId));
     // UNIFYING EUROPA LEAGUE MARKETS FROM BOTH ENETPULSE & RUNDOWNS PROVIDERS
-    const unifiedMarketsMap = unifyEuropaLeagueMarkets(marketsMap);
+    const unifiedMarketsMapEuropaLeague = unifyEuropaLeagueMarkets(marketsMap);
+    const unifiedMarketsMap = unifyBoxingMarkets(unifiedMarketsMapEuropaLeague);
     const marketsKeys = sortMarketKeys(
         Object.keys(marketsMap).map((key) => Number(key)),
         unifiedMarketsMap,
@@ -170,8 +166,8 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     });
 
     return [
-        ...soccerKeys,
         ...footballKeys,
+        ...soccerKeys,
         ...basketballKeys,
         ...baseballKeys,
         ...hockeyKeys,
@@ -190,6 +186,16 @@ const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarketInfoV2[]
     if (rundownEuropaLeagueGames.length > 0 || enetpulseEuropaLeagueGames.length > 0) {
         marketsMap[EUROPA_LEAGUE_TAGS[0]] = [...rundownEuropaLeagueGames, ...enetpulseEuropaLeagueGames];
         delete marketsMap[EUROPA_LEAGUE_TAGS[1]];
+    }
+    return marketsMap;
+};
+
+const unifyBoxingMarkets = (marketsMap: Record<number, SportMarketInfoV2[]>) => {
+    const boxingMarkets = marketsMap[BOXING_TAGS[0]] ? marketsMap[BOXING_TAGS[0]] : [];
+    const boxingNonTitleMarkets = marketsMap[BOXING_TAGS[1]] ? marketsMap[BOXING_TAGS[1]] : [];
+    if (boxingMarkets.length > 0 || boxingNonTitleMarkets.length > 0) {
+        marketsMap[BOXING_TAGS[0]] = [...boxingMarkets, ...boxingNonTitleMarkets];
+        delete marketsMap[BOXING_TAGS[1]];
     }
     return marketsMap;
 };
