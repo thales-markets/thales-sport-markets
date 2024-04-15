@@ -1,6 +1,5 @@
 import { ParticleNetwork } from '@particle-network/auth';
 import { ParticleProvider } from '@particle-network/provider';
-import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
 import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
 import ROUTES from 'constants/routes';
@@ -186,7 +185,6 @@ const App = () => {
                                 />
                                 <Route exact path={ROUTES.Markets.Home}>
                                     <DappLayout>
-                                        <BannerCarousel />
                                         <Markets />
                                     </DappLayout>
                                 </Route>
@@ -300,7 +298,6 @@ const App = () => {
                                 <Route>
                                     <Redirect to={ROUTES.Markets.Home} />
                                     <DappLayout>
-                                        <BannerCarousel />
                                         <Markets />
                                     </DappLayout>
                                 </Route>

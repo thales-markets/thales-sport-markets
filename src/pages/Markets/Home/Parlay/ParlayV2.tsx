@@ -146,7 +146,7 @@ const Parlay: React.FC = () => {
 };
 
 const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?: boolean }>`
-    max-width: 320px;
+    max-width: 360px;
     padding: 12px;
     flex: none;
     background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);

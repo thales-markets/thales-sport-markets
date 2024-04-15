@@ -1,3 +1,4 @@
+import BannerCarousel from 'components/BannerCarousel';
 import Button from 'components/Button';
 import GetUsd from 'components/GetUsd';
 import Loader from 'components/Loader';
@@ -516,14 +517,15 @@ const Home: React.FC = () => {
 
             <RowContainer>
                 {/* LEFT FILTERS */}
-                <SidebarContainer maxWidth={280}>
+                <SidebarContainer maxWidth={263}>
+                    <BannerCarousel />
                     <Search
                         text={marketSearch}
                         handleChange={(value) => {
                             dispatch(setMarketSearch(value));
                             setSearchParam(value);
                         }}
-                        width={280}
+                        width={263}
                     />
                     <CheckboxContainer isMobile={isMobile}>
                         <Checkbox
@@ -698,7 +700,7 @@ const Home: React.FC = () => {
                     )}
                 </MainContainer>
                 {/* RIGHT PART */}
-                <SidebarContainer maxWidth={320}>
+                <SidebarContainer maxWidth={360}>
                     {[Network.OptimismMainnet, Network.Arbitrum].includes(networkId) && <GetUsd />}
                     <Suspense fallback={<Loader />}>
                         <Parlay />
@@ -724,6 +726,7 @@ const Home: React.FC = () => {
 
 const Container = styled(FlexDivColumnCentered)`
     width: 100%;
+    margin-top: 15px;
     @media (max-width: 768px) {
         margin-top: 20px;
     }
@@ -738,8 +741,9 @@ const RowContainer = styled(FlexDivRow)`
 
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    max-width: 800px;
+    max-width: 806px;
     flex-grow: 1;
+    margin: 0 25px;
 `;
 
 const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`
