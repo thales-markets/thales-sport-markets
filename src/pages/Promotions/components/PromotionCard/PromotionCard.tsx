@@ -192,7 +192,7 @@ const Description = styled.div`
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-export const ButtonContainer = styled(FlexDivCentered)<{ marginBottom?: string }>`
+const ButtonContainer = styled(FlexDivCentered)<{ marginBottom?: string }>`
     align-items: center;
     justify-content: center;
     margin-top: 20px;
