@@ -16,7 +16,7 @@ import {
     getRewardsArray,
     getRewardsCurrency,
 } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
-import { getOpacityForCombinedMarket } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
+// import { getOpacityForCombinedMarket } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useMemo, useState } from 'react';
@@ -273,7 +273,8 @@ const getExpandedRowComponent = (
             {combinedMarketsData &&
                 combinedMarketsData?.length > 0 &&
                 combinedMarketsData?.map((combinedMarket, index) => {
-                    const opacity = getOpacityForCombinedMarket(combinedMarket);
+                    // const opacity = getOpacityForCombinedMarket(combinedMarket);
+                    const opacity = 1;
 
                     const odd = formatMarketOdds(
                         selectedOddsType,

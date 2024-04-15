@@ -13,9 +13,9 @@ import {
 import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { Network } from 'enums/network';
-import i18n from 'i18n';
+// import i18n from 'i18n';
 import { t } from 'i18next';
-import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
+// import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -38,11 +38,7 @@ import {
 } from 'thales-utils';
 import { CombinedMarket, ParlayMarket, ParlayMarketWithRank, PositionData, SportMarketInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import {
-    extractCombinedMarketsFromParlayMarketType,
-    isCombinedMarketWinner,
-    removeCombinedMarketsFromParlayMarketType,
-} from 'utils/combinedMarkets';
+import { extractCombinedMarketsFromParlayMarketType, isCombinedMarketWinner } from 'utils/combinedMarkets';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
@@ -54,7 +50,7 @@ import useExchangeRatesQuery, { Rates } from '../../queries/rates/useExchangeRat
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
-    const language = i18n.language;
+    // const language = i18n.language;
     const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
@@ -168,7 +164,7 @@ const ParlayLeaderboard: React.FC = () => {
                     />
                 </StickyContrainer>
                 <ExpandedContainer hide={!expandStickyRow}>
-                    {getExpandedRow(data, selectedOddsType, language, theme)}
+                    {getExpandedRow(data, selectedOddsType /*, language, theme*/)}
                 </ExpandedContainer>
             </StickyRow>
         );
@@ -178,7 +174,7 @@ const ParlayLeaderboard: React.FC = () => {
         networkId,
         selectedOddsType,
         expandStickyRow,
-        language,
+        // language,
         walletAddress,
         theme,
         rewardsCurrency,
@@ -390,22 +386,22 @@ const ParlayLeaderboard: React.FC = () => {
                 noResultsMessage={t('parlay-leaderboard.no-parlays')}
                 stickyRow={stickyRow}
                 expandedRow={(row) => {
-                    const parlay = syncPositionsAndMarketsPerContractOrderInParlay(row.original as ParlayMarket);
+                    // const parlay = syncPositionsAndMarketsPerContractOrderInParlay(row.original as ParlayMarket);
 
-                    const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
-                    const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlay);
+                    // const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
+                    // const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(parlay);
 
-                    const toRender = getParlayRow(
-                        parlayWithoutCombinedMarkets,
-                        selectedOddsType,
-                        language,
-                        theme,
-                        combinedMarkets
-                    );
+                    // const toRender = getParlayRow(
+                    //     parlayWithoutCombinedMarkets,
+                    //     selectedOddsType,
+                    //     language,
+                    //     theme,
+                    //     combinedMarkets
+                    // );
 
                     return (
                         <ExpandedRowWrapper>
-                            <FirstSection>{toRender}</FirstSection>
+                            {/* <FirstSection>{toRender}</FirstSection> */}
                             <LastExpandedSection style={{ gap: 20 }}>
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
@@ -484,20 +480,20 @@ export const getOpacity = (position: PositionData) => {
 
 const getExpandedRow = (
     parlay: ParlayMarketWithRank,
-    selectedOddsType: OddsType,
-    language: string,
-    theme: ThemeInterface
+    selectedOddsType: OddsType
+    // language: string,
+    // theme: ThemeInterface
 ) => {
-    const modifiedParlay = syncPositionsAndMarketsPerContractOrderInParlay(parlay);
+    // const modifiedParlay = syncPositionsAndMarketsPerContractOrderInParlay(parlay);
 
-    const combinedMarkets = extractCombinedMarketsFromParlayMarketType(modifiedParlay);
-    const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(modifiedParlay);
+    // const combinedMarkets = extractCombinedMarketsFromParlayMarketType(modifiedParlay);
+    // const parlayWithoutCombinedMarkets = removeCombinedMarketsFromParlayMarketType(modifiedParlay);
 
-    const toRender = getParlayRow(parlayWithoutCombinedMarkets, selectedOddsType, language, theme, combinedMarkets);
+    // const toRender = getParlayRow(parlayWithoutCombinedMarkets, selectedOddsType, language, theme, combinedMarkets);
 
     return (
         <ExpandedRowWrapper>
-            <FirstSection>{toRender}</FirstSection>
+            {/* <FirstSection>{toRender}</FirstSection> */}
             <LastExpandedSection style={{ gap: 20 }}>
                 <QuoteWrapper>
                     <QuoteLabel>{t('parlay-leaderboard.sidebar.total-quote')}:</QuoteLabel>
@@ -665,12 +661,12 @@ const ExpandedRowWrapper = styled.div`
     }
 `;
 
-const FirstSection = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex: 1;
-`;
+// const FirstSection = styled.div`
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     flex: 1;
+// `;
 
 const LastExpandedSection = styled.div`
     display: flex;
