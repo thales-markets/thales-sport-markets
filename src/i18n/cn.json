@@ -518,7 +518,8 @@
             },
             "type-tooltip": {
                 "11055": "接球、冲球、弃踢回攻、踢回攻、防守和拦截达阵均计入结果"
-            }
+            },
+            "odds-live-limitation-message": "直播位置仅允许单打"
         },
         "market-details": {
             "price": "价格",

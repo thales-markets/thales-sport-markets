@@ -401,12 +401,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     };
 
     const handleSubmit = async () => {
-        const { sportsAMMV2Contract, /*overtimeVoucherContract,*/ signer } = networkConnector;
-        if (sportsAMMV2Contract && /* overtimeVoucherContract && */ signer) {
+        const {
+            sportsAMMV2Contract,
+            /*overtimeVoucherContract,*/ signer,
+            liveTradingProcessorContract,
+        } = networkConnector;
+        if (sportsAMMV2Contract && /* overtimeVoucherContract && */ signer && liveTradingProcessorContract) {
             setIsBuying(true);
             const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
             // const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
-
+            const liveTradingProcessorContractWithSigner = liveTradingProcessorContract.connect(signer);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
@@ -430,6 +434,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     networkId,
                     sportsAMMV2ContractWithSigner,
                     sportsAMMV2ContractWithSigner,
+                    liveTradingProcessorContractWithSigner,
                     // overtimeVoucherContractWithSigner,
                     tradeData,
                     usdPaid,

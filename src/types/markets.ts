@@ -448,6 +448,7 @@ export type TradeData = {
     merkleProof: string[];
     position: number;
     combinedPositions: CombinedPositions[];
+    live?: boolean;
 };
 
 export type Ticket = {

@@ -13,6 +13,7 @@ export const getSportsAMMV2Transaction: any = async (
     networkId: Network,
     sportsAMMV2Contract: ethers.Contract,
     overtimeVoucherContract: ethers.Contract,
+    liveTradingProcessorContract: ethers.Contract,
     tradeData: TradeData[],
     sUSDPaid: BigNumber,
     collateralPaid: BigNumber,
@@ -24,62 +25,134 @@ export const getSportsAMMV2Transaction: any = async (
     let finalEstimation = null;
     const referralAddress = referral || ZERO_ADDRESS;
 
-    if (isVoucherSelected) {
+    if (tradeData[0].live) {
+        if (isVoucherSelected) {
+            if (isAA) {
+                return executeBiconomyTransaction(collateralAddress, liveTradingProcessorContract, 'requestLiveTrade', [
+                    tradeData[0].gameId,
+                    tradeData[0].sportId,
+                    tradeData[0].typeId,
+                    tradeData[0].position,
+                    sUSDPaid,
+                    expectedPayout,
+                    additionalSlippage,
+                    voucherId, // check different recipient for buying with voucher
+                    referralAddress,
+                    collateralAddress,
+                ]);
+            } else {
+                if (networkId === Network.OptimismMainnet) {
+                    const estimation = await overtimeVoucherContract.estimateGas.tradeWithVoucher(
+                        tradeData,
+                        sUSDPaid,
+                        additionalSlippage,
+                        expectedPayout,
+                        voucherId
+                    );
+
+                    finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+                }
+
+                return liveTradingProcessorContract.requestLiveTrade(
+                    tradeData[0].gameId,
+                    tradeData[0].sportId,
+                    tradeData[0].typeId,
+                    tradeData[0].position,
+                    sUSDPaid,
+                    expectedPayout,
+                    additionalSlippage,
+                    voucherId, // check different recipient for buying with voucher
+                    referralAddress,
+                    collateralAddress
+                );
+            }
+        }
+
         if (isAA) {
-            return executeBiconomyTransaction(collateralAddress, overtimeVoucherContract, 'tradeWithVoucher', [
-                tradeData,
+            return executeBiconomyTransaction(collateralAddress, liveTradingProcessorContract, 'requestLiveTrade', [
+                tradeData[0].gameId,
+                tradeData[0].sportId,
+                tradeData[0].typeId,
+                tradeData[0].position,
                 sUSDPaid,
                 expectedPayout,
                 additionalSlippage,
-                voucherId,
+                ZERO_ADDRESS, // check different recipient for buying with voucher
+                referralAddress,
+                collateralAddress,
             ]);
         } else {
-            if (networkId === Network.OptimismMainnet) {
-                const estimation = await overtimeVoucherContract.estimateGas.tradeWithVoucher(
+            return liveTradingProcessorContract.requestLiveTrade(
+                tradeData[0].gameId,
+                tradeData[0].sportId,
+                tradeData[0].typeId,
+                tradeData[0].position,
+                sUSDPaid,
+                expectedPayout,
+                additionalSlippage,
+                ZERO_ADDRESS, // check different recipient for buying with voucher
+                referralAddress,
+                collateralAddress
+            );
+        }
+    } else {
+        if (isVoucherSelected) {
+            if (isAA) {
+                return executeBiconomyTransaction(collateralAddress, overtimeVoucherContract, 'tradeWithVoucher', [
+                    tradeData,
+                    sUSDPaid,
+                    expectedPayout,
+                    additionalSlippage,
+                    voucherId,
+                ]);
+            } else {
+                if (networkId === Network.OptimismMainnet) {
+                    const estimation = await overtimeVoucherContract.estimateGas.tradeWithVoucher(
+                        tradeData,
+                        sUSDPaid,
+                        additionalSlippage,
+                        expectedPayout,
+                        voucherId
+                    );
+
+                    finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+                }
+
+                return overtimeVoucherContract.buyFromParlayAMMWithVoucher(
                     tradeData,
                     sUSDPaid,
                     additionalSlippage,
                     expectedPayout,
-                    voucherId
+                    voucherId,
+                    { gasLimit: finalEstimation }
                 );
-
-                finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
             }
+        }
 
-            return overtimeVoucherContract.buyFromParlayAMMWithVoucher(
+        if (isAA) {
+            return executeBiconomyTransaction(collateralAddress, sportsAMMV2Contract, 'trade', [
                 tradeData,
                 sUSDPaid,
-                additionalSlippage,
                 expectedPayout,
-                voucherId,
-                { gasLimit: finalEstimation }
+                additionalSlippage,
+                ZERO_ADDRESS,
+                referralAddress,
+                collateralAddress,
+                isEth,
+            ]);
+        } else {
+            return sportsAMMV2Contract.trade(
+                tradeData,
+                sUSDPaid,
+                expectedPayout,
+                additionalSlippage,
+                ZERO_ADDRESS,
+                referralAddress,
+                isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                isEth,
+                { value: isEth ? collateralPaid : 0 }
             );
         }
-    }
-
-    if (isAA) {
-        return executeBiconomyTransaction(collateralAddress, sportsAMMV2Contract, 'trade', [
-            tradeData,
-            sUSDPaid,
-            expectedPayout,
-            additionalSlippage,
-            ZERO_ADDRESS,
-            referralAddress,
-            collateralAddress,
-            isEth,
-        ]);
-    } else {
-        return sportsAMMV2Contract.trade(
-            tradeData,
-            sUSDPaid,
-            expectedPayout,
-            additionalSlippage,
-            ZERO_ADDRESS,
-            referralAddress,
-            isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-            isEth,
-            { value: isEth ? collateralPaid : 0 }
-        );
     }
 };
 
