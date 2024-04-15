@@ -11,7 +11,7 @@ import {
     ParlaysMarketPosition,
     SGPItem,
 } from 'types/markets';
-import { checkIfCombinedPositionAlreadyInParlay, getCombinedMarketsFromParlayData } from 'utils/combinedMarkets';
+import { checkIfCombinedPositionAlreadyInParlay } from 'utils/combinedMarkets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import {
     getHasCombinedMarketsParentMarketAddress,
@@ -254,29 +254,6 @@ const parlaySlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
-        updateParlayWithMultiplePositions: (state, action: PayloadAction<ParlaysMarketPosition[]>) => {
-            const combinedMarkets = getCombinedMarketsFromParlayData(state.parlay);
-            const incomingCombinedMarkets = getCombinedMarketsFromParlayData(action.payload);
-
-            if (incomingCombinedMarkets.length && Math.round(combinedMarkets.length / 2) == 4) {
-                state.error.code = ParlayErrorCode.MAX_COMBINED_MARKETS;
-                state.error.data = MAX_NUMBER_OF_COMBINED_MARKETS_IN_PARLAY.toString();
-                return;
-            }
-
-            if (state.parlay.length + action.payload.length > state.parlaySize) {
-                state.error.code = ParlayErrorCode.MAX_MATCHES;
-                state.error.data = state.parlaySize.toString();
-                return;
-            }
-
-            if (state.multiSingle.length == 0) {
-                localStore.set(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE, false);
-            }
-
-            state.parlay.push(...action.payload);
-            localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
-        },
         updateCombinedPositions: (state, action: PayloadAction<CombinedMarketPosition>) => {
             const existingCombinedPositions = state.combinedPositions;
 
@@ -385,23 +362,6 @@ const parlaySlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
         },
-        removeCombinedMarketFromParlay: (state, action: PayloadAction<string>) => {
-            state.parlay = state.parlay.filter((market) => market.parentMarket !== action.payload);
-            state.multiSingle = state.multiSingle.filter(
-                (ms) => ms.sportMarketAddress !== action.payload && ms.parentMarketAddress !== action.payload
-            );
-
-            if (state.multiSingle.length == 0) {
-                localStore.set(LOCAL_STORAGE_KEYS.IS_MULTI_SINGLE, false);
-            }
-
-            if (state.parlay.length === 0) {
-                state.payment.amountToBuy = getDefaultPayment().amountToBuy;
-            }
-            state.error = getDefaultError();
-            localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
-            localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
-        },
         removeAll: (state) => {
             state.parlay = [];
             state.combinedPositions = [];
@@ -412,15 +372,6 @@ const parlaySlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.parlay);
             localStore.set(LOCAL_STORAGE_KEYS.COMBINED_POSITIONS, state.combinedPositions);
             localStore.set(LOCAL_STORAGE_KEYS.MULTI_SINGLE, state.multiSingle);
-        },
-        setPayment: (state, action: PayloadAction<ParlayPayment>) => {
-            state.payment = { ...state.payment, ...action.payload };
-
-            // Store the users last selected stable index
-            localStore.set(
-                `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${state.payment.networkId}`,
-                state.payment.selectedCollateralIndex
-            );
         },
         setIsMultiSingle: (state, action: PayloadAction<boolean>) => {
             state.isMultiSingle = action.payload;
@@ -475,14 +426,11 @@ const parlaySlice = createSlice({
 
 export const {
     updateParlay,
-    updateParlayWithMultiplePositions,
     updateCombinedPositions,
     removeCombinedPosition,
     setParlaySize,
     removeFromParlay,
-    removeCombinedMarketFromParlay,
     removeAll,
-    setPayment,
     setMultiSingle,
     setIsMultiSingle,
     setPaymentSelectedCollateralIndex,

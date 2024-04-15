@@ -1,6 +1,4 @@
 import burger from 'assets/images/burger.svg';
-import marchMadnessLeftIcon from 'assets/images/march-madness/mm-button-icon-1.svg';
-import marchMadnessRightIcon from 'assets/images/march-madness/mm-button-icon-2.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -8,7 +6,6 @@ import NavMenuMobile from 'components/NavMenuMobile';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
-import Tooltip from 'components/Tooltip';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
@@ -22,7 +19,6 @@ import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
 import {
-    getIsConnectedViaParticle,
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
@@ -32,7 +28,6 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
-import { isMarchMadnessAvailableForNetworkId } from 'utils/marchMadness';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
 import TopUp from './components/TopUp';
@@ -70,7 +65,6 @@ const DappHeader: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -102,35 +96,6 @@ const DappHeader: React.FC = () => {
 
     const menuImageRef = useRef<HTMLImageElement>(null);
 
-    const getMarchMadnessButton = () => (
-        <MarchMadnessWrapper>
-            <SPAAnchor href={buildHref(ROUTES.MarchMadness)}>
-                <Button
-                    fontSize="18px"
-                    width={isMobile ? '100%' : '290px'}
-                    additionalStyles={{
-                        background: `url(${marchMadnessLeftIcon}) left ${
-                            isMobile ? 70 : 20
-                        }px center no-repeat, url(${marchMadnessRightIcon}) right ${
-                            isMobile ? 70 : 20
-                        }px center no-repeat`,
-                        backgroundColor: theme.marchMadness.button.background.primary,
-                        backgroundSize: '28px, 28px',
-                        border: 'none',
-                        borderRadius: isMobile ? '20px' : undefined,
-                        fontFamily: "'NCAA' !important",
-                        letterSpacing: '2px',
-                        textTransform: 'uppercase',
-                        color: theme.marchMadness.button.textColor.secondary,
-                    }}
-                >
-                    {t('markets.nav-menu.labels.march-madness')}
-                </Button>
-            </SPAAnchor>
-        </MarchMadnessWrapper>
-    );
-
-    const showGetStartedButton = false; // TODO: show Get Started after March Madness
     const getGetStartedButton = () => (
         <SPAAnchor style={{ width: '100%', marginTop: '10px' }} href={buildHref(ROUTES.Wizard)}>
             <Button
@@ -158,15 +123,6 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
-                        {location.pathname !== ROUTES.MarchMadness &&
-                            (isMarchMadnessAvailableForNetworkId(networkId) ? (
-                                getMarchMadnessButton()
-                            ) : (
-                                <Tooltip
-                                    overlay={t('march-madness.header-button-tooltip')}
-                                    component={getMarchMadnessButton()}
-                                />
-                            ))}
                         {isWalletConnected && isMarketsPage && (
                             <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
                                 <Button
@@ -353,19 +309,15 @@ const DappHeader: React.FC = () => {
                             >
                                 {t('get-started.sign-up')}
                             </Button>
-                            {showGetStartedButton && location.pathname !== ROUTES.Wizard && getGetStartedButton()}
+                            {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
                             <NetworkSwitcher />
                         </MobileButtonWrapper>
                     ) : (
-                        (isConnectedViaParticle || showGetStartedButton) && ( // TODO: remove condition after March Madness
-                            <MobileButtonWrapper>
-                                {showGetStartedButton && location.pathname !== ROUTES.Wizard && getGetStartedButton()}
-                                <TopUp />
-                            </MobileButtonWrapper>
-                        )
+                        <MobileButtonWrapper>
+                            {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
+                            <TopUp />
+                        </MobileButtonWrapper>
                     )}
-
-                    {location.pathname !== ROUTES.MarchMadness && getMarchMadnessButton()}
                 </>
             )}
         </>
@@ -509,14 +461,6 @@ const MobileButtonWrapper = styled(FlexDivRowCentered)`
     min-height: 32px;
     @media (max-width: 767px) {
         min-height: 28px;
-    }
-`;
-
-const MarchMadnessWrapper = styled.div`
-    margin-left: 20px;
-    @media (max-width: 767px) {
-        width: 100%;
-        margin: 10px 0 0 0;
     }
 `;
 
