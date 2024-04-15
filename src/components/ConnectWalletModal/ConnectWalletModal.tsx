@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
-import { Colors, FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
 
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
 import termsOfUse from 'assets/docs/thales-terms-of-use.pdf';
@@ -247,8 +247,7 @@ const FooterContainer = styled(FlexDivCentered)<{ disabled: boolean }>`
         margin-top: 28px;
     }
 
-    border-top: ${(props) =>
-        props.disabled ? `1px ${Colors.BLUE} solid` : ''}; // use color from theme after march madness
+    border-top: ${(props) => (props.disabled ? `1px ${props.theme.borderColor.quaternary} solid` : '')};
 `;
 const WalletIconsWrapper = styled(FlexDivCentered)`
     justify-content: center;

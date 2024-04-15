@@ -1,4 +1,4 @@
-import { COLLATERALS, COLLATERAL_DECIMALS, CRYPTO_CURRENCY_MAP, STABLE_COINS } from 'constants/currency';
+import { COLLATERALS, CRYPTO_CURRENCY_MAP, STABLE_COINS } from 'constants/currency';
 
 import { Network } from 'enums/network';
 import { SupportedNetwork } from 'types/network';
@@ -27,9 +27,6 @@ export const getCollateralIndex = (networkId: SupportedNetwork, currencyKey: Coi
 
 export const getCollateralAddress = (networkId: SupportedNetwork, index: number) =>
     multipleCollateral[getCollateral(networkId, index)]?.addresses[networkId];
-
-export const getCollateralDecimals = (networkId: SupportedNetwork, index: number) =>
-    COLLATERAL_DECIMALS[getCollateral(networkId, index)];
 
 export const isStableCurrency = (currencyKey: Coins) => {
     return STABLE_COINS.includes(currencyKey);
