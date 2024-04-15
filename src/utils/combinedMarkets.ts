@@ -91,7 +91,7 @@ export const getCombinedPositionName = (
     return null;
 };
 
-export const getCombinedMarketsFromParlayData = (parlayData: ParlaysMarketPosition[]): ParlaysMarketPosition[] => {
+const getCombinedMarketsFromParlayData = (parlayData: ParlaysMarketPosition[]): ParlaysMarketPosition[] => {
     const combinedMarkets = [];
 
     for (let i = 0; i < parlayData.length - 1; i++) {

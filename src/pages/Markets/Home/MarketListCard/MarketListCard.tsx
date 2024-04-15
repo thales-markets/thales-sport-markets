@@ -21,7 +21,7 @@ import Web3 from 'web3';
 import CombinedMarketsOdds from './components/CombinedMarketsOdds';
 import MatchStatus from './components/MatchStatus';
 import Odds from './components/Odds';
-import PlayerPropsOdds from './components/PlayerPropsOdds/PlayerPropsOdds';
+import PlayerPropsOdds from './components/PlayerPropsOdds';
 import {
     Arrow,
     ClubLogo,
