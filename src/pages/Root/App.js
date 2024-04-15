@@ -9,7 +9,6 @@ import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import Theme from 'layouts/Theme';
-import MarchMadness from 'pages/MarchMadness';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
 import Wizard from 'pages/Wizard';
@@ -264,12 +263,6 @@ const App = () => {
                                         </DappLayout>
                                     </Route>
                                 )}
-
-                                <Route exact path={ROUTES.MarchMadness}>
-                                    <DappLayout>
-                                        <MarchMadness />
-                                    </DappLayout>
-                                </Route>
 
                                 {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                                     <Route exact path={ROUTES.LiquidityPool}>
