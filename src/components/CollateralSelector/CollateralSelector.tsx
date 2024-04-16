@@ -193,9 +193,7 @@ const Text = styled.span<{
 const TextCollateral = styled(Text)`
     color: ${(props) =>
         props.isDetailedView
-            ? props.isSelectedCollateral
-                ? props.theme.marchMadness.dropdown.textColor.primary // TODO: March Madness fix, remove isSelectedCollateral
-                : props.theme.input.textColor.primary
+            ? props.theme.input.textColor.primary
             : props.isSelectedCollateral
             ? props.theme.textColor.quaternary
             : props.theme.textColor.tertiary};

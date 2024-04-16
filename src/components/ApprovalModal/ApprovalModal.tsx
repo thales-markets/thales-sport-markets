@@ -1,18 +1,17 @@
+import Button from 'components/Button';
+import Modal from 'components/Modal';
+import Checkbox from 'components/fields/Checkbox';
+import NumericInput from 'components/fields/NumericInput';
+import { BigNumber, ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import { BigNumber, ethers } from 'ethers';
-import { bigNumberFormatter, coinParser } from 'thales-utils';
-import styled, { useTheme } from 'styled-components';
+import { RootState } from 'redux/rootReducer';
+import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import Checkbox from 'components/fields/Checkbox';
-import NumericInput from 'components/fields/NumericInput';
-import Button from 'components/Button';
-import Modal from 'components/Modal';
+import { bigNumberFormatter, coinParser } from 'thales-utils';
 import { getCollateral } from 'utils/collaterals';
-import { ThemeInterface } from 'types/ui';
 
 type ApprovalModalProps = {
     defaultAmount: number | string;
@@ -32,7 +31,6 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
     onClose,
 }) => {
     const { t } = useTranslation();
-    const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
 
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -55,7 +53,6 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
         if (!isWalletConnected) {
             return (
                 <Button
-                    additionalStyles={{ background: theme.marchMadness.button.background.senary, border: 'none' }} // TODO: remove when marchMadness is removed
                     onClick={() =>
                         dispatch(
                             setWalletConnectModalVisibility({
@@ -69,18 +66,10 @@ const ApprovalModal: React.FC<ApprovalModalProps> = ({
             );
         }
         if (!approveAll && !isAmountEntered) {
-            return (
-                <Button
-                    additionalStyles={{ background: theme.marchMadness.button.background.senary, border: 'none' }} // TODO: remove when marchMadness is removed
-                    disabled={true}
-                >
-                    {t(`common.errors.enter-amount`)}
-                </Button>
-            );
+            return <Button disabled={true}>{t(`common.errors.enter-amount`)}</Button>;
         }
         return (
             <Button
-                additionalStyles={{ background: theme.marchMadness.button.background.senary, border: 'none' }} // TODO: remove when marchMadness is removed
                 disabled={isButtonDisabled}
                 onClick={() => onSubmit(approveAll ? ethers.constants.MaxUint256 : amountConverted)}
             >

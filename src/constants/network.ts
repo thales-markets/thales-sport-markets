@@ -71,7 +71,6 @@ export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
     },
 };
 
-export const MAX_GAS_LIMIT = 29000000;
 export const GAS_ESTIMATION_BUFFER = 1.2; // Adding 20% on gas estimation as a buffer. Used only on Optimisme
 
 // configuration for wagmi

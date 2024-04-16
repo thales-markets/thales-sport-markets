@@ -9,30 +9,6 @@ export const RowSummary = styled.div<{ columnDirection?: boolean }>`
     ${(props) => (props.columnDirection ? `flex-direction: column;` : '')}
 `;
 
-export const CheckboxWrapper = styled(FlexDiv)`
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    margin: 10px 0px;
-    label {
-        font-size: 12px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 100%;
-    }
-    .checkmark {
-        height: 14px;
-        width: 14px;
-        :after {
-            left: 0px;
-            width: 6px;
-            height: 6px;
-        }
-    }
-`;
-
 export const GasSummary = styled(RowSummary)<{ columnDirection?: boolean }>`
     border-top: 2px solid ${(props) => props.theme.background.tertiary};
     border-bottom: 2px solid ${(props) => props.theme.background.tertiary};

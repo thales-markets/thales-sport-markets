@@ -13,7 +13,6 @@ import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
-import SidebarMMLeaderboard from 'pages/MarchMadness/components/SidebarLeaderboard/SidebarMMLeaderboard';
 import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
 import useSportMarketsQuery from 'queries/markets/useSportsMarketsQuery';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
@@ -619,9 +618,6 @@ const Home: React.FC = () => {
                                 );
                             })}
                     </SportFiltersContainer>
-                    <Suspense fallback={<Loader />}>
-                        {networkId == Network.Arbitrum && <SidebarMMLeaderboard />}
-                    </Suspense>
                     <Suspense fallback={<Loader />}>{networkId !== Network.Base && <SidebarLeaderboard />}</Suspense>
                 </SidebarContainer>
                 {/* MAIN PART */}

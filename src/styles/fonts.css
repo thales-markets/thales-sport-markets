@@ -4,11 +4,6 @@
 }
 
 @font-face {
-    font-family: 'RobotoThin';
-    src: local('RobotoThin'), url(../assets/fonts/Roboto/RobotoThin.ttf) format('truetype');
-}
-
-@font-face {
     font-family: 'Jost';
     src: local('Jost'), url(../assets/fonts/Jost/Jost.ttf) format('truetype');
 }
@@ -49,31 +44,6 @@
 }
 
 @font-face {
-    font-family: 'Atma';
-    src: local('Atma'), url(../assets/fonts/Atma/Atma-Regular.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'AtmaBold';
-    src: local('AtmaBold'), url(../assets/fonts/Atma/Atma-Bold.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Oswald';
-    src: local('Oswald'), url(../assets/fonts/Oswald/Oswald-Regular.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'OswaldBold';
-    src: local('OswaldBold'), url(../assets/fonts/Oswald/Oswald-Bold.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'NCAA';
-    src: local('NCAA'), url(../assets/fonts/NCAA/NCAA_Colorado_Buffs_Boulder_Bold.ttf) format('truetype');
-}
-
-@font-face {
     font-family: 'ThalesIcons';
     src: local('ThalesIcons'), url(../assets/fonts/ThalesIcons/ThalesIcons.ttf) format('truetype');
 }
@@ -86,19 +56,4 @@
 @font-face {
     font-family: 'SocialIcons';
     src: local('SocialIcons'), url(../assets/fonts/SocialLogin/SocialIcons.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Legacy';
-    src: local('Legacy'), url(../assets/fonts/Legacy/Legacy.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'Geogrotesque';
-    src: local('Geogrotesque'), url(../assets/fonts/Geogrotesque/Geogrotesque.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'GeogrotesqueReg';
-    src: local('GeogrotesqueReg'), url(../assets/fonts/Geogrotesque/GeogrotesqueCyr-Regular.ttf) format('truetype');
 }
