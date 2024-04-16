@@ -39,7 +39,6 @@ import { getDefaultCollateral } from 'utils/collaterals';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
-import { history } from 'utils/routes';
 import { delay } from 'utils/timer';
 import PnL from './PnL';
 import Return from './Return';
@@ -108,18 +107,7 @@ const LiquidityPool: React.FC = () => {
     const [isWithdrawalPercentageValid, setIsWithdrawalPercentageValid] = useState<boolean>(true);
     const [withdrawalAmount, setWithdrawalAmount] = useState<number>(0);
 
-    const [isParlayLP, setIsParlayLP] = useState<boolean>(false);
-
-    const searchQuery = new URLSearchParams(location.search);
-
-    useEffect(() => {
-        if (searchQuery.get('pool-type') == 'parlay') {
-            setIsParlayLP(true);
-        } else if (searchQuery.get('pool-type') == 'single') {
-            setIsParlayLP(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const [isParlayLP] = useState<boolean>(false);
 
     const collateral = getDefaultCollateral(networkId);
 
@@ -556,26 +544,6 @@ const LiquidityPool: React.FC = () => {
 
     return (
         <Wrapper>
-            <ToggleContainer>
-                <Toggle
-                    label={{
-                        firstLabel: t('liquidity-pool.single-lp'),
-                        secondLabel: t('liquidity-pool.parlay-lp'),
-                        fontSize: '20px',
-                        fontWeight: 'bold',
-                    }}
-                    active={isParlayLP}
-                    dotSize="20px"
-                    dotBackground={theme.background.secondary}
-                    dotBorder={`3px solid ${theme.borderColor.quaternary}`}
-                    handleClick={() => {
-                        searchQuery.set('pool-type', !isParlayLP ? 'parlay' : 'single');
-                        history.push({ search: searchQuery.toString() });
-                        setIsParlayLP(!isParlayLP);
-                    }}
-                    margin={'15px 0px 5px 0px'}
-                />
-            </ToggleContainer>
             <Title>{t('liquidity-pool.title')}</Title>
             {liquidityPoolData && (
                 <Container>

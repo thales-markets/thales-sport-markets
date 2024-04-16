@@ -56,7 +56,13 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',
         route: ROUTES.LiquidityPool,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum, Network.Base],
+        supportedNetworks: [
+            Network.OptimismMainnet,
+            Network.OptimismGoerli,
+            Network.Arbitrum,
+            Network.Base,
+            Network.OptimismSepolia,
+        ],
     },
 ];
 
