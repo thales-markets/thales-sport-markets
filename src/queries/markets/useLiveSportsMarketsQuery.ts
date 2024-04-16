@@ -97,11 +97,7 @@ const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions
             try {
                 const promises: any[] = [];
                 LIVE_SUPPORTED_LEAGUES.forEach((league: number) =>
-                    promises.push(
-                        axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/markets/?status=ongoing&live=true&leagueId=${league}`
-                        )
-                    )
+                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-markets/?leagueId=${league}`))
                 );
                 const responses = await Promise.all(promises);
                 responses.forEach((response: any) => markets.concat(response.data));
