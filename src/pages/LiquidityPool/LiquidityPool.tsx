@@ -107,7 +107,7 @@ const LiquidityPool: React.FC = () => {
     const [isWithdrawalPercentageValid, setIsWithdrawalPercentageValid] = useState<boolean>(true);
     const [withdrawalAmount, setWithdrawalAmount] = useState<number>(0);
 
-    const [isParlayLP, setIsParlayLP] = useState<boolean>(false);
+    const [isParlayLP] = useState<boolean>(false);
 
     const collateral = getDefaultCollateral(networkId);
 
