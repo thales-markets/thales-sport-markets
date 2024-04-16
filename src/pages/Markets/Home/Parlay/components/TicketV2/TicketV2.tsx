@@ -82,6 +82,7 @@ import Tooltip from 'components/Tooltip';
 import { getTicketPayment, removeAll, setPaymentAmountToBuy } from 'redux/modules/ticket';
 import { SportsAmmData, TicketMarket } from 'types/markets';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
+import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 import useSportsAmmDataQuery from '../../../../../../queries/markets/useSportsAmmDataQuery';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from '../../../../../../utils/sportsAmmV2';
 import ShareTicketModalV2 from '../ShareTicketModalV2';
@@ -134,6 +135,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+
+    const [allowedLiveTrade, setAllowedLiveTrade] = useState(false);
+    const [processingLiveTrade, setProcessingLiveTrade] = useState(false);
 
     const [gas, setGas] = useState(0);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -360,6 +364,56 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         isDefaultCollateral,
     ]);
 
+    useEffect(() => {
+        const { sportsAMMV2Contract, liveTradingProcessorContract } = networkConnector;
+        if (sportsAMMV2Contract && liveTradingProcessorContract) {
+            const setLiveTradingListeners = async () => {
+                try {
+                    liveTradingProcessorContract.removeAllListeners('LiveTradeFullfilled');
+                    const filter = liveTradingProcessorContract.filters.LiveTradeFullfilled(walletAddress);
+                    liveTradingProcessorContract.on(
+                        filter,
+                        (
+                            recipient,
+                            allow,
+                            gameId,
+                            sportId,
+                            typeId,
+                            position,
+                            buyInAmount,
+                            expectedPayout,
+                            collateral
+                        ) => {
+                            if (isWalletConnected) {
+                                if (allow) {
+                                    setAllowedLiveTrade(true);
+                                    setProcessingLiveTrade(false);
+                                } else {
+                                    setAllowedLiveTrade(false);
+                                    setProcessingLiveTrade(false);
+                                }
+                                console.log('LiveTradeFulfilled event triggered:', {
+                                    recipient: recipient,
+                                    allow: allow,
+                                    gameId: gameId,
+                                    sportId: sportId,
+                                    typeId: typeId,
+                                    position: position,
+                                    buyInAmount: buyInAmount,
+                                    expectedPayout: expectedPayout,
+                                    collateral: collateral,
+                                });
+                            }
+                        }
+                    );
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+            setLiveTradingListeners();
+        }
+    }, [walletAddress, isWalletConnected]);
+
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMV2Contract && multipleCollateral && signer) {
@@ -401,12 +455,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     };
 
     const handleSubmit = async () => {
-        const { sportsAMMV2Contract, /*overtimeVoucherContract,*/ signer } = networkConnector;
-        if (sportsAMMV2Contract && /* overtimeVoucherContract && */ signer) {
+        const {
+            sportsAMMV2Contract,
+            /*overtimeVoucherContract,*/ signer,
+            liveTradingProcessorContract,
+        } = networkConnector;
+        if (sportsAMMV2Contract && /* overtimeVoucherContract && */ signer && liveTradingProcessorContract) {
             setIsBuying(true);
             const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
             // const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
-
+            const liveTradingProcessorContractWithSigner = liveTradingProcessorContract.connect(signer);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
@@ -421,24 +479,40 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 const expectedPayout = coinParser(totalBuyAmount.toString(), networkId);
                 const additionalSlippage = ethers.utils.parseEther('0.02');
 
-                const tx = await getSportsAMMV2Transaction(
-                    isVoucherSelected,
-                    overtimeVoucher ? overtimeVoucher.id : 0,
-                    collateralAddress,
-                    isDefaultCollateral,
-                    isEth,
-                    networkId,
-                    sportsAMMV2ContractWithSigner,
-                    sportsAMMV2ContractWithSigner,
-                    // overtimeVoucherContractWithSigner,
-                    tradeData,
-                    usdPaid,
-                    collateralPaid,
-                    expectedPayout,
-                    referralId,
-                    additionalSlippage,
-                    isAA
-                );
+                let tx;
+                if (tradeData[0].live) {
+                    setProcessingLiveTrade(true);
+                    tx = await getLiveTradingProcessorTransaction(
+                        isVoucherSelected,
+                        collateralAddress,
+                        liveTradingProcessorContractWithSigner,
+                        tradeData,
+                        usdPaid,
+                        expectedPayout,
+                        referralId,
+                        additionalSlippage,
+                        isAA
+                    );
+                } else {
+                    tx = await getSportsAMMV2Transaction(
+                        isVoucherSelected,
+                        overtimeVoucher ? overtimeVoucher.id : 0,
+                        collateralAddress,
+                        isDefaultCollateral,
+                        isEth,
+                        networkId,
+                        sportsAMMV2ContractWithSigner,
+                        sportsAMMV2ContractWithSigner,
+                        // overtimeVoucherContractWithSigner,
+                        tradeData,
+                        usdPaid,
+                        collateralPaid,
+                        expectedPayout,
+                        referralId,
+                        additionalSlippage,
+                        isAA
+                    );
+                }
 
                 const txResult = isAA ? tx : await tx.wait();
 
@@ -450,11 +524,27 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             networkId,
                         },
                     });
-                    refetchBalances(walletAddress, networkId);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
-                    setIsBuying(false);
-                    setCollateralAmount('');
-                    dispatch(removeAll());
+                    if (tradeData[0].live) {
+                        while (processingLiveTrade) {}
+                        if (allowedLiveTrade) {
+                            refetchBalances(walletAddress, networkId);
+                            toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
+                            setIsBuying(false);
+                            setCollateralAmount('');
+                            dispatch(removeAll());
+                            setAllowedLiveTrade(false);
+                        } else {
+                            setIsBuying(false);
+                            refetchBalances(walletAddress, networkId);
+                            toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                        }
+                    } else {
+                        refetchBalances(walletAddress, networkId);
+                        toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
+                        setIsBuying(false);
+                        setCollateralAmount('');
+                        dispatch(removeAll());
+                    }
                 }
             } catch (e) {
                 setIsBuying(false);

@@ -15,6 +15,7 @@ import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import sportVaultDataContract from 'utils/contracts/sportVaultDataContract';
 import sUSDContract from 'utils/contracts/sUSDContract';
 import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
+import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import { marchMadnessContract } from './contracts/marchMadnessContract';
 import { marchMadnessDataContract } from './contracts/marchMadnessDataContract';
 import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
@@ -54,6 +55,7 @@ type NetworkConnector = {
     multiCollateralOnOffRampContract?: ethers.Contract;
     sportsAMMDataContract?: ethers.Contract;
     sportsAMMV2Contract?: ethers.Contract;
+    liveTradingProcessorContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -99,6 +101,7 @@ const networkConnector: NetworkConnector = {
         };
         this.sportsAMMDataContract = initializeContract(sportsAMMDataContract, networkSettings);
         this.sportsAMMV2Contract = initializeContract(sportsAMMV2Contract, networkSettings);
+        this.liveTradingProcessorContract = initializeContract(liveTradingProcessorContract, networkSettings);
     },
 };
 
