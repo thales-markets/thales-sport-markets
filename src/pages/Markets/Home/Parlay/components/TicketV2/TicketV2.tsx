@@ -370,11 +370,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             const setLiveTradingListeners = async () => {
                 try {
                     liveTradingProcessorContract.removeAllListeners('LiveTradeFullfilled');
+                    const filter = liveTradingProcessorContract.filters.LiveTradeFullfilled(walletAddress);
                     liveTradingProcessorContract.on(
-                        'LiveTradeFulfilled',
+                        filter,
                         (
                             recipient,
-                            requestId,
                             allow,
                             gameId,
                             sportId,
@@ -382,10 +382,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             position,
                             buyInAmount,
                             expectedPayout,
-                            collateral,
-                            timestamp
+                            collateral
                         ) => {
-                            if (recipient == walletAddress) {
+                            if (isWalletConnected) {
                                 if (allow) {
                                     setAllowedLiveTrade(true);
                                     setProcessingLiveTrade(false);
@@ -393,20 +392,18 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                     setAllowedLiveTrade(false);
                                     setProcessingLiveTrade(false);
                                 }
+                                console.log('LiveTradeFulfilled event triggered:', {
+                                    recipient: recipient,
+                                    allow: allow,
+                                    gameId: gameId,
+                                    sportId: sportId,
+                                    typeId: typeId,
+                                    position: position,
+                                    buyInAmount: buyInAmount,
+                                    expectedPayout: expectedPayout,
+                                    collateral: collateral,
+                                });
                             }
-                            console.log('LiveTradeFulfilled event triggered:', {
-                                recipient: recipient,
-                                requestId: requestId,
-                                allow: allow,
-                                gameId: gameId,
-                                sportId: sportId,
-                                typeId: typeId,
-                                position: position,
-                                buyInAmount: buyInAmount,
-                                expectedPayout: expectedPayout,
-                                collateral: collateral,
-                                timestamp: new Date(timestamp),
-                            });
                         }
                     );
                 } catch (e) {
@@ -415,7 +412,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             };
             setLiveTradingListeners();
         }
-    }, [walletAddress]);
+    }, [walletAddress, isWalletConnected]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
