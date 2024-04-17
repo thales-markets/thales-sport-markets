@@ -9,6 +9,7 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarketInfoV2, SportMarketsV2, TagInfo, Tags } from 'types/markets';
+import { getIsMarketSelected } from '../../../../redux/modules/market';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
@@ -18,6 +19,7 @@ type MarketsGridProps = {
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
+    const isMarketSelected = useSelector(getIsMarketSelected);
     const dateFilter = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
 
     const marketsMap: Record<number, SportMarketInfoV2[]> = groupBy(markets, (market) => Number(market.leagueId));
@@ -34,7 +36,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const finalOrderKeys = Number(dateFilter) !== 0 ? groupBySortedMarketsKeys(marketsKeys) : marketsKeys;
 
     return (
-        <Container>
+        <Container isMarketSelected={isMarketSelected}>
             <ListContainer>
                 {finalOrderKeys.map((leagueId: number, index: number) => {
                     return (
@@ -200,19 +202,17 @@ const unifyBoxingMarkets = (marketsMap: Record<number, SportMarketInfoV2[]>) => 
     return marketsMap;
 };
 
-const Container = styled(FlexDiv)`
+const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
     margin: 10px 0px 0 0;
     flex-wrap: wrap;
-    max-width: 806px;
+    max-width: ${(props) => (props.isMarketSelected ? '192px' : '100%')};
     justify-content: center;
     flex-grow: 2;
     > div {
         display: flex;
-        width: 100%;
+        width: ${(props) => (props.isMarketSelected ? '192px' : '100%')};
     }
     overflow-y: auto;
-    // TODO - maybe remove max-height and scrolling, enable whole page scroll
-    max-height: 1210px;
     scrollbar-width: 5px; /* Firefox */
     -ms-overflow-style: none;
     ::-webkit-scrollbar {

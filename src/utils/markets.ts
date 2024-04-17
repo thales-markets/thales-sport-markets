@@ -21,6 +21,8 @@ import {
     PLAYER_PROPS_BET_TYPES,
     Position,
     SPECIAL_YES_NO_BET_TYPES,
+    SPREAD_BET_TYPES,
+    TOTAL_BET_TYPES,
 } from 'enums/markets';
 import i18n from 'i18n';
 import { addDaysToEnteredTimestamp, formatCurrency } from 'thales-utils';
@@ -659,6 +661,14 @@ export const isOneSidePlayerProps = (betType: BetType) => {
 
 export const isSpecialYesNoProp = (betType: BetType) => {
     return SPECIAL_YES_NO_BET_TYPES.includes(betType);
+};
+
+export const isTotal = (betType: BetType) => {
+    return TOTAL_BET_TYPES.includes(betType);
+};
+
+export const isSpread = (betType: BetType) => {
+    return SPREAD_BET_TYPES.includes(betType);
 };
 
 export const fixPlayerPropsLinesFromContract = (market: SportMarketInfo | MarketData) => {

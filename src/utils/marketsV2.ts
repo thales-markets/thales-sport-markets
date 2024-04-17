@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import i18n from 'i18n';
 import { SportMarketInfoV2, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
+import { isSpread, isTotal } from './markets';
 
 export const getSimpleSymbolText = (
     position: Position,
@@ -106,15 +107,56 @@ export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) =
     return getSimpleSymbolText(position, betType);
 };
 
+export const getPositionTextV2 = (market: SportMarketInfoV2, position: Position) => {
+    const betType = market.typeId;
+
+    if (market.isOneSideMarket || market.isOneSidePlayerPropsMarket || market.isYesNoPlayerPropsMarket) {
+        return position === 0 ? 'YES' : 'NO';
+    }
+
+    if (market.isPlayerPropsMarket || isTotal(betType) || isSpread(betType)) {
+        return getLineInfoV2(market, position);
+    }
+
+    // if (
+    //     betType === BetType.COMBINED_POSITIONS ||
+    //     betType === BetType.HALFTIME_FULLTIME ||
+    //     betType === BetType.GOALS ||
+    //     betType === BetType.HALFTIME_FULLTIME_GOALS
+    // )
+    //     return getCombinedPositionsSymbolText(position, market);
+
+    if (betType === BetType.DOUBLE_CHANCE)
+        return position === 0
+            ? `${market.homeTeam} or Draw`
+            : position === 1
+            ? `${market.homeTeam} or ${market.awayTeam}`
+            : `${market.awayTeam} or Draw`;
+    if (betType === BetType.WINNER || betType === BetType.HALFTIME)
+        return position === 0 ? market.homeTeam : position === 1 ? market.awayTeam : 'Draw';
+
+    return position === 0 ? '1' : position === 1 ? '2' : 'X';
+};
+
+export const getSubtitleText = (market: SportMarketInfoV2, position: Position) => {
+    const betType = market.typeId;
+
+    if (market.isPlayerPropsMarket || isTotal(betType)) {
+        return position === 0 ? 'Over' : 'Under';
+    }
+
+    if (isSpread(betType)) return position === 0 ? market.homeTeam : market.awayTeam;
+
+    return undefined;
+};
+
 export const getLineInfo = (typeId: number, position: Position, line: number, market: SportMarketInfoV2) => {
-    if (typeId === BetType.SPREAD || typeId === BetType.SPREAD2 || typeId === BetType.HALFTIME_SPREAD)
+    if (isSpread(typeId))
         return position === Position.HOME
             ? `${Number(line) > 0 ? '+' : '-'}${Math.abs(line)}`
             : `${Number(line) > 0 ? '-' : '+'}${Math.abs(line)}`;
 
-    if (typeId === BetType.TOTAL || typeId === BetType.TOTAL2 || typeId === BetType.HALFTIME_TOTAL)
-        return `${Number(line)}`;
-    if (market.isPlayerPropsMarket) return `${Number(line)}`;
+    if (isTotal(typeId) || market.isPlayerPropsMarket) return `${Number(line)}`;
     return undefined;
 };
 

@@ -149,7 +149,7 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
     max-width: 360px;
     padding: 12px;
     flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
+    background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
 `;
 

@@ -1,14 +1,14 @@
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
+import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import styled from 'styled-components';
 import {
     FlexDiv,
     FlexDivCentered,
     FlexDivColumn,
+    FlexDivColumnCentered,
     FlexDivRow,
     FlexDivRowCentered,
-    FlexDivColumnCentered,
 } from 'styles/common';
 
 export const LeaderboardWrapper = styled(FlexDiv)`
@@ -17,7 +17,7 @@ export const LeaderboardWrapper = styled(FlexDiv)`
 `;
 
 export const Container = styled(FlexDivColumn)`
-    background: linear-gradient(180deg, #303656 54%, rgba(48, 54, 86, 0) 108.5%);
+    background: ${(props) => props.theme.background.quinary};
     border-radius: 6px;
 `;
 

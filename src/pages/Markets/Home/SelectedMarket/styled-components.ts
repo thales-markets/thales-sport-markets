@@ -4,16 +4,13 @@ import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 export const Wrapper = styled(FlexDivColumn)<{
     hideGame: boolean;
     isResolved: boolean;
-    isMarketSelected: boolean;
 }>`
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
     border-radius: 5px;
     margin-bottom: 8px;
     background-color: ${(props) =>
-        props.isResolved || props.isMarketSelected
-            ? props.theme.oddsContainerBackground.primary
-            : props.theme.oddsContainerBackground.secondary};
+        props.isResolved ? props.theme.oddsContainerBackground.tertiary : props.theme.oddsContainerBackground.primary};
     @media (max-width: 575px) {
         margin-bottom: 5px;
     }
@@ -21,7 +18,7 @@ export const Wrapper = styled(FlexDivColumn)<{
 
 export const MainContainer = styled(FlexDivRow)`
     width: 100%;
-    padding: 10px 10px 6px 13px;
+    padding: 6px 9px 4px 8px;
     @media (max-width: 950px) {
         padding-right: 20px;
     }
@@ -53,9 +50,8 @@ export const MatchInfoConatiner = styled(FlexDivColumn)`
 export const MatchTimeLabel = styled.label`
     font-size: 12px;
     font-weight: 600;
-    line-height: 14px;
+    line-height: 14px
     text-transform: uppercase;
-    width: fit-content;
 `;
 
 export const TeamsInfoConatiner = styled(FlexDivRow)`
@@ -84,20 +80,17 @@ export const VSLabel = styled.span`
 `;
 
 export const TeamNamesConatiner = styled(FlexDivColumn)`
-    margin-left: 12px;
+    margin-left: 6px;
     @media (max-width: 575px) {
         margin-left: 0px;
     }
 `;
 
 export const TeamNameLabel = styled.span`
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 18px;
-    text-overflow: ellipsis;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 13px;
     white-space: nowrap;
-    overflow: hidden;
-    width: 110px;
 `;
 
 export const ResultWrapper = styled(FlexDivRowCentered)``;

@@ -10,9 +10,10 @@ import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket'
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarketInfoV2, TicketPosition } from 'types/markets';
 import { convertFinalResultToResultType, formatMarketOdds } from 'utils/markets';
-import { getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2, isSameMarket } from 'utils/marketsV2';
+import { getOddTooltipTextV2, getPositionTextV2, isSameMarket } from 'utils/marketsV2';
 import {
     Container,
+    Odd,
     Status,
     Text,
     TooltipContainer,
@@ -51,10 +52,9 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position }) =
     const disabledPosition = noOdd || !isGameOpen;
 
     const showOdd = isGameOpen;
-    const showTooltip = showOdd && !isMobile;
+    const showTooltip = showOdd && !noOdd && !isMobile;
 
-    const symbolText = getSymbolTextV2(position, market);
-    const lineInfo = getLineInfoV2(market, position);
+    const positionText = getPositionTextV2(market, position);
 
     const oddTooltipText = getOddTooltipTextV2(position, market);
 
@@ -83,17 +83,14 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position }) =
                 }
             }}
         >
-            <Text>
-                {symbolText}
-                {lineInfo && !market.isOneSidePlayerPropsMarket && !market.isYesNoPlayerPropsMarket && ` (${lineInfo})`}
-            </Text>
+            <Text>{positionText}</Text>
             {showOdd ? (
-                <Text>
+                <Odd selected={isAddedToTicket}>
                     {formatMarketOdds(selectedOddsType, odd)}
                     {noOdd && (
                         <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
                     )}
-                </Text>
+                </Odd>
             ) : (
                 <Status>
                     {isPendingResolution

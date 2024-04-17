@@ -23,7 +23,7 @@ import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import { getIsMarketSelected, getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { setSGPFees } from 'redux/modules/parlay';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
@@ -40,6 +40,7 @@ import GlobalFilters from '../components/GlobalFilters';
 import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
+import SelectedMarket from './SelectedMarket';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -74,6 +75,8 @@ const Home: React.FC = () => {
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
     const location = useLocation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isMarketSelected = useSelector(getIsMarketSelected);
+    console.log(isMarketSelected);
 
     const [globalFilter, setGlobalFilter] = useLocalStorage<GlobalFiltersEnum>(
         LOCAL_STORAGE_KEYS.FILTER_GLOBAL,
@@ -692,9 +695,12 @@ const Home: React.FC = () => {
                                     </Button>
                                 </NoMarketsContainer>
                             ) : (
-                                <Suspense fallback={<Loader />}>
-                                    <MarketsGridV2 markets={finalMarkets} />
-                                </Suspense>
+                                <FlexDivRow>
+                                    <Suspense fallback={<Loader />}>
+                                        <MarketsGridV2 markets={finalMarkets} />
+                                    </Suspense>
+                                    {isMarketSelected && <SelectedMarket />}
+                                </FlexDivRow>
                             )}
                         </>
                     )}

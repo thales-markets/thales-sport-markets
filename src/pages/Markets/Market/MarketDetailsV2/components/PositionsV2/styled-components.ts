@@ -1,18 +1,17 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     position: relative;
-    background-color: ${(props) => props.theme.background.secondary};
-    padding: 6px 10px;
+    padding: 6px 0px;
     border-radius: 5px;
     @media (max-width: 575px) {
-        padding: 5px 6px;
+        padding: 5px 0px;
     }
     margin-bottom: 5px;
 `;
 
-export const Header = styled(FlexDivRow)`
+export const Header = styled(FlexDivColumnCentered)`
     position: relative;
 `;
 
@@ -22,6 +21,20 @@ export const Title = styled.span<{ isExpanded: boolean }>`
     text-transform: uppercase;
     margin-bottom: ${(props) => (props.isExpanded ? 4 : 0)}px;
     margin-left: 2px;
+    text-align: center;
+`;
+
+export const SubTitleContainer = styled(FlexDiv)`
+    font-size: 12px;
+    line-height: 14px;
+    color: ${(props) => props.theme.textColor.quinary};
+`;
+
+export const SubTitle = styled.span`
+    font-size: 12px;
+    line-height: 14px;
+    width: 100%;
+    text-align: center;
 `;
 
 export const ContentContianer = styled(FlexDivColumn)``;
