@@ -15,6 +15,7 @@ import {
 } from 'constants/tags';
 import {
     BetType,
+    COMBINED_POSITIONS_BET_TYPES,
     DoubleChanceMarketType,
     ONE_SIDER_PLAYER_PROPS_BET_TYPES,
     OddsType,
@@ -669,6 +670,10 @@ export const isTotal = (betType: BetType) => {
 
 export const isSpread = (betType: BetType) => {
     return SPREAD_BET_TYPES.includes(betType);
+};
+
+export const isCombinedPositions = (betType: BetType) => {
+    return COMBINED_POSITIONS_BET_TYPES.includes(betType);
 };
 
 export const fixPlayerPropsLinesFromContract = (market: SportMarketInfo | MarketData) => {

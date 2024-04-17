@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SportMarketInfoV2 } from 'types/markets';
 import { getSubtitleText, isOddValid } from 'utils/marketsV2';
-import MarketPositionsV2 from '../MarketPositionsV2';
+import PositionDetailsV2 from '../PositionDetailsV2';
 import {
     Arrow,
     Container,
@@ -82,8 +82,10 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds, hideA
                                         <PropsText>{`${market.playerProps.playerName}`}</PropsText>
                                     </PropsTextContainer>
                                 )}
-                                <ContentRow>
-                                    <MarketPositionsV2 market={market} />
+                                <ContentRow gridMinMaxPercentage={market.odds.length === 3 ? 33 : 50}>
+                                    {market.odds.map((_, index) => (
+                                        <PositionDetailsV2 key={index} market={market} position={index} />
+                                    ))}
                                 </ContentRow>
                             </div>
                         );

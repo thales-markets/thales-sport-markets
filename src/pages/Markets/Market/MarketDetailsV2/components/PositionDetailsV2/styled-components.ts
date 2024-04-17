@@ -30,10 +30,6 @@ export const Container = styled(FlexDivRow)<{
     :hover {
         border: ${(props) => (props.disabled ? undefined : `1px solid ${props.theme.borderColor.quaternary}`)};
     }
-    :not(:last-child) {
-        margin-right: 5px;
-    }
-    margin-bottom: 5px;
     @media (max-width: 575px) {
         font-size: 12px;
         line-height: 14px;
@@ -51,7 +47,7 @@ export const Text = styled.span`
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 150px;
+    width: 100%;
 `;
 
 export const Odd = styled.span<{
@@ -61,6 +57,7 @@ export const Odd = styled.span<{
     font-size: 13px;
     color: ${(props) =>
         props.selected ? props.theme.oddsContainerBackground.primary : props.theme.textColor.quaternary};
+    margin-left: 5px;
 `;
 
 export const Status = styled(Text)`

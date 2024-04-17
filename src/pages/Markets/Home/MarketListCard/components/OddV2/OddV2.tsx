@@ -59,7 +59,7 @@ const Odd: React.FC<OddProps> = ({ market, position }) => {
                 text: formatMarketOdds(selectedOddsType, odd),
                 tooltip: noOdd ? t('markets.zero-odds-tooltip') : undefined,
             }}
-            symbolUpperText={lineInfo && market.typeId === BetType.COMBINED_POSITIONS ? { text: lineInfo } : undefined}
+            symbolUpperText={lineInfo && market.typeId === BetType.WINNER_TOTAL ? { text: lineInfo } : undefined}
             disabled={noOdd}
             flexDirection="column"
             symbolText={getSymbolTextV2(position, market)}

@@ -25,7 +25,7 @@ const Odds: React.FC<OddsProps> = ({ market }) => {
         <Container>
             <Title>
                 {BetTypeNameMap[market.typeId as BetType]}
-                {lineInfo && market.typeId !== BetType.COMBINED_POSITIONS && ` ${lineInfo}`}
+                {lineInfo && market.typeId !== BetType.WINNER_TOTAL && ` ${lineInfo}`}
             </Title>
             {
                 <OddsContainer>

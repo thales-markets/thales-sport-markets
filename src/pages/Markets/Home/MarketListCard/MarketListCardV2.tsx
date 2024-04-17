@@ -39,7 +39,7 @@ type MarketRowCardProps = {
     language: string;
 };
 
-const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
+const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);

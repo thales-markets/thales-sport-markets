@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     position: relative;
@@ -39,10 +39,11 @@ export const SubTitle = styled.span`
 
 export const ContentContianer = styled(FlexDivColumn)``;
 
-export const ContentRow = styled(FlexDivRow)`
-    :not(:last-child) {
-        margin-bottom: 3px;
-    }
+export const ContentRow = styled.div<{ gridMinMaxPercentage: number }>`
+    margin-bottom: 5px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(${(props) => props.gridMinMaxPercentage}% - 5px), 1fr));
+    gap: 5px;
 `;
 
 export const Arrow = styled.i`

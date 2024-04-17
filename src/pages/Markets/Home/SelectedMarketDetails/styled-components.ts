@@ -8,12 +8,9 @@ export const Wrapper = styled(FlexDivColumn)<{
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
     border-radius: 8px;
-    margin-bottom: 8px;
+    margin-top: 10px;
     padding: 10px;
     background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
-    @media (max-width: 575px) {
-        margin-bottom: 5px;
-    }
     height: fit-content;
     -webkit-user-select: none;
     -moz-user-select: none;
