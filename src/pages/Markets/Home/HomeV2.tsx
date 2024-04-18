@@ -15,7 +15,6 @@ import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
-import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,16 +25,18 @@ import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getDateFilter,
     getGlobalFilter,
+    getIsMarketSelected,
+    getIsThreeWayView,
     getMarketSearch,
     getSportFilter,
     setDateFilter,
     setGlobalFilter,
+    setIsThreeWayView,
     setMarketSearch,
     setSportFilter,
 } from 'redux/modules/market';
-import { setSGPFees } from 'redux/modules/parlay';
 import { getFavouriteLeagues } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
@@ -49,6 +50,7 @@ import GlobalFilters from '../components/GlobalFilters';
 import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
+import SelectedMarket from './SelectedMarket';
 
 const SidebarLeaderboard = lazy(
     () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
@@ -79,13 +81,14 @@ const Home: React.FC = () => {
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
     const dateFilter = useSelector((state: RootState) => getDateFilter(state));
     const globalFilter = useSelector((state: RootState) => getGlobalFilter(state));
     const sportFilter = useSelector((state: RootState) => getSportFilter(state));
     const location = useLocation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isMarketSelected = useSelector(getIsMarketSelected);
+    const isThreeWayView = useSelector(getIsThreeWayView);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
@@ -100,16 +103,6 @@ const Home: React.FC = () => {
     ).map((tag) => {
         return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
     });
-
-    const sgpFees = useSGPFeesQuery(networkId, {
-        enabled: isWalletConnected,
-    });
-
-    useEffect(() => {
-        if (sgpFees.isSuccess && sgpFees.data) {
-            dispatch(setSGPFees(sgpFees.data));
-        }
-    }, [dispatch, sgpFees.data, sgpFees.isSuccess]);
 
     useEffect(() => {
         if (getSelectedOddsType == undefined) {
@@ -685,9 +678,21 @@ const Home: React.FC = () => {
                                     </Button>
                                 </NoMarketsContainer>
                             ) : (
-                                <Suspense fallback={<Loader />}>
-                                    <MarketsGridV2 markets={finalMarkets} />
-                                </Suspense>
+                                <>
+                                    <Button
+                                        width="fit-content"
+                                        margin="10px 0 0 0"
+                                        onClick={() => dispatch(setIsThreeWayView(!isThreeWayView))}
+                                    >
+                                        {isThreeWayView ? 'Switch to standard view' : 'Switch to three way view'}
+                                    </Button>
+                                    <FlexDivRow>
+                                        <Suspense fallback={<Loader />}>
+                                            <MarketsGridV2 markets={finalMarkets} />
+                                        </Suspense>
+                                        {isMarketSelected && <SelectedMarket />}
+                                    </FlexDivRow>
+                                </>
                             )}
                         </>
                     )}

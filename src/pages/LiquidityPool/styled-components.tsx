@@ -2,12 +2,12 @@ import { Slider } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import {
+    FlexDiv,
     FlexDivCentered,
     FlexDivColumn,
     FlexDivColumnCentered,
-    FlexDivStart,
     FlexDivRow,
-    FlexDiv,
+    FlexDivStart,
 } from 'styles/common';
 
 export const Wrapper = styled(FlexDivColumn)`
@@ -71,7 +71,7 @@ export const MainContentContainer = styled(ContentContainer)`
 
 export const MainContainer = styled(Container)`
     width: 100%;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
+    background: ${(props) => props.theme.background.quinary};
     border-radius: 10px;
     padding: 0 10px;
 `;

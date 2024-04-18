@@ -67,7 +67,8 @@
             },
             "id-create-success": "成功设置推荐人ID",
             "id-exists": "推荐 ID 已存在",
-            "your-referral-id": "您的推荐 ID"
+            "your-referral-id": "您的推荐 ID",
+            "header-label": "推荐并赚取"
         },
         "swap": {
             "title": "获取 美元",
@@ -188,7 +189,8 @@
             "info": "*您可以随时更改游戏列表上方过滤器中的赔率类型",
             "description": "选择赔率显示格式",
             "title": "欢迎来到 Overtime Markets"
-        }
+        },
+        "settings": "设置"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -302,7 +304,8 @@
             "usd-value-col": "美元价值",
             "result-col": "结果",
             "parlay-title": "最近的连本带利活动",
-            "single-title": "近期单一活动"
+            "single-title": "近期单一活动",
+            "ticket-title": "近期票务活动"
         },
         "tooltip": {
             "amount-exceeded": "金额超过AMM的余额。",
@@ -451,6 +454,71 @@
             "toggle": {
                 "hide-paused-markets": "隐藏暂停的市场",
                 "show-paused-markets": "显示暂停的市场"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "sets": "套",
+                    "goals": "目标",
+                    "points": "点",
+                    "rounds": "发子弹"
+                },
+                "match-resolve": {
+                    "overtime": "包括可能的加班",
+                    "regular": "在常规时间内"
+                },
+                "assists-0": "{{team}} 的助攻数将高于 {{line}}",
+                "and": "和",
+                "homeruns-0": "{{team}} 的本垒打数将比 {{line}} 多",
+                "hitsRecorded-0": "{{team}} 的点击量将高于 {{line}}",
+                "passingTouchdowns-0": "{{team}} 的传球达阵次数将超过 {{line}}",
+                "moneyline-2": "比赛将以平局结束 {{matchResolve}}",
+                "total-0": "比赛 {{matchResolve}} 中的 {{scoring}} 总人数将超过 {{line}}",
+                "strikeouts-1": "{{team}}的三振出局数将少于 {{line}}",
+                "doubleDouble-0": "{{team}} 将获得两双",
+                "rebounds-0": "{{team}} 的篮板数将比 {{line}} 多",
+                "rebounds-1": "{{team}} 的篮板数将少于 {{line}}",
+                "moneyline-0": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "points-0": "{{team}} 的得分将高于 {{line}}",
+                "bonus": "获胜后将获得 {{bonus}} 额外奖励！",
+                "moneyline-1": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "passingYards-1": "{{team}} 的传球码数将少于 {{line}}",
+                "doubleChance-2": "{{team}} 将赢得比赛或比赛将以平局结束 {{matchResolve}}",
+                "doubleChance-0": "{{team}} 将赢得比赛或比赛将以平局结束 {{matchResolve}}",
+                "shots-0": "{{team}} 的射门次数将超过 {{line}}",
+                "receivingYards-0": "{{team}} 的接球码数将比 {{line}} 多",
+                "tripleDouble-1": "{{team}} 不会拿下三双",
+                "assists-1": "{{team}} 的助攻数将少于 {{line}}",
+                "pitcherHitsAllowed-0": "{{team}} 允许的点击次数将超过 {{line}}",
+                "goals-0": "{{team}} 将在比赛中进球",
+                "doubleDouble-1": "{{team}} 不会获得两双",
+                "receivingYards-1": "{{team}} 的接球码数将少于 {{line}}",
+                "race-winner": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "strikeouts-0": "{{team}} 的三振出局数将比 {{line}} 多",
+                "shots-1": "{{team}} 的射门次数将少于 {{line}}",
+                "fieldGoalsMade-1": "{{team}}的射门得分少于 {{line}}",
+                "fieldGoalsMade-0": "{{team}} 的射门得分将比 {{line}} 多",
+                "passingTouchdowns-1": "{{team}} 的传球达阵数将少于 {{line}}",
+                "doubleChance-1": "{{team}} 或 {{team2}} 将赢得比赛 {{matchResolve}}",
+                "total-1": "比赛 {{matchResolve}} 中的 {{scoring}} 总数将少于 {{line}}",
+                "firstTouchdown-0": "{{team}} 将在比赛中率先得分",
+                "tripleDouble-0": "{{team}} 将获得三双",
+                "pitcherHitsAllowed-1": "{{team}} 允许的点击次数少于 {{line}}",
+                "tournament-winner": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "spread-1": "{{team}} 将赢得比赛，或输掉的分数少于 {{line}} {{scoring}} {{matchResolve}}",
+                "rushingYards-0": "{{team}} 的冲球码数将超过 {{line}}",
+                "points-1": "{{team}} 的得分将低于 {{line}}",
+                "touchdowns-0": "{{team}} 将在比赛中达阵",
+                "receptions-1": "{{team}} 的接球次数将少于 {{line}}",
+                "receptions-0": "{{team}} 的接球次数将超过 {{line}}",
+                "homeruns-1": "{{team}} 的本垒打数将少于 {{line}}",
+                "hitsRecorded-1": "{{team}} 的点击量将低于 {{line}}",
+                "spread-0": "{{team}} 将以超过 {{line}} {{scoring}} {{matchResolve}} 的差距赢得比赛",
+                "rushingYards-1": "{{team}} 的冲球码数将少于 {{line}}",
+                "passingYards-0": "{{team}} 的传球码数将比 {{line}} 多",
+                "lastTouchdown-0": "{{team}} 将在比赛中取得最后一次达阵"
+            },
+            "type-tooltip": {
+                "11055": "接球、冲球、弃踢回攻、踢球回攻、防守和拦截达阵均计入结果"
             }
         },
         "market-details": {
@@ -1194,7 +1262,8 @@
         "sign-out": "登出",
         "sign-up": "报名",
         "log-in": "登录",
-        "title": "开始加班"
+        "title": "开始加班",
+        "start-tour": "开始游览"
     },
     "banner": {
         "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。"

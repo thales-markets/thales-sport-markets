@@ -67,7 +67,8 @@
             },
             "id-create-success": "Empfehlungs-ID erfolgreich festgelegt",
             "id-exists": "Empfehlungs-ID existiert bereits",
-            "your-referral-id": "Ihre Empfehlungs-ID"
+            "your-referral-id": "Ihre Empfehlungs-ID",
+            "header-label": "Empfehlen & verdienen"
         },
         "swap": {
             "title": "USD erhalten",
@@ -188,7 +189,8 @@
             "description": "Wählen Sie das Anzeigeformat für die Quoten",
             "info": "*Sie können den Quotentyp jederzeit in den Filtern über der Spieleliste ändern",
             "title": "Willkommen zu Overtime Markets"
-        }
+        },
+        "settings": "Einstellungen"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -302,7 +304,8 @@
             "usd-value-col": "USD-Wert",
             "game-col": "Spiel",
             "parlay-title": "Aktuelle Parlay-Aktivität",
-            "single-title": "Letzte Einzelaktivität"
+            "single-title": "Letzte Einzelaktivität",
+            "ticket-title": "Letzte Ticketaktivität"
         },
         "tooltip": {
             "amount-exceeded": "Der Betrag überstieg den auf der AMM verfügbaren Betrag",
@@ -451,6 +454,71 @@
             "toggle": {
                 "hide-paused-markets": "Pausierte Märkte ausblenden",
                 "show-paused-markets": "Pausierte Märkte anzeigen"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "rounds": "Runden",
+                    "sets": "Sätze",
+                    "points": "Punkte",
+                    "goals": "Ziele"
+                },
+                "match-resolve": {
+                    "regular": "in der regulären Spielzeit",
+                    "overtime": "inklusive eventueller Überstunden"
+                },
+                "pitcherHitsAllowed-1": "{{team}} hat weniger zulässige Treffer als {{line}}",
+                "bonus": "{{bonus}} zusätzlicher Bonus bei Gewinn!",
+                "doubleDouble-1": "{{team}} wird kein Double-Double erzielen",
+                "passingTouchdowns-0": "{{team}} wird mehr Pass-Touchdowns haben als {{line}}",
+                "rushingYards-0": "{{team}} wird mehr Rushing Yards haben als {{line}}",
+                "goals-0": "{{team}} wird im Spiel ein Tor erzielen",
+                "receptions-0": "{{team}} wird mehr Empfänge haben als {{line}}",
+                "doubleDouble-0": "{{team}} erzielt ein Double-Double",
+                "tripleDouble-0": "{{team}} erzielt ein Triple-Double",
+                "total-0": "Die Gesamtzahl der {{scoring}} im Spiel {{matchResolve}} wird höher sein als {{line}}",
+                "hitsRecorded-0": "{{team}} wird mehr Treffer verzeichnen als {{line}}",
+                "fieldGoalsMade-0": "{{team}} erzielt mehr Field Goals als {{line}}",
+                "race-winner": "{{team}} wird das Rennen gewinnen {{matchResolve}}",
+                "receptions-1": "{{team}} hat weniger Empfänge als {{line}}",
+                "fieldGoalsMade-1": "{{team}} erzielt weniger Field Goals als {{line}}",
+                "doubleChance-2": "{{team}} gewinnt das Spiel oder das Spiel endet unentschieden {{matchResolve}}",
+                "and": "Und",
+                "receivingYards-1": "{{team}} hat weniger Receiving Yards als {{line}}",
+                "touchdowns-0": "{{team}} wird im Spiel einen Touchdown erzielen",
+                "lastTouchdown-0": "{{team}} erzielt den letzten Touchdown im Spiel",
+                "strikeouts-1": "{{team}} wird weniger Strikeouts haben als {{line}}",
+                "tripleDouble-1": "{{team}} wird kein Triple-Double erzielen",
+                "assists-1": "{{team}} hat weniger Assists als {{line}}",
+                "strikeouts-0": "{{team}} wird mehr Strikeouts haben als {{line}}",
+                "moneyline-1": "{{team}} wird das Spiel gewinnen {{matchResolve}}",
+                "passingTouchdowns-1": "{{team}} wird weniger Pass-Touchdowns haben als {{line}}",
+                "pitcherHitsAllowed-0": "{{team}} hat mehr zulässige Treffer als {{line}}",
+                "shots-1": "{{team}} hat weniger Schüsse als {{line}}",
+                "total-1": "Die Gesamtzahl von {{scoring}} im Spiel {{matchResolve}} wird kleiner sein als {{line}}",
+                "firstTouchdown-0": "{{team}} erzielt den ersten Touchdown im Spiel",
+                "points-0": "{{team}} wird mehr Punkte haben als {{line}}",
+                "assists-0": "{{team}} hat mehr Assists als {{line}}",
+                "rushingYards-1": "{{team}} wird weniger Rushing Yards haben als {{line}}",
+                "rebounds-1": "{{team}} wird weniger Rebounds haben als {{line}}",
+                "passingYards-1": "{{team}} hat weniger Passing Yards als {{line}}",
+                "moneyline-0": "{{team}} wird das Spiel gewinnen {{matchResolve}}",
+                "receivingYards-0": "{{team}} wird mehr Receiving Yards haben als {{line}}",
+                "homeruns-1": "{{team}} wird weniger Homeruns haben als {{line}}",
+                "rebounds-0": "{{team}} wird mehr Rebounds haben als {{line}}",
+                "spread-1": "{{team}} wird das Spiel gewinnen oder mit weniger als {{line}} verlieren {{scoring}} {{matchResolve}}",
+                "spread-0": "{{team}} gewinnt das Spiel mit einem Unterschied von mehr als {{line}} {{scoring}} {{matchResolve}}",
+                "moneyline-2": "Das Spiel endet unentschieden {{matchResolve}}",
+                "homeruns-0": "{{team}} wird mehr Homeruns haben als {{line}}",
+                "points-1": "{{team}} hat weniger Punkte als {{line}}",
+                "hitsRecorded-1": "{{team}} hat weniger Treffer als {{line}}",
+                "doubleChance-1": "{{team}} oder {{team2}} gewinnen das Spiel {{matchResolve}}",
+                "passingYards-0": "{{team}} wird mehr Passing Yards haben als {{line}}",
+                "tournament-winner": "{{team}} wird das Turnier gewinnen {{matchResolve}}",
+                "doubleChance-0": "{{team}} gewinnt das Spiel oder das Spiel endet unentschieden {{matchResolve}}",
+                "shots-0": "{{team}} hat mehr Schüsse als {{line}}"
+            },
+            "type-tooltip": {
+                "11055": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt."
             }
         },
         "market-details": {
@@ -1193,7 +1261,8 @@
         "title": "Beginnen Sie mit Überstunden",
         "log-in": "Anmeldung",
         "get-started": "Loslegen",
-        "sign-out": "Abmelden"
+        "sign-out": "Abmelden",
+        "start-tour": "Tour starten"
     },
     "banner": {
         "arb-distribution-message": "Die ARB-Verteilung hat begonnen. Verdienen Sie ARB-Tokens, indem Sie Überstunden nutzen. Schauen Sie sich die Details hier an."

@@ -46,7 +46,8 @@
             },
             "id-create-success": "L'ID de parrainage a bien été défini",
             "id-exists": "L'ID de parrainage existe déjà",
-            "your-referral-id": "Votre identifiant de parrainage"
+            "your-referral-id": "Votre identifiant de parrainage",
+            "header-label": "Parrainez et gagnez"
         },
         "swap": {
             "title": "Obtenir USD",
@@ -188,7 +189,8 @@
             "info": "*Vous pouvez toujours modifier le type de cotes dans les filtres au-dessus de la liste des jeux",
             "description": "Choisir le format d'affichage des cotes",
             "title": "Bienvenue à Overtime Markets"
-        }
+        },
+        "settings": "Paramètres"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
@@ -301,7 +303,8 @@
             "result-col": "résultat",
             "game-col": "Match",
             "single-title": "Activité unique récente",
-            "parlay-title": "Activité récente de Parlay"
+            "parlay-title": "Activité récente de Parlay",
+            "ticket-title": "Activité récente des billets"
         },
         "skew-tooltip": "Le Skew Impact est le montant de la prime ajoutée à un prix de position basé sur le risque actuel que l'AMM encourt sur ce marché spécifique.",
         "tooltip": {
@@ -451,6 +454,71 @@
             "toggle": {
                 "show-paused-markets": "Afficher les marchés en pause",
                 "hide-paused-markets": "Masquer les marchés en pause"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "points": "points",
+                    "rounds": "Les manches",
+                    "goals": "objectifs",
+                    "sets": "ensembles"
+                },
+                "match-resolve": {
+                    "regular": "en temps réglementaire",
+                    "overtime": "y compris les éventuelles heures supplémentaires"
+                },
+                "pitcherHitsAllowed-0": "{{team}} aura plus de coups autorisés que {{line}}",
+                "assists-0": "{{team}} aura plus de passes décisives que {{line}}",
+                "receivingYards-1": "{{team}} aura moins de yards sur réception que {{line}}",
+                "doubleDouble-1": "{{team}} ne marquera pas de double-double",
+                "rushingYards-1": "{{team}} aura moins de yards au sol que {{line}}",
+                "passingTouchdowns-0": "{{team}} aura plus de touchés par passes que {{line}}",
+                "passingTouchdowns-1": "{{team}} aura moins de touchés de passe que {{line}}",
+                "passingYards-1": "{{team}} aura moins de yards par la passe que {{line}}",
+                "rushingYards-0": "{{team}} aura plus de yards au sol que {{line}}",
+                "doubleDouble-0": "{{team}} marquera un double-double",
+                "and": "et",
+                "rebounds-1": "{{team}} aura moins de rebonds que {{line}}",
+                "moneyline-1": "{{team}} gagnera le match {{matchResolve}}",
+                "goals-0": "{{team}} marquera un but dans le match",
+                "homeruns-0": "{{team}} aura plus de circuits que {{line}}",
+                "doubleChance-2": "{{team}} gagnera le match ou le match se terminera par un match nul {{matchResolve}}",
+                "hitsRecorded-0": "{{team}} aura plus de hits enregistrés que {{line}}",
+                "bonus": "{{bonus}} bonus supplémentaire en cas de victoire !",
+                "points-0": "{{team}} aura plus de points que {{line}}",
+                "rebounds-0": "{{team}} aura plus de rebonds que {{line}}",
+                "race-winner": "{{team}} remportera la course {{matchResolve}}",
+                "strikeouts-1": "{{team}} aura moins de retraits au bâton que {{line}}",
+                "fieldGoalsMade-1": "{{team}} aura moins de buts sur le terrain que {{line}}",
+                "points-1": "{{team}} aura moins de points que {{line}}",
+                "assists-1": "{{team}} aura moins de passes décisives que {{line}}",
+                "homeruns-1": "{{team}} aura moins de circuits que {{line}}",
+                "moneyline-2": "Le match se terminera par un match nul {{matchResolve}}",
+                "doubleChance-0": "{{team}} gagnera le match ou le match se terminera par un match nul {{matchResolve}}",
+                "spread-1": "{{team}} gagnera le match ou perdra par moins de {{line}} {{scoring}} {{matchResolve}}",
+                "touchdowns-0": "{{team}} marquera un touchdown dans le match",
+                "passingYards-0": "{{team}} aura plus de yards par la passe que {{line}}",
+                "doubleChance-1": "{{team}} ou {{team2}} remportera le match {{matchResolve}}",
+                "fieldGoalsMade-0": "{{team}} aura plus de buts sur le terrain que {{line}}",
+                "firstTouchdown-0": "{{team}} marquera le premier touchdown du match",
+                "tournament-winner": "{{team}} remportera le tournoi {{matchResolve}}",
+                "receptions-0": "{{team}} aura plus de réceptions que {{line}}",
+                "pitcherHitsAllowed-1": "{{team}} aura moins de coups autorisés que {{line}}",
+                "tripleDouble-0": "{{team}} marquera un triple-double",
+                "shots-0": "{{team}} aura plus de tirs que {{line}}",
+                "lastTouchdown-0": "{{team}} marquera le dernier touchdown du match",
+                "shots-1": "{{team}} aura moins de tirs que {{line}}",
+                "total-1": "Le nombre total de {{scoring}} dans le match {{matchResolve}} sera inférieur à {{line}}",
+                "receptions-1": "{{team}} aura moins de réceptions que {{line}}",
+                "hitsRecorded-1": "{{team}} aura moins de hits enregistrés que {{line}}",
+                "tripleDouble-1": "{{team}} ne marquera pas de triple-double",
+                "strikeouts-0": "{{team}} aura plus de retraits au bâton que {{line}}",
+                "moneyline-0": "{{team}} gagnera le match {{matchResolve}}",
+                "total-0": "Le nombre total de {{scoring}} dans le match {{matchResolve}} sera supérieur à {{line}}",
+                "spread-0": "{{team}} remportera le match avec une différence de plus de {{line}} {{scoring}} {{matchResolve}}",
+                "receivingYards-0": "{{team}} aura plus de verges sur réception que {{line}}"
+            },
+            "type-tooltip": {
+                "11055": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
             }
         },
         "market-details": {
@@ -1194,7 +1262,8 @@
         "title": "Commencez les heures supplémentaires",
         "sign-out": "se déconnecter",
         "log-in": "Se connecter",
-        "sign-up": "S'inscrire"
+        "sign-up": "S'inscrire",
+        "start-tour": "Tour initial"
     },
     "banner": {
         "arb-distribution-message": "La distribution d'ARB a commencé. Gagnez des jetons ARB en utilisant les heures supplémentaires. Consultez les détails ici."

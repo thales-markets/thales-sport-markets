@@ -58,7 +58,8 @@
             },
             "id-exists": "L'ID referral esiste già",
             "id-create-success": "ID referral impostato correttamente",
-            "your-referral-id": "Il tuo ID di riferimento"
+            "your-referral-id": "Il tuo ID di riferimento",
+            "header-label": "Segnala e guadagna"
         },
         "swap": {
             "title": "Get USD",
@@ -188,7 +189,8 @@
             "decimal-odds": "Quote decimali (es: 2,5)",
             "info": "*Puoi sempre modificare il tipo di quote nei filtri sopra l'elenco dei giochi",
             "title": "Benvenuti nei mercati degli straordinari"
-        }
+        },
+        "settings": "Impostazioni"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -302,7 +304,8 @@
             "usd-value-col": "valore in usd",
             "game-col": "gioco",
             "single-title": "Singola attività recente",
-            "parlay-title": "Attività parlay recente"
+            "parlay-title": "Attività parlay recente",
+            "ticket-title": "Attività recente sui biglietti"
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
@@ -451,6 +454,71 @@
             "toggle": {
                 "hide-paused-markets": "Nascondi i mercati in pausa",
                 "show-paused-markets": "Mostra i mercati in pausa"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "points": "punti",
+                    "sets": "imposta",
+                    "rounds": "giri",
+                    "goals": "obiettivi"
+                },
+                "match-resolve": {
+                    "regular": "in orario regolare",
+                    "overtime": "compresi eventuali straordinari"
+                },
+                "strikeouts-0": "{{team}} avrà più strikeout di {{line}}",
+                "spread-1": "{{team}} vincerà la partita o perderà per meno di {{line}} {{scoring}} {{matchResolve}}",
+                "doubleChance-2": "{{team}} vincerà la partita o la partita finirà con un pareggio {{matchResolve}}",
+                "passingTouchdowns-1": "{{team}} avrà meno touchdown di passaggio rispetto a {{line}}",
+                "total-0": "Il numero totale di {{scoring}} nella partita {{matchResolve}} sarà superiore a {{line}}",
+                "firstTouchdown-0": "{{team}} segnerà il primo touchdown della partita",
+                "strikeouts-1": "{{team}} avrà meno strikeout di {{line}}",
+                "tournament-winner": "{{team}} vincerà il torneo {{matchResolve}}",
+                "passingYards-0": "{{team}} avrà più yard di passaggio di {{line}}",
+                "doubleChance-1": "{{team}} o {{team2}} vinceranno la partita {{matchResolve}}",
+                "moneyline-2": "La partita finirà con un pareggio {{matchResolve}}",
+                "bonus": "{{bonus}} bonus aggiunto alla vincita!",
+                "passingTouchdowns-0": "{{team}} avrà più touchdown di passaggio rispetto a {{line}}",
+                "receivingYards-0": "{{team}} avrà più yard in ricezione rispetto a {{line}}",
+                "race-winner": "{{team}} vincerà la gara {{matchResolve}}",
+                "doubleDouble-1": "{{team}} non segnerà una doppia doppia",
+                "and": "E",
+                "spread-0": "{{team}} vincerà la partita con una differenza superiore a {{line}} {{scoring}} {{matchResolve}}",
+                "receptions-1": "{{team}} avrà meno ricezioni di {{line}}",
+                "total-1": "Il numero totale di {{scoring}} nella partita {{matchResolve}} sarà inferiore a {{line}}",
+                "assists-1": "{{team}} avrà meno assist di {{line}}",
+                "homeruns-1": "{{team}} avrà meno fuoricampo di {{line}}",
+                "receptions-0": "{{team}} avrà più ricezioni di {{line}}",
+                "goals-0": "{{team}} segnerà un goal nel gioco",
+                "tripleDouble-1": "{{team}} non segnerà una tripla doppia",
+                "moneyline-1": "{{team}} vincerà la partita {{matchResolve}}",
+                "fieldGoalsMade-0": "{{team}} realizzerà più field goal rispetto a {{line}}",
+                "lastTouchdown-0": "{{team}} segnerà l'ultimo touchdown della partita",
+                "doubleDouble-0": "{{team}} segnerà una doppia doppia",
+                "rebounds-0": "{{team}} avrà più rimbalzi di {{line}}",
+                "assists-0": "{{team}} avrà più assist di {{line}}",
+                "homeruns-0": "{{team}} avrà più fuoricampo di {{line}}",
+                "shots-1": "{{team}} avrà meno tiri di {{line}}",
+                "points-0": "{{team}} avrà più punti di {{line}}",
+                "points-1": "{{team}} avrà meno punti di {{line}}",
+                "doubleChance-0": "{{team}} vincerà la partita o la partita finirà con un pareggio {{matchResolve}}",
+                "tripleDouble-0": "{{team}} segnerà una tripla doppia",
+                "rushingYards-0": "{{team}} avrà più yard di corsa di {{line}}",
+                "fieldGoalsMade-1": "{{team}} avrà meno field goal realizzati rispetto a {{line}}",
+                "passingYards-1": "{{team}} avrà meno yard di passaggio rispetto a {{line}}",
+                "pitcherHitsAllowed-0": "Al {{team}} saranno consentiti più risultati rispetto a {{line}}",
+                "pitcherHitsAllowed-1": "Al {{team}} saranno consentiti meno risultati rispetto a {{line}}",
+                "receivingYards-1": "{{team}} avrà meno yard in ricezione rispetto a {{line}}",
+                "touchdowns-0": "{{team}} segnerà un touchdown nel gioco",
+                "rushingYards-1": "{{team}} avrà meno yard di corsa rispetto a {{line}}",
+                "hitsRecorded-0": "{{team}} avrà più successi registrati rispetto a {{line}}",
+                "hitsRecorded-1": "{{team}} avrà meno successi registrati rispetto a {{line}}",
+                "moneyline-0": "{{team}} vincerà la partita {{matchResolve}}",
+                "rebounds-1": "{{team}} avrà meno rimbalzi di {{line}}",
+                "shots-0": "{{team}} avrà più tiri di {{line}}"
+            },
+            "type-tooltip": {
+                "11055": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato"
             }
         },
         "market-details": {
@@ -1193,7 +1261,8 @@
         "title": "Inizia con gli straordinari",
         "log-in": "Login",
         "sign-out": "disconnessione",
-        "get-started": "Iniziare"
+        "get-started": "Iniziare",
+        "start-tour": "Inizia il giro"
     },
     "banner": {
         "arb-distribution-message": "La distribuzione ARB è iniziata. Guadagna token ARB utilizzando gli straordinari. Scopri i dettagli qui."

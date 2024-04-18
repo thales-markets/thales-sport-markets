@@ -58,7 +58,8 @@
             },
             "id-exists": "Идентификатор реферала уже существует",
             "id-create-success": "Идентификатор реферала установлен успешно",
-            "your-referral-id": "Ваш реферальный идентификатор"
+            "your-referral-id": "Ваш реферальный идентификатор",
+            "header-label": "Приглашайте и зарабатывайте"
         },
         "swap": {
             "title": "Get USD",
@@ -188,7 +189,8 @@
             "description": "Как бы вы хотели отображать шансы?",
             "info": "*Вы всегда можете изменить тип коэффициента в фильтрах над списком игр.",
             "title": "Добро пожаловать на рынки сверхурочной работы"
-        }
+        },
+        "settings": "Настройки"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -302,7 +304,8 @@
             "game-col": "игра",
             "result-col": "результат",
             "single-title": "Недавнее одиночное действие",
-            "parlay-title": "Недавние экспресс-активности"
+            "parlay-title": "Недавние экспресс-активности",
+            "ticket-title": "Недавняя активность билетов"
         },
         "tooltip": {
             "amount-exceeded": "Amount exceeded the amount available on AMM",
@@ -451,6 +454,71 @@
             "toggle": {
                 "hide-paused-markets": "Скрыть приостановленные рынки",
                 "show-paused-markets": "Показать приостановленные рынки"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "goals": "цели",
+                    "sets": "наборы",
+                    "rounds": "раунды",
+                    "points": "точки"
+                },
+                "match-resolve": {
+                    "regular": "в обычное время",
+                    "overtime": "включая возможные сверхурочные"
+                },
+                "lastTouchdown-0": "{{team}} забьет последний тачдаун в игре",
+                "bonus": "{{bonus}} добавлен бонус за победу!",
+                "touchdowns-0": "{{team}} забьет тачдаун в игре",
+                "shots-1": "У {{team}} будет меньше бросков, чем у {{line}}",
+                "tripleDouble-0": "{{team}} забьет трипл-дабл",
+                "pitcherHitsAllowed-0": "У {{team}} будет разрешено больше попаданий, чем у {{line}}",
+                "strikeouts-0": "У {{team}} будет больше аутов, чем у {{line}}",
+                "rushingYards-1": "У {{team}} будет меньше ярдов, чем у {{line}}",
+                "race-winner": "{{team}} выиграет гонку {{matchResolve}}",
+                "pitcherHitsAllowed-1": "У {{team}} будет меньше разрешенных попаданий, чем у {{line}}",
+                "passingTouchdowns-0": "У команды {{team}} будет больше тачдаунов в пас, чем у команды {{line}}.",
+                "doubleChance-2": "{{team}} выиграет матч или матч завершится вничью {{matchResolve}}",
+                "homeruns-0": "У команды {{team}} будет больше хоум-ранов, чем у команды {{line}}.",
+                "assists-1": "У команды {{team}} будет меньше результативных передач, чем у команды {{line}}",
+                "tripleDouble-1": "{{team}} не забьет трипл-дабл",
+                "hitsRecorded-0": "У {{team}} будет записано больше обращений, чем у {{line}}",
+                "firstTouchdown-0": "{{team}} забьет первый тачдаун в игре",
+                "receivingYards-0": "У {{team}} будет больше приемных ярдов, чем у {{line}}",
+                "moneyline-0": "{{team}} выиграет матч {{matchResolve}}",
+                "points-0": "{{team}} наберет больше очков, чем {{line}}",
+                "points-1": "У команды {{team}} меньше очков, чем у команды {{line}}.",
+                "total-0": "Общее количество {{scoring}} в матче {{matchResolve}} будет больше {{line}}",
+                "rushingYards-0": "У команды {{team}} будет больше ярдов, чем у команды {{line}}.",
+                "rebounds-0": "У команды {{team}} будет больше подборов, чем у команды {{line}}.",
+                "doubleChance-0": "{{team}} выиграет матч или матч завершится вничью {{matchResolve}}",
+                "spread-1": "{{team}} выиграет матч или проиграет с разницей меньше, чем {{line}} {{scoring}} {{matchResolve}}",
+                "homeruns-1": "У {{team}} будет меньше хоум-ранов, чем у {{line}}",
+                "hitsRecorded-1": "У {{team}} будет записано меньше обращений, чем у {{line}}.",
+                "and": "и",
+                "assists-0": "У команды {{team}} будет больше передач, чем у команды {{line}}.",
+                "doubleDouble-1": "{{team}} не забьет дабл-дабл",
+                "goals-0": "{{team}} забьет гол в игре",
+                "moneyline-2": "Матч завершится вничью {{matchResolve}}",
+                "passingTouchdowns-1": "У {{team}} будет меньше тачдаунов в пас, чем у {{line}}",
+                "fieldGoalsMade-0": "{{team}} забьет больше мячей с игры, чем {{line}}",
+                "passingYards-1": "У {{team}} будет меньше пасовых ярдов, чем у {{line}}",
+                "tournament-winner": "{{team}} выиграет турнир {{matchResolve}}",
+                "doubleChance-1": "{{team}} или {{team2}} выиграет матч {{matchResolve}}",
+                "spread-0": "{{team}} выиграет матч с разницей более чем {{line}} {{scoring}} {{matchResolve}}",
+                "moneyline-1": "{{team}} выиграет матч {{matchResolve}}",
+                "receptions-0": "У {{team}} будет больше приёмов, чем у {{line}}",
+                "shots-0": "У команды {{team}} будет больше бросков, чем у команды {{line}}.",
+                "receptions-1": "У {{team}} будет меньше приёмов, чем у {{line}}",
+                "rebounds-1": "У {{team}} будет меньше подборов, чем у {{line}}",
+                "total-1": "Общее количество {{scoring}} в матче {{matchResolve}} будет меньше {{line}}",
+                "fieldGoalsMade-1": "У команды {{team}} будет меньше голов с игры, чем у команды {{line}}.",
+                "doubleDouble-0": "{{team}} забьет дабл-дабл",
+                "passingYards-0": "У {{team}} будет больше пасовых ярдов, чем у {{line}}",
+                "receivingYards-1": "У {{team}} будет меньше приемных ярдов, чем у {{line}}",
+                "strikeouts-1": "У {{team}} будет меньше аутов, чем у {{line}}"
+            },
+            "type-tooltip": {
+                "11055": "Прием, рывок, возврат панта, ответный удар, тачдауны защиты и перехвата засчитываются в результат."
             }
         },
         "market-details": {
@@ -1194,7 +1262,8 @@
         "sign-up": "Зарегистрироваться",
         "title": "Начнём со сверхурочной работы",
         "get-started": "Начать",
-        "log-in": "Авторизоваться"
+        "log-in": "Авторизоваться",
+        "start-tour": "Начать тур"
     },
     "banner": {
         "arb-distribution-message": "Распространение ARB началось. Зарабатывайте токены ARB, используя сверхурочную работу. Подробности уточняйте здесь."

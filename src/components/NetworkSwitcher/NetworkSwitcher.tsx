@@ -98,12 +98,12 @@ const NetworkText = styled.span`
 
 const NetworkIcon = styled.i<{ isConnected: boolean }>`
     font-size: 24px;
-    color: props.theme.button.textColor.primary;
+    color: ${(props) => props.theme.button.textColor.primary};
 `;
 
 const DownIcon = styled.i<{ isConnected: boolean }>`
     font-size: 12px;
-    color: props.theme.button.textColor.primary;
+    color: ${(props) => props.theme.button.textColor.primary};
 `;
 
 const NetworkDropDown = styled.div`

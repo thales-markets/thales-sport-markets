@@ -1,3 +1,4 @@
+import Checkbox from 'components/fields/Checkbox';
 import { USD_SIGN } from 'constants/currency';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useEffect, useMemo } from 'react';
@@ -5,16 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import {
-    getParlayPayment,
+    getTicketPayment,
     setPaymentIsVoucherAvailable,
     setPaymentIsVoucherSelected,
     setPaymentSelectedCollateralIndex,
-} from 'redux/modules/parlay';
+} from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { formatCurrencyWithSign } from 'thales-utils';
 import { CheckboxContainer, RowContainer, RowSummary, SummaryLabel, SummaryValue } from '../styled-components';
-import Checkbox from 'components/fields/Checkbox';
 
 type VoucherProps = {
     disabled?: boolean;
@@ -29,9 +29,9 @@ const Voucher: React.FC<VoucherProps> = ({ disabled }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const parlayPayment = useSelector(getParlayPayment);
-    const isVoucherSelected = parlayPayment.isVoucherSelected;
-    const isVoucherAvailable = parlayPayment.isVoucherAvailable;
+    const ticketPayment = useSelector(getTicketPayment);
+    const isVoucherSelected = ticketPayment.isVoucherSelected;
+    const isVoucherAvailable = ticketPayment.isVoucherAvailable;
 
     const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,

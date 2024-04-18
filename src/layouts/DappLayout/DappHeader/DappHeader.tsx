@@ -191,7 +191,7 @@ const DappHeader: React.FC = () => {
                             <Button
                                 backgroundColor={theme.button.background.tertiary}
                                 textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.quaternary}
+                                borderColor={theme.button.borderColor.quinary}
                                 fontWeight="400"
                                 additionalStyles={{
                                     borderRadius: '15.5px',

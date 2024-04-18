@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 
 export const Container = styled(FlexDivRow)<{
     disabled: boolean;
@@ -10,27 +10,26 @@ export const Container = styled(FlexDivRow)<{
     position: relative;
     align-items: center;
     border-radius: 5px;
-    padding: 0 20px;
+    padding: 0 8px;
     flex: 1 1 0;
-    width: 0;
-    height: 30px;
+    min-height: 25px;
     font-weight: 800;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 16px;
-    background: linear-gradient(180deg, #303656 41.5%, #1a1c2b 100%);
+    background: ${(props) =>
+        props.selected ? props.theme.borderColor.quaternary : props.theme.oddsContainerBackground.primary};
+    color: ${(props) => (props.selected ? props.theme.oddsContainerBackground.primary : props.theme.textColor.primary)};
     border: 1px solid
         ${(props) =>
-            props.selected || props.isWinner ? props.theme.borderColor.quaternary : props.theme.borderColor.primary};
+            props.selected || props.isWinner
+                ? props.theme.borderColor.quaternary
+                : props.theme.oddsContainerBackground.primary};
     box-shadow: ${(props) => (props.isWinner ? props.theme.shadow.positionWinner : '')};
     opacity: ${(props) => (props.disabled && !props.isWinner ? '0.4' : '1')};
     cursor: ${(props) => (props.disabled ? '' : 'pointer')};
     :hover {
         border: ${(props) => (props.disabled ? undefined : `1px solid ${props.theme.borderColor.quaternary}`)};
     }
-    :not(:last-child) {
-        margin-right: 10px;
-    }
-    margin-bottom: 3px;
     @media (max-width: 575px) {
         font-size: 12px;
         line-height: 14px;
@@ -43,31 +42,28 @@ export const Container = styled(FlexDivRow)<{
 `;
 
 export const Text = styled.span`
-    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+`;
+
+export const Odd = styled.span<{
+    selected: boolean;
+}>`
+    font-weight: 600;
+    font-size: 13px;
+    color: ${(props) =>
+        props.selected ? props.theme.oddsContainerBackground.primary : props.theme.textColor.quaternary};
+    margin-left: 5px;
 `;
 
 export const Status = styled(Text)`
     @media (max-width: 575px) {
         font-size: 11px;
         margin-top: 1px;
-    }
-`;
-
-export const Bonus = styled(FlexDivCentered)`
-    color: ${(props) => props.theme.status.win};
-    position: absolute;
-    top: -9px;
-    right: -10px;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 2px 2px 2px 4px;
-    background-color: ${(props) => props.theme.background.secondary};
-    border-radius: 60%;
-    @media (max-width: 575px) {
-        right: -7px;
-        top: -9px;
-        padding: 2px;
-        font-size: 11px;
     }
 `;
 

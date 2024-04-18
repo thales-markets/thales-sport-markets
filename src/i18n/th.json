@@ -58,7 +58,8 @@
             },
             "id-exists": "ID ผู้อ้างอิงมีอยู่แล้ว",
             "id-create-success": "กำหนด ID ผู้อ้างอิงสำเร็จ",
-            "your-referral-id": "ID ผู้อ้างอิงของคุณ"
+            "your-referral-id": "ID ผู้อ้างอิงของคุณ",
+            "header-label": "อ้างอิงและรับ"
         },
         "swap": {
             "title": "รับ USD",
@@ -188,7 +189,8 @@
             "info": "*คุณสามารถเปลี่ยนประเภทอัตราต่อรองในตัวกรองด้านบนรายการเกมได้ตลอดเวลา",
             "description": "เลือกรูปแบบการแสดงอัตราต่อรอง",
             "title": "ยินดีต้อนรับสู่ตลาดล่วงเวลา"
-        }
+        },
+        "settings": "การตั้งค่า"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -302,7 +304,8 @@
             "usd-value-col": "มูลค่า",
             "result-col": "ผลลัพธ์",
             "single-title": "กิจกรรมเดี่ยวล่าสุด",
-            "parlay-title": "กิจกรรมพาร์เลย์ล่าสุด"
+            "parlay-title": "กิจกรรมพาร์เลย์ล่าสุด",
+            "ticket-title": "กิจกรรมตั๋วล่าสุด"
         },
         "tooltip": {
             "amount-exceeded": "จำนวนเงินเกินจำนวนที่มีอยู่ใน AMM",
@@ -359,7 +362,8 @@
                 "last touchdown": "ใครจะเป็นผู้ทำทัชดาวน์ครั้งสุดท้ายในเกม?",
                 "first touchdown": "ใครจะเป็นผู้ทำทัชดาวน์แรกในเกม? (รวมโอที)",
                 "3pts made": "ได้ 3 แต้มแล้ว",
-                "3-points made": "ได้ 3 แต้มแล้ว"
+                "3-points made": "ได้ 3 แต้มแล้ว",
+                "combined positions": "รวมตำแหน่ง"
             },
             "odd-tooltip": {
                 "scoring": {
@@ -451,6 +455,71 @@
             "toggle": {
                 "hide-paused-markets": "ซ่อนตลาดที่หยุดชั่วคราว",
                 "show-paused-markets": "แสดงตลาดที่หยุดชั่วคราว"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "goals": "เป้าหมาย",
+                    "points": "คะแนน",
+                    "sets": "ชุด",
+                    "rounds": "รอบ"
+                },
+                "match-resolve": {
+                    "regular": "ในเวลาปกติ",
+                    "overtime": "รวมถึงการทำงานล่วงเวลาที่เป็นไปได้"
+                },
+                "hitsRecorded-0": "{{team}} จะมีการบันทึกการเข้าชมมากกว่า {{line}}",
+                "receivingYards-1": "{{team}} จะมีระยะรับน้อยกว่า {{line}}",
+                "lastTouchdown-0": "{{team}} จะทำคะแนนทัชดาวน์สุดท้ายของเกม",
+                "rushingYards-0": "{{team}} จะมีระยะวิ่งมากกว่า {{line}}",
+                "total-0": "จำนวน {{scoring}} ทั้งหมดในการแข่งขัน {{matchResolve}} จะมากกว่า {{line}}",
+                "homeruns-1": "{{team}} จะมีโฮมรันน้อยกว่า {{line}}",
+                "total-1": "จำนวน {{scoring}} ทั้งหมดในการแข่งขัน {{matchResolve}} จะน้อยกว่า {{line}}",
+                "pitcherHitsAllowed-0": "{{team}} จะได้รับอนุญาตให้เข้าชมมากกว่า {{line}}",
+                "tripleDouble-1": "{{team}} จะไม่ทำแต้มทริปเปิล-ดับเบิ้ล",
+                "passingTouchdowns-0": "{{team}} จะมีการส่งทัชดาวน์มากกว่า {{line}}",
+                "shots-1": "{{team}} จะมีโอกาสยิงน้อยกว่า {{line}}",
+                "passingYards-1": "{{team}} จะมีระยะส่งบอลน้อยกว่า {{line}}",
+                "moneyline-2": "การแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}",
+                "tournament-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "and": "และ",
+                "strikeouts-1": "{{team}} จะมีขีดฆ่าน้อยกว่า {{line}}",
+                "doubleDouble-0": "{{team}} จะทำแต้มดับเบิ้ล-ดับเบิ้ล",
+                "spread-0": "{{team}} จะชนะการแข่งขันด้วยผลต่างมากกว่า {{line}} {{scoring}} {{matchResolve}}",
+                "receptions-1": "{{team}} จะมีการรับน้อยกว่า {{line}}",
+                "doubleChance-0": "{{team}} จะชนะการแข่งขัน หรือการแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}",
+                "receptions-0": "{{team}} จะมีการรับมากกว่า {{line}}",
+                "moneyline-0": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "doubleChance-1": "{{team}} หรือ {{team2}} จะชนะการแข่งขัน {{matchResolve}}",
+                "rushingYards-1": "{{team}} จะมีระยะวิ่งน้อยกว่า {{line}}",
+                "receivingYards-0": "{{team}} จะมีระยะรับมากกว่า {{line}}",
+                "fieldGoalsMade-0": "{{team}} จะมีการยิงประตูมากกว่า {{line}}",
+                "race-winner": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "rebounds-1": "{{team}} จะมีรีบาวด์น้อยกว่า {{line}}",
+                "doubleDouble-1": "{{team}} จะไม่ทำคะแนนดับเบิ้ล-ดับเบิ้ล",
+                "bonus": "โบนัสเพิ่ม {{bonus}} เมื่อชนะ!",
+                "points-1": "{{team}} จะมีแต้มน้อยกว่า {{line}}",
+                "hitsRecorded-1": "{{team}} จะมีการบันทึกการเข้าชมน้อยกว่า {{line}}",
+                "passingTouchdowns-1": "{{team}} จะมีการส่งทัชดาวน์น้อยกว่า {{line}}",
+                "fieldGoalsMade-1": "{{team}} จะมีการยิงประตูน้อยกว่า {{line}}",
+                "spread-1": "{{team}} จะชนะการแข่งขัน หรือแพ้น้อยกว่า {{line}} {{scoring}} {{matchResolve}}",
+                "homeruns-0": "{{team}} จะมีโฮมรันมากกว่า {{line}}",
+                "touchdowns-0": "{{team}} จะทำคะแนนทัชดาวน์ในเกม",
+                "rebounds-0": "{{team}} จะมีการรีบาวด์มากกว่า {{line}}",
+                "doubleChance-2": "{{team}} จะชนะการแข่งขัน หรือการแข่งขันจะจบลงด้วยผลเสมอ {{matchResolve}}",
+                "firstTouchdown-0": "{{team}} จะทำทัชดาวน์แรกในเกม",
+                "points-0": "{{team}} จะมีแต้มมากกว่า {{line}}",
+                "goals-0": "{{team}} จะทำประตูในเกม",
+                "strikeouts-0": "{{team}} จะมีขีดฆ่ามากกว่า {{line}}",
+                "shots-0": "{{team}} จะมีโอกาสยิงมากกว่า {{line}}",
+                "passingYards-0": "{{team}} จะมีระยะส่งบอลมากกว่า {{line}}",
+                "tripleDouble-0": "{{team}} จะทำแต้มทริปเปิล-ดับเบิ้ล",
+                "moneyline-1": "{{team}} จะชนะการแข่งขัน {{matchResolve}}",
+                "assists-0": "{{team}} จะมีแอสซิสต์มากกว่า {{line}}",
+                "pitcherHitsAllowed-1": "{{team}} จะมีโอกาสโจมตีน้อยกว่า {{line}}",
+                "assists-1": "{{team}} จะมีแอสซิสต์น้อยกว่า {{line}}"
+            },
+            "type-tooltip": {
+                "11055": "การรับ การวิ่ง การเตะเตะกลับ ทัชดาวน์การป้องกันและการสกัดกั้นจะถูกนับรวมในผลการแข่งขัน"
             }
         },
         "market-details": {
@@ -1193,7 +1262,8 @@
         "sign-up": "ลงชื่อ",
         "log-in": "เข้าสู่ระบบ",
         "get-started": "เริ่ม",
-        "title": "เริ่มต้นการทำงานล่วงเวลา"
+        "title": "เริ่มต้นการทำงานล่วงเวลา",
+        "start-tour": "เริ่มทัวร์"
     },
     "banner": {
         "arb-distribution-message": "การกระจาย ARB ได้เริ่มต้นแล้ว รับโทเค็น ARB โดยใช้การต่อเวลา ชำระเงินรายละเอียดได้ที่นี่"

@@ -4,6 +4,15 @@ import { ethers } from 'ethers';
 import i18n from 'i18n';
 import { SportMarketInfoV2, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
+import {
+    getIsOneSideMarket,
+    isCombinedPositions,
+    isOneSidePlayerProps,
+    isPlayerProps,
+    isSpecialYesNoProp,
+    isSpread,
+    isTotal,
+} from './markets';
 
 export const getSimpleSymbolText = (
     position: Position,
@@ -68,7 +77,7 @@ export const getCombinedPositionsSymbolText = (position: Position, market: Sport
         position2.position,
         position2.typeId,
         true,
-        market.typeId === BetType.COMBINED_POSITIONS ? undefined : position2.line
+        market.typeId === BetType.WINNER_TOTAL ? undefined : position2.line
     )}${market.typeId === BetType.HALFTIME_FULLTIME_GOALS ? '&' : ''}${
         !position4 && market.typeId === BetType.HALFTIME_FULLTIME_GOALS ? position3Text : ''
     }${
@@ -96,7 +105,7 @@ export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) =
     }
 
     if (
-        betType === BetType.COMBINED_POSITIONS ||
+        betType === BetType.WINNER_TOTAL ||
         betType === BetType.HALFTIME_FULLTIME ||
         betType === BetType.GOALS ||
         betType === BetType.HALFTIME_FULLTIME_GOALS
@@ -106,15 +115,99 @@ export const getSymbolTextV2 = (position: Position, market: SportMarketInfoV2) =
     return getSimpleSymbolText(position, betType);
 };
 
-export const getLineInfo = (typeId: number, position: Position, line: number, market: SportMarketInfoV2) => {
-    if (typeId === BetType.SPREAD || typeId === BetType.SPREAD2 || typeId === BetType.HALFTIME_SPREAD)
+export const getSimplePositionText = (
+    betType: number,
+    position: number,
+    line: number,
+    homeTeam: string,
+    awayTeam: string
+) => {
+    if (getIsOneSideMarket(betType) || isOneSidePlayerProps(betType) || isSpecialYesNoProp(betType)) {
+        return position === 0 ? 'YES' : 'NO';
+    }
+
+    if (isPlayerProps(betType) || isTotal(betType) || isSpread(betType)) {
+        return getLineInfo(betType, position, line);
+    }
+
+    if (betType === BetType.DOUBLE_CHANCE)
+        return position === 0
+            ? `${homeTeam} or Draw`
+            : position === 1
+            ? `${homeTeam} or ${awayTeam}`
+            : `${awayTeam} or Draw`;
+    if (betType === BetType.WINNER || betType === BetType.HALFTIME)
+        return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
+
+    return position === 0 ? '1' : position === 1 ? '2' : 'X';
+};
+
+export const getCombinedPositionsText = (market: SportMarketInfoV2, position: number) => {
+    const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
+    if (!combinedPositions) return '';
+
+    const betType = market.typeId;
+
+    const position1 = combinedPositions[0];
+    const position2 = combinedPositions[1];
+    if (betType === BetType.HALFTIME_FULLTIME) {
+        return `${getSimplePositionText(
+            position1.typeId,
+            position1.position,
+            position1.line,
+            market.homeTeam,
+            market.awayTeam
+        )}/${getSimplePositionText(
+            position2.typeId,
+            position2.position,
+            position2.line,
+            market.homeTeam,
+            market.awayTeam
+        )}`;
+    }
+
+    if (betType === BetType.WINNER_TOTAL) {
+        return `${getSimplePositionText(
+            position1.typeId,
+            position1.position,
+            position1.line,
+            market.homeTeam,
+            market.awayTeam
+        )} & ${position2.position === 0 ? 'Over' : 'Under'} ${getSimplePositionText(
+            position2.typeId,
+            position2.position,
+            position2.line,
+            market.homeTeam,
+            market.awayTeam
+        )}`;
+    }
+};
+
+export const getPositionTextV2 = (market: SportMarketInfoV2, position: number) => {
+    return isCombinedPositions(market.typeId)
+        ? getCombinedPositionsText(market, position)
+        : getSimplePositionText(market.typeId, position, market.line, market.homeTeam, market.awayTeam);
+};
+
+export const getSubtitleText = (market: SportMarketInfoV2, position: Position) => {
+    const betType = market.typeId;
+
+    if (market.isPlayerPropsMarket || isTotal(betType)) {
+        return position === 0 ? 'Over' : 'Under';
+    }
+
+    if (isSpread(betType)) return position === 0 ? market.homeTeam : market.awayTeam;
+
+    return undefined;
+};
+
+export const getLineInfo = (typeId: number, position: Position, line: number) => {
+    if (isSpread(typeId))
         return position === Position.HOME
             ? `${Number(line) > 0 ? '+' : '-'}${Math.abs(line)}`
             : `${Number(line) > 0 ? '-' : '+'}${Math.abs(line)}`;
 
-    if (typeId === BetType.TOTAL || typeId === BetType.TOTAL2 || typeId === BetType.HALFTIME_TOTAL)
-        return `${Number(line)}`;
-    if (market.isPlayerPropsMarket) return `${Number(line)}`;
+    if (isTotal(typeId) || isPlayerProps(typeId)) return `${Number(line)}`;
     return undefined;
 };
 
@@ -125,9 +218,9 @@ export const getCombinedPositionsLineInfo = (position: Position, market: SportMa
     const position1 = combinedPositions[0];
     const position2 = combinedPositions[1];
 
-    const position1LineInfo = getLineInfo(position1.typeId, position1.position, position1.line, market);
+    const position1LineInfo = getLineInfo(position1.typeId, position1.position, position1.line);
 
-    const position2LineInfo = getLineInfo(position2.typeId, position2.position, position2.line, market);
+    const position2LineInfo = getLineInfo(position2.typeId, position2.position, position2.line);
 
     const lineInfo =
         position1LineInfo && position2LineInfo
@@ -138,9 +231,9 @@ export const getCombinedPositionsLineInfo = (position: Position, market: SportMa
 };
 
 export const getLineInfoV2 = (market: SportMarketInfoV2, position: Position) =>
-    market.typeId === BetType.COMBINED_POSITIONS
+    isCombinedPositions(market.typeId)
         ? getCombinedPositionsLineInfo(position, market)
-        : getLineInfo(market.typeId, position, market.line, market);
+        : getLineInfo(market.typeId, position, market.line);
 
 export const getTooltipText = (typeId: number, position: Position, line: number, market: SportMarketInfoV2) => {
     const team = market.isPlayerPropsMarket
@@ -208,7 +301,7 @@ export const getCombinedPositionsOddTooltipText = (position: Position, market: S
 };
 
 export const getOddTooltipTextV2 = (position: Position, market: SportMarketInfoV2) =>
-    market.typeId === BetType.COMBINED_POSITIONS
+    market.typeId === BetType.WINNER_TOTAL
         ? getCombinedPositionsOddTooltipText(position, market)
         : getTooltipText(market.typeId, position, market.line, market);
 

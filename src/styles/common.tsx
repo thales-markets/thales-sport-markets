@@ -68,6 +68,12 @@ export const Colors = {
     ORANGE: '#FAC439',
 
     PURPLE: '#8884d8',
+
+    NAVY_BLUE: '#1F274D',
+    NAVY_BLUE_LIGHT: '#7983A9',
+    NAVY_BLUE_EXTRA_LIGHT: '#9FA1BA',
+    NAVY_BLUE_DARK: '#151B36',
+    NAVY_BLUE_EXTRA_DARK: '#111325',
 };
 
 export const QuizQuestionDifficultyMap = ['#4673BD', '#50CE99', '#F4CF73', '#FA9E2F', '#C3244A'];

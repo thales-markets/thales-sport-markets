@@ -5,17 +5,29 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SportMarketInfoV2 } from 'types/markets';
-import { isOddValid } from 'utils/marketsV2';
-import MarketPositionsV2 from '../MarketPositionsV2';
-import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
+import { getSubtitleText, isOddValid } from 'utils/marketsV2';
+import { FlexDivColumn } from '../../../../../../styles/common';
+import PositionDetailsV2 from '../PositionDetailsV2';
+import {
+    Arrow,
+    Container,
+    ContentContianer,
+    ContentRow,
+    Header,
+    SubTitle,
+    SubTitleContainer,
+    Title,
+} from './styled-components';
 
 type PositionsProps = {
     markets: SportMarketInfoV2[];
     betType: BetType;
     showOdds: boolean;
+    isMainPageView?: boolean;
+    isColumnView?: boolean;
 };
 
-const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds }) => {
+const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds, isMainPageView, isColumnView }) => {
     const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
@@ -31,10 +43,13 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds }) => 
         [markets]
     );
 
+    const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
+    const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
+
     return showContainer ? (
-        <Container onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')}>
-            <Header>
-                <Title isExpanded={isExpanded}>
+        <Container onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')} isMainPageView={isMainPageView}>
+            <Header isMainPageView={isMainPageView} isColumnView={isColumnView}>
+                <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
                     {BetTypeNameMap[betType]}
                     {betType == BetType.PLAYER_PROPS_TOUCHDOWNS && (
                         <Tooltip
@@ -47,24 +62,37 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds }) => 
                     )}
                 </Title>
             </Header>
-            <Arrow
-                className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
-                onClick={() => setIsExpanded(!isExpanded)}
-            />
+            {!isMainPageView && (
+                <Arrow
+                    className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                />
+            )}
             {isExpanded && (
                 <ContentContianer>
+                    {(positionText0 || positionText1) && !isColumnView && (
+                        <SubTitleContainer>
+                            {positionText0 && <SubTitle>{positionText0}</SubTitle>}
+                            {positionText1 && <SubTitle>{positionText1}</SubTitle>}
+                        </SubTitleContainer>
+                    )}
                     {sortedMarkets.map((market, index) => {
                         return (
-                            <div key={index}>
+                            <FlexDivColumn key={index}>
                                 {market.isPlayerPropsMarket && (
                                     <PropsTextContainer>
                                         <PropsText>{`${market.playerProps.playerName}`}</PropsText>
                                     </PropsTextContainer>
                                 )}
-                                <ContentRow>
-                                    <MarketPositionsV2 market={market} />
+                                <ContentRow
+                                    gridMinMaxPercentage={market.odds.length === 3 ? 33 : 50}
+                                    isColumnView={isColumnView}
+                                >
+                                    {market.odds.map((_, index) => (
+                                        <PositionDetailsV2 key={index} market={market} position={index} />
+                                    ))}
                                 </ContentRow>
-                            </div>
+                            </FlexDivColumn>
                         );
                     })}
                 </ContentContianer>

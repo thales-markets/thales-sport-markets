@@ -67,7 +67,8 @@
             },
             "id-create-success": "Establecer ID de referencia con éxito",
             "id-exists": "El ID de referencia ya existe",
-            "your-referral-id": "Su identificación de referencia"
+            "your-referral-id": "Su identificación de referencia",
+            "header-label": "Refiere y gana"
         },
         "swap": {
             "title": "Obtener USD",
@@ -188,7 +189,8 @@
             "info": "*Siempre puedes cambiar el tipo de probabilidades en los filtros encima de la lista de juegos.",
             "description": "Elija el formato de visualización de probabilidades",
             "title": "Bienvenido a Overtime Markets"
-        }
+        },
+        "settings": "Ajustes"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -302,7 +304,8 @@
             "game-col": "juego",
             "result-col": "resultado",
             "parlay-title": "Actividad parlay reciente",
-            "single-title": "Actividad única reciente"
+            "single-title": "Actividad única reciente",
+            "ticket-title": "Actividad reciente de entradas"
         },
         "tooltip": {
             "amount-exceeded": "Cantidad excede la disponibilidad del AMM",
@@ -451,6 +454,71 @@
             "toggle": {
                 "hide-paused-markets": "Ocultar mercados pausados",
                 "show-paused-markets": "Mostrar mercados pausados"
+            },
+            "odd-tooltip-v2": {
+                "scoring": {
+                    "rounds": "rondas",
+                    "sets": "conjuntos",
+                    "points": "puntos",
+                    "goals": "objetivos"
+                },
+                "match-resolve": {
+                    "regular": "en horario regular",
+                    "overtime": "incluyendo posibles horas extras"
+                },
+                "goals-0": "{{team}} marcará un gol en el juego",
+                "receptions-1": "{{team}} tendrá menos recepciones que {{line}}",
+                "assists-1": "{{team}} tendrá menos asistencias que {{line}}",
+                "rebounds-1": "{{team}} tendrá menos rebotes que {{line}}",
+                "strikeouts-0": "{{team}} tendrá más ponches que {{line}}",
+                "spread-0": "{{team}} ganará el partido con una diferencia de más de {{line}} {{scoring}} {{matchResolve}}",
+                "firstTouchdown-0": "{{team}} anotará el primer touchdown del juego",
+                "receivingYards-1": "{{team}} tendrá menos yardas recibidas que {{line}}",
+                "fieldGoalsMade-0": "{{team}} anotará más tiros de campo que {{line}}",
+                "tripleDouble-1": "{{team}} no conseguirá un triple-doble",
+                "homeruns-1": "{{team}} tendrá menos jonrones que {{line}}",
+                "hitsRecorded-1": "{{team}} tendrá menos visitas registradas que {{line}}",
+                "fieldGoalsMade-1": "{{team}} anotará menos tiros de campo que {{line}}",
+                "bonus": "¡{{bonus}} bonificación adicional al ganar!",
+                "passingYards-1": "{{team}} tendrá menos yardas aéreas que {{line}}",
+                "shots-1": "{{team}} tendrá menos tiros que {{line}}",
+                "and": "y",
+                "doubleChance-2": "{{team}} ganará el partido o el partido terminará en empate {{matchResolve}}",
+                "race-winner": "{{team}} ganará la carrera {{matchResolve}}",
+                "receptions-0": "{{team}} tendrá más recepciones que {{line}}",
+                "pitcherHitsAllowed-1": "{{team}} tendrá menos visitas permitidas que {{line}}",
+                "doubleChance-1": "{{team}} o {{team2}} ganarán el partido {{matchResolve}}",
+                "hitsRecorded-0": "{{team}} tendrá más visitas registradas que {{line}}",
+                "rushingYards-1": "{{team}} tendrá menos yardas terrestres que {{line}}",
+                "points-0": "{{team}} tendrá más puntos que {{line}}",
+                "shots-0": "{{team}} tendrá más tiros que {{line}}",
+                "moneyline-1": "{{team}} ganará el partido {{matchResolve}}",
+                "doubleChance-0": "{{team}} ganará el partido o el partido terminará en empate {{matchResolve}}",
+                "doubleDouble-0": "{{team}} anotará un doble-doble",
+                "tripleDouble-0": "{{team}} anotará un triple-doble",
+                "points-1": "{{team}} tendrá menos puntos que {{line}}",
+                "tournament-winner": "{{team}} ganará el torneo {{matchResolve}}",
+                "passingTouchdowns-0": "{{team}} tendrá más pases de touchdown que {{line}}",
+                "homeruns-0": "{{team}} tendrá más jonrones que {{line}}",
+                "moneyline-0": "{{team}} ganará el partido {{matchResolve}}",
+                "moneyline-2": "El partido terminará en empate {{matchResolve}}",
+                "touchdowns-0": "{{team}} anotará un touchdown en el juego",
+                "pitcherHitsAllowed-0": "{{team}} tendrá más visitas permitidas que {{line}}",
+                "receivingYards-0": "{{team}} tendrá más yardas en recepción que {{line}}",
+                "passingTouchdowns-1": "{{team}} tendrá menos pases de touchdown que {{line}}",
+                "rebounds-0": "{{team}} tendrá más rebotes que {{line}}",
+                "strikeouts-1": "{{team}} tendrá menos ponches que {{line}}",
+                "spread-1": "{{team}} ganará el partido o perderá por menos de {{line}} {{scoring}} {{matchResolve}}",
+                "assists-0": "{{team}} tendrá más asistencias que {{line}}",
+                "lastTouchdown-0": "{{team}} anotará el último touchdown del juego",
+                "total-1": "El número total de {{scoring}} en el partido {{matchResolve}} será menor que {{line}}",
+                "doubleDouble-1": "{{team}} no anotará un doble-doble",
+                "total-0": "El número total de {{scoring}} en el partido {{matchResolve}} será superior a {{line}}",
+                "rushingYards-0": "{{team}} tendrá más yardas terrestres que {{line}}",
+                "passingYards-0": "{{team}} tendrá más yardas aéreas que {{line}}"
+            },
+            "type-tooltip": {
+                "11055": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado."
             }
         },
         "market-details": {
@@ -1193,7 +1261,8 @@
         "log-in": "Acceso",
         "title": "Comience con las horas extras",
         "sign-up": "Inscribirse",
-        "sign-out": "desconectar"
+        "sign-out": "desconectar",
+        "start-tour": "Empezar recorrido"
     },
     "banner": {
         "arb-distribution-message": "La distribución de ARB ha comenzado. Gana tokens ARB usando horas extras. Echa un vistazo a los detalles aquí."

@@ -1,7 +1,7 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import QUERY_KEYS from '../../constants/queryKeys';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
+import QUERY_KEYS from '../../constants/queryKeys';
 
 type User = {
     id: string;

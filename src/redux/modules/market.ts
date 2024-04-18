@@ -32,6 +32,8 @@ type MarketSliceState = {
     dateFilter: Date | number;
     globalFilter: GlobalFiltersEnum;
     sportFilter: SportFilterEnum;
+    selectedMarket: string;
+    isThreeWayView: boolean;
 };
 
 const initialState: MarketSliceState = {
@@ -39,6 +41,8 @@ const initialState: MarketSliceState = {
     dateFilter: getDefaultDateFilter(),
     globalFilter: getDefaultGlobalFilter(),
     sportFilter: getDefaultSportFilter(),
+    selectedMarket: '',
+    isThreeWayView: false,
 };
 
 const marketSlice = createSlice({
@@ -61,15 +65,31 @@ const marketSlice = createSlice({
             state.sportFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_SPORT, action.payload);
         },
+        setSelectedMarket: (state, action: PayloadAction<string>) => {
+            state.selectedMarket = action.payload;
+        },
+        setIsThreeWayView: (state, action: PayloadAction<boolean>) => {
+            state.isThreeWayView = action.payload;
+        },
     },
 });
 
-export const { setMarketSearch, setDateFilter, setGlobalFilter, setSportFilter } = marketSlice.actions;
+export const {
+    setMarketSearch,
+    setDateFilter,
+    setGlobalFilter,
+    setSportFilter,
+    setSelectedMarket,
+    setIsThreeWayView,
+} = marketSlice.actions;
 
 const getMarketState = (state: RootState) => state[sliceName];
 export const getMarketSearch = (state: RootState) => getMarketState(state).marketSearch;
 export const getDateFilter = (state: RootState) => getMarketState(state).dateFilter;
 export const getGlobalFilter = (state: RootState) => getMarketState(state).globalFilter;
 export const getSportFilter = (state: RootState) => getMarketState(state).sportFilter;
+export const getSelectedMarket = (state: RootState) => getMarketState(state).selectedMarket;
+export const getIsMarketSelected = (state: RootState) => getMarketState(state).selectedMarket !== '';
+export const getIsThreeWayView = (state: RootState) => getMarketState(state).isThreeWayView;
 
 export default marketSlice.reducer;

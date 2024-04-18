@@ -1,35 +1,52 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 
-export const Container = styled(FlexDivColumn)`
+export const Container = styled(FlexDivColumn)<{ isMainPageView?: boolean }>`
     position: relative;
-    background-color: ${(props) => props.theme.background.secondary};
-    padding: 6px 10px;
+    padding: ${(props) => (props.isMainPageView ? '0px' : '6px 0px')};
     border-radius: 5px;
     @media (max-width: 575px) {
-        padding: 5px 6px;
+        padding: 5px 0px;
     }
-    margin-bottom: 5px;
 `;
 
-export const Header = styled(FlexDivRow)`
+export const Header = styled(FlexDivColumnCentered)<{ isMainPageView?: boolean; isColumnView?: boolean }>`
     position: relative;
+    max-height: ${(props) => (props.isMainPageView && !props.isColumnView ? 'auto' : '25px')};
+    flex: none;
 `;
 
-export const Title = styled.span<{ isExpanded: boolean }>`
+export const Title = styled.span<{ isExpanded: boolean; isMainPageView?: boolean; isColumnView?: boolean }>`
     font-size: 12px;
     line-height: 14px;
     text-transform: uppercase;
-    margin-bottom: ${(props) => (props.isExpanded ? 4 : 0)}px;
-    margin-left: 2px;
+    margin-bottom: ${(props) => (props.isMainPageView ? (props.isColumnView ? 8 : 14) : props.isExpanded ? 4 : 0)}px;
+    text-align: center;
+`;
+
+export const SubTitleContainer = styled(FlexDiv)`
+    font-size: 12px;
+    line-height: 14px;
+    color: ${(props) => props.theme.textColor.quinary};
+`;
+
+export const SubTitle = styled.span`
+    font-size: 12px;
+    line-height: 14px;
+    width: 100%;
+    text-align: center;
 `;
 
 export const ContentContianer = styled(FlexDivColumn)``;
 
-export const ContentRow = styled(FlexDivRow)`
-    :not(:last-child) {
-        margin-bottom: 3px;
-    }
+export const ContentRow = styled.div<{ gridMinMaxPercentage: number; isColumnView?: boolean }>`
+    margin-bottom: ${(props) => (props.isColumnView ? '0' : '5px')};
+    margin-right: ${(props) => (props.isColumnView ? '5px' : '0')};
+    display: ${(props) => (props.isColumnView ? 'flex' : 'grid')};
+    grid-template-columns: repeat(auto-fit, minmax(calc(${(props) => props.gridMinMaxPercentage}% - 5px), 1fr));
+    gap: 5px;
+    flex-direction: column;
+    flex: 1;
 `;
 
 export const Arrow = styled.i`

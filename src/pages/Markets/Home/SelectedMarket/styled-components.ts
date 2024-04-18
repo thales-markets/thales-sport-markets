@@ -1,23 +1,16 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Wrapper = styled(FlexDivColumn)<{
     hideGame: boolean;
     isResolved: boolean;
-    selected: boolean;
 }>`
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     background-color: ${(props) =>
-        props.selected
-            ? props.theme.background.quaternary
-            : props.isResolved
-            ? props.theme.background.secondary
-            : props.theme.background.quinary};
-    color: ${(props) =>
-        props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.primary};
+        props.isResolved ? props.theme.oddsContainerBackground.tertiary : props.theme.oddsContainerBackground.primary};
     @media (max-width: 575px) {
         margin-bottom: 5px;
     }
@@ -25,70 +18,79 @@ export const Wrapper = styled(FlexDivColumn)<{
 
 export const MainContainer = styled(FlexDivRow)`
     width: 100%;
-    padding: 10px 12px;
+    padding: 6px 9px 4px 8px;
     @media (max-width: 950px) {
         padding-right: 20px;
     }
 `;
 
-export const MatchInfoConatiner = styled(FlexDivColumn)`
-    cursor: pointer;
-    max-width: 250px;
-    margin-right: 5px;
+export const SecondRowContainer = styled(MainContainer)<{ mobilePaddingRight: number }>`
+    flex-direction: column;
+    position: relative;
+    background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    border-radius: 0 0 5px 5px;
+    /* padding-right: 174px; */
+    @media (max-width: 950px) {
+        padding-left: 4px;
+        padding-right: ${(props) => props.mobilePaddingRight}px;
+    }
 `;
 
-export const MatchTimeLabel = styled.label<{
-    selected: boolean;
-}>`
+export const ThirdRowContainer = styled(SecondRowContainer)`
+    padding-right: 0px;
+    justify-content: flex-start;
+`;
+
+export const MatchInfoConatiner = styled(FlexDivColumn)`
+    cursor: pointer;
+`;
+
+export const MatchTimeLabel = styled.label`
     font-size: 12px;
     font-weight: 600;
-    line-height: 14px;
+    line-height: 14px
     text-transform: uppercase;
-    width: fit-content;
-    margin-right: 2px;
-    white-space: nowrap;
-    color: ${(props) =>
-        props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
 `;
 
 export const TeamsInfoConatiner = styled(FlexDivRow)`
     align-items: center;
-    margin-top: 8px;
-    flex: 1;
+    margin-top: 6px;
 `;
 
-export const TeamLogosConatiner = styled(FlexDivRow)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
-    flex-direction: ${(props) => (props.isColumnView ? 'column' : 'row')};
+export const TeamLogosConatiner = styled(FlexDivRow)`
     align-items: center;
     @media (max-width: 575px) {
         display: none;
     }
-    gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '2px' : '10px') : '0px')};
 `;
 
-export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean }>`
-    height: ${(props) => props.height || (props.isColumnView ? '26px' : '24px')};
-    width: ${(props) => props.width || (props.isColumnView ? '26px' : '24px')};
-    margin-left: ${(props) => (props.awayTeam && !props.isColumnView ? '-10px' : '0')};
+export const ClubLogo = styled.img<{ awayTeam?: boolean }>`
+    height: ${(props) => props.height || '24px'};
+    width: ${(props) => props.width || '24px'};
+    margin-left: ${(props) => (props.awayTeam ? '-10px' : '0')};
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
 `;
 
-export const TeamNamesConatiner = styled(FlexDivColumn)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
-    margin-left: 10px;
+export const VSLabel = styled.span`
+    margin: 0 4px;
+    font-weight: 400;
+    font-size: 11px;
+`;
+
+export const TeamNamesConatiner = styled(FlexDivColumn)`
+    margin-left: 6px;
     @media (max-width: 575px) {
         margin-left: 0px;
     }
-    gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '5px' : '10px') : '0px')};
 `;
 
-export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelected: boolean }>`
-    font-weight: 600;
-    font-size: 12px;
-    line-height: ${(props) => (props.isColumnView ? '25px' : '18px')};
-    text-overflow: ellipsis;
+export const TeamNameLabel = styled.span`
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 13px;
     white-space: nowrap;
-    overflow: hidden;
-    width: ${(props) => (props.isMarketSelected ? '110px' : '100%')};
 `;
 
 export const ResultWrapper = styled(FlexDivRowCentered)``;
@@ -106,21 +108,12 @@ export const ResultLabel = styled.span`
     text-transform: uppercase;
 `;
 
-export const MarketsCountWrapper = styled(FlexDivColumnCentered)`
-    max-width: 35px;
-    margin-left: 10px;
-    font-weight: 600;
-    font-size: 13.5px;
-    line-height: 16px;
-    color: ${(props) => props.theme.textColor.quinary};
-    text-align: center;
-    cursor: pointer;
-`;
-
-export const Arrow = styled.i`
-    font-size: 14px;
-    color: ${(props) => props.theme.textColor.quinary};
-    cursor: pointer;
+export const TotalMarketsWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 `;
 
 export const TotalMarketsContainer = styled.span`
@@ -177,6 +170,19 @@ export const TotalMarkets = styled.span`
 export const TotalMarketsArrow = styled.i`
     font-size: 18px;
     cursor: pointer;
+`;
+
+export const Arrow = styled.i`
+    font-size: 14px;
+    position: absolute;
+    bottom: 0px;
+    right: -13px;
+    cursor: pointer;
+`;
+
+export const ArrowRight = styled.i`
+    font-size: 11px;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export const OddsWrapper = styled(FlexDivRow)<{ isFirstRow?: boolean }>`
