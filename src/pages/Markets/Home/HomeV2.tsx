@@ -22,7 +22,13 @@ import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getIsMarketSelected, getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import {
+    getIsMarketSelected,
+    getIsThreeWayView,
+    getMarketSearch,
+    setIsThreeWayView,
+    setMarketSearch,
+} from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -73,6 +79,7 @@ const Home: React.FC = () => {
     const location = useLocation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isMarketSelected = useSelector(getIsMarketSelected);
+    const isThreeWayView = useSelector(getIsThreeWayView);
 
     const [globalFilter, setGlobalFilter] = useLocalStorage<GlobalFiltersEnum>(
         LOCAL_STORAGE_KEYS.FILTER_GLOBAL,
@@ -680,12 +687,21 @@ const Home: React.FC = () => {
                                     </Button>
                                 </NoMarketsContainer>
                             ) : (
-                                <FlexDivRow>
-                                    <Suspense fallback={<Loader />}>
-                                        <MarketsGridV2 markets={finalMarkets} />
-                                    </Suspense>
-                                    {isMarketSelected && <SelectedMarket />}
-                                </FlexDivRow>
+                                <>
+                                    <Button
+                                        width="fit-content"
+                                        margin="10px 0 0 0"
+                                        onClick={() => dispatch(setIsThreeWayView(!isThreeWayView))}
+                                    >
+                                        {isThreeWayView ? 'Switch to standard view' : 'Switch to three way view'}
+                                    </Button>
+                                    <FlexDivRow>
+                                        <Suspense fallback={<Loader />}>
+                                            <MarketsGridV2 markets={finalMarkets} />
+                                        </Suspense>
+                                        {isMarketSelected && <SelectedMarket />}
+                                    </FlexDivRow>
+                                </>
                             )}
                         </>
                     )}
