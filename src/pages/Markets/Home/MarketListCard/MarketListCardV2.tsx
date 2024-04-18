@@ -16,6 +16,7 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import web3 from 'web3';
+import SPAAnchor from '../../../../components/SPAAnchor';
 import { BetType } from '../../../../enums/markets';
 import {
     getIsMarketSelected,
@@ -23,6 +24,7 @@ import {
     getSelectedMarket,
     setSelectedMarket,
 } from '../../../../redux/modules/market';
+import { buildMarketLink } from '../../../../utils/routes';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -319,6 +321,20 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
                             />
                         )}
                     </>
+                )}
+                {marketsCount > 0 && (
+                    <MarketsCountWrapper>
+                        <SPAAnchor
+                            href={buildMarketLink(
+                                market.gameId,
+                                'en',
+                                false,
+                                encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                            )}
+                        >
+                            View
+                        </SPAAnchor>
+                    </MarketsCountWrapper>
                 )}
             </MainContainer>
         </Wrapper>
