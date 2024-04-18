@@ -52,7 +52,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position }) =
     const disabledPosition = noOdd || !isGameOpen;
 
     const showOdd = isGameOpen;
-    const showTooltip = showOdd && !noOdd && !isMobile;
+    const showTooltip = showOdd && !noOdd && !isMobile && false;
 
     const positionText = getPositionTextV2(market, position);
 

@@ -13,11 +13,13 @@ const getDefaultMarketSearch = (): string => {
 type MarketSliceState = {
     marketSearch: string;
     selectedMarket: string;
+    isThreeWayView: boolean;
 };
 
 const initialState: MarketSliceState = {
     marketSearch: getDefaultMarketSearch(),
     selectedMarket: '',
+    isThreeWayView: false,
 };
 
 const marketSlice = createSlice({
@@ -31,14 +33,18 @@ const marketSlice = createSlice({
         setSelectedMarket: (state, action: PayloadAction<string>) => {
             state.selectedMarket = action.payload;
         },
+        setIsThreeWayView: (state, action: PayloadAction<boolean>) => {
+            state.isThreeWayView = action.payload;
+        },
     },
 });
 
-export const { setMarketSearch, setSelectedMarket } = marketSlice.actions;
+export const { setMarketSearch, setSelectedMarket, setIsThreeWayView } = marketSlice.actions;
 
 const getMarketState = (state: RootState) => state[sliceName];
 export const getMarketSearch = (state: RootState) => getMarketState(state).marketSearch;
 export const getSelectedMarket = (state: RootState) => getMarketState(state).selectedMarket;
 export const getIsMarketSelected = (state: RootState) => getMarketState(state).selectedMarket !== '';
+export const getIsThreeWayView = (state: RootState) => getMarketState(state).isThreeWayView;
 
 export default marketSlice.reducer;

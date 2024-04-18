@@ -76,7 +76,6 @@ const Home: React.FC = () => {
     const location = useLocation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isMarketSelected = useSelector(getIsMarketSelected);
-    console.log(isMarketSelected);
 
     const [globalFilter, setGlobalFilter] = useLocalStorage<GlobalFiltersEnum>(
         LOCAL_STORAGE_KEYS.FILTER_GLOBAL,
@@ -244,7 +243,6 @@ const Home: React.FC = () => {
 
                 if (dateFilter !== 0) {
                     if (typeof dateFilter === 'number') {
-                        console.log(market.maturityDate);
                         if (market.maturityDate.getTime() > dateFilter) {
                             return false;
                         }

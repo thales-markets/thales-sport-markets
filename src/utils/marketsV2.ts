@@ -157,11 +157,16 @@ export const getCombinedPositionsText = (market: SportMarketInfoV2, position: nu
             position1.line,
             market.homeTeam,
             market.awayTeam
-        )}/${(position2.typeId, position2.position, position2.line, market.homeTeam, market.awayTeam)}`;
+        )}/${getSimplePositionText(
+            position2.typeId,
+            position2.position,
+            position2.line,
+            market.homeTeam,
+            market.awayTeam
+        )}`;
     }
 
     if (betType === BetType.WINNER_TOTAL) {
-        console.log(position2);
         return `${getSimplePositionText(
             position1.typeId,
             position1.position,

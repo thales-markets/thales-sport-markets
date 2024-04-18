@@ -1,15 +1,16 @@
+import Button from 'components/Button';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsMarketSelected, getIsThreeWayView, setIsThreeWayView } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarketInfoV2, SportMarketsV2, TagInfo, Tags } from 'types/markets';
-import { getIsMarketSelected } from '../../../../redux/modules/market';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
@@ -18,8 +19,10 @@ type MarketsGridProps = {
 
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
+    const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
+    const isThreeWayView = useSelector(getIsThreeWayView);
     const dateFilter = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
 
     const marketsMap: Record<number, SportMarketInfoV2[]> = groupBy(markets, (market) => Number(market.leagueId));
@@ -37,6 +40,9 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     return (
         <Container isMarketSelected={isMarketSelected}>
+            <Button onClick={() => dispatch(setIsThreeWayView(!isThreeWayView))}>
+                {isThreeWayView ? 'Switch to standard view' : 'Switch to three way view'}
+            </Button>
             <ListContainer>
                 {finalOrderKeys.map((leagueId: number, index: number) => {
                     return (

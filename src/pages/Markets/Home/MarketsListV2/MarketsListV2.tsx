@@ -38,7 +38,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
 
     return (
         <>
-            <LeagueCard>
+            <LeagueCard isMarketSelected={isMarketSelected}>
                 <LeagueInfo
                     onClick={() => {
                         if (hideLeague) {
@@ -224,7 +224,7 @@ const getNetworkLogo = (networkId: number) => {
     }
 };
 
-const LeagueCard = styled.div`
+const LeagueCard = styled.div<{ isMarketSelected: boolean }>`
     display: flex;
     position: relative;
     flex-direction: row;
@@ -233,7 +233,7 @@ const LeagueCard = styled.div`
     align-items: center;
     background-color: ${(props) => props.theme.background.primary};
     justify-content: space-between;
-    padding-right: 40px;
+    padding-right: ${(props) => (props.isMarketSelected ? '0px' : '40px')};
 `;
 
 const LeagueInfo = styled.div`

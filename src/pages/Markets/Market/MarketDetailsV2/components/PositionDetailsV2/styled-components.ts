@@ -12,7 +12,7 @@ export const Container = styled(FlexDivRow)<{
     border-radius: 5px;
     padding: 0 8px;
     flex: 1 1 0;
-    height: 25px;
+    min-height: 25px;
     font-weight: 800;
     font-size: 13px;
     line-height: 16px;

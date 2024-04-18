@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
+import { FlexDivStart } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarketInfoV2, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
@@ -16,12 +17,19 @@ import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import web3 from 'web3';
 import { BetType } from '../../../../enums/markets';
-import { getIsMarketSelected, setSelectedMarket } from '../../../../redux/modules/market';
+import {
+    getIsMarketSelected,
+    getIsThreeWayView,
+    getSelectedMarket,
+    setSelectedMarket,
+} from '../../../../redux/modules/market';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
+    Arrow,
     ClubLogo,
     MainContainer,
+    MarketsCountWrapper,
     MatchInfoConatiner,
     MatchTimeLabel,
     Result,
@@ -44,6 +52,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);
     const isMarketSelected = useSelector(getIsMarketSelected);
+    const isThreeWayView = useSelector(getIsThreeWayView);
+    const selectedMarket = useSelector(getSelectedMarket);
     // const isMobile = useSelector((state: RootState) => getIsMobile(state));
     // const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
@@ -66,7 +76,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
     const gameIdString = web3.utils.hexToAscii(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
-    // const totalNumberOfMarkets = market.childMarkets.length + 1;
+    const firstSpreadMarket = market.childMarkets.find((childMarket) => childMarket.typeId === BetType.SPREAD);
+    const firstTotalMarket = market.childMarkets.find((childMarket) => childMarket.typeId === BetType.TOTAL);
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
@@ -87,7 +98,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
                 const tournamentName = useEnetpulseLiveResultQuery.data.tournamentName
                     ? market.isOneSideMarket
                         ? useEnetpulseLiveResultQuery.data.tournamentName
-                        : '| ' + useEnetpulseLiveResultQuery.data.tournamentName
+                        : ' | ' + useEnetpulseLiveResultQuery.data.tournamentName
                     : '';
                 const tournamentRound = useEnetpulseLiveResultQuery.data.tournamentRound
                     ? ' | ' + useEnetpulseLiveResultQuery.data.tournamentRound
@@ -124,47 +135,71 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
     const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
     const hideGame = showOdds && !areOddsValid && !areChildMarketsOddsValid;
+    const isColumnView = isThreeWayView && !isMarketSelected && market.isOpen;
+    const isTwoPositionalMarket = market.odds.length === 2;
+    const selected = selectedMarket == market.gameId;
+
+    let marketsCount = market.childMarkets.length;
+    if (isThreeWayView) {
+        if (firstSpreadMarket) {
+            marketsCount -= 1;
+        }
+        if (firstTotalMarket) {
+            marketsCount -= 1;
+        }
+    }
 
     return (
-        <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved} isMarketSelected={isMarketSelected}>
+        <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved} selected={selected}>
             <MainContainer>
                 <MatchInfoConatiner onClick={() => dispatch(setSelectedMarket(market.gameId))}>
-                    <Tooltip
-                        overlay={
-                            <>
-                                {t(`markets.market-card.starts-in`)}:{' '}
-                                <TimeRemaining end={market.maturityDate} fontSize={11} />
-                            </>
-                        }
-                        component={<MatchTimeLabel>{formatShortDateWithTime(market.maturityDate)} </MatchTimeLabel>}
-                    />
-                    {isFifaWCGame(market.leagueId) && (
-                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
-                    )}
-                    {isIIHFWCGame(market.leagueId) && (
-                        <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
-                    )}
-                    {isUEFAGame(Number(market.leagueId)) && (
-                        <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
-                    )}
-                    <MatchTimeLabel>
-                        {(isEnetpulseSport || isJsonOddsSport) &&
-                        !isFifaWCGame(market.leagueId) &&
-                        !isUEFAGame(Number(market.leagueId)) &&
-                        (liveResultInfo || localStorage.getItem(market.gameId)) &&
-                        !isMarketSelected ? (
-                            <>
-                                {localStorage.getItem(market.gameId)}
-                                {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.leagueId)) && (
-                                    <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
-                                )}
-                            </>
-                        ) : (
-                            ''
+                    <FlexDivStart>
+                        <Tooltip
+                            overlay={
+                                <>
+                                    {t(`markets.market-card.starts-in`)}:{' '}
+                                    <TimeRemaining end={market.maturityDate} fontSize={11} />
+                                </>
+                            }
+                            component={
+                                <MatchTimeLabel selected={selected}>
+                                    {formatShortDateWithTime(market.maturityDate)}{' '}
+                                </MatchTimeLabel>
+                            }
+                        />
+                        {isFifaWCGame(market.leagueId) && (
+                            <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
                         )}
-                    </MatchTimeLabel>
+                        {isIIHFWCGame(market.leagueId) && (
+                            <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
+                        )}
+                        {isUEFAGame(Number(market.leagueId)) && (
+                            <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
+                        )}
+                        <MatchTimeLabel selected={selected}>
+                            {(isEnetpulseSport || isJsonOddsSport) &&
+                            !isFifaWCGame(market.leagueId) &&
+                            !isUEFAGame(Number(market.leagueId)) &&
+                            (liveResultInfo || localStorage.getItem(market.gameId)) &&
+                            !isThreeWayView &&
+                            !isMarketSelected ? (
+                                <>
+                                    {localStorage.getItem(market.gameId)}
+                                    {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.leagueId)) && (
+                                        <Tooltip
+                                            overlay={t(`common.tennis-tooltip`)}
+                                            iconFontSize={12}
+                                            marginLeft={2}
+                                        />
+                                    )}
+                                </>
+                            ) : (
+                                ''
+                            )}
+                        </MatchTimeLabel>
+                    </FlexDivStart>
                     <TeamsInfoConatiner>
-                        <TeamLogosConatiner>
+                        <TeamLogosConatiner isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
                             <ClubLogo
                                 height={
                                     market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '17px' : ''
@@ -175,6 +210,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
                                 alt="Home team logo"
                                 src={homeLogoSrc}
                                 onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
+                                isColumnView={isColumnView}
                             />
                             {!market.isOneSideMarket && (
                                 <>
@@ -193,54 +229,96 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
                                         src={awayLogoSrc}
                                         onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
                                         awayTeam={true}
+                                        isColumnView={isColumnView}
                                     />
                                 </>
                             )}
                         </TeamLogosConatiner>
-                        <TeamNamesConatiner>
-                            <TeamNameLabel>
+                        <TeamNamesConatiner isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
+                            <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
                                 {market.isOneSideMarket
                                     ? fixOneSideMarketCompetitorName(market.homeTeam)
                                     : market.homeTeam}
                             </TeamNameLabel>
-                            {!market.isOneSideMarket && <TeamNameLabel>{market.awayTeam}</TeamNameLabel>}
+                            {!market.isOneSideMarket && (
+                                <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                    {market.awayTeam}
+                                </TeamNameLabel>
+                            )}
                         </TeamNamesConatiner>
                     </TeamsInfoConatiner>
                 </MatchInfoConatiner>
-                {showOdds && <PositionsV2 markets={[market]} betType={BetType.WINNER} showOdds={false} hideArrow />}
-                {isGameRegularlyResolved ? (
-                    <ResultWrapper>
-                        <ResultLabel>
-                            {!market.isOneSideMarket ? `${t('markets.market-card.result')}:` : ''}
-                        </ResultLabel>
-                        <Result>
-                            {market.isOneSideMarket
-                                ? market.homeScore == 1
-                                    ? t('markets.market-card.race-winner')
-                                    : t('markets.market-card.no-win')
-                                : Number(market.leagueId) != 9007
-                                ? `${market.homeScore} - ${market.awayScore}`
-                                : ''}
-                            {Number(market.leagueId) == 9007 ? (
-                                <>
-                                    {Number(market.homeScore) > 0
-                                        ? `W - L (R${market.homeScore})`
-                                        : `L - W (R${market.awayScore})`}
-                                </>
-                            ) : (
-                                ''
-                            )}
-                        </Result>
-                    </ResultWrapper>
+                {showOdds ? (
+                    <>
+                        <PositionsV2
+                            markets={[market]}
+                            betType={BetType.WINNER}
+                            showOdds={false}
+                            isMainPageView
+                            isColumnView={isColumnView}
+                        />
+                        {isColumnView && firstSpreadMarket && (
+                            <PositionsV2
+                                markets={[firstSpreadMarket]}
+                                betType={BetType.SPREAD}
+                                showOdds={false}
+                                isMainPageView
+                                isColumnView={isColumnView}
+                            />
+                        )}
+                        {isColumnView && firstTotalMarket && (
+                            <PositionsV2
+                                markets={[firstTotalMarket]}
+                                betType={BetType.TOTAL}
+                                showOdds={false}
+                                isMainPageView
+                                isColumnView={isColumnView}
+                            />
+                        )}
+                        {marketsCount > 0 && (
+                            <MarketsCountWrapper onClick={() => dispatch(setSelectedMarket(market.gameId))}>
+                                {`+${marketsCount}`}
+                                <Arrow className={'icon icon--arrow-down'} />
+                            </MarketsCountWrapper>
+                        )}
+                    </>
                 ) : (
-                    <MatchStatus
-                        isPendingResolution={isPendingResolution}
-                        liveResultInfo={liveResultInfo}
-                        isCanceled={market.isCanceled}
-                        isPaused={market.isPaused}
-                        isEnetpulseSport={isEnetpulseSport}
-                        isJsonOddsSport={isJsonOddsSport}
-                    />
+                    <>
+                        {isGameRegularlyResolved ? (
+                            <ResultWrapper>
+                                <ResultLabel>
+                                    {!market.isOneSideMarket ? `${t('markets.market-card.result')}:` : ''}
+                                </ResultLabel>
+                                <Result>
+                                    {market.isOneSideMarket
+                                        ? market.homeScore == 1
+                                            ? t('markets.market-card.race-winner')
+                                            : t('markets.market-card.no-win')
+                                        : Number(market.leagueId) != 9007
+                                        ? `${market.homeScore} - ${market.awayScore}`
+                                        : ''}
+                                    {Number(market.leagueId) == 9007 ? (
+                                        <>
+                                            {Number(market.homeScore) > 0
+                                                ? `W - L (R${market.homeScore})`
+                                                : `L - W (R${market.awayScore})`}
+                                        </>
+                                    ) : (
+                                        ''
+                                    )}
+                                </Result>
+                            </ResultWrapper>
+                        ) : (
+                            <MatchStatus
+                                isPendingResolution={isPendingResolution}
+                                liveResultInfo={liveResultInfo}
+                                isCanceled={market.isCanceled}
+                                isPaused={market.isPaused}
+                                isEnetpulseSport={isEnetpulseSport}
+                                isJsonOddsSport={isJsonOddsSport}
+                            />
+                        )}
+                    </>
                 )}
             </MainContainer>
         </Wrapper>

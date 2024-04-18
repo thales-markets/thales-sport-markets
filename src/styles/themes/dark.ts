@@ -134,7 +134,7 @@ export default {
     oddsContainerBackground: {
         primary: Colors.NAVY_BLUE,
         secondary: Colors.NAVY_BLUE_DARK,
-        tertiary: Colors.GRAY_RESOLVED,
+        tertiary: Colors.NAVY_BLUE_EXTRA_DARK,
     },
     oddsGradiendBackground: {
         primary: Colors.GRAY_GRADIENT_1,
