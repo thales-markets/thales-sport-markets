@@ -23,7 +23,16 @@ import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
+import {
+    getDateFilter,
+    getGlobalFilter,
+    getMarketSearch,
+    getSportFilter,
+    setDateFilter,
+    setGlobalFilter,
+    setMarketSearch,
+    setSportFilter,
+} from 'redux/modules/market';
 import { setSGPFees } from 'redux/modules/parlay';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
@@ -72,14 +81,12 @@ const Home: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
+    const dateFilter = useSelector((state: RootState) => getDateFilter(state));
+    const globalFilter = useSelector((state: RootState) => getGlobalFilter(state));
+    const sportFilter = useSelector((state: RootState) => getSportFilter(state));
     const location = useLocation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
-    const [globalFilter, setGlobalFilter] = useLocalStorage<GlobalFiltersEnum>(
-        LOCAL_STORAGE_KEYS.FILTER_GLOBAL,
-        GlobalFiltersEnum.OpenMarkets
-    );
-    const [sportFilter, setSportFilter] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_SPORT, SportFilterEnum.All);
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
@@ -115,8 +122,6 @@ const Home: React.FC = () => {
     const [tagFilter, setTagFilter] = useLocalStorage<Tags>(LOCAL_STORAGE_KEYS.FILTER_TAGS, []);
     const [availableTags, setAvailableTags] = useState<Tags>(tagsList);
 
-    const [dateFilter, setDateFilter] = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
-
     const [sportParam, setSportParam] = useQueryParam('sport', '');
     const [globalFilterParam, setGlobalFilterParam] = useQueryParam('globalFilter', '');
     const [searchParam, setSearchParam] = useQueryParam('searchParam', '');
@@ -127,7 +132,7 @@ const Home: React.FC = () => {
 
     const calculateDate = (hours: number, endOfDay?: boolean) => {
         const calculatedDate = addHoursToCurrentDate(hours, endOfDay);
-        setDateFilter(calculatedDate.getTime());
+        dispatch(setDateFilter(calculatedDate.getTime()));
     };
 
     useEffect(
@@ -141,9 +146,9 @@ const Home: React.FC = () => {
                 resetFilters();
             }
 
-            sportParam != '' ? setSportFilter(sportParam as SportFilterEnum) : setSportParam(sportFilter);
+            sportParam != '' ? dispatch(setSportFilter(sportParam as SportFilterEnum)) : setSportParam(sportFilter);
             globalFilterParam != ''
-                ? setGlobalFilter(globalFilterParam as GlobalFiltersEnum)
+                ? dispatch(setGlobalFilter(globalFilterParam as GlobalFiltersEnum))
                 : setGlobalFilterParam(globalFilter);
             if (dateParam != '') {
                 if (dateParam.includes('hour')) {
@@ -162,7 +167,7 @@ const Home: React.FC = () => {
                 } else {
                     const formattedDate = new Date(dateParam);
                     formattedDate.setHours(23, 59, 59, 999);
-                    setDateFilter(formattedDate);
+                    dispatch(setDateFilter(formattedDate));
                 }
             } else {
                 if (dateFilter == addHoursToCurrentDate(72, true).getTime()) {
@@ -241,7 +246,6 @@ const Home: React.FC = () => {
 
                 if (dateFilter !== 0) {
                     if (typeof dateFilter === 'number') {
-                        console.log(market.maturityDate);
                         if (market.maturityDate.getTime() > dateFilter) {
                             return false;
                         }
@@ -347,28 +351,17 @@ const Home: React.FC = () => {
     }, [openMarketsCountPerTag, favouriteLeagues]);
 
     const resetFilters = useCallback(() => {
-        setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
+        dispatch(setGlobalFilter(GlobalFiltersEnum.OpenMarkets));
         setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
-        setSportFilter(SportFilterEnum.All);
+        dispatch(setSportFilter(SportFilterEnum.All));
         setSportParam(SportFilterEnum.All);
-        setDateFilter(0);
+        dispatch(setDateFilter(0));
         setDateParam('');
         setTagFilter([]);
         setTagParam('');
         setSearchParam('');
         dispatch(setMarketSearch(''));
-    }, [
-        dispatch,
-        setDateFilter,
-        setGlobalFilter,
-        setSportFilter,
-        setTagFilter,
-        setDateParam,
-        setGlobalFilterParam,
-        setSearchParam,
-        setSportParam,
-        setTagParam,
-    ]);
+    }, [dispatch, setTagFilter, setDateParam, setGlobalFilterParam, setSearchParam, setSportParam, setTagParam]);
 
     useEffect(() => {
         if (location.state === RESET_STATE) {
@@ -436,12 +429,12 @@ const Home: React.FC = () => {
                                             sport={filterItem}
                                             onClick={() => {
                                                 if (filterItem !== sportFilter) {
-                                                    setSportFilter(filterItem);
+                                                    dispatch(setSportFilter(filterItem));
                                                     setSportParam(filterItem);
                                                     setTagFilter([]);
                                                     setTagParam('');
                                                     if (filterItem === SportFilterEnum.All) {
-                                                        setDateFilter(0);
+                                                        dispatch(setDateFilter(0));
                                                         setDateParam('');
                                                         setAvailableTags(tagsList);
                                                     } else {
@@ -460,7 +453,7 @@ const Home: React.FC = () => {
                                                         }
                                                     }
                                                 } else {
-                                                    setSportFilter(SportFilterEnum.All);
+                                                    dispatch(setSportFilter(SportFilterEnum.All));
                                                     setSportParam(SportFilterEnum.All);
                                                     setTagFilter([]);
                                                     setTagParam('');
@@ -489,9 +482,9 @@ const Home: React.FC = () => {
                     </SportFiltersContainer>
                     <GlobalFiltersContainer>
                         <GlobalFilters
-                            setDateFilter={setDateFilter}
+                            setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
                             setDateParam={setDateParam}
-                            setGlobalFilter={setGlobalFilter}
+                            setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
                             setGlobalFilterParam={setGlobalFilterParam}
                             globalFilter={globalFilter}
                             dateFilter={dateFilter}
@@ -571,12 +564,12 @@ const Home: React.FC = () => {
                                             sport={filterItem}
                                             onClick={() => {
                                                 if (filterItem !== sportFilter) {
-                                                    setSportFilter(filterItem);
+                                                    dispatch(setSportFilter(filterItem));
                                                     setSportParam(filterItem);
                                                     setTagFilter([]);
                                                     setTagParam('');
                                                     if (filterItem === SportFilterEnum.All) {
-                                                        setDateFilter(0);
+                                                        dispatch(setDateFilter(0));
                                                         setDateParam('');
                                                         setAvailableTags(tagsList);
                                                     } else {
@@ -595,7 +588,7 @@ const Home: React.FC = () => {
                                                         }
                                                     }
                                                 } else {
-                                                    setSportFilter(SportFilterEnum.All);
+                                                    dispatch(setSportFilter(SportFilterEnum.All));
                                                     setSportParam(SportFilterEnum.All);
                                                     setTagFilter([]);
                                                     setTagParam('');
@@ -634,7 +627,7 @@ const Home: React.FC = () => {
                                 sportFilter={sportFilter}
                                 setTagFilter={setTagFilter}
                                 setTagParam={setTagParam}
-                                setSportFilter={setSportFilter}
+                                setSportFilter={(filter: SportFilterEnum) => dispatch(setSportFilter(filter))}
                                 setSportParam={setSportParam}
                                 setAvailableTags={setAvailableTags}
                                 tagsList={tagsList}
@@ -644,13 +637,13 @@ const Home: React.FC = () => {
                                 marketSearch={marketSearch}
                                 globalFilter={globalFilter}
                                 tagFilter={tagFilter}
-                                setDateFilter={setDateFilter}
+                                setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
                                 setDateParam={setDateParam}
-                                setGlobalFilter={setGlobalFilter}
+                                setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
                                 setGlobalFilterParam={setGlobalFilterParam}
                                 setTagFilter={setTagFilter}
                                 setTagParam={setTagParam}
-                                setSportFilter={setSportFilter}
+                                setSportFilter={(filter: SportFilterEnum) => dispatch(setSportFilter(filter))}
                                 setSportParam={setSportParam}
                                 setSearchParam={setSearchParam}
                             />
@@ -658,9 +651,9 @@ const Home: React.FC = () => {
                     )}
                     {!isMobile && (
                         <GlobalFilters
-                            setDateFilter={setDateFilter}
+                            setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
                             setDateParam={setDateParam}
-                            setGlobalFilter={setGlobalFilter}
+                            setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
                             setGlobalFilterParam={setGlobalFilterParam}
                             globalFilter={globalFilter}
                             dateFilter={dateFilter}
@@ -863,7 +856,7 @@ const CheckboxContainer = styled.div<{ isMobile: boolean }>`
     margin-left: ${(props) => (props.isMobile ? '34px' : '6px')};
     margin-top: 15px;
     label {
-        color: ${(props) => props.theme.textColor.secondary};
+        color: ${(props) => props.theme.textColor.quinary};
         font-size: ${(props) => (props.isMobile ? '17px' : '12px')};
         line-height: ${(props) => (props.isMobile ? '19px' : '13px')};
         font-weight: 600;

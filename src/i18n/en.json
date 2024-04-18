@@ -1,5 +1,6 @@
 {
     "common": {
+        "settings": "Settings",
         "winner": "Winner",
         "buy-side": "BUY",
         "sell-side": "SELL",
@@ -74,6 +75,7 @@
             }
         },
         "referral": {
+            "header-label": "Refer & earn",
             "link-copied": "Referral link copied!",
             "button": {
                 "label": "Refer and earn",
@@ -914,6 +916,7 @@
         "top-up-eth-tooltip": "Your ETH gas balance is low.\n\nPlease deposit more ETH or swap other deposited tokens for more ETH"
     },
     "get-started": {
+        "start-tour": "Start tour",
         "sign-up": "Sign Up",
         "log-in": "Log in",
         "sign-out": "Sign out",

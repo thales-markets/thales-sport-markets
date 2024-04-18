@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
-export const FlexDiv = styled.div`
+export const FlexDiv = styled.div<{ gap?: number }>`
     display: flex;
+    gap: ${(props) => (props.gap ? `${props.gap}px` : '0')};
 `;
 
 export const FlexDivCentered = styled(FlexDiv)`
@@ -60,6 +61,7 @@ export const Colors = {
     GREEN: '#5FC694',
 
     BLUE: '#3FD1FF',
+    SHADOW_BLUE: '#7983A9',
 
     RED: '#e26a78',
 

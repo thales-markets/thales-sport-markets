@@ -63,8 +63,8 @@ const Wrapper = styled(FlexDivStart)<{ marginBottom?: number; isMobile: boolean 
 const Input = styled.input<{ width?: number; isMobile: boolean }>`
     background: ${(props) => props.theme.background.primary};
     border-radius: 5px;
-    border: 1px solid ${(props) => props.theme.borderColor.quaternary};
-    color: ${(props) => props.theme.textColor.quaternary};
+    border: 1px solid ${(props) => props.theme.textColor.quinary};
+    color: ${(props) => props.theme.textColor.quinary};
     width: ${(props) => (props.isMobile ? '100%' : props.width + 'px' || 250 + 'px')};
     height: ${(props) => (props.isMobile ? '100%' : '24px')};
     padding-left: 32px;
@@ -78,7 +78,7 @@ const Input = styled.input<{ width?: number; isMobile: boolean }>`
         color: ${(props) => props.theme.textColor.secondary};
     }
     &:focus {
-        border: 1px solid ${(props) => props.theme.borderColor.quaternary} !important;
+        border: 1px solid ${(props) => props.theme.textColor.quinary} !important;
     }
 `;
 
@@ -93,7 +93,7 @@ const IconWrapper = styled.div<{ isMobile: boolean; isModal?: boolean }>`
 `;
 
 const SearchIcon = styled.i<{ isMobile: boolean; isModal?: boolean }>`
-    font-size: ${(props) => (props.isMobile ? (props.isModal ? '32px' : '28px') : '20px')};
+    font-size: ${(props) => (props.isMobile ? (props.isModal ? '32px' : '28px') : '22px')};
     position: absolute;
     top: ${(props) => (props.isMobile ? (props.isModal ? '-6px' : '-5px') : '-4px')};
     left: ${(props) => (props.isMobile ? '-4px' : '-3px')};

@@ -13,6 +13,7 @@ export default {
         secondary: Colors.GRAY_LIGHT,
         tertiary: Colors.GRAY,
         quaternary: Colors.BLUE,
+        quinary: Colors.SHADOW_BLUE,
     },
     borderColor: {
         primary: Colors.GRAY_LIGHT,
@@ -39,6 +40,7 @@ export default {
             primary: Colors.GREEN,
             secondary: Colors.BLUE,
             tertiary: Colors.GRAY_DARK,
+            quaternary: Colors.GRAY_LIGHT,
         },
     },
     input: {

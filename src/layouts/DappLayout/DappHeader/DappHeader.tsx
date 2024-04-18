@@ -1,4 +1,3 @@
-import burger from 'assets/images/burger.svg';
 import Button from 'components/Button';
 import Logo from 'components/Logo';
 import NavMenu from 'components/NavMenu';
@@ -9,8 +8,8 @@ import Search from 'components/Search';
 import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
-import React, { useRef, useState } from 'react';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,12 +24,33 @@ import {
     setWalletConnectModalVisibility,
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { useTheme } from 'styled-components';
+import { FlexDivCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
+import TimeFilters from './components/TimeFilters';
 import TopUp from './components/TopUp';
+import {
+    Container,
+    Count,
+    HeaderIcon,
+    HeaderLabel,
+    IconWrapper,
+    LeftContainer,
+    LogoContainer,
+    MenuIcon,
+    MenuIconContainer,
+    MiddleContainer,
+    MobileButtonWrapper,
+    NotificationCount,
+    ReferAndEarn,
+    RightContainer,
+    SearchContainer,
+    SearchIcon,
+    SearchIconContainer,
+    WrapperMobile,
+} from './styled-components';
 
 const PULSING_COUNT = 10;
 
@@ -123,34 +143,30 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
+                    </LeftContainer>
+                    <MiddleContainer>
+                        <SPAAnchor href={buildHref(ROUTES.Referral)}>
+                            <ReferAndEarn>{t('common.referral.header-label')}</ReferAndEarn>
+                        </SPAAnchor>
                         {isWalletConnected && isMarketsPage && (
-                            <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Wizard)}>
-                                <Button
-                                    backgroundColor={theme.background.primary}
-                                    textColor={theme.button.textColor.quaternary}
-                                    borderColor={theme.button.borderColor.secondary}
-                                    width="150px"
-                                    fontWeight="400"
-                                    additionalStyles={{
-                                        borderRadius: '20px',
-                                        fontWeight: '700',
-                                        fontSize: '14px',
-                                        textTransform: 'capitalize',
-                                        marginLeft: '20px',
-                                    }}
-                                    height="28px"
-                                >
-                                    {t('get-started.get-started')}
-                                </Button>
+                            <SPAAnchor href={buildHref(ROUTES.Wizard)}>
+                                <HeaderIcon className="icon icon--profile" />
+                                <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
                             </SPAAnchor>
                         )}
-                    </LeftContainer>
+                        <TimeFilters />
+                        {isWalletConnected && <ProfileItem />}
+                        <SPAAnchor href={buildHref(ROUTES.Wizard)}>
+                            <HeaderIcon className="icon icon--profile" />
+                            <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                        </SPAAnchor>
+                    </MiddleContainer>
                     <RightContainer>
                         {!isWalletConnected && (
                             <Button
                                 backgroundColor={'transparent'}
-                                textColor={theme.button.textColor.quaternary}
-                                borderColor={theme.button.borderColor.secondary}
+                                textColor={theme.button.borderColor.quaternary}
+                                borderColor={theme.button.borderColor.quaternary}
                                 width="150px"
                                 fontWeight="400"
                                 additionalStyles={{
@@ -173,15 +189,16 @@ const DappHeader: React.FC = () => {
                         )}
                         {!isWalletConnected && (
                             <Button
-                                backgroundColor={theme.button.background.quaternary}
+                                backgroundColor={theme.button.background.tertiary}
                                 textColor={theme.button.textColor.primary}
-                                borderColor={theme.button.borderColor.secondary}
+                                borderColor={theme.button.borderColor.quaternary}
                                 fontWeight="400"
                                 additionalStyles={{
                                     borderRadius: '15.5px',
                                     fontWeight: '700',
                                     fontSize: '14px',
                                     marginRight: '5px',
+                                    padding: '3px 20px',
                                 }}
                                 width="150px"
                                 height="28px"
@@ -199,7 +216,6 @@ const DappHeader: React.FC = () => {
                         )}
                         <TopUp />
                         <WalletInfo />
-                        {isWalletConnected && <ProfileItem />}
                         <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
                         <NavMenu
                             visibility={navMenuVisibility}
@@ -323,145 +339,5 @@ const DappHeader: React.FC = () => {
         </>
     );
 };
-
-const Container = styled(FlexDivRowCentered)`
-    width: 100%;
-    margin-top: 10px;
-    @media (max-width: 767px) {
-        flex-direction: column;
-    }
-    @keyframes pulsing {
-        0% {
-            transform: scale(1);
-            opacity: 1;
-        }
-        50% {
-            transform: scale(1.2);
-            @media (max-width: 767px) {
-                transform: scale(1.1);
-            }
-
-            opacity: 1;
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-`;
-
-const LeftContainer = styled(FlexDivRowCentered)``;
-
-const RightContainer = styled(FlexDivRowCentered)`
-    @media (max-width: 767px) {
-        flex-direction: column;
-    }
-    > div {
-        :not(:last-child) {
-            margin-right: 20px;
-            @media (max-width: 767px) {
-                margin-right: 0px;
-                margin-bottom: 10px;
-            }
-        }
-    }
-`;
-
-const MenuIcon = styled.img.attrs({ src: burger })`
-    cursor: pointer;
-    height: 25px;
-    width: 35px;
-    filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
-`;
-
-const WrapperMobile = styled(FlexDivRow)`
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-`;
-
-const SearchIconContainer = styled.div`
-    width: 50%;
-    display: flex;
-    justify-content: end;
-    position: absolute;
-    right: 12px;
-`;
-
-const MenuIconContainer = styled.div`
-    width: 50%;
-    display: flex;
-    justify-content: start;
-    position: absolute;
-    left: 12px;
-    margin-top: 10px;
-`;
-
-const LogoContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-`;
-
-const IconWrapper = styled.div`
-    border-radius: 30px;
-    background: ${(props) => props.theme.background.tertiary};
-    width: 32px;
-    height: 32px;
-    position: absolute;
-    top: -10px;
-`;
-
-const SearchIcon = styled.i`
-    font-size: 40px;
-    cursor: pointer;
-    margin-bottom: 3px;
-    position: absolute;
-    top: -7px;
-    left: -6px;
-    &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0042';
-        color: ${(props) => props.theme.background.primary};
-    }
-`;
-
-const SearchContainer = styled.div`
-    background: ${(props) => props.theme.background.secondary};
-    height: 100%;
-    text-align: center;
-    margin-right: 2px;
-`;
-
-const NotificationCount = styled.div`
-    position: absolute;
-    border-radius: 50%;
-    bottom: -8px;
-    left: 24px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    height: 16px;
-    width: 16px;
-    background-color: ${(props) => props.theme.background.quaternary};
-    box-shadow: ${(props) => props.theme.shadow.notification};
-`;
-
-const Count = styled.span`
-    color: ${(props) => props.theme.button.textColor.primary};
-    font-weight: 800;
-    font-size: 12px;
-`;
-
-const MobileButtonWrapper = styled(FlexDivRowCentered)`
-    width: 100%;
-    margin-top: 10px;
-    gap: 20px;
-    min-height: 32px;
-    @media (max-width: 767px) {
-        min-height: 28px;
-    }
-`;
 
 export default DappHeader;

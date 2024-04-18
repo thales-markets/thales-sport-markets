@@ -1,15 +1,12 @@
-import CalendarDatepicker from 'components/CalendarDatepicker';
 import Dropdown from 'components/Dropdown';
 import { ODDS_TYPES } from 'constants/markets';
 import { GlobalFiltersEnum, OddsType, SportFilterEnum } from 'enums/markets';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOddsType, setOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { addHoursToCurrentDate } from 'thales-utils';
-import { getQueryStringVal } from 'utils/useQueryParams';
 
 type GlobalFiltersProps = {
     setDateFilter: (value: any) => void;
@@ -44,41 +41,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
         },
         [dispatch]
     );
-
-    useEffect(() => {
-        if (sportFilter == SportFilterEnum.All) {
-            setSelectedPeriod(0);
-        }
-    }, [sportFilter]);
-
-    useEffect(() => {
-        if (typeof dateFilter != 'number') {
-            setSelectedPeriod(0);
-        }
-    }, [dateFilter]);
-
-    useEffect(() => {
-        setSelectedPeriod(0);
-    }, [globalFilter]);
-
-    useEffect(() => {
-        if (typeof dateFilter == 'number') {
-            const dateParam = getQueryStringVal('date');
-            const timeFilter = dateParam?.split('h')[0];
-            switch (timeFilter) {
-                case '12':
-                    setSelectedPeriod(12);
-                    break;
-                case '24':
-                    setSelectedPeriod(24);
-                    break;
-                case '72':
-                    setSelectedPeriod(72);
-                    break;
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <Container>
@@ -116,69 +78,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         </DropdownContrainer>
                     )}
                 </FilterTypeContainer>
-                <Separator isMobile={isMobile} />
-                <FilterTypeContainer isMobile={isMobile} timeFilters={true}>
-                    <TimeFilterContainer
-                        selected={selectedPeriod == 12}
-                        isMobile={isMobile}
-                        onClick={() => {
-                            if (selectedPeriod == 12) {
-                                setDateFilter(0);
-                                setDateParam('');
-                                setSelectedPeriod(0);
-                            } else {
-                                const calculatedDate = addHoursToCurrentDate(12);
-                                setDateFilter(calculatedDate.getTime());
-                                setDateParam('12hours');
-                                setSelectedPeriod(12);
-                            }
-                        }}
-                    >
-                        <Circle isMobile={isMobile} />
-                        <Label>12h</Label>
-                    </TimeFilterContainer>
-                    <TimeFilterContainer
-                        selected={selectedPeriod == 24}
-                        isMobile={isMobile}
-                        onClick={() => {
-                            if (selectedPeriod == 24) {
-                                setDateFilter(0);
-                                setDateParam('');
-                                setSelectedPeriod(0);
-                            } else {
-                                const calculatedDate = addHoursToCurrentDate(24);
-                                setDateFilter(calculatedDate.getTime());
-                                setDateParam('24hours');
-                                setSelectedPeriod(24);
-                            }
-                        }}
-                    >
-                        <Circle isMobile={isMobile} />
-                        <Label>24h</Label>
-                    </TimeFilterContainer>
-                    <TimeFilterContainer
-                        selected={selectedPeriod == 72}
-                        isMobile={isMobile}
-                        onClick={() => {
-                            if (selectedPeriod == 72) {
-                                setDateFilter(0);
-                                setDateParam('');
-                                setSelectedPeriod(0);
-                            } else {
-                                const calculatedDate = addHoursToCurrentDate(72, true);
-                                setDateFilter(calculatedDate.getTime());
-                                setDateParam('72hours');
-                                setSelectedPeriod(72);
-                            }
-                        }}
-                    >
-                        <Circle isMobile={isMobile} />
-                        <Label>3d</Label>
-                    </TimeFilterContainer>
-                    {!isMobile && (
-                        <CalendarDatepicker date={dateFilter} setDate={setDateFilter} setDateParam={setDateParam} />
-                    )}
-                </FilterTypeContainer>
             </Filters>
         </Container>
     );
@@ -212,11 +111,11 @@ const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
 `;
 
 const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean; isMobile?: boolean }>`
-    width: ${(props) => (props.isMobile ? '100%' : '70%')};
     justify-content: space-around;
     align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
     flex-direction: ${(props) => (props.isMobile && !props.timeFilters ? 'column' : 'row')};
     height: ${(props) => (props.isMobile && props.timeFilters ? '120px' : '')};
+    flex: 1;
 `;
 
 const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
