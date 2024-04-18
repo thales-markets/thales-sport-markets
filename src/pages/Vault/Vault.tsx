@@ -40,7 +40,6 @@ import networkConnector from 'utils/networkConnector';
 import { refetchVaultData } from 'utils/queryConnector';
 import { buildHref, navigateTo } from 'utils/routes';
 import PnL from './PnL';
-import Transactions from './Transactions';
 import {
     BoldContent,
     ButtonContainer,
@@ -842,13 +841,6 @@ const Vault: React.FC<VaultProps> = (props) => {
                 </RightContainer>
             </Container>
             {vaultData && <PnL vaultAddress={vaultAddress} lifetimePnl={vaultData.lifetimePnl} />}
-            {vaultData && (
-                <Transactions
-                    vaultAddress={vaultAddress}
-                    currentRound={vaultData.round}
-                    currentRoundDeposit={vaultData.allocationCurrentRound}
-                />
-            )}
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}

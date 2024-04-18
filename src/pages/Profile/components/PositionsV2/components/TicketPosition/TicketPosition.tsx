@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getParlayPayment } from 'redux/modules/parlay';
 import { getOddsType } from 'redux/modules/ui';
 import {
     getIsAA,
@@ -30,9 +29,9 @@ import { executeBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { formatParlayOdds } from 'utils/parlay';
+import { getTicketPayment } from '../../../../../../redux/modules/ticket';
 import { refetchAfterClaim } from '../../../../../../utils/queryConnector';
-import { getTicketMarketOdd } from '../../../../../../utils/tickets';
+import { formatTicketOdds, getTicketMarketOdd } from '../../../../../../utils/tickets';
 import { ShareTicketModalProps } from '../../../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 import { CollateralSelectorContainer } from '../../../Positions/components/SinglePosition/styled-components';
 import {
@@ -87,8 +86,8 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
     const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const parlayPayment = useSelector(getParlayPayment);
-    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
+    const ticketPayment = useSelector(getTicketPayment);
+    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const [hasAllowance, setHasAllowance] = useState(false);
@@ -393,7 +392,7 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                 <CollapseFooterContainer>
                     <TotalQuoteContainer>
                         <Label>{t('profile.card.total-quote')}:</Label>
-                        <Value>{formatParlayOdds(selectedOddsType, ticket.buyInAmount, ticket.payout)}</Value>
+                        <Value>{formatTicketOdds(selectedOddsType, ticket.buyInAmount, ticket.payout)}</Value>
                     </TotalQuoteContainer>
                     <ProfitContainer>
                         {isClaimable ? (

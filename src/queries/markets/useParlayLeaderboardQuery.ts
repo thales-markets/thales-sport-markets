@@ -3,14 +3,10 @@ import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { ParlayMarketWithRank } from 'types/markets';
+// import { ParlayMarketWithRank } from 'types/markets';
 
-export const useParlayLeaderboardQuery = (
-    networkId: Network,
-    period: number,
-    options?: UseQueryOptions<ParlayMarketWithRank[]>
-) => {
-    return useQuery<ParlayMarketWithRank[]>(
+export const useParlayLeaderboardQuery = (networkId: Network, period: number, options?: UseQueryOptions<any[]>) => {
+    return useQuery<any[]>(
         QUERY_KEYS.ParlayLeaderboard(networkId, period),
         async () => {
             try {

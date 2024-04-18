@@ -1,6 +1,3 @@
-import { VaultTradeStatus } from 'enums/vault';
-import { ParlayMarket, SportMarketInfo } from './markets';
-
 export type VaultData = {
     round: number;
     roundEndTime: number;
@@ -40,34 +37,6 @@ export type UserVaultData = {
 export type UserVaultsData = {
     balanceTotal: number;
 };
-
-export type VaultTrade = {
-    hash: string;
-    timestamp: number;
-    amount: number;
-    paid: number;
-    blockNumber: number;
-    position: number;
-    market: string;
-    game: string;
-    result: number;
-    wholeMarket: SportMarketInfo;
-    status: VaultTradeStatus;
-    round: number;
-};
-
-export type ParlayVaultTrade = {
-    hash: string;
-    timestamp: number;
-    paid: number;
-    blockNumber: number;
-    market: string;
-    wholeMarket: ParlayMarket;
-    status: VaultTradeStatus;
-    round: number;
-};
-
-export type VaultTrades = VaultTrade[];
 
 type VaultPnlPerRound = {
     round: number | string;

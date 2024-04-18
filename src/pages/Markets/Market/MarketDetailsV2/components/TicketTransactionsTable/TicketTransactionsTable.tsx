@@ -25,9 +25,8 @@ import { getDefaultCollateral } from 'utils/collaterals';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { formatMarketOdds } from 'utils/markets';
 import { getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/marketsV2';
-import { formatParlayOdds } from 'utils/parlay';
 import { buildMarketLink } from 'utils/routes';
-import { getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
+import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
 import ShareTicketModalV2 from '../../../../Home/Parlay/components/ShareTicketModalV2';
 import { ShareTicketModalProps } from '../../../../Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 import {
@@ -194,7 +193,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('profile.table.total-quote')}:</QuoteLabel>
                                     <QuoteText>
-                                        {formatParlayOdds(
+                                        {formatTicketOdds(
                                             selectedOddsType,
                                             row.original.buyInAmount,
                                             row.original.payout

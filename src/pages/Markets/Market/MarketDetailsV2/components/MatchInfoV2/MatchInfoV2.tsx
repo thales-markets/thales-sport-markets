@@ -6,7 +6,7 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarketInfoV2, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
-import { convertFinalResultToResultType, isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
+import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import {
     Container,
     LeagueLogo,
@@ -69,10 +69,8 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                     </LeagueLogoContainer>
                     <ParticipantsContainer>
                         <ParticipantLogoContainer
-                            isWinner={
-                                isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 0
-                            }
-                            isDraw={isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 2}
+                            isWinner={isGameRegularlyResolved && market.finalResult == 0}
+                            isDraw={isGameRegularlyResolved && market.finalResult == 2}
                         >
                             <ParticipantLogo
                                 src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.leagueId)}
@@ -81,12 +79,8 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                         </ParticipantLogoContainer>
                         {!market.isOneSideMarket && (
                             <ParticipantLogoContainer
-                                isWinner={
-                                    isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 1
-                                }
-                                isDraw={
-                                    isGameRegularlyResolved && convertFinalResultToResultType(market.finalResult) == 2
-                                }
+                                isWinner={isGameRegularlyResolved && market.finalResult == 1}
+                                isDraw={isGameRegularlyResolved && market.finalResult == 2}
                                 awayTeam={true}
                             >
                                 <ParticipantLogo

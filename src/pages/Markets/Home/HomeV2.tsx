@@ -15,7 +15,6 @@ import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
-import useSGPFeesQuery from 'queries/markets/useSGPFeesQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,9 +23,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getIsMarketSelected, getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { setSGPFees } from 'redux/modules/parlay';
 import { getFavouriteLeagues } from 'redux/modules/ui';
-import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
@@ -71,7 +69,6 @@ const Home: React.FC = () => {
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
     const location = useLocation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -95,16 +92,6 @@ const Home: React.FC = () => {
     ).map((tag) => {
         return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
     });
-
-    const sgpFees = useSGPFeesQuery(networkId, {
-        enabled: isWalletConnected,
-    });
-
-    useEffect(() => {
-        if (sgpFees.isSuccess && sgpFees.data) {
-            dispatch(setSGPFees(sgpFees.data));
-        }
-    }, [dispatch, sgpFees.data, sgpFees.isSuccess]);
 
     useEffect(() => {
         if (getSelectedOddsType == undefined) {

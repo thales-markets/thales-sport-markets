@@ -11,7 +11,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getParlayPayment } from 'redux/modules/parlay';
+import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
@@ -57,8 +57,8 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const parlayPayment = useSelector(getParlayPayment);
-    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
+    const ticketPayment = useSelector(getTicketPayment);
+    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
