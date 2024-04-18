@@ -322,7 +322,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
                         )}
                     </>
                 )}
-                {marketsCount > 0 && (
+                {!isMarketSelected && (
                     <MarketsCountWrapper>
                         <SPAAnchor
                             href={buildMarketLink(
