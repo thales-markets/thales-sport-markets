@@ -205,20 +205,21 @@ const unifyBoxingMarkets = (marketsMap: Record<number, SportMarketInfoV2[]>) => 
 const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
     margin: 10px 0px 0 0;
     flex-wrap: wrap;
-    max-width: ${(props) => (props.isMarketSelected ? '192px' : '100%')};
+    max-width: ${(props) => (props.isMarketSelected ? '210px' : '100%')};
     justify-content: center;
     flex-grow: 2;
     > div {
         display: flex;
-        width: ${(props) => (props.isMarketSelected ? '192px' : '100%')};
+        max-width: ${(props) => (props.isMarketSelected ? '190px' : '100%')};
+        width: ${(props) => (props.isMarketSelected ? '190px' : '100%')};
     }
     overflow-y: auto;
-    scrollbar-width: 5px; /* Firefox */
+    overflow-x: hidden;
+    scrollbar-width: 5px; /* Firefox */n
     -ms-overflow-style: none;
     ::-webkit-scrollbar {
-        /* WebKit */
-        width: 5px;
-        height: 5px;
+        border-radius: 8px;
+        width: 10px;
     }
     @media (max-width: 950px) {
         margin: 0;
@@ -229,6 +230,7 @@ const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
             height: 0px;
         }
     }
+    height: 80vh;
 `;
 
 const ListContainer = styled.div`

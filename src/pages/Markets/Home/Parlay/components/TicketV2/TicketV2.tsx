@@ -833,7 +833,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         isEth,
     ]);
     useEffect(() => {
-        if (usdAmountValue > 0 && totalQuote > 0) {
+        if (usdAmountValue > 0 && totalQuote > 0 && false) {
             const buyInPow = Math.pow(usdAmountValue, 1 / 2);
             const minBuyInPow = 1;
 
