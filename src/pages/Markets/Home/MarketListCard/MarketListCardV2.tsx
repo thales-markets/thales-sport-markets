@@ -285,42 +285,44 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
                         )}
                     </>
                 ) : (
-                    <>
-                        {isGameRegularlyResolved ? (
-                            <ResultWrapper>
-                                <ResultLabel>
-                                    {!market.isOneSideMarket ? `${t('markets.market-card.result')}:` : ''}
-                                </ResultLabel>
-                                <Result>
-                                    {market.isOneSideMarket
-                                        ? market.homeScore == 1
-                                            ? t('markets.market-card.race-winner')
-                                            : t('markets.market-card.no-win')
-                                        : Number(market.leagueId) != 9007
-                                        ? `${market.homeScore} - ${market.awayScore}`
-                                        : ''}
-                                    {Number(market.leagueId) == 9007 ? (
-                                        <>
-                                            {Number(market.homeScore) > 0
-                                                ? `W - L (R${market.homeScore})`
-                                                : `L - W (R${market.awayScore})`}
-                                        </>
-                                    ) : (
-                                        ''
-                                    )}
-                                </Result>
-                            </ResultWrapper>
-                        ) : (
-                            <MatchStatus
-                                isPendingResolution={isPendingResolution}
-                                liveResultInfo={liveResultInfo}
-                                isCanceled={market.isCanceled}
-                                isPaused={market.isPaused}
-                                isEnetpulseSport={isEnetpulseSport}
-                                isJsonOddsSport={isJsonOddsSport}
-                            />
-                        )}
-                    </>
+                    !isMarketSelected && (
+                        <>
+                            {isGameRegularlyResolved ? (
+                                <ResultWrapper>
+                                    <ResultLabel>
+                                        {!market.isOneSideMarket ? `${t('markets.market-card.result')}:` : ''}
+                                    </ResultLabel>
+                                    <Result>
+                                        {market.isOneSideMarket
+                                            ? market.homeScore == 1
+                                                ? t('markets.market-card.race-winner')
+                                                : t('markets.market-card.no-win')
+                                            : Number(market.leagueId) != 9007
+                                            ? `${market.homeScore} - ${market.awayScore}`
+                                            : ''}
+                                        {Number(market.leagueId) == 9007 ? (
+                                            <>
+                                                {Number(market.homeScore) > 0
+                                                    ? `W - L (R${market.homeScore})`
+                                                    : `L - W (R${market.awayScore})`}
+                                            </>
+                                        ) : (
+                                            ''
+                                        )}
+                                    </Result>
+                                </ResultWrapper>
+                            ) : (
+                                <MatchStatus
+                                    isPendingResolution={isPendingResolution}
+                                    liveResultInfo={liveResultInfo}
+                                    isCanceled={market.isCanceled}
+                                    isPaused={market.isPaused}
+                                    isEnetpulseSport={isEnetpulseSport}
+                                    isJsonOddsSport={isJsonOddsSport}
+                                />
+                            )}
+                        </>
+                    )
                 )}
                 {!isMarketSelected && (
                     <MarketsCountWrapper>
