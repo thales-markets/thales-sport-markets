@@ -109,7 +109,7 @@ const Wrapper = styled(FlexDivColumn)`
         padding: 0 20px;
     }
     @media (max-width: 950px) {
-        padding-top: 10px; // remove when removing banner
+        padding-top: 10px;
     }
     @media (max-width: 767px) {
         padding: 0px 10px;
