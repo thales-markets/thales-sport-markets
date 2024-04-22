@@ -15,6 +15,7 @@ export default {
         tertiary: Colors.NAVY_BLUE,
         quaternary: Colors.BLUE,
         quinary: Colors.NAVY_BLUE_EXTRA_LIGHT,
+        senary: Colors.BLACK,
     },
     borderColor: {
         primary: Colors.NAVY_BLUE_LIGHT,
