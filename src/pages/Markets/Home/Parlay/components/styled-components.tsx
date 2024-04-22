@@ -23,8 +23,8 @@ export const RowContainer = styled(FlexDiv)`
 
 export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
     font-weight: 400;
-    font-size: 11px;
-    line-height: 27px;
+    font-size: 12px;
+    line-height: 20px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};

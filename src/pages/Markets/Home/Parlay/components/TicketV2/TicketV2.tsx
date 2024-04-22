@@ -85,11 +85,7 @@ import {
     CheckboxContainer,
     GasSummary,
     HorizontalLine,
-    InfoContainer,
-    InfoLabel,
     InfoTooltip,
-    InfoValue,
-    InfoWrapper,
     InputContainer,
     RowContainer,
     RowSummary,
@@ -947,16 +943,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     />
                 </AmountToBuyContainer>
             </InputContainer>
-            <InfoContainer>
-                <InfoWrapper>
-                    <InfoLabel>{t('markets.parlay.safebox-fee')}:</InfoLabel>
-                    <InfoValue>
-                        {parlayAmmData?.safeBoxFee === undefined || isFetching
-                            ? '-'
-                            : formatPercentage(parlayAmmData?.safeBoxFee)}
-                    </InfoValue>
-                </InfoWrapper>
-            </InfoContainer>
             {isAA && (
                 <GasSummary>
                     <SummaryLabel>

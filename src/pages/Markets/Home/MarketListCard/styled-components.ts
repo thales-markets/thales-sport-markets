@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 
 export const Wrapper = styled(FlexDivColumn)<{
     hideGame: boolean;
     isResolved: boolean;
     selected: boolean;
+    isMarketSelected: boolean;
 }>`
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
@@ -13,7 +14,7 @@ export const Wrapper = styled(FlexDivColumn)<{
     background-color: ${(props) =>
         props.selected
             ? props.theme.background.quaternary
-            : props.isResolved
+            : props.isResolved || props.isMarketSelected
             ? props.theme.background.secondary
             : props.theme.background.quinary};
     color: ${(props) =>
@@ -23,12 +24,14 @@ export const Wrapper = styled(FlexDivColumn)<{
     }
 `;
 
-export const MainContainer = styled(FlexDivRow)`
+export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean }>`
+    position: relative;
     width: 100%;
     padding: 10px 12px;
     @media (max-width: 950px) {
         padding-right: 20px;
     }
+    cursor: ${(props) => (props.isGameOpen ? 'default' : 'pointer')};
 `;
 
 export const MatchInfoConatiner = styled(FlexDivColumn)`
@@ -37,9 +40,18 @@ export const MatchInfoConatiner = styled(FlexDivColumn)`
     margin-right: 5px;
 `;
 
-export const MatchTimeLabel = styled.label<{
+export const MatchInfo = styled(FlexDivStart)<{
     selected: boolean;
 }>`
+    color: ${(props) =>
+        props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
+    i {
+        color: ${(props) =>
+            props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
+    }
+`;
+
+export const MatchInfoLabel = styled.label`
     font-size: 12px;
     font-weight: 600;
     line-height: 14px;
@@ -47,8 +59,6 @@ export const MatchTimeLabel = styled.label<{
     width: fit-content;
     margin-right: 2px;
     white-space: nowrap;
-    color: ${(props) =>
-        props.selected ? props.theme.oddsContainerBackground.tertiary : props.theme.textColor.quinary};
 `;
 
 export const TeamsInfoConatiner = styled(FlexDivRow)`
@@ -117,106 +127,17 @@ export const MarketsCountWrapper = styled(FlexDivColumnCentered)`
     cursor: pointer;
 `;
 
-export const Arrow = styled.i`
-    font-size: 14px;
+export const ExternalArrow = styled.i`
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 12px;
     color: ${(props) => props.theme.textColor.quinary};
     cursor: pointer;
 `;
 
-export const TotalMarketsContainer = styled.span`
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 117px;
-    padding-left: 9px;
-`;
-
-export const PlayerPropsLabel = styled.span`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 10px;
-    height: 20px;
-    border-radius: 30px;
-    border: 1px solid ${(props) => props.theme.background.quaternary};
-    box-shadow: 0px 0px 6.39919px 0px ${(props) => props.theme.background.quaternary};
-    color: ${(props) => props.theme.background.quaternary};
-    font-family: Roboto;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-transform: uppercase;
-`;
-
-export const TotalMarketsLabel = styled.span`
-    width: min-content;
-    font-size: 10px;
-    line-height: 105%;
-    display: flex;
-    text-align: center;
-    align-items: center;
-    text-transform: uppercase;
-    white-space: pre-line;
-    margin-right: 5px;
-`;
-
-export const TotalMarkets = styled.span`
-    width: 25px;
-    height: 25px;
-    font-size: 13px;
-    display: flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    background: ${(props) => props.theme.background.tertiary};
-    border-radius: 50%;
-    margin-right: 6px;
-`;
-
-export const TotalMarketsArrow = styled.i`
-    font-size: 18px;
-    cursor: pointer;
-`;
-
-export const OddsWrapper = styled(FlexDivRow)<{ isFirstRow?: boolean }>`
-    position: relative;
-    justify-content: flex-start;
-    flex-wrap: ${(props) => (props.isFirstRow ? 'nowrap' : 'wrap')};
-    gap: 10px;
-`;
-
-export const PlayerPropsText = styled.span`
-    color: ${(props) => props.theme.textColor.quaternary};
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    text-transform: uppercase;
-`;
-
-export const PlayerPropsContainer = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    gap: 4px;
-    align-items: center;
-    margin-left: 10px;
-    margin-top: 6px;
-`;
-
-export const PlayerPropsBubble = styled.span`
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    padding: 2px;
-    background: ${(props) => props.theme.textColor.quaternary};
-    color: ${(props) => props.theme.background.primary};
-    display: flex;
-    justify-content: center;
-    align-items: center;
+export const Arrow = styled.i`
     font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.quinary};
+    cursor: pointer;
 `;

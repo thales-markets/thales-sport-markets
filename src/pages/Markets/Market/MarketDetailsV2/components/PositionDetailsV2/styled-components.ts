@@ -6,6 +6,7 @@ export const Container = styled(FlexDivRow)<{
     selected: boolean;
     isResolved?: boolean;
     isWinner: boolean;
+    order?: string;
 }>`
     position: relative;
     align-items: center;
@@ -16,14 +17,11 @@ export const Container = styled(FlexDivRow)<{
     font-weight: 800;
     font-size: 13px;
     line-height: 16px;
-    background: ${(props) =>
-        props.selected ? props.theme.borderColor.quaternary : props.theme.oddsContainerBackground.primary};
-    color: ${(props) => (props.selected ? props.theme.oddsContainerBackground.primary : props.theme.textColor.primary)};
+    background: ${(props) => (props.selected ? props.theme.background.quaternary : props.theme.background.secondary)};
+    color: ${(props) => (props.selected ? props.theme.textColor.tertiary : props.theme.textColor.primary)};
     border: 1px solid
         ${(props) =>
-            props.selected || props.isWinner
-                ? props.theme.borderColor.quaternary
-                : props.theme.oddsContainerBackground.primary};
+            props.selected || props.isWinner ? props.theme.borderColor.quaternary : props.theme.borderColor.quinary};
     box-shadow: ${(props) => (props.isWinner ? props.theme.shadow.positionWinner : '')};
     opacity: ${(props) => (props.disabled && !props.isWinner ? '0.4' : '1')};
     cursor: ${(props) => (props.disabled ? '' : 'pointer')};
@@ -39,6 +37,7 @@ export const Container = styled(FlexDivRow)<{
             margin-right: 6px;
         }
     }
+    order: ${(props) => props.order || 'initial'};
 `;
 
 export const Text = styled.span`
@@ -55,12 +54,14 @@ export const Odd = styled.span<{
 }>`
     font-weight: 600;
     font-size: 13px;
-    color: ${(props) =>
-        props.selected ? props.theme.oddsContainerBackground.primary : props.theme.textColor.quaternary};
+    color: ${(props) => (props.selected ? props.theme.textColor.tertiary : props.theme.textColor.quaternary)};
     margin-left: 5px;
 `;
 
 export const Status = styled(Text)`
+    text-align: end;
+    width: fit-content;
+    overflow: initial;
     @media (max-width: 575px) {
         font-size: 11px;
         margin-top: 1px;
@@ -70,12 +71,6 @@ export const Status = styled(Text)`
 export const TooltipContainer = styled(FlexDivColumn)``;
 
 export const TooltipText = styled.span``;
-
-export const TooltipBonusText = styled(TooltipText)`
-    font-weight: 700;
-    margin-top: 8px;
-    color: ${(props) => props.theme.status.win};
-`;
 
 export const TooltipFooter = styled(FlexDivRow)`
     border-top: 1px solid ${(props) => props.theme.background.secondary};

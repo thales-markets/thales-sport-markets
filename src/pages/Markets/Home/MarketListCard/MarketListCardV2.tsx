@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { FlexDivStart } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarketInfoV2, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
@@ -30,10 +29,12 @@ import MatchStatus from './components/MatchStatus';
 import {
     Arrow,
     ClubLogo,
+    ExternalArrow,
     MainContainer,
     MarketsCountWrapper,
+    MatchInfo,
     MatchInfoConatiner,
-    MatchTimeLabel,
+    MatchInfoLabel,
     Result,
     ResultLabel,
     ResultWrapper,
@@ -49,7 +50,7 @@ type MarketRowCardProps = {
     language: string;
 };
 
-const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
+const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);
@@ -69,10 +70,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
     }, [market.homeTeam, market.awayTeam, market.leagueId]);
 
     const isGameStarted = market.maturityDate < new Date();
+    const isGameOpen = market.isOpen && !isGameStarted;
     const isGameResolved = market.isResolved || market.isCanceled;
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
-    const showOdds = !isPendingResolution && !isGameResolved && !market.isPaused && !isMarketSelected;
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
     const gameIdString = web3.utils.hexToAscii(market.gameId);
@@ -136,8 +137,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
 
     const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
-    const hideGame = showOdds && !areOddsValid && !areChildMarketsOddsValid;
-    const isColumnView = isThreeWayView && !isMarketSelected && market.isOpen;
+    const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
+    const isColumnView = isThreeWayView && !isMarketSelected && isGameOpen;
     const isTwoPositionalMarket = market.odds.length === 2;
     const selected = selectedMarket == market.gameId;
 
@@ -151,141 +152,141 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
         }
     }
 
-    return (
-        <Wrapper hideGame={hideGame} isResolved={isGameRegularlyResolved} selected={selected}>
-            <MainContainer>
-                <MatchInfoConatiner onClick={() => dispatch(setSelectedMarket(market.gameId))}>
-                    <FlexDivStart>
-                        <Tooltip
-                            overlay={
-                                <>
-                                    {t(`markets.market-card.starts-in`)}:{' '}
-                                    <TimeRemaining end={market.maturityDate} fontSize={11} />
-                                </>
-                            }
-                            component={
-                                <MatchTimeLabel selected={selected}>
-                                    {formatShortDateWithTime(market.maturityDate)}{' '}
-                                </MatchTimeLabel>
-                            }
-                        />
-                        {isFifaWCGame(market.leagueId) && (
-                            <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
+    const getMainContainerContent = () => (
+        <MainContainer isGameOpen={isGameOpen}>
+            <MatchInfoConatiner onClick={() => (isGameOpen ? dispatch(setSelectedMarket(market.gameId)) : {})}>
+                <MatchInfo selected={selected}>
+                    <Tooltip
+                        overlay={
+                            <>
+                                {t(`markets.market-card.starts-in`)}:{' '}
+                                <TimeRemaining end={market.maturityDate} fontSize={11} />
+                            </>
+                        }
+                        component={<MatchInfoLabel>{formatShortDateWithTime(market.maturityDate)} </MatchInfoLabel>}
+                    />
+                    {isFifaWCGame(market.leagueId) && (
+                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
+                    )}
+                    {isIIHFWCGame(market.leagueId) && (
+                        <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
+                    )}
+                    {isUEFAGame(market.leagueId) && (
+                        <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
+                    )}
+                    <MatchInfoLabel>
+                        {(isEnetpulseSport || isJsonOddsSport) &&
+                        !isFifaWCGame(market.leagueId) &&
+                        !isUEFAGame(market.leagueId) &&
+                        (liveResultInfo || localStorage.getItem(market.gameId)) &&
+                        !isThreeWayView &&
+                        !isMarketSelected ? (
+                            <>
+                                {localStorage.getItem(market.gameId)}
+                                {SPORTS_TAGS_MAP['Tennis'].includes(market.leagueId) && (
+                                    <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
+                                )}
+                            </>
+                        ) : (
+                            ''
                         )}
-                        {isIIHFWCGame(market.leagueId) && (
-                            <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
-                        )}
-                        {isUEFAGame(Number(market.leagueId)) && (
-                            <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
-                        )}
-                        <MatchTimeLabel selected={selected}>
-                            {(isEnetpulseSport || isJsonOddsSport) &&
-                            !isFifaWCGame(market.leagueId) &&
-                            !isUEFAGame(Number(market.leagueId)) &&
-                            (liveResultInfo || localStorage.getItem(market.gameId)) &&
-                            !isThreeWayView &&
-                            !isMarketSelected ? (
-                                <>
-                                    {localStorage.getItem(market.gameId)}
-                                    {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.leagueId)) && (
-                                        <Tooltip
-                                            overlay={t(`common.tennis-tooltip`)}
-                                            iconFontSize={12}
-                                            marginLeft={2}
-                                        />
-                                    )}
-                                </>
-                            ) : (
-                                ''
-                            )}
-                        </MatchTimeLabel>
-                    </FlexDivStart>
-                    <TeamsInfoConatiner>
-                        <TeamLogosConatiner isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
-                            <ClubLogo
-                                height={
-                                    market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '17px' : ''
-                                }
-                                width={
-                                    market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '27px' : ''
-                                }
-                                alt="Home team logo"
-                                src={homeLogoSrc}
-                                onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
-                                isColumnView={isColumnView}
-                            />
-                            {!market.isOneSideMarket && (
-                                <>
-                                    <ClubLogo
-                                        height={
-                                            market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG
-                                                ? '17px'
-                                                : ''
-                                        }
-                                        width={
-                                            market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG
-                                                ? '27px'
-                                                : ''
-                                        }
-                                        alt="Away team logo"
-                                        src={awayLogoSrc}
-                                        onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
-                                        awayTeam={true}
-                                        isColumnView={isColumnView}
-                                    />
-                                </>
-                            )}
-                        </TeamLogosConatiner>
-                        <TeamNamesConatiner isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
-                            <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
-                                {market.isOneSideMarket
-                                    ? fixOneSideMarketCompetitorName(market.homeTeam)
-                                    : market.homeTeam}
-                            </TeamNameLabel>
-                            {!market.isOneSideMarket && (
-                                <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
-                                    {market.awayTeam}
-                                </TeamNameLabel>
-                            )}
-                        </TeamNamesConatiner>
-                    </TeamsInfoConatiner>
-                </MatchInfoConatiner>
-                {showOdds ? (
-                    <>
-                        <PositionsV2
-                            markets={[market]}
-                            betType={BetType.WINNER}
-                            showOdds={false}
-                            isMainPageView
+                    </MatchInfoLabel>
+                </MatchInfo>
+                <TeamsInfoConatiner>
+                    <TeamLogosConatiner isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
+                        <ClubLogo
+                            height={market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '17px' : ''}
+                            width={market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '27px' : ''}
+                            alt="Home team logo"
+                            src={homeLogoSrc}
+                            onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
                             isColumnView={isColumnView}
                         />
-                        {isColumnView && firstSpreadMarket && (
+                        {!market.isOneSideMarket && (
+                            <>
+                                <ClubLogo
+                                    height={
+                                        market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG
+                                            ? '17px'
+                                            : ''
+                                    }
+                                    width={
+                                        market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG
+                                            ? '27px'
+                                            : ''
+                                    }
+                                    alt="Away team logo"
+                                    src={awayLogoSrc}
+                                    onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
+                                    awayTeam={true}
+                                    isColumnView={isColumnView}
+                                />
+                            </>
+                        )}
+                    </TeamLogosConatiner>
+                    <TeamNamesConatiner isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
+                        <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                            {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
+                        </TeamNameLabel>
+                        {!market.isOneSideMarket && (
+                            <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                {market.awayTeam}
+                            </TeamNameLabel>
+                        )}
+                    </TeamNamesConatiner>
+                </TeamsInfoConatiner>
+            </MatchInfoConatiner>
+            {!isMarketSelected && (
+                <>
+                    {isGameOpen ? (
+                        <>
                             <PositionsV2
-                                markets={[firstSpreadMarket]}
-                                betType={BetType.SPREAD}
-                                showOdds={false}
+                                markets={[market]}
+                                betType={BetType.WINNER}
+                                isGameOpen={false}
                                 isMainPageView
                                 isColumnView={isColumnView}
                             />
-                        )}
-                        {isColumnView && firstTotalMarket && (
-                            <PositionsV2
-                                markets={[firstTotalMarket]}
-                                betType={BetType.TOTAL}
-                                showOdds={false}
-                                isMainPageView
-                                isColumnView={isColumnView}
-                            />
-                        )}
-                        {marketsCount > 0 && (
-                            <MarketsCountWrapper onClick={() => dispatch(setSelectedMarket(market.gameId))}>
-                                {`+${marketsCount}`}
-                                <Arrow className={'icon icon--arrow-down'} />
-                            </MarketsCountWrapper>
-                        )}
-                    </>
-                ) : (
-                    !isMarketSelected && (
+                            {isColumnView && firstSpreadMarket && (
+                                <PositionsV2
+                                    markets={[firstSpreadMarket]}
+                                    betType={BetType.SPREAD}
+                                    isGameOpen={false}
+                                    isMainPageView
+                                    isColumnView={isColumnView}
+                                />
+                            )}
+                            {isColumnView && firstTotalMarket && (
+                                <PositionsV2
+                                    markets={[firstTotalMarket]}
+                                    betType={BetType.TOTAL}
+                                    isGameOpen={false}
+                                    isMainPageView
+                                    isColumnView={isColumnView}
+                                />
+                            )}
+                            {marketsCount > 0 && (
+                                <MarketsCountWrapper onClick={() => dispatch(setSelectedMarket(market.gameId))}>
+                                    {`+${marketsCount}`}
+                                    <Arrow className={'icon icon--arrow-down'} />
+                                </MarketsCountWrapper>
+                            )}
+
+                            <SPAAnchor
+                                href={buildMarketLink(
+                                    market.gameId,
+                                    language,
+                                    false,
+                                    encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                                )}
+                            >
+                                <Tooltip
+                                    overlay="Open market page"
+                                    component={<ExternalArrow className={'icon icon--arrow-external'} />}
+                                />
+                            </SPAAnchor>
+                        </>
+                    ) : (
                         <>
                             {isGameRegularlyResolved ? (
                                 <ResultWrapper>
@@ -322,23 +323,33 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market }) => {
                                 />
                             )}
                         </>
-                    )
-                )}
-                {!isMarketSelected && (
-                    <MarketsCountWrapper>
-                        <SPAAnchor
-                            href={buildMarketLink(
-                                market.gameId,
-                                'en',
-                                false,
-                                encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
-                            )}
-                        >
-                            View
-                        </SPAAnchor>
-                    </MarketsCountWrapper>
-                )}
-            </MainContainer>
+                    )}
+                </>
+            )}
+        </MainContainer>
+    );
+
+    return (
+        <Wrapper
+            hideGame={hideGame}
+            isResolved={isGameRegularlyResolved}
+            selected={selected}
+            isMarketSelected={isMarketSelected}
+        >
+            {isGameOpen ? (
+                <>{getMainContainerContent()}</>
+            ) : (
+                <SPAAnchor
+                    href={buildMarketLink(
+                        market.gameId,
+                        language,
+                        false,
+                        encodeURIComponent(`${market.homeTeam} vs ${market.awayTeam}`)
+                    )}
+                >
+                    {getMainContainerContent()}
+                </SPAAnchor>
+            )}
         </Wrapper>
     );
 };

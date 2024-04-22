@@ -1,22 +1,15 @@
-import PositionSymbol from 'components/PositionSymbol';
-import { Position } from 'enums/markets';
+import { BetTypeNameMap } from 'constants/tags';
+import { BetType, Position } from 'enums/markets';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
+import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { TicketMarket } from 'types/markets';
-import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
-import {
-    getLineInfoV2,
-    getMarketNameV2,
-    getOddTooltipTextV2,
-    getPositionOddsV2,
-    getSymbolTextV2,
-} from 'utils/marketsV2';
+import { getMarketNameV2, getPositionTextV2 } from 'utils/marketsV2';
 import MatchLogosV2 from '../MatchLogosV2';
-import { XButton } from '../styled-components';
 
 type MatchInfoProps = {
     market: TicketMarket;
@@ -27,94 +20,94 @@ type MatchInfoProps = {
 
 const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
     const dispatch = useDispatch();
-    const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
-    const symbolText = getSymbolTextV2(market.position, market);
-    const lineInfo = getLineInfoV2(market, market.position);
     const marketNameHome = getMarketNameV2(market, Position.HOME);
     const marketNameAway = getMarketNameV2(market, Position.AWAY);
 
+    const positionText = getPositionTextV2(market, market.position, true);
+
     return (
         <>
-            <MatchLogosV2 market={market} width={'120px'} isHighlighted={isHighlighted} />
-            <MatchLabel>
-                <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                    {marketNameHome}
-                </ClubName>
-                {!market.isOneSideMarket && !market.isPlayerPropsMarket && (
-                    <ClubName fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                        {marketNameAway}
-                    </ClubName>
-                )}
-            </MatchLabel>
-            <PositionSymbol
-                symbolAdditionalText={{
-                    text: formatMarketOdds(selectedOddsType, getPositionOddsV2(market)),
-                    textStyle: {
-                        width: '34px',
-                        marginRight: '3px',
-                        textAlign: 'right',
-                    },
-                }}
-                symbolText={symbolText}
-                symbolUpperText={
-                    lineInfo && !market.isOneSidePlayerPropsMarket && !market.isYesNoPlayerPropsMarket
-                        ? {
-                              text: lineInfo,
-                              textStyle: {
-                                  backgroundColor: customStyle
-                                      ? theme.oddsGradiendBackground.primary
-                                      : theme.oddsGradiendBackground.secondary,
-                                  top: '-9px',
-                              },
-                          }
-                        : undefined
-                }
-                tooltip={!readOnly && <>{getOddTooltipTextV2(market.position, market)}</>}
-                additionalStyle={
-                    market.isOneSidePlayerPropsMarket && market.isYesNoPlayerPropsMarket ? { fontSize: 10 } : {}
-                }
-            />
-            {readOnly ? (
-                market.isCanceled ? (
-                    <Canceled className={`icon icon--open`} />
-                ) : market.isResolved ? (
-                    market.isWinning ? (
-                        <Correct className={`icon icon--correct`} />
+            <MatchLogosV2 market={market} width={'55px'} isHighlighted={isHighlighted} />
+            <MarketPositionContainer>
+                <MatchLabel fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
+                    {`${marketNameHome}${
+                        !market.isOneSideMarket && !market.isPlayerPropsMarket ? ` - ${marketNameAway}` : ''
+                    }`}
+                    <CloseIcon
+                        className="icon icon--close"
+                        onClick={() => {
+                            dispatch(removeFromTicket(market.gameId));
+                        }}
+                    />
+                </MatchLabel>
+                <MarketTypeInfo>{BetTypeNameMap[market.typeId as BetType]}</MarketTypeInfo>
+                <PositionInfo>
+                    <PositionText>{positionText}</PositionText>
+                    <Odd>{formatMarketOdds(selectedOddsType, market.odd)}</Odd>
+                </PositionInfo>
+            </MarketPositionContainer>
+            {readOnly && (
+                <>
+                    {market.isCanceled ? (
+                        <Canceled className={`icon icon--open`} />
+                    ) : market.isResolved ? (
+                        market.isWinning ? (
+                            <Correct className={`icon icon--correct`} />
+                        ) : (
+                            <Wrong className={`icon icon--wrong`} />
+                        )
                     ) : (
-                        <Wrong className={`icon icon--wrong`} />
-                    )
-                ) : (
-                    <Empty className={`icon icon--open`} />
-                )
-            ) : (
-                <XButton
-                    onClick={() => {
-                        dispatch(removeFromTicket(market.gameId));
-                    }}
-                    className={`icon icon--cross-button`}
-                />
+                        <Empty className={`icon icon--open`} />
+                    )}
+                </>
             )}
         </>
     );
 };
 
-const MatchLabel = styled.div`
+const MarketPositionContainer = styled(FlexDivColumn)`
     display: block;
     width: 100%;
     margin-right: 5px;
 `;
 
-const ClubName = styled.span<{ fontSize?: string; lineHeight?: string }>`
-    display: block;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 300;
-    font-size: ${(props) => (props.fontSize ? props.fontSize : '10px')};
-    line-height: ${(props) => (props.lineHeight ? props.lineHeight : '11px')};
-    text-transform: uppercase;
+const MatchLabel = styled(FlexDivRow)<{ fontSize?: string; lineHeight?: string }>`
+    font-weight: 600;
+    font-size: ${(props) => (props.fontSize ? props.fontSize : '13px')};
+    line-height: ${(props) => (props.lineHeight ? props.lineHeight : '13px')};
     color: ${(props) => props.theme.textColor.primary};
-    white-space: pre-line;
+    margin-bottom: 5px;
+    text-align: start;
+`;
+
+const MarketTypeInfo = styled(FlexDivRow)<{ fontSize?: string; lineHeight?: string }>`
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 13px;
+    color: ${(props) => props.theme.textColor.quinary};
+    margin-bottom: 5px;
+`;
+
+const PositionInfo = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 13px;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const PositionText = styled.span`
+    text-align: start;
+`;
+
+const Odd = styled.span`
+    margin-left: 5px;
+`;
+
+const CloseIcon = styled.i`
+    font-size: 10px;
+    color: ${(props) => props.theme.textColor.secondary};
+    cursor: pointer;
 `;
 
 const Icon = styled.i`

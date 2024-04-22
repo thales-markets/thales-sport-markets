@@ -80,7 +80,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     }, [networkId]);
 
     const isGameStarted = market.maturityDate < new Date();
-    const showAMM = !market.isResolved && !market.isCanceled && !isGameStarted && !market.isPaused;
+    const isGameOpen = market.isOpen && !isGameStarted;
 
     const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == market.leagueId)?.label;
     const isGameCancelled = market.isCanceled || (!isGameStarted && market.isResolved);
@@ -124,7 +124,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     return (
         <RowContainer>
-            <MainContainer showAMM={showAMM}>
+            <MainContainer isGameOpen={isGameOpen}>
                 <HeaderWrapper>
                     <BackToLink
                         link={buildHref(ROUTES.Markets.Home)}
@@ -368,32 +368,43 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     </Status>
                 )}
                 <>
-                    <ToggleContainer>
-                        <Toggle
-                            label={{
-                                firstLabel: t('markets.market-card.toggle.hide-paused-markets'),
-                                secondLabel: t('markets.market-card.toggle.show-paused-markets'),
-                            }}
-                            active={!hidePausedMarkets}
-                            dotSize="18px"
-                            dotBackground={theme.background.secondary}
-                            dotBorder={`3px solid ${theme.borderColor.quaternary}`}
-                            handleClick={() => {
-                                setHidePausedMarkets(!hidePausedMarkets);
-                            }}
-                        />
-                    </ToggleContainer>
-                    <PositionsV2 markets={[market]} betType={BetType.WINNER} showOdds={showAMM} />
-                    {Object.keys(groupedChildMarkets).map((key, index) => {
-                        const typeId = Number(key);
-                        const childMarkets = groupedChildMarkets[typeId];
-                        return <PositionsV2 key={index} markets={childMarkets} betType={typeId} showOdds={showAMM} />;
-                    })}
+                    {isGameOpen && (
+                        <ToggleContainer>
+                            <Toggle
+                                label={{
+                                    firstLabel: t('markets.market-card.toggle.hide-paused-markets'),
+                                    secondLabel: t('markets.market-card.toggle.show-paused-markets'),
+                                }}
+                                active={!hidePausedMarkets}
+                                dotSize="18px"
+                                dotBackground={theme.background.secondary}
+                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                                handleClick={() => {
+                                    setHidePausedMarkets(!hidePausedMarkets);
+                                }}
+                            />
+                        </ToggleContainer>
+                    )}
+                    <PositionsContainer>
+                        <PositionsV2 markets={[market]} betType={BetType.WINNER} isGameOpen={isGameOpen} />
+                        {Object.keys(groupedChildMarkets).map((key, index) => {
+                            const typeId = Number(key);
+                            const childMarkets = groupedChildMarkets[typeId];
+                            return (
+                                <PositionsV2
+                                    key={index}
+                                    markets={childMarkets}
+                                    betType={typeId}
+                                    isGameOpen={isGameOpen}
+                                />
+                            );
+                        })}
+                    </PositionsContainer>
                 </>
                 {/* <Transactions market={market} /> */}
                 <TicketTransactions market={market} />
             </MainContainer>
-            {showAMM && (
+            {isGameOpen && (
                 <SidebarContainer>
                     <Parlay />
                 </SidebarContainer>
@@ -403,6 +414,15 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         </RowContainer>
     );
 };
+
+const PositionsContainer = styled(FlexDivColumn)`
+    position: relative;
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+    padding: 10px 10px 10px 10px;
+    background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
+`;
 
 const hideResultInfoPerPeriodForSports = (sportId: number) => {
     return (
@@ -436,17 +456,17 @@ const RowContainer = styled(FlexDivRow)`
     }
 `;
 
-const MainContainer = styled(FlexDivColumn)<{ showAMM: boolean }>`
+const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
     width: 100%;
-    max-width: 800px;
-    margin-right: ${(props) => (props.showAMM ? 10 : 0)}px;
+    max-width: 900px;
+    margin-right: ${(props) => (props.isGameOpen ? 10 : 0)}px;
     @media (max-width: 575px) {
         margin-right: 0;
     }
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
-    max-width: 320px;
+    max-width: 360px;
     @media (max-width: 950px) {
         display: none;
     }
@@ -484,7 +504,7 @@ const IncentivizedTitle = styled.span`
 
 const Status = styled(FlexDivCentered)<{ backgroundColor?: string }>`
     width: 100%;
-    border-radius: 15px;
+    border-radius: 8px;
     background-color: ${(props) => props.backgroundColor || props.theme.background.secondary};
     padding: 10px 50px;
     margin-bottom: 7px;

@@ -210,8 +210,8 @@ const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
     flex-grow: 2;
     > div {
         display: flex;
-        max-width: ${(props) => (props.isMarketSelected ? '190px' : '100%')};
-        width: ${(props) => (props.isMarketSelected ? '190px' : '100%')};
+        max-width: ${(props) => (props.isMarketSelected ? '100%' : '100%')};
+        width: ${(props) => (props.isMarketSelected ? '100%' : '100%')};
     }
     overflow-y: auto;
     overflow-x: hidden;
@@ -230,7 +230,7 @@ const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
             height: 0px;
         }
     }
-    height: 80vh;
+    height: calc(100vh - 154px);;
 `;
 
 const ListContainer = styled.div`
