@@ -104,6 +104,7 @@ const Wrapper = styled(FlexDivColumn)`
     max-width: 1350px;
     min-height: 100vh;
     justify-content: space-between;
+    padding-bottom: 20px;
     @media (max-width: 1260px) {
         padding: 0 20px;
     }
