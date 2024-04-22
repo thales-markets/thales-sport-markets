@@ -1,5 +1,5 @@
 import { BetTypeNameMap } from 'constants/tags';
-import { BetType, Position } from 'enums/markets';
+import { BetType } from 'enums/markets';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromTicket } from 'redux/modules/ticket';
@@ -21,8 +21,8 @@ type MatchInfoProps = {
 const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
-    const marketNameHome = getMarketNameV2(market, Position.HOME);
-    const marketNameAway = getMarketNameV2(market, Position.AWAY);
+    const marketNameHome = getMarketNameV2(market, 0);
+    const marketNameAway = getMarketNameV2(market, 1);
 
     const positionText = getPositionTextV2(market, market.position, true);
 

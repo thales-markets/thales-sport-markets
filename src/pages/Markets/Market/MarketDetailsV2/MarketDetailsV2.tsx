@@ -56,10 +56,14 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const groupedChildMarkets = useMemo(
         () =>
             groupBy(
-                market.childMarkets.filter((childMarket) => (hidePausedMarkets ? !childMarket.isPaused : true)),
+                market.childMarkets.filter((childMarket) =>
+                    hidePausedMarkets && market.isOpen && market.maturityDate > new Date()
+                        ? !childMarket.isPaused
+                        : true
+                ),
                 (childMarket) => childMarket.typeId
             ),
-        [market.childMarkets, hidePausedMarkets]
+        [market.childMarkets, market.isOpen, market.maturityDate, hidePausedMarkets]
     );
 
     useEffect(() => {
