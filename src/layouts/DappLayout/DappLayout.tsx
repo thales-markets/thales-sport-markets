@@ -107,12 +107,14 @@ const Wrapper = styled(FlexDivColumn)`
     padding-bottom: 20px;
     @media (max-width: 1260px) {
         padding: 0 20px;
+        padding-bottom: 20px;
     }
     @media (max-width: 950px) {
         padding-top: 10px;
     }
     @media (max-width: 767px) {
         padding: 0px 10px;
+        padding-bottom: 20px;
     }
 `;
 
