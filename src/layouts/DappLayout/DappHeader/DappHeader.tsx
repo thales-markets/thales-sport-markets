@@ -326,7 +326,6 @@ const DappHeader: React.FC = () => {
 
 const Container = styled(FlexDivRowCentered)`
     width: 100%;
-    margin-top: 10px;
     @media (max-width: 767px) {
         flex-direction: column;
     }
