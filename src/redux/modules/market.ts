@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { localStore } from 'thales-utils';
+import { Tags } from 'types/markets';
 import { RootState } from '../rootReducer';
 
 const sliceName = 'market';
@@ -27,11 +28,17 @@ const getDefaultSportFilter = (): SportFilterEnum => {
     return lsSportFilter !== undefined ? (lsSportFilter as SportFilterEnum) : SportFilterEnum.All;
 };
 
+const getDefaultTagFilter = (): Tags => {
+    const lsTagFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_TAGS);
+    return lsTagFilter !== undefined ? (lsTagFilter as Tags) : [];
+};
+
 type MarketSliceState = {
     marketSearch: string;
     dateFilter: Date | number;
     globalFilter: GlobalFiltersEnum;
     sportFilter: SportFilterEnum;
+    tagFilter: Tags;
     selectedMarket: string;
     isThreeWayView: boolean;
 };
@@ -41,6 +48,7 @@ const initialState: MarketSliceState = {
     dateFilter: getDefaultDateFilter(),
     globalFilter: getDefaultGlobalFilter(),
     sportFilter: getDefaultSportFilter(),
+    tagFilter: getDefaultTagFilter(),
     selectedMarket: '',
     isThreeWayView: false,
 };
@@ -65,6 +73,10 @@ const marketSlice = createSlice({
             state.sportFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_SPORT, action.payload);
         },
+        setTagFilter: (state, action: PayloadAction<Tags>) => {
+            state.tagFilter = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.FILTER_TAGS, action.payload);
+        },
         setSelectedMarket: (state, action: PayloadAction<string>) => {
             state.selectedMarket = action.payload;
         },
@@ -79,6 +91,7 @@ export const {
     setDateFilter,
     setGlobalFilter,
     setSportFilter,
+    setTagFilter,
     setSelectedMarket,
     setIsThreeWayView,
 } = marketSlice.actions;
@@ -88,6 +101,7 @@ export const getMarketSearch = (state: RootState) => getMarketState(state).marke
 export const getDateFilter = (state: RootState) => getMarketState(state).dateFilter;
 export const getGlobalFilter = (state: RootState) => getMarketState(state).globalFilter;
 export const getSportFilter = (state: RootState) => getMarketState(state).sportFilter;
+export const getTagFilter = (state: RootState) => getMarketState(state).tagFilter;
 export const getSelectedMarket = (state: RootState) => getMarketState(state).selectedMarket;
 export const getIsMarketSelected = (state: RootState) => getMarketState(state).selectedMarket !== '';
 export const getIsThreeWayView = (state: RootState) => getMarketState(state).isThreeWayView;
