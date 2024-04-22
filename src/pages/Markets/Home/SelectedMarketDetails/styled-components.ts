@@ -11,14 +11,14 @@ export const Wrapper = styled(FlexDivColumn)<{
     border-radius: 8px;
     margin-top: 10px;
     padding: 20px 10px 10px 10px;
-    background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
+    background-color: ${(props) => props.theme.background.quinary};
     height: fit-content;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    height: 80vh;
+    height: calc(100vh - 154px);
     overflow: auto;
 `;
 

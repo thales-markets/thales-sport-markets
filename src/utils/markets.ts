@@ -7,11 +7,13 @@ import {
     INTERNATIONAL_SPORTS,
     MOTOSPORT_TAGS,
     SPORTS_TAGS_MAP,
+    TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
     UEFA_TAGS,
 } from 'constants/tags';
 import {
     BetType,
     COMBINED_POSITIONS_BET_TYPES,
+    MARKET_TYPES_WITH_DRAW,
     ONE_SIDER_PLAYER_PROPS_BET_TYPES,
     OddsType,
     PLAYER_PROPS_BET_TYPES,
@@ -79,3 +81,9 @@ export const isSpread = (betType: BetType) => {
 export const isCombinedPositions = (betType: BetType) => {
     return COMBINED_POSITIONS_BET_TYPES.includes(betType);
 };
+
+export const getIsDrawAvailable = (leagueId: number, betType: BetType) =>
+    !TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(leagueId) && MARKET_TYPES_WITH_DRAW.includes(betType);
+
+export const getPositionOrder = (leagueId: number, betType: BetType, position: number) =>
+    getIsDrawAvailable(leagueId, betType) ? `${position == 0 ? 1 : position == 1 ? 3 : 2}` : undefined;

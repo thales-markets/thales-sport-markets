@@ -15,13 +15,13 @@ export default {
         tertiary: Colors.NAVY_BLUE,
         quaternary: Colors.BLUE,
         quinary: Colors.NAVY_BLUE_EXTRA_LIGHT,
-        senary: Colors.NAVY_BLUE_LIGHT,
     },
     borderColor: {
         primary: Colors.NAVY_BLUE_LIGHT,
         secondary: Colors.WHITE,
         tertiary: Colors.GREEN,
         quaternary: Colors.BLUE,
+        quinary: Colors.NAVY_BLUE,
     },
     button: {
         background: {
@@ -138,11 +138,6 @@ export default {
         primary: Colors.NAVY_BLUE,
         secondary: Colors.NAVY_BLUE_DARK,
         tertiary: Colors.NAVY_BLUE_EXTRA_DARK,
-    },
-    oddsGradiendBackground: {
-        primary: Colors.GRAY_GRADIENT_1,
-        secondary: Colors.GRAY_GRADIENT_2,
-        tertiary: Colors.GRAY_GRADIENT_3,
     },
     chart: {
         primary: Colors.PURPLE,

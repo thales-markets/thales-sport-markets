@@ -33,6 +33,16 @@ const getDefaultTagFilter = (): Tags => {
     return lsTagFilter !== undefined ? (lsTagFilter as Tags) : [];
 };
 
+const getDefaultSelectedMarket = (): string => {
+    const lsSelectedMarket = localStore.get(LOCAL_STORAGE_KEYS.SELECTED_MARKET);
+    return lsSelectedMarket !== undefined ? (lsSelectedMarket as string) : '';
+};
+
+const getDefaultIsThreeWayView = (): boolean => {
+    const lsIsThreeWayView = localStore.get(LOCAL_STORAGE_KEYS.IS_THREE_WAY_VIEW);
+    return lsIsThreeWayView !== undefined ? (lsIsThreeWayView as boolean) : true;
+};
+
 type MarketSliceState = {
     marketSearch: string;
     dateFilter: Date | number;
@@ -49,8 +59,8 @@ const initialState: MarketSliceState = {
     globalFilter: getDefaultGlobalFilter(),
     sportFilter: getDefaultSportFilter(),
     tagFilter: getDefaultTagFilter(),
-    selectedMarket: '',
-    isThreeWayView: false,
+    selectedMarket: getDefaultSelectedMarket(),
+    isThreeWayView: getDefaultIsThreeWayView(),
 };
 
 const marketSlice = createSlice({
@@ -67,6 +77,9 @@ const marketSlice = createSlice({
         },
         setGlobalFilter: (state, action: PayloadAction<GlobalFiltersEnum>) => {
             state.globalFilter = action.payload;
+            if (action.payload !== GlobalFiltersEnum.OpenMarkets) {
+                state.selectedMarket = '';
+            }
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, action.payload);
         },
         setSportFilter: (state, action: PayloadAction<SportFilterEnum>) => {
@@ -79,9 +92,11 @@ const marketSlice = createSlice({
         },
         setSelectedMarket: (state, action: PayloadAction<string>) => {
             state.selectedMarket = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, action.payload);
         },
         setIsThreeWayView: (state, action: PayloadAction<boolean>) => {
             state.isThreeWayView = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.IS_THREE_WAY_VIEW, action.payload);
         },
     },
 });

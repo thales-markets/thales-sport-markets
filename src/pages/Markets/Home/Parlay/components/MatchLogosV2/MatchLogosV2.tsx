@@ -67,8 +67,8 @@ const Container = styled.div<{ width?: string }>`
 
 const ClubLogo = styled.img<{ awayTeam?: boolean; isHighlighted?: boolean }>`
     position: absolute;
-    height: 27px;
-    width: 27px;
+    height: 30px;
+    width: 30px;
     ${(props) => (props.awayTeam ? `margin-left: 16px;` : '')}
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
     opacity: ${(props) => (props.isHighlighted ? '1' : '0.4')};

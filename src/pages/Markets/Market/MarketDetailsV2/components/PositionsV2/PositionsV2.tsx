@@ -22,18 +22,18 @@ import {
 type PositionsProps = {
     markets: SportMarketInfoV2[];
     betType: BetType;
-    showOdds: boolean;
+    isGameOpen: boolean;
     isMainPageView?: boolean;
     isColumnView?: boolean;
 };
 
-const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds, isMainPageView, isColumnView }) => {
+const Positions: React.FC<PositionsProps> = ({ markets, betType, isGameOpen, isMainPageView, isColumnView }) => {
     const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
     const areOddsValid = markets.some((market) => market.odds.some((odd) => isOddValid(odd)));
 
-    const showContainer = !showOdds || areOddsValid;
+    const showContainer = !isGameOpen || areOddsValid;
 
     const sortedMarkets = useMemo(
         () =>

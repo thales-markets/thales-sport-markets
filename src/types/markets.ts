@@ -100,6 +100,7 @@ export type SportMarketInfoV2 = {
     sport: string;
     leagueId: number;
     leagueName: string;
+    subLeagueId: number;
     typeId: number;
     type: string;
     maturity: number;
@@ -136,6 +137,7 @@ export type TicketPosition = {
     playerId: number;
     line: number;
     position: number;
+    combinedPositions: CombinedPositions[];
 };
 
 export type BetTypeInfo = {

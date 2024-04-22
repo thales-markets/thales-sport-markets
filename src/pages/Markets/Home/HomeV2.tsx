@@ -1,6 +1,5 @@
 import BannerCarousel from 'components/BannerCarousel';
 import Button from 'components/Button';
-import GetUsd from 'components/GetUsd';
 import Loader from 'components/Loader';
 import Logo from 'components/Logo';
 import OddsSelectorModal from 'components/OddsSelectorModal';
@@ -694,7 +693,9 @@ const Home: React.FC = () => {
                                         <Suspense fallback={<Loader />}>
                                             <MarketsGridV2 markets={finalMarkets} />
                                         </Suspense>
-                                        {isMarketSelected && <SelectedMarket />}
+                                        {isMarketSelected && globalFilter === GlobalFiltersEnum.OpenMarkets && (
+                                            <SelectedMarket />
+                                        )}
                                     </FlexDivRow>
                                 </>
                             )}
@@ -703,7 +704,6 @@ const Home: React.FC = () => {
                 </MainContainer>
                 {/* RIGHT PART */}
                 <SidebarContainer maxWidth={360}>
-                    {[Network.OptimismMainnet, Network.Arbitrum].includes(networkId) && <GetUsd />}
                     <Suspense fallback={<Loader />}>
                         <Parlay />
                     </Suspense>

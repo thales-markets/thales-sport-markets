@@ -9,7 +9,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarketInfoV2, TicketPosition } from 'types/markets';
-import { formatMarketOdds } from 'utils/markets';
+import { formatMarketOdds, getPositionOrder } from 'utils/markets';
 import { getOddTooltipTextV2, getPositionTextV2, isSameMarket } from 'utils/marketsV2';
 import {
     Container,
@@ -63,6 +63,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position }) =
             disabled={disabledPosition}
             selected={isAddedToTicket}
             isWinner={isGameRegularlyResolved && market.finalResult == position}
+            order={getPositionOrder(market.leagueId, market.typeId, position)}
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {
@@ -75,6 +76,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position }) =
                         playerId: market.playerProps.playerId,
                         line: market.line,
                         position: position,
+                        combinedPositions: market.combinedPositions,
                     };
                     dispatch(updateTicket(ticket));
                     if (isMobile) {
