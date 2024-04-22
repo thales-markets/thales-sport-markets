@@ -16,7 +16,7 @@ const ElectionsBanner: React.FC = () => {
 };
 
 const Container = styled(FlexDiv)`
-    position: absolute;
+    position: relative;
     top: 0;
     width: 100%;
     align-items: center;
