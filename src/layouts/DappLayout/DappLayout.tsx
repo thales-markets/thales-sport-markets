@@ -20,6 +20,7 @@ import { isMobile } from 'utils/device';
 import { setReferralId } from 'utils/referral';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
+import ElectionsBanner from 'components/Banner/Banner';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -72,6 +73,7 @@ const DappLayout: React.FC = ({ children }) => {
         <>
             {isAppReady ? (
                 <Background>
+                    <ElectionsBanner />
                     <Wrapper>
                         <MetaData />
                         <DappHeader />
@@ -99,7 +101,7 @@ const Wrapper = styled(FlexDivColumn)`
     width: 99%;
     margin-left: auto;
     margin-right: auto;
-    padding: 20px 0px;
+    padding: 7px 0 20px 0;
     max-width: 1350px;
     min-height: 100vh;
     justify-content: space-between;

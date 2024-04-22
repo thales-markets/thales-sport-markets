@@ -50,7 +50,8 @@ const Container = styled.div`
     height: 165px;
     border-radius: 11px;
     overflow: hidden;
-    margin: 30px 0;
+    margin-top: 6px;
+    margin-bottom: 12px;
     max-width: 100%;
     @media (max-width: 768px) {
         display: none;
