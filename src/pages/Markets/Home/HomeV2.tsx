@@ -9,7 +9,7 @@ import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
-import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import { BetType, GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
@@ -25,14 +25,14 @@ import {
     getDateFilter,
     getGlobalFilter,
     getIsMarketSelected,
-    getIsThreeWayView,
     getMarketSearch,
     getSportFilter,
+    getTagFilter,
     setDateFilter,
     setGlobalFilter,
-    setIsThreeWayView,
     setMarketSearch,
     setSportFilter,
+    setTagFilter,
 } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
@@ -49,6 +49,8 @@ import GlobalFilters from '../components/GlobalFilters';
 import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
+import Breadcrumbs from './Breadcrumbs';
+import Header from './Header';
 import SelectedMarket from './SelectedMarket';
 
 const SidebarLeaderboard = lazy(
@@ -84,15 +86,17 @@ const Home: React.FC = () => {
     const dateFilter = useSelector((state: RootState) => getDateFilter(state));
     const globalFilter = useSelector((state: RootState) => getGlobalFilter(state));
     const sportFilter = useSelector((state: RootState) => getSportFilter(state));
+    const tagFilter = useSelector((state: RootState) => getTagFilter(state));
     const location = useLocation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isMarketSelected = useSelector(getIsMarketSelected);
-    const isThreeWayView = useSelector(getIsThreeWayView);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
     const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
+    const [availableBetTypes, setAvailableBetTypes] = useState<BetType[]>([]);
+    const [selectedBetTypes, setSelectedBetTypes] = useState<BetType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
     const tagsList = orderBy(
@@ -111,7 +115,6 @@ const Home: React.FC = () => {
 
     const favouriteLeagues = useSelector(getFavouriteLeagues);
 
-    const [tagFilter, setTagFilter] = useLocalStorage<Tags>(LOCAL_STORAGE_KEYS.FILTER_TAGS, []);
     const [availableTags, setAvailableTags] = useState<Tags>(tagsList);
 
     const [sportParam, setSportParam] = useQueryParam('sport', '');
@@ -170,7 +173,7 @@ const Home: React.FC = () => {
             if (tagParam != '') {
                 const tagParamsSplitted = tagParam.split(',');
                 const filteredTags = availableTags.filter((tag) => tagParamsSplitted.includes(tag.label));
-                filteredTags.length > 0 ? setTagFilter(filteredTags) : setTagFilter([]);
+                filteredTags.length > 0 ? dispatch(setTagFilter(filteredTags)) : dispatch(setTagFilter([]));
             } else {
                 setTagParam(tagFilter.map((tag) => tag.label).toString());
             }
@@ -204,7 +207,7 @@ const Home: React.FC = () => {
                       ResolvedMarkets: [],
                       PendingMarkets: [],
                   };
-
+        const betTypes = new Set<BetType>();
         const filteredMarkets = (allMarkets[globalFilter] || allMarkets[GlobalFiltersEnum.OpenMarkets]).filter(
             (market: SportMarketInfoV2) => {
                 if (marketSearch) {
@@ -265,6 +268,22 @@ const Home: React.FC = () => {
                     }
                 }
 
+                betTypes.add(market.typeId);
+                market.childMarkets?.forEach((childMarket) => {
+                    betTypes.add(childMarket.typeId);
+                });
+
+                if (selectedBetTypes.length) {
+                    const marketBetTypes = [
+                        market.typeId,
+                        ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
+                    ];
+
+                    if (!marketBetTypes.some((betType) => selectedBetTypes.includes(betType))) {
+                        return false;
+                    }
+                }
+
                 return true;
             }
         );
@@ -279,8 +298,20 @@ const Home: React.FC = () => {
             ]
         );
 
+        setAvailableBetTypes(Array.from(betTypes));
+
         return sortedFilteredMarkets;
-    }, [marketSearch, tagFilter, dateFilter, sportFilter, globalFilter, favouriteLeagues, sportMarketsQueryNew]);
+    }, [
+        sportMarketsQueryNew.isSuccess,
+        sportMarketsQueryNew.data,
+        globalFilter,
+        marketSearch,
+        tagFilter,
+        dateFilter,
+        sportFilter,
+        selectedBetTypes,
+        favouriteLeagues,
+    ]);
 
     useEffect(() => {
         if (sportFilter == SportFilterEnum.Favourites) {
@@ -349,11 +380,11 @@ const Home: React.FC = () => {
         setSportParam(SportFilterEnum.All);
         dispatch(setDateFilter(0));
         setDateParam('');
-        setTagFilter([]);
+        dispatch(setTagFilter([]));
         setTagParam('');
         setSearchParam('');
         dispatch(setMarketSearch(''));
-    }, [dispatch, setTagFilter, setDateParam, setGlobalFilterParam, setSearchParam, setSportParam, setTagParam]);
+    }, [dispatch, setDateParam, setGlobalFilterParam, setSearchParam, setSportParam, setTagParam]);
 
     useEffect(() => {
         if (location.state === RESET_STATE) {
@@ -423,7 +454,7 @@ const Home: React.FC = () => {
                                                 if (filterItem !== sportFilter) {
                                                     dispatch(setSportFilter(filterItem));
                                                     setSportParam(filterItem);
-                                                    setTagFilter([]);
+                                                    dispatch(setTagFilter([]));
                                                     setTagParam('');
                                                     if (filterItem === SportFilterEnum.All) {
                                                         dispatch(setDateFilter(0));
@@ -447,7 +478,7 @@ const Home: React.FC = () => {
                                                 } else {
                                                     dispatch(setSportFilter(SportFilterEnum.All));
                                                     setSportParam(SportFilterEnum.All);
-                                                    setTagFilter([]);
+                                                    dispatch(setTagFilter([]));
                                                     setTagParam('');
                                                     setAvailableTags(tagsList);
                                                 }
@@ -463,7 +494,7 @@ const Home: React.FC = () => {
                                             key={filterItem + '1'}
                                             tags={availableTags}
                                             tagFilter={tagFilter}
-                                            setTagFilter={setTagFilter}
+                                            setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
                                             setTagParam={setTagParam}
                                             openMarketsCountPerTag={openMarketsCountPerTag}
                                             showActive={showActive}
@@ -558,7 +589,7 @@ const Home: React.FC = () => {
                                                 if (filterItem !== sportFilter) {
                                                     dispatch(setSportFilter(filterItem));
                                                     setSportParam(filterItem);
-                                                    setTagFilter([]);
+                                                    dispatch(setTagFilter([]));
                                                     setTagParam('');
                                                     if (filterItem === SportFilterEnum.All) {
                                                         dispatch(setDateFilter(0));
@@ -582,7 +613,7 @@ const Home: React.FC = () => {
                                                 } else {
                                                     dispatch(setSportFilter(SportFilterEnum.All));
                                                     setSportParam(SportFilterEnum.All);
-                                                    setTagFilter([]);
+                                                    dispatch(setTagFilter([]));
                                                     setTagParam('');
                                                     setAvailableTags(tagsList);
                                                 }
@@ -597,7 +628,7 @@ const Home: React.FC = () => {
                                             key={filterItem + '1'}
                                             tags={availableTags}
                                             tagFilter={tagFilter}
-                                            setTagFilter={setTagFilter}
+                                            setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
                                             setTagParam={setTagParam}
                                             openMarketsCountPerTag={openMarketsCountPerTag}
                                             showActive={showActive}
@@ -617,7 +648,7 @@ const Home: React.FC = () => {
                         <>
                             <SportFilterMobile
                                 sportFilter={sportFilter}
-                                setTagFilter={setTagFilter}
+                                setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
                                 setTagParam={setTagParam}
                                 setSportFilter={(filter: SportFilterEnum) => dispatch(setSportFilter(filter))}
                                 setSportParam={setSportParam}
@@ -633,7 +664,7 @@ const Home: React.FC = () => {
                                 setDateParam={setDateParam}
                                 setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
                                 setGlobalFilterParam={setGlobalFilterParam}
-                                setTagFilter={setTagFilter}
+                                setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
                                 setTagParam={setTagParam}
                                 setSportFilter={(filter: SportFilterEnum) => dispatch(setSportFilter(filter))}
                                 setSportParam={setSportParam}
@@ -641,7 +672,8 @@ const Home: React.FC = () => {
                             />
                         </>
                     )}
-                    {!isMobile && (
+                    {!isMobile && <Breadcrumbs />}
+                    {/* {!isMobile && (
                         <GlobalFilters
                             setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
                             setDateParam={setDateParam}
@@ -651,6 +683,13 @@ const Home: React.FC = () => {
                             dateFilter={dateFilter}
                             sportFilter={sportFilter}
                             isMobile={isMobile}
+                        />
+                    )} */}
+                    {!isMobile && (
+                        <Header
+                            selectedBetTypes={selectedBetTypes}
+                            setSelectedBetTypes={setSelectedBetTypes}
+                            availableBetTypes={availableBetTypes}
                         />
                     )}
                     {sportMarketsQueryNew.isLoading ? (
@@ -678,13 +717,6 @@ const Home: React.FC = () => {
                                 </NoMarketsContainer>
                             ) : (
                                 <>
-                                    <Button
-                                        width="fit-content"
-                                        margin="10px 0 0 0"
-                                        onClick={() => dispatch(setIsThreeWayView(!isThreeWayView))}
-                                    >
-                                        {isThreeWayView ? 'Switch to standard view' : 'Switch to three way view'}
-                                    </Button>
                                     <FlexDivRow>
                                         <Suspense fallback={<Loader />}>
                                             <MarketsGridV2 markets={finalMarkets} />

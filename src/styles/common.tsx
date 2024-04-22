@@ -58,10 +58,11 @@ export const Colors = {
 
     WHITE: '#FFFFFF',
 
+    BLACK: '#000000',
+
     GREEN: '#5FC694',
 
     BLUE: '#3FD1FF',
-    SHADOW_BLUE: '#7983A9',
 
     RED: '#e26a78',
 
