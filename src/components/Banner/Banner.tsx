@@ -30,6 +30,7 @@ const Container = styled(FlexDiv)`
     @media screen and (max-width: 767px) {
         display: none;
     }
+    margin-bottom: -10px;
 `;
 
 const Label = styled.span`
