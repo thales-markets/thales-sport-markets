@@ -7,7 +7,7 @@ import SPAAnchor from '../SPAAnchor';
 const ElectionsBanner: React.FC = () => {
     const { t } = useTranslation();
     return (
-        <SPAAnchor href={'https://dune.com/leifu/arb-incentive-program-dashboard'}>
+        <SPAAnchor href={'https://www.overtimemarkets.xyz/promotions'}>
             <Container>
                 <Label>{t('banner.arb-distribution-message')}</Label>
             </Container>
