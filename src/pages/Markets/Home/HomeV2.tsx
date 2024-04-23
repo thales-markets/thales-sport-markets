@@ -99,8 +99,6 @@ const Home: React.FC = () => {
     const [availableBetTypes, setAvailableBetTypes] = useState<BetType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
-    console.log('isMarketSelected', isMarketSelected);
-
     const tagsList = orderBy(
         TAGS_LIST.filter((tag) => !tag.hidden),
         ['priority', 'label'],
