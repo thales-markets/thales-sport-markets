@@ -13,7 +13,7 @@ import {
 import {
     BetType,
     COMBINED_POSITIONS_BET_TYPES,
-    MARKET_TYPES_WITH_DRAW,
+    MONEYLINE_BET_TYPES,
     ONE_SIDER_PLAYER_PROPS_BET_TYPES,
     OddsType,
     PLAYER_PROPS_BET_TYPES,
@@ -70,20 +70,32 @@ export const isSpecialYesNoProp = (betType: BetType) => {
     return SPECIAL_YES_NO_BET_TYPES.includes(betType);
 };
 
+export const isMoneyline = (betType: BetType) => {
+    return MONEYLINE_BET_TYPES.includes(betType) || `${betType}`.startsWith('1002') || `${betType}`.startsWith('1005');
+};
+
 export const isTotal = (betType: BetType) => {
-    return TOTAL_BET_TYPES.includes(betType);
+    return TOTAL_BET_TYPES.includes(betType) || `${betType}`.startsWith('1003') || `${betType}`.startsWith('1006');
 };
 
 export const isSpread = (betType: BetType) => {
-    return SPREAD_BET_TYPES.includes(betType);
+    return SPREAD_BET_TYPES.includes(betType) || `${betType}`.startsWith('1004') || `${betType}`.startsWith('1007');
 };
 
 export const isCombinedPositions = (betType: BetType) => {
     return COMBINED_POSITIONS_BET_TYPES.includes(betType);
 };
 
+export const isPeriod = (betType: BetType) => {
+    return `${betType}`.startsWith('1002') || `${betType}`.startsWith('1003') || `${betType}`.startsWith('1004');
+};
+
+export const isPeriod2 = (betType: BetType) => {
+    return `${betType}`.startsWith('1005') || `${betType}`.startsWith('1006') || `${betType}`.startsWith('1007');
+};
+
 export const getIsDrawAvailable = (leagueId: number, betType: BetType) =>
-    !TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(leagueId) && MARKET_TYPES_WITH_DRAW.includes(betType);
+    !TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(leagueId) && isMoneyline(betType);
 
 export const getPositionOrder = (leagueId: number, betType: BetType, position: number) =>
     getIsDrawAvailable(leagueId, betType) ? `${position == 0 ? 1 : position == 1 ? 3 : 2}` : undefined;

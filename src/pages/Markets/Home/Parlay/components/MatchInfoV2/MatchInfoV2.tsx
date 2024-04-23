@@ -1,5 +1,3 @@
-import { BetTypeNameMap } from 'constants/tags';
-import { BetType } from 'enums/markets';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromTicket } from 'redux/modules/ticket';
@@ -8,7 +6,7 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { TicketMarket } from 'types/markets';
 import { formatMarketOdds } from 'utils/markets';
-import { getMarketNameV2, getPositionTextV2 } from 'utils/marketsV2';
+import { getMarketNameV2, getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import MatchLogosV2 from '../MatchLogosV2';
 
 type MatchInfoProps = {
@@ -41,7 +39,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, 
                         }}
                     />
                 </MatchLabel>
-                <MarketTypeInfo>{BetTypeNameMap[market.typeId as BetType]}</MarketTypeInfo>
+                <MarketTypeInfo>{getTitleText(market)}</MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{positionText}</PositionText>
                     <Odd>{formatMarketOdds(selectedOddsType, market.odd)}</Odd>

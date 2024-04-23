@@ -5,7 +5,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SportMarketInfoV2 } from 'types/markets';
-import { getSubtitleText, isOddValid } from 'utils/marketsV2';
+import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
 import PositionDetailsV2 from '../PositionDetailsV2';
 import {
     Arrow,
@@ -54,7 +54,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, isGameOpen, isM
         >
             <Header isMainPageView={isMainPageView} isColumnView={isColumnView}>
                 <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
-                    {BetTypeNameMap[betType]}
+                    {getTitleText(markets[0])}
                     {betType == BetType.PLAYER_PROPS_TOUCHDOWNS && (
                         <Tooltip
                             overlay={
