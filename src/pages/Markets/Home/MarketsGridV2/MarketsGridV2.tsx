@@ -1,16 +1,16 @@
+import Scroll from 'components/Scroll';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { getIsMarketSelected } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { addHoursToCurrentDate } from 'thales-utils';
 import { SportMarketInfoV2, SportMarketsV2, TagInfo, Tags } from 'types/markets';
-import { isMobile } from 'utils/device';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
@@ -20,14 +20,13 @@ type MarketsGridProps = {
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
-    const dateFilter = useLocalStorage<Date | number>(
-        LOCAL_STORAGE_KEYS.FILTER_DATE,
-        !isMobile ? addHoursToCurrentDate(72, true).getTime() : 0
-    );
+    const isMarketSelected = useSelector(getIsMarketSelected);
+    const dateFilter = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
 
     const marketsMap: Record<number, SportMarketInfoV2[]> = groupBy(markets, (market) => Number(market.leagueId));
     // UNIFYING EUROPA LEAGUE MARKETS FROM BOTH ENETPULSE & RUNDOWNS PROVIDERS
-    const unifiedMarketsMap = unifyEuropaLeagueMarkets(marketsMap);
+    const unifiedMarketsMapEuropaLeague = unifyEuropaLeagueMarkets(marketsMap);
+    const unifiedMarketsMap = unifyBoxingMarkets(unifiedMarketsMapEuropaLeague);
     const marketsKeys = sortMarketKeys(
         Object.keys(marketsMap).map((key) => Number(key)),
         unifiedMarketsMap,
@@ -38,19 +37,21 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const finalOrderKeys = Number(dateFilter) !== 0 ? groupBySortedMarketsKeys(marketsKeys) : marketsKeys;
 
     return (
-        <Container>
-            <ListContainer>
-                {finalOrderKeys.map((leagueId: number, index: number) => {
-                    return (
-                        <MarketsListV2
-                            key={index}
-                            league={leagueId}
-                            markets={marketsMap[leagueId]}
-                            language={language}
-                        />
-                    );
-                })}
-            </ListContainer>
+        <Container isMarketSelected={isMarketSelected}>
+            <Scroll height="calc(100vh - 154px)">
+                <ListContainer>
+                    {finalOrderKeys.map((leagueId: number, index: number) => {
+                        return (
+                            <MarketsListV2
+                                key={index}
+                                league={leagueId}
+                                markets={marketsMap[leagueId]}
+                                language={language}
+                            />
+                        );
+                    })}
+                </ListContainer>
+            </Scroll>
         </Container>
     );
 };
@@ -170,8 +171,8 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     });
 
     return [
-        ...soccerKeys,
         ...footballKeys,
+        ...soccerKeys,
         ...basketballKeys,
         ...baseballKeys,
         ...hockeyKeys,
@@ -194,25 +195,33 @@ const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarketInfoV2[]
     return marketsMap;
 };
 
-const Container = styled(FlexDiv)`
-    margin: 10px 10px 0 0;
+const unifyBoxingMarkets = (marketsMap: Record<number, SportMarketInfoV2[]>) => {
+    const boxingMarkets = marketsMap[BOXING_TAGS[0]] ? marketsMap[BOXING_TAGS[0]] : [];
+    const boxingNonTitleMarkets = marketsMap[BOXING_TAGS[1]] ? marketsMap[BOXING_TAGS[1]] : [];
+    if (boxingMarkets.length > 0 || boxingNonTitleMarkets.length > 0) {
+        marketsMap[BOXING_TAGS[0]] = [...boxingMarkets, ...boxingNonTitleMarkets];
+        delete marketsMap[BOXING_TAGS[1]];
+    }
+    return marketsMap;
+};
+
+const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
+    margin: 10px 5px 0 0;
     flex-wrap: wrap;
-    max-width: 800px;
+    max-width: ${(props) => (props.isMarketSelected ? '210px' : '100%')};
     justify-content: center;
     flex-grow: 2;
     > div {
         display: flex;
-        width: 100%;
+        max-width: ${(props) => (props.isMarketSelected ? '100%' : '100%')};
+        width: ${(props) => (props.isMarketSelected ? '100%' : '100%')};
     }
-    overflow-y: auto;
-    // TODO - maybe remove max-height and scrolling, enable whole page scroll
-    max-height: 1210px;
-    scrollbar-width: 5px; /* Firefox */
+    overflow-x: hidden;
+    scrollbar-width: 5px; /* Firefox */n
     -ms-overflow-style: none;
     ::-webkit-scrollbar {
-        /* WebKit */
-        width: 5px;
-        height: 5px;
+        border-radius: 8px;
+        width: 10px;
     }
     @media (max-width: 950px) {
         margin: 0;
@@ -228,9 +237,9 @@ const Container = styled(FlexDiv)`
 const ListContainer = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 0 10px 20px 10px;
+    padding: 0 10px 0 0;
     @media (max-width: 950px) {
-        padding: 0 0px 20px 0px;
+        padding: 0 0px 0 0px;
     }
 `;
 

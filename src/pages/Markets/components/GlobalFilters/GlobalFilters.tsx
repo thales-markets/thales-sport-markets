@@ -1,15 +1,12 @@
-import CalendarDatepicker from 'components/CalendarDatepicker';
 import Dropdown from 'components/Dropdown';
 import { ODDS_TYPES } from 'constants/markets';
 import { GlobalFiltersEnum, OddsType, SportFilterEnum } from 'enums/markets';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOddsType, setOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { addHoursToCurrentDate } from 'thales-utils';
-import { getQueryStringVal } from 'utils/useQueryParams';
+import { FlexDiv, FlexDivRowCentered } from 'styles/common';
 
 type GlobalFiltersProps = {
     setDateFilter: (value: any) => void;
@@ -23,19 +20,13 @@ type GlobalFiltersProps = {
 };
 
 const GlobalFilters: React.FC<GlobalFiltersProps> = ({
-    setDateFilter,
-    setDateParam,
     setGlobalFilter,
     setGlobalFilterParam,
     globalFilter,
-    dateFilter,
-    sportFilter,
     isMobile,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-
-    const [selectedPeriod, setSelectedPeriod] = useState<number>(0);
 
     const selectedOddsType = useSelector(getOddsType);
     const setSelectedOddsType = useCallback(
@@ -44,41 +35,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
         },
         [dispatch]
     );
-
-    useEffect(() => {
-        if (sportFilter == SportFilterEnum.All) {
-            setSelectedPeriod(0);
-        }
-    }, [sportFilter]);
-
-    useEffect(() => {
-        if (typeof dateFilter != 'number') {
-            setSelectedPeriod(0);
-        }
-    }, [dateFilter]);
-
-    useEffect(() => {
-        setSelectedPeriod(0);
-    }, [globalFilter]);
-
-    useEffect(() => {
-        if (typeof dateFilter == 'number') {
-            const dateParam = getQueryStringVal('date');
-            const timeFilter = dateParam?.split('h')[0];
-            switch (timeFilter) {
-                case '12':
-                    setSelectedPeriod(12);
-                    break;
-                case '24':
-                    setSelectedPeriod(24);
-                    break;
-                case '72':
-                    setSelectedPeriod(72);
-                    break;
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <Container>
@@ -116,69 +72,6 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         </DropdownContrainer>
                     )}
                 </FilterTypeContainer>
-                <Separator isMobile={isMobile} />
-                <FilterTypeContainer isMobile={isMobile} timeFilters={true}>
-                    <TimeFilterContainer
-                        selected={selectedPeriod == 12}
-                        isMobile={isMobile}
-                        onClick={() => {
-                            if (selectedPeriod == 12) {
-                                setDateFilter(0);
-                                setDateParam('');
-                                setSelectedPeriod(0);
-                            } else {
-                                const calculatedDate = addHoursToCurrentDate(12);
-                                setDateFilter(calculatedDate.getTime());
-                                setDateParam('12hours');
-                                setSelectedPeriod(12);
-                            }
-                        }}
-                    >
-                        <Circle isMobile={isMobile} />
-                        <Label>12h</Label>
-                    </TimeFilterContainer>
-                    <TimeFilterContainer
-                        selected={selectedPeriod == 24}
-                        isMobile={isMobile}
-                        onClick={() => {
-                            if (selectedPeriod == 24) {
-                                setDateFilter(0);
-                                setDateParam('');
-                                setSelectedPeriod(0);
-                            } else {
-                                const calculatedDate = addHoursToCurrentDate(24);
-                                setDateFilter(calculatedDate.getTime());
-                                setDateParam('24hours');
-                                setSelectedPeriod(24);
-                            }
-                        }}
-                    >
-                        <Circle isMobile={isMobile} />
-                        <Label>24h</Label>
-                    </TimeFilterContainer>
-                    <TimeFilterContainer
-                        selected={selectedPeriod == 72}
-                        isMobile={isMobile}
-                        onClick={() => {
-                            if (selectedPeriod == 72) {
-                                setDateFilter(0);
-                                setDateParam('');
-                                setSelectedPeriod(0);
-                            } else {
-                                const calculatedDate = addHoursToCurrentDate(72, true);
-                                setDateFilter(calculatedDate.getTime());
-                                setDateParam('72hours');
-                                setSelectedPeriod(72);
-                            }
-                        }}
-                    >
-                        <Circle isMobile={isMobile} />
-                        <Label>3d</Label>
-                    </TimeFilterContainer>
-                    {!isMobile && (
-                        <CalendarDatepicker date={dateFilter} setDate={setDateFilter} setDateParam={setDateParam} />
-                    )}
-                </FilterTypeContainer>
             </Filters>
         </Container>
     );
@@ -186,7 +79,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
 
 const Container = styled(FlexDiv)`
     width: 100%;
-    max-width: 800px;
+    max-width: 806px;
 `;
 
 const DropdownContrainer = styled.div`
@@ -207,16 +100,16 @@ const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
     line-height: ${(props) => (props.isMobile ? '17px' : '14px')};
     align-items: center;
     letter-spacing: 0.01em;
-    margin: ${(props) => (props.isMobile ? '0px 30px' : '0px 10px')};
+    margin: ${(props) => (props.isMobile ? '0px 30px' : '0px 0px')};
     padding: ${(props) => (props.isMobile ? '0px' : '0px 10px')};
 `;
 
 const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean; isMobile?: boolean }>`
-    width: ${(props) => (props.isMobile ? '100%' : '70%')};
-    justify-content: 'space-around';
+    justify-content: space-around;
     align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
     flex-direction: ${(props) => (props.isMobile && !props.timeFilters ? 'column' : 'row')};
     height: ${(props) => (props.isMobile && props.timeFilters ? '120px' : '')};
+    flex: 1;
 `;
 
 const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
@@ -232,62 +125,10 @@ const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cance
     }
 `;
 
-const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean; isMobile?: boolean }>`
-    margin: 0px 2px;
-    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
-    & > div {
-        background-color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
-    }
-    &:hover {
-        cursor: pointer;
-        color: ${(props) => (!props.isMobile ? props.theme.textColor.quaternary : '')};
-        & > div {
-            cursor: pointer;
-            color: ${(props) => (!props.isMobile ? props.theme.textColor.quaternary : '')};
-        }
-        & > label {
-            cursor: pointer;
-        }
-    }
-`;
-
-const Circle = styled.div<{ isMobile: boolean }>`
-    height: ${(props) => (props.isMobile ? '23px' : '9px')};
-    width: ${(props) => (props.isMobile ? '23px' : '9px')};
-    border-radius: 50px;
-    background-color: ${(props) => props.theme.textColor.secondary};
-    cursor: pointer;
-    margin-top: ${(props) => (props.isMobile ? '0px' : '2px')};
-    margin-right: 3px;
-`;
-
-const Label = styled.label`
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-    white-space: nowrap;
-    align-self: center;
-`;
-
 const FilterIcon = styled.i<{ isMobile: boolean }>`
     display: ${(props) => (props.isMobile ? '' : 'none')};
     font-size: 25px;
     margin-right: 15px;
-`;
-
-const Separator = styled(FlexDivColumn)<{ isMobile: boolean }>`
-    display: ${(props) => (props.isMobile ? '' : 'none')};
-    height: fit-content;
-    width: 100%;
-    &:before {
-        content: '';
-        height: 3px;
-        background: ${(props) => props.theme.borderColor.primary};
-        border-radius: 10px 10px 10px 10px;
-        margin-bottom: 20px;
-    }
 `;
 
 export default GlobalFilters;

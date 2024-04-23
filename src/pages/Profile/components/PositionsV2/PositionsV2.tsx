@@ -4,14 +4,14 @@ import SimpleLoader from 'components/SimpleLoader';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
 import { ethers } from 'ethers';
-import { LoaderContainer } from 'pages/Markets/Home/Home';
+import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getParlayPayment } from 'redux/modules/parlay';
+import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
@@ -24,6 +24,7 @@ import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { useUserTicketsQuery } from '../../../../queries/markets/useUserTicketsQuery';
 import ShareTicketModalV2 from '../../../Markets/Home/Parlay/components/ShareTicketModalV2';
+import { ShareTicketModalProps } from '../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 import TicketPosition from './components/TicketPosition';
 import {
     Arrow,
@@ -40,7 +41,6 @@ import {
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
 } from './styled-components';
-import { ShareTicketModalProps } from '../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
@@ -57,8 +57,8 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const parlayPayment = useSelector(getParlayPayment);
-    const selectedCollateralIndex = parlayPayment.selectedCollateralIndex;
+    const ticketPayment = useSelector(getTicketPayment);
+    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 

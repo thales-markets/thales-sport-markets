@@ -1,4 +1,5 @@
 import { BetType, ContractSGPOrder, OddsType, Position } from 'enums/markets';
+import { TAGS_FLAGS } from 'enums/tags';
 
 export const ODDS_TYPES = [OddsType.American, OddsType.AMM, OddsType.Decimal];
 
@@ -37,10 +38,17 @@ export const INCENTIVIZED_UEFA = {
 export const INCENTIVIZED_NHL = {
     ids: [9006],
     startDate: new Date(Date.UTC(2024, 2, 5, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 3, 18, 23, 59, 59)),
-    link: 'https://dune.com/leifu/overtime-nhl-campaign',
-    opRewards: '',
+    endDate: new Date(Date.UTC(2024, 5, 24, 23, 59, 59)),
+    link: 'https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards',
     arbRewards: '20,000 ARB',
+};
+
+export const INCENTIVIZED_MLB = {
+    ids: [TAGS_FLAGS.MLB],
+    startDate: new Date(Date.UTC(2024, 3, 8, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 10, 1, 23, 59, 59)),
+    link: 'https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards',
+    arbRewards: '30,000 ARB',
 };
 
 export const MIN_LIQUIDITY = 10;

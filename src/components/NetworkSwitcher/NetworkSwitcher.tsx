@@ -1,5 +1,5 @@
 import { DEFAULT_NETWORK, SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, switchToNetworkId } from 'redux/modules/wallet';
@@ -69,11 +69,11 @@ const NetworkSwitcher: React.FC = () => {
 };
 
 const NetworkIconWrapper = styled.div<{ isConnected: boolean }>`
-    background: ${(props) => (props.isConnected ? props.theme.background.quaternary : 'transparent')};
+    background: ${(props) => (props.isConnected ? props.theme.background.tertiary : 'transparent')};
     height: 28px;
     border-radius: 20px;
     border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.background.quaternary};
+    border: 1px solid ${(props) => props.theme.background.tertiary};
     display: flex;
     justify-content: center;
     gap: 4px;
@@ -98,14 +98,12 @@ const NetworkText = styled.span`
 
 const NetworkIcon = styled.i<{ isConnected: boolean }>`
     font-size: 24px;
-    color: ${(props) =>
-        props.isConnected ? props.theme.button.textColor.primary : props.theme.button.textColor.quaternary};
+    color: ${(props) => (props.isConnected ? props.theme.button.textColor.primary : props.theme.textColor.secondary)};
 `;
 
 const DownIcon = styled.i<{ isConnected: boolean }>`
     font-size: 12px;
-    color: ${(props) =>
-        props.isConnected ? props.theme.button.textColor.primary : props.theme.button.textColor.quaternary};
+    color: ${(props) => (props.isConnected ? props.theme.button.textColor.primary : props.theme.textColor.secondary)};
 `;
 
 const NetworkDropDown = styled.div`
@@ -116,7 +114,7 @@ const NetworkDropDown = styled.div`
     display: flex;
     flex-direction: column;
     border-radius: 20px;
-    background: ${(props) => props.theme.background.quaternary};
+    background: ${(props) => props.theme.background.tertiary};
     width: 130px;
     padding: 10px;
     justify-content: center;

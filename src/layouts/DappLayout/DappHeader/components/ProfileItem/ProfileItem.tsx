@@ -65,6 +65,11 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
     return (
         <>
             <ProfileIconContainer>
+                {!!notificationsCount && (
+                    <NotificationCount>
+                        <Count>{notificationsCount}</Count>
+                    </NotificationCount>
+                )}
                 {favoriteTeamData?.favoriteTeam ? (
                     <TeamImage
                         avatarSize={avatarSize}
@@ -77,12 +82,6 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
                     />
                 ) : (
                     <ProfileIcon avatarSize={avatarSize} iconColor={iconColor} />
-                )}
-
-                {!!notificationsCount && (
-                    <NotificationCount>
-                        <Count>{notificationsCount}</Count>
-                    </NotificationCount>
                 )}
             </ProfileIconContainer>
         </>

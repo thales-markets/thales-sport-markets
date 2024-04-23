@@ -244,3 +244,7 @@ a {
 .green:after {
     border-right-color: #5fc694;
 }
+
+.invisible {
+    visibility: hidden;
+}

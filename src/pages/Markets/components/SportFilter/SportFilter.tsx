@@ -3,7 +3,7 @@ import Lottie from 'lottie-react';
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivRowCentered } from 'styles/common';
 
 type SportFilterProps = {
     disabled?: boolean;
@@ -24,30 +24,39 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, is
                     className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`}
                     onClick={() => (!disabled ? onClick() : '')}
                 >
-                    {sport.toLowerCase() == 'live' && (
-                        <Lottie autoplay={true} animationData={liveAnimationData} loop={true} style={liveBlinkStyle} />
-                    )}
-                    {sport.toLowerCase() != 'live' && (
-                        <SportIcon
-                            className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`}
-                        />
-                    )}
-                    <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
-                    {sport.toLowerCase() != 'all' ? (
-                        !selected ? (
-                            <ArrowIcon className={`icon-exotic icon-exotic--right ${selected ? 'selected' : ''}`} />
-                        ) : (
-                            <ArrowIcon
-                                down={true}
-                                className={`icon-exotic icon-exotic--down ${selected ? 'selected' : ''}`}
+                    <FlexDiv>
+                        {sport.toLowerCase() == 'live' && (
+                            <Lottie
+                                autoplay={true}
+                                animationData={liveAnimationData}
+                                loop={true}
+                                style={liveBlinkStyle}
                             />
-                        )
-                    ) : (
-                        ''
-                    )}
+                        )}
+                        {sport.toLowerCase() != 'live' && (
+                            <SportIcon
+                                className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`}
+                            />
+                        )}
+                        <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
+                    </FlexDiv>
+                    <FlexDiv gap={15}>
+                        {count > 0 && <Count isMobile={isMobile}>{count}</Count>}
+                        {sport.toLowerCase() != 'all' ? (
+                            !selected ? (
+                                <ArrowIcon className={`icon-exotic icon-exotic--right ${selected ? 'selected' : ''}`} />
+                            ) : (
+                                <ArrowIcon
+                                    down={true}
+                                    className={`icon-exotic icon-exotic--down ${selected ? 'selected' : ''}`}
+                                />
+                            )
+                        ) : (
+                            <ArrowIcon className={`invisible icon-exotic icon-exotic--right`} />
+                        )}
+                    </FlexDiv>
                 </LabelContainer>
             </LeftContainer>
-            {count > 0 && <Count isMobile={isMobile}>{count}</Count>}
         </Container>
     );
 };
@@ -60,20 +69,21 @@ const Container = styled(FlexDivRowCentered)<{ isMobile?: boolean }>`
     letter-spacing: 0.035em;
     text-transform: uppercase;
     cursor: pointer;
-    height: 36px;
+    height: 25px;
     margin-left: ${(props) => (props.isMobile ? '30px' : '0px')};
     margin-right: ${(props) => (props.isMobile ? '30px' : '0px')};
     position: relative;
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.textColor.quinary};
     margin-bottom: 5px;
     justify-content: flex-start;
 `;
 
 const LeftContainer = styled(FlexDivRowCentered)`
-    width: 100%;
+    flex: 1;
 `;
 
 const LabelContainer = styled(FlexDivRowCentered)`
+    flex: 1;
     &.selected,
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
@@ -126,10 +136,12 @@ const ArrowIcon = styled.i<{ down?: boolean }>`
 const Count = styled(FlexDivCentered)<{ isMobile?: boolean }>`
     border-radius: 8px;
     color: ${(props) => props.theme.textColor.quaternary};
-    background: ${(props) => (props.isMobile ? props.theme.background.tertiary : props.theme.background.secondary)};
+    background: ${(props) => (props.isMobile ? props.theme.background.primary : props.theme.background.primary)};
+    border: 2px solid ${(props) => props.theme.background.secondary};
     font-size: ${(props) => (props.isMobile ? '15px' : '12px')};
     min-width: 30px;
     height: ${(props) => (props.isMobile ? '20px' : '18px')};
+    line-height: ${(props) => (props.isMobile ? '20px' : '18px')};
     padding: 0 6px;
     -webkit-user-select: none;
     -moz-user-select: none;

@@ -1,14 +1,16 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
+import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_LEAGUE, INCENTIVIZED_UEFA } from 'constants/markets';
+import { INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
 import ROUTES from 'constants/routes';
-import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP, TAGS_LIST } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
 import { BetType } from 'enums/markets';
 import { Network } from 'enums/network';
 import { groupBy } from 'lodash';
+import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
 import Parlay from 'pages/Markets/Home/Parlay';
 import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
@@ -24,7 +26,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { NetworkId } from 'thales-utils';
-import { SportMarketInfoV2 } from 'types/markets';
+import { SportMarketInfoV2, TagInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
@@ -49,10 +51,20 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const [metaTitle, setMetaTitle] = useQueryParam('title', queryParams?.title ? queryParams?.title : '');
     const [showParlayMobileModal, setShowParlayMobileModal] = useState(false);
+    const [hidePausedMarkets, setHidePausedMarkets] = useState(true);
 
-    const groupedChildMarkets = useMemo(() => groupBy(market.childMarkets, (childMarket) => childMarket.typeId), [
-        market.childMarkets,
-    ]);
+    const groupedChildMarkets = useMemo(
+        () =>
+            groupBy(
+                market.childMarkets.filter((childMarket) =>
+                    hidePausedMarkets && market.isOpen && market.maturityDate > new Date()
+                        ? !childMarket.isPaused
+                        : true
+                ),
+                (childMarket) => childMarket.typeId
+            ),
+        [market.childMarkets, market.isOpen, market.maturityDate, hidePausedMarkets]
+    );
 
     useEffect(() => {
         if (!metaTitle) {
@@ -72,8 +84,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     }, [networkId]);
 
     const isGameStarted = market.maturityDate < new Date();
-    const showAMM = !market.isResolved && !market.isCanceled && !isGameStarted && !market.isPaused;
+    const isGameOpen = market.isOpen && !isGameStarted;
 
+    const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == market.leagueId)?.label;
     const isGameCancelled = market.isCanceled || (!isGameStarted && market.isResolved);
     const isGameResolved = market.isResolved || market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
@@ -115,7 +128,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     return (
         <RowContainer>
-            <MainContainer showAMM={showAMM}>
+            <MainContainer isGameOpen={isGameOpen}>
                 <HeaderWrapper>
                     <BackToLink
                         link={buildHref(ROUTES.Markets.Home)}
@@ -170,6 +183,58 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards: INCENTIVIZED_UEFA.arbRewards,
+                                        }}
+                                    />
+                                }
+                                component={
+                                    <IncentivizedLeague>
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        {getNetworkLogo(NetworkId.Arbitrum)}
+                                    </IncentivizedLeague>
+                                }
+                            ></Tooltip>
+                        )}
+                    {INCENTIVIZED_NHL.ids.includes(Number(market.leagueId)) &&
+                        new Date() > INCENTIVIZED_NHL.startDate &&
+                        new Date() < INCENTIVIZED_NHL.endDate && (
+                            <Tooltip
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.incentivized-tooltip-nhl-mlb"
+                                        components={{
+                                            detailsLink: (
+                                                <a href={INCENTIVIZED_NHL.link} target="_blank" rel="noreferrer" />
+                                            ),
+                                        }}
+                                        values={{
+                                            league: leagueName,
+                                            rewards: INCENTIVIZED_NHL.arbRewards,
+                                        }}
+                                    />
+                                }
+                                component={
+                                    <IncentivizedLeague>
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        {getNetworkLogo(NetworkId.Arbitrum)}
+                                    </IncentivizedLeague>
+                                }
+                            ></Tooltip>
+                        )}
+                    {INCENTIVIZED_MLB.ids.includes(Number(market.leagueId)) &&
+                        new Date() > INCENTIVIZED_MLB.startDate &&
+                        new Date() < INCENTIVIZED_MLB.endDate && (
+                            <Tooltip
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.incentivized-tooltip-nhl-mlb"
+                                        components={{
+                                            detailsLink: (
+                                                <a href={INCENTIVIZED_MLB.link} target="_blank" rel="noreferrer" />
+                                            ),
+                                        }}
+                                        values={{
+                                            league: leagueName,
+                                            rewards: INCENTIVIZED_MLB.arbRewards,
                                         }}
                                     />
                                 }
@@ -307,17 +372,43 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     </Status>
                 )}
                 <>
-                    <PositionsV2 markets={[market]} betType={BetType.WINNER} showOdds={showAMM} />
-                    {Object.keys(groupedChildMarkets).map((key, index) => {
-                        const typeId = Number(key);
-                        const childMarkets = groupedChildMarkets[typeId];
-                        return <PositionsV2 key={index} markets={childMarkets} betType={typeId} showOdds={showAMM} />;
-                    })}
+                    {isGameOpen && (
+                        <ToggleContainer>
+                            <Toggle
+                                label={{
+                                    firstLabel: t('markets.market-card.toggle.hide-paused-markets'),
+                                    secondLabel: t('markets.market-card.toggle.show-paused-markets'),
+                                }}
+                                active={!hidePausedMarkets}
+                                dotSize="18px"
+                                dotBackground={theme.background.secondary}
+                                dotBorder={`3px solid ${theme.borderColor.quaternary}`}
+                                handleClick={() => {
+                                    setHidePausedMarkets(!hidePausedMarkets);
+                                }}
+                            />
+                        </ToggleContainer>
+                    )}
+                    <PositionsContainer>
+                        <PositionsV2 markets={[market]} betType={BetType.WINNER} isGameOpen={isGameOpen} />
+                        {Object.keys(groupedChildMarkets).map((key, index) => {
+                            const typeId = Number(key);
+                            const childMarkets = groupedChildMarkets[typeId];
+                            return (
+                                <PositionsV2
+                                    key={index}
+                                    markets={childMarkets}
+                                    betType={typeId}
+                                    isGameOpen={isGameOpen}
+                                />
+                            );
+                        })}
+                    </PositionsContainer>
                 </>
                 {/* <Transactions market={market} /> */}
                 <TicketTransactions market={market} />
             </MainContainer>
-            {showAMM && (
+            {isGameOpen && (
                 <SidebarContainer>
                     <Parlay />
                 </SidebarContainer>
@@ -327,6 +418,15 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         </RowContainer>
     );
 };
+
+const PositionsContainer = styled(FlexDivColumn)`
+    position: relative;
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+    padding: 10px 10px 10px 10px;
+    background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
+`;
 
 const hideResultInfoPerPeriodForSports = (sportId: number) => {
     return (
@@ -360,17 +460,17 @@ const RowContainer = styled(FlexDivRow)`
     }
 `;
 
-const MainContainer = styled(FlexDivColumn)<{ showAMM: boolean }>`
+const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
     width: 100%;
-    max-width: 800px;
-    margin-right: ${(props) => (props.showAMM ? 10 : 0)}px;
+    max-width: 900px;
+    margin-right: ${(props) => (props.isGameOpen ? 10 : 0)}px;
     @media (max-width: 575px) {
         margin-right: 0;
     }
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
-    max-width: 320px;
+    max-width: 360px;
     @media (max-width: 950px) {
         display: none;
     }
@@ -408,7 +508,7 @@ const IncentivizedTitle = styled.span`
 
 const Status = styled(FlexDivCentered)<{ backgroundColor?: string }>`
     width: 100%;
-    border-radius: 15px;
+    border-radius: 8px;
     background-color: ${(props) => props.backgroundColor || props.theme.background.secondary};
     padding: 10px 50px;
     margin-bottom: 7px;

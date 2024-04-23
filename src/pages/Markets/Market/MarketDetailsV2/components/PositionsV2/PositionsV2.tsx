@@ -1,41 +1,74 @@
 import Tooltip from 'components/Tooltip';
 import { BetTypeNameMap } from 'constants/tags';
 import { BetType } from 'enums/markets';
+import { orderBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SportMarketInfoV2 } from 'types/markets';
-import { isOddValid } from 'utils/marketsV2';
-import MarketPositionsV2 from '../MarketPositionsV2';
-import { Arrow, Container, ContentContianer, ContentRow, Header, Title } from './styled-components';
+import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
+import PositionDetailsV2 from '../PositionDetailsV2';
+import {
+    Arrow,
+    Container,
+    ContentContianer,
+    ContentRow,
+    ContentWrapper,
+    Header,
+    SubTitle,
+    SubTitleContainer,
+    Title,
+} from './styled-components';
 
 type PositionsProps = {
     markets: SportMarketInfoV2[];
     betType: BetType;
-    showOdds: boolean;
+    isGameOpen: boolean;
+    isMainPageView?: boolean;
+    isColumnView?: boolean;
+    onAccordionClick?: () => void;
 };
 
-const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds }) => {
+const Positions: React.FC<PositionsProps> = ({
+    markets,
+    betType,
+    isGameOpen,
+    isMainPageView,
+    isColumnView,
+    onAccordionClick,
+}) => {
     const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
     const areOddsValid = markets.some((market) => market.odds.some((odd) => isOddValid(odd)));
 
-    const showContainer = !showOdds || areOddsValid;
+    const showContainer = !isGameOpen || areOddsValid;
 
     const sortedMarkets = useMemo(
         () =>
-            markets.sort((marketA: SportMarketInfoV2, marketB: SportMarketInfoV2) => {
+            orderBy(markets, ['line'], ['asc']).sort((marketA: SportMarketInfoV2, marketB: SportMarketInfoV2) => {
                 return sortMarketsByDisabled(marketA, marketB);
             }),
         [markets]
     );
 
+    const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
+    const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
+
     return showContainer ? (
-        <Container onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')}>
-            <Header>
-                <Title isExpanded={isExpanded}>
-                    {BetTypeNameMap[betType]}
+        <Container
+            onClick={() => {
+                if (!isExpanded) {
+                    setIsExpanded(!isExpanded);
+                    onAccordionClick && onAccordionClick();
+                }
+            }}
+            isExpanded={isExpanded}
+            isMainPageView={isMainPageView}
+        >
+            <Header isMainPageView={isMainPageView} isColumnView={isColumnView}>
+                <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
+                    {getTitleText(markets[0])}
                     {betType == BetType.PLAYER_PROPS_TOUCHDOWNS && (
                         <Tooltip
                             overlay={
@@ -47,24 +80,40 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, showOdds }) => 
                     )}
                 </Title>
             </Header>
-            <Arrow
-                className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
-                onClick={() => setIsExpanded(!isExpanded)}
-            />
+            {!isMainPageView && (
+                <Arrow
+                    className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
+                    onClick={() => {
+                        setIsExpanded(!isExpanded);
+                        onAccordionClick && onAccordionClick();
+                    }}
+                />
+            )}
             {isExpanded && (
                 <ContentContianer>
+                    {(positionText0 || positionText1) && !isColumnView && (
+                        <SubTitleContainer>
+                            {positionText0 && <SubTitle>{positionText0}</SubTitle>}
+                            {positionText1 && <SubTitle>{positionText1}</SubTitle>}
+                        </SubTitleContainer>
+                    )}
                     {sortedMarkets.map((market, index) => {
                         return (
-                            <div key={index}>
+                            <ContentWrapper key={index}>
                                 {market.isPlayerPropsMarket && (
                                     <PropsTextContainer>
                                         <PropsText>{`${market.playerProps.playerName}`}</PropsText>
                                     </PropsTextContainer>
                                 )}
-                                <ContentRow>
-                                    <MarketPositionsV2 market={market} />
+                                <ContentRow
+                                    gridMinMaxPercentage={market.odds.length === 3 ? 33 : 50}
+                                    isColumnView={isColumnView}
+                                >
+                                    {market.odds.map((_, index) => (
+                                        <PositionDetailsV2 key={index} market={market} position={index} />
+                                    ))}
                                 </ContentRow>
-                            </div>
+                            </ContentWrapper>
                         );
                     })}
                 </ContentContianer>
@@ -94,8 +143,7 @@ const PropsTextContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 6px;
-    margin-top: 4px;
+    margin: 5px 0;
 `;
 
 const PropsText = styled.span`

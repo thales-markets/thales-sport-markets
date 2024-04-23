@@ -112,7 +112,7 @@ const WalletInfo: React.FC = ({}) => {
 };
 
 const Container = styled(FlexDivCentered)`
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
     position: relative;
     justify-content: end;
@@ -125,7 +125,7 @@ const Container = styled(FlexDivCentered)`
 const Wrapper = styled.div<{ displayPadding?: boolean }>`
     display: flex;
     border-radius: 20px;
-    border: 1px solid ${(props) => props.theme.background.quaternary}; // TODO: March Madness fix, revert background to borderColor
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     height: 28px;
     justify-content: space-between;
     align-items: center;
@@ -156,7 +156,7 @@ const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?:
 `;
 
 const WalletBalanceInfo = styled.div`
-    border-left: 2px solid ${(props) => props.theme.background.quaternary}; // TODO: March Madness fix, revert background to borderColor
+    border-left: 2px solid ${(props) => props.theme.borderColor.primary};
     padding-left: 7px;
     padding-right: 6px;
     height: 70%;
@@ -170,7 +170,7 @@ const Text = styled.span`
     font-weight: 800;
     font-size: 10.8px;
     line-height: 12px;
-    color: ${(props) => props.theme.background.quaternary}; // TODO: March Madness fix, revert background to textColor
+    color: ${(props) => props.theme.textColor.secondary};
 `;
 
 const VoucherText = styled(Text)`

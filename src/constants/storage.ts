@@ -9,6 +9,7 @@ export const LOCAL_STORAGE_KEYS = {
     FILTER_DATE: 'filterDate',
     FILTER_SPORT: 'filterSport',
     FILTER_ACTIVE: 'filterActive',
+    FILTER_BET_TYPE: 'filterBetType',
     LIST_VIEW: 'listView',
     ODDS_TYPE: 'typeOdds',
     QUIZ_STATE: 'quizState',
@@ -21,4 +22,7 @@ export const LOCAL_STORAGE_KEYS = {
     BRACKETS: 'brackets',
     COLLATERAL_INDEX: 'collateralIndex',
     SGP_FEES: 'sgpFees',
+    KEEP_SELECTION: 'keepSelection',
+    SELECTED_MARKET: 'selectedMarket',
+    IS_THREE_WAY_VIEW: 'isThreeWayView',
 };

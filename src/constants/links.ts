@@ -19,14 +19,10 @@ export const LINKS = {
         Discord: 'https://discord.gg/thales',
         Docs: 'https://docs.overtimemarkets.xyz/',
         Medium: 'https://medium.com/@OvertimeMarkets.xyz',
-        Tutorial: 'https://www.youtube.com/watch?v=olp7jOj4Iyg',
+        Tutorial: 'https://youtu.be/fk05qbqbuZo?si=zkaHBogLqB850pV3',
         GitHub: 'https://github.com/thales-markets/thales-sport-markets',
         Instagram: 'https://www.instagram.com/overtimemarkets',
         Reddit: 'https://www.reddit.com/r/overtimemarkets',
-    },
-    MarchMadness: {
-        Medium:
-            'https://medium.com/@OvertimeMarkets.xyz/overtime-brings-the-bracket-to-the-blockchain-for-march-madness-66777956d87f',
     },
     UniswapBuyThalesOp:
         'https://app.uniswap.org/#/swap?outputCurrency=0x217d47011b23bb961eb6d93ca9945b7501a5bb11&chain=optimism',

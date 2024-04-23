@@ -12,7 +12,7 @@ type CheckboxProps = {
 
 const Checkbox: React.FC<CheckboxProps> = ({ value, onChange, className, disabled, checked, label, ...rest }) => {
     return (
-        <Container className={disabled ? 'disabled' : ''}>
+        <Container className={`${className} ${disabled ? 'disabled' : ''}`}>
             {label}
             <Input
                 {...rest}
@@ -41,11 +41,12 @@ const Container = styled.label`
     position: relative;
     padding-left: 25px;
     cursor: pointer;
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-style: normal;
     font-size: 18px;
     line-height: 20px;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.quinary};
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

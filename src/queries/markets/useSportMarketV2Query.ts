@@ -8,6 +8,7 @@ import { SportMarketInfoV2 } from 'types/markets';
 
 const useSportMarketQuery = (
     marketAddress: string,
+    onlyOpenChildMarkets: boolean,
     networkId: Network,
     options?: UseQueryOptions<SportMarketInfoV2 | undefined>
 ) => {
@@ -23,13 +24,18 @@ const useSportMarketQuery = (
                     maturityDate: new Date(market.maturityDate),
                     odds: market.odds.map((odd: any) => odd.normalizedImplied),
                     childMarkets: orderBy(
-                        market.childMarkets.map((childMarket: any) => {
-                            return {
-                                ...childMarket,
-                                maturityDate: new Date(childMarket.maturityDate),
-                                odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
-                            };
-                        }),
+                        market.childMarkets
+                            .filter(
+                                (childMarket: any) =>
+                                    (onlyOpenChildMarkets && childMarket.isOpen) || !onlyOpenChildMarkets
+                            )
+                            .map((childMarket: any) => {
+                                return {
+                                    ...childMarket,
+                                    maturityDate: new Date(childMarket.maturityDate),
+                                    odds: childMarket.odds.map((odd: any) => odd.normalizedImplied),
+                                };
+                            }),
                         ['typeId'],
                         ['asc']
                     ),

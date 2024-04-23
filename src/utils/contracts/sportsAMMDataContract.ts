@@ -6,7 +6,7 @@ const sportsAMMDataContract = {
         [Network.OptimismGoerli]: '',
         [Network.Arbitrum]: '0x1fe010d0393A3082bda4d6A269D85133dE985935',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '0xd375572a9d6f6F464dd315D53053Cf8183FB392E',
+        [Network.OptimismSepolia]: '0xdA07acf472c6AfDAd3cf4d2cbb97Cc311f081c26',
     },
     abi: [
         {
@@ -75,6 +75,19 @@ const sportsAMMDataContract = {
                 },
             ],
             name: 'PauseChanged',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: 'riskManager',
+                    type: 'address',
+                },
+            ],
+            name: 'RiskManagerChanged',
             type: 'event',
         },
         {
@@ -217,7 +230,7 @@ const sportsAMMDataContract = {
                         },
                         {
                             internalType: 'uint256',
-                            name: 'buyInAmountAfterFees',
+                            name: 'fees',
                             type: 'uint256',
                         },
                         {
@@ -399,7 +412,7 @@ const sportsAMMDataContract = {
                         },
                         {
                             internalType: 'uint256',
-                            name: 'buyInAmountAfterFees',
+                            name: 'fees',
                             type: 'uint256',
                         },
                         {
@@ -621,7 +634,7 @@ const sportsAMMDataContract = {
                         },
                         {
                             internalType: 'uint256',
-                            name: 'buyInAmountAfterFees',
+                            name: 'fees',
                             type: 'uint256',
                         },
                         {
@@ -803,7 +816,7 @@ const sportsAMMDataContract = {
                         },
                         {
                             internalType: 'uint256',
-                            name: 'buyInAmountAfterFees',
+                            name: 'fees',
                             type: 'uint256',
                         },
                         {
@@ -873,8 +886,13 @@ const sportsAMMDataContract = {
                     type: 'address',
                 },
                 {
-                    internalType: 'address',
+                    internalType: 'contract ISportsAMMV2',
                     name: '_sportsAMM',
+                    type: 'address',
+                },
+                {
+                    internalType: 'contract ISportsAMMV2RiskManager',
+                    name: '_riskManager',
                     type: 'address',
                 },
             ],
@@ -949,6 +967,19 @@ const sportsAMMDataContract = {
             type: 'function',
         },
         {
+            inputs: [],
+            name: 'riskManager',
+            outputs: [
+                {
+                    internalType: 'contract ISportsAMMV2RiskManager',
+                    name: '',
+                    type: 'address',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [
                 {
                     internalType: 'address',
@@ -970,6 +1001,19 @@ const sportsAMMDataContract = {
                 },
             ],
             name: 'setPaused',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'contract ISportsAMMV2RiskManager',
+                    name: '_riskManager',
+                    type: 'address',
+                },
+            ],
+            name: 'setRiskManager',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',

@@ -1,7 +1,7 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_LEAGUE, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
+import { INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
 import { Network } from 'enums/network';
 import React from 'react';
 import { Trans } from 'react-i18next';
@@ -98,7 +98,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                         });
                                         dispatch(setFavouriteLeagues(newFavourites));
                                     }}
-                                    className={`icon icon--${isFavourite ? 'star-full selected' : 'star-empty'} `}
+                                    className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                                 />
                                 <LabelContainer
                                     className={`${tagFilterIds.includes(tag.id) ? 'selected' : ''}`}
@@ -181,7 +181,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                             <Tooltip
                                                 overlay={
                                                     <Trans
-                                                        i18nKey="markets.incentivized-tooltip-nhl"
+                                                        i18nKey="markets.incentivized-tooltip-nhl-mlb"
                                                         components={{
                                                             detailsLink: (
                                                                 <a
@@ -192,7 +192,37 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                             ),
                                                         }}
                                                         values={{
+                                                            league: tag.label,
                                                             rewards: INCENTIVIZED_NHL.arbRewards,
+                                                        }}
+                                                    />
+                                                }
+                                                component={
+                                                    <IncentivizedLeague>
+                                                        {getNetworkLogo(NetworkId.Arbitrum)}
+                                                    </IncentivizedLeague>
+                                                }
+                                            ></Tooltip>
+                                        )}
+                                    {INCENTIVIZED_MLB.ids.includes(tag.id) &&
+                                        new Date() > INCENTIVIZED_MLB.startDate &&
+                                        new Date() < INCENTIVIZED_MLB.endDate && (
+                                            <Tooltip
+                                                overlay={
+                                                    <Trans
+                                                        i18nKey="markets.incentivized-tooltip-nhl-mlb"
+                                                        components={{
+                                                            detailsLink: (
+                                                                <a
+                                                                    href={INCENTIVIZED_MLB.link}
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                />
+                                                            ),
+                                                        }}
+                                                        values={{
+                                                            league: tag.label,
+                                                            rewards: INCENTIVIZED_MLB.arbRewards,
                                                         }}
                                                     />
                                                 }

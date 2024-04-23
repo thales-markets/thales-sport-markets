@@ -1,9 +1,8 @@
 import React from 'react';
 import { Oval } from 'react-loader-spinner';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
 const Loader: React.FC = () => {
     const theme: ThemeInterface = useTheme();

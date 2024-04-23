@@ -152,10 +152,10 @@ const Parlay: React.FC = () => {
 };
 
 const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?: boolean }>`
-    max-width: 320px;
+    max-width: 360px;
     padding: 12px;
     flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
+    background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
 `;
 
@@ -164,13 +164,59 @@ const ListContainer = styled(FlexDivColumn)``;
 const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     display: flex;
     position: relative;
-    height: 45px;
+    // height: 45px;
     align-items: center;
     text-align: center;
-    padding: ${(props) => (props.outOfLiquidity ? '5px' : '5px 0px')};
-    ${(props) => (props.outOfLiquidity ? 'background: rgba(26, 28, 43, 0.5);' : '')}
+    padding: ${(props) => (props.outOfLiquidity ? '5px' : '8px 10px')};
+    background: ${(props) => (props.outOfLiquidity ? 'rgba(26, 28, 43, 0.5);' : props.theme.background.secondary)};
     ${(props) => (props.outOfLiquidity ? `border: 2px solid ${props.theme.status.loss};` : '')}
-    ${(props) => (props.outOfLiquidity ? 'border-radius: 2px;' : '')}
+    ${(props) => (props.outOfLiquidity ? 'border-radius: 2px;' : '')};
+    margin-bottom: 11px;
+    :first-child {
+        border-radius: 5px 5px 0 0;
+    }
+    :last-child {
+        border-radius: 0 0 5px 5px;
+    }
+    :first-child:last-child {
+        border-radius: 5px;
+    }
+    :not(:first-child) {
+        :before {
+            content: '';
+            position: absolute;
+            left: 0;
+            height: 6px;
+            width: 100%;
+            top: -4px;
+            background: radial-gradient(
+                    circle,
+                    transparent,
+                    transparent 50%,
+                    ${(props) => props.theme.background.secondary} 50%,
+                    ${(props) => props.theme.background.secondary} 100%
+                )
+                0px -6px / 0.7rem 0.7rem repeat-x;
+        }
+    }
+    :not(:last-child) {
+        :after {
+            content: '';
+            position: absolute;
+            left: 0;
+            height: 6px;
+            width: 100%;
+            bottom: -4px;
+            background: radial-gradient(
+                    circle,
+                    transparent,
+                    transparent 50%,
+                    ${(props) => props.theme.background.secondary} 50%,
+                    ${(props) => props.theme.background.secondary} 100%
+                )
+                0px 1px / 0.7rem 0.7rem repeat-x;
+        }
+    }
 `;
 
 const HorizontalLine = styled.hr`

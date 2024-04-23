@@ -29,9 +29,8 @@ const useUsersStatsV2Query = (
                     const ticket = tickets[index];
 
                     const buyInAmount = coinFormatter(ticket.buyInAmount, networkId);
-                    const buyInAmountAfterFees = coinFormatter(ticket.buyInAmountAfterFees, networkId);
                     const totalQuote = bigNumberFormatter(ticket.totalQuote);
-                    const payout = buyInAmountAfterFees / totalQuote;
+                    const payout = buyInAmount / totalQuote;
 
                     volume += buyInAmount;
                     if (ticket.isUserTheWinner && payout > highestWin) {

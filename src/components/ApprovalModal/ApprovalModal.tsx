@@ -1,16 +1,16 @@
+import Button from 'components/Button';
+import Modal from 'components/Modal';
+import Checkbox from 'components/fields/Checkbox';
+import NumericInput from 'components/fields/NumericInput';
+import { BigNumber, ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
 import { getIsWalletConnected, getNetworkId, setWalletConnectModalVisibility } from 'redux/modules/wallet';
-import { BigNumber, ethers } from 'ethers';
-import { bigNumberFormatter, coinParser } from 'thales-utils';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
-import Checkbox from 'components/fields/Checkbox';
-import NumericInput from 'components/fields/NumericInput';
-import Button from 'components/Button';
-import Modal from 'components/Modal';
+import { bigNumberFormatter, coinParser } from 'thales-utils';
 import { getCollateral } from 'utils/collaterals';
 
 type ApprovalModalProps = {

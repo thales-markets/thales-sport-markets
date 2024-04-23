@@ -1,60 +1,67 @@
 import { Colors } from 'styles/common';
 
 export default {
+    fontFamily: { primary: "'Roboto' !important", secondary: '', tertiary: '' },
     background: {
-        primary: Colors.GRAY_DARK,
-        secondary: Colors.GRAY,
-        tertiary: Colors.GRAY_LIGHT,
+        primary: Colors.NAVY_BLUE_EXTRA_DARK,
+        secondary: Colors.NAVY_BLUE,
+        tertiary: Colors.NAVY_BLUE_LIGHT,
         quaternary: Colors.BLUE,
+        quinary: Colors.NAVY_BLUE_DARK,
     },
     textColor: {
         primary: Colors.WHITE,
-        secondary: Colors.GRAY_LIGHT,
-        tertiary: Colors.GRAY,
+        secondary: Colors.NAVY_BLUE_LIGHT,
+        tertiary: Colors.NAVY_BLUE,
         quaternary: Colors.BLUE,
+        quinary: Colors.NAVY_BLUE_EXTRA_LIGHT,
+        senary: Colors.BLACK,
     },
     borderColor: {
-        primary: Colors.GRAY_LIGHT,
+        primary: Colors.NAVY_BLUE_LIGHT,
         secondary: Colors.WHITE,
         tertiary: Colors.GREEN,
         quaternary: Colors.BLUE,
+        quinary: Colors.NAVY_BLUE,
     },
     button: {
         background: {
             primary: Colors.GREEN,
-            secondary: Colors.GRAY,
-            tertiary: Colors.GRAY_LIGHT,
+            secondary: Colors.NAVY_BLUE,
+            tertiary: Colors.NAVY_BLUE_LIGHT,
             quaternary: Colors.BLUE,
             quinary: Colors.BLUE,
         },
         textColor: {
-            primary: Colors.GRAY_DARK,
+            primary: Colors.NAVY_BLUE_DARK,
             secondary: Colors.WHITE,
             tertiary: Colors.ORANGE,
             quaternary: Colors.BLUE,
-            quinary: Colors.GRAY,
+            quinary: Colors.NAVY_BLUE,
         },
         borderColor: {
             primary: Colors.GREEN,
             secondary: Colors.BLUE,
-            tertiary: Colors.GRAY_DARK,
+            tertiary: Colors.NAVY_BLUE_DARK,
+            quaternary: Colors.NAVY_BLUE_LIGHT,
+            quinary: Colors.GRAY_DARK,
         },
     },
     input: {
         background: {
             primary: Colors.WHITE,
-            secondary: Colors.GRAY_DARK,
+            secondary: Colors.NAVY_BLUE_DARK,
             selection: {
-                primary: Colors.GRAY_LIGHT,
+                primary: Colors.NAVY_BLUE_LIGHT,
             },
         },
         textColor: {
-            primary: Colors.GRAY_DARK,
+            primary: Colors.NAVY_BLUE_DARK,
             secondary: Colors.BLUE,
         },
         borderColor: {
             primary: Colors.WHITE,
-            secondary: Colors.GRAY_LIGHT,
+            secondary: Colors.NAVY_BLUE_LIGHT,
             tertiary: Colors.BLUE,
             focus: {
                 primary: Colors.BLUE,
@@ -69,7 +76,7 @@ export default {
     },
     error: {
         background: {
-            primary: Colors.GRAY,
+            primary: Colors.NAVY_BLUE,
         },
         textColor: {
             primary: Colors.RED,
@@ -80,7 +87,7 @@ export default {
     },
     warning: {
         background: {
-            primary: Colors.GRAY,
+            primary: Colors.NAVY_BLUE,
         },
         textColor: {
             primary: Colors.ORANGE,
@@ -91,7 +98,7 @@ export default {
     },
     info: {
         background: {
-            primary: Colors.GRAY,
+            primary: Colors.NAVY_BLUE,
         },
         textColor: {
             primary: Colors.BLUE,
@@ -114,40 +121,35 @@ export default {
         started: Colors.RED,
         canceled: Colors.RED,
         paused: Colors.RED,
-        sold: Colors.GRAY_LIGHT,
+        sold: Colors.NAVY_BLUE_LIGHT,
         comingSoon: Colors.ORANGE,
-        finished: Colors.GRAY_LIGHT,
+        finished: Colors.NAVY_BLUE_LIGHT,
     },
     promotion: {
         background: {
             primary: Colors.GREEN,
-            secondary: Colors.GRAY_LIGHT,
+            secondary: Colors.NAVY_BLUE_LIGHT,
         },
         textColor: {
-            primary: Colors.GRAY_DARK,
+            primary: Colors.NAVY_BLUE_DARK,
             secondary: Colors.WHITE,
         },
     },
     oddsContainerBackground: {
-        primary: Colors.GRAY,
-        secondary: Colors.GRAY_SECOND,
-        tertiary: Colors.GRAY_RESOLVED,
-    },
-    oddsGradiendBackground: {
-        primary: Colors.GRAY_GRADIENT_1,
-        secondary: Colors.GRAY_GRADIENT_2,
-        tertiary: Colors.GRAY_GRADIENT_3,
+        primary: Colors.NAVY_BLUE,
+        secondary: Colors.NAVY_BLUE_DARK,
+        tertiary: Colors.NAVY_BLUE_EXTRA_DARK,
     },
     chart: {
         primary: Colors.PURPLE,
     },
     connectWalletModal: {
         secondaryText: Colors.WHITE,
-        border: Colors.GRAY_LIGHT,
-        buttonBackground: Colors.GRAY_LIGHT,
-        modalBackground: Colors.GRAY_DARK,
+        border: Colors.NAVY_BLUE_LIGHT,
+        buttonBackground: Colors.NAVY_BLUE_LIGHT,
+        modalBackground: Colors.NAVY_BLUE_DARK,
         hover: Colors.BLUE,
-        hoverText: Colors.GRAY_DARK,
+        hoverText: Colors.NAVY_BLUE_DARK,
         errorMessage: Colors.RED,
         warningBackground: Colors.RED,
         warningText: Colors.WHITE,
@@ -156,72 +158,5 @@ export default {
     progressBar: {
         selected: Colors.BLUE,
         unselected: Colors.WHITE,
-    },
-    marchMadness: {
-        background: {
-            primary: '',
-            secondary: '',
-            tertiary: '',
-            quaternary: '',
-            quinary: '',
-            senary: '',
-        },
-        textColor: {
-            primary: '',
-            secondary: '',
-            tertiary: '',
-            quaternary: '',
-            quinary: '',
-            senary: '',
-        },
-        borderColor: {
-            primary: '',
-            secondary: '',
-            tertiary: '',
-            quaternary: '',
-            quinary: '',
-            senary: '',
-        },
-        button: {
-            background: {
-                primary: '',
-                secondary: Colors.BLUE_GRADIENT_1,
-                tertiary: '',
-                quaternary: '',
-                quinary: '',
-                senary: '',
-            },
-            textColor: {
-                primary: '',
-                secondary: Colors.WHITE,
-                tertiary: '',
-                quaternary: '',
-                quinary: '',
-            },
-            borderColor: {
-                primary: '',
-                secondary: '',
-                tertiary: '',
-            },
-        },
-        link: {
-            textColor: {
-                primary: '',
-                secondary: '',
-            },
-        },
-        shadow: {
-            modal: '',
-            image: '',
-        },
-        status: {
-            notSelected: '',
-            win: '',
-            loss: '',
-            started: '',
-            wrong: '',
-            selected: '',
-            share: '',
-        },
     },
 };

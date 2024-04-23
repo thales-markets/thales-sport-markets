@@ -1,6 +1,5 @@
 import { ParticleNetwork } from '@particle-network/auth';
 import { ParticleProvider } from '@particle-network/provider';
-import BannerCarousel from 'components/BannerCarousel';
 import Loader from 'components/Loader';
 import { SUPPORTED_NETWORKS_NAMES } from 'constants/network';
 import ROUTES from 'constants/routes';
@@ -9,7 +8,6 @@ import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import Theme from 'layouts/Theme';
-import MarchMadness from 'pages/MarchMadness';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
 import Wizard from 'pages/Wizard';
@@ -186,7 +184,6 @@ const App = () => {
                                 />
                                 <Route exact path={ROUTES.Markets.Home}>
                                     <DappLayout>
-                                        <BannerCarousel />
                                         <Markets />
                                     </DappLayout>
                                 </Route>
@@ -265,12 +262,6 @@ const App = () => {
                                     </Route>
                                 )}
 
-                                <Route exact path={ROUTES.MarchMadness}>
-                                    <DappLayout>
-                                        <MarchMadness />
-                                    </DappLayout>
-                                </Route>
-
                                 {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                                     <Route exact path={ROUTES.LiquidityPool}>
                                         <DappLayout>
@@ -300,7 +291,6 @@ const App = () => {
                                 <Route>
                                     <Redirect to={ROUTES.Markets.Home} />
                                     <DappLayout>
-                                        <BannerCarousel />
                                         <Markets />
                                     </DappLayout>
                                 </Route>

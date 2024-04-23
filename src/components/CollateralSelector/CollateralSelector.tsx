@@ -5,18 +5,18 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import {
-    FlexDivSpaceBetween,
+    FlexDivCentered,
     FlexDivColumnCentered,
     FlexDivRowCentered,
+    FlexDivSpaceBetween,
     FlexDivStart,
-    FlexDivCentered,
 } from 'styles/common';
+import { formatCurrencyWithSign } from 'thales-utils';
 import { Coins } from 'types/tokens';
 import { isStableCurrency } from 'utils/collaterals';
-import { formatCurrencyWithSign } from 'thales-utils';
-import { setPaymentSelectedCollateralIndex } from 'redux/modules/parlay';
-import { getNetworkId } from '../../redux/modules/wallet';
 import { getNetworkNameByNetworkId } from 'utils/network';
+import { setPaymentSelectedCollateralIndex } from '../../redux/modules/ticket';
+import { getNetworkId } from '../../redux/modules/wallet';
 
 type CollateralSelectorProps = {
     collateralArray: Array<string>;
@@ -179,6 +179,7 @@ const Text = styled.span<{
     isDetailedView?: boolean;
     isSelectedCollateral?: boolean;
 }>`
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-style: normal;
     font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '600')};
     font-size: ${(props) => (props.isDetailedView ? '14px' : '12px')};
