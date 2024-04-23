@@ -225,7 +225,7 @@ export const getTitleText = (market: SportMarketInfoV2) => {
         (market.leagueId == 9153 || market.leagueId == 9156) &&
         (isTotal(betType) || isTotalOddEven(betType) || isSpread(betType))
     ) {
-        sufix = `${sufix}${betType === BetType.TOTAL2 || betType === BetType.SPREAD2 ? ' (sets)' : ' (gems)'}`;
+        sufix = `${sufix}${betType === BetType.TOTAL2 || betType === BetType.SPREAD2 ? ' (sets)' : ' (games)'}`;
     }
 
     return betTypeName ? `${betTypeName}${sufix}` : `${betType}`;
