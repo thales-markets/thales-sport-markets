@@ -9,6 +9,7 @@ export const Container = styled(FlexDiv)`
 `;
 
 export const BetTypesContainer = styled(FlexDiv)`
+    width: 100%;
     overflow: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -25,6 +26,7 @@ export const BetTypeButton = styled.button<{ selected?: boolean }>`
     margin-right: 5px;
     cursor: pointer;
     white-space: nowrap;
+    width: fit-content;
     font-weight: bold;
     background: ${({ theme, selected }) =>
         selected ? theme.button.background.quaternary : theme.button.background.secondary};
