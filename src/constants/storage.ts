@@ -9,6 +9,7 @@ export const LOCAL_STORAGE_KEYS = {
     FILTER_DATE: 'filterDate',
     FILTER_SPORT: 'filterSport',
     FILTER_ACTIVE: 'filterActive',
+    FILTER_BET_TYPE: 'filterBetType',
     LIST_VIEW: 'listView',
     ODDS_TYPE: 'typeOdds',
     QUIZ_STATE: 'quizState',

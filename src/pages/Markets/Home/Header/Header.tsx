@@ -1,18 +1,17 @@
 import { BetTypeNameMap } from 'constants/tags';
 import { BetType } from 'enums/markets';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsThreeWayView, setIsThreeWayView } from 'redux/modules/market';
+import { getBetTypeFilter, getIsThreeWayView, setBetTypeFilter, setIsThreeWayView } from 'redux/modules/market';
 import { ArrowIcon, BetTypeButton, BetTypesContainer, Container, ThreeWayIcon } from './styled-components';
 
 type HeaderProps = {
     availableBetTypes: BetType[];
-    selectedBetTypes: BetType[];
-    setSelectedBetTypes: (betTypes: BetType[]) => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ availableBetTypes, selectedBetTypes, setSelectedBetTypes }) => {
+const Header: React.FC<HeaderProps> = ({ availableBetTypes }) => {
     const dispatch = useDispatch();
     const isThreeWayView = useSelector(getIsThreeWayView);
+    const betTypeFilter = useSelector(getBetTypeFilter);
 
     return (
         <Container>
@@ -21,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ availableBetTypes, selectedBetTypes, se
                 className="icon icon--arrow"
                 onClick={() => {
                     document.getElementById('bet-types-container')?.scrollBy({
-                        left: -100,
+                        left: -200,
                         behavior: 'smooth',
                     });
                 }}
@@ -30,11 +29,11 @@ const Header: React.FC<HeaderProps> = ({ availableBetTypes, selectedBetTypes, se
                 {availableBetTypes.map((betType) => (
                     <BetTypeButton
                         onClick={() =>
-                            selectedBetTypes.includes(betType)
-                                ? setSelectedBetTypes(selectedBetTypes.filter((type) => type !== betType))
-                                : setSelectedBetTypes([...selectedBetTypes, betType])
+                            betTypeFilter === betType
+                                ? dispatch(setBetTypeFilter(undefined))
+                                : dispatch(setBetTypeFilter(betType))
                         }
-                        selected={selectedBetTypes.includes(betType)}
+                        selected={betTypeFilter === betType}
                         key={betType}
                     >
                         {BetTypeNameMap[betType]}
@@ -44,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ availableBetTypes, selectedBetTypes, se
             <ArrowIcon
                 onClick={() => {
                     document.getElementById('bet-types-container')?.scrollBy({
-                        left: 100,
+                        left: 200,
                         behavior: 'smooth',
                     });
                 }}

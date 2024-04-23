@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
+    getBetTypeFilter,
     getDateFilter,
     getGlobalFilter,
     getIsMarketSelected,
@@ -36,7 +37,6 @@ import {
 } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
@@ -80,15 +80,16 @@ const Home: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const theme: ThemeInterface = useTheme();
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
-    const dateFilter = useSelector((state: RootState) => getDateFilter(state));
-    const globalFilter = useSelector((state: RootState) => getGlobalFilter(state));
-    const sportFilter = useSelector((state: RootState) => getSportFilter(state));
-    const tagFilter = useSelector((state: RootState) => getTagFilter(state));
+    const isAppReady = useSelector(getIsAppReady);
+    const networkId = useSelector(getNetworkId);
+    const marketSearch = useSelector(getMarketSearch);
+    const dateFilter = useSelector(getDateFilter);
+    const globalFilter = useSelector(getGlobalFilter);
+    const sportFilter = useSelector(getSportFilter);
+    const tagFilter = useSelector(getTagFilter);
+    const betTypeFilter = useSelector(getBetTypeFilter);
     const location = useLocation();
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
@@ -96,7 +97,6 @@ const Home: React.FC = () => {
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
     const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
     const [availableBetTypes, setAvailableBetTypes] = useState<BetType[]>([]);
-    const [selectedBetTypes, setSelectedBetTypes] = useState<BetType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
     const tagsList = orderBy(
@@ -273,13 +273,13 @@ const Home: React.FC = () => {
                     betTypes.add(childMarket.typeId);
                 });
 
-                if (selectedBetTypes.length) {
+                if (betTypeFilter) {
                     const marketBetTypes = [
                         market.typeId,
                         ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
                     ];
 
-                    if (!marketBetTypes.some((betType) => selectedBetTypes.includes(betType))) {
+                    if (!marketBetTypes.some((betType) => betTypeFilter === betType)) {
                         return false;
                     }
                 }
@@ -309,7 +309,7 @@ const Home: React.FC = () => {
         tagFilter,
         dateFilter,
         sportFilter,
-        selectedBetTypes,
+        betTypeFilter,
         favouriteLeagues,
     ]);
 
@@ -685,13 +685,7 @@ const Home: React.FC = () => {
                             isMobile={isMobile}
                         />
                     )} */}
-                    {!isMobile && (
-                        <Header
-                            selectedBetTypes={selectedBetTypes}
-                            setSelectedBetTypes={setSelectedBetTypes}
-                            availableBetTypes={availableBetTypes}
-                        />
-                    )}
+                    {!isMobile && <Header availableBetTypes={availableBetTypes} />}
                     {sportMarketsQueryNew.isLoading ? (
                         <LoaderContainer>
                             <SimpleLoader />

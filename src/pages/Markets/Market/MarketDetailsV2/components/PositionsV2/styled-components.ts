@@ -37,7 +37,9 @@ export const SubTitle = styled.span`
     text-align: center;
 `;
 
-export const ContentContianer = styled(FlexDivColumn)``;
+export const ContentContianer = styled(FlexDiv)`
+    flex-direction: column;
+`;
 
 export const ContentRow = styled.div<{ gridMinMaxPercentage: number; isColumnView?: boolean }>`
     margin-bottom: ${(props) => (props.isColumnView ? '0' : '5px')};
