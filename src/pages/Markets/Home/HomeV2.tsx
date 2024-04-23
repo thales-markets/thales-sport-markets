@@ -105,7 +105,7 @@ const Home: React.FC = () => {
         ['priority', 'label'],
         ['asc', 'asc']
     ).map((tag) => {
-        return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
+        return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite, live: tag.live };
     });
 
     useEffect(() => {

@@ -106,6 +106,7 @@ const Label = styled.div`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    align-self: center;
 `;
 
 const SportIcon = styled.i`
