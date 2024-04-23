@@ -267,7 +267,8 @@
                 "cricket": "Criquet",
                 "boxing": "Boxe",
                 "mma": "Sports de combat",
-                "golf": "Le golf"
+                "golf": "Le golf",
+                "live": "En direct"
             },
             "all": "Tous",
             "datepicker": {
@@ -520,7 +521,8 @@
             },
             "type-tooltip": {
                 "11055": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
-            }
+            },
+            "odds-live-limitation-message": "Positions en direct autorisées uniquement en tant que célibataires"
         },
         "market-details": {
             "wallet-info": {

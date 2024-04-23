@@ -1,5 +1,6 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
-import { GlobalFiltersEnum } from 'enums/markets';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { t } from 'i18next';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
@@ -33,6 +34,9 @@ const Parlay: React.FC = () => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const ticket = useSelector(getTicket);
     const hasTicketError = useSelector(getHasTicketError);
+    // TODO SWITCH CHECK TO LIVE WITH SPORTMARKETSV2 OBJECT FLAG
+    const liveFilter = localStorage.getItem(LOCAL_STORAGE_KEYS.FILTER_SPORT);
+    const isLiveFilterSelected = liveFilter != null ? JSON.parse(liveFilter) == SportFilterEnum.Live : false;
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
 
@@ -91,16 +95,18 @@ const Parlay: React.FC = () => {
 
             // if market is not opened anymore remove it
             if (ticket.length > ticketMarkets.length) {
-                const notOpenedMarkets = ticket.filter((ticketPosition) =>
-                    sportOpenMarkets.every((market: SportMarketInfoV2) => !isSameMarket(market, ticketPosition))
-                );
+                if (!isLiveFilterSelected) {
+                    const notOpenedMarkets = ticket.filter((ticketPosition) =>
+                        sportOpenMarkets.every((market: SportMarketInfoV2) => !isSameMarket(market, ticketPosition))
+                    );
 
-                if (notOpenedMarkets.length > 0) dispatch(removeAll());
+                    if (notOpenedMarkets.length > 0) dispatch(removeAll());
+                }
             }
 
             setTicketMarkets(ticketMarkets);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch, isLiveFilterSelected]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 

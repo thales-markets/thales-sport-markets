@@ -10,6 +10,7 @@ export type TagInfo = {
     favourite?: boolean;
     hidden?: boolean;
     priority?: number;
+    live?: boolean;
 };
 
 export type Tags = TagInfo[];
@@ -126,6 +127,7 @@ export type SportMarketInfoV2 = {
     childMarkets: SportMarketInfoV2[];
     combinedPositions: CombinedPositions[];
     selectedCombinedPositions?: CombinedPositions;
+    live?: boolean;
 };
 
 export type SportMarketsV2 = SportMarketInfoV2[];
@@ -138,6 +140,7 @@ export type TicketPosition = {
     line: number;
     position: number;
     combinedPositions: CombinedPositions[];
+    live?: boolean;
 };
 
 export type BetTypeInfo = {
@@ -172,6 +175,7 @@ export type TradeData = {
     merkleProof: string[];
     position: number;
     combinedPositions: CombinedPositions[];
+    live?: boolean;
 };
 
 export type Ticket = {

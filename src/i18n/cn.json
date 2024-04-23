@@ -268,7 +268,8 @@
                 "cricket": "蟋蟀",
                 "mma": "格斗运动",
                 "boxing": "拳击",
-                "golf": "高尔夫球"
+                "golf": "高尔夫球",
+                "live": "居住"
             },
             "all": "所有",
             "datepicker": {
@@ -520,7 +521,8 @@
             },
             "type-tooltip": {
                 "11055": "接球、冲球、弃踢回攻、踢球回攻、防守和拦截达阵均计入结果"
-            }
+            },
+            "odds-live-limitation-message": "直播位置仅允许单打"
         },
         "market-details": {
             "price": "价格",

@@ -9,12 +9,13 @@ import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, LIVE_SUPPORTED_LEAGUES, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
 import { BetType, GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
+import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -104,7 +105,7 @@ const Home: React.FC = () => {
         ['priority', 'label'],
         ['asc', 'asc']
     ).map((tag) => {
-        return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite };
+        return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite, live: tag.live };
     });
 
     useEffect(() => {
@@ -182,6 +183,9 @@ const Home: React.FC = () => {
             if (sportFilter == SportFilterEnum.Favourites) {
                 const filteredTags = tagsList.filter((tag: TagInfo) => tag.favourite);
                 setAvailableTags(filteredTags);
+            } else if (sportFilter == SportFilterEnum.Live) {
+                const filteredTags = tagsList.filter((tag: TagInfo) => tag.live);
+                setAvailableTags(filteredTags);
             } else {
                 const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
                 if (tagsPerSport) {
@@ -195,7 +199,13 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(globalFilter, networkId, { enabled: isAppReady });
+    const sportMarketsQueryNew = useSportsMarketsV2Query(globalFilter, networkId, {
+        enabled: isAppReady,
+    });
+
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, {
+        enabled: isAppReady,
+    });
 
     const finalMarkets = useMemo(() => {
         const allMarkets: AllMarkets =
@@ -208,56 +218,62 @@ const Home: React.FC = () => {
                       PendingMarkets: [],
                   };
         const betTypes = new Set<BetType>();
-        const filteredMarkets = (allMarkets[globalFilter] || allMarkets[GlobalFiltersEnum.OpenMarkets]).filter(
-            (market: SportMarketInfoV2) => {
-                if (marketSearch) {
+        const allLiveMarkets =
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
+
+        const filteredMarkets = (sportFilter === SportFilterEnum.Live
+            ? allLiveMarkets
+            : allMarkets[globalFilter] || allMarkets[GlobalFiltersEnum.OpenMarkets]
+        ).filter((market: SportMarketInfoV2) => {
+            if (marketSearch) {
+                if (
+                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                ) {
+                    return false;
+                }
+            }
+
+            if (tagFilter.length > 0) {
+                if (EUROPA_LEAGUE_TAGS.includes(market.leagueId)) {
                     if (
-                        !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
-                        !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
+                        !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[0]) &&
+                        !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[1])
                     ) {
                         return false;
                     }
+                } else if (BOXING_TAGS.includes(market.leagueId)) {
+                    if (
+                        !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[0]) &&
+                        !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[1])
+                    ) {
+                        return false;
+                    }
+                } else if (!tagFilter.map((tag) => tag.id).includes(market.leagueId)) {
+                    return false;
                 }
+            }
 
-                if (tagFilter.length > 0) {
-                    if (EUROPA_LEAGUE_TAGS.includes(market.leagueId)) {
-                        if (
-                            !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[0]) &&
-                            !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[1])
-                        ) {
-                            return false;
-                        }
-                    } else if (BOXING_TAGS.includes(market.leagueId)) {
-                        if (
-                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[0]) &&
-                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[1])
-                        ) {
-                            return false;
-                        }
-                    } else if (!tagFilter.map((tag) => tag.id).includes(market.leagueId)) {
+            if (dateFilter !== 0) {
+                if (typeof dateFilter === 'number') {
+                    if (market.maturityDate.getTime() > dateFilter) {
+                        return false;
+                    }
+                } else {
+                    const dateToCompare = new Date(dateFilter);
+                    if (market.maturityDate.toDateString() != dateToCompare.toDateString()) {
                         return false;
                     }
                 }
+            }
 
-                if (dateFilter !== 0) {
-                    if (typeof dateFilter === 'number') {
-                        if (market.maturityDate.getTime() > dateFilter) {
-                            return false;
-                        }
-                    } else {
-                        const dateToCompare = new Date(dateFilter);
-                        if (market.maturityDate.toDateString() != dateToCompare.toDateString()) {
-                            return false;
-                        }
+            if (sportFilter !== SportFilterEnum.All) {
+                if (sportFilter != SportFilterEnum.Favourites && sportFilter != SportFilterEnum.Live) {
+                    if (market.sport !== sportFilter) {
+                        return false;
                     }
-                }
-
-                if (sportFilter !== SportFilterEnum.All) {
-                    if (sportFilter != SportFilterEnum.Favourites) {
-                        if (market.sport !== sportFilter) {
-                            return false;
-                        }
-                    } else {
+                } else {
+                    if (sportFilter == SportFilterEnum.Favourites) {
                         if (
                             !favouriteLeagues
                                 .filter((league) => league.favourite)
@@ -282,11 +298,14 @@ const Home: React.FC = () => {
                     if (!marketBetTypes.some((betType) => betTypeFilter === betType)) {
                         return false;
                     }
+                    if (sportFilter == SportFilterEnum.Live) {
+                        if (!LIVE_SUPPORTED_LEAGUES.includes(market.leagueId)) return false;
+                    }
                 }
-
-                return true;
             }
-        );
+
+            return true;
+        });
 
         const sortedFilteredMarkets = orderBy(
             filteredMarkets,
@@ -304,6 +323,8 @@ const Home: React.FC = () => {
     }, [
         sportMarketsQueryNew.isSuccess,
         sportMarketsQueryNew.data,
+        liveSportMarketsQuery.isSuccess,
+        liveSportMarketsQuery.data,
         globalFilter,
         marketSearch,
         tagFilter,
@@ -313,6 +334,9 @@ const Home: React.FC = () => {
         favouriteLeagues,
     ]);
 
+    const marketsLoading =
+        sportFilter === SportFilterEnum.Live ? liveSportMarketsQuery.isLoading : sportMarketsQueryNew.isLoading;
+
     useEffect(() => {
         if (sportFilter == SportFilterEnum.Favourites) {
             const filteredTags = favouriteLeagues.filter((tag: any) => tag.favourite);
@@ -320,9 +344,13 @@ const Home: React.FC = () => {
         }
     }, [favouriteLeagues, sportFilter]);
 
-    const openSportMarketsQuery = useSportsMarketsV2Query(GlobalFiltersEnum.OpenMarkets, networkId, {
-        enabled: isAppReady,
-    });
+    const openSportMarketsQuery = useSportsMarketsV2Query(
+        sportFilter == SportFilterEnum.Live ? GlobalFiltersEnum.PendingMarkets : GlobalFiltersEnum.OpenMarkets,
+        networkId,
+        {
+            enabled: isAppReady,
+        }
+    );
 
     const openMarketsCountPerTag = useMemo(() => {
         const openSportMarkets: SportMarketsV2 =
@@ -442,7 +470,8 @@ const Home: React.FC = () => {
                                     (showActive && openMarketsCountPerSport[filterItem] > 0) ||
                                     !showActive ||
                                     openSportMarketsQuery.isLoading ||
-                                    filterItem === SportFilterEnum.Favourites
+                                    filterItem === SportFilterEnum.Favourites ||
+                                    filterItem === SportFilterEnum.Live
                             )
                             .map((filterItem: any, index) => {
                                 return (
@@ -460,6 +489,11 @@ const Home: React.FC = () => {
                                                         dispatch(setDateFilter(0));
                                                         setDateParam('');
                                                         setAvailableTags(tagsList);
+                                                    } else if (filterItem === SportFilterEnum.Live) {
+                                                        setDateFilter(0);
+                                                        setDateParam('');
+                                                        const filteredLiveTags = tagsList.filter((tag) => tag.live);
+                                                        setAvailableTags(filteredLiveTags);
                                                     } else {
                                                         const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
                                                         if (tagsPerSport) {
@@ -699,7 +733,7 @@ const Home: React.FC = () => {
                         />
                     )} */}
                     {!isMobile && <Header availableBetTypes={availableBetTypes} />}
-                    {sportMarketsQueryNew.isLoading ? (
+                    {marketsLoading ? (
                         <LoaderContainer>
                             <SimpleLoader />
                         </LoaderContainer>

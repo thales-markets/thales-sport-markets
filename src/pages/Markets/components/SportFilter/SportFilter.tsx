@@ -1,4 +1,6 @@
-import React from 'react';
+import liveAnimationData from 'assets/lotties/live-markets-filter.json';
+import Lottie from 'lottie-react';
+import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRowCentered } from 'styles/common';
@@ -23,9 +25,19 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, is
                     onClick={() => (!disabled ? onClick() : '')}
                 >
                     <FlexDiv>
-                        <SportIcon
-                            className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`}
-                        />
+                        {sport.toLowerCase() == 'live' && (
+                            <Lottie
+                                autoplay={true}
+                                animationData={liveAnimationData}
+                                loop={true}
+                                style={liveBlinkStyle}
+                            />
+                        )}
+                        {sport.toLowerCase() != 'live' && (
+                            <SportIcon
+                                className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`}
+                            />
+                        )}
                         <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
                     </FlexDiv>
                     <FlexDiv gap={15}>
@@ -94,6 +106,7 @@ const Label = styled.div`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    align-self: center;
 `;
 
 const SportIcon = styled.i`
@@ -137,5 +150,10 @@ const Count = styled(FlexDivCentered)<{ isMobile?: boolean }>`
     -o-user-select: none;
     user-select: none;
 `;
+
+const liveBlinkStyle: CSSProperties = {
+    width: 50,
+    margin: '0px 2px 0px -12px',
+};
 
 export default SportFilter;

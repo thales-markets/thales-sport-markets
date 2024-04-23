@@ -398,6 +398,7 @@ export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
                     line: combinedPosition.line * 100,
                 }))
             ),
+            live: market.live,
         };
     });
 

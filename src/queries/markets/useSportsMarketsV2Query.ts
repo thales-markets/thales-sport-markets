@@ -23,7 +23,7 @@ const useSportsMarketsV2Query = (
     return useQuery<typeof marketsCache>(
         QUERY_KEYS.SportMarketsV2(globalFilter, networkId),
         async () => {
-            let markets = [];
+            let markets: any[] = [];
             let response;
             try {
                 // const today = new Date();

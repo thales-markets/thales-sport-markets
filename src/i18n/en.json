@@ -255,6 +255,7 @@
                 "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
+                "live": "Live",
                 "all": "All sports",
                 "favourites": "Favourites",
                 "basketball": "Basketball",
@@ -597,7 +598,8 @@
             "race-winner": "Winner",
             "no-win": "No win",
             "see-more-markets": "see player props markets",
-            "see-more-markets-mobile": "player props"
+            "see-more-markets-mobile": "player props",
+            "odds-live-limitation-message": "Live positions only allowed as singles"
         },
         "market-details": {
             "price": "Price",
