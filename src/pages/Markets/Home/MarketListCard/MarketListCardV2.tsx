@@ -74,7 +74,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameResolved = market.isResolved || market.isCanceled;
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
-    const isLiveMarket = market.live && isGameStarted;
+    // const isLiveMarket = market.live && isGameStarted;
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
     const gameIdString = web3.utils.hexToAscii(market.gameId);
