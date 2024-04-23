@@ -190,7 +190,8 @@
             "info": "*Sie können den Quotentyp jederzeit in den Filtern über der Spieleliste ändern",
             "title": "Willkommen zu Overtime Markets"
         },
-        "settings": "Einstellungen"
+        "settings": "Einstellungen",
+        "filters": "Filter"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",

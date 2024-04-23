@@ -80,26 +80,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                     return (
                         <TagContainer key={tag.id} isMobile={isMobile}>
                             <LeftContainer>
-                                <StarIcon
-                                    isMobile={isMobile}
-                                    onClick={() => {
-                                        const newFavourites = favouriteLeagues.map((league: TagInfo) => {
-                                            if (league.id == tag.id) {
-                                                let newFavouriteFlag;
-                                                league.favourite
-                                                    ? (newFavouriteFlag = false)
-                                                    : (newFavouriteFlag = true);
-                                                return {
-                                                    ...league,
-                                                    favourite: newFavouriteFlag,
-                                                };
-                                            }
-                                            return league;
-                                        });
-                                        dispatch(setFavouriteLeagues(newFavourites));
-                                    }}
-                                    className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
-                                />
                                 <LabelContainer
                                     className={`${tagFilterIds.includes(tag.id) ? 'selected' : ''}`}
                                     onClick={() => {
@@ -238,6 +218,24 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                             {!!openMarketsCountPerTag[tag.id] && (
                                 <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
                             )}
+                            <StarIcon
+                                isMobile={isMobile}
+                                onClick={() => {
+                                    const newFavourites = favouriteLeagues.map((league: TagInfo) => {
+                                        if (league.id == tag.id) {
+                                            let newFavouriteFlag;
+                                            league.favourite ? (newFavouriteFlag = false) : (newFavouriteFlag = true);
+                                            return {
+                                                ...league,
+                                                favourite: newFavouriteFlag,
+                                            };
+                                        }
+                                        return league;
+                                    });
+                                    dispatch(setFavouriteLeagues(newFavourites));
+                                }}
+                                className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
+                            />
                         </TagContainer>
                     );
                 })}
@@ -282,7 +280,6 @@ const LeftContainer = styled(FlexDivRowCentered)`
 `;
 
 const LabelContainer = styled(FlexDivRowCentered)`
-    margin-left: 10px;
     width: 100%;
     justify-content: flex-start;
     &.selected,
@@ -301,7 +298,7 @@ const LabelContainer = styled(FlexDivRowCentered)`
 `;
 
 const Label = styled.div`
-    margin-left: 10px;
+    margin-left: 15px;
     white-space: pre-line;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -320,8 +317,8 @@ const StarIcon = styled.i<{ isMobile: boolean }>`
 `;
 
 const LeagueFlag = styled.img`
-    width: 18px;
-    height: 18px;
+    width: 25px;
+    height: 25px;
 `;
 
 const IncentivizedLeague = styled.div`
@@ -337,15 +334,19 @@ const IncentivizedLeague = styled.div`
 const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
     border-radius: 8px;
     color: ${(props) => props.theme.textColor.quaternary};
-    background: ${(props) => (props.isMobile ? props.theme.background.tertiary : props.theme.background.secondary)};
+    background: ${(props) => (props.isMobile ? props.theme.background.primary : props.theme.background.primary)};
+    border: 2px solid ${(props) => props.theme.background.secondary};
+    font-size: ${(props) => (props.isMobile ? '15px' : '12px')};
     min-width: 30px;
-    height: 18px;
+    height: ${(props) => (props.isMobile ? '20px' : '18px')};
+    line-height: ${(props) => (props.isMobile ? '20px' : '18px')};
     padding: 0 6px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    margin-right: 12px;
 `;
 
 export default TagsDropdown;

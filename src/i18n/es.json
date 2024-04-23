@@ -190,7 +190,8 @@
             "description": "Elija el formato de visualización de probabilidades",
             "title": "Bienvenido a Overtime Markets"
         },
-        "settings": "Ajustes"
+        "settings": "Ajustes",
+        "filters": "Filtros"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
