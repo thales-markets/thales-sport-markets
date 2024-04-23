@@ -14,7 +14,6 @@ import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     getIsOneSideMarket,
     isCombinedPositions,
-    isMoneyline,
     isOneSidePlayerProps,
     isPeriod,
     isPeriod2,
@@ -23,6 +22,7 @@ import {
     isSpread,
     isTotal,
     isTotalOddEven,
+    isWinner,
 } from './markets';
 
 export const getSimpleSymbolText = (
@@ -159,7 +159,7 @@ export const getSimplePositionText = (
             : position === 1
             ? `${homeTeam} or ${awayTeam}`
             : `${awayTeam} or Draw`;
-    if (isMoneyline(betType)) return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
+    if (isWinner(betType)) return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
 
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };

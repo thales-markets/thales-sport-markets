@@ -22,7 +22,7 @@ export const Title = styled.span<{ isExpanded: boolean; isMainPageView?: boolean
     font-size: 12px;
     line-height: 14px;
     text-transform: uppercase;
-    margin-bottom: ${(props) => (props.isMainPageView ? (props.isColumnView ? 8 : 14) : props.isExpanded ? 4 : 0)}px;
+    margin-bottom: ${(props) => (props.isMainPageView ? (props.isColumnView ? 8 : 14) : props.isExpanded ? 5 : 0)}px;
     text-align: center;
 `;
 
