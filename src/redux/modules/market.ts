@@ -77,25 +77,38 @@ const marketSlice = createSlice({
         setMarketSearch: (state, action: PayloadAction<string>) => {
             state.marketSearch = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_MARKET_SEARCH, action.payload);
+
+            state.selectedMarket = '';
+            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
         },
         setDateFilter: (state, action: PayloadAction<Date | number>) => {
             state.dateFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_DATE, action.payload);
+
+            state.selectedMarket = '';
+            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
         },
         setGlobalFilter: (state, action: PayloadAction<GlobalFiltersEnum>) => {
             state.globalFilter = action.payload;
             if (action.payload !== GlobalFiltersEnum.OpenMarkets) {
                 state.selectedMarket = '';
+                localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
             }
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, action.payload);
         },
         setSportFilter: (state, action: PayloadAction<SportFilterEnum>) => {
             state.sportFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_SPORT, action.payload);
+
+            state.selectedMarket = '';
+            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
         },
         setTagFilter: (state, action: PayloadAction<Tags>) => {
             state.tagFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_TAGS, action.payload);
+
+            state.selectedMarket = '';
+            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
         },
         setSelectedMarket: (state, action: PayloadAction<string>) => {
             state.selectedMarket = action.payload;

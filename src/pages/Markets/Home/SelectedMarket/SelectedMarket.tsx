@@ -39,7 +39,13 @@ const SelectedMarket: React.FC = () => {
         <Wrapper>
             {lastValidMarket && <Title>{matchLabel}</Title>}
             <CloseIcon className="icon icon--close" onClick={() => dispatch(setSelectedMarket(''))} />
-            {lastValidMarket ? <SelectedMarketDetails market={lastValidMarket} /> : <SimpleLoader />}
+            {lastValidMarket ? (
+                <SelectedMarketDetails market={lastValidMarket} />
+            ) : (
+                <LoaderContainer>
+                    <SimpleLoader />
+                </LoaderContainer>
+            )}
         </Wrapper>
     );
 };
@@ -50,7 +56,15 @@ const Wrapper = styled(FlexDivColumn)`
     background-color: ${(props) => props.theme.background.quinary};
     border-radius: 8px;
     flex: 1 1 0;
-    height: min-content;
+    height: auto;
+`;
+
+const LoaderContainer = styled(FlexDivCentered)`
+    position: relative;
+    width: 100%;
+    background-color: ${(props) => props.theme.background.quinary};
+    border-radius: 0 0 8px 8px;
+    flex: 1;
 `;
 
 const Title = styled(FlexDivCentered)`
@@ -61,12 +75,11 @@ const Title = styled(FlexDivCentered)`
 `;
 
 const CloseIcon = styled.i`
-    font-size: 10px;
+    font-size: 12px;
     color: ${(props) => props.theme.textColor.secondary};
     position: absolute;
-    top: 6px;
-    right: 2px;
-    margin-right: 2px;
+    top: 4px;
+    right: 12px;
     cursor: pointer;
 `;
 

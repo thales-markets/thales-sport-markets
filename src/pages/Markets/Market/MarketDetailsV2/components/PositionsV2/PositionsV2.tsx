@@ -1,6 +1,7 @@
 import Tooltip from 'components/Tooltip';
 import { BetTypeNameMap } from 'constants/tags';
 import { BetType } from 'enums/markets';
+import { orderBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -37,7 +38,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, isGameOpen, isM
 
     const sortedMarkets = useMemo(
         () =>
-            markets.sort((marketA: SportMarketInfoV2, marketB: SportMarketInfoV2) => {
+            orderBy(markets, ['line'], ['asc']).sort((marketA: SportMarketInfoV2, marketB: SportMarketInfoV2) => {
                 return sortMarketsByDisabled(marketA, marketB);
             }),
         [markets]
