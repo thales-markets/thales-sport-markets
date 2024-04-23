@@ -61,11 +61,11 @@ const Title = styled(FlexDivCentered)`
 `;
 
 const CloseIcon = styled.i`
-    font-size: 12px;
+    font-size: 10px;
     color: ${(props) => props.theme.textColor.secondary};
     position: absolute;
-    top: 4px;
-    right: 10px;
+    top: 6px;
+    right: 2px;
     margin-right: 2px;
     cursor: pointer;
 `;

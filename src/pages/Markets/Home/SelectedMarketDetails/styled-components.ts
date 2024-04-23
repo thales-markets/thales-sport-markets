@@ -14,6 +14,4 @@ export const Wrapper = styled(FlexDivColumn)<{
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    max-height: calc(100vh - 178px);
-    overflow: auto;
 `;

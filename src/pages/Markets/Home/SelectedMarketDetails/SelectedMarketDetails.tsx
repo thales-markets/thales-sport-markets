@@ -1,3 +1,4 @@
+import Scroll from 'components/Scroll';
 import { BetType } from 'enums/markets';
 import { groupBy } from 'lodash';
 import React, { useMemo } from 'react';
@@ -19,8 +20,6 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
         [market.childMarkets]
     );
 
-    // const totalNumberOfMarkets = market.childMarkets.length + 1;
-
     const areChildMarketsOddsValid = market.childMarkets.some((childMarket) =>
         childMarket.odds.some((odd) => isOddValid(odd))
     );
@@ -30,14 +29,16 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
 
     return (
-        <Wrapper hideGame={hideGame}>
-            <PositionsV2 markets={[market]} betType={BetType.WINNER} isGameOpen={false} />
-            {Object.keys(groupedChildMarkets).map((key, index) => {
-                const typeId = Number(key);
-                const childMarkets = groupedChildMarkets[typeId];
-                return <PositionsV2 key={index} markets={childMarkets} betType={typeId} isGameOpen={false} />;
-            })}
-        </Wrapper>
+        <Scroll height="calc(100vh - 178px)">
+            <Wrapper hideGame={hideGame}>
+                <PositionsV2 markets={[market]} betType={BetType.WINNER} isGameOpen={false} />
+                {Object.keys(groupedChildMarkets).map((key, index) => {
+                    const typeId = Number(key);
+                    const childMarkets = groupedChildMarkets[typeId];
+                    return <PositionsV2 key={index} markets={childMarkets} betType={typeId} isGameOpen={false} />;
+                })}
+            </Wrapper>
+        </Scroll>
     );
 };
 
