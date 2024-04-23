@@ -1,5 +1,6 @@
 {
     "common": {
+        "filters": "Filters",
         "settings": "Settings",
         "winner": "Winner",
         "buy-side": "BUY",

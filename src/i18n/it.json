@@ -190,7 +190,8 @@
             "info": "*Puoi sempre modificare il tipo di quote nei filtri sopra l'elenco dei giochi",
             "title": "Benvenuti nei mercati degli straordinari"
         },
-        "settings": "Impostazioni"
+        "settings": "Impostazioni",
+        "filters": "Filtri"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",

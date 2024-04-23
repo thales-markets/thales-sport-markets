@@ -190,7 +190,8 @@
             "description": "เลือกรูปแบบการแสดงอัตราต่อรอง",
             "title": "ยินดีต้อนรับสู่ตลาดล่วงเวลา"
         },
-        "settings": "การตั้งค่า"
+        "settings": "การตั้งค่า",
+        "filters": "ตัวกรอง"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
