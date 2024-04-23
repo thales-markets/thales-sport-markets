@@ -1,6 +1,6 @@
 import Tooltip from 'components/Tooltip';
 import { oddToastOptions } from 'config/toast';
-import { Position } from 'enums/markets';
+import { BetType, Position } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,9 +27,10 @@ import {
 type PositionDetailsProps = {
     market: SportMarketInfoV2;
     position: Position;
+    isMainPageView?: boolean;
 };
 
-const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position }) => {
+const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isMainPageView }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
@@ -54,7 +55,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position }) =
     const showOdd = isGameOpen;
     const showTooltip = showOdd && !noOdd && !isMobile && false;
 
-    const positionText = getPositionTextV2(market, position);
+    const positionText = getPositionTextV2(market, position, isMainPageView && market.typeId === BetType.TOTAL);
 
     const oddTooltipText = getOddTooltipTextV2(position, market);
 

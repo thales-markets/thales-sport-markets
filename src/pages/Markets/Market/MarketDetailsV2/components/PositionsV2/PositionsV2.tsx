@@ -110,7 +110,12 @@ const Positions: React.FC<PositionsProps> = ({
                                     isColumnView={isColumnView}
                                 >
                                     {market.odds.map((_, index) => (
-                                        <PositionDetailsV2 key={index} market={market} position={index} />
+                                        <PositionDetailsV2
+                                            key={index}
+                                            market={market}
+                                            position={index}
+                                            isMainPageView={isMainPageView}
+                                        />
                                     ))}
                                 </ContentRow>
                             </ContentWrapper>

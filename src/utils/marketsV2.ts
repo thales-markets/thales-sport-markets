@@ -140,17 +140,11 @@ export const getSimplePositionText = (
     }
 
     if (isPlayerProps(betType) || isTotal(betType) || isSpread(betType)) {
-        return `${
-            extendedText
-                ? isSpread(betType)
-                    ? position === 0
-                        ? homeTeam
-                        : awayTeam
-                    : position === 0
-                    ? 'Over'
-                    : 'Under'
-                : ''
-        } ${getLineInfo(betType, position, line)}`;
+        return extendedText
+            ? isSpread(betType)
+                ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(betType, position, line)})`
+                : `${position === 0 ? 'Over' : 'Under'} ${getLineInfo(betType, position, line)}`
+            : getLineInfo(betType, position, line);
     }
 
     if (betType === BetType.DOUBLE_CHANCE)
