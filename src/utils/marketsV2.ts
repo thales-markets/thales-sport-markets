@@ -1,4 +1,11 @@
-import { BetTypeMap, GOLF_TOURNAMENT_WINNER_TAG, MATCH_RESOLVE_MAP, SCORING_MAP } from 'constants/tags';
+import {
+    BetTypeMap,
+    BetTypeNameMap,
+    GOLF_TOURNAMENT_WINNER_TAG,
+    MATCH_RESOLVE_MAP,
+    SCORING_MAP,
+    SPORT_PERIODS_MAP,
+} from 'constants/tags';
 import { BetType, Position } from 'enums/markets';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
@@ -7,7 +14,10 @@ import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     getIsOneSideMarket,
     isCombinedPositions,
+    isMoneyline,
     isOneSidePlayerProps,
+    isPeriod,
+    isPeriod2,
     isPlayerProps,
     isSpecialYesNoProp,
     isSpread,
@@ -20,9 +30,8 @@ export const getSimpleSymbolText = (
     isCombinedPosition?: boolean,
     line?: number
 ) => {
-    if (betType === BetType.SPREAD || betType === BetType.SPREAD2 || betType === BetType.HALFTIME_SPREAD)
-        return `H${position + 1}`;
-    if (betType === BetType.TOTAL || betType === BetType.TOTAL2 || betType === BetType.HALFTIME_TOTAL) {
+    if (betType === BetType.SPREAD || betType === BetType.SPREAD2) return `H${position + 1}`;
+    if (betType === BetType.TOTAL || betType === BetType.TOTAL2) {
         return isCombinedPosition && line
             ? position === 0
                 ? Math.ceil(line).toString()
@@ -32,8 +41,6 @@ export const getSimpleSymbolText = (
             : 'U';
     }
     if (betType === BetType.DOUBLE_CHANCE) return position === 0 ? '1X' : position === 1 ? '12' : 'X2';
-    if (betType === BetType.HALFTIME && !isCombinedPosition)
-        return position === 0 ? 'HT1' : position === 1 ? 'HT2' : 'HTX';
 
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
@@ -147,8 +154,7 @@ export const getSimplePositionText = (
             : position === 1
             ? `${homeTeam} or ${awayTeam}`
             : `${awayTeam} or Draw`;
-    if (betType === BetType.WINNER || betType === BetType.HALFTIME)
-        return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
+    if (isMoneyline(betType)) return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
 
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
@@ -202,6 +208,15 @@ export const getPositionTextV2 = (market: SportMarketInfoV2, position: number, e
     return isCombinedPositions(market.typeId)
         ? getCombinedPositionsText(market, position)
         : getSimplePositionText(market.typeId, position, market.line, market.homeTeam, market.awayTeam, extendedText);
+};
+
+export const getTitleText = (market: SportMarketInfoV2) => {
+    const betType = market.typeId;
+    const betTypeName = BetTypeNameMap[betType as BetType];
+
+    const sufix = isPeriod(betType) ? ` ${SPORT_PERIODS_MAP[market.leagueId]}` : isPeriod2(betType) ? ' half' : '';
+
+    return `${betTypeName}${sufix}`;
 };
 
 export const getSubtitleText = (market: SportMarketInfoV2, position: Position) => {

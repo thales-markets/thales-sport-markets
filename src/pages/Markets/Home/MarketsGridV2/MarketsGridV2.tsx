@@ -1,3 +1,4 @@
+import Scroll from 'components/Scroll';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -37,18 +38,20 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     return (
         <Container isMarketSelected={isMarketSelected}>
-            <ListContainer>
-                {finalOrderKeys.map((leagueId: number, index: number) => {
-                    return (
-                        <MarketsListV2
-                            key={index}
-                            league={leagueId}
-                            markets={marketsMap[leagueId]}
-                            language={language}
-                        />
-                    );
-                })}
-            </ListContainer>
+            <Scroll height="calc(100vh - 154px)">
+                <ListContainer>
+                    {finalOrderKeys.map((leagueId: number, index: number) => {
+                        return (
+                            <MarketsListV2
+                                key={index}
+                                league={leagueId}
+                                markets={marketsMap[leagueId]}
+                                language={language}
+                            />
+                        );
+                    })}
+                </ListContainer>
+            </Scroll>
         </Container>
     );
 };
@@ -203,7 +206,7 @@ const unifyBoxingMarkets = (marketsMap: Record<number, SportMarketInfoV2[]>) => 
 };
 
 const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
-    margin: 10px 0px 0 0;
+    margin: 10px 5px 0 0;
     flex-wrap: wrap;
     max-width: ${(props) => (props.isMarketSelected ? '210px' : '100%')};
     justify-content: center;
@@ -213,7 +216,6 @@ const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
         max-width: ${(props) => (props.isMarketSelected ? '100%' : '100%')};
         width: ${(props) => (props.isMarketSelected ? '100%' : '100%')};
     }
-    overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: 5px; /* Firefox */n
     -ms-overflow-style: none;
@@ -230,7 +232,6 @@ const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
             height: 0px;
         }
     }
-    height: calc(100vh - 154px);;
 `;
 
 const ListContainer = styled.div`

@@ -118,13 +118,14 @@ export const ResultLabel = styled.span`
 
 export const MarketsCountWrapper = styled(FlexDivColumnCentered)`
     max-width: 35px;
-    margin-left: 10px;
+    margin-left: 5px;
     font-weight: 600;
     font-size: 13.5px;
     line-height: 16px;
     color: ${(props) => props.theme.textColor.quinary};
     text-align: center;
     cursor: pointer;
+    margin-top: 20px;
 `;
 
 export const ExternalArrow = styled.i`

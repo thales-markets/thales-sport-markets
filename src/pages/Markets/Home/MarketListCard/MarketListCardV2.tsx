@@ -243,7 +243,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             <PositionsV2
                                 markets={[market]}
                                 betType={BetType.WINNER}
-                                isGameOpen={false}
+                                isGameOpen={isGameOpen}
                                 isMainPageView
                                 isColumnView={isColumnView}
                             />
@@ -251,7 +251,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <PositionsV2
                                     markets={[firstSpreadMarket]}
                                     betType={BetType.SPREAD}
-                                    isGameOpen={false}
+                                    isGameOpen={isGameOpen}
                                     isMainPageView
                                     isColumnView={isColumnView}
                                 />
@@ -260,7 +260,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <PositionsV2
                                     markets={[firstTotalMarket]}
                                     betType={BetType.TOTAL}
-                                    isGameOpen={false}
+                                    isGameOpen={isGameOpen}
                                     isMainPageView
                                     isColumnView={isColumnView}
                                 />

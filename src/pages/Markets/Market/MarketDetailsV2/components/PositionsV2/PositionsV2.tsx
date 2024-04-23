@@ -5,14 +5,14 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SportMarketInfoV2 } from 'types/markets';
-import { getSubtitleText, isOddValid } from 'utils/marketsV2';
-import { FlexDivColumn } from '../../../../../../styles/common';
+import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
 import PositionDetailsV2 from '../PositionDetailsV2';
 import {
     Arrow,
     Container,
     ContentContianer,
     ContentRow,
+    ContentWrapper,
     Header,
     SubTitle,
     SubTitleContainer,
@@ -47,10 +47,14 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, isGameOpen, isM
     const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
 
     return showContainer ? (
-        <Container onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')} isMainPageView={isMainPageView}>
+        <Container
+            onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')}
+            isExpanded={isExpanded}
+            isMainPageView={isMainPageView}
+        >
             <Header isMainPageView={isMainPageView} isColumnView={isColumnView}>
                 <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
-                    {BetTypeNameMap[betType]}
+                    {getTitleText(markets[0])}
                     {betType == BetType.PLAYER_PROPS_TOUCHDOWNS && (
                         <Tooltip
                             overlay={
@@ -78,7 +82,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, isGameOpen, isM
                     )}
                     {sortedMarkets.map((market, index) => {
                         return (
-                            <FlexDivColumn key={index}>
+                            <ContentWrapper key={index}>
                                 {market.isPlayerPropsMarket && (
                                     <PropsTextContainer>
                                         <PropsText>{`${market.playerProps.playerName}`}</PropsText>
@@ -92,7 +96,7 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, isGameOpen, isM
                                         <PositionDetailsV2 key={index} market={market} position={index} />
                                     ))}
                                 </ContentRow>
-                            </FlexDivColumn>
+                            </ContentWrapper>
                         );
                     })}
                 </ContentContianer>
@@ -122,8 +126,7 @@ const PropsTextContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 6px;
-    margin-top: 4px;
+    margin: 5px 0;
 `;
 
 const PropsText = styled.span`

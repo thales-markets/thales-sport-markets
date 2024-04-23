@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 
-export const Container = styled(FlexDivColumn)<{ isMainPageView?: boolean }>`
+export const Container = styled(FlexDivColumn)<{ isExpanded: boolean; isMainPageView?: boolean }>`
     position: relative;
     padding: ${(props) => (props.isMainPageView ? '0px' : '6px 0px')};
-    border-radius: 5px;
     @media (max-width: 575px) {
         padding: 5px 0px;
     }
+    border-bottom: ${(props) => (!props.isExpanded ? `1px solid ${props.theme.borderColor.primary}` : 'none')};
+    margin-bottom: ${(props) => (!props.isExpanded ? `5px` : '0')};
+    flex: ${(props) => (props.isMainPageView ? '1' : 'initial')};
 `;
 
 export const Header = styled(FlexDivColumnCentered)<{ isMainPageView?: boolean; isColumnView?: boolean }>`
@@ -34,12 +36,15 @@ export const SubTitle = styled.span`
     font-size: 12px;
     line-height: 14px;
     width: 100%;
-    text-align: center;
+    text-align: center;    margin-bottom: 5px;
+}
 `;
 
 export const ContentContianer = styled(FlexDiv)`
     flex-direction: column;
 `;
+
+export const ContentWrapper = styled(FlexDivColumn)``;
 
 export const ContentRow = styled.div<{ gridMinMaxPercentage: number; isColumnView?: boolean }>`
     margin-bottom: ${(props) => (props.isColumnView ? '0' : '5px')};
@@ -53,10 +58,10 @@ export const ContentRow = styled.div<{ gridMinMaxPercentage: number; isColumnVie
 
 export const Arrow = styled.i`
     font-size: 12px;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     position: absolute;
     top: 4px;
-    right: 5px;
+    right: 0px;
     margin-right: 2px;
     cursor: pointer;
 `;
