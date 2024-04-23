@@ -797,19 +797,19 @@ const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`
     }
 `;
 
-const GlobalFiltersContainer = styled(FlexDivColumn)`
-    height: fit-content;
-    flex: 0;
-    &:before {
-        content: '';
-        height: 3px;
-        background: ${(props) => props.theme.borderColor.primary};
-        border-radius: 10px 10px 10px 10px;
-        margin-bottom: 20px;
-        margin-left: 30px;
-        margin-right: 30px;
-    }
-`;
+// const GlobalFiltersContainer = styled(FlexDivColumn)`
+//     height: fit-content;
+//     flex: 0;
+//     &:before {
+//         content: '';
+//         height: 3px;
+//         background: ${(props) => props.theme.borderColor.primary};
+//         border-radius: 10px 10px 10px 10px;
+//         margin-bottom: 20px;
+//         margin-left: 30px;
+//         margin-right: 30px;
+//     }
+// `;
 
 const SportFiltersContainer = styled(FlexDivColumn)`
     margin-bottom: 10px;
