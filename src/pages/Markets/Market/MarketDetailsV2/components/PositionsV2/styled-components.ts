@@ -3,7 +3,7 @@ import { FlexDiv, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 
 export const Container = styled(FlexDivColumn)<{ isExpanded: boolean; isMainPageView?: boolean }>`
     position: relative;
-    padding: ${(props) => (props.isMainPageView ? '0px' : '6px 0px')};
+    padding: ${(props) => (props.isMainPageView ? '0px' : '5px 0px')};
     @media (max-width: 575px) {
         padding: 5px 0px;
     }
@@ -42,6 +42,7 @@ export const SubTitle = styled.span`
 
 export const ContentContianer = styled(FlexDiv)`
     flex-direction: column;
+    flex: 1;
 `;
 
 export const ContentWrapper = styled(FlexDivColumn)``;

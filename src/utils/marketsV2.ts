@@ -22,6 +22,7 @@ import {
     isSpecialYesNoProp,
     isSpread,
     isTotal,
+    isTotalOddEven,
 } from './markets';
 
 export const getSimpleSymbolText = (
@@ -131,7 +132,11 @@ export const getSimplePositionText = (
     extendedText?: boolean
 ) => {
     if (getIsOneSideMarket(betType) || isOneSidePlayerProps(betType) || isSpecialYesNoProp(betType)) {
-        return position === 0 ? 'YES' : 'NO';
+        return position === 0 ? 'Yes' : 'No';
+    }
+
+    if (isTotalOddEven(betType)) {
+        return position === 0 ? 'Odd' : 'Even';
     }
 
     if (isPlayerProps(betType) || isTotal(betType) || isSpread(betType)) {
@@ -214,9 +219,16 @@ export const getTitleText = (market: SportMarketInfoV2) => {
     const betType = market.typeId;
     const betTypeName = BetTypeNameMap[betType as BetType];
 
-    const sufix = isPeriod(betType) ? ` ${SPORT_PERIODS_MAP[market.leagueId]}` : isPeriod2(betType) ? ' half' : '';
+    let sufix = isPeriod(betType) ? ` ${SPORT_PERIODS_MAP[market.leagueId]}` : isPeriod2(betType) ? ' half' : '';
 
-    return `${betTypeName}${sufix}`;
+    if (
+        (market.leagueId == 9153 || market.leagueId == 9156) &&
+        (isTotal(betType) || isTotalOddEven(betType) || isSpread(betType))
+    ) {
+        sufix = `${sufix}${betType === BetType.TOTAL2 || betType === BetType.SPREAD2 ? ' (sets)' : ' (gems)'}`;
+    }
+
+    return betTypeName ? `${betTypeName}${sufix}` : `${betType}`;
 };
 
 export const getSubtitleText = (market: SportMarketInfoV2, position: Position) => {

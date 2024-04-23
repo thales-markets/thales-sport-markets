@@ -20,6 +20,7 @@ import {
     SPECIAL_YES_NO_BET_TYPES,
     SPREAD_BET_TYPES,
     TOTAL_BET_TYPES,
+    TOTAL_ODD_EVEN_BET_TYPES,
 } from 'enums/markets';
 import { formatCurrency } from 'thales-utils';
 
@@ -78,6 +79,12 @@ export const isTotal = (betType: BetType) => {
     return TOTAL_BET_TYPES.includes(betType) || `${betType}`.startsWith('1003') || `${betType}`.startsWith('1006');
 };
 
+export const isTotalOddEven = (betType: BetType) => {
+    return (
+        TOTAL_ODD_EVEN_BET_TYPES.includes(betType) || `${betType}`.startsWith('1008') || `${betType}`.startsWith('1009')
+    );
+};
+
 export const isSpread = (betType: BetType) => {
     return SPREAD_BET_TYPES.includes(betType) || `${betType}`.startsWith('1004') || `${betType}`.startsWith('1007');
 };
@@ -87,11 +94,21 @@ export const isCombinedPositions = (betType: BetType) => {
 };
 
 export const isPeriod = (betType: BetType) => {
-    return `${betType}`.startsWith('1002') || `${betType}`.startsWith('1003') || `${betType}`.startsWith('1004');
+    return (
+        `${betType}`.startsWith('1002') ||
+        `${betType}`.startsWith('1003') ||
+        `${betType}`.startsWith('1004') ||
+        `${betType}`.startsWith('1008')
+    );
 };
 
 export const isPeriod2 = (betType: BetType) => {
-    return `${betType}`.startsWith('1005') || `${betType}`.startsWith('1006') || `${betType}`.startsWith('1007');
+    return (
+        `${betType}`.startsWith('1005') ||
+        `${betType}`.startsWith('1006') ||
+        `${betType}`.startsWith('1007') ||
+        `${betType}`.startsWith('1009')
+    );
 };
 
 export const getIsDrawAvailable = (leagueId: number, betType: BetType) =>

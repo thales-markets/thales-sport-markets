@@ -26,9 +26,17 @@ type PositionsProps = {
     isGameOpen: boolean;
     isMainPageView?: boolean;
     isColumnView?: boolean;
+    onAccordionClick?: () => void;
 };
 
-const Positions: React.FC<PositionsProps> = ({ markets, betType, isGameOpen, isMainPageView, isColumnView }) => {
+const Positions: React.FC<PositionsProps> = ({
+    markets,
+    betType,
+    isGameOpen,
+    isMainPageView,
+    isColumnView,
+    onAccordionClick,
+}) => {
     const { t } = useTranslation();
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
@@ -49,7 +57,12 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, isGameOpen, isM
 
     return showContainer ? (
         <Container
-            onClick={() => (!isExpanded ? setIsExpanded(!isExpanded) : '')}
+            onClick={() => {
+                if (!isExpanded) {
+                    setIsExpanded(!isExpanded);
+                    onAccordionClick && onAccordionClick();
+                }
+            }}
             isExpanded={isExpanded}
             isMainPageView={isMainPageView}
         >
@@ -70,7 +83,10 @@ const Positions: React.FC<PositionsProps> = ({ markets, betType, isGameOpen, isM
             {!isMainPageView && (
                 <Arrow
                     className={isExpanded ? 'icon icon--arrow-up' : 'icon icon--arrow-down'}
-                    onClick={() => setIsExpanded(!isExpanded)}
+                    onClick={() => {
+                        setIsExpanded(!isExpanded);
+                        onAccordionClick && onAccordionClick();
+                    }}
                 />
             )}
             {isExpanded && (
