@@ -281,6 +281,7 @@ const LeftContainer = styled(FlexDivRowCentered)`
 
 const LabelContainer = styled(FlexDivRowCentered)`
     width: 100%;
+    padding-left: 10px;
     justify-content: flex-start;
     &.selected,
     &:hover {
@@ -317,8 +318,8 @@ const StarIcon = styled.i<{ isMobile: boolean }>`
 `;
 
 const LeagueFlag = styled.img`
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
 `;
 
 const IncentivizedLeague = styled.div`
