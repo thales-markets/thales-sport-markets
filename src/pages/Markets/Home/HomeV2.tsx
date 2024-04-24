@@ -402,6 +402,46 @@ const Home: React.FC = () => {
         return openMarketsCount;
     }, [openMarketsCountPerTag, favouriteLeagues]);
 
+    const liveMarketsCountPerTag = useMemo(() => {
+        const liveSportMarkets: SportMarketsV2 =
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
+
+        const groupedMarkets = groupBy(liveSportMarkets, (market) => market.leagueId);
+
+        const liveMarketsCountPerTag: any = {};
+        Object.keys(groupedMarkets).forEach((key: string) => {
+            if (EUROPA_LEAGUE_TAGS.includes(Number(key))) {
+                liveMarketsCountPerTag[EUROPA_LEAGUE_TAGS[0].toString()] = groupedMarkets[key].length;
+            } else if (BOXING_TAGS.includes(Number(key))) {
+                liveMarketsCountPerTag[BOXING_TAGS[0].toString()] = groupedMarkets[key].length;
+            } else {
+                liveMarketsCountPerTag[key] = groupedMarkets[key].length;
+            }
+        });
+        Object.values(SportFilterEnum);
+        return liveMarketsCountPerTag;
+    }, [liveSportMarketsQuery]);
+
+    const liveMarketsCountPerSport = useMemo(() => {
+        const liveMarketsCount: any = {};
+        let totalCount = 0;
+        const tagsPerSport = SPORTS_TAGS_MAP[SportFilterEnum.Live];
+        if (tagsPerSport) {
+            tagsPerSport.forEach((tag) => (totalCount += liveMarketsCountPerTag[tag] || 0));
+        }
+
+        liveMarketsCount[SportFilterEnum.Live] = totalCount;
+
+        let favouriteCount = 0;
+        const favouriteTags = favouriteLeagues.filter((tag: any) => tag.favourite);
+        favouriteTags.forEach((tag: TagInfo) => {
+            favouriteCount += liveMarketsCountPerTag[tag.id] || 0;
+        });
+        liveMarketsCount[SportFilterEnum.Favourites] = favouriteCount;
+
+        return liveMarketsCount;
+    }, [liveMarketsCountPerTag, favouriteLeagues]);
+
     const resetFilters = useCallback(() => {
         dispatch(setGlobalFilter(GlobalFiltersEnum.OpenMarkets));
         setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
@@ -471,8 +511,7 @@ const Home: React.FC = () => {
                                     (showActive && openMarketsCountPerSport[filterItem] > 0) ||
                                     !showActive ||
                                     openSportMarketsQuery.isLoading ||
-                                    filterItem === SportFilterEnum.Favourites ||
-                                    filterItem === SportFilterEnum.Live
+                                    filterItem === SportFilterEnum.Favourites
                             )
                             .map((filterItem: any, index) => {
                                 return (
@@ -520,7 +559,11 @@ const Home: React.FC = () => {
                                             }}
                                             key={filterItem}
                                             isMobile={isMobile}
-                                            count={openMarketsCountPerSport[filterItem]}
+                                            count={
+                                                filterItem == SportFilterEnum.Live
+                                                    ? liveMarketsCountPerSport[filterItem]
+                                                    : openMarketsCountPerSport[filterItem]
+                                            }
                                         >
                                             {t(`market.filter-label.sport.${filterItem.toLowerCase()}`)}
                                         </SportFilter>
@@ -532,6 +575,8 @@ const Home: React.FC = () => {
                                             setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
                                             setTagParam={setTagParam}
                                             openMarketsCountPerTag={openMarketsCountPerTag}
+                                            liveMarketsCountPerTag={liveMarketsCountPerTag}
+                                            showLive={sportFilter == SportFilterEnum.Live}
                                             showActive={showActive}
                                         ></TagsDropdown>
                                     </React.Fragment>
@@ -666,7 +711,11 @@ const Home: React.FC = () => {
                                                     }
                                                 }}
                                                 key={filterItem}
-                                                count={openMarketsCountPerSport[filterItem]}
+                                                count={
+                                                    filterItem == SportFilterEnum.Live
+                                                        ? liveMarketsCountPerSport[filterItem]
+                                                        : openMarketsCountPerSport[filterItem]
+                                                }
                                             >
                                                 {t(`market.filter-label.sport.${filterItem.toLowerCase()}`)}
                                             </SportFilter>
@@ -678,7 +727,9 @@ const Home: React.FC = () => {
                                                 setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
                                                 setTagParam={setTagParam}
                                                 openMarketsCountPerTag={openMarketsCountPerTag}
+                                                liveMarketsCountPerTag={liveMarketsCountPerTag}
                                                 showActive={showActive}
+                                                showLive={sportFilter == SportFilterEnum.Live}
                                             ></TagsDropdown>
                                         </React.Fragment>
                                     );

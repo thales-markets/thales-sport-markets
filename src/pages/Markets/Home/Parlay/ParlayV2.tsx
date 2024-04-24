@@ -2,6 +2,7 @@ import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.sv
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { t } from 'i18next';
+import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -50,6 +51,10 @@ const Parlay: React.FC = () => {
         enabled: isAppReady,
     });
 
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, {
+        enabled: isAppReady,
+    });
+
     useEffect(() => {
         dispatch(
             setPaymentSelectedCollateralIndex({
@@ -66,7 +71,12 @@ const Parlay: React.FC = () => {
     }, [dispatch, sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
     useEffect(() => {
-        if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
+        if (
+            sportMarketsQuery.isSuccess &&
+            sportMarketsQuery.data &&
+            liveSportMarketsQuery.isSuccess &&
+            liveSportMarketsQuery.data
+        ) {
             const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets].reduce(
                 (acc: SportMarketInfoV2[], market: SportMarketInfoV2) => {
                     acc.push(market);
@@ -78,12 +88,25 @@ const Parlay: React.FC = () => {
                 []
             );
 
+            const liveSportOpenMarkets = liveSportMarketsQuery.data.reduce(
+                (acc: SportMarketInfoV2[], market: SportMarketInfoV2) => {
+                    acc.push(market);
+                    market.childMarkets.forEach((childMarket: SportMarketInfoV2) => {
+                        acc.push(childMarket);
+                    });
+                    return acc;
+                },
+                []
+            );
+
+            const liveAndOpenSportMarkets = sportOpenMarkets.concat(liveSportOpenMarkets);
+
             const ticketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
-                    sportOpenMarkets.some((market: SportMarketInfoV2) => isSameMarket(market, ticketPosition))
+                    liveAndOpenSportMarkets.some((market: SportMarketInfoV2) => isSameMarket(market, ticketPosition))
                 )
                 .map((ticketPosition) => {
-                    const openMarket: SportMarketInfoV2 = sportOpenMarkets.filter((market: SportMarketInfoV2) =>
+                    const openMarket: SportMarketInfoV2 = liveAndOpenSportMarkets.filter((market: SportMarketInfoV2) =>
                         isSameMarket(market, ticketPosition)
                     )[0];
                     return {
@@ -106,7 +129,15 @@ const Parlay: React.FC = () => {
 
             setTicketMarkets(ticketMarkets);
         }
-    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch, isLiveFilterSelected]);
+    }, [
+        liveSportMarketsQuery.isSuccess,
+        liveSportMarketsQuery.data,
+        sportMarketsQuery.isSuccess,
+        sportMarketsQuery.data,
+        ticket,
+        dispatch,
+        isLiveFilterSelected,
+    ]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 

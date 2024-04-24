@@ -41,6 +41,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const isAddedToTicket = addedToTicket && addedToTicket.position == position;
 
     const isGameStarted = market.maturityDate < new Date();
+    const isGameLive = !!market.live && isGameStarted;
     const isGameCancelled = market.isCanceled;
     const isGameResolved = market.isResolved || market.isCanceled;
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
@@ -50,9 +51,9 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
 
     const odd = market.odds[position];
     const noOdd = !odd || odd == 0;
-    const disabledPosition = noOdd || !isGameOpen;
+    const disabledPosition = noOdd || (!isGameOpen && !isGameLive);
 
-    const showOdd = isGameOpen;
+    const showOdd = isGameOpen || isGameLive;
     const showTooltip = showOdd && !noOdd && !isMobile && false;
 
     const positionText = getPositionTextV2(market, position, isMainPageView && market.typeId === BetType.TOTAL);
@@ -70,7 +71,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                 if (isAddedToTicket) {
                     dispatch(removeFromTicket(market.gameId));
                 } else {
-                    const ticket: TicketPosition = {
+                    const ticketPosition: TicketPosition = {
                         gameId: market.gameId,
                         leagueId: market.leagueId,
                         typeId: market.typeId,
@@ -78,8 +79,13 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                         line: market.line,
                         position: position,
                         combinedPositions: market.combinedPositions,
+                        live: market.live,
                     };
-                    dispatch(updateTicket(ticket));
+                    if (ticket.some((position) => position.live) || (ticket.length && market.live)) {
+                        toast(t('markets.market-card.odds-live-limitation-message'), { type: 'error' });
+                    } else {
+                        dispatch(updateTicket(ticketPosition));
+                    }
                     if (isMobile) {
                         toast(oddTooltipText, oddToastOptions);
                     }

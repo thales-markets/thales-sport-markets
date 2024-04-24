@@ -76,7 +76,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameResolved = market.isResolved || market.isCanceled;
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
-    // const isLiveMarket = market.live && isGameStarted;
+    const isGameLive = !!market.live && isGameStarted;
+
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
     const gameIdString = web3.utils.hexToAscii(market.gameId);
@@ -243,7 +244,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             </MatchInfoConatiner>
             {!isMarketSelected && (
                 <>
-                    {isGameOpen ? (
+                    {isGameLive ? (
+                        <PositionsV2
+                            markets={[market]}
+                            betType={BetType.WINNER}
+                            isGameOpen={isGameLive}
+                            isMainPageView
+                            isColumnView={isColumnView}
+                        />
+                    ) : isGameOpen ? (
                         <>
                             <PositionsV2
                                 markets={[betTypeFilterMarket ? betTypeFilterMarket : market]}
@@ -341,7 +350,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             selected={selected}
             isMarketSelected={isMarketSelected}
         >
-            {isGameOpen ? (
+            {isGameOpen || isGameLive ? (
                 <>{getMainContainerContent()}</>
             ) : (
                 <SPAAnchor

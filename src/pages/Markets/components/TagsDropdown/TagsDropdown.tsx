@@ -23,7 +23,9 @@ type TagsDropdownProps = {
     setTagFilter: any;
     setTagParam: any;
     openMarketsCountPerTag: any;
+    liveMarketsCountPerTag: any;
     showActive: boolean;
+    showLive: boolean;
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({
@@ -33,7 +35,9 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     setTagFilter,
     setTagParam,
     openMarketsCountPerTag,
+    liveMarketsCountPerTag,
     showActive,
+    showLive,
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -44,10 +48,21 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     return (
         <Container open={open}>
             {tags
-                .filter((tag: TagInfo) => (showActive && !!openMarketsCountPerTag[tag.id]) || !showActive)
+                .filter(
+                    (tag: TagInfo) =>
+                        (showActive && (!!openMarketsCountPerTag[tag.id] || !!liveMarketsCountPerTag[tag.id])) ||
+                        !showActive
+                )
                 .sort((a, b) => {
-                    const numberOfGamesA = Number(!!openMarketsCountPerTag[a.id]);
-                    const numberOfGamesB = Number(!!openMarketsCountPerTag[b.id]);
+                    let numberOfGamesA;
+                    let numberOfGamesB;
+                    if (showLive) {
+                        numberOfGamesA = Number(!!liveMarketsCountPerTag[a.id]);
+                        numberOfGamesB = Number(!!liveMarketsCountPerTag[b.id]);
+                    } else {
+                        numberOfGamesA = Number(!!openMarketsCountPerTag[a.id]);
+                        numberOfGamesB = Number(!!openMarketsCountPerTag[b.id]);
+                    }
 
                     const favouriteA = favouriteLeagues.find((league: TagInfo) => league.id == a.id);
                     const isFavouriteA = Number(favouriteA && favouriteA.favourite);
@@ -215,9 +230,14 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                         )}
                                 </LabelContainer>
                             </LeftContainer>
-                            {!!openMarketsCountPerTag[tag.id] && (
-                                <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
-                            )}
+                            {showLive
+                                ? !!liveMarketsCountPerTag[tag.id] && (
+                                      <Count isMobile={isMobile}>{liveMarketsCountPerTag[tag.id]}</Count>
+                                  )
+                                : !!openMarketsCountPerTag[tag.id] && (
+                                      <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
+                                  )}
+                            {}
                             <StarIcon
                                 isMobile={isMobile}
                                 onClick={() => {

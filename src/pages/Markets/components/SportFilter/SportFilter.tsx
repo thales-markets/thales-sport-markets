@@ -16,7 +16,6 @@ type SportFilterProps = {
 
 const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, isMobile, onClick, count, children }) => {
     const { t } = useTranslation();
-
     return (
         <Container isMobile={isMobile}>
             <LeftContainer>
@@ -152,8 +151,8 @@ const Count = styled(FlexDivCentered)<{ isMobile?: boolean }>`
 `;
 
 const liveBlinkStyle: CSSProperties = {
-    width: 50,
-    margin: '0px 2px 0px -12px',
+    width: 37,
+    margin: '0px 9px 0px -6px',
 };
 
 export default SportFilter;
