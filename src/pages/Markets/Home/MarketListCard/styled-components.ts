@@ -98,7 +98,7 @@ export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelect
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    width: ${(props) => (props.isMarketSelected ? '110px' : '100%')};
+    width: ${(props) => (props.isMarketSelected ? '130px' : '100%')};
 `;
 
 export const ResultWrapper = styled(FlexDivRowCentered)``;

@@ -37,8 +37,6 @@ import RouterProvider from './Provider/RouterProvider/RouterProvider';
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
-const Quiz = lazy(() => import('pages/Quiz'));
-const QuizLeaderboard = lazy(() => import('pages/Quiz/Leaderboard'));
 const Vaults = lazy(() => import('pages/Vaults'));
 const Vault = lazy(() => import('pages/Vault'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
@@ -227,13 +225,6 @@ const App = () => {
                                         {!isConnectedViaParticle && <Wizard />}
                                     </DappLayout>
                                 </Route>
-                                {isRouteAvailableForNetwork(ROUTES.Quiz, networkId) && (
-                                    <Route exact path={ROUTES.Quiz}>
-                                        <DappLayout>
-                                            <Quiz />
-                                        </DappLayout>
-                                    </Route>
-                                )}
                                 {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
                                     <Route exact path={ROUTES.Vaults}>
                                         <DappLayout>
@@ -252,14 +243,6 @@ const App = () => {
                                             </DappLayout>
                                         )}
                                     />
-                                )}
-
-                                {isRouteAvailableForNetwork(ROUTES.QuizLeaderboard, networkId) && (
-                                    <Route exact path={ROUTES.QuizLeaderboard}>
-                                        <DappLayout>
-                                            <QuizLeaderboard />
-                                        </DappLayout>
-                                    </Route>
                                 )}
 
                                 {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (

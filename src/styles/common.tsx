@@ -76,5 +76,3 @@ export const Colors = {
     NAVY_BLUE_DARK: '#151B36',
     NAVY_BLUE_EXTRA_DARK: '#111325',
 };
-
-export const QuizQuestionDifficultyMap = ['#4673BD', '#50CE99', '#F4CF73', '#FA9E2F', '#C3244A'];

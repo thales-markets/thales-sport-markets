@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Referrer } from 'types/referral';
 import Table from 'components/Table';
-import { useTranslation } from 'react-i18next';
-import { CellProps } from 'react-table';
-import { truncateAddress, formatCurrencyWithSign, formatDateWithTime } from 'thales-utils';
 import { USD_SIGN } from 'constants/currency';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
+import { CellProps } from 'react-table';
 import { getIsMobile } from 'redux/modules/app';
-import { TableHeaderStyle, TableHeaderStyleMobile } from '../TradersTable/TradersTable';
-import { PaginationWrapper } from 'pages/Quiz/styled-components';
+import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
+import { formatCurrencyWithSign, formatDateWithTime, truncateAddress } from 'thales-utils';
+import { Referrer } from 'types/referral';
 import { ThemeInterface } from 'types/ui';
+import { PaginationWrapper } from '../../../ParlayLeaderboard/ParlayLeaderboard';
+import { TableHeaderStyle, TableHeaderStyleMobile } from '../TradersTable/TradersTable';
 
 type AffiliateLeaderboardProps = {
     referrers: Referrer[] | [];

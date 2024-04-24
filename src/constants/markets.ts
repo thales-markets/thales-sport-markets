@@ -1,4 +1,4 @@
-import { BetType, ContractSGPOrder, OddsType, Position } from 'enums/markets';
+import { OddsType, Position } from 'enums/markets';
 import { TAGS_FLAGS } from 'enums/tags';
 
 export const ODDS_TYPES = [OddsType.American, OddsType.AMM, OddsType.Decimal];
@@ -6,12 +6,6 @@ export const ODDS_TYPES = [OddsType.American, OddsType.AMM, OddsType.Decimal];
 export const MIN_COLLATERAL_MULTIPLIER = 1.01;
 export const MAX_COLLATERAL_MULTIPLIER = 0.99;
 export const APPROVAL_BUFFER = 0.01;
-
-export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, BetType[]> = {
-    [ContractSGPOrder.MONEYLINETOTALS]: [0, 10002],
-    [ContractSGPOrder.MONEYLINESPREAD]: [0, 10001],
-    [ContractSGPOrder.SPREADTOTALS]: [10001, 10002],
-};
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.05; // 5%
 
@@ -114,15 +108,6 @@ export const ENETPULSE_ROUNDS: Record<number, string> = {
     [8]: '1/128',
     [9]: 'Final',
 };
-
-export const COMBINED_MARKETS_CONTRACT_DATA_TO_POSITIONS: [0 | 1 | 2, 0 | 1][] = [
-    [0, 0],
-    [0, 1],
-    [1, 0],
-    [1, 1],
-    [2, 0],
-    [2, 1],
-];
 
 export const POSITION_TO_ODDS_OBJECT_PROPERTY_NAME: Record<Position, 'homeOdds' | 'awayOdds' | 'drawOdds'> = {
     0: 'homeOdds',

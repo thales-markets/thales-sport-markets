@@ -34,28 +34,10 @@ export enum OddsType {
     AMM = 'normalized-implied-odds',
 }
 
-export enum ContractSGPOrder {
-    MONEYLINETOTALS = 0,
-    MONEYLINESPREAD = 1,
-    SPREADTOTALS = 2,
-}
-
-export enum PositionName {
-    home = 'home',
-    away = 'away',
-    draw = 'draw',
-}
-
 export enum Position {
     HOME = 0,
     AWAY = 1,
     DRAW = 2,
-}
-
-export enum DoubleChanceMarketType {
-    HOME_TEAM_NOT_TO_LOSE = 'HomeTeamNotToLose',
-    NO_DRAW = 'NoDraw',
-    AWAY_TEAM_NOT_TO_LOSE = 'AwayTeamNotToLose',
 }
 
 export enum BetType {
@@ -182,14 +164,6 @@ export enum ParlayErrorCode {
     COMBINE_REGULAR_WITH_COMBINED_POSITIONS = 10,
 }
 
-export enum CombinedPositionsMatchingCode {
-    SAME_POSITIONS = 0,
-    SAME_MARKETS = 1,
-    SAME_MARKET_ADDRESSES_NOT_POSITIONS = 2,
-    SAME_POSITIONS_DIFFERENT_ODDS = 3,
-    NOTHING_COMMON = 4,
-    SAME_PARENT_MARKET = 5,
-}
 export const PLAYER_PROPS_BET_TYPES = [
     BetType.PLAYER_PROPS_HOMERUNS,
     BetType.PLAYER_PROPS_STRIKEOUTS,

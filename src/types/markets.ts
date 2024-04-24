@@ -1,4 +1,4 @@
-import { BetType, Position } from 'enums/markets';
+import { Position } from 'enums/markets';
 import { ethers } from 'ethers';
 import { Network } from '../enums/network';
 
@@ -73,12 +73,6 @@ export type CombinedMarketContractData = {
     mainMarket: string;
     combinedOdds: { odds: number[]; tags: number[] }[];
 };
-
-export type SGPItem = { tags: number[]; combination: BetType[]; SGPFee: number };
-
-type SGPContractDataItem = [number, number, number, number];
-
-export type SGPContractData = SGPContractDataItem[];
 
 export type LeaderboardPoints = {
     basicPoints: number;

@@ -8,8 +8,6 @@ const ROUTES = {
     },
     Profile: '/profile',
     Referral: '/referral',
-    Quiz: '/trivia',
-    QuizLeaderboard: '/trivia/leaderboard',
     Wizard: '/wizard',
     Vaults: '/vaults',
     Vault: '/vaults/:vaultId',
