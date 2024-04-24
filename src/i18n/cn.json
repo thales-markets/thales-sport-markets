@@ -676,64 +676,6 @@
         "total-global-rebates": "要支付的总回扣",
         "parlay-link": "<div>对于 OP 月度 parlay 比赛<parlayLink>点击这里</ parlayLink>.</div>"
     },
-    "quiz": {
-        "title": "体育百科竞赛",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition. The trivia is available to everyone to test their knowledge and compete.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! For any questions please join our <discord>Discord</discord>.</p>",
-        "twitter-handle-label": "推特账号",
-        "twitter-handle-placeholder": "请输入您的推特账号",
-        "twitter-handle-validation": "无效的推特账号，请重新输入",
-        "discord-label": "Discord 账号 (可选)",
-        "discord-placeholder": "请输入您的Discord 账号",
-        "current-question-label": "当前问题: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "剩余时间: <0/>",
-        "question-weight-label": "问题分数: {{points}}",
-        "point-label": "分",
-        "points-label": "分",
-        "quiz-finished-label": "问答完成!",
-        "your-score-label": "您的得分: {{score}}/{{max}} 分",
-        "button": {
-            "start-quiz-label": "开始测试",
-            "next-question-label": "下一个问题",
-            "previous-question-label": "上一个问题",
-            "finish-quiz-label": "完成测试",
-            "try-again-label": "再次测试",
-            "see-leaderboard-label": "查看排行榜"
-        },
-        "leaderboard": {
-            "title": "体育百科竞赛排行榜",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
-            "back-to-quiz": "返回测试",
-            "search-placeholder": "搜索...",
-            "table": {
-                "rank-col": "排名",
-                "wallet-address-col": "钱包地址",
-                "twitter-col": "推特",
-                "points-col": "得分",
-                "time-col": "时间",
-                "rewards-col": "奖励",
-                "no-data-available": "无法获取数据"
-            },
-            "period-end-label": "期间结束于",
-            "period-ended-label": "期间结束",
-            "week-label": "星期",
-            "overtime-voucher": "Overtime 代金券",
-            "all-time-leaderboard-label": "All time leaderboard"
-        },
-        "help-us-improve-label": "帮助我们提高",
-        "help-us-improve-tooltip": "帮助我们的体育百科添加新的问题",
-        "finish-messages": {
-            "your-best-result": "你的最好成绩: {{points}} {{pointsLabel}}",
-            "rank-info": "你目前的成绩 {{points}} {{pointsLabel}} 在所有 {{totalParticipants}} 名参赛者中排名第 {{rank}} 。"
-        },
-        "difficulty-label": "难度",
-        "difficulty": {
-            "1": "极容易",
-            "2": "容易",
-            "3": "中等",
-            "4": "困难",
-            "5": "极困难"
-        }
-    },
     "landing-page": {
         "best-odds": "市场最佳赔率",
         "try-now": "立刻尝试",

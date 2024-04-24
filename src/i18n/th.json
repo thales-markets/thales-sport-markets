@@ -676,64 +676,6 @@
         "total-global-rebates": "รวมเงินคืนที่ต้องจ่าย",
         "parlay-link": "<div>สำหรับการแข่งขันพาร์เลย์ OP ประจำเดือน<parlayLink> คลิกที่นี่</ parlayLink> .</div>"
     },
-    "quiz": {
-        "title": "การแข่งขันเกร็ดความรู้ด้านกีฬา",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition. The trivia is available to everyone to test their knowledge and compete.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! For any questions please join our <discord>Discord</discord>.</p>",
-        "twitter-handle-label": "ชื่อบัญชี Twitter",
-        "twitter-handle-placeholder": "ระบุชื่อบัญชี Twitter",
-        "twitter-handle-validation": "ชื่อบัญชี Twitter ไม่ถูกต้อง โปรดลองใหม่อีกครั้ง",
-        "discord-label": "Discord ID (optional)",
-        "discord-placeholder": "ระบุ Discord ID",
-        "current-question-label": "คำถามปัจจุบัน: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "เวลาที่เหลืออยู่: <0/>",
-        "question-weight-label": "น้ำหนักคำถาม: {{points}}",
-        "point-label": "คะแนน",
-        "points-label": "คะแนน",
-        "quiz-finished-label": "สิ้นสุดการแข่งขันตอบคำถาม!",
-        "your-score-label": "คะแนนของคุณ: {{score}}/{{max}} คะแนน",
-        "button": {
-            "start-quiz-label": "เริ่มแข่งขันตอบคำถาม",
-            "next-question-label": "คำถามถัดไป",
-            "previous-question-label": "คำถามก่อนหน้า",
-            "finish-quiz-label": "สิ้นสุดการตอบคำถาม",
-            "try-again-label": "ลองใหม่อีกครั้ง",
-            "see-leaderboard-label": "ดู leaderboard"
-        },
-        "leaderboard": {
-            "title": "Trivia Leaderboard",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
-            "back-to-quiz": "กลับไปที่การทดสอบ",
-            "search-placeholder": "ค้นหา...",
-            "table": {
-                "rank-col": "อันดับ",
-                "wallet-address-col": "หมายเลขกระเป๋าเงิน",
-                "twitter-col": "Twitter",
-                "points-col": "คะแนน",
-                "time-col": "เวลา",
-                "rewards-col": "รางวัล",
-                "no-data-available": "ไม่พบข้อมูล"
-            },
-            "period-end-label": "การแข่งขันรอบนี้จะสิ้นสุดใน",
-            "period-ended-label": "การแข่งขันสิ้นสุด",
-            "week-label": "สัปดาห์ที่",
-            "overtime-voucher": "บัตรกำนัล Overtime",
-            "all-time-leaderboard-label": "All time leaderboard"
-        },
-        "help-us-improve-label": "ช่วยเราพัฒนา",
-        "help-us-improve-tooltip": "ช่วยเราพัฒนาการแข่งขันการตอบคำถามด้านกีฬาโดยการช่วยเราเพิ่มคำถามลงใน database",
-        "finish-messages": {
-            "your-best-result": "คะแนนที่ดีที่สุดของคุณ: {{points}} {{pointsLabel}}",
-            "rank-info": "ด้วย {{points}} {{pointsLabel}} คุณอยู่อันดับที่ {{rank}} จากผู้เข้าแข่งขันทั้งหมด {{totalParticipants}} คน"
-        },
-        "difficulty-label": "ระดับความยาก",
-        "difficulty": {
-            "1": "Trivial",
-            "2": "Easy",
-            "3": "Moderate",
-            "4": "Challenging",
-            "5": "Hard"
-        }
-    },
     "landing-page": {
         "best-odds": "อัตราต่อรองที่ดีที่สุดในอุตสาหกรรม",
         "try-now": "ลองเลย",

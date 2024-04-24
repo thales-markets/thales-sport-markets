@@ -675,64 +675,6 @@
         "total-global-rebates": "Sconti totali da pagare",
         "parlay-link": "<div>Per la competizione parlay mensile OP<parlayLink> clicca qui</ parlayLink> .</div>"
     },
-    "quiz": {
-        "title": "Sports Trivia competition",
-        "start-quiz-description": "<p>Hey sports fans! Ready to test your knowledge and beat the field?</p><p>Overtime has launched a sports trivia competition where weekly winners will receive NFT Vouchers that can be used instead of sUSD to participate in any sports market you like.</p><p>Read all the information about this trivia in our <blogPost>blog post</blogPost>.</p><p>How to participate? The trivia is available to everyone to test their knowledge and compete, but to be eligible for rewards you need to retweet this <quizRetweetLink>tweet</quizRetweetLink> and follow <twitter>Overtime's Twitter</twitter>.</p><p>Connect your wallet and enter your Twitter handle to start the trivia! If you win rewards, we will ask you to confirm your address via Twitter DM. Discord ID is optional if you want to receive a Discord role as a potential trivia winner.</p><p>For any questions please join our <discord>Discord</discord>.</p>",
-        "twitter-handle-label": "Twitter handle",
-        "twitter-handle-placeholder": "Enter your Twitter handle",
-        "twitter-handle-validation": "Invalid Twitter handle. Try again.",
-        "discord-label": "Discord ID (optional)",
-        "discord-placeholder": "Enter your Discord ID",
-        "current-question-label": "Current question: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "Time remaining: <0/>",
-        "question-weight-label": "Question weight: {{points}}",
-        "point-label": "point",
-        "points-label": "points",
-        "quiz-finished-label": "Trivia finished!",
-        "your-score-label": "Your score: {{score}}/{{max}} points",
-        "button": {
-            "start-quiz-label": "Start trivia",
-            "next-question-label": "Next question",
-            "previous-question-label": "Previous question",
-            "finish-quiz-label": "Finish trivia",
-            "try-again-label": "Try again",
-            "see-leaderboard-label": "See leaderboard"
-        },
-        "leaderboard": {
-            "title": "Trivia Leaderboard",
-            "description": "<p>This is the trivia leaderboard where you can see how are you faring against the competition for any given week.</p><p>All the details about how to participate for NFT sUSD vouchers that can be used on any sports market available <blogPost>here</blogPost>.</p><p>You can take the trivia as many times as you like <sportsTrivia>here</sportsTrivia>.</p>",
-            "back-to-quiz": "Back to trivia",
-            "search-placeholder": "Search...",
-            "table": {
-                "rank-col": "Rank",
-                "wallet-address-col": "Wallet address",
-                "twitter-col": "Twitter",
-                "points-col": "Points",
-                "time-col": "Time",
-                "rewards-col": "Rewards",
-                "no-data-available": "No data available"
-            },
-            "period-end-label": "The period ends in",
-            "period-ended-label": "Period ended",
-            "week-label": "Week",
-            "overtime-voucher": "Overtime voucher",
-            "all-time-leaderboard-label": "Classifica di tutti i tempi"
-        },
-        "help-us-improve-label": "Help us improve",
-        "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
-        "finish-messages": {
-            "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants."
-        },
-        "difficulty-label": "Difficulty",
-        "difficulty": {
-            "1": "Trivial",
-            "2": "Easy",
-            "3": "Moderate",
-            "4": "Challenging",
-            "5": "Hard"
-        }
-    },
     "landing-page": {
         "web3-positioning": "Posizionamento sportivo Web3",
         "launch-dapp": "Avvia dapp",

@@ -48,6 +48,8 @@
 // import { formatParlayOdds } from 'utils/parlay';
 // import useExchangeRatesQuery, { Rates } from '../../queries/rates/useExchangeRatesQuery';
 
+import { TablePagination } from '@material-ui/core';
+import styled from 'styled-components';
 import {
     PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
@@ -787,5 +789,35 @@ export const getRewardsCurrency = (networkId: Network) => {
     if (networkId == Network.OptimismMainnet) return 'OP';
     return 'THALES';
 };
+
+export const PaginationWrapper = styled(TablePagination)`
+    border: none !important;
+    display: flex;
+    width: 100%;
+    height: auto;
+    color: ${(props) => props.theme.textColor.primary} !important;
+    .MuiToolbar-root {
+        padding: 0;
+        display: flex;
+        .MuiSelect-icon {
+            color: ${(props) => props.theme.textColor.primary};
+        }
+    }
+    .MuiIconButton-root.Mui-disabled {
+        color: ${(props) => props.theme.textColor.secondary};
+    }
+    .MuiTablePagination-toolbar > .MuiTablePagination-caption:last-of-type {
+        display: block;
+    }
+    .MuiTablePagination-input {
+        margin-top: 2px;
+    }
+    .MuiTablePagination-selectRoot {
+        @media (max-width: 767px) {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+    }
+`;
 
 export default ParlayLeaderboard;

@@ -676,64 +676,6 @@
         "twap": "TWAP d'une semaine",
         "parlay-link": "<div>Pour le concours de parlay mensuel OP<parlayLink> Cliquez ici</ parlayLink> .</div>"
     },
-    "quiz": {
-        "button": {
-            "previous-question-label": "Question précédente",
-            "see-leaderboard-label": "Voir le classement",
-            "next-question-label": "Question suivante",
-            "try-again-label": "Réessayer",
-            "start-quiz-label": "Commencer le quiz",
-            "finish-quiz-label": "Terminer le quiz"
-        },
-        "leaderboard": {
-            "table": {
-                "rank-col": "Rang",
-                "no-data-available": "Pas de données disponibles",
-                "twitter-col": "Twitter",
-                "wallet-address-col": "Adresse du portefeuille",
-                "time-col": "Temps",
-                "points-col": "Points",
-                "rewards-col": "Récompenses"
-            },
-            "title": "Classement du quiz",
-            "overtime-voucher": "Coupon Overtime",
-            "back-to-quiz": "Retour aux quiz",
-            "period-ended-label": "Période terminée",
-            "search-placeholder": "Chercher...",
-            "week-label": "Semaine",
-            "description": "<p>Voici le classement du quiz où vous pouvez voir comment vous vous en sortez par rapport à la concurrence.</p><p> Vous pouvez participer au quiz autant de fois que vous le souhaitez <sportsTrivia>ici</sportsTrivia>.</p>",
-            "period-end-label": "La période se termine dans",
-            "all-time-leaderboard-label": "All time leaderboard"
-        },
-        "finish-messages": {
-            "your-best-result": "Votre meilleur résultat : {{points}} {{pointsLabel}}",
-            "rank-info": "Avec {{points}} {{pointsLabel}} vous êtes classé {{rank}} sur {{totalParticipants}} participants."
-        },
-        "difficulty": {
-            "1": "Ultra facile",
-            "2": "Facile",
-            "3": "Moyen",
-            "4": "Difficile",
-            "5": "Très difficile"
-        },
-        "quiz-finished-label": "Quiz terminé !",
-        "discord-placeholder": "Entrez votre identifiant Discord",
-        "twitter-handle-label": "Nom d'utilisateur Twitter",
-        "points-label": "points",
-        "time-reamining-label": "Temps restant : <0/>",
-        "your-score-label": "Votre score : {{score}}/{{max}} points",
-        "current-question-label": "Question actuelle : {{currentQuestion}}/{{numberOfQuestions}}",
-        "title": "Quiz sportif",
-        "discord-label": "Identifiant Discord (facultatif)",
-        "twitter-handle-validation": "Identifiant Twitter non valide. Veuillez réessayer.",
-        "difficulty-label": "Difficulté",
-        "help-us-improve-label": "Aidez nous à améliorer",
-        "twitter-handle-placeholder": "Entrez votre identifiant Twitter",
-        "point-label": "point",
-        "start-quiz-description": "<p>Salut les fans de sport! Prêt à tester vos connaissances et à battre tout le monde?</p><p>Overtime a lancé un concours de quiz sportifs. Le quiz est accessible à tous pour tester ses connaissances et participer.</p><p>Connectez votre portefeuille et entrez votre identifiant Twitter pour commencer le quiz! Pour toute question, veuillez rejoindre notre <discord>Discord</discord>.</p>",
-        "question-weight-label": "Poids de la question : {{points}}",
-        "help-us-improve-tooltip": "Aidez-nous à améliorer les quiz sportifs en ajoutant de nouvelles questions à la base de données de questions."
-    },
     "landing-page": {
         "best-odds": "Les meilleures cotes du secteur",
         "try-now": "Essayer maintenant",

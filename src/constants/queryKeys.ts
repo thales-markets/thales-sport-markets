@@ -112,9 +112,6 @@ const QUERY_KEYS = {
             walletAddress,
         ],
     },
-    Quiz: {
-        Leaderboard: () => ['quiz', 'leaderboard'],
-    },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
     Vault: {
         Data: (vaultAddress: string, networkId: Network) => [vaultAddress, 'data', networkId],
@@ -163,7 +160,6 @@ const QUERY_KEYS = {
             networkId,
         ],
     },
-    SGPFees: (networkId: Network) => ['sgpFees', networkId],
     CheckPausedAMM: (networkId: Network) => ['checkPausedAMM', networkId],
     Rates: {
         ExchangeRates: (networkId: Network) => ['rates', 'exchangeRates', networkId],

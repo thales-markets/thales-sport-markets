@@ -675,64 +675,6 @@
         "total-global-rebates": "Reembolsos totales a pagar",
         "parlay-link": "<div>Para la competencia parlay mensual OP<parlayLink> haga clic aquí</ parlayLink> .</div>"
     },
-    "quiz": {
-        "title": "Competencia de trivia sobre deportes (en ingles)",
-        "start-quiz-description": "<p>Hey fanaticos de los deportes! Listos para probar sus conocimientos?</p><p>Overtime ha inaugurado esta competencia de trivia sobre deportes. Esta trivia es abierta para que cualquiera pueda participar y probar su conocimiento.</p><p>Conecta tu billetera e ingresa tu nombre de Twitter para comenzar la trivia! Si tienes preguntas por favor ingresa a nuestro <discord>Discord</discord>.</p>",
-        "twitter-handle-label": "Nombre en Twitter",
-        "twitter-handle-placeholder": "Ingresa tu nombre en Twitter",
-        "twitter-handle-validation": "Nombre en Twitter invalido. Por favor intenta nuevamente.",
-        "discord-label": "Discord ID (opcional)",
-        "discord-placeholder": "Ingresa tu Discord ID",
-        "current-question-label": "Pregunta actual: {{currentQuestion}}/{{numberOfQuestions}}",
-        "time-reamining-label": "Tiempo restante: <0/>",
-        "question-weight-label": "Dificultad de pregunta: {{points}}",
-        "point-label": "punto",
-        "points-label": "puntos",
-        "quiz-finished-label": "Trivia finalizada!",
-        "your-score-label": "Tu puntaje: {{score}}/{{max}} puntos",
-        "button": {
-            "start-quiz-label": "Comenzar trivia",
-            "next-question-label": "Siguiente pregunta",
-            "previous-question-label": "Pregunta anterior",
-            "finish-quiz-label": "Finalizar trivia",
-            "try-again-label": "Intentar nuevamente",
-            "see-leaderboard-label": "Ver leaderboard"
-        },
-        "leaderboard": {
-            "title": "Trivia Leaderboard",
-            "description": "<p>Este es el leaderboard de la trivia en donde podras ver tu posicion con respecto a la competencia.</p><p>Puedes participar en la trivia tantas veces como desees <sportsTrivia>aqui</sportsTrivia>.</p>",
-            "back-to-quiz": "Volver a trivia",
-            "search-placeholder": "Buscar...",
-            "table": {
-                "rank-col": "Ranking",
-                "wallet-address-col": "Direccion de billetera",
-                "twitter-col": "Twitter",
-                "points-col": "Puntos",
-                "time-col": "Tiempo",
-                "rewards-col": "Recompensas",
-                "no-data-available": "Datos no disponibles"
-            },
-            "overtime-voucher": "Vale de horas extras",
-            "week-label": "Semana",
-            "period-end-label": "El período termina en",
-            "period-ended-label": "Período terminado",
-            "all-time-leaderboard-label": "All time leaderboard"
-        },
-        "help-us-improve-label": "Help us improve",
-        "help-us-improve-tooltip": "Help us improve sports trivia by adding new questions to the questions database.",
-        "finish-messages": {
-            "your-best-result": "Your best result: {{points}} {{pointsLabel}}",
-            "rank-info": "With {{points}} {{pointsLabel}} you are ranked {{rank}} out of {{totalParticipants}} participants."
-        },
-        "difficulty-label": "Difficulty",
-        "difficulty": {
-            "1": "Trivial",
-            "2": "Easy",
-            "3": "Moderate",
-            "4": "Challenging",
-            "5": "Hard"
-        }
-    },
     "landing-page": {
         "best-odds": "Las mejores odds en la industria",
         "try-now": "Pruebalo ahora",
