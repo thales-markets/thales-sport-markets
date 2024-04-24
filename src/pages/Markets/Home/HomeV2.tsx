@@ -284,24 +284,24 @@ const Home: React.FC = () => {
                             return false;
                     }
                 }
+            }
 
-                betTypes.add(market.typeId);
-                market.childMarkets?.forEach((childMarket) => {
-                    betTypes.add(childMarket.typeId);
-                });
+            betTypes.add(market.typeId);
+            market.childMarkets?.forEach((childMarket) => {
+                betTypes.add(childMarket.typeId);
+            });
 
-                if (betTypeFilter) {
-                    const marketBetTypes = [
-                        market.typeId,
-                        ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
-                    ];
+            if (betTypeFilter) {
+                const marketBetTypes = [
+                    market.typeId,
+                    ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
+                ];
 
-                    if (!marketBetTypes.some((betType) => betTypeFilter === betType)) {
-                        return false;
-                    }
-                    if (sportFilter == SportFilterEnum.Live) {
-                        if (!LIVE_SUPPORTED_LEAGUES.includes(market.leagueId)) return false;
-                    }
+                if (!marketBetTypes.some((betType) => betTypeFilter === betType)) {
+                    return false;
+                }
+                if (sportFilter == SportFilterEnum.Live) {
+                    if (!LIVE_SUPPORTED_LEAGUES.includes(market.leagueId)) return false;
                 }
             }
 
