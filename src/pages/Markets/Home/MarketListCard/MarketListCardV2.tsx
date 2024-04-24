@@ -18,6 +18,7 @@ import web3 from 'web3';
 import SPAAnchor from '../../../../components/SPAAnchor';
 import { BetType } from '../../../../enums/markets';
 import {
+    getBetTypeFilter,
     getIsMarketSelected,
     getIsThreeWayView,
     getSelectedMarket,
@@ -57,6 +58,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
+    const betTypeFilter = useSelector(getBetTypeFilter);
     // const isMobile = useSelector((state: RootState) => getIsMobile(state));
     // const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
@@ -82,6 +84,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const firstSpreadMarket = market.childMarkets.find((childMarket) => childMarket.typeId === BetType.SPREAD);
     const firstTotalMarket = market.childMarkets.find((childMarket) => childMarket.typeId === BetType.TOTAL);
+    const betTypeFilterMarket =
+        betTypeFilter && market.childMarkets.find((childMarket) => childMarket.typeId === betTypeFilter);
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
@@ -139,7 +143,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
     const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
-    const isColumnView = isThreeWayView && !isMarketSelected && isGameOpen;
+    const isColumnView = !betTypeFilterMarket && isThreeWayView && !isMarketSelected && isGameOpen;
     const isTwoPositionalMarket = market.odds.length === 2;
     const selected = selectedMarket == market.gameId;
 
@@ -242,8 +246,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     {isGameOpen ? (
                         <>
                             <PositionsV2
-                                markets={[market]}
-                                betType={BetType.WINNER}
+                                markets={[betTypeFilterMarket ? betTypeFilterMarket : market]}
+                                betType={betTypeFilterMarket ? betTypeFilter : BetType.WINNER}
                                 isGameOpen={isGameOpen}
                                 isMainPageView
                                 isColumnView={isColumnView}
