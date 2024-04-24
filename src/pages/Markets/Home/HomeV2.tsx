@@ -47,6 +47,7 @@ import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
 import FilterTagsMobile from '../components/FilterTagsMobile';
+import GlobalFilters from '../components/GlobalFilters';
 import SportFilter from '../components/SportFilter';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import TagsDropdown from '../components/TagsDropdown';
@@ -606,7 +607,7 @@ const Home: React.FC = () => {
                     </CheckboxContainer>
                     <Scroll height="500px">
                         <SportFiltersContainer>
-                            {/* <GlobalFilters
+                            <GlobalFilters
                                 setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
                                 setDateParam={setDateParam}
                                 setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
@@ -615,7 +616,7 @@ const Home: React.FC = () => {
                                 dateFilter={dateFilter}
                                 sportFilter={sportFilter}
                                 isMobile={isMobile}
-                            /> */}
+                            />
                             {Object.values(SportFilterEnum)
                                 .filter(
                                     (filterItem: any) =>
@@ -848,7 +849,7 @@ const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`
 const SportFiltersContainer = styled(FlexDivColumn)`
     margin-bottom: 10px;
     padding-top: 15px;
-    padding-right: 10px;
+    padding-right: 15px;
 `;
 
 const NoMarketsContainer = styled(FlexDivColumnCentered)`

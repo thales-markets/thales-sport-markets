@@ -1,12 +1,8 @@
-import Dropdown from 'components/Dropdown';
-import { ODDS_TYPES } from 'constants/markets';
-import { GlobalFiltersEnum, OddsType, SportFilterEnum } from 'enums/markets';
-import React, { useCallback } from 'react';
+import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { getOddsType, setOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 type GlobalFiltersProps = {
     setDateFilter: (value: any) => void;
@@ -26,108 +22,177 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
     isMobile,
 }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
-
-    const selectedOddsType = useSelector(getOddsType);
-    const setSelectedOddsType = useCallback(
-        (oddsType: OddsType) => {
-            return dispatch(setOddsType(oddsType));
-        },
-        [dispatch]
-    );
+    const [open, setOpen] = useState(globalFilter !== GlobalFiltersEnum.OpenMarkets);
 
     return (
-        <Container>
-            <Filters isMobile={isMobile}>
-                <FilterTypeContainer isMobile={isMobile}>
-                    {Object.values(GlobalFiltersEnum).map((filterItem) => {
-                        return (
+        <Wrapper>
+            <Container isMobile={isMobile}>
+                <LeftContainer>
+                    <LabelContainer className={`${open ? 'selected' : ''}`} onClick={() => setOpen(!open)}>
+                        <FlexDiv>
+                            <SportIcon className={`icon icon--filters`} />
+                            <Label>{t('common.filters')}</Label>
+                        </FlexDiv>
+                        <FlexDiv gap={15}>
+                            {!open ? (
+                                <ArrowIcon className={`icon-exotic icon-exotic--right ${open ? 'selected' : ''}`} />
+                            ) : (
+                                <ArrowIcon
+                                    down={true}
+                                    className={`icon-exotic icon-exotic--down ${open ? 'selected' : ''}`}
+                                />
+                            )}
+                        </FlexDiv>
+                    </LabelContainer>
+                </LeftContainer>
+            </Container>
+            <FiltersContainer open={open}>
+                {Object.values(GlobalFiltersEnum).map((filterItem, index) => {
+                    return (
+                        <FilterContainer
+                            isLast={Object.values(GlobalFiltersEnum).length === index - 1}
+                            isMobile={isMobile}
+                            key={filterItem}
+                        >
                             <GlobalFilter
-                                selected={globalFilter === filterItem}
-                                isMobile={isMobile}
-                                cancelled={filterItem == GlobalFiltersEnum.Canceled}
+                                className={`${globalFilter === filterItem ? 'selected' : ''}`}
                                 onClick={() => {
                                     setGlobalFilter(filterItem);
                                     setGlobalFilterParam(filterItem);
                                 }}
-                                key={filterItem}
                             >
-                                <FilterIcon
-                                    isMobile={isMobile}
-                                    className={`icon icon--${
-                                        filterItem.toLowerCase() == 'openmarkets' ? 'logo' : filterItem.toLowerCase()
-                                    }`}
-                                />
+                                <FilterIcon isMobile={isMobile} className={`icon icon--profile`} />
                                 {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
                             </GlobalFilter>
-                        );
-                    })}
-                    {!isMobile && (
-                        <DropdownContrainer>
-                            <Dropdown<OddsType>
-                                list={ODDS_TYPES}
-                                selectedItem={t(`common.odds.${selectedOddsType}`)}
-                                onSelect={setSelectedOddsType}
-                            />
-                        </DropdownContrainer>
-                    )}
-                </FilterTypeContainer>
-            </Filters>
-        </Container>
+                        </FilterContainer>
+                    );
+                })}
+            </FiltersContainer>
+        </Wrapper>
     );
 };
 
-const Container = styled(FlexDiv)`
-    width: 100%;
-    max-width: 806px;
+const Wrapper = styled.div<{ isMobile?: boolean }>`
+    border-bottom: 1px solid ${(props) => props.theme.textColor.secondary};
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 `;
 
-const DropdownContrainer = styled.div`
-    height: auto;
-    width: auto;
-`;
-
-const Filters = styled(FlexDiv)<{ isMobile?: boolean }>`
-    width: 100%;
-    height: ${(props) => (props.isMobile ? '' : '24px')};
-    flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
-    border: ${(props) => (props.isMobile ? '' : '1px solid ' + props.theme.borderColor.primary)};
-    color: ${(props) => props.theme.textColor.secondary};
-    border-radius: 5px;
+const Container = styled(FlexDivRowCentered)<{ isMobile?: boolean }>`
     font-style: normal;
     font-weight: 600;
     font-size: ${(props) => (props.isMobile ? '17px' : '12px')};
-    line-height: ${(props) => (props.isMobile ? '17px' : '14px')};
-    align-items: center;
-    letter-spacing: 0.01em;
-    margin: ${(props) => (props.isMobile ? '0px 30px' : '0px 0px')};
-    padding: ${(props) => (props.isMobile ? '0px' : '0px 10px')};
+    line-height: ${(props) => (props.isMobile ? '17px' : '13px')};
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+    cursor: pointer;
+    height: 25px;
+    margin-left: ${(props) => (props.isMobile ? '30px' : '0px')};
+    margin-right: ${(props) => (props.isMobile ? '30px' : '0px')};
+    position: relative;
+    color: ${(props) => props.theme.textColor.quinary};
+    justify-content: flex-start;
+    margin-bottom: 5px;
 `;
 
-const FilterTypeContainer = styled(FlexDivRowCentered)<{ timeFilters?: boolean; isMobile?: boolean }>`
-    justify-content: space-around;
-    align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
-    flex-direction: ${(props) => (props.isMobile && !props.timeFilters ? 'column' : 'row')};
-    height: ${(props) => (props.isMobile && props.timeFilters ? '120px' : '')};
+const LeftContainer = styled(FlexDivRowCentered)`
     flex: 1;
 `;
 
-const GlobalFilter = styled.span<{ selected?: boolean; isMobile?: boolean; cancelled?: boolean }>`
-    margin: ${(props) => (props.isMobile ? '2px 0px' : '0px 2px')};
-    text-transform: uppercase;
-    white-space: nowrap;
-    width: ${(props) => (props.cancelled ? 'max-content' : '')};
-    height: ${(props) => (props.isMobile ? '36px' : '')};
-    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
+const LabelContainer = styled(FlexDivRowCentered)`
+    flex: 1;
+    &.selected,
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+
+    @media (max-width: 950px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
+        &.selected {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+    }
+`;
+
+const Label = styled.div`
+    white-space: pre-line;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+`;
+
+const SportIcon = styled.i`
+    font-size: 25px;
+    margin-right: 15px;
+`;
+
+const ArrowIcon = styled.i<{ down?: boolean }>`
+    font-size: 12px;
+    margin-left: 5px;
+    margin-top: ${(props) => (props.down ? '5px' : '')};
+    margin-bottom: ${(props) => (props.down ? '' : '2px')};
+    &.selected,
     &:hover {
         cursor: pointer;
-        color: ${(props) => (!props.isMobile ? props.theme.textColor.quaternary : '')};
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+    @media (max-width: 950px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
+        &.selected {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+    }
+`;
+
+const FiltersContainer = styled.div<{ open: boolean }>`
+    display: ${(props) => (!props.open ? 'none' : '')};
+`;
+
+const FilterContainer = styled(FlexDivRow)<{ isMobile: boolean; isLast?: boolean }>`
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 13px;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+    cursor: pointer;
+    height: 25px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-bottom: ${(props) => (props.isLast ? '0px' : '5px')};
+    margin-right: ${(props) => (props.isMobile ? '30px' : '0px')};
+    justify-content: flex-start;
+    position: relative;
+    align-items: center;
+`;
+
+const GlobalFilter = styled.div`
+    width: 100%;
+    padding-left: 10px;
+    justify-content: flex-start;
+    &.selected,
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+
+    @media (max-width: 950px) {
+        &:hover {
+            color: ${(props) => props.theme.textColor.secondary};
+        }
+        &.selected {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
     }
 `;
 
 const FilterIcon = styled.i<{ isMobile: boolean }>`
-    display: ${(props) => (props.isMobile ? '' : 'none')};
-    font-size: 25px;
+    font-weight: 400;
+    font-size: 22px;
     margin-right: 15px;
 `;
 
