@@ -64,8 +64,8 @@ export const EmptyContainer = styled(FlexDivRowCentered)`
     width: 100%;
     text-align: center;
     justify-content: space-evenly;
-    background: linear-gradient(180deg, #303656 41.5%, #1a1c2b 100%);
-    border-radius: 4px;
+    background: ${(props) => props.theme.background.secondary};
+    border-radius: 7px;
     height: 200px;
     flex-direction: column;
 `;
