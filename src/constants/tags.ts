@@ -690,6 +690,7 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.HALFTIME_FULLTIME]: 'Half-time/Full-time',
     [BetType.GOALS]: 'Goals',
     [BetType.HALFTIME_FULLTIME_GOALS]: 'Half-time/Full-time + Goals',
+    [BetType.BOTH_TEAMS_TO_SCORE]: 'Both teams to score',
     [BetType.SPREAD2]: 'Handicap',
     [BetType.TOTAL2]: 'Total',
     [BetType.PLAYER_PROPS_STRIKEOUTS]: 'Strikeouts',
@@ -788,6 +789,16 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.SEVENTH_PERIOD_TOTAL2_ODD_EVEN]: 'Total odd/even 7th',
     [BetType.EIGHTH_PERIOD_TOTAL2_ODD_EVEN]: 'Total odd/even 8th',
     [BetType.NINTH_PERIOD_TOTAL2_ODD_EVEN]: 'Total odd/even 9th',
+
+    [BetType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 1st',
+    [BetType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 2nd',
+    [BetType.THIRD_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 3rd',
+    [BetType.FOURTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 4th',
+    [BetType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 5th',
+    [BetType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 6th',
+    [BetType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 7th',
+    [BetType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 8th',
+    [BetType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 9th',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
@@ -800,6 +811,7 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.HALFTIME_FULLTIME]: 'half-time/full-time',
     [BetType.GOALS]: 'goals',
     [BetType.HALFTIME_FULLTIME_GOALS]: 'half-time/full-time + goals',
+    [BetType.BOTH_TEAMS_TO_SCORE]: 'Both teams to score',
     [BetType.SPREAD2]: 'handicap',
     [BetType.TOTAL2]: 'total',
     [BetType.PLAYER_PROPS_STRIKEOUTS]: 'strikeouts',
@@ -898,6 +910,16 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.SEVENTH_PERIOD_TOTAL2_ODD_EVEN]: 'Total odd/even 7th',
     [BetType.EIGHTH_PERIOD_TOTAL2_ODD_EVEN]: 'Total odd/even 8th',
     [BetType.NINTH_PERIOD_TOTAL2_ODD_EVEN]: 'Total odd/even 9th',
+
+    [BetType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 1st',
+    [BetType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 2nd',
+    [BetType.THIRD_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 3rd',
+    [BetType.FOURTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 4th',
+    [BetType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 5th',
+    [BetType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 6th',
+    [BetType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 7th',
+    [BetType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 8th',
+    [BetType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 9th',
 };
 
 export const BetTypeMap: Record<BetType, string> = {
@@ -908,6 +930,7 @@ export const BetTypeMap: Record<BetType, string> = {
     [BetType.WINNER_TOTAL]: 'winnerTotal',
     [BetType.TOTAL_ODD_EVEN]: 'totalOddEven',
     [BetType.HALFTIME_FULLTIME]: 'halftimeFulltime',
+    [BetType.BOTH_TEAMS_TO_SCORE]: 'bothTeamsToScore',
     [BetType.GOALS]: 'goals',
     [BetType.HALFTIME_FULLTIME_GOALS]: 'halftimeFulltimeGoals',
     [BetType.SPREAD2]: 'handicap2',
@@ -1008,6 +1031,16 @@ export const BetTypeMap: Record<BetType, string> = {
     [BetType.SEVENTH_PERIOD_TOTAL2_ODD_EVEN]: 'seventhPeriodTotal2OddEven',
     [BetType.EIGHTH_PERIOD_TOTAL2_ODD_EVEN]: 'eightPeriodTotal2OddEven',
     [BetType.NINTH_PERIOD_TOTAL2_ODD_EVEN]: 'ninthPeriodTotal2OddEven',
+
+    [BetType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE]: 'firstPeriodBothTeamsToScore',
+    [BetType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE]: 'secondPeriodBothTeamsToScore',
+    [BetType.THIRD_PERIOD_BOTH_TEAMS_TO_SCORE]: 'thirdPeriodBothTeamsToScore',
+    [BetType.FOURTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'fourthPeriodBothTeamsToScore',
+    [BetType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'fifthPeriodBothTeamsToScore',
+    [BetType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'sixthPeriodBothTeamsToScore',
+    [BetType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'seventhPeriodBothTeamsToScore',
+    [BetType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'eightPeriodBothTeamsToScore',
+    [BetType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'ninthPeriodBothTeamsToScore',
 };
 
 export const SCORING_MAP: SportsMap = {

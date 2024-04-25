@@ -13,6 +13,7 @@ import { SportMarketInfoV2, Ticket, TicketMarket, TicketPosition, TradeData } fr
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     getIsOneSideMarket,
+    isBothsTeamsToScore,
     isCombinedPositions,
     isOneSidePlayerProps,
     isPeriod,
@@ -131,7 +132,12 @@ export const getSimplePositionText = (
     awayTeam: string,
     extendedText?: boolean
 ) => {
-    if (getIsOneSideMarket(betType) || isOneSidePlayerProps(betType) || isSpecialYesNoProp(betType)) {
+    if (
+        getIsOneSideMarket(betType) ||
+        isOneSidePlayerProps(betType) ||
+        isSpecialYesNoProp(betType) ||
+        isBothsTeamsToScore(betType)
+    ) {
         return position === 0 ? 'Yes' : 'No';
     }
 
