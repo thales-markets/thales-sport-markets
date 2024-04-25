@@ -1,4 +1,5 @@
 import { uniqBy } from 'lodash';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
 import { RootState } from 'redux/rootReducer';
@@ -17,13 +18,11 @@ const Breadcrumbs: React.FC = () => {
             {!!tagFilter.length &&
                 uniqueTagFilter.map((tag, index) => {
                     return (
-                        <>
+                        <React.Fragment key={tag.label}>
                             {index === 0 ? ' / ' : ''}
-                            <Breadcrumb onClick={() => dispatch(setTagFilter([tag]))} key={tag.label}>
-                                {tag.label}
-                            </Breadcrumb>
+                            <Breadcrumb onClick={() => dispatch(setTagFilter([tag]))}>{tag.label}</Breadcrumb>
                             {index === uniqueTagFilter.length - 1 ? '' : ', '}
-                        </>
+                        </React.Fragment>
                     );
                 })}
         </BreadcrumbsContainer>

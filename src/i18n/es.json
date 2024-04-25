@@ -517,7 +517,10 @@
                 "doubleDouble-1": "{{team}} no anotará un doble-doble",
                 "total-0": "El número total de {{scoring}} en el partido {{matchResolve}} será superior a {{line}}",
                 "rushingYards-0": "{{team}} tendrá más yardas terrestres que {{line}}",
-                "passingYards-0": "{{team}} tendrá más yardas aéreas que {{line}}"
+                "passingYards-0": "{{team}} tendrá más yardas aéreas que {{line}}",
+                "winner-0": "{{team}} ganará el partido {{matchResolve}}",
+                "winner-1": "{{team}} ganará el partido {{matchResolve}}",
+                "winner-2": "El partido terminará en empate {{matchResolve}}"
             },
             "type-tooltip": {
                 "11055": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado."

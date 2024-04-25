@@ -517,7 +517,10 @@
                 "hitsRecorded-1": "{{team}} avrà meno successi registrati rispetto a {{line}}",
                 "moneyline-0": "{{team}} vincerà la partita {{matchResolve}}",
                 "rebounds-1": "{{team}} avrà meno rimbalzi di {{line}}",
-                "shots-0": "{{team}} avrà più tiri di {{line}}"
+                "shots-0": "{{team}} avrà più tiri di {{line}}",
+                "winner-2": "La partita finirà con un pareggio {{matchResolve}}",
+                "winner-1": "{{team}} vincerà la partita {{matchResolve}}",
+                "winner-0": "{{team}} vincerà la partita {{matchResolve}}"
             },
             "type-tooltip": {
                 "11055": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato"

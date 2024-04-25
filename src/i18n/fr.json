@@ -517,7 +517,10 @@
                 "moneyline-0": "{{team}} gagnera le match {{matchResolve}}",
                 "total-0": "Le nombre total de {{scoring}} dans le match {{matchResolve}} sera supérieur à {{line}}",
                 "spread-0": "{{team}} remportera le match avec une différence de plus de {{line}} {{scoring}} {{matchResolve}}",
-                "receivingYards-0": "{{team}} aura plus de verges sur réception que {{line}}"
+                "receivingYards-0": "{{team}} aura plus de verges sur réception que {{line}}",
+                "winner-2": "Le match se terminera par un match nul {{matchResolve}}",
+                "winner-1": "{{team}} gagnera le match {{matchResolve}}",
+                "winner-0": "{{team}} gagnera le match {{matchResolve}}"
             },
             "type-tooltip": {
                 "11055": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
