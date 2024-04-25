@@ -59,7 +59,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 501,
-        live: false,
+        live: true,
     },
     {
         id: 9007,
@@ -108,7 +108,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 105,
-        live: false,
+        live: true,
     },
     {
         id: 9013,
@@ -441,7 +441,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 109,
-        live: false,
+        live: true,
     },
     {
         id: 9268,
@@ -450,7 +450,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 109,
-        live: false,
+        live: true,
     },
     {
         id: 19199,

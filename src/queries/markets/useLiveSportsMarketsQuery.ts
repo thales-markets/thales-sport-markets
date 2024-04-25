@@ -93,18 +93,32 @@ const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions
             //         live: true,
             //     },
             // ];
+
             const markets: any[] = [];
             try {
                 const promises: any[] = [];
-                LIVE_SUPPORTED_LEAGUES.forEach((league: number) =>
-                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-markets?leagueId=${league}`))
-                );
+                LIVE_SUPPORTED_LEAGUES.forEach((league: number) => {
+                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-markets?leagueId=${league}`));
+                });
                 const responses = await Promise.all(promises);
-                responses.forEach((response: any) => markets.concat(response.data));
+                // TODO REFACTOR THIS PART OF FILTERING AND FLATTENING
+                responses
+                    .filter((response) => !(typeof response.data == 'string'))
+                    .forEach((response: any) => markets.push(response.data));
             } catch (e) {
                 console.log(e);
             }
-            return markets;
+            const marketsFlattened = markets
+                .reduce((accumulator, value) => accumulator.concat(value), [])
+                .map((game: any) => {
+                    return {
+                        ...game,
+                        live: true,
+                        maturityDate: new Date(game.maturityDate),
+                        odds: game.odds.map((odd: any) => odd.normalizedImplied),
+                    };
+                });
+            return marketsFlattened;
         },
         {
             refetchInterval: 10 * 1000,
