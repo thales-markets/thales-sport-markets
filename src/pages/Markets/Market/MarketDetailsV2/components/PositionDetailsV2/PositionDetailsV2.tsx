@@ -54,7 +54,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const disabledPosition = noOdd || (!isGameOpen && !isGameLive);
 
     const showOdd = isGameOpen || isGameLive;
-    const showTooltip = showOdd && !noOdd && !isMobile && false;
+    const showTooltip = showOdd && !noOdd && !isMobile;
 
     const positionText = getPositionTextV2(market, position, isMainPageView && market.typeId === BetType.TOTAL);
 
