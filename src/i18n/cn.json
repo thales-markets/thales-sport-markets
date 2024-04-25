@@ -517,7 +517,10 @@
                 "spread-0": "{{team}} 将以超过 {{line}} {{scoring}} {{matchResolve}} 的差距赢得比赛",
                 "rushingYards-1": "{{team}} 的冲球码数将少于 {{line}}",
                 "passingYards-0": "{{team}} 的传球码数将比 {{line}} 多",
-                "lastTouchdown-0": "{{team}} 将在比赛中取得最后一次达阵"
+                "lastTouchdown-0": "{{team}} 将在比赛中取得最后一次达阵",
+                "winner-2": "比赛将以平局结束 {{matchResolve}}",
+                "winner-1": "{{team}} 将赢得比赛 {{matchResolve}}",
+                "winner-0": "{{team}} 将赢得比赛 {{matchResolve}}"
             },
             "type-tooltip": {
                 "11055": "接球、冲球、弃踢回攻、踢球回攻、防守和拦截达阵均计入结果"

@@ -120,7 +120,11 @@ const marketSlice = createSlice({
         },
         setBetTypeFilter: (state, action: PayloadAction<BetType | undefined>) => {
             state.betTypeFilter = action.payload;
-            localStore.set(LOCAL_STORAGE_KEYS.FILTER_BET_TYPE, action.payload);
+            if (action.payload) {
+                localStore.set(LOCAL_STORAGE_KEYS.FILTER_BET_TYPE, action.payload);
+            } else {
+                window.localStorage.removeItem(LOCAL_STORAGE_KEYS.FILTER_BET_TYPE);
+            }
         },
     },
 });

@@ -12,9 +12,19 @@ type SportFilterProps = {
     isMobile?: boolean;
     onClick: () => void;
     count: number;
+    open: boolean;
 };
 
-const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, isMobile, onClick, count, children }) => {
+const SportFilter: React.FC<SportFilterProps> = ({
+    disabled,
+    selected,
+    sport,
+    isMobile,
+    onClick,
+    count,
+    children,
+    open,
+}) => {
     const { t } = useTranslation();
     return (
         <Container isMobile={isMobile}>
@@ -42,7 +52,7 @@ const SportFilter: React.FC<SportFilterProps> = ({ disabled, selected, sport, is
                     <FlexDiv gap={15}>
                         {count > 0 && <Count isMobile={isMobile}>{count}</Count>}
                         {sport.toLowerCase() != 'all' ? (
-                            !selected ? (
+                            !open ? (
                                 <ArrowIcon className={`icon-exotic icon-exotic--right ${selected ? 'selected' : ''}`} />
                             ) : (
                                 <ArrowIcon

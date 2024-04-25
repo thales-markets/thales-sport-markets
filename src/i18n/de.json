@@ -517,7 +517,10 @@
                 "passingYards-0": "{{team}} wird mehr Passing Yards haben als {{line}}",
                 "tournament-winner": "{{team}} wird das Turnier gewinnen {{matchResolve}}",
                 "doubleChance-0": "{{team}} gewinnt das Spiel oder das Spiel endet unentschieden {{matchResolve}}",
-                "shots-0": "{{team}} hat mehr Schüsse als {{line}}"
+                "shots-0": "{{team}} hat mehr Schüsse als {{line}}",
+                "winner-2": "Das Spiel endet unentschieden {{matchResolve}}",
+                "winner-1": "{{team}} wird das Spiel gewinnen {{matchResolve}}",
+                "winner-0": "{{team}} wird das Spiel gewinnen {{matchResolve}}"
             },
             "type-tooltip": {
                 "11055": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt."
