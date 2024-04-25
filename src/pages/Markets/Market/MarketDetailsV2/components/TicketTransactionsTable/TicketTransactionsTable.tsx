@@ -1,4 +1,3 @@
-import PositionSymbol from 'components/PositionSymbol';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
@@ -24,7 +23,7 @@ import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { formatMarketOdds } from 'utils/markets';
-import { getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/marketsV2';
+import { getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
 import ShareTicketModalV2 from '../../../../Home/Parlay/components/ShareTicketModalV2';
@@ -127,7 +126,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     },
                     {
                         Header: <>{t('profile.table.games')}</>,
-                        accessor: 'numOfGames',
+                        accessor: 'numOfMarkets',
                         sortable: true,
                         Cell: (cellProps: any) => {
                             return <TableText>{cellProps.cell.value}</TableText>;
@@ -248,8 +247,6 @@ export const getTicketMarkets = (
 ) => {
     return ticket.sportMarkets.map((ticketMarket, index) => {
         const quote = getTicketMarketOdd(ticketMarket);
-        const symbolText = getSymbolTextV2(ticketMarket.position, ticketMarket);
-        const lineInfo = getLineInfoV2(ticketMarket, ticketMarket.position);
 
         return (
             <TicketRow
@@ -271,31 +268,10 @@ export const getTicketMarkets = (
                         </TicketRowTeam>
                     </TicketRowText>
                 </SPAAnchor>
-                <PositionSymbol
-                    symbolAdditionalText={{
-                        text: formatMarketOdds(selectedOddsType, quote),
-                        textStyle: {
-                            fontSize: '10.5px',
-                            marginLeft: '10px',
-                        },
-                    }}
-                    additionalStyle={{ width: 23, height: 23, fontSize: 10.5, borderWidth: 2 }}
-                    symbolText={symbolText}
-                    symbolUpperText={
-                        lineInfo && !ticketMarket.isOneSidePlayerPropsMarket && !ticketMarket.isYesNoPlayerPropsMarket
-                            ? {
-                                  text: lineInfo,
-                                  textStyle: {
-                                      backgroundColor: theme.background.primary,
-                                      fontSize: '10px',
-                                      top: '-9px',
-                                      left: '10px',
-                                  },
-                              }
-                            : undefined
-                    }
-                    tooltip={<>{getOddTooltipTextV2(ticketMarket.position, ticketMarket)}</>}
-                />
+
+                <QuoteText>{getTitleText(ticketMarket)}</QuoteText>
+                <QuoteText>{getPositionTextV2(ticketMarket, ticketMarket.position, true)}</QuoteText>
+                <QuoteText>{formatMarketOdds(selectedOddsType, quote)}</QuoteText>
                 <QuoteText>{getTicketMarketStatus(ticketMarket)}</QuoteText>
             </TicketRow>
         );

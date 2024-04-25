@@ -22,7 +22,7 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
         fees: coinFormatter(ticket.fees, networkId),
         totalQuote: bigNumberFormatter(ticket.totalQuote),
         payout: coinFormatter(ticket.buyInAmount, networkId) / bigNumberFormatter(ticket.totalQuote),
-        numOfMarkets: Number(ticket.numOfGames),
+        numOfMarkets: Number(ticket.numOfMarkets),
         expiry: Number(ticket.expiry) * 1000,
         isResolved: ticket.resolved,
         isPaused: ticket.paused,
