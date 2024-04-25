@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
+import { getBetTypeFilter } from 'redux/modules/market';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarketInfoV2, TicketPosition } from 'types/markets';
@@ -36,6 +37,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector(getIsMobile);
     const ticket = useSelector(getTicket);
+    const betTypeFilter = useSelector(getBetTypeFilter);
     const addedToTicket = ticket.filter((position: any) => isSameMarket(market, position))[0];
 
     const isAddedToTicket = addedToTicket && addedToTicket.position == position;
@@ -54,9 +56,13 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const disabledPosition = noOdd || (!isGameOpen && !isGameLive);
 
     const showOdd = isGameOpen || isGameLive;
-    const showTooltip = showOdd && !noOdd && !isMobile;
+    const showTooltip = showOdd && !noOdd && !isMobile && false;
 
-    const positionText = getPositionTextV2(market, position, isMainPageView && market.typeId === BetType.TOTAL);
+    const positionText = getPositionTextV2(
+        market,
+        position,
+        isMainPageView && (market.typeId === BetType.TOTAL || !!betTypeFilter)
+    );
 
     const oddTooltipText = getOddTooltipTextV2(position, market);
 

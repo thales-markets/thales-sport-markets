@@ -91,7 +91,7 @@ const Positions: React.FC<PositionsProps> = ({
             )}
             {isExpanded && (
                 <ContentContianer>
-                    {(positionText0 || positionText1) && !isColumnView && (
+                    {(positionText0 || positionText1) && !isMainPageView && (
                         <SubTitleContainer>
                             {positionText0 && <SubTitle>{positionText0}</SubTitle>}
                             {positionText1 && <SubTitle>{positionText1}</SubTitle>}

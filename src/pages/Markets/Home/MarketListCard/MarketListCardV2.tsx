@@ -149,7 +149,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const selected = selectedMarket == market.gameId;
 
     let marketsCount = market.childMarkets.length;
-    if (isThreeWayView) {
+    if (!betTypeFilterMarket && isThreeWayView) {
         if (firstSpreadMarket) {
             marketsCount -= 1;
         }
@@ -185,7 +185,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         !isFifaWCGame(market.leagueId) &&
                         !isUEFAGame(market.leagueId) &&
                         (liveResultInfo || localStorage.getItem(market.gameId)) &&
-                        !isThreeWayView &&
+                        !isColumnView &&
                         !isMarketSelected ? (
                             <>
                                 {localStorage.getItem(market.gameId)}
