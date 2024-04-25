@@ -19,9 +19,6 @@ export const buildMarketLink = (marketAddress: string, language: string, exclude
         title ? `&title=${title}` : ''
     }`;
 
-export const buildVaultLink = (vaultId: string, language: string, excludeSlash = false) =>
-    `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${ROUTES.Vaults}/${vaultId}?lang=${language}`;
-
 export const buildLpLink = (language: string, lpType: string, excludeSlash = false) =>
     `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${
         lpType == 'parlay' ? ROUTES.ParlayLiquidityPool : ROUTES.SingleLiquidityPool
@@ -42,7 +39,6 @@ export const buildReffererLink = (reffererID: string) => {
 export const getMetaRouteItem = (pathName: string) => {
     if (pathName.includes(ROUTES.Markets.Home + '/')) return MetaRoutes.SingleMarket;
     if (pathName.includes(ROUTES.Markets.Home)) return MetaRoutes.Markets;
-    if (pathName.includes(ROUTES.Vaults)) return MetaRoutes.Vaults;
     if (pathName.includes(ROUTES.ParlayLiquidityPool)) return MetaRoutes.ParlayLeaderboard;
     if (pathName.includes(ROUTES.Referral)) return MetaRoutes.Referral;
     if (pathName.includes(ROUTES.Profile)) return MetaRoutes.Profile;

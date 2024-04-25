@@ -45,13 +45,6 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         ],
     },
     {
-        i18label: 'markets.nav-menu.items.vaults',
-        iconClass: 'icon icon--vaults',
-        name: 'vaults',
-        route: ROUTES.Vaults,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum],
-    },
-    {
         i18label: 'markets.nav-menu.items.liquidity-pool',
         iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',

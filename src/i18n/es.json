@@ -634,7 +634,6 @@
                 "sports-trivia": "curiosidades deportivas",
                 "fee-rebates": "Reembolsos de tarifas",
                 "fifa-campaign": "Campaña Zebro FIFA",
-                "vaults": "Bóvedas",
                 "liquidity-pool": "Proporcionar Liquidez",
                 "promotions": "Promociones"
             },
@@ -757,15 +756,11 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins",
-            "in-vaults": "In vaults"
+            "lifetime-wins": "Lifetime wins"
         },
         "in-lp": "Liquidez proporcionada",
-        "vaults": "Bóvedas/LP",
         "go-to-lp": "Ir a LP",
         "lp-title": "fondo de liquidez",
-        "in-vault": "en bóveda",
-        "go-to-vault": "ir a la bóveda",
         "claim-voucher": "Comprobante de reclamación",
         "left-to-claim": "Izquierda para reclamar",
         "gift-voucher": "Vale regalo",
@@ -809,123 +804,6 @@
             "see-result-by-trader": "Ver resultado por participante",
             "affiliate-leaderboard": "Leaderboard de afiliados"
         }
-    },
-    "vaults": {
-        "title": "Bovedas de deportes",
-        "strategy-label": "Estrategia de la boveda",
-        "risks-label": "Riesgos de la boveda"
-    },
-    "vault": {
-        "discount-vault": {
-            "title": "Boveda de Descuentos",
-            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con un descuento mayor a {{discount}}.",
-            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
-        },
-        "degen-discount-vault": {
-            "title": "Boveda de Descuentos Degen",
-            "description": "<p>Compra posiciones, sin importar los odds, que esten disponibles por un descuento mayor a {{discount}}.</p>",
-            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado.</p>"
-        },
-        "safu-discount-vault": {
-            "title": "Boveda de Descuentos Safu",
-            "description": "<p>Compra posiciones que tengan odds mayores a {{odds}} y que esten disponibles con cualquier descuento.</p>",
-            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
-        },
-        "upsettoor-vault": {
-            "title": "Upsettoor Vault",
-            "description": "<p>Compra posiciones que tengan odds inferiores  a {{odds}} y que esten disponibles con un descuento mayor a {{discount}}.",
-            "risks": "<p>Esta boveda tiene una tasa de utilizacion de {{utilizationRate}} lo que asegura que no mas de {{utilizationRate}} del total depositado es expuesto al riesgo de la estrategia. Es mas, de este {{utilizationRate}} un maximo de {{allocationLimitsPerMarketPerRound}} puede ser invertido en un solo mercado, de esta forma diversificando el riesgo en multiples mercados que tienen mas de {{odds}} odds.</p>"
-        },
-        "variables": "<p>Variables:</p><ul><li>Tasa de utilizacion: {{utilizationRate}}</li><li>Limite inferior del precio: {{priceLowerLimit}}</li><li>Limite superior del precio: {{priceUpperLimit}}</li><li>Impacto maximo de Skew: {{skewImpactLimit}}</li><li>Asignacion maxima por mercado: {{allocationLimitsPerMarketPerRound}}</li><li>Deposito total maximo: {{maxAllowedDeposit}}</li><li>Cantidad de usuarios maxima en la boveda: {{maxAllowedUsers}}</li><li>Cantidad minima por transaccion: {{minTradeAmount}}</li><li>Deposito minimo: {{minDepositAmount}}</li><li>Duracion del round: {{roundLength}} dias</li></ul>",
-        "back-to-vaults": "Volver a bovedas",
-        "vault-not-started-message": "La boveda aun no ha sido iniciada",
-        "vault-paused-message": "La boveda esta en pausa",
-        "round-allocation-label": "Deposito total en este round",
-        "spent-trading-label": "Invertido en estrategia",
-        "available-trading-label": "Disponible para estrategia",
-        "round-end-label": "Este round termina en",
-        "your-round-allocation-label": "Tu deposito para este round: <bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "Tu deposito para el proximo round: <bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "Esta es una cantidad estimada. La cantidad definitiva sera calculada una vez finalice el round actual basado en el PnL del round.",
-        "next-round-start-label": "El proximo round comienza en: <counter />",
-        "users-in-vault-label": "Ususarios en la boveda: {{number}} / {{max}}",
-        "vault-filled-label": "Capacidad de la boveda: {{amount}} / {{max}}",
-        "deposit-message": "Fondos depositados en la boveda para el proximo round.",
-        "deposit-amount-label": "Depositar cantidad",
-        "deposit-amount-placeholder": "Ingresar cantidad",
-        "available-to-withdraw-label": "Disponible para retiro: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "Nada que retirar.",
-        "withdrawal-message": "Puedes solicitar un retiro y tus fondos seran enviados automaticamente al finalizar el round una vez este se encuentre cerrado.",
-        "withdraw-round-end-label": "El round termina en: <counter />",
-        "withdrawal-requested-message": "Solicitaste retirar <bold>{{amount}}</bold><tooltip />. Tus fondos seran nviados automaticamente al finalizar el round una vez este se encuentre cerrado.",
-        "withdrawal-request-label": "Solicitud de retiro: <bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "Has depositado para el proximo round y puedes retirar estos fondos al finalizar el proximo round.",
-        "round-ended-label": "Round finalizado",
-        "deposit-withdrawal-warning": "Retiro solicitado, no puedes depositar.",
-        "deposit-max-amount-of-users-warning": "Numero maximo de usuarios en la boveda ha sido alcanzado, no puedes depositar.",
-        "deposit-vault-cap-reached-warning": "El limite de la boveda ha sido alcanzado, no puedes depositar.",
-        "deposit-vault-cap-error": "Cantidad depositada excede el limite de la boveda",
-        "deposit-min-amount-error": "La cantidad minima a depositar es {{amount}}",
-        "withdrawal-deposit-warning": "No puedes retirar ya que has depositado para el siguiente round.",
-        "tabs": {
-            "deposit": "Depositar",
-            "claim": "Reclamar",
-            "withdraw": "Retirar"
-        },
-        "button": {
-            "deposit-label": "Depositar",
-            "deposit-progress-label": "Deposito en proceso...",
-            "deposit-confirmation-message": "Deposito realizado con exito",
-            "request-withdrawal-label": "Solicitar retiro",
-            "request-withdrawal-progress-label": "Solicitud en proceso...",
-            "request-withdrawal-confirmation-message": "Solicitud de retiro enviada con exito",
-            "withdraw-label": "Retirar",
-            "withdraw-progress-label": "Retiro en proceso...",
-            "withdraw-confirmation-message": "Funds successfully withdrawn",
-            "close-round-label": "Round finalizado",
-            "close-round-progress-label": "Finalización de round en proceso...",
-            "close-round-confirmation-message": "Round finalizado con exito"
-        },
-        "trades-history": {
-            "title": "Historia de transacciones de la boveda",
-            "no-trades": "No hay transacciones asociadas con esta boveda en el round seleccionado.",
-            "round-label": "Round"
-        },
-        "pnl": {
-            "title": "PnL por round",
-            "no-data": "No hay data de PnL para rounds previos.",
-            "lifetime-pnl": "PnL Total",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "user-transactions": {
-            "type": {
-                "deposit": "Depósito",
-                "withdrawalRequest": "Solicitud de Retiro",
-                "claim": "Reclamo de Retiro"
-            },
-            "no-transactions": "No hay transacciones de usuario asociadas con esta bóveda en la ronda seleccionada.",
-            "title": "Transacciones de usuario",
-            "name": "Nombre"
-        },
-        "parlay-discount-vault": {
-            "title": "Bóveda de descuento Parlay",
-            "description": "<p>Compra boletos parlay donde cada posición individual en el boleto tiene al menos un descuento de {{discount}}.</p>",
-            "risks": "<p>La bóveda tiene una tasa de utilización de {{utilizationRate}}, lo que garantiza que no se ponga en riesgo más de {{utilizationRate}} de lo depositado en una ronda. Además, de esos {{utilizationRate}}, se puede gastar un máximo de {{allocationLimitsPerMarketPerRound}} en un solo ticket parlay por ronda, diversificando así el riesgo en varios tickets parlay que tienen un descuento superior a {{odds}}.</p>"
-        },
-        "gamified-staking-message": "<p>Todos los depósitos que ingresan a una ronda cuentan para el volumen de participación gamificado.</p>",
-        "LP": {
-            "title": "LP",
-            "parlay-lp": "Parlay LP",
-            "single-lp": "LP individual"
-        },
-        "variables-parlay": "<p>Variables:</p><ul><li> Tasa de utilización: {{utilizationRate}}</li><li> Límite inferior de precio: {{priceLowerLimit}}</li><li> Límite superior de precio: {{priceUpperLimit}}</li><li> Impacto sesgado máximo: {{skewImpactLimit}}</li><li> Asignación máxima en un único parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Depósito total máximo: {{maxAllowedDeposit}}</li><li> Usuarios máximos en la bóveda: {{maxAllowedUsers}}</li><li> Monto mínimo en una sola operación: {{minTradeAmount}}</li><li> Depósito mínimo: {{minDepositAmount}}</li><li> Duración de la ronda: {{roundLength}} días</li></ul>",
-        "single-lp": {
-            "title": "LP individual"
-        },
-        "parlay-lp": {
-            "title": "Parlay LP"
-        },
-        "deprecated-info": "En desuso, ¡retire sus fondos!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1101,10 +979,6 @@
         "markets": {
             "title": "Mercados de horas extras: mercados de apuestas deportivas Web3 para más de 40 ligas",
             "description": "Únase a la mejor casa de apuestas web3 del mercado. Asegure posiciones en las mejores ligas como la NFL, NBA, UCL, EPL y más."
-        },
-        "vaults": {
-            "title": "Bóvedas de mercados de horas extras: comercio automatizado",
-            "description": "Deposite activos en la bóveda de Overtime Markets y deje que nuestro mecanismo de negociación automatizado implemente la estrategia que usted elija."
         },
         "parlay-leaderboard": {
             "description": "Overtime Markets es una casa de apuestas web3 con los mejores bonos quincenales del mercado para jugadores parlay. Consulta la clasificación y si calificaste aquí.",

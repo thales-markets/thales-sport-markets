@@ -634,7 +634,6 @@
                 "history": "历史",
                 "fifa-campaign": "斑马FIFA活动",
                 "fee-rebates": "费用回扣",
-                "vaults": "金库",
                 "liquidity-pool": "提供流动性",
                 "promotions": "促销活动"
             },
@@ -758,14 +757,10 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins",
-            "in-vaults": "In vaults"
+            "lifetime-wins": "Lifetime wins"
         },
-        "in-vault": "在保险库中",
         "lp-title": "流动资金池",
         "go-to-lp": "去LP",
-        "go-to-vault": "去金库",
-        "vaults": "金库/LP",
         "in-lp": "提供流动资金",
         "voucher": "代金券",
         "gift-voucher": "礼品券",
@@ -810,123 +805,6 @@
             "see-result-by-trader": "按交易者查看结果",
             "affiliate-leaderboard": "推广激励排行榜"
         }
-    },
-    "vaults": {
-        "title": "体育竞赛金库",
-        "strategy-label": "金库策略",
-        "risks-label": "金库风险"
-    },
-    "vault": {
-        "discount-vault": {
-            "title": "折扣金库",
-            "description": "<p>买入超过{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>",
-            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。 此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
-        },
-        "degen-discount-vault": {
-            "title": "激进折扣金库",
-            "description": "<p>买入超过{{discount}}折扣的任何赔率头寸。</p>",
-            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场。</p>"
-        },
-        "safu-discount-vault": {
-            "title": "保守折扣金库",
-            "description": "<p>买入超过{{odds}}赔率且有任何折扣的仓位。</p>",
-            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。此外,{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
-        },
-        "upsettoor-vault": {
-            "title": "Upsettoor Vault",
-            "description": "<p>购买赔率低于{{odds}}的赔率且折扣大于{{discount}}的头寸。</p>",
-            "risks": "<p>金库的利用率为{{utilizationRate}}，确保每轮风险敞口的资金不超过{{utilizationRate}}。 此外，{{utilizationRate}}的资金最多有 {{allocationLimitsPerMarketPerRound}}可以投入单一市场，从而将风险分散到赔率高于{{odds}}的多个市场。</p>"
-        },
-        "variables": "<p>金库参数</p><ul><li>金库利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏度影响：{{skewImpactLimit}}</li><li>单一市场投入上限：{{allocationLimitsPerMarketPerRound}}</li><li>存款上限：{{maxAllowedDeposit}}</li><li>金库最大用户：{{maxAllowedUsers}}</li><li>Minimum amount on a single trade：{{minTradeAmount}}</li><li>Minimum deposit：{{minDepositAmount}}</li><li>本轮时间: {{roundLength}} 天</li></ul>",
-        "back-to-vaults": "返回金库选择页面",
-        "vault-not-started-message": "金库尚未启动",
-        "vault-paused-message": "金库已暂停",
-        "round-allocation-label": "本轮存款总量",
-        "spent-trading-label": "已交易量",
-        "available-trading-label": "允许交易量",
-        "round-end-label": "本轮剩余时间",
-        "your-round-allocation-label": "本轮分配的数量：<bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "下轮分配的数量：<bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "这是一个估计金额。实际金额将在本轮结束时根据实际盈亏计算。",
-        "next-round-start-label": "下一轮比赛将于开始：<counter />",
-        "users-in-vault-label": "参与金库用户: {{number}} / {{max}}",
-        "vault-filled-label": "金库存款: {{amount}} / {{max}}",
-        "deposit-message": "将资金存入金库，用于下一轮。",
-        "deposit-amount-label": "存款金额",
-        "deposit-amount-placeholder": "输入存款金额",
-        "available-to-withdraw-label": "允许提款金额：<bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "无可提款金额。",
-        "withdrawal-message": "你可以申请提款，本轮结束时存款会自动发送至你的钱包。",
-        "withdraw-round-end-label": "本轮结束于：<counter />",
-        "withdrawal-requested-message": "你要求取款<bold>{{amount}}</bold><tooltip />。本轮结束时存款会自动发送至你的钱包。",
-        "withdrawal-request-label": "取款请求：<bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "你已经为下一轮存款，可以在下一轮结束时提取资金。",
-        "round-ended-label": "本轮结束",
-        "deposit-withdrawal-warning": "已提交取款请求，所以不能存款",
-        "deposit-max-amount-of-users-warning": "金库已达到存款用户上限，不再接受新存款。",
-        "deposit-vault-cap-reached-warning": "金库已达到存款上限，不再接受新存款。",
-        "deposit-vault-cap-error": "存款达到存款上限",
-        "deposit-min-amount-error": "存款的最低金额为{{amount}}",
-        "withdrawal-deposit-warning": "你现在不能取款，因为已经决定参与下一轮存款",
-        "tabs": {
-            "deposit": "存款",
-            "claim": "领取",
-            "withdraw": "提款"
-        },
-        "button": {
-            "deposit-label": "存款",
-            "deposit-progress-label": "存款中...",
-            "deposit-confirmation-message": "存款成功入账",
-            "request-withdrawal-label": "申请取款",
-            "request-withdrawal-progress-label": "申请中...",
-            "request-withdrawal-confirmation-message": "申请已发送",
-            "withdraw-label": "取款",
-            "withdraw-progress-label": "取款中...",
-            "withdraw-confirmation-message": "取款已成功",
-            "close-round-label": "结束本轮",
-            "close-round-progress-label": "结束本轮中...",
-            "close-round-confirmation-message": "本轮成功完成"
-        },
-        "trades-history": {
-            "title": "金库交易历史",
-            "no-trades": "在选定的轮次中，没有与本金库相关的交易。",
-            "round-label": "轮次"
-        },
-        "pnl": {
-            "title": "每轮盈亏",
-            "no-data": "无上一轮盈亏数据",
-            "lifetime-pnl": "总盈亏",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "user-transactions": {
-            "type": {
-                "deposit": "订金",
-                "withdrawalRequest": "提款请求",
-                "claim": "提款申请"
-            },
-            "title": "用户交易",
-            "no-transactions": "在选定的回合中没有与此保管库关联的用户交易。",
-            "name": "姓名"
-        },
-        "parlay-discount-vault": {
-            "title": "Parlay 折扣金库",
-            "description": "<p>购买 parlay 彩票，其中彩票中的每个单独位置至少有 {{discount}} 折扣。</p>",
-            "risks": "<p>金库的利用率为 {{utilizationRate}}，确保不超过 {{utilizationRate}} 的存入一轮风险。此外，在这些 {{utilizationRate}} 中，每轮最多可以将 {{allocationLimitsPerMarketPerRound}} 花在一张连赢彩票上，从而将风险分散到折扣大于 {{odds}} 的多张连赢彩票上。</p>"
-        },
-        "gamified-staking-message": "<p>进入一轮的所有存款都计入游戏化的质押量。</p>",
-        "LP": {
-            "title": "唱片",
-            "parlay-lp": "连本带利LP",
-            "single-lp": "单张唱片"
-        },
-        "variables-parlay": "<p>变量：</p><ul><li>利用率：{{utilizationRate}}</li><li>价格下限：{{priceLowerLimit}}</li><li>价格上限：{{priceUpperLimit}}</li><li>最大偏斜影响：{{skewImpactLimit}}</li><li>单个 parlay 的最大分配：{{allocationLimitsPerMarketPerRound}}</li><li>最大总存款：{{maxAllowedDeposit}}</li><li>保险库中的最大用户数：{{maxAllowedUsers}}</li><li>单笔交易的最低金额：{{minTradeAmount}}</li><li>最低存款：{{minDepositAmount}}</li><li>回合持续时间：{{roundLength}} 天</li></ul>",
-        "single-lp": {
-            "title": "单张唱片"
-        },
-        "parlay-lp": {
-            "title": "连本带利LP"
-        },
-        "deprecated-info": "已弃用，请撤回资金！"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1102,10 +980,6 @@
         "markets": {
             "description": "加入市场上最好的 web3 体育博彩。确保在 NFL、NBA、UCL、EPL 等顶级联赛中的位置。",
             "title": "加时赛市场： 40 多个联赛的 Web3 体育博彩市场"
-        },
-        "vaults": {
-            "title": "加班市场金库：自动交易",
-            "description": "将资产存入 Overtime Markets 金库，让我们的自动交易机制部署您选择的策略。"
         },
         "parlay-leaderboard": {
             "title": "加班市场：每两周赚取过关奖励",

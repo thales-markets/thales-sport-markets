@@ -113,20 +113,6 @@ const QUERY_KEYS = {
         ],
     },
     FavoriteTeam: (walletAddress: string, networkId: Network) => ['favoriteTeam', walletAddress, networkId],
-    Vault: {
-        Data: (vaultAddress: string, networkId: Network) => [vaultAddress, 'data', networkId],
-        UserData: (vaultAddress: string, walletAddress: string, networkId: Network) => [
-            vaultAddress,
-            'data',
-            walletAddress,
-            networkId,
-        ],
-        AllVaultsUserData: (walletAddress: string, networkId: Network) => ['data', walletAddress, networkId],
-        Trades: (vaultAddress: string, networkId: Network) => [vaultAddress, 'trades', networkId],
-        ParlayTrades: (vaultAddress: string, networkId: Network) => [vaultAddress, 'parlayTrades', networkId],
-        PnL: (vaultAddress: string, networkId: Network) => [vaultAddress, 'pnl', networkId],
-        UserTransactions: (vaultAddress: string, networkId: Network) => [vaultAddress, 'userTransactions', networkId],
-    },
     Bungee: {
         Tokens: () => ['bungee', 'tokens'],
     },

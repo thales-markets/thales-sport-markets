@@ -634,7 +634,6 @@
                 "become-affiliate": "Diventa affiliato",
                 "fifa-campaign": "Campagna Zebro FIFA",
                 "fee-rebates": "Riduzioni sulle commissioni",
-                "vaults": "Volte",
                 "liquidity-pool": "Fornire liquidità",
                 "promotions": "Promozioni"
             },
@@ -757,15 +756,11 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins",
-            "in-vaults": "In vaults"
+            "lifetime-wins": "Lifetime wins"
         },
-        "vaults": "Volte/LP",
-        "in-vault": "Nel caveau",
         "in-lp": "Liquidità fornita",
         "lp-title": "Pool di liquidità",
         "go-to-lp": "Vai a L.P",
-        "go-to-vault": "Vai al caveau",
         "voucher": "Voucher; tagliando",
         "gift-voucher": "Buono regalo",
         "claiming-voucher": "Rivendicazione...",
@@ -809,123 +804,6 @@
         "no-result": "Non ci sono risultati per questa tabella",
         "total-earned": "Totale guadagnato",
         "paragraph": "<bold>Overtime Referral Program è uno strumento di onboarding e acquisizione di utenti incentivato sulla catena.</bold> Il programma permette a chiunque di<bold> generare un link di riferimento</bold> e condividerlo con gli utenti che stanno tentando di integrare.<br /><br /> Quando condividi il tuo Referral Link personale, guadagni<bold> 0,5% di tutto il volume sUSD prodotto dai tuoi utenti segnalati!</bold> Non sono necessarie richieste manuali, sUSD si accumula automaticamente nel tuo portafoglio sotto forma di semplici trasferimenti sUSD."
-    },
-    "vaults": {
-        "title": "Volte sportive",
-        "risks-label": "Rischi di voltaggio",
-        "strategy-label": "Strategia del caveau"
-    },
-    "vault": {
-        "discount-vault": {
-            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>",
-            "title": "Cassaforte scontata",
-            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p>"
-        },
-        "degen-discount-vault": {
-            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato.</p>",
-            "description": "<p>Acquista posizioni a qualsiasi quota disponibile per uno sconto superiore a {{discount}}.</p>",
-            "title": "Degen Discount Vault"
-        },
-        "safu-discount-vault": {
-            "title": "Colonna Sconto Vault",
-            "description": "<p>Acquista posizioni che hanno più di {{odds}} quote e sono disponibili con qualsiasi sconto.</p>",
-            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>"
-        },
-        "upsettoor-vault": {
-            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso su un singolo mercato, diversificando così il rischio in più mercati che hanno quote superiori a {{odds}}.</p>",
-            "title": "Upsettoor Vault",
-            "description": "<p>Acquista posizioni con quote inferiori a {{odds}} quote e sono disponibili con uno sconto maggiore di {{discount}}.</p>"
-        },
-        "tabs": {
-            "withdraw": "Ritirare",
-            "claim": "Reclamo",
-            "deposit": "Depositare"
-        },
-        "button": {
-            "request-withdrawal-confirmation-message": "Richiesta di prelievo inviata con successo",
-            "withdraw-confirmation-message": "Fondi prelevati con successo",
-            "close-round-confirmation-message": "Turno chiuso con successo",
-            "withdraw-label": "Ritirare",
-            "deposit-label": "Depositare",
-            "deposit-progress-label": "Deposito in corso...",
-            "close-round-label": "Chiudi in tondo",
-            "close-round-progress-label": "Turno di chiusura in corso...",
-            "deposit-confirmation-message": "Deposito effettuato con successo",
-            "request-withdrawal-progress-label": "Richiesta in corso...",
-            "request-withdrawal-label": "Richiedi il ritiro",
-            "withdraw-progress-label": "Ritiro in corso..."
-        },
-        "trades-history": {
-            "no-trades": "Nessuna operazione associata a questo caveau nel round selezionato.",
-            "round-label": "Girare",
-            "title": "Cronologia degli scambi di Vault"
-        },
-        "pnl": {
-            "title": "PnL per round",
-            "no-data": "Nessun dato PnL per i turni precedenti.",
-            "lifetime-pnl": "PnL a vita",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "deposit-min-amount-error": "L'importo minimo per il deposito è {{amount}}",
-        "withdrawal-request-label": "Richiesta di prelievo: <bold>{{amount}}</bold>",
-        "available-to-withdraw-label": "Disponibile per il prelievo: <bold>{{amount}}</bold>",
-        "deposit-vault-cap-error": "L'importo del deposito supera il limite del caveau",
-        "deposit-max-amount-of-users-warning": "Raggiunto il numero massimo di utenti nel caveau, non è possibile depositare.",
-        "withdrawal-requested-message": "Hai richiesto di prelevare <bold>{{amount}}</bold><tooltip />. I tuoi fondi ti verranno inviati automaticamente alla fine del round quando il round si chiude.",
-        "withdrawal-message": "Puoi richiedere un prelievo e i tuoi fondi ti verranno inviati automaticamente alla fine del round quando il round si chiude.",
-        "deposit-withdrawal-warning": "È richiesto il prelievo, non è possibile depositare.",
-        "withdrawal-deposit-warning": "Non puoi prelevare poiché hai già depositato per il round successivo.",
-        "round-ended-label": "Turno terminato",
-        "deposit-amount-placeholder": "Inserire l'importo",
-        "withdraw-round-end-label": "Il round termina tra: <counter />",
-        "nothing-to-withdraw-label": "Niente da ritirare.",
-        "deposit-amount-label": "Importo del deposito",
-        "deposit-vault-cap-reached-warning": "Il limite del caveau è stato raggiunto, non puoi depositare.",
-        "available-trading-label": "Disponibile per il commercio",
-        "round-end-label": "Il giro finisce tra",
-        "vault-not-started-message": "Il caveau non è stato avviato",
-        "back-to-vaults": "Torniamo ai caveau",
-        "spent-trading-label": "Speso per il trading",
-        "next-round-start-label": "Il prossimo round inizia tra: <counter />",
-        "your-next-round-allocation-label": "La tua allocazione per il round successivo: <bold>{{amount}}</bold>",
-        "your-round-allocation-label": "La tua allocazione per il round: <bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "Questo è un importo stimato. L'importo effettivo verrà calcolato alla chiusura del round corrente in base al round PnL.",
-        "vault-filled-label": "Cassaforte piena: {{amount}} / {{max}}",
-        "round-allocation-label": "Deposito tondo totale",
-        "deposit-message": "Deposita i fondi nel caveau per il round successivo.",
-        "variables": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo mercato: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li></ul>",
-        "vault-paused-message": "Il caveau è in pausa",
-        "users-in-vault-label": "Utenti nel caveau: {{number}} / {{max}}",
-        "first-deposit-withdrawal-message": "Hai depositato per il round successivo e puoi prelevare questi fondi alla fine del round successivo.",
-        "user-transactions": {
-            "type": {
-                "deposit": "Depositare",
-                "withdrawalRequest": "Richiesta di prelievo",
-                "claim": "Richiesta di recesso"
-            },
-            "title": "Transazioni utente",
-            "no-transactions": "Nessuna transazione utente associata a questo vault nel round selezionato.",
-            "name": "Nome"
-        },
-        "parlay-discount-vault": {
-            "description": "<p>Acquista biglietti parlay in cui ogni singola posizione nel biglietto ha almeno uno sconto {{discount}}.</p>",
-            "title": "Cassaforte scontata di Parlay",
-            "risks": "<p>Il caveau ha un tasso di utilizzo di {{utilizationRate}} che garantisce che non vengano messi a rischio più di {{utilizationRate}} di depositi per round. Inoltre, di questi {{utilizationRate}} un massimo di {{allocationLimitsPerMarketPerRound}} può essere speso per un singolo biglietto parlay per round, diversificando così il rischio in più biglietti parlay che hanno uno sconto maggiore di {{odds}}.</p>"
-        },
-        "gamified-staking-message": "<p>Tutti i depositi che entrano in un round contano per il volume di staking gamificato.</p>",
-        "LP": {
-            "title": "LP",
-            "single-lp": "LP singolo",
-            "parlay-lp": "Parlay LP"
-        },
-        "variables-parlay": "<p>Variabili:</p><ul><li> Tasso di utilizzo: {{utilizationRate}}</li><li> Limite inferiore del prezzo: {{priceLowerLimit}}</li><li> Limite massimo del prezzo: {{priceUpperLimit}}</li><li> Impatto Max Skew: {{skewImpactLimit}}</li><li> Allocazione massima su un singolo parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Deposito totale massimo: {{maxAllowedDeposit}}</li><li> Numero massimo di utenti nel vault: {{maxAllowedUsers}}</li><li> Importo minimo su una singola operazione: {{minTradeAmount}}</li><li> Deposito minimo: {{minDepositAmount}}</li><li> Durata round: {{roundLength}} giorni</li></ul>",
-        "single-lp": {
-            "title": "LP singolo"
-        },
-        "parlay-lp": {
-            "title": "Parlay LP"
-        },
-        "deprecated-info": "Deprecato, ritira i tuoi fondi!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1101,10 +979,6 @@
         "markets": {
             "title": "Mercati straordinari: mercati di scommesse sportive Web3 per oltre 40 campionati",
             "description": "Unisciti alle migliori scommesse sportive web3 sul mercato. Assicurati posizioni nei migliori campionati come NFL, NBA, UCL, EPL e altri."
-        },
-        "vaults": {
-            "description": "Deposita beni nel caveau di Overtime Markets e lascia che il nostro meccanismo di trading automatizzato implementi una strategia di tua scelta.",
-            "title": "Casseforti dei mercati straordinari: trading automatizzato"
         },
         "parlay-leaderboard": {
             "title": "Mercati straordinari: guadagna premi Parlay ogni 2 settimane",

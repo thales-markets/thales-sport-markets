@@ -634,7 +634,6 @@
                 "history": "Histoire",
                 "fee-rebates": "Remises sur les frais",
                 "fifa-campaign": "Campagne Zebro FIFA",
-                "vaults": "coffres",
                 "liquidity-pool": "Fournir des liquidités",
                 "promotions": "Promotions"
             },
@@ -758,14 +757,10 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins",
-            "in-vaults": "In vaults"
+            "lifetime-wins": "Lifetime wins"
         },
-        "vaults": "Voûtes/LP",
         "in-lp": "Liquidité fournie",
-        "in-vault": "Au coffre",
         "go-to-lp": "Aller à LP",
-        "go-to-vault": "Aller au coffre",
         "lp-title": "Pool de liquidité",
         "voucher-info": "Mais afin que vous puissiez voir d'où vient toute cette erreur née de ceux qui accusent le plaisir et louent la douleur, je vais ouvrir toute l'affaire et expliquer les choses mêmes qui ont été dites par ce découvreur de la vérité et, pour ainsi dire, l'architecte de une vie heureuse.",
         "claim-voucher": "Bon de réclamation",
@@ -810,123 +805,6 @@
             "see-result-by-trader": "Voir le résultat par utilisateur",
             "affiliate-leaderboard": "Classement des parrains"
         }
-    },
-    "vaults": {
-        "title": "Coffres de sport",
-        "strategy-label": "Stratégie du coffre",
-        "risks-label": "Risques du coffre"
-    },
-    "vault": {
-        "discount-vault": {
-            "title": "Discount Vault",
-            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec une remise supérieure à {{discount}}.</p>",
-            "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
-        },
-        "degen-discount-vault": {
-            "title": "Degen Discount Vault",
-            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>",
-            "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôt par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
-        },
-        "safu-discount-vault": {
-            "title": "Safu Discount Vault",
-            "description": "<p>Achète des positions qui ont une cote supérieure à {{odds}} et sont disponibles avec un rabais supérieur à {{discount}}.</p>",
-            "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôt par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
-        },
-        "upsettoor-vault": {
-            "title": "Upsettoor Vault",
-            "description": "<p>Achète des positions qui ont une cote inférieures à {{odds}} et sont disponibles avec une remise supérieure à {{discount}}.</p>",
-            "risks": "<p>Le coffre a un taux d'utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts par tour soient utilisés. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé sur un seul marché, diversifiant ainsi le risque sur plusieurs marchés qui ont des cotes supérieures à {{odds}}.</p>"
-        },
-        "variables": "<p>Variables:</p><ul><li>Taux d’utilisation: {{utilizationRate}}</li><li>Limite inférieure de prix: {{priceLowerLimit}}</li><li>Limite supérieure de prix: {{priceUpperLimit}}</li><li>Impact d'inclinaison maximum: {{skewImpactLimit}}</li><li>Allocation maximale sur un seul marché: {{allocationLimitsPerMarketPerRound}}</li><li>Dépôt total maximum: {{maxAllowedDeposit}}</li><li>Nombre maximal d'utilisateurs dans le coffre: {{maxAllowedUsers}}</li><li>Montant minimum par transaction: {{minTradeAmount}}</li><li>Dépôt minimal: {{minDepositAmount}}</li><li>Durée du tour: {{roundLength}} jours</li></ul>",
-        "back-to-vaults": "Retour aux coffres",
-        "vault-not-started-message": "Le coffre n'a pas démarré",
-        "vault-paused-message": "Le coffre est en pause",
-        "round-allocation-label": "Dépôt total du tour",
-        "spent-trading-label": "Dépensé",
-        "available-trading-label": "Disponible",
-        "round-end-label": "Le tour se termine dans",
-        "your-round-allocation-label": "Votre allocation pour le tour: <bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "Votre allocation pour le prochain tour: <bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "Il s'agit d'un montant estimé. Le montant réel sera calculé à la clôture du tour en cours sur la base du PnL.",
-        "next-round-start-label": "Le prochain tour commence dans: <counter />",
-        "users-in-vault-label": "Utilisateurs dans le coffre {{number}} / {{max}}",
-        "vault-filled-label": "Remplissage du coffre : {{amount}} / {{max}}",
-        "deposit-message": "Déposez des fonds dans le coffre pour le tour suivant.",
-        "deposit-amount-label": "Montant du dépôt",
-        "deposit-amount-placeholder": "Saisir le montant",
-        "available-to-withdraw-label": "Disponible pour retirer: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "Rien à retirer.",
-        "withdrawal-message": "Vous pouvez demander un retrait et vos fonds vous seront automatiquement disponibles à la cloture du tour.",
-        "withdraw-round-end-label": "Le tour se termine dans: <counter />",
-        "withdrawal-requested-message": "Vous avez demandé le retrait de <bold>{{amount}}</bold><tooltip />. Vos fonds vous seront envoyés automatiquement à la cloture du tour.",
-        "withdrawal-request-label": "Demande de retrait: <bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "Vous avez déposé pour le tour suivant et vous pouvez retirer ces fonds à la fin du tour suivant.",
-        "round-ended-label": "Tour terminé",
-        "deposit-withdrawal-warning": "Un retrait est demandé, vous ne pouvez pas déposer.",
-        "deposit-max-amount-of-users-warning": "Le nombre maximum d'utilisateurs dans le coffre est atteint, vous ne pouvez pas effectuer de dépôt.",
-        "deposit-vault-cap-reached-warning": "Le plafond du coffre est atteint, vous ne pouvez pas effectuer de dépôt.",
-        "deposit-vault-cap-error": "Le montant du dépôt dépasse le plafond du coffre.",
-        "deposit-min-amount-error": "Le montant minimum pour le dépôt est de {{amount}}.",
-        "withdrawal-deposit-warning": "Vous ne pouvez pas retirer car vous avez déjà déposé pour le tour suivant.",
-        "tabs": {
-            "deposit": "Dépôt",
-            "claim": "Réclamer",
-            "withdraw": "Retrait"
-        },
-        "button": {
-            "deposit-label": "Déposer",
-            "deposit-progress-label": "Dépôt en cours…",
-            "deposit-confirmation-message": "Dépôt effectué avec succès",
-            "request-withdrawal-label": "Demande de retrait",
-            "request-withdrawal-progress-label": "Demande en cours...",
-            "request-withdrawal-confirmation-message": "Demande de retrait envoyée avec succès",
-            "withdraw-label": "Retirer",
-            "withdraw-progress-label": "Retrait en cours...",
-            "withdraw-confirmation-message": "Fonds retirés avec succès",
-            "close-round-label": "Fermer le tour",
-            "close-round-progress-label": "Fermeture du tour en cours...",
-            "close-round-confirmation-message": "Tour clôturé avec succès"
-        },
-        "trades-history": {
-            "title": "Historique des transactions du coffre",
-            "no-trades": "Aucune transaction associée à ce coffre dans le tour sélectionné.",
-            "round-label": "Tour"
-        },
-        "pnl": {
-            "title": "PnL par tour",
-            "no-data": "Pas de données PnL pour les tours précédents.",
-            "lifetime-pnl": "PnL depuis la création",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "user-transactions": {
-            "type": {
-                "deposit": "Verser",
-                "claim": "Demande de retrait",
-                "withdrawalRequest": "Demande de retrait"
-            },
-            "title": "Opérations utilisateur",
-            "no-transactions": "Aucune transaction utilisateur associée à ce coffre dans le tour sélectionné.",
-            "name": "Nom"
-        },
-        "parlay-discount-vault": {
-            "title": "Coffre-fort de remise Parlay",
-            "risks": "<p>Le coffre-fort a un taux d&#39;utilisation de {{utilizationRate}}, ce qui garantit que pas plus de {{utilizationRate}} de dépôts pour un tour ne sont mis en danger. De plus, sur ces {{utilizationRate}}, un maximum de {{allocationLimitsPerMarketPerRound}} peut être dépensé pour un seul ticket Parlay par tour, diversifiant ainsi le risque en plusieurs tickets Parlay avec une réduction supérieure à {{odds}}.</p>",
-            "description": "<p>Achète des billets Parlay où chaque position individuelle dans le billet bénéficie d&#39;au moins une remise de {{discount}}.</p>"
-        },
-        "gamified-staking-message": "<p>Tous les dépôts qui entrent dans un tour comptent pour le volume de mise gamifié.</p>",
-        "LP": {
-            "title": "LP",
-            "parlay-lp": "Parlay LP",
-            "single-lp": "LP unique"
-        },
-        "variables-parlay": "<p>Variable :</p><ul><li> Taux d&#39;utilisation : {{utilizationRate}}</li><li> Limite inférieure de prix : {{priceLowerLimit}}</li><li> Limite supérieure de prix : {{priceUpperLimit}}</li><li> Impact d&#39;inclinaison maximum : {{skewImpactLimit}}</li><li> Allocation maximale sur un seul parlay : {{allocationLimitsPerMarketPerRound}}</li><li> Dépôt total maximum : {{maxAllowedDeposit}}</li><li> Nombre maximum d&#39;utilisateurs dans le coffre : {{maxAllowedUsers}}</li><li> Montant minimum sur une seule transaction : {{minTradeAmount}}</li><li> Dépôt minimum : {{minDepositAmount}}</li><li> Durée du cycle : {{roundLength}} jours</li></ul>",
-        "single-lp": {
-            "title": "LP unique"
-        },
-        "parlay-lp": {
-            "title": "Parlay LP"
-        },
-        "deprecated-info": "Obsolète, veuillez retirer vos fonds !"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1102,10 +980,6 @@
         "markets": {
             "description": "Rejoignez le meilleur bookmaker web3 du marché. Obtenez des positions dans les meilleures ligues comme la NFL, la NBA, l'UCL, l'EPL et plus encore.",
             "title": "Marchés des heures supplémentaires : marchés de paris sportifs Web3 pour plus de 40 ligues"
-        },
-        "vaults": {
-            "description": "Déposez des actifs dans le coffre-fort d'Overtime Markets et laissez notre mécanisme de trading automatisé déployer la stratégie de votre choix.",
-            "title": "Coffres-forts des marchés supplémentaires : trading automatisé"
         },
         "parlay-leaderboard": {
             "title": "Marchés des heures supplémentaires : gagnez des récompenses Parlay toutes les 2 semaines",

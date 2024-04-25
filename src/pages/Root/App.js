@@ -37,8 +37,6 @@ import RouterProvider from './Provider/RouterProvider/RouterProvider';
 const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
-const Vaults = lazy(() => import('pages/Vaults'));
-const Vault = lazy(() => import('pages/Vault'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
@@ -225,26 +223,6 @@ const App = () => {
                                         {!isConnectedViaParticle && <Wizard />}
                                     </DappLayout>
                                 </Route>
-                                {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
-                                    <Route exact path={ROUTES.Vaults}>
-                                        <DappLayout>
-                                            <Vaults />
-                                        </DappLayout>
-                                    </Route>
-                                )}
-
-                                {isRouteAvailableForNetwork(ROUTES.Vaults, networkId) && (
-                                    <Route
-                                        exact
-                                        path={ROUTES.Vault}
-                                        render={(routeProps) => (
-                                            <DappLayout>
-                                                <Vault {...routeProps} />
-                                            </DappLayout>
-                                        )}
-                                    />
-                                )}
-
                                 {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (
                                     <Route exact path={ROUTES.LiquidityPool}>
                                         <DappLayout>

@@ -1,7 +1,7 @@
 import QUERY_KEYS from 'constants/queryKeys';
+import { Network } from 'enums/network';
 import { QueryClient } from 'react-query';
 import { LiquidityPoolType } from 'types/liquidityPool';
-import { Network } from 'enums/network';
 
 type QueryConnector = {
     queryClient: QueryClient;
@@ -31,14 +31,6 @@ export const refetchAfterClaim = (walletAddress: string, networkId: Network) => 
 
 export const refetchAfterVoucherClaim = (walletAddress: string, networkId: Network) => {
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucherEscrow(walletAddress, networkId));
-};
-
-export const refetchVaultData = (vaultAddress: string, walletAddress: string, networkId: Network) => {
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.Data(vaultAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.UserData(vaultAddress, walletAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.PnL(vaultAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.Trades(vaultAddress, networkId));
-    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.UserTransactions(vaultAddress, networkId));
 };
 
 export const refetchLiquidityPoolData = (

@@ -1,4 +1,3 @@
-import useUserVaultsDataQuery from 'queries/vault/useUserVaultsDataQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { UserVaultsData } from 'types/vault';
 import { FlexDivColumn } from '../../../../styles/common';
 
 const UserStats: React.FC = () => {
@@ -17,14 +15,6 @@ const UserStats: React.FC = () => {
 
     const userStatsQuery = useUsersStatsV2Query(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
-
-    const userVaultsDataQuery = useUserVaultsDataQuery(walletAddress.toLowerCase(), networkId, {
-        enabled: isWalletConnected,
-    });
-
-    const vaultsData = userVaultsDataQuery.isSuccess
-        ? (userVaultsDataQuery.data as UserVaultsData)
-        : { balanceTotal: 0 };
 
     return (
         <Wrapper>
@@ -43,10 +33,6 @@ const UserStats: React.FC = () => {
             <Section>
                 <Label>{t('profile.stats.lifetime-wins')}</Label>
                 <Value>{!userStats ? 0 : userStats.lifetimeWins}</Value>
-            </Section>
-            <Section>
-                <Label>{t('profile.stats.in-vaults')}</Label>
-                <Value>{!vaultsData ? 0 : vaultsData.balanceTotal.toFixed(2)}</Value>
             </Section>
         </Wrapper>
     );
