@@ -1212,4 +1212,4 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     9209: 'half',
 };
 
-export const LIVE_SUPPORTED_LEAGUES = [9004, 9011];
+export const LIVE_SUPPORTED_LEAGUES = [9004, 9011, 9012, 9015, 9536];
