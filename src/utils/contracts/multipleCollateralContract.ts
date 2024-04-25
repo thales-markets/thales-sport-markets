@@ -604,17 +604,15 @@ const multipleCollateral = {
     sUSD: {
         addresses: {
             [Network.OptimismMainnet]: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9', // sUSD
-            [Network.OptimismGoerli]: '0xE1ceaa829525a08C1d39A5CEBe4b42aF58d77198', // exoticSUSD
             [Network.Arbitrum]: '',
             [Network.Base]: '',
-            [Network.OptimismSepolia]: '0xaeB5De0E09218233542906BF94C26841d186FffB', // exoticSUSD
+            [Network.OptimismSepolia]: '',
         },
         abi,
     },
     DAI: {
         addresses: {
             [Network.OptimismMainnet]: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
             [Network.Base]: '',
             [Network.OptimismSepolia]: '',
@@ -624,7 +622,6 @@ const multipleCollateral = {
     USDCe: {
         addresses: {
             [Network.OptimismMainnet]: '',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
             [Network.Base]: '',
             [Network.OptimismSepolia]: '',
@@ -634,17 +631,15 @@ const multipleCollateral = {
     USDC: {
         addresses: {
             [Network.OptimismMainnet]: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
             [Network.Base]: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-            [Network.OptimismSepolia]: '',
+            [Network.OptimismSepolia]: '0xff6535c1F971245435429A915aB9eB1713beC1C1', // exoticUSDC
         },
         abi,
     },
     USDT: {
         addresses: {
             [Network.OptimismMainnet]: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9',
             [Network.Base]: '',
             [Network.OptimismSepolia]: '',
@@ -654,7 +649,6 @@ const multipleCollateral = {
     OP: {
         addresses: {
             [Network.OptimismMainnet]: '0x4200000000000000000000000000000000000042',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '',
             [Network.Base]: '',
             [Network.OptimismSepolia]: '',
@@ -664,7 +658,6 @@ const multipleCollateral = {
     ARB: {
         addresses: {
             [Network.OptimismMainnet]: '',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0x912CE59144191C1204E64559FE8253a0e49E6548',
             [Network.Base]: '',
             [Network.OptimismSepolia]: '',
@@ -674,17 +667,15 @@ const multipleCollateral = {
     WETH: {
         addresses: {
             [Network.OptimismMainnet]: '0x4200000000000000000000000000000000000006',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
             [Network.Base]: '0x4200000000000000000000000000000000000006',
-            [Network.OptimismSepolia]: '',
+            [Network.OptimismSepolia]: '0xF9b8b43530A3CF8D29cb0D657867347958edf63F',
         },
         abi,
     },
     ETH: {
         addresses: {
             [Network.OptimismMainnet]: ZERO_ADDRESS,
-            [Network.OptimismGoerli]: ZERO_ADDRESS,
             [Network.Arbitrum]: ZERO_ADDRESS,
             [Network.Base]: ZERO_ADDRESS,
             [Network.OptimismSepolia]: ZERO_ADDRESS,
@@ -694,7 +685,6 @@ const multipleCollateral = {
     USDbC: {
         addresses: {
             [Network.OptimismMainnet]: '',
-            [Network.OptimismGoerli]: '',
             [Network.Arbitrum]: '',
             [Network.Base]: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
             [Network.OptimismSepolia]: '',

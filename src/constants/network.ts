@@ -6,7 +6,6 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
-    [Network.OptimismGoerli]: 'GOERLI-OPTIMISM',
     [Network.Arbitrum]: 'ARBITRUM-ONE',
     [Network.Base]: 'BASE',
     [Network.OptimismSepolia]: 'SEPOLIA-OPTIMISM',
@@ -14,7 +13,6 @@ export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
 
 export const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISM MAINNET',
-    [Network.OptimismGoerli]: 'OPTIMISM GOERLI',
     [Network.Arbitrum]: 'ARBITRUM ONE',
     [Network.Base]: 'BASE',
     [Network.OptimismSepolia]: 'OPTIMISM SEPOLIA',

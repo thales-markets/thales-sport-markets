@@ -26,7 +26,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { arbitrum, optimism, optimismGoerli } from 'wagmi/dist/chains';
+import { arbitrum, optimism } from 'wagmi/dist/chains';
 import { infuraProvider } from 'wagmi/dist/providers/infura';
 import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
 import { publicProvider } from 'wagmi/dist/providers/public';
@@ -51,7 +51,6 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
         chainnode: 'optimism-mainnet',
         blast: 'optimism-mainnet',
     },
-    [Network.OptimismGoerli]: { ankr: 'optimism_testnet', chainnode: 'optimism-goerli', blast: 'optimism-goerli' },
     [Network.Arbitrum]: { ankr: 'arbitrum', chainnode: 'arbitrum-one', blast: 'arbitrum-one' },
     [Network.Base]: { ankr: 'base', chainnode: 'base-mainnet', blast: '' },
     [Network.OptimismSepolia]: { ankr: '', chainnode: '', blast: '' },
@@ -61,7 +60,7 @@ const theme = getDefaultTheme();
 const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
 const { chains, provider } = configureChains(
-    [optimism, optimismGoerli, arbitrum, base, optimismSepolia],
+    [optimism, arbitrum, base, optimismSepolia],
     [
         jsonRpcProvider({
             rpc: (chain) => {

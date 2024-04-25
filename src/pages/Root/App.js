@@ -59,7 +59,6 @@ const particle = new ParticleNetwork({
             { id: Network.OptimismMainnet, name: 'optimism' },
             { id: Network.Arbitrum, name: 'arbitrum' },
             { id: Network.Base, name: 'base' },
-            { id: Network.OptimismGoerli, name: 'optimism' },
         ], // optional: web wallet support chains.
         customStyle: {}, //optional: custom wallet style
     },

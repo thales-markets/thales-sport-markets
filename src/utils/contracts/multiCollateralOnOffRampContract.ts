@@ -3,10 +3,9 @@ import { Network } from 'enums/network';
 const multiCollateralOnOffRampContract = {
     addresses: {
         [Network.OptimismMainnet]: '0x6F5A76423396Bf39F64F8c51C0B3dEb24990b116',
-        [Network.OptimismGoerli]: '',
         [Network.Arbitrum]: '0x7b065dE3fd7190A6C2CB6D51E946e82B6b2C4358',
         [Network.Base]: '0x0946BfE3c543e0B770B7F7e508c8A566947C4278',
-        [Network.OptimismSepolia]: '',
+        [Network.OptimismSepolia]: '0x5454FeA21Cdd51b56C08dE744E49F82BA24BACFE',
     },
     abi: [
         {
