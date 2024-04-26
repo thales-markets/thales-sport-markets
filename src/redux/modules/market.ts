@@ -38,11 +38,6 @@ const getDefaultIsThreeWayView = (): boolean => {
     return lsIsThreeWayView !== undefined ? (lsIsThreeWayView as boolean) : true;
 };
 
-const getDefaultBetType = (): BetType[] => {
-    const lsBetType = localStore.get(LOCAL_STORAGE_KEYS.FILTER_BET_TYPE);
-    return lsBetType !== undefined ? (lsBetType as BetType[]) : [];
-};
-
 type MarketSliceState = {
     marketSearch: string;
     dateFilter: Date | number;
@@ -62,7 +57,7 @@ const initialState: MarketSliceState = {
     tagFilter: getDefaultTagFilter(),
     selectedMarket: undefined,
     isThreeWayView: getDefaultIsThreeWayView(),
-    betTypeFilter: getDefaultBetType(),
+    betTypeFilter: [],
 };
 
 const marketSlice = createSlice({
@@ -111,11 +106,6 @@ const marketSlice = createSlice({
         },
         setBetTypeFilter: (state, action: PayloadAction<BetType[]>) => {
             state.betTypeFilter = action.payload;
-            if (action.payload) {
-                localStore.set(LOCAL_STORAGE_KEYS.FILTER_BET_TYPE, action.payload);
-            } else {
-                window.localStorage.removeItem(LOCAL_STORAGE_KEYS.FILTER_BET_TYPE);
-            }
         },
     },
 });
