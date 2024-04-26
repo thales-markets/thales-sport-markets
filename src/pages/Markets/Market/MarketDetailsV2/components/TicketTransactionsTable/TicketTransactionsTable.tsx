@@ -25,6 +25,12 @@ import {
     ExternalLink,
     FirstExpandedSection,
     LastExpandedSection,
+    MarketStatus,
+    MarketTypeInfo,
+    MatchLabel,
+    Odd,
+    PositionInfo,
+    PositionText,
     QuoteLabel,
     QuoteText,
     QuoteWrapper,
@@ -34,7 +40,6 @@ import {
     TableRowStyle,
     TableText,
     TicketRow,
-    TicketRowTeam,
     TicketRowText,
     TwitterWrapper,
 } from './styled-components';
@@ -255,22 +260,24 @@ export const getTicketMarkets = (
                 <SPAAnchor href={buildMarketLink(ticketMarket.gameId, language)}>
                     <TicketRowText style={{ cursor: 'pointer' }}>
                         {getTicketMarketStatusIcon(ticketMarket, theme)}
-                        <TicketRowTeam>
+                        <MatchLabel>
                             {ticketMarket.isOneSideMarket
                                 ? fixOneSideMarketCompetitorName(ticketMarket.homeTeam)
                                 : !ticketMarket.isPlayerPropsMarket
-                                ? ticketMarket.homeTeam + ' vs ' + ticketMarket.awayTeam
+                                ? ticketMarket.homeTeam + ' - ' + ticketMarket.awayTeam
                                 : `${ticketMarket.playerProps.playerName} (${
                                       BetTypeNameMap[ticketMarket.typeId as BetType]
                                   }) `}
-                        </TicketRowTeam>
+                        </MatchLabel>
                     </TicketRowText>
                 </SPAAnchor>
 
-                <QuoteText>{getTitleText(ticketMarket)}</QuoteText>
-                <QuoteText>{getPositionTextV2(ticketMarket, ticketMarket.position, true)}</QuoteText>
-                <QuoteText>{formatMarketOdds(selectedOddsType, quote)}</QuoteText>
-                <QuoteText>{getTicketMarketStatus(ticketMarket)}</QuoteText>
+                <MarketTypeInfo>{getTitleText(ticketMarket)}</MarketTypeInfo>
+                <PositionInfo>
+                    <PositionText>{getPositionTextV2(ticketMarket, ticketMarket.position, true)}</PositionText>
+                    <Odd>{formatMarketOdds(selectedOddsType, quote)}</Odd>
+                </PositionInfo>
+                <MarketStatus>{getTicketMarketStatus(ticketMarket)}</MarketStatus>
             </TicketRow>
         );
     });

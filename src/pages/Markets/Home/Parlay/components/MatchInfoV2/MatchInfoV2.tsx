@@ -79,7 +79,7 @@ const MatchLabel = styled(FlexDivRow)<{ fontSize?: string; lineHeight?: string }
     text-align: start;
 `;
 
-const MarketTypeInfo = styled(FlexDivRow)<{ fontSize?: string; lineHeight?: string }>`
+const MarketTypeInfo = styled(FlexDivRow)`
     font-weight: 600;
     font-size: 13px;
     line-height: 13px;
