@@ -164,7 +164,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             <MatchInfoConatiner
                 onClick={() => {
                     if (isGameOpen) {
-                        dispatch(setSelectedMarket(market));
+                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }));
                         dispatch(setBetTypeFilter([]));
                     }
                 }}

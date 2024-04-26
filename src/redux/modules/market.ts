@@ -95,10 +95,8 @@ const marketSlice = createSlice({
 
             state.selectedMarket = undefined;
         },
-        setSelectedMarket: (state, action: PayloadAction<SportMarketInfoV2 | undefined>) => {
-            state.selectedMarket = action.payload
-                ? { gameId: action.payload?.gameId, sport: action.payload?.sport }
-                : undefined;
+        setSelectedMarket: (state, action: PayloadAction<Pick<SportMarketInfoV2, 'gameId' | 'sport'> | undefined>) => {
+            state.selectedMarket = action.payload;
         },
         setIsThreeWayView: (state, action: PayloadAction<boolean>) => {
             state.isThreeWayView = action.payload;
