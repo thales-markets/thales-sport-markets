@@ -399,7 +399,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             typeId,
                             position,
                             buyInAmount,
-                            expectedPayout,
+                            expectedQuote,
                             collateral
                         ) => {
                             if (isWalletConnected) {
@@ -418,7 +418,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                     typeId: typeId,
                                     position: position,
                                     buyInAmount: buyInAmount,
-                                    expectedPayout: expectedPayout,
+                                    expectedQuote: expectedQuote,
                                     collateral: collateral,
                                 });
                             }
