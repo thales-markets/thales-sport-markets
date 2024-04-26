@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { BetType, GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { localStore } from 'thales-utils';
-import { Tags } from 'types/markets';
+import { SportMarketInfoV2, Tags } from 'types/markets';
 import { RootState } from '../rootReducer';
 
 const sliceName = 'market';
@@ -33,19 +33,9 @@ const getDefaultTagFilter = (): Tags => {
     return lsTagFilter !== undefined ? (lsTagFilter as Tags) : [];
 };
 
-const getDefaultSelectedMarket = (): string => {
-    const lsSelectedMarket = localStore.get(LOCAL_STORAGE_KEYS.SELECTED_MARKET);
-    return lsSelectedMarket !== undefined ? (lsSelectedMarket as string) : '';
-};
-
 const getDefaultIsThreeWayView = (): boolean => {
     const lsIsThreeWayView = localStore.get(LOCAL_STORAGE_KEYS.IS_THREE_WAY_VIEW);
     return lsIsThreeWayView !== undefined ? (lsIsThreeWayView as boolean) : true;
-};
-
-const getDefaultBetType = (): BetType | undefined => {
-    const lsBetType = localStore.get(LOCAL_STORAGE_KEYS.FILTER_BET_TYPE);
-    return lsBetType !== undefined ? (Number(lsBetType) as BetType | undefined) : undefined;
 };
 
 type MarketSliceState = {
@@ -53,9 +43,9 @@ type MarketSliceState = {
     dateFilter: Date | number;
     globalFilter: GlobalFiltersEnum;
     sportFilter: SportFilterEnum;
-    betTypeFilter: BetType | undefined;
+    betTypeFilter: BetType[];
     tagFilter: Tags;
-    selectedMarket: string;
+    selectedMarket: Pick<SportMarketInfoV2, 'gameId' | 'sport'> | undefined;
     isThreeWayView: boolean;
 };
 
@@ -65,9 +55,9 @@ const initialState: MarketSliceState = {
     globalFilter: getDefaultGlobalFilter(),
     sportFilter: getDefaultSportFilter(),
     tagFilter: getDefaultTagFilter(),
-    selectedMarket: getDefaultSelectedMarket(),
+    selectedMarket: undefined,
     isThreeWayView: getDefaultIsThreeWayView(),
-    betTypeFilter: getDefaultBetType(),
+    betTypeFilter: [],
 };
 
 const marketSlice = createSlice({
@@ -78,21 +68,18 @@ const marketSlice = createSlice({
             state.marketSearch = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_MARKET_SEARCH, action.payload);
 
-            state.selectedMarket = '';
-            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
+            state.selectedMarket = undefined;
         },
         setDateFilter: (state, action: PayloadAction<Date | number>) => {
             state.dateFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_DATE, action.payload);
 
-            state.selectedMarket = '';
-            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
+            state.selectedMarket = undefined;
         },
         setGlobalFilter: (state, action: PayloadAction<GlobalFiltersEnum>) => {
             state.globalFilter = action.payload;
             if (action.payload !== GlobalFiltersEnum.OpenMarkets) {
-                state.selectedMarket = '';
-                localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
+                state.selectedMarket = undefined;
             }
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, action.payload);
         },
@@ -100,31 +87,25 @@ const marketSlice = createSlice({
             state.sportFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_SPORT, action.payload);
 
-            state.selectedMarket = '';
-            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
+            state.selectedMarket = undefined;
         },
         setTagFilter: (state, action: PayloadAction<Tags>) => {
             state.tagFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_TAGS, action.payload);
 
-            state.selectedMarket = '';
-            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, '');
+            state.selectedMarket = undefined;
         },
-        setSelectedMarket: (state, action: PayloadAction<string>) => {
-            state.selectedMarket = action.payload;
-            localStore.set(LOCAL_STORAGE_KEYS.SELECTED_MARKET, action.payload);
+        setSelectedMarket: (state, action: PayloadAction<SportMarketInfoV2 | undefined>) => {
+            state.selectedMarket = action.payload
+                ? { gameId: action.payload?.gameId, sport: action.payload?.sport }
+                : undefined;
         },
         setIsThreeWayView: (state, action: PayloadAction<boolean>) => {
             state.isThreeWayView = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.IS_THREE_WAY_VIEW, action.payload);
         },
-        setBetTypeFilter: (state, action: PayloadAction<BetType | undefined>) => {
+        setBetTypeFilter: (state, action: PayloadAction<BetType[]>) => {
             state.betTypeFilter = action.payload;
-            if (action.payload) {
-                localStore.set(LOCAL_STORAGE_KEYS.FILTER_BET_TYPE, action.payload);
-            } else {
-                window.localStorage.removeItem(LOCAL_STORAGE_KEYS.FILTER_BET_TYPE);
-            }
         },
     },
 });
@@ -148,7 +129,7 @@ export const getSportFilter = (state: RootState) => getMarketState(state).sportF
 export const getTagFilter = (state: RootState) => getMarketState(state).tagFilter;
 export const getBetTypeFilter = (state: RootState) => getMarketState(state).betTypeFilter;
 export const getSelectedMarket = (state: RootState) => getMarketState(state).selectedMarket;
-export const getIsMarketSelected = (state: RootState) => getMarketState(state).selectedMarket !== '';
+export const getIsMarketSelected = (state: RootState) => !!getMarketState(state).selectedMarket;
 export const getIsThreeWayView = (state: RootState) => getMarketState(state).isThreeWayView;
 
 export default marketSlice.reducer;

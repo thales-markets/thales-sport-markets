@@ -22,6 +22,7 @@ import {
     getIsMarketSelected,
     getIsThreeWayView,
     getSelectedMarket,
+    setBetTypeFilter,
     setSelectedMarket,
 } from '../../../../redux/modules/market';
 import { buildMarketLink } from '../../../../utils/routes';
@@ -86,7 +87,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const firstSpreadMarket = market.childMarkets.find((childMarket) => childMarket.typeId === BetType.SPREAD);
     const firstTotalMarket = market.childMarkets.find((childMarket) => childMarket.typeId === BetType.TOTAL);
     const betTypeFilterMarket =
-        betTypeFilter && market.childMarkets.find((childMarket) => childMarket.typeId === betTypeFilter);
+        betTypeFilter.length && market.childMarkets.find((childMarket) => betTypeFilter.includes(childMarket.typeId));
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
@@ -146,7 +147,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const hideGame = isGameLive ? !areOddsValid : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
     const isColumnView = !betTypeFilterMarket && isThreeWayView && !isMarketSelected && isGameOpen;
     const isTwoPositionalMarket = market.odds.length === 2;
-    const selected = selectedMarket == market.gameId;
+    const selected = selectedMarket?.gameId == market.gameId;
 
     let marketsCount = market.childMarkets.length;
     if (!betTypeFilterMarket && isThreeWayView) {
@@ -160,7 +161,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const getMainContainerContent = () => (
         <MainContainer isGameOpen={isGameOpen}>
-            <MatchInfoConatiner onClick={() => (isGameOpen ? dispatch(setSelectedMarket(market.gameId)) : {})}>
+            <MatchInfoConatiner
+                onClick={() => {
+                    if (isGameOpen) {
+                        dispatch(setSelectedMarket(market));
+                        dispatch(setBetTypeFilter([]));
+                    }
+                }}
+            >
                 <MatchInfo selected={selected}>
                     <Tooltip
                         overlay={
@@ -258,7 +266,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         <>
                             <PositionsV2
                                 markets={[betTypeFilterMarket ? betTypeFilterMarket : market]}
-                                betType={betTypeFilterMarket ? betTypeFilter : BetType.WINNER}
+                                betType={betTypeFilterMarket ? betTypeFilter[0] : BetType.WINNER}
                                 isGameOpen={isGameOpen}
                                 isMainPageView
                                 isColumnView={isColumnView}
@@ -282,7 +290,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 />
                             )}
                             {marketsCount > 0 && (
-                                <MarketsCountWrapper onClick={() => dispatch(setSelectedMarket(market.gameId))}>
+                                <MarketsCountWrapper onClick={() => dispatch(setSelectedMarket(market))}>
                                     {`+${marketsCount}`}
                                     <Arrow className={'icon icon--arrow-down'} />
                                 </MarketsCountWrapper>

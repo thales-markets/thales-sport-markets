@@ -161,6 +161,11 @@ export enum BetType {
     NINTH_PERIOD_BOTH_TEAMS_TO_SCORE = 10109,
 }
 
+export enum BetTypeGroup {
+    TOTALS = 'Totals',
+    HANDICAP = 'Handicap',
+}
+
 export enum ParlayErrorCode {
     NO_ERROS = 0,
     MAX_MATCHES = 1,
