@@ -149,6 +149,7 @@ export const MatchLabel = styled(FlexDivRow)`
     line-height: 12px;
     color: ${(props) => props.theme.textColor.primary};
     text-align: start;
+    margin-right: 5px;
 `;
 
 export const MarketTypeInfo = styled(FlexDivRow)`
@@ -156,6 +157,7 @@ export const MarketTypeInfo = styled(FlexDivRow)`
     font-size: 12px;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.quinary};
+    margin-right: 5px;
 `;
 
 export const PositionInfo = styled(FlexDivRow)`
@@ -164,10 +166,12 @@ export const PositionInfo = styled(FlexDivRow)`
     line-height: 12px;
     color: ${(props) => props.theme.textColor.quaternary};
     align-items: center;
+    margin-right: 5px;
 `;
 
 export const PositionText = styled.span`
     text-align: start;
+    min-width: 100px;
 `;
 
 export const Odd = styled.span`
