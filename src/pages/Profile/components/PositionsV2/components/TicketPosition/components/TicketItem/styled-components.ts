@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { FlexDivRow } from 'styles/common';
+import { FlexDivRowCentered } from '../../../../../../../../styles/common';
 
-export const Wrapper = styled(FlexDivRow)`
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
+export const Wrapper = styled(FlexDivRowCentered)`
     margin-bottom: 10px;
     padding: 5px 10px;
     @media (max-width: 768px) {
         padding: 5px 5px;
+    }
+    & > div {
+        flex: 1;
     }
 `;
 

@@ -92,7 +92,6 @@ export const TicketRowText = styled.div`
     display: flex;
     align-items: center;
     height: 30px;
-    align-items: center;
 `;
 
 export const TicketRowTeam = styled.span`
