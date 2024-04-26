@@ -776,7 +776,8 @@
         "wrapper-nav": {
             "my-portfolio": "ผลงานของฉัน",
             "my-tickets": "ตั๋วของฉัน"
-        }
+        },
+        "lp": "ห้างหุ้นส่วนจำกัด"
     },
     "referral": {
         "generate-link": "สร้างลิงค์",

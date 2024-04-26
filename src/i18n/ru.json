@@ -776,7 +776,8 @@
         "wrapper-nav": {
             "my-tickets": "Мои билеты",
             "my-portfolio": "Мое Портфолио"
-        }
+        },
+        "lp": "LP"
     },
     "referral": {
         "nav-items": {
