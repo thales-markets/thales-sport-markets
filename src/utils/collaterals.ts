@@ -21,5 +21,7 @@ export const isStableCurrency = (currencyKey: Coins) => {
 
 // TODO: for OP Sepolia, add generic logic per network
 export const isLpSupported = (currencyKey: Coins) => {
-    return currencyKey === CRYPTO_CURRENCY_MAP.USDC || currencyKey === CRYPTO_CURRENCY_MAP.WETH;
+    return (
+        currencyKey === CRYPTO_CURRENCY_MAP.USDC || currencyKey === CRYPTO_CURRENCY_MAP.WETH || CRYPTO_CURRENCY_MAP.ETH
+    );
 };
