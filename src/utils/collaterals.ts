@@ -1,4 +1,4 @@
-import { COLLATERALS, STABLE_COINS } from 'constants/currency';
+import { COLLATERALS, CRYPTO_CURRENCY_MAP, STABLE_COINS } from 'constants/currency';
 import { SupportedNetwork } from 'types/network';
 import { Coins } from 'types/tokens';
 import multipleCollateral from './contracts/multipleCollateralContract';
@@ -17,4 +17,9 @@ export const getCollateralAddress = (networkId: SupportedNetwork, index: number)
 
 export const isStableCurrency = (currencyKey: Coins) => {
     return STABLE_COINS.includes(currencyKey);
+};
+
+// TODO: for OP Sepolia, add generic logic per network
+export const isLpSupported = (currencyKey: Coins) => {
+    return currencyKey === CRYPTO_CURRENCY_MAP.USDC || currencyKey === CRYPTO_CURRENCY_MAP.WETH;
 };

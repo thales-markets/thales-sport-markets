@@ -14,9 +14,8 @@ export const getSportsAMMV2Transaction: any = async (
     sportsAMMV2Contract: ethers.Contract,
     overtimeVoucherContract: ethers.Contract,
     tradeData: TradeData[],
-    sUSDPaid: BigNumber,
-    collateralPaid: BigNumber,
-    expectedPayout: BigNumber,
+    buyInAmount: BigNumber,
+    expectedQuote: BigNumber,
     referral?: string | null,
     additionalSlippage?: BigNumber,
     isAA?: boolean
@@ -28,8 +27,8 @@ export const getSportsAMMV2Transaction: any = async (
         if (isAA) {
             return executeBiconomyTransaction(collateralAddress, overtimeVoucherContract, 'tradeWithVoucher', [
                 tradeData,
-                sUSDPaid,
-                expectedPayout,
+                buyInAmount,
+                expectedQuote,
                 additionalSlippage,
                 voucherId,
             ]);
@@ -37,9 +36,9 @@ export const getSportsAMMV2Transaction: any = async (
             if (networkId === Network.OptimismMainnet) {
                 const estimation = await overtimeVoucherContract.estimateGas.tradeWithVoucher(
                     tradeData,
-                    sUSDPaid,
+                    buyInAmount,
                     additionalSlippage,
-                    expectedPayout,
+                    expectedQuote,
                     voucherId
                 );
 
@@ -48,9 +47,9 @@ export const getSportsAMMV2Transaction: any = async (
 
             return overtimeVoucherContract.buyFromParlayAMMWithVoucher(
                 tradeData,
-                sUSDPaid,
+                buyInAmount,
                 additionalSlippage,
-                expectedPayout,
+                expectedQuote,
                 voucherId,
                 { gasLimit: finalEstimation }
             );
@@ -60,25 +59,24 @@ export const getSportsAMMV2Transaction: any = async (
     if (isAA) {
         return executeBiconomyTransaction(collateralAddress, sportsAMMV2Contract, 'trade', [
             tradeData,
-            sUSDPaid,
-            expectedPayout,
+            buyInAmount,
+            expectedQuote,
             additionalSlippage,
-            ZERO_ADDRESS,
             referralAddress,
             collateralAddress,
             isEth,
         ]);
     } else {
+        console.log(tradeData, buyInAmount.toString(), expectedQuote.toString());
         return sportsAMMV2Contract.trade(
             tradeData,
-            sUSDPaid,
-            expectedPayout,
+            buyInAmount,
+            expectedQuote,
             additionalSlippage,
-            ZERO_ADDRESS,
             referralAddress,
             isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
             isEth,
-            { value: isEth ? collateralPaid : 0 }
+            { value: isEth ? buyInAmount : 0 }
         );
     }
 };
@@ -88,7 +86,11 @@ export const getSportsAMMV2QuoteMethod: any = (
     isDefaultCollateral: boolean,
     sportsAMMV2Contract: ethers.Contract,
     tradeData: TradeData[],
-    sUSDPaid: BigNumber
+    buyInAmount: BigNumber
 ) => {
-    return sportsAMMV2Contract.tradeQuote(tradeData, sUSDPaid, isDefaultCollateral ? ZERO_ADDRESS : collateralAddress);
+    return sportsAMMV2Contract.tradeQuote(
+        tradeData,
+        buyInAmount,
+        isDefaultCollateral ? ZERO_ADDRESS : collateralAddress
+    );
 };

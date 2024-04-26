@@ -5,7 +5,7 @@ const liquidityPoolDataContract = {
         [Network.OptimismMainnet]: '',
         [Network.Arbitrum]: '',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '',
+        [Network.OptimismSepolia]: '0x2A34F47E7A12aB77dbB5d87A77d9ee116CD1Bfe9',
     },
     abi: [
         {
