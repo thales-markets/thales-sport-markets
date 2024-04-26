@@ -780,7 +780,8 @@
         "wrapper-nav": {
             "my-tickets": "Meine Tickets",
             "my-portfolio": "Mein Portfolio"
-        }
+        },
+        "lp": "LP"
     },
     "referral": {
         "generate-link": "Link generieren",
@@ -809,123 +810,6 @@
             "see-result-by-trader": "Siehe Ergebnis nach Trader",
             "affiliate-leaderboard": "Affiliate-Rangliste"
         }
-    },
-    "vaults": {
-        "title": "Sport Vaults",
-        "strategy-label": "Vault-Strategie",
-        "risks-label": "Vault-Risiken"
-    },
-    "vault": {
-        "discount-vault": {
-            "title": "Rabatt Vault",
-            "description": "<p>Kauft Positionen, die eine höhere Quote als {{odds}} haben und mit einem größeren Rabatt als {{discount}} erhältlich sind.</p>",
-            "risks": "<p>Die Vault hat eine Nutzungsrate von {{UtilizationRate}}, die sicherstellt, dass nicht mehr als {{UtilizationRate}} der für eine Runde eingezahlten Mittel dem Risiko ausgesetzt werden. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzigen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
-        },
-        "degen-discount-vault": {
-            "title": "Degen Rabatt Vault",
-            "description": "<p>Kauft Positionen zu allen Quoten, die für mehr als {{Rabatt}} Rabatt verfügbar sind.</p>",
-            "risks": "<p>Die Vault hat eine Nutzungsrate von {{utilizationRate}}, die sicherstellt, dass nicht mehr als {{utilizationRate}} der in einer Runde eingezahlten Mittel riskiert wird. Außerdem kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzelnen Markt ausgegeben werden.</p>"
-        },
-        "safu-discount-vault": {
-            "title": "Safu Rabatt Vault",
-            "description": "<p>Kauft Positionen, die mehr als {{odds}} Quoten haben und mit einem beliebigen Rabatt verfügbar sind.</p>",
-            "risks": "<p>Die Vault hat eine Nutzungsrate von {{utilizationRate}}, die sicherstellt, dass nicht mehr als {{utilizationRate}} des eingezahlten Geldes pro Runde riskiert wird. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzelnen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
-        },
-        "upsettoor-vault": {
-            "title": "Upsettoor Vault",
-            "description": "<p>Kauft Positionen, mit geringeren Quoten als {{odds}} haben und mit einem größeren Rabatt als {{discount}} erhältlich sind.</p>",
-            "risks": "<p>Die Vault hat eine Nutzungsrate von {{UtilizationRate}}, die sicherstellt, dass nicht mehr als {{UtilizationRate}} der für eine Runde eingezahlten Mittel dem Risiko ausgesetzt werden. Darüber hinaus kann von diesen {{UtilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für einen einzigen Markt ausgegeben werden, wodurch das Risiko auf mehrere Märkte verteilt wird, die Quoten von mehr als {{odds}} haben.</p>"
-        },
-        "variables": "<p>Variablen:</p><ul><li>Nutzungsrate: {{utilizationRate}}</li><li>Preis-Untergrenze: {{priceLowerLimit}}</li><li>Preis-Obergrenze: {{priceUpperLimit}}</li><li>Max Skew Impact: {{skewImpactLimit}}</li><li>Maximale Allokation auf einem einzelnen Markt:  {{allocationLimitsPerMarketPerRound}}</li><li>Maximale Gesamteinlage: {{maxAllowedDeposit}}</li><li>Maximum Benutzer im Tresor: {{maxAllowedUsers}}</li><li>Mindestbetrag für ein einzelnes Trade: {{minTradeAmount}}</li><li>Mindesteinzahlung: {{minDepositAmount}}</li><li>Dauer der Runde: {{roundLength}} Tage</li></ul>",
-        "back-to-vaults": "Zurück zu den Vaults",
-        "vault-not-started-message": "Die Vault wurde nicht gestartet",
-        "vault-paused-message": "Die Vault ist pausiert",
-        "round-allocation-label": "Gesamteinlage für die Runde",
-        "spent-trading-label": "Für Trades aufgewendet",
-        "available-trading-label": "Für Trades verfügbar",
-        "round-end-label": "Die Runde endet in",
-        "your-round-allocation-label": "Ihre Zuteilung für diese Runde: <bold>{{Betrag}}</bold>",
-        "your-next-round-allocation-label": "Ihre Zuteilung für die nächste Runde: <bold>{{Betrag}}</bold>",
-        "estimated-amount-tooltip": "Dies ist ein geschätzter Betrag. Der tatsächliche Betrag wird nach Abschluss der aktuellen Runde auf der Grundlage der Runden-PnL berechnet.",
-        "next-round-start-label": "Die nächste Runde beginnt in: <counter />",
-        "users-in-vault-label": "Benutzer in Vault: {{number}} / {{max}}",
-        "vault-filled-label": "Vault gefüllt: {{amount}} / {{max}}",
-        "deposit-message": "Mittel in die Vault für die nächste Runde einzahlen.",
-        "deposit-amount-label": "Mittel einzahlen",
-        "deposit-amount-placeholder": "Betrag eingeben",
-        "available-to-withdraw-label": "Verfügbar zum Abheben: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "Nichts zum Abheben.",
-        "withdrawal-message": "Du kannst eine Auszahlung beantragen, und dein Geld wird dir am Ende der Runde automatisch zugeschickt, wenn die Runde beendet ist.",
-        "withdraw-round-end-label": "Die Runde endet in <counter />",
-        "withdrawal-requested-message": "Du hast beantragt, <bold>{{Betrag}}</bold><tooltip /> abzuheben. Dein Geld wird dir automatisch am Ende der Runde überwiesen, wenn die Runde abgeschlossen ist.",
-        "withdrawal-request-label": "Antrag auf Aufhebung: <bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "Du hast für die nächste Runde eingezahlt und kannst diese Mittel am Ende der nächsten Runde abheben.",
-        "round-ended-label": "Runde beendet",
-        "deposit-withdrawal-warning": "Die Abhebung wird beantragt, Einzahlung ist nicht möglich.",
-        "deposit-max-amount-of-users-warning": "Die maximale Anzahl der Benutzer für die Vault ist erreicht, du kannst nicht einzahlen.",
-        "deposit-vault-cap-reached-warning": "Die Obergrenze der Vault ist erreicht, eine Einzahlung ist nicht möglich.",
-        "deposit-vault-cap-error": "Einzahlungsbetrag überschreitet Tresorobergrenze",
-        "deposit-min-amount-error": "Der Mindestbetrag für die Einzahlung beträgt {{amount}}",
-        "withdrawal-deposit-warning": "Du kannst dich nicht zurückziehen, da du bereits für die nächste Runde eingezahlt hast.",
-        "tabs": {
-            "deposit": "Einzahlung",
-            "claim": "Beanspruchen",
-            "withdraw": "Rückzug"
-        },
-        "button": {
-            "deposit-label": "Einzahlung",
-            "deposit-progress-label": "Einzahlung in Arbeit...",
-            "deposit-confirmation-message": "Einzahlung erfolgreich platziert",
-            "request-withdrawal-label": "Antrag auf Abhebung",
-            "request-withdrawal-progress-label": "Anfrage in Bearbeitung...",
-            "request-withdrawal-confirmation-message": "Abhebungsantrag erfolgreich gesendet",
-            "withdraw-label": "Abheben",
-            "withdraw-progress-label": "Abhebung in Arbeit...",
-            "withdraw-confirmation-message": "Mittel erfolgreich abgehoben",
-            "close-round-label": "Runde schließen",
-            "close-round-progress-label": "Abschlussrunde im Gange...",
-            "close-round-confirmation-message": "Runde erfolgreich abgeschlossen"
-        },
-        "trades-history": {
-            "title": "Historie der Vault",
-            "no-trades": "Mit der Vault sind in der ausgewählten Runde keine Trades verbunden.",
-            "round-label": "Runde"
-        },
-        "pnl": {
-            "title": "PnL per Runde",
-            "no-data": "Keine PnL-Daten für frühere Runden.",
-            "lifetime-pnl": "Lifetime PnL",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "user-transactions": {
-            "type": {
-                "deposit": "Kaution",
-                "withdrawalRequest": "Auszahlungsantrag",
-                "claim": "Rücktrittsanspruch"
-            },
-            "title": "Benutzertransaktionen",
-            "no-transactions": "Mit diesem Tresor sind in der ausgewählten Runde keine Benutzertransaktionen verbunden.",
-            "name": "Name"
-        },
-        "parlay-discount-vault": {
-            "title": "Parlay-Rabatttresor",
-            "risks": "<p>Der Tresor hat eine Auslastungsrate von {{utilizationRate}}, was sicherstellt, dass nicht mehr als {{utilizationRate}} pro Runde eingezahlt werden. Darüber hinaus können von diesen {{utilizationRate}} maximal {{allocationLimitsPerMarketPerRound}} für ein einzelnes Parlay-Ticket pro Runde ausgegeben werden, wodurch das Risiko auf mehrere Parlay-Tickets verteilt wird, die einen Rabatt von mehr als {{odds}} haben.</p>",
-            "description": "<p>Kauft Parlay-Tickets, bei denen jede einzelne Position im Ticket mindestens einen Rabatt von {{discount}} hat.</p>"
-        },
-        "gamified-staking-message": "<p>Alle Einzahlungen, die in eine Runde eingehen, zählen zum gamifizierten Staking-Volumen.</p>",
-        "LP": {
-            "title": "LP",
-            "single-lp": "Einzel-LP",
-            "parlay-lp": "Parlay-LP"
-        },
-        "variables-parlay": "<p>Variablen:</p><ul><li> Nutzungsrate: {{utilizationRate}}</li><li> Preisuntergrenze: {{priceLowerLimit}}</li><li> Preisobergrenze: {{priceUpperLimit}}</li><li> Max. Skew-Auswirkung: {{skewImpactLimit}}</li><li> Maximale Zuweisung für eine einzelne Parlay: {{allocationLimitsPerMarketPerRound}}</li><li> Maximale Gesamteinzahlung: {{maxAllowedDeposit}}</li><li> Max. Benutzer im Tresor: {{maxAllowedUsers}}</li><li> Mindestbetrag für einen einzelnen Trade: {{minTradeAmount}}</li><li> Mindesteinzahlung: {{minDepositAmount}}</li><li> Rundendauer: {{roundLength}} Tage</li></ul>",
-        "single-lp": {
-            "title": "Einzel-LP"
-        },
-        "parlay-lp": {
-            "title": "Parlay-LP"
-        },
-        "deprecated-info": "Veraltet, bitte heben Sie Ihr Geld ab!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1101,10 +985,6 @@
         "markets": {
             "description": "Treten Sie dem besten Web3-Sportwettenanbieter auf dem Markt bei. Sichern Sie sich Positionen in den Top-Ligen wie NFL, NBA, UCL, EPL und mehr.",
             "title": "Overtime-Märkte: Web3-Sportwettenmärkte für über 40 Ligen"
-        },
-        "vaults": {
-            "title": "Overtime Markets Vaults: Automatisierter Handel",
-            "description": "Zahlen Sie Vermögenswerte in den Tresor von Overtime Markets ein und lassen Sie unseren automatisierten Handelsmechanismus eine von Ihnen gewählte Strategie anwenden."
         },
         "parlay-leaderboard": {
             "title": "Überstundenmärkte: Verdienen Sie alle 2 Wochen Parlay-Belohnungen",

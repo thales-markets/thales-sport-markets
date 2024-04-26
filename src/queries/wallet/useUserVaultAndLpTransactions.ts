@@ -1,10 +1,8 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import thalesData from 'thales-data';
 import { LiquidityPoolUserTransactions, VaultsAndLiquidityPoolUserTransactions } from 'types/liquidityPool';
-import { VAULT_MAP } from 'constants/vault';
-import { VaultUserTransactions } from 'types/vault';
 
 const useUserVaultAndLpTransactions = (
     networkId: Network,
@@ -16,21 +14,6 @@ const useUserVaultAndLpTransactions = (
         async () => {
             try {
                 const vaultTx: VaultsAndLiquidityPoolUserTransactions = [];
-                for (const key in VAULT_MAP) {
-                    const vaultUserTransactions: VaultUserTransactions = await thalesData.sportMarkets.vaultUserTransactions(
-                        {
-                            network: networkId,
-                            vault: VAULT_MAP[key].addresses[networkId],
-                            account: walletAddress,
-                        }
-                    );
-
-                    vaultTx.push(
-                        ...vaultUserTransactions.map((tx) => {
-                            return { name: key, ...tx };
-                        })
-                    );
-                }
 
                 const liquidityPoolUserTransactions: LiquidityPoolUserTransactions = await thalesData.sportMarkets.liquidityPoolUserTransactions(
                     {

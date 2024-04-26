@@ -3,7 +3,6 @@ import { Network } from 'enums/network';
 const parlayAMMLiquidityPoolDataContract = {
     addresses: {
         [Network.OptimismMainnet]: '0x6d4393FAd7A2928c10cdD0bcdd7702B39086d8b2',
-        [Network.OptimismGoerli]: '0xb25A2e739D9f10E346c5de5a46520Bf23df769E9',
         [Network.Arbitrum]: '0xB5F1924136d7A72C3E5E746Ba2E23A3bfd499097',
         [Network.Base]: '0xd7718Fb45Df5Cef74793444DAC32EB43ab9C41E8',
         [Network.OptimismSepolia]: '',

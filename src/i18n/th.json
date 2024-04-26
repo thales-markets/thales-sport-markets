@@ -635,7 +635,6 @@
                 "onboarding-wizard": "วิซาร์ดการเริ่มต้นใช้งาน",
                 "fee-rebates": "ส่วนลดค่าธรรมเนียม",
                 "fifa-campaign": "แคมเปญ Zebro FIFA",
-                "vaults": "ห้องใต้ดิน",
                 "liquidity-pool": "ให้สภาพคล่อง",
                 "promotions": "โปรโมชั่น"
             },
@@ -758,13 +757,9 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins",
-            "in-vaults": "In vaults"
+            "lifetime-wins": "Lifetime wins"
         },
-        "vaults": "ห้องนิรภัย/LP",
         "lp-title": "สระว่ายน้ำสภาพคล่อง",
-        "in-vault": "ในห้องนิรภัย",
-        "go-to-vault": "ไปที่ห้องนิรภัย",
         "go-to-lp": "ไปที่หจก",
         "in-lp": "มีสภาพคล่อง",
         "claiming-voucher": "การอ้างสิทธิ์...",
@@ -781,7 +776,8 @@
         "wrapper-nav": {
             "my-portfolio": "ผลงานของฉัน",
             "my-tickets": "ตั๋วของฉัน"
-        }
+        },
+        "lp": "ห้างหุ้นส่วนจำกัด"
     },
     "referral": {
         "generate-link": "สร้างลิงค์",
@@ -810,123 +806,6 @@
             "see-result-by-trader": "ดูผลลัพธ์โดยเทรดเดอร์",
             "affiliate-leaderboard": "กระดานผู้นำ"
         }
-    },
-    "vaults": {
-        "title": "Sport Vaults",
-        "strategy-label": "กลยุทธ์ของ Vault",
-        "risks-label": "ความเสี่ยงของ Vault"
-    },
-    "vault": {
-        "discount-vault": {
-            "title": "Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>",
-            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
-        },
-        "degen-discount-vault": {
-            "title": "Degen Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่ odds ใดๆ ที่มีส่วนลดมากกว่า {{discount}}</p>",
-            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอด {{utilizationRate}} จะมีเพียงมากที่สุด {{allocationLimitsPerMarketPerRound}} เท่านั้นที่สามารถใช้กับเกมการแข่งขั้นหนึ่งเกม</p>"
-        },
-        "safu-discount-vault": {
-            "title": "Safu Discount Vault",
-            "description": "<p>ซื้อโพสิชั่นที่มี odds มากกว่า {{odds}} และ มีส่วนลดใดๆ </p>",
-            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
-        },
-        "upsettoor-vault": {
-            "title": "Upsettoor Vault",
-            "description": "<p>ซื้อตำแหน่งที่มีอัตราต่อรองน้อยกว่า {{odds}} และมีส่วนลดมากกว่า {{discount}}.</p>",
-            "risks": "<p>Vault มี utilization rate อยู่ที่ {{utilizationRate}} เพื่อเป็นการให้แน่ใจว่าไม่เกิน {{utilizationRate}} ของยอดฝากจะอยู่ในความเสี่ยง ยิ่งไปกว่านั้นจากยอดทั้งหมดไม่เกิน {{utilizationRate}} จะมียอดไม่เกิน {{allocationLimitsPerMarketPerRound}} ที่สามารถนำไปใช้ได้ต่อการแข่งขันหนึ่งเกม จากที่กล่าวมาจึงเป็นการกระจายความเสี่ยงไปยังหลายตลาดที่มีอัตราต่อรองมากกว่า {{odds}}</p>"
-        },
-        "variables": "<p>Variables:</p><ul><li>Utilization rate: {{utilizationRate}}</li><li>Price lower limit: {{priceLowerLimit}}</li><li>Price upper limit: {{priceUpperLimit}}</li><li>Max Skew impact: {{skewImpactLimit}}</li><li>Max allocation on a single market: {{allocationLimitsPerMarketPerRound}}</li><li>Max total deposit: {{maxAllowedDeposit}}</li><li>Max users in the vault: {{maxAllowedUsers}}</li><li>Minimum amount on a single trade: {{minTradeAmount}}</li><li>Minimum deposit: {{minDepositAmount}}</li><li>Round duration: {{roundLength}} days</li></ul>",
-        "back-to-vaults": "กลับไปที่ Vaults",
-        "vault-not-started-message": "Vault ยังไม่เริ่ม",
-        "vault-paused-message": "Vault ถูกหยุดทำงาน",
-        "round-allocation-label": "ยอดการฝากทั้งหมด",
-        "spent-trading-label": "ยอดที่ถูกนำไปเทรด",
-        "available-trading-label": "ยอดฝากที่สามารถนำไปเทรดได้",
-        "round-end-label": "รอบนี้จะจบใน",
-        "your-round-allocation-label": "เงินฝากของคุณในรอบนี้: <bold>{{amount}}</bold>",
-        "your-next-round-allocation-label": "เงินฝากของคุณในรอบถัดไป: <bold>{{amount}}</bold>",
-        "estimated-amount-tooltip": "จำนวนนี้เป็นเพียงการประมาณ จำนวนที่แท้จริงจะถูกคำนวณหลังจากจบรอบโดยจะนำ PnL มาคิด",
-        "next-round-start-label": "รอบต่อไปจะเริ่มใน: <counter />",
-        "users-in-vault-label": "จำนวนผู้ใช้งานใน Vault : {{number}} / {{max}}",
-        "vault-filled-label": "จำนวนเงินฝากใน Vault: {{amount}} / {{max}}",
-        "deposit-message": "ฝากเงินเข้าสู่ Vault เพื่อเข้าร่วมรอบต่อไป",
-        "deposit-amount-label": "จำนวนเงินฝาก",
-        "deposit-amount-placeholder": "ระบุจำนวน",
-        "available-to-withdraw-label": "จำนวนเงินฝากที่สามารถถอนได้: <bold>{{amount}}</bold>",
-        "nothing-to-withdraw-label": "ไม่มีสิ่งที่จะสามารถถอนได้",
-        "withdrawal-message": "คุณสามารถขอถอนเงินและเงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อรอบปิด",
-        "withdraw-round-end-label": "รอบนี้จะสิ้นสุดใน: <counter />",
-        "withdrawal-requested-message": "คุณขอถอนเงินเป็นจำนวน <bold>{{amount}}</bold><tooltip />. เงินของคุณจะถูกส่งถึงคุณโดยอัตโนมัติเมื่อสิ้นสุดรอบเมื่อปิดรอบ",
-        "withdrawal-request-label": "ขอถอน: <bold>{{amount}}</bold>",
-        "first-deposit-withdrawal-message": "คุณฝากเงินในรอบถัดไป และคุณสามารถถอนเงินเหล่านี้ได้เมื่อสิ้นสุดรอบถัดไป",
-        "round-ended-label": "จบรอบ",
-        "deposit-withdrawal-warning": "มีการร้องขอการถอน คุณไม่สามารถฝากได้",
-        "deposit-max-amount-of-users-warning": "ถึงจำนวนผู้ใช้สูงสุดของ Vault แล้ว คุณไม่สามารถฝากเงินได้",
-        "deposit-vault-cap-reached-warning": "ถึงจำนวนฝากสูงสุดของ Vault แล้ว คุณไม่สามารถฝากเงินได้",
-        "deposit-vault-cap-error": "จำนวนเงินฝากเกินขีดจำกัดของ Vault",
-        "deposit-min-amount-error": "จำนวนเงินขั้นต่ำสำหรับการฝากคือ {{amount}}",
-        "withdrawal-deposit-warning": "คุณไม่สามารถถอนได้เนื่องจากคุณฝากไว้แล้วสำหรับรอบถัดไป",
-        "tabs": {
-            "deposit": "ฝาก",
-            "claim": "รับ",
-            "withdraw": "ถอน"
-        },
-        "button": {
-            "deposit-label": "ฝาก",
-            "deposit-progress-label": "กำลังทำการฝาก...",
-            "deposit-confirmation-message": "การฝากสำเร็จ",
-            "request-withdrawal-label": "ขอถอนเงิน",
-            "request-withdrawal-progress-label": "กำลังทำคำร้อง...",
-            "request-withdrawal-confirmation-message": "ส่งคำขอถอนสำเร็จแล้ว",
-            "withdraw-label": "ถอน",
-            "withdraw-progress-label": "กำลังดำเนินการถอนเงิน…",
-            "withdraw-confirmation-message": "ถอนเงินสำเร็จ",
-            "close-round-label": "ปิดรอบ",
-            "close-round-progress-label": "กำลังดำเนินการปิดรอบ…",
-            "close-round-confirmation-message": "ปิดรอบสำเร็จ"
-        },
-        "trades-history": {
-            "title": "ประวัติการเทรดของ Vault",
-            "no-trades": "ไม่มีการเทรดที่เกี่ยวข้องกับ Vault นี้ในรอบที่เลือก",
-            "round-label": "รอบ"
-        },
-        "pnl": {
-            "title": "PnL ต่อรอบ",
-            "no-data": "ไม่มีข้อมูล PnL สำหรับรอบก่อนหน้า",
-            "lifetime-pnl": "Lifetime PnL",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "user-transactions": {
-            "type": {
-                "deposit": "เงินฝาก",
-                "claim": "การเรียกร้องการถอน",
-                "withdrawalRequest": "คำขอถอนเงิน"
-            },
-            "title": "การทำธุรกรรมของผู้ใช้",
-            "no-transactions": "ไม่มีธุรกรรมของผู้ใช้ที่เกี่ยวข้องกับห้องนิรภัยนี้ในรอบที่เลือก",
-            "name": "ชื่อ"
-        },
-        "parlay-discount-vault": {
-            "description": "<p>ซื้อตั๋วพาร์เลย์โดยแต่ละตำแหน่งในตั๋วมีส่วนลดอย่างน้อย {{discount}}</p>",
-            "risks": "<p>ห้องนิรภัยมีอัตราการใช้งาน {{utilizationRate}} ซึ่งรับรองว่าไม่เกิน {{utilizationRate}} ของเงินฝากในแต่ละรอบที่มีความเสี่ยง นอกจากนี้ จาก {{utilizationRate}} เหล่านั้น คุณสามารถใช้จ่ายได้สูงสุด {{allocationLimitsPerMarketPerRound}} กับตั๋วพาร์เลย์ใบเดียวต่อรอบ ดังนั้นจึงเป็นการกระจายความเสี่ยงไปสู่ตั๋วพาร์เลย์หลายใบที่มีส่วนลดมากกว่า {{odds}}</p>",
-            "title": "ห้องเก็บส่วนลด Parlay"
-        },
-        "gamified-staking-message": "<p>เงินฝากทั้งหมดที่เข้าสู่รอบจะนับรวมกับปริมาณการเดิมพันแบบเกม</p>",
-        "LP": {
-            "title": "หจก",
-            "parlay-lp": "หจก.พาร์เลย์",
-            "single-lp": "หจก.เดียว"
-        },
-        "variables-parlay": "<p>ตัวแปร:</p><ul><li> อัตราการใช้: {{utilizationRate}}</li><li> ขีดจำกัดล่างของราคา: {{priceLowerLimit}}</li><li> ขีดจำกัดสูงสุดของราคา: {{priceUpperLimit}}</li><li> ผลกระทบเอียงสูงสุด: {{skewImpactLimit}}</li><li> การจัดสรรสูงสุดในพาร์เลย์เดียว: {{allocationLimitsPerMarketPerRound}}</li><li> เงินฝากทั้งหมดสูงสุด: {{maxAllowedDeposit}}</li><li> ผู้ใช้สูงสุดในห้องนิรภัย: {{maxAllowedUsers}}</li><li> จำนวนเงินขั้นต่ำในการซื้อขายครั้งเดียว: {{minTradeAmount}}</li><li> เงินฝากขั้นต่ำ: {{minDepositAmount}}</li><li> ระยะเวลาของรอบ: {{roundLength}} วัน</li></ul>",
-        "single-lp": {
-            "title": "หจก.เดียว"
-        },
-        "parlay-lp": {
-            "title": "หจก.พาร์เลย์"
-        },
-        "deprecated-info": "เลิกใช้แล้ว โปรดถอนเงินของคุณ!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1102,10 +981,6 @@
         "markets": {
             "description": "เข้าร่วมเว็บสปอร์ตบุ๊ค web3 ที่ดีที่สุดในตลาด รักษาตำแหน่งในลีกชั้นนำเช่น NFL, NBA, UCL, EPL และอีกมากมาย",
             "title": "ตลาดต่อเวลา: ตลาดหนังสือกีฬา Web3 สำหรับลีกมากกว่า 40 ลีก"
-        },
-        "vaults": {
-            "title": "ห้องนิรภัยตลาดล่วงเวลา: การซื้อขายอัตโนมัติ",
-            "description": "ฝากสินทรัพย์ไว้ในห้องนิรภัยของตลาดล่วงเวลา และปล่อยให้กลไกการซื้อขายอัตโนมัติของเราปรับใช้กลยุทธ์ที่คุณเลือก"
         },
         "parlay-leaderboard": {
             "title": "ตลาดต่อเวลา: รับรางวัลพาร์เลย์ทุกๆ 2 สัปดาห์",

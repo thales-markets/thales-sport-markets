@@ -844,6 +844,7 @@ const MainContainer = styled(FlexDivColumn)`
 const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`
     max-width: ${(props) => props.maxWidth}px;
     flex-grow: 1;
+    min-width: 250px;
     @media (max-width: 950px) {
         display: none;
     }

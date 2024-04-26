@@ -1,4 +1,3 @@
-import PositionSymbol from 'components/PositionSymbol';
 import SPAAnchor from 'components/SPAAnchor';
 import { BetTypeNameMap, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
@@ -19,7 +18,7 @@ import { ThemeInterface } from 'types/ui';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds } from 'utils/markets';
-import { getLineInfoV2, getOddTooltipTextV2, getSymbolTextV2 } from 'utils/marketsV2';
+import { getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getTicketMarketStatus } from 'utils/tickets';
 import { getOrdinalNumberLabel } from 'utils/ui';
@@ -57,13 +56,8 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
         }
     }, [market.homeTeam, market.awayTeam, market.leagueId, market.isPlayerPropsMarket, market.playerProps.playerName]);
 
-    const positionEnum = market.position;
-
     const parlayItemQuote = market.isCanceled ? 1 : market.odd;
     const parlayStatus = getTicketMarketStatus(market);
-
-    const symbolText = getSymbolTextV2(positionEnum, market);
-    const lineInfo = getLineInfoV2(market, positionEnum);
 
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
     const isGameStarted = market.maturityDate < new Date();
@@ -151,31 +145,9 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
                 </MatchInfo>
             </SPAAnchor>
             <StatusContainer>
-                <PositionSymbol
-                    symbolAdditionalText={{
-                        text: formatMarketOdds(selectedOddsType, parlayItemQuote),
-                        textStyle: {
-                            marginLeft: '10px',
-                        },
-                    }}
-                    symbolText={symbolText}
-                    symbolUpperText={
-                        lineInfo && !market.isOneSideMarket && !market.isYesNoPlayerPropsMarket
-                            ? {
-                                  text: lineInfo,
-                                  textStyle: {
-                                      top: '-9px',
-                                  },
-                              }
-                            : undefined
-                    }
-                    tooltip={<>{getOddTooltipTextV2(positionEnum, market)}</>}
-                    additionalStyle={
-                        market.isOneSideMarket || market.isOneSidePlayerPropsMarket || market.isYesNoPlayerPropsMarket
-                            ? { fontSize: 11 }
-                            : {}
-                    }
-                />
+                <ClubName>{getTitleText(market)}</ClubName>
+                <ClubName>{getPositionTextV2(market, market.position, true)}</ClubName>
+                <ClubName>{formatMarketOdds(selectedOddsType, parlayItemQuote)}</ClubName>
                 {isPendingResolution && !isMobile ? (
                     isEnetpulseSport ? (
                         <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>

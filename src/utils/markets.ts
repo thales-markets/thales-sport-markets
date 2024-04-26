@@ -11,6 +11,7 @@ import {
     UEFA_TAGS,
 } from 'constants/tags';
 import {
+    BOTH_TEAMS_TO_SCORE_BET_TYPES,
     BetType,
     COMBINED_POSITIONS_BET_TYPES,
     ONE_SIDER_PLAYER_PROPS_BET_TYPES,
@@ -98,7 +99,8 @@ export const isPeriod = (betType: BetType) => {
         `${betType}`.startsWith('1002') ||
         `${betType}`.startsWith('1003') ||
         `${betType}`.startsWith('1004') ||
-        `${betType}`.startsWith('1008')
+        `${betType}`.startsWith('1008') ||
+        `${betType}`.startsWith('1010')
     );
 };
 
@@ -109,6 +111,10 @@ export const isPeriod2 = (betType: BetType) => {
         `${betType}`.startsWith('1007') ||
         `${betType}`.startsWith('1009')
     );
+};
+
+export const isBothsTeamsToScore = (betType: BetType) => {
+    return BOTH_TEAMS_TO_SCORE_BET_TYPES.includes(betType) || `${betType}`.startsWith('1010');
 };
 
 export const getIsDrawAvailable = (leagueId: number, betType: BetType) =>

@@ -4,6 +4,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, coinFormatter } from 'thales-utils';
 import { UserStats } from 'types/markets';
 import networkConnector from 'utils/networkConnector';
+import { getCollateralByAddress } from '../../utils/collaterals';
 
 const useUsersStatsV2Query = (
     walletAddress: string,
@@ -27,8 +28,9 @@ const useUsersStatsV2Query = (
                 let lifetimeWins = 0;
                 for (let index = 0; index < tickets.length; index++) {
                     const ticket = tickets[index];
+                    const collateral = getCollateralByAddress(ticket.collateral, networkId);
 
-                    const buyInAmount = coinFormatter(ticket.buyInAmount, networkId);
+                    const buyInAmount = coinFormatter(ticket.buyInAmount, networkId, collateral);
                     const totalQuote = bigNumberFormatter(ticket.totalQuote);
                     const payout = buyInAmount / totalQuote;
 

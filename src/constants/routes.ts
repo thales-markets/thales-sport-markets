@@ -9,8 +9,6 @@ const ROUTES = {
     Profile: '/profile',
     Referral: '/referral',
     Wizard: '/wizard',
-    Vaults: '/vaults',
-    Vault: '/vaults/:vaultId',
     Leaderboard: '/parlay-leaderboard',
     LiquidityPool: '/liquidity-pool',
     SingleLiquidityPool: '/liquidity-pool?pool-type=single',
@@ -33,10 +31,6 @@ export const PAGE_NAME_TO_META_DATA_KEYS: {
     [MetaRoutes.Markets]: {
         title: 'seo.markets.title',
         description: 'seo.markets.description',
-    },
-    [MetaRoutes.Vaults]: {
-        title: 'seo.vaults.title',
-        description: 'seo.vaults.description',
     },
     [MetaRoutes.ParlayLeaderboard]: {
         title: 'seo.parlay-leaderboard.title',

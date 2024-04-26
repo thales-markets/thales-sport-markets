@@ -77,7 +77,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameResolved = market.isResolved || market.isCanceled;
     const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
-    const isGameLive = !!market.live && isGameStarted;
+    const isGameLive = !!market.live;
 
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
@@ -144,7 +144,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
-    const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
+    const hideGame = isGameLive ? !areOddsValid : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
     const isColumnView = !betTypeFilterMarket && isThreeWayView && !isMarketSelected && isGameOpen;
     const isTwoPositionalMarket = market.odds.length === 2;
     const selected = selectedMarket?.gameId == market.gameId;
@@ -177,7 +177,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <TimeRemaining end={market.maturityDate} fontSize={11} />
                             </>
                         }
-                        component={<MatchInfoLabel>{formatShortDateWithTime(market.maturityDate)} </MatchInfoLabel>}
+                        component={
+                            <MatchInfoLabel>{formatShortDateWithTime(new Date(market.maturityDate))} </MatchInfoLabel>
+                        }
                     />
                     {isFifaWCGame(market.leagueId) && (
                         <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />

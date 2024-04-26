@@ -20,13 +20,7 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--profile',
         name: 'profile',
         route: ROUTES.Profile,
-        supportedNetworks: [
-            Network.OptimismMainnet,
-            Network.OptimismGoerli,
-            Network.Arbitrum,
-            Network.Base,
-            Network.OptimismSepolia,
-        ],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 
@@ -36,33 +30,14 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--logo',
         name: 'markets',
         route: ROUTES.Markets.Home,
-        supportedNetworks: [
-            Network.OptimismMainnet,
-            Network.OptimismGoerli,
-            Network.Arbitrum,
-            Network.Base,
-            Network.OptimismSepolia,
-        ],
-    },
-    {
-        i18label: 'markets.nav-menu.items.vaults',
-        iconClass: 'icon icon--vaults',
-        name: 'vaults',
-        route: ROUTES.Vaults,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
     {
         i18label: 'markets.nav-menu.items.liquidity-pool',
         iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',
         route: ROUTES.LiquidityPool,
-        supportedNetworks: [
-            Network.OptimismMainnet,
-            Network.OptimismGoerli,
-            Network.Arbitrum,
-            Network.Base,
-            Network.OptimismSepolia,
-        ],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 
@@ -72,14 +47,14 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--competition',
         name: 'parlay-competition',
         route: ROUTES.Leaderboard,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum],
     },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',
         iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
         route: ROUTES.Referral,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum, Network.Base],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base],
     },
 ];
 
@@ -89,7 +64,7 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--promotions',
         name: 'promotions',
         route: ROUTES.Promotions.Home,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismGoerli, Network.Arbitrum, Network.Base],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base],
     },
 ];
 

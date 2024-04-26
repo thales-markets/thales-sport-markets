@@ -3,10 +3,9 @@ import { Network } from 'enums/network';
 const liquidityPoolDataContract = {
     addresses: {
         [Network.OptimismMainnet]: '',
-        [Network.OptimismGoerli]: '',
         [Network.Arbitrum]: '',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '',
+        [Network.OptimismSepolia]: '0x2A34F47E7A12aB77dbB5d87A77d9ee116CD1Bfe9',
     },
     abi: [
         {
@@ -154,7 +153,7 @@ const liquidityPoolDataContract = {
                 {
                     indexed: false,
                     internalType: 'address',
-                    name: 'recipient',
+                    name: 'requester',
                     type: 'address',
                 },
                 {
@@ -189,6 +188,12 @@ const liquidityPoolDataContract = {
                 },
                 {
                     indexed: false,
+                    internalType: 'int24',
+                    name: '_line',
+                    type: 'int24',
+                },
+                {
+                    indexed: false,
                     internalType: 'uint8',
                     name: '_position',
                     type: 'uint8',
@@ -202,7 +207,7 @@ const liquidityPoolDataContract = {
                 {
                     indexed: false,
                     internalType: 'uint256',
-                    name: '_expectedPayout',
+                    name: '_expectedQuote',
                     type: 'uint256',
                 },
                 {
@@ -227,7 +232,7 @@ const liquidityPoolDataContract = {
                 {
                     indexed: false,
                     internalType: 'address',
-                    name: 'sender',
+                    name: 'requester',
                     type: 'address',
                 },
                 {
@@ -262,6 +267,12 @@ const liquidityPoolDataContract = {
                 },
                 {
                     indexed: false,
+                    internalType: 'int24',
+                    name: '_line',
+                    type: 'int24',
+                },
+                {
+                    indexed: false,
                     internalType: 'uint8',
                     name: '_position',
                     type: 'uint8',
@@ -275,14 +286,8 @@ const liquidityPoolDataContract = {
                 {
                     indexed: false,
                     internalType: 'uint256',
-                    name: '_expectedPayout',
+                    name: '_expectedQuote',
                     type: 'uint256',
-                },
-                {
-                    indexed: false,
-                    internalType: 'address',
-                    name: '_differentRecipient',
-                    type: 'address',
                 },
                 {
                     indexed: false,
@@ -324,6 +329,19 @@ const liquidityPoolDataContract = {
                 },
             ],
             name: 'Paused',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: 'address',
+                    name: '_freeBetsHolder',
+                    type: 'address',
+                },
+            ],
+            name: 'SetFreeBetsHolder',
             type: 'event',
         },
         {
@@ -385,7 +403,7 @@ const liquidityPoolDataContract = {
                 },
                 {
                     internalType: 'uint256',
-                    name: '_approvedPayoutAmount',
+                    name: '_approvedQuote',
                     type: 'uint256',
                 },
             ],
@@ -525,13 +543,27 @@ const liquidityPoolDataContract = {
                     type: 'bytes32',
                 },
             ],
-            name: 'requestIdToTradeData',
+            name: 'requestIdToRequester',
             outputs: [
                 {
                     internalType: 'address',
-                    name: '_requester',
+                    name: '',
                     type: 'address',
                 },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'bytes32',
+                    name: '',
+                    type: 'bytes32',
+                },
+            ],
+            name: 'requestIdToTradeData',
+            outputs: [
                 {
                     internalType: 'bytes32',
                     name: '_gameId',
@@ -548,6 +580,11 @@ const liquidityPoolDataContract = {
                     type: 'uint16',
                 },
                 {
+                    internalType: 'int24',
+                    name: '_line',
+                    type: 'int24',
+                },
+                {
                     internalType: 'uint8',
                     name: '_position',
                     type: 'uint8',
@@ -559,18 +596,13 @@ const liquidityPoolDataContract = {
                 },
                 {
                     internalType: 'uint256',
-                    name: '_expectedPayout',
+                    name: '_expectedQuote',
                     type: 'uint256',
                 },
                 {
                     internalType: 'uint256',
                     name: '_additionalSlippage',
                     type: 'uint256',
-                },
-                {
-                    internalType: 'address',
-                    name: '_differentRecipient',
-                    type: 'address',
                 },
                 {
                     internalType: 'address',
@@ -589,58 +621,71 @@ const liquidityPoolDataContract = {
         {
             inputs: [
                 {
-                    internalType: 'bytes32',
-                    name: '_gameId',
-                    type: 'bytes32',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_sportId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'uint16',
-                    name: '_typeId',
-                    type: 'uint16',
-                },
-                {
-                    internalType: 'uint8',
-                    name: '_position',
-                    type: 'uint8',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '_buyInAmount',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '_expectedPayout',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'uint256',
-                    name: '_additionalSlippage',
-                    type: 'uint256',
-                },
-                {
-                    internalType: 'address',
-                    name: '_differentRecipient',
-                    type: 'address',
-                },
-                {
-                    internalType: 'address',
-                    name: '_referrer',
-                    type: 'address',
-                },
-                {
-                    internalType: 'address',
-                    name: '_collateral',
-                    type: 'address',
+                    components: [
+                        {
+                            internalType: 'bytes32',
+                            name: '_gameId',
+                            type: 'bytes32',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: '_sportId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'uint16',
+                            name: '_typeId',
+                            type: 'uint16',
+                        },
+                        {
+                            internalType: 'int24',
+                            name: '_line',
+                            type: 'int24',
+                        },
+                        {
+                            internalType: 'uint8',
+                            name: '_position',
+                            type: 'uint8',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: '_buyInAmount',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: '_expectedQuote',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'uint256',
+                            name: '_additionalSlippage',
+                            type: 'uint256',
+                        },
+                        {
+                            internalType: 'address',
+                            name: '_referrer',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'address',
+                            name: '_collateral',
+                            type: 'address',
+                        },
+                    ],
+                    internalType: 'struct ILiveTradingProcessor.LiveTradeData',
+                    name: '_liveTradeData',
+                    type: 'tuple',
                 },
             ],
             name: 'requestLiveTrade',
-            outputs: [],
+            outputs: [
+                {
+                    internalType: 'bytes32',
+                    name: 'requestId',
+                    type: 'bytes32',
+                },
+            ],
             stateMutability: 'nonpayable',
             type: 'function',
         },
@@ -673,6 +718,19 @@ const liquidityPoolDataContract = {
                 },
             ],
             name: 'setConfiguration',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    internalType: 'address',
+                    name: '_freeBetsHolder',
+                    type: 'address',
+                },
+            ],
+            name: 'setFreeBetsHolder',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',

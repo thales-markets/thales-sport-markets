@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const StatusIcon = styled.i`
     font-size: 14px;
@@ -62,9 +62,9 @@ export const QuoteWrapper = styled.div`
 
 export const ExpandedRowWrapper = styled.div`
     display: flex;
-    padding-left: 30px;
+    flex-direction: column;
+    padding-left: 10px;
     @media (max-width: 600px) {
-        flex-direction: column;
         padding-left: 10px;
         padding-right: 10px;
     }
@@ -86,10 +86,12 @@ export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     }
 `;
 
-export const TicketRowText = styled(QuoteText)`
-    max-width: 220px;
+export const TicketRowText = styled.div`
+    max-width: 300px;
     width: 300px;
     display: flex;
+    align-items: center;
+    height: 30px;
     align-items: center;
 `;
 
@@ -141,3 +143,42 @@ export const TableRowStyle: React.CSSProperties = {
     justifyContent: 'center',
     padding: '0',
 };
+
+export const MatchLabel = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    color: ${(props) => props.theme.textColor.primary};
+    text-align: start;
+`;
+
+export const MarketTypeInfo = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    color: ${(props) => props.theme.textColor.quinary};
+`;
+
+export const PositionInfo = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    color: ${(props) => props.theme.textColor.quaternary};
+    align-items: center;
+`;
+
+export const PositionText = styled.span`
+    text-align: start;
+`;
+
+export const Odd = styled.span`
+    margin-left: 5px;
+`;
+
+export const MarketStatus = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    color: ${(props) => props.theme.textColor.primary};
+    justify-content: end;
+`;

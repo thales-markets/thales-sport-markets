@@ -38,7 +38,6 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
     ],
-    [Network.OptimismGoerli]: [CRYPTO_CURRENCY_MAP.sUSD as Coins],
     [Network.Arbitrum]: [
         CRYPTO_CURRENCY_MAP.USDCe as Coins,
         CRYPTO_CURRENCY_MAP.USDC as Coins,
@@ -54,7 +53,12 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
         CRYPTO_CURRENCY_MAP.WETH as Coins,
         CRYPTO_CURRENCY_MAP.ETH as Coins,
     ],
-    [Network.OptimismSepolia]: [CRYPTO_CURRENCY_MAP.sUSD as Coins],
+    [Network.OptimismSepolia]: [
+        CRYPTO_CURRENCY_MAP.USDC as Coins,
+        CRYPTO_CURRENCY_MAP.USDT as Coins,
+        CRYPTO_CURRENCY_MAP.WETH as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
+    ],
 };
 
 // export const COLLATERALS_AA: Record<SupportedNetwork, Coins[]> = {
@@ -67,7 +71,6 @@ export const COLLATERALS: Record<SupportedNetwork, Coins[]> = {
 //         CRYPTO_CURRENCY_MAP.OP as Coins,
 //         CRYPTO_CURRENCY_MAP.WETH as Coins,
 //     ],
-//     [Network.OptimismGoerli]: [CRYPTO_CURRENCY_MAP.sUSD as Coins],
 //     [Network.Arbitrum]: [
 //         CRYPTO_CURRENCY_MAP.ETH as Coins,
 //         CRYPTO_CURRENCY_MAP.USDCe as Coins,

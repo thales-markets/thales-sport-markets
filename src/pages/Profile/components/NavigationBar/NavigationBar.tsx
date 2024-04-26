@@ -18,7 +18,7 @@ export const navItems = [
     },
     {
         id: 3,
-        i18Label: 'profile.vaults',
+        i18Label: 'profile.lp',
     },
     {
         id: 4,

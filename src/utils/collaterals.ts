@@ -1,22 +1,9 @@
 import { COLLATERALS, CRYPTO_CURRENCY_MAP, STABLE_COINS } from 'constants/currency';
-
-import { Network } from 'enums/network';
 import { SupportedNetwork } from 'types/network';
 import { Coins } from 'types/tokens';
 import multipleCollateral from './contracts/multipleCollateralContract';
 
-export const getDefaultCollateral = (networkId: SupportedNetwork) => {
-    if (networkId === Network.OptimismMainnet) {
-        return CRYPTO_CURRENCY_MAP.sUSD as Coins;
-    }
-    if (networkId === Network.Arbitrum) {
-        return CRYPTO_CURRENCY_MAP.USDCe as Coins;
-    }
-    if (networkId === Network.Base) {
-        return CRYPTO_CURRENCY_MAP.USDbC as Coins;
-    }
-    return COLLATERALS[networkId][0];
-};
+export const getDefaultCollateral = (networkId: SupportedNetwork) => COLLATERALS[networkId][0];
 
 export const getCollateral = (networkId: SupportedNetwork, index: number) => COLLATERALS[networkId][index];
 
@@ -28,6 +15,26 @@ export const getCollateralIndex = (networkId: SupportedNetwork, currencyKey: Coi
 export const getCollateralAddress = (networkId: SupportedNetwork, index: number) =>
     multipleCollateral[getCollateral(networkId, index)]?.addresses[networkId];
 
+export const getCollateralByAddress = (collateralAddress: string, networkId: number) => {
+    let collateral = getDefaultCollateral(networkId);
+    Object.keys(multipleCollateral).forEach((collateralKey: string) => {
+        Object.values(multipleCollateral[collateralKey as Coins].addresses).forEach((address: string) => {
+            if (collateralAddress.toLowerCase() === address.toLowerCase()) {
+                collateral = collateralKey as Coins;
+            }
+        });
+    });
+
+    return collateral;
+};
+
 export const isStableCurrency = (currencyKey: Coins) => {
     return STABLE_COINS.includes(currencyKey);
+};
+
+// TODO: for OP Sepolia, add generic logic per network
+export const isLpSupported = (currencyKey: Coins) => {
+    return (
+        currencyKey === CRYPTO_CURRENCY_MAP.USDC || currencyKey === CRYPTO_CURRENCY_MAP.WETH || CRYPTO_CURRENCY_MAP.ETH
+    );
 };

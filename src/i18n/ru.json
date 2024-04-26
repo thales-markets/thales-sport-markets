@@ -634,7 +634,6 @@
                 "markets": "Рынки",
                 "fee-rebates": "Комиссионные скидки",
                 "fifa-campaign": "Кампания Зебро ФИФА",
-                "vaults": "Хранилища",
                 "liquidity-pool": "Обеспечить ликвидность",
                 "promotions": "Акции"
             },
@@ -758,13 +757,9 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins",
-            "in-vaults": "In vaults"
+            "lifetime-wins": "Lifetime wins"
         },
-        "vaults": "Хранилища/LP",
         "lp-title": "Пул ликвидности",
-        "go-to-vault": "Перейти в хранилище",
-        "in-vault": "В хранилище",
         "in-lp": "Предоставляемая ликвидность",
         "go-to-lp": "Перейти на LP",
         "claiming-voucher": "Заявка...",
@@ -781,7 +776,8 @@
         "wrapper-nav": {
             "my-tickets": "Мои билеты",
             "my-portfolio": "Мое Портфолио"
-        }
+        },
+        "lp": "LP"
     },
     "referral": {
         "nav-items": {
@@ -810,123 +806,6 @@
         "no-result": "Для этой таблицы нет результатов",
         "total-earned": "Всего заработано",
         "paragraph": "<bold>Программа сверхурочных рефералов — это сетевой инструмент для стимулирования привлечения и адаптации пользователей.</bold> Программа позволяет любому<bold> создать реферальную ссылку</bold> и поделитесь им с пользователями, которых они пытаются подключить.<br /><br /> Делясь своей личной реферальной ссылкой, вы зарабатываете<bold> 0,5% от всего объема sUSD, произведенного вашими привлеченными пользователями!</bold> Нет необходимости в ручных требованиях, sUSD автоматически накапливается в вашем кошельке в виде простых переводов sUSD."
-    },
-    "vaults": {
-        "title": "Спортивные своды",
-        "risks-label": "Риски хранилища",
-        "strategy-label": "Стратегия хранилища"
-    },
-    "vault": {
-        "discount-vault": {
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на одном рынке, что диверсифицирует риск на несколько рынков с коэффициентами более {{odds}}.</p>",
-            "description": "<p>Покупает позиции, которые имеют шансы более {{odds}} и доступны со скидкой, превышающей {{discount}}.</p>",
-            "title": "Хранилище скидок"
-        },
-        "degen-discount-vault": {
-            "title": "Хранилище скидок Дегена",
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на одном рынке.</p>",
-            "description": "<p>Покупает позиции с любым коэффициентом, доступным со скидкой более {{discount}}.</p>"
-        },
-        "safu-discount-vault": {
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на одном рынке, что диверсифицирует риск на несколько рынков с коэффициентами более {{odds}}.</p>",
-            "description": "<p>Покупает позиции с коэффициентами более {{odds}}, доступные с любой скидкой.</p>",
-            "title": "Хранилище скидок на столбцы"
-        },
-        "upsettoor-vault": {
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на одном рынке, что диверсифицирует риск на несколько рынков с коэффициентами более {{odds}}.</p>",
-            "description": "<p>Покупает позиции, которые имеют шансы меньше {{odds}} и доступны со скидкой, превышающей {{discount}}.</p>",
-            "title": "Upsettoor Vault"
-        },
-        "tabs": {
-            "claim": "Требовать",
-            "withdraw": "Отзывать",
-            "deposit": "Депозит"
-        },
-        "button": {
-            "deposit-progress-label": "Депозит в процессе...",
-            "withdraw-progress-label": "Вывод средств...",
-            "close-round-confirmation-message": "Раунд успешно закрыт",
-            "withdraw-label": "Отзывать",
-            "deposit-label": "Депозит",
-            "request-withdrawal-confirmation-message": "Запрос на вывод успешно отправлен",
-            "close-round-progress-label": "Идет заключительный раунд...",
-            "request-withdrawal-label": "Запросить вывод",
-            "request-withdrawal-progress-label": "Запрос выполняется...",
-            "withdraw-confirmation-message": "Средства успешно выведены",
-            "close-round-label": "Закрыть раунд",
-            "deposit-confirmation-message": "Депозит успешно размещен"
-        },
-        "trades-history": {
-            "no-trades": "Нет сделок, связанных с этим хранилищем в выбранном раунде.",
-            "round-label": "Круглый",
-            "title": "История сделок в хранилище"
-        },
-        "pnl": {
-            "no-data": "Нет данных PnL за предыдущие раунды.",
-            "title": "PnL за раунд",
-            "lifetime-pnl": "Пожизненный PnL",
-            "ongoing-pnl": "Ongoing PnL"
-        },
-        "vault-not-started-message": "Хранилище не запущено",
-        "withdrawal-message": "Вы можете запросить вывод средств, и ваши средства будут отправлены вам автоматически в конце раунда, когда раунд будет закрыт.",
-        "available-trading-label": "Доступно для торговли",
-        "variables": "<p>Переменные:</p><ul><li> Коэффициент использования: {{utilizationRate}}</li><li> Нижний предел цены: {{priceLowerLimit}}</li><li> Верхний предел цены: {{priceUpperLimit}}</li><li> Максимальное влияние перекоса: {{skewImpactLimit}}</li><li> Максимальное распределение на одном рынке: {{allocationLimitsPerMarketPerRound}}</li><li> Максимальный общий депозит: {{maxAllowedDeposit}}</li><li> Максимальное количество пользователей в хранилище: {{maxAllowedUsers}}</li><li> Минимальная сумма для одной сделки: {{minTradeAmount}}</li><li> Минимальный депозит: {{minDepositAmount}}</li></ul>",
-        "withdrawal-deposit-warning": "Вы не можете снять, так как вы уже внесли депозит для следующего раунда.",
-        "deposit-vault-cap-reached-warning": "Ограничение хранилища достигнуто, вы не можете внести депозит.",
-        "deposit-amount-placeholder": "Введите сумму",
-        "vault-paused-message": "Хранилище приостановлено",
-        "withdraw-round-end-label": "Раунд заканчивается через: <counter />",
-        "estimated-amount-tooltip": "Это ориентировочная сумма. Фактическая сумма будет рассчитана при закрытии текущего раунда на основе PnL раунда.",
-        "round-end-label": "Раунд заканчивается через",
-        "nothing-to-withdraw-label": "Нечего снимать.",
-        "your-next-round-allocation-label": "Ваше распределение на следующий раунд: <bold>{{amount}}</bold>",
-        "deposit-vault-cap-error": "Сумма депозита превышает лимит хранилища",
-        "vault-filled-label": "Хранилище заполнено: {{amount}} / {{max}}",
-        "withdrawal-requested-message": "Вы запросили вывод средств <bold>{{amount}}</bold><tooltip />. Ваши средства будут отправлены вам автоматически в конце раунда, когда раунд закрывается.",
-        "round-allocation-label": "Общий круглый депозит",
-        "deposit-amount-label": "Сумма вклада",
-        "your-round-allocation-label": "Ваше распределение на раунд: <bold>{{amount}}</bold>",
-        "back-to-vaults": "Назад к хранилищам",
-        "withdrawal-request-label": "Запрос на вывод средств: <bold>{{amount}}</bold>",
-        "next-round-start-label": "Следующий раунд начнется через: <counter />",
-        "deposit-withdrawal-warning": "Запрошен вывод средств, вы не можете внести депозит.",
-        "deposit-message": "Внесите средства в хранилище для следующего раунда.",
-        "round-ended-label": "Раунд завершен",
-        "spent-trading-label": "Потрачено на торговлю",
-        "deposit-max-amount-of-users-warning": "Достигнуто максимальное количество пользователей в хранилище, вы не можете внести депозит.",
-        "deposit-min-amount-error": "Минимальная сумма депозита: {{amount}}",
-        "available-to-withdraw-label": "Доступно для снятия: <bold>{{amount}}</bold>",
-        "users-in-vault-label": "Пользователи в хранилище: {{number}} / {{max}}",
-        "first-deposit-withdrawal-message": "Вы внесли депозит для следующего раунда, и вы можете вывести эти средства в конце следующего раунда.",
-        "user-transactions": {
-            "type": {
-                "deposit": "Депозит",
-                "withdrawalRequest": "Запрос на вывод средств",
-                "claim": "Заявление о снятии средств"
-            },
-            "no-transactions": "Нет пользовательских транзакций, связанных с этим хранилищем в выбранном раунде.",
-            "title": "Пользовательские транзакции",
-            "name": "Имя"
-        },
-        "parlay-discount-vault": {
-            "title": "Экспресс хранилище скидок",
-            "description": "<p>Покупает экспресс-билеты, каждая отдельная позиция в которых имеет скидку не менее {{discount}}.</p>",
-            "risks": "<p>Хранилище имеет коэффициент использования {{utilizationRate}}, который гарантирует, что риску подвергается не более {{utilizationRate}} депонированных в раунде средств. Кроме того, из этих {{utilizationRate}} максимум {{allocationLimitsPerMarketPerRound}} может быть потрачено на один экспресс-билет за раунд, что диверсифицирует риск на несколько экспресс-билетов со скидкой, превышающей {{odds}}.</p>"
-        },
-        "gamified-staking-message": "<p>Все депозиты, входящие в раунд, засчитываются в счет геймифицированного объема ставок.</p>",
-        "LP": {
-            "title": "LP",
-            "parlay-lp": "Парлай ЛП",
-            "single-lp": "Одиночный LP"
-        },
-        "variables-parlay": "<p>Переменные:</p><ul><li> Коэффициент использования: {{utilizationRate}}</li><li> Нижний предел цены: {{priceLowerLimit}}</li><li> Верхний предел цены: {{priceUpperLimit}}</li><li> Максимальное влияние перекоса: {{skewImpactLimit}}</li><li> Максимальное распределение на один экспресс: {{allocationLimitsPerMarketPerRound}}</li><li> Максимальный общий депозит: {{maxAllowedDeposit}}</li><li> Максимальное количество пользователей в хранилище: {{maxAllowedUsers}}</li><li> Минимальная сумма для одной сделки: {{minTradeAmount}}</li><li> Минимальный депозит: {{minDepositAmount}}</li><li> Продолжительность раунда: {{roundLength}} дней</li></ul>",
-        "single-lp": {
-            "title": "Одиночный LP"
-        },
-        "parlay-lp": {
-            "title": "Парлай ЛП"
-        },
-        "deprecated-info": "Устарело, пожалуйста, выведите свои средства!"
     },
     "parlay-leaderboard": {
         "title": "Parlay Incentives Leaderboard",
@@ -1102,10 +981,6 @@
         "markets": {
             "description": "Присоединяйтесь к лучшей букмекерской конторе Web3 на рынке. Закрепите позиции в ведущих лигах, таких как НФЛ, НБА, UCL, EPL и других.",
             "title": "Рынки сверхурочных: рынки букмекерских контор Web3 для более чем 40 лиг"
-        },
-        "vaults": {
-            "title": "Хранилища сверхурочных рынков: автоматическая торговля",
-            "description": "Внесите активы в хранилище Overtime Markets и позвольте нашему автоматическому торговому механизму применить выбранную вами стратегию."
         },
         "parlay-leaderboard": {
             "description": "Overtime Markets — это букмекерская контора Web3 с лучшими на рынке бонусами, которые раздаются раз в две недели для игроков с экспресс-ставками! Проверьте таблицу лидеров и проверьте, прошли ли вы квалификацию здесь.",
