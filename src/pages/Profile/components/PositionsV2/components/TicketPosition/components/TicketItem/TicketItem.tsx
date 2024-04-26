@@ -1,7 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
-import { BetTypeNameMap, ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
+import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
-import { BetType } from 'enums/markets';
 import i18n from 'i18n';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
@@ -30,7 +29,16 @@ import {
     Status,
     TeamScoreLabel,
 } from '../../../../../Positions/components/SinglePosition/styled-components';
-import { ClubLogo, ClubName, MatchInfo, MatchLabel, MatchLogo, StatusContainer } from '../../../../styled-components';
+import {
+    ClubLogo,
+    MarketTypeInfo,
+    MatchInfo,
+    MatchLabel,
+    MatchLogo,
+    Odd,
+    PositionInfo,
+    PositionText,
+} from '../../../../styled-components';
 import { ParlayStatus, Wrapper } from './styled-components';
 
 const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
@@ -107,7 +115,7 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
                                 src={homeLogoSrc}
                                 losingTeam={false}
                                 onError={getOnPlayerImageError(setHomeLogoSrc)}
-                                customMobileSize={'30px'}
+                                customMobileSize={'24px'}
                             />
                         ) : (
                             <ClubLogo
@@ -115,7 +123,7 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
                                 src={homeLogoSrc}
                                 losingTeam={false}
                                 onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
-                                customMobileSize={'30px'}
+                                customMobileSize={'24px'}
                             />
                         )}
 
@@ -131,78 +139,71 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
                         )}
                     </MatchLogo>
                     <MatchLabel>
-                        <ClubName isOneSided={market.isOneSideMarket}>
-                            {!market.isPlayerPropsMarket
-                                ? market.isOneSideMarket
-                                    ? fixOneSideMarketCompetitorName(market.homeTeam)
-                                    : market.homeTeam
-                                : `${market.playerProps.playerName} (${BetTypeNameMap[market.typeId as BetType]})`}
-                        </ClubName>
-                        {!market.isOneSideMarket && !market.isPlayerPropsMarket && (
-                            <ClubName>{market.awayTeam}</ClubName>
-                        )}
+                        {market.isOneSideMarket
+                            ? fixOneSideMarketCompetitorName(market.homeTeam)
+                            : !market.isPlayerPropsMarket
+                            ? market.homeTeam + ' - ' + market.awayTeam
+                            : market.playerProps.playerName}
                     </MatchLabel>
                 </MatchInfo>
             </SPAAnchor>
-            <StatusContainer>
-                <ClubName>{getTitleText(market)}</ClubName>
-                <ClubName>{getPositionTextV2(market, market.position, true)}</ClubName>
-                <ClubName>{formatMarketOdds(selectedOddsType, parlayItemQuote)}</ClubName>
-                {isPendingResolution && !isMobile ? (
-                    isEnetpulseSport ? (
-                        <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
-                    ) : (
-                        <FlexDivRow>
-                            {liveResultInfo?.status != GAME_STATUS.FINAL &&
-                                liveResultInfo?.status != GAME_STATUS.FULL_TIME &&
-                                !isEnetpulseSport && (
-                                    <MatchPeriodContainer>
-                                        <MatchPeriodLabel>{`${getOrdinalNumberLabel(
-                                            Number(liveResultInfo?.period)
-                                        )} ${t(
-                                            `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`
-                                        )}`}</MatchPeriodLabel>
-                                        <FlexDivCentered>
-                                            <MatchPeriodLabel className="red">
-                                                {displayClockTime}
-                                                <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
-                                            </MatchPeriodLabel>
-                                        </FlexDivCentered>
-                                    </MatchPeriodContainer>
-                                )}
+            <MarketTypeInfo>{getTitleText(market)}</MarketTypeInfo>
+            <PositionInfo>
+                <PositionText>{getPositionTextV2(market, market.position, true)}</PositionText>
+                <Odd>{formatMarketOdds(selectedOddsType, parlayItemQuote)}</Odd>
+            </PositionInfo>
+            {isPendingResolution && !isMobile ? (
+                isEnetpulseSport ? (
+                    <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
+                ) : (
+                    <FlexDivRow>
+                        {liveResultInfo?.status != GAME_STATUS.FINAL &&
+                            liveResultInfo?.status != GAME_STATUS.FULL_TIME &&
+                            !isEnetpulseSport && (
+                                <MatchPeriodContainer>
+                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
+                                        `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`
+                                    )}`}</MatchPeriodLabel>
+                                    <FlexDivCentered>
+                                        <MatchPeriodLabel className="red">
+                                            {displayClockTime}
+                                            <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
+                                        </MatchPeriodLabel>
+                                    </FlexDivCentered>
+                                </MatchPeriodContainer>
+                            )}
 
-                            <ScoreContainer>
-                                <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
-                                <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
-                            </ScoreContainer>
-                            {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId))
-                                ? liveResultInfo?.period == 2 && (
-                                      <ScoreContainer>
+                        <ScoreContainer>
+                            <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
+                            <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
+                        </ScoreContainer>
+                        {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId))
+                            ? liveResultInfo?.period == 2 && (
+                                  <ScoreContainer>
+                                      <TeamScoreLabel className="period">
+                                          {liveResultInfo?.scoreHomeByPeriod[0]}
+                                      </TeamScoreLabel>
+                                      <TeamScoreLabel className="period">
+                                          {liveResultInfo?.scoreAwayByPeriod[0]}
+                                      </TeamScoreLabel>
+                                  </ScoreContainer>
+                              )
+                            : liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                  return (
+                                      <ScoreContainer key={index}>
+                                          <TeamScoreLabel className="period">{homePeriodResult}</TeamScoreLabel>
                                           <TeamScoreLabel className="period">
-                                              {liveResultInfo?.scoreHomeByPeriod[0]}
-                                          </TeamScoreLabel>
-                                          <TeamScoreLabel className="period">
-                                              {liveResultInfo?.scoreAwayByPeriod[0]}
+                                              {liveResultInfo.scoreAwayByPeriod[index]}
                                           </TeamScoreLabel>
                                       </ScoreContainer>
-                                  )
-                                : liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
-                                      return (
-                                          <ScoreContainer key={index}>
-                                              <TeamScoreLabel className="period">{homePeriodResult}</TeamScoreLabel>
-                                              <TeamScoreLabel className="period">
-                                                  {liveResultInfo.scoreAwayByPeriod[index]}
-                                              </TeamScoreLabel>
-                                          </ScoreContainer>
-                                      );
-                                  })}
-                        </FlexDivRow>
-                    )
-                ) : (
-                    <></>
-                )}
-                <ParlayStatus>{parlayStatus}</ParlayStatus>
-            </StatusContainer>
+                                  );
+                              })}
+                    </FlexDivRow>
+                )
+            ) : (
+                <></>
+            )}
+            <ParlayStatus>{parlayStatus}</ParlayStatus>
         </Wrapper>
     );
 };

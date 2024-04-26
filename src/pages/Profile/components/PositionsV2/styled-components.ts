@@ -90,18 +90,18 @@ export const ListContainer = styled(FlexDivColumnNative)`
     width: 100%;
 `;
 
-export const MatchInfo = styled(FlexDivRow)`
-    justify-content: flex-start;
+export const MatchInfo = styled.div`
+    max-width: 300px;
+    width: 300px;
+    display: flex;
     align-items: center;
-    @media (max-width: 768px) {
-        max-width: 50%;
-    }
+    height: 30px;
 `;
 
 export const MatchLogo = styled.div`
     display: flex;
     align-items: center;
-    margin-right: 15px;
+    margin-right: 10px;
     @media (max-width: 768px) {
         margin-right: 7px;
     }
@@ -112,24 +112,14 @@ export const ClubLogo = styled.img<{
     losingTeam?: boolean;
     customMobileSize?: string;
 }>`
-    height: 40px;
-    width: 40px;
+    height: 24px;
+    width: 24px;
     opacity: ${(props) => (props?.losingTeam ? `0.4` : '1')};
     z-index: ${(props) => (props?.losingTeam ? '1' : '2')};
     ${(props) => (props?.awayTeam ? 'margin-left: -15px;' : '')}
     @media (max-width: 768px) {
         height: ${(props) => (props?.customMobileSize ? props.customMobileSize : '30px')};
         width: ${(props) => (props?.customMobileSize ? props.customMobileSize : '30px')};
-    }
-`;
-
-export const MatchLabel = styled(FlexDivColumn)`
-    margin-right: 5px;
-    @media (max-width: 768px) {
-        font-size: 10px;
-        flex-direction: column;
-        justify-content: center;
-        word-wrap: unset;
     }
 `;
 
@@ -258,3 +248,45 @@ export const additionalClaimButtonStyleMobile: CSSProperties = {
     minWidth: '65px',
     maxWidth: '80px',
 };
+
+export const MatchLabel = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    color: ${(props) => props.theme.textColor.primary};
+    text-align: start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+`;
+
+export const MarketTypeInfo = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    color: ${(props) => props.theme.textColor.quinary};
+`;
+
+export const PositionInfo = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    color: ${(props) => props.theme.textColor.quaternary};
+    align-items: center;
+`;
+
+export const PositionText = styled.span`
+    text-align: start;
+`;
+
+export const Odd = styled.span`
+    margin-left: 5px;
+`;
+
+export const MarketStatus = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 12px;
+    color: ${(props) => props.theme.textColor.primary};
+    justify-content: end;
+`;

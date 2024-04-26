@@ -1,7 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
-import { BetTypeNameMap } from 'constants/tags';
-import { BetType, OddsType } from 'enums/markets';
+import { OddsType } from 'enums/markets';
 import i18n from 'i18n';
 import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import React, { useState } from 'react';
@@ -265,9 +264,7 @@ export const getTicketMarkets = (
                                 ? fixOneSideMarketCompetitorName(ticketMarket.homeTeam)
                                 : !ticketMarket.isPlayerPropsMarket
                                 ? ticketMarket.homeTeam + ' - ' + ticketMarket.awayTeam
-                                : `${ticketMarket.playerProps.playerName} (${
-                                      BetTypeNameMap[ticketMarket.typeId as BetType]
-                                  }) `}
+                                : ticketMarket.playerProps.playerName}
                         </MatchLabel>
                     </TicketRowText>
                 </SPAAnchor>
