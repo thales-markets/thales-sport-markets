@@ -780,7 +780,8 @@
         "wrapper-nav": {
             "my-tickets": "Meine Tickets",
             "my-portfolio": "Mein Portfolio"
-        }
+        },
+        "lp": "LP"
     },
     "referral": {
         "generate-link": "Link generieren",

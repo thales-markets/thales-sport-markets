@@ -776,7 +776,8 @@
         "wrapper-nav": {
             "my-tickets": "Mes billets",
             "my-portfolio": "Mon portfolio"
-        }
+        },
+        "lp": "LP"
     },
     "referral": {
         "generate-link": "Générer un lien",

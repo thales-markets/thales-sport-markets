@@ -776,7 +776,8 @@
         "wrapper-nav": {
             "my-tickets": "我的门票",
             "my-portfolio": "我的投资组合"
-        }
+        },
+        "lp": "LP"
     },
     "referral": {
         "generate-link": "生成链接",
