@@ -2,7 +2,7 @@ import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getSelectedMarket, setSelectedMarket } from 'redux/modules/market';
+import { getSelectedMarket, setBetTypeFilter, setSelectedMarket } from 'redux/modules/market';
 import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { SportMarketInfoV2 } from 'types/markets';
@@ -18,8 +18,8 @@ const SelectedMarket: React.FC = () => {
     const networkId = useSelector(getNetworkId);
     const [lastValidMarket, setLastValidMarket] = useState<SportMarketInfoV2 | undefined>(undefined);
 
-    const marketQuery = useSportMarketV2Query(selectedMarket, true, networkId, {
-        enabled: isAppReady && selectedMarket !== '',
+    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, networkId, {
+        enabled: isAppReady && !!selectedMarket,
     });
 
     const marketNameHome = lastValidMarket ? getMarketNameV2(lastValidMarket, 0) : '';
@@ -38,7 +38,13 @@ const SelectedMarket: React.FC = () => {
     return (
         <Wrapper>
             {lastValidMarket && <Title>{matchLabel}</Title>}
-            <CloseIcon className="icon icon--close" onClick={() => dispatch(setSelectedMarket(''))} />
+            <CloseIcon
+                className="icon icon--close"
+                onClick={() => {
+                    dispatch(setBetTypeFilter([]));
+                    dispatch(setSelectedMarket(undefined));
+                }}
+            />
             {lastValidMarket ? (
                 <SelectedMarketDetails market={lastValidMarket} />
             ) : (

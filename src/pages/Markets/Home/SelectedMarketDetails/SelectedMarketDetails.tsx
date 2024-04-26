@@ -27,11 +27,11 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     };
 
     const groupedChildMarkets = useMemo(() => {
-        if (betTypeFilter === undefined) {
+        if (!betTypeFilter.length) {
             return groupBy(market.childMarkets, (childMarket: SportMarketInfoV2) => childMarket.typeId);
         } else {
             return groupBy(
-                market.childMarkets.filter((childMarket) => childMarket.typeId === betTypeFilter),
+                market.childMarkets.filter((childMarket) => betTypeFilter.includes(childMarket.typeId)),
                 (childMarket: SportMarketInfoV2) => childMarket.typeId
             );
         }
@@ -48,7 +48,7 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     return (
         <Scroll height="calc(100vh - 178px)">
             <Wrapper hideGame={hideGame}>
-                {(betTypeFilter === undefined || betTypeFilter === BetType.WINNER) && (
+                {(!betTypeFilter.length || betTypeFilter.includes(BetType.WINNER)) && (
                     <PositionsV2
                         markets={[market]}
                         betType={BetType.WINNER}

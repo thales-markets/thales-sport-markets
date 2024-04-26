@@ -290,13 +290,13 @@ const Home: React.FC = () => {
                 betTypes.add(childMarket.typeId);
             });
 
-            if (betTypeFilter) {
+            if (betTypeFilter.length) {
                 const marketBetTypes = [
                     market.typeId,
                     ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
                 ];
 
-                if (!marketBetTypes.some((betType) => betTypeFilter === betType)) {
+                if (!marketBetTypes.some((betType) => betTypeFilter.includes(betType))) {
                     return false;
                 }
                 if (sportFilter == SportFilterEnum.Live) {

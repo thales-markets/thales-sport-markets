@@ -150,6 +150,11 @@ export enum BetType {
     NINTH_PERIOD_TOTAL2_ODD_EVEN = 10099,
 }
 
+export enum BetTypeGroup {
+    TOTALS = 'Totals',
+    HANDICAP = 'Handicap',
+}
+
 export enum ParlayErrorCode {
     NO_ERROS = 0,
     MAX_MATCHES = 1,

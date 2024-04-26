@@ -90,9 +90,21 @@ export type CombinedPosition = { typeId: number; position: number; line: number 
 
 export type CombinedPositions = CombinedPosition[];
 
+export type MarketSport =
+    | 'Soccer'
+    | 'Basketball'
+    | 'MMA'
+    | 'Tennis'
+    | 'Football'
+    | 'Baseball'
+    | 'Hockey'
+    | 'Esports'
+    | 'Cricket'
+    | 'Golf';
+
 export type SportMarketInfoV2 = {
     gameId: string;
-    sport: string;
+    sport: MarketSport;
     leagueId: number;
     leagueName: string;
     subLeagueId: number;
