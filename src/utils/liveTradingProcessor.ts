@@ -9,7 +9,7 @@ export const getLiveTradingProcessorTransaction: any = async (
     liveTradingProcessorContract: ethers.Contract,
     tradeData: TradeData[],
     sUSDPaid: BigNumber,
-    expectedPayout: BigNumber,
+    expectedQuote: BigNumber,
     referral?: string | null,
     additionalSlippage?: BigNumber,
     isAA?: boolean
@@ -23,7 +23,7 @@ export const getLiveTradingProcessorTransaction: any = async (
                 tradeData[0].typeId,
                 tradeData[0].position,
                 sUSDPaid,
-                expectedPayout,
+                expectedQuote,
                 additionalSlippage,
                 '', // check different recipient for buying with voucher
                 referralAddress,
@@ -36,7 +36,7 @@ export const getLiveTradingProcessorTransaction: any = async (
                 tradeData[0].typeId,
                 tradeData[0].position,
                 sUSDPaid,
-                expectedPayout,
+                expectedQuote,
                 additionalSlippage,
                 '', // check different recipient for buying with voucher
                 referralAddress,
@@ -52,7 +52,7 @@ export const getLiveTradingProcessorTransaction: any = async (
             tradeData[0].typeId,
             tradeData[0].position,
             sUSDPaid,
-            expectedPayout,
+            expectedQuote,
             additionalSlippage,
             ZERO_ADDRESS, // check different recipient for buying with voucher
             referralAddress,
@@ -65,7 +65,7 @@ export const getLiveTradingProcessorTransaction: any = async (
             tradeData[0].typeId,
             tradeData[0].position,
             sUSDPaid,
-            expectedPayout,
+            expectedQuote,
             additionalSlippage,
             ZERO_ADDRESS, // check different recipient for buying with voucher
             referralAddress,
