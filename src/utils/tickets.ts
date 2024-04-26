@@ -15,7 +15,6 @@ import {
 
 export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticket => {
     const collateral = getCollateralByAddress(ticket.collateral, networkId);
-    console.log('collateral', collateral);
     const mappedTicket: Ticket = {
         id: ticket.id,
         txHash: '',
