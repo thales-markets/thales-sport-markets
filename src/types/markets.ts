@@ -1,6 +1,7 @@
 import { Position } from 'enums/markets';
 import { ethers } from 'ethers';
 import { Network } from '../enums/network';
+import { Coins } from './tokens';
 
 export type TagInfo = {
     id: number;
@@ -177,6 +178,7 @@ export type Ticket = {
     timestamp: number;
     txHash: string;
     sportMarkets: TicketMarket[];
+    collateral: Coins;
     account: string;
     buyInAmount: number;
     fees: number;
@@ -192,6 +194,7 @@ export type Ticket = {
     isExercisable: boolean;
     isClaimable: boolean;
     isOpen: boolean;
+    finalPayout: number;
 };
 
 export type UserStats = {

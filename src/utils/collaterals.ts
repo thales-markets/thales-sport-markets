@@ -15,6 +15,19 @@ export const getCollateralIndex = (networkId: SupportedNetwork, currencyKey: Coi
 export const getCollateralAddress = (networkId: SupportedNetwork, index: number) =>
     multipleCollateral[getCollateral(networkId, index)]?.addresses[networkId];
 
+export const getCollateralByAddress = (collateralAddress: string, networkId: SupportedNetwork) => {
+    let collateral = getDefaultCollateral(networkId);
+    Object.keys(multipleCollateral).forEach((collateralKey: string) => {
+        Object.values(multipleCollateral[collateralKey as Coins].addresses).forEach((address: string) => {
+            if (collateralAddress.toLowerCase() === address.toLowerCase()) {
+                collateral = collateralKey as Coins;
+            }
+        });
+    });
+
+    return collateral;
+};
+
 export const isStableCurrency = (currencyKey: Coins) => {
     return STABLE_COINS.includes(currencyKey);
 };

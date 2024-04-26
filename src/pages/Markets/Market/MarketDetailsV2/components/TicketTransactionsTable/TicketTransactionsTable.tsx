@@ -1,6 +1,5 @@
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
-import { USD_SIGN } from 'constants/currency';
 import { BetTypeNameMap } from 'constants/tags';
 import { BetType, OddsType } from 'enums/markets';
 import i18n from 'i18n';
@@ -11,16 +10,9 @@ import { useSelector } from 'react-redux';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import {
-    formatCurrencyWithKey,
-    formatCurrencyWithSign,
-    formatTxTimestamp,
-    getEtherscanAddressLink,
-    truncateAddress,
-} from 'thales-utils';
+import { formatCurrencyWithKey, formatTxTimestamp, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { SportMarketInfoV2, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { getDefaultCollateral } from 'utils/collaterals';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTitleText } from 'utils/marketsV2';
@@ -139,7 +131,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         Cell: (cellProps: any) => {
                             return (
                                 <TableText>
-                                    {formatCurrencyWithKey(getDefaultCollateral(networkId), cellProps.cell.value, 2)}
+                                    {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
                                 </TableText>
                             );
                         },
@@ -149,7 +141,11 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         accessor: 'payout',
                         sortable: true,
                         Cell: (cellProps: any) => {
-                            return <TableText>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.value, 2)}</TableText>;
+                            return (
+                                <TableText>
+                                    {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
+                                </TableText>
+                            );
                         },
                     },
                     {
@@ -201,7 +197,9 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                 </QuoteWrapper>
                                 <QuoteWrapper>
                                     <QuoteLabel>{t('profile.table.total-amount')}:</QuoteLabel>
-                                    <QuoteText>{formatCurrencyWithKey(USD_SIGN, row.original.payout, 2)}</QuoteText>
+                                    <QuoteText>
+                                        {formatCurrencyWithKey(row.original.collateral, row.original.payout)}
+                                    </QuoteText>
                                 </QuoteWrapper>
                                 <TwitterWrapper>
                                     <TwitterIcon fontSize={'15px'} onClick={() => onTwitterIconClick(row.original)} />

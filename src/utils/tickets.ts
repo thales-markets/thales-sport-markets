@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
 import { TicketMarketStatus } from '../enums/tickets';
+import { getCollateralByAddress } from './collaterals';
 import {
     formatMarketOdds,
     getIsOneSideMarket,
@@ -13,15 +14,18 @@ import {
 } from './markets';
 
 export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticket => {
+    const collateral = getCollateralByAddress(ticket.collateral, networkId);
+    console.log('collateral', collateral);
     const mappedTicket: Ticket = {
         id: ticket.id,
         txHash: '',
         timestamp: Number(ticket.createdAt) * 1000,
+        collateral,
         account: ticket.ticketOwner,
-        buyInAmount: coinFormatter(ticket.buyInAmount, networkId),
+        buyInAmount: coinFormatter(ticket.buyInAmount, networkId, collateral),
         fees: coinFormatter(ticket.fees, networkId),
         totalQuote: bigNumberFormatter(ticket.totalQuote),
-        payout: coinFormatter(ticket.buyInAmount, networkId) / bigNumberFormatter(ticket.totalQuote),
+        payout: coinFormatter(ticket.buyInAmount, networkId, collateral) / bigNumberFormatter(ticket.totalQuote),
         numOfMarkets: Number(ticket.numOfMarkets),
         expiry: Number(ticket.expiry) * 1000,
         isResolved: ticket.resolved,
@@ -34,6 +38,7 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
         isExercisable: ticket.isExercisable,
         isClaimable: ticket.isUserTheWinner && !ticket.resolved,
         isOpen: !ticket.resolved && !ticket.isExercisable,
+        finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
 
         sportMarkets: ticket.marketsData.map((market: any, index: number) => {
             const leagueId = Number(market.sportId);

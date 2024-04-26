@@ -3,7 +3,6 @@ import Button from 'components/Button/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { USD_SIGN } from 'constants/currency';
 import { APPROVAL_BUFFER } from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
@@ -22,7 +21,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { coinParser, formatCurrencyWithSign, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import { coinParser, formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction } from 'utils/biconomy';
@@ -318,12 +317,12 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                 </InfoContainer>
                 <InfoContainerColumn>
                     <Label>{t('profile.card.ticket-paid')}:</Label>
-                    <Value>{formatCurrencyWithSign(USD_SIGN, ticket.buyInAmount)}</Value>
+                    <Value>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Value>
                 </InfoContainerColumn>
                 {isMobile && !isClaimable && (
                     <InfoContainerColumn>
                         <WinLabel>{t('profile.card.to-win')}:</WinLabel>
-                        <WinValue>{formatCurrencyWithSign(USD_SIGN, ticket.payout)}</WinValue>
+                        <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                     </InfoContainerColumn>
                 )}
                 {!isMobile && (
@@ -335,9 +334,9 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                                 <WinLabel>{t('profile.card.to-win')}:</WinLabel>
                             )}
                             {isClaimable ? (
-                                <ClaimValue>{formatCurrencyWithSign(USD_SIGN, ticket.payout)}</ClaimValue>
+                                <ClaimValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</ClaimValue>
                             ) : (
-                                <WinValue>{formatCurrencyWithSign(USD_SIGN, ticket.payout)}</WinValue>
+                                <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                             )}
                         </InfoContainerColumn>
                         {isClaimable && isMultiCollateralSupported && (
@@ -359,7 +358,7 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                 )}
                 {isMobile && isClaimable && (
                     <ClaimContainer>
-                        <ClaimValue>{formatCurrencyWithSign(USD_SIGN, ticket.payout)}</ClaimValue>
+                        <ClaimValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</ClaimValue>
                         {getButton(isMobile)}
                         {isMultiCollateralSupported && (
                             <CollateralSelectorContainer>
@@ -401,9 +400,9 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                             <WinLabel>{t('profile.card.to-win')}:</WinLabel>
                         )}
                         {isClaimable ? (
-                            <ClaimValue>{formatCurrencyWithSign(USD_SIGN, ticket.payout)}</ClaimValue>
+                            <ClaimValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</ClaimValue>
                         ) : (
-                            <WinValue>{formatCurrencyWithSign(USD_SIGN, ticket.payout)}</WinValue>
+                            <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                         )}
                     </ProfitContainer>
                 </CollapseFooterContainer>
