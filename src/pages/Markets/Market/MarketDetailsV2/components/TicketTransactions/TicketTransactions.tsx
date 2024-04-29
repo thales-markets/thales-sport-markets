@@ -28,7 +28,7 @@ const ParlayTransactions: React.FC<{ market: SportMarketInfoV2 }> = ({ market })
             <TicketTransactionsTable
                 ticketTransactions={gameTickets}
                 market={market}
-                tableHeight="calc(100% - 68px)"
+                tableHeight="calc(100% - 59px)"
                 isLoading={gameTicketsQuery.isLoading}
             />
         </Container>

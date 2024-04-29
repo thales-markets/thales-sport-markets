@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { SportMarketInfoV2 } from 'types/markets';
 import SimpleLoader from '../../../../components/SimpleLoader';
 import { FlexDivCentered, FlexDivColumn } from '../../../../styles/common';
-import { getMarketNameV2 } from '../../../../utils/marketsV2';
+import { getTeamNameV2 } from '../../../../utils/marketsV2';
 import SelectedMarketDetails from '../SelectedMarketDetails';
 
 const SelectedMarket: React.FC = () => {
@@ -22,8 +22,8 @@ const SelectedMarket: React.FC = () => {
         enabled: isAppReady && !!selectedMarket,
     });
 
-    const marketNameHome = lastValidMarket ? getMarketNameV2(lastValidMarket, 0) : '';
-    const marketNameAway = lastValidMarket ? getMarketNameV2(lastValidMarket, 1) : '';
+    const marketNameHome = lastValidMarket ? getTeamNameV2(lastValidMarket, 0) : '';
+    const marketNameAway = lastValidMarket ? getTeamNameV2(lastValidMarket, 1) : '';
 
     const matchLabel = `${marketNameHome}${
         lastValidMarket && !lastValidMarket.isOneSideMarket ? ` - ${marketNameAway}` : ''

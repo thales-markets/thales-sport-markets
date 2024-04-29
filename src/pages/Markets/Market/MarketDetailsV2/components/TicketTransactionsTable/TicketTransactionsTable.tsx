@@ -2,7 +2,6 @@ import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { OddsType } from 'enums/markets';
 import i18n from 'i18n';
-import { TwitterIcon } from 'pages/Markets/Home/Parlay/components/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -12,9 +11,8 @@ import { useTheme } from 'styled-components';
 import { formatCurrencyWithKey, formatTxTimestamp, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { SportMarketInfoV2, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { formatMarketOdds } from 'utils/markets';
-import { getPositionTextV2, getTitleText } from 'utils/marketsV2';
+import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
 import ShareTicketModalV2 from '../../../../Home/Parlay/components/ShareTicketModalV2';
@@ -25,6 +23,7 @@ import {
     FirstExpandedSection,
     LastExpandedSection,
     MarketStatus,
+    MarketStatusIcon,
     MarketTypeInfo,
     MatchLabel,
     Odd,
@@ -33,14 +32,13 @@ import {
     QuoteLabel,
     QuoteText,
     QuoteWrapper,
-    StatusIcon,
     StatusWrapper,
-    TableHeaderStyle,
-    TableRowStyle,
     TableText,
     TicketRow,
-    TicketRowText,
+    TwitterIcon,
     TwitterWrapper,
+    tableHeaderStyle,
+    tableRowStyle,
 } from './styled-components';
 
 type TicketTransactionsTableProps = {
@@ -91,10 +89,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             <Table
                 tableHeight={tableHeight}
                 tableHeadCellStyles={{
-                    ...TableHeaderStyle,
+                    ...tableHeaderStyle,
                     color: theme.textColor.secondary,
                 }}
-                tableRowCellStyles={TableRowStyle}
+                tableRowCellStyles={tableRowStyle}
                 columnsDeps={[networkId]}
                 columns={[
                     {
@@ -199,14 +197,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                         )}
                                     </QuoteText>
                                 </QuoteWrapper>
-                                <QuoteWrapper>
+                                <QuoteWrapper isPayout={true}>
                                     <QuoteLabel>{t('profile.table.total-amount')}:</QuoteLabel>
                                     <QuoteText>
                                         {formatCurrencyWithKey(row.original.collateral, row.original.payout)}
                                     </QuoteText>
                                 </QuoteWrapper>
                                 <TwitterWrapper>
-                                    <TwitterIcon fontSize={'15px'} onClick={() => onTwitterIconClick(row.original)} />
+                                    <TwitterIcon onClick={() => onTwitterIconClick(row.original)} />
                                 </TwitterWrapper>
                             </LastExpandedSection>
                         </ExpandedRowWrapper>
@@ -230,11 +228,11 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 
 const getTicketMarketStatusIcon = (market: TicketMarket, theme: ThemeInterface) => {
     return market.isOpen || market.isCanceled ? (
-        <StatusIcon color={theme.status.open} className={`icon icon--open`} />
+        <MarketStatusIcon color={theme.status.open} className={`icon icon--open`} />
     ) : market.isWinning ? (
-        <StatusIcon color={theme.status.win} className={`icon icon--win`} />
+        <MarketStatusIcon color={theme.status.win} className={`icon icon--win`} />
     ) : (
-        <StatusIcon color={theme.status.loss} className={`icon icon--lost`} />
+        <MarketStatusIcon color={theme.status.loss} className={`icon icon--lost`} />
     );
 };
 
@@ -248,8 +246,6 @@ export const getTicketMarkets = (
     market?: SportMarketInfoV2
 ) => {
     return ticket.sportMarkets.map((ticketMarket, index) => {
-        const quote = getTicketMarketOdd(ticketMarket);
-
         return (
             <TicketRow
                 highlighted={market && ticketMarket.gameId === market.gameId}
@@ -257,24 +253,17 @@ export const getTicketMarkets = (
                 key={`m-${index}`}
             >
                 <SPAAnchor href={buildMarketLink(ticketMarket.gameId, language)}>
-                    <TicketRowText style={{ cursor: 'pointer' }}>
-                        {getTicketMarketStatusIcon(ticketMarket, theme)}
-                        <MatchLabel>
-                            {ticketMarket.isOneSideMarket
-                                ? fixOneSideMarketCompetitorName(ticketMarket.homeTeam)
-                                : !ticketMarket.isPlayerPropsMarket
-                                ? ticketMarket.homeTeam + ' - ' + ticketMarket.awayTeam
-                                : ticketMarket.playerProps.playerName}
-                        </MatchLabel>
-                    </TicketRowText>
+                    <MatchLabel>{getMatchLabel(ticketMarket)}</MatchLabel>
                 </SPAAnchor>
-
                 <MarketTypeInfo>{getTitleText(ticketMarket)}</MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{getPositionTextV2(ticketMarket, ticketMarket.position, true)}</PositionText>
-                    <Odd>{formatMarketOdds(selectedOddsType, quote)}</Odd>
+                    <Odd>{formatMarketOdds(selectedOddsType, getTicketMarketOdd(ticketMarket))}</Odd>
                 </PositionInfo>
-                <MarketStatus>{getTicketMarketStatus(ticketMarket)}</MarketStatus>
+                <MarketStatus>
+                    {getTicketMarketStatusIcon(ticketMarket, theme)}
+                    {getTicketMarketStatus(ticketMarket)}
+                </MarketStatus>
             </TicketRow>
         );
     });

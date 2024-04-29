@@ -33,8 +33,8 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
             userTickets = userTickets.filter((item) => {
                 const marketWithSearchTextIncluded = item.sportMarkets.find(
                     (item) =>
-                        item.homeTeam?.toLowerCase().includes(searchText.toLowerCase()) ||
-                        item.awayTeam?.toLowerCase().includes(searchText.toLowerCase())
+                        item.homeTeam.toLowerCase().includes(searchText.toLowerCase()) ||
+                        item.awayTeam.toLowerCase().includes(searchText.toLowerCase())
                 );
 
                 if (marketWithSearchTextIncluded) return item;

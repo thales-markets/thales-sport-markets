@@ -152,7 +152,7 @@ const Parlay: React.FC = () => {
                                     const outOfLiquidity = outOfLiquidityMarkets.includes(index);
                                     return (
                                         <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                            <MatchInfoV2 market={market} isHighlighted={true} />
+                                            <MatchInfoV2 market={market} />
                                         </RowMarket>
                                     );
                                 })}

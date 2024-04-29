@@ -347,12 +347,16 @@ export const getOddTooltipTextV2 = (position: Position, market: SportMarketInfoV
         ? getCombinedPositionsOddTooltipText(position, market)
         : getTooltipText(market.typeId, position, market.line, market);
 
-export const getMarketNameV2 = (market: SportMarketInfoV2, position?: Position) => {
+export const getTeamNameV2 = (market: SportMarketInfoV2, position?: Position) => {
     if (market.isOneSideMarket) return fixOneSideMarketCompetitorName(market.homeTeam);
     if (market.isPlayerPropsMarket) return market.playerProps.playerName;
     return position === Position.HOME ? market.homeTeam : market.awayTeam;
 };
 
+export const getMatchLabel = (market: SportMarketInfoV2) =>
+    `${getTeamNameV2(market, 0)}${
+        !market.isOneSideMarket && !market.isPlayerPropsMarket ? ` - ${getTeamNameV2(market, 1)}` : ''
+    }`;
 export const getPositionOddsV2 = (market: TicketMarket) => market.odd;
 
 export const areSameCombinedPositions = (market: SportMarketInfoV2, ticketPosition: TicketPosition) => {

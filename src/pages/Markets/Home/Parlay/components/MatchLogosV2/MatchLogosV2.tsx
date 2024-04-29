@@ -1,4 +1,3 @@
-import { Position } from 'enums/markets';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
@@ -7,10 +6,9 @@ import { TicketMarket } from '../../../../../../types/markets';
 type MatchLogosProps = {
     market: TicketMarket;
     width?: string;
-    isHighlighted?: boolean;
 };
 
-const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, isHighlighted }) => {
+const MatchLogos: React.FC<MatchLogosProps> = ({ market, width }) => {
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         market.isPlayerPropsMarket
             ? getTeamImageSource(market.playerProps.playerName, market.leagueId)
@@ -33,14 +31,12 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, isHighlighted })
                 <ClubLogo
                     alt={market.playerProps.playerName}
                     src={homeLogoSrc}
-                    isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
                     onError={getOnPlayerImageError(setHomeLogoSrc)}
                 />
             ) : (
                 <ClubLogo
                     alt={market.homeTeam}
                     src={homeLogoSrc}
-                    isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.AWAY}
                     onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
                 />
             )}
@@ -49,7 +45,6 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, isHighlighted })
                     awayTeam={true}
                     alt={market.awayTeam}
                     src={awayLogoSrc}
-                    isHighlighted={isHighlighted ? isHighlighted : market.position !== Position.HOME}
                     onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
                 />
             )}
@@ -61,17 +56,16 @@ const Container = styled.div<{ width?: string }>`
     display: flex;
     position: relative;
     align-items: center;
-    width: ${(props) => (props.width ? props.width : '100%')};
+    width: ${(props) => props.width || '100%'};
     height: 100%;
 `;
 
-const ClubLogo = styled.img<{ awayTeam?: boolean; isHighlighted?: boolean }>`
+const ClubLogo = styled.img<{ awayTeam?: boolean }>`
     position: absolute;
     height: 30px;
     width: 30px;
     ${(props) => (props.awayTeam ? `margin-left: 16px;` : '')}
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
-    opacity: ${(props) => (props.isHighlighted ? '1' : '0.4')};
 `;
 
 export default MatchLogos;

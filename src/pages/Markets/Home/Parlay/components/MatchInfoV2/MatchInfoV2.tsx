@@ -6,32 +6,28 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { TicketMarket } from 'types/markets';
 import { formatMarketOdds } from 'utils/markets';
-import { getMarketNameV2, getPositionTextV2, getTitleText } from 'utils/marketsV2';
+import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import MatchLogosV2 from '../MatchLogosV2';
 
 type MatchInfoProps = {
     market: TicketMarket;
     readOnly?: boolean;
-    isHighlighted?: boolean;
     customStyle?: { fontSize?: string; lineHeight?: string };
 };
 
-const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, isHighlighted, customStyle }) => {
+const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) => {
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
-    const marketNameHome = getMarketNameV2(market, 0);
-    const marketNameAway = getMarketNameV2(market, 1);
+    const matchLabel = getMatchLabel(market);
 
     const positionText = getPositionTextV2(market, market.position, true);
 
     return (
         <>
-            <MatchLogosV2 market={market} width={'55px'} isHighlighted={isHighlighted} />
+            <MatchLogosV2 market={market} width={'55px'} />
             <MarketPositionContainer>
                 <MatchLabel fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                    {`${marketNameHome}${
-                        !market.isOneSideMarket && !market.isPlayerPropsMarket ? ` - ${marketNameAway}` : ''
-                    }`}
+                    {matchLabel}
                     <CloseIcon
                         className="icon icon--close"
                         onClick={() => {
