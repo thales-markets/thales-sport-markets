@@ -15,7 +15,6 @@ import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
 import { coinParser } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
@@ -31,6 +30,7 @@ import {
     CategoryContainer,
     CategoryDisclaimer,
     CategoryIcon,
+    CategoryInfo,
     CategoryLabel,
     ClaimAllContainer,
     Container,
@@ -240,14 +240,14 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     return (
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
-                <FlexDivCentered>
+                <CategoryInfo>
                     <CategoryIcon className="icon icon--claimable-flag" />
                     <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
-                    <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
-                </FlexDivCentered>
+                </CategoryInfo>
                 <CategoryDisclaimer>
                     <Trans i18nKey="profile.winnings-are-forfeit" values={{ amount: marketDuration }} />
                 </CategoryDisclaimer>
+                <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
             </CategoryContainer>
             {openClaimable && (
                 <ListContainer>
@@ -302,11 +302,11 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                 </ListContainer>
             )}
             <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
-                <FlexDivCentered>
+                <CategoryInfo>
                     <CategoryIcon className="icon icon--logo" />
                     <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
-                    <Arrow className={openOpenPositions ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
-                </FlexDivCentered>
+                </CategoryInfo>
+                <Arrow className={openOpenPositions ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
             </CategoryContainer>
             {openOpenPositions && (
                 <ListContainer>

@@ -78,8 +78,8 @@ export const WinLabel = styled(Label)`
 export const WinValue = styled(WinLabel)``;
 
 export const ArrowIcon = styled.i`
-    font-size: 12px;
-    color: ${(props) => props.theme.textColor.primary};
+    font-size: 14px;
+    color: ${(props) => props.theme.textColor.secondary};
     margin-right: 10px;
     @media (max-width: 768px) {
         margin-right: 5px;

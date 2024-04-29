@@ -1,5 +1,12 @@
 import styled, { CSSProperties } from 'styled-components';
-import { FlexDiv, FlexDivColumn, FlexDivColumnNative, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import {
+    FlexDivColumn,
+    FlexDivColumnNative,
+    FlexDivRow,
+    FlexDivRowCentered,
+    FlexDivSpaceBetween,
+    FlexDivStart,
+} from 'styles/common';
 
 export const Container = styled(FlexDivColumn)`
     width: 100%;
@@ -9,56 +16,57 @@ export const Container = styled(FlexDivColumn)`
     }
 `;
 
-// --> Category Elements
-export const CategoryContainer = styled(FlexDiv)`
+export const CategoryContainer = styled(FlexDivSpaceBetween)`
     width: 100%;
-    flex-direction: column;
-    align-items: start;
     margin: 20px 0px;
     position: relative;
+    color: ${(props) => props.theme.textColor.primary};
+    align-items: center;
+    cursor: pointer;
+`;
+
+export const CategoryInfo = styled(FlexDivStart)`
+    align-items: center;
 `;
 
 export const CategoryLabel = styled.span`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 14px;
     line-height: 110%;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     text-transform: uppercase;
-    cursor: pointer;
     @media (max-width: 768px) {
         font-size: 10px;
     }
 `;
 
 export const CategoryIcon = styled.i`
-    font-size: 24px;
+    font-size: 20px;
+    margin-right: 15px;
     color: ${(props) => props.theme.textColor.secondary};
-    margin-right: 20px;
     @media (max-width: 768px) {
         font-size: 15px;
     }
 `;
 
 export const Arrow = styled.i`
-    font-size: 18px;
-    color: ${(props) => props.theme.textColor.primary};
-    margin-left: 15px;
+    font-size: 14px;
+    margin-right: 25px;
+    color: ${(props) => props.theme.textColor.secondary};
     @media (max-width: 768px) {
         font-size: 10px;
     }
 `;
 
 export const CategoryDisclaimer = styled.div`
-    padding-top: 5px;
-    margin-left: 45px;
-    font-size: 13px;
+    font-weight: 600;
+    font-size: 12px;
+    color: ${(props) => props.theme.status.loss};
     @media (max-width: 768px) {
         font-size: 11px;
         margin-left: 15px;
     }
 `;
-
-//  ------------------------------------------------
 
 export const EmptyContainer = styled(FlexDivRowCentered)`
     width: 100%;
@@ -71,7 +79,6 @@ export const EmptyContainer = styled(FlexDivRowCentered)`
 `;
 
 export const EmptyTitle = styled.span`
-    font-family: 'Nunito';
     font-weight: bold;
     color: ${(props) => props.theme.textColor.quaternary};
     text-transform: uppercase;
@@ -79,7 +86,6 @@ export const EmptyTitle = styled.span`
     letter-spacing: 0.025em;
 `;
 export const EmptySubtitle = styled.span`
-    font-family: 'Nunito';
     color: ${(props) => props.theme.textColor.quaternary};
     font-size: 12px;
     width: 180px;
