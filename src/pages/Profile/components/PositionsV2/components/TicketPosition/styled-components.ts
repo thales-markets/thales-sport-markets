@@ -4,9 +4,8 @@ import { Label } from '../../styled-components';
 
 export const Container = styled(FlexDivColumnNative)`
     align-items: center;
-    background-color: ${(props) => props.theme.background.secondary};
-    border-radius: 4px;
-    padding: 12px 10px;
+    background-color: ${(props) => props.theme.background.quinary};
+    border-radius: 7px;
     width: 100%;
     margin-bottom: 5px;
     @media (max-width: 768px) {
@@ -16,7 +15,11 @@ export const Container = styled(FlexDivColumnNative)`
 
 export const OverviewContainer = styled(FlexDivRow)`
     justify-content: space-between;
+    background-color: ${(props) => props.theme.background.secondary};
+    border-radius: 7px;
+    padding: 10px 10px;
     width: 100%;
+    max-height: 40px;
     align-items: center;
     cursor: pointer;
     position: relative;
@@ -26,7 +29,9 @@ export const OverviewContainer = styled(FlexDivRow)`
 `;
 
 export const InfoContainer = styled(FlexDivRow)`
-    min-width: 160px;
+    border-radius: 7px;
+    padding: 10px 10px;
+    min-width: 120px;
     justify-content: flex-start;
     @media (max-width: 768px) {
         min-width: auto;
@@ -35,9 +40,9 @@ export const InfoContainer = styled(FlexDivRow)`
 `;
 
 export const TicketIdContainer = styled(FlexDivRow)`
-    min-width: 162px;
+    min-width: 150px;
     justify-content: flex-start;
-    margin-right: 20px;
+    margin-right: 10px;
     @media (max-width: 768px) {
         min-width: auto;
         flex-direction: column;
@@ -45,7 +50,7 @@ export const TicketIdContainer = styled(FlexDivRow)`
 `;
 
 export const InfoContainerColumn = styled(FlexDivColumnNative)`
-    min-width: 100px;
+    min-width: 120px;
     margin-left: 10px;
     justify-content: flex-start;
     @media (max-width: 768px) {
@@ -69,14 +74,11 @@ export const Value = styled(TicketId)`
 `;
 
 export const WinLabel = styled(Label)`
-    font-weight: 900;
+    font-weight: 600;
     color: ${(props) => props.theme.status.win};
-    text-transform: uppercase;
 `;
 
-export const WinValue = styled(WinLabel)`
-    text-transform: none;
-`;
+export const WinValue = styled(WinLabel)``;
 
 export const ArrowIcon = styled.i`
     font-size: 12px;

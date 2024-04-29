@@ -51,7 +51,6 @@ import {
     CollapsableContainer,
     CollapseFooterContainer,
     Container,
-    Divider,
     InfoContainer,
     InfoContainerColumn,
     OverviewContainer,
@@ -382,7 +381,6 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                 )}
             </OverviewContainer>
             <CollapsableContainer show={showDetails}>
-                <Divider />
                 <ParlayDetailContainer>
                     {ticket.sportMarkets.map((market, index) => {
                         return <TicketItem market={market} key={index} />;

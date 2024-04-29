@@ -254,11 +254,14 @@ const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean }>`
     font-size: 14px;
     line-height: 100%;
     letter-spacing: 0.25px;
-    border-bottom: 2px dotted ${(props) => props.theme.borderColor.primary};
+    border-bottom: 2px dashed #3c498a;
 `;
 
 const TableRowHead = styled(TableRow)`
-    min-height: 40px;
+    min-height: 31px;
+    border-radius: 5px;
+    background-color: ${(props) => props.theme.background.secondary};
+    border-bottom: none;
 `;
 
 const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string; minWidth?: number }>`

@@ -10,7 +10,7 @@ export const StatusIcon = styled.i`
 `;
 
 export const TableText = styled.span`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 12px;
     text-align: left;
     @media (max-width: 600px) {
@@ -75,7 +75,6 @@ export const ExpandedRowWrapper = styled.div`
 `;
 
 export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
-    margin-top: 10px;
     background: ${(props) => (props.highlighted ? props.theme.background.secondary : 'initial')};
     border-radius: 10px;
     & > div {
@@ -87,8 +86,8 @@ export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
 `;
 
 export const TicketRowText = styled.div`
-    max-width: 300px;
-    width: 300px;
+    max-width: 250px;
+    width: 250px;
     display: flex;
     align-items: center;
     height: 30px;
@@ -131,7 +130,7 @@ export const ExternalLink = styled.a`
 
 export const TableHeaderStyle: React.CSSProperties = {
     fontWeight: 600,
-    fontSize: '10px',
+    fontSize: '11px',
     lineHeight: '12px',
     textAlign: 'center',
     textTransform: 'uppercase',
@@ -145,7 +144,7 @@ export const TableRowStyle: React.CSSProperties = {
 
 export const MatchLabel = styled(FlexDivRow)`
     font-weight: 600;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.primary};
     text-align: start;
@@ -154,7 +153,7 @@ export const MatchLabel = styled(FlexDivRow)`
 
 export const MarketTypeInfo = styled(FlexDivRow)`
     font-weight: 600;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.quinary};
     margin-right: 5px;
@@ -162,7 +161,7 @@ export const MarketTypeInfo = styled(FlexDivRow)`
 
 export const PositionInfo = styled(FlexDivRow)`
     font-weight: 600;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.quaternary};
     align-items: center;
@@ -180,7 +179,7 @@ export const Odd = styled.span`
 
 export const MarketStatus = styled(FlexDivRow)`
     font-weight: 600;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.primary};
     justify-content: end;

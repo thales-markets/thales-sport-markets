@@ -207,10 +207,9 @@ export const ExternalLinkArrow = styled.i.attrs({ className: 'icon icon--arrow-e
 export const ExternalLink = styled.a``;
 
 export const Label = styled.span<{ canceled?: boolean }>`
-    font-weight: 400;
+    font-weight: 600;
     font-size: 12px;
     color: ${(props) => (props?.canceled ? props.theme.status.canceled : props.theme.textColor.primary)};
-    text-transform: uppercase;
     margin-right: 3px;
     @media (max-width: 768px) {
         font-size: 10px;
@@ -272,7 +271,7 @@ export const PositionInfo = styled(FlexDivRow)`
     line-height: 12px;
     color: ${(props) => props.theme.textColor.quaternary};
     align-items: center;
-    margin-right: 5px;
+    margin-right: 20px;
 `;
 
 export const PositionText = styled.span`

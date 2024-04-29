@@ -203,7 +203,7 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
             ) : (
                 <></>
             )}
-            <ParlayStatus>{parlayStatus}</ParlayStatus>
+            {!isPendingResolution && <ParlayStatus>{parlayStatus}</ParlayStatus>}
         </Wrapper>
     );
 };
