@@ -299,7 +299,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         (collateralHasLp
                             ? minimumNeededForMinUsdAmountValue
                             : coinFormatter(minimumNeededForMinUsdAmountValue, networkId, selectedCollateral)) *
-                            MIN_COLLATERAL_MULTIPLIER
+                            (isDefaultCollateral ? 1 : MIN_COLLATERAL_MULTIPLIER)
                     );
 
                     const [parlayAmmQuote] = await Promise.all([

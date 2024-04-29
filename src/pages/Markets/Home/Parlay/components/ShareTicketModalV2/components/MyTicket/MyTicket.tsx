@@ -95,12 +95,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, paid, payout,
                     return (
                         <React.Fragment key={index}>
                             <RowMarket>
-                                <MatchInfoV2
-                                    market={market}
-                                    readOnly={true}
-                                    isHighlighted={true}
-                                    customStyle={matchInfoStyle}
-                                />
+                                <MatchInfoV2 market={market} readOnly={true} customStyle={matchInfoStyle} />
                             </RowMarket>
                             {markets.length !== index + 1 && <HorizontalDashedLine />}
                         </React.Fragment>
