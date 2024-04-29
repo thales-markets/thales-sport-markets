@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
-import { Label } from '../../styled-components';
+import { FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivColumnNative)`
+    font-weight: 600;
+    font-size: 12px;
     align-items: center;
     background-color: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
@@ -17,7 +18,7 @@ export const OverviewContainer = styled(FlexDivRow)`
     justify-content: space-between;
     background-color: ${(props) => props.theme.background.secondary};
     border-radius: 7px;
-    padding: 10px 10px;
+    padding: 10px 15px;
     width: 100%;
     max-height: 40px;
     align-items: center;
@@ -28,20 +29,20 @@ export const OverviewContainer = styled(FlexDivRow)`
     }
 `;
 
-export const InfoContainer = styled(FlexDivRow)`
-    border-radius: 7px;
-    padding: 10px 10px;
-    min-width: 120px;
-    justify-content: flex-start;
+export const TicketIdContainer = styled(FlexDivStart)`
+    min-width: 150px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-left: 10px;
+    margin-right: 10px;
     @media (max-width: 768px) {
         min-width: auto;
         flex-direction: column;
     }
 `;
 
-export const TicketIdContainer = styled(FlexDivRow)`
-    min-width: 150px;
-    justify-content: flex-start;
+export const NumberOfGamesContainer = styled(FlexDivStart)`
+    min-width: 120px;
+    color: ${(props) => props.theme.textColor.secondary};
     margin-right: 10px;
     @media (max-width: 768px) {
         min-width: auto;
@@ -51,8 +52,8 @@ export const TicketIdContainer = styled(FlexDivRow)`
 
 export const InfoContainerColumn = styled(FlexDivColumnNative)`
     min-width: 120px;
-    margin-left: 10px;
     justify-content: flex-start;
+    margin-right: 10px;
     @media (max-width: 768px) {
         min-width: auto;
         flex-direction: column;
@@ -60,21 +61,17 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)`
     }
 `;
 
-export const TicketId = styled(Label)`
-    text-transform: none;
+export const Label = styled.span`
+    margin-right: 3px;
     @media (max-width: 768px) {
         font-size: 10px;
+        margin-bottom: 2px;
     }
 `;
 
-export const Value = styled(TicketId)`
-    @media (max-width: 768px) {
-        font-size: 10px;
-    }
-`;
+export const Value = styled(Label)``;
 
 export const WinLabel = styled(Label)`
-    font-weight: 600;
     color: ${(props) => props.theme.status.win};
 `;
 
@@ -84,7 +81,6 @@ export const ArrowIcon = styled.i`
     font-size: 12px;
     color: ${(props) => props.theme.textColor.primary};
     margin-right: 10px;
-    margin-left: 10px;
     @media (max-width: 768px) {
         margin-right: 5px;
         margin-left: 5px;
@@ -99,18 +95,9 @@ export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean
     align-items: center;
 `;
 
-export const Divider = styled.div`
-    height: 1px;
-    border: none;
-    background-color: ${(props) => props.theme.background.tertiary};
-    color: ${(props) => props.theme.textColor.secondary};
+export const TicketMarketsContainer = styled(FlexDivColumnNative)`
     width: 100%;
-    margin-top: 8px;
-    margin-bottom: 10px;
-`;
-
-export const ParlayDetailContainer = styled(FlexDivColumnNative)`
-    width: 100%;
+    padding: 0 15px;
 `;
 
 export const CollapseFooterContainer = styled(FlexDivRow)`
@@ -118,8 +105,8 @@ export const CollapseFooterContainer = styled(FlexDivRow)`
     justify-content: space-around;
     width: 100%;
     align-items: center;
-    margin-bottom: 11px;
-    margin-top: 11px;
+    margin-bottom: 15px;
+    margin-top: 15px;
 `;
 
 export const TotalQuoteContainer = styled(FlexDivRow)``;

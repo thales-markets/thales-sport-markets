@@ -38,9 +38,6 @@ import {
     ClaimLabel,
     ClaimValue,
     ExternalLink,
-    ExternalLinkArrow,
-    ExternalLinkContainer,
-    Label,
     PayoutLabel,
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
@@ -51,13 +48,13 @@ import {
     CollapsableContainer,
     CollapseFooterContainer,
     Container,
-    InfoContainer,
     InfoContainerColumn,
+    Label,
+    NumberOfGamesContainer,
     OverviewContainer,
-    ParlayDetailContainer,
     ProfitContainer,
-    TicketId,
     TicketIdContainer,
+    TicketMarketsContainer,
     TotalQuoteContainer,
     Value,
     WinLabel,
@@ -108,8 +105,6 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
     const isEth = collateralAddress === ZERO_ADDRESS;
 
     const isClaimable = ticket.isClaimable;
-
-    const NUMBER_OF_GAMES = ticket.sportMarkets.length;
 
     useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer } = networkConnector;
@@ -305,15 +300,16 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
     return (
         <Container>
             <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
-                <ArrowIcon className={showDetails ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
-                <TicketIdContainer>
-                    <Label>{t('profile.card.ticket-id')}:</Label>
-                    <TicketId>{truncateAddress(ticket.id)}</TicketId>
-                </TicketIdContainer>
-                <InfoContainer>
+                <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
+                    <TicketIdContainer>
+                        <Label>{t('profile.card.ticket-id')}:</Label>
+                        <Value>{truncateAddress(ticket.id)}</Value>
+                    </TicketIdContainer>
+                </ExternalLink>
+                <NumberOfGamesContainer>
                     <Label>{t('profile.card.number-of-games')}:</Label>
-                    <Value>{NUMBER_OF_GAMES}</Value>
-                </InfoContainer>
+                    <Value>{ticket.numOfMarkets}</Value>
+                </NumberOfGamesContainer>
                 <InfoContainerColumn>
                     <Label>{t('profile.card.ticket-paid')}:</Label>
                     <Value>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Value>
@@ -372,20 +368,14 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                     </ClaimContainer>
                 )}
                 {isClaimable && !isMobile && getButton(isMobile)}
-                {!isClaimable && (
-                    <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
-                        <ExternalLinkContainer>
-                            <ExternalLinkArrow style={{ right: '7px' }} />
-                        </ExternalLinkContainer>
-                    </ExternalLink>
-                )}
+                <ArrowIcon className={showDetails ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
             </OverviewContainer>
             <CollapsableContainer show={showDetails}>
-                <ParlayDetailContainer>
+                <TicketMarketsContainer>
                     {ticket.sportMarkets.map((market, index) => {
                         return <TicketItem market={market} key={index} />;
                     })}
-                </ParlayDetailContainer>
+                </TicketMarketsContainer>
                 <CollapseFooterContainer>
                     <TotalQuoteContainer>
                         <Label>{t('profile.card.total-quote')}:</Label>

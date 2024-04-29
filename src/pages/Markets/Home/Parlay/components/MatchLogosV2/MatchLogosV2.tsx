@@ -6,9 +6,11 @@ import { TicketMarket } from '../../../../../../types/markets';
 type MatchLogosProps = {
     market: TicketMarket;
     width?: string;
+    logoWidth?: string;
+    logoHeight?: string;
 };
 
-const MatchLogos: React.FC<MatchLogosProps> = ({ market, width }) => {
+const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, logoWidth, logoHeight }) => {
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         market.isPlayerPropsMarket
             ? getTeamImageSource(market.playerProps.playerName, market.leagueId)
@@ -32,12 +34,16 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width }) => {
                     alt={market.playerProps.playerName}
                     src={homeLogoSrc}
                     onError={getOnPlayerImageError(setHomeLogoSrc)}
+                    logoWidth={logoWidth}
+                    logoHeight={logoHeight}
                 />
             ) : (
                 <ClubLogo
                     alt={market.homeTeam}
                     src={homeLogoSrc}
                     onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
+                    logoWidth={logoWidth}
+                    logoHeight={logoHeight}
                 />
             )}
             {!market.isOneSideMarket && !market.isPlayerPropsMarket && (
@@ -46,6 +52,8 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width }) => {
                     alt={market.awayTeam}
                     src={awayLogoSrc}
                     onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
+                    logoWidth={logoWidth}
+                    logoHeight={logoHeight}
                 />
             )}
         </Container>
@@ -60,10 +68,10 @@ const Container = styled.div<{ width?: string }>`
     height: 100%;
 `;
 
-const ClubLogo = styled.img<{ awayTeam?: boolean }>`
+const ClubLogo = styled.img<{ awayTeam?: boolean; logoWidth?: string; logoHeight?: string }>`
     position: absolute;
-    height: 30px;
-    width: 30px;
+    height: ${(props) => props.logoWidth || '30px'};
+    width: ${(props) => props.logoHeight || '30px'};
     ${(props) => (props.awayTeam ? `margin-left: 16px;` : '')}
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
 `;

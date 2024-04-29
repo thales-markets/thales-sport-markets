@@ -14,14 +14,13 @@ import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { SportMarketLiveResult, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
 import { formatMarketOdds } from 'utils/markets';
-import { getPositionTextV2, getTitleText } from 'utils/marketsV2';
+import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getTicketMarketStatus } from 'utils/tickets';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import web3 from 'web3';
+import MatchLogosV2 from '../../../../../../../Markets/Home/Parlay/components/MatchLogosV2';
 import {
     MatchPeriodContainer,
     MatchPeriodLabel,
@@ -30,16 +29,15 @@ import {
     TeamScoreLabel,
 } from '../../../../../Positions/components/SinglePosition/styled-components';
 import {
-    ClubLogo,
     MarketTypeInfo,
     MatchInfo,
     MatchLabel,
-    MatchLogo,
     Odd,
+    ParlayStatus,
     PositionInfo,
     PositionText,
-} from '../../../../styled-components';
-import { ParlayStatus, Wrapper } from './styled-components';
+    Wrapper,
+} from './styled-components';
 
 const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
     const theme: ThemeInterface = useTheme();
@@ -48,24 +46,7 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
     const selectedOddsType = useSelector(getOddsType);
     const language = i18n.language;
 
-    const [homeLogoSrc, setHomeLogoSrc] = useState(
-        market.isPlayerPropsMarket
-            ? getTeamImageSource(market.playerProps.playerName, market.leagueId)
-            : getTeamImageSource(market.homeTeam, market.leagueId)
-    );
-    const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
-
-    useEffect(() => {
-        if (market.isPlayerPropsMarket) {
-            setHomeLogoSrc(getTeamImageSource(market.playerProps.playerName, market.leagueId));
-        } else {
-            setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.leagueId));
-            setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.leagueId));
-        }
-    }, [market.homeTeam, market.awayTeam, market.leagueId, market.isPlayerPropsMarket, market.playerProps.playerName]);
-
     const parlayItemQuote = market.isCanceled ? 1 : market.odd;
-    const parlayStatus = getTicketMarketStatus(market);
 
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
     const isGameStarted = market.maturityDate < new Date();
@@ -107,44 +88,9 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
     return (
         <Wrapper style={{ opacity: market.isCanceled ? 0.5 : 1 }}>
             <SPAAnchor href={buildMarketLink(market.gameId, language)}>
-                <MatchInfo style={{ cursor: 'pointer' }}>
-                    <MatchLogo>
-                        {market.isPlayerPropsMarket ? (
-                            <ClubLogo
-                                alt={market.playerProps.playerName}
-                                src={homeLogoSrc}
-                                losingTeam={false}
-                                onError={getOnPlayerImageError(setHomeLogoSrc)}
-                                customMobileSize={'24px'}
-                            />
-                        ) : (
-                            <ClubLogo
-                                alt={market.homeTeam}
-                                src={homeLogoSrc}
-                                losingTeam={false}
-                                onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
-                                customMobileSize={'24px'}
-                            />
-                        )}
-
-                        {!market.isOneSideMarket && !market.isPlayerPropsMarket && (
-                            <ClubLogo
-                                awayTeam={true}
-                                alt={market.awayTeam}
-                                src={awayLogoSrc}
-                                losingTeam={false}
-                                onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
-                                customMobileSize={'30px'}
-                            />
-                        )}
-                    </MatchLogo>
-                    <MatchLabel>
-                        {market.isOneSideMarket
-                            ? fixOneSideMarketCompetitorName(market.homeTeam)
-                            : !market.isPlayerPropsMarket
-                            ? market.homeTeam + ' - ' + market.awayTeam
-                            : market.playerProps.playerName}
-                    </MatchLabel>
+                <MatchInfo>
+                    <MatchLogosV2 market={market} width={'50px'} logoWidth={'24px'} logoHeight={'24px'} />
+                    <MatchLabel>{getMatchLabel(market)} </MatchLabel>
                 </MatchInfo>
             </SPAAnchor>
             <MarketTypeInfo>{getTitleText(market)}</MarketTypeInfo>
@@ -203,7 +149,7 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
             ) : (
                 <></>
             )}
-            {!isPendingResolution && <ParlayStatus>{parlayStatus}</ParlayStatus>}
+            {!isPendingResolution && <ParlayStatus>{getTicketMarketStatus(market)}</ParlayStatus>}
         </Wrapper>
     );
 };
