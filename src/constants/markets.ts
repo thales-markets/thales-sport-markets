@@ -56,6 +56,8 @@ export const MIN_LIQUIDITY = 10;
 export const PARLAY_LEADERBOARD_WEEKLY_START_DATE = new Date(2024, 1, 14, 0, 0, 0);
 export const PARLAY_LEADERBOARD_WEEKLY_START_DATE_UTC = new Date(Date.UTC(2024, 1, 14, 0, 0, 0));
 
+export const START_PERIOD_UNIQUE_REWARDS = 11;
+
 export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20 = [
     100,
     75,
@@ -100,6 +102,29 @@ export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20 = [
     60,
     55,
     50,
+];
+
+export const PARLAY_LEADERBOARD_UNIQUE_REWARDS_TOP_20 = [
+    200,
+    150,
+    100,
+    75,
+    60,
+    50,
+    45,
+    40,
+    35,
+    30,
+    25,
+    25,
+    25,
+    25,
+    25,
+    20,
+    20,
+    20,
+    20,
+    20,
 ];
 
 export const ENETPULSE_ROUNDS: Record<number, string> = {
