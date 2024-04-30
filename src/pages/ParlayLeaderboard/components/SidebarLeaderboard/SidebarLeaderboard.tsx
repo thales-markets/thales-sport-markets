@@ -89,7 +89,7 @@ const SidebarLeaderboard: React.FC = () => {
         return query.isSuccess ? query.data.slice(0, SIDEBAR_NUMBER_OF_TOP_USERS) : [];
     }, [query.isSuccess, query.data]);
 
-    const rewards = getRewardsArray(networkId);
+    const rewards = getRewardsArray(networkId, latestPeriodWeekly);
     const rewardsCurrency = getRewardsCurrency(networkId);
 
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {

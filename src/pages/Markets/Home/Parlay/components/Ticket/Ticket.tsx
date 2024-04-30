@@ -178,7 +178,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
         return query.isSuccess ? query.data : [];
     }, [query.isSuccess, query.data]);
 
-    const rewards = getRewardsArray(networkId);
+    const rewards = getRewardsArray(networkId, latestPeriodWeekly);
     const rewardsCurrency = getRewardsCurrency(networkId);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
