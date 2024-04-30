@@ -7,8 +7,10 @@ import { USD_SIGN } from 'constants/currency';
 import {
     PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
+    PARLAY_LEADERBOARD_UNIQUE_REWARDS_TOP_20,
     PARLAY_LEADERBOARD_WEEKLY_START_DATE,
     PARLAY_LEADERBOARD_WEEKLY_START_DATE_UTC,
+    START_PERIOD_UNIQUE_REWARDS,
 } from 'constants/markets';
 import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
@@ -98,8 +100,8 @@ const ParlayLeaderboard: React.FC = () => {
         return parlays.filter((parlay) => parlay.account.toLowerCase().includes(searchText.toLowerCase()));
     }, [searchText, parlays]);
 
-    const rewards = getRewardsArray(networkId);
-    const rewardsAmount = getRewardsAmount(networkId);
+    const rewards = getRewardsArray(networkId, period);
+    const rewardsAmount = getRewardsAmount(networkId, period);
     const rewardsCurrency = getRewardsCurrency(networkId);
 
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
@@ -767,14 +769,15 @@ const AddressLink = styled.a`
     }
 `;
 
-export const getRewardsArray = (networkId: Network): number[] => {
+export const getRewardsArray = (networkId: Network, period: number): number[] => {
+    if (period >= START_PERIOD_UNIQUE_REWARDS) return PARLAY_LEADERBOARD_UNIQUE_REWARDS_TOP_20;
     if (networkId == Network.Arbitrum) return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
     return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20;
 };
 
-const getRewardsAmount = (networkId: Network) => {
-    if (networkId == Network.Arbitrum) return '2,500 ARB';
-    if (networkId == Network.OptimismMainnet) return '500 OP';
+const getRewardsAmount = (networkId: Network, period: number) => {
+    if (networkId == Network.Arbitrum) return period >= START_PERIOD_UNIQUE_REWARDS ? '1,000 ARB' : '2,500 ARB';
+    if (networkId == Network.OptimismMainnet) return period >= START_PERIOD_UNIQUE_REWARDS ? '1,000 OP' : '500 OP';
     return '1,000 THALES';
 };
 
