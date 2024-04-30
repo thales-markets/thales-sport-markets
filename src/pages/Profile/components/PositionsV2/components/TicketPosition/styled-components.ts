@@ -51,7 +51,7 @@ export const NumberOfGamesContainer = styled(FlexDivStart)`
 `;
 
 export const InfoContainerColumn = styled(FlexDivColumnNative)`
-    min-width: 120px;
+    min-width: 100px;
     justify-content: flex-start;
     margin-right: 10px;
     @media (max-width: 768px) {
@@ -80,6 +80,7 @@ export const WinValue = styled(WinLabel)``;
 export const ArrowIcon = styled.i`
     font-size: 14px;
     color: ${(props) => props.theme.textColor.secondary};
+    margin-left: 10px;
     margin-right: 10px;
     @media (max-width: 768px) {
         margin-right: 5px;
