@@ -51,7 +51,7 @@ export type LiquidityPoolUserTransaction = {
 
 export type LiquidityPoolUserTransactions = LiquidityPoolUserTransaction[];
 
-export type VaultsAndLiquidityPoolUserTransaction = {
+export type ProfileLiquidityPoolUserTransaction = {
     name: string;
     hash: string;
     timestamp: number;
@@ -62,7 +62,7 @@ export type VaultsAndLiquidityPoolUserTransaction = {
     round: number;
 };
 
-export type VaultsAndLiquidityPoolUserTransactions = VaultsAndLiquidityPoolUserTransaction[];
+export type ProfileLiquidityPoolUserTransactions = ProfileLiquidityPoolUserTransaction[];
 
 export type LiquidityPoolReturn = {
     arr: number;

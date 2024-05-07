@@ -1,1 +1,1 @@
-export { default } from './UserVaultAndLpTransactionsTable';
+export { default } from './TransactionsTable';

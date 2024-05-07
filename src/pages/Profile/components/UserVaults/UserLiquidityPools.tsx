@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
-import UserVaultAndLpTransactionsTable from './components/TransactionsTable';
+import TransactionsTable from './components/TransactionsTable';
 import UserLP from './components/UserLP';
 
-const UserVaults: React.FC = () => {
+const UserLiquidityPools: React.FC = () => {
     return (
         <>
             <Wrapper>
                 <UserLP />
             </Wrapper>
-            <UserVaultAndLpTransactionsTable />
+            <TransactionsTable />
         </>
     );
 };
@@ -22,4 +22,4 @@ const Wrapper = styled(FlexDivCentered)`
     max-width: 780px;
 `;
 
-export default UserVaults;
+export default UserLiquidityPools;

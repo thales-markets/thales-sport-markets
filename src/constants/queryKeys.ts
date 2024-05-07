@@ -105,9 +105,9 @@ const QUERY_KEYS = {
         ],
         Stats: (networkId: Network, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
         StatsV2: (networkId: Network, walletAddress: string) => ['wallet', 'statsV2', networkId, walletAddress],
-        VaultsAndLpTxs: (networkId: Network, walletAddress: string) => [
+        LiquidityPoolTransactions: (networkId: Network, walletAddress: string) => [
             'wallet',
-            'vaultsAndLpTxs',
+            'liquidityPoolTransactions',
             networkId,
             walletAddress,
         ],

@@ -2,18 +2,18 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
-import { LiquidityPoolUserTransactions, VaultsAndLiquidityPoolUserTransactions } from 'types/liquidityPool';
+import { LiquidityPoolUserTransactions, ProfileLiquidityPoolUserTransactions } from 'types/liquidityPool';
 
-const useUserVaultAndLpTransactions = (
+const useProfileLiquidityPoolUserTransactions = (
     networkId: Network,
     walletAddress: string,
-    options?: UseQueryOptions<VaultsAndLiquidityPoolUserTransactions>
+    options?: UseQueryOptions<ProfileLiquidityPoolUserTransactions>
 ) => {
-    return useQuery<VaultsAndLiquidityPoolUserTransactions>(
-        QUERY_KEYS.Wallet.VaultsAndLpTxs(networkId, walletAddress),
+    return useQuery<ProfileLiquidityPoolUserTransactions>(
+        QUERY_KEYS.Wallet.LiquidityPoolTransactions(networkId, walletAddress),
         async () => {
             try {
-                const vaultTx: VaultsAndLiquidityPoolUserTransactions = [];
+                const vaultTx: ProfileLiquidityPoolUserTransactions = [];
 
                 const liquidityPoolUserTransactions: LiquidityPoolUserTransactions = await thalesData.sportMarkets.liquidityPoolUserTransactions(
                     {
@@ -40,4 +40,4 @@ const useUserVaultAndLpTransactions = (
     );
 };
 
-export default useUserVaultAndLpTransactions;
+export default useProfileLiquidityPoolUserTransactions;

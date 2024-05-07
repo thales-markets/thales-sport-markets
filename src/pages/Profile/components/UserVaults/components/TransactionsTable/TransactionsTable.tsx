@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { CellProps } from 'react-table';
-import { formatTxTimestamp, formatCurrency } from 'thales-utils';
 import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
-import useUserVaultAndLpTransactions from 'queries/wallet/useUserVaultAndLpTransactions';
+import useUserVaultAndLpTransactions from 'queries/wallet/useProfileLiquidityPoolUserTransactions';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { CellProps } from 'react-table';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { VaultsAndLiquidityPoolUserTransaction, VaultsAndLiquidityPoolUserTransactions } from 'types/liquidityPool';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
+import { formatCurrency, formatTxTimestamp } from 'thales-utils';
+import { ProfileLiquidityPoolUserTransaction, ProfileLiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
-const UserVaultAndLpTransactionsTable: React.FC = () => {
+const TransactionsTable: React.FC = () => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -22,7 +21,7 @@ const UserVaultAndLpTransactionsTable: React.FC = () => {
         enabled: walletAddress !== '',
     });
 
-    const [lastValidData, setLastValidData] = useState<VaultsAndLiquidityPoolUserTransactions>([]);
+    const [lastValidData, setLastValidData] = useState<ProfileLiquidityPoolUserTransactions>([]);
 
     useEffect(() => {
         if (txQuery.isSuccess && txQuery.data) setLastValidData(txQuery.data);
@@ -44,8 +43,8 @@ const UserVaultAndLpTransactionsTable: React.FC = () => {
                         accessor: 'timestamp',
                         Cell: (
                             cellProps: CellProps<
-                                VaultsAndLiquidityPoolUserTransaction,
-                                VaultsAndLiquidityPoolUserTransaction['timestamp']
+                                ProfileLiquidityPoolUserTransaction,
+                                ProfileLiquidityPoolUserTransaction['timestamp']
                             >
                         ) => <TableText>{formatTxTimestamp(cellProps.cell.value)}</TableText>,
                         width: 150,
@@ -56,8 +55,8 @@ const UserVaultAndLpTransactionsTable: React.FC = () => {
                         accessor: 'name',
                         Cell: (
                             cellProps: CellProps<
-                                VaultsAndLiquidityPoolUserTransaction,
-                                VaultsAndLiquidityPoolUserTransaction['name']
+                                ProfileLiquidityPoolUserTransaction,
+                                ProfileLiquidityPoolUserTransaction['name']
                             >
                         ) => <TableText> {t(`vault.${cellProps.cell.value}.title`)}</TableText>,
                         width: 150,
@@ -69,8 +68,8 @@ const UserVaultAndLpTransactionsTable: React.FC = () => {
                         sortType: 'alphanumeric',
                         Cell: (
                             cellProps: CellProps<
-                                VaultsAndLiquidityPoolUserTransaction,
-                                VaultsAndLiquidityPoolUserTransaction['type']
+                                ProfileLiquidityPoolUserTransaction,
+                                ProfileLiquidityPoolUserTransaction['type']
                             >
                         ) => <TableText>{t(`vault.user-transactions.type.${cellProps.cell.value}`)}</TableText>,
                         width: 150,
@@ -82,8 +81,8 @@ const UserVaultAndLpTransactionsTable: React.FC = () => {
                         accessor: 'amount',
                         Cell: (
                             cellProps: CellProps<
-                                VaultsAndLiquidityPoolUserTransaction,
-                                VaultsAndLiquidityPoolUserTransaction['amount']
+                                ProfileLiquidityPoolUserTransaction,
+                                ProfileLiquidityPoolUserTransaction['amount']
                             >
                         ) => (
                             <>
@@ -102,8 +101,8 @@ const UserVaultAndLpTransactionsTable: React.FC = () => {
                         accessor: 'round',
                         Cell: (
                             cellProps: CellProps<
-                                VaultsAndLiquidityPoolUserTransaction,
-                                VaultsAndLiquidityPoolUserTransaction['round']
+                                ProfileLiquidityPoolUserTransaction,
+                                ProfileLiquidityPoolUserTransaction['round']
                             >
                         ) => (
                             <TableText>
@@ -117,8 +116,8 @@ const UserVaultAndLpTransactionsTable: React.FC = () => {
                         accessor: 'hash',
                         Cell: (
                             cellProps: CellProps<
-                                VaultsAndLiquidityPoolUserTransaction,
-                                VaultsAndLiquidityPoolUserTransaction['hash']
+                                ProfileLiquidityPoolUserTransaction,
+                                ProfileLiquidityPoolUserTransaction['hash']
                             >
                         ) => <ViewEtherscanLink hash={cellProps.cell.value} />,
                         width: 150,
@@ -173,4 +172,4 @@ const TableText = styled.span`
     }
 `;
 
-export default UserVaultAndLpTransactionsTable;
+export default TransactionsTable;

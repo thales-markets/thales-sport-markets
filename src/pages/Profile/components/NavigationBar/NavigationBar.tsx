@@ -20,10 +20,10 @@ export const navItems = [
         id: 3,
         i18Label: 'profile.lp',
     },
-    {
-        id: 4,
-        i18Label: 'profile.voucher',
-    },
+    // {
+    //     id: 4,
+    //     i18Label: 'profile.voucher',
+    // },
 ];
 
 type NavigationBarProps = {

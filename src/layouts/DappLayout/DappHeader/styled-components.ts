@@ -39,6 +39,9 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
 
 export const RightContainer = styled(FlexDivRowCentered)`
     width: 360px;
+    @media (max-width: 1299px) {
+        width: 320px;
+    }
     @media (max-width: 767px) {
         flex-direction: column;
     }

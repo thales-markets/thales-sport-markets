@@ -188,6 +188,9 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
     flex: none;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
+    @media (max-width: 1299px) {
+        max-width: 320px;
+    }
 `;
 
 const ListContainer = styled(FlexDivColumn)``;

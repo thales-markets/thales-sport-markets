@@ -1,3 +1,4 @@
+import Button from 'components/Button';
 import SPAAnchor from 'components/SPAAnchor';
 import i18n from 'i18n';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
@@ -8,9 +9,8 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { buildLpLink } from 'utils/routes';
-import Button from 'components/Button';
 import { ThemeInterface } from 'types/ui';
+import { buildLpLink } from 'utils/routes';
 
 const UserLP: React.FC = () => {
     const { t } = useTranslation();
@@ -45,7 +45,7 @@ const UserLP: React.FC = () => {
     return (
         <>
             <SPAAnchor href={buildLpLink(language, 'single')}>
-                <VaultCard>
+                <LiquidityPoolCard>
                     <TitleWrapper>
                         <Icon className={`icon icon--liquidity-pool`} />
                         <Title> {t(`profile.single-lp-title`)}</Title>
@@ -67,10 +67,10 @@ const UserLP: React.FC = () => {
                             {t('profile.go-to-single-lp')}
                         </Button>
                     </ContentWrapper>
-                </VaultCard>
+                </LiquidityPoolCard>
             </SPAAnchor>
             <SPAAnchor href={buildLpLink(language, 'parlay')}>
-                <VaultCard>
+                <LiquidityPoolCard>
                     <TitleWrapper>
                         <Icon className={`icon icon--liquidity-pool`} />
                         <Title> {t(`profile.parlay-lp-title`)}</Title>
@@ -92,13 +92,13 @@ const UserLP: React.FC = () => {
                             {t('profile.go-to-parlay-lp')}
                         </Button>
                     </ContentWrapper>
-                </VaultCard>
+                </LiquidityPoolCard>
             </SPAAnchor>
         </>
     );
 };
 
-const VaultCard = styled.div`
+const LiquidityPoolCard = styled.div`
     width: 100%;
     max-width: 220px;
     min-width: 220px;

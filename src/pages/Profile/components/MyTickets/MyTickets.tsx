@@ -13,7 +13,6 @@ import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
 import { navItems } from '../../components/NavigationBar/NavigationBar';
 import SearchField from '../../components/SearchField';
 import UserVaults from '../../components/UserVaults';
-import Voucher from '../../components/Voucher';
 import NavigationBar from '../NavigationBar';
 import PositionsV2 from '../PositionsV2';
 import TicketTransactions from '../TicketTransactions';
@@ -50,9 +49,8 @@ const MyTickets: React.FC = () => {
                 {navItems[0].id == navItem && <PositionsV2 searchText={searchText} />}
                 {navItems[1].id == navItem && <TicketTransactions searchText={searchText} />}
                 {navItems[2].id == navItem && <UserVaults />}
-                {navItems[3].id == navItem && <Voucher searchText={searchText} />}
             </MainContainer>
-            <SidebarContainer maxWidth={360}>
+            <SidebarContainer maxWidth={320}>
                 <UserStatsV2 />
             </SidebarContainer>
         </RowContainer>
