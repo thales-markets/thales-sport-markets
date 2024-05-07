@@ -69,6 +69,21 @@ export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
         },
         order: 3,
     },
+    [Network.OptimismSepolia]: {
+        chainId: '0xaa37dc',
+        chainName: 'Optimism Sepolia',
+        shortChainName: 'OP Sepolia',
+        chainKey: 'optimism_sepolia',
+        iconClassName: 'icon icon--op',
+        rpcUrls: ['https://sepolia.optimism.io'],
+        blockExplorerUrls: ['https://sepolia-optimism.etherscan.io'],
+        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+        nativeCurrency: {
+            symbol: 'ETH',
+            decimals: 18,
+        },
+        order: 4,
+    },
 };
 
 export const GAS_ESTIMATION_BUFFER = 1.2; // Adding 20% on gas estimation as a buffer. Used only on Optimisme
