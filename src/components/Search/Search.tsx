@@ -63,7 +63,7 @@ const Wrapper = styled(FlexDivStart)<{ marginBottom?: number; isMobile: boolean 
 const Input = styled.input<{ width?: number; isMobile: boolean }>`
     background: ${(props) => props.theme.background.primary};
     border-radius: 5px;
-    border: 1px solid ${(props) => props.theme.textColor.quinary};
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     color: ${(props) => props.theme.textColor.quinary};
     width: ${(props) => (props.isMobile ? '100%' : props.width + 'px' || 250 + 'px')};
     height: ${(props) => (props.isMobile ? '100%' : '24px')};

@@ -39,14 +39,14 @@ const Wrapper = styled.div`
 `;
 
 const Input = styled.input`
-    border: 1px solid ${(props) => props.theme.background.secondary};
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 5px;
     padding: 5px 50px 5px 30px;
     color: ${(props) => props.theme.textColor.primary};
     background: ${(props) => props.theme.background.primary};
     outline: none;
     &::placeholder {
-        color: ${(props) => props.theme.textColor.tertiary};
+        color: ${(props) => props.theme.textColor.secondary};
     }
     &:focus {
         border: 1px solid ${(props) => props.theme.borderColor.quaternary} !important;
@@ -64,14 +64,14 @@ const IconWrapper = styled.div`
     border-radius: 30px;
     background: ${(props) => props.theme.textColor.secondary};
     position: absolute;
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     top: 7px;
     left: 6px;
 `;
 
 const SearchIcon = styled.i`
-    font-size: 20px;
+    font-size: 22px;
     position: absolute;
     top: -4px;
     left: -3px;

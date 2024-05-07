@@ -6,9 +6,10 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { navigateTo } from 'utils/routes';
+import { buildHref, navigateTo } from 'utils/routes';
 import { getQueryStringVal } from 'utils/useQueryParams';
 import BannerCarousel from '../../../../components/BannerCarousel';
+import SPAAnchor from '../../../../components/SPAAnchor';
 import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
 import { navItems } from '../../components/NavigationBar/NavigationBar';
 import SearchField from '../../components/SearchField';
@@ -37,8 +38,10 @@ const MyTickets: React.FC = () => {
             </SidebarContainer>
             <MainContainer>
                 <NavigationWrapper>
+                    <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
+                        <ButtonContainer>Back</ButtonContainer>
+                    </SPAAnchor>
                     <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />
-
                     <SearchField
                         disabled={navItems[2].id == navItem}
                         customPlaceholder={t('profile.search-field')}
@@ -77,6 +80,19 @@ const MainContainer = styled(FlexDivColumn)`
     max-width: 806px;
     flex-grow: 1;
     margin: 0 25px;
+`;
+
+const ButtonContainer = styled(FlexDivRow)`
+    font-size: 12px;
+    font-weight: 600;
+    height: 30px;
+    background: ${(props) => props.theme.background.secondary};
+    color: ${(props) => props.theme.textColor.secondary};
+    border-radius: 7px;
+    padding: 0px 10px;
+    margin: 10px 0px;
+    align-items: center;
+    cursor: pointer;
 `;
 
 export default MyTickets;

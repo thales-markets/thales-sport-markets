@@ -4,9 +4,8 @@ import { FlexDivRow } from 'styles/common';
 export const Wrapper = styled(FlexDivRow)`
     width: 100%;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 6px;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 5px;
     margin: 10px 0px;
 `;
