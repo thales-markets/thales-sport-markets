@@ -19,8 +19,8 @@ export const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
 };
 
 export const DEFAULT_NETWORK: { name: string; networkId: SupportedNetwork } = {
-    name: SUPPORTED_NETWORKS_NAMES[Network.Arbitrum],
-    networkId: Network.Arbitrum,
+    name: SUPPORTED_NETWORKS_NAMES[Network.OptimismSepolia],
+    networkId: Network.OptimismSepolia,
 };
 
 export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
