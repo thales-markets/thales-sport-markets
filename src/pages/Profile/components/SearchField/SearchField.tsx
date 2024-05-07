@@ -71,10 +71,10 @@ const IconWrapper = styled.div`
 `;
 
 const SearchIcon = styled.i`
-    font-size: 22px;
+    font-size: 23px;
     position: absolute;
     top: -4px;
-    left: -3px;
+    left: -4px;
     &:before {
         font-family: ExoticIcons !important;
         content: '\\0042';
