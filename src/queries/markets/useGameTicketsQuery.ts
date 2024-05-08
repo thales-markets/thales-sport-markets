@@ -22,7 +22,7 @@ export const useGameTicketsQuery = (
                 if (sportsAMMDataContract) {
                     const [tickets, teamNamesResponse] = await Promise.all([
                         sportsAMMDataContract.getTicketsDataPerGame(market.gameId),
-                        axios.get(`${generalConfig.API_URL}/overtime-v2/team-names`),
+                        axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`),
                     ]);
 
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>

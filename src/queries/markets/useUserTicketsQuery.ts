@@ -23,7 +23,7 @@ export const useUserTicketsQuery = (
                     const [activeTickets, resolvedTickets, teamNamesResponse] = await Promise.all([
                         sportsAMMDataContract.getActiveTicketsDataPerUser(user),
                         sportsAMMDataContract.getResolvedTicketsDataPerUser(user),
-                        axios.get(`${generalConfig.API_URL}/overtime-v2/team-names`),
+                        axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`),
                     ]);
 
                     const tickets = [...activeTickets, ...resolvedTickets];
