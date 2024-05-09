@@ -67,7 +67,6 @@ export const getSportsAMMV2Transaction: any = async (
             isEth,
         ]);
     } else {
-        console.log(tradeData, buyInAmount.toString(), expectedQuote.toString());
         return sportsAMMV2Contract.trade(
             tradeData,
             buyInAmount,

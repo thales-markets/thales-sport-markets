@@ -29,16 +29,15 @@ export const MatchPeriodLabel = styled.span`
     }
 `;
 
-export const ScoreContainer = styled(FlexDivColumn)`
-    margin: 0px 5px;
-`;
+export const ScoreContainer = styled(FlexDivColumn)``;
 
 export const TeamScoreLabel = styled.span`
     font-weight: 400;
     font-size: 12px;
-    line-height: 18px;
+    line-height: 16px;
     text-transform: uppercase;
     white-space: nowrap;
+    text-align: end;
     color: ${(props) => props.theme.textColor.primary};
     &.period {
         color: ${(props) => props.theme.textColor.secondary};
@@ -49,8 +48,8 @@ export const Status = styled.span<{ color: string }>`
     font-size: 12px;
     text-transform: uppercase;
     color: ${(props) => props.color};
-    align-self: center;
-    justify-content: space-evenly;
+    text-align: end;
+    min-width: 100px;
 `;
 
 export const CollateralSelectorContainer = styled(FlexDivRow)`

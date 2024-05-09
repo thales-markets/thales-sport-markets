@@ -633,6 +633,14 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
 };
 
 export const ENETPULSE_SPORTS = [
+    9006,
+    9011,
+    9012,
+    9013,
+    9014,
+    9015,
+    9016,
+    9017,
     9153,
     9156,
     18977,
@@ -1701,4 +1709,50 @@ export const BET_TYPE_GROUPS_BY_SPORT: Record<MarketSport, Partial<Record<BetTyp
             BetType.NINTH_PERIOD_TOTAL2_ODD_EVEN,
         ],
     },
+};
+
+export const SPORT_ID_MAP_ENETPULSE: Record<number, number> = {
+    18: 320, // Hockey Norway
+    24: 6, // NHL
+    33: 33, // Hockey World Championship
+    16: 42, // Champions League
+    45: 45, // Copa Libertadores
+    11: 47, // EPL
+    50: 50, // EURO Qualification
+    12: 53, // France League 1
+    13: 54, // Bundesliga
+    15: 55, // Seria A
+    57: 57, // Netherlands League 1
+    61: 61, // Portugal League 1
+    17: 73, // Europa League
+    76: 76, // World Cup Woman
+    14: 87, // La Liga
+    153: 153, // Tennis GS
+    156: 156, // Tennis Masters 1000
+    132: 132, // FA Cup
+    134: 134, // Coupe de France
+    138: 138, // Copa del Rey
+    141: 141, // Coppa Italia
+    209: 209, // DFB Pokal
+    268: 268, // Brazil Football League
+    288: 288, // EURO U21
+    296: 296, // FIFA WC U20
+    310: 310, // Hockey Czech
+    319: 319, // Hockey Finland
+    322: 322, // Hockey Germany
+    327: 327, // Hockey Switzerland
+    399: 399, // EuroLeague
+    409: 409, // FIBA World Cup
+    445: 445, // F1
+    497: 497, // Moto GP
+    536: 536, // Saudi Arabia Football League
+    9196: 9196, // Boxing
+    9806: 9806, // UEFA League of Nations
+    9821: 9821, // CONCACAF League of Nations
+    9977: 9977, // CsGo
+    9983: 9983, // Dota
+    10138: 10138, // LOL
+    10199: 10199, // World Cup Qualifications CONMBOL
+    10216: 10216, // Europa Conference League
+    10595: 10595, // Non-Title Boxing
 };

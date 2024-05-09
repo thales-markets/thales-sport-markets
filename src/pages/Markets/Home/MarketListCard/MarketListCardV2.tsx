@@ -10,11 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarketInfoV2, SportMarketLiveResult } from 'types/markets';
-import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { convertFromBytes32, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
-import web3 from 'web3';
 import SPAAnchor from '../../../../components/SPAAnchor';
 import { BetType } from '../../../../enums/markets';
 import {
@@ -81,7 +80,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
-    const gameIdString = web3.utils.hexToAscii(market.gameId);
+    const gameIdString = convertFromBytes32(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const firstSpreadMarket = market.childMarkets.find((childMarket) => childMarket.typeId === BetType.SPREAD);

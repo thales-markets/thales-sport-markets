@@ -1,6 +1,6 @@
 import { ENETPULSE_ROUNDS } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
-import { SPORTS_TAGS_MAP } from 'constants/tags';
+import { SPORT_ID_MAP_ENETPULSE, SPORTS_TAGS_MAP } from 'constants/tags';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
 
@@ -14,21 +14,16 @@ const useEnetpulseAdditionalDataQuery = (
         QUERY_KEYS.EnetpulseLiveResult(marketId, gameDate, sportTag),
         async () => {
             const sportParameter = sportTag - 9000;
+            const enetpulseSportParameter = SPORT_ID_MAP_ENETPULSE[sportParameter];
             try {
                 const response = await fetch(
-                    `https://api.thalesmarket.io/enetpulse-result/${sportParameter}/${gameDate}`
+                    `https://api.thalesmarket.io/enetpulse-result/${enetpulseSportParameter}/${gameDate}`
                 );
                 const events = Object.values(JSON.parse(await response.text()).events);
 
-                let trimmedMarketId = '';
-                for (let i = 0; i < marketId.length; i++) {
-                    if (!Number.isNaN(Number(marketId[i]))) {
-                        trimmedMarketId = trimmedMarketId.concat(marketId[i]);
-                    }
-                }
                 const event = SPORTS_TAGS_MAP['Motosport'].includes(Number(sportTag))
                     ? events[0]
-                    : (events.find((sportEvent: any) => sportEvent.id == trimmedMarketId) as any);
+                    : (events.find((sportEvent: any) => sportEvent.id == marketId) as any);
                 if (event) {
                     const tournamentName = event.tournament_stage_name;
                     const tournamentRound = ENETPULSE_ROUNDS[Number(event.round_typeFK)];

@@ -14,12 +14,12 @@ import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivRow } from 'styles/common';
 import { SportMarketLiveResult, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { convertFromBytes32 } from 'utils/formatters/string';
 import { formatMarketOdds } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getTicketMarketStatus } from 'utils/tickets';
 import { getOrdinalNumberLabel } from 'utils/ui';
-import web3 from 'web3';
 import MatchLogosV2 from '../../../../../../../Markets/Home/Parlay/components/MatchLogosV2';
 import {
     MatchPeriodContainer,
@@ -53,7 +53,7 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
     const isGameResolved = market.isResolved || market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
 
-    const gameIdString = web3.utils.hexToAscii(market.gameId);
+    const gameIdString = convertFromBytes32(market.gameId);
     const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
     const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
