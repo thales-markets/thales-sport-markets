@@ -119,3 +119,7 @@ export const ProfitContainer = styled(FlexDivRow)`
     text-transform: uppercase;
     margin-left: 20px;
 `;
+
+export const CollateralSelectorContainer = styled(FlexDivRow)`
+    margin-top: 5px;
+`;

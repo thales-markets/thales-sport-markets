@@ -139,7 +139,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         },
                     },
                     {
-                        Header: <>{t('profile.table.amount')}</>,
+                        Header: <>{t('profile.table.payout')}</>,
                         accessor: 'payout',
                         sortable: true,
                         Cell: (cellProps: any) => {
@@ -198,7 +198,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                     </QuoteText>
                                 </QuoteWrapper>
                                 <QuoteWrapper isPayout={true}>
-                                    <QuoteLabel>{t('profile.table.total-amount')}:</QuoteLabel>
+                                    <QuoteLabel>{t('profile.table.payout')}:</QuoteLabel>
                                     <QuoteText>
                                         {formatCurrencyWithKey(row.original.collateral, row.original.payout)}
                                     </QuoteText>
@@ -226,13 +226,13 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     );
 };
 
-const getTicketMarketStatusIcon = (market: TicketMarket, theme: ThemeInterface) => {
+const getTicketMarketStatusIcon = (market: TicketMarket) => {
     return market.isOpen || market.isCanceled ? (
-        <MarketStatusIcon color={theme.status.open} className={`icon icon--open`} />
+        <MarketStatusIcon className={`icon icon--open`} />
     ) : market.isWinning ? (
-        <MarketStatusIcon color={theme.status.win} className={`icon icon--win`} />
+        <MarketStatusIcon className={`icon icon--win`} />
     ) : (
-        <MarketStatusIcon color={theme.status.loss} className={`icon icon--lost`} />
+        <MarketStatusIcon className={`icon icon--lost`} />
     );
 };
 
@@ -260,8 +260,16 @@ export const getTicketMarkets = (
                     <PositionText>{getPositionTextV2(ticketMarket, ticketMarket.position, true)}</PositionText>
                     <Odd>{formatMarketOdds(selectedOddsType, getTicketMarketOdd(ticketMarket))}</Odd>
                 </PositionInfo>
-                <MarketStatus>
-                    {getTicketMarketStatusIcon(ticketMarket, theme)}
+                <MarketStatus
+                    color={
+                        ticketMarket.isOpen || ticketMarket.isCanceled
+                            ? theme.status.open
+                            : ticketMarket.isWinning
+                            ? theme.status.win
+                            : theme.status.loss
+                    }
+                >
+                    {getTicketMarketStatusIcon(ticketMarket)}
                     {getTicketMarketStatus(ticketMarket)}
                 </MarketStatus>
             </TicketRow>

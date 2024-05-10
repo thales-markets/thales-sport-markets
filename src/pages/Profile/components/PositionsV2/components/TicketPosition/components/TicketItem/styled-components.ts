@@ -22,6 +22,7 @@ export const MatchInfo = styled.div`
     display: flex;
     align-items: center;
     height: 30px;
+    cursor: pointer;
 `;
 
 export const MatchLabel = styled(FlexDivRow)`

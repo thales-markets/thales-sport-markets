@@ -381,12 +381,11 @@
             "time": "Time",
             "games": "Games",
             "paid": "Paid",
-            "amount": "Payout",
+            "payout": "Payout",
             "id": "Id",
             "position": "Position",
             "status": "Status",
-            "total-quote": "Total Quote",
-            "total-amount": "Payout"
+            "total-quote": "Total quote"
         },
         "voucher-title": "Claim Overtime vouchers",
         "voucher-info": "<br/>Overtime vouchers are NFTs that can be minted in Optimism or Arbitrum and can be used as collateral for taking positions into its corresponding chain.<br/><br/>In this page you can claim your outstanding vouchers from different campaigns. Once you claim your voucher you can use it in the Overtime platform or transfer it (as a gift, for example) to someone else (after all, it's an NFT!). Once the voucher is used as collateral in the platform it'll dissapear from your wallet.<br/><br/>You can read more about Overtime vouchers <docsLink>in the documentation.</docsLink>",

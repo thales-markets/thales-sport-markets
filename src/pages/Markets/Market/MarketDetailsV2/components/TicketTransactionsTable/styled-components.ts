@@ -82,21 +82,21 @@ export const Odd = styled.span`
     margin-left: 5px;
 `;
 
-export const MarketStatusIcon = styled.i<{ color?: string }>`
+export const MarketStatusIcon = styled.i`
     font-size: 12px;
     margin-right: 5px;
-    color: ${(props) => props.color || props.theme.textColor.primary};
+    margin-top: -1px;
 `;
 
-export const MarketStatus = styled(FlexDivRow)`
-    color: ${(props) => props.theme.textColor.primary};
+export const MarketStatus = styled(FlexDivRow)<{ color?: string }>`
+    color: ${(props) => props.color || props.theme.textColor.primary};
     justify-content: end;
 `;
 
 export const LastExpandedSection = styled(FlexDivRowCentered)`
     position: relative;
     flex: 1;
-    gap: 10px;
+    gap: 30px;
     @media (max-width: 600px) {
         margin: 10px 0;
     }
@@ -109,7 +109,6 @@ export const QuoteWrapper = styled.div<{ isPayout?: boolean }>`
     align-items: center;
     width: 100%;
     gap: 6px;
-    margin-left: 20px;
     font-size: 10px;
     color: ${(props) => (props.isPayout ? props.theme.status.win : props.theme.textColor.quaternary)};
     :first-child {

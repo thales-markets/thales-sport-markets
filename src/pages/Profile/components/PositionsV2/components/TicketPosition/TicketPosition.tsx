@@ -1,36 +1,31 @@
-import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button/Button';
 import CollateralSelector from 'components/CollateralSelector';
-import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
-import { APPROVAL_BUFFER } from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
-import { BigNumber, ethers } from 'ethers';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
-import {
-    getIsAA,
-    getIsConnectedViaParticle,
-    getIsWalletConnected,
-    getNetworkId,
-    getWalletAddress,
-} from 'redux/modules/wallet';
+import { getIsAA, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { coinParser, formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import { formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { executeBiconomyTransaction } from 'utils/biconomy';
-import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
-import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
+import {
+    getCollateral,
+    getCollateralAddress,
+    getCollaterals,
+    getDefaultCollateral,
+    isLpSupported,
+} from 'utils/collaterals';
+import { getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { getTicketPayment } from '../../../../../../redux/modules/ticket';
 import { refetchAfterClaim } from '../../../../../../utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from '../../../../../../utils/tickets';
 import { ShareTicketModalProps } from '../../../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
-import { CollateralSelectorContainer } from '../../../Positions/components/SinglePosition/styled-components';
 import {
     ClaimContainer,
     ClaimLabel,
@@ -45,6 +40,7 @@ import {
     ArrowIcon,
     CollapsableContainer,
     CollapseFooterContainer,
+    CollateralSelectorContainer,
     Container,
     InfoContainerColumn,
     Label,
@@ -75,17 +71,12 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isAA = useSelector((state: RootState) => getIsAA(state));
-    const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const ticketPayment = useSelector(getTicketPayment);
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
-    const [hasAllowance, setHasAllowance] = useState(false);
-    const [isAllowing, setIsAllowing] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [openApprovalModal, setOpenApprovalModal] = useState(false);
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -99,87 +90,11 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
     ]);
 
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
+    const ticketCollateralHasLp = isLpSupported(ticket.collateral);
+    const isTicketCollateralDefaultCollateral = ticket.collateral === defaultCollateral;
     const isEth = collateralAddress === ZERO_ADDRESS;
 
     const isClaimable = ticket.isClaimable;
-
-    useEffect(() => {
-        const { sportsAMMV2Contract, sUSDContract, signer } = networkConnector;
-        if (sportsAMMV2Contract && signer && sUSDContract) {
-            const collateralContractWithSigner = sUSDContract?.connect(signer);
-            const addressToApprove = sportsAMMV2Contract.address;
-
-            const getAllowance = async () => {
-                try {
-                    const parsedAmount = coinParser(Number(ticket.payout).toString(), networkId);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        collateralContractWithSigner,
-                        walletAddress,
-                        addressToApprove
-                    );
-                    setHasAllowance(allowance);
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-            if (isWalletConnected && isClaimable && isMultiCollateralSupported && !isDefaultCollateral) {
-                getAllowance();
-            }
-        }
-    }, [
-        walletAddress,
-        isWalletConnected,
-        hasAllowance,
-        isAllowing,
-        selectedCollateralIndex,
-        networkId,
-        selectedCollateral,
-        isEth,
-        isClaimable,
-        isMultiCollateralSupported,
-        ticket.payout,
-        isDefaultCollateral,
-    ]);
-
-    const handleAllowance = async (approveAmount: BigNumber) => {
-        const { sportsAMMV2Contract, sUSDContract, signer } = networkConnector;
-        if (sportsAMMV2Contract && signer) {
-            setIsAllowing(true);
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-            try {
-                let txResult;
-                const collateralContractWithSigner = sUSDContract?.connect(signer);
-                const addressToApprove = sportsAMMV2Contract.address;
-
-                if (isAA) {
-                    txResult = await executeBiconomyTransaction(
-                        collateralAddress,
-                        collateralContractWithSigner,
-                        'approve',
-                        [addressToApprove, approveAmount]
-                    );
-                } else {
-                    const tx = (await collateralContractWithSigner?.approve(
-                        addressToApprove,
-                        approveAmount
-                    )) as ethers.ContractTransaction;
-                    setOpenApprovalModal(false);
-                    txResult = await tx.wait();
-                }
-
-                if (txResult && txResult.transactionHash) {
-                    setIsAllowing(false);
-                    claimTicket(ticket.id);
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
-                }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-                console.log(e);
-                setIsAllowing(false);
-            }
-        }
-    };
 
     const claimTicket = async (parlayAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
@@ -190,34 +105,36 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                 let txResult;
                 const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
                 if (isAA) {
-                    txResult = isDefaultCollateral
-                        ? await executeBiconomyTransaction(
-                              collateralAddress,
-                              sportsAMMV2ContractWithSigner,
-                              'exerciseTicket',
-                              [parlayAddress]
-                          )
-                        : await executeBiconomyTransaction(
-                              collateralAddress,
-                              sportsAMMV2ContractWithSigner,
-                              'exerciseTicketWithOfframp',
-                              [parlayAddress, collateralAddress, isEth]
-                          );
+                    txResult =
+                        isDefaultCollateral || (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                            ? await executeBiconomyTransaction(
+                                  collateralAddress,
+                                  sportsAMMV2ContractWithSigner,
+                                  'exerciseTicket',
+                                  [parlayAddress]
+                              )
+                            : await executeBiconomyTransaction(
+                                  collateralAddress,
+                                  sportsAMMV2ContractWithSigner,
+                                  'exerciseTicketOffRamp',
+                                  [parlayAddress, collateralAddress, isEth]
+                              );
                 } else {
-                    const tx = isDefaultCollateral
-                        ? await sportsAMMV2ContractWithSigner?.exerciseTicket(parlayAddress)
-                        : await sportsAMMV2ContractWithSigner?.exerciseTicketWithOfframp(
-                              parlayAddress,
-                              collateralAddress,
-                              isEth
-                          );
+                    const tx =
+                        isDefaultCollateral || (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                            ? await sportsAMMV2ContractWithSigner?.exerciseTicket(parlayAddress)
+                            : await sportsAMMV2ContractWithSigner?.exerciseTicketOffRamp(
+                                  parlayAddress,
+                                  collateralAddress,
+                                  isEth
+                              );
                     txResult = await tx.wait();
                 }
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.claim-winnings-success')));
                     if (setShareTicketModalData && setShowShareTicketModal) {
-                        setShareTicketModalData(shareParlayData);
+                        setShareTicketModalData(shareTicketData);
                         setShowShareTicketModal(true);
                     }
                 }
@@ -229,7 +146,7 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
         }
     };
 
-    const shareParlayData = {
+    const shareTicketData = {
         markets: ticket.sportMarkets.map((sportMarket) => {
             return {
                 ...sportMarket,
@@ -249,47 +166,23 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
 
     const getClaimButton = (isMobile: boolean) => (
         <Button
-            disabled={isSubmitting || isAllowing}
+            disabled={isSubmitting}
             additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
             padding="2px 5px"
-            fontSize={isMobile ? '9px' : hasAllowance || isDefaultCollateral ? '15px' : '10px'}
+            fontSize={isMobile ? '9px' : '15px'}
             height={isMobile ? '19px' : undefined}
-            lineHeight={hasAllowance || isDefaultCollateral ? undefined : '10px'}
             onClick={(e: any) => {
                 e.preventDefault();
                 e.stopPropagation();
-                hasAllowance || isDefaultCollateral
-                    ? claimTicket(ticket.id)
-                    : isParticle
-                    ? handleAllowance(ethers.constants.MaxUint256)
-                    : setOpenApprovalModal(true);
+                claimTicket(ticket.id);
             }}
         >
-            {hasAllowance || isDefaultCollateral
-                ? isSubmitting
-                    ? t('profile.card.claim-progress')
-                    : t('profile.card.claim')
-                : isAllowing
-                ? t('common.enable-wallet-access.approve-progress')
-                : t('common.enable-wallet-access.approve-swap', {
-                      currencyKey: selectedCollateral,
-                      defaultCurrency: defaultCollateral,
-                  })}
+            {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
         </Button>
     );
 
     const getButton = (isMobile: boolean) => {
-        return hasAllowance || isDefaultCollateral ? (
-            getClaimButton(isMobile)
-        ) : (
-            <Tooltip
-                overlay={t('profile.card.approve-swap-tooltip', {
-                    currencyKey: selectedCollateral,
-                    defaultCurrency: defaultCollateral,
-                })}
-                component={<div>{getClaimButton(isMobile)}</div>}
-            />
-        );
+        return getClaimButton(isMobile);
     };
 
     return (
@@ -336,12 +229,16 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                                     e.stopPropagation();
                                 }}
                             >
-                                <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
-                                <CollateralSelector
-                                    collateralArray={getCollaterals(networkId)}
-                                    selectedItem={selectedCollateralIndex}
-                                    onChangeCollateral={() => {}}
-                                />
+                                {(!ticketCollateralHasLp || isTicketCollateralDefaultCollateral) && (
+                                    <>
+                                        <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
+                                        <CollateralSelector
+                                            collateralArray={getCollaterals(networkId)}
+                                            selectedItem={selectedCollateralIndex}
+                                            onChangeCollateral={() => {}}
+                                        />
+                                    </>
+                                )}
                             </InfoContainerColumn>
                         )}
                     </>
@@ -390,16 +287,6 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                     </ProfitContainer>
                 </CollapseFooterContainer>
             </CollapsableContainer>
-            {openApprovalModal && (
-                <ApprovalModal
-                    // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={Number(ticket.payout) * (1 + APPROVAL_BUFFER)}
-                    tokenSymbol={defaultCollateral}
-                    isAllowing={isAllowing}
-                    onSubmit={handleAllowance}
-                    onClose={() => setOpenApprovalModal(false)}
-                />
-            )}
         </Container>
     );
 };

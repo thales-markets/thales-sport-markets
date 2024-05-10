@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 
 export const MatchPeriodContainer = styled(FlexDivColumnCentered)`
     align-items: center;
@@ -50,8 +50,4 @@ export const Status = styled.span<{ color: string }>`
     color: ${(props) => props.color};
     text-align: end;
     min-width: 100px;
-`;
-
-export const CollateralSelectorContainer = styled(FlexDivRow)`
-    margin-top: 5px;
 `;
