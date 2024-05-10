@@ -14,10 +14,8 @@ import { getIsMobile } from 'redux/modules/app';
 import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { useTheme } from 'styled-components';
 import { coinParser } from 'thales-utils';
 import { Ticket } from 'types/markets';
-import { ThemeInterface } from 'types/ui';
 import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils/collaterals';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
@@ -44,7 +42,6 @@ import {
 
 const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
-    const theme: ThemeInterface = useTheme();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
@@ -267,8 +264,6 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                                 claimAllRewards();
                                             }}
                                             disabled={!hasAllowance}
-                                            backgroundColor={theme.button.background.quaternary}
-                                            borderColor={theme.button.borderColor.secondary}
                                             additionalStyles={
                                                 isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle
                                             }

@@ -177,7 +177,7 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
     align-items: end;
     justify-content: flex-end;
     margin-bottom: 10px;
-    margin-right: 10px;
+    margin-right: 50px;
 
     @media (max-width: 768px) {
         min-width: 60px;
@@ -225,8 +225,7 @@ export const Label = styled.span<{ canceled?: boolean }>`
 
 export const ClaimLabel = styled(Label)`
     font-weight: 900;
-    color: ${(props) => props.theme.textColor.quaternary};
-    text-transform: uppercase;
+    color: ${(props) => props.theme.status.win};
     @media (max-width: 768px) {
         font-size: 10px;
     }

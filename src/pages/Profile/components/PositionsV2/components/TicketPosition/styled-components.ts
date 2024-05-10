@@ -103,13 +103,19 @@ export const TicketMarketsContainer = styled(FlexDivColumnNative)`
 
 export const CollapseFooterContainer = styled(FlexDivRow)`
     position: relative;
-    justify-content: space-around;
+    justify-content: center;
     width: 100%;
     align-items: center;
     margin-bottom: 15px;
     margin-top: 15px;
 `;
 
-export const TotalQuoteContainer = styled(FlexDivRow)``;
+export const TotalQuoteContainer = styled(FlexDivRow)`
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
 
-export const ProfitContainer = styled(FlexDivRow)``;
+export const ProfitContainer = styled(FlexDivRow)`
+    text-transform: uppercase;
+    margin-left: 20px;
+`;

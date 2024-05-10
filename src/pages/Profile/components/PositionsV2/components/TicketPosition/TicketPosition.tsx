@@ -20,10 +20,8 @@ import {
     getWalletAddress,
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { useTheme } from 'styled-components';
 import { coinParser, formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
-import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction } from 'utils/biconomy';
 import { getCollateral, getCollateralAddress, getCollaterals, getDefaultCollateral } from 'utils/collaterals';
 import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
@@ -73,7 +71,6 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
     setShowShareTicketModal,
 }) => {
     const { t } = useTranslation();
-    const theme: ThemeInterface = useTheme();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -253,8 +250,6 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
     const getClaimButton = (isMobile: boolean) => (
         <Button
             disabled={isSubmitting || isAllowing}
-            backgroundColor={theme.button.background.quaternary}
-            borderColor={theme.button.borderColor.secondary}
             additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
             padding="2px 5px"
             fontSize={isMobile ? '9px' : hasAllowance || isDefaultCollateral ? '15px' : '10px'}
@@ -324,7 +319,7 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                     <>
                         <InfoContainerColumn>
                             {isClaimable ? (
-                                <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
+                                <ClaimLabel>{t('profile.card.win')}:</ClaimLabel>
                             ) : (
                                 <WinLabel>{t('profile.card.to-win')}:</WinLabel>
                             )}
@@ -383,7 +378,7 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                     </TotalQuoteContainer>
                     <ProfitContainer>
                         {isClaimable ? (
-                            <ClaimLabel>{t('profile.card.to-claim')}:</ClaimLabel>
+                            <ClaimLabel>{t('profile.card.win')}:</ClaimLabel>
                         ) : (
                             <WinLabel>{t('profile.card.to-win')}:</WinLabel>
                         )}

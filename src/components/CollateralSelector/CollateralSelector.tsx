@@ -169,7 +169,6 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
 };
 
 const Container = styled(FlexDivStart)<{ stretch?: boolean }>`
-    margin: 0 7px;
     align-items: center;
     width: ${(props) => (props.stretch ? '100%' : '')};
 `;
@@ -195,7 +194,7 @@ const TextCollateral = styled(Text)`
         props.isDetailedView
             ? props.theme.input.textColor.primary
             : props.isSelectedCollateral
-            ? props.theme.textColor.quaternary
+            ? props.theme.status.win
             : props.theme.textColor.tertiary};
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -216,7 +215,7 @@ const TextCollateralWrapper = styled.div<{ isDetailedView?: boolean }>`
 const Arrow = styled.i`
     font-size: 10px;
     text-transform: none;
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => props.theme.status.win};
 `;
 
 const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean; stretch?: boolean }>`
@@ -233,9 +232,9 @@ const Dropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
     width: ${(props) => (props.width ? props.width : '71px')};
     padding: 5px 3px;
     border-radius: 8px;
-    background: ${(props) => props.theme.background.quaternary};
+    background: ${(props) => props.theme.status.win};
     z-index: 100;
-    border: 2px solid ${(props) => props.theme.input.borderColor.tertiary};
+    border: 2px solid ${(props) => props.theme.status.win};
 `;
 
 const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
@@ -256,9 +255,9 @@ const CollateralOption = styled.div`
     padding: 5px 7px;
     border-radius: 8px;
     cursor: pointer;
-    border: 2px solid ${(props) => props.theme.background.quaternary};
+    border: 2px solid ${(props) => props.theme.status.win};
     &:hover {
-        background: rgb(80 183 215);
+        background: #1cb169;
     }
 `;
 
