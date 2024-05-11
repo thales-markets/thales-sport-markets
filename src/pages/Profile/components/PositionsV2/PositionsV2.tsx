@@ -6,7 +6,7 @@ import { ZERO_ADDRESS } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -14,14 +14,10 @@ import { getIsMobile } from 'redux/modules/app';
 import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { coinParser } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils/collaterals';
-import { checkAllowance, getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { useUserTicketsQuery } from '../../../../queries/markets/useUserTicketsQuery';
-import ShareTicketModalV2 from '../../../Markets/Home/Parlay/components/ShareTicketModalV2';
-import { ShareTicketModalProps } from '../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 import TicketPosition from './components/TicketPosition';
 import {
     Arrow,
@@ -45,9 +41,6 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
-    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketData, setShareTicketData] = useState<ShareTicketModalProps | undefined>(undefined);
-    const [hasAllowance, setHasAllowance] = useState(false);
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     // const isAA = useSelector((state: RootState) => getIsAA(state));
@@ -59,7 +52,6 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
 
-    const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
@@ -123,55 +115,6 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
         }
         return data;
     }, [userTicketsQuery.isSuccess, userTicketsQuery.data, searchText]);
-
-    const totalParlayClaimableAmount = useMemo(
-        () => userTicketsByStatus.claimable.reduce((partialSum, ticket) => partialSum + ticket.payout, 0),
-        [userTicketsByStatus.claimable]
-    );
-
-    useEffect(() => {
-        const { sportsAMMV2Contract, sUSDContract, signer } = networkConnector;
-        if (sportsAMMV2Contract && signer && sUSDContract) {
-            const collateralContractWithSigner = sUSDContract?.connect(signer);
-            const addressToApprove = sportsAMMV2Contract.address;
-
-            const getAllowance = async () => {
-                try {
-                    const parsedAmount = coinParser(Number(totalParlayClaimableAmount).toString(), networkId);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        collateralContractWithSigner,
-                        walletAddress,
-                        addressToApprove
-                    );
-                    setHasAllowance(allowance);
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-            if (
-                isWalletConnected &&
-                isMultiCollateralSupported &&
-                !isDefaultCollateral &&
-                Number(totalParlayClaimableAmount) > 0
-            ) {
-                getAllowance();
-            } else {
-                setHasAllowance(true);
-            }
-        }
-    }, [
-        walletAddress,
-        isWalletConnected,
-        hasAllowance,
-        selectedCollateralIndex,
-        networkId,
-        selectedCollateral,
-        isEth,
-        isMultiCollateralSupported,
-        totalParlayClaimableAmount,
-        isDefaultCollateral,
-    ]);
 
     const isLoading = userTicketsQuery.isLoading;
 
@@ -263,7 +206,6 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                                 e.stopPropagation();
                                                 claimAllRewards();
                                             }}
-                                            disabled={!hasAllowance}
                                             additionalStyles={
                                                 isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle
                                             }
@@ -275,14 +217,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                         </Button>
                                     </ClaimAllContainer>
                                     {userTicketsByStatus.claimable.map((parlayMarket, index) => {
-                                        return (
-                                            <TicketPosition
-                                                ticket={parlayMarket}
-                                                key={index}
-                                                setShareTicketModalData={setShareTicketData}
-                                                setShowShareTicketModal={setShowShareTicketModal}
-                                            />
-                                        );
+                                        return <TicketPosition ticket={parlayMarket} key={index} />;
                                     })}
                                 </>
                             ) : (
@@ -327,17 +262,6 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                         </>
                     )}
                 </ListContainer>
-            )}
-            {showShareTicketModal && shareTicketData && (
-                <ShareTicketModalV2
-                    markets={shareTicketData.markets}
-                    multiSingle={false}
-                    paid={shareTicketData.paid}
-                    payout={shareTicketData.payout}
-                    onClose={shareTicketData.onClose}
-                    isTicketLost={shareTicketData.isTicketLost}
-                    isTicketResolved={shareTicketData.isTicketResolved}
-                />
             )}
         </Container>
     );

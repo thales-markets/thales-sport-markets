@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
+import { getTicketPayment } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsAA, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -22,10 +23,11 @@ import {
 } from 'utils/collaterals';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { getTicketPayment } from '../../../../../../redux/modules/ticket';
-import { refetchAfterClaim } from '../../../../../../utils/queryConnector';
-import { formatTicketOdds, getTicketMarketOdd } from '../../../../../../utils/tickets';
-import { ShareTicketModalProps } from '../../../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
+import { refetchAfterClaim } from 'utils/queryConnector';
+import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
+import ShareTicketModalV2, {
+    ShareTicketModalProps,
+} from '../../../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 import {
     ClaimContainer,
     ClaimLabel,
@@ -57,15 +59,9 @@ import {
 
 type TicketPositionProps = {
     ticket: Ticket;
-    setShareTicketModalData?: (shareTicketData: ShareTicketModalProps) => void;
-    setShowShareTicketModal?: (show: boolean) => void;
 };
 
-const TicketPosition: React.FC<TicketPositionProps> = ({
-    ticket,
-    setShareTicketModalData,
-    setShowShareTicketModal,
-}) => {
+const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -77,6 +73,8 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showShareTicketModal, setShowShareTicketModal] = useState(false);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -287,6 +285,17 @@ const TicketPosition: React.FC<TicketPositionProps> = ({
                     </ProfitContainer>
                 </CollapseFooterContainer>
             </CollapsableContainer>
+            {showShareTicketModal && shareTicketModalData && (
+                <ShareTicketModalV2
+                    markets={shareTicketModalData.markets}
+                    multiSingle={false}
+                    paid={shareTicketModalData.paid}
+                    payout={shareTicketModalData.payout}
+                    onClose={shareTicketModalData.onClose}
+                    isTicketLost={shareTicketModalData.isTicketLost}
+                    isTicketResolved={shareTicketModalData.isTicketResolved}
+                />
+            )}
         </Container>
     );
 };
