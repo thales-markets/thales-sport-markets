@@ -120,8 +120,8 @@ const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
                 } else {
                     const tx =
                         isDefaultCollateral || (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
-                            ? await sportsAMMV2ContractWithSigner?.exerciseTicket(parlayAddress)
-                            : await sportsAMMV2ContractWithSigner?.exerciseTicketOffRamp(
+                            ? await sportsAMMV2ContractWithSigner.exerciseTicket(parlayAddress)
+                            : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
                                   parlayAddress,
                                   collateralAddress,
                                   isEth

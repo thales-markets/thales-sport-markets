@@ -15,7 +15,7 @@ import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { Ticket } from 'types/markets';
-import { getCollateral, getCollateralAddress, getDefaultCollateral } from 'utils/collaterals';
+import { getCollateral, getCollateralAddress, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
 import { useUserTicketsQuery } from '../../../../queries/markets/useUserTicketsQuery';
 import TicketPosition from './components/TicketPosition';
@@ -131,16 +131,20 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                 const id = toast.loading(t('market.toast-message.transaction-pending'));
 
                                 try {
+                                    const ticketCollateralHasLp = isLpSupported(market.collateral);
+                                    const isTicketCollateralDefaultCollateral = market.collateral === defaultCollateral;
+
                                     const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
 
-                                    const tx = isDefaultCollateral
-                                        ? await sportsAMMV2ContractWithSigner?.exerciseTicket(market.id)
-                                        : // TODO: not available yet
-                                          await sportsAMMV2ContractWithSigner?.exerciseTicketWithOfframp(
-                                              market.id,
-                                              collateralAddress,
-                                              isEth
-                                          );
+                                    const tx =
+                                        isDefaultCollateral ||
+                                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                                            ? await sportsAMMV2ContractWithSigner.exerciseTicket(market.id)
+                                            : await sportsAMMV2ContractWithSigner.exerciseTicketWithOfframp(
+                                                  market.id,
+                                                  collateralAddress,
+                                                  isEth
+                                              );
                                     const txResult = await tx.wait();
 
                                     if (txResult && txResult.transactionHash) {
