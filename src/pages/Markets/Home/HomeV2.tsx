@@ -10,7 +10,7 @@ import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, LIVE_SUPPORTED_LEAGUES, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
-import { BetType, GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
@@ -24,11 +24,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
-    getBetTypeFilter,
     getDateFilter,
     getGlobalFilter,
     getIsMarketSelected,
     getMarketSearch,
+    getMarketTypeFilter,
     getSportFilter,
     getTagFilter,
     setDateFilter,
@@ -46,6 +46,7 @@ import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
+import { MarketType } from '../../../enums/marketTypes';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import GlobalFilters from '../components/GlobalFilters';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
@@ -88,7 +89,7 @@ const Home: React.FC = () => {
     const globalFilter = useSelector(getGlobalFilter);
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
-    const betTypeFilter = useSelector(getBetTypeFilter);
+    const marketTypeFilter = useSelector(getMarketTypeFilter);
     const location = useLocation();
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
@@ -97,7 +98,7 @@ const Home: React.FC = () => {
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
     const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
-    const [availableBetTypes, setAvailableBetTypes] = useState<BetType[]>([]);
+    const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
     const tagsList = orderBy(
@@ -217,7 +218,7 @@ const Home: React.FC = () => {
                       ResolvedMarkets: [],
                       PendingMarkets: [],
                   };
-        const betTypes = new Set<BetType>();
+        const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
             liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
 
@@ -285,18 +286,18 @@ const Home: React.FC = () => {
                 }
             }
 
-            betTypes.add(market.typeId);
+            marketTypes.add(market.typeId);
             market.childMarkets?.forEach((childMarket) => {
-                betTypes.add(childMarket.typeId);
+                marketTypes.add(childMarket.typeId);
             });
 
-            if (betTypeFilter.length) {
-                const marketBetTypes = [
+            if (marketTypeFilter.length) {
+                const marketMarketTypes = [
                     market.typeId,
                     ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
                 ];
 
-                if (!marketBetTypes.some((betType) => betTypeFilter.includes(betType))) {
+                if (!marketMarketTypes.some((marketType) => marketTypeFilter.includes(marketType))) {
                     return false;
                 }
                 if (sportFilter == SportFilterEnum.Live) {
@@ -317,7 +318,7 @@ const Home: React.FC = () => {
             ]
         );
 
-        setAvailableBetTypes(Array.from(betTypes));
+        setAvailableMarketTypes(Array.from(marketTypes));
 
         return sortedFilteredMarkets;
     }, [
@@ -330,7 +331,7 @@ const Home: React.FC = () => {
         tagFilter,
         dateFilter,
         sportFilter,
-        betTypeFilter,
+        marketTypeFilter,
         favouriteLeagues,
     ]);
 
@@ -750,7 +751,7 @@ const Home: React.FC = () => {
                             isMobile={isMobile}
                         />
                     )} */}
-                    {!isMobile && <Header availableBetTypes={availableBetTypes} />}
+                    {!isMobile && <Header availableMarketTypes={availableMarketTypes} />}
                     {marketsLoading ? (
                         <LoaderContainer>
                             <SimpleLoader />

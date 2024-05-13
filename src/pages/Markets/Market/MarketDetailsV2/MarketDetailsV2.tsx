@@ -7,8 +7,9 @@ import { INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL, INCENTIVIZED_U
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP, TAGS_LIST } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
-import { BetType } from 'enums/markets';
+import { MarketType } from 'enums/marketTypes';
 import { Network } from 'enums/network';
+import { TAGS_FLAGS } from 'enums/tags';
 import { groupBy } from 'lodash';
 import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
 import Parlay from 'pages/Markets/Home/Parlay';
@@ -32,7 +33,6 @@ import { convertFromBytes32 } from 'utils/formatters/string';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
-import { TAGS_FLAGS } from '../../../../enums/tags';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
 import TicketTransactions from './components/TicketTransactions';
@@ -390,7 +390,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         </ToggleContainer>
                     )}
                     <PositionsContainer>
-                        <PositionsV2 markets={[market]} betType={BetType.WINNER} isGameOpen={isGameOpen} />
+                        <PositionsV2 markets={[market]} marketType={MarketType.WINNER} isGameOpen={isGameOpen} />
                         {Object.keys(groupedChildMarkets).map((key, index) => {
                             const typeId = Number(key);
                             const childMarkets = groupedChildMarkets[typeId];
@@ -398,7 +398,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 <PositionsV2
                                     key={index}
                                     markets={childMarkets}
-                                    betType={typeId}
+                                    marketType={typeId}
                                     isGameOpen={isGameOpen}
                                 />
                             );

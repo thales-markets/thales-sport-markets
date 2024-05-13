@@ -15,14 +15,14 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import SPAAnchor from '../../../../components/SPAAnchor';
-import { BetType } from '../../../../enums/markets';
+import { MarketType } from '../../../../enums/marketTypes';
 import { TAGS_FLAGS } from '../../../../enums/tags';
 import {
-    getBetTypeFilter,
     getIsMarketSelected,
     getIsThreeWayView,
+    getMarketTypeFilter,
     getSelectedMarket,
-    setBetTypeFilter,
+    setMarketTypeFilter,
     setSelectedMarket,
 } from '../../../../redux/modules/market';
 import { buildMarketLink } from '../../../../utils/routes';
@@ -59,7 +59,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
-    const betTypeFilter = useSelector(getBetTypeFilter);
+    const marketTypeFilter = useSelector(getMarketTypeFilter);
     // const isMobile = useSelector((state: RootState) => getIsMobile(state));
     // const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
@@ -84,10 +84,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const gameIdString = convertFromBytes32(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
-    const firstSpreadMarket = market.childMarkets.find((childMarket) => childMarket.typeId === BetType.SPREAD);
-    const firstTotalMarket = market.childMarkets.find((childMarket) => childMarket.typeId === BetType.TOTAL);
-    const betTypeFilterMarket =
-        betTypeFilter.length && market.childMarkets.find((childMarket) => betTypeFilter.includes(childMarket.typeId));
+    const firstSpreadMarket = market.childMarkets.find((childMarket) => childMarket.typeId === MarketType.SPREAD);
+    const firstTotalMarket = market.childMarkets.find((childMarket) => childMarket.typeId === MarketType.TOTAL);
+    const marketTypeFilterMarket =
+        marketTypeFilter.length &&
+        market.childMarkets.find((childMarket) => marketTypeFilter.includes(childMarket.typeId));
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
@@ -145,12 +146,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
     const hideGame = isGameLive ? !areOddsValid : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
-    const isColumnView = !betTypeFilterMarket && isThreeWayView && !isMarketSelected && isGameOpen;
+    const isColumnView = !marketTypeFilterMarket && isThreeWayView && !isMarketSelected && isGameOpen;
     const isTwoPositionalMarket = market.odds.length === 2;
     const selected = selectedMarket?.gameId == market.gameId;
 
     let marketsCount = market.childMarkets.length;
-    if (!betTypeFilterMarket && isThreeWayView) {
+    if (!marketTypeFilterMarket && isThreeWayView) {
         if (firstSpreadMarket) {
             marketsCount -= 1;
         }
@@ -165,7 +166,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 onClick={() => {
                     if (isGameOpen) {
                         dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }));
-                        dispatch(setBetTypeFilter([]));
+                        dispatch(setMarketTypeFilter([]));
                     }
                 }}
             >
@@ -257,7 +258,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     {isGameLive ? (
                         <PositionsV2
                             markets={[market]}
-                            betType={BetType.WINNER}
+                            marketType={MarketType.WINNER}
                             isGameOpen={isGameLive}
                             isMainPageView
                             isColumnView={isColumnView}
@@ -265,8 +266,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     ) : isGameOpen ? (
                         <>
                             <PositionsV2
-                                markets={[betTypeFilterMarket ? betTypeFilterMarket : market]}
-                                betType={betTypeFilterMarket ? betTypeFilter[0] : BetType.WINNER}
+                                markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}
+                                marketType={marketTypeFilterMarket ? marketTypeFilter[0] : MarketType.WINNER}
                                 isGameOpen={isGameOpen}
                                 isMainPageView
                                 isColumnView={isColumnView}
@@ -274,7 +275,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {isColumnView && firstSpreadMarket && (
                                 <PositionsV2
                                     markets={[firstSpreadMarket]}
-                                    betType={BetType.SPREAD}
+                                    marketType={MarketType.SPREAD}
                                     isGameOpen={isGameOpen}
                                     isMainPageView
                                     isColumnView={isColumnView}
@@ -283,7 +284,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {isColumnView && firstTotalMarket && (
                                 <PositionsV2
                                     markets={[firstTotalMarket]}
-                                    betType={BetType.TOTAL}
+                                    marketType={MarketType.TOTAL}
                                     isGameOpen={isGameOpen}
                                     isMainPageView
                                     isColumnView={isColumnView}

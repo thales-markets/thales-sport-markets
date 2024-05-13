@@ -1,14 +1,14 @@
+import SimpleLoader from 'components/SimpleLoader';
 import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getSelectedMarket, setBetTypeFilter, setSelectedMarket } from 'redux/modules/market';
+import { getSelectedMarket, setMarketTypeFilter, setSelectedMarket } from 'redux/modules/market';
 import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket } from 'types/markets';
-import SimpleLoader from '../../../../components/SimpleLoader';
-import { FlexDivCentered, FlexDivColumn } from '../../../../styles/common';
-import { getTeamNameV2 } from '../../../../utils/marketsV2';
+import { getTeamNameV2 } from 'utils/marketsV2';
 import SelectedMarketDetails from '../SelectedMarketDetails';
 
 const SelectedMarket: React.FC = () => {
@@ -41,7 +41,7 @@ const SelectedMarket: React.FC = () => {
             <CloseIcon
                 className="icon icon--close"
                 onClick={() => {
-                    dispatch(setBetTypeFilter([]));
+                    dispatch(setMarketTypeFilter([]));
                     dispatch(setSelectedMarket(undefined));
                 }}
             />

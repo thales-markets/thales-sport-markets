@@ -1,11 +1,11 @@
 import Tooltip from 'components/Tooltip';
-import { BetTypeNameMap } from 'constants/tags';
-import { BetType } from 'enums/markets';
+import { MarketType } from 'enums/marketTypes';
 import { orderBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
+import { getMarketTypeName } from 'utils/markets';
 import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
 import PositionDetailsV2 from '../PositionDetailsV2';
 import {
@@ -22,7 +22,7 @@ import {
 
 type PositionsProps = {
     markets: SportMarket[];
-    betType: BetType;
+    marketType: MarketType;
     isGameOpen: boolean;
     isMainPageView?: boolean;
     isColumnView?: boolean;
@@ -31,7 +31,7 @@ type PositionsProps = {
 
 const Positions: React.FC<PositionsProps> = ({
     markets,
-    betType,
+    marketType,
     isGameOpen,
     isMainPageView,
     isColumnView,
@@ -69,10 +69,16 @@ const Positions: React.FC<PositionsProps> = ({
             <Header isMainPageView={isMainPageView} isColumnView={isColumnView}>
                 <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
                     {getTitleText(markets[0])}
-                    {betType == BetType.PLAYER_PROPS_TOUCHDOWNS && (
+                    {marketType == MarketType.PLAYER_PROPS_TOUCHDOWNS && (
                         <Tooltip
                             overlay={
-                                <>{t(`markets.market-card.odd-tooltip.player-props.info.${BetTypeNameMap[betType]}`)}</>
+                                <>
+                                    {t(
+                                        `markets.market-card.odd-tooltip.player-props.info.${getMarketTypeName(
+                                            marketType
+                                        )}`
+                                    )}
+                                </>
                             }
                             iconFontSize={13}
                             marginLeft={3}

@@ -1,5 +1,7 @@
-import { BetTypeMap, SPORTS_MAP } from 'constants/tags';
-import { BetType, OddsType } from 'enums/markets';
+import { MarketTypeMap } from 'constants/marketTypes';
+import { SPORTS_MAP } from 'constants/tags';
+import { MarketType } from 'enums/marketTypes';
+import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
@@ -8,9 +10,9 @@ import { getCollateralByAddress } from './collaterals';
 import {
     formatMarketOdds,
     getIsOneSideMarket,
-    isOneSidePlayerProps,
-    isPlayerProps,
-    isSpecialYesNoProp,
+    getIsOneSidePlayerPropsMarket,
+    getIsPlayerPropsMarket,
+    getIsYesNoPlayerPropsMarket,
 } from './markets';
 
 export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticket => {
@@ -43,8 +45,8 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
             const leagueId = Number(market.sportId);
             // const isEnetpulseSport = ENETPULSE_SPORTS.includes(leagueId);
             const typeId = Number(market.typeId);
-            const isPlayerPropsMarket = isPlayerProps(typeId);
-            const type = BetTypeMap[typeId as BetType];
+            const isPlayerPropsMarket = getIsPlayerPropsMarket(typeId);
+            const type = MarketTypeMap[typeId as MarketType];
             const line = Number(market.line);
 
             const homeTeam = !!teamNames[market.gameId] && teamNames[market.gameId].find((team: Team) => team.isHome);
@@ -84,8 +86,8 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
                 total: line / 100,
                 line: line / 100,
                 isPlayerPropsMarket: isPlayerPropsMarket,
-                isOneSidePlayerPropsMarket: isOneSidePlayerProps(typeId),
-                isYesNoPlayerPropsMarket: isSpecialYesNoProp(typeId),
+                isOneSidePlayerPropsMarket: getIsOneSidePlayerPropsMarket(typeId),
+                isYesNoPlayerPropsMarket: getIsYesNoPlayerPropsMarket(typeId),
                 playerProps: {
                     playerId: Number(market.playerId),
                     playerName: 'Player Name',

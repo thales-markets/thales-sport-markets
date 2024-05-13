@@ -1,37 +1,38 @@
-import { BET_TYPES_BY_SPORT, BET_TYPE_GROUPS_BY_SPORT, BetTypeNameMap } from 'constants/tags';
-import { BetType, BetTypeGroup } from 'enums/markets';
+import { MARKET_TYPES_BY_SPORT, MARKET_TYPE_GROUPS_BY_SPORT } from 'constants/marketTypes';
+import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    getBetTypeFilter,
     getIsThreeWayView,
+    getMarketTypeFilter,
     getSelectedMarket,
     getSportFilter,
-    setBetTypeFilter,
     setIsThreeWayView,
+    setMarketTypeFilter,
 } from 'redux/modules/market';
-import { ArrowIcon, BetTypeButton, BetTypesContainer, Container, ThreeWayIcon } from './styled-components';
+import { getMarketTypeName } from 'utils/markets';
+import { ArrowIcon, Container, MarketTypeButton, MarketTypesContainer, ThreeWayIcon } from './styled-components';
 
 type HeaderProps = {
-    availableBetTypes: BetType[];
+    availableMarketTypes: MarketType[];
 };
 
 const SCROLL_AMOUNT = 200;
 
-const Header: React.FC<HeaderProps> = ({ availableBetTypes }) => {
+const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
     const dispatch = useDispatch();
     const isThreeWayView = useSelector(getIsThreeWayView);
-    const betTypeFilter = useSelector(getBetTypeFilter);
+    const marketTypeFilter = useSelector(getMarketTypeFilter);
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
 
-    const betTypes = useMemo(() => {
+    const marketTypes = useMemo(() => {
         if (selectedMarket) {
-            return Object.keys(BET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport] || {});
+            return Object.keys(MARKET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport] || {});
         } else {
-            return availableBetTypes.filter((betType) => BET_TYPES_BY_SPORT[sportFilter].includes(betType));
+            return availableMarketTypes.filter((marketType) => MARKET_TYPES_BY_SPORT[sportFilter].includes(marketType));
         }
-    }, [sportFilter, availableBetTypes, selectedMarket]);
+    }, [sportFilter, availableMarketTypes, selectedMarket]);
 
     return (
         <Container>
@@ -45,54 +46,58 @@ const Header: React.FC<HeaderProps> = ({ availableBetTypes }) => {
                     });
                 }}
             />
-            <BetTypesContainer id="bet-types-container">
-                {betTypes.map((betType) => {
-                    if (typeof betType === 'string') {
+            <MarketTypesContainer id="bet-types-container">
+                {marketTypes.map((marketType) => {
+                    if (typeof marketType === 'string') {
                         if (!selectedMarket) {
                             return;
                         }
                         return (
-                            <BetTypeButton
+                            <MarketTypeButton
                                 onClick={() =>
                                     JSON.stringify(
-                                        BET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport][betType as BetTypeGroup] || []
-                                    ) === JSON.stringify(betTypeFilter)
-                                        ? dispatch(setBetTypeFilter([]))
+                                        MARKET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport][
+                                            marketType as MarketTypeGroup
+                                        ] || []
+                                    ) === JSON.stringify(marketTypeFilter)
+                                        ? dispatch(setMarketTypeFilter([]))
                                         : dispatch(
-                                              setBetTypeFilter(
-                                                  BET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport][
-                                                      betType as BetTypeGroup
+                                              setMarketTypeFilter(
+                                                  MARKET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport][
+                                                      marketType as MarketTypeGroup
                                                   ] || []
                                               )
                                           )
                                 }
                                 selected={
                                     JSON.stringify(
-                                        BET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport][betType as BetTypeGroup] || []
-                                    ) === JSON.stringify(betTypeFilter)
+                                        MARKET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport][
+                                            marketType as MarketTypeGroup
+                                        ] || []
+                                    ) === JSON.stringify(marketTypeFilter)
                                 }
-                                key={betType}
+                                key={marketType}
                             >
-                                {betType}
-                            </BetTypeButton>
+                                {marketType}
+                            </MarketTypeButton>
                         );
                     } else {
                         return (
-                            <BetTypeButton
+                            <MarketTypeButton
                                 onClick={() =>
-                                    betTypeFilter.includes(betType)
-                                        ? dispatch(setBetTypeFilter([]))
-                                        : dispatch(setBetTypeFilter([betType]))
+                                    marketTypeFilter.includes(marketType)
+                                        ? dispatch(setMarketTypeFilter([]))
+                                        : dispatch(setMarketTypeFilter([marketType]))
                                 }
-                                selected={betTypeFilter.includes(betType)}
-                                key={betType}
+                                selected={marketTypeFilter.includes(marketType)}
+                                key={marketType}
                             >
-                                {BetTypeNameMap[betType]}
-                            </BetTypeButton>
+                                {getMarketTypeName(marketType)}
+                            </MarketTypeButton>
                         );
                     }
                 })}
-            </BetTypesContainer>
+            </MarketTypesContainer>
             <ArrowIcon
                 onClick={() => {
                     document.getElementById('bet-types-container')?.scrollBy({
