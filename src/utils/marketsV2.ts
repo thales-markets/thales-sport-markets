@@ -10,6 +10,7 @@ import { BetType, Position } from 'enums/markets';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
 import { SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
+import { TAGS_FLAGS } from '../enums/tags';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     getIsOneSideMarket,
@@ -222,7 +223,7 @@ export const getTitleText = (market: SportMarket) => {
     let sufix = isPeriod(betType) ? ` ${SPORT_PERIODS_MAP[market.leagueId]}` : isPeriod2(betType) ? ' half' : '';
 
     if (
-        (market.leagueId == 9153 || market.leagueId == 9156) &&
+        (market.leagueId == TAGS_FLAGS.TENNIS_GS || market.leagueId == TAGS_FLAGS.TENNIS_MASTERS) &&
         (isTotal(betType) || isTotalOddEven(betType) || isSpread(betType))
     ) {
         sufix = `${sufix}${betType === BetType.TOTAL2 || betType === BetType.SPREAD2 ? ' (sets)' : ' (games)'}`;

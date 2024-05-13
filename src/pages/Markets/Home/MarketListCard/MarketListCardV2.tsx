@@ -16,6 +16,7 @@ import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import SPAAnchor from '../../../../components/SPAAnchor';
 import { BetType } from '../../../../enums/markets';
+import { TAGS_FLAGS } from '../../../../enums/tags';
 import {
     getBetTypeFilter,
     getIsMarketSelected,
@@ -321,10 +322,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             ? market.homeScore == 1
                                                 ? t('markets.market-card.race-winner')
                                                 : t('markets.market-card.no-win')
-                                            : Number(market.leagueId) != 9007
+                                            : Number(market.leagueId) != TAGS_FLAGS.UFC
                                             ? `${market.homeScore} - ${market.awayScore}`
                                             : ''}
-                                        {Number(market.leagueId) == 9007 ? (
+                                        {Number(market.leagueId) == TAGS_FLAGS.UFC ? (
                                             <>
                                                 {Number(market.homeScore) > 0
                                                     ? `W - L (R${market.homeScore})`

@@ -5,29 +5,29 @@ import { fixOneSideMarketCompetitorName } from './formatters/string';
 import { isInternationalGame } from './markets';
 
 export const getTeamImageSource = (team: string, leagueTag: number) =>
-    leagueTag == 9153 || leagueTag == 9156
+    leagueTag == TAGS_FLAGS.TENNIS_GS || leagueTag == TAGS_FLAGS.TENNIS_MASTERS
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9445 || leagueTag == 9497
+        : leagueTag == TAGS_FLAGS.FORMULA1 || leagueTag == TAGS_FLAGS.MOTOGP
         ? `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${fixOneSideMarketCompetitorName(team)
               .replaceAll(' ', '-')
               .toLowerCase()}.webp`
-        : leagueTag == 109021
+        : leagueTag == TAGS_FLAGS.GOLF_H2H
         ? `/logos/PGA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 109121
+        : leagueTag == TAGS_FLAGS.GOLF_WINNER
         ? `/logos/PGA/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9268
+        : leagueTag == TAGS_FLAGS.BRAZIL_1
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : isInternationalGame(Number(leagueTag))
         ? `/logos/Countries/${team.trim().replaceAll(' ', '-').toLowerCase()}.svg`
-        : leagueTag == 9132
+        : leagueTag == TAGS_FLAGS.ENGLAND_CUP
         ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9134
+        : leagueTag == TAGS_FLAGS.FRANCE_CUP
         ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9138
+        : leagueTag == TAGS_FLAGS.SPAIN_CUP
         ? `/logos/La Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9141
+        : leagueTag == TAGS_FLAGS.ITALY_CUP
         ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == 9209
+        : leagueTag == TAGS_FLAGS.GERMANY_CUP
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : `/logos/${TAGS_LIST.find((t) => t.id == leagueTag)?.label}/${team
               .trim()

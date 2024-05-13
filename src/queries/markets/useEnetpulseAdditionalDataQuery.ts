@@ -3,6 +3,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { SPORT_ID_MAP_ENETPULSE, SPORTS_TAGS_MAP } from 'constants/tags';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
+import { TAGS_FLAGS } from '../../enums/tags';
 
 const useEnetpulseAdditionalDataQuery = (
     marketId: string,
@@ -81,9 +82,18 @@ const useEnetpulseAdditionalDataQuery = (
                         scoreAwayByPeriod,
                         displayClock,
                         sportId,
-                        tournamentName: sportTag == 9033 || sportTag == 9050 || sportTag == 19199 ? '' : tournamentName,
+                        tournamentName:
+                            sportTag == TAGS_FLAGS.IIHF_WORLD_CHAMPIONSHIP ||
+                            sportTag == TAGS_FLAGS.UEFA_EURO_QUALIFICATIONS ||
+                            sportTag == TAGS_FLAGS.CONMEBOL_WC_QUALIFICATIONS
+                                ? ''
+                                : tournamentName,
                         tournamentRound:
-                            sportTag == 9033 || sportTag == 9050 || sportTag == 19199 ? '' : tournamentRound,
+                            sportTag == TAGS_FLAGS.IIHF_WORLD_CHAMPIONSHIP ||
+                            sportTag == TAGS_FLAGS.UEFA_EURO_QUALIFICATIONS ||
+                            sportTag == TAGS_FLAGS.CONMEBOL_WC_QUALIFICATIONS
+                                ? ''
+                                : tournamentRound,
                     };
                     return finalResult;
                 }

@@ -1,6 +1,7 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
+import { TAGS_FLAGS } from '../../enums/tags';
 
 const useSportMarketLiveResultQuery = (
     marketId: string,
@@ -22,7 +23,7 @@ const useSportMarketLiveResultQuery = (
                 const displayClock = resultData.events[0].score.display_clock;
                 const sportId = resultData.events[0].sport_id + 9000;
 
-                if (sportId == 9007) {
+                if (sportId == TAGS_FLAGS.UFC) {
                     let totalHomeScoreInRounds = 0;
                     let totalAwayScoreInRounds = 0;
                     for (let i = 0; i < scoreHomeByPeriod.length; i++) {

@@ -32,6 +32,7 @@ import { convertFromBytes32 } from 'utils/formatters/string';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
+import { TAGS_FLAGS } from '../../../../enums/tags';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
 import TicketTransactions from './components/TicketTransactions';
@@ -318,7 +319,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         ? market.homeScore == 1
                                             ? t('markets.market-card.race-winner')
                                             : t('markets.market-card.no-win')
-                                        : Number(liveResultInfo?.sportId) != 9007
+                                        : Number(liveResultInfo?.sportId) != TAGS_FLAGS.UFC
                                         ? `${market.homeScore} - ${market.awayScore}`
                                         : ''}
                                     {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
@@ -331,7 +332,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                     ')'}
                                             </InfoLabel>
                                         )}
-                                    {Number(liveResultInfo?.sportId) == 9007 ? (
+                                    {Number(liveResultInfo?.sportId) == TAGS_FLAGS.UFC ? (
                                         <>
                                             {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
                                             <InfoLabel className="ufc">
@@ -434,7 +435,7 @@ const hideResultInfoPerPeriodForSports = (sportId: number) => {
         !SPORTS_TAGS_MAP['MMA'].includes(sportId) &&
         !SPORTS_TAGS_MAP['Cricket'].includes(sportId) &&
         !SPORTS_TAGS_MAP['Motosport'].includes(sportId) &&
-        sportId != 9399
+        sportId != TAGS_FLAGS.EUROLEAGUE
     );
 };
 

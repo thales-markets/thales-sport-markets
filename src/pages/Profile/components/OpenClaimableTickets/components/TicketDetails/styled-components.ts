@@ -8,7 +8,7 @@ export const Container = styled(FlexDivColumnNative)`
     background-color: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
     width: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
     @media (max-width: 768px) {
         padding: 7px 5px;
     }
