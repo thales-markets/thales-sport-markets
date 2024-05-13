@@ -1,6 +1,8 @@
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
+import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
@@ -66,6 +68,7 @@ import {
     getDefaultCollateral,
     isLpSupported,
 } from 'utils/collaterals';
+import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
@@ -75,8 +78,6 @@ import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
-import ShareTicketModalV2 from '../ShareTicketModalV2';
-import { ShareTicketModalProps } from '../ShareTicketModalV2/ShareTicketModalV2';
 import SuggestedAmount from '../SuggestedAmount';
 import Voucher from '../Voucher';
 import {
@@ -95,8 +96,6 @@ import {
     XButton,
     defaultButtonProps,
 } from '../styled-components';
-
-import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 
 type TicketProps = {
     markets: TicketMarket[];

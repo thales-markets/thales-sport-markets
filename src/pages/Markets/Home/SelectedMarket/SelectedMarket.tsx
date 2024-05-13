@@ -5,7 +5,7 @@ import { getIsAppReady } from 'redux/modules/app';
 import { getSelectedMarket, setBetTypeFilter, setSelectedMarket } from 'redux/modules/market';
 import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { SportMarketInfoV2 } from 'types/markets';
+import { SportMarket } from 'types/markets';
 import SimpleLoader from '../../../../components/SimpleLoader';
 import { FlexDivCentered, FlexDivColumn } from '../../../../styles/common';
 import { getTeamNameV2 } from '../../../../utils/marketsV2';
@@ -16,7 +16,7 @@ const SelectedMarket: React.FC = () => {
     const selectedMarket = useSelector(getSelectedMarket);
     const isAppReady = useSelector(getIsAppReady);
     const networkId = useSelector(getNetworkId);
-    const [lastValidMarket, setLastValidMarket] = useState<SportMarketInfoV2 | undefined>(undefined);
+    const [lastValidMarket, setLastValidMarket] = useState<SportMarket | undefined>(undefined);
 
     const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, networkId, {
         enabled: isAppReady && !!selectedMarket,

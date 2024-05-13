@@ -9,7 +9,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getBetTypeFilter } from 'redux/modules/market';
 import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
-import { SportMarketInfoV2, TicketPosition } from 'types/markets';
+import { SportMarket, TicketPosition } from 'types/markets';
 import { formatMarketOdds, getPositionOrder } from 'utils/markets';
 import { getOddTooltipTextV2, getPositionTextV2, isSameMarket } from 'utils/marketsV2';
 import {
@@ -26,7 +26,7 @@ import {
 } from './styled-components';
 
 type PositionDetailsProps = {
-    market: SportMarketInfoV2;
+    market: SportMarket;
     position: Position;
     isMainPageView?: boolean;
 };

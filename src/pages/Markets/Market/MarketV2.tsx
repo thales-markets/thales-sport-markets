@@ -8,7 +8,7 @@ import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { SportMarketInfoV2 } from 'types/markets';
+import { SportMarket } from 'types/markets';
 import MarketDetailsV2 from './MarketDetailsV2';
 
 type MarketProps = RouteComponentProps<{
@@ -17,7 +17,7 @@ type MarketProps = RouteComponentProps<{
 
 const Market: React.FC<MarketProps> = (props) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const [lastValidMarket, setLastValidMarket] = useState<SportMarketInfoV2 | undefined>(undefined);
+    const [lastValidMarket, setLastValidMarket] = useState<SportMarket | undefined>(undefined);
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const { params } = props.match;

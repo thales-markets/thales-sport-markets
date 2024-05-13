@@ -103,7 +103,7 @@ export type MarketSport =
     | 'Cricket'
     | 'Golf';
 
-export type SportMarketInfoV2 = {
+export type SportMarket = {
     gameId: string;
     sport: MarketSport;
     leagueId: number;
@@ -131,13 +131,13 @@ export type SportMarketInfoV2 = {
     playerProps: PlayerProps;
     odds: number[];
     proof: string[];
-    childMarkets: SportMarketInfoV2[];
+    childMarkets: SportMarket[];
     combinedPositions: CombinedPositions[];
     selectedCombinedPositions?: CombinedPositions;
     live?: boolean;
 };
 
-export type SportMarketsV2 = SportMarketInfoV2[];
+export type SportMarkets = SportMarket[];
 
 export type TicketPosition = {
     gameId: string;
@@ -156,7 +156,7 @@ export type BetTypeInfo = {
     showTooltip: boolean;
 };
 
-export type TicketMarket = SportMarketInfoV2 & {
+export type TicketMarket = SportMarket & {
     position: Position;
     odd: number;
     isWinning?: boolean;

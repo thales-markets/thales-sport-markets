@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { formatShortDateWithTime } from 'thales-utils';
-import { SportMarketInfoV2, SportMarketLiveResult } from 'types/markets';
+import { SportMarket, SportMarketLiveResult } from 'types/markets';
 import { convertFromBytes32, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
@@ -47,7 +47,7 @@ import {
 } from './styled-components';
 
 type MarketRowCardProps = {
-    market: SportMarketInfoV2;
+    market: SportMarket;
     language: string;
 };
 

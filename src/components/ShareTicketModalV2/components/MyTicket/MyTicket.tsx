@@ -19,9 +19,9 @@ import {
     FlexDivRowCentered,
 } from 'styles/common';
 import { formatCurrencyWithSign } from 'thales-utils';
+import { TicketMarket } from 'types/markets';
 import { buildReffererLink } from 'utils/routes';
 import { formatTicketOdds } from 'utils/tickets';
-import { TicketMarket } from '../../../../../../../../types/markets';
 import MatchInfoV2 from '../../../MatchInfoV2';
 
 type MyTicketProps = {

@@ -3,7 +3,7 @@ import { SPORTS_TAGS_MAP } from 'constants/tags';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatShortDateWithTime } from 'thales-utils';
-import { SportMarketInfoV2, SportMarketLiveResult } from 'types/markets';
+import { SportMarket, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
@@ -24,7 +24,7 @@ import {
 } from './styled-components';
 
 type MatchInfoPropsType = {
-    market: SportMarketInfoV2;
+    market: SportMarket;
     liveResultInfo: SportMarketLiveResult | undefined;
     isEnetpulseSport: boolean;
 };

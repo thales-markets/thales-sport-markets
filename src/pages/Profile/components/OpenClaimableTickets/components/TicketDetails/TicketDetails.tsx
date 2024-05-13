@@ -1,5 +1,7 @@
 import Button from 'components/Button/Button';
 import CollateralSelector from 'components/CollateralSelector';
+import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
 import React, { useMemo, useState } from 'react';
@@ -25,25 +27,15 @@ import { getIsMultiCollateralSupported } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
 import { refetchAfterClaim } from 'utils/queryConnector';
 import { formatTicketOdds, getTicketMarketOdd } from 'utils/tickets';
-import ShareTicketModalV2, {
-    ShareTicketModalProps,
-} from '../../../../../Markets/Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
-import {
-    ClaimContainer,
-    ClaimLabel,
-    ClaimValue,
-    ExternalLink,
-    PayoutLabel,
-    additionalClaimButtonStyle,
-    additionalClaimButtonStyleMobile,
-} from '../../styled-components';
-import TicketItem from './components/TicketItem';
+import TicketMarketDetails from '../TicketMarketDetails';
 import {
     ArrowIcon,
+    ClaimContainer,
     CollapsableContainer,
     CollapseFooterContainer,
     CollateralSelectorContainer,
     Container,
+    ExternalLink,
     InfoContainerColumn,
     Label,
     NumberOfGamesContainer,
@@ -55,13 +47,15 @@ import {
     Value,
     WinLabel,
     WinValue,
+    additionalClaimButtonStyle,
+    additionalClaimButtonStyleMobile,
 } from './styled-components';
 
-type TicketPositionProps = {
+type TicketDetailsProps = {
     ticket: Ticket;
 };
 
-const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
+const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -159,7 +153,7 @@ const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
             setShowShareTicketModal ? setShowShareTicketModal(false) : null;
         },
         isTicketLost: ticket.isLost,
-        isTicketResolved: !ticket.isOpen,
+        isTicketResolved: ticket.isResolved,
     };
 
     const getClaimButton = (isMobile: boolean) => (
@@ -202,23 +196,15 @@ const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
                 </InfoContainerColumn>
                 {isMobile && !isClaimable && (
                     <InfoContainerColumn>
-                        <WinLabel>{t('profile.card.to-win')}:</WinLabel>
+                        <WinLabel>{t('profile.card.payout')}:</WinLabel>
                         <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                     </InfoContainerColumn>
                 )}
                 {!isMobile && (
                     <>
                         <InfoContainerColumn>
-                            {isClaimable ? (
-                                <ClaimLabel>{t('profile.card.win')}:</ClaimLabel>
-                            ) : (
-                                <WinLabel>{t('profile.card.to-win')}:</WinLabel>
-                            )}
-                            {isClaimable ? (
-                                <ClaimValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</ClaimValue>
-                            ) : (
-                                <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
-                            )}
+                            <WinLabel>{t('profile.card.payout')}:</WinLabel>
+                            <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                         </InfoContainerColumn>
                         {isClaimable && isMultiCollateralSupported && (
                             <InfoContainerColumn
@@ -229,7 +215,7 @@ const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
                             >
                                 {(!ticketCollateralHasLp || isTicketCollateralDefaultCollateral) && (
                                     <>
-                                        <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
+                                        <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
                                         <CollateralSelector
                                             collateralArray={getCollaterals(networkId)}
                                             selectedItem={selectedCollateralIndex}
@@ -243,11 +229,11 @@ const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
                 )}
                 {isMobile && isClaimable && (
                     <ClaimContainer>
-                        <ClaimValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</ClaimValue>
+                        <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                         {getButton(isMobile)}
                         {isMultiCollateralSupported && (
                             <CollateralSelectorContainer>
-                                <PayoutLabel>{t('profile.card.payout-in')}:</PayoutLabel>
+                                <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
                                 <CollateralSelector
                                     collateralArray={getCollaterals(networkId)}
                                     selectedItem={selectedCollateralIndex}
@@ -263,7 +249,7 @@ const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
             <CollapsableContainer show={showDetails}>
                 <TicketMarketsContainer>
                     {ticket.sportMarkets.map((market, index) => {
-                        return <TicketItem market={market} key={index} />;
+                        return <TicketMarketDetails market={market} key={index} />;
                     })}
                 </TicketMarketsContainer>
                 <CollapseFooterContainer>
@@ -272,16 +258,8 @@ const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
                         <Value>{formatTicketOdds(selectedOddsType, ticket.buyInAmount, ticket.payout)}</Value>
                     </TotalQuoteContainer>
                     <ProfitContainer>
-                        {isClaimable ? (
-                            <ClaimLabel>{t('profile.card.win')}:</ClaimLabel>
-                        ) : (
-                            <WinLabel>{t('profile.card.to-win')}:</WinLabel>
-                        )}
-                        {isClaimable ? (
-                            <ClaimValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</ClaimValue>
-                        ) : (
-                            <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
-                        )}
+                        <WinLabel>{t('profile.card.payout')}:</WinLabel>
+                        <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                     </ProfitContainer>
                 </CollapseFooterContainer>
             </CollapsableContainer>
@@ -300,4 +278,4 @@ const TicketPosition: React.FC<TicketPositionProps> = ({ ticket }) => {
     );
 };
 
-export default TicketPosition;
+export default TicketDetails;

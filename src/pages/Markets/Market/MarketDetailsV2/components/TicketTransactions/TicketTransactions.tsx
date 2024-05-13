@@ -4,15 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { SportMarketInfoV2 } from 'types/markets';
+import { SportMarket } from 'types/markets';
 import TicketTransactionsTable from '../TicketTransactionsTable';
 import { Container, Title } from './styled-components';
 
-const ParlayTransactions: React.FC<{ market: SportMarketInfoV2 }> = ({ market }) => {
+const ParlayTransactions: React.FC<{ market: SportMarket }> = ({ market }) => {
     const { t } = useTranslation();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const gameTicketsQuery = useGameTicketsQuery(market, networkId);
+    const gameTicketsQuery = useGameTicketsQuery(market.gameId, networkId);
 
     const gameTickets = useMemo(() => {
         if (gameTicketsQuery.data && gameTicketsQuery.isSuccess) {

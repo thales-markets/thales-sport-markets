@@ -4,13 +4,13 @@ import { groupBy } from 'lodash';
 import React, { useMemo, useReducer } from 'react';
 import { useSelector } from 'react-redux';
 import { getBetTypeFilter } from 'redux/modules/market';
-import { SportMarketInfoV2 } from 'types/markets';
+import { SportMarket } from 'types/markets';
 import { isOddValid } from 'utils/marketsV2';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { Wrapper } from './styled-components';
 
 type SelectedMarketProps = {
-    market: SportMarketInfoV2;
+    market: SportMarket;
 };
 
 const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
@@ -28,11 +28,11 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
 
     const groupedChildMarkets = useMemo(() => {
         if (!betTypeFilter.length) {
-            return groupBy(market.childMarkets, (childMarket: SportMarketInfoV2) => childMarket.typeId);
+            return groupBy(market.childMarkets, (childMarket: SportMarket) => childMarket.typeId);
         } else {
             return groupBy(
                 market.childMarkets.filter((childMarket) => betTypeFilter.includes(childMarket.typeId)),
-                (childMarket: SportMarketInfoV2) => childMarket.typeId
+                (childMarket: SportMarket) => childMarket.typeId
             );
         }
     }, [market.childMarkets, betTypeFilter]);

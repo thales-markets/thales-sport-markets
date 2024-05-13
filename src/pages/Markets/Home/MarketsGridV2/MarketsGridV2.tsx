@@ -10,11 +10,11 @@ import { getIsMarketSelected } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { SportMarketInfoV2, SportMarketsV2, TagInfo, Tags } from 'types/markets';
+import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
-    markets: SportMarketsV2;
+    markets: SportMarkets;
 };
 
 const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
@@ -23,7 +23,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const isMarketSelected = useSelector(getIsMarketSelected);
     const dateFilter = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
 
-    const marketsMap: Record<number, SportMarketInfoV2[]> = groupBy(markets, (market) => Number(market.leagueId));
+    const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
     // UNIFYING EUROPA LEAGUE MARKETS FROM BOTH ENETPULSE & RUNDOWNS PROVIDERS
     const unifiedMarketsMapEuropaLeague = unifyEuropaLeagueMarkets(marketsMap);
     const unifiedMarketsMap = unifyBoxingMarkets(unifiedMarketsMapEuropaLeague);
@@ -58,7 +58,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
 const sortMarketKeys = (
     marketsKeys: number[],
-    marketsMap: Record<number, SportMarketInfoV2[]>,
+    marketsMap: Record<number, SportMarket[]>,
     favouriteLeagues: Tags,
     dateFilter: any
 ) => {
@@ -185,7 +185,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     ];
 };
 
-const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarketInfoV2[]>) => {
+const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarket[]>) => {
     const rundownEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[0]] ? marketsMap[EUROPA_LEAGUE_TAGS[0]] : [];
     const enetpulseEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[1]] ? marketsMap[EUROPA_LEAGUE_TAGS[1]] : [];
     if (rundownEuropaLeagueGames.length > 0 || enetpulseEuropaLeagueGames.length > 0) {
@@ -195,7 +195,7 @@ const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarketInfoV2[]
     return marketsMap;
 };
 
-const unifyBoxingMarkets = (marketsMap: Record<number, SportMarketInfoV2[]>) => {
+const unifyBoxingMarkets = (marketsMap: Record<number, SportMarket[]>) => {
     const boxingMarkets = marketsMap[BOXING_TAGS[0]] ? marketsMap[BOXING_TAGS[0]] : [];
     const boxingNonTitleMarkets = marketsMap[BOXING_TAGS[1]] ? marketsMap[BOXING_TAGS[1]] : [];
     if (boxingMarkets.length > 0 || boxingNonTitleMarkets.length > 0) {

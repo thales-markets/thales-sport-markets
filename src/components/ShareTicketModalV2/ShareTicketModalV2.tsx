@@ -11,8 +11,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
 import { isFirefox, isIos, isMetamask } from 'thales-utils';
-import { TicketMarket } from '../../../../../../types/markets';
-import { TwitterIcon } from '../styled-components';
+import { TicketMarket } from 'types/markets';
 import MyTicket from './components/MyTicket';
 
 export type ShareTicketModalProps = {
@@ -299,6 +298,19 @@ const TwitterShareLabel = styled.span`
     line-height: 25px;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
+`;
+
+const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
+    font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.primary)};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? '0.4' : '1')};
+    ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
+    text-transform: lowercase;
+    &:before {
+        font-family: ExoticIcons !important;
+        content: '\\0061';
+    }
 `;
 
 export default React.memo(ShareTicketModal);

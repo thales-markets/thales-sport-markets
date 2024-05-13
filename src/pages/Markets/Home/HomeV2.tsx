@@ -42,7 +42,7 @@ import { getNetworkId } from 'redux/modules/wallet';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
-import { SportMarketInfoV2, SportMarketsV2, TagInfo, Tags } from 'types/markets';
+import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
@@ -71,10 +71,10 @@ const FooterSidebarMobile = lazy(
 const MarketsGridV2 = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ './MarketsGridV2'));
 
 type AllMarkets = {
-    OpenMarkets: SportMarketsV2;
-    Canceled: SportMarketsV2;
-    ResolvedMarkets: SportMarketsV2;
-    PendingMarkets: SportMarketsV2;
+    OpenMarkets: SportMarkets;
+    Canceled: SportMarkets;
+    ResolvedMarkets: SportMarkets;
+    PendingMarkets: SportMarkets;
 };
 
 const Home: React.FC = () => {
@@ -224,7 +224,7 @@ const Home: React.FC = () => {
         const filteredMarkets = (sportFilter === SportFilterEnum.Live
             ? allLiveMarkets
             : allMarkets[globalFilter] || allMarkets[GlobalFiltersEnum.OpenMarkets]
-        ).filter((market: SportMarketInfoV2) => {
+        ).filter((market: SportMarket) => {
             if (marketSearch) {
                 if (
                     !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
@@ -353,7 +353,7 @@ const Home: React.FC = () => {
     );
 
     const openMarketsCountPerTag = useMemo(() => {
-        const openSportMarkets: SportMarketsV2 =
+        const openSportMarkets: SportMarkets =
             openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
                 ? openSportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets]
                 : [];
@@ -402,7 +402,7 @@ const Home: React.FC = () => {
     }, [openMarketsCountPerTag, favouriteLeagues]);
 
     const liveMarketsCountPerTag = useMemo(() => {
-        const liveSportMarkets: SportMarketsV2 =
+        const liveSportMarkets: SportMarkets =
             liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
 
         const groupedMarkets = groupBy(liveSportMarkets, (market) => market.leagueId);

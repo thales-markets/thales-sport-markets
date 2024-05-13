@@ -20,10 +20,10 @@ import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
-import { SportMarketInfoV2, TicketMarket } from 'types/markets';
+import { SportMarket, TicketMarket } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
-import MatchInfoV2 from './components/MatchInfoV2';
+import MatchInfoV2 from '../../../../components/MatchInfoV2';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
@@ -78,9 +78,9 @@ const Parlay: React.FC = () => {
             liveSportMarketsQuery.data
         ) {
             const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets].reduce(
-                (acc: SportMarketInfoV2[], market: SportMarketInfoV2) => {
+                (acc: SportMarket[], market: SportMarket) => {
                     acc.push(market);
-                    market.childMarkets.forEach((childMarket: SportMarketInfoV2) => {
+                    market.childMarkets.forEach((childMarket: SportMarket) => {
                         acc.push(childMarket);
                     });
                     return acc;
@@ -89,9 +89,9 @@ const Parlay: React.FC = () => {
             );
 
             const liveSportOpenMarkets = liveSportMarketsQuery.data.reduce(
-                (acc: SportMarketInfoV2[], market: SportMarketInfoV2) => {
+                (acc: SportMarket[], market: SportMarket) => {
                     acc.push(market);
-                    market.childMarkets.forEach((childMarket: SportMarketInfoV2) => {
+                    market.childMarkets.forEach((childMarket: SportMarket) => {
                         acc.push(childMarket);
                     });
                     return acc;
@@ -103,10 +103,10 @@ const Parlay: React.FC = () => {
 
             const ticketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
-                    liveAndOpenSportMarkets.some((market: SportMarketInfoV2) => isSameMarket(market, ticketPosition))
+                    liveAndOpenSportMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
                 )
                 .map((ticketPosition) => {
-                    const openMarket: SportMarketInfoV2 = liveAndOpenSportMarkets.filter((market: SportMarketInfoV2) =>
+                    const openMarket: SportMarket = liveAndOpenSportMarkets.filter((market: SportMarket) =>
                         isSameMarket(market, ticketPosition)
                     )[0];
                     return {
@@ -120,7 +120,7 @@ const Parlay: React.FC = () => {
             if (ticket.length > ticketMarkets.length) {
                 if (!isLiveFilterSelected) {
                     const notOpenedMarkets = ticket.filter((ticketPosition) =>
-                        sportOpenMarkets.every((market: SportMarketInfoV2) => !isSameMarket(market, ticketPosition))
+                        sportOpenMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
                     );
 
                     if (notOpenedMarkets.length > 0) dispatch(removeAll());

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivColumnNative)`
@@ -28,6 +28,8 @@ export const OverviewContainer = styled(FlexDivRow)`
         justify-content: space-between;
     }
 `;
+
+export const ExternalLink = styled.a``;
 
 export const TicketIdContainer = styled(FlexDivStart)`
     min-width: 150px;
@@ -111,15 +113,38 @@ export const CollapseFooterContainer = styled(FlexDivRow)`
 `;
 
 export const TotalQuoteContainer = styled(FlexDivRow)`
-    text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export const ProfitContainer = styled(FlexDivRow)`
-    text-transform: uppercase;
     margin-left: 20px;
 `;
 
 export const CollateralSelectorContainer = styled(FlexDivRow)`
     margin-top: 5px;
 `;
+
+export const ClaimContainer = styled(FlexDivColumnNative)`
+    min-width: 100px;
+    align-items: end;
+    justify-content: flex-end;
+    @media (max-width: 768px) {
+        min-width: 60px;
+    }
+    button {
+        margin-top: 2px;
+        @media (max-width: 768px) {
+            margin-top: 0px;
+        }
+    }
+`;
+
+export const additionalClaimButtonStyle: CSSProperties = {
+    minWidth: '100px',
+    maxWidth: '100px',
+};
+
+export const additionalClaimButtonStyleMobile: CSSProperties = {
+    minWidth: '65px',
+    maxWidth: '80px',
+};

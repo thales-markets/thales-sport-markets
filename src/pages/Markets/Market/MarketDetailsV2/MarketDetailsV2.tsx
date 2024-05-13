@@ -26,7 +26,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { NetworkId } from 'thales-utils';
-import { SportMarketInfoV2, SportMarketLiveResult, TagInfo } from 'types/markets';
+import { SportMarket, SportMarketLiveResult, TagInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { convertFromBytes32 } from 'utils/formatters/string';
 import { buildHref, navigateTo } from 'utils/routes';
@@ -37,7 +37,7 @@ import PositionsV2 from './components/PositionsV2';
 import TicketTransactions from './components/TicketTransactions';
 
 type MarketDetailsPropType = {
-    market: SportMarketInfoV2;
+    market: SportMarket;
 };
 
 const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {

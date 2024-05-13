@@ -15,7 +15,7 @@ import { navItems } from '../../components/NavigationBar/NavigationBar';
 import SearchField from '../../components/SearchField';
 import UserVaults from '../../components/UserVaults';
 import NavigationBar from '../NavigationBar';
-import PositionsV2 from '../PositionsV2';
+import OpenClaimableTickets from '../OpenClaimableTickets';
 import TicketTransactions from '../TicketTransactions';
 import UserStatsV2 from '../UserStatsV2';
 
@@ -33,9 +33,9 @@ const MyTickets: React.FC = () => {
 
     return (
         <RowContainer>
-            <SidebarContainer maxWidth={263}>
+            <LeftSidebarContainer>
                 <BannerCarousel />
-            </SidebarContainer>
+            </LeftSidebarContainer>
             <MainContainer>
                 <NavigationWrapper>
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
@@ -49,13 +49,13 @@ const MyTickets: React.FC = () => {
                         handleChange={(value) => setSearchText(value)}
                     />
                 </NavigationWrapper>
-                {navItems[0].id == navItem && <PositionsV2 searchText={searchText} />}
+                {navItems[0].id == navItem && <OpenClaimableTickets searchText={searchText} />}
                 {navItems[1].id == navItem && <TicketTransactions searchText={searchText} />}
                 {navItems[2].id == navItem && <UserVaults />}
             </MainContainer>
-            <SidebarContainer maxWidth={320}>
+            <RightSidebarContainer>
                 <UserStatsV2 />
-            </SidebarContainer>
+            </RightSidebarContainer>
         </RowContainer>
     );
 };
@@ -67,17 +67,24 @@ const RowContainer = styled(FlexDivRow)`
     justify-content: center;
 `;
 
-const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`
-    max-width: ${(props) => props.maxWidth}px;
+const SidebarContainer = styled(FlexDivColumn)`
     flex-grow: 1;
     @media (max-width: 950px) {
         display: none;
     }
 `;
 
+const LeftSidebarContainer = styled(SidebarContainer)`
+    max-width: 263px;
+`;
+
+const RightSidebarContainer = styled(SidebarContainer)`
+    max-width: 320px;
+`;
+
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    max-width: 806px;
+    width: 806px;
     flex-grow: 1;
     margin: 0 25px;
 `;

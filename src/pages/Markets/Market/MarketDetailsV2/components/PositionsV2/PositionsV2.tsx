@@ -5,7 +5,7 @@ import { orderBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { SportMarketInfoV2 } from 'types/markets';
+import { SportMarket } from 'types/markets';
 import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
 import PositionDetailsV2 from '../PositionDetailsV2';
 import {
@@ -21,7 +21,7 @@ import {
 } from './styled-components';
 
 type PositionsProps = {
-    markets: SportMarketInfoV2[];
+    markets: SportMarket[];
     betType: BetType;
     isGameOpen: boolean;
     isMainPageView?: boolean;
@@ -46,7 +46,7 @@ const Positions: React.FC<PositionsProps> = ({
 
     const sortedMarkets = useMemo(
         () =>
-            orderBy(markets, ['line'], ['asc']).sort((marketA: SportMarketInfoV2, marketB: SportMarketInfoV2) => {
+            orderBy(markets, ['line'], ['asc']).sort((marketA: SportMarket, marketB: SportMarket) => {
                 return sortMarketsByDisabled(marketA, marketB);
             }),
         [markets]
@@ -129,7 +129,7 @@ const Positions: React.FC<PositionsProps> = ({
     );
 };
 
-const sortMarketsByDisabled = (marketA: SportMarketInfoV2, marketB: SportMarketInfoV2) => {
+const sortMarketsByDisabled = (marketA: SportMarket, marketB: SportMarket) => {
     const isGameStartedA = marketA.maturityDate < new Date();
     const isGameOpenA = !marketA.isResolved && !marketA.isCanceled && !marketA.isPaused && !isGameStartedA;
     const noOddA = !marketA.odds[0] || marketA.odds[0] == 0;

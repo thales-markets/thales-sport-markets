@@ -4,10 +4,10 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { LIVE_SUPPORTED_LEAGUES } from 'constants/tags';
 import { Network } from 'enums/network';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { SportMarketsV2 } from 'types/markets';
+import { SportMarkets } from 'types/markets';
 
-const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions<SportMarketsV2>) => {
-    return useQuery<SportMarketsV2>(
+const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions<SportMarkets>) => {
+    return useQuery<SportMarkets>(
         QUERY_KEYS.LiveSportMarkets(networkId),
         // @ts-ignore
         async () => {

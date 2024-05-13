@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumn } from '../../../../styles/common';
+import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
@@ -18,6 +18,7 @@ const UserStats: React.FC = () => {
 
     return (
         <Wrapper>
+            <Header>Profile Data</Header>
             <Section>
                 <Label>{t('profile.stats.total-volume')}</Label>
                 <Value>{!userStats ? 0 : userStats.volume.toFixed(2)}</Value>
@@ -38,8 +39,17 @@ const UserStats: React.FC = () => {
     );
 };
 
+const Header = styled(FlexDivRow)`
+    font-weight: 600;
+    font-size: 12px;
+    color: #3c498a;
+    text-transform: uppercase;
+    padding: 15px 0;
+    justify-content: center;
+`;
+
 const Wrapper = styled(FlexDivColumn)`
-    background: ${(props) => props.theme.background.secondary};
+    background: ${(props) => props.theme.background.quinary};
     border-radius: 5px;
     width: 100%;
     padding: 8px 14px;

@@ -6,6 +6,7 @@ import { ZERO_ADDRESS } from 'constants/network';
 import { ethers } from 'ethers';
 import { LoaderContainer } from 'pages/Markets/Home/HomeV2';
 import useMarketDurationQuery from 'queries/markets/useMarketDurationQuery';
+import { useUserTicketsQuery } from 'queries/markets/useUserTicketsQuery';
 import React, { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -14,11 +15,9 @@ import { getIsMobile } from 'redux/modules/app';
 import { getTicketPayment } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { Ticket } from 'types/markets';
 import { getCollateral, getCollateralAddress, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
-import { useUserTicketsQuery } from '../../../../queries/markets/useUserTicketsQuery';
-import TicketPosition from './components/TicketPosition';
+import TicketDetails from './components/TicketDetails';
 import {
     Arrow,
     CategoryContainer,
@@ -36,7 +35,7 @@ import {
     additionalClaimButtonStyleMobile,
 } from './styled-components';
 
-const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
+const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText }) => {
     const { t } = useTranslation();
 
     const [openClaimable, setClaimableState] = useState<boolean>(true);
@@ -79,40 +78,21 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
         marketDurationQuery.isSuccess && marketDurationQuery.data ? Math.floor(marketDurationQuery.data) : 30;
 
     const userTicketsByStatus = useMemo(() => {
-        const userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
+        let userTickets = userTicketsQuery.isSuccess && userTicketsQuery.data ? userTicketsQuery.data : [];
+        if (searchText && !ethers.utils.isAddress(searchText)) {
+            userTickets = userTickets.filter((ticket) =>
+                ticket.sportMarkets.some(
+                    (market) =>
+                        market.homeTeam.toLowerCase().includes(searchText.toLowerCase()) ||
+                        market.awayTeam.toLowerCase().includes(searchText.toLowerCase())
+                )
+            );
+        }
 
         const data = {
-            open: [] as Ticket[],
-            claimable: [] as Ticket[],
+            open: userTickets.filter((ticket) => ticket.isOpen),
+            claimable: userTickets.filter((ticket) => ticket.isClaimable),
         };
-        userTickets.forEach((ticket: Ticket) => {
-            if (ticket.isClaimable) {
-                data.claimable.push(ticket);
-            }
-
-            if (ticket.isOpen) {
-                data.open.push(ticket);
-            }
-        });
-
-        if (searchText && !ethers.utils.isAddress(searchText)) {
-            data.open = data.open.filter((item) => {
-                const itemWithSearchText = item.sportMarkets.find(
-                    (item) =>
-                        item.homeTeam.includes(searchText.toLowerCase()) ||
-                        item.awayTeam.includes(searchText.toLowerCase())
-                );
-                if (itemWithSearchText) return item;
-            });
-            data.claimable = data.claimable.filter((item) => {
-                const itemWithSearchText = item.sportMarkets.find(
-                    (item) =>
-                        item.homeTeam.includes(searchText.toLowerCase()) ||
-                        item.awayTeam.includes(searchText.toLowerCase())
-                );
-                if (itemWithSearchText) return item;
-            });
-        }
         return data;
     }, [userTicketsQuery.isSuccess, userTicketsQuery.data, searchText]);
 
@@ -140,7 +120,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                         isDefaultCollateral ||
                                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
                                             ? await sportsAMMV2ContractWithSigner.exerciseTicket(market.id)
-                                            : await sportsAMMV2ContractWithSigner.exerciseTicketWithOfframp(
+                                            : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
                                                   market.id,
                                                   collateralAddress,
                                                   isEth
@@ -221,7 +201,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                                         </Button>
                                     </ClaimAllContainer>
                                     {userTicketsByStatus.claimable.map((parlayMarket, index) => {
-                                        return <TicketPosition ticket={parlayMarket} key={index} />;
+                                        return <TicketDetails ticket={parlayMarket} key={index} />;
                                     })}
                                 </>
                             ) : (
@@ -253,7 +233,7 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
                             {userTicketsByStatus.open.length ? (
                                 <>
                                     {userTicketsByStatus.open.map((parlayMarket, index) => {
-                                        return <TicketPosition ticket={parlayMarket} key={index} />;
+                                        return <TicketDetails ticket={parlayMarket} key={index} />;
                                     })}
                                 </>
                             ) : (
@@ -271,4 +251,4 @@ const Positions: React.FC<{ searchText?: string }> = ({ searchText }) => {
     );
 };
 
-export default Positions;
+export default OpenClaimableTickets;

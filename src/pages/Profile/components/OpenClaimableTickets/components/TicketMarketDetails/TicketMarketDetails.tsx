@@ -20,26 +20,23 @@ import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2'
 import { buildMarketLink } from 'utils/routes';
 import { getTicketMarketStatus } from 'utils/tickets';
 import { getOrdinalNumberLabel } from 'utils/ui';
-import MatchLogosV2 from '../../../../../../../Markets/Home/Parlay/components/MatchLogosV2';
-import {
-    MatchPeriodContainer,
-    MatchPeriodLabel,
-    ScoreContainer,
-    Status,
-    TeamScoreLabel,
-} from '../../../../../Positions/components/SinglePosition/styled-components';
+import MatchLogosV2 from '../../../../../../components/MatchLogosV2';
 import {
     MarketTypeInfo,
     MatchInfo,
     MatchLabel,
+    MatchPeriodContainer,
+    MatchPeriodLabel,
     Odd,
-    ParlayStatus,
     PositionInfo,
     PositionText,
+    ScoreContainer,
+    TeamScoreLabel,
+    TicketMarketStatus,
     Wrapper,
 } from './styled-components';
 
-const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
+const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => {
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -100,7 +97,9 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
             </PositionInfo>
             {isPendingResolution && !isMobile ? (
                 isEnetpulseSport ? (
-                    <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
+                    <TicketMarketStatus color={theme.status.started}>
+                        {t('markets.market-card.pending')}
+                    </TicketMarketStatus>
                 ) : (
                     <FlexDivRow>
                         {liveResultInfo?.status != GAME_STATUS.FINAL &&
@@ -149,9 +148,9 @@ const TicketItem: React.FC<{ market: TicketMarket }> = ({ market }) => {
             ) : (
                 <></>
             )}
-            {!isPendingResolution && <ParlayStatus>{getTicketMarketStatus(market)}</ParlayStatus>}
+            {!isPendingResolution && <TicketMarketStatus>{getTicketMarketStatus(market)}</TicketMarketStatus>}
         </Wrapper>
     );
 };
 
-export default TicketItem;
+export default TicketMarketDetails;

@@ -1,4 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
+import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Table from 'components/Table';
 import { OddsType } from 'enums/markets';
 import i18n from 'i18n';
@@ -9,14 +11,12 @@ import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { formatCurrencyWithKey, formatTxTimestamp, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
-import { SportMarketInfoV2, Ticket, TicketMarket } from 'types/markets';
+import { SportMarket, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
-import ShareTicketModalV2 from '../../../../Home/Parlay/components/ShareTicketModalV2';
-import { ShareTicketModalProps } from '../../../../Home/Parlay/components/ShareTicketModalV2/ShareTicketModalV2';
 import {
     ExpandedRowWrapper,
     ExternalLink,
@@ -43,7 +43,7 @@ import {
 
 type TicketTransactionsTableProps = {
     ticketTransactions: Ticket[];
-    market?: SportMarketInfoV2;
+    market?: SportMarket;
     tableHeight?: string;
     isLoading: boolean;
 };
@@ -243,7 +243,7 @@ export const getTicketMarkets = (
     selectedOddsType: OddsType,
     language: string,
     theme: ThemeInterface,
-    market?: SportMarketInfoV2
+    market?: SportMarket
 ) => {
     return ticket.sportMarkets.map((ticketMarket, index) => {
         return (

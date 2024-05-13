@@ -12,13 +12,13 @@ import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { NetworkId } from 'thales-utils';
-import { SportMarketsV2, TagInfo } from 'types/markets';
+import { SportMarkets, TagInfo } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import { getIsMarketSelected } from '../../../../redux/modules/market';
 import MarketListCardV2 from '../MarketListCard';
 
 type MarketsList = {
-    markets: SportMarketsV2;
+    markets: SportMarkets;
     league: number;
     language: string;
 };
@@ -206,7 +206,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     );
 };
 
-const sortWinnerMarkets = (markets: SportMarketsV2, leagueId: number) => {
+const sortWinnerMarkets = (markets: SportMarkets, leagueId: number) => {
     if (leagueId == GOLF_TOURNAMENT_WINNER_TAG || MOTOSPORT_TAGS.includes(leagueId)) {
         return orderBy(markets, ['maturityDate', 'odds[0]'], ['asc', 'desc']);
     }

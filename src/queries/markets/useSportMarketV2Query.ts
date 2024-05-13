@@ -4,15 +4,15 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { SportMarketInfoV2 } from 'types/markets';
+import { SportMarket } from 'types/markets';
 
 const useSportMarketQuery = (
     marketAddress: string,
     onlyOpenChildMarkets: boolean,
     networkId: Network,
-    options?: UseQueryOptions<SportMarketInfoV2 | undefined>
+    options?: UseQueryOptions<SportMarket | undefined>
 ) => {
-    return useQuery<SportMarketInfoV2 | undefined>(
+    return useQuery<SportMarket | undefined>(
         QUERY_KEYS.SportMarketV2(marketAddress, networkId),
         async () => {
             try {

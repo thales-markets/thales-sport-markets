@@ -5,13 +5,13 @@ import { GlobalFiltersEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { SportMarketsV2 } from 'types/markets';
+import { SportMarkets } from 'types/markets';
 
 const marketsCache = {
-    [GlobalFiltersEnum.OpenMarkets]: [] as SportMarketsV2,
-    [GlobalFiltersEnum.Canceled]: [] as SportMarketsV2,
-    [GlobalFiltersEnum.ResolvedMarkets]: [] as SportMarketsV2,
-    [GlobalFiltersEnum.PendingMarkets]: [] as SportMarketsV2,
+    [GlobalFiltersEnum.OpenMarkets]: [] as SportMarkets,
+    [GlobalFiltersEnum.Canceled]: [] as SportMarkets,
+    [GlobalFiltersEnum.ResolvedMarkets]: [] as SportMarkets,
+    [GlobalFiltersEnum.PendingMarkets]: [] as SportMarkets,
 };
 
 // TODO - there is a problem when return type is SportMarkets (some problem with SGP mapping and query is stuck in fetching), keep logic with typeof marketsCache for now

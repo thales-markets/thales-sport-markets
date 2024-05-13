@@ -374,6 +374,7 @@
             "result": "Result",
             "position-size": "Position size",
             "starts": "Starts",
+            "payout": "Payout",
             "payout-in": "Payout in",
             "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}."
         },
