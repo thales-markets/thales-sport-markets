@@ -21,7 +21,7 @@ const useSportMarketLiveResultQuery = (
                 const scoreHomeByPeriod = resultData.events[0].score.score_home_by_period;
                 const scoreAwayByPeriod = resultData.events[0].score.score_away_by_period;
                 const displayClock = resultData.events[0].score.display_clock;
-                const sportId = resultData.events[0].sport_id + 9000;
+                const sportId = resultData.events[0].sport_id;
 
                 if (sportId == League.UFC) {
                     let totalHomeScoreInRounds = 0;

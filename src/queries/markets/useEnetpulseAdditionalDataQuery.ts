@@ -15,7 +15,7 @@ const useEnetpulseAdditionalDataQuery = (
     return useQuery<SportMarketLiveResult | undefined>(
         QUERY_KEYS.EnetpulseLiveResult(marketId, gameDate, sportTag),
         async () => {
-            const sportParameter = sportTag - 9000;
+            const sportParameter = sportTag;
             const enetpulseSportParameter = SPORT_ID_MAP_ENETPULSE[sportParameter];
             try {
                 const response = await fetch(

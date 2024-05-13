@@ -1,5 +1,5 @@
-import { League, MatchResolveType, PeriodType, Provider, ScoringType, Sport } from '../enums/sports';
-import { LeagueInfo } from '../types/sports';
+import { League, MatchResolveType, PeriodType, Provider, ScoringType, Sport } from 'enums/sports';
+import { LeagueInfo } from 'types/sports';
 
 export const LeagueMap: Record<League, LeagueInfo> = {
     [League.NCAAF]: {
