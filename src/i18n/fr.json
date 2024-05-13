@@ -728,7 +728,9 @@
             "claim-all": "Réclamer tout",
             "payout-in": "Paiement en",
             "claim-progress": "Affirmant...",
-            "approve-swap-tooltip": "Pour obtenir un paiement en {{currencyKey}}, vous devez approuver le passage de {{defaultCurrency}} à {{currencyKey}}."
+            "approve-swap-tooltip": "Pour obtenir un paiement en {{currencyKey}}, vous devez approuver le passage de {{defaultCurrency}} à {{currencyKey}}.",
+            "payout": "Paiement",
+            "win": "Gagner"
         },
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",
@@ -749,7 +751,8 @@
             "amount": "montant",
             "status": "Statut",
             "total-quote": "Devis total",
-            "total-amount": "Montant total"
+            "total-amount": "Montant total",
+            "payout": "Paiement"
         },
         "winnings-are-forfeit": "*Les gains non réclamés dans les {{amount}} jours suivant la résolution d'un marché sont annulés.",
         "search-field": "Portefeuille de recherche",

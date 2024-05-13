@@ -727,7 +727,9 @@
             "claim-all": "Richiedi tutto",
             "payout-in": "Pagamento in entrata",
             "approve-swap-tooltip": "Per ricevere il pagamento in {{currencyKey}}, devi approvare lo scambio da {{defaultCurrency}} a {{currencyKey}}.",
-            "claim-progress": "Rivendicando..."
+            "claim-progress": "Rivendicando...",
+            "win": "Vincita",
+            "payout": "Pagamento"
         },
         "messages": {
             "no-claimable": "Non hai posizioni rivendicabili",
@@ -748,7 +750,8 @@
             "position": "Posizione",
             "status": "Stato",
             "total-amount": "Importo totale",
-            "total-quote": "Citazione totale"
+            "total-quote": "Citazione totale",
+            "payout": "Pagamento"
         },
         "winnings-are-forfeit": "*Le vincite non riscosse entro {{amount}} giorni dalla risoluzione di un mercato vengono annullate.",
         "search-field": "Cerca portafoglio",

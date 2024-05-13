@@ -728,7 +728,9 @@
             "claim-all": "索取全部",
             "approve-swap-tooltip": "要以 {{currencyKey}} 付款，您需要批准从 {{defaultCurrency}} 兑换为 {{currencyKey}}。",
             "payout-in": "付款于",
-            "claim-progress": "声称..."
+            "claim-progress": "声称...",
+            "payout": "付款",
+            "win": "赢"
         },
         "messages": {
             "no-claimable": "您没有任何可申请的职位",
@@ -749,7 +751,8 @@
             "time": "时间",
             "status": "地位",
             "total-amount": "总金额",
-            "total-quote": "总报价"
+            "total-quote": "总报价",
+            "payout": "付款"
         },
         "winnings-are-forfeit": "*在盘口解决后的 {{amount}} 天内未领取的奖金将被没收。",
         "search-field": "搜索钱包",

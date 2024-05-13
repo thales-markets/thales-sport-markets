@@ -728,7 +728,9 @@
             "claim-all": "Требовать все",
             "approve-swap-tooltip": "Чтобы получить выплату в {{currencyKey}}, вам необходимо одобрить обмен с {{defaultCurrency}} на {{currencyKey}}.",
             "payout-in": "Выплата в",
-            "claim-progress": "Утверждение..."
+            "claim-progress": "Утверждение...",
+            "win": "Победить",
+            "payout": "Выплата"
         },
         "messages": {
             "no-claimable": "У вас нет требуемых должностей",
@@ -749,7 +751,8 @@
             "position": "Должность",
             "status": "Статус",
             "total-amount": "Итого",
-            "total-quote": "Общая котировка"
+            "total-quote": "Общая котировка",
+            "payout": "Выплата"
         },
         "winnings-are-forfeit": "*Выигрыши, не запрошенные в течение {{amount}} дней после решения рынка, аннулируются.",
         "search-field": "Поиск кошелька",

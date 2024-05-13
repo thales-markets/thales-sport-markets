@@ -138,7 +138,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 103,
-        live: false,
+        live: true,
     },
     {
         id: 16,
@@ -178,7 +178,7 @@ export const TAGS_LIST: Tags = [
         favourite: false,
         hidden: false,
         priority: 109,
-        live: false,
+        live: true,
     },
     // {
     //     id: 9445,
