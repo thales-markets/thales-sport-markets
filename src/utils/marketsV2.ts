@@ -16,6 +16,7 @@ import {
     getIsOneSideMarket,
     isBothsTeamsToScore,
     isCombinedPositions,
+    isDoubleChance,
     isOneSidePlayerProps,
     isPeriod,
     isPeriod2,
@@ -154,7 +155,7 @@ export const getSimplePositionText = (
             : getLineInfo(betType, position, line);
     }
 
-    if (betType === BetType.DOUBLE_CHANCE)
+    if (isDoubleChance(betType))
         return position === 0
             ? `${homeTeam} or Draw`
             : position === 1

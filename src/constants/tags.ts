@@ -703,6 +703,10 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.WINNER3]: 'Winner',
     [BetType.SPREAD2]: 'Handicap',
     [BetType.TOTAL2]: 'Total',
+    [BetType.FIRST_PERIOD_DOUBLE_CHANCE]: 'Double chance 1st',
+    [BetType.SECOND_PERIOD_DOUBLE_CHANCE]: 'Double chance 2nd',
+    [BetType.TOTAL_HOME_TEAM]: 'Total home team',
+    [BetType.TOTAL_AWAY_TEAM]: 'Total away team',
     [BetType.PLAYER_PROPS_STRIKEOUTS]: 'Strikeouts',
     [BetType.PLAYER_PROPS_HOMERUNS]: 'Home runs',
     [BetType.PLAYER_PROPS_PASSING_YARDS]: 'Passing yards',
@@ -809,6 +813,11 @@ export const BetTypeNameMap: Record<BetType, string> = {
     [BetType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 7th',
     [BetType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 8th',
     [BetType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 9th',
+
+    [BetType.FIRST_PERIOD_HOME_TEAM]: 'Total home team 1st',
+    [BetType.FIRST_PERIOD_AWAY_TEAM]: 'Total away team 2ns',
+    [BetType.SECOND_PERIOD_HOME_TEAM]: 'Total home team 1st',
+    [BetType.SECOND_PERIOD_AWAY_TEAM]: 'Total away team 2nd',
 };
 
 export const BetTypeTitleMap: Record<BetType, string> = {
@@ -826,6 +835,10 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.WINNER3]: 'winner',
     [BetType.SPREAD2]: 'handicap',
     [BetType.TOTAL2]: 'total',
+    [BetType.FIRST_PERIOD_DOUBLE_CHANCE]: 'Double chance 1st',
+    [BetType.SECOND_PERIOD_DOUBLE_CHANCE]: 'Double chance 2nd',
+    [BetType.TOTAL_HOME_TEAM]: 'Total home team',
+    [BetType.TOTAL_AWAY_TEAM]: 'Total away team',
     [BetType.PLAYER_PROPS_STRIKEOUTS]: 'strikeouts',
     [BetType.PLAYER_PROPS_HOMERUNS]: 'home runs',
     [BetType.PLAYER_PROPS_PASSING_YARDS]: 'passing yards',
@@ -932,6 +945,11 @@ export const BetTypeTitleMap: Record<BetType, string> = {
     [BetType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 7th',
     [BetType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 8th',
     [BetType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'Both teams to score 9th',
+
+    [BetType.FIRST_PERIOD_HOME_TEAM]: 'Total home team 1st',
+    [BetType.FIRST_PERIOD_AWAY_TEAM]: 'Total away team 2ns',
+    [BetType.SECOND_PERIOD_HOME_TEAM]: 'Total home team 1st',
+    [BetType.SECOND_PERIOD_AWAY_TEAM]: 'Total away team 2nd',
 };
 
 export const BetTypeMap: Record<BetType, string> = {
@@ -949,6 +967,10 @@ export const BetTypeMap: Record<BetType, string> = {
     [BetType.WINNER3]: 'winner3',
     [BetType.SPREAD2]: 'handicap2',
     [BetType.TOTAL2]: 'total2',
+    [BetType.FIRST_PERIOD_DOUBLE_CHANCE]: 'firstPeriodDoubleChance',
+    [BetType.SECOND_PERIOD_DOUBLE_CHANCE]: 'secondPeriodDoubleChance',
+    [BetType.TOTAL_HOME_TEAM]: 'totalHomeTeam',
+    [BetType.TOTAL_AWAY_TEAM]: 'totalAwayTeam',
     [BetType.PLAYER_PROPS_HOMERUNS]: 'homeruns',
     [BetType.PLAYER_PROPS_STRIKEOUTS]: 'strikeouts',
     [BetType.PLAYER_PROPS_PASSING_YARDS]: 'passingYards',
@@ -1055,6 +1077,11 @@ export const BetTypeMap: Record<BetType, string> = {
     [BetType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'seventhPeriodBothTeamsToScore',
     [BetType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'eightPeriodBothTeamsToScore',
     [BetType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE]: 'ninthPeriodBothTeamsToScore',
+
+    [BetType.FIRST_PERIOD_HOME_TEAM]: 'firstPeriodTotalHomeTeam',
+    [BetType.FIRST_PERIOD_AWAY_TEAM]: 'firstPeriodTotalAwayTeam',
+    [BetType.SECOND_PERIOD_HOME_TEAM]: 'secondPeriodTotalHomeTeam',
+    [BetType.SECOND_PERIOD_AWAY_TEAM]: 'secondPeriodTotalAwayTeam',
 };
 
 export const SCORING_MAP: SportsMap = {

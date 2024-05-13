@@ -14,6 +14,7 @@ import {
     BOTH_TEAMS_TO_SCORE_BET_TYPES,
     BetType,
     COMBINED_POSITIONS_BET_TYPES,
+    DOUBLE_CHANCE_BET_TYPES,
     ONE_SIDER_PLAYER_PROPS_BET_TYPES,
     OddsType,
     PLAYER_PROPS_BET_TYPES,
@@ -77,7 +78,13 @@ export const isWinner = (betType: BetType) => {
 };
 
 export const isTotal = (betType: BetType) => {
-    return TOTAL_BET_TYPES.includes(betType) || `${betType}`.startsWith('1003') || `${betType}`.startsWith('1006');
+    return (
+        TOTAL_BET_TYPES.includes(betType) ||
+        `${betType}`.startsWith('1003') ||
+        `${betType}`.startsWith('1006') ||
+        `${betType}`.startsWith('1011') ||
+        `${betType}`.startsWith('1012')
+    );
 };
 
 export const isTotalOddEven = (betType: BetType) => {
@@ -100,7 +107,11 @@ export const isPeriod = (betType: BetType) => {
         `${betType}`.startsWith('1003') ||
         `${betType}`.startsWith('1004') ||
         `${betType}`.startsWith('1008') ||
-        `${betType}`.startsWith('1010')
+        `${betType}`.startsWith('1010') ||
+        `${betType}`.startsWith('1011') ||
+        `${betType}`.startsWith('1012') ||
+        betType === BetType.FIRST_PERIOD_DOUBLE_CHANCE ||
+        betType === BetType.SECOND_PERIOD_DOUBLE_CHANCE
     );
 };
 
@@ -122,3 +133,7 @@ export const getIsDrawAvailable = (leagueId: number, betType: BetType) =>
 
 export const getPositionOrder = (leagueId: number, betType: BetType, position: number) =>
     getIsDrawAvailable(leagueId, betType) ? `${position == 0 ? 1 : position == 1 ? 3 : 2}` : undefined;
+
+export const isDoubleChance = (betType: BetType) => {
+    return DOUBLE_CHANCE_BET_TYPES.includes(betType);
+};
