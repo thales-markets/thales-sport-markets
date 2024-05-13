@@ -1,6 +1,6 @@
 export enum TicketMarketStatus {
-    Open,
-    Cancelled,
-    Winning,
-    Losing,
+    OPEN,
+    CANCELLED,
+    WINNING,
+    LOSING,
 }

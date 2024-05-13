@@ -32,7 +32,7 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
         isResolved: ticket.resolved,
         isPaused: ticket.paused,
         isCancelled: ticket.marketsResult.every(
-            (marketResult: any) => Number(marketResult.status) === TicketMarketStatus.Cancelled
+            (marketResult: any) => Number(marketResult.status) === TicketMarketStatus.CANCELLED
         ),
         isLost: ticket.isLost,
         isUserTheWinner: ticket.isUserTheWinner,
@@ -76,10 +76,10 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
                 awayScore: isPlayerPropsMarket ? 0 : awayScore,
                 finalResult: Number(marketResult.results[0]),
                 status: 0,
-                isOpen: marketStatus === TicketMarketStatus.Open,
-                isResolved: marketStatus !== TicketMarketStatus.Open,
-                isCanceled: marketStatus === TicketMarketStatus.Cancelled,
-                isWinning: marketStatus === TicketMarketStatus.Winning,
+                isOpen: marketStatus === TicketMarketStatus.OPEN,
+                isResolved: marketStatus !== TicketMarketStatus.OPEN,
+                isCanceled: marketStatus === TicketMarketStatus.CANCELLED,
+                isWinning: marketStatus === TicketMarketStatus.WINNING,
                 isPaused: false,
                 isOneSideMarket: getIsOneSideMarket(leagueId),
                 spread: line / 100,

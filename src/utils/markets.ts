@@ -1,4 +1,16 @@
 import {
+    BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
+    COMBINED_POSITIONS_MARKET_TYPES,
+    DOUBLE_CHANCE_MARKET_TYPES,
+    ONE_SIDE_PLAYER_PROPS_MARKET_TYPES,
+    PLAYER_PROPS_MARKET_TYPES,
+    SPREAD_MARKET_TYPES,
+    TOTAL_MARKET_TYPES,
+    TOTAL_ODD_EVEN_MARKET_TYPES,
+    WINNER_MARKET_TYPES,
+    YES_NO_PLAYER_PROPS_MARKET_TYPES,
+} from 'constants/marketTypes';
+import {
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
     GOLF_TAGS,
@@ -10,22 +22,10 @@ import {
     TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
     UEFA_TAGS,
 } from 'constants/tags';
+import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { formatCurrency } from 'thales-utils';
 import { MarketTypeMap } from '../constants/marketTypes';
-import {
-    BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
-    COMBINED_POSITIONS_MARKET_TYPES,
-    DOUBLE_CHANCE_MARKET_TYPES,
-    MarketType,
-    ONE_SIDE_PLAYER_PROPS_MARKET_TYPES,
-    PLAYER_PROPS_MARKET_TYPES,
-    SPREAD_MARKET_TYPES,
-    TOTAL_MARKET_TYPES,
-    TOTAL_ODD_EVEN_MARKET_TYPES,
-    WINNER_MARKET_TYPES,
-    YES_NO_PLAYER_PROPS_MARKET_TYPES,
-} from '../enums/marketTypes';
 
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {
     if (!odds) {
