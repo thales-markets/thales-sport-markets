@@ -1,5 +1,4 @@
 import { MarketTypeMap } from 'constants/marketTypes';
-import { SPORTS_MAP } from 'constants/tags';
 import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
@@ -14,6 +13,7 @@ import {
     getIsPlayerPropsMarket,
     getIsYesNoPlayerPropsMarket,
 } from './markets';
+import { getLeagueSport } from './sports';
 
 export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticket => {
     const collateral = getCollateralByAddress(ticket.collateral, networkId);
@@ -62,7 +62,7 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
 
             return {
                 gameId: market.gameId,
-                sport: SPORTS_MAP[leagueId],
+                sport: getLeagueSport(leagueId),
                 leagueId: leagueId,
                 // leagueName: getLeagueNameById(leagueId),
                 leagueName: '',

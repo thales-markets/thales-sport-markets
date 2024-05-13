@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { TAGS_LIST } from 'constants/tags';
 import { ThemeMap } from 'constants/ui';
 import { OddsType } from 'enums/markets';
 import { Theme } from 'enums/ui';
 import { uniqBy } from 'lodash';
 import { localStore } from 'thales-utils';
 import { Tags } from 'types/markets';
+import { LeagueMap } from '../../constants/sports';
 import { RootState } from '../rootReducer';
 
 const sliceName = 'ui';
@@ -28,7 +28,9 @@ const getDefaultStopPulsing = (): boolean => {
 
 const getDefaultFavouriteLeagues = (): Tags => {
     const lsFavouriteLeagues = localStore.get(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES);
-    return (lsFavouriteLeagues !== undefined ? uniqBy(lsFavouriteLeagues as Tags, 'id') : TAGS_LIST) as Tags;
+    return (lsFavouriteLeagues !== undefined
+        ? uniqBy(lsFavouriteLeagues as Tags, 'id')
+        : Object.values(LeagueMap)) as Tags;
 };
 
 type UISliceState = {

@@ -1,6 +1,6 @@
 import Scroll from 'components/Scroll';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS } from 'constants/tags';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
@@ -11,6 +11,9 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { LeagueMap } from '../../../../constants/sports';
+import { Sport } from '../../../../enums/sports';
+import { getIsLeagueUnderSport } from '../../../../utils/sports';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
@@ -73,8 +76,8 @@ const sortMarketKeys = (
             const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b);
             const isFavouriteB = Number(favouriteB && favouriteB.favourite);
 
-            const leagueA = TAGS_LIST.find((t: TagInfo) => t.id == a);
-            const leagueB = TAGS_LIST.find((t: TagInfo) => t.id == b);
+            const leagueA = Object.values(LeagueMap).find((t: TagInfo) => t.id == a);
+            const leagueB = Object.values(LeagueMap).find((t: TagInfo) => t.id == b);
 
             const leagueNameA = leagueA?.label || '';
             const leagueNameB = leagueB?.label || '';
@@ -100,8 +103,8 @@ const sortMarketKeys = (
             const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b);
             const isFavouriteB = Number(favouriteB && favouriteB.favourite);
 
-            const leagueA = TAGS_LIST.find((t: TagInfo) => t.id == a);
-            const leagueB = TAGS_LIST.find((t: TagInfo) => t.id == b);
+            const leagueA = Object.values(LeagueMap).find((t: TagInfo) => t.id == a);
+            const leagueB = Object.values(LeagueMap).find((t: TagInfo) => t.id == b);
 
             const leagueNameA = leagueA?.label || '';
             const leagueNameB = leagueB?.label || '';
@@ -135,37 +138,37 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     const motosportKeys: number[] = [];
     const golfKeys: number[] = [];
     marketsKeys.forEach((tag: number) => {
-        if (SPORTS_MAP[tag] == 'Soccer') {
+        if (getIsLeagueUnderSport(tag, Sport.SOCCER)) {
             soccerKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Football') {
+        if (getIsLeagueUnderSport(tag, Sport.FOOTBALL)) {
             footballKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Basketball') {
+        if (getIsLeagueUnderSport(tag, Sport.BASKETBALL)) {
             basketballKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Baseball') {
+        if (getIsLeagueUnderSport(tag, Sport.BASEBALL)) {
             baseballKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Hockey') {
+        if (getIsLeagueUnderSport(tag, Sport.HOCKEY)) {
             hockeyKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Motosport') {
+        if (getIsLeagueUnderSport(tag, Sport.MOTOSPORT)) {
             mmaKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Tennis') {
+        if (getIsLeagueUnderSport(tag, Sport.TENNIS)) {
             tennisKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'eSports') {
+        if (getIsLeagueUnderSport(tag, Sport.ESPORTS)) {
             eSportsKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Cricket') {
+        if (getIsLeagueUnderSport(tag, Sport.CRICKET)) {
             cricketKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'MMA') {
+        if (getIsLeagueUnderSport(tag, Sport.MMA)) {
             motosportKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Golf') {
+        if (getIsLeagueUnderSport(tag, Sport.GOLF)) {
             golfKeys.push(tag);
         }
     });

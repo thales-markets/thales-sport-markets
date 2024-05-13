@@ -18,14 +18,14 @@ import {
     IIHF_WC_TAG,
     INTERNATIONAL_SPORTS,
     MOTOSPORT_TAGS,
-    SPORTS_TAGS_MAP,
-    TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
     UEFA_TAGS,
 } from 'constants/tags';
 import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { formatCurrency } from 'thales-utils';
 import { MarketTypeMap } from '../constants/marketTypes';
+import { Sport } from '../enums/sports';
+import { getIsLeagueUnderSport, getLeagueIsDrawAvailable } from './sports';
 
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {
     if (!odds) {
@@ -60,7 +60,7 @@ export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 export const isGolf = (tag: number) => GOLF_TAGS.includes(tag);
 
 export const getIsOneSideMarket = (tag: number) =>
-    SPORTS_TAGS_MAP['Motosport'].includes(Number(tag)) || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
+    getIsLeagueUnderSport(Number(tag), Sport.MOTOSPORT) || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
 
 export const getIsPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);
@@ -126,7 +126,7 @@ export const getIsPeriod2Market = (marketType: MarketType) => {
 };
 
 export const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
-    !TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(leagueId) && getIsWinnerMarket(marketType);
+    getLeagueIsDrawAvailable(leagueId) && getIsWinnerMarket(marketType);
 
 export const getPositionOrder = (leagueId: number, marketType: MarketType, position: number) =>
     getIsDrawAvailable(leagueId, marketType) ? `${position == 0 ? 1 : position == 1 ? 3 : 2}` : undefined;

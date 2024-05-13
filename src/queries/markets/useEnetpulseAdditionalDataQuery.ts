@@ -1,9 +1,10 @@
 import { ENETPULSE_ROUNDS } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
-import { SPORT_ID_MAP_ENETPULSE, SPORTS_TAGS_MAP } from 'constants/tags';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { League, Sport } from 'enums/sports';
+import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
-import { TAGS_FLAGS } from '../../enums/tags';
+import { SPORT_ID_MAP_ENETPULSE } from '../../constants/sports';
+import { getIsLeagueUnderSport } from '../../utils/sports';
 
 const useEnetpulseAdditionalDataQuery = (
     marketId: string,
@@ -22,22 +23,22 @@ const useEnetpulseAdditionalDataQuery = (
                 );
                 const events = Object.values(JSON.parse(await response.text()).events);
 
-                const event = SPORTS_TAGS_MAP['Motosport'].includes(Number(sportTag))
+                const event = getIsLeagueUnderSport(Number(sportTag), Sport.MOTOSPORT)
                     ? events[0]
                     : (events.find((sportEvent: any) => sportEvent.id == marketId) as any);
                 if (event) {
                     const tournamentName = event.tournament_stage_name;
                     const tournamentRound = ENETPULSE_ROUNDS[Number(event.round_typeFK)];
-                    const eventParticipants: any[] = SPORTS_TAGS_MAP['Motosport'].includes(Number(sportTag))
+                    const eventParticipants: any[] = getIsLeagueUnderSport(Number(sportTag), Sport.MOTOSPORT)
                         ? []
                         : Object.values(event.event_participants);
                     const homeResults: any[] = [];
                     const awayResults: any[] = [];
 
                     if (
-                        !SPORTS_TAGS_MAP['eSports'].includes(Number(sportTag)) &&
-                        !SPORTS_TAGS_MAP['Soccer'].includes(Number(sportTag)) &&
-                        !SPORTS_TAGS_MAP['Motosport'].includes(Number(sportTag))
+                        !getIsLeagueUnderSport(Number(sportTag), Sport.ESPORTS) &&
+                        !getIsLeagueUnderSport(Number(sportTag), Sport.SOCCER) &&
+                        !getIsLeagueUnderSport(Number(sportTag), Sport.MOTOSPORT)
                     ) {
                         homeResults.push(...Object.values(eventParticipants[0].result));
                         awayResults.push(...Object.values(eventParticipants[1].result));
@@ -47,7 +48,7 @@ const useEnetpulseAdditionalDataQuery = (
                     let awayScore = 0;
                     const scoreHomeByPeriod = [];
                     const scoreAwayByPeriod = [];
-                    if (SPORTS_TAGS_MAP['Tennis'].includes(Number(sportTag))) {
+                    if (getIsLeagueUnderSport(Number(sportTag), Sport.TENNIS)) {
                         homeScore = homeResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
                         awayScore = awayResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
 
@@ -83,15 +84,15 @@ const useEnetpulseAdditionalDataQuery = (
                         displayClock,
                         sportId,
                         tournamentName:
-                            sportTag == TAGS_FLAGS.IIHF_WORLD_CHAMPIONSHIP ||
-                            sportTag == TAGS_FLAGS.UEFA_EURO_QUALIFICATIONS ||
-                            sportTag == TAGS_FLAGS.CONMEBOL_WC_QUALIFICATIONS
+                            sportTag == League.IIHF_WORLD_CHAMPIONSHIP ||
+                            sportTag == League.UEFA_EURO_QUALIFICATIONS ||
+                            sportTag == League.CONMEBOL_WC_QUALIFICATIONS
                                 ? ''
                                 : tournamentName,
                         tournamentRound:
-                            sportTag == TAGS_FLAGS.IIHF_WORLD_CHAMPIONSHIP ||
-                            sportTag == TAGS_FLAGS.UEFA_EURO_QUALIFICATIONS ||
-                            sportTag == TAGS_FLAGS.CONMEBOL_WC_QUALIFICATIONS
+                            sportTag == League.IIHF_WORLD_CHAMPIONSHIP ||
+                            sportTag == League.UEFA_EURO_QUALIFICATIONS ||
+                            sportTag == League.CONMEBOL_WC_QUALIFICATIONS
                                 ? ''
                                 : tournamentRound,
                     };

@@ -1,6 +1,9 @@
+import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { ENETPULSE_SPORTS, FIFA_WC_TAG, FIFA_WC_U20_TAG, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP } from 'constants/tags';
+import { FIFA_WC_TAG, FIFA_WC_U20_TAG } from 'constants/tags';
+import { MarketType } from 'enums/marketTypes';
+import { League, Provider, Sport } from 'enums/sports';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -8,15 +11,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { formatShortDateWithTime } from 'thales-utils';
-import { SportMarket, SportMarketLiveResult } from 'types/markets';
-import { convertFromBytes32, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
-import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
-import { isOddValid } from 'utils/marketsV2';
-import SPAAnchor from '../../../../components/SPAAnchor';
-import { MarketType } from '../../../../enums/marketTypes';
-import { TAGS_FLAGS } from '../../../../enums/tags';
 import {
     getIsMarketSelected,
     getIsThreeWayView,
@@ -24,8 +18,15 @@ import {
     getSelectedMarket,
     setMarketTypeFilter,
     setSelectedMarket,
-} from '../../../../redux/modules/market';
-import { buildMarketLink } from '../../../../utils/routes';
+} from 'redux/modules/market';
+import { formatShortDateWithTime } from 'thales-utils';
+import { SportMarket, SportMarketLiveResult } from 'types/markets';
+import { convertFromBytes32, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { getOnImageError, getTeamImageSource } from 'utils/images';
+import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
+import { isOddValid } from 'utils/marketsV2';
+import { buildMarketLink } from 'utils/routes';
+import { getIsLeagueUnderProvider, getIsLeagueUnderSport } from 'utils/sports';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -79,8 +80,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isGameLive = !!market.live;
 
-    const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
-    const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
+    const isEnetpulseSport = getIsLeagueUnderProvider(Number(market.leagueId), Provider.ENETPULSE);
+    const isJsonOddsSport = getIsLeagueUnderProvider(Number(market.leagueId), Provider.JSONODDS);
     const gameIdString = convertFromBytes32(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
@@ -200,7 +201,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         !isMarketSelected ? (
                             <>
                                 {localStorage.getItem(market.gameId)}
-                                {SPORTS_TAGS_MAP['Tennis'].includes(market.leagueId) && (
+                                {getIsLeagueUnderSport(market.leagueId, Sport.TENNIS) && (
                                     <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
                                 )}
                             </>
@@ -323,10 +324,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             ? market.homeScore == 1
                                                 ? t('markets.market-card.race-winner')
                                                 : t('markets.market-card.no-win')
-                                            : Number(market.leagueId) != TAGS_FLAGS.UFC
+                                            : Number(market.leagueId) != League.UFC
                                             ? `${market.homeScore} - ${market.awayScore}`
                                             : ''}
-                                        {Number(market.leagueId) == TAGS_FLAGS.UFC ? (
+                                        {Number(market.leagueId) == League.UFC ? (
                                             <>
                                                 {Number(market.homeScore) > 0
                                                     ? `W - L (R${market.homeScore})`

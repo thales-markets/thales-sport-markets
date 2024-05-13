@@ -9,7 +9,7 @@ import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, LIVE_SUPPORTED_LEAGUES, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS } from 'constants/tags';
 import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -46,7 +46,10 @@ import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
+import { LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
+import { Sport } from '../../../enums/sports';
+import { getLeagueIsLiveSupported, getLiveSupportedLeagues, getSportLeagueIds } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import GlobalFilters from '../components/GlobalFilters';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
@@ -102,7 +105,7 @@ const Home: React.FC = () => {
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
     const tagsList = orderBy(
-        TAGS_LIST.filter((tag) => !tag.hidden),
+        Object.values(LeagueMap).filter((tag) => !tag.hidden),
         ['priority', 'label'],
         ['asc', 'asc']
     ).map((tag) => {
@@ -188,7 +191,7 @@ const Home: React.FC = () => {
                 const filteredTags = tagsList.filter((tag: TagInfo) => tag.live);
                 setAvailableTags(filteredTags);
             } else {
-                const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
+                const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
                 if (tagsPerSport) {
                     const filteredTags = tagsList.filter((tag: TagInfo) => tagsPerSport.includes(tag.id));
                     setAvailableTags(filteredTags);
@@ -301,7 +304,7 @@ const Home: React.FC = () => {
                     return false;
                 }
                 if (sportFilter == SportFilterEnum.Live) {
-                    if (!LIVE_SUPPORTED_LEAGUES.includes(market.leagueId)) return false;
+                    return getLeagueIsLiveSupported(market.leagueId);
                 }
             }
 
@@ -379,7 +382,7 @@ const Home: React.FC = () => {
         const openMarketsCount: any = {};
         let totalCount = 0;
         Object.values(SportFilterEnum).forEach((filterItem: string) => {
-            const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+            const tagsPerSport = getSportLeagueIds(filterItem as Sport);
             let count = 0;
             if (tagsPerSport) {
                 tagsPerSport.forEach((tag) => {
@@ -425,7 +428,7 @@ const Home: React.FC = () => {
     const liveMarketsCountPerSport = useMemo(() => {
         const liveMarketsCount: any = {};
         let totalCount = 0;
-        const tagsPerSport = SPORTS_TAGS_MAP[SportFilterEnum.Live];
+        const tagsPerSport = getLiveSupportedLeagues();
         if (tagsPerSport) {
             tagsPerSport.forEach((tag) => (totalCount += liveMarketsCountPerTag[tag] || 0));
         }
@@ -487,7 +490,7 @@ const Home: React.FC = () => {
                                 if (sportFilter === SportFilterEnum.All) {
                                     setAvailableTags(tagsList);
                                 } else {
-                                    const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
+                                    const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
                                     if (tagsPerSport) {
                                         const filteredTags = tagsList.filter(
                                             (tag: TagInfo) =>
@@ -533,7 +536,7 @@ const Home: React.FC = () => {
                                                     const filteredLiveTags = tagsList.filter((tag) => tag.live);
                                                     setAvailableTags(filteredLiveTags);
                                                 } else {
-                                                    const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                                    const tagsPerSport = getSportLeagueIds(filterItem as Sport);
                                                     if (tagsPerSport) {
                                                         const filteredTags = tagsList.filter(
                                                             (tag: TagInfo) =>
@@ -614,7 +617,7 @@ const Home: React.FC = () => {
                                 if (sportFilter === SportFilterEnum.All) {
                                     setAvailableTags(tagsList);
                                 } else {
-                                    const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
+                                    const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
                                     if (tagsPerSport) {
                                         const filteredTags = tagsList.filter(
                                             (tag: TagInfo) =>
@@ -671,7 +674,7 @@ const Home: React.FC = () => {
                                                         const filteredLiveTags = tagsList.filter((tag) => tag.live);
                                                         setAvailableTags(filteredLiveTags);
                                                     } else {
-                                                        const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                                        const tagsPerSport = getSportLeagueIds(filterItem as Sport);
                                                         if (tagsPerSport) {
                                                             const filteredTags = tagsList.filter(
                                                                 (tag: TagInfo) =>
