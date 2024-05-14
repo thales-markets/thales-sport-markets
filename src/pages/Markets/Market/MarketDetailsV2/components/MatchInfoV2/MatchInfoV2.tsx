@@ -7,7 +7,7 @@ import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { Sport } from '../../../../../../enums/sports';
-import { getIsLeagueUnderSport } from '../../../../../../utils/sports';
+import { getLeagueSport } from '../../../../../../utils/sports';
 import {
     Container,
     LeagueLogo,
@@ -110,7 +110,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                             <>
                                 {liveResultInfo.tournamentName ? liveResultInfo.tournamentName : ''}
                                 {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
-                                {getIsLeagueUnderSport(Number(market.leagueId), Sport.TENNIS) && (
+                                {getLeagueSport(Number(market.leagueId)) === Sport.TENNIS && (
                                     <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={14} marginLeft={2} />
                                 )}
                             </>

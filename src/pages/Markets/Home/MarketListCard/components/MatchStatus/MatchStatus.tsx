@@ -1,13 +1,13 @@
 import { GAME_STATUS } from 'constants/ui';
+import { Sport } from 'enums/sports';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketLiveResult } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
-import { Sport } from '../../../../../../enums/sports';
-import { getIsLeagueUnderSport, getLeaguePeriodType } from '../../../../../../utils/sports';
 
 type MatchStatusProps = {
     isPendingResolution: boolean;
@@ -58,7 +58,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                             <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
                             <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
                         </ScoreContainer>
-                        {getIsLeagueUnderSport(Number(liveResultInfo?.sportId), Sport.SOCCER)
+                        {getLeagueSport(Number(liveResultInfo?.sportId)) === Sport.SOCCER
                             ? liveResultInfo?.period == 2 && (
                                   <ScoreContainer>
                                       <TeamScoreLabel className="period">

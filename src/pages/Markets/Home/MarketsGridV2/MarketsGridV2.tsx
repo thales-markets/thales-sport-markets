@@ -1,6 +1,8 @@
 import Scroll from 'components/Scroll';
+import { LeagueMap } from 'constants/sports';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { BOXING_TAGS, EUROPA_LEAGUE_TAGS } from 'constants/tags';
+import { Sport } from 'enums/sports';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
@@ -11,9 +13,7 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
-import { LeagueMap } from '../../../../constants/sports';
-import { Sport } from '../../../../enums/sports';
-import { getIsLeagueUnderSport } from '../../../../utils/sports';
+import { getLeagueSport } from '../../../../utils/sports';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
@@ -138,37 +138,38 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     const motosportKeys: number[] = [];
     const golfKeys: number[] = [];
     marketsKeys.forEach((tag: number) => {
-        if (getIsLeagueUnderSport(tag, Sport.SOCCER)) {
+        const leagueSport = getLeagueSport(tag);
+        if (leagueSport === Sport.SOCCER) {
             soccerKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.FOOTBALL)) {
+        if (leagueSport === Sport.FOOTBALL) {
             footballKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.BASKETBALL)) {
+        if (leagueSport === Sport.BASKETBALL) {
             basketballKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.BASEBALL)) {
+        if (leagueSport === Sport.BASEBALL) {
             baseballKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.HOCKEY)) {
+        if (leagueSport === Sport.HOCKEY) {
             hockeyKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.MOTOSPORT)) {
+        if (leagueSport === Sport.MOTOSPORT) {
             mmaKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.TENNIS)) {
+        if (leagueSport === Sport.TENNIS) {
             tennisKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.ESPORTS)) {
+        if (leagueSport === Sport.ESPORTS) {
             eSportsKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.CRICKET)) {
+        if (leagueSport === Sport.CRICKET) {
             cricketKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.MMA)) {
+        if (leagueSport === Sport.MMA) {
             motosportKeys.push(tag);
         }
-        if (getIsLeagueUnderSport(tag, Sport.GOLF)) {
+        if (leagueSport === Sport.GOLF) {
             golfKeys.push(tag);
         }
     });

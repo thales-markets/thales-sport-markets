@@ -30,7 +30,7 @@ import { SportMarket, SportMarketLiveResult, TagInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { convertFromBytes32 } from 'utils/formatters/string';
 import { buildHref, navigateTo } from 'utils/routes';
-import { getIsLeagueUnderProvider, getIsLeagueUnderSport, getLeaguePeriodType } from 'utils/sports';
+import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
 import { LeagueMap } from '../../../../constants/sports';
@@ -94,8 +94,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isGamePaused = market.isPaused && !isGameResolved;
     const showStatus = market.isResolved || market.isCanceled || isGameStarted || market.isPaused;
     const gameIdString = convertFromBytes32(market.gameId);
-    const isEnetpulseSport = getIsLeagueUnderProvider(Number(market.leagueId), Provider.ENETPULSE);
-    const isJsonOddsSport = getIsLeagueUnderProvider(Number(market.leagueId), Provider.JSONODDS);
+    const isEnetpulseSport = getLeagueProvider(Number(market.leagueId)) === Provider.ENETPULSE;
+    const isJsonOddsSport = getLeagueProvider(Number(market.leagueId)) === Provider.JSONODDS;
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
 
@@ -126,6 +126,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     ]);
 
     const hideResultInfoPerPeriod = hideResultInfoPerPeriodForSports(Number(liveResultInfo?.sportId));
+    const leagueSport = getLeagueSport(Number(liveResultInfo?.sportId));
 
     return (
         <RowContainer>
@@ -256,16 +257,15 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 <ResultContainer>
                                     <ResultLabel>
                                         {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
-                                        {getIsLeagueUnderSport(Number(liveResultInfo?.sportId), Sport.SOCCER) &&
-                                            liveResultInfo?.period == 2 && (
-                                                <InfoLabel className="football">
-                                                    {'(' +
-                                                        liveResultInfo?.scoreHomeByPeriod[0] +
-                                                        ' - ' +
-                                                        liveResultInfo?.scoreAwayByPeriod[0] +
-                                                        ')'}
-                                                </InfoLabel>
-                                            )}
+                                        {leagueSport === Sport.SOCCER && liveResultInfo?.period == 2 && (
+                                            <InfoLabel className="football">
+                                                {'(' +
+                                                    liveResultInfo?.scoreHomeByPeriod[0] +
+                                                    ' - ' +
+                                                    liveResultInfo?.scoreAwayByPeriod[0] +
+                                                    ')'}
+                                            </InfoLabel>
+                                        )}
                                     </ResultLabel>
                                     {liveResultInfo?.status != GAME_STATUS.FINAL &&
                                         liveResultInfo?.status != GAME_STATUS.FULL_TIME && (
@@ -292,7 +292,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 )}
                                             </PeriodsContainer>
                                         )}
-                                    {!getIsLeagueUnderSport(Number(liveResultInfo?.sportId), Sport.SOCCER) && (
+                                    {leagueSport !== Sport.SOCCER && (
                                         <FlexDivRow>
                                             {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
                                                 return (
@@ -323,16 +323,15 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         : Number(liveResultInfo?.sportId) != League.UFC
                                         ? `${market.homeScore} - ${market.awayScore}`
                                         : ''}
-                                    {getIsLeagueUnderSport(Number(liveResultInfo?.sportId), Sport.SOCCER) &&
-                                        liveResultInfo?.period == 2 && (
-                                            <InfoLabel className="football">
-                                                {'(' +
-                                                    liveResultInfo?.scoreHomeByPeriod[0] +
-                                                    ' - ' +
-                                                    liveResultInfo?.scoreAwayByPeriod[0] +
-                                                    ')'}
-                                            </InfoLabel>
-                                        )}
+                                    {leagueSport === Sport.SOCCER && liveResultInfo?.period == 2 && (
+                                        <InfoLabel className="football">
+                                            {'(' +
+                                                liveResultInfo?.scoreHomeByPeriod[0] +
+                                                ' - ' +
+                                                liveResultInfo?.scoreAwayByPeriod[0] +
+                                                ')'}
+                                        </InfoLabel>
+                                    )}
                                     {Number(liveResultInfo?.sportId) == League.UFC ? (
                                         <>
                                             {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
@@ -430,12 +429,14 @@ const PositionsContainer = styled(FlexDivColumn)`
 `;
 
 const hideResultInfoPerPeriodForSports = (sportId: number) => {
+    const leagueSport = getLeagueSport(Number(sportId));
+
     return (
-        !getIsLeagueUnderSport(Number(sportId), Sport.SOCCER) &&
-        !getIsLeagueUnderSport(Number(sportId), Sport.ESPORTS) &&
-        !getIsLeagueUnderSport(Number(sportId), Sport.MMA) &&
-        !getIsLeagueUnderSport(Number(sportId), Sport.CRICKET) &&
-        !getIsLeagueUnderSport(Number(sportId), Sport.MOTOSPORT) &&
+        leagueSport !== Sport.SOCCER &&
+        leagueSport !== Sport.ESPORTS &&
+        leagueSport !== Sport.MMA &&
+        leagueSport !== Sport.CRICKET &&
+        leagueSport !== Sport.MOTOSPORT &&
         sportId != League.EUROLEAGUE
     );
 };

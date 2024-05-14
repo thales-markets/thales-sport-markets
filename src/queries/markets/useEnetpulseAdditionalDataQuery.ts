@@ -1,10 +1,10 @@
 import { ENETPULSE_ROUNDS } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { SPORT_ID_MAP_ENETPULSE } from 'constants/sports';
 import { League, Sport } from 'enums/sports';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
-import { SPORT_ID_MAP_ENETPULSE } from '../../constants/sports';
-import { getIsLeagueUnderSport } from '../../utils/sports';
+import { getLeagueSport } from '../../utils/sports';
 
 const useEnetpulseAdditionalDataQuery = (
     marketId: string,
@@ -22,23 +22,24 @@ const useEnetpulseAdditionalDataQuery = (
                     `https://api.thalesmarket.io/enetpulse-result/${enetpulseSportParameter}/${gameDate}`
                 );
                 const events = Object.values(JSON.parse(await response.text()).events);
+                const leagueSport = getLeagueSport(Number(sportTag));
 
-                const event = getIsLeagueUnderSport(Number(sportTag), Sport.MOTOSPORT)
-                    ? events[0]
-                    : (events.find((sportEvent: any) => sportEvent.id == marketId) as any);
+                const event =
+                    leagueSport === Sport.MOTOSPORT
+                        ? events[0]
+                        : (events.find((sportEvent: any) => sportEvent.id == marketId) as any);
                 if (event) {
                     const tournamentName = event.tournament_stage_name;
                     const tournamentRound = ENETPULSE_ROUNDS[Number(event.round_typeFK)];
-                    const eventParticipants: any[] = getIsLeagueUnderSport(Number(sportTag), Sport.MOTOSPORT)
-                        ? []
-                        : Object.values(event.event_participants);
+                    const eventParticipants: any[] =
+                        leagueSport === Sport.MOTOSPORT ? [] : Object.values(event.event_participants);
                     const homeResults: any[] = [];
                     const awayResults: any[] = [];
 
                     if (
-                        !getIsLeagueUnderSport(Number(sportTag), Sport.ESPORTS) &&
-                        !getIsLeagueUnderSport(Number(sportTag), Sport.SOCCER) &&
-                        !getIsLeagueUnderSport(Number(sportTag), Sport.MOTOSPORT)
+                        leagueSport !== Sport.ESPORTS &&
+                        leagueSport !== Sport.SOCCER &&
+                        leagueSport !== Sport.MOTOSPORT
                     ) {
                         homeResults.push(...Object.values(eventParticipants[0].result));
                         awayResults.push(...Object.values(eventParticipants[1].result));
@@ -48,7 +49,7 @@ const useEnetpulseAdditionalDataQuery = (
                     let awayScore = 0;
                     const scoreHomeByPeriod = [];
                     const scoreAwayByPeriod = [];
-                    if (getIsLeagueUnderSport(Number(sportTag), Sport.TENNIS)) {
+                    if (leagueSport === Sport.TENNIS) {
                         homeScore = homeResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
                         awayScore = awayResults.find((result) => result.result_code.toLowerCase() == 'setswon').value;
 

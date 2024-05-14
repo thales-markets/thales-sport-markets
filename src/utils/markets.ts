@@ -25,7 +25,7 @@ import { OddsType } from 'enums/markets';
 import { formatCurrency } from 'thales-utils';
 import { MarketTypeMap } from '../constants/marketTypes';
 import { Sport } from '../enums/sports';
-import { getIsLeagueUnderSport, getLeagueIsDrawAvailable } from './sports';
+import { getLeagueIsDrawAvailable, getLeagueSport } from './sports';
 
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {
     if (!odds) {
@@ -60,7 +60,7 @@ export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 export const isGolf = (tag: number) => GOLF_TAGS.includes(tag);
 
 export const getIsOneSideMarket = (tag: number) =>
-    getIsLeagueUnderSport(Number(tag), Sport.MOTOSPORT) || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
+    getLeagueSport(Number(tag)) === Sport.MOTOSPORT || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
 
 export const getIsPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);

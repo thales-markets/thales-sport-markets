@@ -49,7 +49,7 @@ import useQueryParam from 'utils/useQueryParams';
 import { LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
 import { Sport } from '../../../enums/sports';
-import { getLeagueIsLiveSupported, getLiveSupportedLeagues, getSportLeagueIds } from '../../../utils/sports';
+import { getLiveSupportedLeagues, getSportLeagueIds, isLiveSupportedForLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import GlobalFilters from '../components/GlobalFilters';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
@@ -304,7 +304,7 @@ const Home: React.FC = () => {
                     return false;
                 }
                 if (sportFilter == SportFilterEnum.Live) {
-                    return getLeagueIsLiveSupported(market.leagueId);
+                    return isLiveSupportedForLeague(market.leagueId);
                 }
             }
 

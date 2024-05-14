@@ -1,4 +1,4 @@
-import { League, PeriodType, Provider, Sport } from 'enums/sports';
+import { League, PeriodType, Sport } from 'enums/sports';
 import { LeagueMap } from '../constants/sports';
 
 export const getLeagueSport = (league: League) => {
@@ -21,14 +21,9 @@ export const getLeaguePeriodType = (league: League) => {
     return leagueInfo ? leagueInfo.periodType : PeriodType.EMPTY;
 };
 
-export const getIsLeagueUnderSport = (league: League, sport: Sport) => {
+export const getLeagueProvider = (league: League) => {
     const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.sport === sport : false;
-};
-
-export const getIsLeagueUnderProvider = (league: League, provider: Provider) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.provider === provider : false;
+    return leagueInfo ? leagueInfo.provider : '';
 };
 
 export const getLeagueIsDrawAvailable = (league: League) => {
@@ -46,7 +41,7 @@ export const getLiveSupportedLeagues = () => {
     return allLeagues.filter((league) => league.live).map((league) => league.id);
 };
 
-export const getLeagueIsLiveSupported = (league: League) => {
+export const isLiveSupportedForLeague = (league: League) => {
     const leagueInfo = LeagueMap[league];
     return leagueInfo ? leagueInfo.live : false;
 };

@@ -1,5 +1,7 @@
+import MatchLogosV2 from 'components/MatchLogosV2';
 import SPAAnchor from 'components/SPAAnchor';
 import { GAME_STATUS } from 'constants/ui';
+import { Provider, Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
@@ -17,11 +19,9 @@ import { convertFromBytes32 } from 'utils/formatters/string';
 import { formatMarketOdds } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
+import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
 import { getTicketMarketStatus } from 'utils/tickets';
 import { getOrdinalNumberLabel } from 'utils/ui';
-import MatchLogosV2 from '../../../../../../components/MatchLogosV2';
-import { Provider, Sport } from '../../../../../../enums/sports';
-import { getIsLeagueUnderProvider, getIsLeagueUnderSport, getLeaguePeriodType } from '../../../../../../utils/sports';
 import {
     MarketTypeInfo,
     MatchInfo,
@@ -52,8 +52,8 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
     const isPendingResolution = isGameStarted && !isGameResolved;
 
     const gameIdString = convertFromBytes32(market.gameId);
-    const isEnetpulseSport = getIsLeagueUnderProvider(Number(market.leagueId), Provider.ENETPULSE);
-    const isJsonOddsSport = getIsLeagueUnderProvider(Number(market.leagueId), Provider.JSONODDS);
+    const isEnetpulseSport = getLeagueProvider(Number(market.leagueId)) === Provider.ENETPULSE;
+    const isJsonOddsSport = getLeagueProvider(Number(market.leagueId)) === Provider.JSONODDS;
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
@@ -123,7 +123,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
                             <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
                             <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
                         </ScoreContainer>
-                        {getIsLeagueUnderSport(Number(liveResultInfo?.sportId), Sport.SOCCER)
+                        {getLeagueSport(Number(liveResultInfo?.sportId)) === Sport.SOCCER
                             ? liveResultInfo?.period == 2 && (
                                   <ScoreContainer>
                                       <TeamScoreLabel className="period">

@@ -26,7 +26,7 @@ import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
-import { getIsLeagueUnderProvider, getIsLeagueUnderSport } from 'utils/sports';
+import { getLeagueProvider, getLeagueSport } from 'utils/sports';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -80,8 +80,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isGameLive = !!market.live;
 
-    const isEnetpulseSport = getIsLeagueUnderProvider(Number(market.leagueId), Provider.ENETPULSE);
-    const isJsonOddsSport = getIsLeagueUnderProvider(Number(market.leagueId), Provider.JSONODDS);
+    const isEnetpulseSport = getLeagueProvider(Number(market.leagueId)) === Provider.ENETPULSE;
+    const isJsonOddsSport = getLeagueProvider(Number(market.leagueId)) === Provider.JSONODDS;
     const gameIdString = convertFromBytes32(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
@@ -201,7 +201,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         !isMarketSelected ? (
                             <>
                                 {localStorage.getItem(market.gameId)}
-                                {getIsLeagueUnderSport(market.leagueId, Sport.TENNIS) && (
+                                {getLeagueSport(market.leagueId) === Sport.TENNIS && (
                                     <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
                                 )}
                             </>
