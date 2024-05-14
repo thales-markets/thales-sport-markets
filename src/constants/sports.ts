@@ -36,7 +36,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     },
     [League.MLB]: {
         sport: Sport.BASEBALL,
-        id: League.NFL,
+        id: League.MLB,
         label: 'MLB',
         logo: `/logos/leagueLogos/mlb.webp`,
         logoClass: 'icon-league league--mlb',

@@ -259,7 +259,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
                                         {leagueSport === Sport.SOCCER && liveResultInfo?.period == 2 && (
                                             <InfoLabel className="football">
-                                                {'(' +
+                                                {' (' +
                                                     liveResultInfo?.scoreHomeByPeriod[0] +
                                                     ' - ' +
                                                     liveResultInfo?.scoreAwayByPeriod[0] +
@@ -325,7 +325,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         : ''}
                                     {leagueSport === Sport.SOCCER && liveResultInfo?.period == 2 && (
                                         <InfoLabel className="football">
-                                            {'(' +
+                                            {' (' +
                                                 liveResultInfo?.scoreHomeByPeriod[0] +
                                                 ' - ' +
                                                 liveResultInfo?.scoreAwayByPeriod[0] +
