@@ -597,7 +597,7 @@ const Home: React.FC = () => {
 
             <RowContainer>
                 {/* LEFT FILTERS */}
-                <SidebarContainer maxWidth={263}>
+                <LeftSidebarContainer>
                     <BannerCarousel />
                     <Search
                         text={marketSearch}
@@ -709,7 +709,7 @@ const Home: React.FC = () => {
                     <Suspense fallback={<Loader />}>
                         {networkId !== Network.Base && networkId !== Network.OptimismSepolia && <SidebarLeaderboard />}
                     </Suspense>
-                </SidebarContainer>
+                </LeftSidebarContainer>
                 {/* MAIN PART */}
 
                 <MainContainer>
@@ -802,11 +802,11 @@ const Home: React.FC = () => {
                     )}
                 </MainContainer>
                 {/* RIGHT PART */}
-                <SidebarContainer maxWidth={360}>
+                <RightSidebarContainer>
                     <Suspense fallback={<Loader />}>
                         <Parlay />
                     </Suspense>
-                </SidebarContainer>
+                </RightSidebarContainer>
             </RowContainer>
             {isMobile && showParlayMobileModal && (
                 <Suspense fallback={<Loader />}>
@@ -845,18 +845,31 @@ const MainContainer = styled(FlexDivColumn)`
     max-width: 806px;
     flex-grow: 1;
     margin: 0 25px;
+    @media (max-width: 1199px) {
+        margin: 0 10px;
+    }
     @media (max-width: 950px) {
         margin: 0;
         max-width: 100%;
     }
 `;
 
-const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`
-    max-width: ${(props) => props.maxWidth}px;
+const SidebarContainer = styled(FlexDivColumn)`
     flex-grow: 1;
     min-width: 250px;
     @media (max-width: 950px) {
         display: none;
+    }
+`;
+
+const LeftSidebarContainer = styled(SidebarContainer)`
+    max-width: 263px;
+`;
+
+const RightSidebarContainer = styled(SidebarContainer)`
+    max-width: 360px;
+    @media (max-width: 1199px) {
+        max-width: 320px;
     }
 `;
 

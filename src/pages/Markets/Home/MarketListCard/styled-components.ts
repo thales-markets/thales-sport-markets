@@ -70,9 +70,6 @@ export const TeamsInfoConatiner = styled(FlexDivRow)`
 export const TeamLogosConatiner = styled(FlexDivRow)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
     flex-direction: ${(props) => (props.isColumnView ? 'column' : 'row')};
     align-items: center;
-    @media (max-width: 575px) {
-        display: none;
-    }
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '2px' : '10px') : '0px')};
 `;
 
@@ -85,9 +82,6 @@ export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean }
 
 export const TeamNamesConatiner = styled(FlexDivColumn)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
     margin-left: 10px;
-    @media (max-width: 575px) {
-        margin-left: 0px;
-    }
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '5px' : '10px') : '0px')};
 `;
 

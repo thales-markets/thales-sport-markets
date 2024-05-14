@@ -63,6 +63,16 @@ const Wrapper = styled(FlexDivColumn)`
     border-radius: 8px;
     flex: 1 1 0;
     height: auto;
+    @media (max-width: 950px) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        margin-top: 0;
+        border-radius: 0px;
+    }
 `;
 
 const LoaderContainer = styled(FlexDivCentered)`
