@@ -10,7 +10,7 @@ export const APPROVAL_BUFFER = 0.01;
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.05; // 5%
 
 export const INCENTIVIZED_LEAGUE = {
-    ids: [9011, 9004],
+    ids: [League.NBA, League.EPL],
     startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
     endDate: new Date(Date.UTC(2024, 4, 16, 23, 59, 59)),
     link:
@@ -21,7 +21,7 @@ export const INCENTIVIZED_LEAGUE = {
 };
 
 export const INCENTIVIZED_UEFA = {
-    ids: [9016, 9017, 19216],
+    ids: [League.UEFA_EL, League.UEFA_EL, League.UEFA_CONFERENCE_LEAGUE],
     startDate: new Date(Date.UTC(2024, 1, 13, 0, 0, 0)),
     endDate: new Date(Date.UTC(2024, 4, 25, 23, 59, 59)),
     link: 'https://dune.com/leifu/overtime-uefa-competitions-13-feb-25-may-24',
@@ -30,7 +30,7 @@ export const INCENTIVIZED_UEFA = {
 };
 
 export const INCENTIVIZED_NHL = {
-    ids: [9006],
+    ids: [League.NHL],
     startDate: new Date(Date.UTC(2024, 2, 5, 0, 0, 0)),
     endDate: new Date(Date.UTC(2024, 5, 24, 23, 59, 59)),
     link: 'https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards',
