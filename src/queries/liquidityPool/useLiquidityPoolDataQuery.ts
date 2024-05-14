@@ -1,9 +1,9 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
-import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { LiquidityPoolData } from 'types/liquidityPool';
+import networkConnector from 'utils/networkConnector';
+import QUERY_KEYS from '../../constants/queryKeys';
 
 const useLiquidityPoolDataQuery = (networkId: Network, options?: UseQueryOptions<LiquidityPoolData | undefined>) => {
     return useQuery<LiquidityPoolData | undefined>(
@@ -62,9 +62,6 @@ const useLiquidityPoolDataQuery = (networkId: Network, options?: UseQueryOptions
                     liquidityPoolData.canCloseCurrentRound = contractLiquidityPoolData.canCloseCurrentRound;
                     liquidityPoolData.paused = contractLiquidityPoolData.paused;
                     liquidityPoolData.roundLength = Number(contractLiquidityPoolData.roundLength) / 60 / 60 / 24;
-                    liquidityPoolData.stakedThalesMultiplier = bigNumberFormatter(
-                        contractLiquidityPoolData.stakedThalesMultiplier
-                    );
                     liquidityPoolData.allocationCurrentRound = bigNumberFormatter(
                         contractLiquidityPoolData.allocationCurrentRound,
                         decimals

@@ -348,7 +348,6 @@ const LiquidityPool: React.FC = () => {
             try {
                 const liquidityPoolContractWithSigner = lpContract.connect(signer);
                 const parsedAmount = coinParser(Number(amount).toString(), networkId);
-
                 const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount);
                 const txResult = await tx.wait();
 

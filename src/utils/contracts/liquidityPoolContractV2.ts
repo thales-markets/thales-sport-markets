@@ -5,7 +5,7 @@ const liquidityPoolContractV2 = {
         [Network.OptimismMainnet]: '',
         [Network.Arbitrum]: '',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '0x74f6742e62c65bf5d3d15477cba1db78c8769cb5',
+        [Network.OptimismSepolia]: '0xAE145Fe3Af36aAE9135c488E9B728eD504B2385C',
     },
     abi: [
         {
@@ -171,12 +171,6 @@ const liquidityPoolContractV2 = {
         },
         {
             anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: 'stakingThales', type: 'address' }],
-            name: 'StakingThalesChanged',
-            type: 'event',
-        },
-        {
-            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'account', type: 'address' }],
             name: 'Unpaused',
             type: 'event',
@@ -194,6 +188,13 @@ const liquidityPoolContractV2 = {
             type: 'event',
         },
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+        {
+            inputs: [],
+            name: 'addressManager',
+            outputs: [{ internalType: 'contract IAddressManager', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
         {
             inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             name: 'allocationPerRound',
@@ -223,6 +224,13 @@ const liquidityPoolContractV2 = {
             inputs: [],
             name: 'collateral',
             outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'collateralKey',
+            outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -289,6 +297,13 @@ const liquidityPoolContractV2 = {
             type: 'function',
         },
         {
+            inputs: [],
+            name: 'getCollateralPrice',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'uint256', name: '_round', type: 'uint256' }],
             name: 'getNumberOfTradingTicketsPerRound',
             outputs: [{ internalType: 'uint256', name: 'numOfTickets', type: 'uint256' }],
@@ -344,7 +359,7 @@ const liquidityPoolContractV2 = {
                     components: [
                         { internalType: 'address', name: '_owner', type: 'address' },
                         { internalType: 'address', name: '_sportsAMM', type: 'address' },
-                        { internalType: 'address', name: '_stakingThales', type: 'address' },
+                        { internalType: 'address', name: '_addressManager', type: 'address' },
                         { internalType: 'contract IERC20', name: '_collateral', type: 'address' },
                         { internalType: 'uint256', name: '_roundLength', type: 'uint256' },
                         { internalType: 'uint256', name: '_maxAllowedDeposit', type: 'uint256' },
@@ -353,6 +368,7 @@ const liquidityPoolContractV2 = {
                         { internalType: 'uint256', name: '_utilizationRate', type: 'uint256' },
                         { internalType: 'address', name: '_safeBox', type: 'address' },
                         { internalType: 'uint256', name: '_safeBoxImpact', type: 'uint256' },
+                        { internalType: 'bytes32', name: '_collateralKey', type: 'bytes32' },
                     ],
                     internalType: 'struct SportsAMMV2LiquidityPool.InitParams',
                     name: 'params',
@@ -582,13 +598,6 @@ const liquidityPoolContractV2 = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'contract IStakingThales', name: '_stakingThales', type: 'address' }],
-            name: 'setStakingThales',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
             inputs: [{ internalType: 'uint256', name: '_utilizationRate', type: 'uint256' }],
             name: 'setUtilizationRate',
             outputs: [],
@@ -599,13 +608,6 @@ const liquidityPoolContractV2 = {
             inputs: [],
             name: 'sportsAMM',
             outputs: [{ internalType: 'contract ISportsAMMV2', name: '', type: 'address' }],
-            stateMutability: 'view',
-            type: 'function',
-        },
-        {
-            inputs: [],
-            name: 'stakingThales',
-            outputs: [{ internalType: 'contract IStakingThales', name: '', type: 'address' }],
             stateMutability: 'view',
             type: 'function',
         },

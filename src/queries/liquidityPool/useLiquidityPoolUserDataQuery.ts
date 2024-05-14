@@ -1,9 +1,9 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import QUERY_KEYS from '../../constants/queryKeys';
-import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
-import networkConnector from 'utils/networkConnector';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { UserLiquidityPoolData } from 'types/liquidityPool';
+import networkConnector from 'utils/networkConnector';
+import QUERY_KEYS from '../../constants/queryKeys';
 
 const useLiquidityPoolUserDataQuery = (
     walletAddress: string,

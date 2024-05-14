@@ -1,7 +1,7 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import thalesData from 'thales-data';
 import { LiquidityPoolType, LiquidityPoolUserTransactions } from 'types/liquidityPool';
 
 const useLiquidityPoolUserTransactionsQuery = (
@@ -17,6 +17,7 @@ const useLiquidityPoolUserTransactionsQuery = (
                     network: networkId,
                     liquidityPoolType,
                 });
+
                 return liquidityPoolUserTransactions;
             } catch (e) {
                 console.log(e);
