@@ -497,6 +497,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
 
                 let tx;
                 if (tradeData[0].live) {
+                    const liveTradeDataOdds = tradeData[0].odds;
+                    const liveTradeDataPosition = tradeData[0].position;
+                    const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
+
                     setProcessingLiveTrade(true);
                     tx = await getLiveTradingProcessorTransaction(
                         isVoucherSelected,
@@ -504,7 +508,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         liveTradingProcessorContractWithSigner,
                         tradeData,
                         parsedBuyInAmount,
-                        parsedTotalQuote,
+                        liveTotalQuote,
                         referralId,
                         additionalSlippage,
                         isAA
