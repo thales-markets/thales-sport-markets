@@ -728,7 +728,9 @@
             "claim-all": "Alle beanspruchen",
             "claim-progress": "Behauptung...",
             "payout-in": "Auszahlung in",
-            "approve-swap-tooltip": "Um eine Auszahlung in {{currencyKey}} zu erhalten, müssen Sie den Umtausch von {{defaultCurrency}} in {{currencyKey}} genehmigen."
+            "approve-swap-tooltip": "Um eine Auszahlung in {{currencyKey}} zu erhalten, müssen Sie den Umtausch von {{defaultCurrency}} in {{currencyKey}} genehmigen.",
+            "payout": "Auszahlung",
+            "win": "Gewinnen"
         },
         "messages": {
             "no-open": "Sie haben keine offene Stelle",
@@ -749,7 +751,8 @@
             "position": "Position",
             "status": "Status",
             "total-amount": "Gesamtsumme",
-            "total-quote": "Gesamtangebot"
+            "total-quote": "Gesamtangebot",
+            "payout": "Auszahlung"
         },
         "winnings-are-forfeit": "*Gewinne, die nicht innerhalb von {{amount}} Tagen nach Auflösung eines Marktes beansprucht werden, verfallen.",
         "search-field": "Brieftasche suchen",

@@ -28,10 +28,11 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean }>`
     position: relative;
     width: 100%;
     padding: 10px 12px;
-    @media (max-width: 950px) {
-        padding-right: 20px;
-    }
     cursor: ${(props) => (props.isGameOpen ? 'default' : 'pointer')};
+    @media (max-width: 950px) {
+        flex-direction: column;
+        padding: 8px 8px 4px 8px;
+    }
 `;
 
 export const MatchInfoConatiner = styled(FlexDivColumn)`
@@ -70,9 +71,6 @@ export const TeamsInfoConatiner = styled(FlexDivRow)`
 export const TeamLogosConatiner = styled(FlexDivRow)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
     flex-direction: ${(props) => (props.isColumnView ? 'column' : 'row')};
     align-items: center;
-    @media (max-width: 575px) {
-        display: none;
-    }
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '2px' : '10px') : '0px')};
 `;
 
@@ -85,10 +83,10 @@ export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean }
 
 export const TeamNamesConatiner = styled(FlexDivColumn)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
     margin-left: 10px;
-    @media (max-width: 575px) {
-        margin-left: 0px;
-    }
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '5px' : '10px') : '0px')};
+    @media (max-width: 950px) {
+        flex-direction: row;
+    }
 `;
 
 export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelected: boolean }>`
@@ -99,6 +97,10 @@ export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelect
     white-space: nowrap;
     overflow: hidden;
     width: ${(props) => (props.isMarketSelected ? '130px' : '100%')};
+    @media (max-width: 950px) {
+        width: fit-content;
+        margin-right: 5px;
+    }
 `;
 
 export const ResultWrapper = styled(FlexDivRowCentered)``;
@@ -126,6 +128,14 @@ export const MarketsCountWrapper = styled(FlexDivColumnCentered)`
     text-align: center;
     cursor: pointer;
     margin-top: 20px;
+    @media (max-width: 950px) {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        margin-top: 8px;
+        font-size: 12px;
+        line-height: 14px;
+    }
 `;
 
 export const ExternalArrow = styled.i`

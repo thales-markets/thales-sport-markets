@@ -1,10 +1,11 @@
-import { SPORTS_TAGS_MAP } from 'constants/tags';
 import { SportFilterEnum } from 'enums/markets';
 import { DIRECTION_HORIZONTAL } from 'hammerjs';
 import React, { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
+import { Sport } from '../../../../../enums/sports';
+import { getSportLeagueIds } from '../../../../../utils/sports';
 
 type SportFilterMobileProps = {
     sportFilter: string;
@@ -82,7 +83,7 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                 if (filterItem === SportFilterEnum.All) {
                                     setAvailableTags(tagsList);
                                 } else {
-                                    const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                    const tagsPerSport = getSportLeagueIds(filterItem as Sport);
                                     if (tagsPerSport) {
                                         const filteredTags = tagsList.filter((tag: TagInfo) =>
                                             tagsPerSport.includes(tag.id)

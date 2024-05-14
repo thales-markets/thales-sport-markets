@@ -1,5 +1,4 @@
 import Tooltip from 'components/Tooltip';
-import { SPORTS_TAGS_MAP } from 'constants/tags';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatShortDateWithTime } from 'thales-utils';
@@ -7,6 +6,8 @@ import { SportMarket, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
+import { Sport } from '../../../../../../enums/sports';
+import { getLeagueSport } from '../../../../../../utils/sports';
 import {
     Container,
     LeagueLogo,
@@ -109,7 +110,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                             <>
                                 {liveResultInfo.tournamentName ? liveResultInfo.tournamentName : ''}
                                 {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
-                                {SPORTS_TAGS_MAP['Tennis'].includes(Number(market.leagueId)) && (
+                                {getLeagueSport(Number(market.leagueId)) === Sport.TENNIS && (
                                     <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={14} marginLeft={2} />
                                 )}
                             </>

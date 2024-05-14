@@ -1,4 +1,16 @@
 import {
+    BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
+    COMBINED_POSITIONS_MARKET_TYPES,
+    DOUBLE_CHANCE_MARKET_TYPES,
+    ONE_SIDE_PLAYER_PROPS_MARKET_TYPES,
+    PLAYER_PROPS_MARKET_TYPES,
+    SPREAD_MARKET_TYPES,
+    TOTAL_MARKET_TYPES,
+    TOTAL_ODD_EVEN_MARKET_TYPES,
+    WINNER_MARKET_TYPES,
+    YES_NO_PLAYER_PROPS_MARKET_TYPES,
+} from 'constants/marketTypes';
+import {
     FIFA_WC_TAG,
     FIFA_WC_U20_TAG,
     GOLF_TAGS,
@@ -6,24 +18,14 @@ import {
     IIHF_WC_TAG,
     INTERNATIONAL_SPORTS,
     MOTOSPORT_TAGS,
-    SPORTS_TAGS_MAP,
-    TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS,
     UEFA_TAGS,
 } from 'constants/tags';
-import {
-    BOTH_TEAMS_TO_SCORE_BET_TYPES,
-    BetType,
-    COMBINED_POSITIONS_BET_TYPES,
-    ONE_SIDER_PLAYER_PROPS_BET_TYPES,
-    OddsType,
-    PLAYER_PROPS_BET_TYPES,
-    SPECIAL_YES_NO_BET_TYPES,
-    SPREAD_BET_TYPES,
-    TOTAL_BET_TYPES,
-    TOTAL_ODD_EVEN_BET_TYPES,
-    WINNER_BET_TYPES,
-} from 'enums/markets';
+import { MarketType } from 'enums/marketTypes';
+import { OddsType } from 'enums/markets';
 import { formatCurrency } from 'thales-utils';
+import { MarketTypeMap } from '../constants/marketTypes';
+import { Sport } from '../enums/sports';
+import { getLeagueIsDrawAvailable, getLeagueSport } from './sports';
 
 export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) => {
     if (!odds) {
@@ -58,67 +60,78 @@ export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 export const isGolf = (tag: number) => GOLF_TAGS.includes(tag);
 
 export const getIsOneSideMarket = (tag: number) =>
-    SPORTS_TAGS_MAP['Motosport'].includes(Number(tag)) || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
+    getLeagueSport(Number(tag)) === Sport.MOTOSPORT || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
 
-export const isPlayerProps = (betType: BetType) => {
-    return PLAYER_PROPS_BET_TYPES.includes(betType);
+export const getIsPlayerPropsMarket = (marketType: MarketType) => {
+    return PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
-export const isOneSidePlayerProps = (betType: BetType) => {
-    return ONE_SIDER_PLAYER_PROPS_BET_TYPES.includes(betType);
+export const getIsOneSidePlayerPropsMarket = (marketType: MarketType) => {
+    return ONE_SIDE_PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
-export const isSpecialYesNoProp = (betType: BetType) => {
-    return SPECIAL_YES_NO_BET_TYPES.includes(betType);
+export const getIsYesNoPlayerPropsMarket = (marketType: MarketType) => {
+    return YES_NO_PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
-export const isWinner = (betType: BetType) => {
-    return WINNER_BET_TYPES.includes(betType) || `${betType}`.startsWith('1002') || `${betType}`.startsWith('1005');
+export const getIsWinnerMarket = (marketType: MarketType) => {
+    return WINNER_MARKET_TYPES.includes(marketType);
 };
 
-export const isTotal = (betType: BetType) => {
-    return TOTAL_BET_TYPES.includes(betType) || `${betType}`.startsWith('1003') || `${betType}`.startsWith('1006');
+export const getIsTotalMarket = (marketType: MarketType) => {
+    return TOTAL_MARKET_TYPES.includes(marketType);
 };
 
-export const isTotalOddEven = (betType: BetType) => {
+export const getIsTotalOddEvenMarket = (marketType: MarketType) => {
+    return TOTAL_ODD_EVEN_MARKET_TYPES.includes(marketType);
+};
+
+export const getIsSpreadMarket = (marketType: MarketType) => {
+    return SPREAD_MARKET_TYPES.includes(marketType);
+};
+
+export const getIsCombinedPositionsMarket = (marketType: MarketType) => {
+    return COMBINED_POSITIONS_MARKET_TYPES.includes(marketType);
+};
+
+export const getIsBothsTeamsToScoreMarket = (marketType: MarketType) => {
+    return BOTH_TEAMS_TO_SCORE_MARKET_TYPES.includes(marketType);
+};
+
+export const getIsDoubleChanceMarket = (marketType: MarketType) => {
+    return DOUBLE_CHANCE_MARKET_TYPES.includes(marketType);
+};
+
+export const getIsPeriodMarket = (marketType: MarketType) => {
     return (
-        TOTAL_ODD_EVEN_BET_TYPES.includes(betType) || `${betType}`.startsWith('1008') || `${betType}`.startsWith('1009')
+        marketType === MarketType.FIRST_PERIOD_DOUBLE_CHANCE ||
+        marketType === MarketType.SECOND_PERIOD_DOUBLE_CHANCE ||
+        `${marketType}`.startsWith('1002') ||
+        `${marketType}`.startsWith('1003') ||
+        `${marketType}`.startsWith('1004') ||
+        `${marketType}`.startsWith('1008') ||
+        `${marketType}`.startsWith('1010') ||
+        `${marketType}`.startsWith('1011') ||
+        `${marketType}`.startsWith('1012')
     );
 };
 
-export const isSpread = (betType: BetType) => {
-    return SPREAD_BET_TYPES.includes(betType) || `${betType}`.startsWith('1004') || `${betType}`.startsWith('1007');
-};
-
-export const isCombinedPositions = (betType: BetType) => {
-    return COMBINED_POSITIONS_BET_TYPES.includes(betType);
-};
-
-export const isPeriod = (betType: BetType) => {
+export const getIsPeriod2Market = (marketType: MarketType) => {
     return (
-        `${betType}`.startsWith('1002') ||
-        `${betType}`.startsWith('1003') ||
-        `${betType}`.startsWith('1004') ||
-        `${betType}`.startsWith('1008') ||
-        `${betType}`.startsWith('1010')
+        `${marketType}`.startsWith('1005') ||
+        `${marketType}`.startsWith('1006') ||
+        `${marketType}`.startsWith('1007') ||
+        `${marketType}`.startsWith('1009')
     );
 };
 
-export const isPeriod2 = (betType: BetType) => {
-    return (
-        `${betType}`.startsWith('1005') ||
-        `${betType}`.startsWith('1006') ||
-        `${betType}`.startsWith('1007') ||
-        `${betType}`.startsWith('1009')
-    );
+export const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
+    getLeagueIsDrawAvailable(leagueId) && getIsWinnerMarket(marketType);
+
+export const getPositionOrder = (leagueId: number, marketType: MarketType, position: number) =>
+    getIsDrawAvailable(leagueId, marketType) ? `${position == 0 ? 1 : position == 1 ? 3 : 2}` : undefined;
+
+export const getMarketTypeName = (marketType: MarketType) => {
+    const marketTypeInfo = MarketTypeMap[marketType];
+    return marketTypeInfo ? marketTypeInfo.name : marketType;
 };
-
-export const isBothsTeamsToScore = (betType: BetType) => {
-    return BOTH_TEAMS_TO_SCORE_BET_TYPES.includes(betType) || `${betType}`.startsWith('1010');
-};
-
-export const getIsDrawAvailable = (leagueId: number, betType: BetType) =>
-    !TAGS_OF_MARKETS_WITHOUT_DRAW_ODDS.includes(leagueId) && isWinner(betType);
-
-export const getPositionOrder = (leagueId: number, betType: BetType, position: number) =>
-    getIsDrawAvailable(leagueId, betType) ? `${position == 0 ? 1 : position == 1 ? 3 : 2}` : undefined;

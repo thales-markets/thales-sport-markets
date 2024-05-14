@@ -188,7 +188,7 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
     flex: none;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 7px;
-    @media (max-width: 1299px) {
+    @media (max-width: 1199px) {
         max-width: 320px;
     }
 `;

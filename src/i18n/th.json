@@ -728,7 +728,9 @@
             "claim-all": "อ้างสิทธิ์ทั้งหมด",
             "claim-progress": "กำลังอ้างสิทธิ์...",
             "payout-in": "จ่ายเงินเข้า.",
-            "approve-swap-tooltip": "หากต้องการรับการจ่ายเงินเป็น {{currencyKey}} คุณต้องอนุมัติการแลกเปลี่ยนจาก {{defaultCurrency}} เป็น {{currencyKey}}"
+            "approve-swap-tooltip": "หากต้องการรับการจ่ายเงินเป็น {{currencyKey}} คุณต้องอนุมัติการแลกเปลี่ยนจาก {{defaultCurrency}} เป็น {{currencyKey}}",
+            "win": "ชนะ",
+            "payout": "การจ่ายเงิน"
         },
         "messages": {
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",
@@ -749,7 +751,8 @@
             "id": "ไอดี",
             "status": "สถานะ",
             "total-quote": "ใบเสนอราคาทั้งหมด",
-            "total-amount": "จำนวนเงินทั้งหมด"
+            "total-amount": "จำนวนเงินทั้งหมด",
+            "payout": "การจ่ายเงิน"
         },
         "winnings-are-forfeit": "*การชนะที่ไม่ได้อ้างสิทธิ์ภายใน {{amount}} วันของตลาดที่ได้รับการแก้ไขจะถือว่าสละสิทธิ์",
         "search-field": "ค้นหากระเป๋าสตางค์",

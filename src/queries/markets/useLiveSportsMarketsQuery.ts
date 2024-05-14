@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { LIVE_SUPPORTED_LEAGUES } from 'constants/tags';
 import { Network } from 'enums/network';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarkets } from 'types/markets';
+import { getLiveSupportedLeagues } from '../../utils/sports';
 
 const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions<SportMarkets>) => {
     return useQuery<SportMarkets>(
@@ -97,7 +97,7 @@ const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions
             const markets: any[] = [];
             try {
                 const promises: any[] = [];
-                LIVE_SUPPORTED_LEAGUES.forEach((league: number) => {
+                getLiveSupportedLeagues().forEach((league: number) => {
                     promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-markets?leagueId=${league}`));
                 });
                 const responses = await Promise.all(promises);

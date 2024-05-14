@@ -8,7 +8,7 @@ export const Container = styled(FlexDiv)`
     align-items: center;
 `;
 
-export const BetTypesContainer = styled(FlexDiv)`
+export const MarketTypesContainer = styled(FlexDiv)`
     width: 100%;
     overflow: auto;
     -ms-overflow-style: none;
@@ -18,7 +18,7 @@ export const BetTypesContainer = styled(FlexDiv)`
     }
 `;
 
-export const BetTypeButton = styled.button<{ selected?: boolean }>`
+export const MarketTypeButton = styled.button<{ selected?: boolean }>`
     width: 100%;
     border-radius: 5px;
     border: none;

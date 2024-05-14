@@ -5,10 +5,10 @@ import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
 import ROUTES from 'constants/routes';
-import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP, TAGS_LIST } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
-import { BetType } from 'enums/markets';
+import { MarketType } from 'enums/marketTypes';
 import { Network } from 'enums/network';
+import { League, Provider, Sport } from 'enums/sports';
 import { groupBy } from 'lodash';
 import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
 import Parlay from 'pages/Markets/Home/Parlay';
@@ -30,9 +30,10 @@ import { SportMarket, SportMarketLiveResult, TagInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { convertFromBytes32 } from 'utils/formatters/string';
 import { buildHref, navigateTo } from 'utils/routes';
+import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
-import { TAGS_FLAGS } from '../../../../enums/tags';
+import { LeagueMap } from '../../../../constants/sports';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
 import TicketTransactions from './components/TicketTransactions';
@@ -86,15 +87,15 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isGameStarted = market.maturityDate < new Date();
     const isGameOpen = market.isOpen && !isGameStarted;
 
-    const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == market.leagueId)?.label;
+    const leagueName = Object.values(LeagueMap).find((t: TagInfo) => t.id == market.leagueId)?.label;
     const isGameCancelled = market.isCanceled || (!isGameStarted && market.isResolved);
     const isGameResolved = market.isResolved || market.isCanceled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isGamePaused = market.isPaused && !isGameResolved;
     const showStatus = market.isResolved || market.isCanceled || isGameStarted || market.isPaused;
     const gameIdString = convertFromBytes32(market.gameId);
-    const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
-    const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
+    const isEnetpulseSport = getLeagueProvider(Number(market.leagueId)) === Provider.ENETPULSE;
+    const isJsonOddsSport = getLeagueProvider(Number(market.leagueId)) === Provider.JSONODDS;
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
 
@@ -125,6 +126,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     ]);
 
     const hideResultInfoPerPeriod = hideResultInfoPerPeriodForSports(Number(liveResultInfo?.sportId));
+    const leagueSport = getLeagueSport(Number(liveResultInfo?.sportId));
 
     return (
         <RowContainer>
@@ -255,16 +257,15 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 <ResultContainer>
                                     <ResultLabel>
                                         {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
-                                        {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
-                                            liveResultInfo?.period == 2 && (
-                                                <InfoLabel className="football">
-                                                    {'(' +
-                                                        liveResultInfo?.scoreHomeByPeriod[0] +
-                                                        ' - ' +
-                                                        liveResultInfo?.scoreAwayByPeriod[0] +
-                                                        ')'}
-                                                </InfoLabel>
-                                            )}
+                                        {leagueSport === Sport.SOCCER && liveResultInfo?.period == 2 && (
+                                            <InfoLabel className="football">
+                                                {' (' +
+                                                    liveResultInfo?.scoreHomeByPeriod[0] +
+                                                    ' - ' +
+                                                    liveResultInfo?.scoreAwayByPeriod[0] +
+                                                    ')'}
+                                            </InfoLabel>
+                                        )}
                                     </ResultLabel>
                                     {liveResultInfo?.status != GAME_STATUS.FINAL &&
                                         liveResultInfo?.status != GAME_STATUS.FULL_TIME && (
@@ -278,9 +279,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                             {` ${getOrdinalNumberLabel(
                                                                 Number(liveResultInfo?.period)
                                                             )} ${t(
-                                                                `markets.market-card.${
-                                                                    SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]
-                                                                }`
+                                                                `markets.market-card.${getLeaguePeriodType(
+                                                                    Number(liveResultInfo?.sportId)
+                                                                )}`
                                                             )}`}
                                                         </InfoLabel>
                                                         <InfoLabel className="red">
@@ -291,7 +292,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 )}
                                             </PeriodsContainer>
                                         )}
-                                    {!SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) && (
+                                    {leagueSport !== Sport.SOCCER && (
                                         <FlexDivRow>
                                             {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
                                                 return (
@@ -319,20 +320,19 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         ? market.homeScore == 1
                                             ? t('markets.market-card.race-winner')
                                             : t('markets.market-card.no-win')
-                                        : Number(liveResultInfo?.sportId) != TAGS_FLAGS.UFC
+                                        : Number(liveResultInfo?.sportId) != League.UFC
                                         ? `${market.homeScore} - ${market.awayScore}`
                                         : ''}
-                                    {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId)) &&
-                                        liveResultInfo?.period == 2 && (
-                                            <InfoLabel className="football">
-                                                {'(' +
-                                                    liveResultInfo?.scoreHomeByPeriod[0] +
-                                                    ' - ' +
-                                                    liveResultInfo?.scoreAwayByPeriod[0] +
-                                                    ')'}
-                                            </InfoLabel>
-                                        )}
-                                    {Number(liveResultInfo?.sportId) == TAGS_FLAGS.UFC ? (
+                                    {leagueSport === Sport.SOCCER && liveResultInfo?.period == 2 && (
+                                        <InfoLabel className="football">
+                                            {' (' +
+                                                liveResultInfo?.scoreHomeByPeriod[0] +
+                                                ' - ' +
+                                                liveResultInfo?.scoreAwayByPeriod[0] +
+                                                ')'}
+                                        </InfoLabel>
+                                    )}
+                                    {Number(liveResultInfo?.sportId) == League.UFC ? (
                                         <>
                                             {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
                                             <InfoLabel className="ufc">
@@ -390,7 +390,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         </ToggleContainer>
                     )}
                     <PositionsContainer>
-                        <PositionsV2 markets={[market]} betType={BetType.WINNER} isGameOpen={isGameOpen} />
+                        <PositionsV2 markets={[market]} marketType={MarketType.WINNER} isGameOpen={isGameOpen} />
                         {Object.keys(groupedChildMarkets).map((key, index) => {
                             const typeId = Number(key);
                             const childMarkets = groupedChildMarkets[typeId];
@@ -398,7 +398,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 <PositionsV2
                                     key={index}
                                     markets={childMarkets}
-                                    betType={typeId}
+                                    marketType={typeId}
                                     isGameOpen={isGameOpen}
                                 />
                             );
@@ -429,13 +429,15 @@ const PositionsContainer = styled(FlexDivColumn)`
 `;
 
 const hideResultInfoPerPeriodForSports = (sportId: number) => {
+    const leagueSport = getLeagueSport(Number(sportId));
+
     return (
-        !SPORTS_TAGS_MAP['Soccer'].includes(Number(sportId)) &&
-        !SPORTS_TAGS_MAP['eSports'].includes(sportId) &&
-        !SPORTS_TAGS_MAP['MMA'].includes(sportId) &&
-        !SPORTS_TAGS_MAP['Cricket'].includes(sportId) &&
-        !SPORTS_TAGS_MAP['Motosport'].includes(sportId) &&
-        sportId != TAGS_FLAGS.EUROLEAGUE
+        leagueSport !== Sport.SOCCER &&
+        leagueSport !== Sport.ESPORTS &&
+        leagueSport !== Sport.MMA &&
+        leagueSport !== Sport.CRICKET &&
+        leagueSport !== Sport.MOTOSPORT &&
+        sportId != League.EUROLEAGUE
     );
 };
 

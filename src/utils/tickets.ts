@@ -1,5 +1,6 @@
-import { BetTypeMap, SPORTS_MAP } from 'constants/tags';
-import { BetType, OddsType } from 'enums/markets';
+import { MarketTypeMap } from 'constants/marketTypes';
+import { MarketType } from 'enums/marketTypes';
+import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
@@ -8,10 +9,11 @@ import { getCollateralByAddress } from './collaterals';
 import {
     formatMarketOdds,
     getIsOneSideMarket,
-    isOneSidePlayerProps,
-    isPlayerProps,
-    isSpecialYesNoProp,
+    getIsOneSidePlayerPropsMarket,
+    getIsPlayerPropsMarket,
+    getIsYesNoPlayerPropsMarket,
 } from './markets';
+import { getLeagueSport } from './sports';
 
 export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticket => {
     const collateral = getCollateralByAddress(ticket.collateral, networkId);
@@ -30,7 +32,7 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
         isResolved: ticket.resolved,
         isPaused: ticket.paused,
         isCancelled: ticket.marketsResult.every(
-            (marketResult: any) => Number(marketResult.status) === TicketMarketStatus.Cancelled
+            (marketResult: any) => Number(marketResult.status) === TicketMarketStatus.CANCELLED
         ),
         isLost: ticket.isLost,
         isUserTheWinner: ticket.isUserTheWinner,
@@ -43,8 +45,8 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
             const leagueId = Number(market.sportId);
             // const isEnetpulseSport = ENETPULSE_SPORTS.includes(leagueId);
             const typeId = Number(market.typeId);
-            const isPlayerPropsMarket = isPlayerProps(typeId);
-            const type = BetTypeMap[typeId as BetType];
+            const isPlayerPropsMarket = getIsPlayerPropsMarket(typeId);
+            const type = MarketTypeMap[typeId as MarketType];
             const line = Number(market.line);
 
             const homeTeam = !!teamNames[market.gameId] && teamNames[market.gameId].find((team: Team) => team.isHome);
@@ -60,7 +62,7 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
 
             return {
                 gameId: market.gameId,
-                sport: SPORTS_MAP[leagueId],
+                sport: getLeagueSport(leagueId),
                 leagueId: leagueId,
                 // leagueName: getLeagueNameById(leagueId),
                 leagueName: '',
@@ -74,18 +76,18 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
                 awayScore: isPlayerPropsMarket ? 0 : awayScore,
                 finalResult: Number(marketResult.results[0]),
                 status: 0,
-                isOpen: marketStatus === TicketMarketStatus.Open,
-                isResolved: marketStatus !== TicketMarketStatus.Open,
-                isCanceled: marketStatus === TicketMarketStatus.Cancelled,
-                isWinning: marketStatus === TicketMarketStatus.Winning,
+                isOpen: marketStatus === TicketMarketStatus.OPEN,
+                isResolved: marketStatus !== TicketMarketStatus.OPEN,
+                isCanceled: marketStatus === TicketMarketStatus.CANCELLED,
+                isWinning: marketStatus === TicketMarketStatus.WINNING,
                 isPaused: false,
                 isOneSideMarket: getIsOneSideMarket(leagueId),
                 spread: line / 100,
                 total: line / 100,
                 line: line / 100,
                 isPlayerPropsMarket: isPlayerPropsMarket,
-                isOneSidePlayerPropsMarket: isOneSidePlayerProps(typeId),
-                isYesNoPlayerPropsMarket: isSpecialYesNoProp(typeId),
+                isOneSidePlayerPropsMarket: getIsOneSidePlayerPropsMarket(typeId),
+                isYesNoPlayerPropsMarket: getIsYesNoPlayerPropsMarket(typeId),
                 playerProps: {
                     playerId: Number(market.playerId),
                     playerName: 'Player Name',

@@ -1,13 +1,13 @@
-import { SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
+import { Sport } from 'enums/sports';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarketLiveResult } from 'types/markets';
-import { getOrdinalNumberLabel } from 'utils/ui';
 import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
+import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
+import { getOrdinalNumberLabel } from 'utils/ui';
 
 type MatchStatusProps = {
     isPendingResolution: boolean;
@@ -43,7 +43,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                             !isJsonOddsSport && (
                                 <MatchPeriodContainer>
                                     <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
-                                        `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`
+                                        `markets.market-card.${getLeaguePeriodType(Number(liveResultInfo?.sportId))}`
                                     )}`}</MatchPeriodLabel>
                                     <FlexDivCentered>
                                         <MatchPeriodLabel className="red">
@@ -58,7 +58,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                             <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
                             <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
                         </ScoreContainer>
-                        {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId))
+                        {getLeagueSport(Number(liveResultInfo?.sportId)) === Sport.SOCCER
                             ? liveResultInfo?.period == 2 && (
                                   <ScoreContainer>
                                       <TeamScoreLabel className="period">

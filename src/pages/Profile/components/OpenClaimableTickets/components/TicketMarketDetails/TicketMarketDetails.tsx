@@ -1,6 +1,7 @@
+import MatchLogosV2 from 'components/MatchLogosV2';
 import SPAAnchor from 'components/SPAAnchor';
-import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
+import { Provider, Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { t } from 'i18next';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
@@ -18,9 +19,9 @@ import { convertFromBytes32 } from 'utils/formatters/string';
 import { formatMarketOdds } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
+import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
 import { getTicketMarketStatus } from 'utils/tickets';
 import { getOrdinalNumberLabel } from 'utils/ui';
-import MatchLogosV2 from '../../../../../../components/MatchLogosV2';
 import {
     MarketTypeInfo,
     MatchInfo,
@@ -51,8 +52,8 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
     const isPendingResolution = isGameStarted && !isGameResolved;
 
     const gameIdString = convertFromBytes32(market.gameId);
-    const isEnetpulseSport = ENETPULSE_SPORTS.includes(Number(market.leagueId));
-    const isJsonOddsSport = JSON_ODDS_SPORTS.includes(Number(market.leagueId));
+    const isEnetpulseSport = getLeagueProvider(Number(market.leagueId)) === Provider.ENETPULSE;
+    const isJsonOddsSport = getLeagueProvider(Number(market.leagueId)) === Provider.JSONODDS;
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
@@ -107,7 +108,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
                             !isEnetpulseSport && (
                                 <MatchPeriodContainer>
                                     <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
-                                        `markets.market-card.${SPORT_PERIODS_MAP[Number(liveResultInfo?.sportId)]}`
+                                        `markets.market-card.${getLeaguePeriodType(Number(liveResultInfo?.sportId))}`
                                     )}`}</MatchPeriodLabel>
                                     <FlexDivCentered>
                                         <MatchPeriodLabel className="red">
@@ -122,7 +123,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
                             <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
                             <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
                         </ScoreContainer>
-                        {SPORTS_TAGS_MAP['Soccer'].includes(Number(liveResultInfo?.sportId))
+                        {getLeagueSport(Number(liveResultInfo?.sportId)) === Sport.SOCCER
                             ? liveResultInfo?.period == 2 && (
                                   <ScoreContainer>
                                       <TeamScoreLabel className="period">

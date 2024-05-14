@@ -1,14 +1,14 @@
+import SimpleLoader from 'components/SimpleLoader';
 import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getSelectedMarket, setBetTypeFilter, setSelectedMarket } from 'redux/modules/market';
+import { getSelectedMarket, setMarketTypeFilter, setSelectedMarket } from 'redux/modules/market';
 import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket } from 'types/markets';
-import SimpleLoader from '../../../../components/SimpleLoader';
-import { FlexDivCentered, FlexDivColumn } from '../../../../styles/common';
-import { getTeamNameV2 } from '../../../../utils/marketsV2';
+import { getTeamNameV2 } from 'utils/marketsV2';
 import SelectedMarketDetails from '../SelectedMarketDetails';
 
 const SelectedMarket: React.FC = () => {
@@ -41,7 +41,7 @@ const SelectedMarket: React.FC = () => {
             <CloseIcon
                 className="icon icon--close"
                 onClick={() => {
-                    dispatch(setBetTypeFilter([]));
+                    dispatch(setMarketTypeFilter([]));
                     dispatch(setSelectedMarket(undefined));
                 }}
             />
@@ -63,6 +63,16 @@ const Wrapper = styled(FlexDivColumn)`
     border-radius: 8px;
     flex: 1 1 0;
     height: auto;
+    @media (max-width: 950px) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        margin-top: 0;
+        border-radius: 0px;
+    }
 `;
 
 const LoaderContainer = styled(FlexDivCentered)`

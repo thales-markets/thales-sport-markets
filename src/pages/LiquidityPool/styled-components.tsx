@@ -24,7 +24,7 @@ export const Container = styled(FlexDivRow)`
     @media (max-width: 1199px) {
         width: 80%;
     }
-    @media (max-width: 991px) {
+    @media (max-width: 950px) {
         width: 100%;
         padding: 0;
     }
@@ -126,7 +126,7 @@ export const CopyContainer = styled(Container)`
     @media (max-width: 1199px) {
         width: 90%;
     }
-    @media (max-width: 991px) {
+    @media (max-width: 950px) {
         width: 100%;
         padding: 0;
     }
@@ -303,7 +303,7 @@ export const LiquidityPoolInfoGraphic = styled(FlexDivStart)<{ background: strin
     @media (max-width: 1199px) {
         width: ${(props) => 150 * props.widthPercentage}px;
     }
-    @media (max-width: 991px) {
+    @media (max-width: 950px) {
         width: ${(props) => 120 * props.widthPercentage}px;
     }
     @media (max-width: 767px) {

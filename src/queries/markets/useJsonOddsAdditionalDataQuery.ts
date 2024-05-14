@@ -1,6 +1,7 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import { GOLF_TOURNAMENT_WINNER_TAG, SPORTS_MAP } from 'constants/tags';
+import { GOLF_TOURNAMENT_WINNER_TAG } from 'constants/tags';
 import { useQuery, UseQueryOptions } from 'react-query';
+import { getLeagueSport } from '../../utils/sports';
 
 const useJsonOddsAdditionalDataQuery = (
     marketId: string,
@@ -10,7 +11,7 @@ const useJsonOddsAdditionalDataQuery = (
     return useQuery<string | undefined>(
         QUERY_KEYS.JsonOddsData(marketId, sportTag),
         async () => {
-            const sportParameter = SPORTS_MAP[sportTag].toLowerCase();
+            const sportParameter = `${getLeagueSport(sportTag)}`.toLowerCase();
             try {
                 const response = await fetch(`https://api.thalesmarket.io/json-odds-data/${sportParameter}`);
                 const events = Object.values(JSON.parse(await response.text()));

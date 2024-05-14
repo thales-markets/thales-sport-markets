@@ -59,17 +59,19 @@ export const getLiveTradingProcessorTransaction: any = async (
             collateralAddress,
         ]);
     } else {
-        return liveTradingProcessorContract.requestLiveTrade(
-            tradeData[0].gameId,
-            tradeData[0].sportId,
-            tradeData[0].typeId,
-            tradeData[0].position,
-            sUSDPaid,
-            expectedQuote,
-            additionalSlippage,
-            ZERO_ADDRESS, // check different recipient for buying with voucher
-            referralAddress,
-            collateralAddress
-        );
+        console.log(liveTradingProcessorContract);
+        console.log(tradeData[0].sportId, tradeData[0].typeId);
+        return liveTradingProcessorContract.requestLiveTrade({
+            _gameId: tradeData[0].gameId,
+            _sportId: tradeData[0].sportId,
+            _typeId: tradeData[0].typeId,
+            _position: tradeData[0].position,
+            _line: tradeData[0].line,
+            _buyInAmount: sUSDPaid,
+            _expectedQuote: expectedQuote,
+            _additionalSlippage: additionalSlippage,
+            _referrer: referralAddress,
+            _collateral: collateralAddress,
+        });
     }
 };

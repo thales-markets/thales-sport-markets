@@ -727,7 +727,9 @@
             "claim-all": "Reclamar todo",
             "claim-progress": "Reclamando...",
             "payout-in": "Pago en",
-            "approve-swap-tooltip": "Para recibir pagos en {{currencyKey}}, debe aprobar el intercambio de {{defaultCurrency}} a {{currencyKey}}."
+            "approve-swap-tooltip": "Para recibir pagos en {{currencyKey}}, debe aprobar el intercambio de {{defaultCurrency}} a {{currencyKey}}.",
+            "payout": "Pagar",
+            "win": "Ganar"
         },
         "messages": {
             "no-open": "No tienes ninguna posición abierta",
@@ -748,7 +750,8 @@
             "games": "Juegos",
             "status": "Estado",
             "total-amount": "Cantidad total",
-            "total-quote": "Cotización total"
+            "total-quote": "Cotización total",
+            "payout": "Pagar"
         },
         "winnings-are-forfeit": "*Las ganancias no reclamadas dentro de {{amount}} días de la resolución de un mercado se perderán.",
         "search-field": "Buscar billetera",

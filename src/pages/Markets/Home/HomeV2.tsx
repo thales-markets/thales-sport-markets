@@ -9,8 +9,8 @@ import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, LIVE_SUPPORTED_LEAGUES, SPORTS_TAGS_MAP, TAGS_LIST } from 'constants/tags';
-import { BetType, GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS } from 'constants/tags';
+import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
@@ -24,11 +24,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
-    getBetTypeFilter,
     getDateFilter,
     getGlobalFilter,
     getIsMarketSelected,
     getMarketSearch,
+    getMarketTypeFilter,
     getSportFilter,
     getTagFilter,
     setDateFilter,
@@ -46,6 +46,10 @@ import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
+import { LeagueMap } from '../../../constants/sports';
+import { MarketType } from '../../../enums/marketTypes';
+import { Sport } from '../../../enums/sports';
+import { getLiveSupportedLeagues, getSportLeagueIds, isLiveSupportedForLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import GlobalFilters from '../components/GlobalFilters';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
@@ -88,7 +92,7 @@ const Home: React.FC = () => {
     const globalFilter = useSelector(getGlobalFilter);
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
-    const betTypeFilter = useSelector(getBetTypeFilter);
+    const marketTypeFilter = useSelector(getMarketTypeFilter);
     const location = useLocation();
     const isMobile = useSelector(getIsMobile);
     const isMarketSelected = useSelector(getIsMarketSelected);
@@ -97,11 +101,11 @@ const Home: React.FC = () => {
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
     const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
     const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
-    const [availableBetTypes, setAvailableBetTypes] = useState<BetType[]>([]);
+    const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
     const tagsList = orderBy(
-        TAGS_LIST.filter((tag) => !tag.hidden),
+        Object.values(LeagueMap).filter((tag) => !tag.hidden),
         ['priority', 'label'],
         ['asc', 'asc']
     ).map((tag) => {
@@ -187,7 +191,7 @@ const Home: React.FC = () => {
                 const filteredTags = tagsList.filter((tag: TagInfo) => tag.live);
                 setAvailableTags(filteredTags);
             } else {
-                const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
+                const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
                 if (tagsPerSport) {
                     const filteredTags = tagsList.filter((tag: TagInfo) => tagsPerSport.includes(tag.id));
                     setAvailableTags(filteredTags);
@@ -217,7 +221,7 @@ const Home: React.FC = () => {
                       ResolvedMarkets: [],
                       PendingMarkets: [],
                   };
-        const betTypes = new Set<BetType>();
+        const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
             liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
 
@@ -285,22 +289,22 @@ const Home: React.FC = () => {
                 }
             }
 
-            betTypes.add(market.typeId);
+            marketTypes.add(market.typeId);
             market.childMarkets?.forEach((childMarket) => {
-                betTypes.add(childMarket.typeId);
+                marketTypes.add(childMarket.typeId);
             });
 
-            if (betTypeFilter.length) {
-                const marketBetTypes = [
+            if (marketTypeFilter.length) {
+                const marketMarketTypes = [
                     market.typeId,
                     ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
                 ];
 
-                if (!marketBetTypes.some((betType) => betTypeFilter.includes(betType))) {
+                if (!marketMarketTypes.some((marketType) => marketTypeFilter.includes(marketType))) {
                     return false;
                 }
                 if (sportFilter == SportFilterEnum.Live) {
-                    if (!LIVE_SUPPORTED_LEAGUES.includes(market.leagueId)) return false;
+                    return isLiveSupportedForLeague(market.leagueId);
                 }
             }
 
@@ -317,7 +321,7 @@ const Home: React.FC = () => {
             ]
         );
 
-        setAvailableBetTypes(Array.from(betTypes));
+        setAvailableMarketTypes(Array.from(marketTypes));
 
         return sortedFilteredMarkets;
     }, [
@@ -330,7 +334,7 @@ const Home: React.FC = () => {
         tagFilter,
         dateFilter,
         sportFilter,
-        betTypeFilter,
+        marketTypeFilter,
         favouriteLeagues,
     ]);
 
@@ -378,7 +382,7 @@ const Home: React.FC = () => {
         const openMarketsCount: any = {};
         let totalCount = 0;
         Object.values(SportFilterEnum).forEach((filterItem: string) => {
-            const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+            const tagsPerSport = getSportLeagueIds(filterItem as Sport);
             let count = 0;
             if (tagsPerSport) {
                 tagsPerSport.forEach((tag) => {
@@ -424,7 +428,7 @@ const Home: React.FC = () => {
     const liveMarketsCountPerSport = useMemo(() => {
         const liveMarketsCount: any = {};
         let totalCount = 0;
-        const tagsPerSport = SPORTS_TAGS_MAP[SportFilterEnum.Live];
+        const tagsPerSport = getLiveSupportedLeagues();
         if (tagsPerSport) {
             tagsPerSport.forEach((tag) => (totalCount += liveMarketsCountPerTag[tag] || 0));
         }
@@ -486,7 +490,7 @@ const Home: React.FC = () => {
                                 if (sportFilter === SportFilterEnum.All) {
                                     setAvailableTags(tagsList);
                                 } else {
-                                    const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
+                                    const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
                                     if (tagsPerSport) {
                                         const filteredTags = tagsList.filter(
                                             (tag: TagInfo) =>
@@ -532,7 +536,7 @@ const Home: React.FC = () => {
                                                     const filteredLiveTags = tagsList.filter((tag) => tag.live);
                                                     setAvailableTags(filteredLiveTags);
                                                 } else {
-                                                    const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                                    const tagsPerSport = getSportLeagueIds(filterItem as Sport);
                                                     if (tagsPerSport) {
                                                         const filteredTags = tagsList.filter(
                                                             (tag: TagInfo) =>
@@ -593,7 +597,7 @@ const Home: React.FC = () => {
 
             <RowContainer>
                 {/* LEFT FILTERS */}
-                <SidebarContainer maxWidth={263}>
+                <LeftSidebarContainer>
                     <BannerCarousel />
                     <Search
                         text={marketSearch}
@@ -613,7 +617,7 @@ const Home: React.FC = () => {
                                 if (sportFilter === SportFilterEnum.All) {
                                     setAvailableTags(tagsList);
                                 } else {
-                                    const tagsPerSport = SPORTS_TAGS_MAP[sportFilter];
+                                    const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
                                     if (tagsPerSport) {
                                         const filteredTags = tagsList.filter(
                                             (tag: TagInfo) =>
@@ -670,7 +674,7 @@ const Home: React.FC = () => {
                                                         const filteredLiveTags = tagsList.filter((tag) => tag.live);
                                                         setAvailableTags(filteredLiveTags);
                                                     } else {
-                                                        const tagsPerSport = SPORTS_TAGS_MAP[filterItem];
+                                                        const tagsPerSport = getSportLeagueIds(filterItem as Sport);
                                                         if (tagsPerSport) {
                                                             const filteredTags = tagsList.filter(
                                                                 (tag: TagInfo) =>
@@ -705,7 +709,7 @@ const Home: React.FC = () => {
                     <Suspense fallback={<Loader />}>
                         {networkId !== Network.Base && networkId !== Network.OptimismSepolia && <SidebarLeaderboard />}
                     </Suspense>
-                </SidebarContainer>
+                </LeftSidebarContainer>
                 {/* MAIN PART */}
 
                 <MainContainer>
@@ -750,7 +754,7 @@ const Home: React.FC = () => {
                             isMobile={isMobile}
                         />
                     )} */}
-                    {!isMobile && <Header availableBetTypes={availableBetTypes} />}
+                    {!isMobile && <Header availableMarketTypes={availableMarketTypes} />}
                     {marketsLoading ? (
                         <LoaderContainer>
                             <SimpleLoader />
@@ -777,15 +781,17 @@ const Home: React.FC = () => {
                             ) : (
                                 <>
                                     <FlexDivRow>
-                                        <Suspense
-                                            fallback={
-                                                <LoaderContainer>
-                                                    <Loader />
-                                                </LoaderContainer>
-                                            }
-                                        >
-                                            <MarketsGridV2 markets={finalMarkets} />
-                                        </Suspense>
+                                        {((isMobile && !isMarketSelected) || !isMobile) && (
+                                            <Suspense
+                                                fallback={
+                                                    <LoaderContainer>
+                                                        <Loader />
+                                                    </LoaderContainer>
+                                                }
+                                            >
+                                                <MarketsGridV2 markets={finalMarkets} />
+                                            </Suspense>
+                                        )}
                                         {isMarketSelected && globalFilter === GlobalFiltersEnum.OpenMarkets && (
                                             <SelectedMarket />
                                         )}
@@ -796,11 +802,11 @@ const Home: React.FC = () => {
                     )}
                 </MainContainer>
                 {/* RIGHT PART */}
-                <SidebarContainer maxWidth={360}>
+                <RightSidebarContainer>
                     <Suspense fallback={<Loader />}>
                         <Parlay />
                     </Suspense>
-                </SidebarContainer>
+                </RightSidebarContainer>
             </RowContainer>
             {isMobile && showParlayMobileModal && (
                 <Suspense fallback={<Loader />}>
@@ -839,14 +845,31 @@ const MainContainer = styled(FlexDivColumn)`
     max-width: 806px;
     flex-grow: 1;
     margin: 0 25px;
+    @media (max-width: 1199px) {
+        margin: 0 10px;
+    }
+    @media (max-width: 950px) {
+        margin: 0;
+        max-width: 100%;
+    }
 `;
 
-const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`
-    max-width: ${(props) => props.maxWidth}px;
+const SidebarContainer = styled(FlexDivColumn)`
     flex-grow: 1;
     min-width: 250px;
     @media (max-width: 950px) {
         display: none;
+    }
+`;
+
+const LeftSidebarContainer = styled(SidebarContainer)`
+    max-width: 263px;
+`;
+
+const RightSidebarContainer = styled(SidebarContainer)`
+    max-width: 360px;
+    @media (max-width: 1199px) {
+        max-width: 320px;
     }
 `;
 

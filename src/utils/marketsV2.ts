@@ -1,40 +1,38 @@
-import {
-    BetTypeMap,
-    BetTypeNameMap,
-    GOLF_TOURNAMENT_WINNER_TAG,
-    MATCH_RESOLVE_MAP,
-    SCORING_MAP,
-    SPORT_PERIODS_MAP,
-} from 'constants/tags';
-import { BetType, Position } from 'enums/markets';
+import { MarketTypeMap } from 'constants/marketTypes';
+import { GOLF_TOURNAMENT_WINNER_TAG } from 'constants/tags';
+import { MarketType } from 'enums/marketTypes';
+import { Position } from 'enums/markets';
+import { League } from 'enums/sports';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
 import { SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
-import { TAGS_FLAGS } from '../enums/tags';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
+    getIsBothsTeamsToScoreMarket,
+    getIsCombinedPositionsMarket,
+    getIsDoubleChanceMarket,
     getIsOneSideMarket,
-    isBothsTeamsToScore,
-    isCombinedPositions,
-    isOneSidePlayerProps,
-    isPeriod,
-    isPeriod2,
-    isPlayerProps,
-    isSpecialYesNoProp,
-    isSpread,
-    isTotal,
-    isTotalOddEven,
-    isWinner,
+    getIsOneSidePlayerPropsMarket,
+    getIsPeriod2Market,
+    getIsPeriodMarket,
+    getIsPlayerPropsMarket,
+    getIsSpreadMarket,
+    getIsTotalMarket,
+    getIsTotalOddEvenMarket,
+    getIsWinnerMarket,
+    getIsYesNoPlayerPropsMarket,
+    getMarketTypeName,
 } from './markets';
+import { getLeagueMatchResolveType, getLeaguePeriodType, getLeagueScoringType } from './sports';
 
 export const getSimpleSymbolText = (
     position: Position,
-    betType: number,
+    marketType: number,
     isCombinedPosition?: boolean,
     line?: number
 ) => {
-    if (betType === BetType.SPREAD || betType === BetType.SPREAD2) return `H${position + 1}`;
-    if (betType === BetType.TOTAL || betType === BetType.TOTAL2) {
+    if (marketType === MarketType.SPREAD || marketType === MarketType.SPREAD2) return `H${position + 1}`;
+    if (marketType === MarketType.TOTAL || marketType === MarketType.TOTAL2) {
         return isCombinedPosition && line
             ? position === 0
                 ? Math.ceil(line).toString()
@@ -43,90 +41,13 @@ export const getSimpleSymbolText = (
             ? 'O'
             : 'U';
     }
-    if (betType === BetType.DOUBLE_CHANCE) return position === 0 ? '1X' : position === 1 ? '12' : 'X2';
+    if (marketType === MarketType.DOUBLE_CHANCE) return position === 0 ? '1X' : position === 1 ? '12' : 'X2';
 
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
 
-// TODO: needs refactoring for generic logic
-export const getCombinedPositionsSymbolText = (position: Position, market: SportMarket) => {
-    const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
-    if (!combinedPositions) return '';
-
-    const position1 = combinedPositions[0];
-    const position2 = combinedPositions[1];
-    const position3 = combinedPositions[2];
-    const position4 = combinedPositions[3];
-
-    if (!position2 && market.typeId === BetType.GOALS)
-        return `${position1.position === 0 ? '' : '0-'}${getSimpleSymbolText(
-            position1.position,
-            position1.typeId,
-            true,
-            position1.line
-        )}${position1.position === 0 ? '+' : ''}`;
-
-    let position3Text = '';
-
-    if (!position4 && market.typeId === BetType.HALFTIME_FULLTIME_GOALS) {
-        position3Text = `${position1.position === 0 ? '' : '0-'}${getSimpleSymbolText(
-            position3.position,
-            position3.typeId,
-            true,
-            position3.line
-        )}${position3.position === 0 ? '+' : ''}`;
-    }
-
-    return `${getSimpleSymbolText(position1.position, position1.typeId, true, position1.line)}${
-        market.typeId === BetType.HALFTIME_FULLTIME ||
-        market.typeId === BetType.GOALS ||
-        market.typeId === BetType.HALFTIME_FULLTIME_GOALS
-            ? '-'
-            : '&'
-    }${getSimpleSymbolText(
-        position2.position,
-        position2.typeId,
-        true,
-        market.typeId === BetType.WINNER_TOTAL ? undefined : position2.line
-    )}${market.typeId === BetType.HALFTIME_FULLTIME_GOALS ? '&' : ''}${
-        !position4 && market.typeId === BetType.HALFTIME_FULLTIME_GOALS ? position3Text : ''
-    }${
-        position4 && market.typeId === BetType.HALFTIME_FULLTIME_GOALS
-            ? `${getSimpleSymbolText(position3.position, position3.typeId, true, position3.line)}-${getSimpleSymbolText(
-                  position4.position,
-                  position4.typeId,
-                  true,
-                  position4.line
-              )}`
-            : ''
-    }
-    `;
-};
-
-export const getSymbolTextV2 = (position: Position, market: SportMarket) => {
-    const betType = market.typeId;
-
-    if (market.isOneSideMarket || market.isOneSidePlayerPropsMarket || market.isYesNoPlayerPropsMarket) {
-        return position === 0 ? 'YES' : 'NO';
-    }
-
-    if (market.isPlayerPropsMarket) {
-        return position === 0 ? 'O' : 'U';
-    }
-
-    if (
-        betType === BetType.WINNER_TOTAL ||
-        betType === BetType.HALFTIME_FULLTIME ||
-        betType === BetType.GOALS ||
-        betType === BetType.HALFTIME_FULLTIME_GOALS
-    )
-        return getCombinedPositionsSymbolText(position, market);
-
-    return getSimpleSymbolText(position, betType);
-};
-
 export const getSimplePositionText = (
-    betType: number,
+    marketType: number,
     position: number,
     line: number,
     homeTeam: string,
@@ -134,33 +55,33 @@ export const getSimplePositionText = (
     extendedText?: boolean
 ) => {
     if (
-        getIsOneSideMarket(betType) ||
-        isOneSidePlayerProps(betType) ||
-        isSpecialYesNoProp(betType) ||
-        isBothsTeamsToScore(betType)
+        getIsOneSideMarket(marketType) ||
+        getIsOneSidePlayerPropsMarket(marketType) ||
+        getIsYesNoPlayerPropsMarket(marketType) ||
+        getIsBothsTeamsToScoreMarket(marketType)
     ) {
         return position === 0 ? 'Yes' : 'No';
     }
 
-    if (isTotalOddEven(betType)) {
+    if (getIsTotalOddEvenMarket(marketType)) {
         return position === 0 ? 'Odd' : 'Even';
     }
 
-    if (isPlayerProps(betType) || isTotal(betType) || isSpread(betType)) {
+    if (getIsPlayerPropsMarket(marketType) || getIsTotalMarket(marketType) || getIsSpreadMarket(marketType)) {
         return extendedText
-            ? isSpread(betType)
-                ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(betType, position, line)})`
-                : `${position === 0 ? 'Over' : 'Under'} ${getLineInfo(betType, position, line)}`
-            : getLineInfo(betType, position, line);
+            ? getIsSpreadMarket(marketType)
+                ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(marketType, position, line)})`
+                : `${position === 0 ? 'Over' : 'Under'} ${getLineInfo(marketType, position, line)}`
+            : getLineInfo(marketType, position, line);
     }
 
-    if (betType === BetType.DOUBLE_CHANCE)
+    if (getIsDoubleChanceMarket(marketType))
         return position === 0
             ? `${homeTeam} or Draw`
             : position === 1
             ? `${homeTeam} or ${awayTeam}`
             : `${awayTeam} or Draw`;
-    if (isWinner(betType)) return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
+    if (getIsWinnerMarket(marketType)) return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
 
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
@@ -169,11 +90,11 @@ export const getCombinedPositionsText = (market: SportMarket, position: number) 
     const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
     if (!combinedPositions) return '';
 
-    const betType = market.typeId;
+    const marketType = market.typeId;
 
     const position1 = combinedPositions[0];
     const position2 = combinedPositions[1];
-    if (betType === BetType.HALFTIME_FULLTIME) {
+    if (marketType === MarketType.HALFTIME_FULLTIME) {
         return `${getSimplePositionText(
             position1.typeId,
             position1.position,
@@ -191,7 +112,7 @@ export const getCombinedPositionsText = (market: SportMarket, position: number) 
         )}`;
     }
 
-    if (betType === BetType.WINNER_TOTAL) {
+    if (marketType === MarketType.WINNER_TOTAL) {
         return `${getSimplePositionText(
             position1.typeId,
             position1.position,
@@ -211,46 +132,52 @@ export const getCombinedPositionsText = (market: SportMarket, position: number) 
 };
 
 export const getPositionTextV2 = (market: SportMarket, position: number, extendedText?: boolean) => {
-    return isCombinedPositions(market.typeId)
+    return getIsCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsText(market, position)
         : getSimplePositionText(market.typeId, position, market.line, market.homeTeam, market.awayTeam, extendedText);
 };
 
 export const getTitleText = (market: SportMarket) => {
-    const betType = market.typeId;
-    const betTypeName = BetTypeNameMap[betType as BetType];
+    const marketType = market.typeId as MarketType;
+    const marketTypeName = getMarketTypeName(marketType);
 
-    let sufix = isPeriod(betType) ? ` ${SPORT_PERIODS_MAP[market.leagueId]}` : isPeriod2(betType) ? ' half' : '';
+    let sufix = getIsPeriodMarket(marketType)
+        ? ` ${getLeaguePeriodType(market.leagueId)}`
+        : getIsPeriod2Market(marketType)
+        ? ' half'
+        : '';
 
     if (
-        (market.leagueId == TAGS_FLAGS.TENNIS_GS || market.leagueId == TAGS_FLAGS.TENNIS_MASTERS) &&
-        (isTotal(betType) || isTotalOddEven(betType) || isSpread(betType))
+        (market.leagueId == League.TENNIS_GS || market.leagueId == League.TENNIS_MASTERS) &&
+        (getIsTotalMarket(marketType) || getIsTotalOddEvenMarket(marketType) || getIsSpreadMarket(marketType))
     ) {
-        sufix = `${sufix}${betType === BetType.TOTAL2 || betType === BetType.SPREAD2 ? ' (sets)' : ' (games)'}`;
+        sufix = `${sufix}${
+            marketType === MarketType.TOTAL2 || marketType === MarketType.SPREAD2 ? ' (sets)' : ' (games)'
+        }`;
     }
 
-    return betTypeName ? `${betTypeName}${sufix}` : `${betType}`;
+    return marketTypeName ? `${marketTypeName}${sufix}` : `${marketType}`;
 };
 
 export const getSubtitleText = (market: SportMarket, position: Position) => {
-    const betType = market.typeId;
+    const marketType = market.typeId;
 
-    if (market.isPlayerPropsMarket || isTotal(betType)) {
+    if (market.isPlayerPropsMarket || getIsTotalMarket(marketType)) {
         return position === 0 ? 'Over' : 'Under';
     }
 
-    if (isSpread(betType)) return position === 0 ? market.homeTeam : market.awayTeam;
+    if (getIsSpreadMarket(marketType)) return position === 0 ? market.homeTeam : market.awayTeam;
 
     return undefined;
 };
 
 export const getLineInfo = (typeId: number, position: Position, line: number) => {
-    if (isSpread(typeId))
+    if (getIsSpreadMarket(typeId))
         return position === Position.HOME
             ? `${Number(line) > 0 ? '+' : '-'}${Math.abs(line)}`
             : `${Number(line) > 0 ? '-' : '+'}${Math.abs(line)}`;
 
-    if (isTotal(typeId) || isPlayerProps(typeId)) return `${Number(line)}`;
+    if (getIsTotalMarket(typeId) || getIsPlayerPropsMarket(typeId)) return `${Number(line)}`;
     return undefined;
 };
 
@@ -274,7 +201,7 @@ export const getCombinedPositionsLineInfo = (position: Position, market: SportMa
 };
 
 export const getLineInfoV2 = (market: SportMarket, position: Position) =>
-    isCombinedPositions(market.typeId)
+    getIsCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsLineInfo(position, market)
         : getLineInfo(market.typeId, position, market.line);
 
@@ -288,23 +215,21 @@ export const getTooltipText = (typeId: number, position: Position, line: number,
         : market.homeTeam;
     const team2 = market.awayTeam;
 
-    const scoring =
-        SCORING_MAP[market.leagueId] !== ''
-            ? i18n.t(`markets.market-card.odd-tooltip-v2.scoring.${SCORING_MAP[market.leagueId]}`)
-            : '';
+    const scoringType = getLeagueScoringType(market.leagueId);
+    const matchResolveType = getLeagueMatchResolveType(market.leagueId);
+
+    const scoring = scoringType !== '' ? i18n.t(`markets.market-card.odd-tooltip-v2.scoring.${scoringType}`) : '';
     const matchResolve =
-        MATCH_RESOLVE_MAP[market.leagueId] !== ''
-            ? i18n.t(`markets.market-card.odd-tooltip-v2.match-resolve.${MATCH_RESOLVE_MAP[market.leagueId]}`)
-            : '';
+        matchResolveType !== '' ? i18n.t(`markets.market-card.odd-tooltip-v2.match-resolve.${matchResolveType}`) : '';
 
     let translationKey = '';
 
     if (market.isOneSideMarket) {
         translationKey = market.leagueId == GOLF_TOURNAMENT_WINNER_TAG ? 'tournament-winner' : 'race-winner';
-    } else if (typeId === BetType.SPREAD) {
+    } else if (typeId === MarketType.SPREAD) {
         translationKey = line < 0 ? `spread-${position}` : `spread-${position === 1 ? 0 : 1}`;
     } else {
-        translationKey = `${BetTypeMap[typeId as BetType]}-${position}`;
+        translationKey = `${MarketTypeMap[typeId as MarketType]}-${position}`;
     }
 
     return i18n.t(`markets.market-card.odd-tooltip-v2.${translationKey}`, {
@@ -344,7 +269,7 @@ export const getCombinedPositionsOddTooltipText = (position: Position, market: S
 };
 
 export const getOddTooltipTextV2 = (position: Position, market: SportMarket) =>
-    market.typeId === BetType.WINNER_TOTAL
+    market.typeId === MarketType.WINNER_TOTAL
         ? getCombinedPositionsOddTooltipText(position, market)
         : getTooltipText(market.typeId, position, market.line, market);
 

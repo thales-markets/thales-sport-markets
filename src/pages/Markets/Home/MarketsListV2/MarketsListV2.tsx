@@ -2,7 +2,7 @@ import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg'
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
-import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS, TAGS_LIST } from 'constants/tags';
+import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS } from 'constants/tags';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import React, { useState } from 'react';
@@ -14,6 +14,7 @@ import styled from 'styled-components';
 import { NetworkId } from 'thales-utils';
 import { SportMarkets, TagInfo } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
+import { LeagueMap } from '../../../../constants/sports';
 import { getIsMarketSelected } from '../../../../redux/modules/market';
 import MarketListCardV2 from '../MarketListCard';
 
@@ -26,7 +27,7 @@ type MarketsList = {
 const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     const { t } = useTranslation();
     const [hideLeague, setHideLeague] = useState<boolean>(false);
-    const leagueName = TAGS_LIST.find((t: TagInfo) => t.id == league)?.label;
+    const leagueName = Object.values(LeagueMap).find((t: TagInfo) => t.id == league)?.label;
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const networkId = useSelector(getNetworkId);

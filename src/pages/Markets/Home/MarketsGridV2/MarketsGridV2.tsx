@@ -1,6 +1,8 @@
 import Scroll from 'components/Scroll';
+import { LeagueMap } from 'constants/sports';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { BOXING_TAGS, EUROPA_LEAGUE_TAGS, SPORTS_MAP, TAGS_LIST } from 'constants/tags';
+import { BOXING_TAGS, EUROPA_LEAGUE_TAGS } from 'constants/tags';
+import { Sport } from 'enums/sports';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
@@ -11,6 +13,8 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { getIsMobile } from '../../../../redux/modules/app';
+import { getLeagueSport } from '../../../../utils/sports';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
@@ -21,6 +25,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
+    const isMobile = useSelector(getIsMobile);
     const dateFilter = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
 
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
@@ -36,22 +41,19 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     const finalOrderKeys = Number(dateFilter) !== 0 ? groupBySortedMarketsKeys(marketsKeys) : marketsKeys;
 
+    const getContainerContent = () => (
+        <ListContainer>
+            {finalOrderKeys.map((leagueId: number, index: number) => {
+                return (
+                    <MarketsListV2 key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
+                );
+            })}
+        </ListContainer>
+    );
+
     return (
         <Container isMarketSelected={isMarketSelected}>
-            <Scroll height="calc(100vh - 154px)">
-                <ListContainer>
-                    {finalOrderKeys.map((leagueId: number, index: number) => {
-                        return (
-                            <MarketsListV2
-                                key={index}
-                                league={leagueId}
-                                markets={marketsMap[leagueId]}
-                                language={language}
-                            />
-                        );
-                    })}
-                </ListContainer>
-            </Scroll>
+            {isMobile ? getContainerContent() : <Scroll height="calc(100vh - 154px)">{getContainerContent()}</Scroll>}
         </Container>
     );
 };
@@ -73,8 +75,8 @@ const sortMarketKeys = (
             const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b);
             const isFavouriteB = Number(favouriteB && favouriteB.favourite);
 
-            const leagueA = TAGS_LIST.find((t: TagInfo) => t.id == a);
-            const leagueB = TAGS_LIST.find((t: TagInfo) => t.id == b);
+            const leagueA = Object.values(LeagueMap).find((t: TagInfo) => t.id == a);
+            const leagueB = Object.values(LeagueMap).find((t: TagInfo) => t.id == b);
 
             const leagueNameA = leagueA?.label || '';
             const leagueNameB = leagueB?.label || '';
@@ -100,8 +102,8 @@ const sortMarketKeys = (
             const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b);
             const isFavouriteB = Number(favouriteB && favouriteB.favourite);
 
-            const leagueA = TAGS_LIST.find((t: TagInfo) => t.id == a);
-            const leagueB = TAGS_LIST.find((t: TagInfo) => t.id == b);
+            const leagueA = Object.values(LeagueMap).find((t: TagInfo) => t.id == a);
+            const leagueB = Object.values(LeagueMap).find((t: TagInfo) => t.id == b);
 
             const leagueNameA = leagueA?.label || '';
             const leagueNameB = leagueB?.label || '';
@@ -135,37 +137,38 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     const motosportKeys: number[] = [];
     const golfKeys: number[] = [];
     marketsKeys.forEach((tag: number) => {
-        if (SPORTS_MAP[tag] == 'Soccer') {
+        const leagueSport = getLeagueSport(tag);
+        if (leagueSport === Sport.SOCCER) {
             soccerKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Football') {
+        if (leagueSport === Sport.FOOTBALL) {
             footballKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Basketball') {
+        if (leagueSport === Sport.BASKETBALL) {
             basketballKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Baseball') {
+        if (leagueSport === Sport.BASEBALL) {
             baseballKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Hockey') {
+        if (leagueSport === Sport.HOCKEY) {
             hockeyKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Motosport') {
+        if (leagueSport === Sport.MOTOSPORT) {
             mmaKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Tennis') {
+        if (leagueSport === Sport.TENNIS) {
             tennisKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'eSports') {
+        if (leagueSport === Sport.ESPORTS) {
             eSportsKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Cricket') {
+        if (leagueSport === Sport.CRICKET) {
             cricketKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'MMA') {
+        if (leagueSport === Sport.MMA) {
             motosportKeys.push(tag);
         }
-        if (SPORTS_MAP[tag] == 'Golf') {
+        if (leagueSport === Sport.GOLF) {
             golfKeys.push(tag);
         }
     });
@@ -239,7 +242,7 @@ const ListContainer = styled.div`
     flex-direction: column;
     padding: 0 10px 0 0;
     @media (max-width: 950px) {
-        padding: 0 0px 0 0px;
+        padding: 0;
     }
 `;
 
