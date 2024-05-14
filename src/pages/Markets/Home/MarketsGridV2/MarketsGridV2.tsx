@@ -243,7 +243,7 @@ const ListContainer = styled.div`
     flex-direction: column;
     padding: 0 10px 0 0;
     @media (max-width: 950px) {
-        padding: 0 0px 0 0px;
+        padding: 0 10px 0 0px;
     }
 `;
 

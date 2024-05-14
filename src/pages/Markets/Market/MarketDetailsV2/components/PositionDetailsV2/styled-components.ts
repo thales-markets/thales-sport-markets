@@ -28,15 +28,6 @@ export const Container = styled(FlexDivRow)<{
     :hover {
         border: ${(props) => (props.disabled ? undefined : `1px solid ${props.theme.borderColor.quaternary}`)};
     }
-    @media (max-width: 575px) {
-        font-size: 12px;
-        line-height: 14px;
-        padding: 0px 10px;
-        margin-bottom: 1px;
-        :not(:last-child) {
-            margin-right: 6px;
-        }
-    }
     order: ${(props) => props.order || 'initial'};
 `;
 

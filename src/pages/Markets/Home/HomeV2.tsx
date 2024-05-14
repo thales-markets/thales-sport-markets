@@ -781,15 +781,17 @@ const Home: React.FC = () => {
                             ) : (
                                 <>
                                     <FlexDivRow>
-                                        <Suspense
-                                            fallback={
-                                                <LoaderContainer>
-                                                    <Loader />
-                                                </LoaderContainer>
-                                            }
-                                        >
-                                            <MarketsGridV2 markets={finalMarkets} />
-                                        </Suspense>
+                                        {((isMobile && !isMarketSelected) || !isMobile) && (
+                                            <Suspense
+                                                fallback={
+                                                    <LoaderContainer>
+                                                        <Loader />
+                                                    </LoaderContainer>
+                                                }
+                                            >
+                                                <MarketsGridV2 markets={finalMarkets} />
+                                            </Suspense>
+                                        )}
                                         {isMarketSelected && globalFilter === GlobalFiltersEnum.OpenMarkets && (
                                             <SelectedMarket />
                                         )}
@@ -843,6 +845,10 @@ const MainContainer = styled(FlexDivColumn)`
     max-width: 806px;
     flex-grow: 1;
     margin: 0 25px;
+    @media (max-width: 950px) {
+        margin: 0;
+        max-width: 100%;
+    }
 `;
 
 const SidebarContainer = styled(FlexDivColumn)<{ maxWidth: number }>`

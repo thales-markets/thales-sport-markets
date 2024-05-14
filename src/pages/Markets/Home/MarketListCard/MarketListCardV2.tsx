@@ -10,7 +10,7 @@ import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveRes
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getIsMarketSelected,
     getIsThreeWayView,
@@ -61,7 +61,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
-    // const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isMobile = useSelector(getIsMobile);
     // const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
@@ -147,7 +147,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
     const hideGame = isGameLive ? !areOddsValid : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
-    const isColumnView = !marketTypeFilterMarket && isThreeWayView && !isMarketSelected && isGameOpen;
+    const isColumnView = !marketTypeFilterMarket && (isThreeWayView || isMobile) && !isMarketSelected && isGameOpen;
     const isTwoPositionalMarket = market.odds.length === 2;
     const selected = selectedMarket?.gameId == market.gameId;
 
@@ -273,7 +273,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 isMainPageView
                                 isColumnView={isColumnView}
                             />
-                            {isColumnView && firstSpreadMarket && (
+                            {isColumnView && !isMobile && firstSpreadMarket && (
                                 <PositionsV2
                                     markets={[firstSpreadMarket]}
                                     marketType={MarketType.SPREAD}
@@ -282,7 +282,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     isColumnView={isColumnView}
                                 />
                             )}
-                            {isColumnView && firstTotalMarket && (
+                            {isColumnView && !isMobile && firstTotalMarket && (
                                 <PositionsV2
                                     markets={[firstTotalMarket]}
                                     marketType={MarketType.TOTAL}
