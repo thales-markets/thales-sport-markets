@@ -4,12 +4,12 @@ import { FlexDiv, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 export const Container = styled(FlexDivColumn)<{ isExpanded: boolean; isMainPageView?: boolean }>`
     position: relative;
     padding: ${(props) => (props.isMainPageView ? '0px' : '5px 0px')};
-    @media (max-width: 575px) {
-        padding: 5px 0px;
-    }
     border-bottom: ${(props) => (!props.isExpanded ? `1px solid ${props.theme.borderColor.primary}` : 'none')};
     margin-bottom: ${(props) => (!props.isExpanded ? `5px` : '0')};
     flex: ${(props) => (props.isMainPageView ? '1' : 'initial')};
+    @media (max-width: 950px) {
+        padding: 10px 0px 0px 0px;
+    }
 `;
 
 export const Header = styled(FlexDivColumnCentered)<{ isMainPageView?: boolean; isColumnView?: boolean }>`

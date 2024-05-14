@@ -13,6 +13,7 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { getIsMobile } from '../../../../redux/modules/app';
 import { getLeagueSport } from '../../../../utils/sports';
 import MarketsListV2 from '../MarketsListV2';
 
@@ -24,6 +25,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const language = i18n.language;
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
+    const isMobile = useSelector(getIsMobile);
     const dateFilter = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
 
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
@@ -39,22 +41,19 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     const finalOrderKeys = Number(dateFilter) !== 0 ? groupBySortedMarketsKeys(marketsKeys) : marketsKeys;
 
+    const getContainerContent = () => (
+        <ListContainer>
+            {finalOrderKeys.map((leagueId: number, index: number) => {
+                return (
+                    <MarketsListV2 key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
+                );
+            })}
+        </ListContainer>
+    );
+
     return (
         <Container isMarketSelected={isMarketSelected}>
-            <Scroll height="calc(100vh - 154px)">
-                <ListContainer>
-                    {finalOrderKeys.map((leagueId: number, index: number) => {
-                        return (
-                            <MarketsListV2
-                                key={index}
-                                league={leagueId}
-                                markets={marketsMap[leagueId]}
-                                language={language}
-                            />
-                        );
-                    })}
-                </ListContainer>
-            </Scroll>
+            {isMobile ? getContainerContent() : <Scroll height="calc(100vh - 154px)">{getContainerContent()}</Scroll>}
         </Container>
     );
 };
@@ -243,7 +242,7 @@ const ListContainer = styled.div`
     flex-direction: column;
     padding: 0 10px 0 0;
     @media (max-width: 950px) {
-        padding: 0 10px 0 0px;
+        padding: 0;
     }
 `;
 

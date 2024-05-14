@@ -7,6 +7,7 @@ export const Container = styled(FlexDivRow)<{
     isResolved?: boolean;
     isWinner: boolean;
     order?: string;
+    isMainPageView?: boolean;
 }>`
     position: relative;
     align-items: center;
@@ -29,6 +30,11 @@ export const Container = styled(FlexDivRow)<{
         border: ${(props) => (props.disabled ? undefined : `1px solid ${props.theme.borderColor.quaternary}`)};
     }
     order: ${(props) => props.order || 'initial'};
+    @media (max-width: 950px) {
+        flex-direction: ${(props) => (props.isMainPageView ? 'column' : 'row')};
+        align-items: ${(props) => (props.isMainPageView ? 'flex-start' : 'center')};
+        padding: ${(props) => (props.isMainPageView ? '2px 5px' : '0 5px')};
+    }
 `;
 
 export const Text = styled.span`
@@ -42,11 +48,17 @@ export const Text = styled.span`
 
 export const Odd = styled.span<{
     selected: boolean;
+    isMainPageView?: boolean;
 }>`
     font-weight: 600;
     font-size: 13px;
     color: ${(props) => (props.selected ? props.theme.textColor.tertiary : props.theme.textColor.quaternary)};
     margin-left: 5px;
+    @media (max-width: 950px) {
+        font-size: 12px;
+        text-align: ${(props) => (props.isMainPageView ? 'left' : 'right')};
+        margin-left: ${(props) => (props.isMainPageView ? '0px' : '5px')};
+    }
 `;
 
 export const Status = styled(Text)`

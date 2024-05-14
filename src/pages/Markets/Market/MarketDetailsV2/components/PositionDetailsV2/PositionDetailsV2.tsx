@@ -73,6 +73,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
             selected={isAddedToTicket}
             isWinner={isGameRegularlyResolved && market.finalResult == position}
             order={getPositionOrder(market.leagueId, market.typeId, position)}
+            isMainPageView={isMainPageView}
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {
@@ -101,7 +102,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
         >
             <Text>{positionText}</Text>
             {showOdd ? (
-                <Odd selected={isAddedToTicket}>
+                <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
                     {formatMarketOdds(selectedOddsType, odd)}
                     {noOdd && (
                         <Tooltip overlay={<>{t('markets.zero-odds-tooltip')}</>} iconFontSize={13} marginLeft={3} />
