@@ -48,7 +48,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 401,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.NBA]: {
         sport: Sport.BASKETBALL,
@@ -126,7 +126,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 304,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.MLS]: {
         sport: Sport.SOCCER,
@@ -142,7 +142,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 106,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.EPL]: {
         sport: Sport.SOCCER,
@@ -191,7 +191,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 104,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.LA_LIGA]: {
         sport: Sport.SOCCER,
@@ -207,7 +207,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 102,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.SERIE_A]: {
         sport: Sport.SOCCER,
@@ -239,7 +239,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 110,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.UEFA_EL]: {
         sport: Sport.SOCCER,
@@ -254,7 +254,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 111,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.FIFA_WC]: {
         sport: Sport.SOCCER,
@@ -374,7 +374,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 107,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.PRIMEIRA_LIGA]: {
         sport: Sport.SOCCER,
@@ -389,7 +389,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 108,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.FIFA_WC_WOMEN]: {
         sport: Sport.SOCCER,
@@ -566,7 +566,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 303,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.FIBA_WORLD_CUP]: {
         sport: Sport.SOCCER,
