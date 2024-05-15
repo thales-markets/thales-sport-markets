@@ -126,7 +126,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 304,
         hidden: false,
         favourite: false,
-        live: true,
+        live: false,
     },
     [League.MLS]: {
         sport: Sport.SOCCER,
@@ -521,7 +521,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 109,
         hidden: false,
         favourite: false,
-        live: true,
+        live: false,
     },
 
     [League.UEFA_EURO_U21]: {
