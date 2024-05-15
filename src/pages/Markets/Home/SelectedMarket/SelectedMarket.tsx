@@ -111,8 +111,9 @@ const CloseIcon = styled.i`
     cursor: pointer;
     @media (max-width: 950px) {
         right: 0px;
-        font-size: 16px;
-        padding: 5px 10px 10px 10px;
+        top: 0px;
+        font-size: 18px;
+        padding: 12px 8px 15px 15px;
     }
 `;
 
@@ -125,6 +126,7 @@ const MatchInfo = styled(FlexDivRow)`
     font-weight: 600;
     justify-content: center;
     height: 40px;
+    margin-top: 5px;
 `;
 
 export const MatchInfoLabel = styled.label`
@@ -133,7 +135,7 @@ export const MatchInfoLabel = styled.label`
     line-height: 12px;
     text-transform: uppercase;
     white-space: nowrap;
-    margin-top: 10px;
+    margin-top: 15px;
     text-align: center;
     color: ${(props) => props.theme.textColor.quinary};
 `;
