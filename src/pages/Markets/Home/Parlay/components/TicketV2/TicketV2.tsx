@@ -45,7 +45,6 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import {
-    bigNumberFormatter,
     ceilNumberToDecimals,
     coinFormatter,
     coinParser,
@@ -130,7 +129,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [buyInAmountInDefaultCollateral, setBuyInAmountInDefaultCollateral] = useState<number>(0);
     const [minBuyInAmountInDefaultCollateral, setMinBuyInAmountInDefaultCollateral] = useState<number>(0);
     const [minBuyInAmount, setMinBuyInAmount] = useState<number>(0);
-    const [totalQuote, setTotalQuote] = useState(0);
     const [finalQuotes, setFinalQuotes] = useState<number[]>([]);
 
     const [isAMMPaused, setIsAMMPaused] = useState(false);
@@ -187,6 +185,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const collateralHasLp = isLpSupported(selectedCollateral);
 
     const isMinimumParlayGames = markets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES;
+
+    const totalQuote = useMemo(
+        () => markets.reduce((partialQuote, market) => partialQuote * (market.odd > 0 ? market.odd : 1), 1),
+        [markets]
+    );
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -746,9 +749,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         networkId,
                         collateralHasLp ? selectedCollateral : undefined
                     );
-                    const totalQuote = bigNumberFormatter(parlayAmmQuote.totalQuote);
 
-                    setTotalQuote(totalQuote);
                     setPayout(payout);
 
                     const amountsToBuy: number[] = (parlayAmmQuote.amountsToBuy || []).map((quote: BigNumber) =>
@@ -765,7 +766,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     setTooltipTextMessageUsdAmount(buyInAmount, amountsToBuy);
                 } else {
                     setMarketsOutOfLiquidity([]);
-                    setTotalQuote(0);
                     setPayout(0);
                     setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
                 }

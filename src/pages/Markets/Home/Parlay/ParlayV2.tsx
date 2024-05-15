@@ -164,7 +164,7 @@ const Parlay: React.FC = () => {
                 <>
                     <Empty>
                         <EmptyLabel>{t('markets.parlay.empty-title')}</EmptyLabel>
-                        <ParlayEmptyIcon
+                        <StyledParlayEmptyIcon
                             style={{
                                 marginTop: 10,
                                 marginBottom: 20,
@@ -280,6 +280,16 @@ const EmptyDesc = styled.span`
     line-height: 14px;
     letter-spacing: 0.025em;
     color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
+    margin-top: 10;
+    margin-bottom: 20;
+    width: 100px;
+    height: 100px;
+    path {
+        fill: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export default Parlay;
