@@ -5,7 +5,7 @@ const liquidityPoolDataContract = {
         [Network.OptimismMainnet]: '',
         [Network.Arbitrum]: '',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '0xB26ea774C148EA4F2Fc484DF86dAADDadEbC9E3a',
+        [Network.OptimismSepolia]: '0x1Aeb6064A5a88F134325FC4929711012adb89Add',
     },
     abi: [
         {
@@ -217,7 +217,7 @@ const liquidityPoolDataContract = {
             inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
             name: 'requestIdToTradeData',
             outputs: [
-                { internalType: 'bytes32', name: '_gameId', type: 'bytes32' },
+                { internalType: 'string', name: '_gameId', type: 'string' },
                 { internalType: 'uint16', name: '_sportId', type: 'uint16' },
                 { internalType: 'uint16', name: '_typeId', type: 'uint16' },
                 { internalType: 'int24', name: '_line', type: 'int24' },
@@ -235,7 +235,7 @@ const liquidityPoolDataContract = {
             inputs: [
                 {
                     components: [
-                        { internalType: 'bytes32', name: '_gameId', type: 'bytes32' },
+                        { internalType: 'string', name: '_gameId', type: 'string' },
                         { internalType: 'uint16', name: '_sportId', type: 'uint16' },
                         { internalType: 'uint16', name: '_typeId', type: 'uint16' },
                         { internalType: 'int24', name: '_line', type: 'int24' },
