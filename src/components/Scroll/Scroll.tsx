@@ -1,14 +1,18 @@
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import { useTheme } from 'styled-components';
+import { ThemeInterface } from '../../types/ui';
 
 type ScrollProps = {
     height: string;
 };
 
 const Scroll: React.FC<ScrollProps> = ({ children, height }) => {
+    const theme: ThemeInterface = useTheme();
+
     const renderThumb = ({ style, ...props }: any) => {
         const thumbStyle = {
-            backgroundColor: `#3C498A`,
+            backgroundColor: theme.background.senary,
             borderRadius: '4px',
         };
         return <div style={{ ...style, ...thumbStyle }} {...props} />;
@@ -16,7 +20,7 @@ const Scroll: React.FC<ScrollProps> = ({ children, height }) => {
 
     const renderTrack = ({ style, ...props }: any) => {
         const trackStyle = {
-            backgroundColor: `#1F274D`,
+            backgroundColor: theme.background.secondary,
             width: '5px',
             right: '2px',
             bottom: '2px',

@@ -107,7 +107,7 @@ const Wrapper = styled(FlexDivColumn)`
         padding: 10px 20px;
     }
     @media (max-width: 767px) {
-        padding: 0px 10px;
+        padding: 0px 3px;
     }
 `;
 

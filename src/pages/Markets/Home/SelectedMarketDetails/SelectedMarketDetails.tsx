@@ -48,7 +48,7 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
 
     return (
-        <Scroll height={`calc(100vh - ${isMobile ? 0 : 178}px)`}>
+        <Scroll height={`calc(100vh - ${isMobile ? 0 : 188}px)`}>
             <Wrapper hideGame={hideGame}>
                 {(!marketTypeFilter.length || marketTypeFilter.includes(MarketType.WINNER)) && (
                     <PositionsV2

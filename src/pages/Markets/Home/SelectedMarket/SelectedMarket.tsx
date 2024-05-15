@@ -1,3 +1,4 @@
+import MatchLogosV2 from 'components/MatchLogosV2';
 import SimpleLoader from 'components/SimpleLoader';
 import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
 import React, { useEffect, useState } from 'react';
@@ -9,8 +10,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
-import { getMatchLabel, getTeamNameV2 } from 'utils/marketsV2';
-import MatchLogosV2 from '../../../../components/MatchLogosV2';
+import { getMatchLabel } from 'utils/marketsV2';
 import SelectedMarketDetails from '../SelectedMarketDetails';
 
 const SelectedMarket: React.FC = () => {
@@ -25,13 +25,6 @@ const SelectedMarket: React.FC = () => {
         enabled: isAppReady && !!selectedMarket,
     });
 
-    const marketNameHome = lastValidMarket ? getTeamNameV2(lastValidMarket, 0) : '';
-    const marketNameAway = lastValidMarket ? getTeamNameV2(lastValidMarket, 1) : '';
-
-    const matchLabel = `${marketNameHome}${
-        lastValidMarket && !lastValidMarket.isOneSideMarket ? ` - ${marketNameAway}` : ''
-    }`;
-
     useEffect(() => {
         if (marketQuery.isSuccess && marketQuery.data) {
             setLastValidMarket(marketQuery.data);
@@ -40,12 +33,20 @@ const SelectedMarket: React.FC = () => {
 
     return (
         <Wrapper>
-            {lastValidMarket && !isMobile && <Title>{matchLabel}</Title>}
-            {lastValidMarket && isMobile && (
+            {lastValidMarket && (
                 <>
-                    <MatchInfoLabel>{formatShortDateWithTime(new Date(lastValidMarket.maturityDate))} </MatchInfoLabel>
+                    {isMobile && (
+                        <MatchInfoLabel>
+                            {formatShortDateWithTime(new Date(lastValidMarket.maturityDate))}{' '}
+                        </MatchInfoLabel>
+                    )}
                     <MatchInfo>
-                        <MatchLogosV2 market={lastValidMarket} width={'55px'} logoWidth={'30px'} logoHeight={'30px'} />
+                        <MatchLogosV2
+                            market={lastValidMarket}
+                            width={isMobile ? '55px' : '45px'}
+                            logoWidth={isMobile ? '30px' : '24px'}
+                            logoHeight={isMobile ? '30px' : '24px'}
+                        />
                         <MatchLabel>{getMatchLabel(lastValidMarket)} </MatchLabel>
                     </MatchInfo>
                 </>
@@ -95,19 +96,13 @@ const LoaderContainer = styled(FlexDivCentered)`
     flex: 1;
 `;
 
-const Title = styled(FlexDivCentered)`
-    font-size: 12px;
-    line-height: 12px;
-    border-bottom: 1px solid ${(props) => props.theme.borderColor.primary};
-    padding: 5px 0;
-`;
-
 const CloseIcon = styled.i`
-    font-size: 12px;
+    font-size: 16px;
     color: ${(props) => props.theme.textColor.secondary};
     position: absolute;
-    top: 4px;
-    right: 12px;
+    top: 0px;
+    right: 0px;
+    padding: 8px 10px;
     cursor: pointer;
     @media (max-width: 950px) {
         right: 0px;
@@ -125,7 +120,10 @@ const MatchInfo = styled(FlexDivRow)`
     line-height: 16px;
     font-weight: 600;
     justify-content: center;
-    height: 50px;
+    height: 34px;
+    @media (max-width: 950px) {
+        height: 50px;
+    }
 `;
 
 export const MatchInfoLabel = styled.label`

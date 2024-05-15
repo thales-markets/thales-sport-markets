@@ -8,6 +8,7 @@ export default {
         tertiary: Colors.NAVY_BLUE_LIGHT,
         quaternary: Colors.BLUE,
         quinary: Colors.NAVY_BLUE_DARK,
+        senary: Colors.TORY_BLUE,
     },
     textColor: {
         primary: Colors.WHITE,
