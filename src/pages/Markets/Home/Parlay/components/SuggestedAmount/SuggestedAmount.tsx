@@ -71,24 +71,22 @@ const Container = styled(FlexDiv)`
     flex-direction: row;
     justify-content: space-between;
     margin: 8px 0px;
+    gap: 13px;
 `;
 
 const AmountContainer = styled(FlexDiv)<{ active?: boolean }>`
     align-items: center;
     justify-content: center;
-    margin: 0 2px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     text-transform: capitalize;
     border-radius: 5px;
-    color: ${(props) =>
-        props?.active ? props.theme.button.textColor.quinary : props.theme.button.textColor.quaternary};
+    color: ${(props) => (props.active ? props.theme.button.textColor.quinary : props.theme.button.textColor.secondary)};
     background-color: ${(props) =>
-        props?.active ? props.theme.button.background.quaternary : props.theme.button.background.secondary};
-    border: ${(props) => `1px ${props.theme.button.borderColor.secondary} solid`};
+        props.active ? props.theme.button.background.quaternary : props.theme.button.background.senary};
     cursor: pointer;
-    padding: 3px 0px;
-    width: 20%;
+    height: 25px;
+    width: 100%;
 `;
 
 export default SuggestedAmount;

@@ -75,4 +75,7 @@ export const Colors = {
     NAVY_BLUE_EXTRA_LIGHT: '#9FA1BA',
     NAVY_BLUE_DARK: '#151B36',
     NAVY_BLUE_EXTRA_DARK: '#111325',
+
+    TORY_BLUE: '#3C498A',
+    TORY_BLUE_LIGHT: '#4E5FB1',
 };

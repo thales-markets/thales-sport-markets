@@ -39,11 +39,11 @@ export const SummaryValue = styled.span<{
     isCurrency?: boolean;
     isHidden?: boolean;
     isCollateralInfo?: boolean;
+    fontSize?: number;
 }>`
     font-weight: 700;
-    font-size: 11px;
-    line-height: 12px;
-    letter-spacing: 0.025em;
+    font-size: ${(props) => props.fontSize || 11}px;
+    line-height: 20px;
     display: ${(props) => (props.isHidden ? 'none' : '')};
     color: ${(props) => (props.isInfo || props.isCurrency ? props.theme.status.win : props.theme.textColor.primary)};
     margin-left: ${(props) => (props.isInfo || props.isCollateralInfo ? 'auto' : '5px')};

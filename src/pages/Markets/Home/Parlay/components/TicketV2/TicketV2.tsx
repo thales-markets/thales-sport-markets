@@ -962,7 +962,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         placement={'top'}
                         arrow={true}
                     >
-                        <SummaryValue>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
+                        <SummaryValue fontSize={12}>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
                     </InfoTooltip>
                     <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
                     <XButton
