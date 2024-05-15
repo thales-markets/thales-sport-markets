@@ -72,7 +72,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     }, [collateralArray, isDetailedView, getUSDForCollateral]);
 
     return (
-        <Container stretch={stretch}>
+        <Container stretch={stretch} isDetailedView={isDetailedView}>
             <OutsideClickHandler display="contents" onOutsideClick={() => setOpen(false)}>
                 <SelectedCollateral stretch={stretch} disabled={!!disabled} onClick={() => !disabled && setOpen(!open)}>
                     <TextCollateralWrapper isDetailedView={isDetailedView}>
@@ -90,6 +90,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                     </TextCollateralWrapper>
                     <Arrow
                         className={open ? `icon-thales icon-thales--caret-up` : `icon-thales icon-thales--caret-down`}
+                        isDetailedView={isDetailedView}
                     />
                 </SelectedCollateral>
                 {isDetailedView
@@ -168,7 +169,8 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     );
 };
 
-const Container = styled(FlexDivStart)<{ stretch?: boolean }>`
+const Container = styled(FlexDivStart)<{ stretch?: boolean; isDetailedView?: boolean }>`
+    margin: ${(props) => (props.isDetailedView ? '0 7px' : '0')};
     align-items: center;
     width: ${(props) => (props.stretch ? '100%' : '')};
 `;
@@ -212,10 +214,12 @@ const TextCollateralWrapper = styled.div<{ isDetailedView?: boolean }>`
     }
 `;
 
-const Arrow = styled.i`
+const Arrow = styled.i<{
+    isDetailedView?: boolean;
+}>`
     font-size: 10px;
     text-transform: none;
-    color: ${(props) => props.theme.status.win};
+    color: ${(props) => (props.isDetailedView ? props.theme.input.textColor.primary : props.theme.status.win)};
 `;
 
 const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean; stretch?: boolean }>`

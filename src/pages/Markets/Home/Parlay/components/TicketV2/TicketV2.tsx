@@ -83,6 +83,7 @@ import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
     CheckboxContainer,
+    ClearLabel,
     GasSummary,
     HorizontalLine,
     InfoTooltip,
@@ -900,7 +901,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         isEth,
     ]);
     useEffect(() => {
-        if (buyInAmountInDefaultCollateral > 0 && totalQuote > 0 && false) {
+        if (buyInAmountInDefaultCollateral > 0 && totalQuote > 0) {
             const buyInPow = Math.pow(buyInAmountInDefaultCollateral, 1 / 2);
             const minBuyInPow = 1;
 
@@ -964,7 +965,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     >
                         <SummaryValue fontSize={12}>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
                     </InfoTooltip>
-                    <SummaryLabel alignRight={true}>{t('markets.parlay.clear')}:</SummaryLabel>
+                    <ClearLabel alignRight={true}>{t('markets.parlay.clear')}:</ClearLabel>
                     <XButton
                         margin={'0 0 4px 5px'}
                         onClick={() => dispatch(removeAll())}
@@ -980,7 +981,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 changeAmount={(value) => setCollateralAmount(value)}
             />
             <RowSummary>
-                <SummaryLabel>{t('markets.parlay.buy-in')}:</SummaryLabel>
+                <SummaryLabel lineHeight={26}>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
                 <AmountToBuyContainer>
@@ -1018,7 +1019,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 <GasSummary>
                     <SummaryLabel>
                         {t('markets.parlay.total-gas')}:
-                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} iconFontSize={13} marginLeft={3} />
+                        <Tooltip overlay={<> {t('markets.parlay.gas-tooltip')}</>} iconFontSize={14} marginLeft={3} />
                     </SummaryLabel>
                     <SummaryValue isCollateralInfo={true}>
                         {gas === 0 ? '-' : formatCurrencyWithSign(USD_SIGN, gas as number, 2, true)}
@@ -1066,7 +1067,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                           } (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
-            {networkId !== Network.Base && networkId !== Network.OptimismSepolia && (
+            {networkId !== Network.Base && (
                 <>
                     <HorizontalLine />
                     <RowSummary>
@@ -1077,7 +1078,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             {t(`parlay-leaderboard.ticket-info.points-label`)}
                             <Tooltip
                                 overlay={<>{t(`parlay-leaderboard.ticket-info.points-tooltip`)}</>}
-                                iconFontSize={13}
+                                iconFontSize={14}
                                 marginLeft={3}
                             />
                             :
@@ -1093,7 +1094,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                         0
                                     )} + ${formatPercentage(leaderboardPoints.numberOfGamesBonus, 0)}`}</SummaryValue>
                                     {` = ${formatCurrency(leaderboardPoints.points)}`}
-                                    <Tooltip overlay={getPointsTooltip()} iconFontSize={13} marginLeft={3} />
+                                    <Tooltip overlay={getPointsTooltip()} iconFontSize={14} marginLeft={3} />
                                 </>
                             )}
                         </SummaryValue>
@@ -1103,7 +1104,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             {t(`parlay-leaderboard.ticket-info.rank-label`)}
                             <Tooltip
                                 overlay={<>{t(`parlay-leaderboard.ticket-info.rank-tooltip`)}</>}
-                                iconFontSize={13}
+                                iconFontSize={14}
                                 marginLeft={3}
                             />
                             :
@@ -1117,7 +1118,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             {t(`parlay-leaderboard.ticket-info.rewards-label`)}
                             <Tooltip
                                 overlay={<>{t(`parlay-leaderboard.ticket-info.rewards-tooltip`)}</>}
-                                iconFontSize={13}
+                                iconFontSize={14}
                                 marginLeft={3}
                             />
                             :
@@ -1147,7 +1148,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         {t('markets.parlay.persist-games')}
                         <Tooltip
                             overlay={<>{t(`markets.parlay.keep-selection-tooltip`)}</>}
-                            iconFontSize={13}
+                            iconFontSize={14}
                             marginLeft={3}
                         />
                     </SummaryLabel>

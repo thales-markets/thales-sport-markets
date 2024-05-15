@@ -16,6 +16,7 @@ export default {
         quaternary: Colors.BLUE,
         quinary: Colors.NAVY_BLUE_EXTRA_LIGHT,
         senary: Colors.BLACK,
+        septenary: Colors.TORY_BLUE_LIGHT,
     },
     borderColor: {
         primary: Colors.NAVY_BLUE_LIGHT,
@@ -23,6 +24,7 @@ export default {
         tertiary: Colors.GREEN,
         quaternary: Colors.BLUE,
         quinary: Colors.NAVY_BLUE,
+        senary: Colors.TORY_BLUE,
     },
     button: {
         background: {

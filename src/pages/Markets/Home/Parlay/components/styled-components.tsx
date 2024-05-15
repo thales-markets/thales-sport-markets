@@ -21,10 +21,10 @@ export const RowContainer = styled(FlexDiv)`
     width: 100%;
 `;
 
-export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
+export const SummaryLabel = styled.span<{ alignRight?: boolean; lineHeight?: number }>`
     font-weight: 400;
     font-size: 12px;
-    line-height: 20px;
+    line-height: ${(props) => props.lineHeight || 20}px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
@@ -32,6 +32,15 @@ export const SummaryLabel = styled.span<{ alignRight?: boolean }>`
     @media (max-width: 950px) {
         line-height: 24px;
     }
+    i {
+        color: ${(props) => props.theme.textColor.septenary};
+    }
+`;
+
+export const ClearLabel = styled(SummaryLabel)`
+    font-weight: 600;
+    color: ${(props) => props.theme.textColor.septenary};
+    text-transform: none;
 `;
 
 export const SummaryValue = styled.span<{
@@ -47,6 +56,9 @@ export const SummaryValue = styled.span<{
     display: ${(props) => (props.isHidden ? 'none' : '')};
     color: ${(props) => (props.isInfo || props.isCurrency ? props.theme.status.win : props.theme.textColor.primary)};
     margin-left: ${(props) => (props.isInfo || props.isCollateralInfo ? 'auto' : '5px')};
+    i {
+        color: ${(props) => props.theme.textColor.septenary};
+    }
 `;
 
 export const InfoContainer = styled.div`
@@ -179,7 +191,7 @@ export const BalanceValue = styled.span`
 export const XButton = styled.i<{ margin?: string }>`
     font-size: 15px;
     font-weight: 700;
-    color: ${(props) => props.theme.status.loss};
+    color: ${(props) => props.theme.textColor.septenary};
     cursor: pointer;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
     &:hover {
@@ -192,8 +204,8 @@ export const ShareWrapper = styled(FlexDivCentered)`
 `;
 
 export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
-    font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
-    color: ${(props) => (props.color ? props.color : props.theme.textColor.primary)};
+    font-size: ${(props) => props.fontSize || '18px'};
+    color: ${(props) => props.color || props.theme.textColor.septenary};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
@@ -248,7 +260,6 @@ export const CollateralContainer = styled.div`
 
 export const HorizontalLine = styled.hr`
     width: 100%;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    border: 1px solid ${(props) => props.theme.borderColor.senary};
     border-radius: 2px;
-    background: ${(props) => props.theme.background.tertiary};
 `;

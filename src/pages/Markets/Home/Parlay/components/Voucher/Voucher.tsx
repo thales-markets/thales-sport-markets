@@ -61,7 +61,7 @@ const Voucher: React.FC<VoucherProps> = ({ disabled }) => {
                 <RowSummary>
                     <RowContainer>
                         <SummaryLabel>{t('markets.parlay.pay-with-voucher')}:</SummaryLabel>
-                        <SummaryValue>
+                        <SummaryValue fontSize={12}>
                             {formatCurrencyWithSign(USD_SIGN, overtimeVoucher?.remainingAmount || 0, 2)}
                         </SummaryValue>
                         <CheckboxContainer>

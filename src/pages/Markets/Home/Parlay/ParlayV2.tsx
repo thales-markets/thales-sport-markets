@@ -157,7 +157,6 @@ const Parlay: React.FC = () => {
                                     );
                                 })}
                         </ListContainer>
-                        <HorizontalLine />
                         <TicketV2 markets={ticketMarkets} setMarketsOutOfLiquidity={setOutOfLiquidityMarkets} />
                     </>
                 </>
@@ -255,13 +254,6 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
                 0px 1px / 0.7rem 0.7rem repeat-x;
         }
     }
-`;
-
-const HorizontalLine = styled.hr`
-    width: 100%;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
-    border-radius: 2px;
-    background: ${(props) => props.theme.background.tertiary};
 `;
 
 const Empty = styled(FlexDivColumn)`
