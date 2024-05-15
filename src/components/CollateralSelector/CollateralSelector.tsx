@@ -194,7 +194,7 @@ const Text = styled.span<{
 const TextCollateral = styled(Text)`
     color: ${(props) =>
         props.isDetailedView
-            ? props.theme.input.textColor.primary
+            ? props.theme.input.textColor.tertiary
             : props.isSelectedCollateral
             ? props.theme.status.win
             : props.theme.textColor.tertiary};
@@ -219,7 +219,7 @@ const Arrow = styled.i<{
 }>`
     font-size: 10px;
     text-transform: none;
-    color: ${(props) => (props.isDetailedView ? props.theme.input.textColor.primary : props.theme.status.win)};
+    color: ${(props) => (props.isDetailedView ? props.theme.input.textColor.tertiary : props.theme.status.win)};
 `;
 
 const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean; stretch?: boolean }>`
@@ -248,7 +248,7 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
     width: ${(props) => (props.width ? props.width : '350px')};
     padding: 5px 3px;
     border-radius: 8px;
-    background: ${(props) => props.theme.input.background.primary};
+    background: ${(props) => props.theme.input.background.tertiary};
     z-index: 100;
     border: 2px solid ${(props) => props.theme.input.borderColor.tertiary};
 `;
@@ -278,7 +278,7 @@ const Icon = styled.i`
     font-size: 25px;
     line-height: 100%;
     margin-right: 10px;
-    color: ${(props) => props.theme.input.textColor.primary};
+    color: ${(props) => props.theme.input.textColor.tertiary};
 `;
 
 export default CollateralSelector;

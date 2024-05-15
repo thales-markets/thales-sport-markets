@@ -54,6 +54,7 @@ export default {
         background: {
             primary: Colors.WHITE,
             secondary: Colors.NAVY_BLUE_DARK,
+            tertiary: Colors.NAVY_BLUE_EXTRA_DARK,
             selection: {
                 primary: Colors.NAVY_BLUE_LIGHT,
             },
@@ -61,6 +62,7 @@ export default {
         textColor: {
             primary: Colors.NAVY_BLUE_DARK,
             secondary: Colors.BLUE,
+            tertiary: Colors.WHITE,
         },
         borderColor: {
             primary: Colors.WHITE,

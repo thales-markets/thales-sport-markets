@@ -992,11 +992,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         }}
                         showValidation={inputRefVisible && !!tooltipTextCollateralAmount && !openApprovalModal}
                         validationMessage={tooltipTextCollateralAmount}
-                        inputFontSize="18px"
                         inputFontWeight="700"
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
                         disabled={isAllowing || isBuying}
+                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                         currencyComponent={
                             <CollateralSelector
                                 collateralArray={getCollaterals(networkId)}
