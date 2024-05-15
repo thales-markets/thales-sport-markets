@@ -191,6 +191,10 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
     @media (max-width: 1199px) {
         max-width: 320px;
     }
+    @media (max-width: 950px) {
+        max-width: 100%;
+        height: 100%;
+    }
 `;
 
 const ListContainer = styled(FlexDivColumn)``;

@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeName } from 'utils/markets';
 import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
+import { getGridMinMaxPercentage } from '../../../../../../utils/ui';
 import PositionDetailsV2 from '../PositionDetailsV2';
 import {
     Arrow,
@@ -117,7 +118,7 @@ const Positions: React.FC<PositionsProps> = ({
                                     </PropsTextContainer>
                                 )}
                                 <ContentRow
-                                    gridMinMaxPercentage={market.odds.length === 3 ? 33 : 50}
+                                    gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
                                     isColumnView={isColumnView}
                                 >
                                     {market.odds.map((_, index) => (

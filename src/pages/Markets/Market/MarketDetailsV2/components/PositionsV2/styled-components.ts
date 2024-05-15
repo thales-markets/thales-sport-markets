@@ -8,7 +8,7 @@ export const Container = styled(FlexDivColumn)<{ isExpanded: boolean; isMainPage
     margin-bottom: ${(props) => (!props.isExpanded ? `5px` : '0')};
     flex: ${(props) => (props.isMainPageView ? '1' : 'initial')};
     @media (max-width: 950px) {
-        padding: 10px 0px 0px 0px;
+        padding: ${(props) => (props.isMainPageView ? '10px 0px 0px 0px' : '5px 0px')};
     }
 `;
 

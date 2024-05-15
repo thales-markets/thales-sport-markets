@@ -12,7 +12,7 @@ import { League, Provider, Sport } from 'enums/sports';
 import { groupBy } from 'lodash';
 import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
 import Parlay from 'pages/Markets/Home/Parlay';
-import ParlayMobileModal from 'pages/Markets/Home/Parlay/components/ParlayMobileModal';
+import TicketMobileModal from 'pages/Markets/Home/Parlay/components/TicketMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -51,7 +51,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const queryParams: { title?: string } = queryString.parse(location.search);
 
     const [metaTitle, setMetaTitle] = useQueryParam('title', queryParams?.title ? queryParams?.title : '');
-    const [showParlayMobileModal, setShowParlayMobileModal] = useState(false);
+    const [showTicketMobileModal, setShowTicketMobileModal] = useState(false);
     const [hidePausedMarkets, setHidePausedMarkets] = useState(true);
 
     const groupedChildMarkets = useMemo(
@@ -413,8 +413,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     <Parlay />
                 </SidebarContainer>
             )}
-            {isMobile && showParlayMobileModal && <ParlayMobileModal onClose={() => setShowParlayMobileModal(false)} />}
-            {isMobile && <FooterSidebarMobile setParlayMobileVisibility={setShowParlayMobileModal} />}
+            {isMobile && showTicketMobileModal && <TicketMobileModal onClose={() => setShowTicketMobileModal(false)} />}
+            {isMobile && <FooterSidebarMobile setParlayMobileVisibility={setShowTicketMobileModal} />}
         </RowContainer>
     );
 };

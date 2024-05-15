@@ -2,7 +2,10 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { NAV_MENU } from 'constants/ui';
 import { localStore } from 'thales-utils';
 import { NavMenuItem, PromotionCardStatus, PromotionStatus } from 'types/ui';
+import { MarketType } from '../enums/marketTypes';
+import { SportMarket } from '../types/markets';
 import { formatTimestampForPromotionDate } from './formatters/date';
+import { getIsDoubleChanceMarket } from './markets';
 
 export const getOrdinalNumberLabel = (num: number): string => {
     switch (num) {
@@ -48,4 +51,12 @@ export const getKeepSelectionFromStorage = (): boolean => {
 
 export const setKeepSelectionToStorage = (value: boolean) => {
     localStore.set(LOCAL_STORAGE_KEYS.KEEP_SELECTION, value);
+};
+
+export const getGridMinMaxPercentage = (market: SportMarket, isMobile: boolean): number => {
+    return isMobile && (getIsDoubleChanceMarket(market.typeId) || market.typeId === MarketType.HALFTIME_FULLTIME)
+        ? 100
+        : market.odds.length === 3
+        ? 33
+        : 50;
 };

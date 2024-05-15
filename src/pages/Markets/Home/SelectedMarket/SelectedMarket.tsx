@@ -125,8 +125,7 @@ const MatchInfo = styled(FlexDivRow)`
     line-height: 16px;
     font-weight: 600;
     justify-content: center;
-    height: 40px;
-    margin-top: 5px;
+    height: 50px;
 `;
 
 export const MatchInfoLabel = styled.label`

@@ -64,8 +64,8 @@ const SidebarLeaderboard = lazy(
 
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
-const ParlayMobileModal = lazy(
-    () => import(/* webpackChunkName: "ParlayMobileModal" */ './Parlay/components/ParlayMobileModal')
+const TicketMobileModal = lazy(
+    () => import(/* webpackChunkName: "TicketMobileModal" */ './Parlay/components/TicketMobileModal')
 );
 
 const FooterSidebarMobile = lazy(
@@ -99,7 +99,7 @@ const Home: React.FC = () => {
 
     const [showBurger, setShowBurger] = useState<boolean>(false);
     const [showActive, setShowActive] = useLocalStorage(LOCAL_STORAGE_KEYS.FILTER_ACTIVE, true);
-    const [showParlayMobileModal, setshowParlayMobileModal] = useState<boolean>(false);
+    const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [showOddsSelectorModal, setShowOddsSelectorModal] = useState<boolean>(false);
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
@@ -781,7 +781,7 @@ const Home: React.FC = () => {
                             ) : (
                                 <>
                                     <FlexDivRow>
-                                        {((isMobile && !isMarketSelected) || !isMobile) && (
+                                        {((isMobile && !isMarketSelected && !showTicketMobileModal) || !isMobile) && (
                                             <Suspense
                                                 fallback={
                                                     <LoaderContainer>
@@ -808,15 +808,15 @@ const Home: React.FC = () => {
                     </Suspense>
                 </RightSidebarContainer>
             </RowContainer>
-            {isMobile && showParlayMobileModal && (
+            {isMobile && showTicketMobileModal && (
                 <Suspense fallback={<Loader />}>
-                    <ParlayMobileModal onClose={() => setshowParlayMobileModal(false)} />
+                    <TicketMobileModal onClose={() => setShowTicketMobileModal(false)} />
                 </Suspense>
             )}
             {isMobile && (
                 <Suspense fallback={<Loader />}>
                     <FooterSidebarMobile
-                        setParlayMobileVisibility={setshowParlayMobileModal}
+                        setParlayMobileVisibility={setShowTicketMobileModal}
                         setShowBurger={setShowBurger}
                     />
                 </Suspense>

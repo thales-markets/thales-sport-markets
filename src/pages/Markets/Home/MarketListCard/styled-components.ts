@@ -60,6 +60,9 @@ export const MatchInfoLabel = styled.label`
     width: fit-content;
     margin-right: 2px;
     white-space: nowrap;
+    @media (max-width: 950px) {
+        font-size: 11px;
+    }
 `;
 
 export const TeamsInfoConatiner = styled(FlexDivRow)`
@@ -129,12 +132,14 @@ export const MarketsCountWrapper = styled(FlexDivColumnCentered)`
     cursor: pointer;
     margin-top: 20px;
     @media (max-width: 950px) {
+        max-width: initial;
         position: absolute;
         top: 0;
-        right: 10px;
-        margin-top: 8px;
+        right: 0;
         font-size: 12px;
+        margin-top: 0px;
         line-height: 14px;
+        padding: 8px;
     }
 `;
 
