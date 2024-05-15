@@ -42,7 +42,7 @@ const UserStats: React.FC = () => {
 const Header = styled(FlexDivRow)`
     font-weight: 600;
     font-size: 12px;
-    color: #3c498a;
+    color: ${(props) => props.theme.textColor.septenary};
     text-transform: uppercase;
     padding: 15px 0;
     justify-content: center;

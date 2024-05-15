@@ -12,7 +12,7 @@ export const Wrapper = styled(FlexDivRowCentered)`
     & > div {
         flex: 1;
     }
-    border-bottom: 2px dashed #3c498a;
+    border-bottom: 2px dashed ${(props) => props.theme.borderColor.senary};
     height: 50px;
 `;
 

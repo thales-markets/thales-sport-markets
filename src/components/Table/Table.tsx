@@ -254,7 +254,7 @@ const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean }>`
     font-size: 14px;
     line-height: 100%;
     letter-spacing: 0.25px;
-    border-bottom: 2px dashed #3c498a;
+    border-bottom: 2px dashed ${(props) => props.theme.borderColor.senary};
 `;
 
 const TableRowHead = styled(TableRow)`

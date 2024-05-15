@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivRow, FlexDivColumn, FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 
 export const Wrapper = styled(FlexDivColumn)`
     width: 100%;
@@ -7,6 +7,7 @@ export const Wrapper = styled(FlexDivColumn)`
     @media (max-width: 575px) {
         border-radius: 15px;
     }
+    flex: initial;
 `;
 
 export const Container = styled(FlexDivCentered)`

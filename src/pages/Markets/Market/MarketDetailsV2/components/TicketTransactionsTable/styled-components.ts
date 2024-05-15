@@ -30,7 +30,7 @@ export const StatusWrapper = styled.div`
 export const ExpandedRowWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    border-bottom: 2px dashed #3c498a;
+    border-bottom: 2px dashed ${(props) => props.theme.borderColor.senary};
 `;
 
 export const FirstExpandedSection = styled(FlexDivColumnCentered)`
@@ -143,7 +143,7 @@ export const TwitterWrapper = styled.div`
 
 export const TwitterIcon = styled.i`
     font-size: 14px;
-    color: #3c498a;
+    color: ${(props) => props.theme.textColor.septenary};
     cursor: pointer;
     &:before {
         font-family: ExoticIcons !important;

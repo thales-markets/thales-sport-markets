@@ -426,6 +426,7 @@ const PositionsContainer = styled(FlexDivColumn)`
     margin-top: 10px;
     padding: 10px 10px 10px 10px;
     background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
+    flex: initial;
 `;
 
 const hideResultInfoPerPeriodForSports = (sportId: number) => {
@@ -469,6 +470,7 @@ const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
     @media (max-width: 575px) {
         margin-right: 0;
     }
+    flex: initial;
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
