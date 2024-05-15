@@ -201,6 +201,7 @@ export const XButton = styled.i<{ margin?: string }>`
 
 export const ShareWrapper = styled(FlexDivCentered)`
     margin-top: 15px;
+    margin-bottom: 30px;
 `;
 
 export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
@@ -224,6 +225,7 @@ export const defaultButtonProps = {
 
 export const CheckboxContainer = styled.div`
     margin-left: auto;
+    margin-top: 4px;
     label {
         color: ${(props) => props.theme.textColor.secondary};
         font-size: 12px;

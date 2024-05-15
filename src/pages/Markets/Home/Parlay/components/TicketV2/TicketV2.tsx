@@ -186,11 +186,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
 
     const isMinimumParlayGames = markets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES;
 
-    const totalQuote = useMemo(
-        () => markets.reduce((partialQuote, market) => partialQuote * (market.odd > 0 ? market.odd : 1), 1),
-        [markets]
-    );
-
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
     useEffect(() => {
@@ -215,7 +210,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         }
     }, [ammContractsStatusData]);
 
-    const parlayAmmDataQuery = useSportsAmmDataQuery(networkId, {
+    const sportsAmmDataQuery = useSportsAmmDataQuery(networkId, {
         enabled: isAppReady,
     });
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
@@ -225,12 +220,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         enabled: isAppReady && isWalletConnected,
     });
 
-    const parlayAmmData: SportsAmmData | undefined = useMemo(() => {
-        if (parlayAmmDataQuery.isSuccess && parlayAmmDataQuery.data) {
-            return parlayAmmDataQuery.data;
+    const sportsAmmData: SportsAmmData | undefined = useMemo(() => {
+        if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
+            return sportsAmmDataQuery.data;
         }
         return undefined;
-    }, [parlayAmmDataQuery.isSuccess, parlayAmmDataQuery.data]);
+    }, [sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
     const overtimeVoucher = useMemo(() => {
         if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
@@ -266,10 +261,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         exchangeRates && exchangeRates !== null ? exchangeRates[selectedCollateral] : 1;
 
     useEffect(() => {
-        setMinBuyInAmountInDefaultCollateral(parlayAmmData?.minBuyInAmount || 0);
-    }, [parlayAmmData?.minBuyInAmount]);
+        setMinBuyInAmountInDefaultCollateral(sportsAmmData?.minBuyInAmount || 0);
+    }, [sportsAmmData?.minBuyInAmount]);
 
-    // Clear Parlay when network is changed
+    const totalQuote = useMemo(() => {
+        const quote = markets.reduce((partialQuote, market) => partialQuote * (market.odd > 0 ? market.odd : 1), 1);
+        const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
+        return quote < maxSupportedOdds ? maxSupportedOdds : quote;
+    }, [markets, sportsAmmData?.maxSupportedOdds]);
+
+    // Clear Ticket when network is changed
     const isMounted = useRef(false);
     useEffect(() => {
         // skip first render
@@ -280,7 +281,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         }
     }, [dispatch, networkId]);
 
-    const fetchParlayAmmQuote = useCallback(
+    const fetchTicketAmmQuote = useCallback(
         async (buyInAmountForQuote: number) => {
             if (Number(buyInAmountForQuote) <= 0) return;
 
@@ -667,10 +668,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
 
     const isValidProfit: boolean = useMemo(() => {
         return (
-            parlayAmmData?.maxSupportedAmount !== undefined &&
-            payout - Number(buyInAmountInDefaultCollateral) > parlayAmmData?.maxSupportedAmount
+            sportsAmmData?.maxSupportedAmount !== undefined &&
+            payout - Number(buyInAmountInDefaultCollateral) > sportsAmmData?.maxSupportedAmount
         );
-    }, [parlayAmmData?.maxSupportedAmount, payout, buyInAmountInDefaultCollateral]);
+    }, [sportsAmmData?.maxSupportedAmount, payout, buyInAmountInDefaultCollateral]);
 
     const setTooltipTextMessageUsdAmount = useCallback(
         (value: string | number, quotes: number[], error?: string) => {
@@ -711,7 +712,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             } else if (isValidProfit) {
                 setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.max-profit', {
-                        max: formatCurrencyWithSign(USD_SIGN, parlayAmmData?.maxSupportedAmount || 0),
+                        max: formatCurrencyWithSign(USD_SIGN, sportsAmmData?.maxSupportedAmount || 0),
                     })
                 );
             } else if (Number(value) > paymentTokenBalance) {
@@ -721,7 +722,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             }
         },
         [
-            parlayAmmData?.maxSupportedAmount,
+            sportsAmmData?.maxSupportedAmount,
             minBuyInAmountInDefaultCollateral,
             t,
             paymentTokenBalance,
@@ -739,7 +740,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             setIsFetching(true);
             const { sportsAMMV2Contract } = networkConnector;
             if (sportsAMMV2Contract && Number(buyInAmount) >= 0 && minBuyInAmountInDefaultCollateral) {
-                const parlayAmmQuote = await fetchParlayAmmQuote(Number(buyInAmount));
+                const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
 
                 if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
 
@@ -779,7 +780,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         };
     }, [
         buyInAmount,
-        fetchParlayAmmQuote,
+        fetchTicketAmmQuote,
         setTooltipTextMessageUsdAmount,
         minBuyInAmountInDefaultCollateral,
         setMarketsOutOfLiquidity,
@@ -805,10 +806,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const getQuoteTooltipText = () => {
         return selectedOddsType === OddsType.AMM
             ? t('markets.parlay.info.min-quote', {
-                  value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
+                  value: formatMarketOdds(selectedOddsType, sportsAmmData?.maxSupportedOdds),
               })
             : t('markets.parlay.info.max-quote', {
-                  value: formatMarketOdds(selectedOddsType, parlayAmmData?.maxSupportedOdds),
+                  value: formatMarketOdds(selectedOddsType, sportsAmmData?.maxSupportedOdds),
               });
     };
 
@@ -952,13 +953,15 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         </TooltipContainer>
     );
 
+    console.log(totalQuote, sportsAmmData?.maxSupportedOdds);
+
     return (
         <>
             <RowSummary columnDirection={true}>
                 <RowContainer>
                     <SummaryLabel>{t('markets.parlay.total-quote')}:</SummaryLabel>
                     <InfoTooltip
-                        open={inputRefVisible && totalQuote === parlayAmmData?.maxSupportedOdds}
+                        open={inputRefVisible && totalQuote === sportsAmmData?.maxSupportedOdds}
                         title={getQuoteTooltipText()}
                         placement={'top'}
                         arrow={true}
