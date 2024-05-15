@@ -12,7 +12,7 @@ export const Container = styled(FlexDiv)`
     background: linear-gradient(101.62deg, #64d9fe 14.92%, #a38cff 94.73%);
     border-radius: 40px;
     justify-content: space-around;
-    z-index: 4;
+    z-index: 3;
 `;
 
 export const ItemContainer = styled(FlexDiv)`
