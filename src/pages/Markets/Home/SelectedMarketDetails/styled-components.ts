@@ -14,4 +14,7 @@ export const Wrapper = styled(FlexDivColumn)<{
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    @media (max-width: 950px) {
+        padding: 0px 10px 10px 10px;
+    }
 `;

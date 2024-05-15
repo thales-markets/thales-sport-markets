@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getOnImageError, getOnPlayerImageError, getTeamImageSource } from 'utils/images';
-import { TicketMarket } from '../../types/markets';
+import { SportMarket } from '../../types/markets';
 
 type MatchLogosProps = {
-    market: TicketMarket;
+    market: SportMarket;
     width?: string;
     logoWidth?: string;
     logoHeight?: string;

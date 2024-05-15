@@ -152,7 +152,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const selected = selectedMarket?.gameId == market.gameId;
 
     let marketsCount = market.childMarkets.length;
-    if (!marketTypeFilterMarket && isThreeWayView) {
+    if (isColumnView) {
         if (firstSpreadMarket) {
             marketsCount -= 1;
         }
