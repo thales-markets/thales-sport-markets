@@ -16,7 +16,7 @@ const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose }) => {
                 <Title>Ticket</Title>
             </Header>
             <CloseIcon className="icon icon--close" onClick={onClose} />
-            <Scroll height={`calc(100vh - 100px)`}>
+            <Scroll height="100vh">
                 <Parlay />
             </Scroll>
         </Container>
