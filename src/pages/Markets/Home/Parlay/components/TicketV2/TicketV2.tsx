@@ -498,7 +498,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 const tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, selectedCollateral);
                 const parsedTotalQuote = ethers.utils.parseEther(totalQuote.toString());
-                const additionalSlippage = ethers.utils.parseEther('0.02');
+                const additionalSlippage = ethers.utils.parseEther('0.05');
 
                 let tx;
                 if (tradeData[0].live) {
