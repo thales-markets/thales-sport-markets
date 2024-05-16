@@ -35,7 +35,7 @@ function Dropdown<T>({ list, onSelect, disabled, itemRenderer, selectedItem, sty
                     >
                         {selectedItem}
                         <FlexDiv>
-                            <ArrowDownIcon className={`icon-exotic icon-exotic--down`} />
+                            <ArrowDownIcon className={`icon icon--arrow-down`} />
                         </FlexDiv>
                     </DropdownButton>
                     {dropdownIsOpen && (

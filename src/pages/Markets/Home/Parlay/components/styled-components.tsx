@@ -41,6 +41,13 @@ export const ClearLabel = styled(SummaryLabel)`
     font-weight: 600;
     color: ${(props) => props.theme.textColor.septenary};
     text-transform: none;
+    cursor: pointer;
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+        i {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+    }
 `;
 
 export const SummaryValue = styled.span<{
@@ -192,11 +199,7 @@ export const XButton = styled.i<{ margin?: string }>`
     font-size: 15px;
     font-weight: 700;
     color: ${(props) => props.theme.textColor.septenary};
-    cursor: pointer;
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
-    &:hover {
-        color: ${(props) => props.theme.textColor.quaternary};
-    }
 `;
 
 export const ShareWrapper = styled(FlexDivCentered)`

@@ -1,6 +1,6 @@
 .icon {
     display: inline-block;
-    font-family: OvertimeIcons !important;
+    font-family: OvertimeIconsV2 !important;
     vertical-align: middle;
     font-size: 20px;
 }
@@ -311,4 +311,44 @@
 
 .icon--base:before {
     content: '\00C0';
+}
+
+.icon--clear:before {
+    content: '\00D4';
+}
+
+.icon--caret-down:before {
+    content: '\00D5';
+}
+
+.icon--double-check:before {
+    content: '\00D8';
+}
+
+.icon--ongoing:before {
+    content: '\00DA';
+}
+
+.icon--play:before {
+    content: '\00DF';
+}
+
+.icon--pause:before {
+    content: '\00E0';
+}
+
+.icon--search:before {
+    content: '\00E5';
+}
+
+.icon--settings:before {
+    content: '\00E6';
+}
+
+.icon--tour:before {
+    content: '\00E9';
+}
+
+.icon--caret-up:before {
+    content: '\00EA';
 }

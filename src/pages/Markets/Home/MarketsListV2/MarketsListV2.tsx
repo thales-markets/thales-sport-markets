@@ -52,9 +52,9 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                     <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
                     <LeagueName>{leagueName}</LeagueName>
                     {hideLeague ? (
-                        <ArrowIcon className={`icon-exotic icon-exotic--right`} />
+                        <ArrowIcon className={`icon icon--arrow`} />
                     ) : (
-                        <ArrowIcon down={true} className={`icon-exotic icon-exotic--down`} />
+                        <ArrowIcon down={true} className={`icon icon--arrow-down`} />
                     )}
                 </LeagueInfo>
                 {!isMarketSelected ? (
@@ -276,8 +276,6 @@ const LeagueName = styled.label`
 const ArrowIcon = styled.i<{ down?: boolean }>`
     font-size: 16px;
     margin-left: 10px;
-    margin-top: ${(props) => (props.down ? '5px' : '')};
-    margin-bottom: ${(props) => (props.down ? '' : '2px')};
     &:hover {
         cursor: pointer;
         color: ${(props) => props.theme.textColor.quaternary};

@@ -35,12 +35,9 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                         </FlexDiv>
                         <FlexDiv gap={15}>
                             {!open ? (
-                                <ArrowIcon className={`icon-exotic icon-exotic--right ${open ? 'selected' : ''}`} />
+                                <ArrowIcon className={`icon icon--arrow ${open ? 'selected' : ''}`} />
                             ) : (
-                                <ArrowIcon
-                                    down={true}
-                                    className={`icon-exotic icon-exotic--down ${open ? 'selected' : ''}`}
-                                />
+                                <ArrowIcon down={true} className={`icon icon--arrow-down ${open ? 'selected' : ''}`} />
                             )}
                         </FlexDiv>
                     </LabelContainer>
@@ -61,7 +58,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                                     setGlobalFilterParam(filterItem);
                                 }}
                             >
-                                <FilterIcon isMobile={isMobile} className={`icon icon--profile`} />
+                                <FilterIcon isMobile={isMobile} className={`icon ${getIcon(filterItem)}`} />
                                 {t(`market.filter-label.global.${filterItem.toLowerCase()}`)}
                             </GlobalFilter>
                         </FilterContainer>
@@ -70,6 +67,16 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
             </FiltersContainer>
         </Wrapper>
     );
+};
+
+const getIcon = (filter: GlobalFiltersEnum) => {
+    return filter === GlobalFiltersEnum.OpenMarkets
+        ? `icon--play`
+        : filter === GlobalFiltersEnum.PendingMarkets
+        ? `icon--ongoing`
+        : filter === GlobalFiltersEnum.Canceled
+        ? `icon--pause`
+        : 'icon--double-check';
 };
 
 const Wrapper = styled.div<{ isMobile?: boolean }>`
@@ -133,8 +140,7 @@ const SportIcon = styled.i`
 const ArrowIcon = styled.i<{ down?: boolean }>`
     font-size: 12px;
     margin-left: 5px;
-    margin-top: ${(props) => (props.down ? '5px' : '')};
-    margin-bottom: ${(props) => (props.down ? '' : '2px')};
+    text-transform: none;
     &.selected,
     &:hover {
         cursor: pointer;
@@ -194,6 +200,7 @@ const FilterIcon = styled.i<{ isMobile: boolean }>`
     font-weight: 400;
     font-size: 22px;
     margin-right: 15px;
+    text-transform: none;
 `;
 
 export default GlobalFilters;
