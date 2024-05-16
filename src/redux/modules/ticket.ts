@@ -56,7 +56,9 @@ const ticketSlice = createSlice({
             const existingPositionIndex = state.ticket.findIndex((el) => el.gameId === action.payload.gameId);
 
             // UPDATE market position
-            if (existingPositionIndex === -1) {
+            if (action.payload.live) {
+                state.ticket = [action.payload];
+            } else if (existingPositionIndex === -1) {
                 state.ticket.push(action.payload);
             } else {
                 ticketCopy[existingPositionIndex] = action.payload;

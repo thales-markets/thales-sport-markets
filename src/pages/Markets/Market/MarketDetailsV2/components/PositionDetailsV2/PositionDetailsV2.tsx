@@ -89,7 +89,11 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                         combinedPositions: market.combinedPositions,
                         live: market.live,
                     };
-                    if (ticket.some((position) => position.live) || (ticket.length && market.live)) {
+
+                    if (
+                        !ticketPosition.live &&
+                        (ticket.some((position) => position.live) || (ticket.length && market.live))
+                    ) {
                         toast(t('markets.market-card.odds-live-limitation-message'), { type: 'error' });
                     } else {
                         dispatch(updateTicket(ticketPosition));

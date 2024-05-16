@@ -740,35 +740,39 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             setIsFetching(true);
             const { sportsAMMV2Contract } = networkConnector;
             if (sportsAMMV2Contract && Number(buyInAmount) >= 0 && minBuyInAmountInDefaultCollateral) {
-                const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
-
-                if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
-
-                if (!parlayAmmQuote.error) {
-                    const payout = coinFormatter(
-                        parlayAmmQuote.payout,
-                        networkId,
-                        collateralHasLp ? selectedCollateral : undefined
-                    );
-
-                    setPayout(payout);
-
-                    const amountsToBuy: number[] = (parlayAmmQuote.amountsToBuy || []).map((quote: BigNumber) =>
-                        coinFormatter(quote, networkId, collateralHasLp ? selectedCollateral : undefined)
-                    );
-                    // Update markets (using order index) which are out of liquidity
-                    const marketsOutOfLiquidity = amountsToBuy
-                        .map((amountToBuy, index) => (amountToBuy === 0 ? index : -1))
-                        .filter((index) => index !== -1);
-                    setMarketsOutOfLiquidity(marketsOutOfLiquidity);
-
-                    setFinalQuotes(amountsToBuy);
-
-                    setTooltipTextMessageUsdAmount(buyInAmount, amountsToBuy);
+                if (markets[0]?.live) {
+                    setPayout((1 / totalQuote) * Number(buyInAmount));
                 } else {
-                    setMarketsOutOfLiquidity([]);
-                    setPayout(0);
-                    setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
+                    const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
+
+                    if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
+
+                    if (!parlayAmmQuote.error) {
+                        const payout = coinFormatter(
+                            parlayAmmQuote.payout,
+                            networkId,
+                            collateralHasLp ? selectedCollateral : undefined
+                        );
+
+                        setPayout(payout);
+
+                        const amountsToBuy: number[] = (parlayAmmQuote.amountsToBuy || []).map((quote: BigNumber) =>
+                            coinFormatter(quote, networkId, collateralHasLp ? selectedCollateral : undefined)
+                        );
+                        // Update markets (using order index) which are out of liquidity
+                        const marketsOutOfLiquidity = amountsToBuy
+                            .map((amountToBuy, index) => (amountToBuy === 0 ? index : -1))
+                            .filter((index) => index !== -1);
+                        setMarketsOutOfLiquidity(marketsOutOfLiquidity);
+
+                        setFinalQuotes(amountsToBuy);
+
+                        setTooltipTextMessageUsdAmount(buyInAmount, amountsToBuy);
+                    } else {
+                        setMarketsOutOfLiquidity([]);
+                        setPayout(0);
+                        setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
+                    }
                 }
             }
             setIsFetching(false);
@@ -789,6 +793,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         buyInAmountInDefaultCollateral,
         collateralHasLp,
         selectedCollateral,
+        totalQuote,
     ]);
 
     useEffect(() => {
@@ -952,8 +957,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             </TooltipFooter>
         </TooltipContainer>
     );
-
-    console.log(totalQuote, sportsAmmData?.maxSupportedOdds);
 
     return (
         <>
