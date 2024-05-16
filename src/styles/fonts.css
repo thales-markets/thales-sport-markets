@@ -29,23 +29,13 @@
 }
 
 @font-face {
-    font-family: 'ExoticIcons';
-    src: local('ExoticIcons'), url(../assets/fonts/ExoticIcons/ExoticIcons.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'OvertimeIcons';
-    src: local('OvertimeIcons'), url(../assets/fonts/OvertimeIcons/OvertimeIcons.ttf) format('truetype');
-}
-
-@font-face {
     font-family: 'HomepageIcons';
     src: local('HomepageIcons'), url(../assets/fonts/HomepageIcons/homepage.ttf) format('truetype');
 }
 
 @font-face {
-    font-family: 'LeagueIcons';
-    src: local('LeagueIcons'), url(../assets/fonts/LeagueIcons/LeagueIcons.ttf) format('truetype');
+    font-family: 'HomepageIconsV2';
+    src: local('HomepageIconsV2'), url(../assets/fonts/HomepageIconsV2/HomepageIconsV2.ttf) format('truetype');
 }
 
 @font-face {
@@ -66,11 +56,6 @@
 @font-face {
     font-family: 'OswaldBold';
     src: local('OswaldBold'), url(../assets/fonts/Oswald/Oswald-Bold.ttf) format('truetype');
-}
-
-@font-face {
-    font-family: 'NCAA';
-    src: local('NCAA'), url(../assets/fonts/NCAA/NCAA_Colorado_Buffs_Boulder_Bold.ttf) format('truetype');
 }
 
 @font-face {
@@ -101,4 +86,9 @@
 @font-face {
     font-family: 'GeogrotesqueReg';
     src: local('GeogrotesqueReg'), url(../assets/fonts/Geogrotesque/GeogrotesqueCyr-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'OvertimeIconsV2';
+    src: local('OvertimeIconsV2'), url(../assets/fonts/OvertimeIconsV2/OvertimeIconsV2.ttf) format('truetype');
 }

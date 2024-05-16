@@ -150,14 +150,14 @@ const DappHeader: React.FC = () => {
                         </SPAAnchor>
                         {isWalletConnected && isMarketsPage && (
                             <SPAAnchor href={buildHref(ROUTES.Wizard)}>
-                                <HeaderIcon className="icon icon--profile" />
+                                <HeaderIcon className="icon icon--tour" />
                                 <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
                             </SPAAnchor>
                         )}
                         <TimeFilters />
                         {isWalletConnected && <ProfileItem />}
                         <SPAAnchor href={buildHref(ROUTES.Wizard)}>
-                            <HeaderIcon className="icon icon--profile" />
+                            <HeaderIcon className="icon icon--settings" />
                             <HeaderLabel>{t('common.settings')}</HeaderLabel>
                         </SPAAnchor>
                     </MiddleContainer>

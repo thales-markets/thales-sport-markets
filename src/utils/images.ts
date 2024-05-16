@@ -56,7 +56,9 @@ export const getErrorImage = (leagueTag: number | string) => {
 };
 
 export const getLeagueLogoClass = (leagueTag: number) => {
-    return Object.values(LeagueMap).find((t) => t.id === Number(leagueTag))?.logoClass || 'league league--overtime';
+    return (
+        Object.values(LeagueMap).find((t) => t.id === Number(leagueTag))?.logoClass || 'icon-homepage league--overtime'
+    );
 };
 
 export const getLanguageFlagSource = (language: SupportedLanguages | any) => {

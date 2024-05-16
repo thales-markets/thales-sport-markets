@@ -89,7 +89,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                         </TextCollateral>
                     </TextCollateralWrapper>
                     <Arrow
-                        className={open ? `icon-thales icon-thales--caret-up` : `icon-thales icon-thales--caret-down`}
+                        className={open ? `icon icon--caret-up` : `icon icon--caret-down`}
                         isDetailedView={isDetailedView}
                     />
                 </SelectedCollateral>

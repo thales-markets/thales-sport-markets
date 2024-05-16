@@ -498,7 +498,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 const tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, selectedCollateral);
                 const parsedTotalQuote = ethers.utils.parseEther(totalQuote.toString());
-                const additionalSlippage = ethers.utils.parseEther('0.02');
+                const additionalSlippage = ethers.utils.parseEther('0.05');
 
                 let tx;
                 if (tradeData[0].live) {
@@ -971,12 +971,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     >
                         <SummaryValue fontSize={12}>{formatMarketOdds(selectedOddsType, totalQuote)}</SummaryValue>
                     </InfoTooltip>
-                    <ClearLabel alignRight={true}>{t('markets.parlay.clear')}:</ClearLabel>
-                    <XButton
-                        margin={'0 0 4px 5px'}
-                        onClick={() => dispatch(removeAll())}
-                        className={`icon icon--cross-button-arrow`}
-                    />
+                    <ClearLabel alignRight={true} onClick={() => dispatch(removeAll())}>
+                        {t('markets.parlay.clear')}
+                        <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
+                    </ClearLabel>
                 </RowContainer>
             </RowSummary>
             <Voucher disabled={isAllowing || isBuying} />
@@ -1157,6 +1155,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             iconFontSize={14}
                             marginLeft={3}
                         />
+                        :
                     </SummaryLabel>
                     <CheckboxContainer>
                         <Checkbox

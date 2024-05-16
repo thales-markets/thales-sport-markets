@@ -53,15 +53,15 @@ const SportFilter: React.FC<SportFilterProps> = ({
                         {count > 0 && <Count isMobile={isMobile}>{count}</Count>}
                         {sport.toLowerCase() != 'all' ? (
                             !open ? (
-                                <ArrowIcon className={`icon-exotic icon-exotic--right ${selected ? 'selected' : ''}`} />
+                                <ArrowIcon className={`icon icon--arrow ${selected ? 'selected' : ''}`} />
                             ) : (
                                 <ArrowIcon
                                     down={true}
-                                    className={`icon-exotic icon-exotic--down ${selected ? 'selected' : ''}`}
+                                    className={`icon icon--arrow-down ${selected ? 'selected' : ''}`}
                                 />
                             )
                         ) : (
-                            <ArrowIcon className={`invisible icon-exotic icon-exotic--right`} />
+                            <ArrowIcon className={`invisible icon icon--arrow`} />
                         )}
                     </FlexDiv>
                 </LabelContainer>
@@ -121,13 +121,13 @@ const Label = styled.div`
 const SportIcon = styled.i`
     font-size: 25px;
     margin-right: 15px;
+    font-weight: 400;
 `;
 
 const ArrowIcon = styled.i<{ down?: boolean }>`
     font-size: 12px;
     margin-left: 5px;
-    margin-top: ${(props) => (props.down ? '5px' : '')};
-    margin-bottom: ${(props) => (props.down ? '' : '2px')};
+    text-transform: none;
     &.selected,
     &:hover {
         cursor: pointer;

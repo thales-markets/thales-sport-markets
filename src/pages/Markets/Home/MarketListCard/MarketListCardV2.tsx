@@ -243,13 +243,17 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             </>
                         )}
                     </TeamLogosConatiner>
-                    <TeamNamesConatiner isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
+                    <TeamNamesConatiner
+                        isColumnView={isColumnView}
+                        isTwoPositionalMarket={isTwoPositionalMarket}
+                        isGameOpen={isGameOpen}
+                    >
                         <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
                             {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
                         </TeamNameLabel>
                         {!market.isOneSideMarket && (
                             <>
-                                {isMobile && (
+                                {isMobile && isGameOpen && (
                                     <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
                                         {' '}
                                         -{' '}

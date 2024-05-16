@@ -1,4 +1,3 @@
-import CalendarDatepicker from 'components/CalendarDatepicker';
 import { SportFilterEnum } from 'enums/markets';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +6,6 @@ import { getDateFilter, getGlobalFilter, getSportFilter, setDateFilter } from 'r
 import { RootState } from 'redux/rootReducer';
 import { addHoursToCurrentDate } from 'thales-utils';
 import useQueryParam from 'utils/useQueryParams';
-import { HeaderIcon } from '../../styled-components';
 import { Circle, FilterTypeContainer, Label, TimeFilterContainer } from './styled-components';
 
 const TimeFilters: React.FC = () => {
@@ -115,16 +113,6 @@ const TimeFilters: React.FC = () => {
                 <Circle isMobile={isMobile} />
                 <Label>3d</Label>
             </TimeFilterContainer>
-            {!isMobile && (
-                <>
-                    <HeaderIcon className="icon icon--profile" />
-                    <CalendarDatepicker
-                        date={dateFilter}
-                        setDate={(date: number | Date) => dispatch(setDateFilter(date))}
-                        setDateParam={setDateParam}
-                    />
-                </>
-            )}
         </FilterTypeContainer>
     );
 };
