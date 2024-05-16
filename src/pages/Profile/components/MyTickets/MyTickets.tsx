@@ -87,6 +87,13 @@ const MainContainer = styled(FlexDivColumn)`
     width: 806px;
     flex-grow: 1;
     margin: 0 25px;
+    @media (max-width: 1199px) {
+        margin: 0 10px;
+    }
+    @media (max-width: 950px) {
+        margin: 0;
+        width: 100%;
+    }
 `;
 
 const ButtonContainer = styled(FlexDivRow)`

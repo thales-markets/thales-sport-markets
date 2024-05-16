@@ -71,7 +71,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
 
 const getIcon = (filter: GlobalFiltersEnum) => {
     return filter === GlobalFiltersEnum.OpenMarkets
-        ? `icon--play`
+        ? `icon--logo`
         : filter === GlobalFiltersEnum.PendingMarkets
         ? `icon--ongoing`
         : filter === GlobalFiltersEnum.Canceled

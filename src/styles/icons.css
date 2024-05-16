@@ -326,7 +326,7 @@
 }
 
 .icon--ongoing:before {
-    content: '\00DA';
+    content: '\00DE';
 }
 
 .icon--play:before {
