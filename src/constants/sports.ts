@@ -349,7 +349,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.UEFA_EURO_QUALIFICATIONS]: {
         sport: Sport.SOCCER,
         id: League.UEFA_EURO_QUALIFICATIONS,
-        label: 'UEFA EURO Qualifications',
+        label: 'UEFA EURO 2024',
         logoClass: 'icon-league league--uefa',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.GOALS,
