@@ -30,7 +30,7 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean }>`
     padding: 10px 12px;
     cursor: ${(props) => (props.isGameOpen ? 'default' : 'pointer')};
     @media (max-width: 950px) {
-        flex-direction: column;
+        flex-direction: ${(props) => (props.isGameOpen ? 'column' : 'row')};
         padding: 8px 8px 4px 8px;
     }
 `;
@@ -84,11 +84,15 @@ export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean }
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
 `;
 
-export const TeamNamesConatiner = styled(FlexDivColumn)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
+export const TeamNamesConatiner = styled(FlexDivColumn)<{
+    isColumnView: boolean;
+    isTwoPositionalMarket: boolean;
+    isGameOpen: boolean;
+}>`
     margin-left: 10px;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '5px' : '10px') : '0px')};
     @media (max-width: 950px) {
-        flex-direction: row;
+        flex-direction: ${(props) => (props.isGameOpen ? 'row' : 'column')};
     }
 `;
 
