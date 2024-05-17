@@ -154,7 +154,7 @@ const Count = styled(FlexDivCentered)<{ isMobile?: boolean }>`
 
 const liveBlinkStyle: CSSProperties = {
     width: 37,
-    margin: '0px 9px 0px -6px',
+    margin: '0px 3px 0px -6px',
 };
 
 export default SportFilter;
