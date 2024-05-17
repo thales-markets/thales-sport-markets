@@ -1,8 +1,8 @@
 /* react-toastify notifications */
 #root {
-    --toastify-text-color-light: #5f6180;
-    --toastify-spinner-color: #5f6180;
-    --toastify-spinner-color-empty-area: #e1d9e7;
+    --toastify-text-color-light: #3c498a;
+    --toastify-spinner-color: #3c498a;
+    --toastify-spinner-color-empty-area: #9fa1ba;
 }
 
 /* react-modal */
@@ -35,10 +35,10 @@
 
 .odd-toast {
     color: #ffffff !important;
-    background-color: #5f6180 !important;
+    background-color: #3c498a !important;
 }
 
 .odd-toast-body {
     color: #ffffff !important;
-    background-color: #5f6180 !important;
+    background-color: #3c498a !important;
 }

@@ -148,7 +148,7 @@ table {
     font-family: 'Roboto' !important;
     font-style: normal;
     -webkit-tap-highlight-color: transparent;
-    scrollbar-color: #ffffff #5f6180;
+    scrollbar-color: #3c498a #1f274d;
     scrollbar-width: thin;
 }
 
@@ -157,12 +157,12 @@ table {
     width: 10px;
 }
 *::-webkit-scrollbar-track {
-    background: #5f6180;
+    background: #1f274d;
     border-radius: 8px;
 }
 *::-webkit-scrollbar-thumb {
     border-radius: 8px;
-    background: #ffffff;
+    background: #3c498a;
 }
 
 input::-webkit-outer-spin-button,

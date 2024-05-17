@@ -1,12 +1,12 @@
+import MuiTooltip from '@material-ui/core/Tooltip';
+import { ReactComponent as BalanceIcon } from 'assets/images/balance-icon.svg';
 import Tooltip from 'components/Tooltip';
 import { DEFAULT_TOKEN_DECIMALS } from 'constants/defaults';
 import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FieldContainer, FieldLabel, Input } from '../common';
-import MuiTooltip from '@material-ui/core/Tooltip';
 import { FlexDivCentered } from 'styles/common';
-import { ReactComponent as BalanceIcon } from 'assets/images/balance-icon.svg';
+import { FieldContainer, FieldLabel, Input } from '../common';
 
 type NumericInputProps = {
     value: string | number;
@@ -186,7 +186,7 @@ const CurrencyLabel = styled.label<{ hasSeparator?: boolean }>`
     border-left: ${(props) => (props.hasSeparator ? `2px solid ${props.theme.input.borderColor.tertiary}` : 'none')};
     font-size: 15px;
     line-height: 20px;
-    color: ${(props) => props.theme.input.textColor.primary};
+    color: ${(props) => props.theme.input.textColor.tertiary};
     padding-left: 8px;
     pointer-events: none;
     &.disabled {
