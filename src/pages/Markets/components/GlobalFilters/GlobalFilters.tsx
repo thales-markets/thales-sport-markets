@@ -80,8 +80,8 @@ const getIcon = (filter: GlobalFiltersEnum) => {
 };
 
 const Wrapper = styled.div<{ isMobile?: boolean }>`
-    border-bottom: 1px solid ${(props) => props.theme.textColor.secondary};
-    padding-bottom: 10px;
+    border-bottom: 1px solid ${(props) => props.theme.borderColor.quinary};
+    padding-bottom: 5px;
     margin-bottom: 10px;
 `;
 
@@ -133,8 +133,8 @@ const Label = styled.div`
 `;
 
 const SportIcon = styled.i`
-    font-size: 25px;
-    margin-right: 15px;
+    font-size: 22px;
+    margin-right: 10px;
 `;
 
 const ArrowIcon = styled.i<{ down?: boolean }>`
@@ -198,8 +198,8 @@ const GlobalFilter = styled.div`
 
 const FilterIcon = styled.i<{ isMobile: boolean }>`
     font-weight: 400;
-    font-size: 22px;
-    margin-right: 15px;
+    font-size: 20px;
+    margin-right: 10px;
     text-transform: none;
 `;
 

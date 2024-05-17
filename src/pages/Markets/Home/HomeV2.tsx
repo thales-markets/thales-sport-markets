@@ -634,7 +634,7 @@ const Home: React.FC = () => {
                             label={t(`market.filter-label.show-active`)}
                         />
                     </CheckboxContainer>
-                    <Scroll height="500px">
+                    <Scroll height="calc(100vh - 430px)">
                         <SportFiltersContainer>
                             <GlobalFilters
                                 setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
@@ -842,14 +842,13 @@ const RowContainer = styled(FlexDivRow)`
 
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    max-width: 806px;
+    max-width: 821px;
     flex-grow: 1;
-    margin: 0 25px;
+    margin-right: 10px;
     @media (max-width: 1199px) {
-        margin: 0 10px;
+        margin-right: 5px;
     }
     @media (max-width: 950px) {
-        margin: 0;
         max-width: 100%;
     }
 `;
@@ -863,7 +862,12 @@ const SidebarContainer = styled(FlexDivColumn)`
 `;
 
 const LeftSidebarContainer = styled(SidebarContainer)`
-    max-width: 263px;
+    max-width: 278px;
+    margin-right: 10px;
+    @media (max-width: 1199px) {
+        margin-right: 5px;
+        max-width: 268px;
+    }
 `;
 
 const RightSidebarContainer = styled(SidebarContainer)`
@@ -888,9 +892,12 @@ const RightSidebarContainer = styled(SidebarContainer)`
 // `;
 
 const SportFiltersContainer = styled(FlexDivColumn)`
-    margin-bottom: 10px;
-    padding-top: 15px;
+    padding-bottom: 5px;
+    padding-top: 5px;
     padding-right: 15px;
+    @media (max-width: 1199px) {
+        padding-right: 10px;
+    }
 `;
 
 const NoMarketsContainer = styled(FlexDivColumnCentered)`
@@ -978,8 +985,9 @@ const additionalApplyFiltersButtonStyle: CSSProperties = {
 };
 
 const CheckboxContainer = styled.div<{ isMobile: boolean }>`
-    margin-left: ${(props) => (props.isMobile ? '34px' : '6px')};
+    margin-left: ${(props) => (props.isMobile ? '34px' : '5px')};
     margin-top: 15px;
+    margin-bottom: 10px;
     label {
         color: ${(props) => props.theme.textColor.quinary};
         font-size: ${(props) => (props.isMobile ? '17px' : '12px')};
@@ -988,7 +996,7 @@ const CheckboxContainer = styled.div<{ isMobile: boolean }>`
         letter-spacing: 0.035em;
         text-transform: uppercase;
         padding-top: 2px;
-        padding-left: ${(props) => (props.isMobile ? '38px' : '35px')};
+        padding-left: ${(props) => (props.isMobile ? '38px' : '29px')};
         input:checked ~ .checkmark {
             border: 2px solid ${(props) => props.theme.borderColor.quaternary};
         }

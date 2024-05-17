@@ -76,6 +76,7 @@ const Wrapper = styled(FlexDivColumn)`
     border-radius: 8px;
     flex: 1 1 0;
     height: auto;
+    margin-right: 15px;
     @media (max-width: 950px) {
         position: absolute;
         top: 0;
@@ -85,6 +86,7 @@ const Wrapper = styled(FlexDivColumn)`
         z-index: 2;
         margin-top: 0;
         border-radius: 0px;
+        margin-right: 0px;
     }
 `;
 

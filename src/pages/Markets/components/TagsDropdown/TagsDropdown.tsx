@@ -319,7 +319,7 @@ const LabelContainer = styled(FlexDivRowCentered)`
 `;
 
 const Label = styled.div`
-    margin-left: 15px;
+    margin-left: 10px;
     white-space: pre-line;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -338,8 +338,8 @@ const StarIcon = styled.i<{ isMobile: boolean }>`
 `;
 
 const LeagueFlag = styled.img`
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
 `;
 
 const IncentivizedLeague = styled.div`
@@ -367,7 +367,7 @@ const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    margin-right: 12px;
+    margin-right: 3px;
 `;
 
 export default TagsDropdown;

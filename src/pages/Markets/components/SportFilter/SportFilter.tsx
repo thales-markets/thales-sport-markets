@@ -28,44 +28,34 @@ const SportFilter: React.FC<SportFilterProps> = ({
     const { t } = useTranslation();
     return (
         <Container isMobile={isMobile}>
-            <LeftContainer>
-                <LabelContainer
-                    className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`}
-                    onClick={() => (!disabled ? onClick() : '')}
-                >
-                    <FlexDiv>
-                        {sport.toLowerCase() == 'live' && (
-                            <Lottie
-                                autoplay={true}
-                                animationData={liveAnimationData}
-                                loop={true}
-                                style={liveBlinkStyle}
-                            />
-                        )}
-                        {sport.toLowerCase() != 'live' && (
-                            <SportIcon
-                                className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`}
-                            />
-                        )}
-                        <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
-                    </FlexDiv>
-                    <FlexDiv gap={15}>
-                        {count > 0 && <Count isMobile={isMobile}>{count}</Count>}
-                        {sport.toLowerCase() != 'all' ? (
-                            !open ? (
-                                <ArrowIcon className={`icon icon--arrow ${selected ? 'selected' : ''}`} />
-                            ) : (
-                                <ArrowIcon
-                                    down={true}
-                                    className={`icon icon--arrow-down ${selected ? 'selected' : ''}`}
-                                />
-                            )
+            <LabelContainer
+                className={`${disabled ? 'disabled' : ''} ${selected ? 'selected' : ''}`}
+                onClick={() => (!disabled ? onClick() : '')}
+            >
+                <FlexDiv>
+                    {sport.toLowerCase() == 'live' && (
+                        <Lottie autoplay={true} animationData={liveAnimationData} loop={true} style={liveBlinkStyle} />
+                    )}
+                    {sport.toLowerCase() != 'live' && (
+                        <SportIcon
+                            className={`icon icon--${sport.toLowerCase() == 'all' ? 'logo' : sport.toLowerCase()}`}
+                        />
+                    )}
+                    <Label>{`${children} ${disabled ? `\n ${t('common.coming-soon')}` : ''} `}</Label>
+                </FlexDiv>
+                <RightContainer>
+                    {count > 0 && <Count isMobile={isMobile}>{count}</Count>}
+                    {sport.toLowerCase() != 'all' ? (
+                        !open ? (
+                            <ArrowIcon className={`icon icon--arrow ${selected ? 'selected' : ''}`} />
                         ) : (
-                            <ArrowIcon className={`invisible icon icon--arrow`} />
-                        )}
-                    </FlexDiv>
-                </LabelContainer>
-            </LeftContainer>
+                            <ArrowIcon down={true} className={`icon icon--arrow-down ${selected ? 'selected' : ''}`} />
+                        )
+                    ) : (
+                        <ArrowIcon className={`invisible icon icon--arrow`} />
+                    )}
+                </RightContainer>
+            </LabelContainer>
         </Container>
     );
 };
@@ -87,17 +77,18 @@ const Container = styled(FlexDivRowCentered)<{ isMobile?: boolean }>`
     justify-content: flex-start;
 `;
 
-const LeftContainer = styled(FlexDivRowCentered)`
-    flex: 1;
+const RightContainer = styled(FlexDiv)`
+    align-items: center;
+    gap: 5px;
 `;
 
 const LabelContainer = styled(FlexDivRowCentered)`
     flex: 1;
+    align-items: center;
     &.selected,
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
     }
-
     @media (max-width: 950px) {
         &:hover {
             color: ${(props) => props.theme.textColor.secondary};
@@ -119,9 +110,10 @@ const Label = styled.div`
 `;
 
 const SportIcon = styled.i`
-    font-size: 25px;
-    margin-right: 15px;
+    font-size: 22px;
+    margin-right: 10px;
     font-weight: 400;
+    margin-left: 1px;
 `;
 
 const ArrowIcon = styled.i<{ down?: boolean }>`

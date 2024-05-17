@@ -42,7 +42,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const finalOrderKeys = Number(dateFilter) !== 0 ? groupBySortedMarketsKeys(marketsKeys) : marketsKeys;
 
     const getContainerContent = () => (
-        <ListContainer>
+        <ListContainer isMarketSelected={isMarketSelected}>
             {finalOrderKeys.map((leagueId: number, index: number) => {
                 return (
                     <MarketsListV2 key={index} league={leagueId} markets={marketsMap[leagueId]} language={language} />
@@ -237,10 +237,13 @@ const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
     }
 `;
 
-const ListContainer = styled.div`
+const ListContainer = styled.div<{ isMarketSelected: boolean }>`
     display: flex;
     flex-direction: column;
-    padding: 0 10px 0 0;
+    padding-right: ${(props) => (props.isMarketSelected ? '10px' : '15px')};
+    @media (max-width: 1199px) {
+        padding-right: 10px;
+    }
     @media (max-width: 950px) {
         padding: 0;
     }

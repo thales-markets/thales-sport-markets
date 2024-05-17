@@ -52,8 +52,9 @@ const Container = styled.div`
     overflow: hidden;
     margin: 0 0 15px 0;
     max-width: 100%;
-    @media (max-width: 768px) {
-        display: none;
+    margin-right: 15px;
+    @media (max-width: 1199px) {
+        margin-right: 5px;
     }
 `;
 
