@@ -2,6 +2,7 @@ import { ZERO_ADDRESS } from 'constants/network';
 import { BigNumber, ethers } from 'ethers';
 import { TradeData } from '../types/markets';
 import { executeBiconomyTransaction } from './biconomy';
+import { convertFromBytes32 } from './formatters/string';
 
 export const getLiveTradingProcessorTransaction: any = async (
     isVoucherSelected: boolean,
@@ -15,10 +16,12 @@ export const getLiveTradingProcessorTransaction: any = async (
     isAA?: boolean
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
+    const gameId = convertFromBytes32(tradeData[0].gameId);
+
     if (isVoucherSelected) {
         if (isAA) {
             return executeBiconomyTransaction(collateralAddress, liveTradingProcessorContract, 'requestLiveTrade', [
-                tradeData[0].gameId,
+                gameId,
                 tradeData[0].sportId,
                 tradeData[0].typeId,
                 tradeData[0].position,
@@ -31,7 +34,7 @@ export const getLiveTradingProcessorTransaction: any = async (
             ]);
         } else {
             return liveTradingProcessorContract.requestLiveTrade(
-                tradeData[0].gameId,
+                gameId,
                 tradeData[0].sportId,
                 tradeData[0].typeId,
                 tradeData[0].position,
@@ -47,7 +50,7 @@ export const getLiveTradingProcessorTransaction: any = async (
 
     if (isAA) {
         return executeBiconomyTransaction(collateralAddress, liveTradingProcessorContract, 'requestLiveTrade', [
-            tradeData[0].gameId,
+            gameId,
             tradeData[0].sportId,
             tradeData[0].typeId,
             tradeData[0].position,
@@ -59,10 +62,8 @@ export const getLiveTradingProcessorTransaction: any = async (
             collateralAddress,
         ]);
     } else {
-        console.log(liveTradingProcessorContract);
-        console.log(tradeData[0].sportId, tradeData[0].typeId);
         return liveTradingProcessorContract.requestLiveTrade({
-            _gameId: tradeData[0].gameId,
+            _gameId: gameId,
             _sportId: tradeData[0].sportId,
             _typeId: tradeData[0].typeId,
             _position: tradeData[0].position,
