@@ -242,11 +242,11 @@ export const CheckboxContainer = styled.div`
         }
     }
     .checkmark {
-        height: 14px;
-        width: 14px;
+        height: 15px;
+        width: 15px;
         border: 2px solid ${(props) => props.theme.borderColor.quaternary};
         :after {
-            left: 2px;
+            left: 3px;
             width: 3px;
             height: 8px;
             border: 2px solid ${(props) => props.theme.borderColor.quaternary};

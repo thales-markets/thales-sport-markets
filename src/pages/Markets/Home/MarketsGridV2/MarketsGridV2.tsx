@@ -209,7 +209,7 @@ const unifyBoxingMarkets = (marketsMap: Record<number, SportMarket[]>) => {
 };
 
 const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
-    margin: 10px 5px 0 0;
+    margin: ${(props) => (props.isMarketSelected ? '10px 5px 0 0' : '10px 0 0 0')};;
     flex-wrap: wrap;
     max-width: ${(props) => (props.isMarketSelected ? '210px' : '100%')};
     justify-content: center;

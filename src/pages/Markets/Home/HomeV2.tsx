@@ -567,7 +567,7 @@ const Home: React.FC = () => {
                                 );
                             })}
                     </SportFiltersContainer>
-                    {/* <GlobalFiltersContainer>
+                    <SportFiltersContainer>
                         <GlobalFilters
                             setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
                             setDateParam={setDateParam}
@@ -578,7 +578,7 @@ const Home: React.FC = () => {
                             sportFilter={sportFilter}
                             isMobile={isMobile}
                         />
-                    </GlobalFiltersContainer> */}
+                    </SportFiltersContainer>
                     <Button
                         onClick={() => setShowBurger(false)}
                         width="180px"
@@ -996,7 +996,7 @@ const CheckboxContainer = styled.div<{ isMobile: boolean }>`
         letter-spacing: 0.035em;
         text-transform: uppercase;
         padding-top: 2px;
-        padding-left: ${(props) => (props.isMobile ? '38px' : '29px')};
+        padding-left: ${(props) => (props.isMobile ? '38px' : '28px')};
         input:checked ~ .checkmark {
             border: 2px solid ${(props) => props.theme.borderColor.quaternary};
         }
