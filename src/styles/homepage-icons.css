@@ -5,6 +5,10 @@
     font-size: 20px;
 }
 
+.homepage--arrow-left:before {
+    content: '\0028';
+}
+
 .league--nba:before {
     content: '\0041';
 }

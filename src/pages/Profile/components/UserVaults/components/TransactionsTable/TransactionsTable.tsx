@@ -39,7 +39,7 @@ const TransactionsTable: React.FC = () => {
                 tableRowCellStyles={TableRowStyle}
                 columns={[
                     {
-                        Header: <>{t('market.table.date-time-col')}</>,
+                        Header: <>{t('profile.table.date-time-col')}</>,
                         accessor: 'timestamp',
                         Cell: (
                             cellProps: CellProps<
@@ -51,19 +51,19 @@ const TransactionsTable: React.FC = () => {
                         sortable: true,
                     },
                     {
-                        Header: <>{t(`vault.user-transactions.name`)}</>,
+                        Header: <>{t(`profile.table.name-col`)}</>,
                         accessor: 'name',
                         Cell: (
                             cellProps: CellProps<
                                 ProfileLiquidityPoolUserTransaction,
                                 ProfileLiquidityPoolUserTransaction['name']
                             >
-                        ) => <TableText> {t(`vault.${cellProps.cell.value}.title`)}</TableText>,
+                        ) => <TableText> {t(`profile.table.${cellProps.cell.value}`)}</TableText>,
                         width: 150,
                         sortable: true,
                     },
                     {
-                        Header: <>{t('market.table.type-col')}</>,
+                        Header: <>{t('profile.table.type-col')}</>,
                         accessor: 'type',
                         sortType: 'alphanumeric',
                         Cell: (
@@ -71,12 +71,12 @@ const TransactionsTable: React.FC = () => {
                                 ProfileLiquidityPoolUserTransaction,
                                 ProfileLiquidityPoolUserTransaction['type']
                             >
-                        ) => <TableText>{t(`vault.user-transactions.type.${cellProps.cell.value}`)}</TableText>,
+                        ) => <TableText>{t(`profile.table.${cellProps.cell.value}`)}</TableText>,
                         width: 150,
                         sortable: true,
                     },
                     {
-                        Header: <>{t('market.table.amount-col')}</>,
+                        Header: <>{t('profile.table.amount-col')}</>,
                         sortType: 'basic',
                         accessor: 'amount',
                         Cell: (
@@ -97,7 +97,7 @@ const TransactionsTable: React.FC = () => {
                         sortable: true,
                     },
                     {
-                        Header: <>{t('vault.trades-history.round-label')}</>,
+                        Header: <>{t('profile.table.round-col')}</>,
                         accessor: 'round',
                         Cell: (
                             cellProps: CellProps<
@@ -106,13 +106,13 @@ const TransactionsTable: React.FC = () => {
                             >
                         ) => (
                             <TableText>
-                                {t('vault.trades-history.round-label')} {cellProps.cell.value}
+                                {t('profile.table.round-label')} {cellProps.cell.value}
                             </TableText>
                         ),
                         width: 150,
                     },
                     {
-                        Header: <>{t('market.table.tx-status-col')}</>,
+                        Header: <>{t('profile.table.tx-status-col')}</>,
                         accessor: 'hash',
                         Cell: (
                             cellProps: CellProps<
@@ -143,6 +143,7 @@ const Title = styled.p`
     font-size: 16px;
     line-height: 19px;
     color: ${(props) => props.theme.textColor.primary};
+    margin-bottom: 10px;
 `;
 
 const TableHeaderStyle: React.CSSProperties = {

@@ -1,4 +1,3 @@
-import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
 import Button from 'components/Button';
 import SimpleLoader from 'components/SimpleLoader';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -31,6 +30,7 @@ import {
     EmptySubtitle,
     EmptyTitle,
     ListContainer,
+    StyledParlayEmptyIcon,
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
 } from './styled-components';
@@ -207,7 +207,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                             ) : (
                                 <EmptyContainer>
                                     <EmptyTitle>{t('profile.messages.no-claimable')}</EmptyTitle>
-                                    <OvertimeTicket />
+                                    <StyledParlayEmptyIcon />
                                     <EmptySubtitle>{t('profile.messages.ticket-subtitle')}</EmptySubtitle>
                                 </EmptyContainer>
                             )}
@@ -239,7 +239,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                             ) : (
                                 <EmptyContainer>
                                     <EmptyTitle>{t('profile.messages.no-open')}</EmptyTitle>
-                                    <OvertimeTicket />
+                                    <StyledParlayEmptyIcon />
                                     <EmptySubtitle>{t('profile.messages.ticket-subtitle')}</EmptySubtitle>
                                 </EmptyContainer>
                             )}

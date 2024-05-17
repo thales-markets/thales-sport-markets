@@ -1,3 +1,4 @@
+import { ReactComponent as OvertimeTicket } from 'assets/images/parlay-empty.svg';
 import styled, { CSSProperties } from 'styled-components';
 import {
     FlexDivColumn,
@@ -84,6 +85,12 @@ export const EmptyTitle = styled.span`
     text-transform: uppercase;
     font-size: 16px;
     letter-spacing: 0.025em;
+`;
+
+export const StyledParlayEmptyIcon = styled(OvertimeTicket)`
+    path {
+        fill: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 export const EmptySubtitle = styled.span`

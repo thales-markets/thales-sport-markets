@@ -37,6 +37,7 @@ type TicketSliceState = {
     ticket: TicketPosition[];
     payment: ParlayPayment;
     maxTicketSize: number;
+    isMultiSingle: boolean;
     error: { code: ParlayErrorCode; data: string };
 };
 
@@ -44,6 +45,7 @@ const initialState: TicketSliceState = {
     ticket: getDefaultTicket(),
     payment: getDefaultPayment(),
     maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
+    isMultiSingle: false,
     error: getDefaultError(),
 };
 
@@ -117,6 +119,9 @@ const ticketSlice = createSlice({
         setPaymentAmountToBuy: (state, action: PayloadAction<number | string>) => {
             state.payment = { ...state.payment, amountToBuy: action.payload };
         },
+        setIsMultiSingle: (state, action: PayloadAction<boolean>) => {
+            state.isMultiSingle = action.payload;
+        },
         resetTicketError: (state) => {
             state.error = getDefaultError();
         },
@@ -134,12 +139,14 @@ export const {
     setPaymentAmountToBuy,
     resetTicketError,
     setMaxTicketSize,
+    setIsMultiSingle,
 } = ticketSlice.actions;
 
 const getTicketState = (state: RootState) => state[sliceName];
 export const getTicket = (state: RootState) => getTicketState(state).ticket;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
 export const getMaxTicketSize = (state: RootState) => getTicketState(state).maxTicketSize;
+export const getIsMultiSingle = (state: RootState) => getTicketState(state).isMultiSingle;
 export const getTicketError = (state: RootState) => getTicketState(state).error;
 export const getHasTicketError = createSelector(getTicketError, (error) => error.code != ParlayErrorCode.NO_ERROS);
 

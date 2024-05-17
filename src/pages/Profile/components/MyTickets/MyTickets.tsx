@@ -39,7 +39,10 @@ const MyTickets: React.FC = () => {
             <MainContainer>
                 <NavigationWrapper>
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                        <ButtonContainer>Back</ButtonContainer>
+                        <ButtonContainer>
+                            <BackIcon className="icon-homepage homepage--arrow-left" />
+                            Back
+                        </ButtonContainer>
                     </SPAAnchor>
                     <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />
                     <SearchField
@@ -103,10 +106,15 @@ const ButtonContainer = styled(FlexDivRow)`
     background: ${(props) => props.theme.background.secondary};
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 7px;
-    padding: 0px 10px;
+    padding: 0px 14px 0px 6px;
     margin: 10px 0px;
     align-items: center;
     cursor: pointer;
+`;
+
+export const BackIcon = styled.i`
+    font-size: 24px;
+    margin-right: 4px;
 `;
 
 export default MyTickets;

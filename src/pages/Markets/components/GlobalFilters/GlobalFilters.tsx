@@ -30,7 +30,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
                 <LeftContainer>
                     <LabelContainer className={`${open ? 'selected' : ''}`} onClick={() => setOpen(!open)}>
                         <FlexDiv>
-                            <SportIcon className={`icon icon--filters`} />
+                            <SportIcon className={`icon icon--filters2`} />
                             <Label>{t('common.filters')}</Label>
                         </FlexDiv>
                         <FlexDiv gap={15}>

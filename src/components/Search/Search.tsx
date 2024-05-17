@@ -78,13 +78,12 @@ const Input = styled.input<{ width?: number; isMobile: boolean }>`
         color: ${(props) => props.theme.textColor.secondary};
     }
     &:focus {
-        border: 1px solid ${(props) => props.theme.textColor.quinary} !important;
+        border: 1px solid ${(props) => props.theme.textColor.quaternary} !important;
     }
 `;
 
 const IconWrapper = styled.div<{ isMobile: boolean; isModal?: boolean }>`
     border-radius: 30px;
-    background: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     position: absolute;
     width: ${(props) => (props.isMobile ? (props.isModal ? '25px' : '22px') : '15px')};
     height: ${(props) => (props.isMobile ? (props.isModal ? '25px' : '22px') : '15px')};
@@ -93,14 +92,14 @@ const IconWrapper = styled.div<{ isMobile: boolean; isModal?: boolean }>`
 `;
 
 const SearchIcon = styled.i<{ isMobile: boolean; isModal?: boolean }>`
-    font-size: ${(props) => (props.isMobile ? (props.isModal ? '32px' : '28px') : '22px')};
+    font-size: ${(props) => (props.isMobile ? (props.isModal ? '20px' : '16px') : '14px')};
     position: absolute;
-    top: ${(props) => (props.isMobile ? (props.isModal ? '-6px' : '-5px') : '-4px')};
-    left: ${(props) => (props.isMobile ? '-4px' : '-3px')};
+    top: 0;
+    left: 0;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0042';
-        color: ${(props) => props.theme.background.primary};
+        font-family: OvertimeIconsV2 !important;
+        content: '\\00E5';
+        color: ${(props) => (props.isMobile ? props.theme.textColor.quaternary : props.theme.textColor.secondary)};
     }
 `;
 

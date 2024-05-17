@@ -207,15 +207,15 @@ export const ShareWrapper = styled(FlexDivCentered)`
 `;
 
 export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
-    font-size: ${(props) => props.fontSize || '18px'};
+    font-size: ${(props) => props.fontSize || '20px'};
     color: ${(props) => props.color || props.theme.textColor.septenary};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
     text-transform: lowercase;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0061';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0021';
     }
 `;
 

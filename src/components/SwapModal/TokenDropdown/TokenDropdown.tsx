@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { FlexDivCentered, FlexDiv, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
-import OutsideClickHandler from 'react-outside-click-handler';
-import styled from 'styled-components';
-import { Token } from 'types/tokens';
 import { AVAILABLE_TOKENS } from 'constants/tokens';
+import React, { useState } from 'react';
+import OutsideClickHandler from 'react-outside-click-handler';
+import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import { Token } from 'types/tokens';
 
 type StatusDropdownProps = {
     selectedToken: Token;
@@ -137,8 +137,8 @@ const ArrowDownIcon = styled.i`
     position: relative;
     margin-left: 6px;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\004D';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\00D5';
         color: ${(props) => props.theme.textColor.primary};
     }
 `;

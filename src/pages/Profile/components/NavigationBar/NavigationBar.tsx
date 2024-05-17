@@ -5,20 +5,23 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { Count, Item, ItemWrapper, NotificationCount, Wrapper } from './styled-components';
+import { Count, Icon, Item, ItemWrapper, NotificationCount, Wrapper } from './styled-components';
 
 export const navItems = [
     {
         id: 1,
         i18Label: 'profile.open-claimable',
+        icon: 'icon icon--ticket-horizontal',
     },
     {
         id: 2,
         i18Label: 'profile.transaction-history',
+        icon: 'icon icon--history',
     },
     {
         id: 3,
         i18Label: 'profile.lp',
+        icon: 'icon icon--yield',
     },
     // {
     //     id: 4,
@@ -59,7 +62,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ itemSelected, onSelectIte
                 return (
                     <ItemWrapper key={index}>
                         <Item key={index} selected={item.id == itemSelected} onClick={() => onSelectItem(item.id)}>
-                            {t(item.i18Label).replace('/', '/\u200B')}
+                            <Icon className={item.icon} />
+                            {t(item.i18Label)}
                         </Item>
                         {!!notificationsCount && (
                             <NotificationCount key={'count' + index}>

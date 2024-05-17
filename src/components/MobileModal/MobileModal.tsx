@@ -1,7 +1,7 @@
 import React from 'react';
+import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDivEnd } from 'styles/common';
-import ReactModal from 'react-modal';
 
 type MobileModalProps = {
     shouldCloseOnOverlayClick?: boolean;
@@ -61,8 +61,8 @@ const CloseIcon = styled.i`
     margin-top: 1px;
     cursor: pointer;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\004F';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0031';
         color: ${(props) => props.theme.textColor.primary};
     }
 `;

@@ -308,8 +308,8 @@ const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: 
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
     text-transform: lowercase;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0061';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0021';
     }
 `;
 

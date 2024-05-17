@@ -205,8 +205,8 @@ const CloseIcon = styled.i`
     margin-top: 1px;
     cursor: pointer;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\004F';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0031';
         color: ${(props) => props.theme.textColor.primary};
     }
     @media (max-width: 575px) {

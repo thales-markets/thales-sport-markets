@@ -109,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
             />
             <ThreeWayIcon
                 onClick={() => dispatch(setIsThreeWayView(!isThreeWayView))}
-                className={`icon ${isThreeWayView ? 'icon--profile' : 'icon--filters'}`}
+                className={`icon ${isThreeWayView ? 'icon--list' : 'icon--grid'}`}
             />
         </Container>
     );

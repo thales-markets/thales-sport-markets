@@ -152,12 +152,12 @@ const SportIcon = styled.i`
 `;
 
 const LeftIcon = styled.i<{ disabled?: boolean }>`
-    font-size: 30px;
+    font-size: 40px;
     font-weight: 700;
     cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0041';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0028';
         color: ${(props) => props.theme.textColor.secondary};
         opacity: ${(props) => (props?.disabled ? '0.3' : '')};
         cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
@@ -165,12 +165,12 @@ const LeftIcon = styled.i<{ disabled?: boolean }>`
 `;
 
 const RightIcon = styled.i<{ disabled?: boolean }>`
-    font-size: 30px;
+    font-size: 40px;
     font-weight: 700;
     cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\004B';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0029';
         color: ${(props) => props.theme.textColor.secondary};
         opacity: ${(props) => (props?.disabled ? '0.3' : '')};
         cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};

@@ -321,8 +321,16 @@
     content: '\00D5';
 }
 
+.icon--filters2::before {
+    content: '\00D7';
+}
+
 .icon--double-check:before {
     content: '\00D8';
+}
+
+.icon--history:before {
+    content: '\00DA';
 }
 
 .icon--ongoing:before {
@@ -335,6 +343,10 @@
 
 .icon--pause:before {
     content: '\00E0';
+}
+
+.icon--ticket-horizontal:before {
+    content: '\00E1';
 }
 
 .icon--search:before {
@@ -351,4 +363,8 @@
 
 .icon--caret-up:before {
     content: '\00EA';
+}
+
+.icon--yield:before {
+    content: '\00EE';
 }

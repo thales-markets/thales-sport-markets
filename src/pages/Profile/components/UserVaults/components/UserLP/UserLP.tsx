@@ -103,7 +103,7 @@ const LiquidityPoolCard = styled.div`
     max-width: 220px;
     min-width: 220px;
     height: 200px;
-    background: linear-gradient(180deg, #303656 41.5%, #1a1c2b 100%);
+    background: ${(props) => props.theme.background.secondary};
     border-radius: 5px;
     cursor: pointer;
     &:hover {

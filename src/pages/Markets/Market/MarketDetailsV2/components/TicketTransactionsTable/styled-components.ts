@@ -146,8 +146,8 @@ export const TwitterIcon = styled.i`
     color: ${(props) => props.theme.textColor.septenary};
     cursor: pointer;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0061';
+        font-family: HomepageIconsV2 !important;
+        content: '\\0021';
     }
 `;
 

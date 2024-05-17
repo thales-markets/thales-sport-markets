@@ -94,24 +94,22 @@ export const LogoContainer = styled.div`
 
 export const IconWrapper = styled.div`
     border-radius: 30px;
-    background: ${(props) => props.theme.background.tertiary};
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     position: absolute;
     top: -10px;
 `;
 
 export const SearchIcon = styled.i`
-    font-size: 40px;
+    font-size: 25px;
     cursor: pointer;
-    margin-bottom: 3px;
     position: absolute;
-    top: -7px;
-    left: -6px;
+    top: 0px;
+    left: 0px;
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\0042';
-        color: ${(props) => props.theme.background.primary};
+        font-family: OvertimeIconsV2 !important;
+        content: '\\00E5';
+        color: ${(props) => props.theme.textColor.secondary};
     }
 `;
 
