@@ -18,7 +18,7 @@ export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.05; // 5%
 export const INCENTIVIZED_LEAGUE = {
     ids: [9011, 9004],
     startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 4, 16, 23, 59, 59)),
+    endDate: new Date(Date.UTC(2024, 4, 19, 23, 59, 59)),
     link:
         'https://medium.com/@OvertimeMarkets.xyz/get-ready-for-the-big-leagues-season-overtimes-biggest-reward-program-to-date-2d3949a06338',
     opRewards: '30,000 OP',
@@ -29,7 +29,7 @@ export const INCENTIVIZED_LEAGUE = {
 export const INCENTIVIZED_UEFA = {
     ids: [9016, 9017, 19216],
     startDate: new Date(Date.UTC(2024, 1, 13, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 4, 25, 23, 59, 59)),
+    endDate: new Date(Date.UTC(2024, 5, 1, 23, 59, 59)),
     link: 'https://dune.com/leifu/overtime-uefa-competitions-13-feb-25-may-24',
     opRewards: '',
     arbRewards: '20,000 ARB',
