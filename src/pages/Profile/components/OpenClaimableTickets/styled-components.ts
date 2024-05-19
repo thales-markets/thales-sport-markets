@@ -18,7 +18,7 @@ export const Container = styled(FlexDivColumn)`
 
 export const CategoryContainer = styled(FlexDivSpaceBetween)`
     width: 100%;
-    margin: 20px 0px;
+    margin: 15px 0px;
     position: relative;
     color: ${(props) => props.theme.textColor.primary};
     align-items: center;

@@ -32,6 +32,8 @@ import {
     QuoteLabel,
     QuoteText,
     QuoteWrapper,
+    SelectionInfoContainer,
+    StatusIcon,
     StatusWrapper,
     TableText,
     TicketRow,
@@ -156,14 +158,30 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         sortable: false,
                         Cell: (cellProps: any) => {
                             if (cellProps.row.original.isCancelled) {
-                                return <StatusWrapper color={theme.status.sold}>CANCELED</StatusWrapper>;
+                                return (
+                                    <StatusWrapper color={theme.status.sold}>
+                                        <StatusIcon className={`icon icon--lost`} />
+                                        Canceled
+                                    </StatusWrapper>
+                                );
                             } else if (cellProps.row.original.isUserTheWinner) {
-                                return <StatusWrapper color={theme.status.win}>WON</StatusWrapper>;
+                                return (
+                                    <StatusWrapper color={theme.status.win}>
+                                        <StatusIcon className={`icon icon--ticket-win`} />
+                                        Won
+                                    </StatusWrapper>
+                                );
                             } else {
                                 return cellProps.row.original.isLost ? (
-                                    <StatusWrapper color={theme.status.loss}>LOSS</StatusWrapper>
+                                    <StatusWrapper color={theme.status.loss}>
+                                        <StatusIcon className={`icon icon--ticket-loss`} />
+                                        Loss
+                                    </StatusWrapper>
                                 ) : (
-                                    <StatusWrapper color={theme.status.open}>OPEN</StatusWrapper>
+                                    <StatusWrapper color={theme.status.open}>
+                                        <StatusIcon className={`icon icon--ticket-open`} />
+                                        Open
+                                    </StatusWrapper>
                                 );
                             }
                         },
@@ -222,11 +240,11 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 
 const getTicketMarketStatusIcon = (market: TicketMarket) => {
     return market.isOpen || market.isCanceled ? (
-        <MarketStatusIcon className={`icon icon--open`} />
+        <MarketStatusIcon className={`icon icon--ticket-open`} />
     ) : market.isWinning ? (
-        <MarketStatusIcon className={`icon icon--win`} />
+        <MarketStatusIcon className={`icon icon--ticket-win`} />
     ) : (
-        <MarketStatusIcon className={`icon icon--lost`} />
+        <MarketStatusIcon className={`icon icon--ticket-loss`} />
     );
 };
 
@@ -249,11 +267,13 @@ export const getTicketMarkets = (
                 <SPAAnchor href={buildMarketLink(ticketMarket.gameId, language)}>
                     <MatchLabel>{getMatchLabel(ticketMarket)}</MatchLabel>
                 </SPAAnchor>
-                <MarketTypeInfo>{getTitleText(ticketMarket)}</MarketTypeInfo>
-                <PositionInfo>
-                    <PositionText>{getPositionTextV2(ticketMarket, ticketMarket.position, true)}</PositionText>
-                    <Odd>{formatMarketOdds(selectedOddsType, getTicketMarketOdd(ticketMarket))}</Odd>
-                </PositionInfo>
+                <SelectionInfoContainer>
+                    <MarketTypeInfo>{getTitleText(ticketMarket)}</MarketTypeInfo>
+                    <PositionInfo>
+                        <PositionText>{getPositionTextV2(ticketMarket, ticketMarket.position, true)}</PositionText>
+                        <Odd>{formatMarketOdds(selectedOddsType, getTicketMarketOdd(ticketMarket))}</Odd>
+                    </PositionInfo>
+                </SelectionInfoContainer>
                 <MarketStatus
                     color={
                         ticketMarket.isOpen || ticketMarket.isCanceled

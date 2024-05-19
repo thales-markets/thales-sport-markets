@@ -333,11 +333,15 @@
     content: '\00DA';
 }
 
+.icon--ticket-loss:before {
+    content: '\00DC';
+}
+
 .icon--ongoing:before {
     content: '\00DE';
 }
 
-.icon--play:before {
+.icon--ticket-open:before {
     content: '\00DF';
 }
 
@@ -371,4 +375,8 @@
 
 .icon--yield:before {
     content: '\00EE';
+}
+
+.icon--ticket-win:before {
+    content: '\00ED';
 }

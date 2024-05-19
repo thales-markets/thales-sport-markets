@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivRow } from 'styles/common';
 
 import disclaimer from 'assets/docs/overtime-markets-disclaimer.pdf';
@@ -19,9 +19,30 @@ import { RootState } from 'redux/rootReducer';
 import { getClassNameForParticalLogin, getSpecificConnectorFromConnectorsArray } from 'utils/biconomy';
 import { navigateTo } from 'utils/routes';
 import { Connector, useConnect } from 'wagmi';
-import { ThemeInterface } from '../../types/ui';
 
 ReactModal.setAppElement('#root');
+
+const defaultStyle = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        padding: '25px',
+        backgroundColor: '#151B36',
+        border: `1px solid #7983A9`,
+        width: '720px',
+        borderRadius: '15px',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        overflow: 'none',
+        height: 'auto',
+    },
+    overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 2,
+    },
+};
 
 type ConnectWalletModalProps = {
     isOpen: boolean;
@@ -30,7 +51,6 @@ type ConnectWalletModalProps = {
 
 const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
-    const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const { connectors, isLoading, isSuccess, connect } = useConnect({
@@ -43,28 +63,6 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
 
     const modalOrigin = useSelector((state: RootState) => getWalletConnectModalOrigin(state));
 
-    const defaultStyle = {
-        content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            padding: '25px',
-            backgroundColor: theme.background.quinary,
-            border: `1px solid ${theme.borderColor.primary}`,
-            width: '720px',
-            borderRadius: '15px',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            overflow: 'none',
-            height: 'auto',
-        },
-        overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 2,
-        },
-    };
-
     useEffect(() => {
         if (isMobile) {
             defaultStyle.content.width = '100%';
@@ -75,7 +73,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             defaultStyle.content.padding = '25px';
             defaultStyle.content.height = 'auto';
         }
-    }, [isMobile, defaultStyle.content]);
+    }, [isMobile]);
 
     const handleConnect = (connector: Connector) => {
         try {
@@ -92,6 +90,8 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             onClose();
         }
     }, [isSuccess, isPartical, modalOrigin, onClose]);
+
+    console.log(isMobile, defaultStyle);
 
     return (
         <ReactModal isOpen={isOpen} onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={defaultStyle}>

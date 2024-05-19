@@ -11,11 +11,7 @@ export const Container = styled(FlexDiv)`
 export const MarketTypesContainer = styled(FlexDiv)`
     width: 100%;
     overflow: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    ::-webkit-scrollbar {
-        display: none;
-    }
+    padding-bottom: 10px;
 `;
 
 export const MarketTypeButton = styled.button<{ selected?: boolean }>`

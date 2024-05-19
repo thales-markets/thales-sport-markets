@@ -48,7 +48,7 @@ export const TicketIdContainer = styled(FlexDivStart)`
     }
     @media (max-width: 767px) {
         margin-left: 10px;
-        min-width: auto;
+        min-width: 75px;
         flex-direction: column;
     }
 `;
@@ -65,7 +65,7 @@ export const NumberOfGamesContainer = styled(FlexDivStart)`
         flex-direction: row;
     }
     @media (max-width: 767px) {
-        min-width: auto;
+        min-width: 70px;
         flex-direction: column;
     }
 `;
@@ -74,10 +74,11 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)`
     min-width: 100px;
     justify-content: flex-start;
     margin-right: 10px;
-    @media (max-width: 767px) {
-        min-width: auto;
+    @media (max-width: 767px) {{
+        min-width: 65px;
         flex-direction: column;
         margin-left: 0px;
+        margin-right: 5px;
     }
 `;
 

@@ -29,11 +29,11 @@ const SearchField: React.FC<SearchProps> = ({ text, customPlaceholder, handleCha
 
 const Wrapper = styled.div`
     display: flex;
-    margin: 10px 0px 10px 5px;
+    margin-left: 5px;
     flex-direction: row;
     position: relative;
+    height: 30px;
     @media (max-width: 575px) {
-        margin: 0px;
         width: 100%;
     }
 `;
@@ -41,7 +41,7 @@ const Wrapper = styled.div`
 const Input = styled.input`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     border-radius: 5px;
-    padding: 5px 50px 5px 30px;
+    padding: 5px 10px 5px 30px;
     color: ${(props) => props.theme.textColor.primary};
     background: ${(props) => props.theme.background.primary};
     outline: none;

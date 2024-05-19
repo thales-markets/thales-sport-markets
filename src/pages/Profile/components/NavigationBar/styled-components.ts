@@ -7,7 +7,6 @@ export const Wrapper = styled(FlexDivRow)`
     justify-content: center;
     padding: 6px;
     border-radius: 5px;
-    margin: 10px 0px;
 `;
 
 export const ItemWrapper = styled.div`
@@ -40,6 +39,7 @@ export const Icon = styled.i`
     font-weight: 400;
     font-size: 18px;
     margin-right: 6px;
+    margin-top: -2px;
 `;
 
 export const NotificationCount = styled.div`

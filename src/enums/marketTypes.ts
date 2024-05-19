@@ -157,8 +157,11 @@ export enum MarketType {
 }
 
 export enum MarketTypeGroup {
+    WINNER = 'Winner',
     TOTALS = 'Totals',
     HANDICAP = 'Handicap',
+    FIRST_HALF = '1st half',
+    SECOND_HALF = '2nd half',
 }
 
 export enum ParlayErrorCode {

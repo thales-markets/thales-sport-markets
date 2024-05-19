@@ -6,25 +6,25 @@ export const TableText = styled.span`
     font-size: 12px;
     text-align: left;
     white-space: nowrap;
-    @media (max-width: 600px) {
-        font-size: 10px;
+    @media (max-width: 767px) {
+        font-size: 9px;
         white-space: pre-wrap;
+        margin-right: 2px;
     }
 `;
 
 export const StatusWrapper = styled.div`
     min-width: 62px;
-    height: 21px;
-    border: 2px solid ${(props) => props.color || props.theme.status.open};
-    border-radius: 5px;
     font-weight: 600;
     font-size: 12px;
-    line-height: 14px;
+    line-height: 12px;
     text-align: justify;
-    text-transform: uppercase;
     text-align: center;
     color: ${(props) => props.color || props.theme.status.open};
-    padding: 2px 4px 0 4px;
+    @media (max-width: 767px) {
+        font-size: 10px;
+        line-height: 10px;
+    }
 `;
 
 export const ExpandedRowWrapper = styled.div`
@@ -52,28 +52,50 @@ export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     &:last-child {
         margin-bottom: 10px;
     }
+    @media (max-width: 767px) {
+        height: initial;
+        margin-bottom: 8px;
+        padding: 0 5px;
+    }
 `;
 
 export const MatchLabel = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.primary};
     text-align: start;
     margin-right: 5px;
-    max-width: 250px;
-    width: 250px;
+    min-width: 200px;
+    width: 200px;
     cursor: pointer;
     @media (max-width: 767px) {
-        max-width: 150px;
+        min-width: 150px;
         width: 150px;
     }
-    @media (max-width: 500px) {
-        max-width: 100px;
-        width: 100px;
+    @media (max-width: 575px) {
+        min-width: 110px;
+        width: 110px;
+    }
+`;
+
+export const SelectionInfoContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    & > div {
+        flex: 1;
+    }
+    @media (max-width: 575px) {
+        flex-direction: column;
+        align-items: start;
     }
 `;
 
 export const MarketTypeInfo = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.quinary};
     margin-right: 5px;
+    min-width: 160px;
+    @media (max-width: 575px) {
+        min-width: 110px;
+    }
 `;
 
 export const PositionInfo = styled(FlexDivRow)`
@@ -84,11 +106,23 @@ export const PositionInfo = styled(FlexDivRow)`
 
 export const PositionText = styled.span`
     text-align: start;
-    min-width: 100px;
+    min-width: 150px;
+    @media (max-width: 575px) {
+        min-width: 110px;
+    }
 `;
 
 export const Odd = styled.span`
     margin-left: 5px;
+`;
+
+export const StatusIcon = styled.i`
+    font-size: 16px;
+    margin-right: 5px;
+    margin-top: -2px;
+    @media (max-width: 767px) {
+        font-size: 12px;
+    }
 `;
 
 export const MarketStatusIcon = styled.i`
