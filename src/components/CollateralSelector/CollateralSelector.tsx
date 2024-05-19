@@ -185,7 +185,7 @@ const Text = styled.span<{
     font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '600')};
     font-size: ${(props) => (props.isDetailedView ? '14px' : '12px')};
     ${(props) => (props.isSelectedCollateral ? `line-height: ${props.isDetailedView ? '15px' : '12px'};` : '')}
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         ${(props) => (!props.isDetailedView && props.isSelectedCollateral ? 'font-size: 10px;' : '')}
         ${(props) => (!props.isDetailedView && props.isSelectedCollateral ? 'line-height: 10px;' : '')}
     }
@@ -209,7 +209,7 @@ const TextCollateralWrapper = styled.div<{ isDetailedView?: boolean }>`
     min-width: ${(props) => (props.isDetailedView ? '48px' : '45px')};
     display: flex;
     align-items: center;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         ${(props) => (!props.isDetailedView ? 'min-width: 35px;' : '')}
     }
 `;

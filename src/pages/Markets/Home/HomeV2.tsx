@@ -1,7 +1,7 @@
+import { ReactComponent as Logo } from 'assets/images/overtime-logo.svg';
 import BannerCarousel from 'components/BannerCarousel';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
-import Logo from 'components/Logo';
 import OddsSelectorModal from 'components/OddsSelectorModal';
 import Scroll from 'components/Scroll';
 import Search from 'components/Search';
@@ -49,6 +49,7 @@ import useQueryParam from 'utils/useQueryParams';
 import { LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
 import { Sport } from '../../../enums/sports';
+import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
 import { getLiveSupportedLeagues, getSportLeagueIds, isLiveSupportedForLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import GlobalFilters from '../components/GlobalFilters';
@@ -465,6 +466,106 @@ const Home: React.FC = () => {
         }
     }, [location, resetFilters]);
 
+    const getShowActiveCheckbox = () => (
+        <CheckboxContainer isMobile={isMobile}>
+            <Checkbox
+                checked={showActive}
+                value={showActive.toString()}
+                onChange={(e: any) => {
+                    setShowActive(e.target.checked || false);
+                    setActiveParam((e.target.checked || false).toString());
+                    if (sportFilter === SportFilterEnum.All) {
+                        setAvailableTags(tagsList);
+                    } else {
+                        const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
+                        if (tagsPerSport) {
+                            const filteredTags = tagsList.filter(
+                                (tag: TagInfo) =>
+                                    tagsPerSport.includes(tag.id) &&
+                                    ((e.target.checked && !!openMarketsCountPerTag[tag.id]) || !e.target.checked)
+                            );
+                            setAvailableTags(filteredTags);
+                        } else {
+                            setAvailableTags([]);
+                        }
+                    }
+                }}
+                label={t(`market.filter-label.show-active`)}
+            />
+        </CheckboxContainer>
+    );
+
+    const getSportFilters = () => (
+        <>
+            {Object.values(SportFilterEnum)
+                .filter(
+                    (filterItem: any) =>
+                        (showActive && openMarketsCountPerSport[filterItem] > 0) ||
+                        !showActive ||
+                        openSportMarketsQuery.isLoading ||
+                        filterItem === SportFilterEnum.Favourites
+                )
+                .map((filterItem: any, index) => {
+                    return (
+                        <SportTags
+                            key={index}
+                            onSportClick={() => {
+                                if (filterItem !== sportFilter) {
+                                    dispatch(setSportFilter(filterItem));
+                                    setSportParam(filterItem);
+                                    dispatch(setTagFilter([]));
+                                    setTagParam('');
+                                    if (filterItem === SportFilterEnum.All) {
+                                        dispatch(setDateFilter(0));
+                                        setDateParam('');
+                                        setAvailableTags(tagsList);
+                                    } else if (filterItem === SportFilterEnum.Live) {
+                                        setDateFilter(0);
+                                        setDateParam('');
+                                        const filteredLiveTags = tagsList.filter((tag) => tag.live);
+                                        setAvailableTags(filteredLiveTags);
+                                    } else {
+                                        const tagsPerSport = getSportLeagueIds(filterItem as Sport);
+                                        if (tagsPerSport) {
+                                            const filteredTags = tagsList.filter(
+                                                (tag: TagInfo) =>
+                                                    tagsPerSport.includes(tag.id) &&
+                                                    ((showActive && !!openMarketsCountPerTag[tag.id]) ||
+                                                        !showActive ||
+                                                        openSportMarketsQuery.isLoading)
+                                            );
+                                            setAvailableTags(filteredTags);
+                                        } else {
+                                            setAvailableTags([]);
+                                        }
+                                    }
+                                }
+                            }}
+                            sport={filterItem}
+                            sportCount={
+                                filterItem == SportFilterEnum.Live
+                                    ? liveMarketsCountPerSport[filterItem]
+                                    : openMarketsCountPerSport[filterItem]
+                            }
+                            showActive={showActive}
+                            tags={availableTags}
+                            setTagParam={setTagParam}
+                            openMarketsCountPerTag={openMarketsCountPerTag}
+                            liveMarketsCountPerTag={liveMarketsCountPerTag}
+                        />
+                    );
+                })}
+        </>
+    );
+
+    const getGlobalFilters = () => (
+        <GlobalFilters
+            setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
+            setGlobalFilterParam={setGlobalFilterParam}
+            globalFilter={globalFilter}
+        />
+    );
+
     return (
         <Container>
             {showOddsSelectorModal && <OddsSelectorModal onClose={() => setShowOddsSelectorModal(false)} />}
@@ -480,113 +581,20 @@ const Home: React.FC = () => {
                     <LogoContainer>
                         <Logo />
                     </LogoContainer>
-                    <CheckboxContainer isMobile={isMobile}>
-                        <Checkbox
-                            checked={showActive}
-                            value={showActive.toString()}
-                            onChange={(e: any) => {
-                                setShowActive(e.target.checked || false);
-                                setActiveParam((e.target.checked || false).toString());
-                                if (sportFilter === SportFilterEnum.All) {
-                                    setAvailableTags(tagsList);
-                                } else {
-                                    const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
-                                    if (tagsPerSport) {
-                                        const filteredTags = tagsList.filter(
-                                            (tag: TagInfo) =>
-                                                tagsPerSport.includes(tag.id) &&
-                                                ((e.target.checked && !!openMarketsCountPerTag[tag.id]) ||
-                                                    !e.target.checked)
-                                        );
-                                        setAvailableTags(filteredTags);
-                                    } else {
-                                        setAvailableTags([]);
-                                    }
-                                }
-                            }}
-                            label={t(`market.filter-label.show-active`)}
-                        />
-                    </CheckboxContainer>
+                    {getShowActiveCheckbox()}
                     <SportFiltersContainer>
-                        {Object.values(SportFilterEnum)
-                            .filter(
-                                (filterItem: any) =>
-                                    (showActive && openMarketsCountPerSport[filterItem] > 0) ||
-                                    !showActive ||
-                                    openSportMarketsQuery.isLoading ||
-                                    filterItem === SportFilterEnum.Favourites
-                            )
-                            .map((filterItem: any, index) => {
-                                return (
-                                    <SportTags
-                                        key={index}
-                                        onSportClick={() => {
-                                            if (filterItem !== sportFilter) {
-                                                dispatch(setSportFilter(filterItem));
-                                                setSportParam(filterItem);
-                                                dispatch(setTagFilter([]));
-                                                setTagParam('');
-                                                if (filterItem === SportFilterEnum.All) {
-                                                    dispatch(setDateFilter(0));
-                                                    setDateParam('');
-                                                    setAvailableTags(tagsList);
-                                                } else if (filterItem === SportFilterEnum.Live) {
-                                                    setDateFilter(0);
-                                                    setDateParam('');
-                                                    const filteredLiveTags = tagsList.filter((tag) => tag.live);
-                                                    setAvailableTags(filteredLiveTags);
-                                                } else {
-                                                    const tagsPerSport = getSportLeagueIds(filterItem as Sport);
-                                                    if (tagsPerSport) {
-                                                        const filteredTags = tagsList.filter(
-                                                            (tag: TagInfo) =>
-                                                                tagsPerSport.includes(tag.id) &&
-                                                                ((showActive && !!openMarketsCountPerTag[tag.id]) ||
-                                                                    !showActive ||
-                                                                    openSportMarketsQuery.isLoading)
-                                                        );
-                                                        setAvailableTags(filteredTags);
-                                                    } else {
-                                                        setAvailableTags([]);
-                                                    }
-                                                }
-                                            }
-                                        }}
-                                        sport={filterItem}
-                                        sportCount={
-                                            filterItem == SportFilterEnum.Live
-                                                ? liveMarketsCountPerSport[filterItem]
-                                                : openMarketsCountPerSport[filterItem]
-                                        }
-                                        showActive={showActive}
-                                        tags={availableTags}
-                                        setTagParam={setTagParam}
-                                        openMarketsCountPerTag={openMarketsCountPerTag}
-                                        liveMarketsCountPerTag={liveMarketsCountPerTag}
-                                    />
-                                );
-                            })}
-                    </SportFiltersContainer>
-                    <SportFiltersContainer>
-                        <GlobalFilters
-                            setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
-                            setDateParam={setDateParam}
-                            setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
-                            setGlobalFilterParam={setGlobalFilterParam}
-                            globalFilter={globalFilter}
-                            dateFilter={dateFilter}
-                            sportFilter={sportFilter}
-                            isMobile={isMobile}
-                        />
+                        {getSportFilters()}
+                        {getGlobalFilters()}
+                        <TimeFilters />
                     </SportFiltersContainer>
                     <Button
                         onClick={() => setShowBurger(false)}
                         width="180px"
-                        height="43px"
-                        fontSize="16px"
+                        height="36px"
+                        fontSize="14px"
                         padding="5px 10px"
-                        backgroundColor={theme.button.background.quaternary}
-                        borderColor={theme.button.borderColor.secondary}
+                        backgroundColor={theme.background.septenary}
+                        borderColor={theme.background.septenary}
                         additionalStyles={additionalApplyFiltersButtonStyle}
                     >
                         {t('market.apply-filters')}
@@ -607,111 +615,19 @@ const Home: React.FC = () => {
                         }}
                         width={263}
                     />
-                    <CheckboxContainer isMobile={isMobile}>
-                        <Checkbox
-                            checked={showActive}
-                            value={showActive.toString()}
-                            onChange={(e: any) => {
-                                setShowActive(e.target.checked || false);
-                                setActiveParam((e.target.checked || false).toString());
-                                if (sportFilter === SportFilterEnum.All) {
-                                    setAvailableTags(tagsList);
-                                } else {
-                                    const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
-                                    if (tagsPerSport) {
-                                        const filteredTags = tagsList.filter(
-                                            (tag: TagInfo) =>
-                                                tagsPerSport.includes(tag.id) &&
-                                                ((e.target.checked && !!openMarketsCountPerTag[tag.id]) ||
-                                                    !e.target.checked)
-                                        );
-                                        setAvailableTags(filteredTags);
-                                    } else {
-                                        setAvailableTags([]);
-                                    }
-                                }
-                            }}
-                            label={t(`market.filter-label.show-active`)}
-                        />
-                    </CheckboxContainer>
+                    {getShowActiveCheckbox()}
                     <Scroll height="calc(100vh - 430px)">
                         <SportFiltersContainer>
-                            <GlobalFilters
-                                setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
-                                setDateParam={setDateParam}
-                                setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
-                                setGlobalFilterParam={setGlobalFilterParam}
-                                globalFilter={globalFilter}
-                                dateFilter={dateFilter}
-                                sportFilter={sportFilter}
-                                isMobile={isMobile}
-                            />
-                            {Object.values(SportFilterEnum)
-                                .filter(
-                                    (filterItem: any) =>
-                                        (showActive && openMarketsCountPerSport[filterItem] > 0) ||
-                                        !showActive ||
-                                        openSportMarketsQuery.isLoading ||
-                                        filterItem === SportFilterEnum.Favourites
-                                )
-                                .map((filterItem: any, index) => {
-                                    return (
-                                        <SportTags
-                                            key={index}
-                                            onSportClick={() => {
-                                                if (filterItem !== sportFilter) {
-                                                    dispatch(setSportFilter(filterItem));
-                                                    setSportParam(filterItem);
-                                                    dispatch(setTagFilter([]));
-                                                    setTagParam('');
-                                                    if (filterItem === SportFilterEnum.All) {
-                                                        dispatch(setDateFilter(0));
-                                                        setDateParam('');
-                                                        setAvailableTags(tagsList);
-                                                    } else if (filterItem === SportFilterEnum.Live) {
-                                                        setDateFilter(0);
-                                                        setDateParam('');
-                                                        const filteredLiveTags = tagsList.filter((tag) => tag.live);
-                                                        setAvailableTags(filteredLiveTags);
-                                                    } else {
-                                                        const tagsPerSport = getSportLeagueIds(filterItem as Sport);
-                                                        if (tagsPerSport) {
-                                                            const filteredTags = tagsList.filter(
-                                                                (tag: TagInfo) =>
-                                                                    tagsPerSport.includes(tag.id) &&
-                                                                    ((showActive && !!openMarketsCountPerTag[tag.id]) ||
-                                                                        !showActive ||
-                                                                        openSportMarketsQuery.isLoading)
-                                                            );
-                                                            setAvailableTags(filteredTags);
-                                                        } else {
-                                                            setAvailableTags([]);
-                                                        }
-                                                    }
-                                                }
-                                            }}
-                                            sport={filterItem}
-                                            sportCount={
-                                                filterItem == SportFilterEnum.Live
-                                                    ? liveMarketsCountPerSport[filterItem]
-                                                    : openMarketsCountPerSport[filterItem]
-                                            }
-                                            showActive={showActive}
-                                            tags={availableTags}
-                                            setTagParam={setTagParam}
-                                            openMarketsCountPerTag={openMarketsCountPerTag}
-                                            liveMarketsCountPerTag={liveMarketsCountPerTag}
-                                        />
-                                    );
-                                })}
+                            {getGlobalFilters()}
+                            {getSportFilters()}
                         </SportFiltersContainer>
                     </Scroll>
                     <Suspense fallback={<Loader />}>
                         {networkId !== Network.Base && networkId !== Network.OptimismSepolia && <SidebarLeaderboard />}
                     </Suspense>
                 </LeftSidebarContainer>
-                {/* MAIN PART */}
 
+                {/* MAIN PART */}
                 <MainContainer>
                     {isMobile && (
                         <>
@@ -742,18 +658,6 @@ const Home: React.FC = () => {
                         </>
                     )}
                     {!isMobile && <Breadcrumbs />}
-                    {/* {!isMobile && (
-                        <GlobalFilters
-                            setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
-                            setDateParam={setDateParam}
-                            setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
-                            setGlobalFilterParam={setGlobalFilterParam}
-                            globalFilter={globalFilter}
-                            dateFilter={dateFilter}
-                            sportFilter={sportFilter}
-                            isMobile={isMobile}
-                        />
-                    )} */}
                     {!isMobile && <Header availableMarketTypes={availableMarketTypes} />}
                     {marketsLoading ? (
                         <LoaderContainer>
@@ -828,7 +732,7 @@ const Home: React.FC = () => {
 const Container = styled(FlexDivColumnCentered)`
     width: 100%;
     margin-top: 15px;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         margin-top: 20px;
     }
 `;
@@ -877,20 +781,6 @@ const RightSidebarContainer = styled(SidebarContainer)`
     }
 `;
 
-// const GlobalFiltersContainer = styled(FlexDivColumn)`
-//     height: fit-content;
-//     flex: 0;
-//     &:before {
-//         content: '';
-//         height: 3px;
-//         background: ${(props) => props.theme.borderColor.primary};
-//         border-radius: 10px 10px 10px 10px;
-//         margin-bottom: 20px;
-//         margin-left: 30px;
-//         margin-right: 30px;
-//     }
-// `;
-
 const SportFiltersContainer = styled(FlexDivColumn)`
     padding-bottom: 5px;
     padding-top: 5px;
@@ -898,6 +788,11 @@ const SportFiltersContainer = styled(FlexDivColumn)`
     @media (max-width: 1199px) {
         padding-right: 10px;
     }
+    @media (max-width: 1199px) {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    flex: initial;
 `;
 
 const NoMarketsContainer = styled(FlexDivColumnCentered)`
@@ -945,13 +840,13 @@ const BurgerFiltersContainer = styled(FlexDivColumn)`
 
 const LogoContainer = styled.div`
     width: 100%;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
     text-align: center;
 `;
 
 const ArrowIcon = styled.i`
-    font-size: 30px;
+    font-size: 15px;
     margin-right: -10px;
     text-transform: none;
     writing-mode: vertical-lr;
@@ -989,27 +884,31 @@ const CheckboxContainer = styled.div<{ isMobile: boolean }>`
     margin-top: 15px;
     margin-bottom: 10px;
     label {
-        color: ${(props) => props.theme.textColor.quinary};
-        font-size: ${(props) => (props.isMobile ? '17px' : '12px')};
+        color: ${(props) => (props.isMobile ? props.theme.textColor.primary : props.theme.textColor.quinary)};
+        font-size: ${(props) => (props.isMobile ? '14px' : '12px')};
         line-height: ${(props) => (props.isMobile ? '19px' : '13px')};
         font-weight: 600;
         letter-spacing: 0.035em;
         text-transform: uppercase;
-        padding-top: 2px;
+        padding-top: ${(props) => (props.isMobile ? '0px' : '2px')};
         padding-left: ${(props) => (props.isMobile ? '38px' : '28px')};
         input:checked ~ .checkmark {
-            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+            border: 2px solid
+                ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.quaternary)};
         }
     }
     .checkmark {
-        height: ${(props) => (props.isMobile ? '19px' : '15px')};
-        width: ${(props) => (props.isMobile ? '19px' : '15px')};
-        border: 2px solid ${(props) => props.theme.borderColor.primary};
+        height: ${(props) => (props.isMobile ? '18px' : '15px')};
+        width: ${(props) => (props.isMobile ? '18px' : '15px')};
+        border: 2px solid
+            ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.primary)};
         :after {
-            left: ${(props) => (props.isMobile ? '5px' : '3px')};
+            left: ${(props) => (props.isMobile ? '4px' : '3px')};
             width: ${(props) => (props.isMobile ? '4px' : '3px')};
-            height: ${(props) => (props.isMobile ? '12px' : '8px')};
-            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+            height: ${(props) => (props.isMobile ? '9px' : '8px')};
+            top: ${(props) => (props.isMobile ? '0px' : '-1px')};
+            border: 2px solid
+                ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.borderColor.quaternary)};
             border-width: 0 2px 2px 0;
         }
     }

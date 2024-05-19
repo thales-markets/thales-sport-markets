@@ -1,18 +1,18 @@
 @keyframes multiple-image-crossfade {
     0% {
-        opacity:1;
+        opacity: 1;
     }
     15% {
-        opacity:1;
+        opacity: 1;
     }
     20% {
-        opacity:0;
+        opacity: 0;
     }
     95% {
-        opacity:0;
+        opacity: 0;
     }
     100% {
-        opacity:1;
+        opacity: 1;
     }
 }
 
@@ -22,7 +22,7 @@
     width: 100vw;
 }
 
-.image-container section{
+.image-container section {
     height: 100%;
     width: 100%;
     position: absolute;
@@ -80,7 +80,7 @@
     padding: 10vh 0 5vh 0;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 767px) {
     .soccer-pitch-text {
         height: 80vh;
         width: 100vw;
@@ -113,4 +113,3 @@
         padding-bottom: 5vh;
     }
 }
-

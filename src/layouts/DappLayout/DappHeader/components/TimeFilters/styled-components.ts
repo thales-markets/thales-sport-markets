@@ -2,50 +2,52 @@ import styled from 'styled-components';
 import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const FilterTypeContainer = styled(FlexDivRowCentered)<{ isMobile?: boolean }>`
-    color: ${(props) => props.theme.textColor.secondary};
     justify-content: space-around;
-    align-items: ${(props) => (props.isMobile ? 'flex-start' : 'center')};
-    flex-direction: row;
-    height: ${(props) => (props.isMobile ? '120px' : '')};
+    @media (max-width: 950px) {
+        margin-bottom: 70px;
+    }
 `;
 
-export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean; isMobile?: boolean }>`
+export const TimeFilterContainer = styled(FlexDivRow)<{ selected: boolean }>`
     margin: 0px 10px;
     margin-top: 2px;
-    color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
-    & > div {
+    cursor: pointer;
+    div {
         background-color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
     }
-    &:hover {
+    label {
+        color: ${(props) => (props.selected ? props.theme.textColor.quaternary : '')};
         cursor: pointer;
-        color: ${(props) => (!props.isMobile ? props.theme.textColor.quaternary : '')};
-        & > div {
-            cursor: pointer;
-            color: ${(props) => (!props.isMobile ? props.theme.textColor.quaternary : '')};
-        }
-        & > label {
-            cursor: pointer;
-        }
     }
 `;
 
 export const Circle = styled.div<{ isMobile: boolean }>`
-    height: ${(props) => (props.isMobile ? '23px' : '9px')};
-    width: ${(props) => (props.isMobile ? '23px' : '9px')};
-    border-radius: 50px;
+    height: 14px;
+    width: 14px;
     background-color: ${(props) => props.theme.textColor.secondary};
     cursor: pointer;
-    margin-top: ${(props) => (props.isMobile ? '0px' : '2px')};
-    margin-right: 3px;
+    margin-right: 5px;
+    border-radius: 50px;
+    @media (max-width: 950px) {
+        height: 20px;
+        width: 20px;
+        background-color: ${(props) => props.theme.textColor.septenary};
+        margin-right: 10px;
+    }
 `;
 
 export const Label = styled.label`
+    font-weight: 600;
     font-size: 14px;
+    line-height: 16px;
+    color: ${(props) => props.theme.textColor.secondary};
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    white-space: nowrap;
-    align-self: center;
+    @media (max-width: 950px) {
+        line-height: 20px;
+        color: ${(props) => props.theme.textColor.primary};
+    }
 `;

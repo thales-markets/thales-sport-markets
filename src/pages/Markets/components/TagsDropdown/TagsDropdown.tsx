@@ -112,7 +112,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                     }}
                                 >
                                     <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
-                                    <Label>{tag.label}</Label>
+                                    <Label isMobile={isMobile}>{tag.label}</Label>
                                     {INCENTIVIZED_LEAGUE.ids.includes(tag.id) &&
                                         new Date() > INCENTIVIZED_LEAGUE.startDate &&
                                         new Date() < INCENTIVIZED_LEAGUE.endDate && (
@@ -281,15 +281,14 @@ const Container = styled.div<{ open: boolean }>`
 const TagContainer = styled(FlexDivRow)<{ isMobile: boolean }>`
     font-style: normal;
     font-weight: 700;
-    font-size: 12px;
-    line-height: 13px;
+    font-size: ${(props) => (props.isMobile ? '13px' : '12px')};
+    line-height: ${(props) => (props.isMobile ? '18px' : '13px')};
     letter-spacing: 0.035em;
     text-transform: uppercase;
     cursor: pointer;
-    height: 25px;
-    color: ${(props) => props.theme.textColor.secondary};
+    height: ${(props) => (props.isMobile ? '28px' : '25px')};
+    color: ${(props) => (props.isMobile ? props.theme.textColor.primary : props.theme.textColor.quinary)};
     margin-bottom: 5px;
-    margin-right: ${(props) => (props.isMobile ? '30px' : '0px')};
     justify-content: flex-start;
     position: relative;
     align-items: center;
@@ -307,19 +306,10 @@ const LabelContainer = styled(FlexDivRowCentered)`
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
     }
-
-    @media (max-width: 950px) {
-        &:hover {
-            color: ${(props) => props.theme.textColor.secondary};
-        }
-        &.selected {
-            color: ${(props) => props.theme.textColor.quaternary};
-        }
-    }
 `;
 
-const Label = styled.div`
-    margin-left: 10px;
+const Label = styled.div<{ isMobile: boolean }>`
+    margin-left: ${(props) => (props.isMobile ? '20px' : '10px')};
     white-space: pre-line;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -330,7 +320,7 @@ const Label = styled.div`
 
 const StarIcon = styled.i<{ isMobile: boolean }>`
     font-size: 15px;
-    margin-left: ${(props) => (props.isMobile ? '35px' : '5px')};
+    margin-left: ${(props) => (props.isMobile ? '5px' : '5px')};
     &.selected,
     &:hover {
         color: ${(props) => props.theme.button.textColor.tertiary};
@@ -353,13 +343,13 @@ const IncentivizedLeague = styled.div`
 `;
 
 const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
-    border-radius: 8px;
-    color: ${(props) => props.theme.textColor.quaternary};
-    background: ${(props) => (props.isMobile ? props.theme.background.primary : props.theme.background.primary)};
+    border-radius: ${(props) => (props.isMobile ? '15px' : '8px')};
+    color: ${(props) => (props.isMobile ? props.theme.textColor.tertiary : props.theme.textColor.quaternary)};
+    background: ${(props) => (props.isMobile ? props.theme.background.septenary : props.theme.background.primary)};
     border: 2px solid ${(props) => props.theme.background.secondary};
-    font-size: ${(props) => (props.isMobile ? '15px' : '12px')};
-    min-width: 30px;
-    height: ${(props) => (props.isMobile ? '20px' : '18px')};
+    font-size: ${(props) => (props.isMobile ? '12px' : '12px')};
+    min-width: ${(props) => (props.isMobile ? '35px' : '30px')};
+    height: ${(props) => (props.isMobile ? '22px' : '18px')};
     line-height: ${(props) => (props.isMobile ? '20px' : '18px')};
     padding: 0 6px;
     -webkit-user-select: none;

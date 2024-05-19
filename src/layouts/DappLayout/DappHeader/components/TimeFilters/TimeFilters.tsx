@@ -1,9 +1,7 @@
-import { SportFilterEnum } from 'enums/markets';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getDateFilter, getGlobalFilter, getSportFilter, setDateFilter } from 'redux/modules/market';
-import { RootState } from 'redux/rootReducer';
+import { getDateFilter, getDatePeriodFilter, setDateFilter, setDatePeriodFilter } from 'redux/modules/market';
 import { addHoursToCurrentDate } from 'thales-utils';
 import useQueryParam from 'utils/useQueryParams';
 import { Circle, FilterTypeContainer, Label, TimeFilterContainer } from './styled-components';
@@ -11,64 +9,51 @@ import { Circle, FilterTypeContainer, Label, TimeFilterContainer } from './style
 const TimeFilters: React.FC = () => {
     const dispatch = useDispatch();
 
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const dateFilter = useSelector((state: RootState) => getDateFilter(state));
-    const globalFilter = useSelector((state: RootState) => getGlobalFilter(state));
-    const sportFilter = useSelector((state: RootState) => getSportFilter(state));
+    const isMobile = useSelector(getIsMobile);
+    const dateFilter = useSelector(getDateFilter);
+    const datePeriodFilter = useSelector(getDatePeriodFilter);
 
     const [dateParam, setDateParam] = useQueryParam('date', '');
 
-    const [selectedPeriod, setSelectedPeriod] = useState<number>(0);
-
     useEffect(() => {
         if (typeof dateFilter != 'number') {
-            setSelectedPeriod(0);
+            dispatch(setDatePeriodFilter(0));
         }
-    }, [dateFilter]);
+    }, [dateFilter, dispatch]);
+
+    console.log(dateParam, datePeriodFilter);
 
     useEffect(() => {
         if (typeof dateFilter == 'number') {
             const timeFilter = dateParam?.split('h')[0];
             switch (timeFilter) {
                 case '12':
-                    setSelectedPeriod(12);
+                    dispatch(setDatePeriodFilter(12));
                     break;
                 case '24':
-                    setSelectedPeriod(24);
+                    dispatch(setDatePeriodFilter(24));
                     break;
                 case '72':
-                    setSelectedPeriod(72);
+                    dispatch(setDatePeriodFilter(72));
                     break;
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        setSelectedPeriod(0);
-    }, [globalFilter]);
-
-    useEffect(() => {
-        if (sportFilter == SportFilterEnum.All) {
-            setSelectedPeriod(0);
-        }
-    }, [sportFilter]);
+    }, [dateParam, dateFilter, dispatch]);
 
     return (
         <FilterTypeContainer isMobile={isMobile}>
             <TimeFilterContainer
-                selected={selectedPeriod == 12}
-                isMobile={isMobile}
+                selected={datePeriodFilter == 12}
                 onClick={() => {
-                    if (selectedPeriod == 12) {
+                    if (datePeriodFilter == 12) {
                         dispatch(setDateFilter(0));
                         setDateParam('');
-                        setSelectedPeriod(0);
+                        dispatch(setDatePeriodFilter(0));
                     } else {
                         const calculatedDate = addHoursToCurrentDate(12);
                         dispatch(setDateFilter(calculatedDate.getTime()));
                         setDateParam('12hours');
-                        setSelectedPeriod(12);
+                        dispatch(setDatePeriodFilter(12));
                     }
                 }}
             >
@@ -76,18 +61,17 @@ const TimeFilters: React.FC = () => {
                 <Label>12h</Label>
             </TimeFilterContainer>
             <TimeFilterContainer
-                selected={selectedPeriod == 24}
-                isMobile={isMobile}
+                selected={datePeriodFilter == 24}
                 onClick={() => {
-                    if (selectedPeriod == 24) {
+                    if (datePeriodFilter == 24) {
                         dispatch(setDateFilter(0));
                         setDateParam('');
-                        setSelectedPeriod(0);
+                        dispatch(setDatePeriodFilter(0));
                     } else {
                         const calculatedDate = addHoursToCurrentDate(24);
                         dispatch(setDateFilter(calculatedDate.getTime()));
                         setDateParam('24hours');
-                        setSelectedPeriod(24);
+                        dispatch(setDatePeriodFilter(24));
                     }
                 }}
             >
@@ -95,18 +79,17 @@ const TimeFilters: React.FC = () => {
                 <Label>24h</Label>
             </TimeFilterContainer>
             <TimeFilterContainer
-                selected={selectedPeriod == 72}
-                isMobile={isMobile}
+                selected={datePeriodFilter == 72}
                 onClick={() => {
-                    if (selectedPeriod == 72) {
+                    if (datePeriodFilter == 72) {
                         dispatch(setDateFilter(0));
                         setDateParam('');
-                        setSelectedPeriod(0);
+                        dispatch(setDatePeriodFilter(0));
                     } else {
                         const calculatedDate = addHoursToCurrentDate(72, true);
                         dispatch(setDateFilter(calculatedDate.getTime()));
                         setDateParam('72hours');
-                        setSelectedPeriod(72);
+                        dispatch(setDatePeriodFilter(72));
                     }
                 }}
             >

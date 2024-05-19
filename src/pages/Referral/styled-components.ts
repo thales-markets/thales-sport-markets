@@ -7,7 +7,7 @@ export const Wrapper = styled(FlexDivColumnNative)`
     width: 700px;
     align-items: flex-start;
     margin-top: 20px;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         width: 100%;
         min-width: auto;
     }
@@ -16,14 +16,14 @@ export const Wrapper = styled(FlexDivColumnNative)`
 export const MainInfoContainer = styled(FlexDivRow)`
     width: 100%;
     align-items: flex-start;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         flex-direction: column;
     }
 `;
 
 export const ButtonContainer = styled(FlexDivColumnNative)`
     width: 50%;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         width: 100%;
     }
 `;
@@ -35,7 +35,7 @@ export const InfoContainer = styled(FlexDivColumnNative)`
     margin-left: 15px;
     justify-content: space-between;
     width: 50%;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         margin-left: 0px;
         margin-top: 10px;
         width: 100%;
@@ -82,7 +82,7 @@ export const TabsContainer = styled(FlexDivRow)`
     justify-content: space-around;
     width: 100%;
     margin-top: 20px;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         justify-content: center;
     }
 `;
@@ -93,7 +93,7 @@ export const Tab = styled.span<{ active?: boolean }>`
     padding-bottom: 5px;
     cursor: pointer;
     font-weight: 600;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         font-size: 10px;
         text-align: center;
     }

@@ -2,18 +2,21 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Wrapper = styled(FlexDivRowCentered)`
-    padding: 5px 10px;
+    padding: 5px 5px;
     font-weight: 600;
     font-size: 12px;
     line-height: 12px;
-    @media (max-width: 768px) {
-        padding: 5px 5px;
-    }
     & > div {
         flex: 1;
     }
     border-bottom: 2px dashed ${(props) => props.theme.borderColor.senary};
     height: 50px;
+    @media (max-width: 767px) {
+        font-size: 10px;
+        line-height: 10px;
+        padding: 5px 5px;
+        height: initial;
+    }
 `;
 
 export const MatchInfo = styled.div`
@@ -23,12 +26,37 @@ export const MatchInfo = styled.div`
     align-items: center;
     height: 30px;
     cursor: pointer;
+    @media (max-width: 1399px) {
+        max-width: 200px;
+        width: 200px;
+    }
+    @media (max-width: 767px) {
+        max-width: initial;
+        width: initial;
+    }
 `;
 
 export const MatchLabel = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.primary};
     text-align: start;
     margin-right: 5px;
+    @media (max-width: 767px) {
+        max-width: 100px;
+        width: 100px;
+    }
+`;
+
+export const SelectionInfoContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    & > div {
+        flex: 1;
+    }
+    @media (max-width: 575px) {
+        flex-direction: column;
+        align-items: start;
+    }
 `;
 
 export const MarketTypeInfo = styled(FlexDivRow)`
@@ -37,6 +65,11 @@ export const MarketTypeInfo = styled(FlexDivRow)`
     line-height: 12px;
     color: ${(props) => props.theme.textColor.quinary};
     margin-right: 5px;
+    @media (max-width: 767px) {
+        margin-bottom: 2px;
+        font-size: 10px;
+        line-height: 10px;
+    }
 `;
 
 export const PositionInfo = styled(FlexDivRow)`
@@ -46,6 +79,10 @@ export const PositionInfo = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.quaternary};
     align-items: center;
     margin-right: 20px;
+    @media (max-width: 767px) {
+        font-size: 10px;
+        line-height: 10px;
+    }
 `;
 
 export const PositionText = styled.span`
@@ -109,8 +146,8 @@ export const TicketMarketStatus = styled.span<{ color?: string }>`
     min-width: 100px;
     text-align: end;
     color: ${(props) => props.color || props.theme.textColor.primary};
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         margin-left: 10px;
-        min-width: 50px;
+        min-width: 40px;
     }
 `;

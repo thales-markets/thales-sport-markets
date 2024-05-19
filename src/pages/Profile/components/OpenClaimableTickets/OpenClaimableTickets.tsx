@@ -171,7 +171,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                 <CategoryDisclaimer>
                     <Trans i18nKey="profile.winnings-are-forfeit" values={{ amount: marketDuration }} />
                 </CategoryDisclaimer>
-                <Arrow className={openClaimable ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                <Arrow className={openClaimable ? 'icon icon--caret-up' : 'icon icon--caret-down'} />
             </CategoryContainer>
             {openClaimable && (
                 <ListContainer>
@@ -195,7 +195,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                             }
                                             padding="2px 5px"
                                             fontSize={isMobile ? '9px' : undefined}
-                                            height={isMobile ? '19px' : undefined}
+                                            height={isMobile ? '19px' : '24px'}
                                         >
                                             {t('profile.card.claim-all')}
                                         </Button>
@@ -220,7 +220,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                     <CategoryIcon className="icon icon--logo" />
                     <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
                 </CategoryInfo>
-                <Arrow className={openOpenPositions ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                <Arrow className={openOpenPositions ? 'icon icon--caret-up' : 'icon icon--caret-down'} />
             </CategoryContainer>
             {openOpenPositions && (
                 <ListContainer>

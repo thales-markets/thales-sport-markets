@@ -78,7 +78,11 @@ const SidebarContainer = styled(FlexDivColumn)`
 `;
 
 const LeftSidebarContainer = styled(SidebarContainer)`
+    width: 100%;
     max-width: 263px;
+    @media (max-width: 1399px) {
+        display: none;
+    }
 `;
 
 const RightSidebarContainer = styled(SidebarContainer)`
@@ -87,9 +91,12 @@ const RightSidebarContainer = styled(SidebarContainer)`
 
 const MainContainer = styled(FlexDivColumn)`
     width: 100%;
-    width: 806px;
+    max-width: 806px;
     flex-grow: 1;
     margin: 0 25px;
+    @media (max-width: 1499px) {
+        margin: 0 12px;
+    }
     @media (max-width: 1199px) {
         margin: 0 10px;
     }

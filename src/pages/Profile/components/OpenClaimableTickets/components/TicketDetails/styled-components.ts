@@ -9,8 +9,8 @@ export const Container = styled(FlexDivColumnNative)`
     border-radius: 7px;
     width: 100%;
     margin-bottom: 7px;
-    @media (max-width: 768px) {
-        padding: 7px 5px;
+    @media (max-width: 767px) {
+        margin-bottom: 5px;
     }
 `;
 
@@ -24,8 +24,11 @@ export const OverviewContainer = styled(FlexDivRow)`
     align-items: center;
     cursor: pointer;
     position: relative;
-    @media (max-width: 768px) {
-        justify-content: space-between;
+    @media (max-width: 950px) {
+        max-height: initial;
+    }
+    @media (max-width: 767px) {
+        padding: 5px 0px;
     }
 `;
 
@@ -34,19 +37,34 @@ export const ExternalLink = styled.a``;
 export const TicketIdContainer = styled(FlexDivStart)`
     min-width: 150px;
     color: ${(props) => props.theme.textColor.secondary};
-    margin-left: 10px;
+    margin-left: 0px;
     margin-right: 10px;
-    @media (max-width: 768px) {
+    @media (max-width: 1399px) {
+        flex-direction: column;
+        min-width: auto;
+    }
+    @media (max-width: 950px) {
+        flex-direction: row;
+    }
+    @media (max-width: 767px) {
+        margin-left: 10px;
         min-width: auto;
         flex-direction: column;
     }
 `;
 
 export const NumberOfGamesContainer = styled(FlexDivStart)`
-    min-width: 120px;
+    min-width: 100px;
     color: ${(props) => props.theme.textColor.secondary};
     margin-right: 10px;
-    @media (max-width: 768px) {
+    @media (max-width: 1399px) {
+        flex-direction: column;
+        min-width: 100px;
+    }
+    @media (max-width: 950px) {
+        flex-direction: row;
+    }
+    @media (max-width: 767px) {
         min-width: auto;
         flex-direction: column;
     }
@@ -56,7 +74,7 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)`
     min-width: 100px;
     justify-content: flex-start;
     margin-right: 10px;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         min-width: auto;
         flex-direction: column;
         margin-left: 0px;
@@ -65,7 +83,7 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)`
 
 export const Label = styled.span`
     margin-right: 3px;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         font-size: 10px;
         margin-bottom: 2px;
     }
@@ -77,17 +95,25 @@ export const WinLabel = styled(Label)`
     color: ${(props) => props.theme.status.win};
 `;
 
+export const PayoutInLabel = styled(WinLabel)`
+    @media (max-width: 767px) {
+        margin-bottom: 0px;
+    }
+`;
+
 export const WinValue = styled(WinLabel)``;
 
 export const ArrowIcon = styled.i`
-    font-size: 14px;
+    font-size: 16px;
     color: ${(props) => props.theme.textColor.secondary};
+    text-transform: none;
+    font-weight: 400;
     margin-left: 10px;
-    margin-right: 10px;
-    @media (max-width: 768px) {
+    margin-right: 0px;
+    @media (max-width: 767px) {
         margin-right: 5px;
         margin-left: 5px;
-        font-size: 9px;
+        font-size: 10px;
     }
 `;
 
@@ -101,6 +127,9 @@ export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean
 export const TicketMarketsContainer = styled(FlexDivColumnNative)`
     width: 100%;
     padding: 0 15px;
+    @media (max-width: 767px) {
+        padding: 0 0px;
+    }
 `;
 
 export const CollapseFooterContainer = styled(FlexDivRow)`
@@ -116,10 +145,6 @@ export const TotalQuoteContainer = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-export const ProfitContainer = styled(FlexDivRow)`
-    margin-left: 20px;
-`;
-
 export const CollateralSelectorContainer = styled(FlexDivRow)`
     margin-top: 5px;
 `;
@@ -128,12 +153,12 @@ export const ClaimContainer = styled(FlexDivColumnNative)`
     min-width: 100px;
     align-items: end;
     justify-content: flex-end;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         min-width: 60px;
     }
     button {
         margin-top: 2px;
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
             margin-top: 0px;
         }
     }

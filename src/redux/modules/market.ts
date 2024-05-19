@@ -19,6 +19,12 @@ const getDefaultDateFilter = (): Date | number => {
     return lsDateFilter !== undefined ? (isNaN(dateNumber) ? new Date(lsDateFilter as string) : dateNumber) : 0;
 };
 
+const getDefaultDatePeriodFilter = (): number => {
+    const lsDatePeriodFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD);
+    const datePeriodNumber = Number(lsDatePeriodFilter);
+    return datePeriodNumber !== undefined ? (isNaN(datePeriodNumber) ? 0 : datePeriodNumber) : 0;
+};
+
 const getDefaultGlobalFilter = (): GlobalFiltersEnum => {
     const lsGlobalFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_GLOBAL);
     return lsGlobalFilter !== undefined ? (lsGlobalFilter as GlobalFiltersEnum) : GlobalFiltersEnum.OpenMarkets;
@@ -42,6 +48,7 @@ const getDefaultIsThreeWayView = (): boolean => {
 type MarketSliceState = {
     marketSearch: string;
     dateFilter: Date | number;
+    datePeriodFilter: number;
     globalFilter: GlobalFiltersEnum;
     sportFilter: SportFilterEnum;
     marketTypeFilter: MarketType[];
@@ -53,6 +60,7 @@ type MarketSliceState = {
 const initialState: MarketSliceState = {
     marketSearch: getDefaultMarketSearch(),
     dateFilter: getDefaultDateFilter(),
+    datePeriodFilter: getDefaultDatePeriodFilter(),
     globalFilter: getDefaultGlobalFilter(),
     sportFilter: getDefaultSportFilter(),
     tagFilter: getDefaultTagFilter(),
@@ -77,18 +85,32 @@ const marketSlice = createSlice({
 
             state.selectedMarket = undefined;
         },
+        setDatePeriodFilter: (state, action: PayloadAction<number>) => {
+            state.datePeriodFilter = action.payload;
+            localStore.set(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD, action.payload);
+
+            state.selectedMarket = undefined;
+        },
         setGlobalFilter: (state, action: PayloadAction<GlobalFiltersEnum>) => {
             state.globalFilter = action.payload;
             if (action.payload !== GlobalFiltersEnum.OpenMarkets) {
                 state.selectedMarket = undefined;
             }
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, action.payload);
+
+            state.datePeriodFilter = 0;
+            localStore.set(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD, 0);
         },
         setSportFilter: (state, action: PayloadAction<SportFilterEnum>) => {
             state.sportFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_SPORT, action.payload);
 
             state.selectedMarket = undefined;
+
+            if (action.payload === SportFilterEnum.All) {
+                state.datePeriodFilter = 0;
+                localStore.set(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD, 0);
+            }
         },
         setTagFilter: (state, action: PayloadAction<Tags>) => {
             state.tagFilter = action.payload;
@@ -112,6 +134,7 @@ const marketSlice = createSlice({
 export const {
     setMarketSearch,
     setDateFilter,
+    setDatePeriodFilter,
     setGlobalFilter,
     setSportFilter,
     setTagFilter,
@@ -123,6 +146,7 @@ export const {
 const getMarketState = (state: RootState) => state[sliceName];
 export const getMarketSearch = (state: RootState) => getMarketState(state).marketSearch;
 export const getDateFilter = (state: RootState) => getMarketState(state).dateFilter;
+export const getDatePeriodFilter = (state: RootState) => getMarketState(state).datePeriodFilter;
 export const getGlobalFilter = (state: RootState) => getMarketState(state).globalFilter;
 export const getSportFilter = (state: RootState) => getMarketState(state).sportFilter;
 export const getTagFilter = (state: RootState) => getMarketState(state).tagFilter;

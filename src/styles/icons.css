@@ -349,6 +349,10 @@
     content: '\00E1';
 }
 
+.icon--caret-right:before {
+    content: '\00E4';
+}
+
 .icon--search:before {
     content: '\00E5';
 }

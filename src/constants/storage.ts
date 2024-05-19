@@ -7,6 +7,7 @@ export const LOCAL_STORAGE_KEYS = {
     FILTER_MARKET_SEARCH: 'filterMarketSearch',
     FILTER_TAGS: 'tagsFilter',
     FILTER_DATE: 'filterDate',
+    FILTER_DATE_PERIOD: 'filterDatePeriod',
     FILTER_SPORT: 'filterSport',
     FILTER_ACTIVE: 'filterActive',
     FILTER_BET_TYPE: 'filterBetType',

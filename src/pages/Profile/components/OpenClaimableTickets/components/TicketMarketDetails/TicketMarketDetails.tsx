@@ -32,6 +32,7 @@ import {
     PositionInfo,
     PositionText,
     ScoreContainer,
+    SelectionInfoContainer,
     TeamScoreLabel,
     TicketMarketStatus,
     Wrapper,
@@ -87,15 +88,22 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
         <Wrapper style={{ opacity: market.isCanceled ? 0.5 : 1 }}>
             <SPAAnchor href={buildMarketLink(market.gameId, language)}>
                 <MatchInfo>
-                    <MatchLogosV2 market={market} width={'50px'} logoWidth={'24px'} logoHeight={'24px'} />
+                    <MatchLogosV2
+                        market={market}
+                        width={isMobile ? '45px' : '50px'}
+                        logoWidth={isMobile ? '20px' : '24px'}
+                        logoHeight={isMobile ? '20px' : '24px'}
+                    />
                     <MatchLabel>{getMatchLabel(market)} </MatchLabel>
                 </MatchInfo>
             </SPAAnchor>
-            <MarketTypeInfo>{getTitleText(market)}</MarketTypeInfo>
-            <PositionInfo>
-                <PositionText>{getPositionTextV2(market, market.position, true)}</PositionText>
-                <Odd>{formatMarketOdds(selectedOddsType, parlayItemQuote)}</Odd>
-            </PositionInfo>
+            <SelectionInfoContainer>
+                <MarketTypeInfo>{getTitleText(market)}</MarketTypeInfo>
+                <PositionInfo>
+                    <PositionText>{getPositionTextV2(market, market.position, true)}</PositionText>
+                    <Odd>{formatMarketOdds(selectedOddsType, parlayItemQuote)}</Odd>
+                </PositionInfo>
+            </SelectionInfoContainer>
             {isPendingResolution && !isMobile ? (
                 isEnetpulseSport ? (
                     <TicketMarketStatus color={theme.status.started}>

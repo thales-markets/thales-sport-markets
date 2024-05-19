@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    max-height: 357px;
+    max-height: 500px;
     overflow: hidden;
     padding: 20px 0px;
 `;

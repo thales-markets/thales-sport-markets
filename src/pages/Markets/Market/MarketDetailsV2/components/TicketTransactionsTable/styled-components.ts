@@ -41,10 +41,11 @@ export const FirstExpandedSection = styled(FlexDivColumnCentered)`
 `;
 
 export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
-    background: ${(props) => (props.highlighted ? props.theme.background.secondary : 'initial')};
-    border-radius: 7px;
+    border: ${(props) => (props.highlighted ? `1px solid ${props.theme.borderColor.senary}` : 'none ')};
+    border-radius: 15px;
     height: 32px;
     padding: 0 10px;
+    margin-right: 5px;
     & > div {
         flex: 1;
     }
@@ -60,6 +61,14 @@ export const MatchLabel = styled(FlexDivRow)`
     max-width: 250px;
     width: 250px;
     cursor: pointer;
+    @media (max-width: 767px) {
+        max-width: 150px;
+        width: 150px;
+    }
+    @media (max-width: 500px) {
+        max-width: 100px;
+        width: 100px;
+    }
 `;
 
 export const MarketTypeInfo = styled(FlexDivRow)`
@@ -95,6 +104,7 @@ export const MarketStatus = styled(FlexDivRow)<{ color?: string }>`
 
 export const LastExpandedSection = styled(FlexDivRowCentered)`
     position: relative;
+    justify-content: center;
     flex: 1;
     gap: 30px;
     @media (max-width: 600px) {
@@ -103,21 +113,14 @@ export const LastExpandedSection = styled(FlexDivRowCentered)`
     margin-bottom: 10px;
 `;
 
-export const QuoteWrapper = styled.div<{ isPayout?: boolean }>`
+export const QuoteWrapper = styled.div`
     display: flex;
-    flex: flex-start;
     align-items: center;
+    justify-content: center;
     width: 100%;
     gap: 6px;
     font-size: 10px;
-    color: ${(props) => (props.isPayout ? props.theme.status.win : props.theme.textColor.quaternary)};
-    :first-child {
-        margin-left: 0px;
-        justify-content: end;
-    }
-    @media (max-width: 600px) {
-        margin-left: 0;
-    }
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export const QuoteText = styled.span`

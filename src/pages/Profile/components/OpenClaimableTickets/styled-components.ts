@@ -11,7 +11,7 @@ import {
 export const Container = styled(FlexDivColumn)`
     width: 100%;
     min-width: 668px;
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         min-width: auto;
     }
 `;
@@ -35,7 +35,7 @@ export const CategoryLabel = styled.span`
     line-height: 110%;
     color: ${(props) => props.theme.textColor.secondary};
     text-transform: uppercase;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         font-size: 10px;
     }
 `;
@@ -44,17 +44,18 @@ export const CategoryIcon = styled.i`
     font-size: 20px;
     margin-right: 15px;
     color: ${(props) => props.theme.textColor.secondary};
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         font-size: 15px;
     }
 `;
 
 export const Arrow = styled.i`
-    font-weight: 600;
-    font-size: 14px;
-    margin-right: 25px;
+    font-size: 16px;
+    margin-right: 15px;
+    text-transform: none;
+    font-weight: 400;
     color: ${(props) => props.theme.textColor.secondary};
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         font-size: 10px;
     }
 `;
@@ -63,7 +64,7 @@ export const CategoryDisclaimer = styled.div`
     font-weight: 600;
     font-size: 12px;
     color: ${(props) => props.theme.status.loss};
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         font-size: 11px;
         margin-left: 15px;
     }
@@ -109,15 +110,15 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
     align-items: end;
     justify-content: flex-end;
     margin-bottom: 10px;
-    margin-right: 52px;
+    margin-right: 50px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         min-width: 60px;
         margin-right: 5px;
     }
     button {
         margin-top: 2px;
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
             margin-top: 0px;
         }
     }

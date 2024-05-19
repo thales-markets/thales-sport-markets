@@ -197,12 +197,6 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                         )}
                                     </QuoteText>
                                 </QuoteWrapper>
-                                <QuoteWrapper isPayout={true}>
-                                    <QuoteLabel>{t('profile.table.payout')}:</QuoteLabel>
-                                    <QuoteText>
-                                        {formatCurrencyWithKey(row.original.collateral, row.original.payout)}
-                                    </QuoteText>
-                                </QuoteWrapper>
                                 <TwitterWrapper>
                                     <TwitterIcon onClick={() => onTwitterIconClick(row.original)} />
                                 </TwitterWrapper>

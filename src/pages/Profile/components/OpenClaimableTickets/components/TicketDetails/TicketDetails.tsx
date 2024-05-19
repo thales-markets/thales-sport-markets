@@ -40,7 +40,7 @@ import {
     Label,
     NumberOfGamesContainer,
     OverviewContainer,
-    ProfitContainer,
+    PayoutInLabel,
     TicketIdContainer,
     TicketMarketsContainer,
     TotalQuoteContainer,
@@ -162,7 +162,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
             additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
             padding="2px 5px"
             fontSize={isMobile ? '9px' : '15px'}
-            height={isMobile ? '19px' : undefined}
+            height={isMobile ? '19px' : '24px'}
             onClick={(e: any) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -232,8 +232,13 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                         <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                         {getButton(isMobile)}
                         {isMultiCollateralSupported && (
-                            <CollateralSelectorContainer>
-                                <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
+                            <CollateralSelectorContainer
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
                                 <CollateralSelector
                                     collateralArray={getCollaterals(networkId)}
                                     selectedItem={selectedCollateralIndex}
@@ -244,7 +249,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                     </ClaimContainer>
                 )}
                 {isClaimable && !isMobile && getButton(isMobile)}
-                <ArrowIcon className={showDetails ? 'icon icon--arrow-up' : 'icon icon--arrow-down'} />
+                <ArrowIcon className={showDetails ? 'icon icon--caret-up' : 'icon icon--caret-down'} />
             </OverviewContainer>
             <CollapsableContainer show={showDetails}>
                 <TicketMarketsContainer>
@@ -257,10 +262,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                         <Label>{t('profile.card.total-quote')}:</Label>
                         <Value>{formatTicketOdds(selectedOddsType, ticket.buyInAmount, ticket.payout)}</Value>
                     </TotalQuoteContainer>
-                    <ProfitContainer>
-                        <WinLabel>{t('profile.card.payout')}:</WinLabel>
-                        <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
-                    </ProfitContainer>
                 </CollapseFooterContainer>
             </CollapsableContainer>
             {showShareTicketModal && shareTicketModalData && (

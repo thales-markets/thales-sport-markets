@@ -69,6 +69,7 @@ export const Colors = {
     ORANGE: '#FAC439',
 
     PURPLE: '#8884d8',
+    PURPLE_LIGHT: '#9A9AFF',
 
     NAVY_BLUE: '#1F274D',
     NAVY_BLUE_LIGHT: '#7983A9',

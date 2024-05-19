@@ -341,6 +341,7 @@ const NoResultContainer = styled(TableRow)`
 
 const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
     text-transform: none;
+    font-weight: 400;
     font-size: ${(props) => (props.selected && props.sortDirection !== SortDirection.NONE ? 14 : 14)}px;
     &:before {
         font-family: OvertimeIconsV2 !important;

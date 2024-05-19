@@ -7,9 +7,9 @@ export const Container = styled(FlexDiv)`
     width: 90%;
     left: 50%;
     transform: translateX(-50%);
-    height: 43px;
+    height: 36px;
     color: ${(props) => props.theme.background.primary};
-    background: linear-gradient(101.62deg, #64d9fe 14.92%, #a38cff 94.73%);
+    background: ${(props) => props.theme.background.septenary};
     border-radius: 40px;
     justify-content: space-around;
     z-index: 3;
