@@ -161,7 +161,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     }
 
     const getMainContainerContent = () => (
-        <MainContainer isGameOpen={isGameOpen}>
+        <MainContainer isGameOpen={isGameOpen || isGameLive}>
             <MatchInfoConatiner
                 onClick={() => {
                     if (isGameOpen) {
@@ -244,14 +244,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     <TeamNamesConatiner
                         isColumnView={isColumnView}
                         isTwoPositionalMarket={isTwoPositionalMarket}
-                        isGameOpen={isGameOpen}
+                        isGameOpen={isGameOpen || isGameLive}
                     >
                         <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
                             {market.isOneSideMarket ? fixOneSideMarketCompetitorName(market.homeTeam) : market.homeTeam}
                         </TeamNameLabel>
                         {!market.isOneSideMarket && (
                             <>
-                                {isMobile && isGameOpen && (
+                                {isMobile && (isGameOpen || isGameLive) && (
                                     <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
                                         {' '}
                                         -{' '}
