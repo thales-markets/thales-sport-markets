@@ -5,13 +5,18 @@ export const Container = styled(FlexDiv)`
     width: 100%;
     max-width: 806px;
     margin-top: 10px;
+    margin-bottom: 10px;
     align-items: center;
 `;
 
 export const MarketTypesContainer = styled(FlexDiv)`
     width: 100%;
     overflow: auto;
-    padding-bottom: 10px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 export const MarketTypeButton = styled.button<{ selected?: boolean }>`

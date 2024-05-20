@@ -817,6 +817,8 @@ export const MARKET_TYPE_GROUPS_BY_SPORT: Record<MarketSport, Partial<Record<Mar
         [MarketTypeGroup.WINNER]: [...WINNER_MARKET_TYPES, ...DOUBLE_CHANCE_MARKET_TYPES, MarketType.HALFTIME_FULLTIME],
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: [...SPREAD_MARKET_TYPES],
+        [MarketTypeGroup.DOUBLE_CHANCE]: [...DOUBLE_CHANCE_MARKET_TYPES],
+        [MarketTypeGroup.BOTH_TEAMS_TO_SCORE]: [...BOTH_TEAMS_TO_SCORE_MARKET_TYPES],
         [MarketTypeGroup.FIRST_HALF]: [
             MarketType.FIRST_PERIOD_WINNER,
             MarketType.FIRST_PERIOD_WINNER2,

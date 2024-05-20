@@ -160,6 +160,8 @@ export enum MarketTypeGroup {
     WINNER = 'Winner',
     TOTALS = 'Totals',
     HANDICAP = 'Handicap',
+    DOUBLE_CHANCE = 'Double chance',
+    BOTH_TEAMS_TO_SCORE = 'Both teams to score',
     FIRST_HALF = '1st half',
     SECOND_HALF = '2nd half',
 }

@@ -56,14 +56,13 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                 <FilterTagContainer>
                     <FilterTagLabel>
                         {t(`market.filter-label.mobile-tags.search`)}: {marketSearch}
-                        <ClearButton
+                        <ClearIcon
+                            className="icon icon--close"
                             onClick={() => {
                                 dispatch(setMarketSearch(''));
                                 setSearchParam('');
                             }}
-                        >
-                            X
-                        </ClearButton>
+                        />
                     </FilterTagLabel>
                 </FilterTagContainer>
             )}
@@ -71,14 +70,13 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                 <FilterTagContainer>
                     <FilterTagLabel>
                         {t(`market.filter-label.global.${globalFilter.toLowerCase()}`)}
-                        <ClearButton
+                        <ClearIcon
+                            className="icon icon--close"
                             onClick={() => {
                                 setGlobalFilter(GlobalFiltersEnum.OpenMarkets);
                                 setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
                             }}
-                        >
-                            X
-                        </ClearButton>
+                        />
                     </FilterTagLabel>
                 </FilterTagContainer>
             )}
@@ -86,14 +84,13 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                 <FilterTagContainer>
                     <FilterTagLabel>
                         {dateTagLabel}
-                        <ClearButton
+                        <ClearIcon
+                            className="icon icon--close"
                             onClick={() => {
                                 setDateFilter(0);
                                 setDateParam('');
                             }}
-                        >
-                            X
-                        </ClearButton>
+                        />
                     </FilterTagLabel>
                 </FilterTagContainer>
             )}
@@ -101,16 +98,15 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                 <FilterTagContainer>
                     <FilterTagLabel>
                         {t(`market.filter-label.sport.${sportFilter.toLowerCase()}`)}
-                        <ClearButton
+                        <ClearIcon
+                            className="icon icon--close"
                             onClick={() => {
                                 setSportFilter(SportFilterEnum.All);
                                 setSportParam(SportFilterEnum.All);
                                 setTagFilter([]);
                                 setTagParam('');
                             }}
-                        >
-                            X
-                        </ClearButton>
+                        />
                     </FilterTagLabel>
                 </FilterTagContainer>
             )}
@@ -120,7 +116,8 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                         <FilterTagContainer key={index}>
                             <FilterTagLabel>
                                 {tag.label}
-                                <ClearButton
+                                <ClearIcon
+                                    className="icon icon--close"
                                     onClick={() => {
                                         if (tagFilter.length == 1) {
                                             setTagFilter([]);
@@ -134,9 +131,7 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                                             setTagParam(newTagParam);
                                         }
                                     }}
-                                >
-                                    X
-                                </ClearButton>
+                                />
                             </FilterTagLabel>
                         </FilterTagContainer>
                     );
@@ -148,27 +143,10 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
 const Container = styled(FlexDivRowCentered)<{ hideContainer: boolean }>`
     height: 36px;
     position: relative;
-    margin-bottom: 5px;
     justify-content: flex-start;
     width: 100%;
     display: ${(props) => (props.hideContainer ? 'none' : '')};
     overflow-x: auto;
-    scrollbar-width: 5px; /* Firefox */
-    -ms-overflow-style: none;
-    ::-webkit-scrollbar {
-        /* WebKit */
-        width: 5px;
-        height: 5px;
-    }
-    @media (max-width: 950px) {
-        margin: 0;
-        scrollbar-width: 0px; /* Firefox */
-        ::-webkit-scrollbar {
-            /* WebKit */
-            width: 0px;
-            height: 0px;
-        }
-    }
 `;
 
 const FilterTagContainer = styled(FlexDiv)`
@@ -193,17 +171,9 @@ const FilterTagLabel = styled.span`
     width: max-content;
 `;
 
-const ClearButton = styled.button`
-    display: flex;
-    font-size: 13px;
-    font-weight: 800;
-    background: ${(props) => props.theme.background.tertiary};
-    color: ${(props) => props.theme.background.primary};
-    cursor: pointer;
-    border: none;
-    width: fit-content;
-    margin-left: 10px;
-    padding: 0px;
+const ClearIcon = styled.i`
+    font-size: 10px;
+    padding-left: 10px;
 `;
 
 export default FilterTagsMobile;

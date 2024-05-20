@@ -249,7 +249,6 @@ const DappHeader: React.FC = () => {
                                         handleChange={(value) => {
                                             dispatch(setMarketSearch(value));
                                         }}
-                                        isModal
                                     />
                                 </SearchContainer>
                             </ReactModal>

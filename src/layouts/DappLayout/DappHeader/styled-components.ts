@@ -117,7 +117,10 @@ export const SearchContainer = styled.div`
     background: ${(props) => props.theme.background.secondary};
     height: 100%;
     text-align: center;
-    margin-right: 2px;
+    @media (max-width: 950px) {
+        margin: 0 5px;
+        border-radius: 20px;
+    }
 `;
 
 export const NotificationCount = styled.div`

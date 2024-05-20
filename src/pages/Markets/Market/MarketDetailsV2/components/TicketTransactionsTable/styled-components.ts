@@ -63,8 +63,8 @@ export const MatchLabel = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.primary};
     text-align: start;
     margin-right: 5px;
-    min-width: 200px;
-    width: 200px;
+    min-width: 250px;
+    width: 250px;
     cursor: pointer;
     @media (max-width: 767px) {
         min-width: 150px;

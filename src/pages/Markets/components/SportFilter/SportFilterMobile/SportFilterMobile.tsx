@@ -137,12 +137,8 @@ const Container = styled(FlexDivRowCentered)`
 
 const LabelContainer = styled(FlexDivRowCentered)`
     &.selected,
-    &:hover:not(.disabled) {
+    &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
-    }
-    &.disabled {
-        cursor: default;
-        opacity: 0.4;
     }
     height: 30px;
 `;
@@ -153,27 +149,27 @@ const SportIcon = styled.i`
 
 const LeftIcon = styled.i<{ disabled?: boolean }>`
     font-size: 40px;
-    font-weight: 700;
-    cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
+    text-transform: none;
+    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0028';
         color: ${(props) => props.theme.textColor.secondary};
-        opacity: ${(props) => (props?.disabled ? '0.3' : '')};
-        cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
+        opacity: ${(props) => (props.disabled ? '0.3' : '')};
+        cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     }
 `;
 
 const RightIcon = styled.i<{ disabled?: boolean }>`
     font-size: 40px;
-    font-weight: 700;
-    cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
+    text-transform: none;
+    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0029';
         color: ${(props) => props.theme.textColor.secondary};
-        opacity: ${(props) => (props?.disabled ? '0.3' : '')};
-        cursor: ${(props) => (props?.disabled ? 'not-allowed' : 'pointer')};
+        opacity: ${(props) => (props.disabled ? '0.3' : '')};
+        cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     }
 `;
 
