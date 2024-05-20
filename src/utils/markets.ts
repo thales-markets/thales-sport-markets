@@ -1,7 +1,9 @@
 import {
+    AWAY_TEAM_MARKET_TYPES,
     BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
     COMBINED_POSITIONS_MARKET_TYPES,
     DOUBLE_CHANCE_MARKET_TYPES,
+    HOME_TEAM_MARKET_TYPES,
     ONE_SIDE_PLAYER_PROPS_MARKET_TYPES,
     PLAYER_PROPS_MARKET_TYPES,
     SPREAD_MARKET_TYPES,
@@ -123,6 +125,14 @@ export const getIsPeriod2Market = (marketType: MarketType) => {
         `${marketType}`.startsWith('1007') ||
         `${marketType}`.startsWith('1009')
     );
+};
+
+export const getIsHomeTeamMarket = (marketType: MarketType) => {
+    return HOME_TEAM_MARKET_TYPES.includes(marketType);
+};
+
+export const getIsAwayTeamMarket = (marketType: MarketType) => {
+    return AWAY_TEAM_MARKET_TYPES.includes(marketType);
 };
 
 export const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>

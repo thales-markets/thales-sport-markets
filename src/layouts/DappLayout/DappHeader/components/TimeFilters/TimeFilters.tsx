@@ -21,8 +21,6 @@ const TimeFilters: React.FC = () => {
         }
     }, [dateFilter, dispatch]);
 
-    console.log(dateParam, datePeriodFilter);
-
     useEffect(() => {
         if (typeof dateFilter == 'number') {
             const timeFilter = dateParam?.split('h')[0];

@@ -87,12 +87,12 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.TOTAL_HOME_TEAM]: {
         id: MarketType.TOTAL_HOME_TEAM,
         key: 'totalHomeTeam',
-        name: 'Total home team',
+        name: 'Total',
     },
     [MarketType.TOTAL_AWAY_TEAM]: {
         id: MarketType.TOTAL_AWAY_TEAM,
         key: 'totalAwayTeam',
-        name: 'Total away team',
+        name: 'Total',
     },
     [MarketType.PLAYER_PROPS_STRIKEOUTS]: {
         id: MarketType.PLAYER_PROPS_STRIKEOUTS,
@@ -617,22 +617,22 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.FIRST_PERIOD_HOME_TEAM]: {
         id: MarketType.FIRST_PERIOD_HOME_TEAM,
         key: 'firstPeriodTotalHomeTeam',
-        name: 'Total home team 1st',
+        name: 'Total 1st',
     },
     [MarketType.FIRST_PERIOD_AWAY_TEAM]: {
         id: MarketType.FIRST_PERIOD_AWAY_TEAM,
         key: 'firstPeriodTotalAwayTeam',
-        name: 'Total away team 2nd',
+        name: 'Total 2nd',
     },
     [MarketType.SECOND_PERIOD_HOME_TEAM]: {
         id: MarketType.SECOND_PERIOD_HOME_TEAM,
         key: 'secondPeriodTotalHomeTeam',
-        name: 'Total home team 1st',
+        name: 'Total 1st',
     },
     [MarketType.SECOND_PERIOD_AWAY_TEAM]: {
         id: MarketType.SECOND_PERIOD_AWAY_TEAM,
         key: 'secondPeriodTotalAwayTeam',
-        name: 'Total away team 2nd',
+        name: 'Total 2nd',
     },
 };
 
@@ -824,6 +824,18 @@ export const SECOND_PERIOD_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_HOME_TEAM,
     MarketType.SECOND_PERIOD_AWAY_TEAM,
     MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+export const HOME_TEAM_MARKET_TYPES = [
+    MarketType.TOTAL_HOME_TEAM,
+    MarketType.FIRST_PERIOD_HOME_TEAM,
+    MarketType.SECOND_PERIOD_HOME_TEAM,
+];
+
+export const AWAY_TEAM_MARKET_TYPES = [
+    MarketType.TOTAL_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_AWAY_TEAM,
 ];
 
 export const MARKET_TYPES_BY_SPORT: Record<SportFilterEnum, MarketType[]> = {

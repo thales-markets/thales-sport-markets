@@ -8,9 +8,11 @@ import i18n from 'i18n';
 import { SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
+    getIsAwayTeamMarket,
     getIsBothsTeamsToScoreMarket,
     getIsCombinedPositionsMarket,
     getIsDoubleChanceMarket,
+    getIsHomeTeamMarket,
     getIsOneSideMarket,
     getIsOneSidePlayerPropsMarket,
     getIsPeriod2Market,
@@ -154,6 +156,13 @@ export const getTitleText = (market: SportMarket) => {
         sufix = `${sufix}${
             marketType === MarketType.TOTAL2 || marketType === MarketType.SPREAD2 ? ' (sets)' : ' (games)'
         }`;
+    }
+
+    if (getIsHomeTeamMarket(marketType)) {
+        sufix = `${sufix} (${market.homeTeam})`;
+    }
+    if (getIsAwayTeamMarket(marketType)) {
+        sufix = `${sufix} (${market.awayTeam})`;
     }
 
     return marketTypeName ? `${marketTypeName}${sufix}` : `${marketType}`;
