@@ -476,6 +476,14 @@ const Home: React.FC = () => {
                     setActiveParam((e.target.checked || false).toString());
                     if (sportFilter === SportFilterEnum.All) {
                         setAvailableTags(tagsList);
+                    } else if (sportFilter === SportFilterEnum.Live) {
+                        const filteredLiveTags = getLiveSupportedLeagues();
+                        const filteredTags = tagsList.filter(
+                            (tag: TagInfo) =>
+                                filteredLiveTags.includes(tag.id) &&
+                                ((e.target.checked && !!liveMarketsCountPerTag[tag.id]) || !e.target.checked)
+                        );
+                        setAvailableTags(filteredTags);
                     } else {
                         const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
                         if (tagsPerSport) {
@@ -500,10 +508,13 @@ const Home: React.FC = () => {
             {Object.values(SportFilterEnum)
                 .filter(
                     (filterItem: any) =>
-                        (showActive && openMarketsCountPerSport[filterItem] > 0) ||
+                        (showActive &&
+                            openMarketsCountPerSport[filterItem] > 0 &&
+                            filterItem !== SportFilterEnum.Live) ||
                         !showActive ||
                         openSportMarketsQuery.isLoading ||
-                        filterItem === SportFilterEnum.Favourites
+                        filterItem === SportFilterEnum.Favourites ||
+                        (filterItem === SportFilterEnum.Live && showActive && liveMarketsCountPerSport[filterItem] > 0)
                 )
                 .map((filterItem: any, index) => {
                     return (
@@ -522,8 +533,15 @@ const Home: React.FC = () => {
                                     } else if (filterItem === SportFilterEnum.Live) {
                                         setDateFilter(0);
                                         setDateParam('');
-                                        const filteredLiveTags = tagsList.filter((tag) => tag.live);
-                                        setAvailableTags(filteredLiveTags);
+                                        const filteredLiveTags = getLiveSupportedLeagues();
+                                        const filteredTags = tagsList.filter(
+                                            (tag: TagInfo) =>
+                                                filteredLiveTags.includes(tag.id) &&
+                                                ((showActive && !!liveMarketsCountPerTag[tag.id]) ||
+                                                    !showActive ||
+                                                    openSportMarketsQuery.isLoading)
+                                        );
+                                        setAvailableTags(filteredTags);
                                     } else {
                                         const tagsPerSport = getSportLeagueIds(filterItem as Sport);
                                         if (tagsPerSport) {
