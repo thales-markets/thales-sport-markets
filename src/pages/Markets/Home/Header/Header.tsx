@@ -13,7 +13,14 @@ import {
     setMarketTypeFilter,
 } from 'redux/modules/market';
 import { getMarketTypeName } from '../../../../utils/markets';
-import { ArrowIcon, Container, MarketTypeButton, NoScrollbarContainer, ThreeWayIcon } from './styled-components';
+import {
+    ArrowIcon,
+    Container,
+    FilterIcon,
+    MarketTypeButton,
+    NoScrollbarContainer,
+    ThreeWayIcon,
+} from './styled-components';
 
 type HeaderProps = {
     availableMarketTypes: MarketType[];
@@ -24,29 +31,25 @@ const LeftArrow: React.FC = () => {
     const isFirstItemVisible = visibility.useIsVisible('first', true);
     const isLastItemVisible = visibility.useIsVisible('last', false);
 
-    // const onClick = () => visibility.scrollToItem(visibility.getPrevElement(), 'smooth', 'start');
-
     return (
         <ArrowIcon
             onClick={() => visibility.scrollPrev()}
-            className="icon icon--arrow"
+            className="icon icon--arrow-down"
             hide={isFirstItemVisible}
             hideBoth={isFirstItemVisible && isLastItemVisible}
-            flip
+            isLeft
         ></ArrowIcon>
     );
 };
 
 const RightArrow: React.FC = () => {
     const visibility = useContext<publicApiType>(VisibilityContext);
-    const isFirstItemVisible = visibility.useIsVisible('first', true);
     const isLastItemVisible = visibility.useIsVisible('last', false);
-
-    // const onClick = () => visibility.scrollToItem(visibility.getNextElement(), 'smooth', 'end');
+    const isFirstItemVisible = visibility.useIsVisible('first', true);
 
     return (
         <ArrowIcon
-            className="icon icon--arrow"
+            className="icon icon--arrow-down"
             onClick={() => visibility.scrollNext()}
             hide={isLastItemVisible}
             hideBoth={isFirstItemVisible && isLastItemVisible}
@@ -71,6 +74,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
 
     return (
         <Container>
+            <FilterIcon className="icon icon--filters2" />
             <NoScrollbarContainer>
                 <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
                     {marketTypes.map((marketType, index) => {

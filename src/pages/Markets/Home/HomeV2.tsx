@@ -675,14 +675,13 @@ const Home: React.FC = () => {
                             />
                         </>
                     )}
-                    {!isMobile && <Breadcrumbs />}
-                    {!isMobile && <Header availableMarketTypes={availableMarketTypes} />}
                     {marketsLoading ? (
                         <LoaderContainer>
                             <SimpleLoader />
                         </LoaderContainer>
                     ) : (
                         <>
+                            {!isMobile && <Breadcrumbs />}
                             {finalMarkets.length === 0 ? (
                                 <NoMarketsContainer>
                                     <NoMarketsLabel>
@@ -702,6 +701,7 @@ const Home: React.FC = () => {
                                 </NoMarketsContainer>
                             ) : (
                                 <>
+                                    {!isMobile && <Header availableMarketTypes={availableMarketTypes} />}
                                     <FlexDivRow>
                                         {((isMobile && !isMarketSelected && !showTicketMobileModal) || !isMobile) && (
                                             <Suspense

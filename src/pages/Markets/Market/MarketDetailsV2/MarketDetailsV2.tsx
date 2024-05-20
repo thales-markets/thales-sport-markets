@@ -435,7 +435,7 @@ const hideResultInfoPerPeriodForSports = (sportId: number) => {
     return (
         leagueSport !== Sport.SOCCER &&
         leagueSport !== Sport.ESPORTS &&
-        leagueSport !== Sport.MMA &&
+        leagueSport !== Sport.FIGHTING_SPORTS &&
         leagueSport !== Sport.CRICKET &&
         leagueSport !== Sport.MOTOSPORT &&
         sportId != League.EUROLEAGUE

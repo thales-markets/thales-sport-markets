@@ -98,7 +98,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         live: true,
     },
     [League.UFC]: {
-        sport: Sport.MMA,
+        sport: Sport.FIGHTING_SPORTS,
         id: League.UFC,
         label: 'UFC',
         logo: '/logos/leagueLogos/ufc.webp',
@@ -630,7 +630,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     },
 
     [League.BOXING]: {
-        sport: Sport.MMA,
+        sport: Sport.FIGHTING_SPORTS,
         id: League.BOXING,
         label: 'Boxing',
         logoClass: 'icon-homepage league--boxing',
@@ -753,7 +753,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     },
 
     [League.NON_TITLE_BOXING]: {
-        sport: Sport.MMA,
+        sport: Sport.FIGHTING_SPORTS,
         id: League.NON_TITLE_BOXING,
         label: 'Boxing',
         logoClass: 'icon-homepage league--boxing',

@@ -1,6 +1,6 @@
 import { SportFilterEnum } from 'enums/markets';
-import { t } from 'i18next';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
 import { Tags } from 'types/markets';
@@ -28,6 +28,7 @@ const SportTags: React.FC<SportTagsProps> = ({
     openMarketsCountPerTag,
     liveMarketsCountPerTag,
 }) => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);

@@ -4,7 +4,7 @@ export enum Sport {
     BASKETBALL = 'Basketball',
     BASEBALL = 'Baseball',
     HOCKEY = 'Hockey',
-    MMA = 'MMA',
+    FIGHTING_SPORTS = 'Fighting sports',
     TENNIS = 'Tennis',
     ESPORTS = 'eSports',
     CRICKET = 'Cricket',
