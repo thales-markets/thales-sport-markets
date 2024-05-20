@@ -48,10 +48,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const tagFilterIds = tagFilter.map((tag) => tag.id);
 
-    if (sport === SportFilterEnum.Live) {
-        console.log(sport, tags, liveMarketsCountPerTag);
-    }
-
     return (
         <Container open={open}>
             {tags

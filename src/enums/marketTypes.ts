@@ -164,7 +164,22 @@ export enum MarketTypeGroup {
     BOTH_TEAMS_TO_SCORE = 'Both teams to score',
     FIRST_HALF = '1st half',
     SECOND_HALF = '2nd half',
-    PLAYER_PROPS = 'Player props',
+    FIRST_SET = '1st set',
+    SECOND_SET = '2nd set',
+    SETS = 'Sets',
+    GAMES = 'Games',
+    SGP = 'SGP',
+    PLAYER_PROPS = 'All player props',
+    PLAYER_POINTS = 'Player points',
+    PLAYER_REBOUNDS = 'Player rebounds',
+    PLAYER_ASSISTS = 'Player assists',
+    PLAYER_THRESS = 'Player threes',
+    PLAYER_DOUBLE_DOUBLE = 'Player double double',
+    PLAYER_TRIPLE_DOUBLE = 'Player triple double',
+    PLAYER_GOALS = 'Goalscorer',
+    PLAYER_SHOTS = 'Shots on goal',
+    PLAYER_HITS_RECORDED = 'Hits recorded',
+    PLAYER_STRIKEOUTS = 'Strikeouts',
 }
 
 export enum ParlayErrorCode {
