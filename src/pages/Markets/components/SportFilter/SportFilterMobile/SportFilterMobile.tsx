@@ -181,7 +181,7 @@ export const ArrowIcon = styled.i<{ hide: boolean; isLeft?: boolean }>`
 
 const liveBlinkStyleMobile: CSSProperties = {
     width: 38,
-    marginTop: '-5px',
+    marginTop: '-2px',
     marginLeft: '-6px',
 };
 
