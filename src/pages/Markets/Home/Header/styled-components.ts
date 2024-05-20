@@ -6,6 +6,10 @@ export const Container = styled(FlexDiv)`
     margin-top: 10px;
     margin-bottom: 10px;
     align-items: center;
+    @media (max-width: 950px) {
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
 `;
 
 export const NoScrollbarContainer = styled.div`
@@ -52,6 +56,10 @@ export const MarketTypeButton = styled.button<{ selected?: boolean }>`
     :focus {
         outline: none;
     }
+    @media (max-width: 950px) {
+        height: 22px;
+        padding: 2px 10px;
+    }
 `;
 
 export const ArrowIcon = styled.i<{ hide: boolean; flip?: boolean; hideBoth?: boolean }>`
@@ -61,6 +69,9 @@ export const ArrowIcon = styled.i<{ hide: boolean; flip?: boolean; hideBoth?: bo
     color: ${(props) => props.theme.textColor.secondary};
     opacity: ${(props) => (props.hide ? '0' : '1')};
     display: ${(props) => (props.hideBoth ? 'none' : 'block')};
+    @media (max-width: 950px) {
+        font-size: 18px;
+    }
 `;
 
 export const ThreeWayIcon = styled.i`
@@ -68,4 +79,7 @@ export const ThreeWayIcon = styled.i`
     font-size: 20px;
     color: ${(props) => props.theme.textColor.secondary};
     margin: 0 5px;
+    @media (max-width: 950px) {
+        display: none;
+    }
 `;

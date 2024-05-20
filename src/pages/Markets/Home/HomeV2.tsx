@@ -715,7 +715,7 @@ const Home: React.FC = () => {
                                             </Suspense>
                                         )}
                                         {isMarketSelected && globalFilter === GlobalFiltersEnum.OpenMarkets && (
-                                            <SelectedMarket />
+                                            <SelectedMarket availableMarketTypes={availableMarketTypes} />
                                         )}
                                     </FlexDivRow>
                                 </>

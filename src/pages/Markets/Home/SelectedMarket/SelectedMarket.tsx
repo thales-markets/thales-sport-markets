@@ -11,9 +11,15 @@ import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { getMatchLabel } from 'utils/marketsV2';
+import { MarketType } from '../../../../enums/marketTypes';
+import Header from '../Header';
 import SelectedMarketDetails from '../SelectedMarketDetails';
 
-const SelectedMarket: React.FC = () => {
+type SelectedMarketProps = {
+    availableMarketTypes: MarketType[];
+};
+
+const SelectedMarket: React.FC<SelectedMarketProps> = ({ availableMarketTypes }) => {
     const dispatch = useDispatch();
     const selectedMarket = useSelector(getSelectedMarket);
     const isAppReady = useSelector(getIsAppReady);
@@ -49,6 +55,7 @@ const SelectedMarket: React.FC = () => {
                         />
                         <MatchLabel>{getMatchLabel(lastValidMarket)} </MatchLabel>
                     </MatchInfo>
+                    {isMobile && <Header availableMarketTypes={availableMarketTypes} />}
                 </>
             )}
             <CloseIcon
