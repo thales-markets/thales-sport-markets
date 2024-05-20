@@ -39,6 +39,7 @@
         "react-dom": "^17.0.2",
         "react-flagpack": "^1.2.0",
         "react-helmet": "^6.1.0",
+        "react-horizontal-scrolling-menu": "^7.0.0",
         "react-i18next": "^11.15.4",
         "react-loader-spinner": "^5.1.4",
         "react-masonry-css": "^1.0.16",

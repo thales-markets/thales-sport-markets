@@ -164,6 +164,7 @@ export enum MarketTypeGroup {
     BOTH_TEAMS_TO_SCORE = 'Both teams to score',
     FIRST_HALF = '1st half',
     SECOND_HALF = '2nd half',
+    PLAYER_PROPS = 'Player props',
 }
 
 export enum ParlayErrorCode {

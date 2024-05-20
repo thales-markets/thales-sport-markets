@@ -796,6 +796,36 @@ export const DOUBLE_CHANCE_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
 ];
 
+export const FIRST_PERIOD_MARKET_TYPES = [
+    MarketType.FIRST_PERIOD_WINNER,
+    MarketType.FIRST_PERIOD_WINNER2,
+    MarketType.FIRST_PERIOD_TOTAL,
+    MarketType.FIRST_PERIOD_TOTAL2,
+    MarketType.FIRST_PERIOD_SPREAD,
+    MarketType.FIRST_PERIOD_SPREAD2,
+    MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
+    MarketType.FIRST_PERIOD_DOUBLE_CHANCE,
+    MarketType.FIRST_PERIOD_HOME_TEAM,
+    MarketType.FIRST_PERIOD_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+export const SECOND_PERIOD_MARKET_TYPES = [
+    MarketType.SECOND_PERIOD_WINNER,
+    MarketType.SECOND_PERIOD_WINNER2,
+    MarketType.SECOND_PERIOD_TOTAL,
+    MarketType.SECOND_PERIOD_TOTAL2,
+    MarketType.SECOND_PERIOD_SPREAD,
+    MarketType.SECOND_PERIOD_SPREAD2,
+    MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN,
+    MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
+    MarketType.SECOND_PERIOD_HOME_TEAM,
+    MarketType.SECOND_PERIOD_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
 export const MARKET_TYPES_BY_SPORT: Record<SportFilterEnum, MarketType[]> = {
     [SportFilterEnum.Live]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilterEnum.Favourites]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
@@ -816,37 +846,11 @@ export const MARKET_TYPE_GROUPS_BY_SPORT: Record<MarketSport, Partial<Record<Mar
     Soccer: {
         [MarketTypeGroup.WINNER]: [...WINNER_MARKET_TYPES, ...DOUBLE_CHANCE_MARKET_TYPES, MarketType.HALFTIME_FULLTIME],
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
-        [MarketTypeGroup.HANDICAP]: [...SPREAD_MARKET_TYPES],
-        [MarketTypeGroup.DOUBLE_CHANCE]: [...DOUBLE_CHANCE_MARKET_TYPES],
-        [MarketTypeGroup.BOTH_TEAMS_TO_SCORE]: [...BOTH_TEAMS_TO_SCORE_MARKET_TYPES],
-        [MarketTypeGroup.FIRST_HALF]: [
-            MarketType.FIRST_PERIOD_WINNER,
-            MarketType.FIRST_PERIOD_WINNER2,
-            MarketType.FIRST_PERIOD_TOTAL,
-            MarketType.FIRST_PERIOD_TOTAL2,
-            MarketType.FIRST_PERIOD_SPREAD,
-            MarketType.FIRST_PERIOD_SPREAD2,
-            MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN,
-            MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
-            MarketType.FIRST_PERIOD_DOUBLE_CHANCE,
-            MarketType.FIRST_PERIOD_HOME_TEAM,
-            MarketType.FIRST_PERIOD_AWAY_TEAM,
-            MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE,
-        ],
-        [MarketTypeGroup.SECOND_HALF]: [
-            MarketType.SECOND_PERIOD_WINNER,
-            MarketType.SECOND_PERIOD_WINNER2,
-            MarketType.SECOND_PERIOD_TOTAL,
-            MarketType.SECOND_PERIOD_TOTAL2,
-            MarketType.SECOND_PERIOD_SPREAD,
-            MarketType.SECOND_PERIOD_SPREAD2,
-            MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN,
-            MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN,
-            MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
-            MarketType.SECOND_PERIOD_HOME_TEAM,
-            MarketType.SECOND_PERIOD_AWAY_TEAM,
-            MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
-        ],
+        [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.DOUBLE_CHANCE]: DOUBLE_CHANCE_MARKET_TYPES,
+        [MarketTypeGroup.BOTH_TEAMS_TO_SCORE]: BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
+        [MarketTypeGroup.FIRST_HALF]: FIRST_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.SECOND_HALF]: SECOND_PERIOD_MARKET_TYPES,
     },
     Basketball: {
         [MarketTypeGroup.TOTALS]: [

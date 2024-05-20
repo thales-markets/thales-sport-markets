@@ -9,6 +9,10 @@
     content: '\0028';
 }
 
+.homepage--arrow-right:before {
+    content: '\0029';
+}
+
 .league--nba:before {
     content: '\0041';
 }

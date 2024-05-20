@@ -16,7 +16,6 @@ import {
     getIsThreeWayView,
     getMarketTypeFilter,
     getSelectedMarket,
-    setMarketTypeFilter,
     setSelectedMarket,
 } from 'redux/modules/market';
 import { formatShortDateWithTime } from 'thales-utils';
@@ -167,7 +166,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 onClick={() => {
                     if (isGameOpen) {
                         dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }));
-                        dispatch(setMarketTypeFilter([]));
                     }
                 }}
             >

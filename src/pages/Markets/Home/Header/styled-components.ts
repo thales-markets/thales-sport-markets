@@ -2,11 +2,27 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 
 export const Container = styled(FlexDiv)`
-    width: 100%;
     max-width: 806px;
     margin-top: 10px;
     margin-bottom: 10px;
     align-items: center;
+`;
+
+export const NoScrollbarContainer = styled.div`
+    width: 100%;
+    overflow: hidden;
+    & .react-horizontal-scrolling-menu--scroll-container {
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    & .react-horizontal-scrolling-menu--scroll-container {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .react-horizontal-scrolling-menu--inner-wrapper {
+        align-items: center;
+    }
 `;
 
 export const MarketTypesContainer = styled(FlexDiv)`
@@ -29,6 +45,7 @@ export const MarketTypeButton = styled.button<{ selected?: boolean }>`
     white-space: nowrap;
     width: fit-content;
     font-weight: bold;
+    padding: 2px 10px;
     background: ${({ theme, selected }) =>
         selected ? theme.button.background.quaternary : theme.button.background.secondary};
     color: ${({ theme, selected }) => (selected ? theme.textColor.senary : theme.textColor.secondary)};
@@ -37,12 +54,13 @@ export const MarketTypeButton = styled.button<{ selected?: boolean }>`
     }
 `;
 
-export const ArrowIcon = styled.i<{ flip?: boolean }>`
+export const ArrowIcon = styled.i<{ hide: boolean; flip?: boolean; hideBoth?: boolean }>`
     cursor: pointer;
-    margin: 0 5px;
-    font-size: 15px;
+    font-size: 25px;
     transform: ${(props) => (props.flip ? 'rotate(180deg)' : 'none')};
     color: ${(props) => props.theme.textColor.secondary};
+    opacity: ${(props) => (props.hide ? '0' : '1')};
+    display: ${(props) => (props.hideBoth ? 'none' : 'block')};
 `;
 
 export const ThreeWayIcon = styled.i`

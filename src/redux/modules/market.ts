@@ -106,6 +106,7 @@ const marketSlice = createSlice({
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_SPORT, action.payload);
 
             state.selectedMarket = undefined;
+            state.marketTypeFilter = [];
 
             if (action.payload === SportFilterEnum.All) {
                 state.datePeriodFilter = 0;
