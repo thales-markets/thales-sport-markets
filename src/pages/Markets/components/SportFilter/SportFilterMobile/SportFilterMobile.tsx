@@ -139,7 +139,7 @@ const LabelContainer = styled(FlexDivColumn)`
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
     }
-    height: 30px;
+    height: 36px;
     width: 30px;
     margin: 0 10px;
 `;
@@ -181,7 +181,7 @@ export const ArrowIcon = styled.i<{ hide: boolean; isLeft?: boolean }>`
 
 const liveBlinkStyleMobile: CSSProperties = {
     width: 38,
-    marginTop: '-6px',
+    marginTop: '-5px',
     marginLeft: '-6px',
 };
 
