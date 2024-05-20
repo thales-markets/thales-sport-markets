@@ -5,7 +5,6 @@ import Lottie from 'lottie-react';
 import React, { CSSProperties, Dispatch, SetStateAction, useContext } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
@@ -57,8 +56,6 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
     setTagParam,
     setAvailableTags,
 }) => {
-    const { t } = useTranslation();
-
     return (
         <Container>
             <NoScrollbarContainer>
