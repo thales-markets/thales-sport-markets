@@ -99,5 +99,7 @@ export const ParlayNumber = styled.span`
     text-transform: capitalize;
     position: absolute;
     bottom: 11px;
-    left: 10px;
+    left: 8px;
+    background: ${(props) => props.theme.background.septenary};
+    padding: 0 2px;
 `;
