@@ -91,6 +91,9 @@ export const SwitchContainer = styled(FlexDiv)`
     min-width: 30px;
     justify-content: center;
     margin-left: 20px;
+    @media (max-width: 950px) {
+        display: none;
+    }
 `;
 
 export const ThreeWayIcon = styled.i<{ disabled: boolean; fontSize: number }>`
@@ -98,7 +101,4 @@ export const ThreeWayIcon = styled.i<{ disabled: boolean; fontSize: number }>`
     font-size: ${(props) => props.fontSize}px;
     color: ${(props) => props.theme.textColor.secondary};
     opacity: ${(props) => (props.disabled ? '0.2' : '1')};
-    @media (max-width: 950px) {
-        display: none;
-    }
 `;
