@@ -68,6 +68,28 @@
         }
     },
     {
+        "title": "Higher odds win! Earn 5,000 OP every week using Thales products!",
+        "description": "Earn from 5,000 OP every week by driving notional volume on Sports Markets, Digital Options and Speed Markets!",
+        "startDate": 1713144174,
+        "endDate": 1722337467,
+        "displayCountdown": true,
+        "promotionId": "optimism-weekly-incentives",
+        "promotionUrl": "/promotions/optimism-weekly-incentives",
+        "backgroundImageUrl": "/promotions/mm-small.webp",
+        "callToActionButton": "How to earn",
+        "availableOnNetworks": [10],
+        "article": {
+            "coverImageUrl": "/promotions/mm-big.webp",
+            "headerHtml": "<h1><span><span><span>Higher odds win! Earn 5,000 OP every week using Thales products!</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "Earn from 5,000 OP every week by driving notional volume on Sports Markets (including Overtime), Digital Options and Speed Markets! </span></span></span><span><span><span>Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/op-incentive-program' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
+                "ctaButtonLink": "/markets",
+                "ctaButtonLabel": "Play now"
+            },
+            "contentHtml": " <p><span><span><span>The most exciting part of the NBA season is ahead of us! Enjoy the NBA playoffs and earn some of the highest rewards among traditional and web3 sportsbooks by playing on Overtime!<br> <br> Moneyline wagers, player props, over/under predictions - it’s all there for you to combine and create the perfect winning parlays and singles. If you’re not already an Overtime user, here’s how volume-based rewards work - <strong>the more volume you generate, the higher your rewards.</strong> It’s as simple as that.<br> <br> Pro tip: Your parlay doesn’t have to include just NBA games; you can also add other sports and leagues and compete for <u>multiple rewards buckets</u> at once. Pretty cool, right?</span></span></span> <span><span><span><span><span><br> <br> <span><span><span>Some quick suggestions would be going for:</span></span></span> <a href='https://www.overtimemarkets.xyz/promotions/uefa-competitions' target='_blank'><span><span><span><strong><u>20,000 ARB across 3 UEFA soccer competitions</u></strong></span></span></span></a> and <a href='https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards' target='_blank'><span><span><span><strong><u>20,000 ARB for the NHL and 30,000 ARB for the MLB.</u></strong></span></span></span></a></span></span></span></span></span></p> <h2><span><span><span>Don’t miss out on the other great incentives on Overtime</span></span></span></h2> <p><span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.</span> <span><span><span>You can use the <a href='https://www.overtimemarkets.xyz/promotions'><u>promotions page</u></a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on various rewards leaderboards.</span></span></span></p>"
+        }
+    },
+    {
         "title": "100,000 OP, 100,000 ARB and 180,000 THALES for all users of NBA, NFL and EPL throughout the season!",
         "description": "100,000 OP, 100,000 ARB and 180,000 Thales for the most skilled Overtime traders of the ongoing NBA, NFL, and EPL seasons! The higher your odds and the higher the volume, the better the rewards at the end of the season. Test your skills and win big!",
         "startDate": 1702236692,
