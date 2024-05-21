@@ -617,7 +617,7 @@ const Home: React.FC = () => {
                         additionalStyles={additionalApplyFiltersButtonStyle}
                     >
                         {t('market.apply-filters')}
-                        <ArrowIcon className={`icon icon--arrow-up`} />
+                        <ArrowIcon className={`icon icon--caret-right`} />
                     </Button>
                 </BurgerFiltersContainer>
             </ReactModal>
@@ -873,9 +873,9 @@ const LogoContainer = styled.div`
 
 const ArrowIcon = styled.i`
     font-size: 15px;
+    font-weight: 400;
     margin-right: -10px;
     text-transform: none;
-    writing-mode: vertical-lr;
 `;
 
 const getCustomModalStyles = (theme: ThemeInterface) => ({

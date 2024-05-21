@@ -60,7 +60,7 @@ const LandingPage: React.FC = () => {
                     <LanguageSelector />
                     <CallToAction className="header">
                         <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                            DAPP <ArrowIcon className={`icon icon--arrow`} />
+                            DAPP <ArrowIcon className={`icon icon--caret-right`} />
                         </SPAAnchor>
                     </CallToAction>
                 </FlexDivRowCentered>
@@ -70,7 +70,7 @@ const LandingPage: React.FC = () => {
                 <LargeText className="first">{t('landing-page.best-odds')}</LargeText>
                 <CallToAction className="first">
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                        {t('landing-page.try-now')} <ArrowIcon className={`icon icon--arrow`} />
+                        {t('landing-page.try-now')} <ArrowIcon className={`icon icon--caret-right`} />
                     </SPAAnchor>
                 </CallToAction>
 
@@ -95,7 +95,7 @@ const LandingPage: React.FC = () => {
                 <LargeText className="second in-front">{t('landing-page.no-kyc')}</LargeText>
                 <CallToAction className="second">
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                        {t('landing-page.launch-dapp')} <ArrowIcon className={`icon icon--arrow`} />
+                        {t('landing-page.launch-dapp')} <ArrowIcon className={`icon icon--caret-right`} />
                     </SPAAnchor>
                 </CallToAction>
                 <SubSection className="first">{t('landing-page.leagues')}</SubSection>
@@ -225,7 +225,7 @@ const LandingPage: React.FC = () => {
                 <LargeText className="fourth in-front">{t('landing-page.learn-more')}</LargeText>
                 <CallToAction className="fourth">
                     <DocsLink href={LINKS.Footer.Docs}>
-                        {t('landing-page.read-now')} <ArrowIcon className={`icon icon--arrow`} />
+                        {t('landing-page.read-now')} <ArrowIcon className={`icon icon--caret-right`} />
                     </DocsLink>
                 </CallToAction>
                 <SubSection className="first">{t('landing-page.documentation')}</SubSection>
@@ -237,7 +237,7 @@ const LandingPage: React.FC = () => {
                 <SubSection className="fifth">{t('landing-page.open-overtime')}</SubSection>
                 <CallToAction className="fifth">
                     <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
-                        {t('landing-page.try-now')} <ArrowIcon className={`icon icon--arrow`} />
+                        {t('landing-page.try-now')} <ArrowIcon className={`icon icon--caret-right`} />
                     </SPAAnchor>
                 </CallToAction>
             </Section>

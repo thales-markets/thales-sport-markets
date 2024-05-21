@@ -224,7 +224,7 @@ const Deposit: React.FC = () => {
                         <OnramperIcons className={`icon-homepage icon--master`} />
                         <OnramperIcons className={`icon-homepage icon--applepay`} />
                         <OnramperIcons className={`icon-homepage icon--googlepay`} />
-                        <ExternalIcon className={`icon-homepage homepage--arrow-right`} />
+                        <ExternalIcon className={`icon-homepage icon--arrow-right`} />
                     </OnramperDiv>
                 </FormContainer>
                 <BalanceSection>

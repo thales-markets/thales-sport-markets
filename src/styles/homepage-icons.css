@@ -13,11 +13,11 @@
     content: '\0026';
 }
 
-.homepage--arrow-left:before {
+.icon--arrow-left:before {
     content: '\0028';
 }
 
-.homepage--arrow-right:before {
+.icon--arrow-right:before {
     content: '\0029';
 }
 

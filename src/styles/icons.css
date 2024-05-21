@@ -173,10 +173,6 @@
     content: '\005C';
 }
 
-.icon--arrow:before {
-    content: '\005D';
-}
-
 .icon--stake-thales::before {
     content: '\005F';
 }
