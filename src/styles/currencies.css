@@ -6,22 +6,6 @@
     color: #ffffff;
 }
 
-.currency-icon--usdt::before {
-    content: '\00B1';
-}
-
-.currency-icon--dai::before {
-    content: '\00D1';
-}
-
-.currency-icon--op::before {
-    content: '\0068';
-}
-
-.currency-icon--eth::before {
-    content: '\00B2';
-}
-
 .currency-icon--usdc::before {
     content: '\00B0';
 }
@@ -30,14 +14,30 @@
     content: '\00B0';
 }
 
-.currency-icon--arb::before {
-    content: '\00D1';
-}
-
 .currency-icon--usdce::before {
     content: '\00B0';
 }
 
+.currency-icon--usdt::before {
+    content: '\00B1';
+}
+
+.currency-icon--eth::before {
+    content: '\00B2';
+}
+
 .currency-icon--weth::before {
     content: '\00B3';
+}
+
+.currency-icon--arb::before {
+    content: '\00B4';
+}
+
+.currency-icon--dai::before {
+    content: '\00B5';
+}
+
+.currency-icon--op::before {
+    content: '\00B6';
 }

@@ -409,6 +409,10 @@
     content: '\00F5';
 }
 
+.icon--logged-in:before {
+    content: '\00F6';
+}
+
 .icon--apple:before {
     content: '\010E';
 }

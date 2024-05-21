@@ -167,7 +167,6 @@ const Container = styled(FlexDivRowCentered)<{ hideContainer: boolean }>`
     width: 100%;
     display: ${(props) => (props.hideContainer ? 'none' : '')};
     overflow-x: auto;
-    margin-bottom: 10px;
 `;
 
 const FilterTagContainer = styled(FlexDiv)`

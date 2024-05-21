@@ -25,7 +25,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import ProfileItem from './components/ProfileItem';
@@ -44,7 +44,6 @@ import {
     MiddleContainer,
     MobileButtonWrapper,
     NotificationCount,
-    ReferAndEarn,
     RightContainer,
     SearchContainer,
     SearchIcon,
@@ -94,7 +93,7 @@ const DappHeader: React.FC = () => {
 
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
-    const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
+    // const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
 
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
@@ -117,7 +116,7 @@ const DappHeader: React.FC = () => {
     const menuImageRef = useRef<HTMLImageElement>(null);
 
     const getGetStartedButton = () => (
-        <SPAAnchor style={{ width: '100%', marginTop: '10px' }} href={buildHref(ROUTES.Wizard)}>
+        <SPAAnchor style={{ width: isMobile ? '100%' : 'fit-content' }} href={buildHref(ROUTES.Wizard)}>
             <Button
                 backgroundColor={theme.background.primary}
                 textColor={theme.button.textColor.quaternary}
@@ -127,8 +126,9 @@ const DappHeader: React.FC = () => {
                 additionalStyles={{
                     borderRadius: '20px',
                     fontWeight: '700',
-                    fontSize: '14px',
+                    fontSize: isMobile ? '12px' : '14px',
                     textTransform: 'capitalize',
+                    whiteSpace: 'nowrap',
                 }}
                 height="28px"
             >
@@ -145,15 +145,16 @@ const DappHeader: React.FC = () => {
                         <Logo />
                     </LeftContainer>
                     <MiddleContainer>
-                        <SPAAnchor href={buildHref(ROUTES.Referral)}>
+                        {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
+                        {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
                             <ReferAndEarn>{t('common.referral.header-label')}</ReferAndEarn>
-                        </SPAAnchor>
-                        {isWalletConnected && isMarketsPage && (
+                        </SPAAnchor> */}
+                        {/* {isWalletConnected && isMarketsPage && (
                             <SPAAnchor href={buildHref(ROUTES.Wizard)}>
                                 <HeaderIcon className="icon icon--tour" />
                                 <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
                             </SPAAnchor>
-                        )}
+                        )} */}
                         <TimeFilters />
                         {isWalletConnected && <ProfileItem />}
                         <SPAAnchor href={buildHref(ROUTES.Wizard)}>
@@ -285,8 +286,9 @@ const DappHeader: React.FC = () => {
                                     maxWidth: 400,
                                     borderRadius: '15.5px',
                                     fontWeight: '800',
-                                    fontSize: '14px',
+                                    fontSize: '12px',
                                     textTransform: 'capitalize',
+                                    whiteSpace: 'nowrap',
                                 }}
                                 height="28px"
                                 onClick={() =>
@@ -309,8 +311,9 @@ const DappHeader: React.FC = () => {
                                     maxWidth: 400,
                                     borderRadius: '15.5px',
                                     fontWeight: '700',
-                                    fontSize: '14px',
+                                    fontSize: '12px',
                                     textTransform: 'capitalize',
+                                    whiteSpace: 'nowrap',
                                 }}
                                 width="100%"
                                 height="28px"
@@ -325,7 +328,9 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.sign-up')}
                             </Button>
                             {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
-                            <NetworkSwitcher />
+                            <FlexDivEnd>
+                                <NetworkSwitcher />
+                            </FlexDivEnd>
                         </MobileButtonWrapper>
                     ) : (
                         <MobileButtonWrapper>

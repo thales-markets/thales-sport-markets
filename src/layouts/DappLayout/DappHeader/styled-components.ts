@@ -28,9 +28,7 @@ export const Container = styled(FlexDivRowCentered)`
     }
 `;
 
-export const LeftContainer = styled(FlexDivRowCentered)`
-    width: 263px;
-`;
+export const LeftContainer = styled(FlexDivRowCentered)``;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
     width: 806px;
@@ -38,10 +36,6 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`
-    width: 360px;
-    @media (max-width: 1299px) {
-        width: 320px;
-    }
     @media (max-width: 767px) {
         flex-direction: column;
     }
@@ -143,13 +137,18 @@ export const Count = styled.span`
     font-size: 12px;
 `;
 
-export const MobileButtonWrapper = styled(FlexDivRowCentered)`
+export const MobileButtonWrapper = styled.div`
     width: 100%;
     margin-top: 10px;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(25% - 5px), 1fr));
+    gap: 6px;
     min-height: 32px;
     @media (max-width: 767px) {
         min-height: 28px;
+    }
+    button {
+        width: 100%;
     }
 `;
 
