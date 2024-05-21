@@ -82,7 +82,7 @@
             "coverImageUrl": "/promotions/mm-big.webp",
             "headerHtml": "<h1><span><span><span>Higher odds win! Earn 5,000 OP every week using Thales products!</span></span></span></h1>",
             "ctaSection": {
-                "sectionHtml": "Earn 5,000 OP every week by driving notional volume on Sports Markets (including Overtime), Digital Options and Speed Markets!  </span></span></span><span><span><span> Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/op-incentive-program' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
+                "sectionHtml": "Earn 5,000 OP every week by driving notional volume on Sports Markets (including Overtime), Digital Options and Speed Markets! &nbsp</span></span></span><span><span><span> Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/op-incentive-program' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
                 "ctaButtonLink": "/markets",
                 "ctaButtonLabel": "Play now"
             },
