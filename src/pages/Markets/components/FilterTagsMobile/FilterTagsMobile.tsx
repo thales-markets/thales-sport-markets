@@ -164,7 +164,7 @@ const FilterTagLabel = styled.span`
     font-style: normal;
     font-weight: 800;
     font-size: 13px;
-    line-height: 15px;
+    line-height: 11px;
     color: ${(props) => props.theme.background.primary};
     text-transform: lowercase;
     display: flex;
@@ -174,6 +174,7 @@ const FilterTagLabel = styled.span`
 const ClearIcon = styled.i`
     font-size: 10px;
     padding-left: 10px;
+    align-self: center;
 `;
 
 export default FilterTagsMobile;

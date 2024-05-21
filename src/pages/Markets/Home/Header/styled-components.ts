@@ -27,22 +27,10 @@ export const NoScrollbarContainer = styled.div`
         align-items: center;
         // position: relative;
     }
-    // .react-horizontal-scrolling-menu--arrow-left {
-    //     position: absolute;
-    //     left: 0;
-    //     z-index: 3;
-    //     height: 28px;
-    //     width: 20px;
-    //     align-items: center;
-    // }
-    // .react-horizontal-scrolling-menu--arrow-right {
-    //     position: absolute;
-    //     right: 0;
-    //     z-index: 3;
-    //     height: 28px;
-    //     width: 20px;
-    //     align-items: center;
-    // }
+    .react-horizontal-scrolling-menu--arrow-left,
+    .react-horizontal-scrolling-menu--arrow-right {
+        min-width: 10px;
+    }
 `;
 
 export const MarketTypesContainer = styled(FlexDiv)`
@@ -94,18 +82,18 @@ export const ArrowIcon = styled.i<{ hide: boolean; hideBoth: boolean; isLeft?: b
 
 export const FilterIcon = styled.i`
     font-size: 20px;
-    margin-right: 10px;
     color: ${(props) => props.theme.textColor.secondary};
     @media (max-width: 950px) {
         font-size: 18px;
     }
 `;
 
-export const ThreeWayIcon = styled.i`
-    cursor: pointer;
+export const ThreeWayIcon = styled.i<{ disabled: boolean }>`
+    cursor: ${(props) => (props.disabled ? 'deafult' : 'pointer')};
     font-size: 20px;
-    margin-left: 10px;
+    margin-left: 20px;
     color: ${(props) => props.theme.textColor.secondary};
+    opacity: ${(props) => (props.disabled ? '0.2' : '1')};
     @media (max-width: 950px) {
         display: none;
     }

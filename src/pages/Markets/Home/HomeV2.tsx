@@ -295,13 +295,13 @@ const Home: React.FC = () => {
                 marketTypes.add(childMarket.typeId);
             });
 
-            if (marketTypeFilter.length) {
+            if (marketTypeFilter !== undefined) {
                 const marketMarketTypes = [
                     market.typeId,
                     ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
                 ];
 
-                if (!marketMarketTypes.some((marketType) => marketTypeFilter.includes(marketType))) {
+                if (!marketMarketTypes.some((marketType) => marketTypeFilter === marketType)) {
                     return false;
                 }
                 if (sportFilter == SportFilterEnum.Live) {
@@ -690,11 +690,11 @@ const Home: React.FC = () => {
                                     </NoMarketsLabel>
                                     <Button
                                         onClick={resetFilters}
-                                        backgroundColor={theme.button.background.tertiary}
+                                        backgroundColor={theme.button.background.secondary}
                                         textColor={theme.button.textColor.quaternary}
                                         borderColor={theme.button.borderColor.secondary}
-                                        fontWeight="400"
-                                        fontSize="15px"
+                                        height="24px"
+                                        fontSize="12px"
                                     >
                                         {t('market.view-all-markets')}
                                     </Button>
@@ -825,9 +825,9 @@ const NoMarketsContainer = styled(FlexDivColumnCentered)`
 `;
 
 const NoMarketsLabel = styled.span`
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
 `;
 
 export const LoaderContainer = styled(FlexDivColumn)`

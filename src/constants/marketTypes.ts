@@ -861,7 +861,7 @@ export const MARKET_TYPES_BY_SPORT: Record<SportFilterEnum, MarketType[]> = {
     [SportFilterEnum.Golf]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
 };
 
-export const MARKET_TYPE_GROUPS_BY_SPORT: Record<MarketSport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
+export const MarketTypeGroupsBySport: Record<MarketSport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
     Soccer: {
         [MarketTypeGroup.WINNER]: [...WINNER_MARKET_TYPES, ...DOUBLE_CHANCE_MARKET_TYPES, MarketType.HALFTIME_FULLTIME],
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],

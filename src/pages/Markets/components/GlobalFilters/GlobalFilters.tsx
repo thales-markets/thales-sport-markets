@@ -23,7 +23,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setGlobalFilter, setGloba
                 <Container className={open ? 'selected' : ''} onClick={() => setOpen(!open)}>
                     <FlexDiv>
                         <Icon className={`icon icon--filters2`} />
-                        <Label>{t('common.filters')}</Label>
+                        <Label>{t('common.status')}</Label>
                     </FlexDiv>
                     <FlexDiv>
                         {open ? (
