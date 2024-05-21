@@ -71,7 +71,7 @@ export const LeagueLogo = styled.i`
 `;
 
 export const MatchTimeContainer = styled(FlexDivColumnCentered)`
-    text-align: center;
+    text-align: start;
     justify-content: center;
     margin-left: 15px;
     font-weight: 400;
@@ -84,6 +84,7 @@ export const MatchTimeContainer = styled(FlexDivColumnCentered)`
     @media (max-width: 575px) {
         margin-left: 0px;
         margin-bottom: 10px;
+        text-align: center;
     }
 `;
 

@@ -14,6 +14,7 @@ import {
     setMarketTypeFilter,
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
+import { SportMarket } from 'types/markets';
 import { getMarketTypeName } from 'utils/markets';
 import Tooltip from '../../../../components/Tooltip';
 import {
@@ -26,7 +27,9 @@ import {
 } from './styled-components';
 
 type HeaderProps = {
-    availableMarketTypes: MarketType[];
+    availableMarketTypes?: MarketType[];
+    market?: SportMarket;
+    hideSwitch?: boolean;
 };
 
 const LeftArrow: React.FC = () => {
@@ -60,7 +63,7 @@ const RightArrow: React.FC = () => {
     );
 };
 
-const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
+const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch }) => {
     const dispatch = useDispatch();
     const isThreeWayView = useSelector(getIsThreeWayView);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
@@ -68,15 +71,17 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
 
+    const marketToCheck = market || selectedMarket;
+
     const marketTypes = useMemo(() => {
-        if (selectedMarket) {
-            return Object.keys(MarketTypeGroupsBySport[selectedMarket.sport] || {}).map(
-                (key) => key as MarketTypeGroup
-            );
+        if (marketToCheck) {
+            return Object.keys(MarketTypeGroupsBySport[marketToCheck.sport] || {}).map((key) => key as MarketTypeGroup);
         } else {
-            return availableMarketTypes.filter((marketType) => MARKET_TYPES_BY_SPORT[sportFilter].includes(marketType));
+            return availableMarketTypes
+                ? availableMarketTypes.filter((marketType) => MARKET_TYPES_BY_SPORT[sportFilter].includes(marketType))
+                : [];
         }
-    }, [sportFilter, availableMarketTypes, selectedMarket]);
+    }, [sportFilter, availableMarketTypes, marketToCheck]);
 
     return (
         <Container>
@@ -84,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
             <NoScrollbarContainer>
                 <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
                     {marketTypes.map((marketType, index) => {
-                        if (selectedMarket) {
+                        if (marketToCheck) {
                             return (
                                 <MarketTypeButton
                                     onClick={() =>
@@ -118,20 +123,22 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
                     })}
                 </ScrollMenu>
             </NoScrollbarContainer>
-            <Tooltip
-                overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}
-                component={
-                    <ThreeWayIcon
-                        onClick={() => {
-                            if (!selectedMarket && !marketTypeFilter) {
-                                dispatch(setIsThreeWayView(!isThreeWayView));
-                            }
-                        }}
-                        className={`icon ${isThreeWayView ? 'icon--list' : 'icon--grid'}`}
-                        disabled={!!selectedMarket || !!marketTypeFilter}
-                    />
-                }
-            />
+            {!hideSwitch && (
+                <Tooltip
+                    overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}
+                    component={
+                        <ThreeWayIcon
+                            onClick={() => {
+                                if (!selectedMarket && !marketTypeFilter) {
+                                    dispatch(setIsThreeWayView(!isThreeWayView));
+                                }
+                            }}
+                            className={`icon ${isThreeWayView ? 'icon--list' : 'icon--grid'}`}
+                            disabled={!!selectedMarket || !!marketTypeFilter}
+                        />
+                    }
+                />
+            )}
         </Container>
     );
 };

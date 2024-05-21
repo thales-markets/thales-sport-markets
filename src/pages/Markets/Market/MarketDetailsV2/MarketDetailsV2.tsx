@@ -19,7 +19,7 @@ import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveRes
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -33,7 +33,11 @@ import { buildHref, navigateTo } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
+import Button from '../../../../components/Button';
+import { MarketTypeGroupsBySport } from '../../../../constants/marketTypes';
 import { LeagueMap } from '../../../../constants/sports';
+import { getMarketTypeGroupFilter, setMarketTypeGroupFilter } from '../../../../redux/modules/market';
+import Header from '../../Home/Header';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
 import TicketTransactions from './components/TicketTransactions';
@@ -45,27 +49,46 @@ type MarketDetailsPropType = {
 const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
+    const dispatch = useDispatch();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const queryParams: { title?: string } = queryString.parse(location.search);
 
     const [metaTitle, setMetaTitle] = useQueryParam('title', queryParams?.title ? queryParams?.title : '');
     const [showTicketMobileModal, setShowTicketMobileModal] = useState(false);
     const [hidePausedMarkets, setHidePausedMarkets] = useState(true);
 
+    const marketTypesFilter = useMemo(
+        () => (marketTypeGroupFilter ? MarketTypeGroupsBySport[market.sport][marketTypeGroupFilter] || [] : []),
+        [market.sport, marketTypeGroupFilter]
+    );
+
     const groupedChildMarkets = useMemo(
         () =>
             groupBy(
-                market.childMarkets.filter((childMarket) =>
-                    hidePausedMarkets && market.isOpen && market.maturityDate > new Date()
-                        ? !childMarket.isPaused
-                        : true
+                market.childMarkets.filter(
+                    (childMarket) =>
+                        (!marketTypesFilter.length || marketTypesFilter.includes(childMarket.typeId)) &&
+                        (hidePausedMarkets && market.isOpen && market.maturityDate > new Date()
+                            ? !childMarket.isPaused
+                            : true)
                 ),
                 (childMarket) => childMarket.typeId
             ),
-        [market.childMarkets, market.isOpen, market.maturityDate, hidePausedMarkets]
+        [market.childMarkets, market.isOpen, market.maturityDate, hidePausedMarkets, marketTypesFilter]
     );
+
+    const numberOfMarkets = useMemo(() => {
+        let num = !marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER) ? 1 : 0;
+        Object.keys(groupedChildMarkets).forEach((key) => {
+            const typeId = Number(key);
+            const childMarkets = groupedChildMarkets[typeId];
+            num += childMarkets.length;
+        });
+        return num;
+    }, [groupedChildMarkets, marketTypesFilter]);
 
     useEffect(() => {
         if (!metaTitle) {
@@ -389,20 +412,47 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             />
                         </ToggleContainer>
                     )}
+                    <Header market={market} hideSwitch />
                     <PositionsContainer>
-                        <PositionsV2 markets={[market]} marketType={MarketType.WINNER} isGameOpen={isGameOpen} />
-                        {Object.keys(groupedChildMarkets).map((key, index) => {
-                            const typeId = Number(key);
-                            const childMarkets = groupedChildMarkets[typeId];
-                            return (
-                                <PositionsV2
-                                    key={index}
-                                    markets={childMarkets}
-                                    marketType={typeId}
-                                    isGameOpen={isGameOpen}
-                                />
-                            );
-                        })}
+                        {numberOfMarkets === 0 ? (
+                            <NoMarketsContainer>
+                                <NoMarketsLabel>{`${t(
+                                    'market.no-markets-found'
+                                )} ${marketTypeGroupFilter}`}</NoMarketsLabel>
+                                <Button
+                                    onClick={() => dispatch(setMarketTypeGroupFilter(undefined))}
+                                    backgroundColor={theme.button.background.secondary}
+                                    textColor={theme.button.textColor.quaternary}
+                                    borderColor={theme.button.borderColor.secondary}
+                                    height="24px"
+                                    fontSize="12px"
+                                >
+                                    {t('market.view-all-markets')}
+                                </Button>
+                            </NoMarketsContainer>
+                        ) : (
+                            <>
+                                {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
+                                    <PositionsV2
+                                        markets={[market]}
+                                        marketType={MarketType.WINNER}
+                                        isGameOpen={isGameOpen}
+                                    />
+                                )}
+                                {Object.keys(groupedChildMarkets).map((key, index) => {
+                                    const typeId = Number(key);
+                                    const childMarkets = groupedChildMarkets[typeId];
+                                    return (
+                                        <PositionsV2
+                                            key={index}
+                                            markets={childMarkets}
+                                            marketType={typeId}
+                                            isGameOpen={isGameOpen}
+                                        />
+                                    );
+                                })}
+                            </>
+                        )}
                     </PositionsContainer>
                 </>
                 {/* <Transactions market={market} /> */}
@@ -465,7 +515,7 @@ const RowContainer = styled(FlexDivRow)`
 
 const MainContainer = styled(FlexDivColumn)<{ isGameOpen: boolean }>`
     width: 100%;
-    max-width: 900px;
+    max-width: 806px;
     margin-right: ${(props) => (props.isGameOpen ? 10 : 0)}px;
     @media (max-width: 575px) {
         margin-right: 0;
@@ -579,6 +629,23 @@ const PeriodContainer = styled(FlexDivColumn)`
 const PeriodsContainer = styled(FlexDivColumn)<{ directionRow?: boolean }>`
     margin-top: 10px;
     flex-direction: ${(props) => (props.directionRow ? 'row' : 'column')};
+`;
+
+const NoMarketsContainer = styled(FlexDivColumnCentered)`
+    min-height: 200px;
+    align-items: center;
+    justify-content: start;
+    margin-top: 100px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 100%;
+`;
+
+const NoMarketsLabel = styled.span`
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 16px;
 `;
 
 export default MarketDetails;
