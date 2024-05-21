@@ -7,7 +7,7 @@ export const Container = styled(FlexDiv)`
     margin-bottom: 10px;
     align-items: center;
     @media (max-width: 950px) {
-        margin: 5px 5px 15px 5px;
+        margin: 10px 5px;
     }
 `;
 

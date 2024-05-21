@@ -54,7 +54,8 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
         marketSearch == '' &&
         globalFilter == GlobalFiltersEnum.OpenMarkets &&
         dateParam == null &&
-        sportFilter == SportFilterEnum.All;
+        sportFilter == SportFilterEnum.All &&
+        marketTypeFilter == undefined;
 
     return (
         <Container hideContainer={hideContainer}>
@@ -166,6 +167,7 @@ const Container = styled(FlexDivRowCentered)<{ hideContainer: boolean }>`
     width: 100%;
     display: ${(props) => (props.hideContainer ? 'none' : '')};
     overflow-x: auto;
+    margin-bottom: 10px;
 `;
 
 const FilterTagContainer = styled(FlexDiv)`
