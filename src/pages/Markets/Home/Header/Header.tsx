@@ -23,6 +23,7 @@ import {
     FilterIcon,
     MarketTypeButton,
     NoScrollbarContainer,
+    SwitchContainer,
     ThreeWayIcon,
 } from './styled-components';
 
@@ -124,20 +125,23 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                 </ScrollMenu>
             </NoScrollbarContainer>
             {!hideSwitch && (
-                <Tooltip
-                    overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}
-                    component={
-                        <ThreeWayIcon
-                            onClick={() => {
-                                if (!selectedMarket && !marketTypeFilter) {
-                                    dispatch(setIsThreeWayView(!isThreeWayView));
-                                }
-                            }}
-                            className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
-                            disabled={!!selectedMarket || !!marketTypeFilter}
-                        />
-                    }
-                />
+                <SwitchContainer>
+                    <Tooltip
+                        overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}
+                        component={
+                            <ThreeWayIcon
+                                onClick={() => {
+                                    if (!selectedMarket && !marketTypeFilter) {
+                                        dispatch(setIsThreeWayView(!isThreeWayView));
+                                    }
+                                }}
+                                fontSize={isThreeWayView ? 20 : 28}
+                                className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
+                                disabled={!!selectedMarket || !!marketTypeFilter}
+                            />
+                        }
+                    />
+                </SwitchContainer>
             )}
         </Container>
     );

@@ -87,10 +87,15 @@ export const FilterIcon = styled.i`
     }
 `;
 
-export const ThreeWayIcon = styled.i<{ disabled: boolean }>`
-    cursor: ${(props) => (props.disabled ? 'deafult' : 'pointer')};
-    font-size: 20px;
+export const SwitchContainer = styled(FlexDiv)`
+    min-width: 30px;
+    justify-content: center;
     margin-left: 20px;
+`;
+
+export const ThreeWayIcon = styled.i<{ disabled: boolean; fontSize: number }>`
+    cursor: ${(props) => (props.disabled ? 'deafult' : 'pointer')};
+    font-size: ${(props) => props.fontSize}px;
     color: ${(props) => props.theme.textColor.secondary};
     opacity: ${(props) => (props.disabled ? '0.2' : '1')};
     @media (max-width: 950px) {
