@@ -1,17 +1,17 @@
+import Button from 'components/Button';
 import RefferalModal from 'components/RefferalModal';
 import Tooltip from 'components/Tooltip';
 import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDiv } from 'styles/common';
-import { buildReffererLink } from 'utils/routes';
-import { toast } from 'react-toastify';
-import Button from 'components/Button';
+import { FlexDiv, FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
+import { buildReffererLink } from 'utils/routes';
 
 const ReferralButton: React.FC = () => {
     const { t } = useTranslation();
@@ -69,7 +69,7 @@ const ReferralButton: React.FC = () => {
                     <CopyContainer>
                         <span>{t('common.referral.your-referral-id')}:</span>
                         <span>{reffererID} </span>
-                        <CopyIcon onClick={referralClickHandler} className={`icon-thales icon-thales--copy`} />
+                        <CopyIcon onClick={referralClickHandler} className={`icon icon--copy`} />
                     </CopyContainer>
                 )}
             </ButtonContainer>

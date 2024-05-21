@@ -52,9 +52,9 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                     <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
                     <LeagueName>{leagueName}</LeagueName>
                     {hideLeague ? (
-                        <ArrowIcon className={`icon icon--arrow`} />
+                        <ArrowIcon className={`icon icon--caret-right`} />
                     ) : (
-                        <ArrowIcon down={true} className={`icon icon--arrow-down`} />
+                        <ArrowIcon down={true} className={`icon icon--caret-down`} />
                     )}
                 </LeagueInfo>
                 {!isMarketSelected ? (

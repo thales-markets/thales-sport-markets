@@ -133,7 +133,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                                     dispatch(setIsThreeWayView(!isThreeWayView));
                                 }
                             }}
-                            className={`icon ${isThreeWayView ? 'icon--list' : 'icon--grid'}`}
+                            className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
                             disabled={!!selectedMarket || !!marketTypeFilter}
                         />
                     }

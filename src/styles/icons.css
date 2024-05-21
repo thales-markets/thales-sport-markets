@@ -373,10 +373,46 @@
     content: '\00EA';
 }
 
+.icon--ticket-win:before {
+    content: '\00ED';
+}
+
 .icon--yield:before {
     content: '\00EE';
 }
 
-.icon--ticket-win:before {
-    content: '\00ED';
+.icon--open-ticket:before {
+    content: '\00EF';
+}
+
+.icon--three-column:before {
+    content: '\00F0';
+}
+
+.icon--copy:before {
+    content: '\00F1';
+}
+
+.icon--qr-code:before {
+    content: '\00F3';
+}
+
+.icon--claimable-ticket:before {
+    content: '\00F5';
+}
+
+.icon--apple:before {
+    content: '\010E';
+}
+
+.icon--discord:before {
+    content: '\0110';
+}
+
+.icon--github:before {
+    content: '\0112';
+}
+
+.icon--google:before {
+    content: '\011A';
 }

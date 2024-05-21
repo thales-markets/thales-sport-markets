@@ -139,9 +139,6 @@ table {
 @import './fonts.css';
 @import './icons.css';
 @import './homepage-icons.css';
-@import './thales-icons.css';
-@import './currencies.css';
-@import './social-icons.css';
 
 * {
     box-sizing: border-box;

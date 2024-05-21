@@ -165,7 +165,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
         <Container>
             <CategoryContainer onClick={() => setClaimableState(!openClaimable)}>
                 <CategoryInfo>
-                    <CategoryIcon className="icon icon--claimable-flag" />
+                    <CategoryIcon className="icon icon--claimable-ticket" />
                     <CategoryLabel>{t('profile.categories.claimable')}</CategoryLabel>
                 </CategoryInfo>
                 <CategoryDisclaimer>
@@ -217,7 +217,7 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
             )}
             <CategoryContainer onClick={() => setOpenState(!openOpenPositions)}>
                 <CategoryInfo>
-                    <CategoryIcon className="icon icon--logo" />
+                    <CategoryIcon className="icon icon--open-ticket" />
                     <CategoryLabel>{t('profile.categories.open')}</CategoryLabel>
                 </CategoryInfo>
                 <Arrow className={openOpenPositions ? 'icon icon--caret-up' : 'icon icon--caret-down'} />

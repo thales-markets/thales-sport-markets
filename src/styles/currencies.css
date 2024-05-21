@@ -1,123 +1,43 @@
 .currency-icon {
     display: inline-block;
-    font-family: Currencies !important;
+    font-family: OvertimeIconsV2 !important;
     vertical-align: middle;
     font-size: 24px;
     color: #ffffff;
 }
 
-.currency-icon--link::before {
-    content: '\0042';
-}
-
 .currency-icon--usdt::before {
-    content: '\0044';
-}
-
-.currency-icon--crv::before {
-    content: '\0046';
+    content: '\00B1';
 }
 
 .currency-icon--dai::before {
-    content: '\0049';
-}
-
-.currency-icon--bnb:before {
-    content: '\004C';
-}
-
-.currency-icon--matic:before {
-    content: '\004D';
-}
-
-.currency-icon--snx::before {
-    content: '\004e';
-}
-
-.currency-icon--btc::before {
-    content: '\0050';
+    content: '\00D1';
 }
 
 .currency-icon--op::before {
-    content: '\0053';
-}
-
-.currency-icon--eth::before {
-    content: '\0055';
-}
-
-.currency-icon--usdc::before {
-    content: '\0057';
-}
-
-.currency-icon--usdbc::before {
-    content: '\0070';
-}
-
-.currency-icon--s::before {
-    content: '\005A';
-}
-
-.currency-icon--xau::before {
-    content: '\0062';
-}
-
-.currency-icon--xag::before {
-    content: '\0063';
-}
-
-.currency-icon--arb::before {
-    content: '\0065';
-}
-
-.currency-icon--cake::before {
-    content: '\0066';
-}
-
-.currency-icon--dpx::before {
-    content: '\0067';
-}
-
-.currency-icon--gmx::before {
     content: '\0068';
 }
 
-.currency-icon--magic::before {
-    content: '\0069';
+.currency-icon--eth::before {
+    content: '\00B2';
 }
 
-.currency-icon--sol::before {
-    content: '\006A';
+.currency-icon--usdc::before {
+    content: '\00B0';
 }
 
-.currency-icon--bch::before {
-    content: '\006B';
+.currency-icon--usdbc::before {
+    content: '\00B0';
 }
 
-.currency-icon--ltc::before {
-    content: '\006C';
-}
-
-.currency-icon--xrp::before {
-    content: '\006D';
-}
-
-.currency-icon--pepe::before {
-    content: '\006E';
-}
-
-.currency-icon--wld::before {
-    content: '\006F';
+.currency-icon--arb::before {
+    content: '\00D1';
 }
 
 .currency-icon--usdce::before {
-    content: '\0070';
+    content: '\00B0';
 }
 
 .currency-icon--weth::before {
-    content: '\0071';
-}
-
-.currency-icon--susd::before {
-    content: '\0072';
+    content: '\00B3';
 }
