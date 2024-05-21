@@ -31,8 +31,8 @@ export const Container = styled(FlexDivRowCentered)`
 export const LeftContainer = styled(FlexDivRowCentered)``;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
-    width: 806px;
-    margin: 0 25px;
+    margin: 0 10px;
+    justify-content: center;
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`
@@ -163,6 +163,10 @@ export const ReferAndEarn = styled.button`
     font-size: 13px;
     background: linear-gradient(89.94deg, #8f32d8 1.79%, #d70c61 99.65%);
     border: none;
+`;
+
+export const SettingsContainer = styled(FlexDivRowCentered)`
+    margin: 0 20px;
 `;
 
 export const HeaderIcon = styled.i<{

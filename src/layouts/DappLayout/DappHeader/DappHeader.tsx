@@ -48,6 +48,7 @@ import {
     SearchContainer,
     SearchIcon,
     SearchIconContainer,
+    SettingsContainer,
     WrapperMobile,
 } from './styled-components';
 
@@ -93,7 +94,7 @@ const DappHeader: React.FC = () => {
 
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
-    // const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
+    const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
 
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
@@ -116,7 +117,10 @@ const DappHeader: React.FC = () => {
     const menuImageRef = useRef<HTMLImageElement>(null);
 
     const getGetStartedButton = () => (
-        <SPAAnchor style={{ width: isMobile ? '100%' : 'fit-content' }} href={buildHref(ROUTES.Wizard)}>
+        <SPAAnchor
+            style={{ width: isMobile ? '100%' : 'fit-content', marginLeft: isMobile ? '0' : '30px' }}
+            href={buildHref(ROUTES.Wizard)}
+        >
             <Button
                 backgroundColor={theme.background.primary}
                 textColor={theme.button.textColor.quaternary}
@@ -143,26 +147,30 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
-                    </LeftContainer>
-                    <MiddleContainer>
                         {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
-                        {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
+                    </LeftContainer>
+                    {isMarketsPage && (
+                        <MiddleContainer>
+                            {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
                             <ReferAndEarn>{t('common.referral.header-label')}</ReferAndEarn>
                         </SPAAnchor> */}
-                        {/* {isWalletConnected && isMarketsPage && (
+                            {/* {isWalletConnected && isMarketsPage && (
                             <SPAAnchor href={buildHref(ROUTES.Wizard)}>
                                 <HeaderIcon className="icon icon--tour" />
                                 <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
                             </SPAAnchor>
                         )} */}
-                        <TimeFilters />
+                            <TimeFilters />
+                        </MiddleContainer>
+                    )}
+                    <RightContainer>
                         {isWalletConnected && <ProfileItem />}
                         <SPAAnchor href={buildHref(ROUTES.Wizard)}>
-                            <HeaderIcon className="icon icon--settings" />
-                            <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                            <SettingsContainer>
+                                <HeaderIcon className="icon icon--settings" />
+                                <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                            </SettingsContainer>
                         </SPAAnchor>
-                    </MiddleContainer>
-                    <RightContainer>
                         {!isWalletConnected && (
                             <Button
                                 backgroundColor={'transparent'}

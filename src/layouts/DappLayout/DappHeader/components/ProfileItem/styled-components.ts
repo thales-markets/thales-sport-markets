@@ -4,6 +4,7 @@ import { FlexDivRow } from 'styles/common';
 export const ProfileContainer = styled(FlexDivRow)`
     align-items: center;
     cursor: pointer;
+    margin-right: 20px;
 `;
 export const ProfileLabel = styled.span`
     font-weight: 600;
