@@ -131,13 +131,13 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                         component={
                             <ThreeWayIcon
                                 onClick={() => {
-                                    if (!selectedMarket && !marketTypeFilter) {
+                                    if (!selectedMarket && marketTypeFilter === undefined) {
                                         dispatch(setIsThreeWayView(!isThreeWayView));
                                     }
                                 }}
                                 fontSize={isThreeWayView ? 20 : 28}
                                 className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
-                                disabled={!!selectedMarket || !!marketTypeFilter}
+                                disabled={!!selectedMarket || marketTypeFilter !== undefined}
                             />
                         }
                     />
