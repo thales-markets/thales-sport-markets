@@ -616,6 +616,7 @@ const Home: React.FC = () => {
                         borderColor={theme.background.septenary}
                         additionalStyles={additionalApplyFiltersButtonStyle}
                     >
+                        <FiltersIcon className={`icon icon--filters2`} />
                         {t('market.apply-filters')}
                         <ArrowIcon className={`icon icon--caret-right`} />
                     </Button>
@@ -871,10 +872,18 @@ const LogoContainer = styled.div`
     text-align: center;
 `;
 
+const FiltersIcon = styled.i`
+    font-size: 15px;
+    font-weight: 400;
+    text-transform: none;
+    margin-right: 8px;
+    margin-top: -2px;
+`;
+
 const ArrowIcon = styled.i`
     font-size: 15px;
     font-weight: 400;
-    margin-right: -10px;
+    margin-left: 8px;
     text-transform: none;
 `;
 

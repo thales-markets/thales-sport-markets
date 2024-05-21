@@ -83,7 +83,6 @@ export const MenuIconContainer = styled.div`
     justify-content: start;
     position: absolute;
     left: 12px;
-    margin-top: 10px;
 `;
 
 export const LogoContainer = styled.div`
@@ -97,7 +96,7 @@ export const IconWrapper = styled.div`
     width: 28px;
     height: 28px;
     position: absolute;
-    top: -10px;
+    top: -15px;
 `;
 
 export const SearchIcon = styled.i`

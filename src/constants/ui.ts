@@ -17,7 +17,7 @@ export const GAME_STATUS = {
 export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
     {
         i18label: 'markets.nav-menu.items.profile',
-        iconClass: 'icon icon--profile',
+        iconClass: 'icon icon--profile2',
         name: 'profile',
         route: ROUTES.Profile,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
@@ -47,14 +47,14 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--competition',
         name: 'parlay-competition',
         route: ROUTES.Leaderboard,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
     {
         i18label: 'markets.nav-menu.items.become-affiliate',
         iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
         route: ROUTES.Referral,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 
@@ -64,7 +64,7 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--promotions',
         name: 'promotions',
         route: ROUTES.Promotions.Home,
-        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
 ];
 

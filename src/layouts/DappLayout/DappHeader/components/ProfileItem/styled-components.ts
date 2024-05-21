@@ -19,11 +19,12 @@ export const ProfileIconContainer = styled.div`
     margin-right: 5px;
 `;
 
-export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile' })<{
+export const ProfileIcon = styled.i.attrs({ className: 'icon icon--profile2' })<{
     avatarSize?: number;
     iconColor?: string;
 }>`
     font-size: ${(props) => (props.avatarSize ? props.avatarSize : '20')}px;
+    font-weight: 400;
     color: ${(props) => (props.iconColor ? props.iconColor : props.theme.textColor.secondary)};
 `;
 

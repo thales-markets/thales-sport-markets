@@ -325,6 +325,10 @@
     content: '\00D8';
 }
 
+.icon--sports:before {
+    content: '\00D9';
+}
+
 .icon--history:before {
     content: '\00DA';
 }
@@ -349,6 +353,10 @@
     content: '\00E1';
 }
 
+.icon--profile2:before {
+    content: '\00E2';
+}
+
 .icon--caret-right:before {
     content: '\00E4';
 }
@@ -359,6 +367,10 @@
 
 .icon--settings:before {
     content: '\00E6';
+}
+
+.icon--ticket:before {
+    content: '\00E8';
 }
 
 .icon--tour:before {

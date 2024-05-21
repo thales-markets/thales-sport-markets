@@ -1,6 +1,5 @@
 import LanguageSelector from 'components/LanguageSelector';
 import Logo from 'components/Logo';
-import MintVoucher from 'components/MintVoucher';
 import { Separator } from 'components/NavMenu/styled-components';
 import SPAAnchor from 'components/SPAAnchor';
 import WalletInfo from 'components/WalletInfo';
@@ -55,6 +54,9 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
         <OutsideClickHandler onOutsideClick={() => visibility && setNavMenuVisibility(false)}>
             <Wrapper show={visibility}>
                 <HeaderContainer>
+                    <LogoContainer>
+                        <Logo />
+                    </LogoContainer>
                     <FlexDivCentered>
                         <Network>
                             <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
@@ -137,11 +139,8 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    <MintVoucher style={{ margin: '20px auto 0px auto', width: 205 }} />
-                    <LogoContainer>
-                        <Logo />
-                        <CloseIcon onClick={() => setNavMenuVisibility(false)} />
-                    </LogoContainer>
+                    {/* <MintVoucher style={{ margin: '20px auto 10px auto', width: 205 }} /> */}
+                    <CloseIcon onClick={() => setNavMenuVisibility(false)} />
                 </FooterContainer>
             </Wrapper>
         </OutsideClickHandler>
