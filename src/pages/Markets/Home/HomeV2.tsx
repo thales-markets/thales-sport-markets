@@ -34,6 +34,7 @@ import {
     setDateFilter,
     setGlobalFilter,
     setMarketSearch,
+    setMarketTypeFilter,
     setSportFilter,
     setTagFilter,
 } from 'redux/modules/market';
@@ -658,11 +659,15 @@ const Home: React.FC = () => {
                                 setAvailableTags={setAvailableTags}
                                 tagsList={tagsList}
                             />
+                            {!marketsLoading && finalMarkets.length > 0 && (
+                                <Header availableMarketTypes={availableMarketTypes} />
+                            )}
                             <FilterTagsMobile
                                 sportFilter={sportFilter}
                                 marketSearch={marketSearch}
                                 globalFilter={globalFilter}
                                 tagFilter={tagFilter}
+                                marketTypeFilter={marketTypeFilter}
                                 setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
                                 setDateParam={setDateParam}
                                 setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
@@ -672,6 +677,9 @@ const Home: React.FC = () => {
                                 setSportFilter={(filter: SportFilterEnum) => dispatch(setSportFilter(filter))}
                                 setSportParam={setSportParam}
                                 setSearchParam={setSearchParam}
+                                setMarketTypeFilter={(filter: MarketType | undefined) =>
+                                    dispatch(setMarketTypeFilter(filter))
+                                }
                             />
                         </>
                     )}

@@ -25,7 +25,6 @@ export const NoScrollbarContainer = styled.div`
     }
     .react-horizontal-scrolling-menu--inner-wrapper {
         align-items: center;
-        // position: relative;
     }
     .react-horizontal-scrolling-menu--arrow-left,
     .react-horizontal-scrolling-menu--arrow-right {

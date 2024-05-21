@@ -1,3 +1,4 @@
+import { MarketType } from 'enums/marketTypes';
 import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +7,7 @@ import { setMarketSearch } from 'redux/modules/market';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivRowCentered } from 'styles/common';
 import { Tags } from 'types/markets';
+import { getMarketTypeName } from 'utils/markets';
 import { getQueryStringVal } from 'utils/useQueryParams';
 
 type FilterTagsMobileProps = {
@@ -13,6 +15,7 @@ type FilterTagsMobileProps = {
     tagFilter: Tags;
     globalFilter: string;
     marketSearch: string;
+    marketTypeFilter: MarketType | undefined;
     setSportFilter: (value: SportFilterEnum) => void;
     setSportParam: (val: string) => void;
     setTagFilter: (value: Tags) => void;
@@ -22,6 +25,7 @@ type FilterTagsMobileProps = {
     setDateFilter: (value: number | Date) => void;
     setDateParam: (val: string) => void;
     setSearchParam: (val: string) => void;
+    setMarketTypeFilter: (val: MarketType | undefined) => void;
 };
 
 const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
@@ -29,6 +33,7 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
     tagFilter,
     globalFilter,
     marketSearch,
+    marketTypeFilter,
     setSportFilter,
     setSportParam,
     setTagFilter,
@@ -38,6 +43,7 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
     setDateFilter,
     setDateParam,
     setSearchParam,
+    setMarketTypeFilter,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -136,6 +142,19 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                         </FilterTagContainer>
                     );
                 })}
+            {marketTypeFilter !== undefined && (
+                <FilterTagContainer>
+                    <FilterTagLabel>
+                        {`type: ${getMarketTypeName(marketTypeFilter)}`}
+                        <ClearIcon
+                            className="icon icon--close"
+                            onClick={() => {
+                                setMarketTypeFilter(undefined);
+                            }}
+                        />
+                    </FilterTagLabel>
+                </FilterTagContainer>
+            )}
         </Container>
     );
 };
