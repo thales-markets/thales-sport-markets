@@ -7,7 +7,7 @@ export const Container = styled(FlexDiv)`
     margin-bottom: 10px;
     align-items: center;
     @media (max-width: 950px) {
-        margin: 5px 5px 15px 5px;
+        margin: 10px 5px;
     }
 `;
 
@@ -25,24 +25,11 @@ export const NoScrollbarContainer = styled.div`
     }
     .react-horizontal-scrolling-menu--inner-wrapper {
         align-items: center;
-        // position: relative;
     }
-    // .react-horizontal-scrolling-menu--arrow-left {
-    //     position: absolute;
-    //     left: 0;
-    //     z-index: 3;
-    //     height: 28px;
-    //     width: 20px;
-    //     align-items: center;
-    // }
-    // .react-horizontal-scrolling-menu--arrow-right {
-    //     position: absolute;
-    //     right: 0;
-    //     z-index: 3;
-    //     height: 28px;
-    //     width: 20px;
-    //     align-items: center;
-    // }
+    .react-horizontal-scrolling-menu--arrow-left,
+    .react-horizontal-scrolling-menu--arrow-right {
+        min-width: 10px;
+    }
 `;
 
 export const MarketTypesContainer = styled(FlexDiv)`
@@ -94,19 +81,24 @@ export const ArrowIcon = styled.i<{ hide: boolean; hideBoth: boolean; isLeft?: b
 
 export const FilterIcon = styled.i`
     font-size: 20px;
-    margin-right: 10px;
     color: ${(props) => props.theme.textColor.secondary};
     @media (max-width: 950px) {
         font-size: 18px;
     }
 `;
 
-export const ThreeWayIcon = styled.i`
-    cursor: pointer;
-    font-size: 20px;
-    margin-left: 10px;
-    color: ${(props) => props.theme.textColor.secondary};
+export const SwitchContainer = styled(FlexDiv)`
+    min-width: 30px;
+    justify-content: center;
+    margin-left: 20px;
     @media (max-width: 950px) {
         display: none;
     }
+`;
+
+export const ThreeWayIcon = styled.i<{ disabled: boolean; fontSize: number }>`
+    cursor: ${(props) => (props.disabled ? 'deafult' : 'pointer')};
+    font-size: ${(props) => props.fontSize}px;
+    color: ${(props) => props.theme.textColor.secondary};
+    opacity: ${(props) => (props.disabled ? '0.2' : '1')};
 `;

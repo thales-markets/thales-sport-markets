@@ -62,7 +62,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const positionText = getPositionTextV2(
         market,
         position,
-        isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter.length)
+        isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter)
     );
 
     const oddTooltipText = getOddTooltipTextV2(position, market);

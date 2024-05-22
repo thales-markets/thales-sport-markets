@@ -1,3 +1,4 @@
+import { MarketType } from 'enums/marketTypes';
 import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +7,7 @@ import { setMarketSearch } from 'redux/modules/market';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivRowCentered } from 'styles/common';
 import { Tags } from 'types/markets';
+import { getMarketTypeName } from 'utils/markets';
 import { getQueryStringVal } from 'utils/useQueryParams';
 
 type FilterTagsMobileProps = {
@@ -13,6 +15,7 @@ type FilterTagsMobileProps = {
     tagFilter: Tags;
     globalFilter: string;
     marketSearch: string;
+    marketTypeFilter: MarketType | undefined;
     setSportFilter: (value: SportFilterEnum) => void;
     setSportParam: (val: string) => void;
     setTagFilter: (value: Tags) => void;
@@ -22,6 +25,7 @@ type FilterTagsMobileProps = {
     setDateFilter: (value: number | Date) => void;
     setDateParam: (val: string) => void;
     setSearchParam: (val: string) => void;
+    setMarketTypeFilter: (val: MarketType | undefined) => void;
 };
 
 const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
@@ -29,6 +33,7 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
     tagFilter,
     globalFilter,
     marketSearch,
+    marketTypeFilter,
     setSportFilter,
     setSportParam,
     setTagFilter,
@@ -38,6 +43,7 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
     setDateFilter,
     setDateParam,
     setSearchParam,
+    setMarketTypeFilter,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -48,7 +54,8 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
         marketSearch == '' &&
         globalFilter == GlobalFiltersEnum.OpenMarkets &&
         dateParam == null &&
-        sportFilter == SportFilterEnum.All;
+        sportFilter == SportFilterEnum.All &&
+        marketTypeFilter == undefined;
 
     return (
         <Container hideContainer={hideContainer}>
@@ -136,6 +143,19 @@ const FilterTagsMobile: React.FC<FilterTagsMobileProps> = ({
                         </FilterTagContainer>
                     );
                 })}
+            {marketTypeFilter !== undefined && (
+                <FilterTagContainer>
+                    <FilterTagLabel>
+                        {`type: ${getMarketTypeName(marketTypeFilter)}`}
+                        <ClearIcon
+                            className="icon icon--close"
+                            onClick={() => {
+                                setMarketTypeFilter(undefined);
+                            }}
+                        />
+                    </FilterTagLabel>
+                </FilterTagContainer>
+            )}
         </Container>
     );
 };
@@ -164,7 +184,7 @@ const FilterTagLabel = styled.span`
     font-style: normal;
     font-weight: 800;
     font-size: 13px;
-    line-height: 15px;
+    line-height: 11px;
     color: ${(props) => props.theme.background.primary};
     text-transform: lowercase;
     display: flex;
@@ -174,6 +194,7 @@ const FilterTagLabel = styled.span`
 const ClearIcon = styled.i`
     font-size: 10px;
     padding-left: 10px;
+    align-self: center;
 `;
 
 export default FilterTagsMobile;

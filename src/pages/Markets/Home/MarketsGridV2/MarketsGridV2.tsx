@@ -219,22 +219,8 @@ const Container = styled(FlexDiv)<{ isMarketSelected: boolean }>`
         max-width: ${(props) => (props.isMarketSelected ? '100%' : '100%')};
         width: ${(props) => (props.isMarketSelected ? '100%' : '100%')};
     }
-    overflow-x: hidden;
-    scrollbar-width: 5px; /* Firefox */n
-    -ms-overflow-style: none;
-    ::-webkit-scrollbar {
-        border-radius: 8px;
-        width: 10px;
-    }
     @media (max-width: 950px) {
-        margin: 0;
-        scrollbar-width: 0px; /* Firefox */
-        ::-webkit-scrollbar {
-            /* WebKit */
-            width: 0px;
-            height: 0px;
-        }
-    }
+        margin: 10px 0 0 0;
 `;
 
 const ListContainer = styled.div<{ isMarketSelected: boolean }>`

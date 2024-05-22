@@ -87,8 +87,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const firstSpreadMarket = market.childMarkets.find((childMarket) => childMarket.typeId === MarketType.SPREAD);
     const firstTotalMarket = market.childMarkets.find((childMarket) => childMarket.typeId === MarketType.TOTAL);
     const marketTypeFilterMarket =
-        marketTypeFilter.length &&
-        market.childMarkets.find((childMarket) => marketTypeFilter.includes(childMarket.typeId));
+        marketTypeFilter !== undefined
+            ? marketTypeFilter === MarketType.WINNER
+                ? market
+                : market.childMarkets.find((childMarket) => marketTypeFilter === childMarket.typeId)
+            : undefined;
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
@@ -146,7 +149,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
     const hideGame = isGameLive ? !areOddsValid : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
-    const isColumnView = !marketTypeFilterMarket && isThreeWayView && !isMarketSelected && isGameOpen && !isMobile;
+    const isColumnView =
+        marketTypeFilter === undefined && isThreeWayView && !isMarketSelected && isGameOpen && !isMobile;
     const isTwoPositionalMarket = market.odds.length === 2;
     const selected = selectedMarket?.gameId == market.gameId;
 
@@ -279,7 +283,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         <>
                             <PositionsV2
                                 markets={[marketTypeFilterMarket ? marketTypeFilterMarket : market]}
-                                marketType={marketTypeFilterMarket ? marketTypeFilter[0] : MarketType.WINNER}
+                                marketType={
+                                    marketTypeFilter && marketTypeFilterMarket ? marketTypeFilter : MarketType.WINNER
+                                }
                                 isGameOpen={isGameOpen}
                                 isMainPageView
                                 isColumnView={isColumnView}
@@ -303,7 +309,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 />
                             )}
                             {marketsCount > 0 && (
-                                <MarketsCountWrapper onClick={() => dispatch(setSelectedMarket(market))}>
+                                <MarketsCountWrapper
+                                    onClick={() =>
+                                        dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }))
+                                    }
+                                >
                                     {`+${marketsCount}`}
                                     {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>

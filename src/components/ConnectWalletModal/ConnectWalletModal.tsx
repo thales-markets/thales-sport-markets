@@ -157,7 +157,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                     openConnectModal?.();
                                 }}
                             >
-                                <WalletIcon className={'social-icon icon--wallet'} />
+                                <WalletIcon className={'icon-homepage icon--wallet'} />
                                 <WalletName>{t('common.wallet.connect-with-wallet')}</WalletName>
                             </WalletIconContainer>
                         </WalletIconsWrapper>
@@ -323,6 +323,8 @@ const SocialButtonsWrapper = styled(FlexDivRow)`
 const SocialIcon = styled.i`
     font-size: 22px;
     margin-right: 7px;
+    font-weight: 400;
+    text-transform: none;
 `;
 
 const Button = styled(FlexDivCentered)<{ oneButtoninRow?: boolean; active?: boolean }>`

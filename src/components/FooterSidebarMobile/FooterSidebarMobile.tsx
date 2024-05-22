@@ -63,7 +63,7 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
             <Container>
                 <ItemContainer>
                     <ItemIcon
-                        className="icon icon--odds"
+                        className="icon icon--settings"
                         onClick={() => {
                             setDropdownIsOpen(!dropdownIsOpen);
                         }}
@@ -92,18 +92,23 @@ const FooterSidebarMobile: React.FC<FooterSidebarMobileProps> = ({ setParlayMobi
                 {isWalletConnected && (
                     <ItemContainer>
                         <SPAAnchor href={buildHref(ROUTES.Profile)}>
-                            <ItemIcon className="icon icon--profile" />
+                            <ItemIcon className="icon icon--profile2" />
                         </SPAAnchor>
                     </ItemContainer>
                 )}
                 <ItemContainer onClick={() => setParlayMobileVisibility(true)}>
-                    <ItemIcon iteration={ticketLength} className={`icon icon--parlay ${pulse ? 'pulse' : ''}`} />
+                    <ItemIcon
+                        fontSize={36}
+                        iteration={ticketLength}
+                        className={`icon icon--ticket-horizontal ${pulse ? 'pulse' : ''}`}
+                    />
                     <ParlayNumber>{ticketLength || ''}</ParlayNumber>
                 </ItemContainer>
                 {setShowBurger && (
                     <ItemContainer>
                         <ItemIcon
-                            className="icon icon--filters"
+                            className="icon icon--sports"
+                            fontSize={44}
                             onClick={() => {
                                 setShowBurger(true);
                             }}

@@ -131,7 +131,6 @@ const TopUpButton = styled.button`
     color: ${(props) => props.theme.error.textColor.primary};
     border: 1px solid ${(props) => props.theme.error.borderColor.primary};
     border-radius: 15px;
-    padding: 6px 30px;
     min-width: 140px;
     width: 100%;
     max-width: 400px;
@@ -139,7 +138,8 @@ const TopUpButton = styled.button`
     font-size: 14px;
     font-style: normal;
     font-weight: 800;
-    line-height: normal;
+    line-height: 14px;
+    height: 28px;
     filter: drop-shadow(0px 0px 14px rgba(191, 73, 81, 0.7));
     animation: pulse 2s infinite;
     cursor: pointer;

@@ -7,7 +7,7 @@ export const Container = styled(FlexDiv)`
     width: 90%;
     left: 50%;
     transform: translateX(-50%);
-    height: 36px;
+    height: 40px;
     color: ${(props) => props.theme.background.primary};
     background: ${(props) => props.theme.background.septenary};
     border-radius: 40px;
@@ -18,10 +18,13 @@ export const Container = styled(FlexDiv)`
 export const ItemContainer = styled(FlexDiv)`
     justify-content: center;
     align-self: center;
+    position: relative;
 `;
 
-export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number }>`
-    font-size: 33px;
+export const ItemIcon = styled.i<{ parlay?: boolean; iteration?: number; fontSize?: number }>`
+    font-size: ${(props) => props.fontSize || 33}px;
+    font-weight: 400;
+    text-transform: none;
     color: ${(props) => props.theme.background.primary};
 
     &.pulse {
@@ -95,5 +98,8 @@ export const ParlayNumber = styled.span`
     display: block;
     text-transform: capitalize;
     position: absolute;
-    bottom: 9px;
+    bottom: 11px;
+    left: 8px;
+    background: ${(props) => props.theme.background.septenary};
+    padding: 0 2px;
 `;

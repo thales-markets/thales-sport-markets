@@ -1,4 +1,4 @@
-import { MARKET_TYPES_BY_SPORT, MARKET_TYPE_GROUPS_BY_SPORT } from 'constants/marketTypes';
+import { MARKET_TYPES_BY_SPORT, MarketTypeGroupsBySport } from 'constants/marketTypes';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import React, { useContext, useMemo } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
@@ -7,23 +7,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     getIsThreeWayView,
     getMarketTypeFilter,
+    getMarketTypeGroupFilter,
     getSelectedMarket,
     getSportFilter,
     setIsThreeWayView,
     setMarketTypeFilter,
+    setMarketTypeGroupFilter,
 } from 'redux/modules/market';
-import { getMarketTypeName } from '../../../../utils/markets';
+import { SportMarket } from 'types/markets';
+import { getMarketTypeName } from 'utils/markets';
+import Tooltip from '../../../../components/Tooltip';
 import {
     ArrowIcon,
     Container,
     FilterIcon,
     MarketTypeButton,
     NoScrollbarContainer,
+    SwitchContainer,
     ThreeWayIcon,
 } from './styled-components';
 
 type HeaderProps = {
-    availableMarketTypes: MarketType[];
+    availableMarketTypes?: MarketType[];
+    market?: SportMarket;
+    hideSwitch?: boolean;
 };
 
 const LeftArrow: React.FC = () => {
@@ -57,20 +64,25 @@ const RightArrow: React.FC = () => {
     );
 };
 
-const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
+const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch }) => {
     const dispatch = useDispatch();
     const isThreeWayView = useSelector(getIsThreeWayView);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
+    const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
 
+    const marketToCheck = market || selectedMarket;
+
     const marketTypes = useMemo(() => {
-        if (selectedMarket) {
-            return Object.keys(MARKET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport] || {});
+        if (marketToCheck) {
+            return Object.keys(MarketTypeGroupsBySport[marketToCheck.sport] || {}).map((key) => key as MarketTypeGroup);
         } else {
-            return availableMarketTypes.filter((marketType) => MARKET_TYPES_BY_SPORT[sportFilter].includes(marketType));
+            return availableMarketTypes
+                ? availableMarketTypes.filter((marketType) => MARKET_TYPES_BY_SPORT[sportFilter].includes(marketType))
+                : [];
         }
-    }, [sportFilter, availableMarketTypes, selectedMarket]);
+    }, [sportFilter, availableMarketTypes, marketToCheck]);
 
     return (
         <Container>
@@ -78,36 +90,17 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
             <NoScrollbarContainer>
                 <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
                     {marketTypes.map((marketType, index) => {
-                        if (typeof marketType === 'string') {
-                            if (!selectedMarket) {
-                                return <></>;
-                            }
+                        if (marketToCheck) {
                             return (
                                 <MarketTypeButton
                                     onClick={() =>
-                                        JSON.stringify(
-                                            MARKET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport][
-                                                marketType as MarketTypeGroup
-                                            ] || []
-                                        ) === JSON.stringify(marketTypeFilter)
-                                            ? dispatch(setMarketTypeFilter([]))
-                                            : dispatch(
-                                                  setMarketTypeFilter(
-                                                      MARKET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport][
-                                                          marketType as MarketTypeGroup
-                                                      ] || []
-                                                  )
-                                              )
+                                        marketTypeGroupFilter === marketType
+                                            ? dispatch(setMarketTypeGroupFilter(undefined))
+                                            : dispatch(setMarketTypeGroupFilter(marketType as MarketTypeGroup))
                                     }
-                                    selected={
-                                        JSON.stringify(
-                                            MARKET_TYPE_GROUPS_BY_SPORT[selectedMarket.sport][
-                                                marketType as MarketTypeGroup
-                                            ] || []
-                                        ) === JSON.stringify(marketTypeFilter)
-                                    }
+                                    selected={marketTypeGroupFilter === marketType}
                                     key={`${marketType}${index}`}
-                                    itemID={marketType}
+                                    itemID={`${marketType}`}
                                 >
                                     {marketType}
                                 </MarketTypeButton>
@@ -116,25 +109,40 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes }) => {
                             return (
                                 <MarketTypeButton
                                     onClick={() =>
-                                        marketTypeFilter.includes(marketType)
-                                            ? dispatch(setMarketTypeFilter([]))
-                                            : dispatch(setMarketTypeFilter([marketType]))
+                                        marketTypeFilter === marketType
+                                            ? dispatch(setMarketTypeFilter(undefined))
+                                            : dispatch(setMarketTypeFilter(marketType as MarketType))
                                     }
-                                    selected={marketTypeFilter.includes(marketType)}
+                                    selected={marketTypeFilter === marketType}
                                     key={`${marketType}${index}`}
                                     itemID={`${marketType}`}
                                 >
-                                    {getMarketTypeName(marketType)}
+                                    {getMarketTypeName(marketType as MarketType)}
                                 </MarketTypeButton>
                             );
                         }
                     })}
                 </ScrollMenu>
             </NoScrollbarContainer>
-            <ThreeWayIcon
-                onClick={() => dispatch(setIsThreeWayView(!isThreeWayView))}
-                className={`icon ${isThreeWayView ? 'icon--list' : 'icon--grid'}`}
-            />
+            {!hideSwitch && (
+                <SwitchContainer>
+                    <Tooltip
+                        overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}
+                        component={
+                            <ThreeWayIcon
+                                onClick={() => {
+                                    if (!selectedMarket && marketTypeFilter === undefined) {
+                                        dispatch(setIsThreeWayView(!isThreeWayView));
+                                    }
+                                }}
+                                fontSize={isThreeWayView ? 20 : 28}
+                                className={`icon ${isThreeWayView ? 'icon--list' : 'icon--three-column'}`}
+                                disabled={!!selectedMarket || marketTypeFilter !== undefined}
+                            />
+                        }
+                    />
+                </SwitchContainer>
+            )}
         </Container>
     );
 };

@@ -197,8 +197,8 @@ const DocsIcon = styled.i`
 const YoutubeIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\005B';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0119';
     }
 `;
 
@@ -221,16 +221,16 @@ const GithubIcon = styled.i`
 const InstagramIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\002C';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0116';
     }
 `;
 
 const RedditIcon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     &:before {
-        font-family: ExoticIcons !important;
-        content: '\\002E';
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0114';
     }
 `;
 

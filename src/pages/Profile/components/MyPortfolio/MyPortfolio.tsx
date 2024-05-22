@@ -94,7 +94,6 @@ const Wrapper = styled(FlexDiv)`
     width: 100%;
     background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
     padding: 20px 27px;
-    margin-top: 10px;
 `;
 
 const Divider = styled.hr`

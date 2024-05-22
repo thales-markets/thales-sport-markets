@@ -5,12 +5,36 @@
     font-size: 20px;
 }
 
-.homepage--arrow-left:before {
+.icon--x:before {
+    content: '\0021';
+}
+
+.icon--wallet::before {
+    content: '\0026';
+}
+
+.icon--arrow-left:before {
     content: '\0028';
 }
 
-.homepage--arrow-right:before {
+.icon--arrow-right:before {
     content: '\0029';
+}
+
+.icon--visa::before {
+    content: '\002A';
+}
+
+.icon--master::before {
+    content: '\002B';
+}
+
+.icon--googlepay::before {
+    content: '\002C';
+}
+
+.icon--applepay::before {
+    content: '\002D';
 }
 
 .league--nba:before {

@@ -4,7 +4,7 @@ import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getSelectedMarket, setMarketTypeFilter, setSelectedMarket } from 'redux/modules/market';
+import { getSelectedMarket, setSelectedMarket } from 'redux/modules/market';
 import { getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
@@ -61,7 +61,6 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ availableMarketTypes })
             <CloseIcon
                 className="icon icon--close"
                 onClick={() => {
-                    dispatch(setMarketTypeFilter([]));
                     dispatch(setSelectedMarket(undefined));
                 }}
             />
@@ -129,7 +128,7 @@ const MatchInfo = styled(FlexDivRow)`
     line-height: 16px;
     font-weight: 600;
     justify-content: center;
-    height: 34px;
+    height: 40px;
     @media (max-width: 950px) {
         height: 50px;
     }

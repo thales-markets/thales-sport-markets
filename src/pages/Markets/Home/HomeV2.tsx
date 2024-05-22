@@ -34,6 +34,7 @@ import {
     setDateFilter,
     setGlobalFilter,
     setMarketSearch,
+    setMarketTypeFilter,
     setSportFilter,
     setTagFilter,
 } from 'redux/modules/market';
@@ -295,13 +296,13 @@ const Home: React.FC = () => {
                 marketTypes.add(childMarket.typeId);
             });
 
-            if (marketTypeFilter.length) {
+            if (marketTypeFilter !== undefined) {
                 const marketMarketTypes = [
                     market.typeId,
                     ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
                 ];
 
-                if (!marketMarketTypes.some((marketType) => marketTypeFilter.includes(marketType))) {
+                if (!marketMarketTypes.some((marketType) => marketTypeFilter === marketType)) {
                     return false;
                 }
                 if (sportFilter == SportFilterEnum.Live) {
@@ -615,8 +616,9 @@ const Home: React.FC = () => {
                         borderColor={theme.background.septenary}
                         additionalStyles={additionalApplyFiltersButtonStyle}
                     >
+                        <FiltersIcon className={`icon icon--filters2`} />
                         {t('market.apply-filters')}
-                        <ArrowIcon className={`icon icon--arrow-up`} />
+                        <ArrowIcon className={`icon icon--caret-right`} />
                     </Button>
                 </BurgerFiltersContainer>
             </ReactModal>
@@ -658,11 +660,15 @@ const Home: React.FC = () => {
                                 setAvailableTags={setAvailableTags}
                                 tagsList={tagsList}
                             />
+                            {!marketsLoading && finalMarkets.length > 0 && (
+                                <Header availableMarketTypes={availableMarketTypes} />
+                            )}
                             <FilterTagsMobile
                                 sportFilter={sportFilter}
                                 marketSearch={marketSearch}
                                 globalFilter={globalFilter}
                                 tagFilter={tagFilter}
+                                marketTypeFilter={marketTypeFilter}
                                 setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
                                 setDateParam={setDateParam}
                                 setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
@@ -672,6 +678,9 @@ const Home: React.FC = () => {
                                 setSportFilter={(filter: SportFilterEnum) => dispatch(setSportFilter(filter))}
                                 setSportParam={setSportParam}
                                 setSearchParam={setSearchParam}
+                                setMarketTypeFilter={(filter: MarketType | undefined) =>
+                                    dispatch(setMarketTypeFilter(filter))
+                                }
                             />
                         </>
                     )}
@@ -690,11 +699,11 @@ const Home: React.FC = () => {
                                     </NoMarketsLabel>
                                     <Button
                                         onClick={resetFilters}
-                                        backgroundColor={theme.button.background.tertiary}
+                                        backgroundColor={theme.button.background.secondary}
                                         textColor={theme.button.textColor.quaternary}
                                         borderColor={theme.button.borderColor.secondary}
-                                        fontWeight="400"
-                                        fontSize="15px"
+                                        height="24px"
+                                        fontSize="12px"
                                     >
                                         {t('market.view-all-markets')}
                                     </Button>
@@ -825,9 +834,9 @@ const NoMarketsContainer = styled(FlexDivColumnCentered)`
 `;
 
 const NoMarketsLabel = styled.span`
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
 `;
 
 export const LoaderContainer = styled(FlexDivColumn)`
@@ -863,11 +872,19 @@ const LogoContainer = styled.div`
     text-align: center;
 `;
 
+const FiltersIcon = styled.i`
+    font-size: 15px;
+    font-weight: 400;
+    text-transform: none;
+    margin-right: 8px;
+    margin-top: -2px;
+`;
+
 const ArrowIcon = styled.i`
     font-size: 15px;
-    margin-right: -10px;
+    font-weight: 400;
+    margin-left: 8px;
     text-transform: none;
-    writing-mode: vertical-lr;
 `;
 
 const getCustomModalStyles = (theme: ThemeInterface) => ({

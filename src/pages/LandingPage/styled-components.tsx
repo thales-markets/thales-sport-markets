@@ -420,6 +420,8 @@ export const CallToAction = styled.label`
 
 export const ArrowIcon = styled.i`
     font-size: 30px;
+    font-weight: 400;
+    text-transform: none;
     color: ${(props) => props.theme.textColor.quaternary};
     vertical-align: baseline;
 

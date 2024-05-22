@@ -52,9 +52,9 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                     <LeagueFlag alt={league.toString()} src={getLeagueFlagSource(Number(league))} />
                     <LeagueName>{leagueName}</LeagueName>
                     {hideLeague ? (
-                        <ArrowIcon className={`icon icon--arrow`} />
+                        <ArrowIcon className={`icon icon--caret-right`} />
                     ) : (
-                        <ArrowIcon down={true} className={`icon icon--arrow-down`} />
+                        <ArrowIcon down={true} className={`icon icon--caret-down`} />
                     )}
                 </LeagueInfo>
                 {!isMarketSelected ? (
@@ -229,7 +229,7 @@ const LeagueCard = styled.div<{ isMarketSelected: boolean }>`
     display: flex;
     position: relative;
     flex-direction: row;
-    padding: 10px 12px;
+    padding: 0px 12px 10px 12px;
     border-radius: 5px;
     align-items: center;
     background-color: ${(props) => props.theme.background.primary};
@@ -256,6 +256,7 @@ const LeagueInfo = styled.div`
 
 const GamesContainer = styled.div<{ hidden?: boolean }>`
     display: ${(props) => (props.hidden ? 'none' : '')};
+    margin-bottom: 10px;
 `;
 
 const LeagueFlag = styled.img`
