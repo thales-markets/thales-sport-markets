@@ -82,6 +82,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const numberOfMarkets = useMemo(() => {
         let num = !marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER) ? 1 : 0;
+        console.log(groupedChildMarkets);
         Object.keys(groupedChildMarkets).forEach((key) => {
             const typeId = Number(key);
             const childMarkets = groupedChildMarkets[typeId];
@@ -437,6 +438,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         markets={[market]}
                                         marketType={MarketType.WINNER}
                                         isGameOpen={isGameOpen}
+                                        showInvalid={!hidePausedMarkets}
                                     />
                                 )}
                                 {Object.keys(groupedChildMarkets).map((key, index) => {
@@ -448,6 +450,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             markets={childMarkets}
                                             marketType={typeId}
                                             isGameOpen={isGameOpen}
+                                            showInvalid={!hidePausedMarkets}
                                         />
                                     );
                                 })}

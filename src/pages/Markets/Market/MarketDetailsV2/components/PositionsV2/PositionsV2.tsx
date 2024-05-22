@@ -29,6 +29,7 @@ type PositionsProps = {
     isGameOpen: boolean;
     isMainPageView?: boolean;
     isColumnView?: boolean;
+    showInvalid?: boolean;
     onAccordionClick?: () => void;
 };
 
@@ -38,6 +39,7 @@ const Positions: React.FC<PositionsProps> = ({
     isGameOpen,
     isMainPageView,
     isColumnView,
+    showInvalid,
     onAccordionClick,
 }) => {
     const { t } = useTranslation();
@@ -46,7 +48,7 @@ const Positions: React.FC<PositionsProps> = ({
 
     const areOddsValid = markets.some((market) => market.odds.some((odd) => isOddValid(odd)));
 
-    const showContainer = !isGameOpen || areOddsValid;
+    const showContainer = !isGameOpen || areOddsValid || showInvalid;
 
     const sortedMarkets = useMemo(
         () =>
@@ -110,6 +112,7 @@ const Positions: React.FC<PositionsProps> = ({
                         </SubTitleContainer>
                     )}
                     {sortedMarkets.map((market, index) => {
+                        console.log(market.typeId, market.type);
                         return (
                             <ContentWrapper key={index}>
                                 {market.isPlayerPropsMarket && (

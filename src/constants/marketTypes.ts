@@ -614,23 +614,23 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         name: 'Both teams to score 9th',
     },
 
-    [MarketType.FIRST_PERIOD_HOME_TEAM]: {
-        id: MarketType.FIRST_PERIOD_HOME_TEAM,
+    [MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
         key: 'firstPeriodTotalHomeTeam',
         name: 'Total 1st',
     },
-    [MarketType.FIRST_PERIOD_AWAY_TEAM]: {
-        id: MarketType.FIRST_PERIOD_AWAY_TEAM,
+    [MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
         key: 'firstPeriodTotalAwayTeam',
-        name: 'Total 2nd',
-    },
-    [MarketType.SECOND_PERIOD_HOME_TEAM]: {
-        id: MarketType.SECOND_PERIOD_HOME_TEAM,
-        key: 'secondPeriodTotalHomeTeam',
         name: 'Total 1st',
     },
-    [MarketType.SECOND_PERIOD_AWAY_TEAM]: {
-        id: MarketType.SECOND_PERIOD_AWAY_TEAM,
+    [MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
+        key: 'secondPeriodTotalHomeTeam',
+        name: 'Total 2nd',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
         key: 'secondPeriodTotalAwayTeam',
         name: 'Total 2nd',
     },
@@ -695,10 +695,10 @@ export const TOTAL_MARKET_TYPES = [
     MarketType.SEVENTH_PERIOD_TOTAL2,
     MarketType.EIGHTH_PERIOD_TOTAL2,
     MarketType.NINTH_PERIOD_TOTAL2,
-    MarketType.FIRST_PERIOD_HOME_TEAM,
-    MarketType.FIRST_PERIOD_AWAY_TEAM,
-    MarketType.SECOND_PERIOD_HOME_TEAM,
-    MarketType.SECOND_PERIOD_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
 export const TOTAL_ODD_EVEN_MARKET_TYPES = [
@@ -806,8 +806,8 @@ export const FIRST_PERIOD_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN,
     MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
     MarketType.FIRST_PERIOD_DOUBLE_CHANCE,
-    MarketType.FIRST_PERIOD_HOME_TEAM,
-    MarketType.FIRST_PERIOD_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE,
 ];
 
@@ -821,21 +821,21 @@ export const SECOND_PERIOD_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN,
     MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN,
     MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
-    MarketType.SECOND_PERIOD_HOME_TEAM,
-    MarketType.SECOND_PERIOD_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
 ];
 
 export const HOME_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_HOME_TEAM,
-    MarketType.FIRST_PERIOD_HOME_TEAM,
-    MarketType.SECOND_PERIOD_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
 ];
 
 export const AWAY_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_AWAY_TEAM,
-    MarketType.FIRST_PERIOD_AWAY_TEAM,
-    MarketType.SECOND_PERIOD_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
 export const MARKET_TYPES_BY_SPORT: Record<SportFilterEnum, MarketType[]> = {
