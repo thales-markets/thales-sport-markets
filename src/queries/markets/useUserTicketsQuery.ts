@@ -20,16 +20,17 @@ export const useUserTicketsQuery = (
             try {
                 const { sportsAMMDataContract } = networkConnector;
                 if (sportsAMMDataContract) {
-                    const [activeTickets, resolvedTickets, teamNamesResponse] = await Promise.all([
+                    const [activeTickets, resolvedTickets, gamesInfoResponse, playersInfoResponse] = await Promise.all([
                         sportsAMMDataContract.getActiveTicketsDataPerUser(user),
                         sportsAMMDataContract.getResolvedTicketsDataPerUser(user),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`),
+                        axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`),
                     ]);
 
                     const tickets = [...activeTickets, ...resolvedTickets];
 
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
-                        mapTicket(ticket, networkId, teamNamesResponse.data)
+                        mapTicket(ticket, networkId, gamesInfoResponse.data, playersInfoResponse.data)
                     );
 
                     return orderBy(updateTotalQuoteAndPayout(mappedTickets), ['timestamp'], ['desc']);

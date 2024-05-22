@@ -15,7 +15,7 @@ import {
 } from './markets';
 import { getLeagueSport } from './sports';
 
-export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticket => {
+export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, playersInfo: any): Ticket => {
     const collateral = getCollateralByAddress(ticket.collateral, networkId);
     const mappedTicket: Ticket = {
         id: ticket.id,
@@ -49,13 +49,18 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
             const type = MarketTypeMap[typeId as MarketType];
             const line = Number(market.line);
 
-            const homeTeam = !!teamNames[market.gameId] && teamNames[market.gameId].find((team: Team) => team.isHome);
+            const homeTeam = !!gamesInfo[market.gameId] && gamesInfo[market.gameId].find((team: Team) => team.isHome);
             const homeTeamName = homeTeam ? homeTeam.name : 'Home Team';
             const homeScore = homeTeam ? homeTeam.score : 0;
 
-            const awayTeam = !!teamNames[market.gameId] && teamNames[market.gameId].find((team: Team) => !team.isHome);
+            const awayTeam = !!gamesInfo[market.gameId] && gamesInfo[market.gameId].find((team: Team) => !team.isHome);
             const awayTeamName = awayTeam ? awayTeam.name : 'Away Team';
             const awayScore = awayTeam ? awayTeam.score : 0;
+
+            const playerName =
+                isPlayerPropsMarket && playersInfo[market.playerId]
+                    ? playersInfo[market.playerId].playerName
+                    : 'Player Name';
 
             const marketResult = ticket.marketsResult[index];
             const marketStatus = Number(marketResult.status);
@@ -90,7 +95,7 @@ export const mapTicket = (ticket: any, networkId: number, teamNames: any): Ticke
                 isYesNoPlayerPropsMarket: getIsYesNoPlayerPropsMarket(typeId),
                 playerProps: {
                     playerId: Number(market.playerId),
-                    playerName: 'Player Name',
+                    playerName: playerName,
                 },
                 combinedPositions: [],
                 odds: [],
