@@ -21,6 +21,7 @@ import { OddsType } from 'enums/markets';
 import { Network } from 'enums/network';
 import { BigNumber, ethers } from 'ethers';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
+import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
@@ -132,6 +133,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [minBuyInAmountInDefaultCollateral, setMinBuyInAmountInDefaultCollateral] = useState<number>(0);
     const [minBuyInAmount, setMinBuyInAmount] = useState<number>(0);
     const [finalQuotes, setFinalQuotes] = useState<number[]>([]);
+    const [checkTimeout, setCheckTimeout] = useState<boolean>(false);
 
     const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -146,7 +148,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
     const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
 
-    const [, setProcessingLiveTrade] = useState(false);
+    const [processingLiveTrade, setProcessingLiveTrade] = useState(false);
 
     const [gas, setGas] = useState(0);
     const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
@@ -261,6 +263,18 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const selectedCollateralCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[selectedCollateral] : 1;
 
+    const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const maxAllowedExecutionDelay = useMemo(
+        () =>
+            liveTradingProcessorDataQuery.isSuccess && liveTradingProcessorDataQuery.data
+                ? liveTradingProcessorDataQuery.data.maxAllowedExecutionDelay
+                : 10,
+        [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
+    );
+
     useEffect(() => {
         setMinBuyInAmountInDefaultCollateral(sportsAmmData?.minBuyInAmount || 0);
     }, [sportsAmmData?.minBuyInAmount]);
@@ -346,6 +360,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             collateralHasLp,
         ]
     );
+
+    useEffect(() => {
+        if (checkTimeout && processingLiveTrade) {
+            setIsBuying(false);
+            refetchBalances(walletAddress, networkId);
+            toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+            setProcessingLiveTrade(false);
+            setCheckTimeout(false);
+        }
+    }, [checkTimeout, networkId, processingLiveTrade, t, walletAddress]);
 
     useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
@@ -596,6 +620,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         additionalSlippage,
                         isAA
                     );
+                    setTimeout(() => {
+                        setCheckTimeout(true);
+                    }, (maxAllowedExecutionDelay + 10) * 1000);
                 } else {
                     tx = await getSportsAMMV2Transaction(
                         isVoucherSelected,

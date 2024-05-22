@@ -170,6 +170,10 @@ export type SportsAmmData = {
     safeBoxFee: number;
 };
 
+export type LiveTradingProcessorData = {
+    maxAllowedExecutionDelay: number;
+};
+
 export type TradeData = {
     gameId: string;
     sportId: number;

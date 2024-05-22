@@ -25,6 +25,7 @@ const QUERY_KEYS = {
     SportMarketV2: (address: string, networkId: Network) => ['sportMarketV2', address, networkId],
     ParlayAmmData: (networkId: Network) => ['parlayAmmData', networkId],
     SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
+    LiveTradingProcessorData: (networkId: Network) => ['liveTradingProcessorData', networkId],
     LiveResult: (marketId: string) => ['liveResult', marketId],
     EnetpulseLiveResult: (marketId: string, gameDate: string, sportTag: number) => [
         'enetpulseLiveResult',
