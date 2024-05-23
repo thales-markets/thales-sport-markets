@@ -4,35 +4,535 @@ import { MarketTypeInfo } from 'types/marketTypes';
 import { MarketSport } from 'types/markets';
 
 export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
+    // Winner
     [MarketType.WINNER]: {
         id: MarketType.WINNER,
         key: 'winner',
         name: 'Winner',
     },
+    // Winner with draw - for hockey
+    [MarketType.WINNER2]: {
+        id: MarketType.WINNER2,
+        key: 'winner2',
+        name: 'Winner',
+    },
+    // Winner (placeholder)
+    [MarketType.WINNER3]: {
+        id: MarketType.WINNER3,
+        key: 'winner3',
+        name: 'Winner',
+    },
+    // Winner period - half for soccer, quarter for basketball
+    [MarketType.FIRST_PERIOD_WINNER]: {
+        id: MarketType.FIRST_PERIOD_WINNER,
+        key: 'firstPeriodWinner',
+        name: 'Winner 1st',
+    },
+    [MarketType.SECOND_PERIOD_WINNER]: {
+        id: MarketType.SECOND_PERIOD_WINNER,
+        key: 'secondPeriodWinner',
+        name: 'Winner 2nd',
+    },
+    [MarketType.THIRD_PERIOD_WINNER]: {
+        id: MarketType.THIRD_PERIOD_WINNER,
+        key: 'thirdPeriodWinner',
+        name: 'Winner 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_WINNER]: {
+        id: MarketType.FOURTH_PERIOD_WINNER,
+        key: 'fourthPeriodWinner',
+        name: 'Winner 4th',
+    },
+    [MarketType.FIFTH_PERIOD_WINNER]: {
+        id: MarketType.FIFTH_PERIOD_WINNER,
+        key: 'fifthPeriodWinner',
+        name: 'Winner 5th',
+    },
+    [MarketType.SIXTH_PERIOD_WINNER]: {
+        id: MarketType.SIXTH_PERIOD_WINNER,
+        key: 'sixthPeriodWinner',
+        name: 'Winner 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_WINNER]: {
+        id: MarketType.SEVENTH_PERIOD_WINNER,
+        key: 'seventhPeriodWinner',
+        name: 'Winner 7th',
+    },
+    [MarketType.EIGHTH_PERIOD_WINNER]: {
+        id: MarketType.EIGHTH_PERIOD_WINNER,
+        key: 'eightPeriodWinner',
+        name: 'Winner 8th',
+    },
+    [MarketType.NINTH_PERIOD_WINNER]: {
+        id: MarketType.NINTH_PERIOD_WINNER,
+        key: 'ninthPeriodWinner',
+        name: 'Winner 9th',
+    },
+    // Winner period - half for basketball
+    [MarketType.FIRST_PERIOD_WINNER2]: {
+        id: MarketType.FIRST_PERIOD_WINNER2,
+        key: 'firstPeriodWinner2',
+        name: 'Winner 1st',
+    },
+    [MarketType.SECOND_PERIOD_WINNER2]: {
+        id: MarketType.SECOND_PERIOD_WINNER2,
+        key: 'secondPeriodWinner2',
+        name: 'Winner 2nd',
+    },
+    [MarketType.THIRD_PERIOD_WINNER2]: {
+        id: MarketType.THIRD_PERIOD_WINNER2,
+        key: 'thirdPeriodWinner2',
+        name: 'Winner 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_WINNER2]: {
+        id: MarketType.FOURTH_PERIOD_WINNER2,
+        key: 'fourthPeriodWinner2',
+        name: 'Winner 4th',
+    },
+    [MarketType.FIFTH_PERIOD_WINNER2]: {
+        id: MarketType.FIFTH_PERIOD_WINNER2,
+        key: 'fifthPeriodWinner2',
+        name: 'Winner 5th',
+    },
+    [MarketType.SIXTH_PERIOD_WINNER2]: {
+        id: MarketType.SIXTH_PERIOD_WINNER2,
+        key: 'sixthPeriodWinner2',
+        name: 'Winner 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_WINNER2]: {
+        id: MarketType.SEVENTH_PERIOD_WINNER2,
+        key: 'seventhPeriodWinner2',
+        name: 'Winner 7th',
+    },
+    [MarketType.EIGHTH_PERIOD_WINNER2]: {
+        id: MarketType.EIGHTH_PERIOD_WINNER2,
+        key: 'eightPeriodWinner2',
+        name: 'Winner 8th',
+    },
+    [MarketType.NINTH_PERIOD_WINNER2]: {
+        id: MarketType.NINTH_PERIOD_WINNER2,
+        key: 'ninthPeriodWinner2',
+        name: 'Winner 9th',
+    },
+
+    // Spread (handicap)
     [MarketType.SPREAD]: {
         id: MarketType.SPREAD,
         key: 'spread',
         name: 'Handicap',
     },
+
+    // Spread (handicap) - sets for tennis
+    [MarketType.SPREAD2]: {
+        id: MarketType.SPREAD2,
+        key: 'spread2',
+        name: 'Handicap',
+    },
+    // Spread period - half for soccer, quarter for basketball
+    [MarketType.FIRST_PERIOD_SPREAD]: {
+        id: MarketType.FIRST_PERIOD_SPREAD,
+        key: 'firstPeriodSpread',
+        name: 'Handicap 1st',
+    },
+    [MarketType.SECOND_PERIOD_SPREAD]: {
+        id: MarketType.SECOND_PERIOD_SPREAD,
+        key: 'secondPeriodSpread',
+        name: 'Handicap 2nd',
+    },
+    [MarketType.THIRD_PERIOD_SPREAD]: {
+        id: MarketType.THIRD_PERIOD_SPREAD,
+        key: 'thirdPeriodSpread',
+        name: 'Handicap 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_SPREAD]: {
+        id: MarketType.FOURTH_PERIOD_SPREAD,
+        key: 'fourthPeriodSpread',
+        name: 'Handicap 4th',
+    },
+    [MarketType.FIFTH_PERIOD_SPREAD]: {
+        id: MarketType.FIFTH_PERIOD_SPREAD,
+        key: 'fifthPeriodSpread',
+        name: 'Handicap 5th',
+    },
+    [MarketType.SIXTH_PERIOD_SPREAD]: {
+        id: MarketType.SIXTH_PERIOD_SPREAD,
+        key: 'sixthPeriodSpread',
+        name: 'Handicap 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_SPREAD]: {
+        id: MarketType.SEVENTH_PERIOD_SPREAD,
+        key: 'seventhPeriodSpread',
+        name: 'Handicap 7th',
+    },
+    [MarketType.EIGHTH_PERIOD_SPREAD]: {
+        id: MarketType.EIGHTH_PERIOD_SPREAD,
+        key: 'eightPeriodSpread',
+        name: 'Handicap 8th',
+    },
+    [MarketType.NINTH_PERIOD_SPREAD]: {
+        id: MarketType.NINTH_PERIOD_SPREAD,
+        key: 'ninthPeriodSpread',
+        name: 'Handicap 9th',
+    },
+    // Spread period - half for basketball
+    [MarketType.FIRST_PERIOD_SPREAD2]: {
+        id: MarketType.FIRST_PERIOD_SPREAD2,
+        key: 'firstPeriodSpread2',
+        name: 'Handicap 1st',
+    },
+    [MarketType.SECOND_PERIOD_SPREAD2]: {
+        id: MarketType.SECOND_PERIOD_SPREAD2,
+        key: 'secondPeriodSpread2',
+        name: 'Handicap 2nd',
+    },
+    [MarketType.THIRD_PERIOD_SPREAD2]: {
+        id: MarketType.THIRD_PERIOD_SPREAD2,
+        key: 'thirdPeriodSpread2',
+        name: 'Handicap 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_SPREAD2]: {
+        id: MarketType.FOURTH_PERIOD_SPREAD2,
+        key: 'fourthPeriodSpread2',
+        name: 'Handicap 4th',
+    },
+    [MarketType.FIFTH_PERIOD_SPREAD2]: {
+        id: MarketType.FIFTH_PERIOD_SPREAD2,
+        key: 'fifthPeriodSpread2',
+        name: 'Handicap 5th',
+    },
+    [MarketType.SIXTH_PERIOD_SPREAD2]: {
+        id: MarketType.SIXTH_PERIOD_SPREAD2,
+        key: 'sixthPeriodSpread2',
+        name: 'Handicap 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_SPREAD2]: {
+        id: MarketType.SEVENTH_PERIOD_SPREAD2,
+        key: 'seventhPeriodSpread2',
+        name: 'Handicap 7th',
+    },
+    [MarketType.EIGHTH_PERIOD_SPREAD2]: {
+        id: MarketType.EIGHTH_PERIOD_SPREAD2,
+        key: 'eightPeriodSpread2',
+        name: 'Handicap 8th',
+    },
+    [MarketType.NINTH_PERIOD_SPREAD2]: {
+        id: MarketType.NINTH_PERIOD_SPREAD2,
+        key: 'ninthPeriodSpread2',
+        name: 'Handicap 9th',
+    },
+
+    // Total
     [MarketType.TOTAL]: {
         id: MarketType.TOTAL,
         key: 'total',
         name: 'Total',
     },
+    // Total - sets for tennis
+    [MarketType.TOTAL2]: {
+        id: MarketType.TOTAL2,
+        key: 'total2',
+        name: 'Total',
+    },
+    // Total period - half for soccer, quarter for basketball
+    [MarketType.FIRST_PERIOD_TOTAL]: {
+        id: MarketType.FIRST_PERIOD_TOTAL,
+        key: 'firstPeriodTotal',
+        name: 'Total 1st',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL]: {
+        id: MarketType.SECOND_PERIOD_TOTAL,
+        key: 'secondPeriodTotal',
+        name: 'Total 2nd',
+    },
+    [MarketType.THIRD_PERIOD_TOTAL]: {
+        id: MarketType.THIRD_PERIOD_TOTAL,
+        key: 'thirdPeriodTotal',
+        name: 'Total 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_TOTAL]: {
+        id: MarketType.FOURTH_PERIOD_TOTAL,
+        key: 'fourthPeriodTotal',
+        name: 'Total 4th',
+    },
+    [MarketType.FIFTH_PERIOD_TOTAL]: {
+        id: MarketType.FIFTH_PERIOD_TOTAL,
+        key: 'fifthPeriodTotal',
+        name: 'Total 5th',
+    },
+    [MarketType.SIXTH_PERIOD_TOTAL]: {
+        id: MarketType.SIXTH_PERIOD_TOTAL,
+        key: 'sixthPeriodTotal',
+        name: 'Total 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_TOTAL]: {
+        id: MarketType.SEVENTH_PERIOD_TOTAL,
+        key: 'seventhPeriodTotal',
+        name: 'Total 7th',
+    },
+    [MarketType.EIGHTH_PERIOD_TOTAL]: {
+        id: MarketType.EIGHTH_PERIOD_TOTAL,
+        key: 'eightPeriodTotal',
+        name: 'Total 8th',
+    },
+    [MarketType.NINTH_PERIOD_TOTAL]: {
+        id: MarketType.NINTH_PERIOD_TOTAL,
+        key: 'ninthPeriodTotal',
+        name: 'Total 9th',
+    },
+    // Total period - half for basketball
+    [MarketType.FIRST_PERIOD_TOTAL2]: {
+        id: MarketType.FIRST_PERIOD_TOTAL2,
+        key: 'firstPeriodTotal2',
+        name: 'Total 1st',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL2]: {
+        id: MarketType.SECOND_PERIOD_TOTAL2,
+        key: 'secondPeriodTotal',
+        name: 'Total 2nd',
+    },
+    [MarketType.THIRD_PERIOD_TOTAL2]: {
+        id: MarketType.THIRD_PERIOD_TOTAL2,
+        key: 'thirdPeriodTotal2',
+        name: 'Total 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_TOTAL2]: {
+        id: MarketType.FOURTH_PERIOD_TOTAL2,
+        key: 'fourthPeriodTotal2',
+        name: 'Total 4th',
+    },
+    [MarketType.FIFTH_PERIOD_TOTAL2]: {
+        id: MarketType.FIFTH_PERIOD_TOTAL2,
+        key: 'fifthPeriodTotal2',
+        name: 'Total 5th',
+    },
+    [MarketType.SIXTH_PERIOD_TOTAL2]: {
+        id: MarketType.SIXTH_PERIOD_TOTAL2,
+        key: 'sixthPeriodTotal2',
+        name: 'Total 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_TOTAL2]: {
+        id: MarketType.SEVENTH_PERIOD_TOTAL2,
+        key: 'seventhPeriodTotal2',
+        name: 'Total 7th',
+    },
+    [MarketType.EIGHTH_PERIOD_TOTAL2]: {
+        id: MarketType.EIGHTH_PERIOD_TOTAL2,
+        key: 'eightPeriodTotal2',
+        name: 'Total 8th',
+    },
+    [MarketType.NINTH_PERIOD_TOTAL2]: {
+        id: MarketType.NINTH_PERIOD_TOTAL2,
+        key: 'ninthPeriodTotal2',
+        name: 'Total 9th',
+    },
+    // Total per team
+    [MarketType.TOTAL_HOME_TEAM]: {
+        id: MarketType.TOTAL_HOME_TEAM,
+        key: 'totalHomeTeam',
+        name: 'Total',
+    },
+    [MarketType.TOTAL_AWAY_TEAM]: {
+        id: MarketType.TOTAL_AWAY_TEAM,
+        key: 'totalAwayTeam',
+        name: 'Total',
+    },
+    // Total per team period - half for soccer
+    [MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
+        key: 'firstPeriodTotalHomeTeam',
+        name: 'Total 1st',
+    },
+    [MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
+        key: 'firstPeriodTotalAwayTeam',
+        name: 'Total 1st',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
+        key: 'secondPeriodTotalHomeTeam',
+        name: 'Total 2nd',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
+        key: 'secondPeriodTotalAwayTeam',
+        name: 'Total 2nd',
+    },
+
+    // Total odd/even
+    [MarketType.TOTAL_ODD_EVEN]: {
+        id: MarketType.TOTAL_ODD_EVEN,
+        key: 'totalOddEven',
+        name: 'Total odd/even',
+    },
+    // Total odd/even period - half for soccer, quarter for basketball
+    [MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN,
+        key: 'firstPeriodTotalOddEven',
+        name: 'Total odd/even 1st',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN,
+        key: 'secondPeriodTotalOddEven',
+        name: 'Total odd/even 2nd',
+    },
+    [MarketType.THIRD_PERIOD_TOTAL_ODD_EVEN]: {
+        id: MarketType.THIRD_PERIOD_TOTAL_ODD_EVEN,
+        key: 'thirdPeriodTotalOddEven',
+        name: 'Total odd/even 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_TOTAL_ODD_EVEN]: {
+        id: MarketType.FOURTH_PERIOD_TOTAL_ODD_EVEN,
+        key: 'fourthPeriodTotalOddEven',
+        name: 'Total odd/even 4th',
+    },
+    [MarketType.FIFTH_PERIOD_TOTAL_ODD_EVEN]: {
+        id: MarketType.FIFTH_PERIOD_TOTAL_ODD_EVEN,
+        key: 'fifthPeriodTotalOddEven',
+        name: 'Total odd/even 5th',
+    },
+    [MarketType.SIXTH_PERIOD_TOTAL_ODD_EVEN]: {
+        id: MarketType.SIXTH_PERIOD_TOTAL_ODD_EVEN,
+        key: 'sixthPeriodTotalOddEven',
+        name: 'Total odd/even 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_TOTAL_ODD_EVEN]: {
+        id: MarketType.SEVENTH_PERIOD_TOTAL_ODD_EVEN,
+        key: 'seventhPeriodTotalOddEven',
+        name: 'Total odd/even 7th',
+    },
+    [MarketType.EIGHTH_PERIOD_TOTAL_ODD_EVEN]: {
+        id: MarketType.EIGHTH_PERIOD_TOTAL_ODD_EVEN,
+        key: 'eightPeriodTotalOddEven',
+        name: 'Total odd/even 8th',
+    },
+    [MarketType.NINTH_PERIOD_TOTAL_ODD_EVEN]: {
+        id: MarketType.NINTH_PERIOD_TOTAL_ODD_EVEN,
+        key: 'ninthPeriodTotalOddEven',
+        name: 'Total odd/even 9th',
+    },
+    // Total odd/even period - half for basketball
+    [MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN]: {
+        id: MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
+        key: 'firstPeriodTotal2OddEven',
+        name: 'Total odd/even 1st',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN]: {
+        id: MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN,
+        key: 'secondPeriodTotal2OddEven',
+        name: 'Total odd/even 2nd',
+    },
+    [MarketType.THIRD_PERIOD_TOTAL2_ODD_EVEN]: {
+        id: MarketType.THIRD_PERIOD_TOTAL2_ODD_EVEN,
+        key: 'thirdPeriodTotal2OddEven',
+        name: 'Total odd/even 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_TOTAL2_ODD_EVEN]: {
+        id: MarketType.FOURTH_PERIOD_TOTAL2_ODD_EVEN,
+        key: 'fourthPeriodTotal2OddEven',
+        name: 'Total odd/even 4th',
+    },
+    [MarketType.FIFTH_PERIOD_TOTAL2_ODD_EVEN]: {
+        id: MarketType.FIFTH_PERIOD_TOTAL2_ODD_EVEN,
+        key: 'fifthPeriodTotal2OddEven',
+        name: 'Total odd/even 5th',
+    },
+    [MarketType.SIXTH_PERIOD_TOTAL2_ODD_EVEN]: {
+        id: MarketType.SIXTH_PERIOD_TOTAL2_ODD_EVEN,
+        key: 'sixthPeriodTotal2OddEven',
+        name: 'Total odd/even 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_TOTAL2_ODD_EVEN]: {
+        id: MarketType.SEVENTH_PERIOD_TOTAL2_ODD_EVEN,
+        key: 'seventhPeriodTotal2OddEven',
+        name: 'Total odd/even 7th',
+    },
+    [MarketType.EIGHTH_PERIOD_TOTAL2_ODD_EVEN]: {
+        id: MarketType.EIGHTH_PERIOD_TOTAL2_ODD_EVEN,
+        key: 'eightPeriodTotal2OddEven',
+        name: 'Total odd/even 8th',
+    },
+    [MarketType.NINTH_PERIOD_TOTAL2_ODD_EVEN]: {
+        id: MarketType.NINTH_PERIOD_TOTAL2_ODD_EVEN,
+        key: 'ninthPeriodTotal2OddEven',
+        name: 'Total odd/even 9th',
+    },
+
+    // Double chance
     [MarketType.DOUBLE_CHANCE]: {
         id: MarketType.DOUBLE_CHANCE,
         key: 'doubleChance',
         name: 'Double chance',
     },
+    // Double chance period - half for soccer
+    [MarketType.FIRST_PERIOD_DOUBLE_CHANCE]: {
+        id: MarketType.FIRST_PERIOD_DOUBLE_CHANCE,
+        key: 'firstPeriodDoubleChance',
+        name: 'Double chance 1st',
+    },
+    [MarketType.SECOND_PERIOD_DOUBLE_CHANCE]: {
+        id: MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
+        key: 'secondPeriodDoubleChance',
+        name: 'Double chance 2nd',
+    },
+
+    // Both teams to score
+    [MarketType.BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.BOTH_TEAMS_TO_SCORE,
+        key: 'bothTeamsToScore',
+        name: 'Both teams to score',
+    },
+    // Both teams to score period - half for soccer
+    [MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE,
+        key: 'firstPeriodBothTeamsToScore',
+        name: 'Both teams to score 1st',
+    },
+    [MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
+        key: 'secondPeriodBothTeamsToScore',
+        name: 'Both teams to score 2nd',
+    },
+    [MarketType.THIRD_PERIOD_BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.THIRD_PERIOD_BOTH_TEAMS_TO_SCORE,
+        key: 'thirdPeriodBothTeamsToScore',
+        name: 'Both teams to score 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.FOURTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+        key: 'fourthPeriodBothTeamsToScore',
+        name: 'Both teams to score 4th',
+    },
+    [MarketType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+        key: 'fifthPeriodBothTeamsToScore',
+        name: 'Both teams to score 5th',
+    },
+    [MarketType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+        key: 'sixthPeriodBothTeamsToScore',
+        name: 'Both teams to score 6th',
+    },
+    [MarketType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+        key: 'seventhPeriodBothTeamsToScore',
+        name: 'Both teams to score 7th',
+    },
+    [MarketType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+        key: 'eightPeriodBothTeamsToScore',
+        name: 'Both teams to score 8th',
+    },
+    [MarketType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
+        id: MarketType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+        key: 'ninthPeriodBothTeamsToScore',
+        name: 'Both teams to score 9th',
+    },
+
+    // Combined positions
     [MarketType.WINNER_TOTAL]: {
         id: MarketType.WINNER_TOTAL,
         key: 'winnerTotal',
         name: 'Winner + Total',
-    },
-    [MarketType.TOTAL_ODD_EVEN]: {
-        id: MarketType.TOTAL_ODD_EVEN,
-        key: 'totalOddEven',
-        name: 'Total odd/even',
     },
     [MarketType.HALFTIME_FULLTIME]: {
         id: MarketType.HALFTIME_FULLTIME,
@@ -49,51 +549,8 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'halftimeFulltimeGoals',
         name: 'Half-time/Full-time + Goals',
     },
-    [MarketType.BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.BOTH_TEAMS_TO_SCORE,
-        key: 'bothTeamsToScore',
-        name: 'Both teams to score',
-    },
-    [MarketType.WINNER2]: {
-        id: MarketType.WINNER2,
-        key: 'winner2',
-        name: 'Winner',
-    },
-    [MarketType.WINNER3]: {
-        id: MarketType.WINNER3,
-        key: 'winner3',
-        name: 'Winner',
-    },
-    [MarketType.SPREAD2]: {
-        id: MarketType.SPREAD2,
-        key: 'spread2',
-        name: 'Handicap',
-    },
-    [MarketType.TOTAL2]: {
-        id: MarketType.TOTAL2,
-        key: 'total2',
-        name: 'Total',
-    },
-    [MarketType.FIRST_PERIOD_DOUBLE_CHANCE]: {
-        id: MarketType.FIRST_PERIOD_DOUBLE_CHANCE,
-        key: 'firstPeriodDoubleChance',
-        name: 'Double chance 1st',
-    },
-    [MarketType.SECOND_PERIOD_DOUBLE_CHANCE]: {
-        id: MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
-        key: 'secondPeriodDoubleChance',
-        name: 'Double chance 2nd',
-    },
-    [MarketType.TOTAL_HOME_TEAM]: {
-        id: MarketType.TOTAL_HOME_TEAM,
-        key: 'totalHomeTeam',
-        name: 'Total',
-    },
-    [MarketType.TOTAL_AWAY_TEAM]: {
-        id: MarketType.TOTAL_AWAY_TEAM,
-        key: 'totalAwayTeam',
-        name: 'Total',
-    },
+
+    // Player props
     [MarketType.PLAYER_PROPS_STRIKEOUTS]: {
         id: MarketType.PLAYER_PROPS_STRIKEOUTS,
         key: 'strikeouts',
@@ -202,437 +659,6 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         id: MarketType.PLAYER_PROPS_3PTS_MADE,
         key: 'threePointsMade',
         name: '3-points made',
-    },
-
-    [MarketType.FIRST_PERIOD_WINNER]: {
-        id: MarketType.FIRST_PERIOD_WINNER,
-        key: 'firstPeriodWinner',
-        name: 'Winner 1st',
-    },
-    [MarketType.SECOND_PERIOD_WINNER]: {
-        id: MarketType.SECOND_PERIOD_WINNER,
-        key: 'secondPeriodWinner',
-        name: 'Winner 2nd',
-    },
-    [MarketType.THIRD_PERIOD_WINNER]: {
-        id: MarketType.THIRD_PERIOD_WINNER,
-        key: 'thirdPeriodWinner',
-        name: 'Winner 3rd',
-    },
-    [MarketType.FOURTH_PERIOD_WINNER]: {
-        id: MarketType.FOURTH_PERIOD_WINNER,
-        key: 'fourthPeriodWinner',
-        name: 'Winner 4th',
-    },
-    [MarketType.FIFTH_PERIOD_WINNER]: {
-        id: MarketType.FIFTH_PERIOD_WINNER,
-        key: 'fifthPeriodWinner',
-        name: 'Winner 5th',
-    },
-    [MarketType.SIXTH_PERIOD_WINNER]: {
-        id: MarketType.SIXTH_PERIOD_WINNER,
-        key: 'sixthPeriodWinner',
-        name: 'Winner 6th',
-    },
-    [MarketType.SEVENTH_PERIOD_WINNER]: {
-        id: MarketType.SEVENTH_PERIOD_WINNER,
-        key: 'seventhPeriodWinner',
-        name: 'Winner 7th',
-    },
-    [MarketType.EIGHTH_PERIOD_WINNER]: {
-        id: MarketType.EIGHTH_PERIOD_WINNER,
-        key: 'eightPeriodWinner',
-        name: 'Winner 8th',
-    },
-    [MarketType.NINTH_PERIOD_WINNER]: {
-        id: MarketType.NINTH_PERIOD_WINNER,
-        key: 'ninthPeriodWinner',
-        name: 'Winner 9th',
-    },
-    [MarketType.FIRST_PERIOD_TOTAL]: {
-        id: MarketType.FIRST_PERIOD_TOTAL,
-        key: 'firstPeriodTotal',
-        name: 'Total 1st',
-    },
-    [MarketType.SECOND_PERIOD_TOTAL]: {
-        id: MarketType.SECOND_PERIOD_TOTAL,
-        key: 'secondPeriodTotal',
-        name: 'Total 2nd',
-    },
-    [MarketType.THIRD_PERIOD_TOTAL]: {
-        id: MarketType.THIRD_PERIOD_TOTAL,
-        key: 'thirdPeriodTotal',
-        name: 'Total 3rd',
-    },
-    [MarketType.FOURTH_PERIOD_TOTAL]: {
-        id: MarketType.FOURTH_PERIOD_TOTAL,
-        key: 'fourthPeriodTotal',
-        name: 'Total 4th',
-    },
-    [MarketType.FIFTH_PERIOD_TOTAL]: {
-        id: MarketType.FIFTH_PERIOD_TOTAL,
-        key: 'fifthPeriodTotal',
-        name: 'Total 5th',
-    },
-    [MarketType.SIXTH_PERIOD_TOTAL]: {
-        id: MarketType.SIXTH_PERIOD_TOTAL,
-        key: 'sixthPeriodTotal',
-        name: 'Total 6th',
-    },
-    [MarketType.SEVENTH_PERIOD_TOTAL]: {
-        id: MarketType.SEVENTH_PERIOD_TOTAL,
-        key: 'seventhPeriodTotal',
-        name: 'Total 7th',
-    },
-    [MarketType.EIGHTH_PERIOD_TOTAL]: {
-        id: MarketType.EIGHTH_PERIOD_TOTAL,
-        key: 'eightPeriodTotal',
-        name: 'Total 8th',
-    },
-    [MarketType.NINTH_PERIOD_TOTAL]: {
-        id: MarketType.NINTH_PERIOD_TOTAL,
-        key: 'ninthPeriodTotal',
-        name: 'Total 9th',
-    },
-    [MarketType.FIRST_PERIOD_SPREAD]: {
-        id: MarketType.FIRST_PERIOD_SPREAD,
-        key: 'firstPeriodSpread',
-        name: 'Handicap 1st',
-    },
-    [MarketType.SECOND_PERIOD_SPREAD]: {
-        id: MarketType.SECOND_PERIOD_SPREAD,
-        key: 'secondPeriodSpread',
-        name: 'Handicap 2nd',
-    },
-    [MarketType.THIRD_PERIOD_SPREAD]: {
-        id: MarketType.THIRD_PERIOD_SPREAD,
-        key: 'thirdPeriodSpread',
-        name: 'Handicap 3rd',
-    },
-    [MarketType.FOURTH_PERIOD_SPREAD]: {
-        id: MarketType.FOURTH_PERIOD_SPREAD,
-        key: 'fourthPeriodSpread',
-        name: 'Handicap 4th',
-    },
-    [MarketType.FIFTH_PERIOD_SPREAD]: {
-        id: MarketType.FIFTH_PERIOD_SPREAD,
-        key: 'fifthPeriodSpread',
-        name: 'Handicap 5th',
-    },
-    [MarketType.SIXTH_PERIOD_SPREAD]: {
-        id: MarketType.SIXTH_PERIOD_SPREAD,
-        key: 'sixthPeriodSpread',
-        name: 'Handicap 6th',
-    },
-    [MarketType.SEVENTH_PERIOD_SPREAD]: {
-        id: MarketType.SEVENTH_PERIOD_SPREAD,
-        key: 'seventhPeriodSpread',
-        name: 'Handicap 7th',
-    },
-    [MarketType.EIGHTH_PERIOD_SPREAD]: {
-        id: MarketType.EIGHTH_PERIOD_SPREAD,
-        key: 'eightPeriodSpread',
-        name: 'Handicap 8th',
-    },
-    [MarketType.NINTH_PERIOD_SPREAD]: {
-        id: MarketType.NINTH_PERIOD_SPREAD,
-        key: 'ninthPeriodSpread',
-        name: 'Handicap 9th',
-    },
-
-    [MarketType.FIRST_PERIOD_WINNER2]: {
-        id: MarketType.FIRST_PERIOD_WINNER2,
-        key: 'firstPeriodWinner2',
-        name: 'Winner 1st',
-    },
-    [MarketType.SECOND_PERIOD_WINNER2]: {
-        id: MarketType.SECOND_PERIOD_WINNER2,
-        key: 'secondPeriodWinner2',
-        name: 'Winner 2nd',
-    },
-    [MarketType.THIRD_PERIOD_WINNER2]: {
-        id: MarketType.THIRD_PERIOD_WINNER2,
-        key: 'thirdPeriodWinner2',
-        name: 'Winner 3rd',
-    },
-    [MarketType.FOURTH_PERIOD_WINNER2]: {
-        id: MarketType.FOURTH_PERIOD_WINNER2,
-        key: 'fourthPeriodWinner2',
-        name: 'Winner 4th',
-    },
-    [MarketType.FIFTH_PERIOD_WINNER2]: {
-        id: MarketType.FIFTH_PERIOD_WINNER2,
-        key: 'fifthPeriodWinner2',
-        name: 'Winner 5th',
-    },
-    [MarketType.SIXTH_PERIOD_WINNER2]: {
-        id: MarketType.SIXTH_PERIOD_WINNER2,
-        key: 'sixthPeriodWinner2',
-        name: 'Winner 6th',
-    },
-    [MarketType.SEVENTH_PERIOD_WINNER2]: {
-        id: MarketType.SEVENTH_PERIOD_WINNER2,
-        key: 'seventhPeriodWinner2',
-        name: 'Winner 7th',
-    },
-    [MarketType.EIGHTH_PERIOD_WINNER2]: {
-        id: MarketType.EIGHTH_PERIOD_WINNER2,
-        key: 'eightPeriodWinner2',
-        name: 'Winner 8th',
-    },
-    [MarketType.NINTH_PERIOD_WINNER2]: {
-        id: MarketType.NINTH_PERIOD_WINNER2,
-        key: 'ninthPeriodWinner2',
-        name: 'Winner 9th',
-    },
-    [MarketType.FIRST_PERIOD_TOTAL2]: {
-        id: MarketType.FIRST_PERIOD_TOTAL2,
-        key: 'firstPeriodTotal2',
-        name: 'Total 1st',
-    },
-    [MarketType.SECOND_PERIOD_TOTAL2]: {
-        id: MarketType.SECOND_PERIOD_TOTAL2,
-        key: 'secondPeriodTotal',
-        name: 'Total 2nd',
-    },
-    [MarketType.THIRD_PERIOD_TOTAL2]: {
-        id: MarketType.THIRD_PERIOD_TOTAL2,
-        key: 'thirdPeriodTotal2',
-        name: 'Total 3rd',
-    },
-    [MarketType.FOURTH_PERIOD_TOTAL2]: {
-        id: MarketType.FOURTH_PERIOD_TOTAL2,
-        key: 'fourthPeriodTotal2',
-        name: 'Total 4th',
-    },
-    [MarketType.FIFTH_PERIOD_TOTAL2]: {
-        id: MarketType.FIFTH_PERIOD_TOTAL2,
-        key: 'fifthPeriodTotal2',
-        name: 'Total 5th',
-    },
-    [MarketType.SIXTH_PERIOD_TOTAL2]: {
-        id: MarketType.SIXTH_PERIOD_TOTAL2,
-        key: 'sixthPeriodTotal2',
-        name: 'Total 6th',
-    },
-    [MarketType.SEVENTH_PERIOD_TOTAL2]: {
-        id: MarketType.SEVENTH_PERIOD_TOTAL2,
-        key: 'seventhPeriodTotal2',
-        name: 'Total 7th',
-    },
-    [MarketType.EIGHTH_PERIOD_TOTAL2]: {
-        id: MarketType.EIGHTH_PERIOD_TOTAL2,
-        key: 'eightPeriodTotal2',
-        name: 'Total 8th',
-    },
-    [MarketType.NINTH_PERIOD_TOTAL2]: {
-        id: MarketType.NINTH_PERIOD_TOTAL2,
-        key: 'ninthPeriodTotal2',
-        name: 'Total 9th',
-    },
-    [MarketType.FIRST_PERIOD_SPREAD2]: {
-        id: MarketType.FIRST_PERIOD_SPREAD2,
-        key: 'firstPeriodSpread2',
-        name: 'Handicap 1st',
-    },
-    [MarketType.SECOND_PERIOD_SPREAD2]: {
-        id: MarketType.SECOND_PERIOD_SPREAD2,
-        key: 'secondPeriodSpread2',
-        name: 'Handicap 2nd',
-    },
-    [MarketType.THIRD_PERIOD_SPREAD2]: {
-        id: MarketType.THIRD_PERIOD_SPREAD2,
-        key: 'thirdPeriodSpread2',
-        name: 'Handicap 3rd',
-    },
-    [MarketType.FOURTH_PERIOD_SPREAD2]: {
-        id: MarketType.FOURTH_PERIOD_SPREAD2,
-        key: 'fourthPeriodSpread2',
-        name: 'Handicap 4th',
-    },
-    [MarketType.FIFTH_PERIOD_SPREAD2]: {
-        id: MarketType.FIFTH_PERIOD_SPREAD2,
-        key: 'fifthPeriodSpread2',
-        name: 'Handicap 5th',
-    },
-    [MarketType.SIXTH_PERIOD_SPREAD2]: {
-        id: MarketType.SIXTH_PERIOD_SPREAD2,
-        key: 'sixthPeriodSpread2',
-        name: 'Handicap 6th',
-    },
-    [MarketType.SEVENTH_PERIOD_SPREAD2]: {
-        id: MarketType.SEVENTH_PERIOD_SPREAD2,
-        key: 'seventhPeriodSpread2',
-        name: 'Handicap 7th',
-    },
-    [MarketType.EIGHTH_PERIOD_SPREAD2]: {
-        id: MarketType.EIGHTH_PERIOD_SPREAD2,
-        key: 'eightPeriodSpread2',
-        name: 'Handicap 8th',
-    },
-    [MarketType.NINTH_PERIOD_SPREAD2]: {
-        id: MarketType.NINTH_PERIOD_SPREAD2,
-        key: 'ninthPeriodSpread2',
-        name: 'Handicap 9th',
-    },
-
-    [MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN]: {
-        id: MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN,
-        key: 'firstPeriodTotalOddEven',
-        name: 'Total odd/even 1st',
-    },
-    [MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN]: {
-        id: MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN,
-        key: 'secondPeriodTotalOddEven',
-        name: 'Total odd/even 2nd',
-    },
-    [MarketType.THIRD_PERIOD_TOTAL_ODD_EVEN]: {
-        id: MarketType.THIRD_PERIOD_TOTAL_ODD_EVEN,
-        key: 'thirdPeriodTotalOddEven',
-        name: 'Total odd/even 3rd',
-    },
-    [MarketType.FOURTH_PERIOD_TOTAL_ODD_EVEN]: {
-        id: MarketType.FOURTH_PERIOD_TOTAL_ODD_EVEN,
-        key: 'fourthPeriodTotalOddEven',
-        name: 'Total odd/even 4th',
-    },
-    [MarketType.FIFTH_PERIOD_TOTAL_ODD_EVEN]: {
-        id: MarketType.FIFTH_PERIOD_TOTAL_ODD_EVEN,
-        key: 'fifthPeriodTotalOddEven',
-        name: 'Total odd/even 5th',
-    },
-    [MarketType.SIXTH_PERIOD_TOTAL_ODD_EVEN]: {
-        id: MarketType.SIXTH_PERIOD_TOTAL_ODD_EVEN,
-        key: 'sixthPeriodTotalOddEven',
-        name: 'Total odd/even 6th',
-    },
-    [MarketType.SEVENTH_PERIOD_TOTAL_ODD_EVEN]: {
-        id: MarketType.SEVENTH_PERIOD_TOTAL_ODD_EVEN,
-        key: 'seventhPeriodTotalOddEven',
-        name: 'Total odd/even 7th',
-    },
-    [MarketType.EIGHTH_PERIOD_TOTAL_ODD_EVEN]: {
-        id: MarketType.EIGHTH_PERIOD_TOTAL_ODD_EVEN,
-        key: 'eightPeriodTotalOddEven',
-        name: 'Total odd/even 8th',
-    },
-    [MarketType.NINTH_PERIOD_TOTAL_ODD_EVEN]: {
-        id: MarketType.NINTH_PERIOD_TOTAL_ODD_EVEN,
-        key: 'ninthPeriodTotalOddEven',
-        name: 'Total odd/even 9th',
-    },
-
-    [MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN]: {
-        id: MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
-        key: 'firstPeriodTotal2OddEven',
-        name: 'Total odd/even 1st',
-    },
-    [MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN]: {
-        id: MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN,
-        key: 'secondPeriodTotal2OddEven',
-        name: 'Total odd/even 2nd',
-    },
-    [MarketType.THIRD_PERIOD_TOTAL2_ODD_EVEN]: {
-        id: MarketType.THIRD_PERIOD_TOTAL2_ODD_EVEN,
-        key: 'thirdPeriodTotal2OddEven',
-        name: 'Total odd/even 3rd',
-    },
-    [MarketType.FOURTH_PERIOD_TOTAL2_ODD_EVEN]: {
-        id: MarketType.FOURTH_PERIOD_TOTAL2_ODD_EVEN,
-        key: 'fourthPeriodTotal2OddEven',
-        name: 'Total odd/even 4th',
-    },
-    [MarketType.FIFTH_PERIOD_TOTAL2_ODD_EVEN]: {
-        id: MarketType.FIFTH_PERIOD_TOTAL2_ODD_EVEN,
-        key: 'fifthPeriodTotal2OddEven',
-        name: 'Total odd/even 5th',
-    },
-    [MarketType.SIXTH_PERIOD_TOTAL2_ODD_EVEN]: {
-        id: MarketType.SIXTH_PERIOD_TOTAL2_ODD_EVEN,
-        key: 'sixthPeriodTotal2OddEven',
-        name: 'Total odd/even 6th',
-    },
-    [MarketType.SEVENTH_PERIOD_TOTAL2_ODD_EVEN]: {
-        id: MarketType.SEVENTH_PERIOD_TOTAL2_ODD_EVEN,
-        key: 'seventhPeriodTotal2OddEven',
-        name: 'Total odd/even 7th',
-    },
-    [MarketType.EIGHTH_PERIOD_TOTAL2_ODD_EVEN]: {
-        id: MarketType.EIGHTH_PERIOD_TOTAL2_ODD_EVEN,
-        key: 'eightPeriodTotal2OddEven',
-        name: 'Total odd/even 8th',
-    },
-    [MarketType.NINTH_PERIOD_TOTAL2_ODD_EVEN]: {
-        id: MarketType.NINTH_PERIOD_TOTAL2_ODD_EVEN,
-        key: 'ninthPeriodTotal2OddEven',
-        name: 'Total odd/even 9th',
-    },
-
-    [MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE,
-        key: 'firstPeriodBothTeamsToScore',
-        name: 'Both teams to score 1st',
-    },
-    [MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
-        key: 'secondPeriodBothTeamsToScore',
-        name: 'Both teams to score 2nd',
-    },
-    [MarketType.THIRD_PERIOD_BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.THIRD_PERIOD_BOTH_TEAMS_TO_SCORE,
-        key: 'thirdPeriodBothTeamsToScore',
-        name: 'Both teams to score 3rd',
-    },
-    [MarketType.FOURTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.FOURTH_PERIOD_BOTH_TEAMS_TO_SCORE,
-        key: 'fourthPeriodBothTeamsToScore',
-        name: 'Both teams to score 4th',
-    },
-    [MarketType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE,
-        key: 'fifthPeriodBothTeamsToScore',
-        name: 'Both teams to score 5th',
-    },
-    [MarketType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE,
-        key: 'sixthPeriodBothTeamsToScore',
-        name: 'Both teams to score 6th',
-    },
-    [MarketType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE,
-        key: 'seventhPeriodBothTeamsToScore',
-        name: 'Both teams to score 7th',
-    },
-    [MarketType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE,
-        key: 'eightPeriodBothTeamsToScore',
-        name: 'Both teams to score 8th',
-    },
-    [MarketType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE]: {
-        id: MarketType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE,
-        key: 'ninthPeriodBothTeamsToScore',
-        name: 'Both teams to score 9th',
-    },
-
-    [MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM]: {
-        id: MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
-        key: 'firstPeriodTotalHomeTeam',
-        name: 'Total 1st',
-    },
-    [MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM]: {
-        id: MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
-        key: 'firstPeriodTotalAwayTeam',
-        name: 'Total 1st',
-    },
-    [MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM]: {
-        id: MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
-        key: 'secondPeriodTotalHomeTeam',
-        name: 'Total 2nd',
-    },
-    [MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM]: {
-        id: MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
-        key: 'secondPeriodTotalAwayTeam',
-        name: 'Total 2nd',
     },
 };
 

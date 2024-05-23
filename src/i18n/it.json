@@ -191,7 +191,8 @@
             "title": "Benvenuti nei mercati degli straordinari"
         },
         "settings": "Impostazioni",
-        "filters": "Filtri"
+        "filters": "Filtri",
+        "status": "Stato"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",

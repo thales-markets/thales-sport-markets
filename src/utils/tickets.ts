@@ -4,6 +4,7 @@ import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
+import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
 import {
@@ -42,7 +43,13 @@ export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, player
         finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
 
         sportMarkets: ticket.marketsData.map((market: any, index: number) => {
-            const leagueId = Number(market.sportId);
+            const leagueId = `${market.sportId}`.startsWith('153')
+                ? League.TENNIS_GS
+                : `${market.sportId}`.startsWith('156')
+                ? League.TENNIS_MASTERS
+                : market.sportId === 701 || market.sportId == 702
+                ? League.UFC
+                : Number(market.sportId);
             // const isEnetpulseSport = ENETPULSE_SPORTS.includes(leagueId);
             const typeId = Number(market.typeId);
             const isPlayerPropsMarket = getIsPlayerPropsMarket(typeId);
@@ -130,14 +137,5 @@ export const getTicketQuote = (paid: number, payout: number) => 1 / (payout / pa
 
 export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: number) =>
     formatMarketOdds(oddsType, getTicketQuote(paid, payout));
-
-export const isWinningTicketMarket = (market: TicketMarket) => market.position + 1 === market.finalResult;
-
-export const getTicketMarketWinStatus = (market: TicketMarket) =>
-    market.isResolved && !market.isCanceled
-        ? // win only if not canceled
-          isWinningTicketMarket(market)
-        : // open or canceled
-          undefined;
 
 export const getTicketMarketOdd = (market: TicketMarket) => (market.isCanceled ? 1 : market.odd);

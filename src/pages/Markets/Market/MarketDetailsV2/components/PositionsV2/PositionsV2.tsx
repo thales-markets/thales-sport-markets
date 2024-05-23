@@ -112,7 +112,6 @@ const Positions: React.FC<PositionsProps> = ({
                         </SubTitleContainer>
                     )}
                     {sortedMarkets.map((market, index) => {
-                        console.log(market.typeId, market.type);
                         return (
                             <ContentWrapper key={index}>
                                 {market.isPlayerPropsMarket && (

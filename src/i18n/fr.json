@@ -191,7 +191,8 @@
             "title": "Bienvenue à Overtime Markets"
         },
         "settings": "Paramètres",
-        "filters": "Filtres"
+        "filters": "Filtres",
+        "status": "Statut"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",

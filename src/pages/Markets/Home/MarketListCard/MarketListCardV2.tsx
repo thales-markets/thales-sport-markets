@@ -350,6 +350,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                             : Number(market.leagueId) != League.UFC
                                             ? `${market.homeScore} - ${market.awayScore}`
                                             : ''}
+                                        {getLeagueSport(market.leagueId) === Sport.SOCCER &&
+                                            market.homeScoreByPeriod.length > 0 &&
+                                            market.awayScoreByPeriod.length > 0 &&
+                                            ' (' +
+                                                market.homeScoreByPeriod[0] +
+                                                ' - ' +
+                                                market.awayScoreByPeriod[0] +
+                                                ')'}
                                         {Number(market.leagueId) == League.UFC ? (
                                             <>
                                                 {Number(market.homeScore) > 0

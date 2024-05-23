@@ -82,7 +82,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const numberOfMarkets = useMemo(() => {
         let num = !marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER) ? 1 : 0;
-        console.log(groupedChildMarkets);
         Object.keys(groupedChildMarkets).forEach((key) => {
             const typeId = Number(key);
             const childMarkets = groupedChildMarkets[typeId];
@@ -347,15 +346,17 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         : Number(liveResultInfo?.sportId) != League.UFC
                                         ? `${market.homeScore} - ${market.awayScore}`
                                         : ''}
-                                    {leagueSport === Sport.SOCCER && liveResultInfo?.period == 2 && (
-                                        <InfoLabel className="football">
-                                            {' (' +
-                                                liveResultInfo?.scoreHomeByPeriod[0] +
-                                                ' - ' +
-                                                liveResultInfo?.scoreAwayByPeriod[0] +
-                                                ')'}
-                                        </InfoLabel>
-                                    )}
+                                    {leagueSport === Sport.SOCCER &&
+                                        market.homeScoreByPeriod.length > 0 &&
+                                        market.awayScoreByPeriod.length > 0 && (
+                                            <InfoLabel className="football">
+                                                {' (' +
+                                                    market.homeScoreByPeriod[0] +
+                                                    ' - ' +
+                                                    market.awayScoreByPeriod[0] +
+                                                    ')'}
+                                            </InfoLabel>
+                                        )}
                                     {Number(liveResultInfo?.sportId) == League.UFC ? (
                                         <>
                                             {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
