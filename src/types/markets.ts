@@ -117,8 +117,9 @@ export type SportMarket = {
     awayTeam: string;
     homeScore: number | string;
     awayScore: number | string;
-    finalResult: number;
-    results: number[];
+    homeScoreByPeriod: number[];
+    awayScoreByPeriod: number[];
+    winningPositions: number[];
     status: number;
     isResolved: boolean;
     isOpen: boolean;

@@ -70,8 +70,16 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                     </LeagueLogoContainer>
                     <ParticipantsContainer>
                         <ParticipantLogoContainer
-                            isWinner={isGameRegularlyResolved && market.finalResult == 0}
-                            isDraw={isGameRegularlyResolved && market.finalResult == 2}
+                            isWinner={
+                                isGameRegularlyResolved &&
+                                market.winningPositions &&
+                                market.winningPositions.includes(0)
+                            }
+                            isDraw={
+                                isGameRegularlyResolved &&
+                                market.winningPositions &&
+                                market.winningPositions.includes(2)
+                            }
                         >
                             <ParticipantLogo
                                 src={homeLogoSrc ? homeLogoSrc : getErrorImage(market.leagueId)}
@@ -80,8 +88,16 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                         </ParticipantLogoContainer>
                         {!market.isOneSideMarket && (
                             <ParticipantLogoContainer
-                                isWinner={isGameRegularlyResolved && market.finalResult == 1}
-                                isDraw={isGameRegularlyResolved && market.finalResult == 2}
+                                isWinner={
+                                    isGameRegularlyResolved &&
+                                    market.winningPositions &&
+                                    market.winningPositions.includes(1)
+                                }
+                                isDraw={
+                                    isGameRegularlyResolved &&
+                                    market.winningPositions &&
+                                    market.winningPositions.includes(1)
+                                }
                                 awayTeam={true}
                             >
                                 <ParticipantLogo

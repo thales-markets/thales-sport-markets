@@ -138,13 +138,4 @@ export const getTicketQuote = (paid: number, payout: number) => 1 / (payout / pa
 export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: number) =>
     formatMarketOdds(oddsType, getTicketQuote(paid, payout));
 
-export const isWinningTicketMarket = (market: TicketMarket) => market.position + 1 === market.finalResult;
-
-export const getTicketMarketWinStatus = (market: TicketMarket) =>
-    market.isResolved && !market.isCanceled
-        ? // win only if not canceled
-          isWinningTicketMarket(market)
-        : // open or canceled
-          undefined;
-
 export const getTicketMarketOdd = (market: TicketMarket) => (market.isCanceled ? 1 : market.odd);
