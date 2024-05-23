@@ -191,7 +191,8 @@
             "title": "ยินดีต้อนรับสู่ตลาดล่วงเวลา"
         },
         "settings": "การตั้งค่า",
-        "filters": "ตัวกรอง"
+        "filters": "ตัวกรอง",
+        "status": "สถานะ"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",

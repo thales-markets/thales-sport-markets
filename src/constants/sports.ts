@@ -689,7 +689,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 801,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.DOTA2]: {
         sport: Sport.ESPORTS,
@@ -704,7 +704,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 802,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.LOL]: {
         sport: Sport.ESPORTS,
@@ -719,7 +719,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 803,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
 
     [League.CONMEBOL_WC_QUALIFICATIONS]: {

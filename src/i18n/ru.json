@@ -191,7 +191,8 @@
             "title": "Добро пожаловать на рынки сверхурочной работы"
         },
         "settings": "Настройки",
-        "filters": "Фильтры"
+        "filters": "Фильтры",
+        "status": "Положение дел"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",

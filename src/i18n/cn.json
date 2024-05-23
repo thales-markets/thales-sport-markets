@@ -191,7 +191,8 @@
             "title": "欢迎来到 Overtime Markets"
         },
         "settings": "设置",
-        "filters": "筛选器"
+        "filters": "筛选器",
+        "status": "地位"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",

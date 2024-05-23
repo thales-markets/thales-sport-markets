@@ -191,7 +191,8 @@
             "title": "Bienvenido a Overtime Markets"
         },
         "settings": "Ajustes",
-        "filters": "Filtros"
+        "filters": "Filtros",
+        "status": "Estado"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
