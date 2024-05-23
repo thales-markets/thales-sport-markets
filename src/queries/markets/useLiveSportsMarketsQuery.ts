@@ -9,22 +9,19 @@ import { getLiveSupportedLeagues } from '../../utils/sports';
 const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions<SportMarkets>) => {
     return useQuery<SportMarkets>(
         QUERY_KEYS.LiveSportMarkets(networkId),
-        // @ts-ignore
         async () => {
-            const markets: any[] = [];
+            let markets: any[] = [];
             try {
-                const promises: any[] = [];
-                getLiveSupportedLeagues().forEach((league: number) => {
-                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-markets?leagueId=${league}`));
-                });
-                const responses = await Promise.all(promises);
-                // TODO REFACTOR THIS PART OF FILTERING AND FLATTENING
-                responses
-                    .filter((response) => !(typeof response.data == 'string'))
-                    .forEach((response: any) => markets.push(response.data));
+                const supportedLeagues = getLiveSupportedLeagues();
+                const response = await axios.get<undefined, { data: { errors: string[]; markets: SportMarkets } }>(
+                    `${generalConfig.API_URL}/overtime-v2/live-markets?leagueIds=${JSON.stringify(supportedLeagues)}`
+                );
+
+                markets = response.data.markets;
             } catch (e) {
                 console.log(e);
             }
+
             const marketsFlattened = markets
                 .reduce((accumulator, value) => accumulator.concat(value), [])
                 .map((game: any) => {
@@ -35,6 +32,7 @@ const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions
                         odds: game.odds.map((odd: any) => odd.normalizedImplied),
                     };
                 });
+
             return marketsFlattened;
         },
         {
