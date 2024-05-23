@@ -10,7 +10,7 @@ import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { BOXING_TAGS, EUROPA_LEAGUE_TAGS } from 'constants/tags';
-import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import { SportFilter, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
@@ -24,18 +24,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
-    getDateFilter,
-    getGlobalFilter,
+    getDatePeriodFilter,
     getIsMarketSelected,
     getMarketSearch,
     getMarketTypeFilter,
     getSportFilter,
+    getStatusFilter,
     getTagFilter,
-    setDateFilter,
-    setGlobalFilter,
+    setDatePeriodFilter,
     setMarketSearch,
-    setMarketTypeFilter,
     setSportFilter,
+    setStatusFilter,
     setTagFilter,
 } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
@@ -77,10 +76,11 @@ const FooterSidebarMobile = lazy(
 const MarketsGridV2 = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ './MarketsGridV2'));
 
 type AllMarkets = {
-    OpenMarkets: SportMarkets;
-    Canceled: SportMarkets;
-    ResolvedMarkets: SportMarkets;
-    PendingMarkets: SportMarkets;
+    [StatusFilter.OPEN_MARKETS]: SportMarkets;
+    [StatusFilter.ONGOING_MARKETS]: SportMarkets;
+    [StatusFilter.RESOLVED_MARKETS]: SportMarkets;
+    [StatusFilter.PAUSED_MARKETS]: SportMarkets;
+    [StatusFilter.CANCELLED_MARKETS]: SportMarkets;
 };
 
 const Home: React.FC = () => {
@@ -90,8 +90,8 @@ const Home: React.FC = () => {
     const isAppReady = useSelector(getIsAppReady);
     const networkId = useSelector(getNetworkId);
     const marketSearch = useSelector(getMarketSearch);
-    const dateFilter = useSelector(getDateFilter);
-    const globalFilter = useSelector(getGlobalFilter);
+    const datePeriodFilter = useSelector(getDatePeriodFilter);
+    const statusFilter = useSelector(getStatusFilter);
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
@@ -106,13 +106,24 @@ const Home: React.FC = () => {
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const getSelectedOddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
 
-    const tagsList = orderBy(
-        Object.values(LeagueMap).filter((tag) => !tag.hidden),
-        ['priority', 'label'],
-        ['asc', 'asc']
-    ).map((tag) => {
-        return { id: tag.id, label: tag.label, logo: tag.logo, favourite: tag.favourite, live: tag.live };
-    });
+    const tagsList = useMemo(
+        () =>
+            orderBy(
+                Object.values(LeagueMap).filter((tag) => !tag.hidden),
+                ['priority', 'label'],
+                ['asc', 'asc']
+            ).map((tag) => {
+                return {
+                    id: tag.id,
+                    label: tag.label,
+                    logo: tag.logo,
+                    favourite: tag.favourite,
+                    priority: tag.priority,
+                    live: tag.live,
+                };
+            }),
+        []
+    );
 
     useEffect(() => {
         if (getSelectedOddsType == undefined) {
@@ -125,56 +136,48 @@ const Home: React.FC = () => {
     const [availableTags, setAvailableTags] = useState<Tags>(tagsList);
 
     const [sportParam, setSportParam] = useQueryParam('sport', '');
-    const [globalFilterParam, setGlobalFilterParam] = useQueryParam('globalFilter', '');
-    const [searchParam, setSearchParam] = useQueryParam('searchParam', '');
+    const [statusParam, setStatusParam] = useQueryParam('status', '');
+    const [searchParam, setSearchParam] = useQueryParam('search', '');
     const [dateParam, setDateParam] = useQueryParam('date', '');
     const [tagParam, setTagParam] = useQueryParam('tag', '');
     const [selectedLanguage, setSelectedLanguage] = useQueryParam('lang', '');
     const [activeParam, setActiveParam] = useQueryParam('showActive', '');
 
     const calculateDate = (hours: number, endOfDay?: boolean) => {
-        const calculatedDate = addHoursToCurrentDate(hours, endOfDay);
-        dispatch(setDateFilter(calculatedDate.getTime()));
+        return addHoursToCurrentDate(hours, endOfDay).getTime();
     };
 
     useEffect(
         () => {
             if (
-                globalFilter !== GlobalFiltersEnum.OpenMarkets &&
-                globalFilter !== GlobalFiltersEnum.PendingMarkets &&
-                globalFilter !== GlobalFiltersEnum.ResolvedMarkets &&
-                globalFilter !== GlobalFiltersEnum.Canceled
+                statusFilter !== StatusFilter.OPEN_MARKETS &&
+                statusFilter !== StatusFilter.ONGOING_MARKETS &&
+                statusFilter !== StatusFilter.RESOLVED_MARKETS &&
+                statusFilter !== StatusFilter.CANCELLED_MARKETS &&
+                statusFilter !== StatusFilter.PAUSED_MARKETS
             ) {
                 resetFilters();
             }
 
-            sportParam != '' ? dispatch(setSportFilter(sportParam as SportFilterEnum)) : setSportParam(sportFilter);
-            globalFilterParam != ''
-                ? dispatch(setGlobalFilter(globalFilterParam as GlobalFiltersEnum))
-                : setGlobalFilterParam(globalFilter);
-            if (dateParam != '') {
-                if (dateParam.includes('hour')) {
-                    const timeFilter = dateParam.split('h')[0];
-                    switch (timeFilter) {
-                        case '12':
-                            calculateDate(12);
-                            break;
-                        case '24':
-                            calculateDate(24);
-                            break;
-                        case '72':
-                            calculateDate(72, true);
-                            break;
-                    }
-                } else {
-                    const formattedDate = new Date(dateParam);
-                    formattedDate.setHours(23, 59, 59, 999);
-                    dispatch(setDateFilter(formattedDate));
+            sportParam != '' ? dispatch(setSportFilter(sportParam as SportFilter)) : setSportParam(sportFilter);
+
+            statusParam != '' ? dispatch(setStatusFilter(statusParam as StatusFilter)) : setStatusParam(statusFilter);
+
+            if (dateParam != '' && dateParam.includes('hour')) {
+                const timeFilter = dateParam.split('h')[0];
+                switch (timeFilter) {
+                    case '12':
+                        dispatch(setDatePeriodFilter(12));
+                        break;
+                    case '24':
+                        dispatch(setDatePeriodFilter(24));
+                        break;
+                    case '72':
+                        dispatch(setDatePeriodFilter(72));
+                        break;
                 }
             } else {
-                if (dateFilter == addHoursToCurrentDate(72, true).getTime()) {
-                    setDateParam('72hours');
-                }
+                dispatch(setDatePeriodFilter(datePeriodFilter));
             }
 
             if (tagParam != '') {
@@ -184,12 +187,15 @@ const Home: React.FC = () => {
             } else {
                 setTagParam(tagFilter.map((tag) => tag.label).toString());
             }
+
             searchParam != '' ? dispatch(setMarketSearch(searchParam)) : '';
+
             selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
-            if (sportFilter == SportFilterEnum.Favourites) {
+
+            if (sportFilter == SportFilter.Favourites) {
                 const filteredTags = tagsList.filter((tag: TagInfo) => tag.favourite);
                 setAvailableTags(filteredTags);
-            } else if (sportFilter == SportFilterEnum.Live) {
+            } else if (sportFilter == SportFilter.Live) {
                 const filteredTags = tagsList.filter((tag: TagInfo) => tag.live);
                 setAvailableTags(filteredTags);
             } else {
@@ -199,13 +205,14 @@ const Home: React.FC = () => {
                     setAvailableTags(filteredTags);
                 }
             }
+
             activeParam != '' ? setShowActive(activeParam === 'true') : setActiveParam(showActive.toString());
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
 
-    const sportMarketsQueryNew = useSportsMarketsV2Query(globalFilter, networkId, {
+    const sportMarketsQueryNew = useSportsMarketsV2Query(statusFilter, networkId, {
         enabled: isAppReady,
     });
 
@@ -218,18 +225,19 @@ const Home: React.FC = () => {
             sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
                 ? sportMarketsQueryNew.data
                 : {
-                      OpenMarkets: [],
-                      Canceled: [],
-                      ResolvedMarkets: [],
-                      PendingMarkets: [],
+                      [StatusFilter.OPEN_MARKETS]: [],
+                      [StatusFilter.ONGOING_MARKETS]: [],
+                      [StatusFilter.RESOLVED_MARKETS]: [],
+                      [StatusFilter.PAUSED_MARKETS]: [],
+                      [StatusFilter.CANCELLED_MARKETS]: [],
                   };
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
             liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
 
-        const filteredMarkets = (sportFilter === SportFilterEnum.Live
+        const filteredMarkets = (sportFilter === SportFilter.Live
             ? allLiveMarkets
-            : allMarkets[globalFilter] || allMarkets[GlobalFiltersEnum.OpenMarkets]
+            : allMarkets[statusFilter] || allMarkets[StatusFilter.OPEN_MARKETS]
         ).filter((market: SportMarket) => {
             if (marketSearch) {
                 if (
@@ -260,26 +268,19 @@ const Home: React.FC = () => {
                 }
             }
 
-            if (dateFilter !== 0) {
-                if (typeof dateFilter === 'number') {
-                    if (market.maturityDate.getTime() > dateFilter) {
-                        return false;
-                    }
-                } else {
-                    const dateToCompare = new Date(dateFilter);
-                    if (market.maturityDate.toDateString() != dateToCompare.toDateString()) {
-                        return false;
-                    }
+            if (datePeriodFilter !== 0) {
+                if (market.maturityDate.getTime() > calculateDate(datePeriodFilter)) {
+                    return false;
                 }
             }
 
-            if (sportFilter !== SportFilterEnum.All) {
-                if (sportFilter != SportFilterEnum.Favourites && sportFilter != SportFilterEnum.Live) {
+            if (sportFilter !== SportFilter.All) {
+                if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
                     if (market.sport !== sportFilter) {
                         return false;
                     }
                 } else {
-                    if (sportFilter == SportFilterEnum.Favourites) {
+                    if (sportFilter == SportFilter.Favourites) {
                         if (
                             !favouriteLeagues
                                 .filter((league) => league.favourite)
@@ -305,9 +306,9 @@ const Home: React.FC = () => {
                 if (!marketMarketTypes.some((marketType) => marketTypeFilter === marketType)) {
                     return false;
                 }
-                if (sportFilter == SportFilterEnum.Live) {
-                    return isLiveSupportedForLeague(market.leagueId);
-                }
+            }
+            if (sportFilter == SportFilter.Live) {
+                return isLiveSupportedForLeague(market.leagueId);
             }
 
             return true;
@@ -317,7 +318,9 @@ const Home: React.FC = () => {
             filteredMarkets,
             ['maturityDate'],
             [
-                globalFilter === GlobalFiltersEnum.ResolvedMarkets || globalFilter === GlobalFiltersEnum.Canceled
+                statusFilter === StatusFilter.RESOLVED_MARKETS ||
+                statusFilter === StatusFilter.CANCELLED_MARKETS ||
+                statusFilter === StatusFilter.PAUSED_MARKETS
                     ? 'desc'
                     : 'asc',
             ]
@@ -331,27 +334,27 @@ const Home: React.FC = () => {
         sportMarketsQueryNew.data,
         liveSportMarketsQuery.isSuccess,
         liveSportMarketsQuery.data,
-        globalFilter,
+        statusFilter,
         marketSearch,
         tagFilter,
-        dateFilter,
+        datePeriodFilter,
         sportFilter,
         marketTypeFilter,
         favouriteLeagues,
     ]);
 
     const marketsLoading =
-        sportFilter === SportFilterEnum.Live ? liveSportMarketsQuery.isLoading : sportMarketsQueryNew.isLoading;
+        sportFilter === SportFilter.Live ? liveSportMarketsQuery.isLoading : sportMarketsQueryNew.isLoading;
 
     useEffect(() => {
-        if (sportFilter == SportFilterEnum.Favourites) {
+        if (sportFilter == SportFilter.Favourites) {
             const filteredTags = favouriteLeagues.filter((tag: any) => tag.favourite);
             setAvailableTags(filteredTags);
         }
     }, [favouriteLeagues, sportFilter]);
 
     const openSportMarketsQuery = useSportsMarketsV2Query(
-        sportFilter == SportFilterEnum.Live ? GlobalFiltersEnum.PendingMarkets : GlobalFiltersEnum.OpenMarkets,
+        sportFilter == SportFilter.Live ? StatusFilter.ONGOING_MARKETS : StatusFilter.OPEN_MARKETS,
         networkId,
         {
             enabled: isAppReady,
@@ -361,7 +364,7 @@ const Home: React.FC = () => {
     const openMarketsCountPerTag = useMemo(() => {
         const openSportMarkets: SportMarkets =
             openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
-                ? openSportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets]
+                ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
                 : [];
 
         const groupedMarkets = groupBy(openSportMarkets, (market) => market.leagueId);
@@ -376,14 +379,13 @@ const Home: React.FC = () => {
                 openMarketsCountPerTag[key] = groupedMarkets[key].length;
             }
         });
-        Object.values(SportFilterEnum);
         return openMarketsCountPerTag;
     }, [openSportMarketsQuery]);
 
     const openMarketsCountPerSport = useMemo(() => {
         const openMarketsCount: any = {};
         let totalCount = 0;
-        Object.values(SportFilterEnum).forEach((filterItem: string) => {
+        Object.values(SportFilter).forEach((filterItem: string) => {
             const tagsPerSport = getSportLeagueIds(filterItem as Sport);
             let count = 0;
             if (tagsPerSport) {
@@ -395,14 +397,14 @@ const Home: React.FC = () => {
 
             openMarketsCount[filterItem] = count;
         });
-        openMarketsCount[SportFilterEnum.All] = totalCount;
+        openMarketsCount[SportFilter.All] = totalCount;
 
         let favouriteCount = 0;
         const favouriteTags = favouriteLeagues.filter((tag: any) => tag.favourite);
         favouriteTags.forEach((tag: TagInfo) => {
             favouriteCount += openMarketsCountPerTag[tag.id] || 0;
         });
-        openMarketsCount[SportFilterEnum.Favourites] = favouriteCount;
+        openMarketsCount[SportFilter.Favourites] = favouriteCount;
 
         return openMarketsCount;
     }, [openMarketsCountPerTag, favouriteLeagues]);
@@ -423,7 +425,7 @@ const Home: React.FC = () => {
                 liveMarketsCountPerTag[key] = groupedMarkets[key].length;
             }
         });
-        Object.values(SportFilterEnum);
+        Object.values(SportFilter);
         return liveMarketsCountPerTag;
     }, [liveSportMarketsQuery]);
 
@@ -435,30 +437,30 @@ const Home: React.FC = () => {
             tagsPerSport.forEach((tag) => (totalCount += liveMarketsCountPerTag[tag] || 0));
         }
 
-        liveMarketsCount[SportFilterEnum.Live] = totalCount;
+        liveMarketsCount[SportFilter.Live] = totalCount;
 
         let favouriteCount = 0;
         const favouriteTags = favouriteLeagues.filter((tag: any) => tag.favourite);
         favouriteTags.forEach((tag: TagInfo) => {
             favouriteCount += liveMarketsCountPerTag[tag.id] || 0;
         });
-        liveMarketsCount[SportFilterEnum.Favourites] = favouriteCount;
+        liveMarketsCount[SportFilter.Favourites] = favouriteCount;
 
         return liveMarketsCount;
     }, [liveMarketsCountPerTag, favouriteLeagues]);
 
     const resetFilters = useCallback(() => {
-        dispatch(setGlobalFilter(GlobalFiltersEnum.OpenMarkets));
-        setGlobalFilterParam(GlobalFiltersEnum.OpenMarkets);
-        dispatch(setSportFilter(SportFilterEnum.All));
-        setSportParam(SportFilterEnum.All);
-        dispatch(setDateFilter(0));
+        dispatch(setStatusFilter(StatusFilter.OPEN_MARKETS));
+        setStatusParam(StatusFilter.OPEN_MARKETS);
+        dispatch(setSportFilter(SportFilter.All));
+        setSportParam(SportFilter.All);
         setDateParam('');
+        dispatch(setDatePeriodFilter(0));
         dispatch(setTagFilter([]));
         setTagParam('');
         setSearchParam('');
         dispatch(setMarketSearch(''));
-    }, [dispatch, setDateParam, setGlobalFilterParam, setSearchParam, setSportParam, setTagParam]);
+    }, [dispatch, setDateParam, setStatusParam, setSearchParam, setSportParam, setTagParam]);
 
     useEffect(() => {
         if (location.state === RESET_STATE) {
@@ -475,9 +477,9 @@ const Home: React.FC = () => {
                 onChange={(e: any) => {
                     setShowActive(e.target.checked || false);
                     setActiveParam((e.target.checked || false).toString());
-                    if (sportFilter === SportFilterEnum.All) {
+                    if (sportFilter === SportFilter.All) {
                         setAvailableTags(tagsList);
-                    } else if (sportFilter === SportFilterEnum.Live) {
+                    } else if (sportFilter === SportFilter.Live) {
                         const filteredLiveTags = getLiveSupportedLeagues();
                         const filteredTags = tagsList.filter(
                             (tag: TagInfo) =>
@@ -506,16 +508,14 @@ const Home: React.FC = () => {
 
     const getSportFilters = () => (
         <>
-            {Object.values(SportFilterEnum)
+            {Object.values(SportFilter)
                 .filter(
                     (filterItem: any) =>
-                        (showActive &&
-                            openMarketsCountPerSport[filterItem] > 0 &&
-                            filterItem !== SportFilterEnum.Live) ||
+                        (showActive && openMarketsCountPerSport[filterItem] > 0 && filterItem !== SportFilter.Live) ||
                         !showActive ||
                         openSportMarketsQuery.isLoading ||
-                        filterItem === SportFilterEnum.Favourites ||
-                        (filterItem === SportFilterEnum.Live && showActive && liveMarketsCountPerSport[filterItem] > 0)
+                        filterItem === SportFilter.Favourites ||
+                        (filterItem === SportFilter.Live && showActive && liveMarketsCountPerSport[filterItem] > 0)
                 )
                 .map((filterItem: any, index) => {
                     return (
@@ -527,13 +527,13 @@ const Home: React.FC = () => {
                                     setSportParam(filterItem);
                                     dispatch(setTagFilter([]));
                                     setTagParam('');
-                                    if (filterItem === SportFilterEnum.All) {
-                                        dispatch(setDateFilter(0));
+                                    if (filterItem === SportFilter.All) {
                                         setDateParam('');
+                                        dispatch(setDatePeriodFilter(0));
                                         setAvailableTags(tagsList);
-                                    } else if (filterItem === SportFilterEnum.Live) {
-                                        setDateFilter(0);
+                                    } else if (filterItem === SportFilter.Live) {
                                         setDateParam('');
+                                        dispatch(setDatePeriodFilter(0));
                                         const filteredLiveTags = getLiveSupportedLeagues();
                                         const filteredTags = tagsList.filter(
                                             (tag: TagInfo) =>
@@ -562,7 +562,7 @@ const Home: React.FC = () => {
                             }}
                             sport={filterItem}
                             sportCount={
-                                filterItem == SportFilterEnum.Live
+                                filterItem == SportFilter.Live
                                     ? liveMarketsCountPerSport[filterItem]
                                     : openMarketsCountPerSport[filterItem]
                             }
@@ -577,13 +577,7 @@ const Home: React.FC = () => {
         </>
     );
 
-    const getGlobalFilters = () => (
-        <GlobalFilters
-            setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
-            setGlobalFilterParam={setGlobalFilterParam}
-            globalFilter={globalFilter}
-        />
-    );
+    const getGlobalFilters = () => <GlobalFilters />;
 
     return (
         <Container>
@@ -651,37 +645,11 @@ const Home: React.FC = () => {
                 <MainContainer>
                     {isMobile && (
                         <>
-                            <SportFilterMobile
-                                sportFilter={sportFilter}
-                                setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
-                                setTagParam={setTagParam}
-                                setSportFilter={(filter: SportFilterEnum) => dispatch(setSportFilter(filter))}
-                                setSportParam={setSportParam}
-                                setAvailableTags={setAvailableTags}
-                                tagsList={tagsList}
-                            />
+                            <SportFilterMobile setAvailableTags={setAvailableTags} tagsList={tagsList} />
                             {!marketsLoading && finalMarkets.length > 0 && (
                                 <Header availableMarketTypes={availableMarketTypes} />
                             )}
-                            <FilterTagsMobile
-                                sportFilter={sportFilter}
-                                marketSearch={marketSearch}
-                                globalFilter={globalFilter}
-                                tagFilter={tagFilter}
-                                marketTypeFilter={marketTypeFilter}
-                                setDateFilter={(date: Date | number) => dispatch(setDateFilter(date))}
-                                setDateParam={setDateParam}
-                                setGlobalFilter={(filter: GlobalFiltersEnum) => dispatch(setGlobalFilter(filter))}
-                                setGlobalFilterParam={setGlobalFilterParam}
-                                setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
-                                setTagParam={setTagParam}
-                                setSportFilter={(filter: SportFilterEnum) => dispatch(setSportFilter(filter))}
-                                setSportParam={setSportParam}
-                                setSearchParam={setSearchParam}
-                                setMarketTypeFilter={(filter: MarketType | undefined) =>
-                                    dispatch(setMarketTypeFilter(filter))
-                                }
-                            />
+                            <FilterTagsMobile />
                         </>
                     )}
                     {marketsLoading ? (
@@ -723,7 +691,7 @@ const Home: React.FC = () => {
                                                 <MarketsGridV2 markets={finalMarkets} />
                                             </Suspense>
                                         )}
-                                        {isMarketSelected && globalFilter === GlobalFiltersEnum.OpenMarkets && (
+                                        {isMarketSelected && statusFilter === StatusFilter.OPEN_MARKETS && (
                                             <SelectedMarket availableMarketTypes={availableMarketTypes} />
                                         )}
                                     </FlexDivRow>

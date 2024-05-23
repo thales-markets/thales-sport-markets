@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import { SportFilter, StatusFilter } from 'enums/markets';
 import { localStore } from 'thales-utils';
 import { MarketSport, Tags } from 'types/markets';
 import { MarketType, MarketTypeGroup } from '../../enums/marketTypes';
@@ -18,26 +18,20 @@ const getDefaultMarketSearch = (): string => {
     return lsMarketSearch !== undefined ? (lsMarketSearch as string) : '';
 };
 
-const getDefaultDateFilter = (): Date | number => {
-    const lsDateFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_DATE);
-    const dateNumber = Number(lsDateFilter);
-    return lsDateFilter !== undefined ? (isNaN(dateNumber) ? new Date(lsDateFilter as string) : dateNumber) : 0;
-};
-
 const getDefaultDatePeriodFilter = (): number => {
     const lsDatePeriodFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD);
     const datePeriodNumber = Number(lsDatePeriodFilter);
-    return datePeriodNumber !== undefined ? (isNaN(datePeriodNumber) ? 0 : datePeriodNumber) : 0;
+    return datePeriodNumber !== undefined && !isNaN(datePeriodNumber) ? datePeriodNumber : 0;
 };
 
-const getDefaultGlobalFilter = (): GlobalFiltersEnum => {
-    const lsGlobalFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_GLOBAL);
-    return lsGlobalFilter !== undefined ? (lsGlobalFilter as GlobalFiltersEnum) : GlobalFiltersEnum.OpenMarkets;
+const getDefaultStatusFilter = (): StatusFilter => {
+    const lsGlobalFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_STATUS);
+    return lsGlobalFilter !== undefined ? (lsGlobalFilter as StatusFilter) : StatusFilter.OPEN_MARKETS;
 };
 
-const getDefaultSportFilter = (): SportFilterEnum => {
+const getDefaultSportFilter = (): SportFilter => {
     const lsSportFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_SPORT);
-    return lsSportFilter !== undefined ? (lsSportFilter as SportFilterEnum) : SportFilterEnum.All;
+    return lsSportFilter !== undefined ? (lsSportFilter as SportFilter) : SportFilter.All;
 };
 
 const getDefaultTagFilter = (): Tags => {
@@ -52,10 +46,9 @@ const getDefaultIsThreeWayView = (): boolean => {
 
 type MarketSliceState = {
     marketSearch: string;
-    dateFilter: Date | number;
     datePeriodFilter: number;
-    globalFilter: GlobalFiltersEnum;
-    sportFilter: SportFilterEnum;
+    statusFilter: StatusFilter;
+    sportFilter: SportFilter;
     marketTypeFilter: MarketType | undefined;
     marketTypeGroupFilter: MarketTypeGroup | undefined;
     tagFilter: Tags;
@@ -65,9 +58,8 @@ type MarketSliceState = {
 
 const initialState: MarketSliceState = {
     marketSearch: getDefaultMarketSearch(),
-    dateFilter: getDefaultDateFilter(),
     datePeriodFilter: getDefaultDatePeriodFilter(),
-    globalFilter: getDefaultGlobalFilter(),
+    statusFilter: getDefaultStatusFilter(),
     sportFilter: getDefaultSportFilter(),
     marketTypeFilter: undefined,
     marketTypeGroupFilter: undefined,
@@ -86,29 +78,23 @@ const marketSlice = createSlice({
 
             state.selectedMarket = undefined;
         },
-        setDateFilter: (state, action: PayloadAction<Date | number>) => {
-            state.dateFilter = action.payload;
-            localStore.set(LOCAL_STORAGE_KEYS.FILTER_DATE, action.payload);
-
-            state.selectedMarket = undefined;
-        },
         setDatePeriodFilter: (state, action: PayloadAction<number>) => {
             state.datePeriodFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD, action.payload);
 
             state.selectedMarket = undefined;
         },
-        setGlobalFilter: (state, action: PayloadAction<GlobalFiltersEnum>) => {
-            state.globalFilter = action.payload;
-            if (action.payload !== GlobalFiltersEnum.OpenMarkets) {
+        setStatusFilter: (state, action: PayloadAction<StatusFilter>) => {
+            state.statusFilter = action.payload;
+            if (action.payload !== StatusFilter.OPEN_MARKETS) {
                 state.selectedMarket = undefined;
             }
-            localStore.set(LOCAL_STORAGE_KEYS.FILTER_GLOBAL, action.payload);
+            localStore.set(LOCAL_STORAGE_KEYS.FILTER_STATUS, action.payload);
 
             state.datePeriodFilter = 0;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD, 0);
         },
-        setSportFilter: (state, action: PayloadAction<SportFilterEnum>) => {
+        setSportFilter: (state, action: PayloadAction<SportFilter>) => {
             state.sportFilter = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.FILTER_SPORT, action.payload);
 
@@ -116,7 +102,7 @@ const marketSlice = createSlice({
             state.marketTypeFilter = undefined;
             state.marketTypeGroupFilter = undefined;
 
-            if (action.payload === SportFilterEnum.All) {
+            if (action.payload === SportFilter.All) {
                 state.datePeriodFilter = 0;
                 localStore.set(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD, 0);
             }
@@ -152,9 +138,8 @@ const marketSlice = createSlice({
 
 export const {
     setMarketSearch,
-    setDateFilter,
     setDatePeriodFilter,
-    setGlobalFilter,
+    setStatusFilter,
     setSportFilter,
     setTagFilter,
     setSelectedMarket,
@@ -165,9 +150,8 @@ export const {
 
 const getMarketState = (state: RootState) => state[sliceName];
 export const getMarketSearch = (state: RootState) => getMarketState(state).marketSearch;
-export const getDateFilter = (state: RootState) => getMarketState(state).dateFilter;
 export const getDatePeriodFilter = (state: RootState) => getMarketState(state).datePeriodFilter;
-export const getGlobalFilter = (state: RootState) => getMarketState(state).globalFilter;
+export const getStatusFilter = (state: RootState) => getMarketState(state).statusFilter;
 export const getSportFilter = (state: RootState) => getMarketState(state).sportFilter;
 export const getTagFilter = (state: RootState) => getMarketState(state).tagFilter;
 export const getMarketTypeFilter = (state: RootState) => getMarketState(state).marketTypeFilter;

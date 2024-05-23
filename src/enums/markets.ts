@@ -1,8 +1,9 @@
-export enum GlobalFiltersEnum {
-    OpenMarkets = 'OpenMarkets',
-    PendingMarkets = 'PendingMarkets',
-    ResolvedMarkets = 'ResolvedMarkets',
-    Canceled = 'Canceled',
+export enum StatusFilter {
+    OPEN_MARKETS = 'OpenMarkets',
+    ONGOING_MARKETS = 'OngoingMarkets',
+    RESOLVED_MARKETS = 'ResolvedMarkets',
+    PAUSED_MARKETS = 'PausedMarkets',
+    CANCELLED_MARKETS = 'CancelledMarkets',
 }
 
 export enum SortDirection {
@@ -11,7 +12,7 @@ export enum SortDirection {
     DESC,
 }
 
-export enum SportFilterEnum {
+export enum SportFilter {
     Live = 'Live',
     Favourites = 'Favourites',
     All = 'All',
@@ -29,8 +30,8 @@ export enum SportFilterEnum {
 }
 
 export enum OddsType {
-    American = 'american-odds',
-    Decimal = 'decimal-odds',
+    AMERICAN = 'american-odds',
+    DECIMAL = 'decimal-odds',
     AMM = 'normalized-implied-odds',
 }
 

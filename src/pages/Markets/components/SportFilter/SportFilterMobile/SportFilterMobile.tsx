@@ -1,22 +1,20 @@
 import liveAnimationData from 'assets/lotties/live-markets-filter.json';
-import { SportFilterEnum } from 'enums/markets';
+import { SportFilter } from 'enums/markets';
 import { Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 import React, { CSSProperties, Dispatch, SetStateAction, useContext } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSportFilter, setSportFilter, setTagFilter } from 'redux/modules/market';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getSportLeagueIds } from 'utils/sports';
+import useQueryParam from '../../../../../utils/useQueryParams';
 
 type SportFilterMobileProps = {
-    sportFilter: string;
     tagsList: Tags;
-    setSportFilter: (value: SportFilterEnum) => void;
-    setSportParam: (val: string) => void;
-    setTagFilter: (value: Tags) => void;
-    setTagParam: (val: string) => void;
     setAvailableTags: Dispatch<SetStateAction<Tags>>;
 };
 
@@ -47,20 +45,17 @@ const RightArrow: React.FC = () => {
     );
 };
 
-const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
-    sportFilter,
-    tagsList,
-    setSportFilter,
-    setSportParam,
-    setTagFilter,
-    setTagParam,
-    setAvailableTags,
-}) => {
+const SportFilterMobile: React.FC<SportFilterMobileProps> = ({ tagsList, setAvailableTags }) => {
+    const dispatch = useDispatch();
+    const sportFilter = useSelector(getSportFilter);
+    const [, setSportParam] = useQueryParam('sport', '');
+    const [, setTagParam] = useQueryParam('tag', '');
+
     return (
         <Container>
             <NoScrollbarContainer>
                 <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
-                    {Object.values(SportFilterEnum).map((filterItem: any, index) => {
+                    {Object.values(SportFilter).map((filterItem: any, index) => {
                         return (
                             <LabelContainer
                                 key={index}
@@ -68,11 +63,11 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                 className={`${filterItem == sportFilter ? 'selected' : ''}`}
                                 onClick={() => {
                                     if (filterItem !== sportFilter) {
-                                        setSportFilter(filterItem);
+                                        dispatch(setSportFilter(filterItem));
                                         setSportParam(filterItem);
-                                        setTagFilter([]);
+                                        dispatch(setTagFilter([]));
                                         setTagParam('');
-                                        if (filterItem === SportFilterEnum.All) {
+                                        if (filterItem === SportFilter.All) {
                                             setAvailableTags(tagsList);
                                         } else {
                                             const tagsPerSport = getSportLeagueIds(filterItem as Sport);
@@ -86,15 +81,15 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                             }
                                         }
                                     } else {
-                                        setSportFilter(SportFilterEnum.All);
-                                        setSportParam(SportFilterEnum.All);
-                                        setTagFilter([]);
+                                        dispatch(setSportFilter(SportFilter.All));
+                                        setSportParam(SportFilter.All);
+                                        dispatch(setTagFilter([]));
                                         setTagParam('');
                                         setAvailableTags(tagsList);
                                     }
                                 }}
                             >
-                                {filterItem == SportFilterEnum.Live ? (
+                                {filterItem == SportFilter.Live ? (
                                     <Lottie
                                         autoplay={true}
                                         animationData={liveAnimationData}
@@ -105,7 +100,7 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                                     <FlexDivColumnCentered>
                                         <SportIcon
                                             className={`icon icon--${
-                                                filterItem == SportFilterEnum.All ? 'logo' : filterItem.toLowerCase()
+                                                filterItem == SportFilter.All ? 'logo' : filterItem.toLowerCase()
                                             }`}
                                         />
                                     </FlexDivColumnCentered>

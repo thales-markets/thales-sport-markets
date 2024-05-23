@@ -1,15 +1,15 @@
-import { SportFilterEnum } from 'enums/markets';
+import { SportFilter } from 'enums/markets';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
 import { Tags } from 'types/markets';
-import SportFilter from '../SportFilter/SportFilter';
+import SportFilterDetails from '../SportFilter/SportFilter';
 import TagsDropdown from '../TagsDropdown';
 
 type SportTagsProps = {
     onSportClick: () => void;
-    sport: SportFilterEnum;
+    sport: SportFilter;
     sportCount: number;
     showActive: boolean;
     tags: Tags;
@@ -33,9 +33,9 @@ const SportTags: React.FC<SportTagsProps> = ({
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
 
-    const [isOpen, setIsOpen] = useState(sport == sportFilter && sport !== SportFilterEnum.All);
+    const [isOpen, setIsOpen] = useState(sport == sportFilter && sport !== SportFilter.All);
 
-    const open = useMemo(() => sport == sportFilter && sport !== SportFilterEnum.All && isOpen, [
+    const open = useMemo(() => sport == sportFilter && sport !== SportFilter.All && isOpen, [
         isOpen,
         sport,
         sportFilter,
@@ -43,7 +43,7 @@ const SportTags: React.FC<SportTagsProps> = ({
 
     return (
         <React.Fragment>
-            <SportFilter
+            <SportFilterDetails
                 selected={sportFilter === sport}
                 sport={sport}
                 onClick={() => {
@@ -55,7 +55,7 @@ const SportTags: React.FC<SportTagsProps> = ({
                 open={open}
             >
                 {t(`market.filter-label.sport.${sport.toLowerCase()}`)}
-            </SportFilter>
+            </SportFilterDetails>
             <TagsDropdown
                 sport={sport}
                 open={open}
@@ -67,7 +67,7 @@ const SportTags: React.FC<SportTagsProps> = ({
                 openMarketsCountPerTag={openMarketsCountPerTag}
                 liveMarketsCountPerTag={liveMarketsCountPerTag}
                 showActive={showActive}
-                showLive={sportFilter == SportFilterEnum.Live}
+                showLive={sportFilter == SportFilter.Live}
             ></TagsDropdown>
         </React.Fragment>
     );

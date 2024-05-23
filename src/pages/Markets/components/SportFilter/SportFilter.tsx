@@ -1,5 +1,5 @@
 import liveAnimationData from 'assets/lotties/live-markets-filter.json';
-import { SportFilterEnum } from 'enums/markets';
+import { SportFilter } from 'enums/markets';
 import Lottie from 'lottie-react';
 import React, { CSSProperties } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,19 +9,19 @@ import { FlexDiv, FlexDivCentered, FlexDivSpaceBetween } from 'styles/common';
 
 type SportFilterProps = {
     selected?: boolean;
-    sport: SportFilterEnum;
+    sport: SportFilter;
     onClick: () => void;
     count: number;
     open: boolean;
 };
 
-const SportFilter: React.FC<SportFilterProps> = ({ selected, sport, onClick, count, children, open }) => {
+const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onClick, count, children, open }) => {
     const isMobile = useSelector(getIsMobile);
 
     return (
         <Container className={selected ? 'selected' : ''} onClick={onClick}>
             <LeftContainer>
-                {sport == SportFilterEnum.Live ? (
+                {sport == SportFilter.Live ? (
                     <Lottie
                         autoplay={true}
                         animationData={liveAnimationData}
@@ -29,15 +29,13 @@ const SportFilter: React.FC<SportFilterProps> = ({ selected, sport, onClick, cou
                         style={isMobile ? liveBlinkStyleMobile : liveBlinkStyle}
                     />
                 ) : (
-                    <SportIcon
-                        className={`icon icon--${sport == SportFilterEnum.All ? 'logo' : sport.toLowerCase()}`}
-                    />
+                    <SportIcon className={`icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`} />
                 )}
                 <Label>{children}</Label>
             </LeftContainer>
             <RightContainer>
                 {count > 0 && <Count>{count}</Count>}
-                {sport == SportFilterEnum.All ? (
+                {sport == SportFilter.All ? (
                     <ArrowIcon className={`invisible icon icon--caret-right`} />
                 ) : open ? (
                     <ArrowIcon className="icon icon--caret-down" />
@@ -144,4 +142,4 @@ const liveBlinkStyleMobile: CSSProperties = {
     margin: '0px 10px 0px -6px',
 };
 
-export default SportFilter;
+export default SportFilterDetails;

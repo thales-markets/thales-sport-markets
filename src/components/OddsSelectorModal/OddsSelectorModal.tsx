@@ -15,7 +15,7 @@ type OddsSelectorModalProps = {
 const OddsSelectorModal: React.FC<OddsSelectorModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const [selectedOdds, setSelectedOdds] = useState<OddsType>(OddsType.Decimal);
+    const [selectedOdds, setSelectedOdds] = useState<OddsType>(OddsType.DECIMAL);
 
     const setSelectedOddsType = useCallback(
         (oddsType: OddsType) => {
@@ -38,18 +38,18 @@ const OddsSelectorModal: React.FC<OddsSelectorModalProps> = ({ onClose }) => {
                     <Button
                         margin="5px"
                         backgroundColor={Colors.GRAY}
-                        borderColor={selectedOdds == OddsType.American ? Colors.BLUE : Colors.GRAY}
-                        textColor={selectedOdds == OddsType.American ? Colors.BLUE : Colors.WHITE}
-                        onClick={() => setSelectedOdds(OddsType.American)}
+                        borderColor={selectedOdds == OddsType.AMERICAN ? Colors.BLUE : Colors.GRAY}
+                        textColor={selectedOdds == OddsType.AMERICAN ? Colors.BLUE : Colors.WHITE}
+                        onClick={() => setSelectedOdds(OddsType.AMERICAN)}
                     >
                         {t('common.odds-modal.american-odds')}
                     </Button>
                     <Button
                         margin="5px"
                         backgroundColor={Colors.GRAY}
-                        borderColor={selectedOdds == OddsType.Decimal ? Colors.BLUE : Colors.GRAY}
-                        textColor={selectedOdds == OddsType.Decimal ? Colors.BLUE : Colors.WHITE}
-                        onClick={() => setSelectedOdds(OddsType.Decimal)}
+                        borderColor={selectedOdds == OddsType.DECIMAL ? Colors.BLUE : Colors.GRAY}
+                        textColor={selectedOdds == OddsType.DECIMAL ? Colors.BLUE : Colors.WHITE}
+                        onClick={() => setSelectedOdds(OddsType.DECIMAL)}
                     >
                         {t('common.odds-modal.decimal-odds')}
                     </Button>

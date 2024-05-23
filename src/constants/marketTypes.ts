@@ -1,5 +1,5 @@
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
-import { SportFilterEnum } from 'enums/markets';
+import { SportFilter } from 'enums/markets';
 import { MarketTypeInfo } from 'types/marketTypes';
 import { MarketSport } from 'types/markets';
 
@@ -864,11 +864,11 @@ export const AWAY_TEAM_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
-export const MARKET_TYPES_BY_SPORT: Record<SportFilterEnum, MarketType[]> = {
-    [SportFilterEnum.Live]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.Favourites]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.All]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.Soccer]: [
+export const MARKET_TYPES_BY_SPORT: Record<SportFilter, MarketType[]> = {
+    [SportFilter.Live]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Favourites]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.All]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Soccer]: [
         MarketType.WINNER,
         MarketType.SPREAD,
         MarketType.TOTAL,
@@ -876,15 +876,15 @@ export const MARKET_TYPES_BY_SPORT: Record<SportFilterEnum, MarketType[]> = {
         MarketType.BOTH_TEAMS_TO_SCORE,
         MarketType.TOTAL_ODD_EVEN,
     ],
-    [SportFilterEnum.Football]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.Basketball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.Baseball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.Hockey]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.MMA]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.Tennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.eSports]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.Cricket]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilterEnum.Golf]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Football]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Basketball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Baseball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Hockey]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.MMA]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Tennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.eSports]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Cricket]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Golf]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
 };
 
 export const MarketTypeGroupsBySport: Record<MarketSport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {

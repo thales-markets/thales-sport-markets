@@ -13,7 +13,7 @@ const sliceName = 'ui';
 
 const getDefaultOddsType = (): OddsType => {
     const oddsType = localStore.get(LOCAL_STORAGE_KEYS.ODDS_TYPE);
-    return (oddsType !== undefined ? oddsType : OddsType.Decimal) as OddsType;
+    return (oddsType !== undefined ? oddsType : OddsType.DECIMAL) as OddsType;
 };
 
 export const getDefaultTheme = (): Theme => {

@@ -15,10 +15,10 @@ import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { NetworkId } from 'thales-utils';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
-import { SportFilterEnum } from '../../../../enums/markets';
+import { SportFilter } from '../../../../enums/markets';
 
 type TagsDropdownProps = {
-    sport: SportFilterEnum;
+    sport: SportFilter;
     open: boolean;
     tags: Tags;
     tagFilter: Tags;
@@ -54,8 +54,8 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                 .filter(
                     (tag: TagInfo) =>
                         (showActive &&
-                            ((!!openMarketsCountPerTag[tag.id] && sport !== SportFilterEnum.Live) ||
-                                (!!liveMarketsCountPerTag[tag.id] && sport === SportFilterEnum.Live))) ||
+                            ((!!openMarketsCountPerTag[tag.id] && sport !== SportFilter.Live) ||
+                                (!!liveMarketsCountPerTag[tag.id] && sport === SportFilter.Live))) ||
                         !showActive
                 )
                 .sort((a, b) => {

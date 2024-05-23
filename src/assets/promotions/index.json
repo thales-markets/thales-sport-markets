@@ -80,7 +80,7 @@
             "headerHtml": "<h1><span><span><span>Win 20,000 ARB playing the UEFA Champions League, Europa League, and Conference League</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Earn 10,000 ARB in the knockout stages of the Champions League, Europa League, and Conference League. Compete for an additional 10,000 dedicated exclusively to the Champions League Final. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-uefa-competitions-13-feb-25-may-24' target='_blank'> <span> <span> <span> <strong> <u>Dune Dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
-                "ctaButtonLink": "/markets?lang=en&sport=Soccer&globalFilter=OpenMarkets&showActive=true&tag=UEFA+Champions+League%2CUEFA+Europa+League%2CUEFA+Conference+League",
+                "ctaButtonLink": "/markets?lang=en&sport=Soccer&status=OpenMarkets&showActive=true&tag=UEFA+Champions+League%2CUEFA+Europa+League%2CUEFA+Conference+League",
                 "ctaButtonLabel": "Play now",
                 "forceChangeNetworkOnClick": "arbitrum_mainnet"
             },
@@ -123,7 +123,7 @@
             "headerHtml": "<h1><span><span><span>Win 20,000 ARB in NHL and 30,000 ARB in MLB markets</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.</span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-mlb-campaign' target='_blank'> <span> <span> <span> <strong> <u>MLB dashboard.</u> </strong> </span> </span> </span> </a> and <a href='https://dune.com/leifu/overtime-nhl-campaign' target='_blank'> <span> <span> <span> <strong> <u>NHL dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
-                "ctaButtonLink": "/markets?lang=en&sport=Baseball&globalFilter=OpenMarkets&showActive=true&tag=MLB",
+                "ctaButtonLink": "/markets?lang=en&sport=Baseball&status=OpenMarkets&showActive=true&tag=MLB",
                 "ctaButtonLabel": "Play now",
                 "forceChangeNetworkOnClick": "arbitrum_mainnet"
             },
@@ -145,7 +145,7 @@
             "headerHtml": "<h1><span><span><span>Win 2,000 ARB in pro rata awards on UFC 300</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Compete for 2,000 ARB dedicated to UFC 300, one of the biggest events in the world of fighting! Rewards are distributed pro rata, meaning higher volume = higher rewards. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-ufc-300-campaign' target='_blank'> <span> <span> <span> <strong> <u>Dune Dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
-                "ctaButtonLink": "/markets?lang=en&sport=MMA&globalFilter=OpenMarkets&showActive=true&tag=UFC",
+                "ctaButtonLink": "/markets?lang=en&sport=MMA&status=OpenMarkets&showActive=true&tag=UFC",
                 "ctaButtonLabel": "Play now",
                 "forceChangeNetworkOnClick": "arbitrum_mainnet"
             },

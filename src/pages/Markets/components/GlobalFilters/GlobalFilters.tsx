@@ -1,21 +1,20 @@
-import { GlobalFiltersEnum } from 'enums/markets';
+import { StatusFilter } from 'enums/markets';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
+import { getStatusFilter, setStatusFilter } from 'redux/modules/market';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivSpaceBetween } from 'styles/common';
+import useQueryParam from 'utils/useQueryParams';
 
-type GlobalFiltersProps = {
-    setGlobalFilter: (value: any) => void;
-    setGlobalFilterParam: (value: any) => void;
-    globalFilter: GlobalFiltersEnum;
-};
-
-const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setGlobalFilter, setGlobalFilterParam, globalFilter }) => {
+const GlobalFilters: React.FC = () => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     const isMobile = useSelector(getIsMobile);
-    const [open, setOpen] = useState(globalFilter !== GlobalFiltersEnum.OpenMarkets);
+    const statusFilter = useSelector(getStatusFilter);
+    const [, setStatusParam] = useQueryParam('status', '');
+    const [open, setOpen] = useState(statusFilter !== StatusFilter.OPEN_MARKETS);
 
     return (
         <Wrapper>
@@ -37,14 +36,14 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setGlobalFilter, setGloba
             {isMobile && <Separator />}
             {(open || isMobile) && (
                 <>
-                    {Object.values(GlobalFiltersEnum).map((filterItem) => {
+                    {Object.values(StatusFilter).map((filterItem) => {
                         return (
                             <Container
                                 key={filterItem}
-                                className={globalFilter === filterItem ? 'selected' : ''}
+                                className={statusFilter === filterItem ? 'selected' : ''}
                                 onClick={() => {
-                                    setGlobalFilter(filterItem);
-                                    setGlobalFilterParam(filterItem);
+                                    dispatch(setStatusFilter(filterItem));
+                                    setStatusParam(filterItem);
                                 }}
                             >
                                 <Filter>
@@ -61,13 +60,15 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({ setGlobalFilter, setGloba
     );
 };
 
-const getIcon = (filter: GlobalFiltersEnum) => {
-    return filter === GlobalFiltersEnum.OpenMarkets
+const getIcon = (filter: StatusFilter) => {
+    return filter === StatusFilter.OPEN_MARKETS
         ? `icon--logo`
-        : filter === GlobalFiltersEnum.PendingMarkets
+        : filter === StatusFilter.ONGOING_MARKETS
         ? `icon--ongoing`
-        : filter === GlobalFiltersEnum.Canceled
+        : filter === StatusFilter.PAUSED_MARKETS
         ? `icon--pause`
+        : filter === StatusFilter.CANCELLED_MARKETS
+        ? 'icon--lost'
         : 'icon--double-check';
 };
 

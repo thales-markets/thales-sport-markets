@@ -1,6 +1,6 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { GlobalFiltersEnum, SportFilterEnum } from 'enums/markets';
+import { SportFilter, StatusFilter } from 'enums/markets';
 import { t } from 'i18next';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
@@ -39,7 +39,7 @@ const Parlay: React.FC = () => {
     const hasTicketError = useSelector(getHasTicketError);
     // TODO SWITCH CHECK TO LIVE WITH SPORTMARKETSV2 OBJECT FLAG
     const liveFilter = localStorage.getItem(LOCAL_STORAGE_KEYS.FILTER_SPORT);
-    const isLiveFilterSelected = liveFilter != null ? JSON.parse(liveFilter) == SportFilterEnum.Live : false;
+    const isLiveFilterSelected = liveFilter != null ? JSON.parse(liveFilter) == SportFilter.Live : false;
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
 
@@ -49,7 +49,7 @@ const Parlay: React.FC = () => {
         enabled: isAppReady,
     });
 
-    const sportMarketsQuery = useSportsMarketsV2Query(GlobalFiltersEnum.OpenMarkets, networkId, {
+    const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, {
         enabled: isAppReady,
     });
 
@@ -79,7 +79,7 @@ const Parlay: React.FC = () => {
             liveSportMarketsQuery.isSuccess &&
             liveSportMarketsQuery.data
         ) {
-            const sportOpenMarkets = sportMarketsQuery.data[GlobalFiltersEnum.OpenMarkets].reduce(
+            const sportOpenMarkets = sportMarketsQuery.data[StatusFilter.OPEN_MARKETS].reduce(
                 (acc: SportMarket[], market: SportMarket) => {
                     acc.push(market);
                     market.childMarkets.forEach((childMarket: SportMarket) => {

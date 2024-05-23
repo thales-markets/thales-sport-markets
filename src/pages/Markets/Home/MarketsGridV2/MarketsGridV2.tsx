@@ -26,7 +26,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isMobile = useSelector(getIsMobile);
-    const dateFilter = useLocalStorage<Date | number>(LOCAL_STORAGE_KEYS.FILTER_DATE, 0);
+    const datePeriodFilter = useLocalStorage<number>(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD, 0);
 
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
     // UNIFYING EUROPA LEAGUE MARKETS FROM BOTH ENETPULSE & RUNDOWNS PROVIDERS
@@ -36,10 +36,10 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
         Object.keys(marketsMap).map((key) => Number(key)),
         unifiedMarketsMap,
         favouriteLeagues,
-        dateFilter
+        datePeriodFilter
     );
 
-    const finalOrderKeys = Number(dateFilter) !== 0 ? groupBySortedMarketsKeys(marketsKeys) : marketsKeys;
+    const finalOrderKeys = Number(datePeriodFilter) !== 0 ? groupBySortedMarketsKeys(marketsKeys) : marketsKeys;
 
     const getContainerContent = () => (
         <ListContainer isMarketSelected={isMarketSelected}>
@@ -62,10 +62,10 @@ const sortMarketKeys = (
     marketsKeys: number[],
     marketsMap: Record<number, SportMarket[]>,
     favouriteLeagues: Tags,
-    dateFilter: any
+    datePeriodFilter: any
 ) => {
     return marketsKeys.sort((a, b) => {
-        if (Number(dateFilter) !== 0) {
+        if (Number(datePeriodFilter) !== 0) {
             const earliestGameA = marketsMap[a][0];
             const earliestGameB = marketsMap[b][0];
 

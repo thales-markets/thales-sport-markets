@@ -246,12 +246,13 @@
             "global": {
                 "allmarkets": "All",
                 "openmarkets": "Open",
-                "resolvedmarkets": "Finished",
-                "pendingmarkets": "Ongoing",
+                "resolvedmarkets": "Resolved",
+                "ongoingmarkets": "Ongoing",
                 "yourpositions": "Your positions",
                 "claim": "Claimable",
                 "history": "Your transactions",
-                "canceled": "Paused / Cancelled",
+                "cancelledmarkets": "Cancelled",
+                "pausedmarkets": "Paused",
                 "archivedmarkets": "Archived markets",
                 "tooltip": "Markets resolved more than 7 days ago"
             },

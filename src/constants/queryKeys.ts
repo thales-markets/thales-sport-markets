@@ -1,4 +1,4 @@
-import { GlobalFiltersEnum, Position } from 'enums/markets';
+import { Position, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { LiquidityPoolType } from 'types/liquidityPool';
 
@@ -14,12 +14,8 @@ const QUERY_KEYS = {
     GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
     UserTickets: (networkId: Network, user: string) => ['userTickets', networkId, user],
     ParlayLeaderboard: (networkId: Network, period: number) => ['parlayLeaderboard', period, networkId],
-    SportMarkets: (globalFilter: GlobalFiltersEnum, networkId: Network) => ['sportMarkets', globalFilter, networkId],
-    SportMarketsV2: (globalFilter: GlobalFiltersEnum, networkId: Network) => [
-        'sportMarketsV2',
-        globalFilter,
-        networkId,
-    ],
+    SportMarkets: (statusFilter: StatusFilter, networkId: Network) => ['sportMarkets', statusFilter, networkId],
+    SportMarketsV2: (statusFilter: StatusFilter, networkId: Network) => ['sportMarketsV2', statusFilter, networkId],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
     SportMarket: (address: string, networkId: Network) => ['sportMarket', address, networkId],
     SportMarketV2: (address: string, networkId: Network) => ['sportMarketV2', address, networkId],

@@ -8,10 +8,9 @@ export type TagInfo = {
     label: string;
     logo?: string;
     logoClass?: string;
-    favourite?: boolean;
-    hidden?: boolean;
-    priority?: number;
-    live?: boolean;
+    favourite: boolean;
+    priority: number;
+    live: boolean;
 };
 
 export type Tags = TagInfo[];

@@ -34,9 +34,9 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
         return '0';
     }
     switch (oddsType) {
-        case OddsType.Decimal:
+        case OddsType.DECIMAL:
             return `${formatCurrency(1 / odds, 2)}`;
-        case OddsType.American:
+        case OddsType.AMERICAN:
             const decimal = 1 / odds;
             if (decimal >= 2) {
                 return `+${formatCurrency((decimal - 1) * 100, 0)}`;

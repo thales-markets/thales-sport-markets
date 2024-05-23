@@ -1,7 +1,7 @@
 import { OddsType, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 
-export const ODDS_TYPES = [OddsType.American, OddsType.AMM, OddsType.Decimal];
+export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 
 export const MIN_COLLATERAL_MULTIPLIER = 1.01;
 export const MAX_COLLATERAL_MULTIPLIER = 0.99;
