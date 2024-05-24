@@ -212,6 +212,7 @@ export type Ticket = {
     isClaimable: boolean;
     isOpen: boolean;
     finalPayout: number;
+    isLive: boolean;
 };
 
 export type UserStats = {

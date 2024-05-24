@@ -10,17 +10,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getHasTicketError,
-    getIsMultiSingle,
     getTicket,
     removeAll,
     resetTicketError,
-    setIsMultiSingle,
     setMaxTicketSize,
     setPaymentSelectedCollateralIndex,
 } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivColumn } from 'styles/common';
 import { SportMarket, TicketMarket } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
@@ -33,7 +31,6 @@ const Parlay: React.FC = () => {
     const isAppReady = useSelector(getIsAppReady);
     const isMobile = useSelector(getIsMobile);
     const networkId = useSelector(getNetworkId);
-    const isMultiSingle = useSelector(getIsMultiSingle);
     const isWalletConnected = useSelector(getIsWalletConnected);
     const ticket = useSelector(getTicket);
     const hasTicketError = useSelector(getHasTicketError);
@@ -101,14 +98,14 @@ const Parlay: React.FC = () => {
                 []
             );
 
-            const liveAndOpenSportMarkets = sportOpenMarkets.concat(liveSportOpenMarkets);
+            const liveOrOpenSportMarkets = isLiveFilterSelected ? liveSportOpenMarkets : sportOpenMarkets;
 
             const ticketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
-                    liveAndOpenSportMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
+                    liveOrOpenSportMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
                 )
                 .map((ticketPosition) => {
-                    const openMarket: SportMarket = liveAndOpenSportMarkets.filter((market: SportMarket) =>
+                    const openMarket: SportMarket = liveOrOpenSportMarkets.filter((market: SportMarket) =>
                         isSameMarket(market, ticketPosition)
                     )[0];
                     return {
@@ -147,32 +144,18 @@ const Parlay: React.FC = () => {
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
             {ticketMarkets.length > 0 ? (
                 <>
-                    <TypeContainer>
-                        <TypeLabel isSelected={!isMultiSingle} onClick={() => dispatch(setIsMultiSingle(false))}>
-                            Ticket
-                        </TypeLabel>
-                        <TypeLabel isSelected={isMultiSingle} onClick={() => dispatch(setIsMultiSingle(true))}>
-                            Multi single
-                        </TypeLabel>
-                    </TypeContainer>
-                    {isMultiSingle ? (
-                        <EmptyLabel>Coming soon</EmptyLabel>
-                    ) : (
-                        <>
-                            <ListContainer>
-                                {ticketMarkets.length > 0 &&
-                                    ticketMarkets.map((market, index) => {
-                                        const outOfLiquidity = outOfLiquidityMarkets.includes(index);
-                                        return (
-                                            <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                                <MatchInfoV2 market={market} />
-                                            </RowMarket>
-                                        );
-                                    })}
-                            </ListContainer>
-                            <TicketV2 markets={ticketMarkets} setMarketsOutOfLiquidity={setOutOfLiquidityMarkets} />
-                        </>
-                    )}
+                    <ListContainer>
+                        {ticketMarkets.length > 0 &&
+                            ticketMarkets.map((market, index) => {
+                                const outOfLiquidity = outOfLiquidityMarkets.includes(index);
+                                return (
+                                    <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
+                                        <MatchInfoV2 market={market} />
+                                    </RowMarket>
+                                );
+                            })}
+                    </ListContainer>
+                    <TicketV2 markets={ticketMarkets} setMarketsOutOfLiquidity={setOutOfLiquidityMarkets} />
                 </>
             ) : (
                 <>
@@ -304,43 +287,6 @@ const StyledParlayEmptyIcon = styled(ParlayEmptyIcon)`
     height: 100px;
     path {
         fill: ${(props) => props.theme.textColor.quaternary};
-    }
-`;
-
-const TypeContainer = styled(FlexDivRow)`
-    height: 30px;
-    color: ${(props) => props.theme.textColor.septenary};
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 12px;
-    text-transform: uppercase;
-    border-radius: 20px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border: 2px solid ${(props) => props.theme.borderColor.senary};
-    align-items: center;
-    width: fit-content;
-    align-self: center;
-}
-`;
-
-const TypeLabel = styled.label<{ isSelected: boolean }>`
-    height: 30px;
-    cursor: pointer;
-    border-radius: 20px;
-    width: 100%;
-    color: ${(props) => (props.isSelected ? props.theme.textColor.tertiary : props.theme.textColor.septenary)};
-    background: ${(props) => (props.isSelected ? props.theme.background.quaternary : props.theme.background.quinary)};
-    height: ${(props) => (props.isSelected ? '30px' : '26px')};
-    white-space: nowrap;
-    padding: ${(props) => (props.isSelected ? '10px 0px' : '8px 0px')};
-    width: 110px;
-    text-align: center;
-    :first-child {
-        margin-left: ${(props) => (props.isSelected ? '-1px' : '0')};
-    }
-    :last-child {
-        margin-right: ${(props) => (props.isSelected ? '-1px' : '0')};
     }
 `;
 

@@ -9,14 +9,14 @@ import WalletInfo from 'components/WalletInfo';
 import ROUTES from 'constants/routes';
 import useInterval from 'hooks/useInterval';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
-import { getStopPulsing, setStopPulsing } from 'redux/modules/ui';
+import { getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import {
     getIsWalletConnected,
     getNetworkId,
@@ -28,15 +28,21 @@ import { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
+import { ODDS_TYPES } from '../../../constants/markets';
+import { OddsType } from '../../../enums/markets';
 import ProfileItem from './components/ProfileItem';
 import TimeFilters from './components/TimeFilters';
 import TopUp from './components/TopUp';
 import {
     Container,
     Count,
+    DropDown,
+    DropDownItem,
+    DropdownContainer,
     HeaderIcon,
     HeaderLabel,
     IconWrapper,
+    Label,
     LeftContainer,
     LogoContainer,
     MenuIcon,
@@ -91,6 +97,7 @@ const DappHeader: React.FC = () => {
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
+    const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
 
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
@@ -104,6 +111,13 @@ const DappHeader: React.FC = () => {
         claimablePositionsCountQuery.isSuccess && claimablePositionsCountQuery.data
             ? claimablePositionsCountQuery.data
             : null;
+
+    const setSelectedOddsType = useCallback(
+        (oddsType: OddsType) => {
+            return dispatch(setOddsType(oddsType));
+        },
+        [dispatch]
+    );
 
     useInterval(async () => {
         if (!stopPulsing) {
@@ -165,12 +179,33 @@ const DappHeader: React.FC = () => {
                     )}
                     <RightContainer>
                         {isWalletConnected && <ProfileItem />}
-                        <SPAAnchor href={buildHref(ROUTES.Wizard)}>
-                            <SettingsContainer>
-                                <HeaderIcon className="icon icon--settings" />
-                                <HeaderLabel>{t('common.settings')}</HeaderLabel>
-                            </SettingsContainer>
-                        </SPAAnchor>
+                        <SettingsContainer
+                            onClick={() => {
+                                setDropdownIsOpen(!dropdownIsOpen);
+                            }}
+                        >
+                            <HeaderIcon className="icon icon--settings" />
+                            <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                        </SettingsContainer>
+                        {dropdownIsOpen && (
+                            <DropdownContainer>
+                                <DropDown>
+                                    {ODDS_TYPES.map((item: any, index: number) => (
+                                        <DropDownItem
+                                            key={index}
+                                            onClick={() => {
+                                                setSelectedOddsType(item);
+                                                setDropdownIsOpen(false);
+                                            }}
+                                        >
+                                            <FlexDivCentered>
+                                                <Label> {t(`common.odds.${item}`)}</Label>
+                                            </FlexDivCentered>
+                                        </DropDownItem>
+                                    ))}
+                                </DropDown>
+                            </DropdownContainer>
+                        )}
                         {!isWalletConnected && (
                             <Button
                                 backgroundColor={'transparent'}

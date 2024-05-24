@@ -35,8 +35,8 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean }>`
     }
 `;
 
-export const MatchInfoConatiner = styled(FlexDivColumn)`
-    cursor: pointer;
+export const MatchInfoConatiner = styled(FlexDivColumn)<{ isGameLive: boolean }>`
+    cursor: ${(props) => (props.isGameLive ? 'default' : 'pointer')};
     max-width: 250px;
     margin-right: 5px;
 `;
