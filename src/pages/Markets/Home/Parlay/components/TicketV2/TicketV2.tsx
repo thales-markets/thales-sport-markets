@@ -11,6 +11,7 @@ import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
     APPROVAL_BUFFER,
+    HIDE_PARLAY_LEADERBOARD,
     MIN_COLLATERAL_MULTIPLIER,
     PARLAY_LEADERBOARD_MINIMUM_GAMES,
     PARLAY_LEADERBOARD_WEEKLY_START_DATE,
@@ -161,7 +162,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
 
     const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
 
-    const query = useParlayLeaderboardQuery(networkId, latestPeriodWeekly, { enabled: isAppReady });
+    const query = useParlayLeaderboardQuery(networkId, latestPeriodWeekly, {
+        enabled: isAppReady && !HIDE_PARLAY_LEADERBOARD,
+    });
 
     const parlaysData = useMemo(() => {
         return query.isSuccess ? query.data : [];
@@ -926,7 +929,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         isEth,
     ]);
     useEffect(() => {
-        if (buyInAmountInDefaultCollateral > 0 && totalQuote > 0) {
+        if (buyInAmountInDefaultCollateral > 0 && totalQuote > 0 && !HIDE_PARLAY_LEADERBOARD) {
             const buyInPow = Math.pow(buyInAmountInDefaultCollateral, 1 / 2);
             const minBuyInPow = 1;
 
@@ -1090,7 +1093,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                           } (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
-            {networkId !== Network.Base && (
+            {networkId !== Network.Base && !HIDE_PARLAY_LEADERBOARD && (
                 <>
                     <HorizontalLine />
                     <RowSummary>
