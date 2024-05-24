@@ -14,7 +14,6 @@ import {
     isPlayerPropsMarket,
     isYesNoPlayerPropsMarket,
 } from './markets';
-import { getLeagueSport } from './sports';
 
 export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, playersInfo: any): Ticket => {
     const collateral = getCollateralByAddress(ticket.collateral, networkId);
@@ -79,7 +78,8 @@ export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, player
 
                 return {
                     gameId: market.gameId,
-                    sport: getLeagueSport(leagueId),
+                    // sport: getLeagueSport(leagueId),
+                    sport: 'Soccer',
                     leagueId: leagueId,
                     subLeagueId: Number(market.sportId),
                     // leagueName: getLeagueNameById(leagueId),

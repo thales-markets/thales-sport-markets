@@ -104,7 +104,7 @@ export type MarketSport =
 
 export type SportMarket = {
     gameId: string;
-    sport: MarketSport | string;
+    sport: MarketSport;
     leagueId: number;
     leagueName: string;
     subLeagueId: number;
