@@ -136,6 +136,8 @@ export type SportMarket = {
     combinedPositions: CombinedPositions[];
     selectedCombinedPositions?: CombinedPositions;
     live?: boolean;
+    gameClock?: number;
+    gamePeriod?: string;
 };
 
 export type SportMarkets = SportMarket[];

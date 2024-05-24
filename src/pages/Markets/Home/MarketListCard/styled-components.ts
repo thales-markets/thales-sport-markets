@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 
 export const Wrapper = styled(FlexDivColumn)<{
@@ -35,9 +35,9 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean }>`
     }
 `;
 
-export const MatchInfoConatiner = styled(FlexDivColumn)<{ isGameLive: boolean }>`
+export const MatchInfoContainer = styled(FlexDivColumn)<{ isGameLive: boolean }>`
     cursor: ${(props) => (props.isGameLive ? 'default' : 'pointer')};
-    max-width: 250px;
+    max-width: ${(props) => (props.isGameLive ? '300px' : '250px')};
     margin-right: 5px;
 `;
 
@@ -65,13 +65,16 @@ export const MatchInfoLabel = styled.label`
     }
 `;
 
-export const TeamsInfoConatiner = styled(FlexDivRow)`
+export const TeamsInfoContainer = styled(FlexDivRow)`
     align-items: center;
     margin-top: 8px;
     flex: 1;
+    @media (max-width: 950px) {
+        flex-wrap: wrap;
+    }
 `;
 
-export const TeamLogosConatiner = styled(FlexDivRow)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
+export const TeamLogosContainer = styled(FlexDivRow)<{ isColumnView: boolean; isTwoPositionalMarket: boolean }>`
     flex-direction: ${(props) => (props.isColumnView ? 'column' : 'row')};
     align-items: center;
     gap: ${(props) => (props.isColumnView ? (props.isTwoPositionalMarket ? '2px' : '10px') : '0px')};
@@ -84,7 +87,7 @@ export const ClubLogo = styled.img<{ awayTeam?: boolean; isColumnView: boolean }
     z-index: ${(props) => (props.awayTeam ? '1' : '2')};
 `;
 
-export const TeamNamesConatiner = styled(FlexDivColumn)<{
+export const TeamNamesContainer = styled(FlexDivColumn)<{
     isColumnView: boolean;
     isTwoPositionalMarket: boolean;
     isGameOpen: boolean;
@@ -168,4 +171,88 @@ export const Arrow = styled.i`
     font-size: 14px;
     color: ${(props) => props.theme.textColor.quinary};
     cursor: pointer;
+`;
+
+export const liveBlinkStyle: CSSProperties = {
+    width: 25,
+    height: 25,
+    marginTop: -6,
+};
+
+export const LiveIndicatorContainer = styled(FlexDivStart)`
+    align-items: flex-start;
+    color: ${(props) => props.theme.textColor.primary};
+    margin-right: 10px;
+    & > label {
+        text-transform: none;
+    }
+    & + label {
+        text-transform: none;
+    }
+`;
+
+export const LiveInfoContainer = styled(FlexDivColumn)`
+    margin-right: 10px;
+    gap: 5px;
+    align-items: center;
+    color: ${(props) => props.theme.textColor.quinary};
+    & > label {
+        > span {
+            color: ${(props) => props.theme.textColor.primary};
+            text-transform: none;
+        }
+    }
+    @media (max-width: 950px) {
+        flex-direction: row;
+        gap: 18px;
+        margin: 5px 0px 0px 10px;
+    }
+`;
+
+export const Icon = styled.i`
+    font-size: 20px;
+    color: ${(props) => props.theme.textColor.quinary};
+    cursor: pointer;
+`;
+
+export const Blink = styled.span`
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: ${(props) => props.theme.textColor.primary};
+    animation: blinker 1.5s step-start infinite;
+    font-weight: 700;
+    @keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }
+    @media (max-width: 950px) {
+        font-size: 11px;
+    }
+`;
+
+export const LiveInfoSpan = styled.span`
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 14px;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-right: 2px;
+    white-space: nowrap;
+    @media (max-width: 950px) {
+        font-size: 11px;
+    }
+`;
+
+export const CurrentResultContainer = styled(FlexDivColumn)<{
+    isColumnView: boolean;
+}>`
+    margin-left: 10px;
+    gap: ${(props) => (props.isColumnView ? '10px' : '0px')};
+    @media (max-width: 950px) {
+        flex-direction: row;
+    }
 `;

@@ -529,7 +529,9 @@
             "type-tooltip": {
                 "11055": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt."
             },
-            "odds-live-limitation-message": "Live-Positionen nur als Singles erlaubt"
+            "odds-live-limitation-message": "Live-Positionen nur als Singles erlaubt",
+            "live": "Live",
+            "time": "Zeit"
         },
         "market-details": {
             "price": "Preis",

@@ -529,7 +529,9 @@
             "type-tooltip": {
                 "11055": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado."
             },
-            "odds-live-limitation-message": "Posiciones en vivo solo permitidas como individuales"
+            "odds-live-limitation-message": "Posiciones en vivo solo permitidas como individuales",
+            "live": "Vivir",
+            "time": "Tiempo"
         },
         "market-details": {
             "price": "Precio",

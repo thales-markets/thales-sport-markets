@@ -529,7 +529,9 @@
             "type-tooltip": {
                 "11055": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato"
             },
-            "odds-live-limitation-message": "Le posizioni dal vivo sono consentite solo come single"
+            "odds-live-limitation-message": "Le posizioni dal vivo sono consentite solo come single",
+            "live": "Vivere",
+            "time": "Tempo"
         },
         "market-details": {
             "price": "Price",

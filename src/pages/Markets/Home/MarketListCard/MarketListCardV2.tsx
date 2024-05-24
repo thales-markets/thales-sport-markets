@@ -1,9 +1,11 @@
+import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { FIFA_WC_TAG, FIFA_WC_U20_TAG } from 'constants/tags';
 import { MarketType } from 'enums/marketTypes';
 import { League, Provider, Sport } from 'enums/sports';
+import Lottie from 'lottie-react';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
@@ -18,34 +20,42 @@ import {
     getSelectedMarket,
     setSelectedMarket,
 } from 'redux/modules/market';
-import { formatShortDateWithTime } from 'thales-utils';
+import { formatShortDateWithTime, formatTimeFromDate } from 'thales-utils';
 import { SportMarket, SportMarketLiveResult } from 'types/markets';
 import { convertFromBytes32, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
-import { getLeagueProvider, getLeagueSport } from 'utils/sports';
+import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
+import { getOrdinalNumberLabel } from 'utils/ui';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
     Arrow,
+    Blink,
     ClubLogo,
+    CurrentResultContainer,
     ExternalArrow,
+    Icon,
+    LiveIndicatorContainer,
+    LiveInfoContainer,
+    LiveInfoSpan,
     MainContainer,
     MarketsCountWrapper,
     MatchInfo,
-    MatchInfoConatiner,
+    MatchInfoContainer,
     MatchInfoLabel,
     Result,
     ResultContainer,
     ResultLabel,
     ResultWrapper,
-    TeamLogosConatiner,
+    TeamLogosContainer,
     TeamNameLabel,
-    TeamNamesConatiner,
-    TeamsInfoConatiner,
+    TeamNamesContainer,
+    TeamsInfoContainer,
     Wrapper,
+    liveBlinkStyle,
 } from './styled-components';
 
 type MarketRowCardProps = {
@@ -167,7 +177,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const getMainContainerContent = () => (
         <MainContainer isGameOpen={isGameOpen || isGameLive}>
-            <MatchInfoConatiner
+            <MatchInfoContainer
                 isGameLive={isGameLive}
                 onClick={() => {
                     if (isGameOpen && !isGameLive) {
@@ -176,17 +186,37 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 }}
             >
                 <MatchInfo selected={selected}>
-                    <Tooltip
-                        overlay={
-                            <>
-                                {t(`markets.market-card.starts-in`)}:{' '}
-                                <TimeRemaining end={market.maturityDate} fontSize={11} />
-                            </>
-                        }
-                        component={
-                            <MatchInfoLabel>{formatShortDateWithTime(new Date(market.maturityDate))} </MatchInfoLabel>
-                        }
-                    />
+                    {isGameLive ? (
+                        <>
+                            <LiveIndicatorContainer>
+                                <Lottie
+                                    autoplay={true}
+                                    animationData={liveAnimationData}
+                                    loop={true}
+                                    style={liveBlinkStyle}
+                                />
+                                <MatchInfoLabel>{t(`markets.market-card.live`)}</MatchInfoLabel>
+                            </LiveIndicatorContainer>
+                            <MatchInfoLabel>
+                                {t(`markets.market-card.started`)}: {formatTimeFromDate(new Date(market.maturityDate))}
+                            </MatchInfoLabel>
+                        </>
+                    ) : (
+                        <Tooltip
+                            overlay={
+                                <>
+                                    {t(`markets.market-card.starts-in`)}:{' '}
+                                    <TimeRemaining end={market.maturityDate} fontSize={11} />
+                                </>
+                            }
+                            component={
+                                <MatchInfoLabel>
+                                    {formatShortDateWithTime(new Date(market.maturityDate))}{' '}
+                                </MatchInfoLabel>
+                            }
+                        />
+                    )}
+
                     {isFifaWCGame(market.leagueId) && (
                         <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
                     )}
@@ -215,8 +245,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         )}
                     </MatchInfoLabel>
                 </MatchInfo>
-                <TeamsInfoConatiner>
-                    <TeamLogosConatiner isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
+                <TeamsInfoContainer>
+                    <TeamLogosContainer isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
                         <ClubLogo
                             height={market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '17px' : ''}
                             width={market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '27px' : ''}
@@ -246,8 +276,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 />
                             </>
                         )}
-                    </TeamLogosConatiner>
-                    <TeamNamesConatiner
+                    </TeamLogosContainer>
+                    <TeamNamesContainer
                         isColumnView={isColumnView}
                         isTwoPositionalMarket={isTwoPositionalMarket}
                         isGameOpen={isGameOpen || isGameLive}
@@ -268,9 +298,42 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 </TeamNameLabel>
                             </>
                         )}
-                    </TeamNamesConatiner>
-                </TeamsInfoConatiner>
-            </MatchInfoConatiner>
+                    </TeamNamesContainer>
+                    {isGameLive && (
+                        <CurrentResultContainer isColumnView={isColumnView}>
+                            <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                {market.homeScore}
+                            </TeamNameLabel>
+                            {isMobile && (isGameOpen || isGameLive) && (
+                                <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                    {' '}
+                                    -{' '}
+                                </TeamNameLabel>
+                            )}
+                            <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                {market.awayScore}
+                            </TeamNameLabel>
+                        </CurrentResultContainer>
+                    )}
+                    {isGameLive && (
+                        <LiveInfoContainer>
+                            <Icon className={'icon icon--clock'} />
+                            <MatchInfoLabel>
+                                {t(`markets.market-card.time`)}: <LiveInfoSpan>{market.gameClock}</LiveInfoSpan>
+                                <Blink>&prime;</Blink>
+                            </MatchInfoLabel>
+                            <MatchInfoLabel>
+                                {t(`markets.market-card.period`)}:{' '}
+                                <LiveInfoSpan>
+                                    {' '}
+                                    {market.gamePeriod ? getOrdinalNumberLabel(Number(market.gamePeriod[0])) : ''}{' '}
+                                    {t(`markets.market-card.${getLeaguePeriodType(Number(market.leagueId))}`)}
+                                </LiveInfoSpan>
+                            </MatchInfoLabel>
+                        </LiveInfoContainer>
+                    )}
+                </TeamsInfoContainer>
+            </MatchInfoContainer>
             {!isMarketSelected && (
                 <>
                     {isGameLive ? (

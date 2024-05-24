@@ -529,7 +529,9 @@
             "type-tooltip": {
                 "11055": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
             },
-            "odds-live-limitation-message": "Positions en direct autorisées uniquement en tant que célibataires"
+            "odds-live-limitation-message": "Positions en direct autorisées uniquement en tant que célibataires",
+            "time": "Temps",
+            "live": "En direct"
         },
         "market-details": {
             "wallet-info": {

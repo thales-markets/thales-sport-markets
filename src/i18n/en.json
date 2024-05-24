@@ -419,6 +419,8 @@
             "finished": "Finished",
             "result": "Result",
             "started": "Started",
+            "live": "Live",
+            "time": "Time",
             "canceled": "Cancelled",
             "pending-resolution": "Pending resolution",
             "claim": "Claim",
