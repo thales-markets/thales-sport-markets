@@ -112,10 +112,18 @@ export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelect
 
 export const ResultWrapper = styled(FlexDivRowCentered)``;
 
+export const ResultContainer = styled(FlexDivColumn)`
+    align-items: center;
+    gap: 0px;
+`;
+
 export const Result = styled.span`
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    :not(:first-child) {
+        color: ${(props) => props.theme.textColor.secondary};
+    }
 `;
 
 export const ResultLabel = styled.span`

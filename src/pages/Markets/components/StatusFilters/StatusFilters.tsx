@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { FlexDiv, FlexDivSpaceBetween } from 'styles/common';
 import useQueryParam from 'utils/useQueryParams';
 
-const GlobalFilters: React.FC = () => {
+const StatusFilters: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isMobile = useSelector(getIsMobile);
@@ -152,4 +152,4 @@ const Separator = styled.div`
     border-radius: 5px;
 `;
 
-export default GlobalFilters;
+export default StatusFilters;

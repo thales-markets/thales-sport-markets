@@ -52,9 +52,9 @@ import { Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
 import { getLiveSupportedLeagues, getSportLeagueIds, isLiveSupportedForLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
-import GlobalFilters from '../components/GlobalFilters';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';
+import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
@@ -124,6 +124,7 @@ const Home: React.FC = () => {
             }),
         []
     );
+    const filteredLiveTags = useMemo(() => getLiveSupportedLeagues(), []);
 
     useEffect(() => {
         if (getSelectedOddsType == undefined) {
@@ -480,7 +481,6 @@ const Home: React.FC = () => {
                     if (sportFilter === SportFilter.All) {
                         setAvailableTags(tagsList);
                     } else if (sportFilter === SportFilter.Live) {
-                        const filteredLiveTags = getLiveSupportedLeagues();
                         const filteredTags = tagsList.filter(
                             (tag: TagInfo) =>
                                 filteredLiveTags.includes(tag.id) &&
@@ -511,11 +511,11 @@ const Home: React.FC = () => {
             {Object.values(SportFilter)
                 .filter(
                     (filterItem: any) =>
-                        (showActive && openMarketsCountPerSport[filterItem] > 0 && filterItem !== SportFilter.Live) ||
+                        (showActive && filterItem !== SportFilter.Live && openMarketsCountPerSport[filterItem] > 0) ||
+                        (showActive && filterItem === SportFilter.Live && liveMarketsCountPerSport[filterItem] > 0) ||
                         !showActive ||
                         openSportMarketsQuery.isLoading ||
-                        filterItem === SportFilter.Favourites ||
-                        (filterItem === SportFilter.Live && showActive && liveMarketsCountPerSport[filterItem] > 0)
+                        filterItem === SportFilter.Favourites
                 )
                 .map((filterItem: any, index) => {
                     return (
@@ -528,19 +528,18 @@ const Home: React.FC = () => {
                                     dispatch(setTagFilter([]));
                                     setTagParam('');
                                     if (filterItem === SportFilter.All) {
-                                        setDateParam('');
                                         dispatch(setDatePeriodFilter(0));
+                                        setDateParam('');
                                         setAvailableTags(tagsList);
                                     } else if (filterItem === SportFilter.Live) {
                                         setDateParam('');
                                         dispatch(setDatePeriodFilter(0));
-                                        const filteredLiveTags = getLiveSupportedLeagues();
                                         const filteredTags = tagsList.filter(
                                             (tag: TagInfo) =>
                                                 filteredLiveTags.includes(tag.id) &&
                                                 ((showActive && !!liveMarketsCountPerTag[tag.id]) ||
                                                     !showActive ||
-                                                    openSportMarketsQuery.isLoading)
+                                                    liveSportMarketsQuery.isLoading)
                                         );
                                         setAvailableTags(filteredTags);
                                     } else {
@@ -577,7 +576,7 @@ const Home: React.FC = () => {
         </>
     );
 
-    const getGlobalFilters = () => <GlobalFilters />;
+    const getStatusFilters = () => <GlobalFilters />;
 
     return (
         <Container>
@@ -597,7 +596,7 @@ const Home: React.FC = () => {
                     {getShowActiveCheckbox()}
                     <SportFiltersContainer>
                         {getSportFilters()}
-                        {getGlobalFilters()}
+                        {getStatusFilters()}
                         <TimeFilters />
                     </SportFiltersContainer>
                     <Button
@@ -632,7 +631,7 @@ const Home: React.FC = () => {
                     {getShowActiveCheckbox()}
                     <Scroll height="calc(100vh - 430px)">
                         <SportFiltersContainer>
-                            {getGlobalFilters()}
+                            {getStatusFilters()}
                             {getSportFilters()}
                         </SportFiltersContainer>
                     </Scroll>

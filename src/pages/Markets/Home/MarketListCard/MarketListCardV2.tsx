@@ -38,6 +38,7 @@ import {
     MatchInfoConatiner,
     MatchInfoLabel,
     Result,
+    ResultContainer,
     ResultLabel,
     ResultWrapper,
     TeamLogosConatiner,
@@ -342,32 +343,37 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     <ResultLabel>
                                         {!market.isOneSideMarket ? `${t('markets.market-card.result')}:` : ''}
                                     </ResultLabel>
-                                    <Result>
-                                        {market.isOneSideMarket
-                                            ? market.homeScore == 1
-                                                ? t('markets.market-card.race-winner')
-                                                : t('markets.market-card.no-win')
-                                            : Number(market.leagueId) != League.UFC
-                                            ? `${market.homeScore} - ${market.awayScore}`
-                                            : ''}
-                                        {getLeagueSport(market.leagueId) === Sport.SOCCER &&
-                                            market.homeScoreByPeriod.length > 0 &&
-                                            market.awayScoreByPeriod.length > 0 &&
-                                            ' (' +
-                                                market.homeScoreByPeriod[0] +
-                                                ' - ' +
-                                                market.awayScoreByPeriod[0] +
-                                                ')'}
-                                        {Number(market.leagueId) == League.UFC ? (
-                                            <>
-                                                {Number(market.homeScore) > 0
-                                                    ? `W - L (R${market.homeScore})`
-                                                    : `L - W (R${market.awayScore})`}
-                                            </>
-                                        ) : (
-                                            ''
+                                    <ResultContainer>
+                                        <Result>
+                                            {market.isOneSideMarket
+                                                ? market.homeScore == 1
+                                                    ? t('markets.market-card.race-winner')
+                                                    : t('markets.market-card.no-win')
+                                                : Number(market.leagueId) != League.UFC
+                                                ? `${market.homeScore} - ${market.awayScore}`
+                                                : ''}
+                                            {Number(market.leagueId) == League.UFC ? (
+                                                <>
+                                                    {Number(market.homeScore) > 0
+                                                        ? `W - L (R${market.homeScore})`
+                                                        : `L - W (R${market.awayScore})`}
+                                                </>
+                                            ) : (
+                                                ''
+                                            )}
+                                        </Result>
+                                        {getLeagueSport(market.leagueId) === Sport.SOCCER && (
+                                            <Result>
+                                                {market.homeScoreByPeriod.length > 0 &&
+                                                    market.awayScoreByPeriod.length > 0 &&
+                                                    ' (' +
+                                                        market.homeScoreByPeriod[0] +
+                                                        ' - ' +
+                                                        market.awayScoreByPeriod[0] +
+                                                        ')'}
+                                            </Result>
                                         )}
-                                    </Result>
+                                    </ResultContainer>
                                 </ResultWrapper>
                             ) : (
                                 <MatchStatus
