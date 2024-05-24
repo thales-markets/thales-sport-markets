@@ -17,7 +17,7 @@ const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions
                     `${generalConfig.API_URL}/overtime-v2/live-markets?leagueIds=${JSON.stringify(supportedLeagues)}`
                 );
 
-                markets = response.data.markets;
+                markets = response?.data?.markets || [];
             } catch (e) {
                 console.log(e);
             }
