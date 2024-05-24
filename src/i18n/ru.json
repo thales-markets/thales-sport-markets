@@ -250,7 +250,10 @@
                 "canceled": "Cancelled",
                 "archivedmarkets": "Archived markets",
                 "tooltip": "Markets resolved more than 7 days ago",
-                "pendingmarkets": "Непрерывный"
+                "pendingmarkets": "Непрерывный",
+                "pausedmarkets": "Приостановлено",
+                "cancelledmarkets": "Отменено",
+                "ongoingmarkets": "Непрерывный"
             },
             "sport": {
                 "all": "All sports",

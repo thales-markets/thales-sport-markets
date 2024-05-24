@@ -250,7 +250,10 @@
                 "allmarkets": "Alle",
                 "openmarkets": "Offen",
                 "canceled": "Angehalten / Abgebrochen",
-                "pendingmarkets": "Laufend"
+                "pendingmarkets": "Laufend",
+                "ongoingmarkets": "Laufend",
+                "cancelledmarkets": "Abgesagt",
+                "pausedmarkets": "Angehalten"
             },
             "sport": {
                 "all": "alle Sportarten",

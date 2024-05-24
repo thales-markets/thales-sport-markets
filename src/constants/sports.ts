@@ -554,7 +554,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         live: false,
     },
     [League.EUROLEAGUE]: {
-        sport: Sport.SOCCER,
+        sport: Sport.BASKETBALL,
         id: League.EUROLEAGUE,
         label: 'Euroleague',
         logoClass: 'icon-homepage league--euroleague',

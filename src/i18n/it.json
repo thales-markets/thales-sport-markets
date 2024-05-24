@@ -250,7 +250,10 @@
                 "canceled": "Cancelled",
                 "archivedmarkets": "Archived markets",
                 "tooltip": "Markets resolved more than 7 days ago",
-                "pendingmarkets": "In corso"
+                "pendingmarkets": "In corso",
+                "pausedmarkets": "In pausa",
+                "ongoingmarkets": "In corso",
+                "cancelledmarkets": "Annullato"
             },
             "sport": {
                 "all": "All sports",

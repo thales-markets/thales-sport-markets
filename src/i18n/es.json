@@ -250,7 +250,10 @@
                 "resolvedmarkets": "Acabado",
                 "allmarkets": "Todos",
                 "canceled": "En pausa / Cancelado",
-                "pendingmarkets": "En curso"
+                "pendingmarkets": "En curso",
+                "ongoingmarkets": "En curso",
+                "cancelledmarkets": "Cancelado",
+                "pausedmarkets": "En pausa"
             },
             "sport": {
                 "all": "Todos los deportes",

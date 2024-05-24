@@ -250,7 +250,10 @@
                 "canceled": "已取消",
                 "archivedmarkets": "已存档的比赛",
                 "tooltip": "已结束超过7天的比赛",
-                "pendingmarkets": "进行中"
+                "pendingmarkets": "进行中",
+                "ongoingmarkets": "正在进行",
+                "pausedmarkets": "已暂停",
+                "cancelledmarkets": "取消"
             },
             "sport": {
                 "all": "所有运动",

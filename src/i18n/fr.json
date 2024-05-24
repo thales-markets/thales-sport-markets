@@ -249,7 +249,10 @@
                 "resolvedmarkets": "Terminés",
                 "openmarkets": "Ouvrir",
                 "canceled": "En pause / Annulés",
-                "pendingmarkets": "En cours"
+                "pendingmarkets": "En cours",
+                "cancelledmarkets": "Annulé",
+                "pausedmarkets": "En pause",
+                "ongoingmarkets": "En cours"
             },
             "sport": {
                 "all": "Tous les sports",
