@@ -1,6 +1,6 @@
 import burger from 'assets/images/burger.svg';
 import styled from 'styled-components';
-import { FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
@@ -36,6 +36,7 @@ export const MiddleContainer = styled(FlexDivRowCentered)`
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`
+    position: relative;
     @media (max-width: 767px) {
         flex-direction: column;
     }
@@ -167,6 +168,7 @@ export const ReferAndEarn = styled.button`
 
 export const SettingsContainer = styled(FlexDivRowCentered)`
     margin: 0 20px;
+    cursor: pointer;
 `;
 
 export const HeaderIcon = styled.i<{
@@ -183,4 +185,41 @@ export const HeaderLabel = styled.span`
     font-size: 12px;
     color: ${(props) => props.theme.textColor.secondary};
     text-transform: uppercase;
+`;
+
+export const DropdownContainer = styled.div`
+    position: absolute;
+    width: 180px;
+    left: 20px;
+    top: 28px;
+    z-index: 1000;
+`;
+
+export const DropDown = styled(FlexDivColumn)`
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    background: ${(props) => props.theme.background.secondary};
+    color: white;
+    border-radius: 5px;
+    position: absolute;
+    margin-top: 2px;
+    padding: 4px;
+    width: 100%;
+`;
+
+export const DropDownItem = styled(FlexDiv)`
+    padding: 7px 10px 9px 10px;
+    cursor: pointer;
+    &:hover {
+        background: ${(props) => props.theme.background.tertiary};
+        border-radius: 5px;
+    }
+`;
+
+export const Label = styled.div`
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    color: white;
+    display: block;
+    text-transform: capitalize;
 `;
