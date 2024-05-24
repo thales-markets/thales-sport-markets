@@ -61,50 +61,50 @@ export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 
 export const isGolf = (tag: number) => GOLF_TAGS.includes(tag);
 
-export const getIsOneSideMarket = (tag: number) =>
+export const isOneSideMarket = (tag: number) =>
     getLeagueSport(Number(tag)) === Sport.MOTOSPORT || Number(tag) == GOLF_TOURNAMENT_WINNER_TAG;
 
-export const getIsPlayerPropsMarket = (marketType: MarketType) => {
+export const isPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsOneSidePlayerPropsMarket = (marketType: MarketType) => {
+export const isOneSidePlayerPropsMarket = (marketType: MarketType) => {
     return ONE_SIDE_PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsYesNoPlayerPropsMarket = (marketType: MarketType) => {
+export const isYesNoPlayerPropsMarket = (marketType: MarketType) => {
     return YES_NO_PLAYER_PROPS_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsWinnerMarket = (marketType: MarketType) => {
+export const isWinnerMarket = (marketType: MarketType) => {
     return WINNER_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsTotalMarket = (marketType: MarketType) => {
+export const isTotalMarket = (marketType: MarketType) => {
     return TOTAL_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsTotalOddEvenMarket = (marketType: MarketType) => {
+export const isTotalOddEvenMarket = (marketType: MarketType) => {
     return TOTAL_ODD_EVEN_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsSpreadMarket = (marketType: MarketType) => {
+export const isSpreadMarket = (marketType: MarketType) => {
     return SPREAD_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsCombinedPositionsMarket = (marketType: MarketType) => {
+export const isCombinedPositionsMarket = (marketType: MarketType) => {
     return COMBINED_POSITIONS_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsBothsTeamsToScoreMarket = (marketType: MarketType) => {
+export const isBothsTeamsToScoreMarket = (marketType: MarketType) => {
     return BOTH_TEAMS_TO_SCORE_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsDoubleChanceMarket = (marketType: MarketType) => {
+export const isDoubleChanceMarket = (marketType: MarketType) => {
     return DOUBLE_CHANCE_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsPeriodMarket = (marketType: MarketType) => {
+export const isPeriodMarket = (marketType: MarketType) => {
     return (
         marketType === MarketType.FIRST_PERIOD_DOUBLE_CHANCE ||
         marketType === MarketType.SECOND_PERIOD_DOUBLE_CHANCE ||
@@ -118,7 +118,7 @@ export const getIsPeriodMarket = (marketType: MarketType) => {
     );
 };
 
-export const getIsPeriod2Market = (marketType: MarketType) => {
+export const isPeriod2Market = (marketType: MarketType) => {
     return (
         `${marketType}`.startsWith('1005') ||
         `${marketType}`.startsWith('1006') ||
@@ -127,16 +127,16 @@ export const getIsPeriod2Market = (marketType: MarketType) => {
     );
 };
 
-export const getIsHomeTeamMarket = (marketType: MarketType) => {
+export const isHomeTeamMarket = (marketType: MarketType) => {
     return HOME_TEAM_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsAwayTeamMarket = (marketType: MarketType) => {
+export const isAwayTeamMarket = (marketType: MarketType) => {
     return AWAY_TEAM_MARKET_TYPES.includes(marketType);
 };
 
 export const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
-    getLeagueIsDrawAvailable(leagueId) && getIsWinnerMarket(marketType);
+    getLeagueIsDrawAvailable(leagueId) && isWinnerMarket(marketType);
 
 export const getPositionOrder = (leagueId: number, marketType: MarketType, position: number) =>
     getIsDrawAvailable(leagueId, marketType) ? `${position == 0 ? 1 : position == 1 ? 3 : 2}` : undefined;

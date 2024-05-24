@@ -5,7 +5,7 @@ import { NavMenuItem, PromotionCardStatus, PromotionStatus } from 'types/ui';
 import { MarketType } from '../enums/marketTypes';
 import { SportMarket } from '../types/markets';
 import { formatTimestampForPromotionDate } from './formatters/date';
-import { getIsDoubleChanceMarket } from './markets';
+import { isDoubleChanceMarket } from './markets';
 
 export const getOrdinalNumberLabel = (num: number): string => {
     switch (num) {
@@ -54,7 +54,7 @@ export const setKeepSelectionToStorage = (value: boolean) => {
 };
 
 export const getGridMinMaxPercentage = (market: SportMarket, isMobile: boolean): number => {
-    return isMobile && (getIsDoubleChanceMarket(market.typeId) || market.typeId === MarketType.HALFTIME_FULLTIME)
+    return isMobile && (isDoubleChanceMarket(market.typeId) || market.typeId === MarketType.HALFTIME_FULLTIME)
         ? 100
         : market.odds.length === 3
         ? 33

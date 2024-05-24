@@ -9,10 +9,10 @@ import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
 import {
     formatMarketOdds,
-    getIsOneSideMarket,
-    getIsOneSidePlayerPropsMarket,
-    getIsPlayerPropsMarket,
-    getIsYesNoPlayerPropsMarket,
+    isOneSideMarket,
+    isOneSidePlayerPropsMarket,
+    isPlayerPropsMarket,
+    isYesNoPlayerPropsMarket,
 } from './markets';
 import { getLeagueSport } from './sports';
 
@@ -42,81 +42,95 @@ export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, player
         isOpen: !ticket.resolved && !ticket.isExercisable,
         finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
 
-        sportMarkets: ticket.marketsData.map((market: any, index: number) => {
-            const leagueId = `${market.sportId}`.startsWith('153')
-                ? League.TENNIS_GS
-                : `${market.sportId}`.startsWith('156')
-                ? League.TENNIS_MASTERS
-                : market.sportId === 701 || market.sportId == 702
-                ? League.UFC
-                : Number(market.sportId);
-            // const isEnetpulseSport = ENETPULSE_SPORTS.includes(leagueId);
-            const typeId = Number(market.typeId);
-            const isPlayerPropsMarket = getIsPlayerPropsMarket(typeId);
-            const type = MarketTypeMap[typeId as MarketType];
-            const line = Number(market.line);
+        sportMarkets: ticket.marketsData.map(
+            (market: any, index: number): TicketMarket => {
+                const leagueId = `${market.sportId}`.startsWith('153')
+                    ? League.TENNIS_GS
+                    : `${market.sportId}`.startsWith('156')
+                    ? League.TENNIS_MASTERS
+                    : market.sportId === 701 || market.sportId == 702
+                    ? League.UFC
+                    : Number(market.sportId);
+                // const isEnetpulseSport = ENETPULSE_SPORTS.includes(leagueId);
+                const typeId = Number(market.typeId);
+                const isPlayerProps = isPlayerPropsMarket(typeId);
+                const type = MarketTypeMap[typeId as MarketType];
+                const line = Number(market.line);
 
-            const homeTeam = !!gamesInfo[market.gameId] && gamesInfo[market.gameId].find((team: Team) => team.isHome);
-            const homeTeamName = homeTeam ? homeTeam.name : 'Home Team';
-            const homeScore = homeTeam ? homeTeam.score : 0;
+                const homeTeam =
+                    !!gamesInfo[market.gameId] && gamesInfo[market.gameId].find((team: Team) => team.isHome);
+                const homeTeamName = homeTeam ? homeTeam.name : 'Home Team';
+                const homeScore = homeTeam ? homeTeam.score : 0;
+                const homeScoreByPeriod = homeTeam ? homeTeam.homeScoreByPeriod : [];
 
-            const awayTeam = !!gamesInfo[market.gameId] && gamesInfo[market.gameId].find((team: Team) => !team.isHome);
-            const awayTeamName = awayTeam ? awayTeam.name : 'Away Team';
-            const awayScore = awayTeam ? awayTeam.score : 0;
+                const awayTeam =
+                    !!gamesInfo[market.gameId] && gamesInfo[market.gameId].find((team: Team) => !team.isHome);
+                const awayTeamName = awayTeam ? awayTeam.name : 'Away Team';
+                const awayScore = awayTeam ? awayTeam.score : 0;
+                const awayScoreByPeriod = awayTeam ? awayTeam.awayScoreByPeriod : [];
 
-            const playerName =
-                isPlayerPropsMarket && playersInfo[market.playerId]
-                    ? playersInfo[market.playerId].playerName
-                    : 'Player Name';
+                const playerName =
+                    isPlayerProps && playersInfo[market.playerId]
+                        ? playersInfo[market.playerId].playerName
+                        : 'Player Name';
 
-            const marketResult = ticket.marketsResult[index];
-            const marketStatus = Number(marketResult.status);
+                const marketResult = ticket.marketsResult[index];
+                const marketStatus = Number(marketResult.status);
 
-            return {
-                gameId: market.gameId,
-                sport: getLeagueSport(leagueId),
-                leagueId: leagueId,
-                // leagueName: getLeagueNameById(leagueId),
-                leagueName: '',
-                typeId: typeId,
-                type: type,
-                maturity: Number(market.maturity) * 1000,
-                maturityDate: new Date(market.maturity * 1000),
-                homeTeam: homeTeamName,
-                awayTeam: awayTeamName,
-                homeScore: isPlayerPropsMarket ? Number(marketResult.results[0]) : homeScore,
-                awayScore: isPlayerPropsMarket ? 0 : awayScore,
-                finalResult: Number(marketResult.results[0]),
-                status: 0,
-                isOpen: marketStatus === TicketMarketStatus.OPEN,
-                isResolved: marketStatus !== TicketMarketStatus.OPEN,
-                isCanceled: marketStatus === TicketMarketStatus.CANCELLED,
-                isWinning: marketStatus === TicketMarketStatus.WINNING,
-                isPaused: false,
-                isOneSideMarket: getIsOneSideMarket(leagueId),
-                spread: line / 100,
-                total: line / 100,
-                line: line / 100,
-                isPlayerPropsMarket: isPlayerPropsMarket,
-                isOneSidePlayerPropsMarket: getIsOneSidePlayerPropsMarket(typeId),
-                isYesNoPlayerPropsMarket: getIsYesNoPlayerPropsMarket(typeId),
-                playerProps: {
-                    playerId: Number(market.playerId),
-                    playerName: playerName,
-                },
-                combinedPositions: [],
-                odds: [],
-                proof: [],
-                selectedCombinedPositions: market.combinedPositions.map((combinedPosition: CombinedPosition) => ({
-                    typeId: combinedPosition.typeId,
-                    position: combinedPosition.position,
-                    line: combinedPosition.line / 100,
-                })),
+                return {
+                    gameId: market.gameId,
+                    sport: getLeagueSport(leagueId),
+                    leagueId: leagueId,
+                    subLeagueId: Number(market.sportId),
+                    // leagueName: getLeagueNameById(leagueId),
+                    leagueName: '',
+                    typeId: typeId,
+                    type: type.key,
+                    maturity: Number(market.maturity) * 1000,
+                    maturityDate: new Date(market.maturity * 1000),
+                    homeTeam: homeTeamName,
+                    awayTeam: awayTeamName,
+                    homeScore: isPlayerProps
+                        ? isOneSidePlayerPropsMarket(typeId) || isYesNoPlayerPropsMarket(typeId)
+                            ? Number(marketResult.results[0]) / 100 === 1
+                                ? 'Yes'
+                                : 'No'
+                            : Number(marketResult.results[0]) / 100
+                        : homeScore,
+                    homeScoreByPeriod,
+                    awayScore: isPlayerProps ? 0 : awayScore,
+                    awayScoreByPeriod,
+                    status: 0,
+                    isOpen: marketStatus === TicketMarketStatus.OPEN,
+                    isResolved: marketStatus !== TicketMarketStatus.OPEN,
+                    isCanceled: marketStatus === TicketMarketStatus.CANCELLED,
+                    isWinning: marketStatus === TicketMarketStatus.WINNING,
+                    isPaused: false,
+                    isOneSideMarket: isOneSideMarket(leagueId),
+                    line: line / 100,
+                    isPlayerPropsMarket: isPlayerProps,
+                    isOneSidePlayerPropsMarket: isOneSidePlayerPropsMarket(typeId),
+                    isYesNoPlayerPropsMarket: isYesNoPlayerPropsMarket(typeId),
+                    playerProps: {
+                        playerId: Number(market.playerId),
+                        playerName: playerName,
+                    },
+                    combinedPositions: [],
+                    odds: [],
+                    proof: [],
+                    selectedCombinedPositions: market.combinedPositions.map((combinedPosition: CombinedPosition) => ({
+                        typeId: combinedPosition.typeId,
+                        position: combinedPosition.position,
+                        line: combinedPosition.line / 100,
+                    })),
 
-                position: Number(market.position),
-                odd: bigNumberFormatter(market.odd),
-            };
-        }),
+                    position: Number(market.position),
+                    odd: bigNumberFormatter(market.odd),
+                    childMarkets: [],
+                    winningPositions: [],
+                };
+            }
+        ),
     };
 
     return mappedTicket;

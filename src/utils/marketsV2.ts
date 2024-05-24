@@ -8,22 +8,22 @@ import i18n from 'i18n';
 import { SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
-    getIsAwayTeamMarket,
-    getIsBothsTeamsToScoreMarket,
-    getIsCombinedPositionsMarket,
-    getIsDoubleChanceMarket,
-    getIsHomeTeamMarket,
-    getIsOneSideMarket,
-    getIsOneSidePlayerPropsMarket,
-    getIsPeriod2Market,
-    getIsPeriodMarket,
-    getIsPlayerPropsMarket,
-    getIsSpreadMarket,
-    getIsTotalMarket,
-    getIsTotalOddEvenMarket,
-    getIsWinnerMarket,
-    getIsYesNoPlayerPropsMarket,
     getMarketTypeName,
+    isAwayTeamMarket,
+    isBothsTeamsToScoreMarket,
+    isCombinedPositionsMarket,
+    isDoubleChanceMarket,
+    isHomeTeamMarket,
+    isOneSideMarket,
+    isOneSidePlayerPropsMarket,
+    isPeriod2Market,
+    isPeriodMarket,
+    isPlayerPropsMarket,
+    isSpreadMarket,
+    isTotalMarket,
+    isTotalOddEvenMarket,
+    isWinnerMarket,
+    isYesNoPlayerPropsMarket,
 } from './markets';
 import { getLeagueMatchResolveType, getLeaguePeriodType, getLeagueScoringType } from './sports';
 
@@ -57,33 +57,33 @@ export const getSimplePositionText = (
     extendedText?: boolean
 ) => {
     if (
-        getIsOneSideMarket(marketType) ||
-        getIsOneSidePlayerPropsMarket(marketType) ||
-        getIsYesNoPlayerPropsMarket(marketType) ||
-        getIsBothsTeamsToScoreMarket(marketType)
+        isOneSideMarket(marketType) ||
+        isOneSidePlayerPropsMarket(marketType) ||
+        isYesNoPlayerPropsMarket(marketType) ||
+        isBothsTeamsToScoreMarket(marketType)
     ) {
         return position === 0 ? 'Yes' : 'No';
     }
 
-    if (getIsTotalOddEvenMarket(marketType)) {
+    if (isTotalOddEvenMarket(marketType)) {
         return position === 0 ? 'Odd' : 'Even';
     }
 
-    if (getIsPlayerPropsMarket(marketType) || getIsTotalMarket(marketType) || getIsSpreadMarket(marketType)) {
+    if (isPlayerPropsMarket(marketType) || isTotalMarket(marketType) || isSpreadMarket(marketType)) {
         return extendedText
-            ? getIsSpreadMarket(marketType)
+            ? isSpreadMarket(marketType)
                 ? `${position === 0 ? homeTeam : awayTeam} (${getLineInfo(marketType, position, line)})`
                 : `${position === 0 ? 'Over' : 'Under'} ${getLineInfo(marketType, position, line)}`
             : getLineInfo(marketType, position, line);
     }
 
-    if (getIsDoubleChanceMarket(marketType))
+    if (isDoubleChanceMarket(marketType))
         return position === 0
             ? `${homeTeam} or Draw`
             : position === 1
             ? `${homeTeam} or ${awayTeam}`
             : `${awayTeam} or Draw`;
-    if (getIsWinnerMarket(marketType)) return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
+    if (isWinnerMarket(marketType)) return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
 
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
@@ -134,7 +134,7 @@ export const getCombinedPositionsText = (market: SportMarket, position: number) 
 };
 
 export const getPositionTextV2 = (market: SportMarket, position: number, extendedText?: boolean) => {
-    return getIsCombinedPositionsMarket(market.typeId)
+    return isCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsText(market, position)
         : getSimplePositionText(market.typeId, position, market.line, market.homeTeam, market.awayTeam, extendedText);
 };
@@ -143,25 +143,25 @@ export const getTitleText = (market: SportMarket) => {
     const marketType = market.typeId as MarketType;
     const marketTypeName = getMarketTypeName(marketType);
 
-    let sufix = getIsPeriodMarket(marketType)
+    let sufix = isPeriodMarket(marketType)
         ? ` ${getLeaguePeriodType(market.leagueId)}`
-        : getIsPeriod2Market(marketType)
+        : isPeriod2Market(marketType)
         ? ' half'
         : '';
 
     if (
         (market.leagueId == League.TENNIS_GS || market.leagueId == League.TENNIS_MASTERS) &&
-        (getIsTotalMarket(marketType) || getIsTotalOddEvenMarket(marketType) || getIsSpreadMarket(marketType))
+        (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${
             marketType === MarketType.TOTAL2 || marketType === MarketType.SPREAD2 ? ' (sets)' : ' (games)'
         }`;
     }
 
-    if (getIsHomeTeamMarket(marketType)) {
+    if (isHomeTeamMarket(marketType)) {
         sufix = `${sufix} (${market.homeTeam})`;
     }
-    if (getIsAwayTeamMarket(marketType)) {
+    if (isAwayTeamMarket(marketType)) {
         sufix = `${sufix} (${market.awayTeam})`;
     }
 
@@ -171,22 +171,22 @@ export const getTitleText = (market: SportMarket) => {
 export const getSubtitleText = (market: SportMarket, position: Position) => {
     const marketType = market.typeId;
 
-    if (market.isPlayerPropsMarket || getIsTotalMarket(marketType)) {
+    if (market.isPlayerPropsMarket || isTotalMarket(marketType)) {
         return position === 0 ? 'Over' : 'Under';
     }
 
-    if (getIsSpreadMarket(marketType)) return position === 0 ? market.homeTeam : market.awayTeam;
+    if (isSpreadMarket(marketType)) return position === 0 ? market.homeTeam : market.awayTeam;
 
     return undefined;
 };
 
 export const getLineInfo = (typeId: number, position: Position, line: number) => {
-    if (getIsSpreadMarket(typeId))
+    if (isSpreadMarket(typeId))
         return position === Position.HOME
             ? `${Number(line) > 0 ? '+' : '-'}${Math.abs(line)}`
             : `${Number(line) > 0 ? '-' : '+'}${Math.abs(line)}`;
 
-    if (getIsTotalMarket(typeId) || getIsPlayerPropsMarket(typeId)) return `${Number(line)}`;
+    if (isTotalMarket(typeId) || isPlayerPropsMarket(typeId)) return `${Number(line)}`;
     return undefined;
 };
 
@@ -210,7 +210,7 @@ export const getCombinedPositionsLineInfo = (position: Position, market: SportMa
 };
 
 export const getLineInfoV2 = (market: SportMarket, position: Position) =>
-    getIsCombinedPositionsMarket(market.typeId)
+    isCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsLineInfo(position, market)
         : getLineInfo(market.typeId, position, market.line);
 
