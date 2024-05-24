@@ -90,6 +90,28 @@
         }
     },
     {
+        "title": "Win 1,500 OP in Pro Rata Awards during the French Open 2024",
+        "description": "Compete for 1,500 OP dedicated to the French Open 2024, distributed pro rata, meaning higher volume = higher rewards.",
+        "startDate": 1713144174,
+        "endDate": 1722337467,
+        "displayCountdown": true,
+        "promotionId": "roland-garros-2024",
+        "promotionUrl": "/promotions/roland-garros-2024",
+        "backgroundImageUrl": "/promotions/op-grant-small.webp",
+        "callToActionButton": "How to earn",
+        "availableOnNetworks": [10],
+        "article": {
+            "coverImageUrl": "/promotions/op-grant-big.webp",
+            "headerHtml": "<h1><span><span><span>Win 1,500 OP in Pro Rata Awards during the French Open 2024</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "Compete for 1,500 OP dedicated to the French Open 2024, distributed pro rata, meaning higher volume = higher rewards. &nbsp</span></span></span><span><span><span> Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/overtime-french-open-26-may-9-jun-2024' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
+                "ctaButtonLink": "/markets",
+                "ctaButtonLabel": "Play now"
+            },
+            "contentHtml": " <p> <span> <span> <span>This reward category on Overtime and Thales Protocol favors higher odds! <span> <span> <span>Your notional volume using Overtime,</span> </span> </span> <a href='https://thalesmarket.io/markets' target='_blank'> <span> <span> <span> <strong> <u>Thales Market</u> </strong> </span> </span> </span> </a> and <a href='https://thalesmarket.io/speed-markets' target='_blank'> <span> <span> <span> <strong> <u>Speed Markets,</u> </strong> </span> </span> </span> </a>and other products built on Thales Protocol will be used to determine your OP bonus winnings. </span> </span> </span> </span></span><br> <br> Notional volume simply means your potential winnings on a Single or Parlay (or digital options position). Let’s analyze an example to see how this would work in practice. <br> <br> <strong>Example 1:</strong> A $100 buy-in with 90% implied odds of winning (-900 in American or 1.10 in decimal odds) would generate a ~10% return or a notional volume of ~$110. <br> <br> <strong>Example 2:</strong> A $30 buy-in with 20% odds of winning (+400 in American or 5.00 in decimal odds) would generate a ~500% return or a notional volume of ~$150. <br> <br>In this case, even with a much lower buy-in, Position 2 would generate a higher notional volume and would thus be higher up on the OP rewards leaderboard. In the case of Thales Market and Speed Markets, always look for the higher ROI markets if you want to generate more notional volume (chained Speed Markets is the best option for the latter). </span> </span> </span> <span> <span> <span> <span> <span> <br> <br> </p> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.</span> <span> <span> <span>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on various rewards leaderboards. </span> </span> </span> </p>"
+        }        
+    },
+    {
         "title": "100,000 OP, 100,000 ARB and 180,000 THALES for all users of NBA, NFL and EPL throughout the season!",
         "description": "100,000 OP, 100,000 ARB and 180,000 Thales for the most skilled Overtime traders of the ongoing NBA, NFL, and EPL seasons! The higher your odds and the higher the volume, the better the rewards at the end of the season. Test your skills and win big!",
         "startDate": 1702236692,
