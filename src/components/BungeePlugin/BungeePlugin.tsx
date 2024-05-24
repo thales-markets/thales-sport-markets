@@ -1,19 +1,19 @@
 import { Bridge } from '@socket.tech/plugin';
+import { Network } from 'enums/network';
+import { ethers } from 'ethers';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import networkConnector from 'utils/networkConnector';
-import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
-import { Network } from 'enums/network';
-import { mainnet, useNetwork } from 'wagmi';
-import { ThemeInterface } from 'types/ui';
 import { hexToRGB } from 'thales-utils';
-import { ethers } from 'ethers';
-import { getDefaultCollateral } from 'utils/collaterals';
 import { SupportedNetwork } from 'types/network';
+import { ThemeInterface } from 'types/ui';
+import { getDefaultCollateral } from 'utils/collaterals';
+import networkConnector from 'utils/networkConnector';
+import { mainnet, useNetwork } from 'wagmi';
+import useAllSourceTokensQuery, { SOURCE_NETWORK_IDS } from './queries/useAllSourceTokensQuery';
 
 type CustomizationProps = {
     width?: number;

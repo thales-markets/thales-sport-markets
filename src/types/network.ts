@@ -30,6 +30,6 @@ export type SupportedNetwork = Exclude<
     | Network.PolygonMainnet
     | Network.ZkSyncSepolia
     | Network.ZkSync
-    | Network.OptimismGoerli
+    | Network.OptimismSepolia
     | Network.BlastSepolia
 >;
