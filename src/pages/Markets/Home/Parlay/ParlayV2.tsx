@@ -101,14 +101,14 @@ const Parlay: React.FC = () => {
                 []
             );
 
-            const liveAndOpenSportMarkets = sportOpenMarkets.concat(liveSportOpenMarkets);
+            const liveOrOpenSportMarkets = isLiveFilterSelected ? liveSportOpenMarkets : sportOpenMarkets;
 
             const ticketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
-                    liveAndOpenSportMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
+                    liveOrOpenSportMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
                 )
                 .map((ticketPosition) => {
-                    const openMarket: SportMarket = liveAndOpenSportMarkets.filter((market: SportMarket) =>
+                    const openMarket: SportMarket = liveOrOpenSportMarkets.filter((market: SportMarket) =>
                         isSameMarket(market, ticketPosition)
                     )[0];
                     return {

@@ -82,6 +82,24 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)`
     }
 `;
 
+export const LiveIndicatorContainer = styled(FlexDivStart)`
+    min-width: 100px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-right: 10px;
+    align-items: center;
+    @media (max-width: 1399px) {
+        flex-direction: column;
+        min-width: 100px;
+    }
+    @media (max-width: 950px) {
+        flex-direction: row;
+    }
+    @media (max-width: 767px) {
+        min-width: 70px;
+        flex-direction: column;
+    }
+`;
+
 export const Label = styled.span`
     margin-right: 3px;
     @media (max-width: 767px) {
@@ -173,4 +191,12 @@ export const additionalClaimButtonStyle: CSSProperties = {
 export const additionalClaimButtonStyleMobile: CSSProperties = {
     minWidth: '65px',
     maxWidth: '80px',
+};
+
+export const liveBlinkStyle: CSSProperties = {
+    width: 25,
+};
+
+export const liveBlinkStyleMobile: CSSProperties = {
+    width: 20,
 };

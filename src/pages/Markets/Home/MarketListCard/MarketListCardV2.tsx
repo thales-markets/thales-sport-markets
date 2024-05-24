@@ -168,8 +168,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const getMainContainerContent = () => (
         <MainContainer isGameOpen={isGameOpen || isGameLive}>
             <MatchInfoConatiner
+                isGameLive={isGameLive}
                 onClick={() => {
-                    if (isGameOpen) {
+                    if (isGameOpen && !isGameLive) {
                         dispatch(setSelectedMarket({ gameId: market.gameId, sport: market.sport }));
                     }
                 }}
