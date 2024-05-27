@@ -54,7 +54,8 @@ const sportsAMMDataContract = {
             inputs: [
                 { internalType: 'bytes32[]', name: '_gameIds', type: 'bytes32[]' },
                 { internalType: 'uint16[]', name: '_typeIds', type: 'uint16[]' },
-                { internalType: 'uint16[]', name: '_playerIds', type: 'uint16[]' },
+                { internalType: 'uint24[]', name: '_playerIds', type: 'uint24[]' },
+                { internalType: 'int24[]', name: '_lines', type: 'int24[]' },
             ],
             name: 'areMarketsResolved',
             outputs: [{ internalType: 'bool[]', name: 'resolvedMarkets', type: 'bool[]' }],
@@ -75,7 +76,7 @@ const sportsAMMDataContract = {
                                 { internalType: 'uint16', name: 'typeId', type: 'uint16' },
                                 { internalType: 'uint256', name: 'maturity', type: 'uint256' },
                                 { internalType: 'int24', name: 'line', type: 'int24' },
-                                { internalType: 'uint16', name: 'playerId', type: 'uint16' },
+                                { internalType: 'uint24', name: 'playerId', type: 'uint24' },
                                 { internalType: 'uint8', name: 'position', type: 'uint8' },
                                 { internalType: 'uint256', name: 'odd', type: 'uint256' },
                                 {
@@ -132,7 +133,34 @@ const sportsAMMDataContract = {
             type: 'function',
         },
         {
-            inputs: [{ internalType: 'bytes32[]', name: '_gameIds', type: 'bytes32[]' }],
+            inputs: [
+                { internalType: 'bytes32[]', name: '_gameIds', type: 'bytes32[]' },
+                { internalType: 'uint256', name: '_startIndex', type: 'uint256' },
+                { internalType: 'uint256', name: '_pageSize', type: 'uint256' },
+            ],
+            name: 'getAllActiveGameIdsTypeIdsPlayerIdsLinesForGameIds',
+            outputs: [
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
+                        { internalType: 'uint16', name: 'typeId', type: 'uint16' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
+                        { internalType: 'int24', name: 'line', type: 'int24' },
+                    ],
+                    internalType: 'struct SportsAMMV2Data.TicketMarketInfo[]',
+                    name: 'finalTicketsInfo',
+                    type: 'tuple[]',
+                },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'bytes32[]', name: '_gameIds', type: 'bytes32[]' },
+                { internalType: 'uint256', name: '_startIndex', type: 'uint256' },
+                { internalType: 'uint256', name: '_pageSize', type: 'uint256' },
+            ],
             name: 'getOnlyActiveGameIdsAndTicketsOf',
             outputs: [
                 { internalType: 'bytes32[]', name: 'activeGameIds', type: 'bytes32[]' },
@@ -156,7 +184,7 @@ const sportsAMMDataContract = {
                                 { internalType: 'uint16', name: 'typeId', type: 'uint16' },
                                 { internalType: 'uint256', name: 'maturity', type: 'uint256' },
                                 { internalType: 'int24', name: 'line', type: 'int24' },
-                                { internalType: 'uint16', name: 'playerId', type: 'uint16' },
+                                { internalType: 'uint24', name: 'playerId', type: 'uint24' },
                                 { internalType: 'uint8', name: 'position', type: 'uint8' },
                                 { internalType: 'uint256', name: 'odd', type: 'uint256' },
                                 {
@@ -216,7 +244,7 @@ const sportsAMMDataContract = {
             inputs: [
                 { internalType: 'bytes32[]', name: '_gameIds', type: 'bytes32[]' },
                 { internalType: 'uint16[]', name: '_typeIds', type: 'uint16[]' },
-                { internalType: 'uint16[]', name: '_playerIds', type: 'uint16[]' },
+                { internalType: 'uint24[]', name: '_playerIds', type: 'uint24[]' },
             ],
             name: 'getResultsForMarkets',
             outputs: [{ internalType: 'int24[][]', name: 'resultsForMarkets', type: 'int24[][]' }],
@@ -258,7 +286,7 @@ const sportsAMMDataContract = {
                                 { internalType: 'uint16', name: 'typeId', type: 'uint16' },
                                 { internalType: 'uint256', name: 'maturity', type: 'uint256' },
                                 { internalType: 'int24', name: 'line', type: 'int24' },
-                                { internalType: 'uint16', name: 'playerId', type: 'uint16' },
+                                { internalType: 'uint24', name: 'playerId', type: 'uint24' },
                                 { internalType: 'uint8', name: 'position', type: 'uint8' },
                                 { internalType: 'uint256', name: 'odd', type: 'uint256' },
                                 {
@@ -328,7 +356,7 @@ const sportsAMMDataContract = {
                                 { internalType: 'uint16', name: 'typeId', type: 'uint16' },
                                 { internalType: 'uint256', name: 'maturity', type: 'uint256' },
                                 { internalType: 'int24', name: 'line', type: 'int24' },
-                                { internalType: 'uint16', name: 'playerId', type: 'uint16' },
+                                { internalType: 'uint24', name: 'playerId', type: 'uint24' },
                                 { internalType: 'uint8', name: 'position', type: 'uint8' },
                                 { internalType: 'uint256', name: 'odd', type: 'uint256' },
                                 {

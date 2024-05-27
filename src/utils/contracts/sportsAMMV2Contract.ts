@@ -73,7 +73,7 @@ const sportsAMMV2Contract = {
                         { internalType: 'uint256', name: 'maturity', type: 'uint256' },
                         { internalType: 'uint8', name: 'status', type: 'uint8' },
                         { internalType: 'int24', name: 'line', type: 'int24' },
-                        { internalType: 'uint16', name: 'playerId', type: 'uint16' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
                         { internalType: 'uint8', name: 'position', type: 'uint8' },
                         { internalType: 'uint256', name: 'odd', type: 'uint256' },
                         {
@@ -142,6 +142,15 @@ const sportsAMMV2Contract = {
         },
         {
             anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: '_collateral', type: 'address' },
+                { indexed: false, internalType: 'uint256', name: '_addedPayout', type: 'uint256' },
+            ],
+            name: 'SetAddedPayoutPercentagePerCollateral',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'freeBetsHolder', type: 'address' }],
             name: 'SetFreeBetsHolder',
             type: 'event',
@@ -168,6 +177,15 @@ const sportsAMMV2Contract = {
                 { indexed: false, internalType: 'bool', name: 'enabled', type: 'bool' },
             ],
             name: 'SetMultiCollateralOnOffRamp',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: '_collateral', type: 'address' },
+                { indexed: false, internalType: 'address', name: '_safeBox', type: 'address' },
+            ],
+            name: 'SetSafeBoxPerCollateral',
             type: 'event',
         },
         {
@@ -200,6 +218,13 @@ const sportsAMMV2Contract = {
             type: 'event',
         },
         { inputs: [], name: 'acceptOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+        {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'addedPayoutPercentagePerCollateral',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
         {
             inputs: [],
             name: 'defaultCollateral',
@@ -236,6 +261,13 @@ const sportsAMMV2Contract = {
             inputs: [],
             name: 'freeBetsHolder',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'bytes32[]', name: '_games', type: 'bytes32[]' }],
+            name: 'getRootsPerGames',
+            outputs: [{ internalType: 'bytes32[]', name: '_roots', type: 'bytes32[]' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -369,6 +401,23 @@ const sportsAMMV2Contract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'safeBoxPerCollateral',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: '_collateral', type: 'address' },
+                { internalType: 'uint256', name: '_addedPayout', type: 'uint256' },
+            ],
+            name: 'setAddedPayoutPercentagePerCollateral',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [
                 { internalType: 'contract IERC20', name: '_defaultCollateral', type: 'address' },
                 { internalType: 'address', name: '_manager', type: 'address' },
@@ -449,6 +498,16 @@ const sportsAMMV2Contract = {
             type: 'function',
         },
         {
+            inputs: [
+                { internalType: 'address', name: '_collateral', type: 'address' },
+                { internalType: 'address', name: '_safeBox', type: 'address' },
+            ],
+            name: 'setSafeBoxPerCollateral',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: '_ticketMastercopy', type: 'address' }],
             name: 'setTicketMastercopy',
             outputs: [],
@@ -479,7 +538,7 @@ const sportsAMMV2Contract = {
                         { internalType: 'uint256', name: 'maturity', type: 'uint256' },
                         { internalType: 'uint8', name: 'status', type: 'uint8' },
                         { internalType: 'int24', name: 'line', type: 'int24' },
-                        { internalType: 'uint16', name: 'playerId', type: 'uint16' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
                         { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
                         { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
                         { internalType: 'uint8', name: 'position', type: 'uint8' },
@@ -520,7 +579,7 @@ const sportsAMMV2Contract = {
                         { internalType: 'uint256', name: 'maturity', type: 'uint256' },
                         { internalType: 'uint8', name: 'status', type: 'uint8' },
                         { internalType: 'int24', name: 'line', type: 'int24' },
-                        { internalType: 'uint16', name: 'playerId', type: 'uint16' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
                         { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
                         { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
                         { internalType: 'uint8', name: 'position', type: 'uint8' },
@@ -560,7 +619,7 @@ const sportsAMMV2Contract = {
                         { internalType: 'uint256', name: 'maturity', type: 'uint256' },
                         { internalType: 'uint8', name: 'status', type: 'uint8' },
                         { internalType: 'int24', name: 'line', type: 'int24' },
-                        { internalType: 'uint16', name: 'playerId', type: 'uint16' },
+                        { internalType: 'uint24', name: 'playerId', type: 'uint24' },
                         { internalType: 'uint256[]', name: 'odds', type: 'uint256[]' },
                         { internalType: 'bytes32[]', name: 'merkleProof', type: 'bytes32[]' },
                         { internalType: 'uint8', name: 'position', type: 'uint8' },
