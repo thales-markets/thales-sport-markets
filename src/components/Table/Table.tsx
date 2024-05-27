@@ -251,7 +251,7 @@ const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean }>`
     cursor: ${(props) => (props.cursorPointer ? 'pointer' : 'default')};
     min-height: 38px;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 100%;
     letter-spacing: 0.25px;
     border-bottom: 2px dashed ${(props) => props.theme.borderColor.senary};
@@ -285,7 +285,7 @@ const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string;
             padding-right: 6px;
         }
     }
-    @media (max-width: 512px) {
+    @media (max-width: 575px) {
         font-size: 10px;
         &:first-child {
             padding-left: 6px;
@@ -298,16 +298,16 @@ const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string;
 
 const TableCellHead = styled(TableCell)<{ cssProp?: CSSPropertiesWithMedia }>`
     font-weight: 600;
-    font-size: 15px;
+    font-size: 11px;
     letter-spacing: 0.5px;
     @media (max-width: 767px) {
-        font-size: 13px;
+        font-size: 10px;
     }
     @media (max-width: ${(props) => (props.cssProp ? props.cssProp.mediaMaxWidth : '600px')}) {
         ${(props) => (props.cssProp ? { ...props.cssProp.cssProperties } : '')}
     }
-    @media (max-width: 512px) {
-        font-size: 10px;
+    @media (max-width: 575px) {
+        font-size: 9px;
     }
     user-select: none;
 `;
@@ -341,8 +341,8 @@ const NoResultContainer = styled(TableRow)`
 
 const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
     text-transform: none;
-    font-weight: 400;
-    font-size: ${(props) => (props.selected && props.sortDirection !== SortDirection.NONE ? 14 : 14)}px;
+    font-weight: ${(props) => (props.selected && props.sortDirection !== SortDirection.NONE ? 400 : 600)};
+    font-size: 13px;
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: ${(props) =>
@@ -354,8 +354,8 @@ const SortIcon = styled.i<{ selected: boolean; sortDirection: SortDirection }>`
                     : "'\\00D6'"
                 : "'\\00D6'"};
     }
-    @media (max-width: 512px) {
-        font-size: ${(props) => (props.selected && props.sortDirection !== SortDirection.NONE ? 17 : 14)}px;
+    @media (max-width: 575px) {
+        font-size: 10px;
     }
 `;
 

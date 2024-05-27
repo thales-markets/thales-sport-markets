@@ -147,13 +147,7 @@ const Title = styled.p`
 `;
 
 const TableHeaderStyle: React.CSSProperties = {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 600,
-    fontSize: '12px',
-    lineHeight: '14px',
     textAlign: 'center',
-    textTransform: 'uppercase',
     justifyContent: 'center',
 };
 
@@ -163,13 +157,14 @@ const TableRowStyle: React.CSSProperties = {
 };
 
 const TableText = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 12px;
     text-align: center;
-    @media (max-width: 600px) {
+    @media (max-width: 767px) {
         font-size: 10px;
+    }
+    @media (max-width: 575px) {
+        font-size: 9px;
     }
 `;
 

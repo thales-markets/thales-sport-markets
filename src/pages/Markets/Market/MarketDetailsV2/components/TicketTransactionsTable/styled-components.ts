@@ -7,9 +7,12 @@ export const TableText = styled.span`
     text-align: left;
     white-space: nowrap;
     @media (max-width: 767px) {
-        font-size: 9px;
+        font-size: 10px;
         white-space: pre-wrap;
         margin-right: 2px;
+    }
+    @media (max-width: 575px) {
+        font-size: 9px;
     }
 `;
 
@@ -193,11 +196,7 @@ export const ExternalLink = styled.a`
 `;
 
 export const tableHeaderStyle: React.CSSProperties = {
-    fontWeight: 600,
-    fontSize: '11px',
-    lineHeight: '12px',
     textAlign: 'center',
-    textTransform: 'uppercase',
     justifyContent: 'center',
 };
 

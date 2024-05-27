@@ -171,7 +171,7 @@ export const getTitleText = (market: SportMarket) => {
 export const getSubtitleText = (market: SportMarket, position: Position) => {
     const marketType = market.typeId;
 
-    if (market.isPlayerPropsMarket || isTotalMarket(marketType)) {
+    if ((market.isPlayerPropsMarket && !market.isYesNoPlayerPropsMarket) || isTotalMarket(marketType)) {
         return position === 0 ? 'Over' : 'Under';
     }
 

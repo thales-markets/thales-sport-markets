@@ -178,7 +178,7 @@ const Home: React.FC = () => {
                         break;
                 }
             } else {
-                dispatch(setDatePeriodFilter(datePeriodFilter));
+                setDateParam(`${datePeriodFilter}hours`);
             }
 
             if (tagParam != '') {

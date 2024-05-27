@@ -1,6 +1,5 @@
 import Button from 'components/Button';
 import LanguageSelector from 'components/LanguageSelector';
-import MintVoucher from 'components/MintVoucher';
 import SPAAnchor from 'components/SPAAnchor';
 import {
     NAV_MENU_FIRST_SECTION,
@@ -137,7 +136,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             </SPAAnchor>
                         );
                     })}
-                    <Separator />
+                    {/* <Separator /> */}
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
@@ -155,7 +154,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    {!isConnectedViaParticle && <MintVoucher style={{ width: '100%' }} />}
+                    {/* {!isConnectedViaParticle && <MintVoucher style={{ width: '100%' }} />} */}
                     {isConnectedViaParticle && (
                         <Button
                             backgroundColor={theme.button.background.quaternary}
