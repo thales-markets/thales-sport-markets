@@ -31,8 +31,8 @@ export const MatchInfo = styled.div`
         width: 200px;
     }
     @media (max-width: 767px) {
-        max-width: initial;
-        width: initial;
+        max-width: 150px;
+        width: 150px;
     }
 `;
 
@@ -40,9 +40,13 @@ export const MatchLabel = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.primary};
     text-align: start;
     margin-right: 5px;
+    @media (max-width: 1399px) {
+        max-width: 160px;
+        width: 160px;
+    }
     @media (max-width: 767px) {
-        max-width: 100px;
-        width: 100px;
+        max-width: 110px;
+        width: 110px;
     }
 `;
 
@@ -78,7 +82,7 @@ export const PositionInfo = styled(FlexDivRow)`
     line-height: 12px;
     color: ${(props) => props.theme.textColor.quaternary};
     align-items: center;
-    margin-right: 20px;
+    margin-right: 5px;
     @media (max-width: 767px) {
         font-size: 10px;
         line-height: 10px;
@@ -101,7 +105,7 @@ export const MarketStatus = styled(FlexDivRow)`
 
 export const MatchPeriodContainer = styled(FlexDivColumnCentered)`
     align-items: center;
-    margin-right: 20px;
+    margin-right: 5px;
 `;
 
 export const MatchPeriodLabel = styled.span`

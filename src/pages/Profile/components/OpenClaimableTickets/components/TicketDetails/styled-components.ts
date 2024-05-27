@@ -156,7 +156,7 @@ export const CollapsableContainer = styled(FlexDivColumnNative)<{ show?: boolean
 
 export const TicketMarketsContainer = styled(FlexDivColumnNative)`
     width: 100%;
-    padding: 0 15px;
+    padding: 0 10px;
     @media (max-width: 767px) {
         padding: 0 0px;
     }
