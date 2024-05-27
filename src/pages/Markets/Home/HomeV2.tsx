@@ -645,9 +645,11 @@ const Home: React.FC = () => {
                     {isMobile && (
                         <>
                             <SportFilterMobile setAvailableTags={setAvailableTags} tagsList={tagsList} />
-                            {!marketsLoading && finalMarkets.length > 0 && (
-                                <Header availableMarketTypes={availableMarketTypes} />
-                            )}
+                            {!marketsLoading &&
+                                finalMarkets.length > 0 &&
+                                statusFilter === StatusFilter.OPEN_MARKETS && (
+                                    <Header availableMarketTypes={availableMarketTypes} />
+                                )}
                             <FilterTagsMobile />
                         </>
                     )}
@@ -677,7 +679,9 @@ const Home: React.FC = () => {
                                 </NoMarketsContainer>
                             ) : (
                                 <>
-                                    {!isMobile && <Header availableMarketTypes={availableMarketTypes} />}
+                                    {!isMobile && statusFilter === StatusFilter.OPEN_MARKETS && (
+                                        <Header availableMarketTypes={availableMarketTypes} />
+                                    )}
                                     <FlexDivRow>
                                         {((isMobile && !isMarketSelected && !showTicketMobileModal) || !isMobile) && (
                                             <Suspense

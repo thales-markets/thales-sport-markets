@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
+import { formatCurrencyWithSign } from 'thales-utils';
+import { USD_SIGN } from '../../../../constants/currency';
 import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
 
 const UserStats: React.FC = () => {
@@ -18,10 +20,13 @@ const UserStats: React.FC = () => {
 
     return (
         <Wrapper>
-            <Header>Profile Data</Header>
+            <Header>
+                <ProfileIcon className="icon icon--profile2" />
+                {t('profile.stats.profile-data')}
+            </Header>
             <Section>
                 <Label>{t('profile.stats.total-volume')}</Label>
-                <Value>{!userStats ? 0 : userStats.volume.toFixed(2)}</Value>
+                <Value>{!userStats ? 0 : formatCurrencyWithSign(USD_SIGN, userStats.volume)}</Value>
             </Section>
             <Section>
                 <Label>{t('profile.stats.trades')}</Label>
@@ -29,7 +34,7 @@ const UserStats: React.FC = () => {
             </Section>
             <Section>
                 <Label>{t('profile.stats.highest-win')}</Label>
-                <Value>{!userStats ? 0 : userStats.highestWin.toFixed(2)}</Value>
+                <Value>{!userStats ? 0 : formatCurrencyWithSign(USD_SIGN, userStats.highestWin)}</Value>
             </Section>
             <Section>
                 <Label>{t('profile.stats.lifetime-wins')}</Label>
@@ -46,13 +51,14 @@ const Header = styled(FlexDivRow)`
     text-transform: uppercase;
     padding: 15px 0;
     justify-content: center;
+    align-items: center;
 `;
 
 const Wrapper = styled(FlexDivColumn)`
     background: ${(props) => props.theme.background.quinary};
     border-radius: 5px;
     width: 100%;
-    padding: 8px 14px;
+    padding: 10px 15px 20px 15px;
     gap: 4px;
     flex: initial;
 `;
@@ -82,6 +88,14 @@ const Value = styled.span`
     letter-spacing: 0.025em;
     color: ${(props) => props.theme.status.win};
     margin-left: auto;
+`;
+
+const ProfileIcon = styled.i`
+    font-size: 20px;
+    margin-right: 8px;
+    font-weight: 400;
+    text-transform: none;
+    color: ${(props) => props.theme.textColor.septenary};
 `;
 
 export default UserStats;

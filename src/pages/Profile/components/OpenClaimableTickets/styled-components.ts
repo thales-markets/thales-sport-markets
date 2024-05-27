@@ -43,9 +43,11 @@ export const CategoryLabel = styled.span`
 export const CategoryIcon = styled.i`
     font-size: 20px;
     margin-right: 15px;
+    margin-top: -2px;
     color: ${(props) => props.theme.textColor.secondary};
     @media (max-width: 767px) {
         font-size: 15px;
+        margin-right: 5px;
     }
 `;
 
@@ -65,8 +67,9 @@ export const CategoryDisclaimer = styled.div`
     font-size: 12px;
     color: ${(props) => props.theme.status.loss};
     @media (max-width: 767px) {
-        font-size: 11px;
-        margin-left: 15px;
+        font-size: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
     }
 `;
 

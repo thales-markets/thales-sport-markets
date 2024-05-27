@@ -42,7 +42,7 @@ const MyTickets: React.FC = () => {
                         <SPAAnchor href={buildHref(ROUTES.Markets.Home)}>
                             <ButtonContainer>
                                 <BackIcon className="icon-homepage icon--arrow-left" />
-                                Back
+                                {t('profile.back')}
                             </ButtonContainer>
                         </SPAAnchor>
                         {!isMobile && (

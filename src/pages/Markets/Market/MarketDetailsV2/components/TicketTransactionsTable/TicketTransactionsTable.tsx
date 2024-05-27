@@ -100,7 +100,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     {
                         Header: <>{t('profile.table.time')}</>,
                         accessor: 'timestamp',
-                        sortable: false,
+                        sortable: true,
                         Cell: (cellProps: any) => {
                             return <TableText>{formatTxTimestamp(cellProps.cell.value)}</TableText>;
                         },

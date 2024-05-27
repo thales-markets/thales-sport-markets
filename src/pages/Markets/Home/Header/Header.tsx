@@ -124,7 +124,7 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
                     })}
                 </ScrollMenu>
             </NoScrollbarContainer>
-            {!hideSwitch && (
+            {!hideSwitch && !selectedMarket && marketTypeFilter === undefined && (
                 <SwitchContainer>
                     <Tooltip
                         overlay={isThreeWayView ? 'Switch to standard view' : 'Switch to three column view'}

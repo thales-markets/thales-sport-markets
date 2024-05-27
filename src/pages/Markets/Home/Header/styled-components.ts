@@ -3,7 +3,6 @@ import { FlexDiv } from 'styles/common';
 
 export const Container = styled(FlexDiv)`
     max-width: 806px;
-    margin-top: 10px;
     margin-bottom: 10px;
     align-items: center;
     @media (max-width: 950px) {

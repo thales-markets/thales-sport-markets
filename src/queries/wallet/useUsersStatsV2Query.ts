@@ -26,6 +26,7 @@ const useUsersStatsV2Query = (
                 let volume = 0;
                 let highestWin = 0;
                 let lifetimeWins = 0;
+                // TODO: convert from ETH to USD
                 for (let index = 0; index < tickets.length; index++) {
                     const ticket = tickets[index];
                     const collateral = getCollateralByAddress(ticket.collateral, networkId);

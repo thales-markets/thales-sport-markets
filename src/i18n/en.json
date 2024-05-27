@@ -325,6 +325,7 @@
     },
     "profile": {
         "stats": {
+            "profile-data": "Profile data",
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
@@ -409,7 +410,8 @@
         "claim-voucher": "Claim voucher",
         "claiming-voucher": "Claiming...",
         "search-field": "Search wallet",
-        "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit."
+        "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit.",
+        "back": "Back"
     },
     "markets": {
         "market-card": {
