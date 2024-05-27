@@ -621,7 +621,7 @@ const multipleCollateral = {
     },
     USDCe: {
         addresses: {
-            [Network.OptimismMainnet]: '',
+            [Network.OptimismMainnet]: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
             [Network.Arbitrum]: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
             [Network.Base]: '',
             [Network.OptimismSepolia]: '',
@@ -630,7 +630,7 @@ const multipleCollateral = {
     },
     USDC: {
         addresses: {
-            [Network.OptimismMainnet]: '0x7F5c764cBc14f9669B88837ca1490cCa17c31607',
+            [Network.OptimismMainnet]: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
             [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
             [Network.Base]: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
             [Network.OptimismSepolia]: '0xff6535c1F971245435429A915aB9eB1713beC1C1', // exoticUSDC

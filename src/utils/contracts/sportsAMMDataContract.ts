@@ -2,7 +2,7 @@ import { Network } from 'enums/network';
 
 const sportsAMMDataContract = {
     addresses: {
-        [Network.OptimismMainnet]: '',
+        [Network.OptimismMainnet]: '0x71CE219942FFD9C1d8B67d6C35C39Ae04C4F647B',
         [Network.Arbitrum]: '',
         [Network.Base]: '',
         [Network.OptimismSepolia]: '0xe4d8d605874443f952fBdc03Dd1C69761230A7f0',
