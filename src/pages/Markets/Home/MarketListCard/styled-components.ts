@@ -196,12 +196,6 @@ export const LiveInfoContainer = styled(FlexDivColumn)`
     gap: 5px;
     align-items: center;
     color: ${(props) => props.theme.textColor.quinary};
-    & > label {
-        > span {
-            color: ${(props) => props.theme.textColor.primary};
-            text-transform: none;
-        }
-    }
     @media (max-width: 950px) {
         flex-direction: row;
         gap: 18px;
@@ -238,7 +232,8 @@ export const LiveInfoSpan = styled.span`
     font-size: 12px;
     font-weight: 600;
     line-height: 14px;
-    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.primary};
+    text-transform: none;
     width: fit-content;
     margin-right: 2px;
     white-space: nowrap;

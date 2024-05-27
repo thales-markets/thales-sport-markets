@@ -318,18 +318,14 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                     {isGameLive && (
                         <LiveInfoContainer>
                             <Icon className={'icon icon--clock'} />
-                            <MatchInfoLabel>
-                                {t(`markets.market-card.time`)}: <LiveInfoSpan>{market.gameClock}</LiveInfoSpan>
-                                <Blink>&prime;</Blink>
-                            </MatchInfoLabel>
-                            <MatchInfoLabel>
-                                {t(`markets.market-card.period`)}:{' '}
-                                <LiveInfoSpan>
-                                    {' '}
-                                    {market.gamePeriod ? getOrdinalNumberLabel(Number(market.gamePeriod[0])) : ''}{' '}
-                                    {t(`markets.market-card.${getLeaguePeriodType(Number(market.leagueId))}`)}
-                                </LiveInfoSpan>
-                            </MatchInfoLabel>
+                            <LiveInfoSpan>
+                                {market.gameClock} <Blink>&prime;</Blink>
+                            </LiveInfoSpan>
+                            <LiveInfoSpan>
+                                {' '}
+                                {market.gamePeriod ? getOrdinalNumberLabel(Number(market.gamePeriod[0])) : ''}{' '}
+                                {t(`markets.market-card.${getLeaguePeriodType(Number(market.leagueId))}`)}
+                            </LiveInfoSpan>
                         </LiveInfoContainer>
                     )}
                 </TeamsInfoContainer>

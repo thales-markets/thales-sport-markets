@@ -53,7 +53,6 @@ import {
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
     liveBlinkStyle,
-    liveBlinkStyleMobile,
 } from './styled-components';
 
 type TicketDetailsProps = {
@@ -188,13 +187,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
             <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
                 {ticket.isLive ? (
                     <LiveIndicatorContainer>
-                        <Lottie
-                            autoplay={true}
-                            animationData={liveAnimationData}
-                            loop={true}
-                            style={isMobile ? liveBlinkStyleMobile : liveBlinkStyle}
-                        />
-                        <Label>Live trade</Label>
+                        <Lottie autoplay={true} animationData={liveAnimationData} loop={true} style={liveBlinkStyle} />
                     </LiveIndicatorContainer>
                 ) : (
                     <LiveIndicatorContainer />
