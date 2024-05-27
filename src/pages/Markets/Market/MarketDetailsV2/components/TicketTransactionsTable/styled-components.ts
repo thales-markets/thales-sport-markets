@@ -48,7 +48,6 @@ export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     border-radius: 15px;
     height: 32px;
     padding: 0 10px;
-    margin-right: 5px;
     & > div {
         flex: 1;
     }
@@ -132,7 +131,7 @@ export const MarketStatus = styled.span<{ color?: string }>`
     min-width: 100px;
     text-align: end;
     @media (max-width: 767px) {
-        margin-left: 10px;
+        margin-left: 5px;
         min-width: 40px;
     }
 `;

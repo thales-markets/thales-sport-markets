@@ -697,6 +697,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             return;
         }
 
+        // No payout
+        if (!Number(payout)) {
+            setSubmitDisabled(true);
+            return;
+        }
+
         // Not enough funds
         setSubmitDisabled(!paymentTokenBalance || Number(buyInAmount) > paymentTokenBalance);
     }, [

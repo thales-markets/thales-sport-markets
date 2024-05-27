@@ -151,7 +151,7 @@ export const TicketMarketStatus = styled.span<{ color?: string }>`
     text-align: end;
     color: ${(props) => props.color || props.theme.textColor.primary};
     @media (max-width: 767px) {
-        margin-left: 10px;
+        margin-left: 5px;
         min-width: 40px;
     }
 `;
