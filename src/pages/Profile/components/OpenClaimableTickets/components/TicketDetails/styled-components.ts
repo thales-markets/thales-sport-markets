@@ -2,6 +2,7 @@ import styled, { CSSProperties } from 'styled-components';
 import { FlexDivColumnNative, FlexDivRow, FlexDivStart } from 'styles/common';
 
 export const Container = styled(FlexDivColumnNative)`
+    position: relative;
     font-weight: 600;
     font-size: 12px;
     align-items: center;
@@ -83,17 +84,22 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)`
 `;
 
 export const LiveIndicatorContainer = styled(FlexDivStart)`
-    min-width: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 12px;
+    height: 40px;
+    border-radius: 5px 0 0 5px;
+    background: #ec3535;
+    padding-left: 2px;
     color: ${(props) => props.theme.textColor.secondary};
     align-items: center;
-    @media (max-width: 1399px) {
-        flex-direction: column;
-    }
-    @media (max-width: 950px) {
-        flex-direction: row;
-    }
-    @media (max-width: 767px) {
-        flex-direction: column;
+    justify-content: center;
+    span {
+        transform: rotate(270deg);
+        color: ${(props) => props.theme.textColor.tertiary};
+        font-size: 10px;
+        line-height: 10px;
     }
 `;
 
@@ -191,5 +197,9 @@ export const additionalClaimButtonStyleMobile: CSSProperties = {
 };
 
 export const liveBlinkStyle: CSSProperties = {
+    width: 25,
+};
+
+export const liveBlinkStyleMobile: CSSProperties = {
     width: 20,
 };

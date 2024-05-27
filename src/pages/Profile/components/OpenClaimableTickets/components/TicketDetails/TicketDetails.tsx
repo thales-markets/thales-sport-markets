@@ -1,11 +1,9 @@
-import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import Button from 'components/Button/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
-import Lottie from 'lottie-react';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -52,7 +50,6 @@ import {
     WinValue,
     additionalClaimButtonStyle,
     additionalClaimButtonStyleMobile,
-    liveBlinkStyle,
 } from './styled-components';
 
 type TicketDetailsProps = {
@@ -185,12 +182,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
     return (
         <Container>
             <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
-                {ticket.isLive ? (
+                {ticket.isLive && (
                     <LiveIndicatorContainer>
-                        <Lottie autoplay={true} animationData={liveAnimationData} loop={true} style={liveBlinkStyle} />
+                        <Label>LIVE</Label>
                     </LiveIndicatorContainer>
-                ) : (
-                    <LiveIndicatorContainer />
                 )}
                 <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
                     <TicketIdContainer>
