@@ -46,7 +46,7 @@ const UserStats: React.FC = () => {
 
 const Header = styled(FlexDivRow)`
     font-weight: 600;
-    font-size: 12px;
+    font-size: 14px;
     color: ${(props) => props.theme.textColor.septenary};
     text-transform: uppercase;
     padding: 15px 0;
@@ -83,8 +83,8 @@ const Label = styled.span`
 
 const Value = styled.span`
     font-weight: 700;
-    font-size: 11px;
-    line-height: 12px;
+    font-size: 12px;
+    line-height: 20px;
     letter-spacing: 0.025em;
     color: ${(props) => props.theme.status.win};
     margin-left: auto;
