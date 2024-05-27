@@ -20,7 +20,7 @@ import {
     getSelectedMarket,
     setSelectedMarket,
 } from 'redux/modules/market';
-import { formatShortDateWithTime, formatTimeFromDate } from 'thales-utils';
+import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketLiveResult } from 'types/markets';
 import { convertFromBytes32, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
@@ -37,10 +37,7 @@ import {
     ClubLogo,
     CurrentResultContainer,
     ExternalArrow,
-    Icon,
     LiveIndicatorContainer,
-    LiveInfoContainer,
-    LiveInfoSpan,
     MainContainer,
     MarketsCountWrapper,
     MatchInfo,
@@ -198,7 +195,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <MatchInfoLabel>{t(`markets.market-card.live`)}</MatchInfoLabel>
                             </LiveIndicatorContainer>
                             <MatchInfoLabel>
-                                {t(`markets.market-card.started`)}: {formatTimeFromDate(new Date(market.maturityDate))}
+                                {market.gameClock}
+                                <Blink>&prime;</Blink>{' '}
+                                {market.gamePeriod ? getOrdinalNumberLabel(Number(market.gamePeriod[0])) : ''}{' '}
+                                {t(`markets.market-card.${getLeaguePeriodType(Number(market.leagueId))}`)}
                             </MatchInfoLabel>
                         </>
                     ) : (
@@ -314,19 +314,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 {market.awayScore}
                             </TeamNameLabel>
                         </CurrentResultContainer>
-                    )}
-                    {isGameLive && (
-                        <LiveInfoContainer>
-                            <Icon className={'icon icon--clock'} />
-                            <LiveInfoSpan>
-                                {market.gameClock} <Blink>&prime;</Blink>
-                            </LiveInfoSpan>
-                            <LiveInfoSpan>
-                                {' '}
-                                {market.gamePeriod ? getOrdinalNumberLabel(Number(market.gamePeriod[0])) : ''}{' '}
-                                {t(`markets.market-card.${getLeaguePeriodType(Number(market.leagueId))}`)}
-                            </LiveInfoSpan>
-                        </LiveInfoContainer>
                     )}
                 </TeamsInfoContainer>
             </MatchInfoContainer>

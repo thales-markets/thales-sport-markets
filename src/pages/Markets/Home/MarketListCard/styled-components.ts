@@ -37,7 +37,7 @@ export const MainContainer = styled(FlexDivRow)<{ isGameOpen: boolean }>`
 
 export const MatchInfoContainer = styled(FlexDivColumn)<{ isGameLive: boolean }>`
     cursor: ${(props) => (props.isGameLive ? 'default' : 'pointer')};
-    max-width: ${(props) => (props.isGameLive ? '300px' : '250px')};
+    max-width: 250px;
     margin-right: 5px;
 `;
 
@@ -62,6 +62,9 @@ export const MatchInfoLabel = styled.label`
     white-space: nowrap;
     @media (max-width: 950px) {
         font-size: 11px;
+    }
+    & > span {
+        color: ${(props) => props.theme.textColor.quinary};
     }
 `;
 
@@ -215,7 +218,8 @@ export const Blink = styled.span`
     line-height: 14px;
     text-transform: uppercase;
     white-space: nowrap;
-    color: ${(props) => props.theme.textColor.primary};
+    margin-right: 10px;
+    color: ${(props) => props.theme.textColor.quinary};
     animation: blinker 1.5s step-start infinite;
     font-weight: 700;
     @keyframes blinker {
