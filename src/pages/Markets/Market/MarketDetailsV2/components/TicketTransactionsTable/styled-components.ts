@@ -70,8 +70,8 @@ export const MatchLabel = styled(FlexDivRow)`
     width: 250px;
     cursor: pointer;
     @media (max-width: 767px) {
-        min-width: 150px;
-        width: 150px;
+        min-width: 160px;
+        width: 160px;
     }
     @media (max-width: 575px) {
         min-width: 110px;
@@ -95,10 +95,6 @@ export const SelectionInfoContainer = styled.div`
 export const MarketTypeInfo = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.quinary};
     margin-right: 5px;
-    min-width: 160px;
-    @media (max-width: 575px) {
-        min-width: 110px;
-    }
 `;
 
 export const PositionInfo = styled(FlexDivRow)`
@@ -109,10 +105,7 @@ export const PositionInfo = styled(FlexDivRow)`
 
 export const PositionText = styled.span`
     text-align: start;
-    min-width: 150px;
-    @media (max-width: 575px) {
-        min-width: 110px;
-    }
+    min-width: 100px;
 `;
 
 export const Odd = styled.span`
@@ -134,9 +127,14 @@ export const MarketStatusIcon = styled.i`
     margin-top: -1px;
 `;
 
-export const MarketStatus = styled(FlexDivRow)<{ color?: string }>`
+export const MarketStatus = styled.span<{ color?: string }>`
     color: ${(props) => props.color || props.theme.textColor.primary};
-    justify-content: end;
+    min-width: 100px;
+    text-align: end;
+    @media (max-width: 767px) {
+        margin-left: 10px;
+        min-width: 40px;
+    }
 `;
 
 export const LastExpandedSection = styled(FlexDivRowCentered)`
