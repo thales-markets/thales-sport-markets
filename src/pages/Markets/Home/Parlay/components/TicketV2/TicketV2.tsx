@@ -78,6 +78,7 @@ import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
+import useMarketPositionLiquidityQuery from '../../../../../../queries/markets/useMarketPositionLiquidityQuery';
 import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import SuggestedAmount from '../SuggestedAmount';
 import Voucher from '../Voucher';
@@ -87,7 +88,11 @@ import {
     ClearLabel,
     GasSummary,
     HorizontalLine,
+    InfoContainer,
+    InfoLabel,
     InfoTooltip,
+    InfoValue,
+    InfoWrapper,
     InputContainer,
     RowContainer,
     RowSummary,
@@ -287,6 +292,18 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
         return quote < maxSupportedOdds ? maxSupportedOdds : quote;
     }, [markets, sportsAmmData?.maxSupportedOdds]);
+
+    const marketPositionLiquidityQuery = useMarketPositionLiquidityQuery(markets[0], networkId, {
+        enabled: isAppReady,
+    });
+
+    const marketPositionLiquidity = useMemo(
+        () =>
+            marketPositionLiquidityQuery.isSuccess && marketPositionLiquidityQuery.data
+                ? marketPositionLiquidityQuery.data
+                : 0,
+        [marketPositionLiquidityQuery.isSuccess, marketPositionLiquidityQuery.data]
+    );
 
     // Clear Ticket when network is changed
     const isMounted = useRef(false);
@@ -722,6 +739,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         minBuyInAmountInDefaultCollateral,
         isAMMPaused,
         minBuyInAmount,
+        payout,
     ]);
 
     const getSubmitButton = () => {
@@ -1053,6 +1071,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     />
                 </AmountToBuyContainer>
             </InputContainer>
+            {markets.length === 1 && (
+                <InfoContainer>
+                    <InfoWrapper>
+                        <InfoLabel>{'Liquidity'}:</InfoLabel>
+                        <InfoValue>{formatCurrencyWithSign(USD_SIGN, marketPositionLiquidity)}</InfoValue>
+                    </InfoWrapper>
+                </InfoContainer>
+            )}
             {isAA && (
                 <GasSummary>
                     <SummaryLabel>
