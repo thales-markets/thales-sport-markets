@@ -736,7 +736,8 @@
             "claim-progress": "Affirmant...",
             "approve-swap-tooltip": "Pour obtenir un paiement en {{currencyKey}}, vous devez approuver le passage de {{defaultCurrency}} à {{currencyKey}}.",
             "payout": "Paiement",
-            "win": "Gagner"
+            "win": "Gagner",
+            "live": "En direct"
         },
         "messages": {
             "no-claimable": "Vous n'avez pas de poste réclamable",
@@ -778,7 +779,8 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins"
+            "lifetime-wins": "Lifetime wins",
+            "profile-data": "Données de profil"
         },
         "in-lp": "Liquidité fournie",
         "go-to-lp": "Aller à LP",
@@ -798,7 +800,8 @@
             "my-tickets": "Mes billets",
             "my-portfolio": "Mon portfolio"
         },
-        "lp": "LP"
+        "lp": "LP",
+        "back": "Dos"
     },
     "referral": {
         "generate-link": "Générer un lien",

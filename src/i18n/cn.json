@@ -736,7 +736,8 @@
             "payout-in": "付款于",
             "claim-progress": "声称...",
             "payout": "付款",
-            "win": "赢"
+            "win": "赢",
+            "live": "居住"
         },
         "messages": {
             "no-claimable": "您没有任何可申请的职位",
@@ -778,7 +779,8 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins"
+            "lifetime-wins": "Lifetime wins",
+            "profile-data": "个人资料"
         },
         "lp-title": "流动资金池",
         "go-to-lp": "去LP",
@@ -798,7 +800,8 @@
             "my-tickets": "我的门票",
             "my-portfolio": "我的投资组合"
         },
-        "lp": "LP"
+        "lp": "LP",
+        "back": "后退"
     },
     "referral": {
         "generate-link": "生成链接",

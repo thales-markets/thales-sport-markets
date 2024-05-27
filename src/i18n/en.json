@@ -364,6 +364,7 @@
         },
         "card": {
             "ticket-id": "Ticket ID",
+            "live": "Live",
             "number-of-games": "No. of games",
             "ticket-paid": "Ticket paid",
             "to-win": "Potential win",

@@ -735,7 +735,8 @@
             "approve-swap-tooltip": "Per ricevere il pagamento in {{currencyKey}}, devi approvare lo scambio da {{defaultCurrency}} a {{currencyKey}}.",
             "claim-progress": "Rivendicando...",
             "win": "Vincita",
-            "payout": "Pagamento"
+            "payout": "Pagamento",
+            "live": "Vivere"
         },
         "messages": {
             "no-claimable": "Non hai posizioni rivendicabili",
@@ -777,7 +778,8 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins"
+            "lifetime-wins": "Lifetime wins",
+            "profile-data": "Dati del profilo"
         },
         "in-lp": "Liquidità fornita",
         "lp-title": "Pool di liquidità",
@@ -797,7 +799,8 @@
             "my-tickets": "I miei biglietti",
             "my-portfolio": "Il mio portfolio"
         },
-        "lp": "LP"
+        "lp": "LP",
+        "back": "Indietro"
     },
     "referral": {
         "nav-items": {

@@ -178,13 +178,12 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
         return getClaimButton(isMobile);
     };
 
-    console.log(ticket);
     return (
         <Container>
             <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
                 {ticket.isLive && (
                     <LiveIndicatorContainer>
-                        <Label>LIVE</Label>
+                        <Label>{t('profile.card.live')}</Label>
                     </LiveIndicatorContainer>
                 )}
                 <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>

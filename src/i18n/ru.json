@@ -736,7 +736,8 @@
             "payout-in": "Выплата в",
             "claim-progress": "Утверждение...",
             "win": "Победить",
-            "payout": "Выплата"
+            "payout": "Выплата",
+            "live": "Жить"
         },
         "messages": {
             "no-claimable": "У вас нет требуемых должностей",
@@ -778,7 +779,8 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins"
+            "lifetime-wins": "Lifetime wins",
+            "profile-data": "Данные профиля"
         },
         "lp-title": "Пул ликвидности",
         "in-lp": "Предоставляемая ликвидность",
@@ -798,7 +800,8 @@
             "my-tickets": "Мои билеты",
             "my-portfolio": "Мое Портфолио"
         },
-        "lp": "LP"
+        "lp": "LP",
+        "back": "Назад"
     },
     "referral": {
         "nav-items": {

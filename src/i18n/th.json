@@ -736,7 +736,8 @@
             "payout-in": "จ่ายเงินเข้า.",
             "approve-swap-tooltip": "หากต้องการรับการจ่ายเงินเป็น {{currencyKey}} คุณต้องอนุมัติการแลกเปลี่ยนจาก {{defaultCurrency}} เป็น {{currencyKey}}",
             "win": "ชนะ",
-            "payout": "การจ่ายเงิน"
+            "payout": "การจ่ายเงิน",
+            "live": "สด"
         },
         "messages": {
             "no-open": "คุณไม่มีตำแหน่งที่เปิดอยู่",
@@ -778,7 +779,8 @@
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
-            "lifetime-wins": "Lifetime wins"
+            "lifetime-wins": "Lifetime wins",
+            "profile-data": "ข้อมูลโปรไฟล์"
         },
         "lp-title": "สระว่ายน้ำสภาพคล่อง",
         "go-to-lp": "ไปที่หจก",
@@ -798,7 +800,8 @@
             "my-portfolio": "ผลงานของฉัน",
             "my-tickets": "ตั๋วของฉัน"
         },
-        "lp": "ห้างหุ้นส่วนจำกัด"
+        "lp": "ห้างหุ้นส่วนจำกัด",
+        "back": "กลับ"
     },
     "referral": {
         "generate-link": "สร้างลิงค์",

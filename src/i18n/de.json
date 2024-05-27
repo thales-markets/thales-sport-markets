@@ -736,7 +736,8 @@
             "payout-in": "Auszahlung in",
             "approve-swap-tooltip": "Um eine Auszahlung in {{currencyKey}} zu erhalten, müssen Sie den Umtausch von {{defaultCurrency}} in {{currencyKey}} genehmigen.",
             "payout": "Auszahlung",
-            "win": "Gewinnen"
+            "win": "Gewinnen",
+            "live": "Live"
         },
         "messages": {
             "no-open": "Sie haben keine offene Stelle",
@@ -779,7 +780,8 @@
             "trades": "Trades",
             "highest-win": "Höchster Gewinn",
             "lifetime-wins": "Lebenslange Gewinne",
-            "in-vaults": "In Vaults"
+            "in-vaults": "In Vaults",
+            "profile-data": "Profildaten"
         },
         "lp-title": "Liquiditätspool",
         "in-lp": "Liquidität bereitgestellt",
@@ -802,7 +804,8 @@
             "my-tickets": "Meine Tickets",
             "my-portfolio": "Mein Portfolio"
         },
-        "lp": "LP"
+        "lp": "LP",
+        "back": "Zurück"
     },
     "referral": {
         "generate-link": "Link generieren",
