@@ -7,24 +7,15 @@ import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarkets } from 'types/markets';
 
-const marketsCache = {
-    [StatusFilter.OPEN_MARKETS]: [] as SportMarkets,
-    [StatusFilter.ONGOING_MARKETS]: [] as SportMarkets,
-    [StatusFilter.RESOLVED_MARKETS]: [] as SportMarkets,
-    [StatusFilter.PAUSED_MARKETS]: [] as SportMarkets,
-    [StatusFilter.CANCELLED_MARKETS]: [] as SportMarkets,
-};
-
-// TODO - there is a problem when return type is SportMarkets (some problem with SGP mapping and query is stuck in fetching), keep logic with typeof marketsCache for now
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     networkId: Network,
-    options?: UseQueryOptions<typeof marketsCache>
+    options?: UseQueryOptions<SportMarkets>
 ) => {
-    return useQuery<typeof marketsCache>(
+    return useQuery<SportMarkets>(
         QUERY_KEYS.SportMarketsV2(statusFilter, networkId),
         async () => {
-            let markets: any[] = [];
+            let markets = [];
             let response;
             try {
                 // const today = new Date();
@@ -35,32 +26,36 @@ const useSportsMarketsV2Query = (
                 switch (statusFilter) {
                     case StatusFilter.OPEN_MARKETS:
                         response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/markets/?status=open&ungroup=true`,
+                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=open&ungroup=true`,
                             { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                         );
                         markets = response.data;
                         break;
                     case StatusFilter.RESOLVED_MARKETS:
                         response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/markets/?status=resolved&ungroup=true`
+                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=resolved&ungroup=true`,
+                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                         );
                         markets = response.data;
                         break;
                     case StatusFilter.CANCELLED_MARKETS:
                         response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/markets/?status=canceled&ungroup=true`
+                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=cancelled&ungroup=true`,
+                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                         );
                         markets = response.data;
                         break;
                     case StatusFilter.PAUSED_MARKETS:
                         response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/markets/?status=paused&ungroup=true`
+                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=paused&ungroup=true`,
+                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                         );
                         markets = response.data;
                         break;
                     case StatusFilter.ONGOING_MARKETS:
                         response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/markets/?status=ongoing&ungroup=true`
+                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=ongoing&ungroup=true`,
+                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                         );
                         markets = response.data;
                         break;
@@ -68,7 +63,7 @@ const useSportsMarketsV2Query = (
                         break;
                 }
 
-                marketsCache[statusFilter] = markets.map((market: any) => {
+                markets = markets.map((market: any) => {
                     return {
                         ...market,
                         maturityDate: new Date(market.maturityDate),
@@ -91,7 +86,7 @@ const useSportsMarketsV2Query = (
             } catch (e) {
                 console.log(e);
             }
-            return marketsCache;
+            return markets;
         },
         {
             refetchInterval: 60 * 1000,

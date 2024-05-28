@@ -104,7 +104,7 @@ export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, player
                     status: 0,
                     isOpen: marketStatus === TicketMarketStatus.OPEN,
                     isResolved: marketStatus !== TicketMarketStatus.OPEN,
-                    isCanceled: marketStatus === TicketMarketStatus.CANCELLED,
+                    isCancelled: marketStatus === TicketMarketStatus.CANCELLED,
                     isWinning: marketStatus === TicketMarketStatus.WINNING,
                     isPaused: false,
                     isOneSideMarket: isOneSideMarket(leagueId),
@@ -138,7 +138,7 @@ export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, player
 };
 
 export const getTicketMarketStatus = (market: TicketMarket) => {
-    if (market.isCanceled) return t('profile.card.canceled');
+    if (market.isCancelled) return t('profile.card.canceled');
     if (market.isResolved) {
         if (market.isPlayerPropsMarket) {
             return market.homeScore;
@@ -153,4 +153,4 @@ export const getTicketQuote = (paid: number, payout: number) => 1 / (payout / pa
 export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: number) =>
     formatMarketOdds(oddsType, getTicketQuote(paid, payout));
 
-export const getTicketMarketOdd = (market: TicketMarket) => (market.isCanceled ? 1 : market.odd);
+export const getTicketMarketOdd = (market: TicketMarket) => (market.isCancelled ? 1 : market.odd);

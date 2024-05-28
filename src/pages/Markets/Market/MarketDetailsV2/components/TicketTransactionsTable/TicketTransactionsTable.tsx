@@ -239,7 +239,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 };
 
 const getTicketMarketStatusIcon = (market: TicketMarket) => {
-    return market.isOpen || market.isCanceled ? (
+    return market.isOpen || market.isCancelled ? (
         <MarketStatusIcon className={`icon icon--ticket-open`} />
     ) : market.isWinning ? (
         <MarketStatusIcon className={`icon icon--ticket-win`} />
@@ -276,7 +276,7 @@ export const getTicketMarkets = (
                 </SelectionInfoContainer>
                 <MarketStatus
                     color={
-                        ticketMarket.isOpen || ticketMarket.isCanceled
+                        ticketMarket.isOpen || ticketMarket.isCancelled
                             ? theme.status.open
                             : ticketMarket.isWinning
                             ? theme.status.win

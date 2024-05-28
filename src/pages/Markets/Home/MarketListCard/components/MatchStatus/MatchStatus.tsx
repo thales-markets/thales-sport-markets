@@ -11,7 +11,7 @@ import { getOrdinalNumberLabel } from 'utils/ui';
 
 type MatchStatusProps = {
     isPendingResolution: boolean;
-    isCanceled: boolean;
+    isCancelled: boolean;
     isPaused: boolean;
     liveResultInfo: SportMarketLiveResult | undefined;
     isEnetpulseSport: boolean;
@@ -20,7 +20,7 @@ type MatchStatusProps = {
 
 const MatchStatus: React.FC<MatchStatusProps> = ({
     isPendingResolution,
-    isCanceled,
+    isCancelled,
     isPaused,
     liveResultInfo,
     isEnetpulseSport,
@@ -81,7 +81,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                               })}
                     </FlexDivRow>
                 )
-            ) : isCanceled ? (
+            ) : isCancelled ? (
                 <Status color={theme.status.canceled}>{t('markets.market-card.canceled')}</Status>
             ) : isPaused ? (
                 <Status color={theme.status.paused}>{t('markets.market-card.paused')}</Status>

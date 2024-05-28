@@ -45,12 +45,12 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameLive = !!market.live && isGameStarted;
-    const isGameCancelled = market.isCanceled;
-    const isGameResolved = market.isResolved || market.isCanceled;
-    const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
+    const isGameCancelled = market.isCancelled;
+    const isGameResolved = market.isResolved || market.isCancelled;
+    const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isGamePaused = market.isPaused && !isGameResolved;
-    const isGameOpen = !market.isResolved && !market.isCanceled && !market.isPaused && !isGameStarted;
+    const isGameOpen = !market.isResolved && !market.isCancelled && !market.isPaused && !isGameStarted;
 
     const odd = market.odds[position];
     const noOdd = !odd || odd == 0;

@@ -43,7 +43,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
             </MarketPositionContainer>
             {readOnly && (
                 <>
-                    {market.isCanceled ? (
+                    {market.isCancelled ? (
                         <Canceled className={`icon icon--open`} />
                     ) : market.isResolved ? (
                         market.isWinning ? (

@@ -111,11 +111,11 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isGameOpen = market.isOpen && !isGameStarted;
 
     const leagueName = Object.values(LeagueMap).find((t: TagInfo) => t.id == market.leagueId)?.label;
-    const isGameCancelled = market.isCanceled || (!isGameStarted && market.isResolved);
-    const isGameResolved = market.isResolved || market.isCanceled;
+    const isGameCancelled = market.isCancelled || (!isGameStarted && market.isResolved);
+    const isGameResolved = market.isResolved || market.isCancelled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isGamePaused = market.isPaused && !isGameResolved;
-    const showStatus = market.isResolved || market.isCanceled || isGameStarted || market.isPaused;
+    const showStatus = market.isResolved || market.isCancelled || isGameStarted || market.isPaused;
     const gameIdString = convertFromBytes32(market.gameId);
     const isEnetpulseSport = getLeagueProvider(Number(market.leagueId)) === Provider.ENETPULSE;
     const isJsonOddsSport = getLeagueProvider(Number(market.leagueId)) === Provider.JSONODDS;

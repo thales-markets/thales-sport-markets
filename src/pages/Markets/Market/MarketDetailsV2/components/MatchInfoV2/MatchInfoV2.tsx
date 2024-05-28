@@ -45,7 +45,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
     );
     const leagueLogo = getLeagueLogoClass(market.leagueId);
 
-    const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
+    const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
 
     const getTeamsNames = (hideOnMobile: boolean) => (
         <TeamNamesWrapper hideOnMobile={hideOnMobile}>

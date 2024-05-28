@@ -359,7 +359,7 @@ export const updateTotalQuoteAndPayout = (tickets: Ticket[]): Ticket[] => {
             payout = ticket.buyInAmount;
         } else {
             ticket.sportMarkets.forEach((market) => {
-                if (market.isCanceled) {
+                if (market.isCancelled) {
                     totalQuote = totalQuote / market.odd;
                     payout = payout * market.odd;
                 }

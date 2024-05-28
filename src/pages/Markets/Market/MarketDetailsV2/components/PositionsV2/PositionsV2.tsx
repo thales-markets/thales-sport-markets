@@ -145,11 +145,11 @@ const Positions: React.FC<PositionsProps> = ({
 
 const sortMarketsByDisabled = (marketA: SportMarket, marketB: SportMarket) => {
     const isGameStartedA = marketA.maturityDate < new Date();
-    const isGameOpenA = !marketA.isResolved && !marketA.isCanceled && !marketA.isPaused && !isGameStartedA;
+    const isGameOpenA = !marketA.isResolved && !marketA.isCancelled && !marketA.isPaused && !isGameStartedA;
     const noOddA = !marketA.odds[0] || marketA.odds[0] == 0;
 
     const isGameStartedB = marketB.maturityDate < new Date();
-    const isGameOpenB = !marketB.isResolved && !marketB.isCanceled && !marketB.isPaused && !isGameStartedB;
+    const isGameOpenB = !marketB.isResolved && !marketB.isCancelled && !marketB.isPaused && !isGameStartedB;
     const noOddB = !marketB.odds[0] || marketB.odds[0] == 0;
 
     const disabledPositionA = noOddA || !isGameOpenA;

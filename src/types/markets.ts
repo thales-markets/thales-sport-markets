@@ -122,7 +122,7 @@ export type SportMarket = {
     status: number;
     isResolved: boolean;
     isOpen: boolean;
-    isCanceled: boolean;
+    isCancelled: boolean;
     isPaused: boolean;
     line: number;
     isOneSideMarket: boolean;

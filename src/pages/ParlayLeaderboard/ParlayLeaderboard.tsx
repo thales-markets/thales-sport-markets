@@ -520,7 +520,7 @@ const ParlayLeaderboard: React.FC = () => {
 // };
 
 // export const getParlayItemStatus = (market: SportMarketInfo) => {
-//     if (market.isCanceled) return t('profile.card.canceled');
+//     if (market.isCancelled) return t('profile.card.canceled');
 //     if (market.isResolved) {
 //         if (market.playerName !== null) {
 //             return market.playerPropsScore;

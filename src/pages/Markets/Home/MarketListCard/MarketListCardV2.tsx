@@ -82,8 +82,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameOpen = market.isOpen && !isGameStarted;
-    const isGameResolved = market.isResolved || market.isCanceled;
-    const isGameRegularlyResolved = market.isResolved && !market.isCanceled;
+    const isGameResolved = market.isResolved || market.isCancelled;
+    const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isGameLive = !!market.live;
 
@@ -429,7 +429,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <MatchStatus
                                     isPendingResolution={isPendingResolution}
                                     liveResultInfo={liveResultInfo}
-                                    isCanceled={market.isCanceled}
+                                    isCancelled={market.isCancelled}
                                     isPaused={market.isPaused}
                                     isEnetpulseSport={isEnetpulseSport}
                                     isJsonOddsSport={isJsonOddsSport}

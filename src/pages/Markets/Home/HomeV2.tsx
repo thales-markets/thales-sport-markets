@@ -75,14 +75,6 @@ const FooterSidebarMobile = lazy(
 
 const MarketsGridV2 = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ './MarketsGridV2'));
 
-type AllMarkets = {
-    [StatusFilter.OPEN_MARKETS]: SportMarkets;
-    [StatusFilter.ONGOING_MARKETS]: SportMarkets;
-    [StatusFilter.RESOLVED_MARKETS]: SportMarkets;
-    [StatusFilter.PAUSED_MARKETS]: SportMarkets;
-    [StatusFilter.CANCELLED_MARKETS]: SportMarkets;
-};
-
 const Home: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -222,98 +214,89 @@ const Home: React.FC = () => {
     });
 
     const finalMarkets = useMemo(() => {
-        const allMarkets: AllMarkets =
-            sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
-                ? sportMarketsQueryNew.data
-                : {
-                      [StatusFilter.OPEN_MARKETS]: [],
-                      [StatusFilter.ONGOING_MARKETS]: [],
-                      [StatusFilter.RESOLVED_MARKETS]: [],
-                      [StatusFilter.PAUSED_MARKETS]: [],
-                      [StatusFilter.CANCELLED_MARKETS]: [],
-                  };
+        const allMarkets: SportMarkets =
+            sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data ? sportMarketsQueryNew.data : [];
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
             liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
 
-        const filteredMarkets = (sportFilter === SportFilter.Live
-            ? allLiveMarkets
-            : allMarkets[statusFilter] || allMarkets[StatusFilter.OPEN_MARKETS]
-        ).filter((market: SportMarket) => {
-            if (marketSearch) {
-                if (
-                    !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
-                    !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
-                ) {
-                    return false;
-                }
-            }
-
-            if (tagFilter.length > 0) {
-                if (EUROPA_LEAGUE_TAGS.includes(market.leagueId)) {
+        const filteredMarkets = (sportFilter === SportFilter.Live ? allLiveMarkets : allMarkets).filter(
+            (market: SportMarket) => {
+                if (marketSearch) {
                     if (
-                        !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[0]) &&
-                        !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[1])
+                        !market.homeTeam.toLowerCase().includes(marketSearch.toLowerCase()) &&
+                        !market.awayTeam.toLowerCase().includes(marketSearch.toLowerCase())
                     ) {
                         return false;
                     }
-                } else if (BOXING_TAGS.includes(market.leagueId)) {
-                    if (
-                        !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[0]) &&
-                        !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[1])
-                    ) {
-                        return false;
-                    }
-                } else if (!tagFilter.map((tag) => tag.id).includes(market.leagueId)) {
-                    return false;
                 }
-            }
 
-            if (datePeriodFilter !== 0) {
-                if (market.maturityDate.getTime() > calculateDate(datePeriodFilter)) {
-                    return false;
-                }
-            }
-
-            if (sportFilter !== SportFilter.All) {
-                if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
-                    if (market.sport !== sportFilter) {
-                        return false;
-                    }
-                } else {
-                    if (sportFilter == SportFilter.Favourites) {
+                if (tagFilter.length > 0) {
+                    if (EUROPA_LEAGUE_TAGS.includes(market.leagueId)) {
                         if (
-                            !favouriteLeagues
-                                .filter((league) => league.favourite)
-                                .map((league) => league.id)
-                                .includes(market.leagueId)
-                        )
+                            !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[0]) &&
+                            !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[1])
+                        ) {
                             return false;
+                        }
+                    } else if (BOXING_TAGS.includes(market.leagueId)) {
+                        if (
+                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[0]) &&
+                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[1])
+                        ) {
+                            return false;
+                        }
+                    } else if (!tagFilter.map((tag) => tag.id).includes(market.leagueId)) {
+                        return false;
                     }
                 }
-            }
 
-            marketTypes.add(market.typeId);
-            market.childMarkets?.forEach((childMarket) => {
-                marketTypes.add(childMarket.typeId);
-            });
-
-            if (marketTypeFilter !== undefined) {
-                const marketMarketTypes = [
-                    market.typeId,
-                    ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
-                ];
-
-                if (!marketMarketTypes.some((marketType) => marketTypeFilter === marketType)) {
-                    return false;
+                if (datePeriodFilter !== 0) {
+                    if (market.maturityDate.getTime() > calculateDate(datePeriodFilter)) {
+                        return false;
+                    }
                 }
-            }
-            if (sportFilter == SportFilter.Live) {
-                return isLiveSupportedForLeague(market.leagueId);
-            }
 
-            return true;
-        });
+                if (sportFilter !== SportFilter.All) {
+                    if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
+                        if (market.sport !== sportFilter) {
+                            return false;
+                        }
+                    } else {
+                        if (sportFilter == SportFilter.Favourites) {
+                            if (
+                                !favouriteLeagues
+                                    .filter((league) => league.favourite)
+                                    .map((league) => league.id)
+                                    .includes(market.leagueId)
+                            )
+                                return false;
+                        }
+                    }
+                }
+
+                marketTypes.add(market.typeId);
+                market.childMarkets?.forEach((childMarket) => {
+                    marketTypes.add(childMarket.typeId);
+                });
+
+                if (marketTypeFilter !== undefined) {
+                    const marketMarketTypes = [
+                        market.typeId,
+                        ...(market.childMarkets || []).map((childMarket) => childMarket.typeId),
+                    ];
+
+                    if (!marketMarketTypes.some((marketType) => marketTypeFilter === marketType)) {
+                        return false;
+                    }
+                }
+                if (sportFilter == SportFilter.Live) {
+                    return isLiveSupportedForLeague(market.leagueId);
+                }
+
+                return true;
+            }
+        );
 
         const sortedFilteredMarkets = orderBy(
             filteredMarkets,
@@ -364,9 +347,7 @@ const Home: React.FC = () => {
 
     const openMarketsCountPerTag = useMemo(() => {
         const openSportMarkets: SportMarkets =
-            openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
-                ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
-                : [];
+            openSportMarketsQuery.isSuccess && openSportMarketsQuery.data ? openSportMarketsQuery.data : [];
 
         const groupedMarkets = groupBy(openSportMarkets, (market) => market.leagueId);
 

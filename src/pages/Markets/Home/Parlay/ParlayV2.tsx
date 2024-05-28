@@ -76,16 +76,13 @@ const Parlay: React.FC = () => {
             liveSportMarketsQuery.isSuccess &&
             liveSportMarketsQuery.data
         ) {
-            const sportOpenMarkets = sportMarketsQuery.data[StatusFilter.OPEN_MARKETS].reduce(
-                (acc: SportMarket[], market: SportMarket) => {
-                    acc.push(market);
-                    market.childMarkets.forEach((childMarket: SportMarket) => {
-                        acc.push(childMarket);
-                    });
-                    return acc;
-                },
-                []
-            );
+            const sportOpenMarkets = sportMarketsQuery.data.reduce((acc: SportMarket[], market: SportMarket) => {
+                acc.push(market);
+                market.childMarkets.forEach((childMarket: SportMarket) => {
+                    acc.push(childMarket);
+                });
+                return acc;
+            }, []);
 
             const liveSportOpenMarkets = liveSportMarketsQuery.data.reduce(
                 (acc: SportMarket[], market: SportMarket) => {

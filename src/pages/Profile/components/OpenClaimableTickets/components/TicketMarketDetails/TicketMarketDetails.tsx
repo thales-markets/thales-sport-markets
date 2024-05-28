@@ -46,11 +46,11 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
     const selectedOddsType = useSelector(getOddsType);
     const language = i18n.language;
 
-    const parlayItemQuote = market.isCanceled ? 1 : market.odd;
+    const parlayItemQuote = market.isCancelled ? 1 : market.odd;
 
     const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
     const isGameStarted = market.maturityDate < new Date();
-    const isGameResolved = market.isResolved || market.isCanceled;
+    const isGameResolved = market.isResolved || market.isCancelled;
     const isPendingResolution = isGameStarted && !isGameResolved;
 
     const gameIdString = convertFromBytes32(market.gameId);
@@ -86,7 +86,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
 
     const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
     return (
-        <Wrapper style={{ opacity: market.isCanceled ? 0.5 : 1 }}>
+        <Wrapper style={{ opacity: market.isCancelled ? 0.5 : 1 }}>
             <SPAAnchor href={buildMarketLink(market.gameId, language)}>
                 <MatchInfo>
                     <MatchLogosV2
