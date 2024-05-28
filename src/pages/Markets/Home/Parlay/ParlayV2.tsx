@@ -1,11 +1,11 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
-import { t } from 'i18next';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
@@ -18,7 +18,7 @@ import {
 } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket, TicketMarket } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
@@ -27,6 +27,7 @@ import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
 const Parlay: React.FC = () => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);
     const isMobile = useSelector(getIsMobile);
@@ -141,6 +142,7 @@ const Parlay: React.FC = () => {
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
             {ticketMarkets.length > 0 ? (
                 <>
+                    {!isMobile && <Title>{t('markets.parlay.ticket-slip')}</Title>}
                     <ListContainer>
                         {ticketMarkets.length > 0 &&
                             ticketMarkets.map((market, index) => {
@@ -188,6 +190,16 @@ const Container = styled(FlexDivColumn)<{ isMobile: boolean; isWalletConnected?:
         max-width: 100%;
         padding-bottom: 40px;
     }
+`;
+
+const Title = styled(FlexDivCentered)`
+    color: ${(props) => props.theme.textColor.septenary};
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 14px;
+    text-transform: uppercase;
+    height: 20px;
+    margin-bottom: 10px;
 `;
 
 const ListContainer = styled(FlexDivColumn)``;

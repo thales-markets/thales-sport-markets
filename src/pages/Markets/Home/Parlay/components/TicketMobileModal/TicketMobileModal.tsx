@@ -1,7 +1,8 @@
+import Scroll from 'components/Scroll';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import Scroll from '../../../../../../components/Scroll';
 import Parlay from '../../ParlayV2';
 
 type ParylayMobileModalProps = {
@@ -9,11 +10,11 @@ type ParylayMobileModalProps = {
 };
 
 const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose }) => {
-    console.log('load modal');
+    const { t } = useTranslation();
     return (
         <Container>
             <Header>
-                <Title>Ticket</Title>
+                <Title>{t('markets.parlay.ticket-slip')}</Title>
             </Header>
             <CloseIcon className="icon icon--close" onClick={onClose} />
             <Scroll height="calc(100vh">
@@ -34,21 +35,18 @@ const Container = styled(FlexDivColumnCentered)`
 `;
 
 const Header = styled(FlexDivRow)`
-    min-height: 50px;
+    min-height: 45px;
     justify-content: center;
 `;
 
 const Title = styled(FlexDivCentered)`
-    color: ${(props) => props.theme.textColor.secondary};
+    color: ${(props) => props.theme.textColor.septenary};
     font-weight: 600;
-    font-size: 12px;
-    line-height: 12px;
-    padding: 5px 15px;
+    font-size: 14px;
+    line-height: 14px;
     text-transform: uppercase;
-    border-radius: 20px;
     height: 30px;
-    margin-top: 10px;
-    border: 2px solid ${(props) => props.theme.borderColor.primary};
+    margin-top: 8px;
 `;
 
 const CloseIcon = styled.i`
@@ -58,7 +56,7 @@ const CloseIcon = styled.i`
     right: 0px;
     top: 0px;
     font-size: 18px;
-    padding: 16px;
+    padding: 14px 16px;
 `;
 
 export default ParylayMobileModal;
