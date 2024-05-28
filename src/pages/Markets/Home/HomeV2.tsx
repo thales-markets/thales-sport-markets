@@ -259,7 +259,7 @@ const Home: React.FC = () => {
 
                 if (sportFilter !== SportFilter.All) {
                     if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
-                        if (market.sport !== sportFilter) {
+                        if (((market.sport as unknown) as SportFilter) !== sportFilter) {
                             return false;
                         }
                     } else {

@@ -1,7 +1,7 @@
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import { SportFilter } from 'enums/markets';
 import { MarketTypeInfo } from 'types/marketTypes';
-import { MarketSport } from 'types/markets';
+import { Sport } from '../enums/sports';
 
 export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     // Winner
@@ -880,15 +880,15 @@ export const MARKET_TYPES_BY_SPORT: Record<SportFilter, MarketType[]> = {
     [SportFilter.Basketball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Baseball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Hockey]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilter.MMA]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Fighting]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Tennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.eSports]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Cricket]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Golf]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
 };
 
-export const MarketTypeGroupsBySport: Record<MarketSport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
-    Soccer: {
+export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
+    [Sport.SOCCER]: {
         [MarketTypeGroup.WINNER]: [...WINNER_MARKET_TYPES, ...DOUBLE_CHANCE_MARKET_TYPES, MarketType.HALFTIME_FULLTIME],
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
@@ -897,7 +897,7 @@ export const MarketTypeGroupsBySport: Record<MarketSport, Partial<Record<MarketT
         [MarketTypeGroup.FIRST_HALF]: FIRST_PERIOD_MARKET_TYPES,
         [MarketTypeGroup.SECOND_HALF]: SECOND_PERIOD_MARKET_TYPES,
     },
-    Basketball: {
+    [Sport.BASKETBALL]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
@@ -909,11 +909,11 @@ export const MarketTypeGroupsBySport: Record<MarketSport, Partial<Record<MarketT
         [MarketTypeGroup.PLAYER_DOUBLE_DOUBLE]: [MarketType.PLAYER_PROPS_DOUBLE_DOUBLE],
         [MarketTypeGroup.PLAYER_TRIPLE_DOUBLE]: [MarketType.PLAYER_PROPS_TRIPLE_DOUBLE],
     },
-    MMA: {
+    [Sport.FIGHTING]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
     },
-    Tennis: {
+    [Sport.TENNIS]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
@@ -934,11 +934,11 @@ export const MarketTypeGroupsBySport: Record<MarketSport, Partial<Record<MarketT
         [MarketTypeGroup.FIRST_SET]: [MarketType.FIRST_PERIOD_TOTAL],
         [MarketTypeGroup.SECOND_SET]: [MarketType.SECOND_PERIOD_TOTAL],
     },
-    Football: {
+    [Sport.FOOTBALL]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
     },
-    Baseball: {
+    [Sport.BASEBALL]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
@@ -946,7 +946,7 @@ export const MarketTypeGroupsBySport: Record<MarketSport, Partial<Record<MarketT
         [MarketTypeGroup.PLAYER_HITS_RECORDED]: [MarketType.PLAYER_PROPS_HITS_RECORDED],
         [MarketTypeGroup.PLAYER_STRIKEOUTS]: [MarketType.PLAYER_PROPS_STRIKEOUTS],
     },
-    Hockey: {
+    [Sport.HOCKEY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
@@ -956,16 +956,24 @@ export const MarketTypeGroupsBySport: Record<MarketSport, Partial<Record<MarketT
         [MarketTypeGroup.PLAYER_GOALS]: [MarketType.PLAYER_PROPS_GOALS],
         [MarketTypeGroup.PLAYER_SHOTS]: [MarketType.PLAYER_PROPS_SHOTS],
     },
-    Esports: {
+    [Sport.ESPORTS]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
+        [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
+        [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+    },
+    [Sport.CRICKET]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
     },
-    Cricket: {
+    [Sport.GOLF]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
     },
-    Golf: {
+    [Sport.MOTOSPORT]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
+    },
+    [Sport.EMPTY]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
     },
 };

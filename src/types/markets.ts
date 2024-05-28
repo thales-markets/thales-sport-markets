@@ -1,6 +1,7 @@
 import { Position } from 'enums/markets';
 import { ethers } from 'ethers';
 import { Network } from '../enums/network';
+import { League, Sport } from '../enums/sports';
 import { Coins } from './tokens';
 
 export type TagInfo = {
@@ -90,22 +91,10 @@ export type CombinedPosition = { typeId: number; position: number; line: number 
 
 export type CombinedPositions = CombinedPosition[];
 
-export type MarketSport =
-    | 'Soccer'
-    | 'Basketball'
-    | 'MMA'
-    | 'Tennis'
-    | 'Football'
-    | 'Baseball'
-    | 'Hockey'
-    | 'Esports'
-    | 'Cricket'
-    | 'Golf';
-
 export type SportMarket = {
     gameId: string;
-    sport: MarketSport;
-    leagueId: number;
+    sport: Sport;
+    leagueId: League;
     leagueName: string;
     subLeagueId: number;
     typeId: number;

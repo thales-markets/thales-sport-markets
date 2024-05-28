@@ -165,7 +165,7 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
         if (leagueSport === Sport.CRICKET) {
             cricketKeys.push(tag);
         }
-        if (leagueSport === Sport.FIGHTING_SPORTS) {
+        if (leagueSport === Sport.FIGHTING) {
             motosportKeys.push(tag);
         }
         if (leagueSport === Sport.GOLF) {

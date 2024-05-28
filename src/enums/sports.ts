@@ -4,12 +4,13 @@ export enum Sport {
     BASKETBALL = 'Basketball',
     BASEBALL = 'Baseball',
     HOCKEY = 'Hockey',
-    FIGHTING_SPORTS = 'Fighting sports',
+    FIGHTING = 'Fighting',
     TENNIS = 'Tennis',
     ESPORTS = 'eSports',
     CRICKET = 'Cricket',
     MOTOSPORT = 'Motosport',
     GOLF = 'Golf',
+    EMPTY = '',
 }
 
 export enum League {

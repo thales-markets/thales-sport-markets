@@ -3,7 +3,7 @@ import { LeagueMap } from '../constants/sports';
 
 export const getLeagueSport = (league: League) => {
     const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.sport : '';
+    return leagueInfo ? leagueInfo.sport : Sport.EMPTY;
 };
 
 export const getLeagueScoringType = (league: League) => {

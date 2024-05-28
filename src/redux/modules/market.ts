@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
+import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
+import { Sport } from 'enums/sports';
 import { localStore } from 'thales-utils';
-import { MarketSport, Tags } from 'types/markets';
-import { MarketType, MarketTypeGroup } from '../../enums/marketTypes';
+import { Tags } from 'types/markets';
 import { RootState } from '../rootReducer';
 
 const sliceName = 'market';
 
 type SelectedMarket = {
     gameId: string;
-    sport: MarketSport;
+    sport: Sport;
 };
 
 const getDefaultMarketSearch = (): string => {
