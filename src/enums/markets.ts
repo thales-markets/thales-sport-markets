@@ -41,7 +41,7 @@ export enum Position {
     DRAW = 2,
 }
 
-export enum ParlayErrorCode {
+export enum TicketErrorCode {
     NO_ERROS = 0,
     MAX_MATCHES = 1,
     SAME_TEAM_TWICE = 2,

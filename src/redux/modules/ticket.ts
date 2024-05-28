@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { ParlayErrorCode } from 'enums/markets';
+import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
 import { localStore } from 'thales-utils';
 import { ParlayPayment, TicketPosition } from 'types/markets';
@@ -30,7 +30,7 @@ const getDefaultPayment = (): ParlayPayment => {
 };
 
 const getDefaultError = () => {
-    return { code: ParlayErrorCode.NO_ERROS, data: '' };
+    return { code: TicketErrorCode.NO_ERROS, data: '' };
 };
 
 type TicketSliceState = {
@@ -38,7 +38,7 @@ type TicketSliceState = {
     payment: ParlayPayment;
     maxTicketSize: number;
     isMultiSingle: boolean;
-    error: { code: ParlayErrorCode; data: string };
+    error: { code: TicketErrorCode; data: string };
 };
 
 const initialState: TicketSliceState = {
@@ -61,7 +61,12 @@ const ticketSlice = createSlice({
             if (action.payload.live) {
                 state.ticket = [action.payload];
             } else if (existingPositionIndex === -1) {
-                state.ticket.push(action.payload);
+                if (state.ticket.length < state.maxTicketSize) {
+                    state.ticket.push(action.payload);
+                } else {
+                    state.error.code = TicketErrorCode.MAX_MATCHES;
+                    state.error.data = state.maxTicketSize.toString();
+                }
             } else {
                 ticketCopy[existingPositionIndex] = action.payload;
                 state.ticket = [...ticketCopy];
@@ -148,6 +153,6 @@ export const getTicketPayment = (state: RootState) => getTicketState(state).paym
 export const getMaxTicketSize = (state: RootState) => getTicketState(state).maxTicketSize;
 export const getIsMultiSingle = (state: RootState) => getTicketState(state).isMultiSingle;
 export const getTicketError = (state: RootState) => getTicketState(state).error;
-export const getHasTicketError = createSelector(getTicketError, (error) => error.code != ParlayErrorCode.NO_ERROS);
+export const getHasTicketError = createSelector(getTicketError, (error) => error.code != TicketErrorCode.NO_ERROS);
 
 export default ticketSlice.reducer;

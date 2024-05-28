@@ -1,7 +1,7 @@
 import checkmarkAnimationData from 'assets/lotties/green-checkmark.json';
 import crossmarkAnimationData from 'assets/lotties/red-checkmark.json';
 import Modal from 'components/Modal';
-import { ParlayErrorCode } from 'enums/markets';
+import { TicketErrorCode } from 'enums/markets';
 import useInterval from 'hooks/useInterval';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import React, { createRef, CSSProperties, useRef } from 'react';
@@ -75,7 +75,7 @@ const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
     return (
         <Modal title={t('markets.parlay.validation.title')} onClose={() => onClose()} shouldCloseOnOverlayClick={true}>
             <Container>
-                {ticketError.code === ParlayErrorCode.MAX_MATCHES && (
+                {ticketError.code === TicketErrorCode.MAX_MATCHES && (
                     <>
                         <ErrorMessage color={theme.status.win}>
                             {t('markets.parlay.validation.max-teams', { max: ticketError.data })}
@@ -83,29 +83,29 @@ const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
                         {getMaxMatchesAnimation()}
                     </>
                 )}
-                {ticketError.code === ParlayErrorCode.SAME_TEAM_TWICE && (
+                {ticketError.code === TicketErrorCode.SAME_TEAM_TWICE && (
                     <ErrorMessage>
                         {t('markets.parlay.validation.team-in-parlay', { team: ticketError.data })}
                     </ErrorMessage>
                 )}
-                {ticketError.code === ParlayErrorCode.MAX_DOUBLE_CHANCES && (
+                {ticketError.code === TicketErrorCode.MAX_DOUBLE_CHANCES && (
                     <ErrorMessage>
                         {t('markets.parlay.validation.max-double-chances', { max: ticketError.data })}
                     </ErrorMessage>
                 )}
-                {ticketError.code === ParlayErrorCode.MAX_COMBINED_MARKETS && (
+                {ticketError.code === TicketErrorCode.MAX_COMBINED_MARKETS && (
                     <ErrorMessage>
                         {t('markets.parlay.validation.max-combined-markets', { max: ticketError.data })}
                     </ErrorMessage>
                 )}
-                {ticketError.code === ParlayErrorCode.MAX_NUMBER_OF_MARKETS_WITH_COMBINED_MARKETS && (
+                {ticketError.code === TicketErrorCode.MAX_NUMBER_OF_MARKETS_WITH_COMBINED_MARKETS && (
                     <ErrorMessage>
                         {t('markets.parlay.validation.max-number-of-markets-with-combined-markets', {
                             max: ticketError.data,
                         })}
                     </ErrorMessage>
                 )}
-                {ticketError.code === ParlayErrorCode.SAME_EVENT_PARTICIPANT && (
+                {ticketError.code === TicketErrorCode.SAME_EVENT_PARTICIPANT && (
                     <ErrorMessage>
                         {t('markets.parlay.validation.same-event-participant', {
                             existingParticipant: ticketError.data.split('/')[0],
@@ -113,20 +113,20 @@ const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
                         })}
                     </ErrorMessage>
                 )}
-                {ticketError.code === ParlayErrorCode.UNIQUE_TOURNAMENT_PLAYERS && (
+                {ticketError.code === TicketErrorCode.UNIQUE_TOURNAMENT_PLAYERS && (
                     <ErrorMessage>
                         {t('markets.parlay.validation.unique-players', {
                             existingParticipant: ticketError.data,
                         })}
                     </ErrorMessage>
                 )}
-                {ticketError.code === ParlayErrorCode.SAME_GAME_OTHER_PLAYER_PROPS_TYPE && (
+                {ticketError.code === TicketErrorCode.SAME_GAME_OTHER_PLAYER_PROPS_TYPE && (
                     <ErrorMessage>{t('markets.parlay.validation.same-game-different-player-props')}</ErrorMessage>
                 )}
-                {ticketError.code === ParlayErrorCode.ADDING_PLAYER_PROPS_ALREADY_HAVE_POSITION_OF_SAME_MARKET && (
+                {ticketError.code === TicketErrorCode.ADDING_PLAYER_PROPS_ALREADY_HAVE_POSITION_OF_SAME_MARKET && (
                     <ErrorMessage>{t('markets.parlay.validation.player-props-and-other-positions')}</ErrorMessage>
                 )}
-                {ticketError.code === ParlayErrorCode.COMBINE_REGULAR_WITH_COMBINED_POSITIONS && (
+                {ticketError.code === TicketErrorCode.COMBINE_REGULAR_WITH_COMBINED_POSITIONS && (
                     <ErrorMessage>{t('markets.parlay.validation.already-added-combined-positions')}</ErrorMessage>
                 )}
             </Container>
