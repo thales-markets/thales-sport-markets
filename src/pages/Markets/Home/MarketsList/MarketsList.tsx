@@ -71,7 +71,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                                             networkId == Network.OptimismMainnet
                                                 ? INCENTIVIZED_LEAGUE.opRewards
                                                 : networkId == Network.Arbitrum
-                                                ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                ? INCENTIVIZED_LEAGUE.arbRewards
                                                 : '',
                                     }}
                                 />

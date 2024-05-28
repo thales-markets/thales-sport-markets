@@ -138,7 +138,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                             rewards:
                                                                 networkId !== Network.Arbitrum
                                                                     ? INCENTIVIZED_LEAGUE.opRewards
-                                                                    : INCENTIVIZED_LEAGUE.thalesRewards,
+                                                                    : INCENTIVIZED_LEAGUE.arbRewards,
                                                         }}
                                                     />
                                                 }

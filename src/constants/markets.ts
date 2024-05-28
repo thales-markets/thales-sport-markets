@@ -16,14 +16,12 @@ export const SGPCombinationsFromContractOrderMapping: Record<ContractSGPOrder, B
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.05; // 5%
 
 export const INCENTIVIZED_LEAGUE = {
-    ids: [9011, 9004],
+    ids: [9004],
     startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 4, 19, 23, 59, 59)),
-    link:
-        'https://medium.com/@OvertimeMarkets.xyz/get-ready-for-the-big-leagues-season-overtimes-biggest-reward-program-to-date-2d3949a06338',
-    opRewards: '30,000 OP',
-    arbRewards: '30, 000 ARB',
-    thalesRewards: '30,000 THALES',
+    endDate: new Date(Date.UTC(2024, 5, 24, 23, 59, 59)),
+    link: 'https://www.overtimemarkets.xyz/promotions/nba-playoffs-2024',
+    opRewards: '15,000 OP',
+    arbRewards: '20,000 ARB',
 };
 
 export const INCENTIVIZED_UEFA = {
