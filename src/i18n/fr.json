@@ -626,7 +626,8 @@
             "gas-tooltip": "Frais de gaz actuels requis par la blockchain pour régler la transaction",
             "total-gas": "Frais de gaz (ESTIMÉS)",
             "persist-games": "Conserver la sélection après la soumission",
-            "keep-selection-tooltip": "Par défaut, le générateur Parlay est réinitialisé après une soumission réussie. Cochez cette case si vous souhaitez conserver le contexte actuel après la soumission."
+            "keep-selection-tooltip": "Par défaut, le générateur Parlay est réinitialisé après une soumission réussie. Cochez cette case si vous souhaitez conserver le contexte actuel après la soumission.",
+            "liquidity": "Liquidité"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {

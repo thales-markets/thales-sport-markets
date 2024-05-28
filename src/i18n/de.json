@@ -626,7 +626,8 @@
             "gas-tooltip": "Aktuelle Gasgebühr, die von der Blockchain zur Abwicklung der Transaktion benötigt wird",
             "total-gas": "Gasgebühr (GESCHÄTZT)",
             "persist-games": "Auswahl nach dem Absenden beibehalten",
-            "keep-selection-tooltip": "Standardmäßig wird der Parlay Builder nach erfolgreicher Übermittlung zurückgesetzt. Aktivieren Sie diese Option, wenn Sie den aktuellen Kontext nach der Übermittlung beibehalten möchten."
+            "keep-selection-tooltip": "Standardmäßig wird der Parlay Builder nach erfolgreicher Übermittlung zurückgesetzt. Aktivieren Sie diese Option, wenn Sie den aktuellen Kontext nach der Übermittlung beibehalten möchten.",
+            "liquidity": "Liquidität"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {

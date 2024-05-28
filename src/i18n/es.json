@@ -626,7 +626,8 @@
             "total-gas": "Tarifa de gas (ESTIMADA)",
             "gas-tooltip": "Tarifa de gas actual requerida por blockchain para liquidar la transacción",
             "keep-selection-tooltip": "De forma predeterminada, el generador de parlay se restablece después de un envío exitoso. Marque esta opción si desea mantener el contexto actual después del envío.",
-            "persist-games": "Mantener la selección después de enviar"
+            "persist-games": "Mantener la selección después de enviar",
+            "liquidity": "Liquidez"
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {

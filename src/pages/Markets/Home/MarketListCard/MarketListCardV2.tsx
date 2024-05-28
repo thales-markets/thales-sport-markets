@@ -28,7 +28,7 @@ import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
-import { getOrdinalNumberLabel } from 'utils/ui';
+import { displayGameClock, displayGamePeriod } from 'utils/ui';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -195,10 +195,13 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 <MatchInfoLabel>{t(`markets.market-card.live`)}</MatchInfoLabel>
                             </LiveIndicatorContainer>
                             <MatchInfoLabel>
-                                {market.gameClock}
-                                <Blink>&prime;</Blink>{' '}
-                                {market.gamePeriod ? getOrdinalNumberLabel(Number(market.gamePeriod[0])) : ''}{' '}
-                                {t(`markets.market-card.${getLeaguePeriodType(Number(market.leagueId))}`)}
+                                {displayGameClock(market) ? market.gameClock : ''}
+                                {displayGameClock(market) && getLeaguePeriodType(Number(market.leagueId)) == 'half' ? (
+                                    <Blink>&prime;</Blink>
+                                ) : (
+                                    ''
+                                )}
+                                {displayGamePeriod(market)}
                             </MatchInfoLabel>
                         </>
                     ) : (
