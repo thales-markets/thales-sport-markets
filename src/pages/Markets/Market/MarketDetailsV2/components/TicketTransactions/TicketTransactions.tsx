@@ -26,15 +26,7 @@ const ParlayTransactions: React.FC<{ market: SportMarket }> = ({ market }) => {
         <Container>
             <Title>{t('market.table.ticket-title')}</Title>
             <TicketTransactionsTable
-                ticketTransactions={[
-                    ...gameTickets,
-                    ...gameTickets,
-                    ...gameTickets,
-                    ...gameTickets,
-                    ...gameTickets,
-                    ...gameTickets,
-                    ...gameTickets,
-                ]}
+                ticketTransactions={gameTickets}
                 market={market}
                 tableHeight="calc(100% - 59px)"
                 isLoading={gameTicketsQuery.isLoading}

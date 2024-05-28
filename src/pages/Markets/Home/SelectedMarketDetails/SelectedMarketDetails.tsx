@@ -13,7 +13,6 @@ import { SportMarket } from 'types/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { ThemeInterface } from '../../../../types/ui';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
-import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
 
 type SelectedMarketProps = {
@@ -112,7 +111,6 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
                         })}
                     </>
                 )}
-                {isMobile && <TicketTransactions market={market} />}
             </Wrapper>
         </Scroll>
     );

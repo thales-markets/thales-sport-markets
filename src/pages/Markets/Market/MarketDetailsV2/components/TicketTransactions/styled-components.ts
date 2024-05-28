@@ -4,9 +4,6 @@ export const Container = styled.div`
     max-height: 500px;
     overflow: hidden;
     padding: 20px 0px;
-    @media (max-width: 950px) {
-        padding: 15px 0px;
-    }
 `;
 
 export const Title = styled.span`
@@ -19,7 +16,4 @@ export const Title = styled.span`
     text-align: center;
     color: ${(props) => props.theme.textColor.primary};
     margin-bottom: 10px;
-    @media (max-width: 950px) {
-        font-size: 14px;
-    }
 `;
