@@ -491,7 +491,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 603,
         hidden: false,
         favourite: false,
-        live: true,
+        live: false,
     },
 
     [League.GERMANY_CUP]: {
