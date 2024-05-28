@@ -60,6 +60,7 @@ export const MatchInfoLabel = styled.label`
     width: fit-content;
     margin-right: 2px;
     white-space: nowrap;
+    z-index: 2;
     @media (max-width: 950px) {
         font-size: 11px;
     }
