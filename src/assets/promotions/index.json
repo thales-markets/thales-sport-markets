@@ -90,6 +90,28 @@
         }
     },
     {
+        "title": "Win 1,500 OP in Pro Rata Awards during the French Open 2024",
+        "description": "Compete for 1,500 OP dedicated to the French Open 2024, distributed pro rata, meaning higher volume = higher rewards.",
+        "startDate": 1716601888,
+        "endDate": 1717887088,
+        "displayCountdown": true,
+        "promotionId": "roland-garros-2024",
+        "promotionUrl": "/promotions/roland-garros-2024",
+        "backgroundImageUrl": "/promotions/rg-2024-small.webp",
+        "callToActionButton": "How to earn",
+        "availableOnNetworks": [10],
+        "article": {
+            "coverImageUrl": "/promotions/rg-2024-big.webp",
+            "headerHtml": "<h1><span><span><span>Win 1,500 OP in Pro Rata Awards during the French Open 2024</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "Compete for 1,500 OP dedicated to the French Open 2024, distributed pro rata, meaning higher volume = higher rewards. &nbsp</span></span></span><span><span><span> Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/overtime-french-open-26-may-9-jun-2024' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
+                "ctaButtonLink": "/markets?globalFilter=OpenMarkets&sport=Tennis",
+                "ctaButtonLabel": "Play now"
+            },
+            "contentHtml": "<p> <span> <span> <span>TENNIS FANS, ARE YOU READY? <span><br><br> <span> <span>From May 25th, all eyes will be on Paris.</span> <br> <br> The 2024 French Open could be one of the most competitive Grand Slam tournaments in recent years. But hat's not all – you can win up to 1,500 OP in rewards by predicting the French Open on Overtime! <br><br>The OP rewards are divided to users based on volume generated. It's really simple - the higher your volume, the more OP rewards you win. </span> </span> </span> <span> <span> <span> <span> <span> <br> </p> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.</span> <span> <span> <span>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on various rewards leaderboards. </span> </span> </span> </p>"
+        }        
+    },
+    {
         "title": "100,000 OP, 100,000 ARB and 180,000 THALES for all users of NBA, NFL and EPL throughout the season!",
         "description": "100,000 OP, 100,000 ARB and 180,000 Thales for the most skilled Overtime traders of the ongoing NBA, NFL, and EPL seasons! The higher your odds and the higher the volume, the better the rewards at the end of the season. Test your skills and win big!",
         "startDate": 1702236692,
@@ -152,27 +174,6 @@
                 "forceChangeNetworkOnClick": "arbitrum_mainnet"
             },
             "contentHtml": " <p> <span> <span> <span>If you're into soccer (or football, depending on where you're from), you'll be elated to hear you can win 20,000 ARB in three UEFA competitions on Overtime. That's right - the Champions League, Europa League, and Conference League are incentivized in their knockout stages! The rewards are handed out based on the total volume you generate. The more you play, the higher the rewards! <br><br>The most insane part about all of this is that you can combine these rewards with all the other promotions taking place on Overtime. <br> </span> </span> </p> <p> <span> <span> <span> <strong>Note: Users who have covered 50% or more of potential combinations of their winning tickets will be disqualified.</strong> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
-        }
-    },
-    {
-        "title": "Stake THALES and play Overtime to earn a rewards multiplier!",
-        "description": "Overtime is built on the Thales Protocol. Staking THALES and using other products built on the Thales Protocol gives you two types of rewards: Staking rewards in THALES tokens and Protocol Rewards in stablecoins. These rewards are multiplied using the Gamified Staking mechanism.",
-        "startDate": 1702236692,
-        "endDate": 0,
-        "promotionId": "gamified-staking-rewards",
-        "promotionUrl": "/promotions/gamified-staking-rewards",
-        "backgroundImageUrl": "/promotions/thales-new.webp",
-        "callToActionButton": "Stake now",
-        "availableOnNetworks": [10, 42161],
-        "article": {
-            "coverImageUrl": "/promotions/thales-stakers.webp",
-            "headerHtml": "<h1><span><span><span>Stake THALES and play Overtime to earn a rewards multiplier!</span></span></span></h1>",
-            "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>Overtime is built on the Thales Protocol. Staking THALES and using other products built on the Thales Protocol gives you two types of rewards: Staking rewards in THALES tokens and Protocol Rewards in stablecoins. These rewards are multiplied using the Gamified Staking mechanism.</span> </span> </span> <span> <span> <span> <span> <span></span> </span> </p>",
-                "ctaButtonLink": "https://thalesmarket.io/token",
-                "ctaButtonLabel": "Stake now"
-            },
-            "contentHtml": "<p> <span> <span> <span>Did you know that staking THALES and using Thales Protocol products (including Overtime Markets) gives you a staking rewards multiplier? Here is how Gamified Staking Rewards work: </span> </span> </span> </p> <h2> <span> <span> <span>Trading Volume Points</span> </span> </span> </h2> <p> <span> <span> <span>Trading Volume points are accrued by driving trading volume through <a href='https://thalesmarket.io/markets' target='_blank'> <span> <span> <span> <strong> <u>Thales Markets</u> </strong> </span> </span> </span> </a> and Overtime Markets. For every 1 USD of volume driven across Thales products, you get 1 point. This means that your total points from Trading Volume are equal to the sum of your total USD Trading Volume from Thales Markets and Overtime Markets (multiplied by 1).</span> </span> </span> </p> <h2> <span> <span> <span>AMM LP Points</span> </span> </span> </h2> <p> <span> <span> <span>AMM LP points are accrued by depositing USD into various AMM Liquidity Pools across Thales products (including <a href='https://thalesmarket.io/liquidity-pool' target='_blank'> <span> <span> <span> <strong> <u>Thales AMM Pool, </u> </strong> </span> </span> </span> </a> <a href='https://www.overtimemarkets.xyz/liquidity-pool?lang=en&pool-type=single' target='_blank'> <span> <span> <span> <strong> <u>SportsAMM pool, </u> </strong> </span> </span> </span> </a> <a href='https://www.overtimemarkets.xyz/liquidity-pool?lang=en&pool-type=parlay' target='_blank'> <span> <span> <span> <strong> <u>ParlayAMM pool, </u> </strong> </span> </span> </span> </a> etc.). <br><br>For each 1 USD deposited into a LP pool you get 0.1 points. This means that your total points from AMM LP-ing are equal to the sum of your total USD deposits from Thales Markets and Overtime Markets LP pools, multiplied by 0.1. </span> </span> </p> <h2> <span> <span> <span>Vaults points</span> </span> </span> </h2> <p> <span> <span> <span> Vaults Points are accrued by depositing USD into various Vaults across Thales products (including<a href='https://thalesmarket.io/vaults' target='_blank'><span> <span> <span> <strong> <u>Thales Market Vaults, </u> </strong> </span> </span> </span> </a> and <a href='https://www.overtimemarkets.xyz/vaults' target='_blank'> <span> <span> <span> <strong> <u>Overtime Markets Vaults</u></strong> </span> </span> </span> </a>). Vaults offer a mechanism for automatic trading, i.e. buying positions when certain conditions are met (for example, buying positions with 75% odds of winning and any discount).<br><br> For each 1 USD deposited into a Vault, you get 0.2 points. This means that your total points from Vaults deposits are equal to the sum of your total Vaults USD deposits, multiplied by 0.2. </span> </span> </span> </p> <h2> <span> <span> <span>THALES Staked Multiplier</span> </span> </span> <span> </span> </h2> <span>The amount of THALES you have staked determines the multiplier for your total points. The more THALES you stake, the higher the final multiplier of your total points. THALESStakedMultiplier = 1 + UserThalesStaked /{StakingDivider} THALES Staked Multiplier minimum value is 1 and maximum value is 2. <br><br> Your final points that determine your share of THALES Gamified Staking Bonus rewards is equal to the sum of all your accrued points multiplied by the THALES Staked Multiplier. Total Points = (Trading Volume points + AMM LP points + Vaults Points) x THALES Staked Multiplier </span> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
         }
     },
     {
