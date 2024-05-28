@@ -256,9 +256,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         ) : (
                             ''
                         )}
-                        {leagueTooltipKey && (
-                            <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} top={0} />
-                        )}
+                        {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />}
                     </MatchInfoLabel>
                 </MatchInfo>
                 <TeamsInfoContainer>
