@@ -39,31 +39,33 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ availableMarketTypes })
 
     return (
         <Wrapper>
-            {lastValidMarket && (
-                <>
-                    {isMobile && (
-                        <MatchInfoLabel>
-                            {formatShortDateWithTime(new Date(lastValidMarket.maturityDate))}{' '}
-                        </MatchInfoLabel>
-                    )}
-                    <MatchInfo>
-                        <MatchLogosV2
-                            market={lastValidMarket}
-                            width={isMobile ? '55px' : '45px'}
-                            logoWidth={isMobile ? '30px' : '24px'}
-                            logoHeight={isMobile ? '30px' : '24px'}
-                        />
-                        <MatchLabel>{getMatchLabel(lastValidMarket)} </MatchLabel>
-                    </MatchInfo>
-                    {isMobile && <Header availableMarketTypes={availableMarketTypes} />}
-                </>
-            )}
-            <CloseIcon
-                className="icon icon--close"
-                onClick={() => {
-                    dispatch(setSelectedMarket(undefined));
-                }}
-            />
+            <HeaderContainer>
+                {lastValidMarket && (
+                    <>
+                        {isMobile && (
+                            <MatchInfoLabel>
+                                {formatShortDateWithTime(new Date(lastValidMarket.maturityDate))}{' '}
+                            </MatchInfoLabel>
+                        )}
+                        <MatchInfo>
+                            <MatchLogosV2
+                                market={lastValidMarket}
+                                width={isMobile ? '55px' : '45px'}
+                                logoWidth={isMobile ? '30px' : '24px'}
+                                logoHeight={isMobile ? '30px' : '24px'}
+                            />
+                            <MatchLabel>{getMatchLabel(lastValidMarket)} </MatchLabel>
+                        </MatchInfo>
+                        {isMobile && <Header availableMarketTypes={availableMarketTypes} />}
+                    </>
+                )}
+                <CloseIcon
+                    className="icon icon--close"
+                    onClick={() => {
+                        dispatch(setSelectedMarket(undefined));
+                    }}
+                />
+            </HeaderContainer>
             {lastValidMarket ? (
                 <SelectedMarketDetails market={lastValidMarket} />
             ) : (
@@ -93,6 +95,12 @@ const Wrapper = styled(FlexDivColumn)`
         margin-top: 0;
         border-radius: 0px;
         margin-right: 0px;
+    }
+`;
+
+const HeaderContainer = styled(FlexDivColumn)`
+    @media (max-width: 950px) {
+        margin-bottom: 10px;
     }
 `;
 

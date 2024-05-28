@@ -39,6 +39,9 @@ export const MatchInfoContainer = styled(FlexDivColumn)<{ isGameLive: boolean }>
     cursor: ${(props) => (props.isGameLive ? 'default' : 'pointer')};
     max-width: 250px;
     margin-right: 5px;
+    @media (max-width: 950px) {
+        max-width: 100%;
+    }
 `;
 
 export const MatchInfo = styled(FlexDivStart)<{

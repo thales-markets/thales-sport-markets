@@ -173,7 +173,7 @@ const Home: React.FC = () => {
                         dispatch(setDatePeriodFilter(72));
                         break;
                 }
-            } else {
+            } else if (datePeriodFilter !== 0) {
                 setDateParam(`${datePeriodFilter}hours`);
             }
 

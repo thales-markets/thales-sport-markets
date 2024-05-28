@@ -3,6 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    getDatePeriodFilter,
     getMarketSearch,
     getMarketTypeFilter,
     getSportFilter,
@@ -24,7 +25,7 @@ const FilterTagsMobile: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const marketSearch = useSelector(getMarketSearch);
-    // const dateFilter = useSelector(getDateFilter);
+    const datePeriodFilter = useSelector(getDatePeriodFilter);
     const statusFilter = useSelector(getStatusFilter);
     const sportFilter = useSelector(getSportFilter);
     const tagFilter = useSelector(getTagFilter);
@@ -39,7 +40,7 @@ const FilterTagsMobile: React.FC = () => {
     const hideContainer =
         marketSearch == '' &&
         statusFilter == StatusFilter.OPEN_MARKETS &&
-        dateParam == '' &&
+        datePeriodFilter == 0 &&
         sportFilter == SportFilter.All &&
         marketTypeFilter == undefined;
 
@@ -73,7 +74,7 @@ const FilterTagsMobile: React.FC = () => {
                     </FilterTagLabel>
                 </FilterTagContainer>
             )}
-            {dateParam != '' && (
+            {datePeriodFilter != 0 && (
                 <FilterTagContainer>
                     <FilterTagLabel>
                         {dateTagLabel}
