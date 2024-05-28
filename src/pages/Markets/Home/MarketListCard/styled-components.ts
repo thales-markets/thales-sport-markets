@@ -63,9 +63,6 @@ export const MatchInfoLabel = styled.label`
     @media (max-width: 950px) {
         font-size: 11px;
     }
-    & > span {
-        color: ${(props) => props.theme.textColor.quinary};
-    }
 `;
 
 export const TeamsInfoContainer = styled(FlexDivRow)`
