@@ -5,8 +5,7 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
-import { Sport } from '../../../../../../enums/sports';
-import { getLeagueSport, getLeagueTooltipKey } from '../../../../../../utils/sports';
+import { getLeagueTooltipKey } from '../../../../../../utils/sports';
 import {
     Container,
     LeagueLogo,
@@ -110,20 +109,17 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                     </ParticipantsContainer>
                     {getTeamsNames(false)}
                     <MatchTimeContainer>
-                        <MatchTimeLabel>
-                            {t('market.match-time')}:
+                        <MatchTimeLabel>{t('market.match-time')}:</MatchTimeLabel>
+                        <MatchTime>
+                            {formatShortDateWithTime(market.maturityDate)}
                             {leagueTooltipKey && (
-                                <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />
+                                <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={14} marginLeft={2} />
                             )}
-                        </MatchTimeLabel>
-                        <MatchTime>{formatShortDateWithTime(market.maturityDate)}</MatchTime>
+                        </MatchTime>
                         {isEnetpulseSport && liveResultInfo ? (
                             <>
                                 {liveResultInfo.tournamentName ? liveResultInfo.tournamentName : ''}
                                 {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
-                                {getLeagueSport(Number(market.leagueId)) === Sport.TENNIS && (
-                                    <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={14} marginLeft={2} />
-                                )}
                             </>
                         ) : (
                             ''

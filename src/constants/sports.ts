@@ -481,6 +481,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: true,
+        tooltipKey: 'common.tennis-tooltip',
     },
     [League.TENNIS_MASTERS]: {
         sport: Sport.TENNIS,
@@ -497,8 +498,8 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: false,
+        tooltipKey: 'common.tennis-tooltip',
     },
-
     [League.GERMANY_CUP]: {
         sport: Sport.SOCCER,
         id: League.GERMANY_CUP,
@@ -513,7 +514,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         favourite: false,
         live: false,
     },
-
     [League.BRAZIL_1]: {
         sport: Sport.SOCCER,
         id: League.BRAZIL_1,
@@ -528,7 +528,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         favourite: false,
         live: false,
     },
-
     [League.UEFA_EURO_U21]: {
         sport: Sport.SOCCER,
         id: League.UEFA_EURO_U21,

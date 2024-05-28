@@ -246,21 +246,18 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             }
                         />
                     )}
-                    {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />}
                     <MatchInfoLabel>
                         {(isEnetpulseSport || isJsonOddsSport) &&
                         (liveResultInfo || localStorage.getItem(market.gameId)) &&
                         !isColumnView &&
                         !isMarketSelected &&
                         !isMobile ? (
-                            <>
-                                {localStorage.getItem(market.gameId)}
-                                {getLeagueSport(market.leagueId) === Sport.TENNIS && (
-                                    <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
-                                )}
-                            </>
+                            <>{localStorage.getItem(market.gameId)}</>
                         ) : (
                             ''
+                        )}
+                        {leagueTooltipKey && (
+                            <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} top={0} />
                         )}
                     </MatchInfoLabel>
                 </MatchInfo>
