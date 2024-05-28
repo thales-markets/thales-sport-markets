@@ -649,7 +649,7 @@
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
         "discounted-per": "Discounted as per",
-        "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip": "15,000 OP and 20,000 ARB during the NBA Playoffs! Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS",
         "incentivized-tooltip-tennis": "A total of {{rewards}} will be distributed during the Australian Open. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "A whopping total of {{rewards}} will be distributed for the NFL Superbowl. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
