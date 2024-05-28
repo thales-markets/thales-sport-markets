@@ -475,7 +475,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 602,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
     [League.TENNIS_MASTERS]: {
         sport: Sport.TENNIS,
@@ -491,7 +491,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 603,
         hidden: false,
         favourite: false,
-        live: false,
+        live: true,
     },
 
     [League.GERMANY_CUP]: {
