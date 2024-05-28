@@ -531,7 +531,8 @@
             },
             "odds-live-limitation-message": "Positions en direct autorisées uniquement en tant que célibataires",
             "time": "Temps",
-            "live": "En direct"
+            "live": "En direct",
+            "set": "Ensemble"
         },
         "market-details": {
             "wallet-info": {

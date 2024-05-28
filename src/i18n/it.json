@@ -531,7 +531,8 @@
             },
             "odds-live-limitation-message": "Le posizioni dal vivo sono consentite solo come single",
             "live": "Vivere",
-            "time": "Tempo"
+            "time": "Tempo",
+            "set": "Impostato"
         },
         "market-details": {
             "price": "Price",

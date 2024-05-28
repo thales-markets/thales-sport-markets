@@ -531,7 +531,8 @@
             },
             "odds-live-limitation-message": "Posiciones en vivo solo permitidas como individuales",
             "live": "Vivir",
-            "time": "Tiempo"
+            "time": "Tiempo",
+            "set": "Colocar"
         },
         "market-details": {
             "price": "Precio",

@@ -531,7 +531,8 @@
             },
             "odds-live-limitation-message": "直播位置仅允许单打",
             "live": "居住",
-            "time": "时间"
+            "time": "时间",
+            "set": "放"
         },
         "market-details": {
             "price": "价格",

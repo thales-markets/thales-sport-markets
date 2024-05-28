@@ -531,7 +531,8 @@
             },
             "odds-live-limitation-message": "Live-Positionen nur als Singles erlaubt",
             "live": "Live",
-            "time": "Zeit"
+            "time": "Zeit",
+            "set": "Satz"
         },
         "market-details": {
             "price": "Preis",

@@ -531,7 +531,8 @@
             },
             "odds-live-limitation-message": "Позиции в реальном времени разрешены только в одиночном разряде.",
             "live": "Жить",
-            "time": "Время"
+            "time": "Время",
+            "set": "Набор"
         },
         "market-details": {
             "price": "Price",

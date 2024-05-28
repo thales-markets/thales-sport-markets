@@ -532,7 +532,8 @@
             },
             "odds-live-limitation-message": "ตำแหน่งสดอนุญาตเฉพาะคนโสดเท่านั้น",
             "live": "สด",
-            "time": "เวลา"
+            "time": "เวลา",
+            "set": "ชุด"
         },
         "market-details": {
             "price": "ราคา",
