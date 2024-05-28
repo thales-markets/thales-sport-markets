@@ -2,7 +2,6 @@ import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { FIFA_WC_TAG, FIFA_WC_U20_TAG } from 'constants/tags';
 import { MarketType } from 'enums/marketTypes';
 import { League, Provider, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
@@ -24,10 +23,9 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketLiveResult } from 'types/markets';
 import { convertFromBytes32, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
-import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
+import { getLeaguePeriodType, getLeagueProvider, getLeagueSport, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
 import { MEDIUM_ODDS } from '../../../../constants/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
@@ -199,6 +197,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
         }
     }
 
+    const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
+
     const getMainContainerContent = () => (
         <MainContainer isGameOpen={isGameOpen || isGameLive}>
             <MatchInfoContainer
@@ -246,20 +246,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             }
                         />
                     )}
-
-                    {isFifaWCGame(market.leagueId) && (
-                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
-                    )}
-                    {isIIHFWCGame(market.leagueId) && (
-                        <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
-                    )}
-                    {isUEFAGame(market.leagueId) && (
-                        <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
-                    )}
+                    {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />}
                     <MatchInfoLabel>
                         {(isEnetpulseSport || isJsonOddsSport) &&
-                        !isFifaWCGame(market.leagueId) &&
-                        !isUEFAGame(market.leagueId) &&
                         (liveResultInfo || localStorage.getItem(market.gameId)) &&
                         !isColumnView &&
                         !isMarketSelected &&
@@ -278,8 +267,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                 <TeamsInfoContainer>
                     <TeamLogosContainer isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
                         <ClubLogo
-                            height={market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '17px' : ''}
-                            width={market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '27px' : ''}
                             alt="Home team logo"
                             src={homeLogoSrc}
                             onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
@@ -288,16 +275,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         {!market.isOneSideMarket && (
                             <>
                                 <ClubLogo
-                                    height={
-                                        market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG
-                                            ? '17px'
-                                            : ''
-                                    }
-                                    width={
-                                        market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG
-                                            ? '27px'
-                                            : ''
-                                    }
                                     alt="Away team logo"
                                     src={awayLogoSrc}
                                     onError={getOnImageError(setAwayLogoSrc, market.leagueId)}

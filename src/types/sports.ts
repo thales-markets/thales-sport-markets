@@ -15,4 +15,5 @@ export type LeagueInfo = {
     hidden: boolean;
     favourite: boolean;
     live: boolean;
+    tooltipKey?: string;
 };

@@ -2,7 +2,6 @@ import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg'
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
 import { INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
-import { GOLF_TOURNAMENT_WINNER_TAG, MOTOSPORT_TAGS } from 'constants/tags';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import React, { useState } from 'react';
@@ -16,6 +15,7 @@ import { SportMarkets, TagInfo } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import { LeagueMap } from '../../../../constants/sports';
 import { getIsMarketSelected } from '../../../../redux/modules/market';
+import { isOneSideMarket } from '../../../../utils/markets';
 import MarketListCardV2 from '../MarketListCard';
 
 type MarketsList = {
@@ -208,7 +208,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
 };
 
 const sortWinnerMarkets = (markets: SportMarkets, leagueId: number) => {
-    if (leagueId == GOLF_TOURNAMENT_WINNER_TAG || MOTOSPORT_TAGS.includes(leagueId)) {
+    if (isOneSideMarket(leagueId)) {
         return orderBy(markets, ['maturityDate', 'odds[0]'], ['asc', 'desc']);
     }
     return markets;

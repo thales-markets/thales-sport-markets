@@ -2,7 +2,7 @@ import { SupportedLanguages } from 'enums/languages';
 import { League } from 'enums/sports';
 import { LeagueMap } from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
-import { isInternationalGame } from './markets';
+import { isInternationalLeague } from './sports';
 
 export const getTeamImageSource = (team: string, leagueTag: number) =>
     leagueTag == League.TENNIS_GS || leagueTag == League.TENNIS_MASTERS
@@ -19,7 +19,7 @@ export const getTeamImageSource = (team: string, leagueTag: number) =>
         ? `/logos/PGA/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
         : leagueTag == League.BRAZIL_1
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : isInternationalGame(Number(leagueTag))
+        : isInternationalLeague(Number(leagueTag))
         ? `/logos/Countries/${team.trim().replaceAll(' ', '-').toLowerCase()}.svg`
         : leagueTag == League.ENGLAND_CUP
         ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`

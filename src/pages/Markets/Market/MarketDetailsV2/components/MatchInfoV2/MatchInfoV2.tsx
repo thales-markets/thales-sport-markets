@@ -5,9 +5,8 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketLiveResult } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { Sport } from '../../../../../../enums/sports';
-import { getLeagueSport } from '../../../../../../utils/sports';
+import { getLeagueSport, getLeagueTooltipKey } from '../../../../../../utils/sports';
 import {
     Container,
     LeagueLogo,
@@ -61,6 +60,8 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
         </TeamNamesWrapper>
     );
 
+    const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
+
     return (
         <>
             <Wrapper>
@@ -111,14 +112,8 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                     <MatchTimeContainer>
                         <MatchTimeLabel>
                             {t('market.match-time')}:
-                            {isFifaWCGame(market.leagueId) && (
-                                <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={14} marginLeft={2} />
-                            )}
-                            {isIIHFWCGame(market.leagueId) && (
-                                <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
-                            )}
-                            {isUEFAGame(Number(market.leagueId)) && (
-                                <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
+                            {leagueTooltipKey && (
+                                <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />
                             )}
                         </MatchTimeLabel>
                         <MatchTime>{formatShortDateWithTime(market.maturityDate)}</MatchTime>
