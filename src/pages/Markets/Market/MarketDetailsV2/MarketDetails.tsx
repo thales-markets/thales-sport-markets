@@ -258,7 +258,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 networkId == Network.OptimismMainnet
                                                     ? INCENTIVIZED_LEAGUE.opRewards
                                                     : networkId == Network.Arbitrum
-                                                    ? INCENTIVIZED_LEAGUE.thalesRewards
+                                                    ? INCENTIVIZED_LEAGUE.arbRewards
                                                     : '',
                                         }}
                                     />
