@@ -25,6 +25,7 @@ import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQue
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
+import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
@@ -78,7 +79,6 @@ import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
-import useMarketPositionLiquidityQuery from '../../../../../../queries/markets/useMarketPositionLiquidityQuery';
 import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import SuggestedAmount from '../SuggestedAmount';
 import Voucher from '../Voucher';
@@ -293,16 +293,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         return quote < maxSupportedOdds ? maxSupportedOdds : quote;
     }, [markets, sportsAmmData?.maxSupportedOdds]);
 
-    const marketPositionLiquidityQuery = useMarketPositionLiquidityQuery(markets[0], networkId, {
+    const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
         enabled: isAppReady,
     });
 
-    const marketPositionLiquidity = useMemo(
+    const ticketLiquidity: number | undefined = useMemo(
         () =>
-            marketPositionLiquidityQuery.isSuccess && marketPositionLiquidityQuery.data
-                ? marketPositionLiquidityQuery.data
-                : 0,
-        [marketPositionLiquidityQuery.isSuccess, marketPositionLiquidityQuery.data]
+            ticketLiquidityQuery.isSuccess && ticketLiquidityQuery.data !== undefined
+                ? ticketLiquidityQuery.data
+                : undefined,
+        [ticketLiquidityQuery.isSuccess, ticketLiquidityQuery.data]
     );
 
     // Clear Ticket when network is changed
@@ -831,6 +831,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
                     }
                 }
+            } else {
+                if (Number(buyInAmount) === 0) {
+                    setFinalQuotes([]);
+                }
             }
             setIsFetching(false);
         };
@@ -1071,14 +1075,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     />
                 </AmountToBuyContainer>
             </InputContainer>
-            {markets.length === 1 && (
-                <InfoContainer>
-                    <InfoWrapper>
-                        <InfoLabel>{'Liquidity'}:</InfoLabel>
-                        <InfoValue>{formatCurrencyWithSign(USD_SIGN, marketPositionLiquidity)}</InfoValue>
-                    </InfoWrapper>
-                </InfoContainer>
-            )}
+
+            <InfoContainer>
+                <InfoWrapper>
+                    <InfoLabel>{t('markets.parlay.liquidity')}:</InfoLabel>
+                    <InfoValue>
+                        {ticketLiquidity ? formatCurrencyWithSign(USD_SIGN, ticketLiquidity, 0, true) : '-'}
+                    </InfoValue>
+                </InfoWrapper>
+            </InfoContainer>
+
             {isAA && (
                 <GasSummary>
                     <SummaryLabel>

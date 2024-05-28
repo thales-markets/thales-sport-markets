@@ -69,6 +69,8 @@ const { chains, provider } = configureChains(
                     http:
                         chain.id === Network.OptimismSepolia
                             ? `https://optimism-sepolia.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`
+                            : chain.id === Network.OptimismMainnet
+                            ? `https://optimism-mainnet.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`
                             : process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' && chain.id === Network.Base
                             ? // For Base use Ankr when Infura is primary as Infura doesn't support it
                               `https://rpc.ankr.com/base/${process.env.REACT_APP_ANKR_PROJECT_ID}`

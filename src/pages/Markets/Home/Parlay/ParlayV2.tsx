@@ -201,10 +201,10 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     // height: 45px;
     align-items: center;
     text-align: center;
-    padding: ${(props) => (props.outOfLiquidity ? '5px' : '8px 10px')};
-    background: ${(props) => (props.outOfLiquidity ? 'rgba(26, 28, 43, 0.5);' : props.theme.background.secondary)};
+    padding: ${(props) => (props.outOfLiquidity ? '6px 8px' : '8px 10px')};
+    background: ${(props) =>
+        props.outOfLiquidity ? props.theme.background.quinary : props.theme.background.secondary};
     ${(props) => (props.outOfLiquidity ? `border: 2px solid ${props.theme.status.loss};` : '')}
-    ${(props) => (props.outOfLiquidity ? 'border-radius: 2px;' : '')};
     margin-bottom: 11px;
     :first-child {
         border-radius: 5px 5px 0 0;

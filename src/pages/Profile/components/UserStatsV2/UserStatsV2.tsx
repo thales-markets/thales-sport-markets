@@ -26,19 +26,19 @@ const UserStats: React.FC = () => {
             </Header>
             <Section>
                 <Label>{t('profile.stats.total-volume')}</Label>
-                <Value>{!userStats ? 0 : formatCurrencyWithSign(USD_SIGN, userStats.volume)}</Value>
+                <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.volume)}</Value>
             </Section>
             <Section>
                 <Label>{t('profile.stats.trades')}</Label>
-                <Value>{!userStats ? 0 : userStats.trades}</Value>
+                <Value>{!userStats ? '-' : userStats.trades}</Value>
             </Section>
             <Section>
                 <Label>{t('profile.stats.highest-win')}</Label>
-                <Value>{!userStats ? 0 : formatCurrencyWithSign(USD_SIGN, userStats.highestWin)}</Value>
+                <Value>{!userStats ? '-' : formatCurrencyWithSign(USD_SIGN, userStats.highestWin)}</Value>
             </Section>
             <Section>
                 <Label>{t('profile.stats.lifetime-wins')}</Label>
-                <Value>{!userStats ? 0 : userStats.lifetimeWins}</Value>
+                <Value>{!userStats ? '-' : userStats.lifetimeWins}</Value>
             </Section>
         </Wrapper>
     );

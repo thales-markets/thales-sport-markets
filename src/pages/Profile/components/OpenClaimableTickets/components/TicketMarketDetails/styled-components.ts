@@ -103,6 +103,10 @@ export const MarketStatus = styled(FlexDivRow)`
     justify-content: end;
 `;
 
+export const MatchScoreContainer = styled(FlexDivRow)`
+    flex: initial !important;
+`;
+
 export const MatchPeriodContainer = styled(FlexDivColumnCentered)`
     align-items: center;
     margin-right: 5px;
@@ -131,7 +135,9 @@ export const MatchPeriodLabel = styled.span`
     }
 `;
 
-export const ScoreContainer = styled(FlexDivColumn)``;
+export const ScoreContainer = styled(FlexDivColumn)`
+    padding-left: 8px;
+`;
 
 export const TeamScoreLabel = styled.span`
     font-weight: 400;

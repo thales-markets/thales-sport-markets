@@ -74,6 +74,7 @@ export const InfoContainer = styled.div`
     justify-content: space-between;
     margin-bottom: 5px;
     align-items: center;
+    line-height: 10px;
 `;
 
 export const InfoWrapper = styled.div``;

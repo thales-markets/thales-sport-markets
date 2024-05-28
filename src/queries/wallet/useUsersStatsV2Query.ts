@@ -1,10 +1,12 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { bigNumberFormatter, coinFormatter } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-utils';
 import { UserStats } from 'types/markets';
 import networkConnector from 'utils/networkConnector';
-import { getCollateralByAddress } from '../../utils/collaterals';
+import { CRYPTO_CURRENCY_MAP } from '../../constants/currency';
+import { getCollateralByAddress, isLpSupported, isStableCurrency } from '../../utils/collaterals';
+import { Rates } from '../rates/useExchangeRatesQuery';
 
 const useUsersStatsV2Query = (
     walletAddress: string,
@@ -14,30 +16,41 @@ const useUsersStatsV2Query = (
     return useQuery<UserStats | undefined>(
         QUERY_KEYS.Wallet.StatsV2(networkId, walletAddress),
         async () => {
-            const { sportsAMMDataContract } = networkConnector;
-            if (sportsAMMDataContract) {
-                const [activeTickets, resolvedTickets] = await Promise.all([
+            const { sportsAMMDataContract, priceFeedContract } = networkConnector;
+            if (sportsAMMDataContract && priceFeedContract) {
+                const [activeTickets, resolvedTickets, currencies, rates] = await Promise.all([
                     sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress),
                     sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress),
+                    priceFeedContract.getCurrencies(),
+                    priceFeedContract.getRates(),
                 ]);
+
+                const exchangeRates: Rates = {};
+                currencies.forEach((currency: string, idx: number) => {
+                    const currencyName = parseBytes32String(currency);
+                    exchangeRates[currencyName] = bigNumberFormatter(rates[idx]);
+                    if (currencyName === CRYPTO_CURRENCY_MAP.ETH) {
+                        exchangeRates[`W${currencyName}`] = bigNumberFormatter(rates[idx]);
+                    }
+                });
 
                 const tickets = [...activeTickets, ...resolvedTickets];
 
                 let volume = 0;
                 let highestWin = 0;
                 let lifetimeWins = 0;
-                // TODO: convert from ETH to USD
                 for (let index = 0; index < tickets.length; index++) {
                     const ticket = tickets[index];
                     const collateral = getCollateralByAddress(ticket.collateral, networkId);
+                    const convertAmount = isLpSupported(collateral) && !isStableCurrency(collateral);
 
                     const buyInAmount = coinFormatter(ticket.buyInAmount, networkId, collateral);
                     const totalQuote = bigNumberFormatter(ticket.totalQuote);
                     const payout = buyInAmount / totalQuote;
 
-                    volume += buyInAmount;
+                    volume += convertAmount ? buyInAmount * exchangeRates[collateral] : buyInAmount;
                     if (ticket.isUserTheWinner && payout > highestWin) {
-                        highestWin = payout;
+                        highestWin = convertAmount ? payout * exchangeRates[collateral] : payout;
                     }
                     if (ticket.isUserTheWinner) {
                         lifetimeWins += 1;

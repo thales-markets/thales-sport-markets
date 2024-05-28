@@ -12,7 +12,7 @@ import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivRow } from 'styles/common';
+import { FlexDivCentered } from 'styles/common';
 import { SportMarketLiveResult, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { convertFromBytes32 } from 'utils/formatters/string';
@@ -28,6 +28,7 @@ import {
     MatchLabel,
     MatchPeriodContainer,
     MatchPeriodLabel,
+    MatchScoreContainer,
     Odd,
     PositionInfo,
     PositionText,
@@ -110,7 +111,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
                         {t('markets.market-card.pending')}
                     </TicketMarketStatus>
                 ) : (
-                    <FlexDivRow>
+                    <MatchScoreContainer>
                         {liveResultInfo?.status != GAME_STATUS.FINAL &&
                             liveResultInfo?.status != GAME_STATUS.FULL_TIME &&
                             !isEnetpulseSport && (
@@ -152,7 +153,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
                                       </ScoreContainer>
                                   );
                               })}
-                    </FlexDivRow>
+                    </MatchScoreContainer>
                 )
             ) : (
                 <></>

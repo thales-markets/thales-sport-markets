@@ -35,7 +35,8 @@ const useSportsMarketsV2Query = (
                 switch (statusFilter) {
                     case StatusFilter.OPEN_MARKETS:
                         response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/markets/?status=open&ungroup=true`
+                            `${generalConfig.API_URL}/overtime-v2/markets/?status=open&ungroup=true`,
+                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                         );
                         markets = response.data;
                         break;
