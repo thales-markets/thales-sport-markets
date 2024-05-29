@@ -2,7 +2,7 @@ import Tooltip from 'components/Tooltip';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatShortDateWithTime } from 'thales-utils';
-import { SportMarket, SportMarketLiveResult } from 'types/markets';
+import { SportMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getErrorImage, getLeagueLogoClass, getOnImageError, getTeamImageSource } from 'utils/images';
 import { getLeagueTooltipKey } from '../../../../../../utils/sports';
@@ -24,11 +24,9 @@ import {
 
 type MatchInfoPropsType = {
     market: SportMarket;
-    liveResultInfo: SportMarketLiveResult | undefined;
-    isEnetpulseSport: boolean;
 };
 
-const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEnetpulseSport }) => {
+const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
     const { t } = useTranslation();
 
     const [homeLogoSrc, setHomeLogoSrc] = useState(
@@ -116,14 +114,11 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market, liveResultInfo, isEne
                                 <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={14} marginLeft={2} />
                             )}
                         </MatchTime>
-                        {isEnetpulseSport && liveResultInfo ? (
-                            <>
-                                {liveResultInfo.tournamentName ? liveResultInfo.tournamentName : ''}
-                                {liveResultInfo.tournamentRound ? ' | ' + liveResultInfo.tournamentRound : ''}
-                            </>
-                        ) : (
-                            ''
-                        )}
+                        <>
+                            {`${market.tournamentName ? `${market.tournamentName}` : ''}${
+                                market.tournamentRound ? ` | ${market.tournamentRound}` : ''
+                            }`}
+                        </>
                     </MatchTimeContainer>
                 </Container>
                 {getTeamsNames(true)}

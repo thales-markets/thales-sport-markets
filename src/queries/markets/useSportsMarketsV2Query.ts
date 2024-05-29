@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { generalConfig } from 'config/general';
+import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { SportMarkets } from 'types/markets';
+import { SportMarkets, Team } from 'types/markets';
 
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
@@ -15,55 +15,30 @@ const useSportsMarketsV2Query = (
     return useQuery<SportMarkets>(
         QUERY_KEYS.SportMarketsV2(statusFilter, networkId),
         async () => {
-            let markets = [];
-            let response;
             try {
-                // const today = new Date();
-                // // thales-data takes timestamp argument in seconds
-                // const minMaturityDate = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
-                // const todaysDate = Math.round(today.getTime() / 1000);
+                const status = statusFilter.toLowerCase().split('market')[0];
 
-                switch (statusFilter) {
-                    case StatusFilter.OPEN_MARKETS:
-                        response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=open&ungroup=true`,
-                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
-                        );
-                        markets = response.data;
-                        break;
-                    case StatusFilter.RESOLVED_MARKETS:
-                        response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=resolved&ungroup=true`,
-                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
-                        );
-                        markets = response.data;
-                        break;
-                    case StatusFilter.CANCELLED_MARKETS:
-                        response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=cancelled&ungroup=true`,
-                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
-                        );
-                        markets = response.data;
-                        break;
-                    case StatusFilter.PAUSED_MARKETS:
-                        response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=paused&ungroup=true`,
-                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
-                        );
-                        markets = response.data;
-                        break;
-                    case StatusFilter.ONGOING_MARKETS:
-                        response = await axios.get(
-                            `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=ongoing&ungroup=true`,
-                            { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
-                        );
-                        markets = response.data;
-                        break;
-                    default:
-                        break;
-                }
+                const [marketsResponse, gamesInfoResponse] = await Promise.all([
+                    axios.get(
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true`,
+                        noCacheConfig
+                    ),
+                    axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
+                ]);
+                const markets = marketsResponse.data;
+                const gamesInfo = gamesInfoResponse.data;
 
-                markets = markets.map((market: any) => {
+                return markets.map((market: any) => {
+                    const gameInfo = gamesInfo[market.gameId];
+
+                    const homeTeam = !!gameInfo && gameInfo.teams.find((team: Team) => team.isHome);
+                    const homeScore = homeTeam ? homeTeam.score : 0;
+                    const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
+
+                    const awayTeam = !!gameInfo && gameInfo.teams.find((team: Team) => !team.isHome);
+                    const awayScore = awayTeam ? awayTeam.score : 0;
+                    const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
+
                     return {
                         ...market,
                         maturityDate: new Date(market.maturityDate),
@@ -81,15 +56,22 @@ const useSportsMarketsV2Query = (
                             ['typeId'],
                             ['asc']
                         ),
+                        tournamentName: gameInfo ? gameInfo.tournamentName : undefined,
+                        tournamentRound: gameInfo ? gameInfo.tournamentRound : undefined,
+                        homeScore,
+                        awayScore,
+                        homeScoreByPeriod,
+                        awayScoreByPeriod,
+                        isGameFinished: gameInfo ? gameInfo.isGameFinished : undefined,
                     };
                 });
             } catch (e) {
                 console.log(e);
             }
-            return markets;
+            return [];
         },
         {
-            refetchInterval: 60 * 1000,
+            refetchInterval: 5 * 1000,
             ...options,
         }
     );

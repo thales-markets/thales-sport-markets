@@ -14,8 +14,6 @@ import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
 import Parlay from 'pages/Markets/Home/Parlay';
 import TicketMobileModal from 'pages/Markets/Home/Parlay/components/TicketMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
-import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
-import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -26,9 +24,8 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { NetworkId } from 'thales-utils';
-import { SportMarket, SportMarketLiveResult, TagInfo } from 'types/markets';
+import { SportMarket, SportMarketScore, TagInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
-import { convertFromBytes32 } from 'utils/formatters/string';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
@@ -36,6 +33,7 @@ import useQueryParam from 'utils/useQueryParams';
 import Button from '../../../../components/Button';
 import { MarketTypeGroupsBySport } from '../../../../constants/marketTypes';
 import { LeagueMap } from '../../../../constants/sports';
+import useSportMarketLiveScoreQuery from '../../../../queries/markets/useSportMarketLiveScoreQuery';
 import { getMarketTypeGroupFilter, setMarketTypeGroupFilter } from '../../../../redux/modules/market';
 import Header from '../../Home/Header';
 import MatchInfoV2 from './components/MatchInfoV2';
@@ -116,40 +114,20 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isGamePaused = market.isPaused && !isGameResolved;
     const showStatus = market.isResolved || market.isCancelled || isGameStarted || market.isPaused;
-    const gameIdString = convertFromBytes32(market.gameId);
-    const isEnetpulseSport = getLeagueProvider(Number(market.leagueId)) === Provider.ENETPULSE;
-    const isJsonOddsSport = getLeagueProvider(Number(market.leagueId)) === Provider.JSONODDS;
-    const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
-    const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
+    const isRundownSport = getLeagueProvider(Number(market.leagueId)) === Provider.RUNDOWN;
+    const [liveScore, setLiveScore] = useState<SportMarketScore | undefined>(undefined);
 
-    const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
-        enabled: isAppReady && !isEnetpulseSport && !isJsonOddsSport,
-    });
-
-    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.leagueId, {
-        enabled: isAppReady && isEnetpulseSport,
+    const useLiveScoreQuery = useSportMarketLiveScoreQuery(market.gameId, {
+        enabled: isAppReady && isRundownSport,
     });
 
     useEffect(() => {
-        if (isEnetpulseSport) {
-            if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
-                setLiveResultInfo(useEnetpulseLiveResultQuery.data);
-            }
-        } else {
-            if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
-                setLiveResultInfo(useLiveResultQuery.data);
-            }
+        if (useLiveScoreQuery.isSuccess && useLiveScoreQuery.data) {
+            setLiveScore(useLiveScoreQuery.data);
         }
-    }, [
-        useLiveResultQuery,
-        useLiveResultQuery.data,
-        useEnetpulseLiveResultQuery,
-        useEnetpulseLiveResultQuery.data,
-        isEnetpulseSport,
-    ]);
+    }, [useLiveScoreQuery, useLiveScoreQuery.data]);
 
-    const hideResultInfoPerPeriod = hideResultInfoPerPeriodForSports(Number(liveResultInfo?.sportId));
-    const leagueSport = getLeagueSport(Number(liveResultInfo?.sportId));
+    const leagueSport = getLeagueSport(market.leagueId);
 
     return (
         <RowContainer>
@@ -272,43 +250,41 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             ></Tooltip>
                         )}
                 </HeaderWrapper>
-                <MatchInfoV2 market={market} liveResultInfo={liveResultInfo} isEnetpulseSport={isEnetpulseSport} />
+                <MatchInfoV2 market={market} />
                 {showStatus && (
                     <Status backgroundColor={isGameCancelled ? theme.status.canceled : theme.background.secondary}>
-                        {isPendingResolution ? (
-                            !isEnetpulseSport && !isJsonOddsSport ? (
+                        {isPendingResolution && !market.isGameFinished ? (
+                            isRundownSport && liveScore ? (
                                 <ResultContainer>
                                     <ResultLabel>
-                                        {liveResultInfo?.homeScore + ' - ' + liveResultInfo?.awayScore}{' '}
-                                        {leagueSport === Sport.SOCCER && liveResultInfo?.period == 2 && (
+                                        {liveScore.homeScore + ' - ' + liveScore.awayScore}{' '}
+                                        {leagueSport === Sport.SOCCER && liveScore.period == 2 && (
                                             <InfoLabel className="football">
                                                 {' (' +
-                                                    liveResultInfo?.scoreHomeByPeriod[0] +
+                                                    liveScore.homeScoreByPeriod[0] +
                                                     ' - ' +
-                                                    liveResultInfo?.scoreAwayByPeriod[0] +
+                                                    liveScore.awayScoreByPeriod[0] +
                                                     ')'}
                                             </InfoLabel>
                                         )}
                                     </ResultLabel>
-                                    {liveResultInfo?.status != GAME_STATUS.FINAL &&
-                                        liveResultInfo?.status != GAME_STATUS.FULL_TIME && (
+                                    {liveScore.status != GAME_STATUS.FINAL &&
+                                        liveScore.status != GAME_STATUS.FULL_TIME && (
                                             <PeriodsContainer>
-                                                {liveResultInfo?.status == GAME_STATUS.HALF_TIME && (
+                                                {liveScore.status == GAME_STATUS.HALF_TIME && (
                                                     <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
                                                 )}
-                                                {liveResultInfo?.status != GAME_STATUS.HALF_TIME && (
+                                                {liveScore.status != GAME_STATUS.HALF_TIME && (
                                                     <>
                                                         <InfoLabel>
-                                                            {` ${getOrdinalNumberLabel(
-                                                                Number(liveResultInfo?.period)
-                                                            )} ${t(
+                                                            {` ${getOrdinalNumberLabel(Number(liveScore.period))} ${t(
                                                                 `markets.market-card.${getLeaguePeriodType(
-                                                                    Number(liveResultInfo?.sportId)
+                                                                    market.leagueId
                                                                 )}`
                                                             )}`}
                                                         </InfoLabel>
                                                         <InfoLabel className="red">
-                                                            {liveResultInfo?.displayClock.replaceAll("'", '')}
+                                                            {liveScore.displayClock?.replaceAll("'", '')}
                                                             <InfoLabel className="blink">&prime;</InfoLabel>
                                                         </InfoLabel>
                                                     </>
@@ -317,12 +293,12 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         )}
                                     {leagueSport !== Sport.SOCCER && (
                                         <FlexDivRow>
-                                            {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                            {liveScore.homeScoreByPeriod.map((_, index) => {
                                                 return (
                                                     <PeriodContainer key={index}>
                                                         <InfoLabel className="gray">{index + 1}</InfoLabel>
-                                                        <InfoLabel>{homePeriodResult}</InfoLabel>
-                                                        <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
+                                                        <InfoLabel>{liveScore.homeScoreByPeriod[index]}</InfoLabel>
+                                                        <InfoLabel>{liveScore.awayScoreByPeriod[index]}</InfoLabel>
                                                     </PeriodContainer>
                                                 );
                                             })}
@@ -343,7 +319,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         ? market.homeScore == 1
                                             ? t('markets.market-card.race-winner')
                                             : t('markets.market-card.no-win')
-                                        : Number(liveResultInfo?.sportId) != League.UFC
+                                        : market.leagueId != League.UFC
                                         ? `${market.homeScore} - ${market.awayScore}`
                                         : ''}
                                     {leagueSport === Sport.SOCCER &&
@@ -357,7 +333,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                     ')'}
                                             </InfoLabel>
                                         )}
-                                    {Number(liveResultInfo?.sportId) == League.UFC ? (
+                                    {market.leagueId == League.UFC ? (
                                         <>
                                             {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
                                             <InfoLabel className="ufc">
@@ -374,22 +350,24 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         ''
                                     )}
                                 </ResultLabel>
-                                {hideResultInfoPerPeriod && (
+                                {leagueSport !== Sport.SOCCER && leagueSport !== Sport.ESPORTS && (
                                     <PeriodsContainer directionRow={true}>
-                                        {liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                                        {market.homeScoreByPeriod.map((homePeriodResult, index) => {
                                             return (
                                                 <PeriodContainer key={index}>
                                                     <InfoLabel className="gray">{index + 1}</InfoLabel>
                                                     <InfoLabel>{homePeriodResult}</InfoLabel>
-                                                    <InfoLabel>{liveResultInfo.scoreAwayByPeriod[index]}</InfoLabel>
+                                                    <InfoLabel>{market.awayScoreByPeriod[index]}</InfoLabel>
                                                 </PeriodContainer>
                                             );
                                         })}
-                                        <PeriodContainer>
-                                            <InfoLabel className="gray">T</InfoLabel>
-                                            <InfoLabel>{liveResultInfo?.homeScore}</InfoLabel>
-                                            <InfoLabel>{liveResultInfo?.awayScore}</InfoLabel>
-                                        </PeriodContainer>
+                                        {leagueSport !== Sport.TENNIS && (
+                                            <PeriodContainer>
+                                                <InfoLabel className="gray">T</InfoLabel>
+                                                <InfoLabel>{market.homeScore}</InfoLabel>
+                                                <InfoLabel>{market.awayScore}</InfoLabel>
+                                            </PeriodContainer>
+                                        )}
                                     </PeriodsContainer>
                                 )}
                             </ResultContainer>
@@ -483,19 +461,6 @@ const PositionsContainer = styled(FlexDivColumn)`
     flex: initial;
 `;
 
-const hideResultInfoPerPeriodForSports = (sportId: number) => {
-    const leagueSport = getLeagueSport(Number(sportId));
-
-    return (
-        leagueSport !== Sport.SOCCER &&
-        leagueSport !== Sport.ESPORTS &&
-        leagueSport !== Sport.FIGHTING &&
-        leagueSport !== Sport.CRICKET &&
-        leagueSport !== Sport.MOTOSPORT &&
-        sportId != League.EUROLEAGUE
-    );
-};
-
 const getNetworkLogo = (networkId: number) => {
     switch (networkId) {
         case Network.OptimismMainnet:
@@ -572,7 +537,7 @@ const Status = styled(FlexDivCentered)<{ backgroundColor?: string }>`
     border-radius: 8px;
     background-color: ${(props) => props.backgroundColor || props.theme.background.secondary};
     padding: 10px 50px;
-    margin-bottom: 7px;
+    margin-bottom: 15px;
     font-weight: 600;
     font-size: 21px;
     line-height: 110%;

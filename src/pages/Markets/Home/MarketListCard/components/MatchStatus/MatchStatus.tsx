@@ -1,10 +1,10 @@
 import { GAME_STATUS } from 'constants/ui';
-import { Sport } from 'enums/sports';
+import { League, Sport } from 'enums/sports';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { SportMarketLiveResult } from 'types/markets';
+import { SportMarketScore } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
@@ -13,37 +13,36 @@ type MatchStatusProps = {
     isPendingResolution: boolean;
     isCancelled: boolean;
     isPaused: boolean;
-    liveResultInfo: SportMarketLiveResult | undefined;
-    isEnetpulseSport: boolean;
-    isJsonOddsSport: boolean;
+    liveScore: SportMarketScore | undefined;
+    isRundownSport: boolean;
+    leagueId: League;
 };
 
 const MatchStatus: React.FC<MatchStatusProps> = ({
     isPendingResolution,
     isCancelled,
     isPaused,
-    liveResultInfo,
-    isEnetpulseSport,
-    isJsonOddsSport,
+    liveScore,
+    isRundownSport,
+    leagueId,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
-    const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
+    const displayClockTime = liveScore?.displayClock?.replaceAll("'", '');
 
     return (
         <Container bottomAlign={isPendingResolution}>
             {isPendingResolution ? (
-                isEnetpulseSport || isJsonOddsSport ? (
+                !isRundownSport || !liveScore ? (
                     <Status color={theme.status.started}>{t('markets.market-card.pending')}</Status>
                 ) : (
                     <FlexDivRow>
-                        {liveResultInfo?.status != GAME_STATUS.FINAL &&
-                            liveResultInfo?.status != GAME_STATUS.FULL_TIME &&
-                            !isEnetpulseSport &&
-                            !isJsonOddsSport && (
+                        {liveScore.status != GAME_STATUS.FINAL &&
+                            liveScore.status != GAME_STATUS.FULL_TIME &&
+                            isRundownSport && (
                                 <MatchPeriodContainer>
-                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveResultInfo?.period))} ${t(
-                                        `markets.market-card.${getLeaguePeriodType(Number(liveResultInfo?.sportId))}`
+                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))} ${t(
+                                        `markets.market-card.${getLeaguePeriodType(leagueId)}`
                                     )}`}</MatchPeriodLabel>
                                     <FlexDivCentered>
                                         <MatchPeriodLabel className="red">
@@ -55,26 +54,28 @@ const MatchStatus: React.FC<MatchStatusProps> = ({
                             )}
 
                         <ScoreContainer>
-                            <TeamScoreLabel>{liveResultInfo?.homeScore}</TeamScoreLabel>
-                            <TeamScoreLabel>{liveResultInfo?.awayScore}</TeamScoreLabel>
+                            <TeamScoreLabel>{liveScore.homeScore}</TeamScoreLabel>
+                            <TeamScoreLabel>{liveScore.awayScore}</TeamScoreLabel>
                         </ScoreContainer>
-                        {getLeagueSport(Number(liveResultInfo?.sportId)) === Sport.SOCCER
-                            ? liveResultInfo?.period == 2 && (
+                        {getLeagueSport(leagueId) === Sport.SOCCER
+                            ? liveScore.period == 2 && (
                                   <ScoreContainer>
                                       <TeamScoreLabel className="period">
-                                          {liveResultInfo?.scoreHomeByPeriod[0]}
+                                          {liveScore.homeScoreByPeriod[0]}
                                       </TeamScoreLabel>
                                       <TeamScoreLabel className="period">
-                                          {liveResultInfo?.scoreAwayByPeriod[0]}
+                                          {liveScore.awayScoreByPeriod[0]}
                                       </TeamScoreLabel>
                                   </ScoreContainer>
                               )
-                            : liveResultInfo?.scoreHomeByPeriod.map((homePeriodResult, index) => {
+                            : liveScore.homeScoreByPeriod.map((_, index) => {
                                   return (
                                       <ScoreContainer key={index}>
-                                          <TeamScoreLabel className="period">{homePeriodResult}</TeamScoreLabel>
                                           <TeamScoreLabel className="period">
-                                              {liveResultInfo.scoreAwayByPeriod[index]}
+                                              {liveScore.homeScoreByPeriod[index]}
+                                          </TeamScoreLabel>
+                                          <TeamScoreLabel className="period">
+                                              {liveScore.awayScoreByPeriod[index]}
                                           </TeamScoreLabel>
                                       </ScoreContainer>
                                   );
