@@ -91,6 +91,17 @@ export type CombinedPosition = { typeId: number; position: number; line: number 
 
 export type CombinedPositions = CombinedPosition[];
 
+export type SportMarketScore = {
+    isGameFinished?: boolean;
+    period?: number;
+    status?: string;
+    displayClock?: string;
+    homeScore: number;
+    awayScore: number;
+    homeScoreByPeriod: number[];
+    awayScoreByPeriod: number[];
+};
+
 export type SportMarket = {
     gameId: string;
     sport: Sport;
@@ -103,8 +114,8 @@ export type SportMarket = {
     maturityDate: Date;
     homeTeam: string;
     awayTeam: string;
-    homeScore: number | string;
-    awayScore: number | string;
+    homeScore?: number | string;
+    awayScore?: number | string;
     homeScoreByPeriod: number[];
     awayScoreByPeriod: number[];
     winningPositions: number[];
@@ -127,6 +138,9 @@ export type SportMarket = {
     live?: boolean;
     gameClock?: number;
     gamePeriod?: string;
+    tournamentName?: string;
+    tournamentRound?: string;
+    isGameFinished?: boolean;
 };
 
 export type SportMarkets = SportMarket[];

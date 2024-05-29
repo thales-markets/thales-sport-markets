@@ -4,7 +4,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { SportMarket } from 'types/markets';
+import { SportMarket, Team } from 'types/markets';
 
 const useSportMarketQuery = (
     marketAddress: string,
@@ -21,6 +21,20 @@ const useSportMarketQuery = (
                     { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                 );
                 const market = response.data;
+
+                const gamesInfoResponse = await axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, {
+                    headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' },
+                });
+                const gamesInfo = gamesInfoResponse.data;
+                const gameInfo = gamesInfo[market.gameId];
+
+                const homeTeam = !!gameInfo && gameInfo.teams.find((team: Team) => team.isHome);
+                const homeScore = homeTeam ? homeTeam.score : 0;
+                const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
+
+                const awayTeam = !!gameInfo && gameInfo.teams.find((team: Team) => !team.isHome);
+                const awayScore = awayTeam ? awayTeam.score : 0;
+                const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
                 return {
                     ...market,
@@ -42,6 +56,13 @@ const useSportMarketQuery = (
                         ['typeId'],
                         ['asc']
                     ),
+                    tournamentName: gameInfo ? gameInfo.tournamentName : undefined,
+                    tournamentRound: gameInfo ? gameInfo.tournamentRound : undefined,
+                    homeScore,
+                    awayScore,
+                    homeScoreByPeriod,
+                    awayScoreByPeriod,
+                    isGameFinished: gameInfo ? gameInfo.isGameFinished : undefined,
                 };
             } catch (e) {
                 console.log(e);

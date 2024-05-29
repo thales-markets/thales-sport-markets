@@ -4,7 +4,6 @@ import { GAME_STATUS } from 'constants/ui';
 import { Provider, Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { t } from 'i18next';
-import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -56,33 +55,16 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
     const gameIdString = convertFromBytes32(market.gameId);
     const isEnetpulseSport = getLeagueProvider(Number(market.leagueId)) === Provider.ENETPULSE;
     const isJsonOddsSport = getLeagueProvider(Number(market.leagueId)) === Provider.JSONODDS;
-    const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
     });
 
-    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.leagueId, {
-        enabled: isAppReady && isEnetpulseSport,
-    });
-
     useEffect(() => {
-        if (isEnetpulseSport) {
-            if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
-                setLiveResultInfo(useEnetpulseLiveResultQuery.data);
-            }
-        } else {
-            if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
-                setLiveResultInfo(useLiveResultQuery.data);
-            }
+        if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
+            setLiveResultInfo(useLiveResultQuery.data);
         }
-    }, [
-        useLiveResultQuery,
-        useLiveResultQuery.data,
-        useEnetpulseLiveResultQuery,
-        useEnetpulseLiveResultQuery.data,
-        isEnetpulseSport,
-    ]);
+    }, [useLiveResultQuery, useLiveResultQuery.data, isEnetpulseSport]);
 
     const displayClockTime = liveResultInfo?.displayClock.replaceAll("'", '');
     return (

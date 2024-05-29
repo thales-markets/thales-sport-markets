@@ -59,16 +59,16 @@ export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, player
                 const line = Number(market.line);
 
                 const homeTeam =
-                    !!gamesInfo[market.gameId] && gamesInfo[market.gameId].find((team: Team) => team.isHome);
+                    !!gamesInfo[market.gameId] && gamesInfo[market.gameId].teams.find((team: Team) => team.isHome);
                 const homeTeamName = homeTeam ? homeTeam.name : 'Home Team';
                 const homeScore = homeTeam ? homeTeam.score : 0;
-                const homeScoreByPeriod = homeTeam ? homeTeam.homeScoreByPeriod : [];
+                const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
 
                 const awayTeam =
-                    !!gamesInfo[market.gameId] && gamesInfo[market.gameId].find((team: Team) => !team.isHome);
+                    !!gamesInfo[market.gameId] && gamesInfo[market.gameId].teams.find((team: Team) => !team.isHome);
                 const awayTeamName = awayTeam ? awayTeam.name : 'Away Team';
                 const awayScore = awayTeam ? awayTeam.score : 0;
-                const awayScoreByPeriod = awayTeam ? awayTeam.awayScoreByPeriod : [];
+                const awayScoreByPeriod = awayTeam ? awayTeam.ScoreByPeriod : [];
 
                 const playerName =
                     isPlayerProps && playersInfo[market.playerId]

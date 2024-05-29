@@ -628,7 +628,8 @@
             "total-gas": "Tariffa gas (STIMATA)",
             "persist-games": "Mantieni la selezione dopo l'invio",
             "keep-selection-tooltip": "Per impostazione predefinita, il generatore di parlay viene ripristinato dopo l'invio riuscito. Seleziona questa opzione se desideri mantenere il contesto corrente dopo l'invio.",
-            "liquidity": "Liquidità"
+            "liquidity": "Liquidità",
+            "ticket-slip": "Tagliando del biglietto"
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {

@@ -628,7 +628,8 @@
             "gas-tooltip": "区块链结算交易所需的当前 Gas 费",
             "persist-games": "提交后保留选择",
             "keep-selection-tooltip": "默认情况下，成功提交后会重置连赢构建器。如果您想在提交后保留当前上下文，请勾选此选项。",
-            "liquidity": "流动性"
+            "liquidity": "流动性",
+            "ticket-slip": "票单"
         },
         "discounted-per": "折扣按",
         "nav-menu": {

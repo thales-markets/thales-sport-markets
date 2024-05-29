@@ -628,7 +628,8 @@
             "total-gas": "Gasgebühr (GESCHÄTZT)",
             "persist-games": "Auswahl nach dem Absenden beibehalten",
             "keep-selection-tooltip": "Standardmäßig wird der Parlay Builder nach erfolgreicher Übermittlung zurückgesetzt. Aktivieren Sie diese Option, wenn Sie den aktuellen Kontext nach der Übermittlung beibehalten möchten.",
-            "liquidity": "Liquidität"
+            "liquidity": "Liquidität",
+            "ticket-slip": "Fahrschein"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {

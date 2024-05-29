@@ -5,9 +5,6 @@ import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
 import { League, Provider, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
-import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
-import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
-import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,14 +17,15 @@ import {
     setSelectedMarket,
 } from 'redux/modules/market';
 import { formatShortDateWithTime } from 'thales-utils';
-import { SportMarket, SportMarketLiveResult } from 'types/markets';
-import { convertFromBytes32, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { SportMarket, SportMarketScore } from 'types/markets';
+import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueProvider, getLeagueSport, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
 import { MEDIUM_ODDS } from '../../../../constants/markets';
+import useSportMarketLiveScoreQuery from '../../../../queries/markets/useSportMarketLiveScoreQuery';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -72,7 +70,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
 
-    const [liveResultInfo, setLiveResultInfo] = useState<SportMarketLiveResult | undefined>(undefined);
+    const [liveScore, setLiveScore] = useState<SportMarketScore | undefined>(undefined);
 
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.leagueId));
@@ -86,10 +84,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isPendingResolution = isGameStarted && !isGameResolved;
     const isGameLive = !!market.live;
 
-    const isEnetpulseSport = getLeagueProvider(Number(market.leagueId)) === Provider.ENETPULSE;
-    const isJsonOddsSport = getLeagueProvider(Number(market.leagueId)) === Provider.JSONODDS;
-    const gameIdString = convertFromBytes32(market.gameId);
-    const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
+    const isRundownSport = getLeagueProvider(Number(market.leagueId)) === Provider.RUNDOWN;
 
     const spreadMarket = useMemo(() => {
         const spreadMarkets = market.childMarkets.filter((childMarket) => childMarket.typeId === MarketType.SPREAD);
@@ -126,54 +121,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
             : undefined;
     }, [market, marketTypeFilter]);
 
-    const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
-        enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
-    });
-
-    const useEnetpulseLiveResultQuery = useEnetpulseAdditionalDataQuery(gameIdString, gameDate, market.leagueId, {
-        enabled: isAppReady && isEnetpulseSport && (isPendingResolution || !localStorage.getItem(market.gameId)),
-    });
-
-    const useJsonDataAdditionalInfoQuery = useJsonOddsAdditionalDataQuery(gameIdString, market.leagueId, {
-        enabled: isAppReady && isJsonOddsSport && (isPendingResolution || !localStorage.getItem(market.gameId)),
+    const useLiveScoreQuery = useSportMarketLiveScoreQuery(market.gameId, {
+        enabled: isAppReady && isPendingResolution && isRundownSport,
     });
 
     useEffect(() => {
-        if (isEnetpulseSport) {
-            if (useEnetpulseLiveResultQuery.isSuccess && useEnetpulseLiveResultQuery.data) {
-                setLiveResultInfo(useEnetpulseLiveResultQuery.data);
-                const tournamentName = useEnetpulseLiveResultQuery.data.tournamentName
-                    ? market.isOneSideMarket
-                        ? useEnetpulseLiveResultQuery.data.tournamentName
-                        : ' | ' + useEnetpulseLiveResultQuery.data.tournamentName
-                    : '';
-                const tournamentRound = useEnetpulseLiveResultQuery.data.tournamentRound
-                    ? ' | ' + useEnetpulseLiveResultQuery.data.tournamentRound
-                    : '';
-                localStorage.setItem(market.gameId, tournamentName + tournamentRound);
-            }
-        } else if (isJsonOddsSport) {
-            if (useJsonDataAdditionalInfoQuery.isSuccess && useJsonDataAdditionalInfoQuery.data) {
-                const tournamentName = useJsonDataAdditionalInfoQuery.data;
-                localStorage.setItem(market.gameId, tournamentName);
-            }
-        } else {
-            if (useLiveResultQuery.isSuccess && useLiveResultQuery.data) {
-                setLiveResultInfo(useLiveResultQuery.data);
-            }
+        if (useLiveScoreQuery.isSuccess && useLiveScoreQuery.data) {
+            setLiveScore(useLiveScoreQuery.data);
         }
-    }, [
-        useLiveResultQuery,
-        useLiveResultQuery.data,
-        useEnetpulseLiveResultQuery,
-        useEnetpulseLiveResultQuery.data,
-        isEnetpulseSport,
-        market.isOneSideMarket,
-        market.gameId,
-        useJsonDataAdditionalInfoQuery,
-        useJsonDataAdditionalInfoQuery.data,
-        isJsonOddsSport,
-    ]);
+    }, [useLiveScoreQuery, useLiveScoreQuery.data]);
 
     const areChildMarketsOddsValid = market.childMarkets.some((childMarket) =>
         childMarket.odds.some((odd) => isOddValid(odd))
@@ -247,14 +203,10 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         />
                     )}
                     <MatchInfoLabel>
-                        {(isEnetpulseSport || isJsonOddsSport) &&
-                        (liveResultInfo || localStorage.getItem(market.gameId)) &&
-                        !isColumnView &&
-                        !isMarketSelected &&
-                        !isMobile ? (
-                            <>{localStorage.getItem(market.gameId)}</>
-                        ) : (
-                            ''
+                        {!isColumnView && !isMarketSelected && !isMobile && (
+                            <>{`${market.tournamentName ? ` | ${market.tournamentName}` : ''}${
+                                market.tournamentRound ? ` | ${market.tournamentRound}` : ''
+                            }`}</>
                         )}
                         {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />}
                     </MatchInfoLabel>
@@ -387,7 +339,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         </>
                     ) : (
                         <>
-                            {isGameRegularlyResolved ? (
+                            {isGameRegularlyResolved || market.isGameFinished ? (
                                 <ResultWrapper>
                                     <ResultLabel>
                                         {!market.isOneSideMarket ? `${t('markets.market-card.result')}:` : ''}
@@ -427,11 +379,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             ) : (
                                 <MatchStatus
                                     isPendingResolution={isPendingResolution}
-                                    liveResultInfo={liveResultInfo}
+                                    liveScore={liveScore}
                                     isCancelled={market.isCancelled}
                                     isPaused={market.isPaused}
-                                    isEnetpulseSport={isEnetpulseSport}
-                                    isJsonOddsSport={isJsonOddsSport}
+                                    isRundownSport={isRundownSport}
+                                    leagueId={market.leagueId}
                                 />
                             )}
                         </>

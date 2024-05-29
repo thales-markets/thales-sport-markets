@@ -31,6 +31,7 @@ const QUERY_KEYS = {
     ],
     LiveTradingProcessorData: (networkId: Network) => ['liveTradingProcessorData', networkId],
     LiveResult: (marketId: string) => ['liveResult', marketId],
+    LiveScore: (gameId: string) => ['liveScore', gameId],
     EnetpulseLiveResult: (marketId: string, gameDate: string, sportTag: number) => [
         'enetpulseLiveResult',
         marketId,
