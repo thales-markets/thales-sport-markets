@@ -628,7 +628,8 @@
             "total-gas": "Frais de gaz (ESTIMÉS)",
             "persist-games": "Conserver la sélection après la soumission",
             "keep-selection-tooltip": "Par défaut, le générateur Parlay est réinitialisé après une soumission réussie. Cochez cette case si vous souhaitez conserver le contexte actuel après la soumission.",
-            "liquidity": "Liquidité"
+            "liquidity": "Liquidité",
+            "ticket-slip": "Bon de billet"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
