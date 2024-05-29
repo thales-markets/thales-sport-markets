@@ -240,6 +240,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: true,
+        tooltipKey: 'common.football-tooltip',
     },
     [League.UEFA_EL]: {
         sport: Sport.SOCCER,
@@ -255,6 +256,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: true,
+        tooltipKey: 'common.football-tooltip',
     },
     [League.FIFA_WC]: {
         sport: Sport.SOCCER,
@@ -270,6 +272,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: true,
         favourite: false,
         live: false,
+        tooltipKey: 'common.fifa-tooltip',
     },
     [League.J1_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -330,6 +333,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: false,
+        tooltipKey: 'common.iihf-tooltip',
     },
     [League.COPA_LIBERTADORES]: {
         sport: Sport.SOCCER,
@@ -404,6 +408,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: false,
+        tooltipKey: 'common.football-tooltip',
     },
     [League.ENGLAND_CUP]: {
         sport: Sport.SOCCER,
@@ -476,6 +481,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: true,
+        tooltipKey: 'common.tennis-tooltip',
     },
     [League.TENNIS_MASTERS]: {
         sport: Sport.TENNIS,
@@ -492,8 +498,8 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: false,
+        tooltipKey: 'common.tennis-tooltip',
     },
-
     [League.GERMANY_CUP]: {
         sport: Sport.SOCCER,
         id: League.GERMANY_CUP,
@@ -508,7 +514,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         favourite: false,
         live: false,
     },
-
     [League.BRAZIL_1]: {
         sport: Sport.SOCCER,
         id: League.BRAZIL_1,
@@ -523,7 +528,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         favourite: false,
         live: false,
     },
-
     [League.UEFA_EURO_U21]: {
         sport: Sport.SOCCER,
         id: League.UEFA_EURO_U21,
@@ -537,6 +541,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: false,
+        tooltipKey: 'common.football-tooltip',
     },
     [League.FIFA_WORLD_CUP_U20]: {
         sport: Sport.SOCCER,
@@ -552,6 +557,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: false,
+        tooltipKey: 'common.fifa-tooltip',
     },
     [League.EUROLEAGUE]: {
         sport: Sport.BASKETBALL,
@@ -628,7 +634,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         favourite: false,
         live: true,
     },
-
     [League.BOXING]: {
         sport: Sport.FIGHTING,
         id: League.BOXING,
@@ -644,7 +649,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         favourite: false,
         live: false,
     },
-
     [League.UEFA_NATIONS_LEAGUE]: {
         sport: Sport.SOCCER,
         id: League.UEFA_NATIONS_LEAGUE,
@@ -659,6 +663,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: false,
+        tooltipKey: 'common.football-tooltip',
     },
     [League.CONCACAF_NATIONS_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -674,8 +679,8 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: false,
+        tooltipKey: 'common.football-tooltip',
     },
-
     [League.CSGO]: {
         sport: Sport.ESPORTS,
         id: League.CSGO,
@@ -721,7 +726,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         favourite: false,
         live: true,
     },
-
     [League.CONMEBOL_WC_QUALIFICATIONS]: {
         sport: Sport.SOCCER,
         id: League.CONMEBOL_WC_QUALIFICATIONS,
@@ -736,7 +740,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         favourite: false,
         live: false,
     },
-
     [League.UEFA_CONFERENCE_LEAGUE]: {
         sport: Sport.SOCCER,
         id: League.UEFA_CONFERENCE_LEAGUE,
@@ -750,8 +753,8 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         favourite: false,
         live: false,
+        tooltipKey: 'common.football-tooltip',
     },
-
     [League.NON_TITLE_BOXING]: {
         sport: Sport.FIGHTING,
         id: League.NON_TITLE_BOXING,
@@ -767,7 +770,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         favourite: false,
         live: false,
     },
-
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
         id: League.GOLF_H2H,
@@ -800,16 +802,19 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     },
 };
 
-export const FIFA_WC_TAG = 18;
-export const FIFA_WC_U20_TAG = 296;
-export const IIHF_WC_TAG = 33;
-export const UEFA_TAGS = [16, 17, 9806, 9821, 288, 42, 10216, 76, 73];
-export const MOTOSPORT_TAGS = [445, 497];
-export const GOLF_TAGS = [100021, 100121];
-export const GOLF_TOURNAMENT_WINNER_TAG = 100121;
-export const EUROPA_LEAGUE_TAGS = [17, 73];
-export const INTERNATIONAL_SPORTS = [9821, 10199, 409, 33, 50, 288, 9806, 18, 296, 76];
-export const BOXING_TAGS = [9196, 10595];
+export const BOXING_LEAGUES = [League.BOXING, League.NON_TITLE_BOXING];
+export const INTERNATIONAL_LEAGUES = [
+    League.FIFA_WC,
+    League.IIHF_WORLD_CHAMPIONSHIP,
+    League.UEFA_EURO_QUALIFICATIONS,
+    League.FIFA_WC_WOMEN,
+    League.UEFA_EURO_U21,
+    League.FIFA_WORLD_CUP_U20,
+    League.FIBA_WORLD_CUP,
+    League.UEFA_NATIONS_LEAGUE,
+    League.CONCACAF_NATIONS_LEAGUE,
+    League.CONMEBOL_WC_QUALIFICATIONS,
+];
 
 export const SPORT_ID_MAP_ENETPULSE: Record<number, number> = {
     320: 18, // Hockey Norway

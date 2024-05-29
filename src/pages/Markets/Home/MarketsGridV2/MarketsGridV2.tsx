@@ -1,7 +1,6 @@
 import Scroll from 'components/Scroll';
-import { LeagueMap } from 'constants/sports';
+import { BOXING_LEAGUES, LeagueMap } from 'constants/sports';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { BOXING_TAGS, EUROPA_LEAGUE_TAGS } from 'constants/tags';
 import { Sport } from 'enums/sports';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
@@ -29,9 +28,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const datePeriodFilter = useLocalStorage<number>(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD, 0);
 
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
-    // UNIFYING EUROPA LEAGUE MARKETS FROM BOTH ENETPULSE & RUNDOWNS PROVIDERS
-    const unifiedMarketsMapEuropaLeague = unifyEuropaLeagueMarkets(marketsMap);
-    const unifiedMarketsMap = unifyBoxingMarkets(unifiedMarketsMapEuropaLeague);
+    const unifiedMarketsMap = unifyBoxingMarkets(marketsMap);
     const marketsKeys = sortMarketKeys(
         Object.keys(marketsMap).map((key) => Number(key)),
         unifiedMarketsMap,
@@ -188,22 +185,12 @@ const groupBySortedMarketsKeys = (marketsKeys: number[]) => {
     ];
 };
 
-const unifyEuropaLeagueMarkets = (marketsMap: Record<number, SportMarket[]>) => {
-    const rundownEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[0]] ? marketsMap[EUROPA_LEAGUE_TAGS[0]] : [];
-    const enetpulseEuropaLeagueGames = marketsMap[EUROPA_LEAGUE_TAGS[1]] ? marketsMap[EUROPA_LEAGUE_TAGS[1]] : [];
-    if (rundownEuropaLeagueGames.length > 0 || enetpulseEuropaLeagueGames.length > 0) {
-        marketsMap[EUROPA_LEAGUE_TAGS[0]] = [...rundownEuropaLeagueGames, ...enetpulseEuropaLeagueGames];
-        delete marketsMap[EUROPA_LEAGUE_TAGS[1]];
-    }
-    return marketsMap;
-};
-
 const unifyBoxingMarkets = (marketsMap: Record<number, SportMarket[]>) => {
-    const boxingMarkets = marketsMap[BOXING_TAGS[0]] ? marketsMap[BOXING_TAGS[0]] : [];
-    const boxingNonTitleMarkets = marketsMap[BOXING_TAGS[1]] ? marketsMap[BOXING_TAGS[1]] : [];
+    const boxingMarkets = marketsMap[BOXING_LEAGUES[0]] ? marketsMap[BOXING_LEAGUES[0]] : [];
+    const boxingNonTitleMarkets = marketsMap[BOXING_LEAGUES[1]] ? marketsMap[BOXING_LEAGUES[1]] : [];
     if (boxingMarkets.length > 0 || boxingNonTitleMarkets.length > 0) {
-        marketsMap[BOXING_TAGS[0]] = [...boxingMarkets, ...boxingNonTitleMarkets];
-        delete marketsMap[BOXING_TAGS[1]];
+        marketsMap[BOXING_LEAGUES[0]] = [...boxingMarkets, ...boxingNonTitleMarkets];
+        delete marketsMap[BOXING_LEAGUES[1]];
     }
     return marketsMap;
 };

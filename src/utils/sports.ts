@@ -1,5 +1,5 @@
 import { League, PeriodType, Sport } from 'enums/sports';
-import { LeagueMap } from '../constants/sports';
+import { BOXING_LEAGUES, INTERNATIONAL_LEAGUES, LeagueMap } from '../constants/sports';
 
 export const getLeagueSport = (league: League) => {
     const leagueInfo = LeagueMap[league];
@@ -45,3 +45,14 @@ export const isLiveSupportedForLeague = (league: League) => {
     const leagueInfo = LeagueMap[league];
     return leagueInfo ? leagueInfo.live : false;
 };
+
+export const getLeagueTooltipKey = (league: League) => {
+    const leagueInfo = LeagueMap[league];
+    return leagueInfo ? leagueInfo.tooltipKey : undefined;
+};
+
+export const isBoxingLeague = (league: League) => {
+    return BOXING_LEAGUES.includes(league);
+};
+
+export const isInternationalLeague = (league: number) => INTERNATIONAL_LEAGUES.includes(league);

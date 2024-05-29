@@ -9,7 +9,6 @@ import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
-import { BOXING_TAGS, EUROPA_LEAGUE_TAGS } from 'constants/tags';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -46,11 +45,16 @@ import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
-import { LeagueMap } from '../../../constants/sports';
+import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
 import { Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
-import { getLiveSupportedLeagues, getSportLeagueIds, isLiveSupportedForLeague } from '../../../utils/sports';
+import {
+    getLiveSupportedLeagues,
+    getSportLeagueIds,
+    isBoxingLeague,
+    isLiveSupportedForLeague,
+} from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';
@@ -169,7 +173,7 @@ const Home: React.FC = () => {
                         dispatch(setDatePeriodFilter(72));
                         break;
                 }
-            } else {
+            } else if (datePeriodFilter !== 0) {
                 setDateParam(`${datePeriodFilter}hours`);
             }
 
@@ -232,17 +236,10 @@ const Home: React.FC = () => {
                 }
 
                 if (tagFilter.length > 0) {
-                    if (EUROPA_LEAGUE_TAGS.includes(market.leagueId)) {
+                    if (isBoxingLeague(market.leagueId)) {
                         if (
-                            !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[0]) &&
-                            !tagFilter.map((tag) => tag.id).includes(EUROPA_LEAGUE_TAGS[1])
-                        ) {
-                            return false;
-                        }
-                    } else if (BOXING_TAGS.includes(market.leagueId)) {
-                        if (
-                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[0]) &&
-                            !tagFilter.map((tag) => tag.id).includes(BOXING_TAGS[1])
+                            !tagFilter.map((tag) => tag.id).includes(BOXING_LEAGUES[0]) &&
+                            !tagFilter.map((tag) => tag.id).includes(BOXING_LEAGUES[1])
                         ) {
                             return false;
                         }
@@ -353,10 +350,8 @@ const Home: React.FC = () => {
 
         const openMarketsCountPerTag: any = {};
         Object.keys(groupedMarkets).forEach((key: string) => {
-            if (EUROPA_LEAGUE_TAGS.includes(Number(key))) {
-                openMarketsCountPerTag[EUROPA_LEAGUE_TAGS[0].toString()] = groupedMarkets[key].length;
-            } else if (BOXING_TAGS.includes(Number(key))) {
-                openMarketsCountPerTag[BOXING_TAGS[0].toString()] = groupedMarkets[key].length;
+            if (isBoxingLeague(Number(key))) {
+                openMarketsCountPerTag[BOXING_LEAGUES[0].toString()] = groupedMarkets[key].length;
             } else {
                 openMarketsCountPerTag[key] = groupedMarkets[key].length;
             }
@@ -399,10 +394,8 @@ const Home: React.FC = () => {
 
         const liveMarketsCountPerTag: any = {};
         Object.keys(groupedMarkets).forEach((key: string) => {
-            if (EUROPA_LEAGUE_TAGS.includes(Number(key))) {
-                liveMarketsCountPerTag[EUROPA_LEAGUE_TAGS[0].toString()] = groupedMarkets[key].length;
-            } else if (BOXING_TAGS.includes(Number(key))) {
-                liveMarketsCountPerTag[BOXING_TAGS[0].toString()] = groupedMarkets[key].length;
+            if (isBoxingLeague(Number(key))) {
+                liveMarketsCountPerTag[BOXING_LEAGUES[0].toString()] = groupedMarkets[key].length;
             } else {
                 liveMarketsCountPerTag[key] = groupedMarkets[key].length;
             }
@@ -628,7 +621,8 @@ const Home: React.FC = () => {
                             <SportFilterMobile setAvailableTags={setAvailableTags} tagsList={tagsList} />
                             {!marketsLoading &&
                                 finalMarkets.length > 0 &&
-                                statusFilter === StatusFilter.OPEN_MARKETS && (
+                                statusFilter === StatusFilter.OPEN_MARKETS &&
+                                sportFilter !== SportFilter.Live && (
                                     <Header availableMarketTypes={availableMarketTypes} />
                                 )}
                             <FilterTagsMobile />
@@ -660,9 +654,11 @@ const Home: React.FC = () => {
                                 </NoMarketsContainer>
                             ) : (
                                 <>
-                                    {!isMobile && statusFilter === StatusFilter.OPEN_MARKETS && (
-                                        <Header availableMarketTypes={availableMarketTypes} />
-                                    )}
+                                    {!isMobile &&
+                                        statusFilter === StatusFilter.OPEN_MARKETS &&
+                                        sportFilter !== SportFilter.Live && (
+                                            <Header availableMarketTypes={availableMarketTypes} />
+                                        )}
                                     <FlexDivRow>
                                         {((isMobile && !isMarketSelected && !showTicketMobileModal) || !isMobile) && (
                                             <Suspense

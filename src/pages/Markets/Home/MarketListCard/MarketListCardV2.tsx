@@ -2,14 +2,13 @@ import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
-import { FIFA_WC_TAG, FIFA_WC_U20_TAG } from 'constants/tags';
 import { MarketType } from 'enums/marketTypes';
 import { League, Provider, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 import useEnetpulseAdditionalDataQuery from 'queries/markets/useEnetpulseAdditionalDataQuery';
 import useJsonOddsAdditionalDataQuery from 'queries/markets/useJsonOddsAdditionalDataQuery';
 import useSportMarketLiveResultQuery from 'queries/markets/useSportMarketLiveResultQuery';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -24,11 +23,11 @@ import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketLiveResult } from 'types/markets';
 import { convertFromBytes32, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
-import { isFifaWCGame, isIIHFWCGame, isUEFAGame } from 'utils/markets';
 import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
-import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
+import { getLeaguePeriodType, getLeagueProvider, getLeagueSport, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
+import { MEDIUM_ODDS } from '../../../../constants/markets';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -92,14 +91,40 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const gameIdString = convertFromBytes32(market.gameId);
     const gameDate = new Date(market.maturityDate).toISOString().split('T')[0];
 
-    const firstSpreadMarket = market.childMarkets.find((childMarket) => childMarket.typeId === MarketType.SPREAD);
-    const firstTotalMarket = market.childMarkets.find((childMarket) => childMarket.typeId === MarketType.TOTAL);
-    const marketTypeFilterMarket =
-        marketTypeFilter !== undefined
-            ? marketTypeFilter === MarketType.WINNER
-                ? market
-                : market.childMarkets.find((childMarket) => marketTypeFilter === childMarket.typeId)
+    const spreadMarket = useMemo(() => {
+        const spreadMarkets = market.childMarkets.filter((childMarket) => childMarket.typeId === MarketType.SPREAD);
+
+        return spreadMarkets.length > 0
+            ? spreadMarkets.reduce(function (prev, curr) {
+                  return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
+              })
             : undefined;
+    }, [market.childMarkets]);
+
+    const totalMarket = useMemo(() => {
+        const totalMarkets = market.childMarkets.filter((childMarket) => childMarket.typeId === MarketType.TOTAL);
+
+        return totalMarkets.length > 0
+            ? totalMarkets.reduce(function (prev, curr) {
+                  return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
+              })
+            : undefined;
+    }, [market.childMarkets]);
+
+    const marketTypeFilterMarket = useMemo(() => {
+        if (marketTypeFilter === undefined) return undefined;
+        if (marketTypeFilter === MarketType.WINNER) return market;
+
+        const marketTypeFilterMarkets = market.childMarkets.filter(
+            (childMarket) => childMarket.typeId === marketTypeFilter
+        );
+
+        return marketTypeFilterMarkets.length > 0
+            ? marketTypeFilterMarkets.reduce(function (prev, curr) {
+                  return Math.abs(curr.odds[0] - MEDIUM_ODDS) < Math.abs(prev.odds[0] - MEDIUM_ODDS) ? curr : prev;
+              })
+            : undefined;
+    }, [market, marketTypeFilter]);
 
     const useLiveResultQuery = useSportMarketLiveResultQuery(gameIdString, {
         enabled: isAppReady && isPendingResolution && !isEnetpulseSport && !isJsonOddsSport,
@@ -164,13 +189,15 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     let marketsCount = market.childMarkets.length;
     if (isColumnView) {
-        if (firstSpreadMarket) {
+        if (spreadMarket) {
             marketsCount -= 1;
         }
-        if (firstTotalMarket) {
+        if (totalMarket) {
             marketsCount -= 1;
         }
     }
+
+    const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
 
     const getMainContainerContent = () => (
         <MainContainer isGameOpen={isGameOpen || isGameLive}>
@@ -219,40 +246,22 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             }
                         />
                     )}
-
-                    {isFifaWCGame(market.leagueId) && (
-                        <Tooltip overlay={t(`common.fifa-tooltip`)} iconFontSize={12} marginLeft={2} />
-                    )}
-                    {isIIHFWCGame(market.leagueId) && (
-                        <Tooltip overlay={t(`common.iihf-tooltip`)} iconFontSize={12} marginLeft={2} />
-                    )}
-                    {isUEFAGame(market.leagueId) && (
-                        <Tooltip overlay={t(`common.football-tooltip`)} iconFontSize={12} marginLeft={2} />
-                    )}
                     <MatchInfoLabel>
                         {(isEnetpulseSport || isJsonOddsSport) &&
-                        !isFifaWCGame(market.leagueId) &&
-                        !isUEFAGame(market.leagueId) &&
                         (liveResultInfo || localStorage.getItem(market.gameId)) &&
                         !isColumnView &&
                         !isMarketSelected &&
                         !isMobile ? (
-                            <>
-                                {localStorage.getItem(market.gameId)}
-                                {getLeagueSport(market.leagueId) === Sport.TENNIS && (
-                                    <Tooltip overlay={t(`common.tennis-tooltip`)} iconFontSize={12} marginLeft={2} />
-                                )}
-                            </>
+                            <>{localStorage.getItem(market.gameId)}</>
                         ) : (
                             ''
                         )}
+                        {leagueTooltipKey && <Tooltip overlay={t(leagueTooltipKey)} iconFontSize={12} marginLeft={2} />}
                     </MatchInfoLabel>
                 </MatchInfo>
                 <TeamsInfoContainer>
                     <TeamLogosContainer isColumnView={isColumnView} isTwoPositionalMarket={isTwoPositionalMarket}>
                         <ClubLogo
-                            height={market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '17px' : ''}
-                            width={market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG ? '27px' : ''}
                             alt="Home team logo"
                             src={homeLogoSrc}
                             onError={getOnImageError(setHomeLogoSrc, market.leagueId)}
@@ -261,16 +270,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         {!market.isOneSideMarket && (
                             <>
                                 <ClubLogo
-                                    height={
-                                        market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG
-                                            ? '17px'
-                                            : ''
-                                    }
-                                    width={
-                                        market.leagueId == FIFA_WC_TAG || market.leagueId == FIFA_WC_U20_TAG
-                                            ? '27px'
-                                            : ''
-                                    }
                                     alt="Away team logo"
                                     src={awayLogoSrc}
                                     onError={getOnImageError(setAwayLogoSrc, market.leagueId)}
@@ -341,18 +340,18 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                 isMainPageView
                                 isColumnView={isColumnView}
                             />
-                            {isColumnView && !isMobile && firstSpreadMarket && (
+                            {isColumnView && !isMobile && spreadMarket && (
                                 <PositionsV2
-                                    markets={[firstSpreadMarket]}
+                                    markets={[spreadMarket]}
                                     marketType={MarketType.SPREAD}
                                     isGameOpen={isGameOpen}
                                     isMainPageView
                                     isColumnView={isColumnView}
                                 />
                             )}
-                            {isColumnView && !isMobile && firstTotalMarket && (
+                            {isColumnView && !isMobile && totalMarket && (
                                 <PositionsV2
-                                    markets={[firstTotalMarket]}
+                                    markets={[totalMarket]}
                                     marketType={MarketType.TOTAL}
                                     isGameOpen={isGameOpen}
                                     isMainPageView

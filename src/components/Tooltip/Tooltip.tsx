@@ -54,7 +54,7 @@ const InfoIcon = styled.i<{ iconFontSize?: number; marginLeft?: number; top?: nu
     cursor: pointer;
     position: relative;
     margin-left: ${(props) => props.marginLeft || 0}px;
-    top: ${(props) => props.top || -1}px;
+    top: ${(props) => (props.top !== undefined ? props.top : -1)}px;
     color: ${(props) => props.color || 'white'};
     text-transform: none;
     &:before {

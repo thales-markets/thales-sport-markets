@@ -327,7 +327,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 try {
                     const [minimumNeededForMinUsdAmountValue] = await Promise.all([
                         collateralHasLp
-                            ? minBuyInAmountInDefaultCollateral / selectedCollateralCurrencyRate
+                            ? minBuyInAmountInDefaultCollateral /
+                              (isDefaultCollateral ? 1 : selectedCollateralCurrencyRate)
                             : multiCollateralOnOffRampContract?.getMinimumNeeded(
                                   collateralAddress,
                                   coinParser(minBuyInAmountInDefaultCollateral.toString(), networkId)
@@ -454,6 +455,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             } else if (quotes.some((quote) => quote === 0)) {
                 setTooltipTextCollateralAmount(t('markets.parlay.validation.availability'));
             } else if (value && Number(value) < minBuyInAmount) {
+                console.log(Number(value), minBuyInAmount);
                 const decimals = getPrecision(minBuyInAmount);
                 setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.min-amount', {

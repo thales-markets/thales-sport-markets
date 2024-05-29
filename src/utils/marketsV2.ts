@@ -1,5 +1,4 @@
 import { MarketTypeMap } from 'constants/marketTypes';
-import { GOLF_TOURNAMENT_WINNER_TAG } from 'constants/tags';
 import { MarketType } from 'enums/marketTypes';
 import { Position } from 'enums/markets';
 import { League } from 'enums/sports';
@@ -234,7 +233,7 @@ export const getTooltipText = (typeId: number, position: Position, line: number,
     let translationKey = '';
 
     if (market.isOneSideMarket) {
-        translationKey = market.leagueId == GOLF_TOURNAMENT_WINNER_TAG ? 'tournament-winner' : 'race-winner';
+        translationKey = market.leagueId == League.GOLF_WINNER ? 'tournament-winner' : 'race-winner';
     } else if (typeId === MarketType.SPREAD) {
         translationKey = line < 0 ? `spread-${position}` : `spread-${position === 1 ? 0 : 1}`;
     } else {
