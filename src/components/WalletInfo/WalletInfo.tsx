@@ -53,7 +53,7 @@ const WalletInfo: React.FC = ({}) => {
     const walletBalance = overtimeVoucher ? overtimeVoucher.remainingAmount : stableCoinBalance;
 
     return (
-        <Container>
+        <Container walletConnected={isWalletConnected}>
             <FlexDivColumn>
                 <RainbowConnectButton.Custom>
                     {({ openAccountModal }) => {
@@ -111,8 +111,8 @@ const WalletInfo: React.FC = ({}) => {
     );
 };
 
-const Container = styled(FlexDivCentered)`
-    width: 100%;
+const Container = styled(FlexDivCentered)<{ walletConnected?: boolean }>`
+    width: ${(props) => (props.walletConnected ? '100%' : 'auto')};
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
     position: relative;
