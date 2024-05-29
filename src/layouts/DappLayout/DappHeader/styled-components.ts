@@ -4,6 +4,7 @@ import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/c
 
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
+    gap: 10px;
     margin-top: 10px;
     @media (max-width: 767px) {
         flex-direction: column;
@@ -28,15 +29,23 @@ export const Container = styled(FlexDivRowCentered)`
     }
 `;
 
-export const LeftContainer = styled(FlexDivRowCentered)``;
+export const LeftContainer = styled(FlexDivRowCentered)`
+    width: 100%;
+    max-width: 278px;
+    justify-content: center;
+    padding-right: 15px;
+`;
 
 export const MiddleContainer = styled(FlexDivRowCentered)`
-    margin: 0 10px;
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 821px;
 `;
 
 export const RightContainer = styled(FlexDivRowCentered)`
     position: relative;
+    width: 100%;
+    max-width: 360px;
     @media (max-width: 767px) {
         flex-direction: column;
     }
@@ -167,7 +176,7 @@ export const ReferAndEarn = styled.button`
 `;
 
 export const SettingsContainer = styled(FlexDivRowCentered)`
-    margin: 0 20px;
+    margin: 0 10px;
     cursor: pointer;
 `;
 

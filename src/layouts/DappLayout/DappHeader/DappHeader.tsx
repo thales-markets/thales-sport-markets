@@ -25,7 +25,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivEnd } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import { ODDS_TYPES } from '../../../constants/markets';
@@ -131,10 +131,7 @@ const DappHeader: React.FC = () => {
     const menuImageRef = useRef<HTMLImageElement>(null);
 
     const getGetStartedButton = () => (
-        <SPAAnchor
-            style={{ width: isMobile ? '100%' : 'fit-content', marginLeft: isMobile ? '0' : '30px' }}
-            href={buildHref(ROUTES.Wizard)}
-        >
+        <SPAAnchor style={{ width: isMobile ? '100%' : 'fit-content' }} href={buildHref(ROUTES.Wizard)}>
             <Button
                 backgroundColor={theme.background.primary}
                 textColor={theme.button.textColor.quaternary}
@@ -161,7 +158,6 @@ const DappHeader: React.FC = () => {
                 <Container>
                     <LeftContainer>
                         <Logo />
-                        {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
                     </LeftContainer>
                     {isMarketsPage && (
                         <MiddleContainer>
@@ -174,19 +170,22 @@ const DappHeader: React.FC = () => {
                                 <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
                             </SPAAnchor>
                         )} */}
+                            {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
                             <TimeFilters />
+                            <FlexDiv>
+                                {isWalletConnected && <ProfileItem />}
+                                <SettingsContainer
+                                    onClick={() => {
+                                        setDropdownIsOpen(!dropdownIsOpen);
+                                    }}
+                                >
+                                    <HeaderIcon className="icon icon--settings" />
+                                    <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                                </SettingsContainer>
+                            </FlexDiv>
                         </MiddleContainer>
                     )}
                     <RightContainer>
-                        {isWalletConnected && <ProfileItem />}
-                        <SettingsContainer
-                            onClick={() => {
-                                setDropdownIsOpen(!dropdownIsOpen);
-                            }}
-                        >
-                            <HeaderIcon className="icon icon--settings" />
-                            <HeaderLabel>{t('common.settings')}</HeaderLabel>
-                        </SettingsContainer>
                         {dropdownIsOpen && (
                             <DropdownContainer>
                                 <DropDown>

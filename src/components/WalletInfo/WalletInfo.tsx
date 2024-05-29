@@ -112,6 +112,7 @@ const WalletInfo: React.FC = ({}) => {
 };
 
 const Container = styled(FlexDivCentered)`
+    width: 100%;
     color: ${(props) => props.theme.textColor.secondary};
     border-radius: 5px;
     position: relative;
@@ -130,9 +131,16 @@ const Wrapper = styled.div<{ displayPadding?: boolean }>`
     justify-content: space-between;
     align-items: center;
     padding-left: ${(props) => (props.displayPadding ? '10px' : '')};
+    & > div {
+        flex: 0.4;
+    }
+    & > div:last-child {
+        flex: 0.2;
+    }
 `;
 
 const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
+    justify-content: center;
     cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
     min-width: 77px;
     height: 100%;
@@ -156,6 +164,7 @@ const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?:
 `;
 
 const WalletBalanceInfo = styled.div`
+    justify-content: center;
     border-left: 2px solid ${(props) => props.theme.borderColor.primary};
     padding-left: 7px;
     padding-right: 6px;
