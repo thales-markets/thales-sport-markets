@@ -130,7 +130,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
-    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
+    const selectedCollateralIndex =
+        markets?.[0]?.live &&
+        getCollateral(networkId, ticketPayment.selectedCollateralIndex) === CRYPTO_CURRENCY_MAP.ETH
+            ? 0
+            : ticketPayment.selectedCollateralIndex;
     const isVoucherSelected = ticketPayment.isVoucherSelected;
     const buyInAmount = ticketPayment.amountToBuy;
 
@@ -1061,7 +1065,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                         currencyComponent={
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId)}
+                                collateralArray={getCollaterals(networkId).filter((collateral) =>
+                                    markets?.[0]?.live ? collateral !== CRYPTO_CURRENCY_MAP.ETH : true
+                                )}
                                 selectedItem={selectedCollateralIndex}
                                 onChangeCollateral={() => {
                                     setCollateralAmount('');
