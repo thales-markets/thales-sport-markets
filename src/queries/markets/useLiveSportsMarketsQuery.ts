@@ -39,7 +39,7 @@ const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions
             return marketsFlattened;
         },
         {
-            refetchInterval: 10 * 1000,
+            refetchInterval: 2 * 1000,
             ...options,
         }
     );

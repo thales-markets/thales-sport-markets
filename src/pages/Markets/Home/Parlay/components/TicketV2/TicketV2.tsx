@@ -122,6 +122,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
 
     const dispatch = useDispatch();
 
+    const isLiveTicket = markets?.[0]?.live;
+
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -131,8 +133,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
     const selectedCollateralIndex =
-        markets?.[0]?.live &&
-        getCollateral(networkId, ticketPayment.selectedCollateralIndex) === CRYPTO_CURRENCY_MAP.ETH
+        isLiveTicket && getCollateral(networkId, ticketPayment.selectedCollateralIndex) === CRYPTO_CURRENCY_MAP.ETH
             ? 0
             : ticketPayment.selectedCollateralIndex;
     const isVoucherSelected = ticketPayment.isVoucherSelected;
@@ -1066,7 +1067,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         currencyComponent={
                             <CollateralSelector
                                 collateralArray={getCollaterals(networkId).filter((collateral) =>
-                                    markets?.[0]?.live ? collateral !== CRYPTO_CURRENCY_MAP.ETH : true
+                                    isLiveTicket ? collateral !== CRYPTO_CURRENCY_MAP.ETH : true
                                 )}
                                 selectedItem={selectedCollateralIndex}
                                 onChangeCollateral={() => {
