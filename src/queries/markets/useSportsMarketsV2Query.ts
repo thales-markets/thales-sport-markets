@@ -31,11 +31,11 @@ const useSportsMarketsV2Query = (
                 return markets.map((market: any) => {
                     const gameInfo = gamesInfo[market.gameId];
 
-                    const homeTeam = !!gameInfo && gameInfo.teams.find((team: Team) => team.isHome);
+                    const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
                     const homeScore = homeTeam ? homeTeam.score : 0;
                     const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
 
-                    const awayTeam = !!gameInfo && gameInfo.teams.find((team: Team) => !team.isHome);
+                    const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
                     const awayScore = awayTeam ? awayTeam.score : 0;
                     const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
