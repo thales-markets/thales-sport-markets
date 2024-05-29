@@ -14,9 +14,9 @@ const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions
             try {
                 const supportedLeagues = getLiveSupportedLeagues();
                 const response = await axios.get<undefined, { data: { errors: string[]; markets: SportMarkets } }>(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-markets?leagueIds=${JSON.stringify(
-                        supportedLeagues
-                    )}`,
+                    `${
+                        generalConfig.API_URL
+                    }/overtime-v2/networks/${networkId}/live-markets?leagueIds=${supportedLeagues.join(',')}`,
                     { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                 );
 
