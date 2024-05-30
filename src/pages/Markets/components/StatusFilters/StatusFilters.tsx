@@ -141,6 +141,7 @@ const FilterIcon = styled.i`
     @media (max-width: 950px) {
         font-size: 22px;
         margin-right: 18px;
+        margin-left: 1px;
     }
 `;
 

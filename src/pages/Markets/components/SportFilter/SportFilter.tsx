@@ -133,13 +133,13 @@ const Count = styled(FlexDivCentered)`
 `;
 
 const liveBlinkStyle: CSSProperties = {
-    width: 37,
-    margin: '0px 3px 0px -6px',
+    width: 32,
+    margin: '0px 5px 0px -4px',
 };
 
 const liveBlinkStyleMobile: CSSProperties = {
-    width: 37,
-    margin: '0px 10px 0px -6px',
+    width: 32,
+    margin: '2px 13px 0px -4px',
 };
 
 export default SportFilterDetails;

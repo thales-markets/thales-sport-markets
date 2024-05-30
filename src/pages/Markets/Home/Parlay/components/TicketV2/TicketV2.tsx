@@ -447,7 +447,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             } else if (quotes.some((quote) => quote === 0)) {
                 setTooltipTextCollateralAmount(t('markets.parlay.validation.availability'));
             } else if (value && Number(value) < minBuyInAmount) {
-                console.log(Number(value), minBuyInAmount);
                 const decimals = getPrecision(minBuyInAmount);
                 setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.min-amount', {
@@ -849,8 +848,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         Number(buyInAmount) < minBuyInAmount ||
         payout === 0 ||
         // hide when validation tooltip exists except in case of invalid profit and not enough funds
-        (tooltipTextCollateralAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance) ||
-        isFetching;
+        (tooltipTextCollateralAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance);
 
     const profitPercentage =
         (Number(buyInAmountInDefaultCollateral) / Number(totalQuote) - Number(buyInAmountInDefaultCollateral)) /
