@@ -15,7 +15,7 @@ export const Container = styled(FlexDivColumnNative)`
     }
 `;
 
-export const OverviewContainerWrapper = styled.div`
+export const OverviewWrapper = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;

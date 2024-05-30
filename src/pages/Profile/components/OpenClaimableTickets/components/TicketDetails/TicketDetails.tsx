@@ -41,7 +41,7 @@ import {
     LiveIndicatorContainer,
     NumberOfGamesContainer,
     OverviewContainer,
-    OverviewContainerWrapper,
+    OverviewWrapper,
     PayoutInLabel,
     TicketIdContainer,
     TicketMarketsContainer,
@@ -181,7 +181,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
 
     return (
         <Container>
-            <OverviewContainerWrapper>
+            <OverviewWrapper>
                 <LiveIndicatorContainer isLive={ticket.isLive}>
                     {ticket.isLive && <Label>{t('profile.card.live')}</Label>}
                 </LiveIndicatorContainer>
@@ -257,7 +257,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                     {isClaimable && !isMobile && getButton(isMobile)}
                     <ArrowIcon className={showDetails ? 'icon icon--caret-up' : 'icon icon--caret-down'} />
                 </OverviewContainer>
-            </OverviewContainerWrapper>
+            </OverviewWrapper>
             <CollapsableContainer show={showDetails}>
                 <TicketMarketsContainer>
                     {ticket.sportMarkets.map((market, index) => {
