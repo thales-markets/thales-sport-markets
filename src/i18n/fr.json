@@ -532,7 +532,12 @@
             "odds-live-limitation-message": "Positions en direct autorisées uniquement en tant que célibataires",
             "time": "Temps",
             "live": "En direct",
-            "set": "Ensemble"
+            "set": "Ensemble",
+            "postponed": "Reporté",
+            "rain-delay": "Délai de pluie",
+            "abandoned": "Abandonné",
+            "delayed": "Retardé",
+            "interrupted": "Interrompu"
         },
         "market-details": {
             "wallet-info": {

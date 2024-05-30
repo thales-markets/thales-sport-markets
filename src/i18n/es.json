@@ -532,7 +532,12 @@
             "odds-live-limitation-message": "Posiciones en vivo solo permitidas como individuales",
             "live": "Vivir",
             "time": "Tiempo",
-            "set": "Colocar"
+            "set": "Colocar",
+            "rain-delay": "Retraso por la lluvia",
+            "delayed": "Demorado",
+            "postponed": "Aplazado",
+            "interrupted": "interrumpido",
+            "abandoned": "Abandonado"
         },
         "market-details": {
             "price": "Precio",

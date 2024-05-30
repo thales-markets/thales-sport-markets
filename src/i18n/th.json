@@ -533,7 +533,12 @@
             "odds-live-limitation-message": "ตำแหน่งสดอนุญาตเฉพาะคนโสดเท่านั้น",
             "live": "สด",
             "time": "เวลา",
-            "set": "ชุด"
+            "set": "ชุด",
+            "rain-delay": "ฝนตกล่าช้า",
+            "postponed": "เลื่อนออกไป",
+            "abandoned": "ถูกทอดทิ้ง",
+            "delayed": "ล่าช้า",
+            "interrupted": "ขัดจังหวะ"
         },
         "market-details": {
             "price": "ราคา",
