@@ -144,7 +144,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [minBuyInAmountInDefaultCollateral, setMinBuyInAmountInDefaultCollateral] = useState<number>(0);
     const [minBuyInAmount, setMinBuyInAmount] = useState<number>(0);
     const [finalQuotes, setFinalQuotes] = useState<number[]>([]);
-    const [checkTimeout, setCheckTimeout] = useState<boolean>(false);
 
     const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -158,8 +157,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
     const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
-
-    const [processingLiveTrade, setProcessingLiveTrade] = useState(false);
 
     const [gas, setGas] = useState(0);
     const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
@@ -388,16 +385,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     );
 
     useEffect(() => {
-        if (checkTimeout && processingLiveTrade) {
-            setIsBuying(false);
-            refetchBalances(walletAddress, networkId);
-            toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-            setProcessingLiveTrade(false);
-            setCheckTimeout(false);
-        }
-    }, [checkTimeout, networkId, processingLiveTrade, t, walletAddress]);
-
-    useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMV2Contract && multipleCollateral && signer) {
             const collateralContractWithSigner = isDefaultCollateral
@@ -513,58 +500,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         [dispatch, finalQuotes, setTooltipTextMessageUsdAmount]
     );
 
-    useEffect(() => {
-        const { sportsAMMV2Contract, liveTradingProcessorContract } = networkConnector;
-        if (sportsAMMV2Contract && liveTradingProcessorContract) {
-            const setLiveTradingListeners = async () => {
-                try {
-                    liveTradingProcessorContract.removeAllListeners('LiveTradeFulfilled');
-                    const filter = liveTradingProcessorContract.filters.LiveTradeFulfilled();
-                    liveTradingProcessorContract.on(
-                        filter,
-                        (
-                            recipient,
-                            allow
-                            // _gameId,
-                            // _sportId,
-                            // _typeId,
-                            // _position,
-                            // _buyInAmount,
-                            // _expectedQuote,
-                            // _collateral
-                        ) => {
-                            if (isWalletConnected && recipient.toLowerCase() === walletAddress.toLowerCase()) {
-                                if (allow) {
-                                    refetchBalances(walletAddress, networkId);
-                                    // toast.update(id, getSuccessToastOptions(t('market.toast-message.buy-success')));
-                                    toast.update(
-                                        toastId,
-                                        getSuccessToastOptions(t('market.toast-message.buy-success'))
-                                    );
-                                    setIsBuying(false);
-                                    setCollateralAmount('');
-                                    if (!keepSelection) dispatch(removeAll());
-                                    setProcessingLiveTrade(false);
-                                } else {
-                                    setIsBuying(false);
-                                    refetchBalances(walletAddress, networkId);
-                                    toast.update(
-                                        toastId,
-                                        getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                    );
-                                    setProcessingLiveTrade(false);
-                                }
-                            }
-                        }
-                    );
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-            setLiveTradingListeners();
-        }
-    }, [walletAddress, isWalletConnected, networkId, setCollateralAmount, keepSelection, dispatch, t]);
-
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMV2Contract && multipleCollateral && signer) {
@@ -641,7 +576,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     const liveTradeDataPosition = tradeData[0].position;
                     const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
 
-                    setProcessingLiveTrade(true);
                     tx = await getLiveTradingProcessorTransaction(
                         isVoucherSelected,
                         collateralAddress,
@@ -653,9 +587,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         additionalSlippage,
                         isAA
                     );
-                    setTimeout(() => {
-                        setCheckTimeout(true);
-                    }, (maxAllowedExecutionDelay + 10) * 1000);
                 } else {
                     tx = await getSportsAMMV2Transaction(
                         isVoucherSelected,
@@ -692,6 +623,36 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         setIsBuying(false);
                         setCollateralAmount('');
                         if (!keepSelection) dispatch(removeAll());
+                    } else if (sportsAMMV2ContractWithSigner) {
+                        const requestId = txResult.events.find((event: any) => event.event === 'LiveTradeRequested')
+                            .args[2];
+                        const startTime = Date.now();
+
+                        const checkFulfilled = async () => {
+                            const isFulfilled = await sportsAMMV2ContractWithSigner.requestIdToFulfillAllowed(
+                                requestId
+                            );
+                            if (!isFulfilled) {
+                                if (Date.now() - startTime >= (maxAllowedExecutionDelay + 10) * 1000) {
+                                    setIsBuying(false);
+                                    refetchBalances(walletAddress, networkId);
+                                    toast.update(
+                                        toastId,
+                                        getErrorToastOptions(t('common.errors.unknown-error-try-again'))
+                                    );
+                                } else {
+                                    setTimeout(checkFulfilled, 2000);
+                                }
+                            } else {
+                                refetchBalances(walletAddress, networkId);
+                                toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
+                                setIsBuying(false);
+                                setCollateralAmount('');
+                                if (!keepSelection) dispatch(removeAll());
+                            }
+                        };
+
+                        setTimeout(checkFulfilled, 2000);
                     }
                 }
             } catch (e) {
