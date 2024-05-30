@@ -63,7 +63,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
                 {!isMobile &&
                     scoreData.homeScoreByPeriod.map((_, index) => {
                         if (leagueSport === Sport.SOCCER && index === 1) {
-                            return <></>;
+                            return null;
                         }
                         return (
                             <ScoreContainer
