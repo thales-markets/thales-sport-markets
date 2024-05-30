@@ -1,6 +1,6 @@
 import { MarketTypeMap } from 'constants/marketTypes';
 import { MarketType } from 'enums/marketTypes';
-import { Position } from 'enums/markets';
+import { GameStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
@@ -372,4 +372,28 @@ export const updateTotalQuoteAndPayout = (tickets: Ticket[]): Ticket[] => {
         };
     });
     return modifiedTickets;
+};
+
+export const showLiveInfo = (status: GameStatus | undefined) => {
+    return (
+        status !== GameStatus.RUNDOWN_FINAL &&
+        status !== GameStatus.RUNDOWN_FULL_TIME &&
+        status !== GameStatus.RUNDOWN_POSTPONED &&
+        status !== GameStatus.RUNDOWN_CANCELED &&
+        status !== GameStatus.RUNDOWN_DELAYED &&
+        status !== GameStatus.RUNDOWN_RAIN_DELAY &&
+        status !== GameStatus.RUNDOWN_ABANDONED
+    );
+};
+
+export const showGameScore = (status: GameStatus | undefined) => {
+    return (
+        status !== GameStatus.RUNDOWN_POSTPONED &&
+        status !== GameStatus.RUNDOWN_CANCELED &&
+        status !== GameStatus.RUNDOWN_DELAYED &&
+        status !== GameStatus.RUNDOWN_RAIN_DELAY &&
+        status !== GameStatus.RUNDOWN_ABANDONED &&
+        status !== GameStatus.ENETPULSE_INTERRUPTED &&
+        status !== GameStatus.ENETPULSE_CANCELED
+    );
 };

@@ -116,11 +116,14 @@ export const PositionInfo = styled(FlexDivRow)`
 
 export const PositionText = styled.span`
     text-align: start;
-    min-width: 100px;
+    min-width: 110px;
 `;
 
 export const Odd = styled.span`
     margin-left: 5px;
+    @media (max-width: 575px) {
+        margin-left: 10px;
+    }
 `;
 
 export const StatusIcon = styled.i`

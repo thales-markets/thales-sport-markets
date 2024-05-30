@@ -441,6 +441,11 @@
             "round": "Round",
             "half-time": "Half-time",
             "resolved": "Resolved",
+            "postponed": "Postponed",
+            "delayed": "Delayed",
+            "rain-delay": "Rain delay",
+            "abandoned": "Abandoned",
+            "interrupted": "Interrupted",
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",

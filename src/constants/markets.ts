@@ -1,4 +1,4 @@
-import { OddsType, Position } from 'enums/markets';
+import { GameStatus, OddsType, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 
 export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
@@ -121,3 +121,18 @@ export const PARLAY_LEADERBOARD_MINIMUM_GAMES = 2;
 export const HIDE_PARLAY_LEADERBOARD = true;
 
 export const MEDIUM_ODDS = 0.5;
+
+export const GameStatusKey: Record<GameStatus, string> = {
+    [GameStatus.RUNDOWN_FINAL]: '',
+    [GameStatus.RUNDOWN_FULL_TIME]: '',
+    [GameStatus.RUNDOWN_HALF_TIME]: 'half-time',
+    [GameStatus.RUNDOWN_POSTPONED]: 'postponed',
+    [GameStatus.RUNDOWN_CANCELED]: 'canceled',
+    [GameStatus.RUNDOWN_DELAYED]: 'delayed',
+    [GameStatus.RUNDOWN_RAIN_DELAY]: 'rain-delay',
+    [GameStatus.RUNDOWN_ABANDONED]: 'abandoned',
+    [GameStatus.RUNDOWN_OVERTIME]: '',
+    [GameStatus.ENETPULSE_FINISHED]: '',
+    [GameStatus.ENETPULSE_INTERRUPTED]: 'interrupted',
+    [GameStatus.ENETPULSE_CANCELED]: 'canceled',
+};

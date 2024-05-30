@@ -8,12 +8,6 @@ export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
 };
 
-export const GAME_STATUS = {
-    FINAL: 'STATUS_FINAL',
-    FULL_TIME: 'STATUS_FULL_TIME',
-    HALF_TIME: 'STATUS_HALFTIME',
-};
-
 export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
     {
         i18label: 'markets.nav-menu.items.profile',

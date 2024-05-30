@@ -1,4 +1,4 @@
-import { Position } from 'enums/markets';
+import { GameStatus, Position } from 'enums/markets';
 import { ethers } from 'ethers';
 import { Network } from '../enums/network';
 import { League, Sport } from '../enums/sports';
@@ -94,7 +94,7 @@ export type CombinedPositions = CombinedPosition[];
 export type SportMarketScore = {
     isGameFinished?: boolean;
     period?: number;
-    status?: string;
+    gameStatus?: GameStatus;
     displayClock?: string;
     homeScore: number;
     awayScore: number;
@@ -141,6 +141,7 @@ export type SportMarket = {
     tournamentName?: string;
     tournamentRound?: string;
     isGameFinished?: boolean;
+    gameStatus?: GameStatus;
     liveScore?: SportMarketScore;
 };
 

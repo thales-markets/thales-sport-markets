@@ -1,6 +1,5 @@
 import MatchLogosV2 from 'components/MatchLogosV2';
 import SPAAnchor from 'components/SPAAnchor';
-import { GAME_STATUS } from 'constants/ui';
 import { Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { t } from 'i18next';
@@ -15,10 +14,12 @@ import { formatDateWithTime } from 'thales-utils';
 import { SportMarket, SportMarketScore, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
-import { getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
+import { getPositionTextV2, getTeamNameV2, getTitleText, showGameScore, showLiveInfo } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
+import { GameStatusKey } from '../../../../../../constants/markets';
+import { GameStatus } from '../../../../../../enums/markets';
 import {
     MarketTypeInfo,
     MatchInfo,
@@ -52,30 +53,38 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
 
     const leagueSport = getLeagueSport(market.leagueId);
 
-    const getScoreComponent = (scoreData: SportMarket | SportMarketScore) => (
-        <>
-            <ScoreContainer>
-                <TeamScoreLabel isResolved={market.isResolved}>{scoreData.homeScore}</TeamScoreLabel>
-                <TeamScoreLabel isResolved={market.isResolved}>{scoreData.awayScore}</TeamScoreLabel>
-            </ScoreContainer>
-            {!isMobile &&
-                scoreData.homeScoreByPeriod.map((_, index) => {
-                    if (leagueSport === Sport.SOCCER && index === 1) {
-                        return <></>;
-                    }
-                    return (
-                        <ScoreContainer key={index}>
-                            <TeamScoreLabel className="period" isResolved={market.isResolved}>
-                                {scoreData.homeScoreByPeriod[index]}
-                            </TeamScoreLabel>
-                            <TeamScoreLabel className="period" isResolved={market.isResolved}>
-                                {scoreData.awayScoreByPeriod[index]}
-                            </TeamScoreLabel>
-                        </ScoreContainer>
-                    );
-                })}
-        </>
-    );
+    const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
+        showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
+            <>
+                <ScoreContainer paddingLeft={leagueSport === Sport.BASEBALL ? '6px' : undefined}>
+                    <TeamScoreLabel isResolved={market.isResolved}>{scoreData.homeScore}</TeamScoreLabel>
+                    <TeamScoreLabel isResolved={market.isResolved}>{scoreData.awayScore}</TeamScoreLabel>
+                </ScoreContainer>
+                {!isMobile &&
+                    scoreData.homeScoreByPeriod.map((_, index) => {
+                        if (leagueSport === Sport.SOCCER && index === 1) {
+                            return <></>;
+                        }
+                        return (
+                            <ScoreContainer
+                                key={`${market.gameId}-${index}`}
+                                paddingLeft={leagueSport === Sport.BASEBALL ? '6px' : undefined}
+                            >
+                                <TeamScoreLabel className="period" isResolved={market.isResolved}>
+                                    {scoreData.homeScoreByPeriod[index]}
+                                </TeamScoreLabel>
+                                <TeamScoreLabel className="period" isResolved={market.isResolved}>
+                                    {scoreData.awayScoreByPeriod[index]}
+                                </TeamScoreLabel>
+                            </ScoreContainer>
+                        );
+                    })}
+            </>
+        ) : (
+            <TicketMarketStatus color={theme.status.started}>
+                {t(`markets.market-card.${GameStatusKey[scoreData.gameStatus]}`)}
+            </TicketMarketStatus>
+        );
 
     return (
         <Wrapper style={{ opacity: market.isCancelled ? 0.5 : 1 }}>
@@ -111,19 +120,22 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
             ) : isPendingResolution ? (
                 liveScore ? (
                     <MatchScoreContainer>
-                        {liveScore.status != GAME_STATUS.FINAL && liveScore.status != GAME_STATUS.FULL_TIME && (
-                            <MatchPeriodContainer>
-                                <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))} ${t(
-                                    `markets.market-card.${getLeaguePeriodType(market.leagueId)}`
-                                )}`}</MatchPeriodLabel>
-                                <FlexDivCentered>
-                                    <MatchPeriodLabel className="red">
-                                        {liveScore.displayClock?.replaceAll("'", '')}
-                                        <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
-                                    </MatchPeriodLabel>
-                                </FlexDivCentered>
-                            </MatchPeriodContainer>
-                        )}
+                        {showLiveInfo(liveScore.gameStatus) &&
+                            (liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
+                                <TicketMarketStatus>{t('markets.market-card.half-time')}</TicketMarketStatus>
+                            ) : (
+                                <MatchPeriodContainer>
+                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))} ${t(
+                                        `markets.market-card.${getLeaguePeriodType(market.leagueId)}`
+                                    )}`}</MatchPeriodLabel>
+                                    <FlexDivCentered>
+                                        <MatchPeriodLabel className="red">
+                                            {liveScore.displayClock?.replaceAll("'", '')}
+                                            <MatchPeriodLabel className="blink">&prime;</MatchPeriodLabel>
+                                        </MatchPeriodLabel>
+                                    </FlexDivCentered>
+                                </MatchPeriodContainer>
+                            ))}
                         {getScoreComponent(liveScore)}
                     </MatchScoreContainer>
                 ) : (

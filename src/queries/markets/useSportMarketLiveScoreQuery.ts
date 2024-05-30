@@ -20,7 +20,7 @@ const useSportMarketLiveScoreQuery = (gameId: string, options?: UseQueryOptions<
                 if (gameLiveScore) {
                     return {
                         period: gameLiveScore.period,
-                        status: gameLiveScore.status,
+                        gameStatus: gameLiveScore.status,
                         displayClock: gameLiveScore.displayClock,
                         homeScore: gameLiveScore.homeScore,
                         awayScore: gameLiveScore.awayScore,

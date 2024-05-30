@@ -66,6 +66,7 @@ const useSportsMarketsV2Query = (
                         homeScoreByPeriod,
                         awayScoreByPeriod,
                         isGameFinished: gameInfo?.isGameFinished,
+                        gameStatus: gameInfo?.gameStatus,
                         liveScore,
                     };
                 });
