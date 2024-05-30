@@ -15,11 +15,17 @@ export const Container = styled(FlexDivColumnNative)`
     }
 `;
 
+export const OverviewContainerWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+`;
+
 export const OverviewContainer = styled(FlexDivRow)`
     justify-content: space-between;
     background-color: ${(props) => props.theme.background.secondary};
-    border-radius: 7px;
-    padding: 10px 15px;
+    border-radius: 0 7px 7px 0;
+    padding: 10px 15px 10px 3px;
     width: 100%;
     max-height: 40px;
     align-items: center;
@@ -48,7 +54,7 @@ export const TicketIdContainer = styled(FlexDivStart)`
         flex-direction: row;
     }
     @media (max-width: 767px) {
-        margin-left: 10px;
+        margin-left: 2px;
         min-width: 75px;
         flex-direction: column;
     }
@@ -83,14 +89,12 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)`
     }
 `;
 
-export const LiveIndicatorContainer = styled(FlexDivStart)`
-    position: absolute;
-    top: 0;
-    left: 0;
+export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>`
+    min-width: 12px;
     max-width: 12px;
-    height: 40px;
+    height: 100%;
     border-radius: 5px 0 0 5px;
-    background: #ca4c53;
+    background: ${(props) => (props.isLive ? props.theme.status.live : props.theme.background.secondary)};
     padding-left: 2px;
     color: ${(props) => props.theme.textColor.secondary};
     align-items: center;
@@ -107,6 +111,14 @@ export const LiveIndicatorContainer = styled(FlexDivStart)`
             50% {
                 opacity: 0;
             }
+        }
+    }
+    @media (max-width: 767px) {
+        min-width: 8px;
+        max-width: 8px;
+        span {
+            font-size: 8px;
+            margin-left: 1px;
         }
     }
 `;
