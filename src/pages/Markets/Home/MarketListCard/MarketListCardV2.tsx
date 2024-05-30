@@ -3,12 +3,11 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
-import { League, Provider, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import {
     getIsMarketSelected,
     getIsThreeWayView,
@@ -17,15 +16,14 @@ import {
     setSelectedMarket,
 } from 'redux/modules/market';
 import { formatShortDateWithTime } from 'thales-utils';
-import { SportMarket, SportMarketScore } from 'types/markets';
+import { SportMarket } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from 'utils/formatters/string';
 import { getOnImageError, getTeamImageSource } from 'utils/images';
 import { isOddValid } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
-import { getLeaguePeriodType, getLeagueProvider, getLeagueSport, getLeagueTooltipKey } from 'utils/sports';
+import { getLeaguePeriodType, getLeagueTooltipKey } from 'utils/sports';
 import { displayGameClock, displayGamePeriod } from 'utils/ui';
 import { MEDIUM_ODDS } from '../../../../constants/markets';
-import useSportMarketLiveScoreQuery from '../../../../queries/markets/useSportMarketLiveScoreQuery';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import MatchStatus from './components/MatchStatus';
 import {
@@ -40,10 +38,6 @@ import {
     MatchInfo,
     MatchInfoContainer,
     MatchInfoLabel,
-    Result,
-    ResultContainer,
-    ResultLabel,
-    ResultWrapper,
     TeamLogosContainer,
     TeamNameLabel,
     TeamNamesContainer,
@@ -60,7 +54,6 @@ type MarketRowCardProps = {
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const isAppReady = useSelector(getIsAppReady);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
@@ -70,8 +63,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const [homeLogoSrc, setHomeLogoSrc] = useState(getTeamImageSource(market.homeTeam, market.leagueId));
     const [awayLogoSrc, setAwayLogoSrc] = useState(getTeamImageSource(market.awayTeam, market.leagueId));
 
-    const [liveScore, setLiveScore] = useState<SportMarketScore | undefined>(undefined);
-
     useEffect(() => {
         setHomeLogoSrc(getTeamImageSource(market.homeTeam, market.leagueId));
         setAwayLogoSrc(getTeamImageSource(market.awayTeam, market.leagueId));
@@ -79,12 +70,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameOpen = market.isOpen && !isGameStarted;
-    const isGameResolved = market.isResolved || market.isCancelled;
     const isGameRegularlyResolved = market.isResolved && !market.isCancelled;
-    const isPendingResolution = isGameStarted && !isGameResolved;
     const isGameLive = !!market.live;
-
-    const isRundownSport = getLeagueProvider(Number(market.leagueId)) === Provider.RUNDOWN;
 
     const spreadMarket = useMemo(() => {
         const spreadMarkets = market.childMarkets.filter((childMarket) => childMarket.typeId === MarketType.SPREAD);
@@ -120,16 +107,6 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
               })
             : undefined;
     }, [market, marketTypeFilter]);
-
-    const useLiveScoreQuery = useSportMarketLiveScoreQuery(market.gameId, {
-        enabled: isAppReady && isPendingResolution && isRundownSport,
-    });
-
-    useEffect(() => {
-        if (useLiveScoreQuery.isSuccess && useLiveScoreQuery.data) {
-            setLiveScore(useLiveScoreQuery.data);
-        }
-    }, [useLiveScoreQuery, useLiveScoreQuery.data]);
 
     const areChildMarketsOddsValid = market.childMarkets.some((childMarket) =>
         childMarket.odds.some((odd) => isOddValid(odd))
@@ -339,7 +316,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         </>
                     ) : (
                         <>
-                            {isGameRegularlyResolved || market.isGameFinished ? (
+                            {/* {isGameRegularlyResolved || market.isGameFinished ? (
                                 <ResultWrapper>
                                     <ResultLabel>
                                         {!market.isOneSideMarket ? `${t('markets.market-card.result')}:` : ''}
@@ -376,16 +353,8 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                         )}
                                     </ResultContainer>
                                 </ResultWrapper>
-                            ) : (
-                                <MatchStatus
-                                    isPendingResolution={isPendingResolution}
-                                    liveScore={liveScore}
-                                    isCancelled={market.isCancelled}
-                                    isPaused={market.isPaused}
-                                    isRundownSport={isRundownSport}
-                                    leagueId={market.leagueId}
-                                />
-                            )}
+                            ) : ( */}
+                            <MatchStatus market={market} />
                         </>
                     )}
                 </>

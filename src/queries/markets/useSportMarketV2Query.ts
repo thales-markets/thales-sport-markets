@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { generalConfig } from 'config/general';
+import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarket, Team } from 'types/markets';
 
 const useSportMarketQuery = (
@@ -16,24 +16,25 @@ const useSportMarketQuery = (
         QUERY_KEYS.SportMarketV2(marketAddress, networkId),
         async () => {
             try {
-                const response = await axios.get(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/${marketAddress}`,
-                    { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
-                );
-                const market = response.data;
+                const [marketResponse, gameInfoResponse, liveScoreResponse] = await Promise.all([
+                    axios.get(
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/${marketAddress}`,
+                        noCacheConfig
+                    ),
+                    axios.get(`${generalConfig.API_URL}/overtime-v2/games-info/${marketAddress}`, noCacheConfig),
+                    axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores/${marketAddress}`, noCacheConfig),
+                ]);
 
-                const gamesInfoResponse = await axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, {
-                    headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' },
-                });
-                const gamesInfo = gamesInfoResponse.data;
-                const gameInfo = gamesInfo[market.gameId];
+                const market = marketResponse.data;
+                const gameInfo = gameInfoResponse.data;
+                const liveScore = liveScoreResponse.data;
 
-                const homeTeam = !!gameInfo && gameInfo.teams.find((team: Team) => team.isHome);
-                const homeScore = homeTeam ? homeTeam.score : 0;
+                const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
+                const homeScore = homeTeam?.score;
                 const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
 
-                const awayTeam = !!gameInfo && gameInfo.teams.find((team: Team) => !team.isHome);
-                const awayScore = awayTeam ? awayTeam.score : 0;
+                const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
+                const awayScore = awayTeam?.score;
                 const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
                 return {
@@ -56,13 +57,14 @@ const useSportMarketQuery = (
                         ['typeId'],
                         ['asc']
                     ),
-                    tournamentName: gameInfo ? gameInfo.tournamentName : undefined,
-                    tournamentRound: gameInfo ? gameInfo.tournamentRound : undefined,
+                    tournamentName: gameInfo?.tournamentName,
+                    tournamentRound: gameInfo?.tournamentRound,
                     homeScore,
                     awayScore,
                     homeScoreByPeriod,
                     awayScoreByPeriod,
-                    isGameFinished: gameInfo ? gameInfo.isGameFinished : undefined,
+                    isGameFinished: gameInfo?.isGameFinished,
+                    liveScore,
                 };
             } catch (e) {
                 console.log(e);

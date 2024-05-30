@@ -8,7 +8,7 @@ import ROUTES from 'constants/routes';
 import { GAME_STATUS } from 'constants/ui';
 import { MarketType } from 'enums/marketTypes';
 import { Network } from 'enums/network';
-import { League, Provider, Sport } from 'enums/sports';
+import { League, Sport } from 'enums/sports';
 import { groupBy } from 'lodash';
 import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
 import Parlay from 'pages/Markets/Home/Parlay';
@@ -18,22 +18,21 @@ import queryString from 'query-string';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getIsMobile } from 'redux/modules/app';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { NetworkId } from 'thales-utils';
-import { SportMarket, SportMarketScore, TagInfo } from 'types/markets';
+import { SportMarket, TagInfo } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { buildHref, navigateTo } from 'utils/routes';
-import { getLeaguePeriodType, getLeagueProvider, getLeagueSport } from 'utils/sports';
+import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
 import Button from '../../../../components/Button';
 import { MarketTypeGroupsBySport } from '../../../../constants/marketTypes';
 import { LeagueMap } from '../../../../constants/sports';
-import useSportMarketLiveScoreQuery from '../../../../queries/markets/useSportMarketLiveScoreQuery';
 import { getMarketTypeGroupFilter, setMarketTypeGroupFilter } from '../../../../redux/modules/market';
 import Header from '../../Home/Header';
 import MatchInfoV2 from './components/MatchInfoV2';
@@ -48,7 +47,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
@@ -109,23 +107,10 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const isGameOpen = market.isOpen && !isGameStarted;
 
     const leagueName = Object.values(LeagueMap).find((t: TagInfo) => t.id == market.leagueId)?.label;
-    const isGameCancelled = market.isCancelled || (!isGameStarted && market.isResolved);
     const isGameResolved = market.isResolved || market.isCancelled;
     const isPendingResolution = isGameStarted && !isGameResolved;
-    const isGamePaused = market.isPaused && !isGameResolved;
-    const showStatus = market.isResolved || market.isCancelled || isGameStarted || market.isPaused;
-    const isRundownSport = getLeagueProvider(Number(market.leagueId)) === Provider.RUNDOWN;
-    const [liveScore, setLiveScore] = useState<SportMarketScore | undefined>(undefined);
-
-    const useLiveScoreQuery = useSportMarketLiveScoreQuery(market.gameId, {
-        enabled: isAppReady && isRundownSport,
-    });
-
-    useEffect(() => {
-        if (useLiveScoreQuery.isSuccess && useLiveScoreQuery.data) {
-            setLiveScore(useLiveScoreQuery.data);
-        }
-    }, [useLiveScoreQuery, useLiveScoreQuery.data]);
+    const showStatus = !market.isOpen || isGameStarted;
+    const liveScore = market.liveScore;
 
     const leagueSport = getLeagueSport(market.leagueId);
 
@@ -252,9 +237,69 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                 </HeaderWrapper>
                 <MatchInfoV2 market={market} />
                 {showStatus && (
-                    <Status backgroundColor={isGameCancelled ? theme.status.canceled : theme.background.secondary}>
-                        {isPendingResolution && !market.isGameFinished ? (
-                            isRundownSport && liveScore ? (
+                    <Status backgroundColor={market.isCancelled ? theme.status.canceled : theme.background.secondary}>
+                        {market.isCancelled ? (
+                            t('markets.market-card.canceled')
+                        ) : market.isResolved || market.isGameFinished ? (
+                            <ResultContainer>
+                                <ResultLabel>
+                                    {market.isOneSideMarket ? (
+                                        market.homeScore == 1 ? (
+                                            t('markets.market-card.race-winner')
+                                        ) : (
+                                            t('markets.market-card.no-win')
+                                        )
+                                    ) : market.leagueId === League.UFC ? (
+                                        <>
+                                            {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
+                                            <InfoLabel className="ufc">
+                                                {`(${t('market.number-of-rounds')}: ` +
+                                                    `${
+                                                        Number(market.homeScore) > 0
+                                                            ? market.homeScore
+                                                            : market.awayScore
+                                                    }` +
+                                                    ')'}
+                                            </InfoLabel>
+                                        </>
+                                    ) : (
+                                        `${market.homeScore} - ${market.awayScore}`
+                                    )}
+                                    {leagueSport === Sport.SOCCER &&
+                                        market.homeScoreByPeriod.length > 0 &&
+                                        market.awayScoreByPeriod.length > 0 && (
+                                            <InfoLabel className="football">
+                                                {' (' +
+                                                    market.homeScoreByPeriod[0] +
+                                                    ' - ' +
+                                                    market.awayScoreByPeriod[0] +
+                                                    ')'}
+                                            </InfoLabel>
+                                        )}
+                                </ResultLabel>
+                                {leagueSport !== Sport.SOCCER && leagueSport !== Sport.ESPORTS && (
+                                    <PeriodsContainer directionRow={true}>
+                                        {market.homeScoreByPeriod.map((_, index) => {
+                                            return (
+                                                <PeriodContainer key={index}>
+                                                    <InfoLabel className="gray">{index + 1}</InfoLabel>
+                                                    <InfoLabel>{market.homeScoreByPeriod[index]}</InfoLabel>
+                                                    <InfoLabel>{market.awayScoreByPeriod[index]}</InfoLabel>
+                                                </PeriodContainer>
+                                            );
+                                        })}
+                                        {leagueSport !== Sport.TENNIS && (
+                                            <PeriodContainer>
+                                                <InfoLabel className="gray">T</InfoLabel>
+                                                <InfoLabel>{market.homeScore}</InfoLabel>
+                                                <InfoLabel>{market.awayScore}</InfoLabel>
+                                            </PeriodContainer>
+                                        )}
+                                    </PeriodsContainer>
+                                )}
+                            </ResultContainer>
+                        ) : isPendingResolution ? (
+                            liveScore ? (
                                 <ResultContainer>
                                     <ResultLabel>
                                         {liveScore.homeScore + ' - ' + liveScore.awayScore}{' '}
@@ -271,10 +316,9 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                     {liveScore.status != GAME_STATUS.FINAL &&
                                         liveScore.status != GAME_STATUS.FULL_TIME && (
                                             <PeriodsContainer>
-                                                {liveScore.status == GAME_STATUS.HALF_TIME && (
+                                                {liveScore.status == GAME_STATUS.HALF_TIME ? (
                                                     <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
-                                                )}
-                                                {liveScore.status != GAME_STATUS.HALF_TIME && (
+                                                ) : (
                                                     <>
                                                         <InfoLabel>
                                                             {` ${getOrdinalNumberLabel(Number(liveScore.period))} ${t(
@@ -291,7 +335,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 )}
                                             </PeriodsContainer>
                                         )}
-                                    {leagueSport !== Sport.SOCCER && (
+                                    {leagueSport !== Sport.SOCCER && leagueSport !== Sport.ESPORTS && (
                                         <FlexDivRow>
                                             {liveScore.homeScoreByPeriod.map((_, index) => {
                                                 return (
@@ -308,69 +352,10 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             ) : (
                                 t('markets.market-card.pending')
                             )
-                        ) : isGameCancelled ? (
-                            t('markets.market-card.canceled')
-                        ) : isGamePaused ? (
+                        ) : market.isPaused ? (
                             t('markets.market-card.paused')
                         ) : (
-                            <ResultContainer>
-                                <ResultLabel>
-                                    {market.isOneSideMarket
-                                        ? market.homeScore == 1
-                                            ? t('markets.market-card.race-winner')
-                                            : t('markets.market-card.no-win')
-                                        : market.leagueId != League.UFC
-                                        ? `${market.homeScore} - ${market.awayScore}`
-                                        : ''}
-                                    {leagueSport === Sport.SOCCER &&
-                                        market.homeScoreByPeriod.length > 0 &&
-                                        market.awayScoreByPeriod.length > 0 && (
-                                            <InfoLabel className="football">
-                                                {' (' +
-                                                    market.homeScoreByPeriod[0] +
-                                                    ' - ' +
-                                                    market.awayScoreByPeriod[0] +
-                                                    ')'}
-                                            </InfoLabel>
-                                        )}
-                                    {market.leagueId == League.UFC ? (
-                                        <>
-                                            {Number(market.homeScore) > 0 ? 'W - L' : 'L - W'}
-                                            <InfoLabel className="ufc">
-                                                {`(${t('market.number-of-rounds')}: ` +
-                                                    `${
-                                                        Number(market.homeScore) > 0
-                                                            ? market.homeScore
-                                                            : market.awayScore
-                                                    }` +
-                                                    ')'}
-                                            </InfoLabel>
-                                        </>
-                                    ) : (
-                                        ''
-                                    )}
-                                </ResultLabel>
-                                {leagueSport !== Sport.SOCCER && leagueSport !== Sport.ESPORTS && (
-                                    <PeriodsContainer directionRow={true}>
-                                        {market.homeScoreByPeriod.map((homePeriodResult, index) => {
-                                            return (
-                                                <PeriodContainer key={index}>
-                                                    <InfoLabel className="gray">{index + 1}</InfoLabel>
-                                                    <InfoLabel>{homePeriodResult}</InfoLabel>
-                                                    <InfoLabel>{market.awayScoreByPeriod[index]}</InfoLabel>
-                                                </PeriodContainer>
-                                            );
-                                        })}
-                                        {leagueSport !== Sport.TENNIS && (
-                                            <PeriodContainer>
-                                                <InfoLabel className="gray">T</InfoLabel>
-                                                <InfoLabel>{market.homeScore}</InfoLabel>
-                                                <InfoLabel>{market.awayScore}</InfoLabel>
-                                            </PeriodContainer>
-                                        )}
-                                    </PeriodsContainer>
-                                )}
-                            </ResultContainer>
+                            <></>
                         )}
                     </Status>
                 )}

@@ -18,25 +18,28 @@ const useSportsMarketsV2Query = (
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
 
-                const [marketsResponse, gamesInfoResponse] = await Promise.all([
+                const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
                         `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true`,
                         noCacheConfig
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
+                    axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
                 ]);
                 const markets = marketsResponse.data;
                 const gamesInfo = gamesInfoResponse.data;
+                const liveScores = liveScoresResponse.data;
 
                 return markets.map((market: any) => {
                     const gameInfo = gamesInfo[market.gameId];
+                    const liveScore = liveScores[market.gameId];
 
                     const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
-                    const homeScore = homeTeam ? homeTeam.score : 0;
+                    const homeScore = homeTeam?.score;
                     const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
 
                     const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
-                    const awayScore = awayTeam ? awayTeam.score : 0;
+                    const awayScore = awayTeam?.score;
                     const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
                     return {
@@ -56,13 +59,14 @@ const useSportsMarketsV2Query = (
                             ['typeId'],
                             ['asc']
                         ),
-                        tournamentName: gameInfo ? gameInfo.tournamentName : undefined,
-                        tournamentRound: gameInfo ? gameInfo.tournamentRound : undefined,
+                        tournamentName: gameInfo?.tournamentName,
+                        tournamentRound: gameInfo?.tournamentRound,
                         homeScore,
                         awayScore,
                         homeScoreByPeriod,
                         awayScoreByPeriod,
-                        isGameFinished: gameInfo ? gameInfo.isGameFinished : undefined,
+                        isGameFinished: gameInfo?.isGameFinished,
+                        liveScore,
                     };
                 });
             } catch (e) {

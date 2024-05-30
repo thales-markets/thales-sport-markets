@@ -20,8 +20,8 @@ export const Wrapper = styled(FlexDivRowCentered)`
 `;
 
 export const MatchInfo = styled.div`
-    max-width: 300px;
-    width: 300px;
+    max-width: 220px;
+    width: 220px;
     display: flex;
     align-items: center;
     height: 30px;
@@ -31,22 +31,25 @@ export const MatchInfo = styled.div`
         width: 200px;
     }
     @media (max-width: 767px) {
-        max-width: 150px;
-        width: 150px;
+        max-width: 165px;
+        width: 165px;
     }
 `;
 
-export const MatchLabel = styled(FlexDivRow)`
+export const TeamNamesContainer = styled(FlexDivColumn)``;
+
+export const TeamNameLabel = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.primary};
+    line-height: 14px;
     text-align: start;
     margin-right: 5px;
     @media (max-width: 1399px) {
-        max-width: 160px;
-        width: 160px;
+        max-width: 150px;
+        width: 150px;
     }
     @media (max-width: 767px) {
-        max-width: 110px;
-        width: 110px;
+        max-width: 120px;
+        width: 120px;
     }
 `;
 
@@ -104,7 +107,12 @@ export const MarketStatus = styled(FlexDivRow)`
 `;
 
 export const MatchScoreContainer = styled(FlexDivRow)`
+    min-width: 150px;
     flex: initial !important;
+    justify-content: end;
+    @media (max-width: 767px) {
+        min-width: 40px;
+    }
 `;
 
 export const MatchPeriodContainer = styled(FlexDivColumnCentered)`
@@ -137,12 +145,13 @@ export const MatchPeriodLabel = styled.span`
 
 export const ScoreContainer = styled(FlexDivColumn)`
     padding-left: 8px;
+    flex: initial;
 `;
 
-export const TeamScoreLabel = styled.span`
-    font-weight: 400;
+export const TeamScoreLabel = styled.span<{ isResolved?: boolean }>`
+    font-weight: ${(props) => (props.isResolved ? 600 : 400)};
     font-size: 12px;
-    line-height: 16px;
+    line-height: 14px;
     text-transform: uppercase;
     white-space: nowrap;
     text-align: end;
@@ -150,10 +159,14 @@ export const TeamScoreLabel = styled.span`
     &.period {
         color: ${(props) => props.theme.textColor.secondary};
     }
+    @media (max-width: 767px) {
+        font-size: 10px;
+        line-height: 12px;
+    }
 `;
 
 export const TicketMarketStatus = styled.span<{ color?: string }>`
-    min-width: 100px;
+    min-width: 150px;
     text-align: end;
     color: ${(props) => props.color || props.theme.textColor.primary};
     @media (max-width: 767px) {

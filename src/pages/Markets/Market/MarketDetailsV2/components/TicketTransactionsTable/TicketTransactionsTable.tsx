@@ -7,6 +7,7 @@ import i18n from 'i18n';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
@@ -14,7 +15,7 @@ import { formatCurrencyWithKey, formatTxTimestamp, getEtherscanAddressLink, trun
 import { SportMarket, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
-import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
+import { getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
 import {
@@ -25,7 +26,6 @@ import {
     MarketStatus,
     MarketStatusIcon,
     MarketTypeInfo,
-    MatchLabel,
     Odd,
     PositionInfo,
     PositionText,
@@ -36,6 +36,8 @@ import {
     StatusIcon,
     StatusWrapper,
     TableText,
+    TeamNameLabel,
+    TeamNamesContainer,
     TicketRow,
     TwitterIcon,
     TwitterWrapper,
@@ -59,6 +61,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     const { t } = useTranslation();
     const language = i18n.language;
     const theme: ThemeInterface = useTheme();
+    const isMobile = useSelector(getIsMobile);
     const selectedOddsType = useSelector(getOddsType);
     const networkId = useSelector(getNetworkId);
 
@@ -199,7 +202,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 data={ticketTransactions}
                 noResultsMessage={t('market.table.no-results')}
                 expandedRow={(row) => {
-                    const ticketMarkets = getTicketMarkets(row.original, selectedOddsType, language, theme, market);
+                    const ticketMarkets = getTicketMarkets(
+                        row.original,
+                        selectedOddsType,
+                        language,
+                        theme,
+                        isMobile,
+                        market
+                    );
 
                     return (
                         <ExpandedRowWrapper>
@@ -255,6 +265,7 @@ export const getTicketMarkets = (
     selectedOddsType: OddsType,
     language: string,
     theme: ThemeInterface,
+    isMobile: boolean,
     market?: SportMarket
 ) => {
     return ticket.sportMarkets.map((ticketMarket, index) => {
@@ -265,7 +276,15 @@ export const getTicketMarkets = (
                 key={`m-${index}`}
             >
                 <SPAAnchor href={buildMarketLink(ticketMarket.gameId, language)}>
-                    <MatchLabel>{getMatchLabel(ticketMarket)}</MatchLabel>
+                    <TeamNamesContainer>
+                        <TeamNameLabel>{getTeamNameV2(ticketMarket, 0)}</TeamNameLabel>
+                        {!ticketMarket.isOneSideMarket && !ticketMarket.isPlayerPropsMarket && (
+                            <>
+                                {!isMobile && <TeamNameLabel>&nbsp;-&nbsp;</TeamNameLabel>}
+                                <TeamNameLabel>{getTeamNameV2(ticketMarket, 1)}</TeamNameLabel>
+                            </>
+                        )}
+                    </TeamNamesContainer>
                 </SPAAnchor>
                 <SelectionInfoContainer>
                     <MarketTypeInfo>{getTitleText(ticketMarket)}</MarketTypeInfo>

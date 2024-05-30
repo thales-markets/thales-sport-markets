@@ -26,7 +26,6 @@ export const StatusWrapper = styled.div`
     color: ${(props) => props.color || props.theme.status.open};
     @media (max-width: 767px) {
         font-size: 10px;
-        line-height: 10px;
     }
 `;
 
@@ -41,6 +40,12 @@ export const FirstExpandedSection = styled(FlexDivColumnCentered)`
     font-weight: 600;
     font-size: 10px;
     line-height: 12px;
+    @media (max-width: 767px) {
+        font-size: 10px;
+    }
+    @media (max-width: 575px) {
+        font-size: 9px;
+    }
 `;
 
 export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
@@ -57,26 +62,33 @@ export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     @media (max-width: 767px) {
         height: initial;
         margin-bottom: 8px;
-        padding: 0 5px;
+        padding: 0;
     }
 `;
 
-export const MatchLabel = styled(FlexDivRow)`
-    color: ${(props) => props.theme.textColor.primary};
-    text-align: start;
-    margin-right: 5px;
+export const TeamNamesContainer = styled.div`
+    display: flex;
+    flex-direction: row;
     min-width: 250px;
     width: 250px;
-    cursor: pointer;
+    @media (max-width: 950px) {
+        flex-direction: column;
+    }
     @media (max-width: 767px) {
         min-width: 160px;
         width: 160px;
     }
     @media (max-width: 575px) {
-        min-width: 110px;
-        width: 110px;
+        min-width: 120px;
+        width: 120px;
     }
+    margin-right: 5px;
+    cursor: pointer;
+    text-align: start;
+    color: ${(props) => props.theme.textColor.primary};
 `;
+
+export const TeamNameLabel = styled(FlexDivRow)``;
 
 export const SelectionInfoContainer = styled.div`
     display: flex;
@@ -124,6 +136,10 @@ export const MarketStatusIcon = styled.i`
     font-size: 12px;
     margin-right: 5px;
     margin-top: -1px;
+    @media (max-width: 767px) {
+        font-size: 10px;
+        margin-right: 3px;
+    }
 `;
 
 export const MarketStatus = styled.span<{ color?: string }>`
@@ -131,6 +147,10 @@ export const MarketStatus = styled.span<{ color?: string }>`
     min-width: 100px;
     text-align: end;
     @media (max-width: 767px) {
+        margin-left: 5px;
+        min-width: 80px;
+    }
+    @media (max-width: 575px) {
         margin-left: 5px;
         min-width: 40px;
     }

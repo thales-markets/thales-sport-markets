@@ -16,7 +16,13 @@ import {
 } from './markets';
 import { getLeagueSport } from './sports';
 
-export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, playersInfo: any): Ticket => {
+export const mapTicket = (
+    ticket: any,
+    networkId: number,
+    gamesInfo: any,
+    playersInfo: any,
+    liveScores: any
+): Ticket => {
     const collateral = getCollateralByAddress(ticket.collateral, networkId);
     const mappedTicket: Ticket = {
         id: ticket.id,
@@ -58,17 +64,18 @@ export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, player
                 const type = MarketTypeMap[typeId as MarketType];
                 const line = Number(market.line);
 
-                const homeTeam =
-                    !!gamesInfo[market.gameId] && gamesInfo[market.gameId].teams.find((team: Team) => team.isHome);
-                const homeTeamName = homeTeam ? homeTeam.name : 'Home Team';
-                const homeScore = homeTeam ? homeTeam.score : 0;
+                const gameInfo = gamesInfo[market.gameId];
+                const liveScore = liveScores[market.gameId];
+
+                const homeTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => team.isHome);
+                const homeTeamName = homeTeam?.name ?? 'Home Team';
+                const homeScore = homeTeam?.score;
                 const homeScoreByPeriod = homeTeam ? homeTeam.scoreByPeriod : [];
 
-                const awayTeam =
-                    !!gamesInfo[market.gameId] && gamesInfo[market.gameId].teams.find((team: Team) => !team.isHome);
-                const awayTeamName = awayTeam ? awayTeam.name : 'Away Team';
-                const awayScore = awayTeam ? awayTeam.score : 0;
-                const awayScoreByPeriod = awayTeam ? awayTeam.ScoreByPeriod : [];
+                const awayTeam = !!gameInfo && gameInfo.teams && gameInfo.teams.find((team: Team) => !team.isHome);
+                const awayTeamName = awayTeam?.name ?? 'Away Team';
+                const awayScore = awayTeam?.score;
+                const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
                 const playerName =
                     isPlayerProps && playersInfo[market.playerId]
@@ -129,6 +136,7 @@ export const mapTicket = (ticket: any, networkId: number, gamesInfo: any, player
                     odd: bigNumberFormatter(market.odd),
                     childMarkets: [],
                     winningPositions: [],
+                    liveScore,
                 };
             }
         ),

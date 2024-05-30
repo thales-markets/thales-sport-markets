@@ -141,6 +141,7 @@ export type SportMarket = {
     tournamentName?: string;
     tournamentRound?: string;
     isGameFinished?: boolean;
+    liveScore?: SportMarketScore;
 };
 
 export type SportMarkets = SportMarket[];
