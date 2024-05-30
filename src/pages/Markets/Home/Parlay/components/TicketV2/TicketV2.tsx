@@ -627,7 +627,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         const requestId = txResult.events.find((event: any) => event.event === 'LiveTradeRequested')
                             .args[2];
                         const startTime = Date.now();
-
+                        console.log('filfill start time:', new Date(startTime));
                         const checkFulfilled = async () => {
                             const isFulfilled = await sportsAMMV2ContractWithSigner.requestIdToFulfillAllowed(
                                 requestId
@@ -641,9 +641,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                         getErrorToastOptions(t('common.errors.unknown-error-try-again'))
                                     );
                                 } else {
-                                    setTimeout(checkFulfilled, 2000);
+                                    setTimeout(checkFulfilled, 1000);
                                 }
                             } else {
+                                console.log('filfill end time:', new Date(Date.now()));
+                                console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
                                 toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                                 setIsBuying(false);
