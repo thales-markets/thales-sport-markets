@@ -94,11 +94,14 @@ export const PositionInfo = styled(FlexDivRow)`
 
 export const PositionText = styled.span`
     text-align: start;
-    min-width: 100px;
+    min-width: 110px;
 `;
 
 export const Odd = styled.span`
     margin-left: 5px;
+    @media (max-width: 575px) {
+        margin-left: 10px;
+    }
 `;
 
 export const MarketStatus = styled(FlexDivRow)`
@@ -111,6 +114,11 @@ export const MatchScoreContainer = styled(FlexDivRow)`
     flex: initial !important;
     justify-content: end;
     @media (max-width: 767px) {
+        margin-left: 5px;
+        min-width: 80px;
+    }
+    @media (max-width: 575px) {
+        margin-left: 5px;
         min-width: 40px;
     }
 `;
@@ -143,8 +151,8 @@ export const MatchPeriodLabel = styled.span`
     }
 `;
 
-export const ScoreContainer = styled(FlexDivColumn)`
-    padding-left: 8px;
+export const ScoreContainer = styled(FlexDivColumn)<{ paddingLeft?: string }>`
+    padding-left: ${(props) => props.paddingLeft || '8px'};
     flex: initial;
 `;
 
@@ -170,6 +178,10 @@ export const TicketMarketStatus = styled.span<{ color?: string }>`
     text-align: end;
     color: ${(props) => props.color || props.theme.textColor.primary};
     @media (max-width: 767px) {
+        margin-left: 5px;
+        min-width: 80px;
+    }
+    @media (max-width: 575px) {
         margin-left: 5px;
         min-width: 40px;
     }
