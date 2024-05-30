@@ -90,7 +90,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)`
     max-width: 12px;
     height: 40px;
     border-radius: 5px 0 0 5px;
-    background: #ec3535;
+    background: #ca4c53;
     padding-left: 2px;
     color: ${(props) => props.theme.textColor.secondary};
     align-items: center;

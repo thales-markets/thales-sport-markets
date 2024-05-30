@@ -148,7 +148,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
-    const [isFetching, setIsFetching] = useState(false);
+    const [, /*isFetching*/ setIsFetching] = useState(false);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState<string>('');

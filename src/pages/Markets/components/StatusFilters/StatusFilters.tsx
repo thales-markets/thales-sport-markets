@@ -118,6 +118,9 @@ const Label = styled.div`
 const Icon = styled.i`
     font-size: 22px;
     margin-right: 10px;
+    font-weight: 400;
+    margin-left: 1px;
+    margin-top: -2px;
 `;
 
 const ArrowIcon = styled.i`
