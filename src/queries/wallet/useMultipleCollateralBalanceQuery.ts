@@ -29,6 +29,7 @@ const useMultipleCollateralBalanceQuery = (
                         ARB: 0,
                         USDC: 0,
                         USDbC: 0,
+                        THALES: 0,
                     };
                 }
 
@@ -43,6 +44,7 @@ const useMultipleCollateralBalanceQuery = (
                     ETHBalance,
                     ARBBalance,
                     USDbCBalance,
+                    THALESBalance,
                 ] = await Promise.all([
                     multipleCollateral
                         ? multipleCollateral[CRYPTO_CURRENCY_MAP.sUSD as Coins]?.balanceOf(walletAddress)
@@ -72,6 +74,9 @@ const useMultipleCollateralBalanceQuery = (
                     multipleCollateral
                         ? multipleCollateral[CRYPTO_CURRENCY_MAP.USDbC as Coins]?.balanceOf(walletAddress)
                         : undefined,
+                    multipleCollateral
+                        ? multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins]?.balanceOf(walletAddress)
+                        : undefined,
                 ]);
 
                 return {
@@ -85,6 +90,7 @@ const useMultipleCollateralBalanceQuery = (
                     ETH: ETHBalance ? bigNumberFormatter(ETHBalance, COLLATERAL_DECIMALS.ETH) : 0,
                     ARB: ARBBalance ? bigNumberFormatter(ARBBalance, COLLATERAL_DECIMALS.ARB) : 0,
                     USDbC: USDbCBalance ? bigNumberFormatter(USDbCBalance, COLLATERAL_DECIMALS.USDbC) : 0,
+                    THALES: THALESBalance ? bigNumberFormatter(THALESBalance, COLLATERAL_DECIMALS.THALES) : 0,
                 };
             } catch (e) {
                 console.log('e ', e);

@@ -1,3 +1,5 @@
+import { GameStatusKey } from 'constants/markets';
+import { GameStatus } from 'enums/markets';
 import { Sport } from 'enums/sports';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -5,11 +7,9 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarket, SportMarketScore } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { showGameScore, showLiveInfo } from 'utils/marketsV2';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
-import { GameStatusKey } from '../../../../../../constants/markets';
-import { GameStatus } from '../../../../../../enums/markets';
-import { showGameScore, showLiveInfo } from '../../../../../../utils/marketsV2';
 
 type MatchStatusProps = {
     market: SportMarket;

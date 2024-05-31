@@ -4,12 +4,12 @@ import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getTicketPayment } from 'redux/modules/ticket';
+import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsAA, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -60,6 +60,7 @@ type TicketDetailsProps = {
 
 const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -87,6 +88,16 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
         networkId,
         ticket.collateral,
     ]);
+
+    useEffect(() => {
+        dispatch(
+            setPaymentSelectedCollateralIndex({
+                selectedCollateralIndex: ticketCollateralIndex,
+                networkId: networkId,
+            })
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const ticketCollateralHasLp = isLpSupported(ticket.collateral);
@@ -229,7 +240,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                                             <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
                                             <CollateralSelector
                                                 collateralArray={getCollaterals(networkId)}
-                                                selectedItem={ticketCollateralIndex}
+                                                selectedItem={selectedCollateralIndex}
                                                 onChangeCollateral={() => {}}
                                             />
                                         </>
@@ -252,7 +263,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                                     <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
                                     <CollateralSelector
                                         collateralArray={getCollaterals(networkId)}
-                                        selectedItem={ticketCollateralIndex}
+                                        selectedItem={selectedCollateralIndex}
                                         onChangeCollateral={() => {}}
                                     />
                                 </CollateralSelectorContainer>

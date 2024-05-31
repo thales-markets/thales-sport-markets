@@ -37,6 +37,7 @@ export const isLpSupported = (currencyKey: Coins) => {
     return (
         currencyKey === CRYPTO_CURRENCY_MAP.USDC ||
         currencyKey === CRYPTO_CURRENCY_MAP.WETH ||
-        currencyKey === CRYPTO_CURRENCY_MAP.ETH
+        currencyKey === CRYPTO_CURRENCY_MAP.ETH ||
+        currencyKey === CRYPTO_CURRENCY_MAP.THALES
     );
 };

@@ -353,6 +353,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
                         ),
                     ]);
+
                     setBuyInAmountInDefaultCollateral(
                         coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
                     );

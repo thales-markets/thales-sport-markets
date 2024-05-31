@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeFromTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { TicketMarket } from 'types/markets';
 import { formatMarketOdds } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
@@ -24,7 +24,10 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
 
     return (
         <>
-            <MatchLogosV2 market={market} width={'55px'} />
+            <LeftContainer>
+                {market.live && <LiveTag>Live</LiveTag>}
+                <MatchLogosV2 market={market} width={'55px'} />
+            </LeftContainer>
             <MarketPositionContainer>
                 <MatchLabel fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
                     {matchLabel}
@@ -59,6 +62,12 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
         </>
     );
 };
+
+const LeftContainer = styled(FlexDivColumn)`
+    flex: initial;
+`;
+
+const LiveTag = styled(FlexDivCentered)``;
 
 const MarketPositionContainer = styled(FlexDivColumn)`
     display: block;

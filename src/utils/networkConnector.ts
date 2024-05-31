@@ -77,6 +77,7 @@ const networkConnector: NetworkConnector = {
             ETH: initializeContract(multipleCollateral.ETH, networkSettings),
             ARB: initializeContract(multipleCollateral.ARB, networkSettings),
             USDbC: initializeContract(multipleCollateral.USDbC, networkSettings),
+            THALES: initializeContract(multipleCollateral.THALES, networkSettings),
         };
         this.sportsAMMDataContract = initializeContract(sportsAMMDataContract, networkSettings);
         this.sportsAMMV2Contract = initializeContract(sportsAMMV2Contract, networkSettings);
