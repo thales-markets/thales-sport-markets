@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeFromTicket } from 'redux/modules/ticket';
+import { getTicketPayment, removeFromTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { TicketMarket } from 'types/markets';
 import { formatMarketOdds } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
+import { getNetworkId } from '../../redux/modules/wallet';
+import { getCollateral } from '../../utils/collaterals';
+import { getAddedPayoutMultiplier } from '../../utils/tickets';
 import MatchLogosV2 from '../MatchLogosV2';
 
 type MatchInfoProps = {
@@ -19,8 +22,14 @@ type MatchInfoProps = {
 const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const networkId = useSelector(getNetworkId);
     const selectedOddsType = useSelector(getOddsType);
     const matchLabel = getMatchLabel(market);
+    const ticketPayment = useSelector(getTicketPayment);
+    const selectedCollateral = useMemo(() => getCollateral(networkId, ticketPayment.selectedCollateralIndex), [
+        networkId,
+        ticketPayment.selectedCollateralIndex,
+    ]);
 
     const positionText = getPositionTextV2(market, market.position, true);
 
@@ -43,7 +52,9 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
                 <MarketTypeInfo>{getTitleText(market)}</MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{positionText}</PositionText>
-                    <Odd>{formatMarketOdds(selectedOddsType, market.odd)}</Odd>
+                    <Odd>
+                        {formatMarketOdds(selectedOddsType, market.odd * getAddedPayoutMultiplier(selectedCollateral))}
+                    </Odd>
                 </PositionInfo>
             </MarketPositionContainer>
             {readOnly && (

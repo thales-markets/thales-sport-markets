@@ -79,6 +79,7 @@ import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
+import { getAddedPayoutMultiplier } from '../../../../../../utils/tickets';
 import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import SuggestedAmount from '../SuggestedAmount';
 import Voucher from '../Voucher';
@@ -290,10 +291,15 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     }, [sportsAmmData?.minBuyInAmount]);
 
     const totalQuote = useMemo(() => {
-        const quote = markets.reduce((partialQuote, market) => partialQuote * (market.odd > 0 ? market.odd : 1), 1);
+        console.log('totalQuoteSet');
+        const quote = markets.reduce(
+            (partialQuote, market) =>
+                partialQuote * (market.odd > 0 ? market.odd * getAddedPayoutMultiplier(selectedCollateral) : 1),
+            1
+        );
         const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
         return quote < maxSupportedOdds ? maxSupportedOdds : quote;
-    }, [markets, sportsAmmData?.maxSupportedOdds]);
+    }, [markets, sportsAmmData?.maxSupportedOdds, selectedCollateral]);
 
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
         enabled: isAppReady,
