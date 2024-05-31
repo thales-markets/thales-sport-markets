@@ -32,14 +32,6 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const convertFromStable = useCallback(
         (value: number) => {
             const rate = exchangeRates?.[collateral];
-            console.log(
-                rate,
-                value,
-                rate && value / (rate * (1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE)),
-                10 ** COLLATERAL_DECIMALS[collateral],
-                COLLATERAL_DECIMALS[collateral],
-                collateral
-            );
             if (isStableCurrency(collateral)) {
                 return value;
             } else {
