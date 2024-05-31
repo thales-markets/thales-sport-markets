@@ -1,9 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { TicketMarket } from 'types/markets';
 import { formatMarketOdds } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
@@ -16,6 +17,7 @@ type MatchInfoProps = {
 };
 
 const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
     const matchLabel = getMatchLabel(market);
@@ -25,7 +27,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
     return (
         <>
             <LeftContainer>
-                {market.live && <LiveTag>Live</LiveTag>}
+                {market.live && <LiveTag>{t(`markets.market-card.live`)}</LiveTag>}
                 <MatchLogosV2 market={market} width={'55px'} />
             </LeftContainer>
             <MarketPositionContainer>
@@ -65,9 +67,20 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
 
 const LeftContainer = styled(FlexDivColumn)`
     flex: initial;
+    height: 100%;
 `;
 
-const LiveTag = styled(FlexDivCentered)``;
+const LiveTag = styled.span`
+    background: ${(props) => props.theme.status.live};
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 10px;
+    height: 12px;
+    line-height: 12px;
+    padding: 0 12px;
+    width: fit-content;
+    margin-bottom: 5px;
+`;
 
 const MarketPositionContainer = styled(FlexDivColumn)`
     display: block;
