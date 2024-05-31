@@ -23,4 +23,5 @@ export const LOCAL_STORAGE_KEYS = {
     KEEP_SELECTION: 'keepSelection',
     SELECTED_MARKET: 'selectedMarket',
     IS_THREE_WAY_VIEW: 'isThreeWayView',
+    LIVE_BET_SLIPPAGE: 'liveBetSlippage',
 };

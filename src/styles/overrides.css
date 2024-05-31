@@ -42,3 +42,17 @@
     color: #ffffff !important;
     background-color: #3c498a !important;
 }
+
+.small-checkbox {
+    span {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.small-checkbox span::after {
+    left: 4px;
+    top: -1px;
+    width: 2px;
+    height: 10px;   
+}

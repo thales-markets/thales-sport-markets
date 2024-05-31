@@ -192,13 +192,6 @@
             "save": "Save",
             "info": "*You can always change the odds type in filters above the games list",
             "title": "Welcome to Overtime Markets"
-        },
-        "slippage": {
-            "slippage": "Slippage",
-            "label": "Slippage tolerance",
-            "enter-value": "Enter value",
-            "invalid-value": "Invalid value",
-            "tooltip": "The transfer won’t go through if the bridge rate moves unfavorably by more than this percentage when the transfer is executed."
         }
     },
     "footer": {
@@ -747,6 +740,13 @@
             "toggle-parlay": {
                 "multi-single": "Multi single",
                 "parlay": "Ticket"
+            },
+            "slippage": {
+                "slippage": "Slippage",
+                "label": "Accept trade if odds drop by:",
+                "enter-value": "Enter value",
+                "invalid-value": "Invalid value",
+                "tooltip": "The transfer won’t go through if the bridge rate moves unfavorably by more than this percentage when the transfer is executed."
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",

@@ -3,7 +3,6 @@ import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
-import Slippage from 'components/Slippage';
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
@@ -18,10 +17,13 @@ import {
     PARLAY_LEADERBOARD_WEEKLY_START_DATE,
 } from 'constants/markets';
 import { ZERO_ADDRESS } from 'constants/network';
+import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { Network } from 'enums/network';
 import { BigNumber, ethers } from 'ethers';
+import useLocalStorage from 'hooks/useLocalStorage';
+import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
@@ -122,7 +124,7 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
 
-const SLIPPAGE_PERCENTAGES = [0.3, 0.5, 1];
+const SLIPPAGE_PERCENTAGES = [0.5, 1, 2];
 
 let toastId: string | number;
 
@@ -177,7 +179,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     });
     const [currentLeaderboardRank, setCurrentLeaderboardRank] = useState<number>(0);
     const [slippageDropdownOpen, setSlippageDropdownOpen] = useState<boolean>(false);
-    const [slippage, setSlippage] = useState<number>(0.05);
+    const [slippage, setSlippage] = useLocalStorage<number>(LOCAL_STORAGE_KEYS.LIVE_BET_SLIPPAGE, 1);
 
     const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
 
@@ -576,7 +578,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 const tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, selectedCollateral);
                 const parsedTotalQuote = ethers.utils.parseEther(totalQuote.toString());
-                const additionalSlippage = ethers.utils.parseEther(tradeData[0].live ? slippage + '' : '0.05');
+                const additionalSlippage = ethers.utils.parseEther(tradeData[0].live ? slippage / 100 + '' : '0.05');
 
                 let tx;
                 if (tradeData[0].live) {
@@ -1064,7 +1066,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                 onOutsideClick={() => slippageDropdownOpen && setSlippageDropdownOpen(false)}
                             >
                                 <SettingsWrapper onClick={() => setSlippageDropdownOpen(!slippageDropdownOpen)}>
-                                    <SettingsLabel>{t('common.slippage.slippage')}</SettingsLabel>
+                                    <SettingsLabel>{t('markets.parlay.slippage.slippage')}</SettingsLabel>
                                     <SettingsIcon className={`icon icon--settings`} />
                                 </SettingsWrapper>
                                 {slippageDropdownOpen && (
@@ -1074,7 +1076,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                             defaultValue={slippage}
                                             onChangeHandler={setSlippage}
                                             maxValue={10}
-                                            tooltip={t('common.slippage.tooltip')}
                                         />
                                     </SlippageDropdownContainer>
                                 )}
