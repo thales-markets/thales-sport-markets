@@ -19,6 +19,7 @@ import { executeBiconomyTransaction } from 'utils/biconomy';
 import {
     getCollateral,
     getCollateralAddress,
+    getCollateralIndex,
     getCollaterals,
     getDefaultCollateral,
     isLpSupported,
@@ -81,6 +82,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
     const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
         networkId,
         selectedCollateralIndex,
+    ]);
+    const ticketCollateralIndex = useMemo(() => getCollateralIndex(networkId, ticket.collateral), [
+        networkId,
+        ticket.collateral,
     ]);
 
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
@@ -224,7 +229,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                                             <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
                                             <CollateralSelector
                                                 collateralArray={getCollaterals(networkId)}
-                                                selectedItem={selectedCollateralIndex}
+                                                selectedItem={ticketCollateralIndex}
                                                 onChangeCollateral={() => {}}
                                             />
                                         </>
@@ -247,7 +252,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                                     <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
                                     <CollateralSelector
                                         collateralArray={getCollaterals(networkId)}
-                                        selectedItem={selectedCollateralIndex}
+                                        selectedItem={ticketCollateralIndex}
                                         onChangeCollateral={() => {}}
                                     />
                                 </CollateralSelectorContainer>
