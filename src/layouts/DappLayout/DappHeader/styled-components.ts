@@ -176,6 +176,7 @@ export const ReferAndEarn = styled.button`
 `;
 
 export const SettingsContainer = styled(FlexDivRowCentered)`
+    position: relative;
     margin: 0 10px;
     cursor: pointer;
 `;
@@ -199,7 +200,6 @@ export const HeaderLabel = styled.span`
 export const DropdownContainer = styled.div`
     position: absolute;
     width: 180px;
-    left: 20px;
     top: 28px;
     z-index: 1000;
 `;

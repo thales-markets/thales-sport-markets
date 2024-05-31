@@ -159,52 +159,52 @@ const DappHeader: React.FC = () => {
                     <LeftContainer>
                         <Logo />
                     </LeftContainer>
-                    {isMarketsPage && (
-                        <MiddleContainer>
-                            {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
+
+                    <MiddleContainer>
+                        {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
                             <ReferAndEarn>{t('common.referral.header-label')}</ReferAndEarn>
                         </SPAAnchor> */}
-                            {/* {isWalletConnected && isMarketsPage && (
+                        {/* {isWalletConnected && isMarketsPage && (
                             <SPAAnchor href={buildHref(ROUTES.Wizard)}>
                                 <HeaderIcon className="icon icon--tour" />
                                 <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
                             </SPAAnchor>
                         )} */}
-                            {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
-                            <TimeFilters />
-                            <FlexDiv>
-                                {isWalletConnected && <ProfileItem />}
-                                <SettingsContainer
-                                    onClick={() => {
-                                        setDropdownIsOpen(!dropdownIsOpen);
-                                    }}
-                                >
-                                    <HeaderIcon className="icon icon--settings" />
-                                    <HeaderLabel>{t('common.settings')}</HeaderLabel>
-                                </SettingsContainer>
-                            </FlexDiv>
-                        </MiddleContainer>
-                    )}
+                        {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
+                        {isMarketsPage && <TimeFilters />}
+                        <FlexDiv>
+                            {isWalletConnected && <ProfileItem />}
+                            <SettingsContainer
+                                onClick={() => {
+                                    setDropdownIsOpen(!dropdownIsOpen);
+                                }}
+                            >
+                                <HeaderIcon className="icon icon--settings" />
+                                <HeaderLabel>{t('common.settings')}</HeaderLabel>
+                                {dropdownIsOpen && (
+                                    <DropdownContainer>
+                                        <DropDown>
+                                            {ODDS_TYPES.map((item: any, index: number) => (
+                                                <DropDownItem
+                                                    key={index}
+                                                    onClick={() => {
+                                                        setSelectedOddsType(item);
+                                                        setDropdownIsOpen(false);
+                                                    }}
+                                                >
+                                                    <FlexDivCentered>
+                                                        <Label> {t(`common.odds.${item}`)}</Label>
+                                                    </FlexDivCentered>
+                                                </DropDownItem>
+                                            ))}
+                                        </DropDown>
+                                    </DropdownContainer>
+                                )}
+                            </SettingsContainer>
+                        </FlexDiv>
+                    </MiddleContainer>
+
                     <RightContainer>
-                        {dropdownIsOpen && (
-                            <DropdownContainer>
-                                <DropDown>
-                                    {ODDS_TYPES.map((item: any, index: number) => (
-                                        <DropDownItem
-                                            key={index}
-                                            onClick={() => {
-                                                setSelectedOddsType(item);
-                                                setDropdownIsOpen(false);
-                                            }}
-                                        >
-                                            <FlexDivCentered>
-                                                <Label> {t(`common.odds.${item}`)}</Label>
-                                            </FlexDivCentered>
-                                        </DropDownItem>
-                                    ))}
-                                </DropDown>
-                            </DropdownContainer>
-                        )}
                         {!isWalletConnected && (
                             <Button
                                 backgroundColor={'transparent'}
