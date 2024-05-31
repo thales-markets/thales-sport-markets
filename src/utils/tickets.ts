@@ -2,8 +2,9 @@ import { MarketTypeMap } from 'constants/marketTypes';
 import { MarketType } from 'enums/marketTypes';
 import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
-import { bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
+import { Coins, bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
+import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
@@ -164,3 +165,5 @@ export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: numbe
     formatMarketOdds(oddsType, getTicketQuote(paid, payout));
 
 export const getTicketMarketOdd = (market: TicketMarket) => (market.isCancelled ? 1 : market.odd);
+
+export const getAddedPayoutMultiplier = (currencyKey: Coins) => (currencyKey === CRYPTO_CURRENCY_MAP.THALES ? 0.99 : 1);
