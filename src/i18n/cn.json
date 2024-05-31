@@ -532,7 +532,12 @@
             "odds-live-limitation-message": "直播位置仅允许单打",
             "live": "居住",
             "time": "时间",
-            "set": "放"
+            "set": "放",
+            "delayed": "延迟",
+            "rain-delay": "大雨延迟",
+            "interrupted": "中断",
+            "abandoned": "弃",
+            "postponed": "延期"
         },
         "market-details": {
             "price": "价格",

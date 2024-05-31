@@ -180,7 +180,8 @@ export const Arrow = styled.i`
 export const liveBlinkStyle: CSSProperties = {
     width: 25,
     height: 25,
-    marginTop: -6,
+    position: 'absolute',
+    top: 4,
 };
 
 export const LiveIndicatorContainer = styled(FlexDivStart)`
@@ -189,6 +190,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)`
     margin-right: 10px;
     & > label {
         text-transform: none;
+        margin-left: 25px;
     }
     & + label {
         text-transform: none;

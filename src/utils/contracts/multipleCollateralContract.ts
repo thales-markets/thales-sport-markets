@@ -691,6 +691,15 @@ const multipleCollateral = {
         },
         abi,
     },
+    THALES: {
+        addresses: {
+            [Network.OptimismMainnet]: '0x217d47011b23bb961eb6d93ca9945b7501a5bb11',
+            [Network.Arbitrum]: '0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30',
+            [Network.Base]: '0xf34e0cff046e154cafcae502c7541b9e5fd8c249',
+            [Network.OptimismSepolia]: '',
+        },
+        abi,
+    },
 };
 
 export default multipleCollateral;

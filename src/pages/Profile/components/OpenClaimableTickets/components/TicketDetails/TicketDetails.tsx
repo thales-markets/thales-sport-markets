@@ -4,12 +4,12 @@ import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getTicketPayment } from 'redux/modules/ticket';
+import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsAA, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -19,6 +19,7 @@ import { executeBiconomyTransaction } from 'utils/biconomy';
 import {
     getCollateral,
     getCollateralAddress,
+    getCollateralIndex,
     getCollaterals,
     getDefaultCollateral,
     isLpSupported,
@@ -41,6 +42,7 @@ import {
     LiveIndicatorContainer,
     NumberOfGamesContainer,
     OverviewContainer,
+    OverviewWrapper,
     PayoutInLabel,
     TicketIdContainer,
     TicketMarketsContainer,
@@ -58,6 +60,7 @@ type TicketDetailsProps = {
 
 const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -81,6 +84,20 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
         networkId,
         selectedCollateralIndex,
     ]);
+    const ticketCollateralIndex = useMemo(() => getCollateralIndex(networkId, ticket.collateral), [
+        networkId,
+        ticket.collateral,
+    ]);
+
+    useEffect(() => {
+        dispatch(
+            setPaymentSelectedCollateralIndex({
+                selectedCollateralIndex: ticketCollateralIndex,
+                networkId: networkId,
+            })
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const ticketCollateralHasLp = isLpSupported(ticket.collateral);
@@ -180,83 +197,83 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
 
     return (
         <Container>
-            <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
-                {ticket.isLive && (
-                    <LiveIndicatorContainer>
-                        <Label>{t('profile.card.live')}</Label>
-                    </LiveIndicatorContainer>
-                )}
-                <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
-                    <TicketIdContainer>
-                        <Label>{t('profile.card.ticket-id')}:</Label>
-                        <Value>{truncateAddress(ticket.id)}</Value>
-                    </TicketIdContainer>
-                </ExternalLink>
-                <NumberOfGamesContainer>
-                    <Label>{t('profile.card.number-of-games')}:</Label>
-                    <Value>{ticket.numOfMarkets}</Value>
-                </NumberOfGamesContainer>
-                <InfoContainerColumn>
-                    <Label>{t('profile.card.ticket-paid')}:</Label>
-                    <Value>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Value>
-                </InfoContainerColumn>
-                {isMobile && !isClaimable && (
+            <OverviewWrapper>
+                <LiveIndicatorContainer isLive={ticket.isLive}>
+                    {ticket.isLive && <Label>{t('profile.card.live')}</Label>}
+                </LiveIndicatorContainer>
+                <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
+                    <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
+                        <TicketIdContainer>
+                            <Label>{t('profile.card.ticket-id')}:</Label>
+                            <Value>{truncateAddress(ticket.id)}</Value>
+                        </TicketIdContainer>
+                    </ExternalLink>
+                    <NumberOfGamesContainer>
+                        <Label>{t('profile.card.number-of-games')}:</Label>
+                        <Value>{ticket.numOfMarkets}</Value>
+                    </NumberOfGamesContainer>
                     <InfoContainerColumn>
-                        <WinLabel>{t('profile.card.payout')}:</WinLabel>
-                        <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
+                        <Label>{t('profile.card.ticket-paid')}:</Label>
+                        <Value>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Value>
                     </InfoContainerColumn>
-                )}
-                {!isMobile && (
-                    <>
+                    {isMobile && !isClaimable && (
                         <InfoContainerColumn>
                             <WinLabel>{t('profile.card.payout')}:</WinLabel>
                             <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                         </InfoContainerColumn>
-                        {isClaimable && isMultiCollateralSupported && (
-                            <InfoContainerColumn
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                }}
-                            >
-                                {(!ticketCollateralHasLp || isTicketCollateralDefaultCollateral) && (
-                                    <>
-                                        <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
-                                        <CollateralSelector
-                                            collateralArray={getCollaterals(networkId)}
-                                            selectedItem={selectedCollateralIndex}
-                                            onChangeCollateral={() => {}}
-                                        />
-                                    </>
-                                )}
+                    )}
+                    {!isMobile && (
+                        <>
+                            <InfoContainerColumn>
+                                <WinLabel>{t('profile.card.payout')}:</WinLabel>
+                                <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                             </InfoContainerColumn>
-                        )}
-                    </>
-                )}
-                {isMobile && isClaimable && (
-                    <ClaimContainer>
-                        <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
-                        {getButton(isMobile)}
-                        {isMultiCollateralSupported && (
-                            <CollateralSelectorContainer
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                }}
-                            >
-                                <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
-                                <CollateralSelector
-                                    collateralArray={getCollaterals(networkId)}
-                                    selectedItem={selectedCollateralIndex}
-                                    onChangeCollateral={() => {}}
-                                />
-                            </CollateralSelectorContainer>
-                        )}
-                    </ClaimContainer>
-                )}
-                {isClaimable && !isMobile && getButton(isMobile)}
-                <ArrowIcon className={showDetails ? 'icon icon--caret-up' : 'icon icon--caret-down'} />
-            </OverviewContainer>
+                            {isClaimable && isMultiCollateralSupported && (
+                                <InfoContainerColumn
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    }}
+                                >
+                                    {(!ticketCollateralHasLp || isTicketCollateralDefaultCollateral) && (
+                                        <>
+                                            <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
+                                            <CollateralSelector
+                                                collateralArray={getCollaterals(networkId)}
+                                                selectedItem={selectedCollateralIndex}
+                                                onChangeCollateral={() => {}}
+                                            />
+                                        </>
+                                    )}
+                                </InfoContainerColumn>
+                            )}
+                        </>
+                    )}
+                    {isMobile && isClaimable && (
+                        <ClaimContainer>
+                            <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
+                            {getButton(isMobile)}
+                            {isMultiCollateralSupported && (
+                                <CollateralSelectorContainer
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    }}
+                                >
+                                    <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
+                                    <CollateralSelector
+                                        collateralArray={getCollaterals(networkId)}
+                                        selectedItem={selectedCollateralIndex}
+                                        onChangeCollateral={() => {}}
+                                    />
+                                </CollateralSelectorContainer>
+                            )}
+                        </ClaimContainer>
+                    )}
+                    {isClaimable && !isMobile && getButton(isMobile)}
+                    <ArrowIcon className={showDetails ? 'icon icon--caret-up' : 'icon icon--caret-down'} />
+                </OverviewContainer>
+            </OverviewWrapper>
             <CollapsableContainer show={showDetails}>
                 <TicketMarketsContainer>
                     {ticket.sportMarkets.map((market, index) => {

@@ -64,6 +64,7 @@ const useSportMarketQuery = (
                     homeScoreByPeriod,
                     awayScoreByPeriod,
                     isGameFinished: gameInfo?.isGameFinished,
+                    gameStatus: gameInfo?.gameStatus,
                     liveScore,
                 };
             } catch (e) {

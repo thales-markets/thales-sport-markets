@@ -532,7 +532,12 @@
             "odds-live-limitation-message": "Live-Positionen nur als Singles erlaubt",
             "live": "Live",
             "time": "Zeit",
-            "set": "Satz"
+            "set": "Satz",
+            "delayed": "Verzögert",
+            "interrupted": "Unterbrochen",
+            "abandoned": "Verlassen",
+            "postponed": "Verschoben",
+            "rain-delay": "Regenverzögerung"
         },
         "market-details": {
             "price": "Preis",

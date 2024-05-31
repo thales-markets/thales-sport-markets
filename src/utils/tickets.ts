@@ -136,6 +136,8 @@ export const mapTicket = (
                     odd: bigNumberFormatter(market.odd),
                     childMarkets: [],
                     winningPositions: [],
+                    isGameFinished: gameInfo?.isGameFinished,
+                    gameStatus: gameInfo?.gameStatus,
                     liveScore,
                 };
             }

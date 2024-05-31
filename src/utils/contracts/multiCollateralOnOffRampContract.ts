@@ -2,9 +2,9 @@ import { Network } from 'enums/network';
 
 const multiCollateralOnOffRampContract = {
     addresses: {
-        [Network.OptimismMainnet]: '0x6F5A76423396Bf39F64F8c51C0B3dEb24990b116',
-        [Network.Arbitrum]: '0x7b065dE3fd7190A6C2CB6D51E946e82B6b2C4358',
-        [Network.Base]: '0x0946BfE3c543e0B770B7F7e508c8A566947C4278',
+        [Network.OptimismMainnet]: '0xdD462615884E70C80037cCf8Aa0f82cb06056D81',
+        [Network.Arbitrum]: '',
+        [Network.Base]: '',
         [Network.OptimismSepolia]: '0x770087E059aa6038ba23b474e18473E1a61bA37F',
     },
     abi: [
@@ -19,12 +19,6 @@ const multiCollateralOnOffRampContract = {
                 { indexed: false, internalType: 'uint256', name: '_maxAllowedPegSlippagePercentage', type: 'uint256' },
             ],
             name: 'CurveSUSDSet',
-            type: 'event',
-        },
-        {
-            anonymous: false,
-            inputs: [{ indexed: false, internalType: 'address', name: 'manager', type: 'address' }],
-            name: 'ManagerChanged',
             type: 'event',
         },
         {
@@ -416,13 +410,6 @@ const multiCollateralOnOffRampContract = {
                 { internalType: 'uint256', name: '_maxAllowedPegSlippagePercentage', type: 'uint256' },
             ],
             name: 'setCurveSUSD',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-        },
-        {
-            inputs: [{ internalType: 'address', name: '_manager', type: 'address' }],
-            name: 'setManager',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',

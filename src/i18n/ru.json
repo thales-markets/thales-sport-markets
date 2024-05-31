@@ -532,7 +532,12 @@
             "odds-live-limitation-message": "Позиции в реальном времени разрешены только в одиночном разряде.",
             "live": "Жить",
             "time": "Время",
-            "set": "Набор"
+            "set": "Набор",
+            "abandoned": "Заброшенный",
+            "interrupted": "Прерванный",
+            "delayed": "Отложенный",
+            "postponed": "Перенесенный",
+            "rain-delay": "Задержка дождя"
         },
         "market-details": {
             "price": "Price",

@@ -148,7 +148,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
-    const [isFetching, setIsFetching] = useState(false);
+    const [, /*isFetching*/ setIsFetching] = useState(false);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState<string>('');
@@ -353,6 +353,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
                         ),
                     ]);
+
                     setBuyInAmountInDefaultCollateral(
                         coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
                     );
@@ -447,7 +448,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             } else if (quotes.some((quote) => quote === 0)) {
                 setTooltipTextCollateralAmount(t('markets.parlay.validation.availability'));
             } else if (value && Number(value) < minBuyInAmount) {
-                console.log(Number(value), minBuyInAmount);
                 const decimals = getPrecision(minBuyInAmount);
                 setTooltipTextCollateralAmount(
                     t('markets.parlay.validation.min-amount', {
@@ -849,8 +849,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         Number(buyInAmount) < minBuyInAmount ||
         payout === 0 ||
         // hide when validation tooltip exists except in case of invalid profit and not enough funds
-        (tooltipTextCollateralAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance) ||
-        isFetching;
+        (tooltipTextCollateralAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance);
 
     const profitPercentage =
         (Number(buyInAmountInDefaultCollateral) / Number(totalQuote) - Number(buyInAmountInDefaultCollateral)) /
