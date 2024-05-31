@@ -334,13 +334,9 @@ const Home: React.FC = () => {
         }
     }, [favouriteLeagues, sportFilter]);
 
-    const openSportMarketsQuery = useSportsMarketsV2Query(
-        sportFilter == SportFilter.Live ? StatusFilter.ONGOING_MARKETS : StatusFilter.OPEN_MARKETS,
-        networkId,
-        {
-            enabled: isAppReady,
-        }
-    );
+    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, {
+        enabled: isAppReady,
+    });
 
     const openMarketsCountPerTag = useMemo(() => {
         const openSportMarkets: SportMarkets =
