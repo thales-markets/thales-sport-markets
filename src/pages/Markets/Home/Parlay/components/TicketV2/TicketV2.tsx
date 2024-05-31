@@ -152,7 +152,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const [, /*isFetching*/ setIsFetching] = useState(false);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
-    const [tooltipTextCollateralAmount, setTooltipTextCollateralAmount] = useState<string>('');
+    const [tooltipTextBuyInAmount, setTooltipTextBuyInAmount] = useState<string>('');
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
@@ -291,7 +291,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     }, [sportsAmmData?.minBuyInAmount]);
 
     const totalQuote = useMemo(() => {
-        console.log('totalQuoteSet');
         const quote = markets.reduce(
             (partialQuote, market) =>
                 partialQuote * (market.odd > 0 ? market.odd * getAddedPayoutMultiplier(selectedCollateral) : 1),
@@ -438,72 +437,64 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         );
     }, [sportsAmmData?.maxSupportedAmount, payout, buyInAmountInDefaultCollateral]);
 
-    const setTooltipTextMessageUsdAmount = useCallback(
-        (value: string | number, quotes: number[], error?: string) => {
-            if (error) {
-                switch (error) {
-                    case TicketErrorMessage.RISK_PER_COMB:
-                        setTooltipTextCollateralAmount(t('markets.parlay.validation.risk-per-comb'));
-                        return;
-                    case TicketErrorMessage.SAME_TEAM_IN_PARLAY:
-                        setTooltipTextCollateralAmount(t('markets.parlay.validation.same-team'));
-                        return;
-                    default:
-                        setTooltipTextCollateralAmount(t('markets.parlay.validation.not-supported', { error }));
-                }
-            } else if (quotes.some((quote) => quote === 0)) {
-                setTooltipTextCollateralAmount(t('markets.parlay.validation.availability'));
-            } else if (value && Number(value) < minBuyInAmount) {
-                const decimals = getPrecision(minBuyInAmount);
-                setTooltipTextCollateralAmount(
-                    t('markets.parlay.validation.min-amount', {
-                        min: `${formatCurrencyWithKey(
-                            selectedCollateral,
-                            ceilNumberToDecimals(minBuyInAmount, decimals),
-                            decimals
-                        )}${
-                            isDefaultCollateral
-                                ? ''
-                                : ` (${formatCurrencyWithSign(
-                                      USD_SIGN,
-                                      ceilNumberToDecimals(
-                                          minBuyInAmountInDefaultCollateral * MIN_COLLATERAL_MULTIPLIER
-                                      ),
-                                      2
-                                  )})`
-                        }`,
-                    })
-                );
-            } else if (isValidProfit) {
-                setTooltipTextCollateralAmount(
-                    t('markets.parlay.validation.max-profit', {
-                        max: formatCurrencyWithSign(USD_SIGN, sportsAmmData?.maxSupportedAmount || 0),
-                    })
-                );
-            } else if (Number(value) > paymentTokenBalance) {
-                setTooltipTextCollateralAmount(t('markets.parlay.validation.no-funds'));
-            } else {
-                setTooltipTextCollateralAmount('');
-            }
-        },
-        [
-            sportsAmmData?.maxSupportedAmount,
-            minBuyInAmountInDefaultCollateral,
-            t,
-            paymentTokenBalance,
-            isValidProfit,
-            minBuyInAmount,
-            selectedCollateral,
-            isDefaultCollateral,
-        ]
-    );
+    useEffect(() => {
+        if (
+            (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
+            (Number(buyInAmountInDefaultCollateral) &&
+                ticketLiquidity &&
+                Number(buyInAmountInDefaultCollateral) > ticketLiquidity)
+        ) {
+            setTooltipTextBuyInAmount(t('markets.parlay.validation.availability'));
+        } else if (Number(buyInAmount) && Number(buyInAmount) < minBuyInAmount) {
+            const decimals = getPrecision(minBuyInAmount);
+            setTooltipTextBuyInAmount(
+                t('markets.parlay.validation.min-amount', {
+                    min: `${formatCurrencyWithKey(
+                        selectedCollateral,
+                        ceilNumberToDecimals(minBuyInAmount, decimals),
+                        decimals
+                    )}${
+                        isDefaultCollateral
+                            ? ''
+                            : ` (${formatCurrencyWithSign(
+                                  USD_SIGN,
+                                  ceilNumberToDecimals(minBuyInAmountInDefaultCollateral * MIN_COLLATERAL_MULTIPLIER),
+                                  2
+                              )})`
+                    }`,
+                })
+            );
+        } else if (isValidProfit) {
+            setTooltipTextBuyInAmount(
+                t('markets.parlay.validation.max-profit', {
+                    max: formatCurrencyWithSign(USD_SIGN, sportsAmmData?.maxSupportedAmount || 0),
+                })
+            );
+        } else if (Number(minBuyInAmount) > paymentTokenBalance) {
+            setTooltipTextBuyInAmount(t('markets.parlay.validation.no-funds'));
+        } else {
+            setTooltipTextBuyInAmount('');
+        }
+    }, [
+        buyInAmount,
+        buyInAmountInDefaultCollateral,
+        finalQuotes,
+        isDefaultCollateral,
+        isValidProfit,
+        minBuyInAmount,
+        minBuyInAmountInDefaultCollateral,
+        paymentTokenBalance,
+        selectedCollateral,
+        sportsAmmData?.maxSupportedAmount,
+        t,
+        ticketLiquidity,
+    ]);
 
     const setCollateralAmount = useCallback(
         (value: string | number) => {
             dispatch(setPaymentAmountToBuy(value));
-            setTooltipTextMessageUsdAmount(value, finalQuotes);
         },
-        [dispatch, finalQuotes, setTooltipTextMessageUsdAmount]
+        [dispatch]
     );
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -691,7 +682,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         }
 
         // Validation message is present
-        if (tooltipTextCollateralAmount) {
+        if (tooltipTextBuyInAmount) {
             setSubmitDisabled(true);
             return;
         }
@@ -711,7 +702,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         hasAllowance,
         paymentTokenBalance,
         totalQuote,
-        tooltipTextCollateralAmount,
+        tooltipTextBuyInAmount,
         minBuyInAmountInDefaultCollateral,
         isAMMPaused,
         minBuyInAmount,
@@ -772,7 +763,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         const fetchData = async () => {
             setIsFetching(true);
             const { sportsAMMV2Contract } = networkConnector;
-            if (sportsAMMV2Contract && Number(buyInAmount) >= 0 && minBuyInAmountInDefaultCollateral) {
+            if (sportsAMMV2Contract && Number(buyInAmount) > 0 && minBuyInAmountInDefaultCollateral) {
                 if (markets[0]?.live) {
                     setPayout((1 / totalQuote) * Number(buyInAmount));
                 } else {
@@ -799,17 +790,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         setMarketsOutOfLiquidity(marketsOutOfLiquidity);
 
                         setFinalQuotes(amountsToBuy);
-
-                        setTooltipTextMessageUsdAmount(buyInAmount, amountsToBuy);
                     } else {
                         setMarketsOutOfLiquidity([]);
                         setPayout(0);
-                        setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
+                        // setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
                     }
                 }
             } else {
                 if (Number(buyInAmount) === 0) {
                     setFinalQuotes([]);
+                    setMarketsOutOfLiquidity([]);
                 }
             }
             setIsFetching(false);
@@ -822,7 +812,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     }, [
         buyInAmount,
         fetchTicketAmmQuote,
-        setTooltipTextMessageUsdAmount,
         minBuyInAmountInDefaultCollateral,
         setMarketsOutOfLiquidity,
         markets,
@@ -832,10 +821,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         selectedCollateral,
         totalQuote,
     ]);
-
-    useEffect(() => {
-        setTooltipTextMessageUsdAmount(buyInAmount, finalQuotes);
-    }, [isVoucherSelected, setTooltipTextMessageUsdAmount, buyInAmount, finalQuotes]);
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
@@ -855,7 +840,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         Number(buyInAmount) < minBuyInAmount ||
         payout === 0 ||
         // hide when validation tooltip exists except in case of invalid profit and not enough funds
-        (tooltipTextCollateralAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance);
+        (tooltipTextBuyInAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance);
 
     const profitPercentage =
         (Number(buyInAmountInDefaultCollateral) / Number(totalQuote) - Number(buyInAmountInDefaultCollateral)) /
@@ -937,6 +922,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         selectedCollateral,
         isEth,
     ]);
+
     useEffect(() => {
         if (buyInAmountInDefaultCollateral > 0 && totalQuote > 0 && !HIDE_PARLAY_LEADERBOARD) {
             const buyInPow = Math.pow(buyInAmountInDefaultCollateral, 1 / 2);
@@ -1025,8 +1011,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         onChange={(e) => {
                             setCollateralAmount(e.target.value);
                         }}
-                        showValidation={inputRefVisible && !!tooltipTextCollateralAmount && !openApprovalModal}
-                        validationMessage={tooltipTextCollateralAmount}
+                        showValidation={inputRefVisible && !!tooltipTextBuyInAmount && !openApprovalModal}
+                        validationMessage={tooltipTextBuyInAmount}
                         inputFontWeight="700"
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
