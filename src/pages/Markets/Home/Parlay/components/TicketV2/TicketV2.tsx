@@ -3,6 +3,7 @@ import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
+import Slippage from 'components/Slippage';
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
@@ -31,6 +32,7 @@ import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollate
 import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
@@ -97,7 +99,12 @@ import {
     InputContainer,
     RowContainer,
     RowSummary,
+    SettingsIcon,
+    SettingsIconContainer,
+    SettingsLabel,
+    SettingsWrapper,
     ShareWrapper,
+    SlippageDropdownContainer,
     SummaryLabel,
     SummaryValue,
     TwitterIcon,
@@ -114,6 +121,8 @@ const TicketErrorMessage = {
     RISK_PER_COMB: 'RiskPerComb exceeded',
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
 };
+
+const SLIPPAGE_PERCENTAGES = [0.3, 0.5, 1];
 
 let toastId: string | number;
 
@@ -167,6 +176,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         numberOfGamesBonus: 0,
     });
     const [currentLeaderboardRank, setCurrentLeaderboardRank] = useState<number>(0);
+    const [slippageDropdownOpen, setSlippageDropdownOpen] = useState<boolean>(false);
+    const [slippage, setSlippage] = useState<number>(0.05);
 
     const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
 
@@ -565,7 +576,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 const tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, selectedCollateral);
                 const parsedTotalQuote = ethers.utils.parseEther(totalQuote.toString());
-                const additionalSlippage = ethers.utils.parseEther('0.05');
+                const additionalSlippage = ethers.utils.parseEther(tradeData[0].live ? slippage + '' : '0.05');
 
                 let tx;
                 if (tradeData[0].live) {
@@ -1046,6 +1057,31 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         {ticketLiquidity ? formatCurrencyWithSign(USD_SIGN, ticketLiquidity, 0, true) : '-'}
                     </InfoValue>
                 </InfoWrapper>
+                {isLiveTicket && (
+                    <>
+                        <SettingsIconContainer>
+                            <OutsideClickHandler
+                                onOutsideClick={() => slippageDropdownOpen && setSlippageDropdownOpen(false)}
+                            >
+                                <SettingsWrapper onClick={() => setSlippageDropdownOpen(!slippageDropdownOpen)}>
+                                    <SettingsLabel>{t('common.slippage.slippage')}</SettingsLabel>
+                                    <SettingsIcon className={`icon icon--settings`} />
+                                </SettingsWrapper>
+                                {slippageDropdownOpen && (
+                                    <SlippageDropdownContainer>
+                                        <Slippage
+                                            fixed={SLIPPAGE_PERCENTAGES}
+                                            defaultValue={slippage}
+                                            onChangeHandler={setSlippage}
+                                            maxValue={10}
+                                            tooltip={t('common.slippage.tooltip')}
+                                        />
+                                    </SlippageDropdownContainer>
+                                )}
+                            </OutsideClickHandler>
+                        </SettingsIconContainer>
+                    </>
+                )}
             </InfoContainer>
 
             {isAA && (

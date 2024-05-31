@@ -1,6 +1,6 @@
 import MuiTooltip from '@material-ui/core/Tooltip';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 
 export const RowSummary = styled.div<{ columnDirection?: boolean }>`
     position: relative;
@@ -74,7 +74,7 @@ export const InfoContainer = styled.div`
     justify-content: space-between;
     margin-bottom: 5px;
     align-items: center;
-    line-height: 10px;
+    line-height: 15px;
 `;
 
 export const InfoWrapper = styled.div``;
@@ -267,4 +267,43 @@ export const HorizontalLine = styled.hr`
     width: 100%;
     border: 1px solid ${(props) => props.theme.borderColor.senary};
     border-radius: 2px;
+`;
+
+export const SettingsIconContainer = styled(FlexDivEnd)`
+    position: relative;
+`;
+
+export const SettingsWrapper = styled(FlexDiv)`
+    cursor: pointer;
+    color: ${(props) => props.theme.textColor.septenary};
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+        i {
+            color: ${(props) => props.theme.textColor.quaternary};
+        }
+    }
+`;
+
+export const SettingsLabel = styled.span`
+    margin-right: 5px;
+    font-size: 12px;
+    font-weight: 600;
+`;
+
+export const SettingsIcon = styled.i`
+    font-size: 16px;
+    font-weight: 600;
+`;
+
+export const SlippageDropdownContainer = styled.div`
+    border: 1px solid ${(props) => props.theme.textColor.septenary};
+    background: ${(props) => props.theme.background.secondary};
+    color: white;
+    border-radius: 5px;
+    position: absolute;
+    margin-top: 2px;
+    padding: 10px;
+    top: 20px;
+    z-index: 1000;
+    right: 0;
 `;

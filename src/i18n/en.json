@@ -192,6 +192,13 @@
             "save": "Save",
             "info": "*You can always change the odds type in filters above the games list",
             "title": "Welcome to Overtime Markets"
+        },
+        "slippage": {
+            "slippage": "Slippage",
+            "label": "Slippage tolerance",
+            "enter-value": "Enter value",
+            "invalid-value": "Invalid value",
+            "tooltip": "The transfer won’t go through if the bridge rate moves unfavorably by more than this percentage when the transfer is executed."
         }
     },
     "footer": {
