@@ -527,6 +527,9 @@ const Home: React.FC = () => {
                                             setAvailableTags([]);
                                         }
                                     }
+                                } else {
+                                    dispatch(setTagFilter([]));
+                                    setTagParam('');
                                 }
                             }}
                             sport={filterItem}

@@ -362,7 +362,7 @@ const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    margin-right: 3px;
+    margin-right: 5px;
 `;
 
 export default TagsDropdown;
