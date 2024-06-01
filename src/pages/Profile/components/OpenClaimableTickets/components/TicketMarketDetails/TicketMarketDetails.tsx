@@ -38,7 +38,7 @@ import {
     Wrapper,
 } from './styled-components';
 
-const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => {
+const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> = ({ market, isLive }) => {
     const theme: ThemeInterface = useTheme();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
@@ -117,7 +117,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket }> = ({ market }) => 
                 <MatchScoreContainer>{getScoreComponent(market)}</MatchScoreContainer>
             ) : market.isResolved && market.isPlayerPropsMarket ? (
                 <TicketMarketStatus>{market.homeScore}</TicketMarketStatus>
-            ) : isPendingResolution ? (
+            ) : isPendingResolution || isLive ? (
                 liveScore ? (
                     <MatchScoreContainer>
                         {showLiveInfo(liveScore.gameStatus) &&

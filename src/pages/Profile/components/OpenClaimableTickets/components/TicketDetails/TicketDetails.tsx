@@ -280,7 +280,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
             <CollapsableContainer show={showDetails}>
                 <TicketMarketsContainer>
                     {ticket.sportMarkets.map((market, index) => {
-                        return <TicketMarketDetails market={market} key={index} />;
+                        return <TicketMarketDetails market={market} key={index} isLive={ticket.isLive} />;
                     })}
                 </TicketMarketsContainer>
                 <CollapseFooterContainer>

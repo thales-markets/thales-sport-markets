@@ -37,7 +37,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
         <>
             <LeftContainer>
                 {market.live && <LiveTag>{t(`markets.market-card.live`)}</LiveTag>}
-                <MatchLogosV2 market={market} width={'55px'} />
+                <MatchLogosV2 market={market} width={'55px'} height={'30px'} />
             </LeftContainer>
             <MarketPositionContainer>
                 <MatchLabel fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
@@ -96,7 +96,6 @@ const LiveTag = styled.span`
 const MarketPositionContainer = styled(FlexDivColumn)`
     display: block;
     width: 100%;
-    margin-right: 5px;
 `;
 
 const MatchLabel = styled(FlexDivRow)<{ fontSize?: string; lineHeight?: string }>`

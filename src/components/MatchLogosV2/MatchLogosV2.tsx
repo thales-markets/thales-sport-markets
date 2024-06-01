@@ -6,11 +6,12 @@ import { SportMarket } from '../../types/markets';
 type MatchLogosProps = {
     market: SportMarket;
     width?: string;
+    height?: string;
     logoWidth?: string;
     logoHeight?: string;
 };
 
-const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, logoWidth, logoHeight }) => {
+const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, height, logoWidth, logoHeight }) => {
     const [homeLogoSrc, setHomeLogoSrc] = useState(
         market.isPlayerPropsMarket
             ? getTeamImageSource(market.playerProps.playerName, market.leagueId)
@@ -28,7 +29,7 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, logoWidth, logoH
     }, [market.homeTeam, market.awayTeam, market.leagueId, market.isPlayerPropsMarket, market.playerProps.playerName]);
 
     return (
-        <Container width={width}>
+        <Container width={width} height={height}>
             {market.isPlayerPropsMarket ? (
                 <ClubLogo
                     alt={market.playerProps.playerName}
@@ -60,12 +61,12 @@ const MatchLogos: React.FC<MatchLogosProps> = ({ market, width, logoWidth, logoH
     );
 };
 
-const Container = styled.div<{ width?: string }>`
+const Container = styled.div<{ width?: string; height?: string }>`
     display: flex;
     position: relative;
     align-items: center;
     width: ${(props) => props.width || '100%'};
-    height: 100%;
+    height: ${(props) => props.height || '100%'};
 `;
 
 const ClubLogo = styled.img<{ awayTeam?: boolean; logoWidth?: string; logoHeight?: string }>`
