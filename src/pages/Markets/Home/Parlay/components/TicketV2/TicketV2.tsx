@@ -362,21 +362,39 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             (isDefaultCollateral ? 1 : MIN_COLLATERAL_MULTIPLIER)
                     );
 
-                    const [parlayAmmQuote] = await Promise.all([
-                        getSportsAMMV2QuoteMethod(
-                            collateralAddress,
-                            isDefaultCollateral,
-                            sportsAMMV2Contract,
-                            tradeData,
-                            coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
-                        ),
-                    ]);
+                    if (markets[0]?.live) {
+                        const [minimumReceivedForBuyInAmount] = await Promise.all([
+                            collateralHasLp
+                                ? buyInAmountForQuote * (isDefaultCollateral ? 1 : selectedCollateralCurrencyRate)
+                                : multiCollateralOnOffRampContract?.getMinimumReceived(
+                                      collateralAddress,
+                                      coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
+                                  ),
+                        ]);
+                        setBuyInAmountInDefaultCollateral(
+                            collateralHasLp
+                                ? minimumReceivedForBuyInAmount
+                                : coinFormatter(minimumReceivedForBuyInAmount, networkId)
+                        );
 
-                    setBuyInAmountInDefaultCollateral(
-                        coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
-                    );
+                        return {};
+                    } else {
+                        const [parlayAmmQuote] = await Promise.all([
+                            getSportsAMMV2QuoteMethod(
+                                collateralAddress,
+                                isDefaultCollateral,
+                                sportsAMMV2Contract,
+                                tradeData,
+                                coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
+                            ),
+                        ]);
 
-                    return parlayAmmQuote;
+                        setBuyInAmountInDefaultCollateral(
+                            coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
+                        );
+
+                        return parlayAmmQuote;
+                    }
                 } catch (e: any) {
                     const errorMessage = e.error?.data?.message;
                     if (errorMessage) {
@@ -777,22 +795,20 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             setIsFetching(true);
             const { sportsAMMV2Contract } = networkConnector;
             if (sportsAMMV2Contract && Number(buyInAmount) > 0 && minBuyInAmountInDefaultCollateral) {
-                if (markets[0]?.live) {
-                    setPayout((1 / totalQuote) * Number(buyInAmount));
-                } else {
-                    const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
+                const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
 
-                    if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
+                if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
 
-                    if (!parlayAmmQuote.error) {
+                if (!parlayAmmQuote.error) {
+                    if (markets[0]?.live) {
+                        setPayout((1 / totalQuote) * Number(buyInAmount));
+                    } else {
                         const payout = coinFormatter(
                             parlayAmmQuote.payout,
                             networkId,
                             collateralHasLp ? selectedCollateral : undefined
                         );
-
                         setPayout(payout);
-
                         const amountsToBuy: number[] = (parlayAmmQuote.amountsToBuy || []).map((quote: BigNumber) =>
                             coinFormatter(quote, networkId, collateralHasLp ? selectedCollateral : undefined)
                         );
@@ -803,11 +819,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         setMarketsOutOfLiquidity(marketsOutOfLiquidity);
 
                         setFinalQuotes(amountsToBuy);
-                    } else {
-                        setMarketsOutOfLiquidity([]);
-                        setPayout(0);
-                        // setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
                     }
+                } else {
+                    setMarketsOutOfLiquidity([]);
+                    setPayout(0);
+                    // setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
                 }
             } else {
                 if (Number(buyInAmount) === 0) {

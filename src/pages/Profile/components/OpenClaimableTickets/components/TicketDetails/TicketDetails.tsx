@@ -6,10 +6,10 @@ import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
+import { getTicketPayment } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsAA, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -60,7 +60,6 @@ type TicketDetailsProps = {
 
 const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
@@ -73,36 +72,36 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+    const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
+
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+    const claimCollateralArray = useMemo(
+        () =>
+            getCollaterals(networkId).filter(
+                (collateral) => !isLpSupported(collateral) || collateral === defaultCollateral
+            ),
+        [networkId, defaultCollateral]
+    );
+    const claimCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, claimCollateralArray), [
+        claimCollateralArray,
         networkId,
         selectedCollateralIndex,
     ]);
-    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
-        networkId,
-        selectedCollateralIndex,
-    ]);
-    const ticketCollateralIndex = useMemo(() => getCollateralIndex(networkId, ticket.collateral), [
-        networkId,
-        ticket.collateral,
-    ]);
+    const claimCollateralAddress = useMemo(
+        () => getCollateralAddress(networkId, claimCollateralIndex, claimCollateralArray),
+        [networkId, claimCollateralIndex, claimCollateralArray]
+    );
 
     useEffect(() => {
-        dispatch(
-            setPaymentSelectedCollateralIndex({
-                selectedCollateralIndex: ticketCollateralIndex,
-                networkId: networkId,
-            })
-        );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        setClaimCollateralIndex(getCollateralIndex(networkId, ticket.collateral, claimCollateralArray));
+    }, [claimCollateralArray, networkId, ticket.collateral]);
 
-    const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const ticketCollateralHasLp = isLpSupported(ticket.collateral);
     const isTicketCollateralDefaultCollateral = ticket.collateral === defaultCollateral;
-    const isEth = collateralAddress === ZERO_ADDRESS;
+    const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
+    const isEth = claimCollateralAddress === ZERO_ADDRESS;
 
     const isClaimable = ticket.isClaimable;
 
@@ -116,26 +115,28 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                 const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
                 if (isAA) {
                     txResult =
-                        isDefaultCollateral || (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                        isClaimCollateralDefaultCollateral ||
+                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
                             ? await executeBiconomyTransaction(
-                                  collateralAddress,
+                                  claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
                                   'exerciseTicket',
                                   [parlayAddress]
                               )
                             : await executeBiconomyTransaction(
-                                  collateralAddress,
+                                  claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
                                   'exerciseTicketOffRamp',
-                                  [parlayAddress, collateralAddress, isEth]
+                                  [parlayAddress, claimCollateralAddress, isEth]
                               );
                 } else {
                     const tx =
-                        isDefaultCollateral || (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                        isClaimCollateralDefaultCollateral ||
+                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
                             ? await sportsAMMV2ContractWithSigner.exerciseTicket(parlayAddress)
                             : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
                                   parlayAddress,
-                                  collateralAddress,
+                                  claimCollateralAddress,
                                   isEth
                               );
                     txResult = await tx.wait();
@@ -235,13 +236,14 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                                         e.stopPropagation();
                                     }}
                                 >
-                                    {(!ticketCollateralHasLp || isTicketCollateralDefaultCollateral) && (
+                                    {isTicketCollateralDefaultCollateral && (
                                         <>
                                             <WinLabel>{t('profile.card.payout-in')}:</WinLabel>
                                             <CollateralSelector
-                                                collateralArray={getCollaterals(networkId)}
-                                                selectedItem={selectedCollateralIndex}
-                                                onChangeCollateral={() => {}}
+                                                collateralArray={claimCollateralArray}
+                                                selectedItem={claimCollateralIndex}
+                                                onChangeCollateral={setClaimCollateralIndex}
+                                                preventPaymentCollateralChange
                                             />
                                         </>
                                     )}
@@ -253,7 +255,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                         <ClaimContainer>
                             <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                             {getButton(isMobile)}
-                            {isMultiCollateralSupported && (
+                            {isMultiCollateralSupported && isTicketCollateralDefaultCollateral && (
                                 <CollateralSelectorContainer
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -262,9 +264,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                                 >
                                     <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
                                     <CollateralSelector
-                                        collateralArray={getCollaterals(networkId)}
-                                        selectedItem={selectedCollateralIndex}
-                                        onChangeCollateral={() => {}}
+                                        collateralArray={claimCollateralArray}
+                                        selectedItem={claimCollateralIndex}
+                                        onChangeCollateral={setClaimCollateralIndex}
+                                        preventPaymentCollateralChange
                                     />
                                 </CollateralSelectorContainer>
                             )}

@@ -68,6 +68,7 @@ const useSportsMarketsV2Query = (
                         isGameFinished: gameInfo?.isGameFinished,
                         gameStatus: gameInfo?.gameStatus,
                         liveScore,
+                        live: true,
                     };
                 });
             } catch (e) {

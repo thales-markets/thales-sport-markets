@@ -41,7 +41,7 @@ const useTicketLiquidityQuery = (
                                 market.typeId,
                                 market.playerProps.playerId,
                                 market.line * 100,
-                                market.maturity
+                                market.live ? Math.round(new Date().getTime() / 1000) + 60 : market.maturity
                             )
                         );
                     }

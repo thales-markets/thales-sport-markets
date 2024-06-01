@@ -12,7 +12,7 @@ import { getTicket, removeFromTicket, updateTicket } from 'redux/modules/ticket'
 import { getOddsType } from 'redux/modules/ui';
 import { SportMarket, TicketPosition } from 'types/markets';
 import { formatMarketOdds, getPositionOrder } from 'utils/markets';
-import { getOddTooltipTextV2, getPositionTextV2, isSameMarket } from 'utils/marketsV2';
+import { getMatchLabel, getOddTooltipTextV2, getPositionTextV2, isSameMarket } from 'utils/marketsV2';
 import {
     Container,
     Odd,
@@ -99,7 +99,8 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                         dispatch(updateTicket(ticketPosition));
                     }
                     if (isMobile) {
-                        toast(oddTooltipText, oddToastOptions);
+                        // TODO: temporary solution
+                        toast(`${getMatchLabel(market)} added to the ticket` || oddTooltipText, oddToastOptions);
                     }
                 }
             }}

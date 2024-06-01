@@ -32,6 +32,7 @@ type CollateralSelectorProps = {
     showCollateralImg?: boolean;
     stretch?: boolean;
     showNetworkName?: boolean;
+    preventPaymentCollateralChange?: boolean;
 };
 
 const CollateralSelector: React.FC<CollateralSelectorProps> = ({
@@ -48,6 +49,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     showCollateralImg,
     stretch,
     showNetworkName,
+    preventPaymentCollateralChange,
 }) => {
     const dispatch = useDispatch();
     const networkId = useSelector(getNetworkId);
@@ -102,12 +104,14 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                           key={i}
                                           onClick={() => {
                                               onChangeCollateral(collateral.index);
-                                              dispatch(
-                                                  setPaymentSelectedCollateralIndex({
-                                                      selectedCollateralIndex: collateral.index,
-                                                      networkId: networkId,
-                                                  })
-                                              );
+                                              if (!preventPaymentCollateralChange) {
+                                                  dispatch(
+                                                      setPaymentSelectedCollateralIndex({
+                                                          selectedCollateralIndex: collateral.index,
+                                                          networkId: networkId,
+                                                      })
+                                                  );
+                                              }
                                           }}
                                       >
                                           <FlexDivCentered>
@@ -150,12 +154,14 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                           key={index}
                                           onClick={() => {
                                               onChangeCollateral(index);
-                                              dispatch(
-                                                  setPaymentSelectedCollateralIndex({
-                                                      selectedCollateralIndex: index,
-                                                      networkId: networkId,
-                                                  })
-                                              );
+                                              if (!preventPaymentCollateralChange) {
+                                                  dispatch(
+                                                      setPaymentSelectedCollateralIndex({
+                                                          selectedCollateralIndex: index,
+                                                          networkId: networkId,
+                                                      })
+                                                  );
+                                              }
                                           }}
                                       >
                                           <TextCollateral fontWeight="600">{collateral}</TextCollateral>

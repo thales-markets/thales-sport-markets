@@ -5,15 +5,16 @@ import multipleCollateral from './contracts/multipleCollateralContract';
 
 export const getDefaultCollateral = (networkId: SupportedNetwork) => COLLATERALS[networkId][0];
 
-export const getCollateral = (networkId: SupportedNetwork, index: number) => COLLATERALS[networkId][index];
+export const getCollateral = (networkId: SupportedNetwork, index: number, collaterals?: Coins[]) =>
+    (collaterals || COLLATERALS[networkId])[index];
 
 export const getCollaterals = (networkId: SupportedNetwork) => COLLATERALS[networkId];
 
-export const getCollateralIndex = (networkId: SupportedNetwork, currencyKey: Coins) =>
-    COLLATERALS[networkId].indexOf(currencyKey);
+export const getCollateralIndex = (networkId: SupportedNetwork, currencyKey: Coins, collaterals?: Coins[]) =>
+    (collaterals || getCollaterals(networkId)).indexOf(currencyKey);
 
-export const getCollateralAddress = (networkId: SupportedNetwork, index: number) =>
-    multipleCollateral[getCollateral(networkId, index)]?.addresses[networkId];
+export const getCollateralAddress = (networkId: SupportedNetwork, index: number, collaterals?: Coins[]) =>
+    multipleCollateral[getCollateral(networkId, index, collaterals)]?.addresses[networkId];
 
 export const getCollateralByAddress = (collateralAddress: string, networkId: number) => {
     let collateral = getDefaultCollateral(networkId);
