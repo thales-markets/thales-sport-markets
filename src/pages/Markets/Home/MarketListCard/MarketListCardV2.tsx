@@ -44,6 +44,7 @@ import {
     TeamsInfoContainer,
     Wrapper,
     liveBlinkStyle,
+    liveBlinkStyleMobile,
 } from './styled-components';
 
 type MarketRowCardProps = {
@@ -150,7 +151,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     autoplay={true}
                                     animationData={liveAnimationData}
                                     loop={true}
-                                    style={liveBlinkStyle}
+                                    style={isMobile ? liveBlinkStyleMobile : liveBlinkStyle}
                                 />
                                 <MatchInfoLabel>{t(`markets.market-card.live`)}</MatchInfoLabel>
                             </LiveIndicatorContainer>

@@ -184,6 +184,13 @@ export const liveBlinkStyle: CSSProperties = {
     top: 4,
 };
 
+export const liveBlinkStyleMobile: CSSProperties = {
+    width: 23,
+    height: 23,
+    position: 'absolute',
+    top: 3,
+};
+
 export const LiveIndicatorContainer = styled(FlexDivStart)`
     align-items: flex-start;
     color: ${(props) => props.theme.textColor.primary};
