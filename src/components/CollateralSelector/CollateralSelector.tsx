@@ -245,6 +245,7 @@ const Dropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
     background: ${(props) => props.theme.status.win};
     z-index: 100;
     border: 2px solid ${(props) => props.theme.status.win};
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 `;
 
 const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
