@@ -25,7 +25,7 @@ export const OverviewContainer = styled(FlexDivRow)`
     justify-content: space-between;
     background-color: ${(props) => props.theme.background.secondary};
     border-radius: 0 7px 7px 0;
-    padding: 10px 15px 10px 3px;
+    padding: 10px 40px 10px 3px;
     width: 100%;
     max-height: 40px;
     align-items: center;
@@ -35,7 +35,15 @@ export const OverviewContainer = styled(FlexDivRow)`
         max-height: initial;
     }
     @media (max-width: 767px) {
-        padding: 5px 0px;
+        padding: 5px 25px 5px 0px;
+    }
+    position: relative;
+`;
+
+export const TicketInfo = styled(FlexDivStart)`
+    @media (max-width: 767px) {
+        margin-left: 3px;
+        flex-direction: column;
     }
 `;
 
@@ -46,17 +54,8 @@ export const TicketIdContainer = styled(FlexDivStart)`
     color: ${(props) => props.theme.textColor.secondary};
     margin-left: 0px;
     margin-right: 10px;
-    @media (max-width: 1399px) {
-        flex-direction: column;
-        min-width: auto;
-    }
-    @media (max-width: 950px) {
-        flex-direction: row;
-    }
     @media (max-width: 767px) {
-        margin-left: 2px;
-        min-width: 75px;
-        flex-direction: column;
+        min-width: 130px;
     }
 `;
 
@@ -64,16 +63,8 @@ export const NumberOfGamesContainer = styled(FlexDivStart)`
     min-width: 100px;
     color: ${(props) => props.theme.textColor.secondary};
     margin-right: 10px;
-    @media (max-width: 1399px) {
-        flex-direction: column;
-        min-width: 100px;
-    }
-    @media (max-width: 950px) {
-        flex-direction: row;
-    }
     @media (max-width: 767px) {
-        min-width: 70px;
-        flex-direction: column;
+        min-width: 100px;
     }
 `;
 
@@ -82,7 +73,7 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)`
     justify-content: flex-start;
     margin-right: 10px;
     @media (max-width: 767px) {{
-        min-width: 65px;
+        min-width: 85px;
         flex-direction: column;
         margin-left: 0px;
         margin-right: 5px;
@@ -146,16 +137,16 @@ export const PayoutInLabel = styled(WinLabel)`
 export const WinValue = styled(WinLabel)``;
 
 export const ArrowIcon = styled.i`
+    position: absolute;
+    right: 0px;
     font-size: 16px;
     color: ${(props) => props.theme.textColor.secondary};
     text-transform: none;
     font-weight: 400;
-    margin-left: 10px;
-    margin-right: 0px;
+    padding: 10px;
     @media (max-width: 767px) {
-        margin-right: 5px;
-        margin-left: 5px;
         font-size: 10px;
+        padding: 6px;
     }
 `;
 
@@ -195,9 +186,6 @@ export const ClaimContainer = styled(FlexDivColumnNative)`
     min-width: 100px;
     align-items: end;
     justify-content: flex-end;
-    @media (max-width: 767px) {
-        min-width: 60px;
-    }
     button {
         margin-top: 2px;
         @media (max-width: 767px) {
