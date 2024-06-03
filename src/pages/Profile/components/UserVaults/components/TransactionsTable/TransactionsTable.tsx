@@ -1,6 +1,6 @@
 import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
-import useUserVaultAndLpTransactions from 'queries/wallet/useProfileLiquidityPoolUserTransactions';
+import useProfileLiquidityPoolUserTransactions from 'queries/wallet/useProfileLiquidityPoolUserTransactions';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { formatCurrencyWithKey, formatTxTimestamp } from 'thales-utils';
-import { ProfileLiquidityPoolUserTransaction, ProfileLiquidityPoolUserTransactions } from 'types/liquidityPool';
+import { LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 
 const TransactionsTable: React.FC = () => {
@@ -18,11 +18,11 @@ const TransactionsTable: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
-    const txQuery = useUserVaultAndLpTransactions(networkId, walletAddress, {
+    const txQuery = useProfileLiquidityPoolUserTransactions(networkId, walletAddress, {
         enabled: walletAddress !== '',
     });
 
-    const [lastValidData, setLastValidData] = useState<ProfileLiquidityPoolUserTransactions>([]);
+    const [lastValidData, setLastValidData] = useState<LiquidityPoolUserTransactions>([]);
 
     useEffect(() => {
         if (txQuery.isSuccess && txQuery.data) setLastValidData(txQuery.data);
@@ -44,8 +44,8 @@ const TransactionsTable: React.FC = () => {
                         accessor: 'timestamp',
                         Cell: (
                             cellProps: CellProps<
-                                ProfileLiquidityPoolUserTransaction,
-                                ProfileLiquidityPoolUserTransaction['timestamp']
+                                LiquidityPoolUserTransaction,
+                                LiquidityPoolUserTransaction['timestamp']
                             >
                         ) => <TableText>{formatTxTimestamp(cellProps.cell.value)}</TableText>,
                         width: 150,
@@ -55,10 +55,7 @@ const TransactionsTable: React.FC = () => {
                         Header: <>{t(`profile.table.name-col`)}</>,
                         accessor: 'name',
                         Cell: (
-                            cellProps: CellProps<
-                                ProfileLiquidityPoolUserTransaction,
-                                ProfileLiquidityPoolUserTransaction['name']
-                            >
+                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['name']>
                         ) => <TableText> {cellProps.cell.value}</TableText>,
                         width: 150,
                         sortable: true,
@@ -68,10 +65,7 @@ const TransactionsTable: React.FC = () => {
                         accessor: 'type',
                         sortType: 'alphanumeric',
                         Cell: (
-                            cellProps: CellProps<
-                                ProfileLiquidityPoolUserTransaction,
-                                ProfileLiquidityPoolUserTransaction['type']
-                            >
+                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['type']>
                         ) => <TableText>{t(`profile.table.${cellProps.cell.value}`)}</TableText>,
                         width: 150,
                         sortable: true,
@@ -81,10 +75,7 @@ const TransactionsTable: React.FC = () => {
                         sortType: 'basic',
                         accessor: 'amount',
                         Cell: (
-                            cellProps: CellProps<
-                                ProfileLiquidityPoolUserTransaction,
-                                ProfileLiquidityPoolUserTransaction['amount']
-                            >
+                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['amount']>
                         ) => (
                             <>
                                 <TableText>
@@ -104,10 +95,7 @@ const TransactionsTable: React.FC = () => {
                         Header: <>{t('profile.table.round-col')}</>,
                         accessor: 'round',
                         Cell: (
-                            cellProps: CellProps<
-                                ProfileLiquidityPoolUserTransaction,
-                                ProfileLiquidityPoolUserTransaction['round']
-                            >
+                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['round']>
                         ) => (
                             <TableText>
                                 {t('profile.table.round-label')} {cellProps.cell.value}
@@ -119,10 +107,7 @@ const TransactionsTable: React.FC = () => {
                         Header: <>{t('profile.table.tx-status-col')}</>,
                         accessor: 'hash',
                         Cell: (
-                            cellProps: CellProps<
-                                ProfileLiquidityPoolUserTransaction,
-                                ProfileLiquidityPoolUserTransaction['hash']
-                            >
+                            cellProps: CellProps<LiquidityPoolUserTransaction, LiquidityPoolUserTransaction['hash']>
                         ) => <ViewEtherscanLink hash={cellProps.cell.value} />,
                         width: 150,
                     },

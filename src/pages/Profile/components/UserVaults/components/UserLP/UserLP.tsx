@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
+import { LiquidityPoolCollateral } from 'enums/liquidityPool';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,24 +9,25 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { Coins, formatCurrency } from 'thales-utils';
+import { formatCurrency } from 'thales-utils';
+import { LiquidityPool } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 
 type UserLPProps = {
-    address: string;
-    collateral: Coins;
+    lp: LiquidityPool;
 };
 
-const UserLP: React.FC<UserLPProps> = ({ address, collateral }) => {
+const UserLP: React.FC<UserLPProps> = ({ lp }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const [lastValidData, setLastValidData] = useState<number>(0);
+    const lpCollateral = lp.collateral.toLowerCase() as LiquidityPoolCollateral;
 
-    const userLpQuery = useLiquidityPoolUserDataQuery(address, collateral, walletAddress, networkId, {
+    const userLpQuery = useLiquidityPoolUserDataQuery(lp.address, lp.collateral, walletAddress, networkId, {
         enabled: isWalletConnected,
     });
 
@@ -37,17 +39,17 @@ const UserLP: React.FC<UserLPProps> = ({ address, collateral }) => {
 
     return (
         <>
-            <SPAAnchor href={`${buildHref(ROUTES.LiquidityPool)}?collateral=${collateral.toLowerCase()}`}>
+            <SPAAnchor href={`${buildHref(ROUTES.LiquidityPool)}?collateral=${lpCollateral}`}>
                 <LiquidityPoolCard>
                     <TitleWrapper>
                         <Icon className={`icon icon--liquidity-pool`} />
-                        <Title>{`${collateral} LP`}</Title>
+                        <Title>{lp.name}</Title>
                     </TitleWrapper>
                     <ContentWrapper>
                         <TextWrapper>
                             <PreLabel>{t('profile.in-lp')}</PreLabel>
                             <Value>{formatCurrency(lastValidData)}</Value>
-                            <PostLabel>{collateral}</PostLabel>
+                            <PostLabel>{lp.collateral}</PostLabel>
                         </TextWrapper>
                         <Button
                             backgroundColor={theme.button.background.quaternary}
@@ -57,7 +59,7 @@ const UserLP: React.FC<UserLPProps> = ({ address, collateral }) => {
                             padding="1px 2px"
                             height="20px"
                         >
-                            {`${t('profile.go-to')} ${collateral} LP`}
+                            {`${t('profile.go-to')} ${lp.name}`}
                         </Button>
                     </ContentWrapper>
                 </LiquidityPoolCard>

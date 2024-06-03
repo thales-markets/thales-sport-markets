@@ -1,21 +1,21 @@
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
-import { coinFormatter, Coins } from 'thales-utils';
-import { LiquidityPoolUserTransactions, ProfileLiquidityPoolUserTransactions } from 'types/liquidityPool';
-import { LiquidityPoolMap } from '../../constants/liquidityPool';
+import { coinFormatter } from 'thales-utils';
+import { LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { SupportedNetwork } from '../../types/network';
+import { getLiquidityPools } from '../../utils/liquidityPool';
 
-const useProfileLiquidityPoolUserTransactions = (
+const useLiquidityPoolUserTransactions = (
     networkId: SupportedNetwork,
     walletAddress: string,
-    options?: UseQueryOptions<ProfileLiquidityPoolUserTransactions>
+    options?: UseQueryOptions<LiquidityPoolUserTransactions>
 ) => {
-    return useQuery<ProfileLiquidityPoolUserTransactions>(
+    return useQuery<LiquidityPoolUserTransactions>(
         QUERY_KEYS.Wallet.LiquidityPoolTransactions(networkId, walletAddress),
         async () => {
             try {
-                const vaultTx: ProfileLiquidityPoolUserTransactions = [];
+                const vaultTx: LiquidityPoolUserTransactions = [];
 
                 const liquidityPoolUserTransactions: LiquidityPoolUserTransactions = await thalesData.sportMarketsV2.liquidityPoolUserTransactions(
                     {
@@ -24,24 +24,19 @@ const useProfileLiquidityPoolUserTransactions = (
                     }
                 );
 
-                const liquidityPools: any = Object.values(LiquidityPoolMap[networkId]);
-                const liquidityPoolKeys = Object.keys(LiquidityPoolMap[networkId]);
+                const liquidityPools = getLiquidityPools(networkId);
 
                 vaultTx.push(
                     ...liquidityPoolUserTransactions.map((tx) => {
-                        const lpIndex = liquidityPools.findIndex(
+                        const lp = liquidityPools.find(
                             (lp: any) => lp.address.toLowerCase() === tx.liquidityPool.toLowerCase()
                         );
-                        console.log(lpIndex, liquidityPoolKeys[lpIndex] as Coins);
+                        if (!lp) return tx;
                         return {
                             ...tx,
-                            name: liquidityPools[lpIndex].name,
-                            amount: coinFormatter(
-                                tx.amount,
-                                networkId,
-                                liquidityPoolKeys[lpIndex].toUpperCase() as Coins
-                            ),
-                            collateral: liquidityPoolKeys[lpIndex].toUpperCase() as Coins,
+                            name: lp.name,
+                            amount: coinFormatter(tx.amount, networkId, lp.collateral),
+                            collateral: lp.collateral,
                         };
                     })
                 );
@@ -58,4 +53,4 @@ const useProfileLiquidityPoolUserTransactions = (
     );
 };
 
-export default useProfileLiquidityPoolUserTransactions;
+export default useLiquidityPoolUserTransactions;

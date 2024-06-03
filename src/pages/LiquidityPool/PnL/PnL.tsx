@@ -21,13 +21,13 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'thales-utils';
-import { LiquidityPoolPnls, LiquidityPoolType } from 'types/liquidityPool';
+import { LiquidityPoolPnls } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 
 type PnlProps = {
     lifetimePnl: number;
     type: LiquidityPoolPnlType;
-    liquidityPoolAddress: LiquidityPoolType;
+    liquidityPoolAddress: string;
 };
 
 const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) => {

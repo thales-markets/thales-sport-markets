@@ -45,6 +45,7 @@ export type LiquidityPoolUserTransaction = {
     timestamp: number;
     blockNumber: number;
     liquidityPool: string;
+    name: string;
     type: string;
     account: string;
     amount: number;
@@ -54,24 +55,14 @@ export type LiquidityPoolUserTransaction = {
 
 export type LiquidityPoolUserTransactions = LiquidityPoolUserTransaction[];
 
-export type ProfileLiquidityPoolUserTransaction = {
-    name: string;
-    hash: string;
-    timestamp: number;
-    blockNumber: number;
-    type: string;
-    account: string;
-    amount: number;
-    round: number;
-    collateral: Coins;
-};
-
-export type ProfileLiquidityPoolUserTransactions = ProfileLiquidityPoolUserTransaction[];
-
 export type LiquidityPoolReturn = {
     arr: number;
     apr: number;
     apy: number;
 };
 
-export type LiquidityPoolType = 'single' | 'parlay';
+export type LiquidityPool = {
+    name: string;
+    address: string;
+    collateral: Coins;
+};

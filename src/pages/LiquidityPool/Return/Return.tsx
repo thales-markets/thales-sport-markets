@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import { getNetworkId } from 'redux/modules/wallet';
-import { useTranslation } from 'react-i18next';
-import { getIsAppReady } from 'redux/modules/app';
-import { LiquidityPoolReturn, LiquidityPoolType } from 'types/liquidityPool';
 import useLiquidityPoolReturnQuery from 'queries/liquidityPool/useLiquidityPoolReturnQuery';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import { formatPercentage } from 'thales-utils';
+import { LiquidityPoolReturn } from 'types/liquidityPool';
 import {
     ContentInfoContainer,
     LiquidityPoolInfoContainer,
@@ -15,13 +15,13 @@ import {
     LiquidityPoolReturnlabel,
 } from '../styled-components';
 
-const Return: React.FC<{ liquidityPoolType: LiquidityPoolType }> = ({ liquidityPoolType }) => {
+const Return: React.FC<{ liquidityPoolAddress: string }> = ({ liquidityPoolAddress }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [liquidityPoolReturn, setLiquidityPoolReturn] = useState<LiquidityPoolReturn | undefined>(undefined);
 
-    const liquidityPoolReturnQuery = useLiquidityPoolReturnQuery(networkId, liquidityPoolType, {
+    const liquidityPoolReturnQuery = useLiquidityPoolReturnQuery(networkId, liquidityPoolAddress, {
         enabled: isAppReady,
     });
 

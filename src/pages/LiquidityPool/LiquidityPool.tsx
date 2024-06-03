@@ -30,7 +30,7 @@ import {
 } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
-import { Coins, coinParser, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
+import { coinParser, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
 import { LiquidityPoolData, UserLiquidityPoolData } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 import liquidityPoolContract from 'utils/contracts/liquidityPoolContractV2';
@@ -39,8 +39,8 @@ import networkConnector from 'utils/networkConnector';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
 import SPAAnchor from '../../components/SPAAnchor';
-import { LiquidityPoolMap } from '../../constants/liquidityPool';
 import ROUTES from '../../constants/routes';
+import { getDefaultLpCollateral, getLiquidityPools, getLpAddress, getLpCollateral } from '../../utils/liquidityPool';
 import { buildHref } from '../../utils/routes';
 import PnL from './PnL';
 import Return from './Return';
@@ -114,9 +114,10 @@ const LiquidityPool: React.FC = () => {
     const [withdrawalAmount, setWithdrawalAmount] = useState<number>(0);
 
     const paramCollateral: LiquidityPoolCollateral =
-        (queryString.parse(location.search).collateral as LiquidityPoolCollateral) || LiquidityPoolCollateral.USDC;
-    const collateral = paramCollateral.toUpperCase() as Coins;
-    const liquidityPoolAddress = LiquidityPoolMap[networkId][paramCollateral]?.address;
+        queryString.parse(location.search).collateral || getDefaultLpCollateral(networkId);
+    const collateral = getLpCollateral(networkId, paramCollateral);
+    const liquidityPoolAddress = getLpAddress(networkId, paramCollateral);
+    const liquidityPools = getLiquidityPools(networkId);
 
     const { openConnectModal } = useConnectModal();
 
@@ -513,25 +514,19 @@ const LiquidityPool: React.FC = () => {
         <Wrapper>
             <Title>{t('liquidity-pool.title')}</Title>
             <NavigationContainer>
-                {Object.values(LiquidityPoolMap[networkId]).map((item: any, index: number) => (
-                    <SPAAnchor
-                        key={item.name}
-                        href={`${buildHref(ROUTES.LiquidityPool)}?collateral=${Object.keys(LiquidityPoolMap[networkId])[
-                            index
-                        ].toLowerCase()}`}
-                    >
-                        <NavigationItem
-                            className={`${
-                                (Object.keys(LiquidityPoolMap[networkId])[index] as LiquidityPoolCollateral) ===
-                                paramCollateral
-                                    ? 'selected'
-                                    : ''
-                            }`}
+                {liquidityPools.map((item: any) => {
+                    const lpCollateral = item.collateral.toLowerCase() as LiquidityPoolCollateral;
+                    return (
+                        <SPAAnchor
+                            key={item.name}
+                            href={`${buildHref(ROUTES.LiquidityPool)}?collateral=${lpCollateral}`}
                         >
-                            {item.name}
-                        </NavigationItem>
-                    </SPAAnchor>
-                ))}
+                            <NavigationItem className={`${lpCollateral === paramCollateral ? 'selected' : ''}`}>
+                                {item.name}
+                            </NavigationItem>
+                        </SPAAnchor>
+                    );
+                })}
             </NavigationContainer>
             {liquidityPoolData && (
                 <Container>
@@ -1005,7 +1000,7 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                            <Return liquidityPoolType={liquidityPoolAddress} />
+                            <Return liquidityPoolAddress={liquidityPoolAddress} />
                         </MainContentContainer>
                         <MainContentContainer>
                             {liquidityPoolData && (
