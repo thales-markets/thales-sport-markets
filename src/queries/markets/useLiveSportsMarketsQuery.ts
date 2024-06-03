@@ -6,7 +6,11 @@ import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarkets } from 'types/markets';
 import { getLiveSupportedLeagues } from '../../utils/sports';
 
-const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions<SportMarkets>) => {
+const useLiveSportsMarketsQuery = (
+    networkId: Network,
+    isLiveSelected: boolean,
+    options?: UseQueryOptions<SportMarkets>
+) => {
     return useQuery<SportMarkets>(
         QUERY_KEYS.LiveSportMarkets(networkId),
         async () => {
@@ -39,7 +43,7 @@ const useLiveSportsMarketsQuery = (networkId: Network, options?: UseQueryOptions
             return marketsFlattened;
         },
         {
-            refetchInterval: 2 * 1000,
+            refetchInterval: isLiveSelected ? 2 * 1000 : 10 * 1000,
             ...options,
         }
     );

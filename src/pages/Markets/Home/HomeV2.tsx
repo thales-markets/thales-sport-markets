@@ -213,7 +213,7 @@ const Home: React.FC = () => {
         enabled: isAppReady,
     });
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, {
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, sportFilter === SportFilter.Live, {
         enabled: isAppReady,
     });
 

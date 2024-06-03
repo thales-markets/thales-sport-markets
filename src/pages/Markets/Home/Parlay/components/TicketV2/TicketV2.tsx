@@ -795,14 +795,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             setIsFetching(true);
             const { sportsAMMV2Contract } = networkConnector;
             if (sportsAMMV2Contract && Number(buyInAmount) > 0 && minBuyInAmountInDefaultCollateral) {
-                const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
+                if (markets[0]?.live) {
+                    setPayout((1 / totalQuote) * Number(buyInAmount));
+                } else {
+                    const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
 
-                if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
+                    if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
 
-                if (!parlayAmmQuote.error) {
-                    if (markets[0]?.live) {
-                        setPayout((1 / totalQuote) * Number(buyInAmount));
-                    } else {
+                    if (!parlayAmmQuote.error) {
                         const payout = coinFormatter(
                             parlayAmmQuote.payout,
                             networkId,
@@ -819,11 +819,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         setMarketsOutOfLiquidity(marketsOutOfLiquidity);
 
                         setFinalQuotes(amountsToBuy);
+                    } else {
+                        setMarketsOutOfLiquidity([]);
+                        setPayout(0);
+                        // setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
                     }
-                } else {
-                    setMarketsOutOfLiquidity([]);
-                    setPayout(0);
-                    // setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
                 }
             } else {
                 if (Number(buyInAmount) === 0) {

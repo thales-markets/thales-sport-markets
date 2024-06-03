@@ -51,7 +51,7 @@ const Parlay: React.FC = () => {
         enabled: isAppReady,
     });
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, {
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, isLiveFilterSelected, {
         enabled: isAppReady,
     });
 
@@ -71,20 +71,7 @@ const Parlay: React.FC = () => {
     }, [dispatch, sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
     useEffect(() => {
-        if (
-            sportMarketsQuery.isSuccess &&
-            sportMarketsQuery.data &&
-            liveSportMarketsQuery.isSuccess &&
-            liveSportMarketsQuery.data
-        ) {
-            const sportOpenMarkets = sportMarketsQuery.data.reduce((acc: SportMarket[], market: SportMarket) => {
-                acc.push(market);
-                market.childMarkets.forEach((childMarket: SportMarket) => {
-                    acc.push(childMarket);
-                });
-                return acc;
-            }, []);
-
+        if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data && isLiveFilterSelected) {
             const liveSportOpenMarkets = liveSportMarketsQuery.data.reduce(
                 (acc: SportMarket[], market: SportMarket) => {
                     acc.push(market);
@@ -95,15 +82,41 @@ const Parlay: React.FC = () => {
                 },
                 []
             );
+            const ticketMarkets: TicketMarket[] = ticket
+                .filter((ticketPosition) =>
+                    liveSportOpenMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
+                )
+                .map((ticketPosition) => {
+                    const openMarket: SportMarket = liveSportOpenMarkets.filter((market: SportMarket) =>
+                        isSameMarket(market, ticketPosition)
+                    )[0];
+                    return {
+                        ...openMarket,
+                        position: ticketPosition.position,
+                        odd: openMarket.odds[ticketPosition.position],
+                    };
+                });
 
-            const liveOrOpenSportMarkets = isLiveFilterSelected ? liveSportOpenMarkets : sportOpenMarkets;
+            setTicketMarkets(ticketMarkets);
+        }
+    }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
+
+    useEffect(() => {
+        if (sportMarketsQuery.isSuccess && sportMarketsQuery.data && !isLiveFilterSelected) {
+            const sportOpenMarkets = sportMarketsQuery.data.reduce((acc: SportMarket[], market: SportMarket) => {
+                acc.push(market);
+                market.childMarkets.forEach((childMarket: SportMarket) => {
+                    acc.push(childMarket);
+                });
+                return acc;
+            }, []);
 
             const ticketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
-                    liveOrOpenSportMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
+                    sportOpenMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
                 )
                 .map((ticketPosition) => {
-                    const openMarket: SportMarket = liveOrOpenSportMarkets.filter((market: SportMarket) =>
+                    const openMarket: SportMarket = sportOpenMarkets.filter((market: SportMarket) =>
                         isSameMarket(market, ticketPosition)
                     )[0];
                     return {
@@ -115,26 +128,16 @@ const Parlay: React.FC = () => {
 
             // if market is not opened anymore remove it
             if (ticket.length > ticketMarkets.length) {
-                if (!isLiveFilterSelected) {
-                    const notOpenedMarkets = ticket.filter((ticketPosition) =>
-                        sportOpenMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
-                    );
+                const notOpenedMarkets = ticket.filter((ticketPosition) =>
+                    sportOpenMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
+                );
 
-                    if (notOpenedMarkets.length > 0) dispatch(removeAll());
-                }
+                if (notOpenedMarkets.length > 0) dispatch(removeAll());
             }
 
             setTicketMarkets(ticketMarkets);
         }
-    }, [
-        liveSportMarketsQuery.isSuccess,
-        liveSportMarketsQuery.data,
-        sportMarketsQuery.isSuccess,
-        sportMarketsQuery.data,
-        ticket,
-        dispatch,
-        isLiveFilterSelected,
-    ]);
+    }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch, isLiveFilterSelected]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
