@@ -2,7 +2,6 @@ import { Network } from 'enums/network';
 import { ethers, Signer } from 'ethers';
 import { NetworkSettings } from 'types/network';
 import { Coins } from 'types/tokens';
-import liquidityPoolContract from 'utils/contracts/liquidityPoolContractV2';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
 import parlayAMMLiquidityPoolContract from 'utils/contracts/parlayAMMLiquidityPoolContract';
 import parlayAMMLiquidityPoolDataContract from 'utils/contracts/parlayAMMLiquidityPoolDataContract';
@@ -32,7 +31,6 @@ type NetworkConnector = {
     overtimeVoucherContract?: ethers.Contract;
     overtimeVoucherEscrowContract?: ethers.Contract;
     favoriteTeamContract?: ethers.Contract;
-    liquidityPoolContract?: ethers.Contract;
     liquidityPoolDataContract?: ethers.Contract;
     parlayAMMLiquidityPoolContract?: ethers.Contract;
     parlayAMMLiquidityPoolDataContract?: ethers.Contract;
@@ -56,7 +54,6 @@ const networkConnector: NetworkConnector = {
         this.overtimeVoucherContract = initializeContract(overtimeVoucherContract, networkSettings);
         this.overtimeVoucherEscrowContract = initializeContract(overtimeVoucherEscrowContract, networkSettings);
         this.favoriteTeamContract = initializeContract(FIFAFavoriteTeam, networkSettings);
-        this.liquidityPoolContract = initializeContract(liquidityPoolContract, networkSettings);
         this.liquidityPoolDataContract = initializeContract(liquidityPoolDataContract, networkSettings);
         this.parlayAMMLiquidityPoolContract = initializeContract(parlayAMMLiquidityPoolContract, networkSettings);
         this.parlayAMMLiquidityPoolDataContract = initializeContract(

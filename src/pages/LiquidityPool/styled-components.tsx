@@ -443,3 +443,23 @@ export const SliderRange = styled.div`
 export const defaultButtonProps = {
     width: '100%',
 };
+
+export const NavigationContainer = styled(FlexDivRow)`
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 30px;
+    font-size: 20px;
+    font-weight: 600;
+`;
+
+export const NavigationItem = styled(FlexDivRow)`
+    color: ${(props) => props.theme.textColor.primary};
+    &.selected {
+        transition: 0.2s;
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
+    &:hover:not(.selected) {
+        cursor: pointer;
+        color: ${(props) => props.theme.textColor.secondary};
+    }
+`;

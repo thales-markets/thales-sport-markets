@@ -1,7 +1,6 @@
 import Button from 'components/Button';
 import SPAAnchor from 'components/SPAAnchor';
 import i18n from 'i18n';
-import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
 import useParlayLiquidityPoolUserDataQuery from 'queries/liquidityPool/useParlayLiquidityPoolUserDataQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,10 +21,9 @@ const UserLP: React.FC = () => {
     const [parlayLPData, setParlayLPData] = useState<number>(0);
     const language = i18n.language;
 
-    const userLpQuery = useLiquidityPoolUserDataQuery(walletAddress, networkId, {
+    const userLpQuery = useParlayLiquidityPoolUserDataQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
     });
-
     const parlayLpQuery = useParlayLiquidityPoolUserDataQuery(walletAddress, networkId, {
         enabled: isWalletConnected,
     });

@@ -13,6 +13,7 @@ const useParlayLiquidityPoolDataQuery = (
         QUERY_KEYS.LiquidityPool.ParlayData(networkId),
         async () => {
             const liquidityPoolData: LiquidityPoolData = {
+                collateral: '',
                 liquidityPoolStarted: false,
                 maxAllowedDeposit: 0,
                 round: 0,
@@ -29,7 +30,6 @@ const useParlayLiquidityPoolDataQuery = (
                 paused: false,
                 lifetimePnl: 0,
                 roundLength: 0,
-                stakedThalesMultiplier: 0,
             };
 
             const decimals = getDefaultDecimalsForNetwork(networkId);
@@ -65,9 +65,6 @@ const useParlayLiquidityPoolDataQuery = (
                     liquidityPoolData.canCloseCurrentRound = contractLiquidityPoolData.canCloseCurrentRound;
                     liquidityPoolData.paused = contractLiquidityPoolData.paused;
                     liquidityPoolData.roundLength = Number(contractLiquidityPoolData.roundLength) / 60 / 60 / 24;
-                    liquidityPoolData.stakedThalesMultiplier = bigNumberFormatter(
-                        contractLiquidityPoolData.stakedThalesMultiplier
-                    );
                     liquidityPoolData.allocationCurrentRound = bigNumberFormatter(
                         contractLiquidityPoolData.allocationCurrentRound,
                         decimals

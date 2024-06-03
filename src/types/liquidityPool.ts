@@ -1,21 +1,21 @@
 export type LiquidityPoolData = {
-    round: number;
-    roundEndTime: number;
+    collateral: string;
     liquidityPoolStarted: boolean;
     maxAllowedDeposit: number;
-    allocationCurrentRound: number;
+    round: number;
+    roundEndTime: number;
     allocationNextRound: number;
-    availableAllocationNextRound: number;
     allocationNextRoundPercentage: number;
+    availableAllocationNextRound: number;
+    allocationCurrentRound: number;
     isRoundEnded: boolean;
     minDepositAmount: number;
     maxAllowedUsers: number;
     usersCurrentlyInLiquidityPool: number;
     canCloseCurrentRound: boolean;
     paused: boolean;
-    lifetimePnl: number;
     roundLength: number;
-    stakedThalesMultiplier: number;
+    lifetimePnl: number;
 };
 
 export type UserLiquidityPoolData = {

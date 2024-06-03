@@ -1,59 +1,73 @@
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
-import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
+import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolData } from 'types/liquidityPool';
 import networkConnector from 'utils/networkConnector';
 import QUERY_KEYS from '../../constants/queryKeys';
 
-const useLiquidityPoolDataQuery = (networkId: Network, options?: UseQueryOptions<LiquidityPoolData | undefined>) => {
+const useLiquidityPoolDataQuery = (
+    address: string,
+    collateral: Coins,
+    networkId: Network,
+    options?: UseQueryOptions<LiquidityPoolData | undefined>
+) => {
     return useQuery<LiquidityPoolData | undefined>(
-        QUERY_KEYS.LiquidityPool.Data(networkId),
+        QUERY_KEYS.LiquidityPool.Data(address, networkId),
         async () => {
             const liquidityPoolData: LiquidityPoolData = {
+                collateral: '',
                 liquidityPoolStarted: false,
                 maxAllowedDeposit: 0,
                 round: 0,
                 roundEndTime: 0,
                 allocationNextRound: 0,
                 allocationNextRoundPercentage: 0,
+                availableAllocationNextRound: 0,
                 allocationCurrentRound: 0,
                 isRoundEnded: false,
-                availableAllocationNextRound: 0,
                 minDepositAmount: 0,
                 maxAllowedUsers: 0,
                 usersCurrentlyInLiquidityPool: 0,
                 canCloseCurrentRound: false,
                 paused: false,
-                lifetimePnl: 0,
                 roundLength: 0,
-                stakedThalesMultiplier: 0,
+                lifetimePnl: 0,
             };
 
-            const decimals = getDefaultDecimalsForNetwork(networkId);
             try {
-                const { liquidityPoolContract, liquidityPoolDataContract } = networkConnector;
-                if (liquidityPoolContract && liquidityPoolDataContract) {
-                    const contractLiquidityPoolData = await liquidityPoolDataContract.getLiquidityPoolData(
-                        liquidityPoolContract.address
-                    );
+                const { liquidityPoolDataContract } = networkConnector;
+                if (liquidityPoolDataContract) {
+                    const contractLiquidityPoolData = await liquidityPoolDataContract.getLiquidityPoolData(address);
+
+                    liquidityPoolData.collateral = contractLiquidityPoolData.collateral;
 
                     liquidityPoolData.liquidityPoolStarted = contractLiquidityPoolData.started;
-                    liquidityPoolData.maxAllowedDeposit = bigNumberFormatter(
+                    liquidityPoolData.maxAllowedDeposit = coinFormatter(
                         contractLiquidityPoolData.maxAllowedDeposit,
-                        decimals
+                        networkId,
+                        collateral
                     );
                     liquidityPoolData.round = Number(contractLiquidityPoolData.round);
-                    liquidityPoolData.allocationNextRound = bigNumberFormatter(
+                    liquidityPoolData.roundEndTime = Number(contractLiquidityPoolData.roundEndTime) * 1000;
+                    liquidityPoolData.allocationNextRound = coinFormatter(
                         contractLiquidityPoolData.totalDeposited,
-                        decimals
+                        networkId,
+                        collateral
                     );
-                    liquidityPoolData.availableAllocationNextRound =
-                        liquidityPoolData.maxAllowedDeposit - liquidityPoolData.allocationNextRound;
                     liquidityPoolData.allocationNextRoundPercentage =
                         (liquidityPoolData.allocationNextRound / liquidityPoolData.maxAllowedDeposit) * 100;
-                    liquidityPoolData.minDepositAmount = bigNumberFormatter(
+                    liquidityPoolData.availableAllocationNextRound =
+                        liquidityPoolData.maxAllowedDeposit - liquidityPoolData.allocationNextRound;
+                    liquidityPoolData.allocationCurrentRound = coinFormatter(
+                        contractLiquidityPoolData.allocationCurrentRound,
+                        networkId,
+                        collateral
+                    );
+                    liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
+                    liquidityPoolData.minDepositAmount = coinFormatter(
                         contractLiquidityPoolData.minDepositAmount,
-                        decimals
+                        networkId,
+                        collateral
                     );
                     liquidityPoolData.maxAllowedUsers = Number(contractLiquidityPoolData.maxAllowedUsers);
                     liquidityPoolData.usersCurrentlyInLiquidityPool = Number(
@@ -62,16 +76,10 @@ const useLiquidityPoolDataQuery = (networkId: Network, options?: UseQueryOptions
                     liquidityPoolData.canCloseCurrentRound = contractLiquidityPoolData.canCloseCurrentRound;
                     liquidityPoolData.paused = contractLiquidityPoolData.paused;
                     liquidityPoolData.roundLength = Number(contractLiquidityPoolData.roundLength) / 60 / 60 / 24;
-                    liquidityPoolData.allocationCurrentRound = bigNumberFormatter(
-                        contractLiquidityPoolData.allocationCurrentRound,
-                        decimals
-                    );
                     liquidityPoolData.lifetimePnl =
                         bigNumberFormatter(contractLiquidityPoolData.lifetimePnl, 18) === 0
                             ? 0
                             : bigNumberFormatter(contractLiquidityPoolData.lifetimePnl, 18) - 1;
-                    liquidityPoolData.roundEndTime = Number(contractLiquidityPoolData.roundEndTime) * 1000;
-                    liquidityPoolData.isRoundEnded = new Date().getTime() > liquidityPoolData.roundEndTime;
 
                     return liquidityPoolData;
                 }
