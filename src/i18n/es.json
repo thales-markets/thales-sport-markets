@@ -634,7 +634,14 @@
             "keep-selection-tooltip": "De forma predeterminada, el generador de parlay se restablece después de un envío exitoso. Marque esta opción si desea mantener el contexto actual después del envío.",
             "persist-games": "Mantener la selección después de enviar",
             "liquidity": "Liquidez",
-            "ticket-slip": "Boleto"
+            "ticket-slip": "Boleto",
+            "slippage": {
+                "label": "Acepte el intercambio si las probabilidades bajan:",
+                "slippage": "deslizamiento",
+                "invalid-value": "valor no válido",
+                "tooltip": "La transferencia no se realizará si la tasa puente se mueve desfavorablemente en más de este porcentaje cuando se ejecuta la transferencia.",
+                "enter-value": "Introducir valor"
+            }
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {

@@ -634,7 +634,14 @@
             "persist-games": "提交后保留选择",
             "keep-selection-tooltip": "默认情况下，成功提交后会重置连赢构建器。如果您想在提交后保留当前上下文，请勾选此选项。",
             "liquidity": "流动性",
-            "ticket-slip": "票单"
+            "ticket-slip": "票单",
+            "slippage": {
+                "slippage": "滑移",
+                "invalid-value": "无效值",
+                "enter-value": "输入值",
+                "label": "如果赔率下降则接受交易：",
+                "tooltip": "如果在执行转移时桥接利率的不利变化超过该百分比，转移将不会通过。"
+            }
         },
         "discounted-per": "折扣按",
         "nav-menu": {

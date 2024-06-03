@@ -634,7 +634,14 @@
             "persist-games": "Mantieni la selezione dopo l'invio",
             "keep-selection-tooltip": "Per impostazione predefinita, il generatore di parlay viene ripristinato dopo l'invio riuscito. Seleziona questa opzione se desideri mantenere il contesto corrente dopo l'invio.",
             "liquidity": "Liquidità",
-            "ticket-slip": "Tagliando del biglietto"
+            "ticket-slip": "Tagliando del biglietto",
+            "slippage": {
+                "slippage": "Slittamento",
+                "invalid-value": "valore non valido",
+                "enter-value": "Inserisci il valore",
+                "label": "Accetta lo scambio se le probabilità scendono di:",
+                "tooltip": "Il trasferimento non verrà effettuato se il tasso del ponte si sposta in modo sfavorevole di oltre questa percentuale al momento dell'esecuzione del trasferimento."
+            }
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {
