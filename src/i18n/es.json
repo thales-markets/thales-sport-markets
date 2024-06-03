@@ -815,7 +815,8 @@
             "my-tickets": "Mis entradas"
         },
         "lp": "LP",
-        "back": "Atrás"
+        "back": "Atrás",
+        "go-to": "Ir a"
     },
     "referral": {
         "generate-link": "Generar enlace",

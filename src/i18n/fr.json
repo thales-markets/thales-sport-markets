@@ -816,7 +816,8 @@
             "my-portfolio": "Mon portfolio"
         },
         "lp": "LP",
-        "back": "Dos"
+        "back": "Dos",
+        "go-to": "Aller à"
     },
     "referral": {
         "generate-link": "Générer un lien",

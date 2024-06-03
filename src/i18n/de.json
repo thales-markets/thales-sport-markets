@@ -820,7 +820,8 @@
             "my-portfolio": "Mein Portfolio"
         },
         "lp": "LP",
-        "back": "Zurück"
+        "back": "Zurück",
+        "go-to": "Gehe zu"
     },
     "referral": {
         "generate-link": "Link generieren",

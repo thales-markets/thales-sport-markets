@@ -815,7 +815,8 @@
             "my-portfolio": "Il mio portfolio"
         },
         "lp": "LP",
-        "back": "Indietro"
+        "back": "Indietro",
+        "go-to": "Vai a"
     },
     "referral": {
         "nav-items": {

@@ -816,7 +816,8 @@
             "my-portfolio": "我的投资组合"
         },
         "lp": "LP",
-        "back": "后退"
+        "back": "后退",
+        "go-to": "去"
     },
     "referral": {
         "generate-link": "生成链接",

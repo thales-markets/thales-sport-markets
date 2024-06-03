@@ -816,7 +816,8 @@
             "my-portfolio": "Мое Портфолио"
         },
         "lp": "LP",
-        "back": "Назад"
+        "back": "Назад",
+        "go-to": "Идти к"
     },
     "referral": {
         "nav-items": {

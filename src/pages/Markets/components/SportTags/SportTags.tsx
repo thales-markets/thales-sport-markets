@@ -59,7 +59,6 @@ const SportTags: React.FC<SportTagsProps> = ({
                 {t(`market.filter-label.sport.${sport.toLowerCase()}`)}
             </SportFilterDetails>
             <TagsDropdown
-                sport={sport}
                 open={open}
                 key={sport + '1'}
                 tags={tags}
