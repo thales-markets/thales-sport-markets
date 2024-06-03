@@ -5,7 +5,7 @@ import { SupportedNetwork } from '../types/network';
 export const LiquidityPoolMap: Record<SupportedNetwork, any> = {
     [NetworkId.OptimismMainnet]: {
         [LiquidityPoolCollateral.USDC]: {
-            name: 'USDC LP (default)',
+            name: 'USDC LP',
             address: '0x0fe1044Fc8C05482102Db14368fE88791E9B8698',
         },
         [LiquidityPoolCollateral.WETH]: {
@@ -21,7 +21,7 @@ export const LiquidityPoolMap: Record<SupportedNetwork, any> = {
     [NetworkId.Arbitrum]: undefined,
     [NetworkId.OptimismSepolia]: {
         [LiquidityPoolCollateral.USDC]: {
-            name: 'USDC LP (default)',
+            name: 'USDC LP',
             address: '0x0fe1044Fc8C05482102Db14368fE88791E9B8698',
         },
         [LiquidityPoolCollateral.WETH]: {

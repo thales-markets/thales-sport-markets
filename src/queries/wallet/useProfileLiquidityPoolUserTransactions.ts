@@ -1,11 +1,13 @@
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
+import { coinFormatter, Coins } from 'thales-utils';
 import { LiquidityPoolUserTransactions, ProfileLiquidityPoolUserTransactions } from 'types/liquidityPool';
+import { LiquidityPoolMap } from '../../constants/liquidityPool';
+import { SupportedNetwork } from '../../types/network';
 
 const useProfileLiquidityPoolUserTransactions = (
-    networkId: Network,
+    networkId: SupportedNetwork,
     walletAddress: string,
     options?: UseQueryOptions<ProfileLiquidityPoolUserTransactions>
 ) => {
@@ -22,9 +24,25 @@ const useProfileLiquidityPoolUserTransactions = (
                     }
                 );
 
+                const liquidityPools: any = Object.values(LiquidityPoolMap[networkId]);
+                const liquidityPoolKeys = Object.keys(LiquidityPoolMap[networkId]);
+
                 vaultTx.push(
                     ...liquidityPoolUserTransactions.map((tx) => {
-                        return { name: tx.liquidityPoolType == 'parlay' ? 'parlay-lp' : 'single-lp', ...tx };
+                        const lpIndex = liquidityPools.findIndex(
+                            (lp: any) => lp.address.toLowerCase() === tx.liquidityPool.toLowerCase()
+                        );
+                        console.log(lpIndex, liquidityPoolKeys[lpIndex] as Coins);
+                        return {
+                            ...tx,
+                            name: liquidityPools[lpIndex].name,
+                            amount: coinFormatter(
+                                tx.amount,
+                                networkId,
+                                liquidityPoolKeys[lpIndex].toUpperCase() as Coins
+                            ),
+                            collateral: liquidityPoolKeys[lpIndex].toUpperCase() as Coins,
+                        };
                     })
                 );
 

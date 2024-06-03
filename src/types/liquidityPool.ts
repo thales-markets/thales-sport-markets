@@ -1,3 +1,5 @@
+import { Coins } from 'thales-utils';
+
 export type LiquidityPoolData = {
     collateral: string;
     liquidityPoolStarted: boolean;
@@ -42,11 +44,12 @@ export type LiquidityPoolUserTransaction = {
     hash: string;
     timestamp: number;
     blockNumber: number;
-    liquidityPoolType: string;
+    liquidityPool: string;
     type: string;
     account: string;
     amount: number;
     round: number;
+    collateral: Coins;
 };
 
 export type LiquidityPoolUserTransactions = LiquidityPoolUserTransaction[];
@@ -60,6 +63,7 @@ export type ProfileLiquidityPoolUserTransaction = {
     account: string;
     amount: number;
     round: number;
+    collateral: Coins;
 };
 
 export type ProfileLiquidityPoolUserTransactions = ProfileLiquidityPoolUserTransaction[];

@@ -123,27 +123,20 @@ const TextWrapper = styled.div`
 `;
 
 const PreLabel = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
     font-weight: 400;
     font-size: 12px;
-    line-height: 14px;
+    margin-bottom: 5px;
 `;
 const Value = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 20px;
-    line-height: 23px;
     text-align: center;
+    margin-bottom: 5px;
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 const PostLabel = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 14px;
-    line-height: 23px;
     text-align: center;
 `;
 

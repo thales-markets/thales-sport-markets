@@ -8,7 +8,7 @@ import { CellProps } from 'react-table';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { formatCurrency, formatTxTimestamp } from 'thales-utils';
+import { formatCurrencyWithKey, formatTxTimestamp } from 'thales-utils';
 import { ProfileLiquidityPoolUserTransaction, ProfileLiquidityPoolUserTransactions } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
 
@@ -17,6 +17,7 @@ const TransactionsTable: React.FC = () => {
     const theme: ThemeInterface = useTheme();
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+
     const txQuery = useUserVaultAndLpTransactions(networkId, walletAddress, {
         enabled: walletAddress !== '',
     });
@@ -58,7 +59,7 @@ const TransactionsTable: React.FC = () => {
                                 ProfileLiquidityPoolUserTransaction,
                                 ProfileLiquidityPoolUserTransaction['name']
                             >
-                        ) => <TableText> {t(`profile.table.${cellProps.cell.value}`)}</TableText>,
+                        ) => <TableText> {cellProps.cell.value}</TableText>,
                         width: 150,
                         sortable: true,
                     },
@@ -89,7 +90,10 @@ const TransactionsTable: React.FC = () => {
                                 <TableText>
                                     {cellProps.cell.row.original.type === 'withdrawalRequest'
                                         ? '-'
-                                        : `$${formatCurrency(cellProps.cell.value)}`}
+                                        : formatCurrencyWithKey(
+                                              cellProps.cell.row.original.collateral,
+                                              cellProps.cell.value
+                                          )}
                                 </TableText>
                             </>
                         ),
