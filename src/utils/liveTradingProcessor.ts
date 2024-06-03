@@ -23,10 +23,10 @@ export const getLiveTradingProcessorTransaction: any = async (
             tradeData[0].sportId,
             tradeData[0].typeId,
             tradeData[0].position,
+            tradeData[0].line,
             sUSDPaid,
             expectedQuote,
             additionalSlippage,
-            ZERO_ADDRESS, // check different recipient for buying with voucher
             referralAddress,
             collateralAddress,
         ]);
