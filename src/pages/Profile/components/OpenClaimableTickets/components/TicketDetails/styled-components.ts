@@ -35,7 +35,7 @@ export const OverviewContainer = styled(FlexDivRow)`
         max-height: initial;
     }
     @media (max-width: 767px) {
-        padding: 6px 30px 5px 0px;
+        padding: 7px 30px 5px 0px;
     }
     position: relative;
 `;
