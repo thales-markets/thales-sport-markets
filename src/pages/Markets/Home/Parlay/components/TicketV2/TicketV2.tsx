@@ -446,6 +446,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     }, [sportsAmmData?.maxSupportedAmount, payout, buyInAmountInDefaultCollateral]);
 
     useEffect(() => {
+        console.log('Number(buyInAmount)', Number(buyInAmount));
         if (
             (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
             (Number(buyInAmountInDefaultCollateral) &&
@@ -794,6 +795,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 }
             } else {
                 if (Number(buyInAmount) === 0) {
+                    setPayout(0);
+                    setBuyInAmountInDefaultCollateral(0);
                     setFinalQuotes([]);
                     setMarketsOutOfLiquidity([]);
                 }
@@ -1029,6 +1032,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                             />
                         }
                         balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
+                        onMaxButton={() => setCollateralAmount(paymentTokenBalance)}
                     />
                 </AmountToBuyContainer>
             </InputContainer>

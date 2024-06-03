@@ -212,7 +212,7 @@ const TextCollateral = styled(Text)`
 `;
 
 const TextCollateralWrapper = styled.div<{ isDetailedView?: boolean }>`
-    min-width: ${(props) => (props.isDetailedView ? '48px' : '45px')};
+    min-width: ${(props) => (props.isDetailedView ? '52px' : '45px')};
     display: flex;
     align-items: center;
     @media (max-width: 767px) {
