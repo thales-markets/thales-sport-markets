@@ -91,8 +91,6 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
         }
     }, [isSuccess, isPartical, modalOrigin, onClose]);
 
-    console.log(isMobile, defaultStyle);
-
     return (
         <ReactModal isOpen={isOpen} onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={defaultStyle}>
             <CloseIconContainer>
