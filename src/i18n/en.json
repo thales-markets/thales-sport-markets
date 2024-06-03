@@ -346,6 +346,7 @@
         "go-to-single-lp": "Go to Single LP",
         "go-to-parlay-lp": "Go to Parlay LP",
         "go-to-lp": "Go to LP",
+        "go-to": "Go to",
         "messages": {
             "no-claimable": "You don't have any claimable positions",
             "no-open": "You don't have any open positions",

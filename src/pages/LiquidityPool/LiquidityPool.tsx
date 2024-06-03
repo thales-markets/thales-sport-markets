@@ -28,7 +28,6 @@ import {
     getWalletAddress,
     setWalletConnectModalVisibility,
 } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 import { Coins, coinParser, formatCurrencyWithKey, formatPercentage } from 'thales-utils';
@@ -88,24 +87,14 @@ import {
 const LiquidityPool: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-
     const location = useLocation();
-    const paramCollateral: LiquidityPoolCollateral =
-        (queryString.parse(location.search).collateral as LiquidityPoolCollateral) || LiquidityPoolCollateral.USDC;
-
-    // const [navigationTab, setNavigationTab] = useState<LiquidityPoolCollateral>(paramCollateral);
-
-    // useEffect(() => {
-    //     const paramCollateral: LiquidityPoolCollateral =
-    //         (queryString.parse(location.search).collateral as LiquidityPoolCollateral) || LiquidityPoolCollateral.USDC;
-    //     setNavigationTab(paramCollateral);
-    // }, [location.search]);
-
     const theme: ThemeInterface = useTheme();
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+
+    const networkId = useSelector(getNetworkId);
+    const isAppReady = useSelector(getIsAppReady);
+    const isWalletConnected = useSelector(getIsWalletConnected);
+    const walletAddress = useSelector(getWalletAddress) || '';
+
     const [amount, setAmount] = useState<number | string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [hasAllowance, setAllowance] = useState<boolean>(false);
@@ -124,6 +113,8 @@ const LiquidityPool: React.FC = () => {
     const [isWithdrawalPercentageValid, setIsWithdrawalPercentageValid] = useState<boolean>(true);
     const [withdrawalAmount, setWithdrawalAmount] = useState<number>(0);
 
+    const paramCollateral: LiquidityPoolCollateral =
+        (queryString.parse(location.search).collateral as LiquidityPoolCollateral) || LiquidityPoolCollateral.USDC;
     const collateral = paramCollateral.toUpperCase() as Coins;
     const liqudityPoolAddress = LiquidityPoolMap[networkId][paramCollateral]?.address;
 
