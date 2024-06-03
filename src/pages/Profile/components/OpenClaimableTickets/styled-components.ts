@@ -59,7 +59,7 @@ export const Arrow = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
     @media (max-width: 767px) {
         font-size: 10px;
-        margin-right: 7px;
+        margin-right: 8px;
     }
 `;
 
@@ -117,7 +117,7 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
     margin-right: 40px;
     @media (max-width: 767px) {
         min-width: 60px;
-        margin-right: 29px;
+        margin-right: 30px;
     }
     button {
         margin-top: 2px;
