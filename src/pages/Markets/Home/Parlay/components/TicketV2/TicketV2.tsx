@@ -446,7 +446,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     }, [sportsAmmData?.maxSupportedAmount, payout, buyInAmountInDefaultCollateral]);
 
     useEffect(() => {
-        console.log('Number(buyInAmount)', Number(buyInAmount));
         if (
             (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
             (Number(buyInAmountInDefaultCollateral) &&
