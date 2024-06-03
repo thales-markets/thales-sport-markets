@@ -1,44 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/rootReducer';
-import { getNetworkId } from 'redux/modules/wallet';
-import { useTranslation } from 'react-i18next';
-import { getIsAppReady } from 'redux/modules/app';
-import { LiquidityPoolPnls, LiquidityPoolType } from 'types/liquidityPool';
+import { LiquidityPoolPnlType } from 'enums/liquidityPool';
 import useLiquidityPoolPnlsQuery from 'queries/liquidityPool/useLiquidityPoolPnlsQuery';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import {
-    BarChart,
     Bar,
+    BarChart,
+    CartesianGrid,
+    Cell,
+    Line,
+    LineChart,
+    ResponsiveContainer,
+    Tooltip,
     XAxis,
     YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-    Cell,
-    LineChart,
-    Line,
 } from 'recharts';
+import { getIsAppReady } from 'redux/modules/app';
+import { getNetworkId } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
+import styled, { useTheme } from 'styled-components';
 import { Colors, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { formatPercentageWithSign } from 'thales-utils';
-import { LiquidityPoolPnlType } from 'enums/liquidityPool';
+import { LiquidityPoolPnls, LiquidityPoolType } from 'types/liquidityPool';
 import { ThemeInterface } from 'types/ui';
-import { useTheme } from 'styled-components';
 
 type PnlProps = {
     lifetimePnl: number;
     type: LiquidityPoolPnlType;
-    liquidityPoolType: LiquidityPoolType;
+    liquidityPoolAddress: LiquidityPoolType;
 };
 
-const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolType }) => {
+const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [liquidityPoolPnls, setLiquidityPoolPnls] = useState<LiquidityPoolPnls>([]);
 
-    const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(networkId, liquidityPoolType, {
+    const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(networkId, liquidityPoolAddress, {
         enabled: isAppReady,
     });
 

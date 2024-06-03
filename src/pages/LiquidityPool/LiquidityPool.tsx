@@ -116,7 +116,7 @@ const LiquidityPool: React.FC = () => {
     const paramCollateral: LiquidityPoolCollateral =
         (queryString.parse(location.search).collateral as LiquidityPoolCollateral) || LiquidityPoolCollateral.USDC;
     const collateral = paramCollateral.toUpperCase() as Coins;
-    const liqudityPoolAddress = LiquidityPoolMap[networkId][paramCollateral]?.address;
+    const liquidityPoolAddress = LiquidityPoolMap[networkId][paramCollateral]?.address;
 
     const { openConnectModal } = useConnectModal();
 
@@ -124,17 +124,17 @@ const LiquidityPool: React.FC = () => {
         enabled: isAppReady && isWalletConnected,
     });
 
-    const liquidityPoolDataQuery = useLiquidityPoolDataQuery(liqudityPoolAddress, collateral, networkId, {
-        enabled: isAppReady && liqudityPoolAddress !== undefined,
+    const liquidityPoolDataQuery = useLiquidityPoolDataQuery(liquidityPoolAddress, collateral, networkId, {
+        enabled: isAppReady && liquidityPoolAddress !== undefined,
     });
 
     const userLiquidityPoolDataQuery = useLiquidityPoolUserDataQuery(
-        liqudityPoolAddress,
+        liquidityPoolAddress,
         collateral,
         walletAddress,
         networkId,
         {
-            enabled: isAppReady && isWalletConnected && liqudityPoolAddress !== undefined,
+            enabled: isAppReady && isWalletConnected && liquidityPoolAddress !== undefined,
         }
     );
 
@@ -168,7 +168,7 @@ const LiquidityPool: React.FC = () => {
                         parsedAmount,
                         sUSDContractWithSigner,
                         walletAddress,
-                        liqudityPoolAddress
+                        liquidityPoolAddress
                     );
                     setAllowance(allowance);
                 } catch (e) {
@@ -179,7 +179,7 @@ const LiquidityPool: React.FC = () => {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId, liqudityPoolAddress]);
+    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId, liquidityPoolAddress]);
 
     const liquidityPoolData: LiquidityPoolData | undefined = useMemo(() => {
         if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
@@ -307,7 +307,7 @@ const LiquidityPool: React.FC = () => {
             setIsSubmitting(true);
             try {
                 const liquidityPoolContractWithSigner = new Contract(
-                    liqudityPoolAddress,
+                    liquidityPoolAddress,
                     liquidityPoolContract,
                     signer
                 );
@@ -320,7 +320,7 @@ const LiquidityPool: React.FC = () => {
                     toast.update(id, getSuccessToastOptions(t('liquidity-pool.button.deposit-confirmation-message')));
                     setAmount('');
                     setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId, liqudityPoolAddress);
+                    refetchLiquidityPoolData(walletAddress, networkId, liquidityPoolAddress);
                 }
             } catch (e) {
                 console.log(e);
@@ -338,7 +338,7 @@ const LiquidityPool: React.FC = () => {
             setIsSubmitting(true);
             try {
                 const liquidityPoolContractWithSigner = new Contract(
-                    liqudityPoolAddress,
+                    liquidityPoolAddress,
                     liquidityPoolContract,
                     signer
                 );
@@ -356,7 +356,7 @@ const LiquidityPool: React.FC = () => {
                     );
                     setAmount('');
                     setIsSubmitting(false);
-                    refetchLiquidityPoolData(walletAddress, networkId, liqudityPoolAddress);
+                    refetchLiquidityPoolData(walletAddress, networkId, liquidityPoolAddress);
                 }
             } catch (e) {
                 console.log(e);
@@ -374,7 +374,7 @@ const LiquidityPool: React.FC = () => {
 
             if (signer) {
                 const liquidityPoolContractWithSigner = new Contract(
-                    liqudityPoolAddress,
+                    liquidityPoolAddress,
                     liquidityPoolContract,
                     signer
                 );
@@ -1005,14 +1005,14 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                            <Return liquidityPoolType={liqudityPoolAddress} />
+                            <Return liquidityPoolType={liquidityPoolAddress} />
                         </MainContentContainer>
                         <MainContentContainer>
                             {liquidityPoolData && (
                                 <PnL
                                     lifetimePnl={liquidityPoolData.lifetimePnl}
                                     type={LiquidityPoolPnlType.PNL_PER_ROUND}
-                                    liquidityPoolType={liqudityPoolAddress}
+                                    liquidityPoolAddress={liquidityPoolAddress}
                                 />
                             )}
                         </MainContentContainer>
@@ -1021,7 +1021,7 @@ const LiquidityPool: React.FC = () => {
                                 <PnL
                                     lifetimePnl={liquidityPoolData.lifetimePnl}
                                     type={LiquidityPoolPnlType.CUMULATIVE_PNL}
-                                    liquidityPoolType={liqudityPoolAddress}
+                                    liquidityPoolAddress={liquidityPoolAddress}
                                 />
                             )}
                         </MainContentContainer>
@@ -1029,7 +1029,11 @@ const LiquidityPool: React.FC = () => {
                 )}
             </MainContainer>
             {liquidityPoolData && (
-                <Transactions currentRound={liquidityPoolData.round} liquidityPoolType={liqudityPoolAddress} />
+                <Transactions
+                    currentRound={liquidityPoolData.round}
+                    liquidityPoolAddress={liquidityPoolAddress}
+                    collateral={collateral}
+                />
             )}
             {openApprovalModal && (
                 <ApprovalModal

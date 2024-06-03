@@ -1,25 +1,25 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
-import { LiquidityPoolReturn, LiquidityPoolType } from 'types/liquidityPool';
 import { orderBy } from 'lodash';
+import { useQuery, UseQueryOptions } from 'react-query';
+import thalesData from 'thales-data';
+import { LiquidityPoolReturn } from 'types/liquidityPool';
 
 const APR_FREQUENCY = 52;
 const arrToApy = (arr: number) => (1 + arr) ** APR_FREQUENCY - 1;
 
 const useLiquidityPoolReturnQuery = (
     networkId: Network,
-    liquidityPoolType: LiquidityPoolType,
+    liquidityPoolAddress: string,
     options?: UseQueryOptions<LiquidityPoolReturn | undefined>
 ) => {
     return useQuery<LiquidityPoolReturn | undefined>(
-        QUERY_KEYS.LiquidityPool.Return(networkId, liquidityPoolType),
+        QUERY_KEYS.LiquidityPool.Return(networkId, liquidityPoolAddress),
         async () => {
             try {
-                const liquidityPoolPnls = await thalesData.sportMarkets.liquidityPoolPnls({
+                const liquidityPoolPnls = await thalesData.sportMarketsV2.liquidityPoolPnls({
                     network: networkId,
-                    liquidityPoolType,
+                    liquidityPool: liquidityPoolAddress,
                 });
                 const numberOfRounds = liquidityPoolPnls.length;
                 const sumPnl = orderBy(liquidityPoolPnls, ['round'], ['asc']).reduce(

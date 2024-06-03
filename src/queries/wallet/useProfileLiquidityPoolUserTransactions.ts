@@ -15,7 +15,7 @@ const useProfileLiquidityPoolUserTransactions = (
             try {
                 const vaultTx: ProfileLiquidityPoolUserTransactions = [];
 
-                const liquidityPoolUserTransactions: LiquidityPoolUserTransactions = await thalesData.sportMarkets.liquidityPoolUserTransactions(
+                const liquidityPoolUserTransactions: LiquidityPoolUserTransactions = await thalesData.sportMarketsV2.liquidityPoolUserTransactions(
                     {
                         network: networkId,
                         account: walletAddress,

@@ -1,6 +1,5 @@
 import { Position, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
-import { LiquidityPoolType } from 'types/liquidityPool';
 
 const QUERY_KEYS = {
     ParlayMarkets: (networkId: Network, account: string, minTimestamp?: number, maxTimestamp?: number) => [
@@ -139,22 +138,22 @@ const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
-        PnL: (networkId: Network, liquidityPoolType: LiquidityPoolType) => [
+        PnL: (networkId: Network, liquidityPoolAddress: string) => [
             'liquidityPool',
             'pnl',
-            liquidityPoolType,
+            liquidityPoolAddress,
             networkId,
         ],
-        Return: (networkId: Network, liquidityPoolType: LiquidityPoolType) => [
+        Return: (networkId: Network, liquidityPoolAddress: string) => [
             'liquidityPool',
             'return',
-            liquidityPoolType,
+            liquidityPoolAddress,
             networkId,
         ],
-        UserTransactions: (networkId: Network, liquidityPoolType: LiquidityPoolType) => [
+        UserTransactions: (networkId: Network, liquidityPoolAddress: string) => [
             'liquidityPool',
             'userTransactions',
-            liquidityPoolType,
+            liquidityPoolAddress,
             networkId,
         ],
     },

@@ -2,23 +2,28 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import thalesData from 'thales-data';
-import { LiquidityPoolType, LiquidityPoolUserTransactions } from 'types/liquidityPool';
+import { coinFormatter, Coins } from 'thales-utils';
+import { LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
 
 const useLiquidityPoolUserTransactionsQuery = (
     networkId: Network,
-    liquidityPoolType: LiquidityPoolType,
+    liquidityPoolAddress: string,
+    collateral: Coins,
     options?: UseQueryOptions<LiquidityPoolUserTransactions>
 ) => {
     return useQuery<LiquidityPoolUserTransactions>(
-        QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolType),
+        QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolAddress),
         async () => {
             try {
-                const liquidityPoolUserTransactions = await thalesData.sportMarkets.liquidityPoolUserTransactions({
+                const liquidityPoolUserTransactions = await thalesData.sportMarketsV2.liquidityPoolUserTransactions({
                     network: networkId,
-                    liquidityPoolType,
+                    liquidityPool: liquidityPoolAddress,
                 });
 
-                return liquidityPoolUserTransactions;
+                return liquidityPoolUserTransactions.map((tx: LiquidityPoolUserTransaction) => ({
+                    ...tx,
+                    amount: coinFormatter(tx.amount, networkId, collateral),
+                }));
             } catch (e) {
                 console.log(e);
                 return [];
