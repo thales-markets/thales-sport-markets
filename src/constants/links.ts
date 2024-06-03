@@ -28,7 +28,4 @@ export const LINKS = {
     ThalesStaking: 'https://thalesmarket.io/token',
     ThalesTip99: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-99.md',
     ThalesTip142: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-142.md',
-    Profile: {
-        Voucher: 'https://docs.overtimemarkets.xyz/decentralized-sports-markets/nft-vouchers',
-    },
 };

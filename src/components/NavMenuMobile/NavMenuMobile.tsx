@@ -139,7 +139,6 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    {/* <MintVoucher style={{ margin: '20px auto 10px auto', width: 205 }} /> */}
                     <CloseIcon onClick={() => setNavMenuVisibility(false)} />
                 </FooterContainer>
             </Wrapper>

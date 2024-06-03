@@ -3,7 +3,6 @@ import ROUTES from 'constants/routes';
 import { countries } from 'constants/worldCup';
 import useFavoriteTeamDataQuery from 'queries/favoriteTeam/useFavoriteTeamDataQuery';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -55,12 +54,7 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({ avatarSize,
             ? claimablePositionsCountQuery.data
             : null;
 
-    const overtimeVoucherEscrowQuery = useOvertimeVoucherEscrowQuery(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
-    const overtimeVoucherEscrowData = overtimeVoucherEscrowQuery.isSuccess ? overtimeVoucherEscrowQuery.data : null;
-
-    const notificationsCount = (claimablePositionCount || 0) + (overtimeVoucherEscrowData?.isClaimable ? 1 : 0);
+    const notificationsCount = claimablePositionCount || 0;
 
     return (
         <>

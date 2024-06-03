@@ -5,7 +5,6 @@ import { executeBiconomyTransaction } from './biconomy';
 import { convertFromBytes32 } from './formatters/string';
 
 export const getLiveTradingProcessorTransaction: any = async (
-    isVoucherSelected: boolean,
     collateralAddress: string,
     liveTradingProcessorContract: ethers.Contract,
     tradeData: TradeData[],
@@ -17,36 +16,6 @@ export const getLiveTradingProcessorTransaction: any = async (
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
     const gameId = convertFromBytes32(tradeData[0].gameId);
-
-    if (isVoucherSelected) {
-        if (isAA) {
-            return executeBiconomyTransaction(collateralAddress, liveTradingProcessorContract, 'requestLiveTrade', [
-                gameId,
-                tradeData[0].sportId,
-                tradeData[0].typeId,
-                tradeData[0].position,
-                sUSDPaid,
-                expectedQuote,
-                additionalSlippage,
-                '', // check different recipient for buying with voucher
-                referralAddress,
-                collateralAddress,
-            ]);
-        } else {
-            return liveTradingProcessorContract.requestLiveTrade(
-                gameId,
-                tradeData[0].sportId,
-                tradeData[0].typeId,
-                tradeData[0].position,
-                sUSDPaid,
-                expectedQuote,
-                additionalSlippage,
-                '', // check different recipient for buying with voucher
-                referralAddress,
-                collateralAddress
-            );
-        }
-    }
 
     if (isAA) {
         return executeBiconomyTransaction(collateralAddress, liveTradingProcessorContract, 'requestLiveTrade', [

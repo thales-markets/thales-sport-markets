@@ -1,5 +1,4 @@
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
-import useOvertimeVoucherEscrowQuery from 'queries/wallet/useOvertimeVoucherEscrowQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -23,10 +22,6 @@ export const navItems = [
         i18Label: 'profile.lp',
         icon: 'icon icon--yield',
     },
-    // {
-    //     id: 4,
-    //     i18Label: 'profile.voucher',
-    // },
 ];
 
 type NavigationBarProps = {
@@ -49,16 +44,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ itemSelected, onSelectIte
             ? claimablePositionsCountQuery.data
             : null;
 
-    const overtimeVoucherEscrowQuery = useOvertimeVoucherEscrowQuery(walletAddress, networkId, {
-        enabled: isWalletConnected,
-    });
-    const overtimeVoucherEscrowData = overtimeVoucherEscrowQuery.isSuccess ? overtimeVoucherEscrowQuery.data : null;
-    const vouchersCount = overtimeVoucherEscrowData?.isClaimable ? 1 : 0;
-
     return (
         <Wrapper>
             {navItems.map((item, index) => {
-                const notificationsCount = item.id === 1 ? claimablePositionCount : item.id === 4 ? vouchersCount : 0;
+                const notificationsCount = item.id === 1 ? claimablePositionCount : 0;
                 return (
                     <ItemWrapper key={index}>
                         <Item key={index} selected={item.id == itemSelected} onClick={() => onSelectItem(item.id)}>

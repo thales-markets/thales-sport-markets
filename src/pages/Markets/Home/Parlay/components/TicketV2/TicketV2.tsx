@@ -31,7 +31,6 @@ import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -82,11 +81,10 @@ import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
+import { getAddedPayoutMultiplier } from 'utils/tickets';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
-import { getAddedPayoutMultiplier } from '../../../../../../utils/tickets';
 import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import SuggestedAmount from '../SuggestedAmount';
-import Voucher from '../Voucher';
 import {
     AmountToBuyContainer,
     CheckboxContainer,
@@ -148,7 +146,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         isLiveTicket && getCollateral(networkId, ticketPayment.selectedCollateralIndex) === CRYPTO_CURRENCY_MAP.ETH
             ? 0
             : ticketPayment.selectedCollateralIndex;
-    const isVoucherSelected = ticketPayment.isVoucherSelected;
     const buyInAmount = ticketPayment.amountToBuy;
 
     const [payout, setPayout] = useState(0);
@@ -243,9 +240,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
-    const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
 
     const sportsAmmData: SportsAmmData | undefined = useMemo(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
@@ -254,28 +248,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         return undefined;
     }, [sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
-    const overtimeVoucher = useMemo(() => {
-        if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
-            return overtimeVoucherQuery.data;
-        }
-        return undefined;
-    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
-
     const paymentTokenBalance: number = useMemo(() => {
-        if (overtimeVoucher && isVoucherSelected) {
-            return overtimeVoucher.remainingAmount;
-        }
         if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
             return multipleCollateralBalances.data[selectedCollateral];
         }
         return 0;
-    }, [
-        multipleCollateralBalances.data,
-        multipleCollateralBalances.isSuccess,
-        selectedCollateral,
-        overtimeVoucher,
-        isVoucherSelected,
-    ]);
+    }, [multipleCollateralBalances.data, multipleCollateralBalances.isSuccess, selectedCollateral]);
 
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
         enabled: isAppReady,
@@ -444,7 +422,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 }
             };
             if (isWalletConnected && buyInAmount) {
-                isVoucherSelected || isEth ? setHasAllowance(true) : getAllowance();
+                isEth ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -454,7 +432,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         isAllowing,
         buyInAmount,
         selectedCollateralIndex,
-        isVoucherSelected,
         networkId,
         selectedCollateral,
         isEth,
@@ -569,22 +546,17 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     };
 
     const handleSubmit = async () => {
-        const {
-            sportsAMMV2Contract,
-            /*overtimeVoucherContract,*/ signer,
-            liveTradingProcessorContract,
-        } = networkConnector;
+        const { sportsAMMV2Contract, signer, liveTradingProcessorContract } = networkConnector;
 
         // TODO: separate logic for regular and live markets
         if (
             ((sportsAMMV2Contract && !markets[0].live) || (liveTradingProcessorContract && markets[0].live)) &&
-            /* overtimeVoucherContract && */ signer
+            signer
         ) {
             setIsBuying(true);
             const sportsAMMV2ContractWithSigner = markets[0].live
                 ? liveTradingProcessorContract?.connect(signer)
                 : sportsAMMV2Contract?.connect(signer);
-            // const overtimeVoucherContractWithSigner = overtimeVoucherContract.connect(signer);
             toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
@@ -605,7 +577,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
 
                     tx = await getLiveTradingProcessorTransaction(
-                        isVoucherSelected,
                         collateralAddress,
                         sportsAMMV2ContractWithSigner,
                         tradeData,
@@ -617,15 +588,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     );
                 } else {
                     tx = await getSportsAMMV2Transaction(
-                        isVoucherSelected,
-                        overtimeVoucher ? overtimeVoucher.id : 0,
                         collateralAddress,
                         isDefaultCollateral,
                         isEth,
                         networkId,
                         sportsAMMV2ContractWithSigner,
-                        sportsAMMV2ContractWithSigner,
-                        // overtimeVoucherContractWithSigner,
                         tradeData,
                         parsedBuyInAmount,
                         parsedTotalQuote,
@@ -1023,7 +990,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     </ClearLabel>
                 </RowContainer>
             </RowSummary>
-            <Voucher disabled={isAllowing || isBuying} />
             <SuggestedAmount
                 insertedAmount={buyInAmount}
                 exchangeRates={exchangeRates}
@@ -1056,7 +1022,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                 onChangeCollateral={() => {
                                     setCollateralAmount('');
                                 }}
-                                disabled={isVoucherSelected}
                                 isDetailedView
                                 collateralBalances={multipleCollateralBalances.data}
                                 exchangeRates={exchangeRates}

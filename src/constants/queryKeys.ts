@@ -96,18 +96,6 @@ const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
-        OvertimeVoucher: (walletAddress: string, networkId: Network) => [
-            'wallet',
-            'overtimeVoucher',
-            walletAddress,
-            networkId,
-        ],
-        OvertimeVoucherEscrow: (walletAddress: string, networkId: Network) => [
-            'wallet',
-            'overtimeVoucherEscrow',
-            walletAddress,
-            networkId,
-        ],
         Stats: (networkId: Network, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
         StatsV2: (networkId: Network, walletAddress: string) => ['wallet', 'statsV2', networkId, walletAddress],
         LiquidityPoolTransactions: (networkId: Network, walletAddress: string) => [

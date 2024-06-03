@@ -6,7 +6,6 @@ export type LeaderboardItem = {
     finishTime: number;
     ranking: number;
     price: number;
-    voucherUrl: string;
 };
 
 export type LeaderboardList = LeaderboardItem[];
