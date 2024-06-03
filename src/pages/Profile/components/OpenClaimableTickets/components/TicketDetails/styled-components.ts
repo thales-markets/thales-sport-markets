@@ -35,7 +35,7 @@ export const OverviewContainer = styled(FlexDivRow)`
         max-height: initial;
     }
     @media (max-width: 767px) {
-        padding: 5px 25px 5px 0px;
+        padding: 5px 30px 5px 0px;
     }
     position: relative;
 `;
@@ -56,6 +56,7 @@ export const TicketIdContainer = styled(FlexDivStart)`
     margin-right: 10px;
     @media (max-width: 767px) {
         min-width: 130px;
+        margin-right: 5px;
     }
 `;
 
@@ -65,6 +66,7 @@ export const NumberOfGamesContainer = styled(FlexDivStart)`
     margin-right: 10px;
     @media (max-width: 767px) {
         min-width: 100px;
+        margin-right: 5px;
     }
 `;
 
@@ -146,7 +148,7 @@ export const ArrowIcon = styled.i`
     padding: 10px;
     @media (max-width: 767px) {
         font-size: 10px;
-        padding: 6px;
+        padding: 8px;
     }
 `;
 
