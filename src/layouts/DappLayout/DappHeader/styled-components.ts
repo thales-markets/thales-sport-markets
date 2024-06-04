@@ -5,7 +5,6 @@ import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/c
 export const Container = styled(FlexDivRowCentered)`
     width: 100%;
     gap: 10px;
-    margin-top: 10px;
     @media (max-width: 767px) {
         flex-direction: column;
     }
@@ -201,6 +200,7 @@ export const DropdownContainer = styled.div`
     position: absolute;
     width: 180px;
     top: 28px;
+    left: 0;
     z-index: 1000;
 `;
 

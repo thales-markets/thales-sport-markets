@@ -12,6 +12,7 @@ import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositi
 import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
+import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getIsMobile } from 'redux/modules/app';
@@ -182,23 +183,25 @@ const DappHeader: React.FC = () => {
                                 <HeaderIcon className="icon icon--settings" />
                                 <HeaderLabel>{t('common.settings')}</HeaderLabel>
                                 {dropdownIsOpen && (
-                                    <DropdownContainer>
-                                        <DropDown>
-                                            {ODDS_TYPES.map((item: any, index: number) => (
-                                                <DropDownItem
-                                                    key={index}
-                                                    onClick={() => {
-                                                        setSelectedOddsType(item);
-                                                        setDropdownIsOpen(false);
-                                                    }}
-                                                >
-                                                    <FlexDivCentered>
-                                                        <Label> {t(`common.odds.${item}`)}</Label>
-                                                    </FlexDivCentered>
-                                                </DropDownItem>
-                                            ))}
-                                        </DropDown>
-                                    </DropdownContainer>
+                                    <OutsideClickHandler onOutsideClick={() => setDropdownIsOpen(false)}>
+                                        <DropdownContainer>
+                                            <DropDown>
+                                                {ODDS_TYPES.map((item: any, index: number) => (
+                                                    <DropDownItem
+                                                        key={index}
+                                                        onClick={() => {
+                                                            setSelectedOddsType(item);
+                                                            setDropdownIsOpen(false);
+                                                        }}
+                                                    >
+                                                        <FlexDivCentered>
+                                                            <Label> {t(`common.odds.${item}`)}</Label>
+                                                        </FlexDivCentered>
+                                                    </DropDownItem>
+                                                ))}
+                                            </DropDown>
+                                        </DropdownContainer>
+                                    </OutsideClickHandler>
                                 )}
                             </SettingsContainer>
                         </FlexDiv>
