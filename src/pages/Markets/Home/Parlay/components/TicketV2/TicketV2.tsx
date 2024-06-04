@@ -16,7 +16,6 @@ import {
     PARLAY_LEADERBOARD_MINIMUM_GAMES,
     PARLAY_LEADERBOARD_WEEKLY_START_DATE,
 } from 'constants/markets';
-import { ZERO_ADDRESS } from 'constants/network';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
@@ -59,7 +58,6 @@ import {
     formatCurrencyWithSign,
     formatPercentage,
     getPrecision,
-    roundNumberToDecimals,
 } from 'thales-utils';
 import { LeaderboardPoints, SportsAmmData, TicketMarket } from 'types/markets';
 import { Coins } from 'types/tokens';
@@ -566,7 +564,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 const tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, selectedCollateral);
                 const parsedTotalQuote = ethers.utils.parseEther(totalQuote.toString());
-                const additionalSlippage = ethers.utils.parseEther(tradeData[0].live ? slippage / 100 + '' : '0.05');
+                const additionalSlippage = ethers.utils.parseEther(tradeData[0].live ? slippage / 100 + '' : '0.02');
 
                 let tx;
                 if (tradeData[0].live) {
@@ -875,9 +873,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             if (!multipleCollateral) return;
             if (!sportsAMMV2Contract) return;
 
+            const referralId =
+                walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
+                    ? getReferralId()
+                    : null;
+
             const tradeData = getTradeData(markets);
-            const usdPaid = coinParser(buyInAmountInDefaultCollateral.toString(), networkId);
-            const expectedPayout = ethers.utils.parseEther(roundNumberToDecimals(payout).toString());
+            const parsedTotalQuote = ethers.utils.parseEther(totalQuote.toString());
             const additionalSlippage = ethers.utils.parseEther('0.02');
 
             if (!hasAllowance) {
@@ -896,15 +898,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
 
                 setGas(gas as number);
             } else {
-                const gas = await getGasFeesForTx(collateralAddress, sportsAMMV2Contract, 'buyFromParlay', [
+                const gas = await getGasFeesForTx(collateralAddress, sportsAMMV2Contract, 'trade', [
                     tradeData,
-                    usdPaid,
-                    expectedPayout,
+                    buyInAmount,
+                    parsedTotalQuote,
                     additionalSlippage,
-                    ZERO_ADDRESS,
-                    ZERO_ADDRESS,
-                    ZERO_ADDRESS,
-                    isDefaultCollateral ? collateralAddress : ZERO_ADDRESS,
+                    referralId,
+                    collateralAddress,
                     isEth,
                 ]);
 
@@ -923,6 +923,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         hasAllowance,
         selectedCollateral,
         isEth,
+        walletAddress,
+        totalQuote,
+        buyInAmount,
     ]);
 
     useEffect(() => {
