@@ -49,12 +49,7 @@ import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
 import { Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
-import {
-    getLiveSupportedLeagues,
-    getSportLeagueIds,
-    isBoxingLeague,
-    isLiveSupportedForLeague,
-} from '../../../utils/sports';
+import { getLiveSupportedLeagues, getSportLeagueIds, isBoxingLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';
@@ -287,9 +282,6 @@ const Home: React.FC = () => {
                         return false;
                     }
                 }
-                if (sportFilter == SportFilter.Live) {
-                    return isLiveSupportedForLeague(market.leagueId);
-                }
 
                 return true;
             }
@@ -403,10 +395,9 @@ const Home: React.FC = () => {
     const liveMarketsCountPerSport = useMemo(() => {
         const liveMarketsCount: any = {};
         let totalCount = 0;
-        const tagsPerSport = getLiveSupportedLeagues();
-        if (tagsPerSport) {
-            tagsPerSport.forEach((tag) => (totalCount += liveMarketsCountPerTag[tag] || 0));
-        }
+        Object.keys(liveMarketsCountPerTag).forEach((key) => {
+            totalCount += liveMarketsCountPerTag[Number(key)];
+        });
 
         liveMarketsCount[SportFilter.Live] = totalCount;
 

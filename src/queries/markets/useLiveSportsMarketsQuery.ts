@@ -4,7 +4,6 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarkets } from 'types/markets';
-import { getLiveSupportedLeagues } from '../../utils/sports';
 
 const useLiveSportsMarketsQuery = (
     networkId: Network,
@@ -16,11 +15,8 @@ const useLiveSportsMarketsQuery = (
         async () => {
             let markets: any[] = [];
             try {
-                const supportedLeagues = getLiveSupportedLeagues();
                 const response = await axios.get<undefined, { data: { errors: string[]; markets: SportMarkets } }>(
-                    `${
-                        generalConfig.API_URL
-                    }/overtime-v2/networks/${networkId}/live-markets?leagueIds=${supportedLeagues.join(',')}`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-markets`,
                     { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                 );
 
