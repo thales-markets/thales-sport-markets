@@ -6,7 +6,6 @@ import ROUTES from 'constants/routes';
 import { Network } from 'enums/network';
 import { ethers } from 'ethers';
 import DappLayout from 'layouts/DappLayout';
-import LandingPageLayout from 'layouts/LandingPageLayout';
 import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
@@ -34,7 +33,7 @@ import { buildHref, history } from 'utils/routes';
 import { mainnet, useAccount, useDisconnect, useNetwork, useProvider, useSigner } from 'wagmi';
 import RouterProvider from './Provider/RouterProvider/RouterProvider';
 
-const LandingPage = lazy(() => import('pages/LandingPage'));
+// const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
@@ -244,9 +243,9 @@ const App = () => {
                                     )}
                                 />
                                 <Route exact path={ROUTES.Home}>
-                                    <LandingPageLayout>
-                                        <LandingPage />
-                                    </LandingPageLayout>
+                                    <DappLayout>
+                                        <Markets />
+                                    </DappLayout>
                                 </Route>
                                 <Route>
                                     <Redirect to={ROUTES.Markets.Home} />
