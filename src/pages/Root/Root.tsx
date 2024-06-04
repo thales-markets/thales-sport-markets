@@ -56,6 +56,12 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
     [Network.Base]: { ankr: 'base', chainnode: 'base-mainnet', blast: '' },
 };
 
+const CHAIN_TO_RPC_PROVIDER_URL: Record<number, string | undefined> = {
+    [Network.OptimismMainnet]: process.env.REACT_APP_OPTIMISM_RPC_URL,
+    [Network.Arbitrum]: process.env.REACT_APP_ARBITRUM_RPC_URL,
+    [Network.Base]: process.env.REACT_APP_BASE_RPC_URL,
+};
+
 const theme = getDefaultTheme();
 const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
@@ -65,14 +71,16 @@ const { chains, provider } = configureChains(
         jsonRpcProvider({
             rpc: (chain) => {
                 const chainnodeNetworkName = CHAIN_TO_RPC_PROVIDER_NETWORK_NAME[chain.id]?.chainnode;
+                const rpcProvider = CHAIN_TO_RPC_PROVIDER_URL[chain.id];
                 return {
-                    http:
-                        process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' && chain.id === Network.Base
-                            ? // For Base use Ankr when Infura is primary as Infura doesn't support it
-                              `https://rpc.ankr.com/base/${process.env.REACT_APP_ANKR_PROJECT_ID}`
-                            : !!chainnodeNetworkName
-                            ? `https://${chainnodeNetworkName}.chainnodes.org/${process.env.REACT_APP_CHAINNODE_PROJECT_ID}`
-                            : chain.rpcUrls.default.http[0],
+                    http: rpcProvider
+                        ? rpcProvider
+                        : process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' && chain.id === Network.Base
+                        ? // For Base use Ankr when Infura is primary as Infura doesn't support it
+                          `https://rpc.ankr.com/base/${process.env.REACT_APP_ANKR_PROJECT_ID}`
+                        : !!chainnodeNetworkName
+                        ? `https://${chainnodeNetworkName}.chainnodes.org/${process.env.REACT_APP_CHAINNODE_PROJECT_ID}`
+                        : chain.rpcUrls.default.http[0],
                 };
             },
             stallTimeout: STALL_TIMEOUT,
