@@ -157,9 +157,9 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             </LiveIndicatorContainer>
                             <MatchInfoLabel>
                                 {displayGameClock(market) ? market.gameClock : ''}
-                                {market.gamePeriod == null ||
-                                (market.gamePeriod == undefined &&
-                                    getLeaguePeriodType(Number(market.leagueId)) == 'half') ? (
+                                {market.gamePeriod != null &&
+                                market.gamePeriod != undefined &&
+                                getLeaguePeriodType(Number(market.leagueId)) == 'half' ? (
                                     <Blink>&prime;</Blink>
                                 ) : (
                                     ''
