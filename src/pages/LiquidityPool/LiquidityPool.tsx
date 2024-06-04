@@ -14,7 +14,6 @@ import { LiquidityPoolCollateral, LiquidityPoolPnlType, LiquidityPoolTab } from 
 import { BigNumber, Contract, ethers } from 'ethers';
 import useLiquidityPoolDataQuery from 'queries/liquidityPool/useLiquidityPoolDataQuery';
 import useLiquidityPoolUserDataQuery from 'queries/liquidityPool/useLiquidityPoolUserDataQuery';
-import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -40,6 +39,7 @@ import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { delay } from 'utils/timer';
 import SPAAnchor from '../../components/SPAAnchor';
 import ROUTES from '../../constants/routes';
+import useMultipleCollateralBalanceQuery from '../../queries/wallet/useMultipleCollateralBalanceQuery';
 import { getDefaultLpCollateral, getLiquidityPools, getLpAddress, getLpCollateral } from '../../utils/liquidityPool';
 import { buildHref } from '../../utils/routes';
 import PnL from './PnL';
@@ -121,7 +121,7 @@ const LiquidityPool: React.FC = () => {
 
     const { openConnectModal } = useConnectModal();
 
-    const paymentTokenBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
+    const multipleCollateralBalanceQuery = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
 
@@ -140,10 +140,10 @@ const LiquidityPool: React.FC = () => {
     );
 
     useEffect(() => {
-        if (paymentTokenBalanceQuery.isSuccess && paymentTokenBalanceQuery.data !== undefined) {
-            setPaymentTokenBalance(Number(paymentTokenBalanceQuery.data));
+        if (multipleCollateralBalanceQuery.isSuccess && multipleCollateralBalanceQuery.data !== undefined) {
+            setPaymentTokenBalance(Number(multipleCollateralBalanceQuery.data[collateral]));
         }
-    }, [paymentTokenBalanceQuery.isSuccess, paymentTokenBalanceQuery.data]);
+    }, [multipleCollateralBalanceQuery.isSuccess, multipleCollateralBalanceQuery.data, collateral]);
 
     useEffect(() => {
         if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
@@ -612,6 +612,7 @@ const LiquidityPool: React.FC = () => {
                                     )}
                                     <NumericInput
                                         value={amount}
+                                        label="Deposit"
                                         disabled={isDepositAmountInputDisabled}
                                         onChange={(_, value) => setAmount(value)}
                                         placeholder={t('liquidity-pool.deposit-amount-placeholder')}
@@ -635,6 +636,7 @@ const LiquidityPool: React.FC = () => {
                                             }
                                         )}
                                         validationPlacement="bottom"
+                                        balance={formatCurrencyWithKey(collateral, paymentTokenBalance)}
                                     />
                                     {getDepositSubmitButton()}
                                 </>

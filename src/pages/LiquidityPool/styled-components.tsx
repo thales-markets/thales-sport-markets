@@ -375,6 +375,8 @@ export const SliderContainer = styled.div`
 export const InputButtonContainer = styled.div`
     max-width: 350px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 `;
 
 export const StyledSlider = styled((props) => (
