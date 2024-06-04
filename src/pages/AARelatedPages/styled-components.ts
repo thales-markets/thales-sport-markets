@@ -80,7 +80,7 @@ export const CollateralContainer = styled.div`
     display: flex;
     justify-content: end;
     align-items: center;
-    background: ${(props) => props.theme.input.background.primary};
+    background: ${(props) => props.theme.background.secondary};
     cursor: pointer;
 `;
 

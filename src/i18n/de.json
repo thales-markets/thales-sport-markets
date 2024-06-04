@@ -634,7 +634,14 @@
             "persist-games": "Auswahl nach dem Absenden beibehalten",
             "keep-selection-tooltip": "Standardmäßig wird der Parlay Builder nach erfolgreicher Übermittlung zurückgesetzt. Aktivieren Sie diese Option, wenn Sie den aktuellen Kontext nach der Übermittlung beibehalten möchten.",
             "liquidity": "Liquidität",
-            "ticket-slip": "Fahrschein"
+            "ticket-slip": "Fahrschein",
+            "slippage": {
+                "invalid-value": "Ungültiger Wert",
+                "label": "Akzeptieren Sie den Handel, wenn die Quoten um Folgendes sinken:",
+                "slippage": "Schlupf",
+                "enter-value": "Wert eingeben",
+                "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert."
+            }
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -813,7 +820,8 @@
             "my-portfolio": "Mein Portfolio"
         },
         "lp": "LP",
-        "back": "Zurück"
+        "back": "Zurück",
+        "go-to": "Gehe zu"
     },
     "referral": {
         "generate-link": "Link generieren",

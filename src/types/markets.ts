@@ -31,8 +31,6 @@ export type ParlayAmmData = {
 
 export type ParlayPayment = {
     selectedCollateralIndex: number;
-    isVoucherAvailable: boolean;
-    isVoucherSelected: boolean;
     amountToBuy: number | string;
     networkId: Network;
 };

@@ -212,7 +212,7 @@ const TextCollateral = styled(Text)`
 `;
 
 const TextCollateralWrapper = styled.div<{ isDetailedView?: boolean }>`
-    min-width: ${(props) => (props.isDetailedView ? '48px' : '45px')};
+    min-width: ${(props) => (props.isDetailedView ? '52px' : '45px')};
     display: flex;
     align-items: center;
     @media (max-width: 767px) {
@@ -245,6 +245,7 @@ const Dropdown = styled(FlexDivColumnCentered)<{ width?: string }>`
     background: ${(props) => props.theme.status.win};
     z-index: 100;
     border: 2px solid ${(props) => props.theme.status.win};
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 `;
 
 const DetailedDropdown = styled(FlexDivColumnCentered)<{ width?: string }>`

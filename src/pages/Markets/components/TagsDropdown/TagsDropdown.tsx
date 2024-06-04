@@ -15,10 +15,8 @@ import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { NetworkId } from 'thales-utils';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
-import { SportFilter } from '../../../../enums/markets';
 
 type TagsDropdownProps = {
-    sport: SportFilter;
     open: boolean;
     tags: Tags;
     tagFilter: Tags;
@@ -31,7 +29,6 @@ type TagsDropdownProps = {
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({
-    sport,
     open,
     tags,
     tagFilter,
@@ -51,13 +48,13 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     return (
         <Container open={open}>
             {tags
-                .filter(
-                    (tag: TagInfo) =>
-                        (showActive &&
-                            ((!!openMarketsCountPerTag[tag.id] && sport !== SportFilter.Live) ||
-                                (!!liveMarketsCountPerTag[tag.id] && sport === SportFilter.Live))) ||
-                        !showActive
-                )
+                .filter((tag: TagInfo) => {
+                    if (showLive) {
+                        return !!liveMarketsCountPerTag[tag.id];
+                    } else {
+                        return (showActive && !!openMarketsCountPerTag[tag.id]) || !showActive;
+                    }
+                })
                 .sort((a, b) => {
                     let numberOfGamesA;
                     let numberOfGamesB;

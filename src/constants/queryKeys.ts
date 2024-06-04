@@ -1,6 +1,5 @@
 import { Position, StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
-import { LiquidityPoolType } from 'types/liquidityPool';
 
 const QUERY_KEYS = {
     ParlayMarkets: (networkId: Network, account: string, minTimestamp?: number, maxTimestamp?: number) => [
@@ -97,18 +96,6 @@ const QUERY_KEYS = {
             walletAddress,
             networkId,
         ],
-        OvertimeVoucher: (walletAddress: string, networkId: Network) => [
-            'wallet',
-            'overtimeVoucher',
-            walletAddress,
-            networkId,
-        ],
-        OvertimeVoucherEscrow: (walletAddress: string, networkId: Network) => [
-            'wallet',
-            'overtimeVoucherEscrow',
-            walletAddress,
-            networkId,
-        ],
         Stats: (networkId: Network, walletAddress: string) => ['wallet', 'stats', networkId, walletAddress],
         StatsV2: (networkId: Network, walletAddress: string) => ['wallet', 'statsV2', networkId, walletAddress],
         LiquidityPoolTransactions: (networkId: Network, walletAddress: string) => [
@@ -124,31 +111,37 @@ const QUERY_KEYS = {
     },
     Banners: (networkId: Network) => ['banners', networkId],
     LiquidityPool: {
-        Data: (networkId: Network) => ['liquidityPool', 'data', networkId],
+        Data: (address: string, networkId: Network) => ['liquidityPool', 'data', address, networkId],
         ParlayData: (networkId: Network) => ['liquidityPool', 'parlayData', networkId],
-        UserData: (walletAddress: string, networkId: Network) => ['liquidityPool', 'data', walletAddress, networkId],
+        UserData: (address: string, walletAddress: string, networkId: Network) => [
+            'liquidityPool',
+            'data',
+            address,
+            walletAddress,
+            networkId,
+        ],
         ParlayUserData: (walletAddress: string, networkId: Network) => [
             'liquidityPool',
             'parlayLPData',
             walletAddress,
             networkId,
         ],
-        PnL: (networkId: Network, liquidityPoolType: LiquidityPoolType) => [
+        PnL: (networkId: Network, liquidityPoolAddress: string) => [
             'liquidityPool',
             'pnl',
-            liquidityPoolType,
+            liquidityPoolAddress,
             networkId,
         ],
-        Return: (networkId: Network, liquidityPoolType: LiquidityPoolType) => [
+        Return: (networkId: Network, liquidityPoolAddress: string) => [
             'liquidityPool',
             'return',
-            liquidityPoolType,
+            liquidityPoolAddress,
             networkId,
         ],
-        UserTransactions: (networkId: Network, liquidityPoolType: LiquidityPoolType) => [
+        UserTransactions: (networkId: Network, liquidityPoolAddress: string) => [
             'liquidityPool',
             'userTransactions',
-            liquidityPoolType,
+            liquidityPoolAddress,
             networkId,
         ],
     },

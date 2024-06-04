@@ -2,10 +2,7 @@ import { Network } from 'enums/network';
 import { ethers, Signer } from 'ethers';
 import { NetworkSettings } from 'types/network';
 import { Coins } from 'types/tokens';
-import liquidityPoolContract from 'utils/contracts/liquidityPoolContractV2';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
-import parlayAMMLiquidityPoolContract from 'utils/contracts/parlayAMMLiquidityPoolContract';
-import parlayAMMLiquidityPoolDataContract from 'utils/contracts/parlayAMMLiquidityPoolDataContract';
 import sportsAMMDataContract from 'utils/contracts/sportsAMMDataContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
 import sportsAMMV2RiskManagerContract from 'utils/contracts/sportsAMMV2RiskManagerContract';
@@ -14,8 +11,6 @@ import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import multiCollateralOnOffRampContract from './contracts/multiCollateralOnOffRampContract';
 import multipleCollateral from './contracts/multipleCollateralContract';
-import overtimeVoucherContract from './contracts/overtimeVoucherContract';
-import { overtimeVoucherEscrowContract } from './contracts/overtimeVoucherEscrowContract';
 import priceFeedContract from './contracts/priceFeedContract';
 
 type NetworkConnector = {
@@ -29,13 +24,8 @@ type NetworkConnector = {
     marketDataContract?: ethers.Contract;
     exoticUsdContract?: ethers.Contract;
     sUSDContract?: ethers.Contract;
-    overtimeVoucherContract?: ethers.Contract;
-    overtimeVoucherEscrowContract?: ethers.Contract;
     favoriteTeamContract?: ethers.Contract;
-    liquidityPoolContract?: ethers.Contract;
     liquidityPoolDataContract?: ethers.Contract;
-    parlayAMMLiquidityPoolContract?: ethers.Contract;
-    parlayAMMLiquidityPoolDataContract?: ethers.Contract;
     priceFeedContract?: ethers.Contract;
     multiCollateralOnOffRampContract?: ethers.Contract;
     sportsAMMDataContract?: ethers.Contract;
@@ -53,16 +43,8 @@ const networkConnector: NetworkConnector = {
         this.signer = networkSettings.signer;
         this.provider = networkSettings.provider;
         this.sUSDContract = initializeContract(sUSDContract, networkSettings);
-        this.overtimeVoucherContract = initializeContract(overtimeVoucherContract, networkSettings);
-        this.overtimeVoucherEscrowContract = initializeContract(overtimeVoucherEscrowContract, networkSettings);
         this.favoriteTeamContract = initializeContract(FIFAFavoriteTeam, networkSettings);
-        this.liquidityPoolContract = initializeContract(liquidityPoolContract, networkSettings);
         this.liquidityPoolDataContract = initializeContract(liquidityPoolDataContract, networkSettings);
-        this.parlayAMMLiquidityPoolContract = initializeContract(parlayAMMLiquidityPoolContract, networkSettings);
-        this.parlayAMMLiquidityPoolDataContract = initializeContract(
-            parlayAMMLiquidityPoolDataContract,
-            networkSettings
-        );
         this.priceFeedContract = initializeContract(priceFeedContract, networkSettings);
         this.multiCollateralOnOffRampContract = initializeContract(multiCollateralOnOffRampContract, networkSettings);
 

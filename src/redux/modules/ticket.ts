@@ -22,8 +22,6 @@ const getDefaultPayment = (): ParlayPayment => {
 
     return {
         selectedCollateralIndex: lsSelectedCollateralIndex !== undefined ? (lsSelectedCollateralIndex as number) : 0,
-        isVoucherAvailable: false,
-        isVoucherSelected: false,
         amountToBuy: '',
         networkId: Network.OptimismMainnet,
     };
@@ -115,12 +113,6 @@ const ticketSlice = createSlice({
                 state.payment.selectedCollateralIndex
             );
         },
-        setPaymentIsVoucherSelected: (state, action: PayloadAction<boolean>) => {
-            state.payment = { ...state.payment, isVoucherSelected: action.payload };
-        },
-        setPaymentIsVoucherAvailable: (state, action: PayloadAction<boolean>) => {
-            state.payment = { ...state.payment, isVoucherAvailable: action.payload };
-        },
         setPaymentAmountToBuy: (state, action: PayloadAction<number | string>) => {
             state.payment = { ...state.payment, amountToBuy: action.payload };
         },
@@ -139,8 +131,6 @@ export const {
     removeAll,
     setPayment,
     setPaymentSelectedCollateralIndex,
-    setPaymentIsVoucherSelected,
-    setPaymentIsVoucherAvailable,
     setPaymentAmountToBuy,
     resetTicketError,
     setMaxTicketSize,

@@ -154,7 +154,6 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                     })}
                 </ItemsContainer>
                 <FooterContainer>
-                    {/* {!isConnectedViaParticle && <MintVoucher style={{ width: '100%' }} />} */}
                     {isConnectedViaParticle && (
                         <Button
                             backgroundColor={theme.button.background.quaternary}

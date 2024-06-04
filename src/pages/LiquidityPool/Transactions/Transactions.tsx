@@ -10,15 +10,17 @@ import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
-import { LiquidityPoolType, LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
+import { Coins } from 'thales-utils';
+import { LiquidityPoolUserTransaction, LiquidityPoolUserTransactions } from 'types/liquidityPool';
 import UserTransactionsTable from '../UserTransactionsTable';
 
 type TransactionsProps = {
     currentRound: number;
-    liquidityPoolType: LiquidityPoolType;
+    liquidityPoolAddress: string;
+    collateral: Coins;
 };
 
-const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPoolType }) => {
+const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPoolAddress, collateral }) => {
     const { t } = useTranslation();
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -57,9 +59,14 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
         });
     }
 
-    const liquidityPoolUserTransactionsQuery = useLiquidityPoolUserTransactionsQuery(networkId, liquidityPoolType, {
-        enabled: isAppReady,
-    });
+    const liquidityPoolUserTransactionsQuery = useLiquidityPoolUserTransactionsQuery(
+        networkId,
+        liquidityPoolAddress,
+        collateral,
+        {
+            enabled: isAppReady,
+        }
+    );
 
     useEffect(() => setRound(currentRound), [currentRound]);
 
@@ -132,6 +139,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
                                 <span>{t(`liquidity-pool.user-transactions.no-transactions`)}</span>
                             ) : undefined
                         }
+                        collateral={collateral}
                     />
                 )}
                 {selectedTab === LiquidityPoolTransaction.YOUR_TRANSACTIONS && (
@@ -143,6 +151,7 @@ const Transactions: React.FC<TransactionsProps> = ({ currentRound, liquidityPool
                                 <span>{t(`liquidity-pool.user-transactions.no-transactions`)}</span>
                             ) : undefined
                         }
+                        collateral={collateral}
                     />
                 )}
             </TableContainer>

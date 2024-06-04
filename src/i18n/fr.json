@@ -634,7 +634,14 @@
             "persist-games": "Conserver la sélection après la soumission",
             "keep-selection-tooltip": "Par défaut, le générateur Parlay est réinitialisé après une soumission réussie. Cochez cette case si vous souhaitez conserver le contexte actuel après la soumission.",
             "liquidity": "Liquidité",
-            "ticket-slip": "Bon de billet"
+            "ticket-slip": "Bon de billet",
+            "slippage": {
+                "slippage": "Glissement",
+                "enter-value": "Entrez la valeur",
+                "invalid-value": "valeur invalide",
+                "tooltip": "Le transfert n’aboutira pas si le taux relais évolue défavorablement de plus de ce pourcentage au moment de l’exécution du transfert.",
+                "label": "Acceptez l'échange si les cotes baissent :"
+            }
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -809,7 +816,8 @@
             "my-portfolio": "Mon portfolio"
         },
         "lp": "LP",
-        "back": "Dos"
+        "back": "Dos",
+        "go-to": "Aller à"
     },
     "referral": {
         "generate-link": "Générer un lien",

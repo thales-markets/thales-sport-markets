@@ -1,21 +1,23 @@
+import { Coins } from 'thales-utils';
+
 export type LiquidityPoolData = {
-    round: number;
-    roundEndTime: number;
+    collateral: string;
     liquidityPoolStarted: boolean;
     maxAllowedDeposit: number;
-    allocationCurrentRound: number;
+    round: number;
+    roundEndTime: number;
     allocationNextRound: number;
-    availableAllocationNextRound: number;
     allocationNextRoundPercentage: number;
+    availableAllocationNextRound: number;
+    allocationCurrentRound: number;
     isRoundEnded: boolean;
     minDepositAmount: number;
     maxAllowedUsers: number;
     usersCurrentlyInLiquidityPool: number;
     canCloseCurrentRound: boolean;
     paused: boolean;
-    lifetimePnl: number;
     roundLength: number;
-    stakedThalesMultiplier: number;
+    lifetimePnl: number;
 };
 
 export type UserLiquidityPoolData = {
@@ -42,27 +44,16 @@ export type LiquidityPoolUserTransaction = {
     hash: string;
     timestamp: number;
     blockNumber: number;
-    liquidityPoolType: string;
+    liquidityPool: string;
+    name: string;
     type: string;
     account: string;
     amount: number;
     round: number;
+    collateral: Coins;
 };
 
 export type LiquidityPoolUserTransactions = LiquidityPoolUserTransaction[];
-
-export type ProfileLiquidityPoolUserTransaction = {
-    name: string;
-    hash: string;
-    timestamp: number;
-    blockNumber: number;
-    type: string;
-    account: string;
-    amount: number;
-    round: number;
-};
-
-export type ProfileLiquidityPoolUserTransactions = ProfileLiquidityPoolUserTransaction[];
 
 export type LiquidityPoolReturn = {
     arr: number;
@@ -70,4 +61,8 @@ export type LiquidityPoolReturn = {
     apy: number;
 };
 
-export type LiquidityPoolType = 'single' | 'parlay';
+export type LiquidityPool = {
+    name: string;
+    address: string;
+    collateral: Coins;
+};

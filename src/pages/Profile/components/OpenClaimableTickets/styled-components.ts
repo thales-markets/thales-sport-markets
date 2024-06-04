@@ -53,12 +53,13 @@ export const CategoryIcon = styled.i`
 
 export const Arrow = styled.i`
     font-size: 16px;
-    margin-right: 15px;
+    margin-right: 10px;
     text-transform: none;
     font-weight: 400;
     color: ${(props) => props.theme.textColor.secondary};
     @media (max-width: 767px) {
         font-size: 10px;
+        margin-right: 8px;
     }
 `;
 
@@ -113,11 +114,10 @@ export const ClaimAllContainer = styled(FlexDivColumnNative)`
     align-items: end;
     justify-content: flex-end;
     margin-bottom: 10px;
-    margin-right: 50px;
-
+    margin-right: 40px;
     @media (max-width: 767px) {
         min-width: 60px;
-        margin-right: 5px;
+        margin-right: 30px;
     }
     button {
         margin-top: 2px;

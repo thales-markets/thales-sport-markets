@@ -45,6 +45,7 @@ import {
     OverviewWrapper,
     PayoutInLabel,
     TicketIdContainer,
+    TicketInfo,
     TicketMarketsContainer,
     TotalQuoteContainer,
     Value,
@@ -203,16 +204,18 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                     {ticket.isLive && <Label>{t('profile.card.live')}</Label>}
                 </LiveIndicatorContainer>
                 <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
-                    <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
-                        <TicketIdContainer>
-                            <Label>{t('profile.card.ticket-id')}:</Label>
-                            <Value>{truncateAddress(ticket.id)}</Value>
-                        </TicketIdContainer>
-                    </ExternalLink>
-                    <NumberOfGamesContainer>
-                        <Label>{t('profile.card.number-of-games')}:</Label>
-                        <Value>{ticket.numOfMarkets}</Value>
-                    </NumberOfGamesContainer>
+                    <TicketInfo>
+                        <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
+                            <TicketIdContainer>
+                                <Label>{t('profile.card.ticket-id')}:</Label>
+                                <Value>{truncateAddress(ticket.id)}</Value>
+                            </TicketIdContainer>
+                        </ExternalLink>
+                        <NumberOfGamesContainer>
+                            <Label>{t('profile.card.number-of-games')}:</Label>
+                            <Value>{ticket.numOfMarkets}</Value>
+                        </NumberOfGamesContainer>
+                    </TicketInfo>
                     <InfoContainerColumn>
                         <Label>{t('profile.card.ticket-paid')}:</Label>
                         <Value>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Value>

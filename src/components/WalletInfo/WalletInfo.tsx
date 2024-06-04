@@ -1,6 +1,5 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
-import useOvertimeVoucherQuery from 'queries/wallet/useOvertimeVoucherQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,16 +32,6 @@ const WalletInfo: React.FC = ({}) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
 
-    const overtimeVoucherQuery = useOvertimeVoucherQuery(walletAddress, networkId, {
-        enabled: isAppReady && isWalletConnected,
-    });
-    const overtimeVoucher = useMemo(() => {
-        if (overtimeVoucherQuery.isSuccess && overtimeVoucherQuery.data) {
-            return overtimeVoucherQuery.data;
-        }
-        return undefined;
-    }, [overtimeVoucherQuery.isSuccess, overtimeVoucherQuery.data]);
-
     const stableCointBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
@@ -50,7 +39,7 @@ const WalletInfo: React.FC = ({}) => {
         return stableCointBalanceQuery?.data || 0;
     }, [stableCointBalanceQuery.data]);
 
-    const walletBalance = overtimeVoucher ? overtimeVoucher.remainingAmount : stableCoinBalance;
+    const walletBalance = stableCoinBalance;
 
     return (
         <Container walletConnected={isWalletConnected}>
@@ -76,19 +65,12 @@ const WalletInfo: React.FC = ({}) => {
                                         </Text>
                                     </WalletAddressInfo>
                                 )}
-                                {isWalletConnected &&
-                                    (overtimeVoucher ? (
-                                        <WalletBalanceInfo>
-                                            <VoucherText>{t('common.voucher.voucher')}:</VoucherText>
-                                            <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                            <Currency>{getDefaultCollateral(networkId)}</Currency>
-                                        </WalletBalanceInfo>
-                                    ) : (
-                                        <WalletBalanceInfo>
-                                            <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                            <Currency>{getDefaultCollateral(networkId)}</Currency>
-                                        </WalletBalanceInfo>
-                                    ))}
+                                {isWalletConnected && (
+                                    <WalletBalanceInfo>
+                                        <Text>{formatCurrency(walletBalance, 2)}</Text>
+                                        <Currency>{getDefaultCollateral(networkId)}</Currency>
+                                    </WalletBalanceInfo>
+                                )}
                                 <NetworkSwitcher />
                             </Wrapper>
                         );
@@ -180,11 +162,6 @@ const Text = styled.span`
     font-size: 10.8px;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.secondary};
-`;
-
-const VoucherText = styled(Text)`
-    text-transform: uppercase;
-    padding-right: 2px;
 `;
 
 const Currency = styled(Text)`
