@@ -94,7 +94,6 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
     height: 100%;
     border-radius: 5px 0 0 5px;
     background: ${(props) => (props.isLive ? props.theme.status.live : props.theme.background.secondary)};
-    padding-left: 1px;
     color: ${(props) => props.theme.textColor.secondary};
     align-items: center;
     justify-content: center;
@@ -102,7 +101,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
         transform: rotate(270deg);
         color: ${(props) => props.theme.textColor.tertiary};
         font-size: 10px;
-        margin-left: 3px;
+        padding-top: 5px;
         text-transform: uppercase;
         line-height: 10px;
         animation: blinker 1.5s step-start infinite;
@@ -113,11 +112,11 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
         }
     }
     @media (max-width: 767px) {
-        padding-left: 0px;
         min-width: 10px;
         max-width: 10px;
         span {
             font-size: 9px;
+            padding-top: 5px;
         }
     }
 `;
