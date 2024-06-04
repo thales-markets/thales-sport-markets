@@ -4,12 +4,11 @@ import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getTicketPayment } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import { getIsAA, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -19,7 +18,6 @@ import { executeBiconomyTransaction } from 'utils/biconomy';
 import {
     getCollateral,
     getCollateralAddress,
-    getCollateralIndex,
     getCollaterals,
     getDefaultCollateral,
     isLpSupported,
@@ -57,23 +55,22 @@ import {
 
 type TicketDetailsProps = {
     ticket: Ticket;
+    claimCollateralIndex: number;
+    setClaimCollateralIndex: any;
 };
 
-const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
+const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIndex, setClaimCollateralIndex }) => {
     const { t } = useTranslation();
     const selectedOddsType = useSelector(getOddsType);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isAA = useSelector((state: RootState) => getIsAA(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const ticketPayment = useSelector(getTicketPayment);
-    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
-    const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
@@ -85,19 +82,15 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
             ),
         [networkId, defaultCollateral]
     );
-    const claimCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex, claimCollateralArray), [
+    const claimCollateral = useMemo(() => getCollateral(networkId, claimCollateralIndex, claimCollateralArray), [
         claimCollateralArray,
         networkId,
-        selectedCollateralIndex,
+        claimCollateralIndex,
     ]);
     const claimCollateralAddress = useMemo(
         () => getCollateralAddress(networkId, claimCollateralIndex, claimCollateralArray),
         [networkId, claimCollateralIndex, claimCollateralArray]
     );
-
-    useEffect(() => {
-        setClaimCollateralIndex(getCollateralIndex(networkId, ticket.collateral, claimCollateralArray));
-    }, [claimCollateralArray, networkId, ticket.collateral]);
 
     const ticketCollateralHasLp = isLpSupported(ticket.collateral);
     const isTicketCollateralDefaultCollateral = ticket.collateral === defaultCollateral;
@@ -106,7 +99,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
 
     const isClaimable = ticket.isClaimable;
 
-    const claimTicket = async (parlayAddress: string) => {
+    const claimTicket = async (ticketAddress: string) => {
         const id = toast.loading(t('market.toast-message.transaction-pending'));
         const { sportsAMMV2Contract, signer } = networkConnector;
         if (signer && sportsAMMV2Contract) {
@@ -122,21 +115,21 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket }) => {
                                   claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
                                   'exerciseTicket',
-                                  [parlayAddress]
+                                  [ticketAddress]
                               )
                             : await executeBiconomyTransaction(
                                   claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
                                   'exerciseTicketOffRamp',
-                                  [parlayAddress, claimCollateralAddress, isEth]
+                                  [ticketAddress, claimCollateralAddress, isEth]
                               );
                 } else {
                     const tx =
                         isClaimCollateralDefaultCollateral ||
                         (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
-                            ? await sportsAMMV2ContractWithSigner.exerciseTicket(parlayAddress)
+                            ? await sportsAMMV2ContractWithSigner.exerciseTicket(ticketAddress)
                             : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
-                                  parlayAddress,
+                                  ticketAddress,
                                   claimCollateralAddress,
                                   isEth
                               );

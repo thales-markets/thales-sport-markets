@@ -11,11 +11,17 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getTicketPayment } from 'redux/modules/ticket';
-import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getIsAA, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { getCollateral, getCollateralAddress, getDefaultCollateral, isLpSupported } from 'utils/collaterals';
+import {
+    getCollateral,
+    getCollateralAddress,
+    getCollaterals,
+    getDefaultCollateral,
+    isLpSupported,
+} from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
+import { executeBiconomyTransaction } from '../../../../utils/biconomy';
 import TicketDetails from './components/TicketDetails';
 import {
     Arrow,
@@ -42,27 +48,33 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
     const [openOpenPositions, setOpenState] = useState<boolean>(true);
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    // const isAA = useSelector((state: RootState) => getIsAA(state));
+    const isAA = useSelector((state: RootState) => getIsAA(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const ticketPayment = useSelector(getTicketPayment);
-    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
     const isSearchTextWalletAddress = searchText && ethers.utils.isAddress(searchText);
+    const [claimCollateralIndex, setClaimCollateralIndex] = useState(0);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
-    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+    const claimCollateralArray = useMemo(
+        () =>
+            getCollaterals(networkId).filter(
+                (collateral) => !isLpSupported(collateral) || collateral === defaultCollateral
+            ),
+        [networkId, defaultCollateral]
+    );
+    const claimCollateral = useMemo(() => getCollateral(networkId, claimCollateralIndex, claimCollateralArray), [
+        claimCollateralArray,
         networkId,
-        selectedCollateralIndex,
+        claimCollateralIndex,
     ]);
-    const collateralAddress = useMemo(() => getCollateralAddress(networkId, selectedCollateralIndex), [
-        networkId,
-        selectedCollateralIndex,
-    ]);
+    const claimCollateralAddress = useMemo(
+        () => getCollateralAddress(networkId, claimCollateralIndex, claimCollateralArray),
+        [networkId, claimCollateralIndex, claimCollateralArray]
+    );
 
-    const isDefaultCollateral = selectedCollateral === defaultCollateral;
-    const isEth = collateralAddress === ZERO_ADDRESS;
+    const isEth = claimCollateralAddress === ZERO_ADDRESS;
 
     const userTicketsQuery = useUserTicketsQuery(
         isSearchTextWalletAddress ? searchText : walletAddress.toLowerCase(),
@@ -113,19 +125,38 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                 try {
                                     const ticketCollateralHasLp = isLpSupported(market.collateral);
                                     const isTicketCollateralDefaultCollateral = market.collateral === defaultCollateral;
+                                    const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
 
+                                    let txResult;
                                     const sportsAMMV2ContractWithSigner = sportsAMMV2Contract.connect(signer);
-
-                                    const tx =
-                                        isDefaultCollateral ||
-                                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
-                                            ? await sportsAMMV2ContractWithSigner.exerciseTicket(market.id)
-                                            : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
-                                                  market.id,
-                                                  collateralAddress,
-                                                  isEth
-                                              );
-                                    const txResult = await tx.wait();
+                                    if (isAA) {
+                                        txResult =
+                                            isClaimCollateralDefaultCollateral ||
+                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                                                ? await executeBiconomyTransaction(
+                                                      claimCollateralAddress,
+                                                      sportsAMMV2ContractWithSigner,
+                                                      'exerciseTicket',
+                                                      [market.id]
+                                                  )
+                                                : await executeBiconomyTransaction(
+                                                      claimCollateralAddress,
+                                                      sportsAMMV2ContractWithSigner,
+                                                      'exerciseTicketOffRamp',
+                                                      [market.id, claimCollateralAddress, isEth]
+                                                  );
+                                    } else {
+                                        const tx =
+                                            isClaimCollateralDefaultCollateral ||
+                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                                                ? await sportsAMMV2ContractWithSigner.exerciseTicket(market.id)
+                                                : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
+                                                      market.id,
+                                                      claimCollateralAddress,
+                                                      isEth
+                                                  );
+                                        txResult = await tx.wait();
+                                    }
 
                                     if (txResult && txResult.transactionHash) {
                                         resolve(
@@ -201,7 +232,14 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                         </Button>
                                     </ClaimAllContainer>
                                     {userTicketsByStatus.claimable.map((parlayMarket, index) => {
-                                        return <TicketDetails ticket={parlayMarket} key={index} />;
+                                        return (
+                                            <TicketDetails
+                                                ticket={parlayMarket}
+                                                key={index}
+                                                claimCollateralIndex={claimCollateralIndex}
+                                                setClaimCollateralIndex={setClaimCollateralIndex}
+                                            />
+                                        );
                                     })}
                                 </>
                             ) : (
@@ -233,7 +271,14 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                             {userTicketsByStatus.open.length ? (
                                 <>
                                     {userTicketsByStatus.open.map((parlayMarket, index) => {
-                                        return <TicketDetails ticket={parlayMarket} key={index} />;
+                                        return (
+                                            <TicketDetails
+                                                ticket={parlayMarket}
+                                                key={index}
+                                                claimCollateralIndex={claimCollateralIndex}
+                                                setClaimCollateralIndex={setClaimCollateralIndex}
+                                            />
+                                        );
                                     })}
                                 </>
                             ) : (
