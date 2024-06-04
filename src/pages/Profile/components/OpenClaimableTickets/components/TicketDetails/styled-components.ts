@@ -41,6 +41,12 @@ export const OverviewContainer = styled(FlexDivRow)`
 `;
 
 export const TicketInfo = styled(FlexDivStart)`
+    @media (max-width: 1399px) {
+        flex-direction: column;
+    }
+    @media (max-width: 950px) {
+        flex-direction: row;
+    }
     @media (max-width: 767px) {
         margin-left: 3px;
         flex-direction: column;
@@ -56,7 +62,7 @@ export const TicketIdContainer = styled(FlexDivStart)`
     margin-right: 10px;
     @media (max-width: 767px) {
         min-width: 130px;
-        margin-right: 5px;
+        margin-right: 4px;
     }
 `;
 
@@ -66,7 +72,7 @@ export const NumberOfGamesContainer = styled(FlexDivStart)`
     margin-right: 10px;
     @media (max-width: 767px) {
         min-width: 100px;
-        margin-right: 5px;
+        margin-right: 4px;
     }
 `;
 
@@ -78,7 +84,7 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)`
         min-width: 85px;
         flex-direction: column;
         margin-left: 0px;
-        margin-right: 5px;
+        margin-right: 4px;
     }
 `;
 
@@ -88,7 +94,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
     height: 100%;
     border-radius: 5px 0 0 5px;
     background: ${(props) => (props.isLive ? props.theme.status.live : props.theme.background.secondary)};
-    padding-left: 2px;
+    padding-left: 1px;
     color: ${(props) => props.theme.textColor.secondary};
     align-items: center;
     justify-content: center;
@@ -107,11 +113,11 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
         }
     }
     @media (max-width: 767px) {
-        min-width: 8px;
-        max-width: 8px;
+        padding-left: 0px;
+        min-width: 10px;
+        max-width: 10px;
         span {
-            font-size: 8px;
-            margin-left: 2px;
+            font-size: 9px;
         }
     }
 `;

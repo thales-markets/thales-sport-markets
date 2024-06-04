@@ -120,7 +120,7 @@ export const PARLAY_MAXIMUM_QUOTE = 0.006666666666666;
 export const PARLAY_LEADERBOARD_MINIMUM_GAMES = 2;
 export const HIDE_PARLAY_LEADERBOARD = true;
 
-export const MEDIUM_ODDS = 0.5;
+export const MEDIUM_ODDS = 0.52;
 
 export const GameStatusKey: Record<GameStatus, string> = {
     [GameStatus.RUNDOWN_FINAL]: '',
