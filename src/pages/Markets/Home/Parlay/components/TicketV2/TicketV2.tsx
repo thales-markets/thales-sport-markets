@@ -6,7 +6,7 @@ import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicket
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { getErrorToastOptions, getLoadingToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
@@ -123,8 +123,6 @@ const TicketErrorMessage = {
 };
 
 const SLIPPAGE_PERCENTAGES = [0.5, 1, 2];
-
-let toastId: string | number;
 
 const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) => {
     const { t } = useTranslation();
@@ -557,7 +555,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             const sportsAMMV2ContractWithSigner = markets[0].live
                 ? liveTradingProcessorContract?.connect(signer)
                 : sportsAMMV2Contract?.connect(signer);
-            toastId = toast.loading(t('market.toast-message.transaction-pending'));
+            const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
                 const referralId =
@@ -619,11 +617,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         setCollateralAmount('');
                         if (!keepSelection) dispatch(removeAll());
                     } else if (sportsAMMV2ContractWithSigner) {
+                        let counter = 0;
                         const requestId = txResult.events.find((event: any) => event.event === 'LiveTradeRequested')
                             .args[2];
                         const startTime = Date.now();
                         console.log('filfill start time:', new Date(startTime));
                         const checkFulfilled = async () => {
+                            counter++;
                             const isFulfilled = await sportsAMMV2ContractWithSigner.requestIdToFulfillAllowed(
                                 requestId
                             );
@@ -636,6 +636,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                         getErrorToastOptions(t('common.errors.unknown-error-try-again'))
                                     );
                                 } else {
+                                    if (counter / 5 === 1) {
+                                        toast.update(
+                                            toastId,
+                                            getLoadingToastOptions(t('market.toast-message.fulfilling-live-trade'))
+                                        );
+                                    }
                                     setTimeout(checkFulfilled, 1000);
                                 }
                             } else {
@@ -648,7 +654,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                 if (!keepSelection) dispatch(removeAll());
                             }
                         };
-
+                        toast.update(toastId, getLoadingToastOptions(t('market.toast-message.live-trade-requested')));
                         setTimeout(checkFulfilled, 2000);
                     }
                 }
