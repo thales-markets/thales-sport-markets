@@ -476,7 +476,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     max: formatCurrencyWithSign(USD_SIGN, sportsAmmData?.maxSupportedAmount || 0),
                 })
             );
-        } else if (Number(minBuyInAmount) > paymentTokenBalance) {
+        } else if (Number(buyInAmount) > paymentTokenBalance) {
             setTooltipTextBuyInAmount(t('markets.parlay.validation.no-funds'));
         } else {
             setTooltipTextBuyInAmount('');
