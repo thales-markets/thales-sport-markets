@@ -768,14 +768,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
             setIsFetching(true);
             const { sportsAMMV2Contract } = networkConnector;
             if (sportsAMMV2Contract && Number(buyInAmount) > 0 && minBuyInAmountInDefaultCollateral) {
-                if (markets[0]?.live) {
-                    setPayout((1 / totalQuote) * Number(buyInAmount));
-                } else {
-                    const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
+                const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
 
-                    if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
+                if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
 
-                    if (!parlayAmmQuote.error) {
+                if (!parlayAmmQuote.error) {
+                    if (markets[0]?.live) {
+                        setPayout((1 / totalQuote) * Number(buyInAmount));
+                    } else {
                         const payout = coinFormatter(
                             parlayAmmQuote.payout,
                             networkId,
@@ -792,16 +792,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         setMarketsOutOfLiquidity(marketsOutOfLiquidity);
 
                         setFinalQuotes(amountsToBuy);
-                    } else {
-                        setMarketsOutOfLiquidity([]);
-                        setPayout(0);
-                        // setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
                     }
+                } else {
+                    setMarketsOutOfLiquidity([]);
+                    setPayout(0);
+                    // setTooltipTextMessageUsdAmount(0, [], parlayAmmQuote.error);
                 }
             } else {
                 if (Number(buyInAmount) === 0) {
-                    setPayout(0);
-                    setBuyInAmountInDefaultCollateral(0);
                     setFinalQuotes([]);
                     setMarketsOutOfLiquidity([]);
                 }
