@@ -1,18 +1,12 @@
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
+import Button from 'components/Button';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
+import IncentivizedLeague from 'components/IncentivizedLeague';
 import Toggle from 'components/Toggle';
-import Tooltip from 'components/Tooltip';
-import {
-    GameStatusKey,
-    INCENTIVIZED_LEAGUE,
-    INCENTIVIZED_MLB,
-    INCENTIVIZED_NHL,
-    INCENTIVIZED_UEFA,
-} from 'constants/markets';
+import { MarketTypeGroupsBySport } from 'constants/marketTypes';
+import { GameStatusKey } from 'constants/markets';
 import ROUTES from 'constants/routes';
 import { MarketType } from 'enums/marketTypes';
-import { Network } from 'enums/network';
+import { GameStatus } from 'enums/markets';
 import { League, Sport } from 'enums/sports';
 import { groupBy } from 'lodash';
 import { ToggleContainer } from 'pages/LiquidityPool/styled-components';
@@ -21,26 +15,21 @@ import TicketMobileModal from 'pages/Markets/Home/Parlay/components/TicketMobile
 import BackToLink from 'pages/Markets/components/BackToLink';
 import queryString from 'query-string';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
+import { getMarketTypeGroupFilter, setMarketTypeGroupFilter } from 'redux/modules/market';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { NetworkId } from 'thales-utils';
-import { SportMarket, TagInfo } from 'types/markets';
+import { SportMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { showGameScore, showLiveInfo } from 'utils/marketsV2';
 import { buildHref, navigateTo } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
-import Button from '../../../../components/Button';
-import { MarketTypeGroupsBySport } from '../../../../constants/marketTypes';
-import { LeagueMap } from '../../../../constants/sports';
-import { GameStatus } from '../../../../enums/markets';
-import { getMarketTypeGroupFilter, setMarketTypeGroupFilter } from '../../../../redux/modules/market';
-import { showGameScore, showLiveInfo } from '../../../../utils/marketsV2';
 import Header from '../../Home/Header';
 import MatchInfoV2 from './components/MatchInfoV2';
 import PositionsV2 from './components/PositionsV2';
@@ -112,8 +101,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameOpen = market.isOpen && !isGameStarted;
-
-    const leagueName = Object.values(LeagueMap).find((t: TagInfo) => t.id == market.leagueId)?.label;
     const isGameResolved = market.isResolved || market.isCancelled;
     const isPendingResolution = isGameStarted && !isGameResolved;
     const showStatus = !market.isOpen || isGameStarted;
@@ -130,117 +117,7 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         text={t('market.back')}
                         customStylingContainer={{ position: 'absolute', left: 0, top: 0, marginTop: 0 }}
                     />
-                    {INCENTIVIZED_LEAGUE.ids.includes(Number(market.leagueId)) &&
-                        new Date(market.maturityDate) > INCENTIVIZED_LEAGUE.startDate &&
-                        new Date(market.maturityDate) < INCENTIVIZED_LEAGUE.endDate && (
-                            <Tooltip
-                                overlay={
-                                    <Trans
-                                        i18nKey="markets.incentivized-tooltip"
-                                        components={{
-                                            detailsLink: (
-                                                <a href={INCENTIVIZED_LEAGUE.link} target="_blank" rel="noreferrer" />
-                                            ),
-                                        }}
-                                        values={{
-                                            rewards:
-                                                networkId == Network.OptimismMainnet
-                                                    ? INCENTIVIZED_LEAGUE.opRewards
-                                                    : networkId == Network.Arbitrum
-                                                    ? INCENTIVIZED_LEAGUE.thalesRewards
-                                                    : '',
-                                        }}
-                                    />
-                                }
-                                component={
-                                    <IncentivizedLeague>
-                                        {networkId !== Network.Base ? (
-                                            <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        ) : (
-                                            ''
-                                        )}
-                                        {getNetworkLogo(networkId)}
-                                    </IncentivizedLeague>
-                                }
-                            ></Tooltip>
-                        )}
-                    {INCENTIVIZED_UEFA.ids.includes(Number(market.leagueId)) &&
-                        new Date() > INCENTIVIZED_UEFA.startDate &&
-                        new Date() < INCENTIVIZED_UEFA.endDate && (
-                            <Tooltip
-                                overlay={
-                                    <Trans
-                                        i18nKey="markets.incentivized-tooltip-uefa"
-                                        components={{
-                                            detailsLink: (
-                                                <a href={INCENTIVIZED_UEFA.link} target="_blank" rel="noreferrer" />
-                                            ),
-                                        }}
-                                        values={{
-                                            rewards: INCENTIVIZED_UEFA.arbRewards,
-                                        }}
-                                    />
-                                }
-                                component={
-                                    <IncentivizedLeague>
-                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {getNetworkLogo(NetworkId.Arbitrum)}
-                                    </IncentivizedLeague>
-                                }
-                            ></Tooltip>
-                        )}
-                    {INCENTIVIZED_NHL.ids.includes(Number(market.leagueId)) &&
-                        new Date() > INCENTIVIZED_NHL.startDate &&
-                        new Date() < INCENTIVIZED_NHL.endDate && (
-                            <Tooltip
-                                overlay={
-                                    <Trans
-                                        i18nKey="markets.incentivized-tooltip-nhl-mlb"
-                                        components={{
-                                            detailsLink: (
-                                                <a href={INCENTIVIZED_NHL.link} target="_blank" rel="noreferrer" />
-                                            ),
-                                        }}
-                                        values={{
-                                            league: leagueName,
-                                            rewards: INCENTIVIZED_NHL.arbRewards,
-                                        }}
-                                    />
-                                }
-                                component={
-                                    <IncentivizedLeague>
-                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {getNetworkLogo(NetworkId.Arbitrum)}
-                                    </IncentivizedLeague>
-                                }
-                            ></Tooltip>
-                        )}
-                    {INCENTIVIZED_MLB.ids.includes(Number(market.leagueId)) &&
-                        new Date() > INCENTIVIZED_MLB.startDate &&
-                        new Date() < INCENTIVIZED_MLB.endDate && (
-                            <Tooltip
-                                overlay={
-                                    <Trans
-                                        i18nKey="markets.incentivized-tooltip-nhl-mlb"
-                                        components={{
-                                            detailsLink: (
-                                                <a href={INCENTIVIZED_MLB.link} target="_blank" rel="noreferrer" />
-                                            ),
-                                        }}
-                                        values={{
-                                            league: leagueName,
-                                            rewards: INCENTIVIZED_MLB.arbRewards,
-                                        }}
-                                    />
-                                }
-                                component={
-                                    <IncentivizedLeague>
-                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
-                                        {getNetworkLogo(NetworkId.Arbitrum)}
-                                    </IncentivizedLeague>
-                                }
-                            ></Tooltip>
-                        )}
+                    <IncentivizedLeague league={market.leagueId} maturityDate={market.maturityDate} fontSize={15} />
                 </HeaderWrapper>
                 <MatchInfoV2 market={market} />
                 {showStatus && (
@@ -460,17 +337,6 @@ const PositionsContainer = styled(FlexDivColumn)`
     flex: initial;
 `;
 
-const getNetworkLogo = (networkId: number) => {
-    switch (networkId) {
-        case Network.OptimismMainnet:
-            return <OPLogo />;
-        case Network.Arbitrum:
-            return <ArbitrumLogo />;
-        default:
-            return <></>;
-    }
-};
-
 const RowContainer = styled(FlexDivRow)`
     margin-top: 40px;
     width: 100%;
@@ -505,30 +371,11 @@ const HeaderWrapper = styled(FlexDivRow)`
     width: 100%;
     position: relative;
     align-items: center;
+    justify-content: end;
     @media (max-width: 950px) {
         flex-direction: column;
+        padding-top: 20px;
     }
-`;
-
-const IncentivizedLeague = styled.div`
-    position: absolute;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    right: 0;
-    top: 0;
-    @media (max-width: 950px) {
-        position: static;
-        margin-top: 20px;
-    }
-    svg {
-        height: 25px;
-    }
-`;
-
-const IncentivizedTitle = styled.span`
-    font-size: 15px;
-    padding-right: 5px;
 `;
 
 const Status = styled(FlexDivCentered)<{ backgroundColor?: string }>`

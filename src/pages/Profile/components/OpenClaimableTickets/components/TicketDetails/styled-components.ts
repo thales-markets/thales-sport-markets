@@ -116,7 +116,6 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
         max-width: 10px;
         span {
             font-size: 9px;
-            padding-top: 5px;
         }
     }
 `;

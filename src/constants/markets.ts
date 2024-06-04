@@ -1,5 +1,6 @@
 import { GameStatus, OddsType, Position } from 'enums/markets';
 import { League } from 'enums/sports';
+import { Network } from '../enums/network';
 
 export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 
@@ -9,40 +10,86 @@ export const APPROVAL_BUFFER = 0.01;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.05; // 5%
 
-export const INCENTIVIZED_LEAGUE = {
-    ids: [League.NBA, League.EPL],
-    startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 4, 16, 23, 59, 59)),
-    link:
-        'https://medium.com/@OvertimeMarkets.xyz/get-ready-for-the-big-leagues-season-overtimes-biggest-reward-program-to-date-2d3949a06338',
-    opRewards: '30,000 OP',
-    arbRewards: '30, 000 ARB',
-    thalesRewards: '30,000 THALES',
-};
-
-export const INCENTIVIZED_UEFA = {
-    ids: [League.UEFA_EL, League.UEFA_EL, League.UEFA_CONFERENCE_LEAGUE],
-    startDate: new Date(Date.UTC(2024, 1, 13, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 4, 25, 23, 59, 59)),
-    link: 'https://dune.com/leifu/overtime-uefa-competitions-13-feb-25-may-24',
-    opRewards: '',
-    arbRewards: '20,000 ARB',
-};
-
-export const INCENTIVIZED_NHL = {
-    ids: [League.NHL],
-    startDate: new Date(Date.UTC(2024, 2, 5, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 5, 24, 23, 59, 59)),
-    link: 'https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards',
-    arbRewards: '20,000 ARB',
-};
-
-export const INCENTIVIZED_MLB = {
-    ids: [League.MLB],
-    startDate: new Date(Date.UTC(2024, 3, 8, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 10, 1, 23, 59, 59)),
-    link: 'https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards',
-    arbRewards: '30,000 ARB',
+export const INCENTIVIZED_LEAGUES: Record<number, any> = {
+    [League.NBA]: {
+        startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 5, 16, 23, 59, 59)),
+        link:
+            'https://medium.com/@OvertimeMarkets.xyz/get-ready-for-the-big-leagues-season-overtimes-biggest-reward-program-to-date-2d3949a06338',
+        tooltipKey: 'markets.incentivized-tooltip',
+        availableOnNetworks: [Network.OptimismMainnet, Network.Arbitrum],
+        rewards: {
+            [Network.OptimismMainnet]: '30,000 OP',
+            [Network.Arbitrum]: '30,000 ARB',
+        },
+    },
+    [League.EPL]: {
+        startDate: new Date(Date.UTC(2023, 7, 11, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 5, 16, 23, 59, 59)),
+        link:
+            'https://medium.com/@OvertimeMarkets.xyz/get-ready-for-the-big-leagues-season-overtimes-biggest-reward-program-to-date-2d3949a06338',
+        tooltipKey: 'markets.incentivized-tooltip',
+        availableOnNetworks: [Network.OptimismMainnet, Network.Arbitrum],
+        rewards: {
+            [Network.OptimismMainnet]: '30,000 OP',
+            [Network.Arbitrum]: '30,000 ARB',
+        },
+    },
+    [League.UEFA_CL]: {
+        startDate: new Date(Date.UTC(2024, 1, 13, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 5, 25, 23, 59, 59)),
+        link: 'https://dune.com/leifu/overtime-uefa-competitions-13-feb-25-may-24',
+        tooltipKey: 'markets.incentivized-tooltip-uefa',
+        availableOnNetworks: [Network.Arbitrum],
+        rewards: {
+            [Network.Arbitrum]: '20,000 ARB',
+        },
+        showOnAllNetworks: Network.Arbitrum,
+    },
+    [League.UEFA_EL]: {
+        startDate: new Date(Date.UTC(2024, 1, 13, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 5, 25, 23, 59, 59)),
+        link: 'https://dune.com/leifu/overtime-uefa-competitions-13-feb-25-may-24',
+        tooltipKey: 'markets.incentivized-tooltip-uefa',
+        availableOnNetworks: [Network.Arbitrum],
+        rewards: {
+            [Network.Arbitrum]: '20,000 ARB',
+        },
+        showOnAllNetworks: Network.Arbitrum,
+    },
+    [League.UEFA_CONFERENCE_LEAGUE]: {
+        startDate: new Date(Date.UTC(2024, 1, 13, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 5, 25, 23, 59, 59)),
+        link: 'https://dune.com/leifu/overtime-uefa-competitions-13-feb-25-may-24',
+        tooltipKey: 'markets.incentivized-tooltip-uefa',
+        availableOnNetworks: [Network.Arbitrum],
+        rewards: {
+            [Network.Arbitrum]: '20,000 ARB',
+        },
+        showOnAllNetworks: Network.Arbitrum,
+    },
+    [League.NHL]: {
+        startDate: new Date(Date.UTC(2024, 2, 5, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 5, 24, 23, 59, 59)),
+        link: 'https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards',
+        tooltipKey: 'markets.incentivized-tooltip-nhl-mlb',
+        availableOnNetworks: [Network.Arbitrum],
+        rewards: {
+            [Network.Arbitrum]: '20,000 ARB',
+        },
+        showOnAllNetworks: Network.Arbitrum,
+    },
+    [League.MLB]: {
+        startDate: new Date(Date.UTC(2024, 3, 8, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 10, 1, 23, 59, 59)),
+        link: 'https://www.overtimemarkets.xyz/promotions/mlb-nhl-rewards',
+        tooltipKey: 'markets.incentivized-tooltip-nhl-mlb',
+        availableOnNetworks: [Network.Arbitrum],
+        rewards: {
+            [Network.Arbitrum]: '30,000 ARB',
+        },
+        showOnAllNetworks: Network.Arbitrum,
+    },
 };
 
 export const MIN_LIQUIDITY = 10;

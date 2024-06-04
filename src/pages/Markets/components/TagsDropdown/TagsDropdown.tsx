@@ -1,20 +1,13 @@
-import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
-import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
-import { Network } from 'enums/network';
 import React from 'react';
-import { Trans } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
-import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { NetworkId } from 'thales-utils';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
+import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -41,7 +34,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
-    const networkId = useSelector(getNetworkId);
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const tagFilterIds = tagFilter.map((tag) => tag.id);
 
@@ -115,121 +107,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                 >
                                     <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
                                     <Label isMobile={isMobile}>{tag.label}</Label>
-                                    {INCENTIVIZED_LEAGUE.ids.includes(tag.id) &&
-                                        new Date() > INCENTIVIZED_LEAGUE.startDate &&
-                                        new Date() < INCENTIVIZED_LEAGUE.endDate && (
-                                            <Tooltip
-                                                overlay={
-                                                    <Trans
-                                                        i18nKey="markets.incentivized-tooltip"
-                                                        components={{
-                                                            detailsLink: (
-                                                                <a
-                                                                    href={INCENTIVIZED_LEAGUE.link}
-                                                                    target="_blank"
-                                                                    rel="noreferrer"
-                                                                />
-                                                            ),
-                                                        }}
-                                                        values={{
-                                                            rewards:
-                                                                networkId !== Network.Arbitrum
-                                                                    ? INCENTIVIZED_LEAGUE.opRewards
-                                                                    : INCENTIVIZED_LEAGUE.thalesRewards,
-                                                        }}
-                                                    />
-                                                }
-                                                component={
-                                                    <IncentivizedLeague>{getNetworkLogo(networkId)}</IncentivizedLeague>
-                                                }
-                                            ></Tooltip>
-                                        )}
-                                    {INCENTIVIZED_UEFA.ids.includes(tag.id) &&
-                                        new Date() > INCENTIVIZED_UEFA.startDate &&
-                                        new Date() < INCENTIVIZED_UEFA.endDate && (
-                                            <Tooltip
-                                                overlay={
-                                                    <Trans
-                                                        i18nKey="markets.incentivized-tooltip-uefa"
-                                                        components={{
-                                                            detailsLink: (
-                                                                <a
-                                                                    href={INCENTIVIZED_UEFA.link}
-                                                                    target="_blank"
-                                                                    rel="noreferrer"
-                                                                />
-                                                            ),
-                                                        }}
-                                                        values={{
-                                                            rewards: INCENTIVIZED_UEFA.arbRewards,
-                                                        }}
-                                                    />
-                                                }
-                                                component={
-                                                    <IncentivizedLeague>
-                                                        {getNetworkLogo(NetworkId.Arbitrum)}
-                                                    </IncentivizedLeague>
-                                                }
-                                            ></Tooltip>
-                                        )}
-                                    {INCENTIVIZED_NHL.ids.includes(tag.id) &&
-                                        new Date() > INCENTIVIZED_NHL.startDate &&
-                                        new Date() < INCENTIVIZED_NHL.endDate && (
-                                            <Tooltip
-                                                overlay={
-                                                    <Trans
-                                                        i18nKey="markets.incentivized-tooltip-nhl-mlb"
-                                                        components={{
-                                                            detailsLink: (
-                                                                <a
-                                                                    href={INCENTIVIZED_NHL.link}
-                                                                    target="_blank"
-                                                                    rel="noreferrer"
-                                                                />
-                                                            ),
-                                                        }}
-                                                        values={{
-                                                            league: tag.label,
-                                                            rewards: INCENTIVIZED_NHL.arbRewards,
-                                                        }}
-                                                    />
-                                                }
-                                                component={
-                                                    <IncentivizedLeague>
-                                                        {getNetworkLogo(NetworkId.Arbitrum)}
-                                                    </IncentivizedLeague>
-                                                }
-                                            ></Tooltip>
-                                        )}
-                                    {INCENTIVIZED_MLB.ids.includes(tag.id) &&
-                                        new Date() > INCENTIVIZED_MLB.startDate &&
-                                        new Date() < INCENTIVIZED_MLB.endDate && (
-                                            <Tooltip
-                                                overlay={
-                                                    <Trans
-                                                        i18nKey="markets.incentivized-tooltip-nhl-mlb"
-                                                        components={{
-                                                            detailsLink: (
-                                                                <a
-                                                                    href={INCENTIVIZED_MLB.link}
-                                                                    target="_blank"
-                                                                    rel="noreferrer"
-                                                                />
-                                                            ),
-                                                        }}
-                                                        values={{
-                                                            league: tag.label,
-                                                            rewards: INCENTIVIZED_MLB.arbRewards,
-                                                        }}
-                                                    />
-                                                }
-                                                component={
-                                                    <IncentivizedLeague>
-                                                        {getNetworkLogo(NetworkId.Arbitrum)}
-                                                    </IncentivizedLeague>
-                                                }
-                                            ></Tooltip>
-                                        )}
+                                    <IncentivizedLeague league={tag.id} onlyLogo />
                                 </LabelContainer>
                             </LeftContainer>
                             {showLive
@@ -263,17 +141,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                 })}
         </Container>
     );
-};
-
-const getNetworkLogo = (networkId: number) => {
-    switch (networkId) {
-        case Network.OptimismMainnet:
-            return <OPLogo />;
-        case Network.Arbitrum:
-            return <ArbitrumLogo />;
-        default:
-            return <></>;
-    }
 };
 
 const Container = styled.div<{ open: boolean }>`
@@ -332,16 +199,6 @@ const StarIcon = styled.i<{ isMobile: boolean }>`
 const LeagueFlag = styled.img`
     width: 18px;
     height: 18px;
-`;
-
-const IncentivizedLeague = styled.div`
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin-left: 6px;
-    svg {
-        height: 18px;
-    }
 `;
 
 const Count = styled(FlexDivCentered)<{ isMobile: boolean }>`
