@@ -14,7 +14,7 @@ export const ItemWrapper = styled.div`
     padding: 0 20px;
     text-align: start;
     @media (max-width: 767px) {
-        padding: 0 15px;
+        padding: 0 10px;
         width: fit-content;
     }
 `;
@@ -56,7 +56,10 @@ export const NotificationCount = styled.div`
     background-color: ${(props) => props.theme.background.quaternary};
     box-shadow: ${(props) => props.theme.shadow.notification};
     @media (max-width: 767px) {
-        right: -5px;
+        height: 12px;
+        width: 12px;
+        right: -2px;
+        top: -4px;
     }
 `;
 
@@ -64,4 +67,7 @@ export const Count = styled.span`
     color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 800;
     font-size: 10px;
+    @media (max-width: 767px) {
+        font-size: 9px;
+    }
 `;
