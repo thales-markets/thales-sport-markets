@@ -40,6 +40,7 @@ export const LiveLabel = styled.span`
     line-height: 10px;
     margin-right: 1px;
     @media (max-width: 767px) {
+        margin-right: 0px;
         font-size: 9px;
     }
 `;
