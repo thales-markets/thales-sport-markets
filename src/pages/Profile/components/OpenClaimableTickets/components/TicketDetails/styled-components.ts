@@ -103,6 +103,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
         font-size: 10px;
         text-transform: uppercase;
         line-height: 10px;
+        margin-left: 1px;
         margin-right: 0px;
         animation: blinker 1.5s step-start infinite;
         @keyframes blinker {
@@ -116,8 +117,8 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
         max-width: 10px;
         span {
             font-size: 9px;
-            margin-bottom: 0px;
             margin-left: 1px;
+            margin-bottom: 0px;
         }
     }
 `;
