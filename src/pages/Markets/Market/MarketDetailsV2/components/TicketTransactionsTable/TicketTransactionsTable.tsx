@@ -11,7 +11,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { formatCurrencyWithKey, formatTxTimestamp, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import { formatCurrencyWithKey, formatDateWithTime, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { SportMarket, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
@@ -23,6 +23,8 @@ import {
     ExternalLink,
     FirstExpandedSection,
     LastExpandedSection,
+    LiveIndicatorContainer,
+    LiveLabel,
     MarketStatus,
     MarketStatusIcon,
     MarketTypeInfo,
@@ -105,7 +107,16 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         accessor: 'timestamp',
                         sortable: true,
                         Cell: (cellProps: any) => {
-                            return <TableText>{formatTxTimestamp(cellProps.cell.value)}</TableText>;
+                            return (
+                                <>
+                                    <LiveIndicatorContainer isLive={cellProps.cell.row.original.isLive}>
+                                        {cellProps.cell.row.original.isLive && (
+                                            <LiveLabel>{t('profile.card.live')}</LiveLabel>
+                                        )}
+                                    </LiveIndicatorContainer>
+                                    <TableText>{formatDateWithTime(cellProps.cell.value)}</TableText>
+                                </>
+                            );
                         },
                     },
                     {

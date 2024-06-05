@@ -101,9 +101,9 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
         transform: rotate(270deg);
         color: ${(props) => props.theme.textColor.tertiary};
         font-size: 10px;
-        padding-top: 5px;
         text-transform: uppercase;
         line-height: 10px;
+        margin-right: 0px;
         animation: blinker 1.5s step-start infinite;
         @keyframes blinker {
             50% {
@@ -116,6 +116,7 @@ export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>
         max-width: 10px;
         span {
             font-size: 9px;
+            margin-bottom: 0px;
         }
     }
 `;
