@@ -129,7 +129,7 @@ export const MatchPeriodContainer = styled(FlexDivColumnCentered)`
 export const MatchPeriodLabel = styled.span`
     font-weight: 400;
     font-size: 12px;
-    line-height: 18px;
+    line-height: 14px;
     text-transform: uppercase;
     white-space: nowrap;
     &.blink {
