@@ -803,6 +803,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
 };
 
 export const BOXING_LEAGUES = [League.BOXING, League.NON_TITLE_BOXING];
+
 export const INTERNATIONAL_LEAGUES = [
     League.FIFA_WC,
     League.IIHF_WORLD_CHAMPIONSHIP,
