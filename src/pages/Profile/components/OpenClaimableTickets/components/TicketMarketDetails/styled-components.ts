@@ -50,6 +50,7 @@ export const TeamNameLabel = styled(FlexDivRow)`
     @media (max-width: 767px) {
         max-width: 120px;
         width: 120px;
+        line-height: 12px;
     }
 `;
 
@@ -73,9 +74,7 @@ export const MarketTypeInfo = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.quinary};
     margin-right: 5px;
     @media (max-width: 767px) {
-        margin-bottom: 2px;
         font-size: 10px;
-        line-height: 10px;
     }
 `;
 
@@ -88,7 +87,6 @@ export const PositionInfo = styled(FlexDivRow)`
     margin-right: 5px;
     @media (max-width: 767px) {
         font-size: 10px;
-        line-height: 10px;
     }
 `;
 
@@ -148,6 +146,10 @@ export const MatchPeriodLabel = styled.span`
 
     &.red {
         color: ${(props) => props.theme.status.loss};
+    }
+    @media (max-width: 767px) {
+        font-size: 10px;
+        line-height: 12px;
     }
 `;
 

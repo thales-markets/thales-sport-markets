@@ -91,7 +91,6 @@ export const mapTicket = (
                     sport: getLeagueSport(leagueId),
                     leagueId: leagueId,
                     subLeagueId: Number(market.sportId),
-                    // leagueName: getLeagueNameById(leagueId),
                     leagueName: '',
                     typeId: typeId,
                     type: type.key,
