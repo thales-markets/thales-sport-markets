@@ -424,6 +424,7 @@
             "claimable": "Claimable",
             "finished": "Finished",
             "result": "Result",
+            "open": "Open",
             "started": "Started",
             "live": "Live",
             "time": "Time",
@@ -449,6 +450,8 @@
             "rain-delay": "Rain delay",
             "abandoned": "Abandoned",
             "interrupted": "Interrupted",
+            "loss": "Loss",
+            "won": "Won",
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",

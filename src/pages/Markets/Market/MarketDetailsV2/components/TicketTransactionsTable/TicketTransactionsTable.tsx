@@ -164,26 +164,26 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                 return (
                                     <StatusWrapper color={theme.status.sold}>
                                         <StatusIcon className={`icon icon--lost`} />
-                                        Canceled
+                                        {t('markets.market-card.canceled')}
                                     </StatusWrapper>
                                 );
                             } else if (cellProps.row.original.isUserTheWinner) {
                                 return (
                                     <StatusWrapper color={theme.status.win}>
                                         <StatusIcon className={`icon icon--ticket-win`} />
-                                        Won
+                                        {t('markets.market-card.won')}
                                     </StatusWrapper>
                                 );
                             } else {
                                 return cellProps.row.original.isLost ? (
                                     <StatusWrapper color={theme.status.loss}>
                                         <StatusIcon className={`icon icon--ticket-loss`} />
-                                        Loss
+                                        {t('markets.market-card.loss')}
                                     </StatusWrapper>
                                 ) : (
                                     <StatusWrapper color={theme.status.open}>
                                         <StatusIcon className={`icon icon--ticket-open`} />
-                                        Open
+                                        {t('markets.market-card.open')}
                                     </StatusWrapper>
                                 );
                             }
@@ -249,8 +249,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 };
 
 const getTicketMarketStatusIcon = (market: TicketMarket) => {
-    return market.isOpen || market.isCancelled ? (
-        <MarketStatusIcon className={`icon icon--ticket-open`} />
+    return market.isCancelled ? (
+        <MarketStatusIcon className={`icon icon--lost`} />
+    ) : market.isOpen ? (
+        market.maturityDate < new Date() ? (
+            <MarketStatusIcon className={`icon icon--ongoing`} />
+        ) : (
+            <MarketStatusIcon className={`icon icon--ticket-open`} />
+        )
     ) : market.isWinning ? (
         <MarketStatusIcon className={`icon icon--ticket-win`} />
     ) : (
