@@ -67,7 +67,4 @@ export const Count = styled.span`
     color: ${(props) => props.theme.button.textColor.primary};
     font-weight: 800;
     font-size: 10px;
-    @media (max-width: 767px) {
-        font-size: 9px;
-    }
 `;
