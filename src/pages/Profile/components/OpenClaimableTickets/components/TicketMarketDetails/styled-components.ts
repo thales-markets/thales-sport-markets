@@ -123,7 +123,6 @@ export const MatchScoreContainer = styled(FlexDivRow)`
 
 export const MatchPeriodContainer = styled(FlexDivColumnCentered)`
     align-items: center;
-    margin-right: 5px;
 `;
 
 export const MatchPeriodLabel = styled.span`

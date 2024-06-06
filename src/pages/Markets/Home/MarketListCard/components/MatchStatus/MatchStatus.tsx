@@ -3,6 +3,7 @@ import { GameStatus } from 'enums/markets';
 import { Sport } from 'enums/sports';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarket, SportMarketScore } from 'types/markets';
@@ -10,6 +11,7 @@ import { ThemeInterface } from 'types/ui';
 import { showGameScore, showLiveInfo } from 'utils/marketsV2';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
+import { getIsMobile } from '../../../../../../redux/modules/app';
 
 type MatchStatusProps = {
     market: SportMarket;
@@ -17,6 +19,7 @@ type MatchStatusProps = {
 
 const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
     const { t } = useTranslation();
+    const isMobile = useSelector(getIsMobile);
     const theme: ThemeInterface = useTheme();
 
     const isGameStarted = market.maturityDate < new Date();
@@ -70,9 +73,11 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
                                     <Status color={theme.status.started}>{t('markets.market-card.half-time')}</Status>
                                 ) : (
                                     <MatchPeriodContainer>
-                                        <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))} ${t(
-                                            `markets.market-card.${getLeaguePeriodType(market.leagueId)}`
-                                        )}`}</MatchPeriodLabel>
+                                        <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
+                                            isMobile
+                                                ? ''
+                                                : ` ${t(`markets.market-card.${getLeaguePeriodType(market.leagueId)}`)}`
+                                        }`}</MatchPeriodLabel>
                                         <FlexDivCentered>
                                             <MatchPeriodLabel className="red">
                                                 {liveScore.displayClock?.replaceAll("'", '')}
@@ -113,6 +118,9 @@ export const Status = styled.span<{ color: string }>`
 const MatchPeriodContainer = styled(FlexDivColumnCentered)`
     align-items: center;
     margin-right: 20px;
+    @media (max-width: 575px) {
+        margin-right: 10px;
+    }
 `;
 
 const MatchPeriodLabel = styled.span`
@@ -139,9 +147,9 @@ const MatchPeriodLabel = styled.span`
 `;
 
 const ScoreContainer = styled(FlexDivColumn)`
-    margin-left: 10px;
+    margin-left: 8px;
     @media (max-width: 575px) {
-        margin-left: 8px;
+        margin-left: 5px;
     }
 `;
 

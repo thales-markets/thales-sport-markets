@@ -60,6 +60,8 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                     <TeamScoreLabel isResolved={market.isResolved}>{scoreData.awayScore}</TeamScoreLabel>
                 </ScoreContainer>
                 {!isMobile &&
+                    liveScore &&
+                    !showLiveInfo(liveScore.gameStatus) &&
                     scoreData.homeScoreByPeriod.map((_, index) => {
                         if (leagueSport === Sport.SOCCER && index === 1) {
                             return null;
@@ -67,7 +69,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                         return (
                             <ScoreContainer
                                 key={`${market.gameId}-${index}`}
-                                paddingLeft={leagueSport === Sport.BASEBALL ? '6px' : undefined}
+                                paddingLeft={leagueSport === Sport.BASEBALL ? '5px' : undefined}
                             >
                                 <TeamScoreLabel className="period" isResolved={market.isResolved}>
                                     {scoreData.homeScoreByPeriod[index]}
@@ -124,8 +126,10 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                                 <TicketMarketStatus>{t('markets.market-card.half-time')}</TicketMarketStatus>
                             ) : (
                                 <MatchPeriodContainer>
-                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))} ${
-                                        isMobile ? '' : t(`markets.market-card.${getLeaguePeriodType(market.leagueId)}`)
+                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
+                                        isMobile
+                                            ? ''
+                                            : ` ${t(`markets.market-card.${getLeaguePeriodType(market.leagueId)}`)}`
                                     }`}</MatchPeriodLabel>
                                     <FlexDivCentered>
                                         <MatchPeriodLabel className="red">
