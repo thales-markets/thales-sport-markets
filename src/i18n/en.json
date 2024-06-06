@@ -190,7 +190,7 @@
             "decimal-odds": "Decimal odds (e.g. 2.5)",
             "normalized-odds": "Normalized implied odds (e.g. 0.40)",
             "save": "Save",
-            "info": "*You can always change the odds type in filters above the games list",
+            "info": "*You can always change the odds type in Settings",
             "title": "Welcome to Overtime Markets"
         }
     },
