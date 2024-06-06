@@ -27,6 +27,11 @@ const getDefaultPayment = (): ParlayPayment => {
     };
 };
 
+const getDefaultLiveSlippage = (): number => {
+    const slippage = localStore.get<number>(LOCAL_STORAGE_KEYS.LIVE_BET_SLIPPAGE);
+    return slippage !== undefined ? slippage : 1;
+};
+
 const getDefaultError = () => {
     return { code: TicketErrorCode.NO_ERROS, data: '' };
 };
@@ -36,6 +41,7 @@ type TicketSliceState = {
     payment: ParlayPayment;
     maxTicketSize: number;
     isMultiSingle: boolean;
+    liveBetSlippage: number;
     error: { code: TicketErrorCode; data: string };
 };
 
@@ -45,6 +51,7 @@ const initialState: TicketSliceState = {
     maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
     isMultiSingle: false,
     error: getDefaultError(),
+    liveBetSlippage: getDefaultLiveSlippage(),
 };
 
 const ticketSlice = createSlice({
@@ -99,6 +106,11 @@ const ticketSlice = createSlice({
                 state.payment.selectedCollateralIndex
             );
         },
+        setLiveBetSlippage: (state, action: PayloadAction<number>) => {
+            state.liveBetSlippage = action.payload;
+
+            localStore.set(LOCAL_STORAGE_KEYS.LIVE_BET_SLIPPAGE, action.payload);
+        },
         setPaymentSelectedCollateralIndex: (
             state,
             action: PayloadAction<{ selectedCollateralIndex: number; networkId: Network }>
@@ -135,6 +147,7 @@ export const {
     resetTicketError,
     setMaxTicketSize,
     setIsMultiSingle,
+    setLiveBetSlippage,
 } = ticketSlice.actions;
 
 const getTicketState = (state: RootState) => state[sliceName];
@@ -142,6 +155,7 @@ export const getTicket = (state: RootState) => getTicketState(state).ticket;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
 export const getMaxTicketSize = (state: RootState) => getTicketState(state).maxTicketSize;
 export const getIsMultiSingle = (state: RootState) => getTicketState(state).isMultiSingle;
+export const getLiveBetSlippage = (state: RootState) => getTicketState(state).liveBetSlippage;
 export const getTicketError = (state: RootState) => getTicketState(state).error;
 export const getHasTicketError = createSelector(getTicketError, (error) => error.code != TicketErrorCode.NO_ERROS);
 

@@ -16,11 +16,9 @@ import {
     PARLAY_LEADERBOARD_MINIMUM_GAMES,
     PARLAY_LEADERBOARD_WEEKLY_START_DATE,
 } from 'constants/markets';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
-import useLocalStorage from 'hooks/useLocalStorage';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
@@ -35,7 +33,13 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
-import { getTicketPayment, removeAll, setPaymentAmountToBuy } from 'redux/modules/ticket';
+import {
+    getLiveBetSlippage,
+    getTicketPayment,
+    removeAll,
+    setLiveBetSlippage,
+    setPaymentAmountToBuy,
+} from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import {
     getIsAA,
@@ -137,6 +141,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     const isParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
+    const liveBetSlippage = useSelector(getLiveBetSlippage);
     const selectedCollateralIndex =
         isLiveTicket && getCollateral(networkId, ticketPayment.selectedCollateralIndex) === CRYPTO_CURRENCY_MAP.ETH
             ? 0
@@ -171,7 +176,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     });
     const [currentLeaderboardRank, setCurrentLeaderboardRank] = useState<number>(0);
     const [slippageDropdownOpen, setSlippageDropdownOpen] = useState<boolean>(false);
-    const [slippage, setSlippage] = useLocalStorage<number>(LOCAL_STORAGE_KEYS.LIVE_BET_SLIPPAGE, 1);
 
     const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
 
@@ -563,7 +567,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                 const tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, selectedCollateral);
                 const parsedTotalQuote = ethers.utils.parseEther(totalQuote.toString());
-                const additionalSlippage = ethers.utils.parseEther(tradeData[0].live ? slippage / 100 + '' : '0.02');
+                const additionalSlippage = ethers.utils.parseEther(
+                    tradeData[0].live ? liveBetSlippage / 100 + '' : '0.02'
+                );
 
                 let tx;
                 if (tradeData[0].live) {
@@ -1063,8 +1069,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                     <SlippageDropdownContainer>
                                         <Slippage
                                             fixed={SLIPPAGE_PERCENTAGES}
-                                            defaultValue={slippage}
-                                            onChangeHandler={setSlippage}
+                                            defaultValue={liveBetSlippage}
+                                            onChangeHandler={(slippage: number) =>
+                                                dispatch(setLiveBetSlippage(slippage))
+                                            }
                                             maxValue={10}
                                         />
                                     </SlippageDropdownContainer>
