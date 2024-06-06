@@ -124,7 +124,6 @@ const Wrapper = styled.div<{ displayPadding?: boolean }>`
 const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
     justify-content: center;
     cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
-    min-width: 77px;
     height: 100%;
     align-items: center;
     display: flex;
@@ -141,7 +140,7 @@ const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?:
 
     @media (max-width: 950px) {
         border-right: none;
-        padding-right: 0;
+        padding-right: 7px;
     }
 `;
 
@@ -149,7 +148,7 @@ const WalletBalanceInfo = styled.div`
     justify-content: center;
     border-left: 2px solid ${(props) => props.theme.borderColor.primary};
     padding-left: 7px;
-    padding-right: 6px;
+    padding-right: 7px;
     height: 70%;
     align-items: center;
     display: flex;

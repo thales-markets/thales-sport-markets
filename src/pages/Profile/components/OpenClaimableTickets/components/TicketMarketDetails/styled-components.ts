@@ -152,8 +152,8 @@ export const MatchPeriodLabel = styled.span`
     }
 `;
 
-export const ScoreContainer = styled(FlexDivColumn)<{ paddingLeft?: string }>`
-    padding-left: ${(props) => props.paddingLeft || '8px'};
+export const ScoreContainer = styled(FlexDivColumn)`
+    margin-left: 5px;
     flex: initial;
 `;
 

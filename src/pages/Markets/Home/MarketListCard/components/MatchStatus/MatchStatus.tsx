@@ -147,10 +147,7 @@ const MatchPeriodLabel = styled.span`
 `;
 
 const ScoreContainer = styled(FlexDivColumn)`
-    margin-left: 8px;
-    @media (max-width: 575px) {
-        margin-left: 5px;
-    }
+    margin-left: 5px;
 `;
 
 const TeamScoreLabel = styled.span<{ isResolved?: boolean }>`

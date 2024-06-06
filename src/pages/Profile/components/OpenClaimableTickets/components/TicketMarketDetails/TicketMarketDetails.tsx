@@ -55,22 +55,18 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
     const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
         showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
             <>
-                <ScoreContainer paddingLeft={leagueSport === Sport.BASEBALL ? '6px' : undefined}>
+                <ScoreContainer>
                     <TeamScoreLabel isResolved={market.isResolved}>{scoreData.homeScore}</TeamScoreLabel>
                     <TeamScoreLabel isResolved={market.isResolved}>{scoreData.awayScore}</TeamScoreLabel>
                 </ScoreContainer>
                 {!isMobile &&
-                    liveScore &&
-                    !showLiveInfo(liveScore.gameStatus) &&
+                    (market.isResolved || market.isGameFinished) &&
                     scoreData.homeScoreByPeriod.map((_, index) => {
                         if (leagueSport === Sport.SOCCER && index === 1) {
                             return null;
                         }
                         return (
-                            <ScoreContainer
-                                key={`${market.gameId}-${index}`}
-                                paddingLeft={leagueSport === Sport.BASEBALL ? '5px' : undefined}
-                            >
+                            <ScoreContainer key={`${market.gameId}-${index}`}>
                                 <TeamScoreLabel className="period" isResolved={market.isResolved}>
                                     {scoreData.homeScoreByPeriod[index]}
                                 </TeamScoreLabel>
