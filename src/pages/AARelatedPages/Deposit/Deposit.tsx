@@ -382,10 +382,8 @@ const TutorialLinksContainer = styled(FlexDiv)`
 `;
 
 const Link = styled.a`
-    font-family: Roboto;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
-    font-style: normal;
     font-weight: 700;
     line-height: 250%;
     text-decoration-line: underline;

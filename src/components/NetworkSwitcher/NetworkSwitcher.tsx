@@ -95,8 +95,6 @@ const NetworkIconWrapper = styled.div<{ isConnected: boolean; isMultiChain: bool
 
 const NetworkText = styled.span`
     position: relative;
-    font-family: 'Roboto';
-    font-style: normal;
     font-weight: 800;
     font-size: 10.8px;
     line-height: 13px;

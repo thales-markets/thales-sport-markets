@@ -146,7 +146,6 @@ const BackContainer = styled(FlexDiv)`
 `;
 
 const Back = styled.span`
-    font-family: 'Roboto';
     font-weight: 700;
     cursor: pointer;
     font-size: 14px;
@@ -226,7 +225,6 @@ const CTAContent = styled(FlexDiv)`
     font-size: 14px;
     line-height: 18px;
     margin-bottom: 20px;
-    font-family: 'Roboto';
     h1 {
         font-size: 30px;
         font-weight: 900;
@@ -278,7 +276,6 @@ const MainContent = styled(FlexDiv)`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 14px;
     line-height: 18px;
-    font-family: 'Roboto';
     font-weight: 400;
     flex-direction: column;
     ul {
