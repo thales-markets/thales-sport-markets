@@ -102,7 +102,7 @@ const DappHeader: React.FC = () => {
 
     const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
-    const isMarketsPage = location.pathname.includes('/markets') && !location.pathname.includes('/markets/');
+    const isMarketsPage = location.pathname === ROUTES.Home || location.pathname === ROUTES.Markets.Home;
 
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
