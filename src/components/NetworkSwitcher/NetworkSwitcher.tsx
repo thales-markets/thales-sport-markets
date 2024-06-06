@@ -21,12 +21,21 @@ const NetworkSwitcher: React.FC = () => {
         [networkId]
     );
 
+    const supportedNetworks = Object.keys(SUPPORTED_NETWORKS_PARAMS);
+
     return (
         <OutsideClickHandler onOutsideClick={() => setDropDownOpen(false)}>
-            <NetworkIconWrapper onClick={() => setDropDownOpen(!dropDownOpen)} isConnected={isWalletConnected}>
+            <NetworkIconWrapper
+                onClick={() => {
+                    if (supportedNetworks.length > 1) setDropDownOpen(!dropDownOpen);
+                }}
+                isConnected={isWalletConnected}
+                isMultiChain={supportedNetworks.length > 1}
+            >
                 <NetworkIcon className={selectedNetwork.iconClassName} isConnected={isWalletConnected} />
-
-                <DownIcon isConnected={isWalletConnected} className={`icon icon--arrow-down`} />
+                {supportedNetworks.length > 1 && (
+                    <DownIcon isConnected={isWalletConnected} className={`icon icon--arrow-down`} />
+                )}
             </NetworkIconWrapper>
             {dropDownOpen && (
                 <NetworkDropDown>
@@ -68,7 +77,7 @@ const NetworkSwitcher: React.FC = () => {
     );
 };
 
-const NetworkIconWrapper = styled.div<{ isConnected: boolean }>`
+const NetworkIconWrapper = styled.div<{ isConnected: boolean; isMultiChain: boolean }>`
     background: ${(props) => (props.isConnected ? props.theme.background.tertiary : 'transparent')};
     height: 28px;
     border-radius: 20px;
@@ -80,7 +89,7 @@ const NetworkIconWrapper = styled.div<{ isConnected: boolean }>`
     align-items: center;
     max-width: 65px;
     min-width: 65px;
-    cursor: pointer;
+    cursor: ${(props) => (props.isMultiChain ? 'pointer' : 'default')};
     margin-right: -1px;
 `;
 
