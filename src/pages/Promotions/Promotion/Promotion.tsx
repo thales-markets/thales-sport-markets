@@ -154,7 +154,7 @@ const Back = styled.span`
 
 const HeaderContainer = styled(FlexDiv)`
     font-family: 'Nunito' !important;
-    font-weight: 900;
+    font-weight: 600;
     text-align: center !important;
     align-items: center;
     width: 100%;
@@ -164,7 +164,7 @@ const HeaderContainer = styled(FlexDiv)`
     h1 {
         font-family: 'Nunito' !important;
         font-size: 30px;
-        font-weight: 900;
+        font-weight: 600;
         line-height: 36px;
         width: 100%;
     }
@@ -227,7 +227,7 @@ const CTAContent = styled(FlexDiv)`
     margin-bottom: 20px;
     h1 {
         font-size: 30px;
-        font-weight: 900;
+        font-weight: 600;
         line-height: 36px;
     }
     h2 {
@@ -285,7 +285,7 @@ const MainContent = styled(FlexDiv)`
     }
     h1 {
         font-size: 30px;
-        font-weight: 900;
+        font-weight: 600;
         line-height: 36px;
     }
     h2 {

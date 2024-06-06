@@ -168,7 +168,7 @@ const PropsTextContainer = styled.div`
 const PropsText = styled.span`
     font-size: 12px;
     font-style: normal;
-    font-weight: 300;
+    font-weight: 400;
     text-transform: capitalize;
 `;
 

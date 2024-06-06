@@ -80,7 +80,7 @@ export const InfoContainer = styled.div`
 export const InfoWrapper = styled.div``;
 
 export const InfoLabel = styled.span<{ marginLeft?: number }>`
-    font-weight: 300;
+    font-weight: 400;
     font-size: 10px;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
@@ -178,7 +178,7 @@ export const BalanceLabel = styled.span<{ marginLeft?: string; bold?: boolean; o
     ${(props) => (props.originalText ? '' : 'text-transform: uppercase;')}
     color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.marginLeft ? `margin-left: ${props.marginLeft};` : '')}
-    font-weight: ${(props) => (props.bold ? '700' : '400')};
+    font-weight: ${(props) => (props.bold ? '600' : '400')};
     @media (max-width: 950px) {
         line-height: 24px;
     }

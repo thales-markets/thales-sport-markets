@@ -15,7 +15,7 @@ export const Container = styled(FlexDivRow)<{
     padding: 0 8px;
     flex: 1 1 0;
     min-height: 25px;
-    font-weight: 800;
+    font-weight: 600;
     font-size: 13px;
     line-height: 16px;
     background: ${(props) => (props.selected ? props.theme.background.quaternary : props.theme.background.secondary)};

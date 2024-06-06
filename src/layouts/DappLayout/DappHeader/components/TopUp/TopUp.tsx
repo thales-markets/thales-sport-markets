@@ -80,7 +80,7 @@ const TopUp: React.FC = () => {
                                     borderColor={theme.button.borderColor.secondary}
                                     width="150px"
                                     fontWeight="400"
-                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '800', fontSize: '14px' }}
+                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '600', fontSize: '14px' }}
                                     height="28px"
                                 >
                                     {t('my-portfolio.deposit')}
@@ -106,7 +106,7 @@ const TopUp: React.FC = () => {
                                     additionalStyles={{
                                         maxWidth: 400,
                                         borderRadius: '15.5px',
-                                        fontWeight: '800',
+                                        fontWeight: '600',
                                         fontSize: '14px',
                                     }}
                                     height="28px"
@@ -135,7 +135,7 @@ const TopUpButton = styled.button`
     width: 100%;
     max-width: 400px;
     font-size: 14px;
-    font-weight: 800;
+    font-weight: 600;
     line-height: 14px;
     height: 28px;
     filter: drop-shadow(0px 0px 14px rgba(191, 73, 81, 0.7));

@@ -1016,7 +1016,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         }}
                         showValidation={inputRefVisible && !!tooltipTextBuyInAmount && !openApprovalModal}
                         validationMessage={tooltipTextBuyInAmount}
-                        inputFontWeight="700"
+                        inputFontWeight="600"
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
                         disabled={isAllowing || isBuying}

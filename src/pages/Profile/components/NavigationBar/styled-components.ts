@@ -65,6 +65,6 @@ export const NotificationCount = styled.div`
 
 export const Count = styled.span`
     color: ${(props) => props.theme.button.textColor.primary};
-    font-weight: 800;
+    font-weight: 600;
     font-size: 10px;
 `;

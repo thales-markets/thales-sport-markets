@@ -134,7 +134,7 @@ export const Result = styled.span`
 `;
 
 export const ResultLabel = styled.span`
-    font-weight: 300;
+    font-weight: 400;
     font-size: 12px;
     margin-right: 6px;
     text-transform: uppercase;

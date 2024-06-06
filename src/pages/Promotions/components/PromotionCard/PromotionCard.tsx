@@ -41,7 +41,7 @@ const PromotionCard: React.FC<PromotionItem> = ({
                     <TimeRemaining
                         end={endDate * 1000}
                         fontSize={14}
-                        fontWeight={700}
+                        fontWeight={600}
                         color={theme.promotion.textColor.primary}
                     />
                 </>
@@ -54,7 +54,7 @@ const PromotionCard: React.FC<PromotionItem> = ({
                     <TimeRemaining
                         end={startDate * 1000}
                         fontSize={14}
-                        fontWeight={700}
+                        fontWeight={600}
                         color={theme.promotion.textColor.primary}
                     />
                 </>
@@ -175,7 +175,7 @@ const NetworkIconsWrapper = styled(FlexDiv)`
 const Title = styled.h2`
     font-size: 20px;
     line-height: 22px;
-    font-weight: 800;
+    font-weight: 600;
     color: ${(props) => props.theme.textColor.primary};
     text-align: center;
     margin-bottom: 16px;

@@ -37,7 +37,7 @@ const Label = styled.span`
     font-size: 18px;
     padding: 7px 0px;
     font-style: normal;
-    font-weight: 800;
+    font-weight: 600;
     text-transform: uppercase;
     @media (max-width: 1260px) {
         font-size: 16px;

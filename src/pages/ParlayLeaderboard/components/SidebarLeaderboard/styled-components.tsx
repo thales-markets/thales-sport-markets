@@ -39,7 +39,7 @@ export const Title = styled(FlexDiv)`
 `;
 
 export const TitleLabel = styled.span<{ isBold?: boolean }>`
-    font-weight: ${(props) => (props.isBold ? '700' : '300')};
+    font-weight: ${(props) => (props.isBold ? '600' : '300')};
     font-size: 16px;
     line-height: 18px;
     letter-spacing: ${(props) => (props.isBold ? '1px' : '11px')};
@@ -114,7 +114,7 @@ export const ParlayRow = styled(FlexDivRowCentered)`
 `;
 
 export const QuoteText = styled.span`
-    font-weight: 300;
+    font-weight: 400;
     font-size: 12px;
     text-align: left;
     white-space: nowrap;

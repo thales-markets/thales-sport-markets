@@ -34,7 +34,7 @@ export const BalanceSection = styled(FlexDiv)`
 
 export const PrimaryHeading = styled.h1`
     font-size: 20px;
-    font-weight: 800;
+    font-weight: 600;
     text-transform: uppercase;
     line-height: 20px;
 `;
