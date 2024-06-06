@@ -40,6 +40,7 @@ import { delay } from 'utils/timer';
 import SPAAnchor from '../../components/SPAAnchor';
 import ROUTES from '../../constants/routes';
 import useMultipleCollateralBalanceQuery from '../../queries/wallet/useMultipleCollateralBalanceQuery';
+import { getCollateralIndex } from '../../utils/collaterals';
 import { getDefaultLpCollateral, getLiquidityPools, getLpAddress, getLpCollateral } from '../../utils/liquidityPool';
 import { buildHref } from '../../utils/routes';
 import PnL from './PnL';
@@ -115,7 +116,10 @@ const LiquidityPool: React.FC = () => {
 
     const paramCollateral: LiquidityPoolCollateral =
         queryString.parse(location.search).collateral || getDefaultLpCollateral(networkId);
+
     const collateral = getLpCollateral(networkId, paramCollateral);
+    const collateralIndex = getCollateralIndex(networkId, collateral);
+
     const liquidityPoolAddress = getLpAddress(networkId, paramCollateral);
     const liquidityPools = getLiquidityPools(networkId);
 
@@ -158,16 +162,17 @@ const LiquidityPool: React.FC = () => {
     }, [userLiquidityPoolDataQuery.isSuccess, userLiquidityPoolDataQuery.data]);
 
     useEffect(() => {
-        const { signer, sUSDContract } = networkConnector;
+        const { signer, multipleCollateral } = networkConnector;
 
-        if (signer && sUSDContract) {
-            const sUSDContractWithSigner = sUSDContract.connect(signer);
+        if (signer && multipleCollateral) {
+            const collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
+
             const getAllowance = async () => {
                 try {
-                    const parsedAmount = coinParser(Number(amount).toString(), networkId);
+                    const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
                     const allowance = await checkAllowance(
                         parsedAmount,
-                        sUSDContractWithSigner,
+                        collateralContractWithSigner,
                         walletAddress,
                         liquidityPoolAddress
                     );
@@ -180,7 +185,16 @@ const LiquidityPool: React.FC = () => {
                 getAllowance();
             }
         }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId, liquidityPoolAddress]);
+    }, [
+        walletAddress,
+        isWalletConnected,
+        hasAllowance,
+        amount,
+        isAllowing,
+        networkId,
+        liquidityPoolAddress,
+        collateral,
+    ]);
 
     const liquidityPoolData: LiquidityPoolData | undefined = useMemo(() => {
         if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
@@ -269,17 +283,17 @@ const LiquidityPool: React.FC = () => {
         isLiquidityPoolCapReached;
 
     const handleAllowance = async (approveAmount: BigNumber) => {
-        const { signer, sUSDContract } = networkConnector;
+        const { signer, multipleCollateral } = networkConnector;
 
-        if (signer && sUSDContract) {
+        if (signer && multipleCollateral) {
+            const collateralContractWithSigner = multipleCollateral[collateral]?.connect(signer);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
             setIsAllowing(true);
 
             try {
-                const sUSDContractWithSigner = sUSDContract.connect(signer);
-
-                const tx = (await sUSDContractWithSigner.approve(
-                    liquidityPoolContract,
+                console.log(approveAmount.toString(), collateral);
+                const tx = (await collateralContractWithSigner?.approve(
+                    liquidityPoolAddress,
                     approveAmount
                 )) as ethers.ContractTransaction;
                 setOpenApprovalModal(false);
@@ -312,7 +326,7 @@ const LiquidityPool: React.FC = () => {
                     liquidityPoolContract,
                     signer
                 );
-                const parsedAmount = coinParser(Number(amount).toString(), networkId);
+                const parsedAmount = coinParser(Number(amount).toString(), networkId, collateral);
                 const tx = await liquidityPoolContractWithSigner.deposit(parsedAmount);
                 const txResult = await tx.wait();
 
@@ -1035,6 +1049,7 @@ const LiquidityPool: React.FC = () => {
             {openApprovalModal && (
                 <ApprovalModal
                     defaultAmount={amount}
+                    collateralIndex={collateralIndex}
                     tokenSymbol={collateral}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}

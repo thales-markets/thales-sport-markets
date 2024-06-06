@@ -1,4 +1,4 @@
-import { Coins } from 'thales-utils';
+import { Coins } from './tokens';
 
 export type LiquidityPoolData = {
     collateral: string;
