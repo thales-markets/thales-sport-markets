@@ -280,7 +280,7 @@ export const LargeText = styled.label`
     display: flex;
     font-family: JostExtraBold !important;
     font-style: normal;
-    font-weight: 900;
+    font-weight: 600;
     font-size: 80px;
     line-height: 90%;
     text-transform: uppercase;
@@ -339,7 +339,7 @@ export const CallToAction = styled.label`
     display: flex;
     font-family: NunitoExtraBold !important;
     font-style: normal;
-    font-weight: 900;
+    font-weight: 600;
     font-size: 30px;
     line-height: 61px;
     text-transform: uppercase;
@@ -350,7 +350,7 @@ export const CallToAction = styled.label`
     & > a {
         font-family: NunitoExtraBold !important;
         font-style: normal;
-        font-weight: 900;
+        font-weight: 600;
         font-size: 30px;
         line-height: 61px;
         cursor: pointer;
@@ -450,7 +450,7 @@ export const SubSection = styled(FlexDivColumn)`
     color: ${(props) => props.theme.textColor.tertiary};
     font-family: NunitoExtraBold !important;
     font-style: normal;
-    font-weight: 800;
+    font-weight: 600;
     font-size: 30px;
     line-height: 37px;
     text-transform: uppercase;
@@ -560,7 +560,7 @@ export const InfoBoxTitle = styled.label`
     margin: 0px 10px;
     font-family: NunitoExtraBold !important;
     font-style: normal;
-    font-weight: 800;
+    font-weight: 600;
     font-size: 25px;
     line-height: 90%;
     text-align: center;
@@ -630,7 +630,7 @@ export const DiscordLink = styled.a`
     display: flex;
     font-family: Nunito !important;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 30px;
     line-height: 90%;
     text-align: left;
@@ -652,7 +652,7 @@ export const DocsLink = styled.a`
     display: flex;
     font-family: NunitoExtraBold !important;
     font-style: normal;
-    font-weight: 900;
+    font-weight: 600;
     font-size: 30px;
     line-height: 61px;
     text-transform: uppercase;

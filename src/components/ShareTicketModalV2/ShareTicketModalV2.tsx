@@ -293,7 +293,7 @@ const TwitterShare = styled(FlexDivColumnCentered)<{ disabled?: boolean }>`
 `;
 
 const TwitterShareLabel = styled.span`
-    font-weight: 800;
+    font-weight: 600;
     font-size: 18px;
     line-height: 25px;
     text-transform: uppercase;

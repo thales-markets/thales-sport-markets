@@ -80,7 +80,7 @@ const DatePickerContainer = styled.div`
     .react-datepicker__current-month {
         color: ${(props) => props.theme.textColor.primary} !important;
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         padding-top: 5px;
     }
 
@@ -122,7 +122,7 @@ const DatePickerContainer = styled.div`
         border-radius: 30px !important;
         color: ${(props) => props.theme.textColor.tertiary} !important;
         background-color: ${(props) => props.theme.background.quaternary} !important;
-        font-weight: 300;
+        font-weight: 400;
     }
 
     .react-datepicker__navigation-icon {

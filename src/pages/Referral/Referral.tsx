@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { formatCurrencyWithSign } from 'thales-utils';
+import { getDefaultCollateral } from 'utils/collaterals';
 import AffiliateLeaderboard from './components/AffiliateLeaderboard';
 import ReferralTransactionsTable from './components/ReferralTransactionsTable';
 import TradersTable from './components/TradersTable';
@@ -28,7 +29,6 @@ import {
     Value,
     Wrapper,
 } from './styled-components';
-import { getDefaultCollateral } from 'utils/collaterals';
 
 const NavigationItems = [
     {
@@ -110,7 +110,7 @@ const Referral: React.FC = () => {
                         i18nKey={'referral.paragraph'}
                         values={{ collateralKey: getDefaultCollateral(networkId) }}
                         components={{
-                            bold: <strong style={{ fontWeight: '900' }} />,
+                            bold: <strong style={{ fontWeight: '600' }} />,
                         }}
                     />
                 </Paragraph>

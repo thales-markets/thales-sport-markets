@@ -169,7 +169,7 @@ const FilterTagContainer = styled(FlexDiv)`
 
 const FilterTagLabel = styled.span`
     font-style: normal;
-    font-weight: 800;
+    font-weight: 600;
     font-size: 13px;
     line-height: 11px;
     color: ${(props) => props.theme.background.primary};

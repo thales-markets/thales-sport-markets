@@ -56,7 +56,7 @@ export const Label = styled.span<{ win?: boolean }>`
 `;
 
 export const Value = styled.span<{ win?: boolean }>`
-    font-weight: 800;
+    font-weight: 600;
     color: ${(props) => (props?.win ? props.theme.status.win : props.theme.textColor.primary)};
 `;
 

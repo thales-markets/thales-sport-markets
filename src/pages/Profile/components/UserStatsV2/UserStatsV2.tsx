@@ -82,7 +82,7 @@ const Label = styled.span`
 `;
 
 const Value = styled.span`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 12px;
     line-height: 20px;
     letter-spacing: 0.025em;

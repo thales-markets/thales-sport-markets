@@ -34,7 +34,7 @@ export const BalanceSection = styled(FlexDiv)`
 
 export const PrimaryHeading = styled.h1`
     font-size: 20px;
-    font-weight: 800;
+    font-weight: 600;
     text-transform: uppercase;
     line-height: 20px;
 `;
@@ -57,7 +57,7 @@ export const DescriptionLabel = styled(Label)`
 
 export const InputLabel = styled.span<{ marginTop?: string }>`
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: capitalize;
     margin-top: ${(props) => (props.marginTop ? props.marginTop : '')};
     margin-bottom: 5px;

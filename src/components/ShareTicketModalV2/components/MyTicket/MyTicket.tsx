@@ -145,7 +145,7 @@ const MarketsContainer = styled(FlexDivColumn)`
 `;
 
 const Header = styled.span<{ isTicket: boolean }>`
-    font-weight: 200;
+    font-weight: 400;
     font-size: ${(props) => (props.isTicket ? '11' : '10')}px;
     line-height: ${(props) => (props.isTicket ? '13' : '12')}px;
     text-align: center;
@@ -160,14 +160,14 @@ const Header = styled.span<{ isTicket: boolean }>`
 `;
 
 const BoldContent = styled.span`
-    font-weight: 900;
+    font-weight: 600;
 `;
 
 const TicketLabel = styled.span`
     font-size: 34px;
     line-height: 27px;
     letter-spacing: 0.3em;
-    font-weight: 300;
+    font-weight: 400;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
     padding-left: 8px;
@@ -192,7 +192,7 @@ const PayoutRow = styled(FlexDivCentered)``;
 const PayoutLabel = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     font-size: ${(props) => (props.isResolved ? '32' : '18')}px;
     line-height: ${(props) => (props.isResolved ? '32' : '18')}px;
-    font-weight: 200;
+    font-weight: 400;
     padding: 0 5px;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')};
@@ -208,7 +208,7 @@ const Square = styled.div<{ isLost?: boolean; isResolved?: boolean }>`
 const PayoutValue = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
     font-size: ${(props) => (props.isResolved ? '35' : '30')}px;
     line-height: ${(props) => (props.isResolved ? '37' : '32')}px;
-    font-weight: 800;
+    font-weight: 600;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')}
 `;
@@ -241,14 +241,14 @@ const InfoLabel = styled.span`
     font-weight: 600;
 `;
 const InfoValue = styled.span`
-    font-weight: 700;
+    font-weight: 600;
     margin-left: 5px;
 `;
 
 const ReferralWrapper = styled(FlexDivColumnCentered)``;
 
 const ReferralLabel = styled.span`
-    font-weight: 300;
+    font-weight: 400;
     font-size: 10px;
     line-height: 12px;
     text-transform: uppercase;

@@ -136,7 +136,7 @@ const UpperText = styled(FlexDivCentered)`
     left: 15px;
     color: ${(props) => props.theme.textColor.primary};
     border-radius: 60%;
-    font-weight: 700;
+    font-weight: 600;
     background: ${(props) => props.theme.background.secondary};
     padding: 2px;
     font-size: 11px;

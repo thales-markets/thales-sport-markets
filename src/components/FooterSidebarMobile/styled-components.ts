@@ -82,7 +82,7 @@ export const DropDownItem = styled(FlexDiv)`
 `;
 
 export const Label = styled.div`
-    font-weight: 500;
+    font-weight: 400;
     font-size: 12px;
     line-height: 14px;
     color: white;
@@ -91,7 +91,7 @@ export const Label = styled.div`
 `;
 
 export const ParlayNumber = styled.span`
-    font-weight: 800;
+    font-weight: 600;
     font-size: 14px;
     line-height: 14px;
     color: ${(props) => props.theme.background.primary};

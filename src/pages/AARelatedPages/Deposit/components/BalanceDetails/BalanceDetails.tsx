@@ -114,7 +114,7 @@ const BalanceWrapper = styled(FlexDiv)`
 
 const SectionLabel = styled.span`
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: capitalize;
     letter-spacing: 3px;
     margin-bottom: 13px;
@@ -122,7 +122,7 @@ const SectionLabel = styled.span`
 
 const TotalBalance = styled.span`
     font-size: 42px;
-    font-weight: 700;
+    font-weight: 600;
     width: 100%;
     border-bottom: 1px ${(props) => props.theme.borderColor.primary} solid;
     margin-bottom: 20px;
@@ -148,7 +148,7 @@ const IndividualTokenBalanceWrapper = styled(FlexDiv)`
 `;
 
 const Token = styled(FlexDiv)`
-    font-weight: 700;
+    font-weight: 600;
     align-items: center;
     font-size: 12px;
 `;
@@ -157,7 +157,7 @@ const TokenIcon = styled.i`
     font-size: 20px;
     margin-right: 5px;
     color: ${(props) => props.theme.textColor.primary};
-    font-weight: 100;
+    font-weight: 400;
 `;
 
 const IndividualTokenBalance = styled.span`

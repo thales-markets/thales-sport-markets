@@ -76,7 +76,7 @@ const Wrapper = styled.button<{
     border: 1px solid ${(props) => props.borderColor || props.theme.button.borderColor.primary};
     border-radius: 5px;
     ${(props) => (props.style?.fontFamily ? `font-family: ${props.style?.fontFamily};` : '')}
-    font-weight: ${(props) => props.fontWeight || '700'};
+    font-weight: ${(props) => props.fontWeight || '600'};
     font-size: ${(props) => props.fontSize || '15px'};
     line-height: ${(props) => props.lineHeight || 'initial'};
     cursor: pointer;

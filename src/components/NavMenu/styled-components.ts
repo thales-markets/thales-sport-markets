@@ -67,7 +67,7 @@ export const ItemsContainer = styled.div`
 export const LanguageLabel = styled.label`
     font-family: 'Nunito' !important;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 14px;
     line-height: 20px;
     text-transform: uppercase;

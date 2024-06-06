@@ -134,7 +134,7 @@ export const Result = styled.span`
 `;
 
 export const ResultLabel = styled.span`
-    font-weight: 300;
+    font-weight: 400;
     font-size: 12px;
     margin-right: 6px;
     text-transform: uppercase;
@@ -231,7 +231,7 @@ export const Blink = styled.span`
     margin-right: 10px;
     color: ${(props) => props.theme.textColor.quinary};
     animation: blinker 1.5s step-start infinite;
-    font-weight: 700;
+    font-weight: 600;
     @keyframes blinker {
         50% {
             opacity: 0;

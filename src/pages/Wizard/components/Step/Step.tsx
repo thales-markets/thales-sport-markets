@@ -205,7 +205,7 @@ const StepAction = styled.div`
 `;
 
 const StepTitle = styled.span`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 20px;
     line-height: 27px;
 
@@ -232,7 +232,7 @@ const StepNumberWrapper = styled.div<{ isActive: boolean; isDisabled?: boolean }
 `;
 
 const StepNumber = styled.span<{ isActive: boolean }>`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 29px;
     line-height: 43px;
     text-transform: uppercase;

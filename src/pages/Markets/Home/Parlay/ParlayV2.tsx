@@ -272,7 +272,7 @@ const Empty = styled(FlexDivColumn)`
 
 const EmptyLabel = styled.span`
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 20px;
     line-height: 38px;
     letter-spacing: 0.025em;
@@ -285,7 +285,7 @@ const EmptyDesc = styled.span`
     width: 80%;
     text-align: center;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 14px;
     line-height: 14px;
     letter-spacing: 0.025em;

@@ -410,18 +410,18 @@ const InfoLabel = styled.label`
     &.football {
         color: ${(props) => props.theme.textColor.secondary};
         font-size: 21px;
-        font-weight: 700;
+        font-weight: 600;
     }
     &.ufc {
         display: flex;
         color: ${(props) => props.theme.textColor.secondary};
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 600;
     }
 
     &.blink {
         color: ${(props) => props.theme.status.loss};
-        font-weight: 700;
+        font-weight: 600;
         animation: blinker 1.5s step-start infinite;
     }
 

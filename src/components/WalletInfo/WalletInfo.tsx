@@ -156,7 +156,7 @@ const WalletBalanceInfo = styled.div`
 `;
 
 const Text = styled.span`
-    font-weight: 800;
+    font-weight: 600;
     font-size: 10.8px;
     line-height: 12px;
     color: ${(props) => props.theme.textColor.secondary};

@@ -96,7 +96,7 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = styled.span`
-    font-weight: 800;
+    font-weight: 600;
     font-size: 16px;
     line-height: 19px;
     color: ${(props) => props.theme.textColor.primary};

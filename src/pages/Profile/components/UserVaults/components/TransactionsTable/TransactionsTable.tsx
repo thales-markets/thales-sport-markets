@@ -126,7 +126,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.p`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 16px;
     line-height: 19px;
     color: ${(props) => props.theme.textColor.primary};

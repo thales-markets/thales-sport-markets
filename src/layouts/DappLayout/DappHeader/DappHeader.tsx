@@ -141,7 +141,7 @@ const DappHeader: React.FC = () => {
                 fontWeight="400"
                 additionalStyles={{
                     borderRadius: '20px',
-                    fontWeight: '700',
+                    fontWeight: '600',
                     fontSize: isMobile ? '12px' : '14px',
                     textTransform: 'capitalize',
                     whiteSpace: 'nowrap',
@@ -217,7 +217,7 @@ const DappHeader: React.FC = () => {
                                 fontWeight="400"
                                 additionalStyles={{
                                     borderRadius: '15.5px',
-                                    fontWeight: '800',
+                                    fontWeight: '600',
                                     fontSize: '14px',
                                     marginRight: '10px',
                                 }}
@@ -241,7 +241,7 @@ const DappHeader: React.FC = () => {
                                 fontWeight="400"
                                 additionalStyles={{
                                     borderRadius: '15.5px',
-                                    fontWeight: '700',
+                                    fontWeight: '600',
                                     fontSize: '14px',
                                     marginRight: '5px',
                                     padding: '3px 20px',
@@ -330,7 +330,7 @@ const DappHeader: React.FC = () => {
                                 additionalStyles={{
                                     maxWidth: 400,
                                     borderRadius: '15.5px',
-                                    fontWeight: '800',
+                                    fontWeight: '600',
                                     fontSize: '12px',
                                     textTransform: 'capitalize',
                                     whiteSpace: 'nowrap',
@@ -355,7 +355,7 @@ const DappHeader: React.FC = () => {
                                 additionalStyles={{
                                     maxWidth: 400,
                                     borderRadius: '15.5px',
-                                    fontWeight: '700',
+                                    fontWeight: '600',
                                     fontSize: '12px',
                                     textTransform: 'capitalize',
                                     whiteSpace: 'nowrap',
