@@ -78,7 +78,7 @@ const AmountContainer = styled(FlexDiv)<{ active?: boolean }>`
     align-items: center;
     justify-content: center;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: capitalize;
     border-radius: 5px;
     color: ${(props) => (props.active ? props.theme.button.textColor.quinary : props.theme.button.textColor.secondary)};

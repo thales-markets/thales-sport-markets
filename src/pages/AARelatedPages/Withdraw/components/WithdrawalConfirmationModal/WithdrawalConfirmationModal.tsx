@@ -182,7 +182,7 @@ const ItemContainer = styled(FlexDiv)`
 const ItemLabel = styled(FlexDiv)`
     align-items: center;
     font-size: 18px;
-    font-weight: 700;
+    font-weight: 600;
     margin-right: 15px;
     @media (max-width: 575px) {
         word-wrap: break-word;
@@ -215,7 +215,7 @@ const Button = styled(FlexDiv)`
     color: ${(props) => props.theme.button.textColor.primary};
     background-color: ${(props) => props.theme.button.background.quaternary};
     font-size: 22px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     border-radius: 5px;
 `;

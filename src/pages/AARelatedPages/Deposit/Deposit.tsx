@@ -350,7 +350,7 @@ const QRIcon = styled.i`
 const CopyButton = styled(FlexDiv)`
     font-size: 18px;
     border-radius: 5px;
-    font-weight: 700;
+    font-weight: 600;
     padding: 7px 20px;
     height: auto;
     cursor: pointer;
@@ -367,7 +367,7 @@ const CopyButton = styled(FlexDiv)`
 
 const SectionLabel = styled.span`
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 3px;
     margin-bottom: 13px;
@@ -384,7 +384,7 @@ const TutorialLinksContainer = styled(FlexDiv)`
 const Link = styled.a`
     color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 250%;
     text-decoration-line: underline;
 `;

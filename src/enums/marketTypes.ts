@@ -154,6 +154,7 @@ export enum MarketType {
     PLAYER_PROPS_FIRST_TOUCHDOWN = 11049,
     PLAYER_PROPS_LAST_TOUCHDOWN = 11056,
     PLAYER_PROPS_3PTS_MADE = 11038,
+    PLAYER_PROPS_BLOCKS = 11098,
 }
 
 export enum MarketTypeGroup {

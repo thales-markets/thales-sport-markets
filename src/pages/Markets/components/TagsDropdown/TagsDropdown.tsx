@@ -149,7 +149,7 @@ const Container = styled.div<{ open: boolean }>`
 
 const TagContainer = styled(FlexDivRow)<{ isMobile: boolean }>`
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: ${(props) => (props.isMobile ? '13px' : '12px')};
     line-height: ${(props) => (props.isMobile ? '18px' : '13px')};
     letter-spacing: 0.035em;

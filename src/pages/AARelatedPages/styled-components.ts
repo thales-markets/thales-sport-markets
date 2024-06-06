@@ -57,7 +57,7 @@ export const DescriptionLabel = styled(Label)`
 
 export const InputLabel = styled.span<{ marginTop?: string }>`
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: capitalize;
     margin-top: ${(props) => (props.marginTop ? props.marginTop : '')};
     margin-bottom: 5px;

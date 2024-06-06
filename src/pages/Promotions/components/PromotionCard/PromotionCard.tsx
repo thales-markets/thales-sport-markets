@@ -155,7 +155,7 @@ const PromotionStatusBadge = styled(FlexDiv)<{ status: PromotionCardStatus }>`
     border-radius: 30px;
     font-size: 14px;
     padding: 5px 20px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     justify-content: space-between;
     > span:first-child {

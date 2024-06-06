@@ -194,7 +194,7 @@ const StepAction = styled.div`
 `;
 
 const StepTitle = styled.span<{ completed?: boolean }>`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 20px;
     line-height: 27px;
     color: ${(props) => (props.completed ? props.theme.background.quaternary : '')};
@@ -229,7 +229,7 @@ const StepNumberWrapper = styled.div<{ isActive: boolean; isDisabled?: boolean; 
 `;
 
 const StepNumber = styled.span<{ isActive: boolean }>`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 29px;
     @media (max-width: 600px) {
         font-size: 20px;

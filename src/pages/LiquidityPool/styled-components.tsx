@@ -234,7 +234,7 @@ export const ExternalButton = styled.a`
     margin-top: 5px;
     border-radius: 5px;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 20px;
     color: ${(props) => props.theme.button.textColor.primary};
     width: 100%;

@@ -225,7 +225,7 @@ export const DropDownItem = styled(FlexDiv)`
 `;
 
 export const Label = styled.div`
-    font-weight: 500;
+    font-weight: 400;
     font-size: 12px;
     line-height: 14px;
     color: white;

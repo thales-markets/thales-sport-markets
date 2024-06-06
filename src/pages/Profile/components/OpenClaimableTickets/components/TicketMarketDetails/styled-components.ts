@@ -135,7 +135,7 @@ export const MatchPeriodLabel = styled.span`
     &.blink {
         color: ${(props) => props.theme.status.loss};
         animation: blinker 1.5s step-start infinite;
-        font-weight: 700;
+        font-weight: 600;
     }
 
     @keyframes blinker {

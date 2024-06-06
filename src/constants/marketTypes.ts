@@ -660,6 +660,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'threePointsMade',
         name: '3-points made',
     },
+    [MarketType.PLAYER_PROPS_BLOCKS]: {
+        id: MarketType.PLAYER_PROPS_BLOCKS,
+        key: 'blocks',
+        name: 'Blocks',
+    },
 };
 
 export const PLAYER_PROPS_MARKET_TYPES = [
@@ -684,6 +689,7 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_FIRST_TOUCHDOWN,
     MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
     MarketType.PLAYER_PROPS_3PTS_MADE,
+    MarketType.PLAYER_PROPS_BLOCKS,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [

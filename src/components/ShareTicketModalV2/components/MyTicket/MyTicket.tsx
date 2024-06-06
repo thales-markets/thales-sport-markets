@@ -241,7 +241,7 @@ const InfoLabel = styled.span`
     font-weight: 600;
 `;
 const InfoValue = styled.span`
-    font-weight: 700;
+    font-weight: 600;
     margin-left: 5px;
 `;
 

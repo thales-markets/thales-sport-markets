@@ -593,7 +593,7 @@ const ParlayLeaderboard: React.FC = () => {
 
 // const StatusIcon = styled.i`
 //     font-size: 12px;
-//     font-weight: 700;
+//     font-weight: 600;
 //     margin-right: 4px;
 //     &::before {
 //         color: ${(props) => props.color || props.theme.status.open};
@@ -601,7 +601,7 @@ const ParlayLeaderboard: React.FC = () => {
 // `;
 
 // const QuoteText = styled.span`
-//     font-weight: 700;
+//     font-weight: 600;
 //     font-size: 12px;
 //     text-align: left;
 //     white-space: nowrap;

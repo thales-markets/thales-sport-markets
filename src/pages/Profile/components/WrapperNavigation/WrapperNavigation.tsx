@@ -40,7 +40,7 @@ const NavItem = styled(FlexDiv)<{ active?: boolean }>`
     color: ${(props) =>
         props?.active ? props.theme.button.textColor.quaternary : props.theme.button.background.tertiary};
     font-size: 18px;
-    font-weight: 700;
+    font-weight: 600;
     text-align: left;
     text-transform: uppercase;
     padding-bottom: 10px;

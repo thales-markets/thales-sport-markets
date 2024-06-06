@@ -96,7 +96,7 @@ export const MatchTime = styled.span`
 
 export const TeamNamesWrapper = styled(FlexDivCentered)<{ hideOnMobile: boolean }>`
     display: ${(props) => (props.hideOnMobile ? 'flex' : 'none')};
-    font-weight: 700;
+    font-weight: 600;
     font-size: 14px;
     width: 100%;
     text-transform: uppercase;
@@ -118,7 +118,7 @@ export const Versus = styled.span``;
 
 export const TeamNames = styled(FlexDivCentered)<{ hideOnMobile: boolean }>`
     display: ${(props) => (props.hideOnMobile ? 'flex' : 'none')};
-    font-weight: 700;
+    font-weight: 600;
     font-size: 14px;
     width: 100%;
     margin-bottom: 20px;

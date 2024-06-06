@@ -197,7 +197,7 @@ const CurrencyLabel = styled.label<{ hasSeparator?: boolean }>`
 const MaxButton = styled.button`
     background: ${(props) => props.theme.button.background.quaternary};
     border: none;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 10px;
     text-transform: uppercase;
     cursor: pointer;

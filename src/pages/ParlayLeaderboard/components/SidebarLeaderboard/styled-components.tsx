@@ -65,7 +65,7 @@ export const LeaderboardRow = styled(FlexDivRow)`
 `;
 
 export const Rank = styled(FlexDivCentered)`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 12px;
     margin: 0px 5px;
     width: 15px;
@@ -80,7 +80,7 @@ export const DataLabel = styled(FlexDivRowCentered)`
 export const ColumnLabel = styled.span`
     text-transform: uppercase;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 103.19%;
     width: 100%;
 `;

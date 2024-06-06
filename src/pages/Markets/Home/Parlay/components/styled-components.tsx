@@ -57,7 +57,7 @@ export const SummaryValue = styled.span<{
     isCollateralInfo?: boolean;
     fontSize?: number;
 }>`
-    font-weight: 700;
+    font-weight: 600;
     font-size: ${(props) => props.fontSize || 11}px;
     line-height: 20px;
     display: ${(props) => (props.isHidden ? 'none' : '')};
@@ -88,7 +88,7 @@ export const InfoLabel = styled.span<{ marginLeft?: number }>`
 `;
 
 export const InfoValue = styled.span`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 10px;
     color: ${(props) => props.theme.textColor.primary};
     margin-left: 4px;
@@ -156,7 +156,7 @@ export const AmountToBuyMultiPayoutLabel = styled.span<{ alignRight?: boolean }>
 `;
 
 export const AmountToBuyMultiPayoutValue = styled.span<{ isInfo?: boolean; isCurrency?: boolean; isHidden?: boolean }>`
-    font-weight: 700;
+    font-weight: 600;
     font-size: 11px;
     line-height: 27px;
     letter-spacing: 0.025em;
@@ -198,7 +198,7 @@ export const BalanceValue = styled.span`
 
 export const XButton = styled.i<{ margin?: string }>`
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 600;
     color: ${(props) => props.theme.textColor.septenary};
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;

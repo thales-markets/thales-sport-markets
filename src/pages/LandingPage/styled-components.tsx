@@ -630,7 +630,7 @@ export const DiscordLink = styled.a`
     display: flex;
     font-family: Nunito !important;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 30px;
     line-height: 90%;
     text-align: left;
