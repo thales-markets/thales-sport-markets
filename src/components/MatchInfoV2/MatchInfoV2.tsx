@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTicketPayment, removeFromTicket } from 'redux/modules/ticket';
@@ -30,8 +30,28 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
         networkId,
         ticketPayment.selectedCollateralIndex,
     ]);
-
     const positionText = getPositionTextV2(market, market.position, true);
+
+    const previousMarket = useRef<TicketMarket>(market);
+
+    useEffect(() => {
+        if (previousMarket.current.gameId === market.gameId && previousMarket.current.position === market.position) {
+            if (market.odd < previousMarket.current.odd) {
+                document.getElementById('odd-change-up')?.classList.add('rise');
+                setTimeout(() => {
+                    document.getElementById('odd-change-up')?.classList.remove('rise');
+                }, 3000);
+            }
+            if (market.odd > previousMarket.current.odd) {
+                document.getElementById('odd-change-down')?.classList.add('descend');
+                setTimeout(() => {
+                    document.getElementById('odd-change-down')?.classList.remove('descend');
+                }, 3000);
+            }
+        }
+
+        previousMarket.current = market;
+    }, [market, market.odd]);
 
     return (
         <>
@@ -53,6 +73,8 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
                 <PositionInfo>
                     <PositionText>{positionText}</PositionText>
                     <Odd>
+                        <OddChangeUp id="odd-change-up" />
+                        <OddChangeDown id="odd-change-down" />
                         {formatMarketOdds(selectedOddsType, market.odd * getAddedPayoutMultiplier(selectedCollateral))}
                     </Odd>
                 </PositionInfo>
@@ -75,6 +97,66 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) 
         </>
     );
 };
+
+const OddChangeUp = styled.span`
+    position: absolute;
+    bottom: 0;
+    left: -15px;
+    visibility: hidden;
+    margin-right: 5px;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid ${(props) => props.theme.borderColor.tertiary};
+    &.rise {
+        visibility: visible;
+        animation-name: rise;
+        animation-duration: 0.8s;
+        animation-iteration-count: 3;
+    }
+    @keyframes rise {
+        0% {
+            transform: scale(1) translateY(-1px);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(0.9) translateY(-11px);
+            opacity: 0.5;
+        }
+    }
+`;
+
+const OddChangeDown = styled.span`
+    position: absolute;
+    top: 0;
+    left: -15px;
+    visibility: hidden;
+    margin-right: 5px;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid ${(props) => props.theme.borderColor.septenary};
+    &.descend {
+        visibility: visible;
+        animation-name: descend;
+        animation-duration: 0.8s;
+        animation-iteration-count: 3;
+    }
+    @keyframes descend {
+        0% {
+            transform: scale(1) translateY(1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(0.9) translateY(11px);
+            opacity: 0.5;
+        }
+    }
+`;
 
 const LeftContainer = styled(FlexDivColumn)`
     flex: initial;
@@ -127,6 +209,7 @@ const PositionText = styled.span`
 `;
 
 const Odd = styled.span`
+    position: relative;
     margin-left: 5px;
 `;
 

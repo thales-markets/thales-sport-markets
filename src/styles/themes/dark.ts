@@ -27,6 +27,7 @@ export default {
         quaternary: Colors.BLUE,
         quinary: Colors.NAVY_BLUE,
         senary: Colors.TORY_BLUE,
+        septenary: Colors.RED,
     },
     button: {
         background: {
