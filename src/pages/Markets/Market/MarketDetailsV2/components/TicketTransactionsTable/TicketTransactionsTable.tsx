@@ -11,7 +11,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { formatCurrencyWithKey, formatTxTimestamp, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import { formatCurrencyWithKey, formatDateWithTime, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { SportMarket, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
@@ -23,6 +23,8 @@ import {
     ExternalLink,
     FirstExpandedSection,
     LastExpandedSection,
+    LiveIndicatorContainer,
+    LiveLabel,
     MarketStatus,
     MarketStatusIcon,
     MarketTypeInfo,
@@ -105,7 +107,16 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         accessor: 'timestamp',
                         sortable: true,
                         Cell: (cellProps: any) => {
-                            return <TableText>{formatTxTimestamp(cellProps.cell.value)}</TableText>;
+                            return (
+                                <>
+                                    <LiveIndicatorContainer isLive={cellProps.cell.row.original.isLive}>
+                                        {cellProps.cell.row.original.isLive && (
+                                            <LiveLabel>{t('profile.card.live')}</LiveLabel>
+                                        )}
+                                    </LiveIndicatorContainer>
+                                    <TableText>{formatDateWithTime(cellProps.cell.value)}</TableText>
+                                </>
+                            );
                         },
                     },
                     {
@@ -164,26 +175,26 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                 return (
                                     <StatusWrapper color={theme.status.sold}>
                                         <StatusIcon className={`icon icon--lost`} />
-                                        Canceled
+                                        {t('markets.market-card.canceled')}
                                     </StatusWrapper>
                                 );
                             } else if (cellProps.row.original.isUserTheWinner) {
                                 return (
                                     <StatusWrapper color={theme.status.win}>
                                         <StatusIcon className={`icon icon--ticket-win`} />
-                                        Won
+                                        {t('markets.market-card.won')}
                                     </StatusWrapper>
                                 );
                             } else {
                                 return cellProps.row.original.isLost ? (
                                     <StatusWrapper color={theme.status.loss}>
                                         <StatusIcon className={`icon icon--ticket-loss`} />
-                                        Loss
+                                        {t('markets.market-card.loss')}
                                     </StatusWrapper>
                                 ) : (
                                     <StatusWrapper color={theme.status.open}>
                                         <StatusIcon className={`icon icon--ticket-open`} />
-                                        Open
+                                        {t('markets.market-card.open')}
                                     </StatusWrapper>
                                 );
                             }
@@ -249,8 +260,14 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
 };
 
 const getTicketMarketStatusIcon = (market: TicketMarket) => {
-    return market.isOpen || market.isCancelled ? (
-        <MarketStatusIcon className={`icon icon--ticket-open`} />
+    return market.isCancelled ? (
+        <MarketStatusIcon className={`icon icon--lost`} />
+    ) : market.isOpen ? (
+        market.maturityDate < new Date() ? (
+            <MarketStatusIcon className={`icon icon--ongoing`} />
+        ) : (
+            <MarketStatusIcon className={`icon icon--ticket-open`} />
+        )
     ) : market.isWinning ? (
         <MarketStatusIcon className={`icon icon--ticket-win`} />
     ) : (

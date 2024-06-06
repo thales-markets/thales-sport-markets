@@ -59,7 +59,6 @@ export const mapTicket = (
                     : market.sportId === 701 || market.sportId == 702
                     ? League.UFC
                     : Number(market.sportId);
-                // const isEnetpulseSport = ENETPULSE_SPORTS.includes(leagueId);
                 const typeId = Number(market.typeId);
                 const isPlayerProps = isPlayerPropsMarket(typeId);
                 const type = MarketTypeMap[typeId as MarketType];
@@ -91,7 +90,6 @@ export const mapTicket = (
                     sport: getLeagueSport(leagueId),
                     leagueId: leagueId,
                     subLeagueId: Number(market.sportId),
-                    // leagueName: getLeagueNameById(leagueId),
                     leagueName: '',
                     typeId: typeId,
                     type: type.key,
@@ -149,12 +147,17 @@ export const mapTicket = (
 };
 
 export const getTicketMarketStatus = (market: TicketMarket) => {
-    if (market.isCancelled) return t('profile.card.canceled');
+    if (market.isCancelled) {
+        return t('markets.market-card.canceled');
+    }
     if (market.isResolved) {
         if (market.isPlayerPropsMarket) {
             return market.homeScore;
         }
         return `${market.homeScore} : ${market.awayScore}`;
+    }
+    if (market.maturityDate < new Date()) {
+        return t('markets.market-card.pending');
     }
     return formatDateWithTime(Number(market.maturityDate));
 };

@@ -20,14 +20,14 @@ const QUERY_KEYS = {
     SportMarketV2: (address: string, networkId: Network) => ['sportMarketV2', address, networkId],
     ParlayAmmData: (networkId: Network) => ['parlayAmmData', networkId],
     SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
-    TicketLiquidity: (gameIds: string, typeIds: string, playerIds: string, positions: string, networkId: Network) => [
-        'ticketLiquidity',
-        gameIds,
-        typeIds,
-        playerIds,
-        positions,
-        networkId,
-    ],
+    TicketLiquidity: (
+        gameIds: string,
+        typeIds: string,
+        playerIds: string,
+        lines: string,
+        positions: string,
+        networkId: Network
+    ) => ['ticketLiquidity', gameIds, typeIds, playerIds, lines, positions, networkId],
     LiveTradingProcessorData: (networkId: Network) => ['liveTradingProcessorData', networkId],
     LiveResult: (marketId: string) => ['liveResult', marketId],
     LiveScore: (gameId: string) => ['liveScore', gameId],

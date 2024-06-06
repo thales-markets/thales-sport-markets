@@ -864,7 +864,7 @@ export const AWAY_TEAM_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
 ];
 
-export const MARKET_TYPES_BY_SPORT: Record<SportFilter, MarketType[]> = {
+export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     [SportFilter.Live]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Favourites]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.All]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],

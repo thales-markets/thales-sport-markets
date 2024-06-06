@@ -156,8 +156,6 @@ const WalletBalanceInfo = styled.div`
 `;
 
 const Text = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
     font-weight: 800;
     font-size: 10.8px;
     line-height: 12px;

@@ -1,7 +1,7 @@
 import { Colors } from 'styles/common';
 
 export default {
-    fontFamily: { primary: "'Roboto' !important", secondary: '', tertiary: '' },
+    fontFamily: { primary: "'Inter' !important", secondary: '', tertiary: '' },
     background: {
         primary: Colors.NAVY_BLUE_EXTRA_DARK,
         secondary: Colors.NAVY_BLUE,

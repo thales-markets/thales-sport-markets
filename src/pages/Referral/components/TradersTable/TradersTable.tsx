@@ -99,8 +99,6 @@ const TradersTable: React.FC<TradersTableProps> = ({ referredTraders, isLoading 
 };
 
 export const TableHeaderStyle: React.CSSProperties = {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
     fontWeight: 600,
     fontSize: '12px',
     lineHeight: '12px',
@@ -109,8 +107,6 @@ export const TableHeaderStyle: React.CSSProperties = {
 };
 
 export const TableHeaderStyleMobile: React.CSSProperties = {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
     fontWeight: 600,
     fontSize: '9px',
     lineHeight: '12px',

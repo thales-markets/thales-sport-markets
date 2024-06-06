@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 
 export const TableText = styled.span`
     font-weight: 600;
@@ -12,6 +12,35 @@ export const TableText = styled.span`
         margin-right: 2px;
     }
     @media (max-width: 575px) {
+        font-size: 9px;
+    }
+`;
+
+export const LiveIndicatorContainer = styled(FlexDivStart)<{ isLive?: boolean }>`
+    min-width: 10px;
+    max-width: 10px;
+    height: 30px;
+    border-radius: 3px;
+    background: ${(props) => (props.isLive ? props.theme.status.live : 'transparent')};
+    color: ${(props) => props.theme.textColor.secondary};
+    align-items: center;
+    justify-content: center;
+    margin-right: 2px;
+    @media (max-width: 767px) {
+        min-width: 9px;
+        max-width: 9px;
+    }
+`;
+
+export const LiveLabel = styled.span`
+    transform: rotate(270deg);
+    color: ${(props) => props.theme.textColor.tertiary};
+    font-size: 10px;
+    text-transform: uppercase;
+    line-height: 10px;
+    margin-right: 1px;
+    @media (max-width: 767px) {
+        margin-right: 0px;
         font-size: 9px;
     }
 `;

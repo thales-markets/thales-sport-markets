@@ -151,9 +151,7 @@ const TokenIcon = styled.i`
 
 const MakeSureText = styled.span`
     color: ${(props) => props.theme.textColor.primary};
-    font-family: Roboto;
     font-size: 18px;
-    font-style: normal;
     font-weight: 400;
     line-height: normal;
     margin-bottom: 14px;

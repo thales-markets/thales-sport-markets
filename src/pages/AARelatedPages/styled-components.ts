@@ -40,10 +40,8 @@ export const PrimaryHeading = styled.h1`
 `;
 
 const Label = styled.span`
-    font-family: Roboto;
     color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
-    font-style: normal;
     font-weight: 400;
     line-height: 119%; /* 14.28px */
     margin-top: 4px;

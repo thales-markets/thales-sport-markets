@@ -7,7 +7,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
-import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { formatDateWithTime } from 'thales-utils';
@@ -40,7 +39,7 @@ import {
 
 const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> = ({ market, isLive }) => {
     const theme: ThemeInterface = useTheme();
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isMobile = useSelector(getIsMobile);
     const selectedOddsType = useSelector(getOddsType);
     const language = i18n.language;
 
@@ -125,9 +124,9 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                                 <TicketMarketStatus>{t('markets.market-card.half-time')}</TicketMarketStatus>
                             ) : (
                                 <MatchPeriodContainer>
-                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))} ${t(
-                                        `markets.market-card.${getLeaguePeriodType(market.leagueId)}`
-                                    )}`}</MatchPeriodLabel>
+                                    <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))} ${
+                                        isMobile ? '' : t(`markets.market-card.${getLeaguePeriodType(market.leagueId)}`)
+                                    }`}</MatchPeriodLabel>
                                     <FlexDivCentered>
                                         <MatchPeriodLabel className="red">
                                             {liveScore.displayClock?.replaceAll("'", '')}

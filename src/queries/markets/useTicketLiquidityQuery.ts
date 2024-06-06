@@ -15,6 +15,7 @@ const useTicketLiquidityQuery = (
             markets.map((market) => market.gameId).join(','),
             markets.map((market) => market.typeId).join(','),
             markets.map((market) => market.playerProps.playerId).join(','),
+            markets.map((market) => market.line).join(','),
             markets.map((market) => market.position).join(','),
             networkId
         ),

@@ -126,8 +126,6 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.p`
-    font-family: 'Roboto';
-    font-style: normal;
     font-weight: 700;
     font-size: 16px;
     line-height: 19px;

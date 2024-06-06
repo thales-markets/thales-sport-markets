@@ -543,8 +543,6 @@ const ParlayLeaderboard: React.FC = () => {
 // `;
 
 // const Title = styled.p`
-//     font-family: 'Roboto';
-//     font-style: normal;
 //     font-weight: 600;
 //     font-size: 18px;
 //     line-height: 150%;
@@ -555,8 +553,6 @@ const ParlayLeaderboard: React.FC = () => {
 // `;
 
 // const Description = styled.p`
-//     font-family: 'Roboto';
-//     font-style: normal;
 //     font-weight: 400;
 //     font-size: 14px;
 //     line-height: 150%;
@@ -567,8 +563,6 @@ const ParlayLeaderboard: React.FC = () => {
 // `;
 
 // const Warning = styled.p`
-//     font-family: 'Roboto';
-//     font-style: normal;
 //     font-weight: 600;
 //     font-size: 14px;
 //     line-height: 150%;
@@ -579,8 +573,6 @@ const ParlayLeaderboard: React.FC = () => {
 // `;
 
 // const TableText = styled.p`
-//     font-family: 'Roboto';
-//     font-style: normal;
 //     font-weight: 600;
 //     font-size: 12px;
 //     line-height: 150%;
@@ -609,8 +601,6 @@ const ParlayLeaderboard: React.FC = () => {
 // `;
 
 // const QuoteText = styled.span`
-//     font-family: 'Roboto';
-//     font-style: normal;
 //     font-weight: 700;
 //     font-size: 12px;
 //     text-align: left;
@@ -619,8 +609,6 @@ const ParlayLeaderboard: React.FC = () => {
 // `;
 
 // const QuoteLabel = styled.span`
-//     font-family: 'Roboto';
-//     font-style: normal;
 //     font-weight: 400;
 //     font-size: 12px;
 
@@ -640,8 +628,6 @@ const ParlayLeaderboard: React.FC = () => {
 // `;
 
 // const TableHeaderStyle: React.CSSProperties = {
-//     fontFamily: 'Roboto',
-//     fontStyle: 'normal',
 //     fontWeight: 600,
 //     fontSize: '10px',
 //     lineHeight: '12px',

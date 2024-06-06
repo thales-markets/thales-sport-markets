@@ -134,9 +134,7 @@ const TopUpButton = styled.button`
     min-width: 140px;
     width: 100%;
     max-width: 400px;
-    font-family: Roboto;
     font-size: 14px;
-    font-style: normal;
     font-weight: 800;
     line-height: 14px;
     height: 28px;

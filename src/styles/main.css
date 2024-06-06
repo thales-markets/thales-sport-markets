@@ -143,7 +143,7 @@ table {
 
 * {
     box-sizing: border-box;
-    font-family: 'Roboto' !important;
+    font-family: 'Inter' !important;
     font-style: normal;
     -webkit-tap-highlight-color: transparent;
     scrollbar-color: #3c498a #1f274d;

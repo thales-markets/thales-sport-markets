@@ -140,7 +140,6 @@ const Heading = styled.h1`
 
 const Description = styled.p`
     font-size: 14px;
-    font-family: Roboto;
     font-weight: 400;
 `;
 

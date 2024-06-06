@@ -1,4 +1,4 @@
-import { MARKET_TYPES_BY_SPORT, MarketTypeGroupsBySport } from 'constants/marketTypes';
+import { MarketTypeGroupsBySport, MarketTypesBySportFilter } from 'constants/marketTypes';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
 import React, { useContext, useMemo } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
@@ -79,7 +79,9 @@ const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitc
             return Object.keys(MarketTypeGroupsBySport[marketToCheck.sport] || {}).map((key) => key as MarketTypeGroup);
         } else {
             return availableMarketTypes
-                ? availableMarketTypes.filter((marketType) => MARKET_TYPES_BY_SPORT[sportFilter].includes(marketType))
+                ? availableMarketTypes.filter((marketType) =>
+                      MarketTypesBySportFilter[sportFilter].includes(marketType)
+                  )
                 : [];
         }
     }, [sportFilter, availableMarketTypes, marketToCheck]);

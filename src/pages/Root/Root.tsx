@@ -15,7 +15,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import WalletDisclaimer from 'components/WalletDisclaimer';
 import { PLAUSIBLE } from 'constants/analytics';
-import { base, optimismSepolia } from 'constants/network';
+import { optimismSepolia } from 'constants/network';
 import { ThemeMap } from 'constants/ui';
 import dotenv from 'dotenv';
 import { Network } from 'enums/network';
@@ -26,7 +26,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { arbitrum, optimism } from 'wagmi/dist/chains';
+import { optimism } from 'wagmi/dist/chains';
 import { infuraProvider } from 'wagmi/dist/providers/infura';
 import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
 import { publicProvider } from 'wagmi/dist/providers/public';
@@ -66,7 +66,7 @@ const theme = getDefaultTheme();
 const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
 const { chains, provider } = configureChains(
-    [optimism, arbitrum, base, optimismSepolia],
+    [optimism, optimismSepolia],
     [
         jsonRpcProvider({
             rpc: (chain) => {
