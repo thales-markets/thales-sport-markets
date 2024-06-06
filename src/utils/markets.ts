@@ -123,3 +123,13 @@ export const getMarketTypeName = (marketType: MarketType) => {
     const marketTypeInfo = MarketTypeMap[marketType];
     return marketTypeInfo ? marketTypeInfo.name : marketType;
 };
+
+export const isWithinSlippage = (originalOdd: number, newOdd: number, slippage: number): boolean => {
+    // TODO: remove
+    return true;
+    if (originalOdd === newOdd) {
+        return true;
+    }
+    const allowedChange = (originalOdd * slippage) / 100;
+    return newOdd < originalOdd ? newOdd >= originalOdd - allowedChange : newOdd <= originalOdd + allowedChange;
+};

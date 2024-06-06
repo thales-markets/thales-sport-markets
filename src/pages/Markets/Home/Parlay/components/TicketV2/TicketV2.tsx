@@ -53,6 +53,7 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import {
+    bigNumberFormatter,
     ceilNumberToDecimals,
     coinFormatter,
     coinParser,
@@ -545,7 +546,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     };
 
     const handleSubmit = async () => {
-        const { sportsAMMV2Contract, signer, liveTradingProcessorContract } = networkConnector;
+        const { sportsAMMV2Contract, signer, liveTradingProcessorContract, sportsAMMDataContract } = networkConnector;
 
         // TODO: separate logic for regular and live markets
         if (
@@ -651,10 +652,33 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                                 console.log('filfill end time:', new Date(Date.now()));
                                 console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
+                                if (sportsAMMDataContract) {
+                                    const userTickets = await sportsAMMDataContract.getActiveTicketsDataPerUser(
+                                        walletAddress.toLowerCase()
+                                    );
+                                    const modalData: ShareTicketModalProps = {
+                                        markets: [
+                                            {
+                                                ...markets[0],
+                                                odd: bigNumberFormatter(userTickets[userTickets.length - 1].totalQuote),
+                                            },
+                                        ],
+                                        multiSingle: false,
+                                        paid: Number(buyInAmountInDefaultCollateral),
+                                        payout: payout,
+                                        onClose: () => {
+                                            if (!keepSelection) dispatch(removeAll());
+                                            onModalClose();
+                                        },
+                                        isTicketLost: false,
+                                        isTicketResolved: false,
+                                    };
+                                    setShareTicketModalData(modalData);
+                                    setShowShareTicketModal(true);
+                                }
                                 toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                                 setIsBuying(false);
                                 setCollateralAmount('');
-                                if (!keepSelection) dispatch(removeAll());
                             }
                         };
                         toast.update(toastId, getLoadingToastOptions(t('market.toast-message.live-trade-requested')));
@@ -1244,7 +1268,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     multiSingle={false}
                     paid={shareTicketModalData.paid}
                     payout={shareTicketModalData.payout}
-                    onClose={onModalClose}
+                    onClose={shareTicketModalData.onClose}
                     isTicketLost={shareTicketModalData.isTicketLost}
                     isTicketResolved={shareTicketModalData.isTicketResolved}
                 />

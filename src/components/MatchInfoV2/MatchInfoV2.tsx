@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTicketPayment, removeFromTicket } from 'redux/modules/ticket';
+import { getLiveBetSlippage, getTicketPayment, removeFromTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { TicketMarket } from 'types/markets';
-import { formatMarketOdds } from 'utils/markets';
+import { formatMarketOdds, isWithinSlippage } from 'utils/markets';
 import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
 import { getNetworkId } from '../../redux/modules/wallet';
 import { getCollateral } from '../../utils/collaterals';
@@ -17,41 +17,53 @@ type MatchInfoProps = {
     market: TicketMarket;
     readOnly?: boolean;
     customStyle?: { fontSize?: string; lineHeight?: string };
+    showOddUpdates?: boolean;
 };
 
-const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle }) => {
+const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle, showOddUpdates }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const networkId = useSelector(getNetworkId);
     const selectedOddsType = useSelector(getOddsType);
     const matchLabel = getMatchLabel(market);
     const ticketPayment = useSelector(getTicketPayment);
+    const liveBetSlippage = useSelector(getLiveBetSlippage);
     const selectedCollateral = useMemo(() => getCollateral(networkId, ticketPayment.selectedCollateralIndex), [
         networkId,
         ticketPayment.selectedCollateralIndex,
     ]);
     const positionText = getPositionTextV2(market, market.position, true);
 
+    // used only for live ticket
     const previousMarket = useRef<TicketMarket>(market);
+    const firstClickMarket = useRef<TicketMarket>(market);
 
     useEffect(() => {
-        if (previousMarket.current.gameId === market.gameId && previousMarket.current.position === market.position) {
-            if (market.odd < previousMarket.current.odd) {
-                document.getElementById('odd-change-up')?.classList.add('rise');
-                setTimeout(() => {
-                    document.getElementById('odd-change-up')?.classList.remove('rise');
-                }, 3000);
+        if (market.live && showOddUpdates) {
+            if (
+                previousMarket.current.gameId === market.gameId &&
+                previousMarket.current.position === market.position
+            ) {
+                if (isWithinSlippage(firstClickMarket.current.odd, market.odd, liveBetSlippage)) {
+                    if (market.odd < previousMarket.current.odd) {
+                        document.getElementById('odd-change-up')?.classList.add('rise');
+                        setTimeout(() => {
+                            document.getElementById('odd-change-up')?.classList.remove('rise');
+                        }, 3000);
+                    }
+                    if (market.odd > previousMarket.current.odd) {
+                        document.getElementById('odd-change-down')?.classList.add('descend');
+                        setTimeout(() => {
+                            document.getElementById('odd-change-down')?.classList.remove('descend');
+                        }, 3000);
+                    }
+                }
+            } else {
+                firstClickMarket.current = market;
             }
-            if (market.odd > previousMarket.current.odd) {
-                document.getElementById('odd-change-down')?.classList.add('descend');
-                setTimeout(() => {
-                    document.getElementById('odd-change-down')?.classList.remove('descend');
-                }, 3000);
-            }
+            previousMarket.current = market;
         }
-
-        previousMarket.current = market;
-    }, [market, market.odd]);
+    }, [market, market.odd, liveBetSlippage, showOddUpdates]);
 
     return (
         <>
