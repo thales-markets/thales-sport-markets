@@ -1,4 +1,6 @@
 import { GameStatus, OddsType, Position } from 'enums/markets';
+import { Network } from '../enums/network';
+import { League } from '../enums/sports';
 
 export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 
@@ -33,6 +35,17 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
     //     },
     //     showOnAllNetworks: Network.Arbitrum,
     // },
+    [League.UEFA_EURO_QUALIFICATIONS]: {
+        startDate: new Date(Date.UTC(2024, 5, 5, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 6, 14, 23, 59, 59)),
+        link: 'https://v2.overtimemarkets.xyz/',
+        tooltipKey: 'markets.incentivized-tooltip-euro',
+        availableOnNetworks: [Network.OptimismMainnet],
+        rewards: {
+            [Network.OptimismMainnet]: '10,000 OP',
+        },
+        showOnAllNetworks: Network.OptimismMainnet,
+    },
 };
 
 export const MIN_LIQUIDITY = 10;

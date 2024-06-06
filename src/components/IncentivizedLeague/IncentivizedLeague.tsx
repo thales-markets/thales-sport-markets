@@ -74,6 +74,7 @@ const Container = styled.div<{ onlyLogo?: boolean }>`
     display: flex;
     align-items: center;
     cursor: pointer;
+    margin-left: ${(props) => (props.onlyLogo ? 5 : 0)}px;
     svg {
         height: ${(props) => (props.onlyLogo ? 18 : 21)}px;
     }
