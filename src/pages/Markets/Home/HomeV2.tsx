@@ -10,7 +10,6 @@ import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SportFilter, StatusFilter } from 'enums/markets';
-import { Network } from 'enums/network';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
@@ -57,10 +56,6 @@ import GlobalFilters from '../components/StatusFilters';
 import Breadcrumbs from './Breadcrumbs';
 import Header from './Header';
 import SelectedMarket from './SelectedMarket';
-
-const SidebarLeaderboard = lazy(
-    () => import(/* webpackChunkName: "SidebarLeaderboard" */ 'pages/ParlayLeaderboard/components/SidebarLeaderboard')
-);
 
 const Parlay = lazy(() => import(/* webpackChunkName: "Parlay" */ './Parlay'));
 
@@ -599,9 +594,9 @@ const Home: React.FC = () => {
                             {getSportFilters()}
                         </SportFiltersContainer>
                     </Scroll>
-                    <Suspense fallback={<Loader />}>
+                    {/* <Suspense fallback={<Loader />}>
                         {networkId !== Network.Base && networkId !== Network.OptimismSepolia && <SidebarLeaderboard />}
-                    </Suspense>
+                    </Suspense> */}
                 </LeftSidebarContainer>
 
                 {/* MAIN PART */}

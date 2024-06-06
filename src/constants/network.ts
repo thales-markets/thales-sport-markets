@@ -6,15 +6,15 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
-    [Network.Arbitrum]: 'ARBITRUM-ONE',
-    [Network.Base]: 'BASE',
+    // [Network.Arbitrum]: 'ARBITRUM-ONE',
+    // [Network.Base]: 'BASE',
     [Network.OptimismSepolia]: 'SEPOLIA-OPTIMISM',
 };
 
 export const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISM MAINNET',
-    [Network.Arbitrum]: 'ARBITRUM ONE',
-    [Network.Base]: 'BASE',
+    // [Network.Arbitrum]: 'ARBITRUM ONE',
+    // [Network.Base]: 'BASE',
     [Network.OptimismSepolia]: 'OPTIMISM SEPOLIA',
 };
 
@@ -39,51 +39,51 @@ export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
         },
         order: 1,
     },
-    [Network.Arbitrum]: {
-        chainId: '0xA4B1',
-        chainName: 'Arbitrum One',
-        shortChainName: 'Arbitrum',
-        chainKey: 'arbitrum_mainnet',
-        iconClassName: 'icon icon--arb',
-        rpcUrls: ['https://arb1.arbitrum.io/rpc'],
-        blockExplorerUrls: ['https://arbiscan.io/'],
-        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
-        nativeCurrency: {
-            symbol: 'ETH',
-            decimals: 18,
-        },
-        order: 2,
-    },
-    [Network.Base]: {
-        chainId: '0x2105',
-        chainName: 'Base Mainnet',
-        shortChainName: 'Base',
-        chainKey: 'base_mainnet',
-        iconClassName: 'icon icon--base',
-        rpcUrls: ['https://mainnet.base.org'],
-        blockExplorerUrls: ['https://basescan.org/'],
-        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
-        nativeCurrency: {
-            symbol: 'ETH',
-            decimals: 18,
-        },
-        order: 3,
-    },
-    [Network.OptimismSepolia]: {
-        chainId: '0xaa37dc',
-        chainName: 'Optimism Sepolia',
-        shortChainName: 'OP Sepolia',
-        chainKey: 'optimism_sepolia',
-        iconClassName: 'icon icon--op',
-        rpcUrls: ['https://sepolia.optimism.io'],
-        blockExplorerUrls: ['https://sepolia-optimism.etherscan.io'],
-        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
-        nativeCurrency: {
-            symbol: 'ETH',
-            decimals: 18,
-        },
-        order: 4,
-    },
+    // [Network.Arbitrum]: {
+    //     chainId: '0xA4B1',
+    //     chainName: 'Arbitrum One',
+    //     shortChainName: 'Arbitrum',
+    //     chainKey: 'arbitrum_mainnet',
+    //     iconClassName: 'icon icon--arb',
+    //     rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+    //     blockExplorerUrls: ['https://arbiscan.io/'],
+    //     iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+    //     nativeCurrency: {
+    //         symbol: 'ETH',
+    //         decimals: 18,
+    //     },
+    //     order: 2,
+    // },
+    // [Network.Base]: {
+    //     chainId: '0x2105',
+    //     chainName: 'Base Mainnet',
+    //     shortChainName: 'Base',
+    //     chainKey: 'base_mainnet',
+    //     iconClassName: 'icon icon--base',
+    //     rpcUrls: ['https://mainnet.base.org'],
+    //     blockExplorerUrls: ['https://basescan.org/'],
+    //     iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+    //     nativeCurrency: {
+    //         symbol: 'ETH',
+    //         decimals: 18,
+    //     },
+    //     order: 3,
+    // },
+    // [Network.OptimismSepolia]: {
+    //     chainId: '0xaa37dc',
+    //     chainName: 'Optimism Sepolia',
+    //     shortChainName: 'OP Sepolia',
+    //     chainKey: 'optimism_sepolia',
+    //     iconClassName: 'icon icon--op',
+    //     rpcUrls: ['https://sepolia.optimism.io'],
+    //     blockExplorerUrls: ['https://sepolia-optimism.etherscan.io'],
+    //     iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+    //     nativeCurrency: {
+    //         symbol: 'ETH',
+    //         decimals: 18,
+    //     },
+    //     order: 4,
+    // },
 };
 
 export const GAS_ESTIMATION_BUFFER = 1.2; // Adding 20% on gas estimation as a buffer. Used only on Optimisme

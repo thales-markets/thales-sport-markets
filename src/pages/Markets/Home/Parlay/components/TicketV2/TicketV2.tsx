@@ -19,7 +19,6 @@ import {
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
-import { Network } from 'enums/network';
 import { BigNumber, ethers } from 'ethers';
 import useLocalStorage from 'hooks/useLocalStorage';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
@@ -1128,7 +1127,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                           } (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
-            {networkId !== Network.Base && !HIDE_PARLAY_LEADERBOARD && (
+            {!HIDE_PARLAY_LEADERBOARD && (
                 <>
                     <HorizontalLine />
                     <RowSummary>

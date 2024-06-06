@@ -26,8 +26,8 @@ export const LiquidityPoolMap: Record<
             collateral: CRYPTO_CURRENCY_MAP.THALES as Coins,
         },
     },
-    [NetworkId.Base]: undefined,
-    [NetworkId.Arbitrum]: undefined,
+    // [NetworkId.Base]: undefined,
+    // [NetworkId.Arbitrum]: undefined,
     [NetworkId.OptimismSepolia]: {
         [LiquidityPoolCollateral.USDC]: {
             name: 'USDC LP',
