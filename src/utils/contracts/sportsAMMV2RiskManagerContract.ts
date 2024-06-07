@@ -97,12 +97,27 @@ const sportsAMMV2RiskManagerContract = {
         },
         {
             anonymous: false,
+            inputs: [{ indexed: false, internalType: 'uint256', name: '_divider', type: 'uint256' }],
+            name: 'SetDefaultLiveCapDivider',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [
                 { indexed: false, internalType: 'uint256', name: 'sportId', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'dynamicLiquidityCutoffTime', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'dynamicLiquidityCutoffDivider', type: 'uint256' },
             ],
             name: 'SetDynamicLiquidityParams',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'uint256', name: '_sportId', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: '_divider', type: 'uint256' },
+            ],
+            name: 'SetLiveCapDivider',
             type: 'event',
         },
         {
@@ -196,6 +211,7 @@ const sportsAMMV2RiskManagerContract = {
                 { internalType: 'uint24', name: '_playerId', type: 'uint24' },
                 { internalType: 'int24', name: '_line', type: 'int24' },
                 { internalType: 'uint256', name: '_maturity', type: 'uint256' },
+                { internalType: 'bool', name: '_isLive', type: 'bool' },
             ],
             name: 'calculateCapToBeUsed',
             outputs: [{ internalType: 'uint256', name: 'cap', type: 'uint256' }],
@@ -279,6 +295,7 @@ const sportsAMMV2RiskManagerContract = {
                     type: 'tuple[]',
                 },
                 { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                { internalType: 'bool', name: '_isLive', type: 'bool' },
             ],
             name: 'checkAndUpdateRisks',
             outputs: [],
@@ -328,6 +345,7 @@ const sportsAMMV2RiskManagerContract = {
                     type: 'tuple[]',
                 },
                 { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                { internalType: 'bool', name: '_isLive', type: 'bool' },
             ],
             name: 'checkRisks',
             outputs: [
@@ -347,6 +365,13 @@ const sportsAMMV2RiskManagerContract = {
         {
             inputs: [],
             name: 'defaultCap',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'defaultLiveCapDivider',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
@@ -445,6 +470,13 @@ const sportsAMMV2RiskManagerContract = {
         {
             inputs: [],
             name: 'lastPauseTime',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            name: 'liveCapDividerPerSport',
             outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
             stateMutability: 'view',
             type: 'function',
@@ -656,12 +688,29 @@ const sportsAMMV2RiskManagerContract = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'uint256', name: '_divider', type: 'uint256' }],
+            name: 'setDefaultLiveCapDivider',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [
                 { internalType: 'uint256', name: '_sportId', type: 'uint256' },
                 { internalType: 'uint256', name: '_dynamicLiquidityCutoffTime', type: 'uint256' },
                 { internalType: 'uint256', name: '_dynamicLiquidityCutoffDivider', type: 'uint256' },
             ],
             name: 'setDynamicLiquidityParamsPerSport',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: '_sportId', type: 'uint256' },
+                { internalType: 'uint256', name: '_divider', type: 'uint256' },
+            ],
+            name: 'setLiveCapDivider',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',

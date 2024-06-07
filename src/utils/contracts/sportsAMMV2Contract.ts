@@ -197,6 +197,7 @@ const sportsAMMV2Contract = {
                 { indexed: false, internalType: 'uint256', name: 'fees', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'payout', type: 'uint256' },
                 { indexed: false, internalType: 'uint256', name: 'totalQuote', type: 'uint256' },
+                { indexed: false, internalType: 'address', name: 'collateral', type: 'address' },
             ],
             name: 'TicketCreated',
             type: 'event',
@@ -640,6 +641,7 @@ const sportsAMMV2Contract = {
                 },
                 { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
                 { internalType: 'address', name: '_collateral', type: 'address' },
+                { internalType: 'bool', name: '_isLive', type: 'bool' },
             ],
             name: 'tradeQuote',
             outputs: [
