@@ -23,7 +23,7 @@ const Market: React.FC<MarketProps> = (props) => {
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const singleMarketQuery = useSportMarketV2Query(marketAddress, false, networkId, {
+    const singleMarketQuery = useSportMarketV2Query(marketAddress, networkId, {
         enabled: isAppReady,
     });
 
@@ -32,6 +32,10 @@ const Market: React.FC<MarketProps> = (props) => {
             setLastValidMarket(singleMarketQuery.data);
         }
     }, [marketAddress, singleMarketQuery.isSuccess, singleMarketQuery.data]);
+
+    useEffect(() => {
+        setLastValidMarket(undefined);
+    }, [networkId]);
 
     return (
         <Container>
