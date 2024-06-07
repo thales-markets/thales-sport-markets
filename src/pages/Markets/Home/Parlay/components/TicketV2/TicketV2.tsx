@@ -134,7 +134,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
 
     const dispatch = useDispatch();
 
-    const isLiveTicket = markets?.[0]?.live;
+    const isLiveTicket = useMemo(() => {
+        return markets?.[0]?.live;
+    }, [markets]);
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
@@ -697,7 +699,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
     };
 
     useEffect(() => {
-        if (!isBuying && oddsChanged && markets?.[0]?.live) {
+        if (oddsChanged && isLiveTicket) {
             setSubmitDisabled(true);
             return;
         }
@@ -747,6 +749,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
         payout,
         oddsChanged,
         markets,
+        isLiveTicket,
     ]);
 
     const getSubmitButton = () => {
@@ -1267,7 +1270,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     </CheckboxContainer>
                 </RowContainer>
             </RowSummary>
-            {oddsChanged && (
+            {!isBuying && oddsChanged && isLiveTicket && (
                 <FlexDivCentered>
                     <Button
                         onClick={() => setOddsChanged(false)}
