@@ -79,31 +79,32 @@ const ticketSlice = createSlice({
                 const existingPosition = state.ticket[existingPositionIndex];
                 const isExistingPositionPP = isPlayerPropsMarket(existingPosition.typeId);
                 const isNewPositionPP = isPlayerPropsMarket(action.payload.typeId);
-                const playerAlreadyOnTicketIndex = state.ticket.findIndex(
-                    (el) => el.playerId === action.payload.playerId && action.payload.playerId > 0
-                );
 
                 if ((isExistingPositionPP && !isNewPositionPP) || (!isExistingPositionPP && isNewPositionPP)) {
                     state.error.code = TicketErrorCode.OTHER_TYPES_WITH_PLAYER_PROPS;
-                } else if (isNewPositionPP && playerAlreadyOnTicketIndex > -1) {
-                    if (state.ticket[playerAlreadyOnTicketIndex].typeId !== action.payload.typeId) {
-                        state.error.code = TicketErrorCode.SAME_PLAYER_DIFFERENT_TYPES;
-                        state.error.data = action.payload.playerName;
-                    } else {
-                        ticketCopy[playerAlreadyOnTicketIndex] = action.payload;
-                        state.ticket = [...ticketCopy];
-                    }
                 } else if (isExistingPositionPP && isNewPositionPP) {
-                    if (isPlayerPropsCombiningEnabled(action.payload.leagueId)) {
+                    const playerAlreadyOnTicketIndex = state.ticket.findIndex(
+                        (el) => el.playerId === action.payload.playerId && action.payload.playerId > 0
+                    );
+
+                    if (!isPlayerPropsCombiningEnabled(action.payload.leagueId)) {
+                        state.error.code = TicketErrorCode.PLAYER_PROPS_COMBINING_NOT_ENABLED;
+                        state.error.data = getLeagueLabel(action.payload.leagueId);
+                    } else if (playerAlreadyOnTicketIndex > -1) {
+                        if (state.ticket[playerAlreadyOnTicketIndex].typeId !== action.payload.typeId) {
+                            state.error.code = TicketErrorCode.SAME_PLAYER_DIFFERENT_TYPES;
+                            state.error.data = action.payload.playerName;
+                        } else {
+                            ticketCopy[playerAlreadyOnTicketIndex] = action.payload;
+                            state.ticket = [...ticketCopy];
+                        }
+                    } else {
                         if (state.ticket.length < state.maxTicketSize) {
                             state.ticket.push(action.payload);
                         } else {
                             state.error.code = TicketErrorCode.MAX_MATCHES;
                             state.error.data = state.maxTicketSize.toString();
                         }
-                    } else {
-                        state.error.code = TicketErrorCode.PLAYER_PROPS_COMBINING_NOT_ENABLED;
-                        state.error.data = getLeagueLabel(action.payload.leagueId);
                     }
                 } else {
                     ticketCopy[existingPositionIndex] = action.payload;

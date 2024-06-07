@@ -196,6 +196,7 @@ const OddChangeDown = styled.span`
 const LeftContainer = styled(FlexDivColumn)`
     flex: initial;
     height: 100%;
+    justify-content: center;
 `;
 
 const LiveTag = styled.span`

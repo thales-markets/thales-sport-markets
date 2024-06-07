@@ -4,9 +4,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getTicketError } from 'redux/modules/ticket';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
-import { ThemeInterface } from 'types/ui';
 
 type ValidationModalProps = {
     onClose: () => void;
@@ -18,7 +17,6 @@ type ValidationModalProps = {
 const ValidationModal: React.FC<ValidationModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
     // const dispatch = useDispatch();
-    const theme: ThemeInterface = useTheme();
 
     const ticketError = useSelector(getTicketError);
     // const maxTicketSize = useSelector(getMaxTicketSize);

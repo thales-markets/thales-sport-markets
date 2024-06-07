@@ -61,7 +61,7 @@ const Positions: React.FC<PositionsProps> = ({
     const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
     const titleText = getTitleText(markets[0], true);
-    const tooltipKey = getMarketTypeTooltipKey(markets[0].typeId);
+    const tooltipKey = getMarketTypeTooltipKey(marketType);
 
     return showContainer ? (
         <Container
