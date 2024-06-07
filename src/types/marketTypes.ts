@@ -5,4 +5,5 @@ export type MarketTypeInfo = {
     key: string;
     name: string;
     description?: string;
+    tooltipKey?: string;
 };

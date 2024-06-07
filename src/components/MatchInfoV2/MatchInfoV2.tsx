@@ -100,7 +100,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                     <CloseIcon
                         className="icon icon--close"
                         onClick={() => {
-                            dispatch(removeFromTicket(market.gameId));
+                            dispatch(removeFromTicket(market));
                         }}
                     />
                 </MatchLabel>

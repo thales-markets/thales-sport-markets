@@ -620,7 +620,7 @@
                 "bonus": "{{bonus}} added bonus on win!"
             },
             "type-tooltip": {
-                "11055": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
+                "touchdowns": "Receiving, rushing, punt return, kick return, defensive and interception touchdowns are counted towards the result"
             },
             "player-props": "Player props",
             "total-markets": "Total markets",
@@ -704,15 +704,12 @@
             },
             "show-parlay": "Show Parlay",
             "validation": {
-                "title": "Ticket Validation",
-                "max-teams": "Maximum {{max}} markets in Ticket",
                 "amm-contract-paused": "Sports AMM Paused",
-                "team-in-parlay": "{{team}} is already in Ticket. The same team from the same league can't be added to a Ticket more than once.",
-                "max-double-chances": "The maximum number of double chance markets in Ticket is {{max}}.",
-                "max-combined-markets": "The maximum number of combined markets in Ticket is {{max}}.",
-                "max-number-of-markets-with-combined-markets": "The maximum number of markets in Ticket is {{max}}. A single combined market counts as two regular markets.",
-                "same-event-participant": "Only one participant per event is supported. Cannot add {{addedParticipant}} because {{existingParticipant}} is already in Ticket",
-                "unique-players": "Cannot add same participant twice in Ticket. {{existingParticipant}} is already in Ticket",
+                "title": "Ticket Validation",
+                "max-teams": "The maximum number of positions on the ticket is {{max}}",
+                "other-types-with-player-props": "It is not supported to combine player props with other types from the same game",
+                "same-player-different-types": "It is not supported to combine different categories for the same player ({{player}})",
+                "player-props-combining-not-enabled": "Combining player props for {{league}} is not supported",
                 "amount-exceeded": "Amount exceeded the amount available on AMM",
                 "max-profit": "Maximal supported profit is {{max}}",
                 "min-amount": "Minimal buy-in is {{min}}",
@@ -720,12 +717,7 @@
                 "availability": "Not enough liquidity for this buy-in amount",
                 "no-funds": "Please ensure your wallet has enough funds",
                 "no-funds-multi-collateral": "Please ensure your wallet has enough funds (buy-in amount plus {{percentage}}%)",
-                "risk-per-comb": "Risk per combination exceeded",
-                "same-team": "The same team can't be in a Ticket more than once",
-                "not-supported": "Not supported validation error: {{error}}",
-                "same-game-different-player-props": "Not supported to combine different category of player props",
-                "player-props-and-other-positions": "Not supported to combine player props positions with other positions from same market",
-                "already-added-combined-positions": "Can not combine positions from the same market with combined positions"
+                "not-supported": "Not supported validation error: {{error}}"
             },
             "share-ticket": {
                 "header": "Web 3 Sport markets on",

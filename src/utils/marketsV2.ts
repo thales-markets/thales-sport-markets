@@ -7,6 +7,7 @@ import i18n from 'i18n';
 import { SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
+    getMarketTypeDescription,
     getMarketTypeName,
     isAwayTeamMarket,
     isBothsTeamsToScoreMarket,
@@ -138,9 +139,11 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
         : getSimplePositionText(market.typeId, position, market.line, market.homeTeam, market.awayTeam, extendedText);
 };
 
-export const getTitleText = (market: SportMarket) => {
+export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
     const marketType = market.typeId as MarketType;
-    const marketTypeName = getMarketTypeName(marketType);
+    const marketTypeDescription = getMarketTypeDescription(marketType);
+    const marketTypeName =
+        useDescription && marketTypeDescription ? marketTypeDescription : getMarketTypeName(marketType);
 
     let sufix = isPeriodMarket(marketType)
         ? ` ${getLeaguePeriodType(market.leagueId)}`
@@ -170,7 +173,10 @@ export const getTitleText = (market: SportMarket) => {
 export const getSubtitleText = (market: SportMarket, position: Position) => {
     const marketType = market.typeId;
 
-    if ((market.isPlayerPropsMarket && !market.isYesNoPlayerPropsMarket) || isTotalMarket(marketType)) {
+    if (
+        (market.isPlayerPropsMarket && !market.isYesNoPlayerPropsMarket && !market.isOneSidePlayerPropsMarket) ||
+        isTotalMarket(marketType)
+    ) {
         return position === 0 ? 'Over' : 'Under';
     }
 

@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
-import { getMarketTypeName } from 'utils/markets';
+import { getMarketTypeTooltipKey } from 'utils/markets';
 import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
 import { getGridMinMaxPercentage } from '../../../../../../utils/ui';
 import PositionDetailsV2 from '../PositionDetailsV2';
@@ -60,6 +60,8 @@ const Positions: React.FC<PositionsProps> = ({
 
     const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
+    const titleText = getTitleText(markets[0], true);
+    const tooltipKey = getMarketTypeTooltipKey(markets[0].typeId);
 
     return showContainer ? (
         <Container
@@ -75,18 +77,10 @@ const Positions: React.FC<PositionsProps> = ({
             <Header isMainPageView={isMainPageView} isColumnView={isColumnView}>
                 {((isMobile && !isMainPageView) || !isMobile) && (
                     <Title isExpanded={isExpanded} isMainPageView={isMainPageView} isColumnView={isColumnView}>
-                        {getTitleText(markets[0])}
-                        {marketType == MarketType.PLAYER_PROPS_TOUCHDOWNS && (
+                        {titleText}
+                        {tooltipKey && (
                             <Tooltip
-                                overlay={
-                                    <>
-                                        {t(
-                                            `markets.market-card.odd-tooltip.player-props.info.${getMarketTypeName(
-                                                marketType
-                                            )}`
-                                        )}
-                                    </>
-                                }
+                                overlay={<>{t(`markets.market-card.type-tooltip.${tooltipKey}`)}</>}
                                 iconFontSize={13}
                                 marginLeft={3}
                             />

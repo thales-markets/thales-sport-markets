@@ -1,9 +1,19 @@
 import { League, MatchResolveType, PeriodType, ScoringType, Sport } from 'enums/sports';
-import { BOXING_LEAGUES, INTERNATIONAL_LEAGUES, LeagueMap } from '../constants/sports';
+import {
+    BOXING_LEAGUES,
+    INTERNATIONAL_LEAGUES,
+    LeagueMap,
+    PLAYER_PROPS_COMBINING_ENABLED_LEAGUES,
+} from '../constants/sports';
 
 export const getLeagueSport = (league: League) => {
     const leagueInfo = LeagueMap[league];
     return leagueInfo ? leagueInfo.sport : Sport.EMPTY;
+};
+
+export const getLeagueLabel = (league: League) => {
+    const leagueInfo = LeagueMap[league];
+    return leagueInfo ? leagueInfo.label : '';
 };
 
 export const getLeagueScoringType = (league: League) => {
@@ -51,3 +61,7 @@ export const isBoxingLeague = (league: League) => {
 };
 
 export const isInternationalLeague = (league: League) => INTERNATIONAL_LEAGUES.includes(league);
+
+export const isPlayerPropsCombiningEnabled = (league: League) => {
+    return PLAYER_PROPS_COMBINING_ENABLED_LEAGUES.includes(league);
+};

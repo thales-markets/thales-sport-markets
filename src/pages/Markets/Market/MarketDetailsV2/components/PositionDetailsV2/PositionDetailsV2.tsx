@@ -77,13 +77,14 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
             onClick={() => {
                 if (disabledPosition) return;
                 if (isAddedToTicket) {
-                    dispatch(removeFromTicket(market.gameId));
+                    dispatch(removeFromTicket(market));
                 } else {
                     const ticketPosition: TicketPosition = {
                         gameId: market.gameId,
                         leagueId: market.leagueId,
                         typeId: market.typeId,
                         playerId: market.playerProps.playerId,
+                        playerName: market.playerProps.playerName,
                         line: market.line,
                         position: position,
                         combinedPositions: market.combinedPositions,

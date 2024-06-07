@@ -124,6 +124,16 @@ export const getMarketTypeName = (marketType: MarketType) => {
     return marketTypeInfo ? marketTypeInfo.name : marketType;
 };
 
+export const getMarketTypeDescription = (marketType: MarketType) => {
+    const marketTypeInfo = MarketTypeMap[marketType];
+    return marketTypeInfo ? marketTypeInfo.description : undefined;
+};
+
+export const getMarketTypeTooltipKey = (marketType: MarketType) => {
+    const marketTypeInfo = MarketTypeMap[marketType];
+    return marketTypeInfo ? marketTypeInfo.tooltipKey : undefined;
+};
+
 export const isWithinSlippage = (originalOdd: number, newOdd: number, slippage: number): boolean => {
     if (originalOdd === newOdd) {
         return true;

@@ -586,6 +586,7 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'touchdowns',
         name: 'Scoring touchdown',
         description: 'Who will score a touchdown in the game?',
+        tooltipKey: 'touchdowns',
     },
     [MarketType.PLAYER_PROPS_FIELD_GOALS_MADE]: {
         id: MarketType.PLAYER_PROPS_FIELD_GOALS_MADE,
@@ -912,6 +913,8 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.PLAYER_POINTS]: [MarketType.PLAYER_PROPS_POINTS],
         [MarketTypeGroup.PLAYER_REBOUNDS]: [MarketType.PLAYER_PROPS_REBOUNDS],
         [MarketTypeGroup.PLAYER_ASSISTS]: [MarketType.PLAYER_PROPS_ASSISTS],
+        [MarketTypeGroup.PLAYER_BLOCKS]: [MarketType.PLAYER_PROPS_BLOCKS],
+        [MarketTypeGroup.PLAYER_THRESS]: [MarketType.PLAYER_PROPS_3PTS_MADE],
         [MarketTypeGroup.PLAYER_DOUBLE_DOUBLE]: [MarketType.PLAYER_PROPS_DOUBLE_DOUBLE],
         [MarketTypeGroup.PLAYER_TRIPLE_DOUBLE]: [MarketType.PLAYER_PROPS_TRIPLE_DOUBLE],
     },

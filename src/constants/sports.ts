@@ -817,6 +817,8 @@ export const INTERNATIONAL_LEAGUES = [
     League.CONMEBOL_WC_QUALIFICATIONS,
 ];
 
+export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [];
+
 export const SPORT_ID_MAP_ENETPULSE: Record<number, number> = {
     320: 18, // Hockey Norway
     24: 6, // NHL

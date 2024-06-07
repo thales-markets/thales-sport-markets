@@ -3,7 +3,10 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
 import { localStore } from 'thales-utils';
-import { ParlayPayment, TicketPosition } from 'types/markets';
+import { ParlayPayment, SportMarket, TicketPosition } from 'types/markets';
+import { isPlayerPropsMarket } from '../../utils/markets';
+import { isSameMarket } from '../../utils/marketsV2';
+import { getLeagueLabel, isPlayerPropsCombiningEnabled } from '../../utils/sports';
 import { RootState } from '../rootReducer';
 
 const sliceName = 'ticket';
@@ -73,8 +76,39 @@ const ticketSlice = createSlice({
                     state.error.data = state.maxTicketSize.toString();
                 }
             } else {
-                ticketCopy[existingPositionIndex] = action.payload;
-                state.ticket = [...ticketCopy];
+                const existingPosition = state.ticket[existingPositionIndex];
+                const isExistingPositionPP = isPlayerPropsMarket(existingPosition.typeId);
+                const isNewPositionPP = isPlayerPropsMarket(action.payload.typeId);
+                const playerAlreadyOnTicketIndex = state.ticket.findIndex(
+                    (el) => el.playerId === action.payload.playerId && action.payload.playerId > 0
+                );
+
+                if ((isExistingPositionPP && !isNewPositionPP) || (!isExistingPositionPP && isNewPositionPP)) {
+                    state.error.code = TicketErrorCode.OTHER_TYPES_WITH_PLAYER_PROPS;
+                } else if (isNewPositionPP && playerAlreadyOnTicketIndex > -1) {
+                    if (state.ticket[playerAlreadyOnTicketIndex].typeId !== action.payload.typeId) {
+                        state.error.code = TicketErrorCode.SAME_PLAYER_DIFFERENT_TYPES;
+                        state.error.data = action.payload.playerName;
+                    } else {
+                        ticketCopy[playerAlreadyOnTicketIndex] = action.payload;
+                        state.ticket = [...ticketCopy];
+                    }
+                } else if (isExistingPositionPP && isNewPositionPP) {
+                    if (isPlayerPropsCombiningEnabled(action.payload.leagueId)) {
+                        if (state.ticket.length < state.maxTicketSize) {
+                            state.ticket.push(action.payload);
+                        } else {
+                            state.error.code = TicketErrorCode.MAX_MATCHES;
+                            state.error.data = state.maxTicketSize.toString();
+                        }
+                    } else {
+                        state.error.code = TicketErrorCode.PLAYER_PROPS_COMBINING_NOT_ENABLED;
+                        state.error.data = getLeagueLabel(action.payload.leagueId);
+                    }
+                } else {
+                    ticketCopy[existingPositionIndex] = action.payload;
+                    state.ticket = [...ticketCopy];
+                }
             }
 
             localStore.set(LOCAL_STORAGE_KEYS.PARLAY, state.ticket);
@@ -82,8 +116,8 @@ const ticketSlice = createSlice({
         setMaxTicketSize: (state, action: PayloadAction<number>) => {
             state.maxTicketSize = action.payload;
         },
-        removeFromTicket: (state, action: PayloadAction<string>) => {
-            state.ticket = state.ticket.filter((market) => market.gameId !== action.payload);
+        removeFromTicket: (state, action: PayloadAction<SportMarket>) => {
+            state.ticket = state.ticket.filter((market) => !isSameMarket(action.payload, market));
 
             if (state.ticket.length === 0) {
                 state.payment.amountToBuy = getDefaultPayment().amountToBuy;

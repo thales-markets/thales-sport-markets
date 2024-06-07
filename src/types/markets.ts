@@ -158,6 +158,7 @@ export type TicketPosition = {
     leagueId: number;
     typeId: number;
     playerId: number;
+    playerName: string;
     line: number;
     position: number;
     combinedPositions: CombinedPositions[];
