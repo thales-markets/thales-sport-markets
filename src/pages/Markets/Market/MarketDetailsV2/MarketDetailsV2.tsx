@@ -14,19 +14,18 @@ import Parlay from 'pages/Markets/Home/Parlay';
 import TicketMobileModal from 'pages/Markets/Home/Parlay/components/TicketMobileModal';
 import BackToLink from 'pages/Markets/components/BackToLink';
 import queryString from 'query-string';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getMarketTypeGroupFilter, setMarketTypeGroupFilter } from 'redux/modules/market';
-import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { SportMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { showGameScore, showLiveInfo } from 'utils/marketsV2';
-import { buildHref, navigateTo } from 'utils/routes';
+import { buildHref } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
 import useQueryParam from 'utils/useQueryParams';
@@ -44,7 +43,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
     const theme: ThemeInterface = useTheme();
     const dispatch = useDispatch();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const queryParams: { title?: string } = queryString.parse(location.search);
 
@@ -88,16 +86,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [market.awayTeam, market.homeTeam]);
-
-    const isMounted = useRef(false);
-    useEffect(() => {
-        // skip first render
-        if (isMounted.current) {
-            navigateTo(ROUTES.Markets.Home);
-        } else {
-            isMounted.current = true;
-        }
-    }, [networkId]);
 
     const isGameStarted = market.maturityDate < new Date();
     const isGameOpen = market.isOpen && !isGameStarted;

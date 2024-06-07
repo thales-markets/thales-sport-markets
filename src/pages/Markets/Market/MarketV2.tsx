@@ -33,7 +33,15 @@ const Market: React.FC<MarketProps> = (props) => {
         }
     }, [marketAddress, singleMarketQuery.isSuccess, singleMarketQuery.data]);
 
-    return <Container>{lastValidMarket ? <MarketDetailsV2 market={lastValidMarket} /> : <SimpleLoader />}</Container>;
+    return (
+        <Container>
+            {lastValidMarket && !singleMarketQuery.isLoading ? (
+                <MarketDetailsV2 market={lastValidMarket} />
+            ) : (
+                <SimpleLoader />
+            )}
+        </Container>
+    );
 };
 
 const Container = styled(FlexDivColumn)`
