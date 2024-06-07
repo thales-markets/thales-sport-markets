@@ -1,26 +1,38 @@
 import Scroll from 'components/Scroll';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import ReactModal from 'react-modal';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { ThemeInterface } from '../../../../../../types/ui';
 import Parlay from '../../ParlayV2';
 
 type ParylayMobileModalProps = {
     onClose: () => void;
+    isOpen: boolean;
 };
 
-const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose }) => {
+const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose, isOpen }) => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
+
     return (
-        <Container>
-            <Header>
-                <Title>{t('markets.parlay.ticket-slip')}</Title>
-            </Header>
-            <CloseIcon className="icon icon--close" onClick={onClose} />
-            <Scroll height="calc(100vh">
-                <Parlay />
-            </Scroll>
-        </Container>
+        <ReactModal
+            isOpen={isOpen}
+            onRequestClose={onClose}
+            shouldCloseOnOverlayClick={false}
+            style={getCustomModalStyles(theme)}
+        >
+            <Container>
+                <Header>
+                    <Title>{t('markets.parlay.ticket-slip')}</Title>
+                </Header>
+                <CloseIcon className="icon icon--close" onClick={onClose} />
+                <Scroll height="calc(100vh">
+                    <Parlay />
+                </Scroll>
+            </Container>
+        </ReactModal>
     );
 };
 
@@ -58,5 +70,25 @@ const CloseIcon = styled.i`
     font-size: 18px;
     padding: 14px 16px;
 `;
+
+const getCustomModalStyles = (theme: ThemeInterface) => ({
+    content: {
+        top: '0',
+        overflow: 'auto',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        padding: '0px',
+        background: 'transparent',
+        border: 'none',
+        width: '100%',
+        height: '100vh',
+    },
+    overlay: {
+        backgroundColor: theme.background.secondary,
+        zIndex: '1000',
+    },
+});
 
 export default ParylayMobileModal;

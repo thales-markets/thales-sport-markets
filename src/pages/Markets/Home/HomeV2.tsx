@@ -672,18 +672,12 @@ const Home: React.FC = () => {
                     </Suspense>
                 </RightSidebarContainer>
             </RowContainer>
-            <ReactModal
-                isOpen={isMobile && showTicketMobileModal}
-                onRequestClose={() => {
-                    setShowTicketMobileModal(false);
-                }}
-                shouldCloseOnOverlayClick={false}
-                style={getCustomModalStyles(theme)}
-            >
-                <Suspense fallback={<Loader />}>
-                    <TicketMobileModal onClose={() => setShowTicketMobileModal(false)} />
-                </Suspense>
-            </ReactModal>
+            <Suspense fallback={<Loader />}>
+                <TicketMobileModal
+                    onClose={() => setShowTicketMobileModal(false)}
+                    isOpen={isMobile && showTicketMobileModal}
+                />
+            </Suspense>
             {isMobile && (
                 <Suspense fallback={<Loader />}>
                     <FooterSidebarMobile

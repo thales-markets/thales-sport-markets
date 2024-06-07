@@ -309,7 +309,10 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     <Parlay />
                 </SidebarContainer>
             )}
-            {isMobile && showTicketMobileModal && <TicketMobileModal onClose={() => setShowTicketMobileModal(false)} />}
+            <TicketMobileModal
+                onClose={() => setShowTicketMobileModal(false)}
+                isOpen={isMobile && showTicketMobileModal}
+            />
             {isMobile && <FooterSidebarMobile setParlayMobileVisibility={setShowTicketMobileModal} />}
         </RowContainer>
     );
