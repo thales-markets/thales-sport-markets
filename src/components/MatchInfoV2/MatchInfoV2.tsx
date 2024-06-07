@@ -19,9 +19,19 @@ type MatchInfoProps = {
     customStyle?: { fontSize?: string; lineHeight?: string };
     showOddUpdates?: boolean;
     setOddsChanged?: (changed: boolean) => void;
+    acceptOdds?: boolean;
+    setAcceptOdds?: (accept: boolean) => void;
 };
 
-const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle, showOddUpdates, setOddsChanged }) => {
+const MatchInfo: React.FC<MatchInfoProps> = ({
+    market,
+    readOnly,
+    customStyle,
+    showOddUpdates,
+    setOddsChanged,
+    acceptOdds,
+    setAcceptOdds,
+}) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const networkId = useSelector(getNetworkId);
@@ -38,6 +48,13 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle, sh
     // used only for live ticket
     const previousMarket = useRef<TicketMarket>(market);
     const firstClickMarket = useRef<TicketMarket>(market);
+
+    useEffect(() => {
+        if (acceptOdds) {
+            firstClickMarket.current = market;
+            setAcceptOdds && setAcceptOdds(false);
+        }
+    }, [acceptOdds, market, setAcceptOdds]);
 
     useEffect(() => {
         if (market.live && showOddUpdates) {
@@ -61,6 +78,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle, sh
                 }
             } else {
                 firstClickMarket.current = market;
+                setOddsChanged && setOddsChanged(false);
             }
             previousMarket.current = market;
         }

@@ -40,6 +40,7 @@ const Parlay: React.FC = () => {
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
+    const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
     const sportsAmmDataQuery = useSportsAmmDataQuery(networkId, {
@@ -154,7 +155,13 @@ const Parlay: React.FC = () => {
                                 const outOfLiquidity = outOfLiquidityMarkets.includes(index);
                                 return (
                                     <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                        <MatchInfoV2 market={market} showOddUpdates setOddsChanged={setOddsChanged} />
+                                        <MatchInfoV2
+                                            market={market}
+                                            showOddUpdates
+                                            setOddsChanged={setOddsChanged}
+                                            acceptOdds={acceptOdds}
+                                            setAcceptOdds={setAcceptOdds}
+                                        />
                                     </RowMarket>
                                 );
                             })}
@@ -163,7 +170,10 @@ const Parlay: React.FC = () => {
                         markets={ticketMarkets}
                         setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
                         oddsChanged={oddsChanged}
-                        setOddsChanged={setOddsChanged}
+                        setOddsChanged={(changed: boolean) => {
+                            setAcceptOdds(true);
+                            setOddsChanged(changed);
+                        }}
                     />
                 </>
             ) : (
