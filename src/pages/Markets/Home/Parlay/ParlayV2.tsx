@@ -1,5 +1,5 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import MatchInfoV2 from 'components/MatchInfoV2';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getSportFilter } from 'redux/modules/market';
 import {
     getHasTicketError,
     getTicket,
@@ -22,7 +23,6 @@ import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket, TicketMarket } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
-import MatchInfoV2 from '../../../../components/MatchInfoV2';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
@@ -35,9 +35,8 @@ const Parlay: React.FC = () => {
     const isWalletConnected = useSelector(getIsWalletConnected);
     const ticket = useSelector(getTicket);
     const hasTicketError = useSelector(getHasTicketError);
-    // TODO SWITCH CHECK TO LIVE WITH SPORTMARKETSV2 OBJECT FLAG
-    const liveFilter = localStorage.getItem(LOCAL_STORAGE_KEYS.FILTER_SPORT);
-    const isLiveFilterSelected = liveFilter != null ? JSON.parse(liveFilter) == SportFilter.Live : false;
+    const sportFilter = useSelector(getSportFilter);
+    const isLiveFilterSelected = sportFilter == SportFilter.Live;
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);

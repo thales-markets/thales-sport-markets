@@ -1,14 +1,14 @@
+import IncentivizedLeague from 'components/IncentivizedLeague';
+import { LeagueMap } from 'constants/sports';
 import { orderBy } from 'lodash';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getIsMarketSelected } from 'redux/modules/market';
 import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { SportMarkets, TagInfo } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
-import IncentivizedLeague from '../../../../components/IncentivizedLeague';
-import { LeagueMap } from '../../../../constants/sports';
-import { getIsMarketSelected } from '../../../../redux/modules/market';
-import { isOneSideMarket } from '../../../../utils/markets';
+import { isOneSideMarket } from 'utils/markets';
 import MarketListCardV2 from '../MarketListCard';
 
 type MarketsList = {

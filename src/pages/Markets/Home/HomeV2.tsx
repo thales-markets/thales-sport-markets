@@ -295,6 +295,7 @@ const Home: React.FC = () => {
             filteredMarkets,
             ['maturityDate'],
             [
+                statusFilter === StatusFilter.ONGOING_MARKETS ||
                 statusFilter === StatusFilter.RESOLVED_MARKETS ||
                 statusFilter === StatusFilter.CANCELLED_MARKETS ||
                 statusFilter === StatusFilter.PAUSED_MARKETS

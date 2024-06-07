@@ -7,13 +7,13 @@ import i18n from 'i18n';
 import { groupBy } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsMarketSelected } from 'redux/modules/market';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
-import { getIsMobile } from '../../../../redux/modules/app';
-import { getLeagueSport } from '../../../../utils/sports';
+import { getLeagueSport } from 'utils/sports';
 import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
