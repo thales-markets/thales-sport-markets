@@ -26,11 +26,11 @@ const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose }) => {
 
 const Container = styled(FlexDivColumnCentered)`
     background: ${(props) => props.theme.background.quinary};
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     z-index: 4;
 `;
 
