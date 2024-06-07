@@ -40,7 +40,7 @@ const Parlay: React.FC = () => {
     const isLiveFilterSelected = liveFilter != null ? JSON.parse(liveFilter) == SportFilter.Live : false;
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
-
+    const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
     const sportsAmmDataQuery = useSportsAmmDataQuery(networkId, {
@@ -152,12 +152,17 @@ const Parlay: React.FC = () => {
                                 const outOfLiquidity = outOfLiquidityMarkets.includes(index);
                                 return (
                                     <RowMarket key={index} outOfLiquidity={outOfLiquidity}>
-                                        <MatchInfoV2 market={market} showOddUpdates />
+                                        <MatchInfoV2 market={market} showOddUpdates setOddsChanged={setOddsChanged} />
                                     </RowMarket>
                                 );
                             })}
                     </ListContainer>
-                    <TicketV2 markets={ticketMarkets} setMarketsOutOfLiquidity={setOutOfLiquidityMarkets} />
+                    <TicketV2
+                        markets={ticketMarkets}
+                        setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
+                        oddsChanged={oddsChanged}
+                        setOddsChanged={setOddsChanged}
+                    />
                 </>
             ) : (
                 <>

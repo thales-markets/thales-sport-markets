@@ -37,6 +37,7 @@ export default {
             quaternary: Colors.BLUE,
             quinary: Colors.BLUE,
             senary: Colors.TORY_BLUE,
+            septenary: Colors.RED,
         },
         textColor: {
             primary: Colors.NAVY_BLUE_DARK,

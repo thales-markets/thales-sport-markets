@@ -18,9 +18,10 @@ type MatchInfoProps = {
     readOnly?: boolean;
     customStyle?: { fontSize?: string; lineHeight?: string };
     showOddUpdates?: boolean;
+    setOddsChanged?: (changed: boolean) => void;
 };
 
-const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle, showOddUpdates }) => {
+const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle, showOddUpdates, setOddsChanged }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const networkId = useSelector(getNetworkId);
@@ -46,24 +47,24 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle, sh
             ) {
                 if (isWithinSlippage(firstClickMarket.current.odd, market.odd, liveBetSlippage)) {
                     if (market.odd < previousMarket.current.odd) {
+                        document.getElementById('odd-change-down')?.classList.remove('descend');
+                        document.getElementById('odd-change-up')?.classList.remove('rise');
                         document.getElementById('odd-change-up')?.classList.add('rise');
-                        setTimeout(() => {
-                            document.getElementById('odd-change-up')?.classList.remove('rise');
-                        }, 3000);
                     }
                     if (market.odd > previousMarket.current.odd) {
+                        document.getElementById('odd-change-down')?.classList.remove('descend');
+                        document.getElementById('odd-change-up')?.classList.remove('rise');
                         document.getElementById('odd-change-down')?.classList.add('descend');
-                        setTimeout(() => {
-                            document.getElementById('odd-change-down')?.classList.remove('descend');
-                        }, 3000);
                     }
+                } else {
+                    setOddsChanged && setOddsChanged(true);
                 }
             } else {
                 firstClickMarket.current = market;
             }
             previousMarket.current = market;
         }
-    }, [market, market.odd, liveBetSlippage, showOddUpdates]);
+    }, [market, market.odd, liveBetSlippage, showOddUpdates, setOddsChanged]);
 
     return (
         <>
@@ -112,7 +113,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ market, readOnly, customStyle, sh
 
 const OddChangeUp = styled.span`
     position: absolute;
-    bottom: 0;
+    bottom: 4px;
     left: -15px;
     visibility: hidden;
     margin-right: 5px;
@@ -130,11 +131,11 @@ const OddChangeUp = styled.span`
     }
     @keyframes rise {
         0% {
-            transform: scale(1) translateY(-1px);
+            transform: scale(1) translateY(2px);
             opacity: 1;
         }
         100% {
-            transform: scale(0.9) translateY(-11px);
+            transform: scale(0.9) translateY(-3px);
             opacity: 0.5;
         }
     }
@@ -142,7 +143,7 @@ const OddChangeUp = styled.span`
 
 const OddChangeDown = styled.span`
     position: absolute;
-    top: 0;
+    top: 5px;
     left: -15px;
     visibility: hidden;
     margin-right: 5px;
@@ -160,11 +161,11 @@ const OddChangeDown = styled.span`
     }
     @keyframes descend {
         0% {
-            transform: scale(1) translateY(1);
+            transform: scale(1) translateY(-3px);
             opacity: 1;
         }
         100% {
-            transform: scale(0.9) translateY(11px);
+            transform: scale(0.9) translateY(2px);
             opacity: 0.5;
         }
     }

@@ -125,8 +125,6 @@ export const getMarketTypeName = (marketType: MarketType) => {
 };
 
 export const isWithinSlippage = (originalOdd: number, newOdd: number, slippage: number): boolean => {
-    // TODO: remove
-    return true;
     if (originalOdd === newOdd) {
         return true;
     }

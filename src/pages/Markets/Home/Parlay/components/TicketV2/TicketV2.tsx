@@ -117,6 +117,8 @@ import {
 type TicketProps = {
     markets: TicketMarket[];
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
+    oddsChanged: boolean;
+    setOddsChanged: (changed: boolean) => void;
 };
 
 const TicketErrorMessage = {
@@ -126,7 +128,7 @@ const TicketErrorMessage = {
 
 const SLIPPAGE_PERCENTAGES = [0.5, 1, 2];
 
-const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) => {
+const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, oddsChanged, setOddsChanged }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -695,6 +697,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
     };
 
     useEffect(() => {
+        if (oddsChanged && markets?.[0]?.live) {
+            setSubmitDisabled(true);
+            return;
+        }
+
         if (isAMMPaused) {
             setSubmitDisabled(true);
             return;
@@ -738,6 +745,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
         isAMMPaused,
         minBuyInAmount,
         payout,
+        oddsChanged,
+        markets,
     ]);
 
     const getSubmitButton = () => {
@@ -1258,6 +1267,18 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                     </CheckboxContainer>
                 </RowContainer>
             </RowSummary>
+            {oddsChanged && (
+                <FlexDivCentered>
+                    <Button
+                        onClick={() => setOddsChanged(false)}
+                        borderColor="transparent"
+                        backgroundColor={theme.button.background.septenary}
+                        {...defaultButtonProps}
+                    >
+                        {t('markets.parlay.accept-odds-changes')}
+                    </Button>
+                </FlexDivCentered>
+            )}
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
