@@ -28,7 +28,7 @@ const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose, isOpen
                     <Title>{t('markets.parlay.ticket-slip')}</Title>
                 </Header>
                 <CloseIcon className="icon icon--close" onClick={onClose} />
-                <Scroll height="calc(100vh">
+                <Scroll height="calc(100vh)">
                     <Parlay />
                 </Scroll>
             </Container>

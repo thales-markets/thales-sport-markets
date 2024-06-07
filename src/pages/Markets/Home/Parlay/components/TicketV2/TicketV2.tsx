@@ -383,7 +383,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity }) =>
                         }
                     }
                     console.log(e);
-                    return { error: errorMessage };
+                    return { error: e };
                 }
             }
         },
