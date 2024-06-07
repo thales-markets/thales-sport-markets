@@ -5,22 +5,22 @@ import { StatusFilter } from 'enums/markets';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { SportMarkets, Team } from 'types/markets';
+import { MarketsCache, Team } from 'types/markets';
 
-const marketsCache = {
-    [StatusFilter.OPEN_MARKETS]: [] as SportMarkets,
-    [StatusFilter.ONGOING_MARKETS]: [] as SportMarkets,
-    [StatusFilter.RESOLVED_MARKETS]: [] as SportMarkets,
-    [StatusFilter.PAUSED_MARKETS]: [] as SportMarkets,
-    [StatusFilter.CANCELLED_MARKETS]: [] as SportMarkets,
+const marketsCache: MarketsCache = {
+    [StatusFilter.OPEN_MARKETS]: [],
+    [StatusFilter.ONGOING_MARKETS]: [],
+    [StatusFilter.RESOLVED_MARKETS]: [],
+    [StatusFilter.PAUSED_MARKETS]: [],
+    [StatusFilter.CANCELLED_MARKETS]: [],
 };
 
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     networkId: Network,
-    options?: UseQueryOptions<typeof marketsCache>
+    options?: UseQueryOptions<MarketsCache>
 ) => {
-    return useQuery<typeof marketsCache>(
+    return useQuery<MarketsCache>(
         QUERY_KEYS.SportMarketsV2(statusFilter, networkId),
         async () => {
             try {

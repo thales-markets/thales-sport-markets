@@ -1,4 +1,4 @@
-import { GameStatus, Position } from 'enums/markets';
+import { GameStatus, Position, StatusFilter } from 'enums/markets';
 import { ethers } from 'ethers';
 import { Network } from '../enums/network';
 import { League, Sport } from '../enums/sports';
@@ -144,6 +144,14 @@ export type SportMarket = {
 };
 
 export type SportMarkets = SportMarket[];
+
+export type MarketsCache = {
+    [StatusFilter.OPEN_MARKETS]: SportMarkets;
+    [StatusFilter.ONGOING_MARKETS]: SportMarkets;
+    [StatusFilter.RESOLVED_MARKETS]: SportMarkets;
+    [StatusFilter.PAUSED_MARKETS]: SportMarkets;
+    [StatusFilter.CANCELLED_MARKETS]: SportMarkets;
+};
 
 export type TicketPosition = {
     gameId: string;

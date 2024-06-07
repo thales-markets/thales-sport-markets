@@ -40,7 +40,7 @@ import { getNetworkId } from 'redux/modules/wallet';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { addHoursToCurrentDate, localStore } from 'thales-utils';
-import { SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { MarketsCache, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { history } from 'utils/routes';
 import useQueryParam from 'utils/useQueryParams';
@@ -68,14 +68,6 @@ const FooterSidebarMobile = lazy(
 );
 
 const MarketsGridV2 = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ './MarketsGridV2'));
-
-type AllMarkets = {
-    [StatusFilter.OPEN_MARKETS]: SportMarkets;
-    [StatusFilter.ONGOING_MARKETS]: SportMarkets;
-    [StatusFilter.RESOLVED_MARKETS]: SportMarkets;
-    [StatusFilter.PAUSED_MARKETS]: SportMarkets;
-    [StatusFilter.CANCELLED_MARKETS]: SportMarkets;
-};
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -216,7 +208,7 @@ const Home: React.FC = () => {
     });
 
     const finalMarkets = useMemo(() => {
-        const allMarkets: AllMarkets =
+        const allMarkets: MarketsCache =
             sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
                 ? sportMarketsQueryNew.data
                 : {
