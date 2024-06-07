@@ -1107,7 +1107,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                                             onChangeHandler={(slippage: number) =>
                                                 dispatch(setLiveBetSlippage(slippage))
                                             }
-                                            maxValue={10}
                                         />
                                     </SlippageDropdownContainer>
                                 )}
