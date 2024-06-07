@@ -697,7 +697,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
     };
 
     useEffect(() => {
-        if (oddsChanged && markets?.[0]?.live) {
+        if (!isBuying && oddsChanged && markets?.[0]?.live) {
             setSubmitDisabled(true);
             return;
         }
