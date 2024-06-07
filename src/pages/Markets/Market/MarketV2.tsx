@@ -23,7 +23,7 @@ const Market: React.FC<MarketProps> = (props) => {
     const { params } = props.match;
     const marketAddress = params && params.marketAddress ? params.marketAddress : '';
 
-    const singleMarketQuery = useSportMarketV2Query(marketAddress, networkId, {
+    const singleMarketQuery = useSportMarketV2Query(marketAddress, false, networkId, {
         enabled: isAppReady,
     });
 
