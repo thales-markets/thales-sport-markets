@@ -160,7 +160,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
     const [isAMMPaused, setIsAMMPaused] = useState(false);
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [hasAllowance, setHasAllowance] = useState(false);
-    const [, /*isFetching*/ setIsFetching] = useState(false);
+    const [isFetching, setIsFetching] = useState(false);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextBuyInAmount, setTooltipTextBuyInAmount] = useState<string>('');
@@ -878,7 +878,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
         Number(buyInAmount) < minBuyInAmount ||
         payout === 0 ||
         // hide when validation tooltip exists except in case of invalid profit and not enough funds
-        (tooltipTextBuyInAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance);
+        (tooltipTextBuyInAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance) ||
+        isFetching;
 
     const profitPercentage =
         (Number(buyInAmountInDefaultCollateral) / Number(totalQuote) - Number(buyInAmountInDefaultCollateral)) /

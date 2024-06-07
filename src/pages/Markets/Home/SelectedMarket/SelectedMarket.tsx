@@ -99,6 +99,7 @@ const Wrapper = styled(FlexDivColumn)`
 `;
 
 const HeaderContainer = styled(FlexDivColumn)`
+    flex: initial;
     @media (max-width: 950px) {
         margin-bottom: 10px;
     }

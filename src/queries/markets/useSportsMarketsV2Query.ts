@@ -7,12 +7,20 @@ import { orderBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarkets, Team } from 'types/markets';
 
+const marketsCache = {
+    [StatusFilter.OPEN_MARKETS]: [] as SportMarkets,
+    [StatusFilter.ONGOING_MARKETS]: [] as SportMarkets,
+    [StatusFilter.RESOLVED_MARKETS]: [] as SportMarkets,
+    [StatusFilter.PAUSED_MARKETS]: [] as SportMarkets,
+    [StatusFilter.CANCELLED_MARKETS]: [] as SportMarkets,
+};
+
 const useSportsMarketsV2Query = (
     statusFilter: StatusFilter,
     networkId: Network,
-    options?: UseQueryOptions<SportMarkets>
+    options?: UseQueryOptions<typeof marketsCache>
 ) => {
-    return useQuery<SportMarkets>(
+    return useQuery<typeof marketsCache>(
         QUERY_KEYS.SportMarketsV2(statusFilter, networkId),
         async () => {
             try {
@@ -30,7 +38,7 @@ const useSportsMarketsV2Query = (
                 const gamesInfo = gamesInfoResponse.data;
                 const liveScores = liveScoresResponse.data;
 
-                return markets.map((market: any) => {
+                marketsCache[statusFilter] = markets.map((market: any) => {
                     const gameInfo = gamesInfo[market.gameId];
                     const liveScore = liveScores[market.gameId];
 
@@ -73,7 +81,7 @@ const useSportsMarketsV2Query = (
             } catch (e) {
                 console.log(e);
             }
-            return [];
+            return marketsCache;
         },
         {
             refetchInterval: 5 * 1000,

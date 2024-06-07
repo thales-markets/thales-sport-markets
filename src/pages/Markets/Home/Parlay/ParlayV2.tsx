@@ -103,13 +103,16 @@ const Parlay: React.FC = () => {
 
     useEffect(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data && !isLiveFilterSelected) {
-            const sportOpenMarkets = sportMarketsQuery.data.reduce((acc: SportMarket[], market: SportMarket) => {
-                acc.push(market);
-                market.childMarkets.forEach((childMarket: SportMarket) => {
-                    acc.push(childMarket);
-                });
-                return acc;
-            }, []);
+            const sportOpenMarkets = sportMarketsQuery.data[StatusFilter.OPEN_MARKETS].reduce(
+                (acc: SportMarket[], market: SportMarket) => {
+                    acc.push(market);
+                    market.childMarkets.forEach((childMarket: SportMarket) => {
+                        acc.push(childMarket);
+                    });
+                    return acc;
+                },
+                []
+            );
 
             const ticketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
