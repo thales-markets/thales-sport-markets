@@ -70,6 +70,6 @@ export const getSportsAMMV2QuoteMethod: any = (
         tradeData,
         buyInAmount,
         isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
-        true
+        false
     );
 };
