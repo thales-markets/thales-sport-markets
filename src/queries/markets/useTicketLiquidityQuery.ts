@@ -17,6 +17,7 @@ const useTicketLiquidityQuery = (
             markets.map((market) => market.playerProps.playerId).join(','),
             markets.map((market) => market.line).join(','),
             markets.map((market) => market.position).join(','),
+            markets.map((market) => market.live).join(','),
             networkId
         ),
         async () => {
@@ -42,7 +43,8 @@ const useTicketLiquidityQuery = (
                                 market.typeId,
                                 market.playerProps.playerId,
                                 market.line * 100,
-                                market.live ? Math.round(new Date().getTime() / 1000) + 60 : market.maturity
+                                market.live ? Math.round(new Date().getTime() / 1000) + 60 : market.maturity,
+                                !!market.live
                             )
                         );
                     }

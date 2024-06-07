@@ -69,6 +69,7 @@ export const getSportsAMMV2QuoteMethod: any = (
     return sportsAMMV2Contract.tradeQuote(
         tradeData,
         buyInAmount,
-        isDefaultCollateral ? ZERO_ADDRESS : collateralAddress
+        isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+        true
     );
 };

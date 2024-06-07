@@ -26,8 +26,9 @@ const QUERY_KEYS = {
         playerIds: string,
         lines: string,
         positions: string,
+        lives: string,
         networkId: Network
-    ) => ['ticketLiquidity', gameIds, typeIds, playerIds, lines, positions, networkId],
+    ) => ['ticketLiquidity', gameIds, typeIds, playerIds, lines, positions, lives, networkId],
     LiveTradingProcessorData: (networkId: Network) => ['liveTradingProcessorData', networkId],
     LiveResult: (marketId: string) => ['liveResult', marketId],
     LiveScore: (gameId: string) => ['liveScore', gameId],
