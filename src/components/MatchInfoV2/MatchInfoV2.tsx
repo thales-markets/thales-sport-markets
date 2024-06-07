@@ -66,12 +66,16 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                     if (market.odd < previousMarket.current.odd) {
                         document.getElementById('odd-change-down')?.classList.remove('descend');
                         document.getElementById('odd-change-up')?.classList.remove('rise');
-                        document.getElementById('odd-change-up')?.classList.add('rise');
+                        setTimeout(() => {
+                            document.getElementById('odd-change-up')?.classList.add('rise');
+                        });
                     }
                     if (market.odd > previousMarket.current.odd) {
                         document.getElementById('odd-change-down')?.classList.remove('descend');
                         document.getElementById('odd-change-up')?.classList.remove('rise');
-                        document.getElementById('odd-change-down')?.classList.add('descend');
+                        setTimeout(() => {
+                            document.getElementById('odd-change-down')?.classList.add('descend');
+                        });
                     }
                 } else {
                     setOddsChanged && setOddsChanged(true);
