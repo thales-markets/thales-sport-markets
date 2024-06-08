@@ -31,6 +31,7 @@ import {
     getTagFilter,
     setDatePeriodFilter,
     setMarketSearch,
+    setSelectedMarket,
     setSportFilter,
     setStatusFilter,
     setTagFilter,
@@ -558,7 +559,7 @@ const Home: React.FC = () => {
                     setShowBurger(false);
                 }}
                 shouldCloseOnOverlayClick={false}
-                style={getCustomModalStyles(theme)}
+                style={getCustomModalStyles(theme, '1002')}
             >
                 <BurgerFiltersContainer>
                     <LogoContainer>
@@ -668,8 +669,22 @@ const Home: React.FC = () => {
                                                 <MarketsGridV2 markets={finalMarkets} />
                                             </Suspense>
                                         )}
-                                        {isMarketSelected && statusFilter === StatusFilter.OPEN_MARKETS && (
-                                            <SelectedMarket availableMarketTypes={availableMarketTypes} />
+                                        {isMobile ? (
+                                            <ReactModal
+                                                isOpen={isMarketSelected && statusFilter === StatusFilter.OPEN_MARKETS}
+                                                onRequestClose={() => {
+                                                    dispatch(setSelectedMarket(undefined));
+                                                }}
+                                                shouldCloseOnOverlayClick={false}
+                                                style={getCustomModalStyles(theme, '1000')}
+                                            >
+                                                <SelectedMarket availableMarketTypes={availableMarketTypes} />{' '}
+                                            </ReactModal>
+                                        ) : (
+                                            isMarketSelected &&
+                                            statusFilter === StatusFilter.OPEN_MARKETS && (
+                                                <SelectedMarket availableMarketTypes={availableMarketTypes} />
+                                            )
                                         )}
                                     </FlexDivRow>
                                 </>
@@ -833,7 +848,7 @@ const ArrowIcon = styled.i`
     text-transform: none;
 `;
 
-const getCustomModalStyles = (theme: ThemeInterface) => ({
+const getCustomModalStyles = (theme: ThemeInterface, zIndex: string) => ({
     content: {
         top: '0',
         overflow: 'auto',
@@ -849,7 +864,7 @@ const getCustomModalStyles = (theme: ThemeInterface) => ({
     },
     overlay: {
         backgroundColor: theme.background.secondary,
-        zIndex: '1000',
+        zIndex: zIndex,
     },
 });
 

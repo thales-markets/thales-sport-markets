@@ -24,6 +24,7 @@ export const Title = styled.span<{ isExpanded: boolean; isMainPageView?: boolean
     text-transform: uppercase;
     margin-bottom: ${(props) => (props.isMainPageView ? (props.isColumnView ? 8 : 14) : props.isExpanded ? 5 : 0)}px;
     text-align: center;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 export const SubTitleContainer = styled(FlexDiv)`

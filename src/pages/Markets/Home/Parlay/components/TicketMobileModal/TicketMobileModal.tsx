@@ -43,7 +43,6 @@ const Container = styled(FlexDivColumnCentered)`
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 4;
 `;
 
 const Header = styled(FlexDivRow)`
@@ -87,7 +86,7 @@ const getCustomModalStyles = (theme: ThemeInterface) => ({
     },
     overlay: {
         backgroundColor: theme.background.secondary,
-        zIndex: '1000',
+        zIndex: '1003',
     },
 });
 
