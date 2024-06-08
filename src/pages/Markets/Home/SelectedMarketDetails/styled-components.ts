@@ -7,6 +7,7 @@ export const Wrapper = styled(FlexDivColumn)<{
     position: relative;
     width: 100%;
     display: ${(props) => (props.hideGame ? 'none' : '')};
+    color: ${(props) => props.theme.textColor.primary};
     padding: 10px 10px 10px 10px;
     height: fit-content;
     -webkit-user-select: none;

@@ -23,7 +23,7 @@ const defaultCustomStyles = {
         left: '50%',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-50%',
+        marginRight: '-48%',
         transform: 'translate(-50%, -50%)',
         padding: '0px',
         background: 'transparent',
