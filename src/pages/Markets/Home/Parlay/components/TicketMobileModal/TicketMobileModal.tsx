@@ -67,7 +67,7 @@ const CloseIcon = styled.i`
     right: 0px;
     top: 0px;
     font-size: 18px;
-    padding: 14px 16px;
+    padding: 14px 18px;
 `;
 
 const getCustomModalStyles = (theme: ThemeInterface) => ({
