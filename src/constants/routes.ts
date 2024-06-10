@@ -69,9 +69,9 @@ export const API_ROUTES = {
     LPPnls: 'v1/sport-markets/liquidity-providing/pnl',
     LPTransactions: 'v1/sport-markets/liquidity-providing/transactions',
 
-    OptionTransactions: 'v1/sport-markets/trades/option-transactions',
-    PositionBalance: 'v1/sport-markets/trades/position-balance',
-    RangedPositionBalance: 'v1/sport-markets/trades/ranged-position-balance',
+    Transactions: 'v1/sport-markets/transactions',
+    PositionBalance: 'v1/sport-markets/transactions/position-balance',
+    Parlays: 'v1/sport-markets/transactions/parlays',
 
     MarketsList: 'v1/sport-markets/markets/list',
     RangeMarketsList: 'v1/sport-markets/markets/ranged',

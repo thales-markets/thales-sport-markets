@@ -1,7 +1,9 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
 import { ParlayMarket } from 'types/markets';
 import { getIsOneSideMarket, updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 
@@ -16,13 +18,14 @@ export const useParlayMarketsQuery = (
         QUERY_KEYS.ParlayMarkets(networkId, account, minTimestamp, maxTimestamp),
         async () => {
             try {
-                if (!account) return undefined;
-                const parlayMarkets = await thalesData.sportMarkets.parlayMarkets({
-                    account,
-                    network: networkId,
-                    maxTimestamp,
-                    minTimestamp,
-                });
+                const parlaysRequest = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.Parlays}/${networkId}?account=${account}&${
+                        minTimestamp ? `min-timestamp=${minTimestamp}&` : ''
+                    }${maxTimestamp ? `max-timestamp=${maxTimestamp}` : ''}
+                `
+                );
+
+                const parlayMarkets = parlaysRequest?.data ? parlaysRequest.data : [];
 
                 const parlayMarketsModified = parlayMarkets.map((parlayMarket: ParlayMarket) => {
                     return {

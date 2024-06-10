@@ -1,9 +1,11 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
-import { LiquidityPoolReturn, LiquidityPoolType } from 'types/liquidityPool';
 import { orderBy } from 'lodash';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { LiquidityPoolReturn, LiquidityPoolType } from 'types/liquidityPool';
 
 const APR_FREQUENCY = 52;
 const arrToApy = (arr: number) => (1 + arr) ** APR_FREQUENCY - 1;
@@ -17,10 +19,12 @@ const useLiquidityPoolReturnQuery = (
         QUERY_KEYS.LiquidityPool.Return(networkId, liquidityPoolType),
         async () => {
             try {
-                const liquidityPoolPnls = await thalesData.sportMarkets.liquidityPoolPnls({
-                    network: networkId,
-                    liquidityPoolType,
-                });
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.LPPnls}/${networkId}?lp-type=${liquidityPoolType}`
+                );
+
+                const liquidityPoolPnls = response?.data ? response.data : [];
+
                 const numberOfRounds = liquidityPoolPnls.length;
                 const sumPnl = orderBy(liquidityPoolPnls, ['round'], ['asc']).reduce(
                     (partialSum, item) => partialSum + item.pnl - 1,

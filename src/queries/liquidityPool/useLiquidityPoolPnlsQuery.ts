@@ -1,9 +1,11 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
-import { LiquidityPoolPnls, LiquidityPoolType } from 'types/liquidityPool';
 import { orderBy } from 'lodash';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { LiquidityPoolPnls, LiquidityPoolType } from 'types/liquidityPool';
 
 const useLiquidityPoolPnlsQuery = (
     networkId: Network,
@@ -14,10 +16,11 @@ const useLiquidityPoolPnlsQuery = (
         QUERY_KEYS.LiquidityPool.PnL(networkId, liquidityPoolType),
         async () => {
             try {
-                const liquidityPoolPnls = await thalesData.sportMarkets.liquidityPoolPnls({
-                    network: networkId,
-                    liquidityPoolType: liquidityPoolType,
-                });
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.LPPnls}/${networkId}?lp-type=${liquidityPoolType}`
+                );
+
+                const liquidityPoolPnls = response?.data ? response.data : [];
 
                 let cumulativePnl = 1;
                 return orderBy(liquidityPoolPnls, ['round'], ['asc']).map((item: any) => {

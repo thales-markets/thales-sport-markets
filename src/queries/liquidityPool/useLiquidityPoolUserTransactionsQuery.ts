@@ -1,7 +1,9 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { LiquidityPoolType, LiquidityPoolUserTransactions } from 'types/liquidityPool';
 
 const useLiquidityPoolUserTransactionsQuery = (
@@ -13,11 +15,11 @@ const useLiquidityPoolUserTransactionsQuery = (
         QUERY_KEYS.LiquidityPool.UserTransactions(networkId, liquidityPoolType),
         async () => {
             try {
-                const liquidityPoolUserTransactions = await thalesData.sportMarkets.liquidityPoolUserTransactions({
-                    network: networkId,
-                    liquidityPoolType,
-                });
-                return liquidityPoolUserTransactions;
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.LPTransactions}/${networkId}?lp-type=${liquidityPoolType}`
+                );
+
+                return response.data ? response.data : [];
             } catch (e) {
                 console.log(e);
                 return [];

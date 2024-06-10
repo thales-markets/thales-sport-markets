@@ -1,9 +1,11 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { MarketTransaction, MarketTransactions } from 'types/markets';
-import { Network } from 'enums/network';
+import { API_ROUTES } from 'constants/routes';
 import { Position } from 'enums/markets';
+import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { MarketTransaction, MarketTransactions } from 'types/markets';
 import { getIsOneSideMarket } from '../../utils/markets';
 
 const useUserTransactionsQuery = (
@@ -15,10 +17,11 @@ const useUserTransactionsQuery = (
         QUERY_KEYS.UserTransactions(walletAddress, networkId),
         async () => {
             try {
-                const marketTransactions = await thalesData.sportMarkets.marketTransactions({
-                    account: walletAddress,
-                    network: networkId,
-                });
+                const marketTransactionsRequest = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.Transactions}/${networkId}?account=${walletAddress}`
+                );
+
+                const marketTransactions = marketTransactionsRequest?.data ? marketTransactionsRequest.data : [];
 
                 return marketTransactions.map((tx: MarketTransaction) => {
                     tx.wholeMarket.isOneSideMarket = getIsOneSideMarket(Number(tx.wholeMarket.tags[0]));

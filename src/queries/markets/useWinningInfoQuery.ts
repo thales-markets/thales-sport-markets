@@ -1,9 +1,11 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { API_ROUTES } from 'constants/routes';
 import { Position } from 'enums/markets';
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
-import { MarketTransaction, ParlayMarket, WinningInfo } from 'types/markets';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { MarketTransaction, ParlayMarket, WinningInfo } from 'types/markets';
 import {
     convertFinalResultToResultType,
     convertPositionNameToPosition,
@@ -16,16 +18,15 @@ const useWinningInfoQuery = (walletAddress: string, networkId: Network, options?
         QUERY_KEYS.WinningInfo(walletAddress, networkId),
         async () => {
             try {
-                const [marketTransactions, parlayMarkets] = await Promise.all([
-                    thalesData.sportMarkets.marketTransactions({
-                        account: walletAddress,
-                        network: networkId,
-                    }),
-                    thalesData.sportMarkets.parlayMarkets({
-                        account: walletAddress,
-                        network: networkId,
-                    }),
+                const [marketTransactionsRequest, parlayMarketsRequest] = await Promise.all([
+                    axios.get(
+                        `${generalConfig.API_URL}/${API_ROUTES.Transactions}/${networkId}?account=${walletAddress}`
+                    ),
+                    axios.get(`${generalConfig.API_URL}/${API_ROUTES.Parlays}/${networkId}?account=${walletAddress}`),
                 ]);
+
+                const marketTransactions = marketTransactionsRequest?.data ? marketTransactionsRequest.data : [];
+                const parlayMarkets = parlayMarketsRequest?.data ? parlayMarketsRequest.data : [];
 
                 const allSinglesWinningAmounts = marketTransactions
                     .map((tx: MarketTransaction) => ({

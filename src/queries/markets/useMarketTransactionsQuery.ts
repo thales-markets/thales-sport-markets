@@ -1,8 +1,10 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
-import { MarketTransactions } from 'types/markets';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { MarketTransactions } from 'types/markets';
 
 const useMarketTransactionsQuery = (
     marketAddress: string,
@@ -15,19 +17,18 @@ const useMarketTransactionsQuery = (
         async () => {
             try {
                 const [marketTransactions, childMarketTransactions] = await Promise.all([
-                    thalesData.sportMarkets.marketTransactions({
-                        market: marketAddress,
-                        network: networkId,
-                        account,
-                    }),
-                    thalesData.sportMarkets.marketTransactions({
-                        parentMarket: marketAddress,
-                        network: networkId,
-                        account,
-                    }),
+                    axios.get(
+                        `${generalConfig.API_URL}/${API_ROUTES.Transactions}/${networkId}?account=${account}&market=${marketAddress}`
+                    ),
+                    axios.get(
+                        `${generalConfig.API_URL}/${API_ROUTES.Transactions}/${networkId}?account=${account}&parent-market=${marketAddress}`
+                    ),
                 ]);
 
-                return [...marketTransactions, ...childMarketTransactions];
+                return [
+                    ...(marketTransactions?.data ? marketTransactions.data : []),
+                    ...(childMarketTransactions?.data ? childMarketTransactions.data : []),
+                ];
             } catch (e) {
                 console.log(e);
                 return undefined;
