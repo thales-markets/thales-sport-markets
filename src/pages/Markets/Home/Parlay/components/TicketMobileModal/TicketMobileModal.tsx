@@ -83,10 +83,11 @@ const getCustomModalStyles = (theme: ThemeInterface) => ({
         border: 'none',
         width: '100%',
         height: '100vh',
+        color: theme.textColor.primary,
     },
     overlay: {
         backgroundColor: theme.background.secondary,
-        zIndex: '1003',
+        zIndex: '13',
     },
 });
 

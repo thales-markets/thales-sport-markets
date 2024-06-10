@@ -309,7 +309,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                         )}
                     </PositionsContainer>
                 </>
-                {/* <Transactions market={market} /> */}
                 <TicketTransactions market={market} />
             </MainContainer>
             {isGameOpen && (

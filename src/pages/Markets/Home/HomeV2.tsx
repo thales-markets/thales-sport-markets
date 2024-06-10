@@ -559,7 +559,7 @@ const Home: React.FC = () => {
                     setShowBurger(false);
                 }}
                 shouldCloseOnOverlayClick={false}
-                style={getCustomModalStyles(theme, '1002')}
+                style={getCustomModalStyles(theme, '12')}
             >
                 <BurgerFiltersContainer>
                     <LogoContainer>
@@ -676,7 +676,7 @@ const Home: React.FC = () => {
                                                     dispatch(setSelectedMarket(undefined));
                                                 }}
                                                 shouldCloseOnOverlayClick={false}
-                                                style={getCustomModalStyles(theme, '1000')}
+                                                style={getCustomModalStyles(theme, '10')}
                                             >
                                                 <SelectedMarket availableMarketTypes={availableMarketTypes} />{' '}
                                             </ReactModal>
@@ -861,6 +861,7 @@ const getCustomModalStyles = (theme: ThemeInterface, zIndex: string) => ({
         border: 'none',
         width: '100%',
         height: '100vh',
+        color: theme.textColor.primary,
     },
     overlay: {
         backgroundColor: theme.background.secondary,

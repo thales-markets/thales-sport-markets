@@ -12,7 +12,7 @@ export const Container = styled(FlexDiv)`
     background: ${(props) => props.theme.background.septenary};
     border-radius: 40px;
     justify-content: space-around;
-    z-index: 1001;
+    z-index: 11;
 `;
 
 export const ItemContainer = styled(FlexDiv)`
