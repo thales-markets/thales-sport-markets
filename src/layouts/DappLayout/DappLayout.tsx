@@ -18,6 +18,7 @@ import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
 import { isMobile } from 'utils/device';
 import { setReferralId } from 'utils/referral';
+import Banner from '../../components/Banner';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
 
@@ -72,6 +73,7 @@ const DappLayout: React.FC = ({ children }) => {
         <>
             {isAppReady ? (
                 <Background>
+                    <Banner />
                     <Wrapper>
                         <MetaData />
                         <DappHeader />
@@ -99,7 +101,7 @@ const Wrapper = styled(FlexDivColumn)`
     width: 99%;
     margin-left: auto;
     margin-right: auto;
-    padding: 20px 15px;
+    padding: 10px 15px;
     max-width: 1512px;
     min-height: 100vh;
     justify-content: space-between;
