@@ -1119,7 +1119,7 @@
         }
     },
     "banner": {
-        "arb-distribution-message": "ARB distribution has started. Earn ARB tokens by using Overtime. Checkout the details here."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 beta version of Overtime. To switch back to V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "title": "Promotions and Incentives",
