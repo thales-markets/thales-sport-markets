@@ -6,10 +6,6 @@
     color: #ffffff;
 }
 
-.currency-icon--thales::before {
-    content: '\0083';
-}
-
 .currency-icon--usdc::before {
     content: '\00B0';
 }
@@ -44,4 +40,12 @@
 
 .currency-icon--op::before {
     content: '\00B6';
+}
+
+.currency-icon--susd::before {
+    content: '\00F8';
+}
+
+.currency-icon--thales::before {
+    content: '\00F9';
 }
