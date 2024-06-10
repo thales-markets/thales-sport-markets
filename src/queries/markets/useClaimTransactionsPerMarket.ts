@@ -1,8 +1,10 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { ClaimTransaction, ClaimTransactions } from 'types/markets';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { ClaimTransaction, ClaimTransactions } from 'types/markets';
 
 const useClaimTransactionsPerMarket = (
     marketAddress: string,
@@ -16,20 +18,17 @@ const useClaimTransactionsPerMarket = (
         async () => {
             try {
                 const [claimTransactions, childClaimTransactions] = await Promise.all([
-                    thalesData.sportMarkets.claimTxes({
-                        market: marketAddress,
-                        network: networkId,
-                    }),
-                    thalesData.sportMarkets.claimTxes({
-                        parentMarket: marketAddress,
-                        network: networkId,
-                    }),
+                    axios.get(`${generalConfig.API_URL}/${API_ROUTES.ClaimTxes}/${networkId}?market=${marketAddress}`),
+                    axios.get(
+                        `${generalConfig.API_URL}/${API_ROUTES.ClaimTxes}/${networkId}?parent-market=${marketAddress}`
+                    ),
                 ]);
 
                 // Filter keeper bot transactions
-                const data = [...claimTransactions, ...childClaimTransactions].filter(
-                    (tx: ClaimTransaction) => tx?.caller?.toLowerCase() !== KEEPER_BOT_CALLER_ADDRESS
-                );
+                const data = [
+                    ...(claimTransactions?.data ? claimTransactions.data : []),
+                    ...(childClaimTransactions?.data ? childClaimTransactions.data : []),
+                ].filter((tx: ClaimTransaction) => tx?.caller?.toLowerCase() !== KEEPER_BOT_CALLER_ADDRESS);
 
                 return data;
             } catch (e) {
