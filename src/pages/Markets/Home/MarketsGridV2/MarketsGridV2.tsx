@@ -67,10 +67,10 @@ const sortMarketKeys = (
             const earliestGameB = marketsMap[b][0];
 
             const favouriteA = favouriteLeagues.find((league: TagInfo) => league.id == a);
-            const isFavouriteA = Number(favouriteA && favouriteA.favourite);
+            const isFavouriteA = Number(!!favouriteA && !!favouriteA.favourite);
 
             const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b);
-            const isFavouriteB = Number(favouriteB && favouriteB.favourite);
+            const isFavouriteB = Number(!!favouriteB && !!favouriteB.favourite);
 
             const leagueA = Object.values(LeagueMap).find((t: TagInfo) => t.id == a);
             const leagueB = Object.values(LeagueMap).find((t: TagInfo) => t.id == b);
@@ -94,10 +94,10 @@ const sortMarketKeys = (
                 : earliestGameA.maturityDate.getTime() - earliestGameB.maturityDate.getTime();
         } else {
             const favouriteA = favouriteLeagues.find((league: TagInfo) => league.id == a);
-            const isFavouriteA = Number(favouriteA && favouriteA.favourite);
+            const isFavouriteA = Number(!!favouriteA && !!favouriteA.favourite);
 
             const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b);
-            const isFavouriteB = Number(favouriteB && favouriteB.favourite);
+            const isFavouriteB = Number(!!favouriteB && !!favouriteB.favourite);
 
             const leagueA = Object.values(LeagueMap).find((t: TagInfo) => t.id == a);
             const leagueB = Object.values(LeagueMap).find((t: TagInfo) => t.id == b);
