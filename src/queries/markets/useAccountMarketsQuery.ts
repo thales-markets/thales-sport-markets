@@ -1,8 +1,10 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { API_ROUTES } from 'constants/routes';
 import { ENETPULSE_SPORTS } from 'constants/tags';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
 import { bigNumberFormatter } from 'thales-utils';
 import { AccountPositionProfile, PositionBalance } from 'types/markets';
 import { fixDuplicatedTeamName } from 'utils/formatters/string';
@@ -17,11 +19,11 @@ const useAccountMarketsQuery = (
         QUERY_KEYS.AccountPositions(walletAddress, networkId),
         async () => {
             try {
-                const positionBalances: PositionBalance[] = await thalesData.sportMarkets.positionBalances({
-                    account: walletAddress,
-                    network: networkId,
-                    isClaimed: false,
-                });
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.PositionBalance}/${networkId}?account=${walletAddress}`
+                );
+
+                const positionBalances: PositionBalance[] = response?.data ? response.data : [];
 
                 const positions: AccountPositionProfile[] = positionBalances.map((position) => {
                     return {

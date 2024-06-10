@@ -63,6 +63,29 @@ export const PAGE_NAME_TO_META_DATA_KEYS: {
     },
 };
 
+export const API_ROUTES = {
+    CacheControl: 'v1/cache-control',
+    LP: 'v1/sport-markets/liquidity-providing',
+    LPPnls: 'v1/sport-markets/liquidity-providing/pnl',
+    LPTransactions: 'v1/sport-markets/liquidity-providing/transactions',
+
+    OptionTransactions: 'v1/sport-markets/trades/option-transactions',
+    PositionBalance: 'v1/sport-markets/trades/position-balance',
+    RangedPositionBalance: 'v1/sport-markets/trades/ranged-position-balance',
+
+    MarketsList: 'v1/sport-markets/markets/list',
+    RangeMarketsList: 'v1/sport-markets/markets/ranged',
+
+    Referral: 'v1/sport-markets/referral',
+    ReferralTransactions: 'v1/sport-markets/referral/transactions',
+    ReferralTraders: 'v1/sport-markets/referral/traders',
+    Referrers: 'v1/sport-markets/referral/referrers',
+
+    VaultsUserTransactions: 'v1/sport-markets/vaults/user-transactions',
+    VaultsPnl: 'v1/sport-markets/vaults/pnl',
+    VaultsTransactions: 'v1/sport-markets/vaults/transactions',
+};
+
 export default ROUTES;
 
 export const RESET_STATE = 'reset';

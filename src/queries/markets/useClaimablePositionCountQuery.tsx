@@ -1,8 +1,11 @@
-import { useQuery, UseQueryOptions } from 'react-query';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { ParlayMarket, PositionBalance } from 'types/markets';
-import thalesData from 'thales-data';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import thalesData from 'thales-data';
+import { ParlayMarket, PositionBalance } from 'types/markets';
 import { isParlayClaimable, isSportMarketExpired } from 'utils/markets';
 
 const useClaimablePositionCountQuery = (
@@ -14,14 +17,11 @@ const useClaimablePositionCountQuery = (
         QUERY_KEYS.ClaimableCount(walletAddress, networkId),
         async () => {
             try {
-                if (!walletAddress) return null;
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.PositionBalance}/${networkId}?account=${walletAddress}&filter=claimable`
+                );
 
-                const positionBalances: PositionBalance[] = thalesData.sportMarkets.positionBalances({
-                    account: walletAddress,
-                    network: networkId,
-                    isClaimable: true,
-                    isClaimed: false,
-                });
+                const positionBalances: PositionBalance[] = response?.data ? response.data : [];
 
                 const parlayMarkets = thalesData.sportMarkets.parlayMarkets({
                     account: walletAddress,
