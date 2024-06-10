@@ -126,7 +126,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/europe.svg`;
         case League.UEFA_EL:
             return `/logos/Countries/europe.svg`;
-        case League.UEFA_EURO_QUALIFICATIONS:
+        case League.UEFA_EURO:
             return `/logos/Countries/europe.svg`;
         case League.UEFA_EURO_U21:
             return `/logos/Countries/europe.svg`;

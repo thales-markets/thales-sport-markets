@@ -35,14 +35,25 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
     //     },
     //     showOnAllNetworks: Network.Arbitrum,
     // },
-    [League.UEFA_EURO_QUALIFICATIONS]: {
+    [League.UEFA_EURO]: {
         startDate: new Date(Date.UTC(2024, 5, 5, 0, 0, 0)),
         endDate: new Date(Date.UTC(2024, 6, 14, 23, 59, 59)),
-        link: 'https://v2.overtimemarkets.xyz/',
-        tooltipKey: 'markets.incentivized-tooltip-euro',
+        link: 'https://medium.com/@OvertimeMarkets.xyz/euro-2024-copa-america-reward-program-709efad25c38',
+        tooltipKey: 'markets.incentivized-tooltip-euro-copa',
         availableOnNetworks: [Network.OptimismMainnet],
         rewards: {
-            [Network.OptimismMainnet]: '10,000 OP',
+            [Network.OptimismMainnet]: '20,000 OP',
+        },
+        showOnAllNetworks: Network.OptimismMainnet,
+    },
+    [League.COPA_AMERICA]: {
+        startDate: new Date(Date.UTC(2024, 5, 5, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 6, 14, 23, 59, 59)),
+        link: 'https://medium.com/@OvertimeMarkets.xyz/euro-2024-copa-america-reward-program-709efad25c38',
+        tooltipKey: 'markets.incentivized-tooltip-euro-copa',
+        availableOnNetworks: [Network.OptimismMainnet],
+        rewards: {
+            [Network.OptimismMainnet]: '20,000 OP',
         },
         showOnAllNetworks: Network.OptimismMainnet,
     },
