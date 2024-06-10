@@ -277,7 +277,7 @@ const getTicketMarketStatusIcon = (market: TicketMarket) => {
 
 const getOpacity = (market: TicketMarket) => (market.isResolved && !market.isWinning ? 0.5 : 1);
 
-export const getTicketMarkets = (
+const getTicketMarkets = (
     ticket: Ticket,
     selectedOddsType: OddsType,
     language: string,

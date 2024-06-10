@@ -1,5 +1,4 @@
 import { GameStatus, Position, StatusFilter } from 'enums/markets';
-import { ethers } from 'ethers';
 import { Network } from '../enums/network';
 import { League, Sport } from '../enums/sports';
 import { Coins } from './tokens';
@@ -16,61 +15,10 @@ export type TagInfo = {
 
 export type Tags = TagInfo[];
 
-export type SportsMap = Record<number, string>;
-
-export type SportsTagsMap = Record<string, number[]>;
-
-export type ParlayAmmData = {
-    minUsdAmount: number;
-    maxSupportedAmount: number;
-    maxSupportedOdds: number;
-    parlayAmmFee: number;
-    safeBoxImpact: number;
-    parlaySize: number;
-};
-
 export type ParlayPayment = {
     selectedCollateralIndex: number;
     amountToBuy: number | string;
     networkId: Network;
-};
-
-export type MultiSingleAmounts = {
-    sportMarketAddress: string;
-    parentMarketAddress: string;
-    amountToBuy: number | string;
-};
-
-export type MultiSingleTokenQuoteAndBonus = {
-    sportMarketAddress: string;
-    isCombinedPosition?: boolean;
-    tokenAmount: number;
-    bonusPercentageDec: number;
-    totalBonusCurrency: number;
-    ammQuote: number | ethers.BigNumber;
-};
-
-export type WinningInfo = {
-    highestWin: number;
-    lifetimeWins: number;
-};
-
-export type SportMarketLiveResult = {
-    homeScore: number;
-    awayScore: number;
-    period: number;
-    status: string;
-    scoreHomeByPeriod: number[];
-    scoreAwayByPeriod: number[];
-    displayClock: string;
-    sportId: number;
-    tournamentName?: string;
-    tournamentRound?: string;
-};
-
-export type CombinedMarketContractData = {
-    mainMarket: string;
-    combinedOdds: { odds: number[]; tags: number[] }[];
 };
 
 export type LeaderboardPoints = {
@@ -80,14 +28,14 @@ export type LeaderboardPoints = {
     numberOfGamesBonus: number;
 };
 
-export type PlayerProps = {
+type PlayerProps = {
     playerId: number;
     playerName: string;
 };
 
 export type CombinedPosition = { typeId: number; position: number; line: number };
 
-export type CombinedPositions = CombinedPosition[];
+type CombinedPositions = CombinedPosition[];
 
 export type SportMarketScore = {
     isGameFinished?: boolean;
@@ -163,12 +111,6 @@ export type TicketPosition = {
     position: number;
     combinedPositions: CombinedPositions[];
     live?: boolean;
-};
-
-export type BetTypeInfo = {
-    name: string;
-    title: string;
-    showTooltip: boolean;
 };
 
 export type TicketMarket = SportMarket & {

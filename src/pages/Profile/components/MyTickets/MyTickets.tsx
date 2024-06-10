@@ -141,7 +141,7 @@ const ButtonContainer = styled(FlexDivRow)`
     cursor: pointer;
 `;
 
-export const BackIcon = styled.i`
+const BackIcon = styled.i`
     font-size: 24px;
     margin-right: 4px;
 `;

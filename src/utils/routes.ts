@@ -19,11 +19,6 @@ export const buildMarketLink = (marketAddress: string, language: string, exclude
         title ? `&title=${title}` : ''
     }`;
 
-export const buildLpLink = (language: string, lpType: string, excludeSlash = false) =>
-    `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${
-        lpType == 'parlay' ? ROUTES.ParlayLiquidityPool : ROUTES.SingleLiquidityPool
-    }&lang=${language}`;
-
 export const buildDepositOrWithdrawLink = (language: string, page: string, coinIndex: number, excludeSlash = false) => {
     return `${ifIpfsDeployment && !excludeSlash ? '#' : ''}${
         page == 'withdraw' ? ROUTES.Withdraw : ROUTES.Deposit

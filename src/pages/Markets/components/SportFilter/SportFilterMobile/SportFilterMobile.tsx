@@ -143,7 +143,7 @@ const SportIcon = styled.i`
     font-size: 30px;
 `;
 
-export const NoScrollbarContainer = styled.div`
+const NoScrollbarContainer = styled.div`
     width: 100%;
     overflow: hidden;
     & .react-horizontal-scrolling-menu--scroll-container {
@@ -165,7 +165,7 @@ export const NoScrollbarContainer = styled.div`
     }
 `;
 
-export const ArrowIcon = styled.i<{ hide: boolean; isLeft?: boolean }>`
+const ArrowIcon = styled.i<{ hide: boolean; isLeft?: boolean }>`
     cursor: pointer;
     font-size: 20px;
     transform: ${(props) => (props.isLeft ? 'rotate(90deg)' : 'rotate(270deg)')};

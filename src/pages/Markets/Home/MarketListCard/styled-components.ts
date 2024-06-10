@@ -1,5 +1,5 @@
 import styled, { CSSProperties } from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivStart } from 'styles/common';
 
 export const Wrapper = styled(FlexDivColumn)<{
     hideGame: boolean;
@@ -117,29 +117,6 @@ export const TeamNameLabel = styled.span<{ isColumnView: boolean; isMarketSelect
     }
 `;
 
-export const ResultWrapper = styled(FlexDivRowCentered)``;
-
-export const ResultContainer = styled(FlexDivColumn)`
-    align-items: center;
-    gap: 0px;
-`;
-
-export const Result = styled.span`
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    :not(:first-child) {
-        color: ${(props) => props.theme.textColor.secondary};
-    }
-`;
-
-export const ResultLabel = styled.span`
-    font-weight: 400;
-    font-size: 12px;
-    margin-right: 6px;
-    text-transform: uppercase;
-`;
-
 export const MarketsCountWrapper = styled(FlexDivColumnCentered)`
     max-width: 35px;
     margin-left: 5px;
@@ -204,24 +181,6 @@ export const LiveIndicatorContainer = styled(FlexDivStart)`
     }
 `;
 
-export const LiveInfoContainer = styled(FlexDivColumn)`
-    margin-right: 10px;
-    gap: 5px;
-    align-items: center;
-    color: ${(props) => props.theme.textColor.quinary};
-    @media (max-width: 950px) {
-        flex-direction: row;
-        gap: 18px;
-        margin: 5px 0px 0px 10px;
-    }
-`;
-
-export const Icon = styled.i`
-    font-size: 20px;
-    color: ${(props) => props.theme.textColor.quinary};
-    cursor: pointer;
-`;
-
 export const Blink = styled.span`
     font-weight: 400;
     font-size: 12px;
@@ -237,20 +196,6 @@ export const Blink = styled.span`
             opacity: 0;
         }
     }
-    @media (max-width: 950px) {
-        font-size: 11px;
-    }
-`;
-
-export const LiveInfoSpan = styled.span`
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 14px;
-    color: ${(props) => props.theme.textColor.primary};
-    text-transform: none;
-    width: fit-content;
-    margin-right: 2px;
-    white-space: nowrap;
     @media (max-width: 950px) {
         font-size: 11px;
     }

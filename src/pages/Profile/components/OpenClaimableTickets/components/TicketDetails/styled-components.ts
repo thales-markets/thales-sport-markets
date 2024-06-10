@@ -212,11 +212,3 @@ export const additionalClaimButtonStyleMobile: CSSProperties = {
     minWidth: '65px',
     maxWidth: '80px',
 };
-
-export const liveBlinkStyle: CSSProperties = {
-    width: 25,
-};
-
-export const liveBlinkStyleMobile: CSSProperties = {
-    width: 20,
-};

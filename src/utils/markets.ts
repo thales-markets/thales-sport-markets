@@ -113,7 +113,7 @@ export const isAwayTeamMarket = (marketType: MarketType) => {
     return AWAY_TEAM_MARKET_TYPES.includes(marketType);
 };
 
-export const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
+const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
     getLeagueIsDrawAvailable(leagueId) && isWinnerMarket(marketType);
 
 export const getPositionOrder = (leagueId: number, marketType: MarketType, position: number) =>

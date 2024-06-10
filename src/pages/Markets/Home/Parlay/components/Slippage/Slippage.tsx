@@ -19,7 +19,7 @@ type SlippageProps = {
 const MIN_VALUE = 0;
 const MAX_VALUE = 100;
 
-export const isSlippageValid = (value: number, max?: number) => {
+const isSlippageValid = (value: number, max?: number) => {
     return value >= MIN_VALUE && value <= (max || MAX_VALUE);
 };
 

@@ -108,7 +108,7 @@ const Container = styled(FlexDiv)`
     align-items: flex-end;
 `;
 
-export const Status = styled.span<{ color: string }>`
+const Status = styled.span<{ color: string }>`
     font-size: 12px;
     text-transform: uppercase;
     color: ${(props) => props.color};
