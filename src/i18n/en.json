@@ -1194,7 +1194,8 @@
         }
     },
     "banner": {
-        "arb-distribution-message": "Win more than $280,000 in bonus earnings on Overtime! Click here to find out how"
+        "arb-distribution-message": "Win more than $280,000 in bonus earnings on Overtime! Click here to find out how",
+        "v2-text": "<bold>Overtime V2</bold> beta is here! <v2Link>Click here</v2Link> to try out the new UI, live betting & much more. Check out the V2 launch details <detailsLink>here</detailsLink>."
     },
     "promotions": {
         "title": "Promotions and Incentives",

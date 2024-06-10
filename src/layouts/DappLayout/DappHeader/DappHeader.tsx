@@ -393,7 +393,6 @@ const MenuIconContainer = styled.div`
     justify-content: start;
     position: absolute;
     left: 12px;
-    margin-top: 10px;
 `;
 
 const LogoContainer = styled.div`
@@ -408,7 +407,7 @@ const IconWrapper = styled.div`
     width: 32px;
     height: 32px;
     position: absolute;
-    top: -10px;
+    top: -15px;
 `;
 
 const SearchIcon = styled.i`
