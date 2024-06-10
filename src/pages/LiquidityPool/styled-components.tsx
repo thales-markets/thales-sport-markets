@@ -142,7 +142,7 @@ export const Description = styled.div`
         width: 90%;
     }
     :last-child {
-        width: 30%;
+        width: 32%;
     }
     h1 {
         font-size: 15px;
@@ -151,6 +151,7 @@ export const Description = styled.div`
     }
     p {
         margin-bottom: 10px;
+        text-align: start;
     }
     ul {
         list-style: initial;
@@ -158,6 +159,7 @@ export const Description = styled.div`
     }
     li {
         margin-bottom: 4px;
+        text-align: start;
     }
     @media (max-width: 767px) {
         padding: 0 5px;
