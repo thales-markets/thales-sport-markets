@@ -27,20 +27,24 @@ const Container = styled(FlexDiv)`
     justify-content: center;
     color: ${(props) => props.theme.textColor.quinary};
     background-color: ${(props) => props.theme.background.secondary};
-    min-height: 20px;
+    min-height: 25px;
     z-index: 102;
     cursor: pointer;
     text-align: center;
     padding: 2px 5px;
-    @media screen and (max-width: 100px) {
-        display: none;
+    @media (max-width: 767px) {
+        min-height: 20px;
     }
 `;
 
 const Label = styled.span`
-    font-size: 12px;
-    line-height: 14px;
+    font-size: 14px;
+    line-height: 16px;
     font-weight: 500;
+    @media (max-width: 767px) {
+        font-size: 12px;
+        line-height: 14px;
+    }
 `;
 
 const HightlightLabel = styled.span`
