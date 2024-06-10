@@ -699,11 +699,6 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
     };
 
     useEffect(() => {
-        if (oddsChanged && isLiveTicket) {
-            setSubmitDisabled(true);
-            return;
-        }
-
         if (isAMMPaused) {
             setSubmitDisabled(true);
             return;
@@ -1287,7 +1282,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     </FlexDivCentered>
                 </>
             )}
-            <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
+            {!(oddsChanged && isLiveTicket) && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>
