@@ -19,6 +19,7 @@ import { isAndroid, isMetamask } from 'thales-utils';
 import { isMobile } from 'utils/device';
 import { setReferralId } from 'utils/referral';
 import BannerV2 from '../../components/BannerV2';
+import V2Modal from '../../components/V2Modal';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
 
@@ -82,6 +83,7 @@ const DappLayout: React.FC = ({ children }) => {
                         <DappFooter />
                     </Wrapper>
                     <ToastContainer theme={'colored'} />
+                    <V2Modal />
                 </Background>
             ) : (
                 <Loader />
