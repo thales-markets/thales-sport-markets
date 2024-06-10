@@ -170,7 +170,7 @@ const Parlay: React.FC = () => {
                         markets={ticketMarkets}
                         setMarketsOutOfLiquidity={setOutOfLiquidityMarkets}
                         oddsChanged={oddsChanged}
-                        setOddsChanged={(changed: boolean) => {
+                        acceptOddChanges={(changed: boolean) => {
                             setAcceptOdds(true);
                             setOddsChanged(changed);
                         }}

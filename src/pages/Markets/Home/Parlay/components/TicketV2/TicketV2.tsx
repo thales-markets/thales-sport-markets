@@ -118,7 +118,7 @@ type TicketProps = {
     markets: TicketMarket[];
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
     oddsChanged: boolean;
-    setOddsChanged: (changed: boolean) => void;
+    acceptOddChanges: (changed: boolean) => void;
 };
 
 const TicketErrorMessage = {
@@ -128,7 +128,7 @@ const TicketErrorMessage = {
 
 const SLIPPAGE_PERCENTAGES = [0.5, 1, 2];
 
-const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, oddsChanged, setOddsChanged }) => {
+const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, oddsChanged, acceptOddChanges }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -1271,16 +1271,21 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                 </RowContainer>
             </RowSummary>
             {!isBuying && oddsChanged && isLiveTicket && (
-                <FlexDivCentered>
-                    <Button
-                        onClick={() => setOddsChanged(false)}
-                        borderColor="transparent"
-                        backgroundColor={theme.button.background.septenary}
-                        {...defaultButtonProps}
-                    >
-                        {t('markets.parlay.accept-odds-changes')}
-                    </Button>
-                </FlexDivCentered>
+                <>
+                    <FlexDivCentered>
+                        <OddsChangedDiv>{t('markets.parlay.odds-changed-description')}</OddsChangedDiv>
+                    </FlexDivCentered>
+                    <FlexDivCentered>
+                        <Button
+                            onClick={() => acceptOddChanges(false)}
+                            borderColor="transparent"
+                            backgroundColor={theme.button.background.septenary}
+                            {...defaultButtonProps}
+                        >
+                            {t('markets.parlay.accept-odds-changes')}
+                        </Button>
+                    </FlexDivCentered>
+                </>
             )}
             <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>
             <ShareWrapper>
@@ -1334,6 +1339,12 @@ const TooltipInfo = styled(TooltipText)`
 
 const TooltipBonusInfo = styled(TooltipInfo)`
     color: ${(props) => props.theme.status.win};
+`;
+
+const OddsChangedDiv = styled.div`
+    color: ${(props) => props.theme.button.background.septenary};
+    padding-top: 10px;
+    font-size: 12px;
 `;
 
 export default Ticket;
