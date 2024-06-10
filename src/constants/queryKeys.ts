@@ -30,15 +30,7 @@ const QUERY_KEYS = {
         networkId: Network
     ) => ['ticketLiquidity', gameIds, typeIds, playerIds, lines, positions, lives, networkId],
     LiveTradingProcessorData: (networkId: Network) => ['liveTradingProcessorData', networkId],
-    LiveResult: (marketId: string) => ['liveResult', marketId],
     LiveScore: (gameId: string) => ['liveScore', gameId],
-    EnetpulseLiveResult: (marketId: string, gameDate: string, sportTag: number) => [
-        'enetpulseLiveResult',
-        marketId,
-        gameDate,
-        sportTag,
-    ],
-    JsonOddsData: (marketId: string, sportTag: number) => ['jsonOddsData', marketId, sportTag],
     PositionDetails: (
         marketAddress: string,
         position: Position,

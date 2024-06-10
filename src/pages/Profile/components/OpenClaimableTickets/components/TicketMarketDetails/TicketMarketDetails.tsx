@@ -61,6 +61,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                 </ScoreContainer>
                 {!isMobile &&
                     (market.isResolved || market.isGameFinished) &&
+                    leagueSport !== Sport.CRICKET &&
                     scoreData.homeScoreByPeriod.map((_, index) => {
                         if (leagueSport === Sport.SOCCER && index === 1) {
                             return null;

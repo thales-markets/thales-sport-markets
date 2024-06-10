@@ -36,21 +36,22 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
                     <TeamScoreLabel isResolved={market.isResolved}>{scoreData.homeScore}</TeamScoreLabel>
                     <TeamScoreLabel isResolved={market.isResolved}>{scoreData.awayScore}</TeamScoreLabel>
                 </ScoreContainer>
-                {scoreData.homeScoreByPeriod.map((_, index) => {
-                    if (leagueSport === Sport.SOCCER && index === 1) {
-                        return null;
-                    }
-                    return (
-                        <ScoreContainer key={`${market.gameId}-${index}`}>
-                            <TeamScoreLabel className="period" isResolved={market.isResolved}>
-                                {scoreData.homeScoreByPeriod[index]}
-                            </TeamScoreLabel>
-                            <TeamScoreLabel className="period" isResolved={market.isResolved}>
-                                {scoreData.awayScoreByPeriod[index]}
-                            </TeamScoreLabel>
-                        </ScoreContainer>
-                    );
-                })}
+                {leagueSport !== Sport.CRICKET &&
+                    scoreData.homeScoreByPeriod.map((_, index) => {
+                        if (leagueSport === Sport.SOCCER && index === 1) {
+                            return null;
+                        }
+                        return (
+                            <ScoreContainer key={`${market.gameId}-${index}`}>
+                                <TeamScoreLabel className="period" isResolved={market.isResolved}>
+                                    {scoreData.homeScoreByPeriod[index]}
+                                </TeamScoreLabel>
+                                <TeamScoreLabel className="period" isResolved={market.isResolved}>
+                                    {scoreData.awayScoreByPeriod[index]}
+                                </TeamScoreLabel>
+                            </ScoreContainer>
+                        );
+                    })}
             </FlexDivRow>
         ) : (
             <Status color={theme.status.started}>

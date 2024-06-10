@@ -150,26 +150,28 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 </InfoLabel>
                                             )}
                                     </ResultLabel>
-                                    {leagueSport !== Sport.SOCCER && leagueSport !== Sport.ESPORTS && (
-                                        <PeriodsContainer directionRow={true}>
-                                            {market.homeScoreByPeriod.map((_, index) => {
-                                                return (
-                                                    <PeriodContainer key={index}>
-                                                        <InfoLabel className="gray">{index + 1}</InfoLabel>
-                                                        <InfoLabel>{market.homeScoreByPeriod[index]}</InfoLabel>
-                                                        <InfoLabel>{market.awayScoreByPeriod[index]}</InfoLabel>
+                                    {leagueSport !== Sport.SOCCER &&
+                                        leagueSport !== Sport.ESPORTS &&
+                                        leagueSport !== Sport.CRICKET && (
+                                            <PeriodsContainer directionRow={true}>
+                                                {market.homeScoreByPeriod.map((_, index) => {
+                                                    return (
+                                                        <PeriodContainer key={index}>
+                                                            <InfoLabel className="gray">{index + 1}</InfoLabel>
+                                                            <InfoLabel>{market.homeScoreByPeriod[index]}</InfoLabel>
+                                                            <InfoLabel>{market.awayScoreByPeriod[index]}</InfoLabel>
+                                                        </PeriodContainer>
+                                                    );
+                                                })}
+                                                {leagueSport !== Sport.TENNIS && (
+                                                    <PeriodContainer>
+                                                        <InfoLabel className="gray">T</InfoLabel>
+                                                        <InfoLabel>{market.homeScore}</InfoLabel>
+                                                        <InfoLabel>{market.awayScore}</InfoLabel>
                                                     </PeriodContainer>
-                                                );
-                                            })}
-                                            {leagueSport !== Sport.TENNIS && (
-                                                <PeriodContainer>
-                                                    <InfoLabel className="gray">T</InfoLabel>
-                                                    <InfoLabel>{market.homeScore}</InfoLabel>
-                                                    <InfoLabel>{market.awayScore}</InfoLabel>
-                                                </PeriodContainer>
-                                            )}
-                                        </PeriodsContainer>
-                                    )}
+                                                )}
+                                            </PeriodsContainer>
+                                        )}
                                 </ResultContainer>
                             ) : (
                                 t(`markets.market-card.${GameStatusKey[market.gameStatus]}`)
@@ -211,19 +213,25 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 )}
                                             </PeriodsContainer>
                                         )}
-                                        {leagueSport !== Sport.SOCCER && leagueSport !== Sport.ESPORTS && (
-                                            <FlexDivRow>
-                                                {liveScore.homeScoreByPeriod.map((_, index) => {
-                                                    return (
-                                                        <PeriodContainer key={index}>
-                                                            <InfoLabel className="gray">{index + 1}</InfoLabel>
-                                                            <InfoLabel>{liveScore.homeScoreByPeriod[index]}</InfoLabel>
-                                                            <InfoLabel>{liveScore.awayScoreByPeriod[index]}</InfoLabel>
-                                                        </PeriodContainer>
-                                                    );
-                                                })}
-                                            </FlexDivRow>
-                                        )}
+                                        {leagueSport !== Sport.SOCCER &&
+                                            leagueSport !== Sport.ESPORTS &&
+                                            leagueSport !== Sport.CRICKET && (
+                                                <FlexDivRow>
+                                                    {liveScore.homeScoreByPeriod.map((_, index) => {
+                                                        return (
+                                                            <PeriodContainer key={index}>
+                                                                <InfoLabel className="gray">{index + 1}</InfoLabel>
+                                                                <InfoLabel>
+                                                                    {liveScore.homeScoreByPeriod[index]}
+                                                                </InfoLabel>
+                                                                <InfoLabel>
+                                                                    {liveScore.awayScoreByPeriod[index]}
+                                                                </InfoLabel>
+                                                            </PeriodContainer>
+                                                        );
+                                                    })}
+                                                </FlexDivRow>
+                                            )}
                                     </ResultContainer>
                                 ) : (
                                     t(`markets.market-card.${GameStatusKey[liveScore.gameStatus]}`)
