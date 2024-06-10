@@ -335,6 +335,20 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         live: false,
         tooltipKey: 'common.iihf-tooltip',
     },
+    [League.COPA_AMERICA]: {
+        sport: Sport.SOCCER,
+        id: League.COPA_AMERICA,
+        label: 'Copa America 2024',
+        provider: Provider.ENETPULSE,
+        scoringType: ScoringType.GOALS,
+        matchResolveType: MatchResolveType.REGULAR,
+        periodType: PeriodType.HALF,
+        isDrawAvailable: true,
+        priority: 113,
+        hidden: false,
+        favourite: false,
+        live: false,
+    },
     [League.COPA_LIBERTADORES]: {
         sport: Sport.SOCCER,
         id: League.COPA_LIBERTADORES,
@@ -345,14 +359,14 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        priority: 112,
+        priority: 113,
         hidden: false,
         favourite: false,
         live: false,
     },
-    [League.UEFA_EURO_QUALIFICATIONS]: {
+    [League.UEFA_EURO]: {
         sport: Sport.SOCCER,
-        id: League.UEFA_EURO_QUALIFICATIONS,
+        id: League.UEFA_EURO,
         label: 'UEFA EURO 2024',
         logoClass: 'icon-homepage league--uefa',
         provider: Provider.ENETPULSE,
@@ -360,7 +374,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        priority: 113,
+        priority: 112,
         hidden: false,
         favourite: false,
         live: false,
@@ -807,7 +821,7 @@ export const BOXING_LEAGUES = [League.BOXING, League.NON_TITLE_BOXING];
 export const INTERNATIONAL_LEAGUES = [
     League.FIFA_WC,
     League.IIHF_WORLD_CHAMPIONSHIP,
-    League.UEFA_EURO_QUALIFICATIONS,
+    League.UEFA_EURO,
     League.FIFA_WC_WOMEN,
     League.UEFA_EURO_U21,
     League.FIFA_WORLD_CUP_U20,
@@ -815,6 +829,7 @@ export const INTERNATIONAL_LEAGUES = [
     League.UEFA_NATIONS_LEAGUE,
     League.CONCACAF_NATIONS_LEAGUE,
     League.CONMEBOL_WC_QUALIFICATIONS,
+    League.COPA_AMERICA,
 ];
 
 export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA];
