@@ -236,7 +236,9 @@
             "image-in-clipboard": "L'image est dans le presse-papier !",
             "save-image-error": "Échec de l'enregistrement de l'image ! Réessayer",
             "metamask-not-supported": "Le navigateur Metamask ne prend pas en charge le téléchargement d'images ! Veuillez utiliser un autre navigateur pour partager l'image",
-            "ios-not-supported": "Le partage d'images n'est pas pris en charge sur les appareils iOS. Si vous souhaitez partager l'image, veuillez utiliser la version de bureau"
+            "ios-not-supported": "Le partage d'images n'est pas pris en charge sur les appareils iOS. Si vous souhaitez partager l'image, veuillez utiliser la version de bureau",
+            "fulfilling-live-trade": "Réaliser le commerce en direct",
+            "live-trade-requested": "Échange en direct demandé"
         },
         "filter-label": {
             "global": {
@@ -537,7 +539,10 @@
             "rain-delay": "Délai de pluie",
             "abandoned": "Abandonné",
             "delayed": "Retardé",
-            "interrupted": "Interrompu"
+            "interrupted": "Interrompu",
+            "loss": "Perte",
+            "open": "Ouvrir",
+            "won": "Gagné"
         },
         "market-details": {
             "wallet-info": {
