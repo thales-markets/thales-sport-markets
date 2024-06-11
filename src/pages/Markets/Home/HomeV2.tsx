@@ -855,7 +855,7 @@ const getCustomModalStyles = (theme: ThemeInterface, zIndex: string) => ({
         left: '50%',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-50%',
+        marginRight: '-48%',
         padding: '0px',
         background: 'transparent',
         border: 'none',
