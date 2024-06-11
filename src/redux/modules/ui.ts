@@ -5,8 +5,9 @@ import { OddsType } from 'enums/markets';
 import { Theme } from 'enums/ui';
 import { uniqBy } from 'lodash';
 import { localStore } from 'thales-utils';
-import { Tags } from 'types/markets';
+import { TagInfo, Tags } from 'types/markets';
 import { LeagueMap } from '../../constants/sports';
+import { League } from '../../enums/sports';
 import { RootState } from '../rootReducer';
 
 const sliceName = 'ui';
@@ -28,9 +29,7 @@ const getDefaultStopPulsing = (): boolean => {
 
 const getDefaultFavouriteLeagues = (): Tags => {
     const lsFavouriteLeagues = localStore.get(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES);
-    return (lsFavouriteLeagues !== undefined
-        ? uniqBy(lsFavouriteLeagues as Tags, 'id')
-        : Object.values(LeagueMap)) as Tags;
+    return (lsFavouriteLeagues !== undefined ? uniqBy(lsFavouriteLeagues as Tags, 'id') : []) as Tags;
 };
 
 type UISliceState = {
@@ -63,14 +62,31 @@ const uiSlice = createSlice({
             state.stopPulsing = action.payload;
             localStore.set(LOCAL_STORAGE_KEYS.STOP_PULSING, action.payload);
         },
-        setFavouriteLeagues: (state, action: PayloadAction<Tags>) => {
-            state.favouriteLeagues = uniqBy(action.payload, 'id');
-            localStore.set(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES, action.payload);
+        setFavouriteLeague: (state, action: PayloadAction<League>) => {
+            const leagueInfo = LeagueMap[action.payload];
+            const existingFavouriteIndex = state.favouriteLeagues.findIndex(
+                (league: TagInfo) => league.id === action.payload
+            );
+            if (existingFavouriteIndex > -1) {
+                state.favouriteLeagues = state.favouriteLeagues.filter(
+                    (league: TagInfo) => league.id !== action.payload
+                );
+            } else {
+                if (leagueInfo) {
+                    state.favouriteLeagues.push({
+                        id: leagueInfo.id,
+                        label: leagueInfo.label,
+                        priority: leagueInfo.priority,
+                        live: leagueInfo.live,
+                    });
+                }
+            }
+            localStore.set(LOCAL_STORAGE_KEYS.FAVOURITE_LEAGUES, state.favouriteLeagues);
         },
     },
 });
 
-export const { setTheme, setOddsType, setStopPulsing, setFavouriteLeagues } = uiSlice.actions;
+export const { setTheme, setOddsType, setStopPulsing, setFavouriteLeague } = uiSlice.actions;
 
 const getUIState = (state: RootState) => state[sliceName];
 export const getTheme = (state: RootState) => getUIState(state).theme;

@@ -4,7 +4,7 @@ import { orderBy } from 'lodash';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMarketSelected } from 'redux/modules/market';
-import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
+import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { SportMarkets, TagInfo } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
@@ -23,8 +23,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
-    const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
-    const isFavourite = favouriteLeague && favouriteLeague.favourite;
+    const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
 
     const sortedMarkets = sortWinnerMarkets(markets, league);
 
@@ -53,18 +52,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                         <IncentivizedLeague league={league} />
                         <StarIcon
                             onClick={() => {
-                                const newFavourites = favouriteLeagues.map((favourite: TagInfo) => {
-                                    if (favourite.id == league) {
-                                        let newFavouriteFlag;
-                                        favourite.favourite ? (newFavouriteFlag = false) : (newFavouriteFlag = true);
-                                        return {
-                                            ...favourite,
-                                            favourite: newFavouriteFlag,
-                                        };
-                                    }
-                                    return favourite;
-                                });
-                                dispatch(setFavouriteLeagues(newFavourites));
+                                dispatch(setFavouriteLeague(league));
                             }}
                             className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                         />

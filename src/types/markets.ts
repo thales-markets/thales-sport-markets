@@ -4,11 +4,8 @@ import { League, Sport } from '../enums/sports';
 import { Coins } from './tokens';
 
 export type TagInfo = {
-    id: number;
+    id: League;
     label: string;
-    logo?: string;
-    logoClass?: string;
-    favourite: boolean;
     priority: number;
     live: boolean;
 };

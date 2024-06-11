@@ -1,13 +1,14 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getFavouriteLeagues, setFavouriteLeagues } from 'redux/modules/ui';
+import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
+import { LeagueMap } from '../../../../constants/sports';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -47,7 +48,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                         return (showActive && !!openMarketsCountPerTag[tag.id]) || !showActive;
                     }
                 })
-                .sort((a, b) => {
+                .sort((a: TagInfo, b: TagInfo) => {
                     let numberOfGamesA;
                     let numberOfGamesB;
                     if (showLive) {
@@ -58,17 +59,17 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                         numberOfGamesB = Number(!!openMarketsCountPerTag[b.id]);
                     }
 
-                    const favouriteA = favouriteLeagues.find((league: TagInfo) => league.id == a.id);
-                    const isFavouriteA = Number(!!favouriteA && !!favouriteA.favourite);
+                    const isFavouriteA = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == a.id));
+                    const isFavouriteB = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == b.id));
 
-                    const favouriteB = favouriteLeagues.find((league: TagInfo) => league.id == b.id);
-                    const isFavouriteB = Number(!!favouriteB && !!favouriteB.favourite);
+                    const leagueInfoA = LeagueMap[a.id];
+                    const leagueInfoB = LeagueMap[b.id];
 
-                    const leagueNameA = favouriteA?.label || '';
-                    const leagueNameB = favouriteB?.label || '';
+                    const leagueNameA = leagueInfoA?.label || '';
+                    const leagueNameB = leagueInfoB?.label || '';
 
-                    const leaguePriorityA = favouriteA?.priority || 0;
-                    const leaguePriorityB = favouriteB?.priority || 0;
+                    const leaguePriorityA = leagueInfoA?.priority || 0;
+                    const leaguePriorityB = leagueInfoB?.priority || 0;
 
                     return isFavouriteA == isFavouriteB
                         ? numberOfGamesA == numberOfGamesB
@@ -83,8 +84,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                         : isFavouriteB - isFavouriteA;
                 })
                 .map((tag: TagInfo) => {
-                    const favouriteLeague = favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
-                    const isFavourite = favouriteLeague && favouriteLeague.favourite;
+                    const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
 
                     return (
                         <TagContainer key={tag.id} isMobile={isMobile}>
@@ -121,18 +121,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                             <StarIcon
                                 isMobile={isMobile}
                                 onClick={() => {
-                                    const newFavourites = favouriteLeagues.map((league: TagInfo) => {
-                                        if (league.id == tag.id) {
-                                            let newFavouriteFlag;
-                                            league.favourite ? (newFavouriteFlag = false) : (newFavouriteFlag = true);
-                                            return {
-                                                ...league,
-                                                favourite: newFavouriteFlag,
-                                            };
-                                        }
-                                        return league;
-                                    });
-                                    dispatch(setFavouriteLeagues(newFavourites));
+                                    dispatch(setFavouriteLeague(tag.id));
                                 }}
                                 className={`icon icon--${isFavourite ? 'star-full selected' : 'favourites'} `}
                             />

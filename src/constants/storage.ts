@@ -13,7 +13,7 @@ export const LOCAL_STORAGE_KEYS = {
     LIST_VIEW: 'listView',
     ODDS_TYPE: 'typeOdds',
     STOP_PULSING: 'stopPulsing',
-    FAVOURITE_LEAGUES: 'favouriteLeagues',
+    FAVOURITE_LEAGUES: 'favouriteLeaguesV2',
     PARLAY: 'parlay',
     COMBINED_POSITIONS: 'combinedPositions',
     MULTI_SINGLE: 'multiSingle',
