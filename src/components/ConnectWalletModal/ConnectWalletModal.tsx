@@ -33,7 +33,7 @@ const defaultStyle = {
         border: '1px solid #5F6180',
         width: '720px',
         borderRadius: '15px',
-        marginRight: '-50%',
+        marginRight: '-48%',
         transform: 'translate(-50%, -50%)',
         overflow: 'none',
         height: 'auto',
