@@ -10,7 +10,6 @@ import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getIsConnectedViaParticle, getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 
@@ -67,20 +66,20 @@ const TopUp: React.FC = () => {
                     <>
                         {showLowBalanceAlert && (
                             <TopUpButtonContainer>
-                                <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
+                                <SPAAnchor style={{ marginRight: '10px' }} href={buildHref(ROUTES.Deposit)}>
                                     <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
                                 </SPAAnchor>
                             </TopUpButtonContainer>
                         )}
                         {!showLowBalanceAlert && (
-                            <SPAAnchor style={{ marginRight: '15px' }} href={buildHref(ROUTES.Deposit)}>
+                            <SPAAnchor style={{ marginRight: '10px' }} href={buildHref(ROUTES.Deposit)}>
                                 <Button
                                     backgroundColor={theme.button.background.quaternary}
                                     textColor={theme.button.textColor.primary}
                                     borderColor={theme.button.borderColor.secondary}
-                                    width="150px"
+                                    width="90px"
                                     fontWeight="400"
-                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '600', fontSize: '14px' }}
+                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '600', fontSize: '12px' }}
                                     height="28px"
                                 >
                                     {t('my-portfolio.deposit')}
@@ -121,7 +120,8 @@ const TopUp: React.FC = () => {
     );
 };
 
-const TopUpButtonContainer = styled(FlexDiv)`
+const TopUpButtonContainer = styled.span`
+    display: flex;
     align-items: center;
     justify-content: center;
 `;
@@ -131,10 +131,10 @@ const TopUpButton = styled.button`
     color: ${(props) => props.theme.error.textColor.primary};
     border: 1px solid ${(props) => props.theme.error.borderColor.primary};
     border-radius: 15px;
-    min-width: 140px;
+    min-width: 90px;
     width: 100%;
     max-width: 400px;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 14px;
     height: 28px;
