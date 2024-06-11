@@ -49,7 +49,7 @@ import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
 import { Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
-import { getLiveSupportedLeagues, getSportLeagueIds, isBoxingLeague } from '../../../utils/sports';
+import { getSportLeagueIds, isBoxingLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';
@@ -104,12 +104,10 @@ const Home: React.FC = () => {
                     id: tag.id,
                     label: tag.label,
                     priority: tag.priority,
-                    live: tag.live,
                 };
             }),
         []
     );
-    const filteredLiveTags = useMemo(() => getLiveSupportedLeagues(), []);
 
     useEffect(() => {
         if (getSelectedOddsType == undefined) {
@@ -178,11 +176,8 @@ const Home: React.FC = () => {
 
             selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
 
-            if (sportFilter == SportFilter.Favourites) {
+            if (sportFilter == SportFilter.Favourites || sportFilter == SportFilter.Live) {
                 setAvailableTags(tagsList);
-            } else if (sportFilter == SportFilter.Live) {
-                const filteredTags = tagsList.filter((tag: TagInfo) => tag.live);
-                setAvailableTags(filteredTags);
             } else {
                 const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
                 if (tagsPerSport) {
@@ -440,8 +435,7 @@ const Home: React.FC = () => {
                     } else if (sportFilter === SportFilter.Live) {
                         const filteredTags = tagsList.filter(
                             (tag: TagInfo) =>
-                                filteredLiveTags.includes(tag.id) &&
-                                ((e.target.checked && !!liveMarketsCountPerTag[tag.id]) || !e.target.checked)
+                                (e.target.checked && !!liveMarketsCountPerTag[tag.id]) || !e.target.checked
                         );
                         setAvailableTags(filteredTags);
                     } else {
@@ -493,10 +487,9 @@ const Home: React.FC = () => {
                                         dispatch(setDatePeriodFilter(0));
                                         const filteredTags = tagsList.filter(
                                             (tag: TagInfo) =>
-                                                filteredLiveTags.includes(tag.id) &&
-                                                ((showActive && !!liveMarketsCountPerTag[tag.id]) ||
-                                                    !showActive ||
-                                                    liveSportMarketsQuery.isLoading)
+                                                (showActive && !!liveMarketsCountPerTag[tag.id]) ||
+                                                !showActive ||
+                                                liveSportMarketsQuery.isLoading
                                         );
                                         setAvailableTags(filteredTags);
                                     } else {

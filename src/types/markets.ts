@@ -7,7 +7,6 @@ export type TagInfo = {
     id: League;
     label: string;
     priority: number;
-    live: boolean;
 };
 
 export type Tags = TagInfo[];

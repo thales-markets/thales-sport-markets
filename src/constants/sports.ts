@@ -15,7 +15,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 202,
         hidden: false,
-        live: false,
     },
     [League.NFL]: {
         sport: Sport.FOOTBALL,
@@ -30,7 +29,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 201,
         hidden: false,
-        live: false,
     },
     [League.MLB]: {
         sport: Sport.BASEBALL,
@@ -45,7 +43,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 401,
         hidden: false,
-        live: true,
     },
     [League.NBA]: {
         sport: Sport.BASKETBALL,
@@ -60,7 +57,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 301,
         hidden: false,
-        live: true,
     },
     [League.NCAAB]: {
         sport: Sport.BASKETBALL,
@@ -74,7 +70,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 302,
         hidden: false,
-        live: false,
     },
     [League.NHL]: {
         sport: Sport.HOCKEY,
@@ -89,7 +84,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 501,
         hidden: false,
-        live: true,
     },
     [League.UFC]: {
         sport: Sport.FIGHTING,
@@ -104,7 +98,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 601,
         hidden: false,
-        live: false,
     },
     [League.WNBA]: {
         sport: Sport.BASKETBALL,
@@ -118,7 +111,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 304,
         hidden: false,
-        live: false,
     },
     [League.MLS]: {
         sport: Sport.SOCCER,
@@ -133,7 +125,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 140,
         hidden: false,
-        live: true,
     },
     [League.EPL]: {
         sport: Sport.SOCCER,
@@ -148,7 +139,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 120,
         hidden: false,
-        live: true,
     },
     [League.LIGUE_ONE]: {
         sport: Sport.SOCCER,
@@ -163,7 +153,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 124,
         hidden: false,
-        live: true,
     },
 
     [League.BUNDESLIGA]: {
@@ -179,7 +168,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 123,
         hidden: false,
-        live: true,
     },
     [League.LA_LIGA]: {
         sport: Sport.SOCCER,
@@ -194,7 +182,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 121,
         hidden: false,
-        live: true,
     },
     [League.SERIE_A]: {
         sport: Sport.SOCCER,
@@ -209,7 +196,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 122,
         hidden: false,
-        live: true,
     },
     [League.UEFA_CL]: {
         sport: Sport.SOCCER,
@@ -224,7 +210,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 103,
         hidden: false,
-        live: true,
         tooltipKey: 'common.football-tooltip',
     },
     [League.UEFA_EL]: {
@@ -239,7 +224,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 104,
         hidden: false,
-        live: true,
         tooltipKey: 'common.football-tooltip',
     },
     [League.FIFA_WC]: {
@@ -254,7 +238,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 100,
         hidden: true,
-        live: false,
         tooltipKey: 'common.fifa-tooltip',
     },
     [League.J1_LEAGUE]: {
@@ -269,7 +252,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 144,
         hidden: false,
-        live: true,
     },
     [League.IPL]: {
         sport: Sport.CRICKET,
@@ -283,7 +265,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 901,
         hidden: false,
-        live: false,
     },
     [League.T20_BLAST]: {
         sport: Sport.CRICKET,
@@ -297,7 +278,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 902,
         hidden: false,
-        live: false,
     },
     [League.IIHF_WORLD_CHAMPIONSHIP]: {
         sport: Sport.HOCKEY,
@@ -311,7 +291,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 502,
         hidden: false,
-        live: false,
         tooltipKey: 'common.iihf-tooltip',
     },
     [League.COPA_AMERICA]: {
@@ -325,7 +304,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 102,
         hidden: false,
-        live: false,
     },
     [League.COPA_LIBERTADORES]: {
         sport: Sport.SOCCER,
@@ -339,7 +317,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 107,
         hidden: false,
-        live: false,
     },
     [League.UEFA_EURO]: {
         sport: Sport.SOCCER,
@@ -353,7 +330,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 101,
         hidden: false,
-        live: false,
     },
     [League.EREDIVISIE]: {
         sport: Sport.SOCCER,
@@ -367,7 +343,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 141,
         hidden: false,
-        live: true,
     },
     [League.PRIMEIRA_LIGA]: {
         sport: Sport.SOCCER,
@@ -381,7 +356,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 142,
         hidden: false,
-        live: true,
     },
     [League.FIFA_WC_WOMEN]: {
         sport: Sport.SOCCER,
@@ -394,7 +368,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 112,
         hidden: false,
-        live: false,
         tooltipKey: 'common.football-tooltip',
     },
     [League.ENGLAND_CUP]: {
@@ -408,7 +381,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 130,
         hidden: false,
-        live: false,
     },
     [League.FRANCE_CUP]: {
         sport: Sport.SOCCER,
@@ -421,7 +393,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 134,
         hidden: false,
-        live: false,
     },
     [League.SPAIN_CUP]: {
         sport: Sport.SOCCER,
@@ -434,7 +405,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 131,
         hidden: false,
-        live: false,
     },
     [League.ITALY_CUP]: {
         sport: Sport.SOCCER,
@@ -447,7 +417,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 132,
         hidden: false,
-        live: false,
     },
     [League.TENNIS_GS]: {
         sport: Sport.TENNIS,
@@ -462,7 +431,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 701,
         hidden: false,
-        live: true,
         tooltipKey: 'common.tennis-tooltip',
     },
     [League.TENNIS_MASTERS]: {
@@ -478,7 +446,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 702,
         hidden: false,
-        live: true,
         tooltipKey: 'common.tennis-tooltip',
     },
     [League.GERMANY_CUP]: {
@@ -492,7 +459,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 133,
         hidden: false,
-        live: false,
     },
     [League.BRAZIL_1]: {
         sport: Sport.SOCCER,
@@ -505,7 +471,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 143,
         hidden: false,
-        live: true,
     },
     [League.UEFA_EURO_U21]: {
         sport: Sport.SOCCER,
@@ -518,7 +483,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 111,
         hidden: false,
-        live: false,
         tooltipKey: 'common.football-tooltip',
     },
     [League.FIFA_WORLD_CUP_U20]: {
@@ -533,7 +497,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 110,
         hidden: false,
-        live: false,
         tooltipKey: 'common.fifa-tooltip',
     },
     [League.EUROLEAGUE]: {
@@ -548,7 +511,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 303,
         hidden: false,
-        live: true,
     },
     [League.FIBA_WORLD_CUP]: {
         sport: Sport.BASEBALL,
@@ -561,7 +523,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 300,
         hidden: false,
-        live: false,
     },
     [League.FORMULA1]: {
         sport: Sport.MOTOSPORT,
@@ -576,7 +537,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 1001,
         hidden: false,
-        live: false,
     },
     [League.MOTOGP]: {
         sport: Sport.MOTOSPORT,
@@ -591,7 +551,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 1002,
         hidden: false,
-        live: false,
     },
     [League.SAUDI_PROFESSIONAL_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -604,7 +563,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 145,
         hidden: false,
-        live: true,
     },
     [League.BOXING]: {
         sport: Sport.FIGHTING,
@@ -618,7 +576,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 602,
         hidden: false,
-        live: false,
     },
     [League.UEFA_NATIONS_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -632,7 +589,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 106,
         hidden: false,
-        live: false,
         tooltipKey: 'common.football-tooltip',
     },
     [League.CONCACAF_NATIONS_LEAGUE]: {
@@ -647,7 +603,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 108,
         hidden: false,
-        live: false,
         tooltipKey: 'common.football-tooltip',
     },
     [League.CSGO]: {
@@ -662,7 +617,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 801,
         hidden: false,
-        live: true,
     },
     [League.DOTA2]: {
         sport: Sport.ESPORTS,
@@ -676,7 +630,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 802,
         hidden: false,
-        live: true,
     },
     [League.LOL]: {
         sport: Sport.ESPORTS,
@@ -690,7 +643,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 803,
         hidden: false,
-        live: true,
     },
     [League.CONMEBOL_WC_QUALIFICATIONS]: {
         sport: Sport.SOCCER,
@@ -703,7 +655,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 109,
         hidden: false,
-        live: false,
     },
     [League.UEFA_CONFERENCE_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -716,7 +667,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 105,
         hidden: false,
-        live: false,
         tooltipKey: 'common.football-tooltip',
     },
     [League.NON_TITLE_BOXING]: {
@@ -731,7 +681,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 603,
         hidden: false,
-        live: false,
     },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
@@ -745,7 +694,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 1101,
         hidden: false,
-        live: false,
     },
     [League.GOLF_WINNER]: {
         sport: Sport.GOLF,
@@ -759,7 +707,6 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 1102,
         hidden: false,
-        live: false,
     },
 };
 

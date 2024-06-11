@@ -77,7 +77,6 @@ const uiSlice = createSlice({
                         id: leagueInfo.id,
                         label: leagueInfo.label,
                         priority: leagueInfo.priority,
-                        live: leagueInfo.live,
                     });
                 }
             }

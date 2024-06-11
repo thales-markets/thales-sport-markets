@@ -65,8 +65,6 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
         isMainPageView && (market.typeId === MarketType.TOTAL || !!marketTypeFilter)
     );
 
-    const extendedPositionText = getPositionTextV2(market, position, true);
-
     const oddTooltipText = getOddTooltipTextV2(position, market);
 
     const getDetails = () => (
@@ -108,11 +106,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                 }
             }}
         >
-            {isMobile ? (
-                <Tooltip overlay={<>{extendedPositionText}</>} component={<Text>{positionText}</Text>} />
-            ) : (
-                <Text>{positionText}</Text>
-            )}
+            <Text>{positionText}</Text>
             {showOdd ? (
                 <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
                     {formatMarketOdds(selectedOddsType, odd)}

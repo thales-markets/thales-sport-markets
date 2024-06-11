@@ -41,11 +41,6 @@ export const getSportLeagueIds = (sport: Sport) => {
     return allLeagues.filter((league) => league.sport === sport).map((league) => league.id);
 };
 
-export const getLiveSupportedLeagues = () => {
-    const allLeagues = Object.values(LeagueMap);
-    return allLeagues.filter((league) => league.live).map((league) => league.id);
-};
-
 export const getLeagueTooltipKey = (league: League) => {
     const leagueInfo = LeagueMap[league];
     return leagueInfo ? leagueInfo.tooltipKey : undefined;

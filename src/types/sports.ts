@@ -13,6 +13,5 @@ export type LeagueInfo = {
     isDrawAvailable: boolean;
     priority: number;
     hidden: boolean;
-    live: boolean;
     tooltipKey?: string;
 };
