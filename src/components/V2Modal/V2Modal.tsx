@@ -11,7 +11,7 @@ const OddsSelectorModal: React.FC = () => {
     const isMobile = useSelector(getIsMobile);
     const [showV2Modal, setShowV2Modal] = useLocalStorage(LOCAL_STORAGE_KEYS.SHOW_V2_MODAL, true);
 
-    return showV2Modal && !isMobile ? (
+    return showV2Modal ? (
         <ReactModal
             isOpen
             onRequestClose={() => setShowV2Modal(false)}
@@ -20,8 +20,8 @@ const OddsSelectorModal: React.FC = () => {
         >
             <Container>
                 <CloseIcon onClick={() => setShowV2Modal(false)} />
-                <SPAAnchor href={'https://v2.overtimemarkets.xyz/'}>
-                    <Image src={'v2-popup.png'} />
+                <SPAAnchor href={'https://v2.overtimemarkets.xyz/'} onClick={() => setShowV2Modal(false)}>
+                    <Image src={isMobile ? 'v2-popup-mobile.png' : 'v2-popup.png'} />
                 </SPAAnchor>
             </Container>
         </ReactModal>
