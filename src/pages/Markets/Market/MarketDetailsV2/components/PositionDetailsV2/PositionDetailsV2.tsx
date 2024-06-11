@@ -106,7 +106,11 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                 }
             }}
         >
-            <Text>{positionText}</Text>
+            {isMobile ? (
+                <Tooltip overlay={<>{positionText}</>} component={<Text>{positionText}</Text>} />
+            ) : (
+                <Text>{positionText}</Text>
+            )}
             {showOdd ? (
                 <Odd selected={isAddedToTicket} isMainPageView={isMainPageView}>
                     {formatMarketOdds(selectedOddsType, odd)}

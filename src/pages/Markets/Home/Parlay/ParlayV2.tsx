@@ -156,7 +156,7 @@ const Parlay: React.FC = () => {
                 <>
                     {!isMobile && <Title>{t('markets.parlay.ticket-slip')}</Title>}
                     <ThalesBonusContainer>
-                        <ThalesBonus>Use THALES and get 1% of bonus for each game. </ThalesBonus>
+                        <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
                     </ThalesBonusContainer>
                     <ListContainer>
                         {ticketMarkets.length > 0 &&
