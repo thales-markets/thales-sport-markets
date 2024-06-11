@@ -8,7 +8,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { COLLATERAL_DECIMALS, formatCurrencyWithKey } from 'thales-utils';
-import { getCollateral, isStableCurrency } from 'utils/collaterals';
+import { getCollateral } from 'utils/collaterals';
 
 const AMOUNTS = [3, 10, 20, 50, 100];
 
@@ -32,15 +32,11 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const convertFromStable = useCallback(
         (value: number) => {
             const rate = exchangeRates?.[collateral];
-            if (isStableCurrency(collateral)) {
-                return value;
-            } else {
-                const priceFeedBuffer = 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE;
-                return rate
-                    ? Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[collateral]) /
-                          10 ** COLLATERAL_DECIMALS[collateral]
-                    : 0;
-            }
+            const priceFeedBuffer = 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE;
+            return rate
+                ? Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[collateral]) /
+                      10 ** COLLATERAL_DECIMALS[collateral]
+                : 0;
         },
         [collateral, exchangeRates]
     );
