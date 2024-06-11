@@ -1,7 +1,9 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { VaultUserTransactions } from 'types/vault';
 
 const useVaultUserTransactionsQuery = (
@@ -13,10 +15,14 @@ const useVaultUserTransactionsQuery = (
         QUERY_KEYS.Vault.UserTransactions(vaultAddress, networkId),
         async () => {
             try {
-                const vaultUserTransactions = await thalesData.sportMarkets.vaultUserTransactions({
-                    network: networkId,
-                    vault: vaultAddress,
-                });
+                const vaultUserTransactionsResponse = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.VaultsUserTransactions}/${networkId}?vault=${vaultAddress}`
+                );
+
+                const vaultUserTransactions = vaultUserTransactionsResponse?.data
+                    ? vaultUserTransactionsResponse.data
+                    : [];
+
                 return vaultUserTransactions;
             } catch (e) {
                 console.log(e);
