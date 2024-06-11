@@ -352,7 +352,7 @@
         "messages": {
             "no-claimable": "You don't have any claimable positions",
             "no-open": "You don't have any open positions",
-            "no-transactions": "You don't have any trades",
+            "no-lp-transactions": "You don't have any LP transactions",
             "no-vouchers": "You do not have any voucher to claim",
             "ticket-subtitle": "Add position, choose a market and make your selection.",
             "canceled-tooltip": "Canceled markets are claimable 2 hours after market is resolved.",

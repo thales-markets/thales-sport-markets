@@ -114,7 +114,7 @@ const TransactionsTable: React.FC = () => {
                 ]}
                 data={lastValidData}
                 isLoading={lastValidData.length === 0 && txQuery.isFetching}
-                noResultsMessage={t('profile.messages.no-transactions')}
+                noResultsMessage={t('profile.messages.no-lp-transactions')}
                 tableRowStyles={{ minHeight: '50px' }}
             />
         </Wrapper>
