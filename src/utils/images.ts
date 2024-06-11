@@ -2,63 +2,53 @@ import { SupportedLanguages } from 'enums/languages';
 import { League } from 'enums/sports';
 import { LeagueMap } from '../constants/sports';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
-import { isInternationalLeague } from './sports';
+import { getLeagueLabel, isInternationalLeague } from './sports';
 
-export const getTeamImageSource = (team: string, leagueTag: number) =>
-    leagueTag == League.TENNIS_GS || leagueTag == League.TENNIS_MASTERS
+export const getTeamImageSource = (team: string, league: League) => {
+    const leagueLabel = getLeagueLabel(league);
+    return league == League.TENNIS_GS || league == League.TENNIS_MASTERS
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == League.FORMULA1 || leagueTag == League.MOTOGP
-        ? `/logos/${Object.values(LeagueMap).find((t) => t.id == leagueTag)?.label}/${fixOneSideMarketCompetitorName(
-              team
-          )
-              .replaceAll(' ', '-')
-              .toLowerCase()}.webp`
-        : leagueTag == League.GOLF_H2H
+        : league == League.FORMULA1 || league == League.MOTOGP
+        ? `/logos/${leagueLabel}/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.GOLF_H2H
         ? `/logos/PGA/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == League.GOLF_WINNER
+        : league == League.GOLF_WINNER
         ? `/logos/PGA/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == League.BRAZIL_1
+        : league == League.BRAZIL_1
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : isInternationalLeague(Number(leagueTag))
+        : isInternationalLeague(Number(league))
         ? `/logos/Countries/${team.trim().replaceAll(' ', '-').toLowerCase()}.svg`
-        : leagueTag == League.ENGLAND_CUP
+        : league == League.ENGLAND_CUP
         ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == League.FRANCE_CUP
+        : league == League.FRANCE_CUP
         ? `/logos/Ligue 1/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == League.SPAIN_CUP
+        : league == League.SPAIN_CUP
         ? `/logos/La Liga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == League.ITALY_CUP
+        : league == League.ITALY_CUP
         ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : leagueTag == League.GERMANY_CUP
+        : league == League.GERMANY_CUP
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : `/logos/${Object.values(LeagueMap).find((t) => t.id == leagueTag)?.label}/${team
-              .trim()
-              .replaceAll(' ', '-')
-              .toLowerCase()}.webp`;
+        : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`;
+};
 
 const OVERTIME_LOGO = '/logos/overtime-logo.png';
 const OVERTIME_LOGO_DARK = '/logos/overtime-logo-dark.svg';
 const PROFILE_SILHOUETTE = '/profile-silhouette.svg';
 
-export const getOnImageError = (setSrc: (src: string) => void, leagueTag: number | string, isDark = false) => () => {
-    setSrc(
-        Object.values(LeagueMap).find((t) => t.id === Number(leagueTag))?.logo ||
-            (isDark ? OVERTIME_LOGO_DARK : OVERTIME_LOGO)
-    );
+export const getOnImageError = (setSrc: (src: string) => void, league: League, isDark = false) => () => {
+    setSrc(LeagueMap[league]?.logo || (isDark ? OVERTIME_LOGO_DARK : OVERTIME_LOGO));
 };
 
 export const getOnPlayerImageError = (setSrc: (src: string) => void) => () => {
     setSrc(PROFILE_SILHOUETTE);
 };
 
-export const getErrorImage = (leagueTag: number | string) => {
-    return Object.values(LeagueMap).find((t) => t.id === Number(leagueTag))?.logo || OVERTIME_LOGO;
+export const getErrorImage = (league: League) => {
+    return LeagueMap[league]?.logo || OVERTIME_LOGO;
 };
 
-export const getLeagueLogoClass = (leagueTag: number) => {
-    return (
-        Object.values(LeagueMap).find((t) => t.id === Number(leagueTag))?.logoClass || 'icon-homepage league--overtime'
-    );
+export const getLeagueLogoClass = (league: League) => {
+    return LeagueMap[league]?.logoClass || 'icon-homepage league--overtime';
 };
 
 export const getLanguageFlagSource = (language: SupportedLanguages | any) => {

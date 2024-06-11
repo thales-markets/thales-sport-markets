@@ -76,7 +76,6 @@ const uiSlice = createSlice({
                     state.favouriteLeagues.push({
                         id: leagueInfo.id,
                         label: leagueInfo.label,
-                        priority: leagueInfo.priority,
                     });
                 }
             }
