@@ -237,7 +237,9 @@
             "download-image": "Bild herunterladen. Warten Sie mal...",
             "save-image": "Bild in Zwischenablage speichern. Warten Sie mal...",
             "open-twitter": "Twitter öffnen...",
-            "ios-not-supported": "Das Teilen von Bildern wird auf iOS-Geräten nicht unterstützt. Wenn Sie das Bild teilen möchten, verwenden Sie bitte die Desktop-Version"
+            "ios-not-supported": "Das Teilen von Bildern wird auf iOS-Geräten nicht unterstützt. Wenn Sie das Bild teilen möchten, verwenden Sie bitte die Desktop-Version",
+            "live-trade-requested": "Live-Handel erwünscht",
+            "fulfilling-live-trade": "Erfüllung des Live-Handels"
         },
         "filter-label": {
             "global": {
@@ -537,7 +539,10 @@
             "interrupted": "Unterbrochen",
             "abandoned": "Verlassen",
             "postponed": "Verschoben",
-            "rain-delay": "Regenverzögerung"
+            "rain-delay": "Regenverzögerung",
+            "loss": "Verlust",
+            "open": "Offen",
+            "won": "Gewonnen"
         },
         "market-details": {
             "price": "Preis",

@@ -237,7 +237,9 @@
             "save-image": "Salvataggio dell'immagine negli appunti. Attendere prego...",
             "image-in-clipboard": "L'immagine è negli appunti!",
             "save-image-error": "Impossibile salvare l'immagine! Riprova",
-            "save-image-cancel": "Salvataggio dell'immagine annullato!"
+            "save-image-cancel": "Salvataggio dell'immagine annullato!",
+            "live-trade-requested": "Richiesto scambio dal vivo",
+            "fulfilling-live-trade": "Soddisfare il commercio dal vivo"
         },
         "filter-label": {
             "global": {
@@ -537,7 +539,10 @@
             "abandoned": "Abbandonato",
             "interrupted": "Interrotto",
             "delayed": "Ritardato",
-            "rain-delay": "Ritardo pioggia"
+            "rain-delay": "Ritardo pioggia",
+            "open": "Aprire",
+            "won": "Vinto",
+            "loss": "Perdita"
         },
         "market-details": {
             "price": "Price",

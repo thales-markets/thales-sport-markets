@@ -237,7 +237,9 @@
             "ios-not-supported": "ไม่รองรับการแชร์รูปภาพบนอุปกรณ์ iOS หากคุณต้องการแชร์รูปภาพ โปรดใช้เวอร์ชันเดสก์ท็อป",
             "save-image-cancel": "ยกเลิกการบันทึกภาพแล้ว!",
             "save-image": "บันทึกภาพไปยังคลิปบอร์ด โปรดรอ...",
-            "download-image": "กำลังดาวน์โหลดรูปภาพ โปรดรอ..."
+            "download-image": "กำลังดาวน์โหลดรูปภาพ โปรดรอ...",
+            "fulfilling-live-trade": "เติมเต็มการซื้อขายสด",
+            "live-trade-requested": "ร้องขอการค้าสด"
         },
         "filter-label": {
             "global": {
@@ -538,7 +540,10 @@
             "postponed": "เลื่อนออกไป",
             "abandoned": "ถูกทอดทิ้ง",
             "delayed": "ล่าช้า",
-            "interrupted": "ขัดจังหวะ"
+            "interrupted": "ขัดจังหวะ",
+            "open": "เปิด",
+            "won": "วอน",
+            "loss": "การสูญเสีย"
         },
         "market-details": {
             "price": "ราคา",
