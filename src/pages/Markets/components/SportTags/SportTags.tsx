@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
 import { Tags } from 'types/markets';
-import SportFilterDetails from '../SportFilter/SportFilter';
+import SportFilterDetails from '../SportFilter';
 import TagsDropdown from '../TagsDropdown';
 
 type SportTagsProps = {

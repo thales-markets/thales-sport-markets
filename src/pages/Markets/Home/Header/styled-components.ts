@@ -31,16 +31,6 @@ export const NoScrollbarContainer = styled.div`
     }
 `;
 
-export const MarketTypesContainer = styled(FlexDiv)`
-    width: 100%;
-    overflow: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    ::-webkit-scrollbar {
-        display: none;
-    }
-`;
-
 export const MarketTypeButton = styled.button<{ selected?: boolean }>`
     width: 100%;
     border-radius: 5px;

@@ -162,7 +162,7 @@ export const getTicketMarketStatus = (market: TicketMarket) => {
     return formatDateWithTime(Number(market.maturityDate));
 };
 
-export const getTicketQuote = (paid: number, payout: number) => 1 / (payout / paid);
+const getTicketQuote = (paid: number, payout: number) => 1 / (payout / paid);
 
 export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: number) =>
     formatMarketOdds(oddsType, getTicketQuote(paid, payout));

@@ -6,7 +6,7 @@ import TimeRemaining from 'components/TimeRemaining';
 import Toggle from 'components/Toggle/Toggle';
 import Tooltip from 'components/Tooltip';
 import NumericInput from 'components/fields/NumericInput';
-import RadioButton from 'components/fields/RadioButton/RadioButton';
+import RadioButton from 'components/fields/RadioButton';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { LINKS } from 'constants/links';

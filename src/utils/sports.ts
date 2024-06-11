@@ -31,11 +31,6 @@ export const getLeaguePeriodType = (league: League) => {
     return leagueInfo ? leagueInfo.periodType : PeriodType.EMPTY;
 };
 
-export const getLeagueProvider = (league: League) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.provider : '';
-};
-
 export const getLeagueIsDrawAvailable = (league: League) => {
     const leagueInfo = LeagueMap[league];
     return leagueInfo ? leagueInfo.isDrawAvailable : false;

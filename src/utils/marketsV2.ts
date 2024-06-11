@@ -27,28 +27,7 @@ import {
 } from './markets';
 import { getLeagueMatchResolveType, getLeaguePeriodType, getLeagueScoringType } from './sports';
 
-export const getSimpleSymbolText = (
-    position: Position,
-    marketType: number,
-    isCombinedPosition?: boolean,
-    line?: number
-) => {
-    if (marketType === MarketType.SPREAD || marketType === MarketType.SPREAD2) return `H${position + 1}`;
-    if (marketType === MarketType.TOTAL || marketType === MarketType.TOTAL2) {
-        return isCombinedPosition && line
-            ? position === 0
-                ? Math.ceil(line).toString()
-                : Math.floor(line).toString()
-            : position === 0
-            ? 'O'
-            : 'U';
-    }
-    if (marketType === MarketType.DOUBLE_CHANCE) return position === 0 ? '1X' : position === 1 ? '12' : 'X2';
-
-    return position === 0 ? '1' : position === 1 ? '2' : 'X';
-};
-
-export const getSimplePositionText = (
+const getSimplePositionText = (
     marketType: number,
     position: number,
     line: number,
@@ -88,7 +67,7 @@ export const getSimplePositionText = (
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
 
-export const getCombinedPositionsText = (market: SportMarket, position: number) => {
+const getCombinedPositionsText = (market: SportMarket, position: number) => {
     const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
     if (!combinedPositions) return '';
 
@@ -185,7 +164,7 @@ export const getSubtitleText = (market: SportMarket, position: Position) => {
     return undefined;
 };
 
-export const getLineInfo = (typeId: number, position: Position, line: number) => {
+const getLineInfo = (typeId: number, position: Position, line: number) => {
     if (isSpreadMarket(typeId))
         return position === Position.HOME
             ? `${Number(line) > 0 ? '+' : '-'}${Math.abs(line)}`
@@ -195,31 +174,7 @@ export const getLineInfo = (typeId: number, position: Position, line: number) =>
     return undefined;
 };
 
-export const getCombinedPositionsLineInfo = (position: Position, market: SportMarket) => {
-    const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
-    if (!combinedPositions) return undefined;
-
-    const position1 = combinedPositions[0];
-    const position2 = combinedPositions[1];
-
-    const position1LineInfo = getLineInfo(position1.typeId, position1.position, position1.line);
-
-    const position2LineInfo = getLineInfo(position2.typeId, position2.position, position2.line);
-
-    const lineInfo =
-        position1LineInfo && position2LineInfo
-            ? `${position1LineInfo}/${position2LineInfo}`
-            : position1LineInfo || position2LineInfo;
-
-    return lineInfo;
-};
-
-export const getLineInfoV2 = (market: SportMarket, position: Position) =>
-    isCombinedPositionsMarket(market.typeId)
-        ? getCombinedPositionsLineInfo(position, market)
-        : getLineInfo(market.typeId, position, market.line);
-
-export const getTooltipText = (typeId: number, position: Position, line: number, market: SportMarket) => {
+const getTooltipText = (typeId: number, position: Position, line: number, market: SportMarket) => {
     const team = market.isPlayerPropsMarket
         ? market.playerProps.playerName
         : position === Position.AWAY
@@ -255,7 +210,7 @@ export const getTooltipText = (typeId: number, position: Position, line: number,
     });
 };
 
-export const getCombinedPositionsOddTooltipText = (position: Position, market: SportMarket) => {
+const getCombinedPositionsOddTooltipText = (position: Position, market: SportMarket) => {
     const combinedPositions = market.selectedCombinedPositions || market.combinedPositions[position];
     if (!combinedPositions) return '';
 
@@ -297,9 +252,8 @@ export const getMatchLabel = (market: SportMarket) =>
     `${getTeamNameV2(market, 0)}${
         !market.isOneSideMarket && !market.isPlayerPropsMarket ? ` - ${getTeamNameV2(market, 1)}` : ''
     }`;
-export const getPositionOddsV2 = (market: TicketMarket) => market.odd;
 
-export const areSameCombinedPositions = (market: SportMarket, ticketPosition: TicketPosition) => {
+const areSameCombinedPositions = (market: SportMarket, ticketPosition: TicketPosition) => {
     for (let i = 0; i < market.combinedPositions.length; i++) {
         for (let j = 0; j < market.combinedPositions[i].length; j++) {
             const marketCombinedPosition = market.combinedPositions[i][j];

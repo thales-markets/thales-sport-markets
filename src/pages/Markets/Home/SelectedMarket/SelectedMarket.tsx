@@ -142,7 +142,7 @@ const MatchInfo = styled(FlexDivRow)`
     }
 `;
 
-export const MatchInfoLabel = styled.label`
+const MatchInfoLabel = styled.label`
     font-size: 11px;
     font-weight: 600;
     line-height: 12px;

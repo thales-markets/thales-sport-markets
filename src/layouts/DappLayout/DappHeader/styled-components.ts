@@ -161,19 +161,6 @@ export const MobileButtonWrapper = styled.div`
     }
 `;
 
-export const ReferAndEarn = styled.button`
-    color: ${(props) => props.theme.button.textColor.secondary};
-    cursor: pointer;
-    font-weight: bold;
-    text-transform: uppercase;
-    height: 30px;
-    width: 140px;
-    border-radius: 20px;
-    font-size: 13px;
-    background: linear-gradient(89.94deg, #8f32d8 1.79%, #d70c61 99.65%);
-    border: none;
-`;
-
 export const SettingsContainer = styled(FlexDivRowCentered)`
     position: relative;
     margin: 0 10px;

@@ -99,7 +99,10 @@ export const RoundEndContainer = styled(FlexDivColumn)`
 
 export const RoundEndLabel = styled.p``;
 
-export const RoundEnd = styled.p`
+export const RoundEnd = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     font-weight: 600;
     font-size: 25px;
     color: ${(props) => props.theme.textColor.quaternary};
@@ -283,7 +286,7 @@ export const LiquidityPoolInfoContainer = styled(FlexDivStart)`
 export const LiquidityPoolInfoLabel = styled.span`
     white-space: nowrap;
     margin-right: 6px;
-    width: 122px;
+    width: 135px;
 `;
 
 export const LiquidityPoolReturnlabel = styled(LiquidityPoolInfoLabel)`

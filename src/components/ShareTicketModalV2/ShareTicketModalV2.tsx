@@ -10,7 +10,7 @@ import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumnCentered } from 'styles/common';
-import { isFirefox, isIos, isMetamask } from 'thales-utils';
+import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import MyTicket from './components/MyTicket';
 
@@ -22,6 +22,7 @@ export type ShareTicketModalProps = {
     onClose: () => void;
     isTicketLost: boolean;
     isTicketResolved: boolean;
+    collateral: Coins;
 };
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
@@ -36,6 +37,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     onClose,
     isTicketLost,
     isTicketResolved,
+    collateral,
 }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -238,6 +240,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     payout={payout}
                     isTicketLost={isTicketLost}
                     isTicketResolved={isTicketResolved}
+                    collateral={collateral}
                 />
 
                 <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>

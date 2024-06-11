@@ -94,17 +94,19 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                 {market.live && <LiveTag>{t(`markets.market-card.live`)}</LiveTag>}
                 <MatchLogosV2 market={market} width={'55px'} height={'30px'} />
             </LeftContainer>
-            <MarketPositionContainer>
-                <MatchLabel fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
+            <MarketPositionContainer fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
+                <MatchLabel readOnly={readOnly}>
                     {matchLabel}
-                    <CloseIcon
-                        className="icon icon--close"
-                        onClick={() => {
-                            dispatch(removeFromTicket(market));
-                        }}
-                    />
+                    {!readOnly && (
+                        <CloseIcon
+                            className="icon icon--close"
+                            onClick={() => {
+                                dispatch(removeFromTicket(market));
+                            }}
+                        />
+                    )}
                 </MatchLabel>
-                <MarketTypeInfo>{getTitleText(market)}</MarketTypeInfo>
+                <MarketTypeInfo readOnly={readOnly}>{getTitleText(market)}</MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{positionText}</PositionText>
                     <Odd>
@@ -211,32 +213,28 @@ const LiveTag = styled.span`
     margin-bottom: 5px;
 `;
 
-const MarketPositionContainer = styled(FlexDivColumn)`
+const MarketPositionContainer = styled(FlexDivColumn)<{ fontSize?: string; lineHeight?: string }>`
     display: block;
     width: 100%;
-`;
-
-const MatchLabel = styled(FlexDivRow)<{ fontSize?: string; lineHeight?: string }>`
-    font-weight: 600;
     font-size: ${(props) => (props.fontSize ? props.fontSize : '13px')};
     line-height: ${(props) => (props.lineHeight ? props.lineHeight : '13px')};
+`;
+
+const MatchLabel = styled(FlexDivRow)<{ readOnly?: boolean }>`
+    font-weight: 600;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 5px;
+    margin-bottom: ${(props) => (props.readOnly ? 0 : '5px')};
     text-align: start;
 `;
 
-const MarketTypeInfo = styled(FlexDivRow)`
+const MarketTypeInfo = styled(FlexDivRow)<{ readOnly?: boolean }>`
     font-weight: 600;
-    font-size: 13px;
-    line-height: 13px;
     color: ${(props) => props.theme.textColor.quinary};
-    margin-bottom: 5px;
+    margin-bottom: ${(props) => (props.readOnly ? 0 : '5px')};
 `;
 
 const PositionInfo = styled(FlexDivRow)`
     font-weight: 600;
-    font-size: 13px;
-    line-height: 13px;
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
@@ -257,6 +255,7 @@ const CloseIcon = styled.i`
 
 const Icon = styled.i`
     font-size: 12px;
+    margin-left: 5px;
 `;
 const Correct = styled(Icon)`
     color: ${(props) => props.theme.status.win};

@@ -1,5 +1,4 @@
 import { ReactComponent as OvertimeLogoIcon } from 'assets/images/overtime-logo.svg';
-import { USD_SIGN } from 'constants/currency';
 import { t } from 'i18next';
 import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React from 'react';
@@ -18,7 +17,7 @@ import {
     FlexDivRow,
     FlexDivRowCentered,
 } from 'styles/common';
-import { formatCurrencyWithSign } from 'thales-utils';
+import { Coins, formatCurrencyWithKey } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import { buildReffererLink } from 'utils/routes';
 import { formatTicketOdds } from 'utils/tickets';
@@ -31,9 +30,18 @@ type MyTicketProps = {
     payout: number;
     isTicketLost: boolean;
     isTicketResolved: boolean;
+    collateral: Coins;
 };
 
-const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, paid, payout, isTicketLost, isTicketResolved }) => {
+const MyTicket: React.FC<MyTicketProps> = ({
+    markets,
+    multiSingle,
+    paid,
+    payout,
+    isTicketLost,
+    isTicketResolved,
+    collateral,
+}) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
@@ -42,7 +50,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, paid, payout,
 
     const matchInfoStyle = isMobile
         ? { fontSize: '10px', lineHeight: '12px' }
-        : { fontSize: '11px', lineHeight: '13px' };
+        : { fontSize: '11px', lineHeight: '14px' };
 
     const reffererIDQuery = useGetReffererIdQuery(walletAddress || '', { enabled: !!walletAddress });
     const reffererID = reffererIDQuery.isSuccess && reffererIDQuery.data ? reffererIDQuery.data : '';
@@ -84,7 +92,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, paid, payout,
                     </PayoutRow>
                     <PayoutRow>
                         <PayoutValue isLost={isTicketLost} isResolved={isTicketResolved}>
-                            {formatCurrencyWithSign(USD_SIGN, payout)}
+                            {formatCurrencyWithKey(collateral, payout)}
                         </PayoutValue>
                     </PayoutRow>
                 </PayoutWrapper>
@@ -121,7 +129,7 @@ const MyTicket: React.FC<MyTicketProps> = ({ markets, multiSingle, paid, payout,
                 )}
                 <InfoDiv>
                     <InfoLabel>{t('markets.parlay.buy-in')}:</InfoLabel>
-                    <InfoValue>{formatCurrencyWithSign(USD_SIGN, paid, 2)}</InfoValue>
+                    <InfoValue>{formatCurrencyWithKey(collateral, paid)}</InfoValue>
                 </InfoDiv>
             </InfoWrapper>
         </Container>
@@ -216,13 +224,9 @@ const PayoutValue = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
 const RowMarket = styled.div`
     display: flex;
     position: relative;
-    height: 39px;
     align-items: center;
     text-align: center;
-    padding: 2px 7px;
-    @media (max-width: 950px) {
-        height: 35px;
-    }
+    padding: 4px 7px;
 `;
 
 const InfoWrapper = styled(FlexDivRow)`
@@ -259,7 +263,7 @@ const ReferralLabel = styled.span`
 
 const HorizontalLine = styled.hr`
     width: 100%;
-    border-top: 1.5px solid ${(props) => props.theme.background.secondary};
+    border-top: 1.5px solid ${(props) => props.theme.background.senary};
     border-bottom: none;
     border-right: none;
     border-left: none;
@@ -267,7 +271,7 @@ const HorizontalLine = styled.hr`
 `;
 const HorizontalDashedLine = styled.hr`
     width: 100%;
-    border-top: 1.5px dashed ${(props) => props.theme.background.secondary};
+    border-top: 1.5px dashed ${(props) => props.theme.background.senary};
     border-bottom: none;
     border-right: none;
     border-left: none;
