@@ -50,13 +50,7 @@ const Positions: React.FC<PositionsProps> = ({
 
     const showContainer = !isGameOpen || areOddsValid || showInvalid;
 
-    const sortedMarkets = useMemo(
-        () =>
-            orderBy(markets, ['line'], ['asc']).sort((marketA: SportMarket, marketB: SportMarket) => {
-                return sortMarketsByDisabled(marketA, marketB);
-            }),
-        [markets]
-    );
+    const sortedMarkets = useMemo(() => orderBy(markets, ['line'], ['asc']), [markets]);
 
     const positionText0 = markets[0] ? getSubtitleText(markets[0], 0) : undefined;
     const positionText1 = markets[0] ? getSubtitleText(markets[0], 1) : undefined;
@@ -135,20 +129,6 @@ const Positions: React.FC<PositionsProps> = ({
     ) : (
         <></>
     );
-};
-
-const sortMarketsByDisabled = (marketA: SportMarket, marketB: SportMarket) => {
-    const isGameStartedA = marketA.maturityDate < new Date();
-    const isGameOpenA = !marketA.isResolved && !marketA.isCancelled && !marketA.isPaused && !isGameStartedA;
-    const noOddA = !marketA.odds[0] || marketA.odds[0] == 0;
-
-    const isGameStartedB = marketB.maturityDate < new Date();
-    const isGameOpenB = !marketB.isResolved && !marketB.isCancelled && !marketB.isPaused && !isGameStartedB;
-    const noOddB = !marketB.odds[0] || marketB.odds[0] == 0;
-
-    const disabledPositionA = noOddA || !isGameOpenA;
-    const disabledPositionB = noOddB || !isGameOpenB;
-    return disabledPositionB ? -1 : disabledPositionA ? 0 : 1;
 };
 
 const PropsTextContainer = styled.div`
