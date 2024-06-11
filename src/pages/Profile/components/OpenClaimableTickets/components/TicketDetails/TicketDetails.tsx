@@ -167,6 +167,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
         },
         isTicketLost: ticket.isLost,
         isTicketResolved: ticket.isResolved,
+        collateral: ticket.collateral,
     };
 
     const getClaimButton = (isMobile: boolean) => (
@@ -295,6 +296,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                     onClose={shareTicketModalData.onClose}
                     isTicketLost={shareTicketModalData.isTicketLost}
                     isTicketResolved={shareTicketModalData.isTicketResolved}
+                    collateral={shareTicketModalData.collateral}
                 />
             )}
         </Container>

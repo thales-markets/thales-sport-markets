@@ -722,7 +722,7 @@
             },
             "share-ticket": {
                 "header": "Web 3 Sport markets on",
-                "parlay": "parlay",
+                "parlay": "ticket",
                 "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
                 "positions": "Number of Positions",

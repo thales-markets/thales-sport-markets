@@ -86,6 +86,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             onClose: () => setShowShareTicketModal(false),
             isTicketLost: ticket.isLost,
             isTicketResolved: !ticket.isOpen,
+            collateral: ticket.collateral,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(true);
@@ -253,6 +254,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     onClose={shareTicketModalData.onClose}
                     isTicketLost={shareTicketModalData.isTicketLost}
                     isTicketResolved={shareTicketModalData.isTicketResolved}
+                    collateral={shareTicketModalData.collateral}
                 />
             )}
         </>
