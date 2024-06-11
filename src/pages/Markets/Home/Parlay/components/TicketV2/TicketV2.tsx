@@ -1264,7 +1264,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     </CheckboxContainer>
                 </RowContainer>
             </RowSummary>
-            {!isBuying && oddsChanged && isLiveTicket && (
+            {!isBuying && oddsChanged && (
                 <>
                     <FlexDivCentered>
                         <OddsChangedDiv>{t('markets.parlay.odds-changed-description')}</OddsChangedDiv>

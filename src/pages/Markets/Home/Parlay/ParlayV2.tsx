@@ -71,6 +71,12 @@ const Parlay: React.FC = () => {
     }, [dispatch, sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
     useEffect(() => {
+        if (!ticket.length) {
+            setOddsChanged(false);
+        }
+    }, [ticket]);
+
+    useEffect(() => {
         if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data && isLiveFilterSelected) {
             const liveSportOpenMarkets = liveSportMarketsQuery.data.reduce(
                 (acc: SportMarket[], market: SportMarket) => {

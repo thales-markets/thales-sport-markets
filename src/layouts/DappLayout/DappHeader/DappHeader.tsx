@@ -161,7 +161,9 @@ const DappHeader: React.FC = () => {
                         <Logo />
                     </LeftContainer>
 
-                    <MiddleContainer>
+                    <MiddleContainer
+                        justifyContent={location.pathname === ROUTES.Wizard ? 'flex-end' : 'space-between'}
+                    >
                         {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
                             <ReferAndEarn>{t('common.referral.header-label')}</ReferAndEarn>
                         </SPAAnchor> */}

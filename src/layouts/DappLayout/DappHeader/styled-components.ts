@@ -35,8 +35,8 @@ export const LeftContainer = styled(FlexDivRowCentered)`
     padding-right: 15px;
 `;
 
-export const MiddleContainer = styled(FlexDivRowCentered)`
-    justify-content: space-between;
+export const MiddleContainer = styled(FlexDivRowCentered)<{ justifyContent: string }>`
+    justify-content: ${(props) => props.justifyContent};
     width: 100%;
     max-width: 821px;
 `;

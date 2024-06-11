@@ -57,12 +57,12 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     }, [acceptOdds, market, setAcceptOdds]);
 
     useEffect(() => {
-        if (market.live && showOddUpdates) {
+        if (showOddUpdates) {
             if (
                 previousMarket.current.gameId === market.gameId &&
                 previousMarket.current.position === market.position
             ) {
-                if (isWithinSlippage(firstClickMarket.current.odd, market.odd, liveBetSlippage)) {
+                if (market.odd !== previousMarket.current.odd) {
                     if (market.odd < previousMarket.current.odd) {
                         document.getElementById('odd-change-down')?.classList.remove('descend');
                         document.getElementById('odd-change-up')?.classList.remove('rise');
@@ -77,12 +77,17 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                             document.getElementById('odd-change-down')?.classList.add('descend');
                         });
                     }
-                } else {
-                    setOddsChanged && setOddsChanged(true);
+                    if (
+                        !isWithinSlippage(firstClickMarket.current.odd, market.odd, market.live ? liveBetSlippage : 0)
+                    ) {
+                        setOddsChanged && setOddsChanged(true);
+                    }
                 }
             } else {
                 firstClickMarket.current = market;
-                setOddsChanged && setOddsChanged(false);
+                if (market.live) {
+                    setOddsChanged && setOddsChanged(false);
+                }
             }
             previousMarket.current = market;
         }
