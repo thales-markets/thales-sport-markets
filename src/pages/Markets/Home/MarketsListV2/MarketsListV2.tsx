@@ -146,6 +146,7 @@ const StarIcon = styled.i`
     position: absolute;
     right: 10px;
     color: ${(props) => props.theme.textColor.secondary};
+    cursor: pointer;
     &.selected,
     &:hover {
         color: ${(props) => props.theme.button.textColor.tertiary};
