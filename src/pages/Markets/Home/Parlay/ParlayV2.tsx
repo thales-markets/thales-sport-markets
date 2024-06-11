@@ -257,7 +257,7 @@ const ThalesBonus = styled.span`
             width: 0;
         }
         to {
-            width: 290px;
+            width: 270px;
         }
     }
 
