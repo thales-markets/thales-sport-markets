@@ -1,9 +1,12 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
+
 export type Rates = Record<string, number>;
 
 const useExchangeRatesQuery = (networkId: Network, options?: UseQueryOptions<Rates>) => {
@@ -13,10 +16,12 @@ const useExchangeRatesQuery = (networkId: Network, options?: UseQueryOptions<Rat
             const exchangeRates: Rates = {};
 
             if (networkConnector.priceFeedContract) {
-                const [currencies, rates] = await Promise.all([
+                const [currencies, rates, thalesPriceResponse] = await Promise.all([
                     networkConnector.priceFeedContract.getCurrencies(),
                     networkConnector.priceFeedContract.getRates(),
+                    axios.get(`${generalConfig.API_URL}/token/price`),
                 ]);
+
                 currencies.forEach((currency: string, idx: number) => {
                     const currencyName = parseBytes32String(currency);
                     exchangeRates[currencyName] = bigNumberFormatter(rates[idx]);
@@ -30,6 +35,7 @@ const useExchangeRatesQuery = (networkId: Network, options?: UseQueryOptions<Rat
                         exchangeRates[`W${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }
                 });
+                exchangeRates['THALES'] = Number(thalesPriceResponse.data);
             }
 
             return exchangeRates;

@@ -387,7 +387,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                         ]);
 
                         setBuyInAmountInDefaultCollateral(
-                            coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
+                            isThales
+                                ? Number(buyInAmount) * selectedCollateralCurrencyRate
+                                : coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
                         );
 
                         return parlayAmmQuote;
@@ -407,14 +409,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
             }
         },
         [
-            networkId,
-            markets,
             minBuyInAmountInDefaultCollateral,
-            selectedCollateral,
-            collateralAddress,
+            markets,
+            collateralHasLp,
             isDefaultCollateral,
             selectedCollateralCurrencyRate,
-            collateralHasLp,
+            collateralAddress,
+            networkId,
+            selectedCollateral,
+            isThales,
+            buyInAmount,
         ]
     );
 
