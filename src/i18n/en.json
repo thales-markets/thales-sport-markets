@@ -679,6 +679,7 @@
             "total-bonus": "Total bonus",
             "persist-games": "Keep selection after submit",
             "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
+            "thales-bonus-tooltip": "Users placing trades with THALES will get 1% of extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
