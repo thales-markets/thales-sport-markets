@@ -699,6 +699,7 @@
             "empty-description": "Add position, choose a market and make your selection.",
             "accept-odds-changes": "Accept odds changes",
             "odds-changed-description": "Odds changed. Accept changes in order to buy.",
+            "odds-changed-error": "Odds changed while fulfilling the order. Please try again.",
             "info": {
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
                 "max-quote": "Maximal TOTAL QUOTE supported is {{value}}"

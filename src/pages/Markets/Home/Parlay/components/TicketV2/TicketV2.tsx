@@ -639,10 +639,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                                 if (Date.now() - startTime >= (maxAllowedExecutionDelay + 10) * 1000) {
                                     setIsBuying(false);
                                     refetchBalances(walletAddress, networkId);
-                                    toast.update(
-                                        toastId,
-                                        getErrorToastOptions(t('common.errors.unknown-error-try-again'))
-                                    );
+                                    toast.update(toastId, getErrorToastOptions(t('markets.parlay.odds-changed-error')));
                                 } else {
                                     if (counter / 5 === 1) {
                                         toast.update(
