@@ -906,7 +906,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
         const modalData: ShareTicketModalProps = {
             markets: [...markets],
             multiSingle: false,
-            paid: Number(buyInAmountInDefaultCollateral),
+            paid:
+                !collateralHasLp || isDefaultCollateral ? Number(buyInAmountInDefaultCollateral) : Number(buyInAmount),
             payout: payout,
             onClose: onModalClose,
             isTicketLost: false,
