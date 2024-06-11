@@ -1,8 +1,6 @@
 import Scroll from 'components/Scroll';
 import { BOXING_LEAGUES, LeagueMap } from 'constants/sports';
-import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { League, Sport } from 'enums/sports';
-import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
 import { groupBy } from 'lodash';
 import React from 'react';
@@ -25,18 +23,16 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isMobile = useSelector(getIsMobile);
-    const datePeriodFilter = useLocalStorage<number>(LOCAL_STORAGE_KEYS.FILTER_DATE_PERIOD, 0);
 
     const marketsMap: Record<number, SportMarket[]> = groupBy(markets, (market) => Number(market.leagueId));
     const unifiedMarketsMap = unifyBoxingMarkets(marketsMap);
     const marketsKeys = sortMarketKeys(
         Object.keys(marketsMap).map((key) => Number(key)),
         unifiedMarketsMap,
-        favouriteLeagues,
-        datePeriodFilter
+        favouriteLeagues
     );
 
-    const finalOrderKeys = Number(datePeriodFilter) !== 0 ? groupBySortedMarketsKeys(marketsKeys) : marketsKeys;
+    const finalOrderKeys = groupBySortedMarketsKeys(marketsKeys);
 
     const getContainerContent = () => (
         <ListContainer isMarketSelected={isMarketSelected}>
@@ -55,54 +51,25 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
     );
 };
 
-const sortMarketKeys = (
-    marketsKeys: number[],
-    marketsMap: Record<number, SportMarket[]>,
-    favouriteLeagues: Tags,
-    datePeriodFilter: any
-) => {
+const sortMarketKeys = (marketsKeys: number[], marketsMap: Record<number, SportMarket[]>, favouriteLeagues: Tags) => {
     return marketsKeys.sort((a: League, b: League) => {
-        if (Number(datePeriodFilter) !== 0) {
-            const earliestGameA = marketsMap[a][0];
-            const earliestGameB = marketsMap[b][0];
+        const earliestGameA = marketsMap[a][0];
+        const earliestGameB = marketsMap[b][0];
 
-            const isFavouriteA = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == a));
-            const isFavouriteB = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == b));
+        const isFavouriteA = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == a));
+        const isFavouriteB = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == b));
 
-            const leagueInfoA = LeagueMap[a];
-            const leagueInfoB = LeagueMap[b];
+        const leagueInfoA = LeagueMap[a];
+        const leagueInfoB = LeagueMap[b];
 
-            const leagueNameA = leagueInfoA?.label || '';
-            const leagueNameB = leagueInfoB?.label || '';
+        const leagueNameA = leagueInfoA?.label || '';
+        const leagueNameB = leagueInfoB?.label || '';
 
-            const leaguePriorityA = leagueInfoA?.priority || 0;
-            const leaguePriorityB = leagueInfoB?.priority || 0;
+        const leaguePriorityA = leagueInfoA?.priority || 0;
+        const leaguePriorityB = leagueInfoB?.priority || 0;
 
-            return earliestGameA.maturityDate.getTime() == earliestGameB.maturityDate.getTime()
-                ? isFavouriteA == isFavouriteB
-                    ? leaguePriorityA > leaguePriorityB
-                        ? 1
-                        : leaguePriorityA < leaguePriorityB
-                        ? -1
-                        : leagueNameA > leagueNameB
-                        ? 1
-                        : -1
-                    : isFavouriteB - isFavouriteA
-                : earliestGameA.maturityDate.getTime() - earliestGameB.maturityDate.getTime();
-        } else {
-            const isFavouriteA = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == a));
-            const isFavouriteB = Number(!!favouriteLeagues.find((league: TagInfo) => league.id == b));
-
-            const leagueInfoA = LeagueMap[a];
-            const leagueInfoB = LeagueMap[b];
-
-            const leagueNameA = leagueInfoA?.label || '';
-            const leagueNameB = leagueInfoB?.label || '';
-
-            const leaguePriorityA = leagueInfoA?.priority || 0;
-            const leaguePriorityB = leagueInfoB?.priority || 0;
-
-            return isFavouriteA == isFavouriteB
+        return earliestGameA.maturityDate.getTime() == earliestGameB.maturityDate.getTime()
+            ? isFavouriteA == isFavouriteB
                 ? leaguePriorityA > leaguePriorityB
                     ? 1
                     : leaguePriorityA < leaguePriorityB
@@ -110,8 +77,8 @@ const sortMarketKeys = (
                     : leagueNameA > leagueNameB
                     ? 1
                     : -1
-                : isFavouriteB - isFavouriteA;
-        }
+                : isFavouriteB - isFavouriteA
+            : earliestGameA.maturityDate.getTime() - earliestGameB.maturityDate.getTime();
     });
 };
 

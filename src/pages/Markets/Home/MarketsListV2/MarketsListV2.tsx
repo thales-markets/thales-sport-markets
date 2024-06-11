@@ -1,5 +1,4 @@
 import IncentivizedLeague from 'components/IncentivizedLeague';
-import { LeagueMap } from 'constants/sports';
 import { orderBy } from 'lodash';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +8,7 @@ import styled from 'styled-components';
 import { SportMarkets, TagInfo } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import { isOneSideMarket } from 'utils/markets';
+import { getLeagueLabel } from '../../../../utils/sports';
 import MarketListCardV2 from '../MarketListCard';
 
 type MarketsList = {
@@ -18,11 +18,12 @@ type MarketsList = {
 };
 
 const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
-    const [hideLeague, setHideLeague] = useState<boolean>(false);
-    const leagueName = Object.values(LeagueMap).find((t: TagInfo) => t.id == league)?.label;
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMarketSelected = useSelector(getIsMarketSelected);
+    const [hideLeague, setHideLeague] = useState<boolean>(false);
+
+    const leagueName = getLeagueLabel(league);
     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == league);
 
     const sortedMarkets = sortWinnerMarkets(markets, league);
@@ -145,6 +146,7 @@ const StarIcon = styled.i`
     position: absolute;
     right: 10px;
     color: ${(props) => props.theme.textColor.secondary};
+    cursor: pointer;
     &.selected,
     &:hover {
         color: ${(props) => props.theme.button.textColor.tertiary};

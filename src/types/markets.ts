@@ -6,7 +6,6 @@ import { Coins } from './tokens';
 export type TagInfo = {
     id: League;
     label: string;
-    priority: number;
 };
 
 export type Tags = TagInfo[];

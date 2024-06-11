@@ -103,7 +103,6 @@ const Home: React.FC = () => {
                 return {
                     id: tag.id,
                     label: tag.label,
-                    priority: tag.priority,
                 };
             }),
         []
