@@ -237,7 +237,9 @@
             "click-open-twitter": "点击此处打开推特",
             "save-image-error": "图片保存失败！再试一次",
             "save-image": "将图像保存到剪贴板。请稍等...",
-            "open-twitter": "打开推特..."
+            "open-twitter": "打开推特...",
+            "fulfilling-live-trade": "实现实时交易",
+            "live-trade-requested": "请求实时交易"
         },
         "filter-label": {
             "global": {
@@ -537,7 +539,10 @@
             "rain-delay": "大雨延迟",
             "interrupted": "中断",
             "abandoned": "弃",
-            "postponed": "延期"
+            "postponed": "延期",
+            "loss": "损失",
+            "won": "韩元",
+            "open": "打开"
         },
         "market-details": {
             "price": "价格",

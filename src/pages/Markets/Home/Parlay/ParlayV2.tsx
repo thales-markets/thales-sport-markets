@@ -155,6 +155,9 @@ const Parlay: React.FC = () => {
             {ticketMarkets.length > 0 ? (
                 <>
                     {!isMobile && <Title>{t('markets.parlay.ticket-slip')}</Title>}
+                    <ThalesBonusContainer>
+                        <ThalesBonus>Use THALES and get 1% of bonus for each game. </ThalesBonus>
+                    </ThalesBonusContainer>
                     <ListContainer>
                         {ticketMarkets.length > 0 &&
                             ticketMarkets.map((market, index) => {
@@ -222,10 +225,52 @@ const Title = styled(FlexDivCentered)`
     color: ${(props) => props.theme.textColor.septenary};
     font-weight: 600;
     font-size: 14px;
-    line-height: 14px;
+    line-height: 16px;
     text-transform: uppercase;
     height: 20px;
     margin-bottom: 10px;
+`;
+
+const ThalesBonusContainer = styled(FlexDivCentered)`
+    background: ${(props) => props.theme.background.quaternary};
+    color: ${(props) => props.theme.textColor.tertiary};
+    min-width: 100%;
+    border-radius: 5px;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+`;
+
+const ThalesBonus = styled.span`
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    padding-right: 2px;
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    border-right: 0.15em solid ${(props) => props.theme.borderColor.primary}; /* The typwriter cursor */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+
+    /* The typing effect */
+    @keyframes typing {
+        from {
+            width: 0;
+        }
+        to {
+            width: 290px;
+        }
+    }
+
+    /* The typewriter cursor effect */
+    @keyframes blink-caret {
+        from,
+        to {
+            border-color: transparent;
+        }
+        50% {
+            border-color: ${(props) => props.theme.borderColor.primary};
+        }
+    }
 `;
 
 const ListContainer = styled(FlexDivColumn)``;

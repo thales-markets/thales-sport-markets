@@ -201,6 +201,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
         selectedCollateralIndex,
     ]);
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
+    const isThales = selectedCollateral === CRYPTO_CURRENCY_MAP.THALES;
     const collateralAddress = useMemo(
         () =>
             getCollateralAddress(
@@ -294,6 +295,20 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
         const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
         return quote < maxSupportedOdds ? maxSupportedOdds : quote;
     }, [markets, sportsAmmData?.maxSupportedOdds, selectedCollateral]);
+
+    const totalBonus = useMemo(() => {
+        const bonus = {
+            percentage: 0,
+            value: 0,
+        };
+        if (isThales) {
+            const multiplier = getAddedPayoutMultiplier(selectedCollateral);
+            const percentage = Math.pow(1 / multiplier, markets.length);
+            bonus.percentage = percentage - 1;
+            bonus.value = Number(payout) - Number(payout) / percentage;
+        }
+        return bonus;
+    }, [isThales, selectedCollateral, markets.length, payout]);
 
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
         enabled: isAppReady,
@@ -891,7 +906,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
         const modalData: ShareTicketModalProps = {
             markets: [...markets],
             multiSingle: false,
-            paid: Number(buyInAmountInDefaultCollateral),
+            paid:
+                !collateralHasLp || isDefaultCollateral ? Number(buyInAmountInDefaultCollateral) : Number(buyInAmount),
             payout: payout,
             onClose: onModalClose,
             isTicketLost: false,
@@ -1034,6 +1050,24 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                         <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
                     </ClearLabel>
                 </RowContainer>
+                {isThales && (
+                    <RowContainer>
+                        <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
+                        <SummaryValue fontSize={12}>{formatPercentage(totalBonus.percentage)}</SummaryValue>
+                        <SummaryValue isCurrency={true} isHidden={hidePayout} fontSize={12}>
+                            (
+                            {formatCurrencyWithSign('+ ' + USD_SIGN, totalBonus.value * selectedCollateralCurrencyRate)}
+                            )
+                        </SummaryValue>
+                        <SummaryLabel>
+                            <Tooltip
+                                overlay={<>{t(`markets.parlay.thales-bonus-tooltip`)}</>}
+                                iconFontSize={14}
+                                marginLeft={3}
+                            />
+                        </SummaryLabel>
+                    </RowContainer>
+                )}
             </RowSummary>
             <SuggestedAmount
                 insertedAmount={buyInAmount}

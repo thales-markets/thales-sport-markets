@@ -260,7 +260,9 @@ const CloseIcon = styled.i`
 
 const Icon = styled.i`
     font-size: 12px;
-    margin-left: 5px;
+    position: absolute;
+    top: 12px;
+    right: 12px;
 `;
 const Correct = styled(Icon)`
     color: ${(props) => props.theme.status.win};

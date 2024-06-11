@@ -237,7 +237,9 @@
             "image-in-clipboard": "¡La imagen está en el portapapeles!",
             "click-open-twitter": "Haga clic aquí para abrir Twitter",
             "metamask-not-supported": "¡El navegador Metamask no admite la descarga de imágenes! Utilice otro navegador para compartir la imagen.",
-            "save-image-error": "¡Error al guardar la imagen! Intentar otra vez"
+            "save-image-error": "¡Error al guardar la imagen! Intentar otra vez",
+            "fulfilling-live-trade": "Cumpliendo con el comercio en vivo",
+            "live-trade-requested": "Se solicita comercio en vivo"
         },
         "filter-label": {
             "global": {
@@ -537,7 +539,10 @@
             "delayed": "Demorado",
             "postponed": "Aplazado",
             "interrupted": "interrumpido",
-            "abandoned": "Abandonado"
+            "abandoned": "Abandonado",
+            "won": "Ganado",
+            "open": "Abierto",
+            "loss": "Pérdida"
         },
         "market-details": {
             "price": "Precio",
