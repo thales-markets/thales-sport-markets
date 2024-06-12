@@ -357,3 +357,17 @@ export const showGameScore = (status: GameStatus | undefined) => {
         status !== GameStatus.ENETPULSE_CANCELED
     );
 };
+
+export const ticketMarketAsTicketPosition = (market: TicketMarket) => {
+    return {
+        gameId: market.gameId,
+        leagueId: market.leagueId,
+        typeId: market.typeId,
+        playerId: market.playerProps.playerId,
+        playerName: market.playerProps.playerName,
+        line: market.line,
+        position: market.position,
+        combinedPositions: market.combinedPositions,
+        live: market.live,
+    } as TicketPosition;
+};

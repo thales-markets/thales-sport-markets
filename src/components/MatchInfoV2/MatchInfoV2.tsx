@@ -7,7 +7,13 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { TicketMarket } from 'types/markets';
 import { formatMarketOdds, isWithinSlippage } from 'utils/markets';
-import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
+import {
+    getMatchLabel,
+    getPositionTextV2,
+    getTitleText,
+    isSameMarket,
+    ticketMarketAsTicketPosition,
+} from 'utils/marketsV2';
 import { getNetworkId } from '../../redux/modules/wallet';
 import { getCollateral } from '../../utils/collaterals';
 import { getAddedPayoutMultiplier } from '../../utils/tickets';
@@ -61,7 +67,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     useEffect(() => {
         if (showOddUpdates) {
             if (
-                previousMarket.current.gameId === market.gameId &&
+                isSameMarket(previousMarket.current, ticketMarketAsTicketPosition(market)) &&
                 previousMarket.current.position === market.position
             ) {
                 if (market.odd !== previousMarket.current.odd) {
