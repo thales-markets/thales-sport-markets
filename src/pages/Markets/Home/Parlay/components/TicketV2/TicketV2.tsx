@@ -684,7 +684,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                                             },
                                         ],
                                         multiSingle: false,
-                                        paid: Number(buyInAmountInDefaultCollateral),
+                                        paid:
+                                            !collateralHasLp || isDefaultCollateral
+                                                ? Number(buyInAmountInDefaultCollateral)
+                                                : Number(buyInAmount),
                                         payout: payout,
                                         onClose: () => {
                                             if (!keepSelection) dispatch(removeAll());
