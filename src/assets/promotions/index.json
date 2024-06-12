@@ -199,8 +199,8 @@
         }
     },
     {
-        "title": "Use Overtime V2 and earn 100 $THALES",
-        "description": "Overtime V2 beta is here. To celebrate, we’re giving 100 $THALES to the top 20 users by volume.",
+        "title": "Use Overtime V2 and earn $THALES vouchers",
+        "description": "Overtime V2 beta is here. To celebrate, we’re giving $THALES vouchers to the top 20 users by volume.",
         "startDate": 1718357249,
         "endDate": 1721035649,
         "promotionId": "overtime-v2-release",
@@ -212,12 +212,12 @@
             "coverImageUrl": "/promotions/thales-stakers.webp",
             "headerHtml": "<h1><span><span><span>Use Overtime V2 and earn 100 $THALES</span></span></span></h1>",
             "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>Overtime V2 beta is here. To celebrate, we’re giving 100 $THALES to the top 20 users by volume. </p>",
+                "sectionHtml": "<p> <span> <span> <span>Overtime V2 beta is here. To celebrate, we’re giving $THALES vouchers to the top 20 users by volume. </p>",
                 "ctaButtonLink": "https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets",
                 "ctaButtonLabel": "Play now",
                 "forceChangeNetworkOnClick": "optimism_mainnet"
             },
-            "contentHtml": " <p> <span> <span> <span>After hours of development, Overtime V2 is finally ready for you to test out! A well-oiled, merkle-tree-driven, world-changing, fully onchain mean machine is raring to go. <br> <br>But that’s not all - we’ve decided to give the top 20 users with the biggest V2 volume from now until until July 15 100 $THALES each. You can access V2 beta </strong> </span> </span> </span> <a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets&showActive=true' target='_blank'> <span> <span> <span> <strong><u>using this link</u></strong> </span> </span></a>. Have fun, earn rewards, and step into the new era of Overtime. <br><br>You should also make sure to combine these rewards with all the other promotions taking place on Overtime. <br> <br>We're handing out 1,000 ARB and 1,000 OP every week for the best parlays, 5,000 OP across all Thales Protocol products every week, and much more.</span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
+            "contentHtml": " <p> <span> <span> <span>After hours of development, Overtime V2 is finally ready for you to test out! A well-oiled, merkle-tree-driven, world-changing, fully onchain mean machine is raring to go. <br> <br>But that’s not all - we’ve decided to give the top 20 users with the biggest V2 volume from now until July 15 a 100 $THALES voucher each. You can access V2 beta </strong> </span> </span> </span> <a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets&showActive=true' target='_blank'> <span> <span> <span> <strong><u>using this link</u></strong> </span> </span></a>. <br><br>Have fun, earn rewards, and step into the new era of Overtime. <br><br>You should also make sure to combine these rewards with all the other promotions taking place on Overtime. <br> <br>We're handing out 1,000 ARB and 1,000 OP every week for the best parlays, 5,000 OP across all Thales Protocol products every week, and much more.</span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
         }
     },
     {
