@@ -34,7 +34,7 @@ const useLiveSportsMarketsQuery = (
                             odds: game.odds.map((odd: any) => odd.normalizedImplied),
                         };
                     });
-                marketsCache.live = marketsFlattened;
+                return { live: marketsFlattened };
             } catch (e) {
                 console.log(e);
             }
