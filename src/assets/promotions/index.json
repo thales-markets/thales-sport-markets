@@ -75,11 +75,11 @@
         "displayCountdown": true,
         "promotionId": "optimism-weekly-incentives",
         "promotionUrl": "/promotions/optimism-weekly-incentives",
-        "backgroundImageUrl": "/promotions/thales-new.webp",
+        "backgroundImageUrl": "/promotions/stip-small.webp",
         "callToActionButton": "How to earn",
         "availableOnNetworks": [10],
         "article": {
-            "coverImageUrl": "/promotions/thales-stakers.webp",
+            "coverImageUrl": "/promotions/stip-big.webp",
             "headerHtml": "<h1><span><span><span>Higher odds win! Earn 5,000 OP every week using Thales products!</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "Earn 5,000 OP every week by driving notional volume on Sports Markets (including Overtime), Digital Options and Speed Markets! &nbsp</span></span></span><span><span><span> Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/op-incentive-program' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
@@ -205,11 +205,11 @@
         "endDate": 1721035649,
         "promotionId": "overtime-v2-release",
         "promotionUrl": "/promotions/overtime-v2-release",
-        "backgroundImageUrl": "/promotions/thales-stakers.webp",
+        "backgroundImageUrl": "/promotions/thales-new.webp",
         "callToActionButton": "How to earn",
         "availableOnNetworks": [10],
         "article": {
-            "coverImageUrl": "/promotions/thales-new.webp",
+            "coverImageUrl": "/promotions/thales-stakers.webp",
             "headerHtml": "<h1><span><span><span>Use Overtime V2 and earn 100 $THALES</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Overtime V2 beta is here. To celebrate, we’re giving 100 $THALES to the top 20 users by volume. </p>",
