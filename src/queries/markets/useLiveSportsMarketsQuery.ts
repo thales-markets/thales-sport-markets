@@ -16,29 +16,29 @@ const useLiveSportsMarketsQuery = (
     return useQuery<{ live: SportMarkets }>(
         QUERY_KEYS.LiveSportMarkets(networkId),
         async () => {
-            let markets: any[] = [];
             try {
                 const response = await axios.get<undefined, { data: { errors: string[]; markets: SportMarkets } }>(
                     `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-markets`,
                     { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                 );
 
-                markets = response?.data?.markets || [];
+                const markets: any[] = response?.data?.markets || marketsCache.live;
+
+                const marketsFlattened = markets
+                    .reduce((accumulator, value) => accumulator.concat(value), [])
+                    .map((game: any) => {
+                        return {
+                            ...game,
+                            live: true,
+                            maturityDate: new Date(game.maturityDate),
+                            odds: game.odds.map((odd: any) => odd.normalizedImplied),
+                        };
+                    });
+                marketsCache.live = marketsFlattened;
             } catch (e) {
                 console.log(e);
             }
 
-            const marketsFlattened = markets
-                .reduce((accumulator, value) => accumulator.concat(value), [])
-                .map((game: any) => {
-                    return {
-                        ...game,
-                        live: true,
-                        maturityDate: new Date(game.maturityDate),
-                        odds: game.odds.map((odd: any) => odd.normalizedImplied),
-                    };
-                });
-            marketsCache.live = marketsFlattened;
             return marketsCache;
         },
         {
