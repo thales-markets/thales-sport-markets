@@ -639,10 +639,30 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     });
                     if (!tradeData[0].live) {
                         refetchBalances(walletAddress, networkId);
+
+                        const modalData: ShareTicketModalProps = {
+                            markets: [...markets],
+                            multiSingle: false,
+                            paid:
+                                !collateralHasLp || isDefaultCollateral
+                                    ? Number(buyInAmountInDefaultCollateral)
+                                    : Number(buyInAmount),
+                            payout: payout,
+                            onClose: () => {
+                                if (!keepSelection) dispatch(removeAll());
+                                onModalClose();
+                            },
+                            isTicketLost: false,
+                            isTicketResolved: false,
+                            collateral: selectedCollateral,
+                            isLive: false,
+                        };
+                        setShareTicketModalData(modalData);
+                        setShowShareTicketModal(true);
+
                         toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                         setIsBuying(false);
                         setCollateralAmount('');
-                        if (!keepSelection) dispatch(removeAll());
                     } else if (sportsAMMV2ContractWithSigner) {
                         let counter = 0;
                         const requestId = txResult.events.find((event: any) => event.event === 'LiveTradeRequested')
