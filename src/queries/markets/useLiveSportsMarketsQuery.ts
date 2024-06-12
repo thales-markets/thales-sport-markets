@@ -3,10 +3,10 @@ import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { UseQueryOptions, useQuery } from 'react-query';
-import { SportMarkets } from 'types/markets';
+import { SportMarket, SportMarkets } from 'types/markets';
 
 // without this every request is treated as new even though it has the same response
-const marketsCache = { live: [] };
+const marketsCache = { live: [] as SportMarkets };
 
 const useLiveSportsMarketsQuery = (
     networkId: Network,
@@ -22,19 +22,16 @@ const useLiveSportsMarketsQuery = (
                     { headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache', Expires: '0' } }
                 );
 
-                const markets: any[] = response?.data?.markets || marketsCache.live;
-
-                const marketsFlattened = markets
-                    .reduce((accumulator, value) => accumulator.concat(value), [])
-                    .map((game: any) => {
+                marketsCache.live = response.data.markets.map(
+                    (game: any): SportMarket => {
                         return {
                             ...game,
                             live: true,
                             maturityDate: new Date(game.maturityDate),
                             odds: game.odds.map((odd: any) => odd.normalizedImplied),
                         };
-                    });
-                marketsCache.live = marketsFlattened;
+                    }
+                );
             } catch (e) {
                 console.log(e);
             }
