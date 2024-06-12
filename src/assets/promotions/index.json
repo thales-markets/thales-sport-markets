@@ -200,7 +200,7 @@
     },
     {
         "title": "Use Overtime V2 and earn $THALES vouchers",
-        "description": "Overtime V2 beta is here. To celebrate, we’re giving $THALES vouchers to the top 20 Live Market users by volume.",
+        "description": "Overtime V2 beta is here. To celebrate, we’re giving $THALES vouchers to the top 20 Live Market users by Live Market volume.",
         "startDate": 1718357249,
         "endDate": 1721035649,
         "promotionId": "overtime-v2-release",
@@ -212,7 +212,7 @@
             "coverImageUrl": "/promotions/thales-stakers.webp",
             "headerHtml": "<h1><span><span><span>Use Overtime V2 and earn $THALES vouchers</span></span></span></h1>",
             "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>Overtime V2 beta is here. To celebrate, we’re giving $THALES vouchers to the top 20 users by volume. </p>",
+                "sectionHtml": "<p> <span> <span> <span>Overtime V2 beta is here. To celebrate, we’re giving $THALES vouchers to the top 20 users by Live Market volume. </p>",
                 "ctaButtonLink": "https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets",
                 "ctaButtonLabel": "Play now",
                 "forceChangeNetworkOnClick": "optimism_mainnet"
