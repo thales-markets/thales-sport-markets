@@ -75,11 +75,11 @@
         "displayCountdown": true,
         "promotionId": "optimism-weekly-incentives",
         "promotionUrl": "/promotions/optimism-weekly-incentives",
-        "backgroundImageUrl": "/promotions/op-grant-small.webp",
+        "backgroundImageUrl": "/promotions/stip-small.webp",
         "callToActionButton": "How to earn",
         "availableOnNetworks": [10],
         "article": {
-            "coverImageUrl": "/promotions/op-grant-big.webp",
+            "coverImageUrl": "/promotions/stip-big.webp",
             "headerHtml": "<h1><span><span><span>Higher odds win! Earn 5,000 OP every week using Thales products!</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "Earn 5,000 OP every week by driving notional volume on Sports Markets (including Overtime), Digital Options and Speed Markets! &nbsp</span></span></span><span><span><span> Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/op-incentive-program' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
@@ -174,6 +174,50 @@
                 "forceChangeNetworkOnClick": "arbitrum_mainnet"
             },
             "contentHtml": " <p> <span> <span> <span>If you're into soccer (or football, depending on where you're from), you'll be elated to hear you can win 20,000 ARB in three UEFA competitions on Overtime. That's right - the Champions League, Europa League, and Conference League are incentivized in their knockout stages! The rewards are handed out based on the total volume you generate. The more you play, the higher the rewards! <br><br>The most insane part about all of this is that you can combine these rewards with all the other promotions taking place on Overtime. <br> </span> </span> </p> <p> <span> <span> <span> <strong>Note: Users who have covered 50% or more of potential combinations of their winning tickets will be disqualified.</strong> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
+        }
+    },
+    {
+        "title": "Win 20,000 OP during EURO 2024 and Copa America",
+        "description": "Earn 20,000 OP in volume-based rewards in just one month during Euro 2024 & Copa America on Overtime V1 and V2.",
+        "startDate": 1718357249,
+        "endDate": 1721035649,
+        "promotionId": "euro-2024-copa-america",
+        "promotionUrl": "/promotions/euro-2024-copa-america",
+        "backgroundImageUrl": "/promotions/ucl-small-new.webp",
+        "callToActionButton": "How to earn",
+        "availableOnNetworks": [10],
+        "article": {
+            "coverImageUrl": "/promotions/ucl-big.webp",
+            "headerHtml": "<h1><span><span><span>20,000 OP during EURO 2024 and Copa America are up for grabs!</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "<p> <span> <span> <span>Earn 20,000 OP in volume-based rewards during two international soccer tournaments: Euro 2024 & Copa America. </p>",
+                "ctaButtonLink": "/markets",
+                "ctaButtonLabel": "Play now",
+                "forceChangeNetworkOnClick": "optimism_mainnet"
+            },
+            "contentHtml": "<p> <span> <span> <span>There’s just something special about international football (or soccer, depending on where you’re from) in the summer. That’s why Overtime has decided to add to that adrenaline-pumping feeling by giving you 20,000 OP in volume-based rewards during Copa America and EURO 2024! <br> <br>As always, volume-based simply means the higher your wagering volume, the higher your share of the winnings. However, this time both your volume on Overtime and the newly released</strong> </span> </span> </span> <a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets&showActive=true' target='_blank'> <span> <span> <span> <strong> <u>Overtime V2 beta</u> </strong> </span> </span> </span></a>counts towards your score. Have fun trying out live markets, a completely new UI, and a bunch of cool other stuff! <br><br> The most insane part about all of this is that you can combine these rewards with all the other promotions taking place on Overtime. <br> <br>We're handing out 1,000 ARB and 1,000 OP every week for the best parlays, 5,000 OP across all Thales Protocol products every week, and much more. There's also an additional bonus in store for you for using Overtime V2 (more details on the promotions page). </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
+        }
+    },
+    {
+        "title": "Use Overtime V2 and earn $THALES vouchers",
+        "description": "Overtime V2 beta is here. To celebrate, we’re giving $THALES vouchers to the top 20 Live Market users by Live Market volume.",
+        "startDate": 1718357249,
+        "endDate": 1721035649,
+        "promotionId": "overtime-v2-release",
+        "promotionUrl": "/promotions/overtime-v2-release",
+        "backgroundImageUrl": "/promotions/thales-new.webp",
+        "callToActionButton": "How to earn",
+        "availableOnNetworks": [10],
+        "article": {
+            "coverImageUrl": "/promotions/thales-stakers.webp",
+            "headerHtml": "<h1><span><span><span>Use Overtime V2 and earn $THALES vouchers</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "<p> <span> <span> <span>Overtime V2 beta is here. To celebrate, we’re giving $THALES vouchers to the top 20 users by Live Market volume. </p>",
+                "ctaButtonLink": "https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets",
+                "ctaButtonLabel": "Play now",
+                "forceChangeNetworkOnClick": "optimism_mainnet"
+            },
+            "contentHtml": " <p> <span> <span> <span>After hours of development, Overtime V2 is finally ready for you to test out! A well-oiled, merkle-tree-driven, world-changing, fully onchain mean machine is raring to go. <br> <br>But that’s not all - we’ve decided to give the top 20 users with the biggest V2 Live Market volume from now until July 15 a 100 $THALES voucher each. You can access V2 beta </strong> </span> </span> </span> <a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets&showActive=true' target='_blank'> <span> <span> <span> <strong><u>using this link.</u></strong> </span> </span></a> Have fun, earn rewards, and step into the new era of Overtime. <br><br>You should also make sure to combine these rewards with all the other promotions taking place on Overtime. <br> <br>We're handing out 1,000 ARB and 1,000 OP every week for the best parlays, 5,000 OP across all Thales Protocol products every week, and much more.</span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
         }
     },
     {
