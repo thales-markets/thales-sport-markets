@@ -56,7 +56,7 @@ export const mapTicket = (
                     ? League.TENNIS_GS
                     : `${market.sportId}`.startsWith('156')
                     ? League.TENNIS_MASTERS
-                    : market.sportId === 701 || market.sportId == 702
+                    : market.sportId === 701 || market.sportId == 702 || market.sportId == 703
                     ? League.UFC
                     : Number(market.sportId);
                 const typeId = Number(market.typeId);
