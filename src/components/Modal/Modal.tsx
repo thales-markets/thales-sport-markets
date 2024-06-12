@@ -1,7 +1,7 @@
 import React from 'react';
+import ReactModal from 'react-modal';
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDiv, FlexDivRow } from 'styles/common';
-import ReactModal from 'react-modal';
 import { convertCssToStyledProperties } from 'thales-utils';
 
 type ModalProps = {
@@ -23,7 +23,7 @@ const defaultCustomStyles = {
         left: '50%',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-50%',
+        marginRight: '-48%',
         transform: 'translate(-50%, -50%)',
         padding: '0px',
         background: 'transparent',
