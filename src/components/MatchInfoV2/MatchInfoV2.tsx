@@ -21,6 +21,7 @@ type MatchInfoProps = {
     setOddsChanged?: (changed: boolean) => void;
     acceptOdds?: boolean;
     setAcceptOdds?: (accept: boolean) => void;
+    isLive?: boolean;
 };
 
 const MatchInfo: React.FC<MatchInfoProps> = ({
@@ -31,6 +32,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     setOddsChanged,
     acceptOdds,
     setAcceptOdds,
+    isLive,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -96,7 +98,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     return (
         <>
             <LeftContainer>
-                {market.live && <LiveTag>{t(`markets.market-card.live`)}</LiveTag>}
+                {(market.live || !!isLive) && <LiveTag>{t(`markets.market-card.live`)}</LiveTag>}
                 <MatchLogosV2 market={market} width={'55px'} height={'30px'} />
             </LeftContainer>
             <MarketPositionContainer fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
@@ -208,6 +210,7 @@ const LeftContainer = styled(FlexDivColumn)`
 
 const LiveTag = styled.span`
     background: ${(props) => props.theme.status.live};
+    color: ${(props) => props.theme.textColor.primary};
     border-radius: 3px;
     font-weight: 600;
     font-size: 10px;

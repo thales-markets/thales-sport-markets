@@ -23,6 +23,7 @@ export type ShareTicketModalProps = {
     isTicketLost: boolean;
     isTicketResolved: boolean;
     collateral: Coins;
+    isLive: boolean;
 };
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
@@ -38,6 +39,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     isTicketLost,
     isTicketResolved,
     collateral,
+    isLive,
 }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -241,6 +243,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     isTicketLost={isTicketLost}
                     isTicketResolved={isTicketResolved}
                     collateral={collateral}
+                    isLive={isLive}
                 />
 
                 <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>

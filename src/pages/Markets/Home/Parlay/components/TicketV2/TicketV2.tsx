@@ -696,6 +696,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                                         isTicketLost: false,
                                         isTicketResolved: false,
                                         collateral: selectedCollateral,
+                                        isLive: true,
                                     };
                                     setShareTicketModalData(modalData);
                                     setShowShareTicketModal(true);
@@ -920,6 +921,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
             isTicketLost: false,
             isTicketResolved: false,
             collateral: selectedCollateral,
+            isLive: !!markets[0].live,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(!twitterShareDisabled);
@@ -1336,6 +1338,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     isTicketLost={shareTicketModalData.isTicketLost}
                     isTicketResolved={shareTicketModalData.isTicketResolved}
                     collateral={shareTicketModalData.collateral}
+                    isLive={shareTicketModalData.isLive}
                 />
             )}
             {openApprovalModal && (

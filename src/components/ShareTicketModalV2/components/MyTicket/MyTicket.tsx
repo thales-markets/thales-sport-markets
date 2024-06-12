@@ -31,6 +31,7 @@ type MyTicketProps = {
     isTicketLost: boolean;
     isTicketResolved: boolean;
     collateral: Coins;
+    isLive: boolean;
 };
 
 const MyTicket: React.FC<MyTicketProps> = ({
@@ -41,6 +42,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
     isTicketLost,
     isTicketResolved,
     collateral,
+    isLive,
 }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
@@ -103,7 +105,12 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     return (
                         <React.Fragment key={index}>
                             <RowMarket>
-                                <MatchInfoV2 market={market} readOnly={true} customStyle={matchInfoStyle} />
+                                <MatchInfoV2
+                                    market={market}
+                                    readOnly={true}
+                                    customStyle={matchInfoStyle}
+                                    isLive={isLive}
+                                />
                             </RowMarket>
                             {markets.length !== index + 1 && <HorizontalDashedLine />}
                         </React.Fragment>
