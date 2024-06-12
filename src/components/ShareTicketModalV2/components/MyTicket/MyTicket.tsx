@@ -65,14 +65,14 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 {!isTicket && (
                     <Header isTicket={isTicket}>
                         {t('markets.parlay.share-ticket.header')}
-                        <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
+                        <BoldContent>{' v2.overtimemarkets.xyz'}</BoldContent>
                     </Header>
                 )}
             </ContentRow>
             {isTicket && (
                 <Header isTicket={isTicket}>
                     {t('markets.parlay.share-ticket.header')}
-                    <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
+                    <BoldContent>{' v2.overtimemarkets.xyz'}</BoldContent>
                 </Header>
             )}
             <ContentRow margin={'3px 0'}>
@@ -165,7 +165,7 @@ const Header = styled.span<{ isTicket: boolean }>`
     line-height: ${(props) => (props.isTicket ? '13' : '12')}px;
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 0.175em;
+    letter-spacing: 0.15em;
     color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.isTicket ? 'white-space: nowrap;' : '')};
     ${(props) => (props.isTicket ? 'margin-top: 3px' : '')};

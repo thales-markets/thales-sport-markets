@@ -724,7 +724,7 @@
                 "not-supported": "Not supported validation error: {{error}}"
             },
             "share-ticket": {
-                "header": "Web 3 Sport markets on",
+                "header": "Web3 Sport markets on",
                 "parlay": "ticket",
                 "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
