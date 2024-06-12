@@ -177,6 +177,28 @@
         }
     },
     {
+        "title": "Win 20,000 OP during EURO 2024 and Copa America",
+        "description": "Earn 20,000 OP in volume-based rewards in just one month during Euro 2024 & Copa America.",
+        "startDate": 1718357249,
+        "endDate": 1721035649,
+        "promotionId": "euro-2024-copa-america",
+        "promotionUrl": "/promotions/euro-2024-copa-america",
+        "backgroundImageUrl": "/promotions/ucl-small-new.webp",
+        "callToActionButton": "How to earn",
+        "availableOnNetworks": [42161],
+        "article": {
+            "coverImageUrl": "/promotions/ucl-big.webp",
+            "headerHtml": "<h1><span><span><span>Win 20,000 ARB playing the UEFA Champions League, Europa League, and Conference League</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "<p> <span> <span> <span>Earn 20,000 OP in volume-based rewards during two international soccer tournaments: Euro 2024 & Copa America. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-mlb-campaign' target='_blank'> <span> <span> <span> <strong> <u>EURO 2024 dashboard.</u> </strong> </span> </span> </span> </a> and <a href='https://dune.com/leifu/overtime-nhl-campaign' target='_blank'> <span> <span> <span> <strong> <u>Copa America dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
+                "ctaButtonLink": "/markets?lang=en&sport=Soccer&globalFilter=OpenMarkets&showActive=true&tag=UEFA+Champions+League%2CUEFA+Europa+League%2CUEFA+Conference+League",
+                "ctaButtonLabel": "Play now",
+                "forceChangeNetworkOnClick": "optimism_mainnet"
+            },
+            "contentHtml": " <p> <span> <span> <span>If you're into soccer (or football, depending on where you're from), you'll be elated to hear you can win 20,000 ARB in three UEFA competitions on Overtime. That's right - the Champions League, Europa League, and Conference League are incentivized in their knockout stages! The rewards are handed out based on the total volume you generate. The more you play, the higher the rewards! <br><br>The most insane part about all of this is that you can combine these rewards with all the other promotions taking place on Overtime. <br> </span> </span> </p> <p> <span> <span> <span> <strong>Note: Users who have covered 50% or more of potential combinations of their winning tickets will be disqualified.</strong> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
+        }
+    },
+    {
         "title": "Win 20,000 ARB in NHL and 30,000 ARB in MLB markets",
         "description": "Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.",
         "startDate": 1702236692,
