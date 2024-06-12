@@ -66,20 +66,20 @@ const TopUp: React.FC = () => {
                     <>
                         {showLowBalanceAlert && (
                             <TopUpButtonContainer>
-                                <SPAAnchor style={{ marginRight: '10px' }} href={buildHref(ROUTES.Deposit)}>
+                                <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
                                     <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
                                 </SPAAnchor>
                             </TopUpButtonContainer>
                         )}
                         {!showLowBalanceAlert && (
-                            <SPAAnchor style={{ marginRight: '10px' }} href={buildHref(ROUTES.Deposit)}>
+                            <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
                                 <Button
                                     backgroundColor={theme.button.background.quaternary}
                                     textColor={theme.button.textColor.primary}
                                     borderColor={theme.button.borderColor.secondary}
-                                    width="90px"
+                                    width="120px"
                                     fontWeight="400"
-                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '600', fontSize: '12px' }}
+                                    additionalStyles={{ borderRadius: '15.5px', fontWeight: '600', fontSize: '14px' }}
                                     height="28px"
                                 >
                                     {t('my-portfolio.deposit')}
@@ -131,10 +131,10 @@ const TopUpButton = styled.button`
     color: ${(props) => props.theme.error.textColor.primary};
     border: 1px solid ${(props) => props.theme.error.borderColor.primary};
     border-radius: 15px;
-    min-width: 90px;
+    min-width: 120px;
     width: 100%;
     max-width: 400px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 14px;
     height: 28px;

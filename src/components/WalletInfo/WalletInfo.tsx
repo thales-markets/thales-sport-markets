@@ -60,7 +60,7 @@ const WalletInfo: React.FC = ({}) => {
                                     >
                                         <Text className="wallet-info">
                                             {isWalletConnected
-                                                ? truncateAddress(walletAddress, 4, 4)
+                                                ? truncateAddress(walletAddress, 5, 5)
                                                 : t('common.wallet.connect-your-wallet')}
                                         </Text>
                                     </WalletAddressInfo>
@@ -122,7 +122,6 @@ const Wrapper = styled.div<{ displayPadding?: boolean }>`
 `;
 
 const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
-    padding-right: 10px;
     justify-content: center;
     cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
     height: 100%;

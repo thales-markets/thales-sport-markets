@@ -162,6 +162,7 @@ export const MobileButtonWrapper = styled.div`
 `;
 
 export const SettingsContainer = styled(FlexDivRowCentered)`
+    padding-right: 15px;
     position: relative;
     margin: 0 10px;
     cursor: pointer;

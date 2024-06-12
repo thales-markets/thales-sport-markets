@@ -206,6 +206,7 @@ const DappHeader: React.FC = () => {
                                     </OutsideClickHandler>
                                 )}
                             </SettingsContainer>
+                            <TopUp />
                         </FlexDiv>
                     </MiddleContainer>
 
@@ -262,7 +263,6 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.sign-up')}
                             </Button>
                         )}
-                        <TopUp />
                         <WalletInfo />
                         <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
                         <NavMenu
