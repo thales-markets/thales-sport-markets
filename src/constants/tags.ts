@@ -296,8 +296,15 @@ export const TAGS_LIST: Tags = [
         priority: 902,
     },
     {
+        id: 9044,
+        label: 'Copa America 2024',
+        favourite: false,
+        hidden: false,
+        priority: 114,
+    },
+    {
         id: 9050,
-        label: 'UEFA EURO Qualifications',
+        label: 'UEFA EURO 2024',
         logoClass: 'icon-league league--uefa',
         favourite: false,
         hidden: false,
@@ -481,6 +488,7 @@ export const SPORTS_MAP: SportsMap = {
     19595: 'MMA',
     9057: 'Soccer',
     9061: 'Soccer',
+    9044: 'Soccer',
     9045: 'Soccer',
     9033: 'Hockey',
     9296: 'Soccer',
@@ -550,6 +558,7 @@ export const SPORTS_TAGS_MAP: SportsTagsMap = {
         9019,
         9057,
         9061,
+        9044,
         9045,
         9296,
         9050,
@@ -587,6 +596,7 @@ export const ENETPULSE_SPORTS = [
     18196,
     9057,
     9061,
+    9044,
     9045,
     9445,
     9033,
@@ -622,7 +632,7 @@ export const MOTOSPORT_TAGS = [9445, 9497];
 export const GOLF_TAGS = [109021, 109121];
 export const GOLF_TOURNAMENT_WINNER_TAG = 109121;
 export const EUROPA_LEAGUE_TAGS = [9017, 9073];
-export const INTERNATIONAL_SPORTS = [18821, 19199, 9409, 9033, 9050, 9288, 18806, 9018, 9296, 9076];
+export const INTERNATIONAL_SPORTS = [18821, 19199, 9409, 9033, 9050, 9288, 18806, 9018, 9296, 9076, 9044];
 export const BOXING_TAGS = [18196, 19595];
 
 export const BetTypeNameMap: Record<BetType, string> = {
@@ -712,6 +722,7 @@ export const SCORING_MAP: SportsMap = {
     18196: 'rounds',
     9057: 'goals',
     9061: 'goals',
+    9044: 'goals',
     9045: 'goals',
     9033: 'goals',
     9296: 'goals',
@@ -769,6 +780,7 @@ export const MATCH_RESOLVE_MAP: SportsMap = {
     18196: '',
     9057: 'regular',
     9061: 'regular',
+    9044: 'regular',
     9045: 'regular',
     9033: 'regular',
     9296: 'regular',
@@ -824,6 +836,7 @@ export const SPORT_PERIODS_MAP: SportsMap = {
     18196: 'round',
     9057: 'half',
     9061: 'half',
+    9044: 'half',
     9045: 'half',
     9033: 'period',
     9296: 'half',

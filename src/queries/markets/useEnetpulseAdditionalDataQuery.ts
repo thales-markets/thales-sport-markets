@@ -1,12 +1,12 @@
 import { ENETPULSE_ROUNDS } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
+import { SPORTS_TAGS_MAP } from 'constants/tags';
 import { ethers } from 'ethers';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { SportMarketLiveResult } from 'types/markets';
+import marketContract from 'utils/contracts/sportsMarketContract';
 import networkConnector from 'utils/networkConnector';
 import Web3 from 'web3';
-import marketContract from 'utils/contracts/sportsMarketContract';
-import { SPORTS_TAGS_MAP } from 'constants/tags';
 
 const useEnetpulseAdditionalDataQuery = (
     marketId: string,
@@ -107,9 +107,14 @@ const useEnetpulseAdditionalDataQuery = (
                         scoreAwayByPeriod,
                         displayClock,
                         sportId,
-                        tournamentName: sportTag == 9033 || sportTag == 9050 || sportTag == 19199 ? '' : tournamentName,
+                        tournamentName:
+                            sportTag == 9033 || sportTag == 9050 || sportTag == 9044 || sportTag == 19199
+                                ? ''
+                                : tournamentName,
                         tournamentRound:
-                            sportTag == 9033 || sportTag == 9050 || sportTag == 19199 ? '' : tournamentRound,
+                            sportTag == 9033 || sportTag == 9050 || sportTag == 9044 || sportTag == 19199
+                                ? ''
+                                : tournamentRound,
                     };
                     return finalResult;
                 }
