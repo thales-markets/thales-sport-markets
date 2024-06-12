@@ -367,7 +367,7 @@ const Home: React.FC = () => {
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
 
         const groupedMarkets = groupBy(liveSportMarkets, (market) => market.leagueId);
 
