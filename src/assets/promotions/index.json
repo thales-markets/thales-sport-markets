@@ -213,7 +213,7 @@
             "headerHtml": "<h1><span><span><span>Use Overtime V2 and earn 100 $THALES</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Overtime V2 beta is here. To celebrate, we’re giving 100 $THALES to the top 20 users by volume. </p>",
-                "ctaButtonLink": "/markets",
+                "ctaButtonLink": "https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets",
                 "ctaButtonLabel": "Play now",
                 "forceChangeNetworkOnClick": "optimism_mainnet"
             },
