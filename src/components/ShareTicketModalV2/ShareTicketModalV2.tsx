@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumnCentered } from 'styles/common';
+import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import MyTicket from './components/MyTicket';
@@ -61,7 +61,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
             background: 'transparent',
             border: 'none',
             borderRadius: '20px',
-            boxShadow: '0px 0px 59px 11px rgba(100, 217, 254, 0.89)',
             overflow: 'visibile',
         },
         overlay: {
@@ -247,7 +246,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 />
 
                 <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>
-                    <TwitterIcon disabled={isLoading} fontSize={'30px'} />
+                    <TwitterIcon disabled={isLoading} fontSize={'22px'} />
                     <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
                 </TwitterShare>
             </Container>
@@ -282,33 +281,33 @@ const CloseIcon = styled.i`
     }
 `;
 
-const TwitterShare = styled(FlexDivColumnCentered)<{ disabled?: boolean }>`
+const TwitterShare = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
     align-items: center;
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -100px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 84px;
-    height: 84px;
-    border-radius: 50%;
-    background: linear-gradient(217.61deg, #123eae 9.6%, #3ca8ca 78.9%);
+    bottom: -46px;
+    height: 32px;
+    border-radius: 5px;
+    background: ${(props) => props.theme.button.background.primary};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
+    justify-content: center;
 `;
 
 const TwitterShareLabel = styled.span`
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 25px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.tertiary};
 `;
 
 const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
+    font-weight: 500;
+    margin-right: 3px;
     font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
-    color: ${(props) => (props.color ? props.color : props.theme.textColor.primary)};
+    color: ${(props) => (props.color ? props.color : props.theme.textColor.tertiary)};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
