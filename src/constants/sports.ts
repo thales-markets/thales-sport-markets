@@ -513,7 +513,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
     },
     [League.FIBA_WORLD_CUP]: {
-        sport: Sport.BASEBALL,
+        sport: Sport.BASKETBALL,
         id: League.FIBA_WORLD_CUP,
         label: 'FIBA World Cup',
         provider: Provider.ENETPULSE,
