@@ -212,7 +212,7 @@ const Home: React.FC = () => {
                   };
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
 
         const filteredMarkets = (sportFilter === SportFilter.Live
             ? allLiveMarkets

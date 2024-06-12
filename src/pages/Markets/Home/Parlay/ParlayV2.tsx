@@ -78,7 +78,7 @@ const Parlay: React.FC = () => {
 
     useEffect(() => {
         if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data && isLiveFilterSelected) {
-            const liveSportOpenMarkets = liveSportMarketsQuery.data.reduce(
+            const liveSportOpenMarkets = liveSportMarketsQuery.data.live.reduce(
                 (acc: SportMarket[], market: SportMarket) => {
                     acc.push(market);
                     market.childMarkets.forEach((childMarket: SportMarket) => {

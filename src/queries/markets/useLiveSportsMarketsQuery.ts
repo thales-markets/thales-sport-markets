@@ -5,12 +5,15 @@ import { Network } from 'enums/network';
 import { UseQueryOptions, useQuery } from 'react-query';
 import { SportMarkets } from 'types/markets';
 
+// without this every request is treated as new even though it has the same response
+const marketsCache = { live: [] };
+
 const useLiveSportsMarketsQuery = (
     networkId: Network,
     isLiveSelected: boolean,
-    options?: UseQueryOptions<SportMarkets>
+    options?: UseQueryOptions<{ live: SportMarkets }>
 ) => {
-    return useQuery<SportMarkets>(
+    return useQuery<{ live: SportMarkets }>(
         QUERY_KEYS.LiveSportMarkets(networkId),
         async () => {
             let markets: any[] = [];
@@ -35,8 +38,8 @@ const useLiveSportsMarketsQuery = (
                         odds: game.odds.map((odd: any) => odd.normalizedImplied),
                     };
                 });
-
-            return marketsFlattened;
+            marketsCache.live = marketsFlattened;
+            return marketsCache;
         },
         {
             refetchInterval: isLiveSelected ? 2 * 1000 : 10 * 1000,
