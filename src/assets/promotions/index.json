@@ -185,10 +185,10 @@
         "promotionUrl": "/promotions/euro-2024-copa-america",
         "backgroundImageUrl": "/promotions/ucl-small-new.webp",
         "callToActionButton": "How to earn",
-        "availableOnNetworks": [42161],
+        "availableOnNetworks": [10],
         "article": {
             "coverImageUrl": "/promotions/ucl-big.webp",
-            "headerHtml": "<h1><span><span><span>Win 20,000 ARB playing the UEFA Champions League, Europa League, and Conference League</span></span></span></h1>",
+            "headerHtml": "<h1><span><span><span>20,000 OP during EURO 2024 and Copa America are up for grabs!</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "<p> <span> <span> <span>Earn 20,000 OP in volume-based rewards during two international soccer tournaments: Euro 2024 & Copa America. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-mlb-campaign' target='_blank'> <span> <span> <span> <strong> <u>EURO 2024 dashboard.</u> </strong> </span> </span> </span> </a> and <a href='https://dune.com/leifu/overtime-nhl-campaign' target='_blank'> <span> <span> <span> <strong> <u>Copa America dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
                 "ctaButtonLink": "/markets?lang=en&sport=Soccer&globalFilter=OpenMarkets&showActive=true&tag=UEFA+Champions+League%2CUEFA+Europa+League%2CUEFA+Conference+League",
