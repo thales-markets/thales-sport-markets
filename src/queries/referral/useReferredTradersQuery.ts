@@ -1,26 +1,26 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { ReferredTrader } from 'types/referral';
-import thalesData from 'thales-data';
 
 const useReferredTradersQuery = (
     networkId: Network,
     referrer?: string,
-    orderBy?: string,
-    orderDirection?: 'asc' | 'desc',
     options?: UseQueryOptions<ReferredTrader[] | null>
 ) => {
     return useQuery<ReferredTrader[] | null>(
         QUERY_KEYS.ReferredTraders(referrer || '', networkId),
         async () => {
             try {
-                const referredTraders: ReferredTrader[] = await thalesData.sportMarkets.referredTraders({
-                    network: networkId,
-                    referrer,
-                    orderBy,
-                    orderDirection,
-                });
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.ReferralTraders}/${networkId}?referrer=${
+                        referrer ? referrer : ''
+                    }`
+                );
+                const referredTraders: ReferredTrader[] = response?.data ? response.data : [];
 
                 return referredTraders;
             } catch (e) {

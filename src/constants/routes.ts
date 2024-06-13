@@ -85,6 +85,10 @@ export const API_ROUTES = {
     VaultsPnl: 'v1/sport-markets/vaults/pnl',
     VaultsTransactions: 'v1/sport-markets/vaults/transactions',
     ParlayVaultsTransactions: 'v1/sport-markets/vaults/parlay-transactions',
+
+    Vouchers: 'v1/sport-markets/vouchers',
+
+    UserStats: 'v1/sport-markets/users/stats',
 };
 
 export default ROUTES;

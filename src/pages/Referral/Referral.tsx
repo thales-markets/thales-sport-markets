@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { formatCurrencyWithSign } from 'thales-utils';
+import { getDefaultCollateral } from 'utils/collaterals';
 import AffiliateLeaderboard from './components/AffiliateLeaderboard';
 import ReferralTransactionsTable from './components/ReferralTransactionsTable';
 import TradersTable from './components/TradersTable';
@@ -28,7 +29,6 @@ import {
     Value,
     Wrapper,
 } from './styled-components';
-import { getDefaultCollateral } from 'utils/collaterals';
 
 const NavigationItems = [
     {
@@ -58,11 +58,11 @@ const Referral: React.FC = () => {
         enabled: isWalletConnected,
     });
 
-    const referrersQuery = useReferrersQuery(networkId, 'totalVolume', 'desc', {
+    const referrersQuery = useReferrersQuery(networkId, {
         enabled: isWalletConnected,
     });
 
-    const referredTradersQuery = useReferredTradersQuery(networkId, walletAddress, undefined, undefined, {
+    const referredTradersQuery = useReferredTradersQuery(networkId, walletAddress, {
         enabled: isWalletConnected,
     });
 

@@ -1,8 +1,10 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { ReferralTransaction } from 'types/referral';
-import thalesData from 'thales-data';
 
 const useReferralTransactionsQuery = (
     networkId: Network,
@@ -13,10 +15,12 @@ const useReferralTransactionsQuery = (
         QUERY_KEYS.ReferralTransaction(referrer || '', networkId),
         async () => {
             try {
-                const referralTransactions: ReferralTransaction[] = thalesData.sportMarkets.referralTransactions({
-                    network: networkId,
-                    referrer,
-                });
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.ReferralTransactions}/${networkId}?referrer=${
+                        referrer ? referrer : ''
+                    }`
+                );
+                const referralTransactions: ReferralTransaction[] = response?.data ? response.data : [];
                 return referralTransactions;
             } catch (e) {
                 console.log('E ', e);
