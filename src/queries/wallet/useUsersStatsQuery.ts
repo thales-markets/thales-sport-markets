@@ -1,7 +1,9 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
+import { API_ROUTES } from 'constants/routes';
+import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import QUERY_KEYS from '../../constants/queryKeys';
-import { Network } from 'enums/network';
-import thalesData from 'thales-data';
 
 type User = {
     id: string;
@@ -14,7 +16,10 @@ const useUsersStatsQuery = (walletAddress: string, networkId: Network, options?:
     return useQuery<User[]>(
         QUERY_KEYS.Wallet.Stats(networkId, walletAddress),
         async () => {
-            const users = await thalesData.sportMarkets.usersStats({ network: networkId, address: walletAddress });
+            const response = await axios.get(
+                `${generalConfig.API_URL}/${API_ROUTES.UserStats}/${networkId}?address=${walletAddress}`
+            );
+            const users = response?.data ? response.data : [];
             return users;
         },
         {
