@@ -165,12 +165,12 @@ const Header = styled.span<{ isTicket: boolean }>`
     line-height: ${(props) => (props.isTicket ? '13' : '12')}px;
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.11em;
     color: ${(props) => props.theme.textColor.primary};
     ${(props) => (props.isTicket ? 'white-space: nowrap;' : '')};
     ${(props) => (props.isTicket ? 'margin-top: 3px' : '')};
     @media (max-width: 950px) {
-        letter-spacing: 0.117em;
+        letter-spacing: 0.05em;
     }
 `;
 

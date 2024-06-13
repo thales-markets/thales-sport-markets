@@ -7,12 +7,12 @@ import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/commo
 import { ThemeInterface } from '../../../../../../types/ui';
 import Parlay from '../../ParlayV2';
 
-type ParylayMobileModalProps = {
+type TicketMobileModalProps = {
     onClose: () => void;
     isOpen: boolean;
 };
 
-const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose, isOpen }) => {
+const TicketMobileModal: React.FC<TicketMobileModalProps> = ({ onClose, isOpen }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -29,7 +29,7 @@ const ParylayMobileModal: React.FC<ParylayMobileModalProps> = ({ onClose, isOpen
                 </Header>
                 <CloseIcon className="icon icon--close" onClick={onClose} />
                 <Scroll height="calc(100vh)">
-                    <Parlay />
+                    <Parlay onSuccess={onClose} />
                 </Scroll>
             </Container>
         </ReactModal>
@@ -91,4 +91,4 @@ const getCustomModalStyles = (theme: ThemeInterface) => ({
     },
 });
 
-export default ParylayMobileModal;
+export default TicketMobileModal;
