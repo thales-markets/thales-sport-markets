@@ -1,12 +1,14 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { Network } from 'enums/network';
-import { ParlayVaultTrade } from 'types/vault';
-import { updateTotalQuoteAndAmountFromContract } from 'utils/markets';
-import { ParlayMarketWithRound, SportMarketInfo } from 'types/markets';
-import { fixOneSideMarketCompetitorName, fixDuplicatedTeamName } from 'utils/formatters/string';
+import { API_ROUTES } from 'constants/routes';
 import { ENETPULSE_SPORTS } from 'constants/tags';
+import { Network } from 'enums/network';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { ParlayMarketWithRound, SportMarketInfo } from 'types/markets';
+import { ParlayVaultTrade } from 'types/vault';
+import { fixDuplicatedTeamName, fixOneSideMarketCompetitorName } from 'utils/formatters/string';
+import { updateTotalQuoteAndAmountFromContract } from 'utils/markets';
 
 const useParlayVaultTradesQuery = (
     vaultAddress: string,
@@ -17,10 +19,11 @@ const useParlayVaultTradesQuery = (
         QUERY_KEYS.Vault.ParlayTrades(vaultAddress, networkId),
         async () => {
             try {
-                const parlayVaultTrades = await thalesData.sportMarkets.parlayVaultTransactions({
-                    network: networkId,
-                    vault: vaultAddress,
-                });
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.ParlayVaultsTransactions}/${networkId}?vault=${vaultAddress}`
+                );
+
+                const parlayVaultTrades = response?.data ? response.data : [];
 
                 const parlayMarketsModified: ParlayMarketWithRound[] = parlayVaultTrades.map(
                     ({ wholeMarket, round }: ParlayVaultTrade) => {
