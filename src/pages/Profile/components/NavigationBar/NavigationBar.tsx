@@ -1,40 +1,39 @@
+import { ProfileTab } from 'enums/ui';
 import useClaimablePositionCountV2Query from 'queries/markets/useClaimablePositionCountV2Query';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { Count, Icon, Item, ItemWrapper, NotificationCount, Wrapper } from './styled-components';
 
 export const navItems = [
     {
-        id: 1,
+        id: ProfileTab.OPEN_CLAIMABLE,
         i18Label: 'profile.open-claimable',
         icon: 'icon icon--ticket-horizontal',
     },
     {
-        id: 2,
+        id: ProfileTab.TRANSACTION_HISTORY,
         i18Label: 'profile.transaction-history',
         icon: 'icon icon--history',
     },
     {
-        id: 3,
+        id: ProfileTab.LP,
         i18Label: 'profile.lp',
         icon: 'icon icon--yield',
     },
 ];
 
 type NavigationBarProps = {
-    itemSelected: number;
-    onSelectItem: (index: number) => void;
+    selectedTab: ProfileTab;
+    setSelectedTab: (tab: ProfileTab) => void;
 };
 
-const NavigationBar: React.FC<NavigationBarProps> = ({ itemSelected, onSelectItem }) => {
+const NavigationBar: React.FC<NavigationBarProps> = ({ selectedTab, setSelectedTab }) => {
     const { t } = useTranslation();
-
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
+    const networkId = useSelector(getNetworkId);
+    const walletAddress = useSelector(getWalletAddress) || '';
+    const isWalletConnected = useSelector(getIsWalletConnected);
 
     const claimablePositionsCountQuery = useClaimablePositionCountV2Query(walletAddress, networkId, {
         enabled: isWalletConnected,
@@ -47,10 +46,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ itemSelected, onSelectIte
     return (
         <Wrapper>
             {navItems.map((item, index) => {
-                const notificationsCount = item.id === 1 ? claimablePositionCount : 0;
+                const notificationsCount = item.id === ProfileTab.OPEN_CLAIMABLE ? claimablePositionCount : 0;
                 return (
                     <ItemWrapper key={index}>
-                        <Item key={index} selected={item.id == itemSelected} onClick={() => onSelectItem(item.id)}>
+                        <Item key={index} selected={item.id == selectedTab} onClick={() => setSelectedTab(item.id)}>
                             <Icon className={item.icon} />
                             {t(item.i18Label)}
                         </Item>
