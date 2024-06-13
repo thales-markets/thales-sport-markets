@@ -529,7 +529,8 @@
                 "winner-0": "{{team}} wird das Spiel gewinnen {{matchResolve}}"
             },
             "type-tooltip": {
-                "11055": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt."
+                "11055": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt.",
+                "touchdowns": "Touchdowns beim Empfangen, Rushen, Punt Return, Kick Return, Defensiv- und Interception-Pass werden zum Ergebnis gezählt."
             },
             "odds-live-limitation-message": "Live-Positionen nur als Singles erlaubt",
             "live": "Live",
@@ -542,7 +543,8 @@
             "rain-delay": "Regenverzögerung",
             "loss": "Verlust",
             "open": "Offen",
-            "won": "Gewonnen"
+            "won": "Gewonnen",
+            "live-trading-paused": "Live-Handel pausiert"
         },
         "market-details": {
             "price": "Preis",
@@ -594,7 +596,10 @@
                 "same-event-participant": "Es wird nur ein Teilnehmer pro Veranstaltung unterstützt. {{addedParticipant}} kann nicht hinzugefügt werden, da {{existingParticipant}} bereits in Parlay ist",
                 "already-added-combined-positions": "Positionen aus demselben Markt können nicht mit kombinierten Positionen kombiniert werden",
                 "player-props-and-other-positions": "Das Kombinieren von Spieler-Requisitenpositionen mit anderen Positionen aus demselben Markt wird nicht unterstützt",
-                "same-game-different-player-props": "Die Kombination verschiedener Kategorien von Spieler-Requisiten wird nicht unterstützt"
+                "same-game-different-player-props": "Die Kombination verschiedener Kategorien von Spieler-Requisiten wird nicht unterstützt",
+                "player-props-combining-not-enabled": "Das Kombinieren von Spielereigenschaften für {{league}} wird nicht unterstützt",
+                "same-player-different-types": "Das Kombinieren verschiedener Kategorien für denselben Spieler ({{player}}) wird nicht unterstützt.",
+                "other-types-with-player-props": "Es wird nicht unterstützt, Spieler-Requisiten mit anderen Typen aus demselben Spiel zu kombinieren."
             },
             "empty-description": "Position hinzufügen, Markt auswählen und Auswahl treffen.",
             "payout": "Insgesamt erhalten",
@@ -646,7 +651,12 @@
                 "slippage": "Schlupf",
                 "enter-value": "Wert eingeben",
                 "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert."
-            }
+            },
+            "accept-odds-changes": "Quotenänderungen akzeptieren",
+            "thales-bonus-tooltip": "Benutzer, die mit THALES handeln, erhalten 1 % zusätzliche Auszahlungen für jedes Spiel auf ihrem Ticket (bereits im Gesamtangebot und der Auszahlung berechnet).",
+            "thales-bonus-info": "Nutzen Sie THALES und erhalten Sie 1 % Bonus für jedes Spiel.",
+            "odds-changed-error": "Die Quoten haben sich während der Auftragserfüllung geändert. Versuchen Sie, den Slippage zu erhöhen.",
+            "odds-changed-description": "Quoten haben sich geändert. Akzeptieren Sie die Änderungen, um zu kaufen."
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -679,7 +689,8 @@
         "superbowl-incentive": "10.000 ARB an Anreizen",
         "incentivized-tooltip-uefa": "Für die UEFA-Wettbewerbe wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-nhl": "Für den Rest der NHL-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "Für den Rest der {{league}}-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} ausgeschüttet. Nur das Volumen im Arbitrum-Netzwerk wird für die Belohnungen angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>."
+        "incentivized-tooltip-nhl-mlb": "Für den Rest der {{league}}-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} ausgeschüttet. Nur das Volumen im Arbitrum-Netzwerk wird für die Belohnungen angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-euro-copa": "Für die EM 2024 und die Copa America werden satte {{rewards}} vergeben. Weitere Details finden Sie <detailsLink>hier</detailsLink>."
     },
     "rewards": {
         "header": "Preise",
@@ -767,7 +778,8 @@
             "canceled-tooltip": "Abgebrochene Märkte können 2 Stunden nach Auflösung des Marktes beansprucht werden.",
             "voucher-claim-success": "Gutschein erfolgreich beansprucht",
             "transaction-pending": "Transaktion ausstehend",
-            "no-vouchers": "Sie haben keinen Gutschein zu beanspruchen"
+            "no-vouchers": "Sie haben keinen Gutschein zu beanspruchen",
+            "no-lp-transactions": "Sie haben keine LP-Transaktionen"
         },
         "table": {
             "games": "Spiele",
@@ -1138,7 +1150,8 @@
         "start-tour": "Tour starten"
     },
     "banner": {
-        "arb-distribution-message": "Die ARB-Verteilung hat begonnen. Verdienen Sie ARB-Tokens, indem Sie Überstunden nutzen. Schauen Sie sich die Details hier an."
+        "arb-distribution-message": "Die ARB-Verteilung hat begonnen. Verdienen Sie ARB-Tokens, indem Sie Überstunden nutzen. Schauen Sie sich die Details hier an.",
+        "v1-text": "<highlight>V2</highlight>: Dies ist die V2-Betaversion von Overtime. Um zurück zu V1 zu wechseln, <highlight>klicken Sie hier</highlight>."
     },
     "promotions": {
         "nav-items": {

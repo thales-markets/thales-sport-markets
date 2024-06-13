@@ -115,7 +115,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
-    const hideGame = isGameLive ? !areOddsValid : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
+    const hideGame = isGameLive ? false : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
     const isColumnView =
         !isGameLive && marketTypeFilter === undefined && isThreeWayView && !isMarketSelected && isGameOpen && !isMobile;
     const isTwoPositionalMarket = market.odds.length === 2;
@@ -258,6 +258,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             markets={[market]}
                             marketType={MarketType.WINNER}
                             isGameOpen={isGameLive}
+                            isGameLive={isGameLive}
                             isMainPageView
                             isColumnView={isColumnView}
                         />

@@ -18,6 +18,7 @@ import {
     ContentRow,
     ContentWrapper,
     Header,
+    Message,
     SubTitle,
     SubTitleContainer,
     Title,
@@ -30,6 +31,7 @@ type PositionsProps = {
     isMainPageView?: boolean;
     isColumnView?: boolean;
     showInvalid?: boolean;
+    isGameLive?: boolean;
     onAccordionClick?: () => void;
 };
 
@@ -40,6 +42,7 @@ const Positions: React.FC<PositionsProps> = ({
     isMainPageView,
     isColumnView,
     showInvalid,
+    isGameLive,
     onAccordionClick,
 }) => {
     const { t } = useTranslation();
@@ -125,6 +128,10 @@ const Positions: React.FC<PositionsProps> = ({
                     })}
                 </ContentContianer>
             )}
+        </Container>
+    ) : isGameLive ? (
+        <Container isExpanded={true} noOdds={true}>
+            <Message>{t(`markets.market-card.live-trading-paused`)}</Message>
         </Container>
     ) : (
         <></>

@@ -529,7 +529,8 @@
                 "winner-0": "{{team}} 将赢得比赛 {{matchResolve}}"
             },
             "type-tooltip": {
-                "11055": "接球、冲球、弃踢回攻、踢球回攻、防守和拦截达阵均计入结果"
+                "11055": "接球、冲球、弃踢回攻、踢球回攻、防守和拦截达阵均计入结果",
+                "touchdowns": "接球、冲球、弃踢回攻、踢球回攻、防守和拦截达阵均计入结果"
             },
             "odds-live-limitation-message": "直播位置仅允许单打",
             "live": "居住",
@@ -542,7 +543,8 @@
             "postponed": "延期",
             "loss": "损失",
             "won": "韩元",
-            "open": "打开"
+            "open": "打开",
+            "live-trading-paused": "实时交易暂停"
         },
         "market-details": {
             "price": "价格",
@@ -594,7 +596,10 @@
                 "same-event-participant": "每个活动仅支持一名参与者。无法添加 {{addedParticipant}}，因为 {{existingParticipant}} 已在连本带利中",
                 "same-game-different-player-props": "不支持组合不同类别的玩家道具",
                 "player-props-and-other-positions": "不支持将玩家道具位置与同一市场的其他位置组合起来",
-                "already-added-combined-positions": "不能将同一市场的头寸与合并头寸合并"
+                "already-added-combined-positions": "不能将同一市场的头寸与合并头寸合并",
+                "same-player-different-types": "不支持对同一个播放器（{{player}}）合并不同的类别",
+                "player-props-combining-not-enabled": "不支持合并 {{league}} 的球员道具",
+                "other-types-with-player-props": "不支持将玩家道具与同一游戏中的其他类型道具组合"
             },
             "empty-description": "添加头寸，选择市场并做出选择。",
             "payout": "收到的总数",
@@ -646,7 +651,12 @@
                 "enter-value": "输入值",
                 "label": "如果赔率下降则接受交易：",
                 "tooltip": "如果在执行转移时桥接利率的不利变化超过该百分比，转移将不会通过。"
-            }
+            },
+            "odds-changed-description": "赔率已更改。请接受更改才能购买。",
+            "odds-changed-error": "订单执行过程中赔率发生变化。请尝试增加滑点。",
+            "thales-bonus-info": "使用 THALES，每场游戏可获得 1% 的奖励。",
+            "accept-odds-changes": "接受赔率变化",
+            "thales-bonus-tooltip": "与 THALES 进行交易的用户将为其票中的每场游戏获得 1% 的额外支出（已在总报价和支出中计算）。"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -679,7 +689,8 @@
         "incentivized-tooltip-uefa": "欧足联比赛将发放总计高达 {{rewards}} 的奖金。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
         "incentivized-tooltip-nhl": "NHL 赛季剩余时间（包括季后赛）将发放总计高达 {{rewards}} 的奖励。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
         "incentivized-tooltip-mm": "在疯狂三月期间赢得 45,000 ARB + 50,000 THALES。更多详细信息<detailsLink>此处</detailsLink>。",
-        "incentivized-tooltip-nhl-mlb": "总计高达 {{rewards}} 的奖励将分发给 {{league}} 赛季的剩余比赛，包括季后赛。只有 Arbitrum 网络上的交易量才会计入奖励！查看<detailsLink>此处</detailsLink>了解更多详情。"
+        "incentivized-tooltip-nhl-mlb": "总计高达 {{rewards}} 的奖励将分发给 {{league}} 赛季的剩余比赛，包括季后赛。只有 Arbitrum 网络上的交易量才会计入奖励！查看<detailsLink>此处</detailsLink>了解更多详情。",
+        "incentivized-tooltip-euro-copa": "2024 年欧洲杯和美洲杯比赛将发放总计高达 {{rewards}} 的奖励。查看<detailsLink>此处</detailsLink>了解更多详情。"
     },
     "rewards": {
         "header": "奖励",
@@ -767,7 +778,8 @@
             "canceled-tooltip": "已取消的盘口可在盘口解决后 2 小时内提出索赔。",
             "transaction-pending": "待处理交易",
             "voucher-claim-success": "代金券领取成功",
-            "no-vouchers": "您没有任何凭证可以领取"
+            "no-vouchers": "您没有任何凭证可以领取",
+            "no-lp-transactions": "您没有任何 LP 交易"
         },
         "table": {
             "position": "位置",
@@ -1134,7 +1146,8 @@
         "start-tour": "开始游览"
     },
     "banner": {
-        "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。"
+        "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。",
+        "v1-text": "<highlight>V2</highlight>：这是 Overtime 的 V2 测试版。要切换回 V1，请<highlight>单击此处</highlight>。"
     },
     "promotions": {
         "nav-items": {

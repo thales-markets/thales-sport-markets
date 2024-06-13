@@ -529,7 +529,8 @@
                 "winner-0": "{{team}} gagnera le match {{matchResolve}}"
             },
             "type-tooltip": {
-                "11055": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
+                "11055": "Les réceptions, les courses, les retours de botté de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat.",
+                "touchdowns": "Les réceptions, les courses, les retours de bottés de dégagement, les retours de coups de pied, les touchés défensifs et d'interception sont pris en compte dans le résultat."
             },
             "odds-live-limitation-message": "Positions en direct autorisées uniquement en tant que célibataires",
             "time": "Temps",
@@ -542,7 +543,8 @@
             "interrupted": "Interrompu",
             "loss": "Perte",
             "open": "Ouvrir",
-            "won": "Gagné"
+            "won": "Gagné",
+            "live-trading-paused": "Le trading en direct est suspendu"
         },
         "market-details": {
             "wallet-info": {
@@ -594,7 +596,10 @@
                 "same-event-participant": "Un seul participant par événement est pris en charge. Impossible d'ajouter {{addedParticipant}} car {{existingParticipant}} est déjà dans Parlay",
                 "already-added-combined-positions": "Impossible de combiner des positions du même marché avec des positions combinées",
                 "player-props-and-other-positions": "Non pris en charge pour combiner les positions d'accessoires de joueur avec d'autres positions du même marché",
-                "same-game-different-player-props": "Non pris en charge pour combiner différentes catégories d'accessoires de joueur"
+                "same-game-different-player-props": "Non pris en charge pour combiner différentes catégories d'accessoires de joueur",
+                "other-types-with-player-props": "Il n'est pas possible de combiner des accessoires de joueur avec d'autres types du même jeu.",
+                "same-player-different-types": "Il n'est pas possible de combiner différentes catégories pour le même joueur ({{player}})",
+                "player-props-combining-not-enabled": "La combinaison d'accessoires de joueur pour {{league}} n'est pas prise en charge"
             },
             "payout": "Total reçu",
             "empty-title": "Aucune position",
@@ -646,7 +651,12 @@
                 "invalid-value": "valeur invalide",
                 "tooltip": "Le transfert n’aboutira pas si le taux relais évolue défavorablement de plus de ce pourcentage au moment de l’exécution du transfert.",
                 "label": "Acceptez l'échange si les cotes baissent :"
-            }
+            },
+            "accept-odds-changes": "Accepter les changements de cotes",
+            "thales-bonus-info": "Utilisez THALES et obtenez 1% de bonus pour chaque partie.",
+            "odds-changed-description": "Les chances ont changé. Acceptez les modifications pour acheter.",
+            "odds-changed-error": "Les chances ont changé lors de l'exécution de la commande. Essayez d'augmenter le glissement.",
+            "thales-bonus-tooltip": "Les utilisateurs effectuant des transactions avec THALES recevront 1 % de paiements supplémentaires pour chaque jeu qu'ils ont dans leur ticket (déjà calculé dans le devis total et le paiement)."
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -679,7 +689,8 @@
         "superbowl-incentive": "10 000 ARB EN INCITATIONS",
         "incentivized-tooltip-uefa": "Un total énorme de {{rewards}} sera distribué pour les compétitions de l'UEFA. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
         "incentivized-tooltip-nhl": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de la LNH, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de {{league}}, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>."
+        "incentivized-tooltip-nhl-mlb": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de {{league}}, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
+        "incentivized-tooltip-euro-copa": "Un total énorme de {{rewards}} sera distribué pour les compétitions Euro 2024 et Copa America. Vérifiez plus de détails <detailsLink>ici</detailsLink>."
     },
     "rewards": {
         "table": {
@@ -767,7 +778,8 @@
             "canceled-tooltip": "Les marchés annulés sont réclamables 2 heures après la résolution du marché.",
             "voucher-claim-success": "Bon réclamé avec succès",
             "transaction-pending": "Transaction en attente",
-            "no-vouchers": "Vous n'avez pas de bon à réclamer"
+            "no-vouchers": "Vous n'avez pas de bon à réclamer",
+            "no-lp-transactions": "Vous n'avez aucune transaction LP"
         },
         "table": {
             "paid": "Payé",
@@ -1134,7 +1146,8 @@
         "start-tour": "Tour initial"
     },
     "banner": {
-        "arb-distribution-message": "La distribution d'ARB a commencé. Gagnez des jetons ARB en utilisant les heures supplémentaires. Consultez les détails ici."
+        "arb-distribution-message": "La distribution d'ARB a commencé. Gagnez des jetons ARB en utilisant les heures supplémentaires. Consultez les détails ici.",
+        "v1-text": "<highlight>V2</highlight> : Il s'agit de la version bêta V2 d'Overtime. Pour revenir à la V1, <highlight>cliquez ici</highlight>."
     },
     "promotions": {
         "nav-items": {
