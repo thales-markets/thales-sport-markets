@@ -658,13 +658,11 @@ const Home: React.FC = () => {
                                                 shouldCloseOnOverlayClick={false}
                                                 style={getCustomModalStyles(theme, '10')}
                                             >
-                                                <SelectedMarket availableMarketTypes={availableMarketTypes} />{' '}
+                                                <SelectedMarket />
                                             </ReactModal>
                                         ) : (
                                             isMarketSelected &&
-                                            statusFilter === StatusFilter.OPEN_MARKETS && (
-                                                <SelectedMarket availableMarketTypes={availableMarketTypes} />
-                                            )
+                                            statusFilter === StatusFilter.OPEN_MARKETS && <SelectedMarket />
                                         )}
                                     </FlexDivRow>
                                 </>
