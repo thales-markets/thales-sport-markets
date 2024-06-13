@@ -9,7 +9,6 @@ import { BetType, GlobalFiltersEnum } from 'enums/markets';
 import { Network } from 'enums/network';
 import { groupBy, orderBy, uniqBy } from 'lodash';
 import { UseQueryOptions, useQuery } from 'react-query';
-import thalesData from 'thales-data';
 import { bigNumberFormatter, getDefaultDecimalsForNetwork, localStore } from 'thales-utils';
 import { CombinedMarketsContractData, SGPItem, SportMarketInfo, SportMarkets } from 'types/markets';
 import { filterMarketsByTagsArray, insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
@@ -182,6 +181,8 @@ const useSportMarketsQuery = (
                 today.setUTCHours(0, 0, 0, 0);
                 // thales-data takes timestamp argument in seconds
 
+                const todayEndOfTheDay = new Date(new Date().setUTCHours(23, 59, 0, 0)).getTime() / 1000;
+
                 const minMaturityDate = Math.round(
                     new Date(today.getTime() - 7 * ONE_DAY_IN_MILLISECONDS).getTime() / 1000
                 ); // show history for 7 days in the past (update: set hours to midnight, because of the cache keys)
@@ -218,13 +219,10 @@ const useSportMarketsQuery = (
                         );
                         break;
                     case GlobalFiltersEnum.PendingMarkets:
-                        markets = await thalesData.sportMarkets.markets({
-                            isOpen: true,
-                            isCanceled: false,
-                            minMaturityDate,
-                            maxMaturityDate: todaysDate,
-                            network: networkId,
-                        });
+                        const pendingMarketsResponse = await axios.get(
+                            `${generalConfig.API_URL}/${API_ROUTES.MarketsList}/${networkId}?min-maturity=${minMaturityDate}&max-maturity=${todayEndOfTheDay}&include=open&exclude=canceled`
+                        );
+                        markets = pendingMarketsResponse?.data ? pendingMarketsResponse.data : [];
                         break;
                     default:
                         break;
