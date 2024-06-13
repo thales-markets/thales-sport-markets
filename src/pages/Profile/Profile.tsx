@@ -1,42 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from './styled-components';
 
+import { ProfileTab } from 'enums/ui';
 import { useSelector } from 'react-redux';
 import { getIsConnectedViaParticle } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import useQueryParam, { getQueryStringVal } from 'utils/useQueryParams';
+import useQueryParam from 'utils/useQueryParams';
 import MyPortfolio from './components/MyPortfolio';
 import MyTickets from './components/MyTickets';
 import WrapperNavigation from './components/WrapperNavigation';
 
 const Profile: React.FC = () => {
-    const selectedTabFromQuery = getQueryStringVal('selected-tab');
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
-
-    const [tabIndex, setTabIndex] = useState<number>(0);
-    const [, setSelectedTab] = useQueryParam('selected-tab', '0');
-
-    const handleTabChange = (index: number) => {
-        setTabIndex(index);
-        setSelectedTab(index.toString());
-    };
+    const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', ProfileTab.OPEN_CLAIMABLE);
+    const [selectedTab, setSelectedTab] = useState<ProfileTab>(ProfileTab.OPEN_CLAIMABLE);
 
     useEffect(() => {
-        if (selectedTabFromQuery !== tabIndex.toString()) {
-            setTabIndex(Number(selectedTabFromQuery));
+        if (Object.values(ProfileTab).includes(selectedTabParam.toLowerCase() as ProfileTab)) {
+            setSelectedTab(selectedTabParam.toLowerCase() as ProfileTab);
+        } else {
+            setSelectedTab(ProfileTab.OPEN_CLAIMABLE);
         }
-    }, [selectedTabFromQuery, tabIndex]);
+    }, [selectedTabParam]);
+
+    const handleTabChange = (tab: ProfileTab) => {
+        setSelectedTab(tab);
+        setSelectedTabParam(tab);
+    };
 
     return (
         <Container>
             {isConnectedViaParticle ? (
                 <>
-                    <WrapperNavigation tabIndex={tabIndex} onChangeTab={(index) => handleTabChange(index)} />
-                    {tabIndex == 0 && <MyPortfolio />}
-                    {tabIndex == 1 && <MyTickets />}
+                    <WrapperNavigation selectedTab={selectedTab} setSelectedTab={handleTabChange} />
+                    {selectedTab !== ProfileTab.MY_PORTFOLIO && (
+                        <MyTickets selectedTab={selectedTab} setSelectedTab={handleTabChange} />
+                    )}
+                    {selectedTab === ProfileTab.MY_PORTFOLIO && <MyPortfolio />}
                 </>
             ) : (
-                <MyTickets />
+                <MyTickets selectedTab={selectedTab} setSelectedTab={handleTabChange} />
             )}
         </Container>
     );

@@ -1,23 +1,30 @@
+import { ProfileTab } from 'enums/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 
 type WrapperNavigationProps = {
-    tabIndex: number;
-    onChangeTab: (index: number) => void;
+    selectedTab: ProfileTab;
+    setSelectedTab: (tab: ProfileTab) => void;
 };
 
-const WrapperNavigation: React.FC<WrapperNavigationProps> = ({ tabIndex, onChangeTab }) => {
+const WrapperNavigation: React.FC<WrapperNavigationProps> = ({ selectedTab, setSelectedTab }) => {
     const { t } = useTranslation();
 
     return (
         <Wrapper>
-            <NavItem active={tabIndex == 0} onClick={() => onChangeTab(0)}>
-                {t('profile.wrapper-nav.my-portfolio')}
-            </NavItem>
-            <NavItem active={tabIndex == 1} onClick={() => onChangeTab(1)}>
+            <NavItem
+                active={selectedTab !== ProfileTab.MY_PORTFOLIO}
+                onClick={() => setSelectedTab(ProfileTab.OPEN_CLAIMABLE)}
+            >
                 {t('profile.wrapper-nav.my-tickets')}
+            </NavItem>
+            <NavItem
+                active={selectedTab === ProfileTab.MY_PORTFOLIO}
+                onClick={() => setSelectedTab(ProfileTab.MY_PORTFOLIO)}
+            >
+                {t('profile.wrapper-nav.my-portfolio')}
             </NavItem>
         </Wrapper>
     );
