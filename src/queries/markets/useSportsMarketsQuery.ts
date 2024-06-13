@@ -1,17 +1,21 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
+import { ONE_DAY_IN_MILLISECONDS } from 'constants/date';
 import QUERY_KEYS from 'constants/queryKeys';
-import { ENETPULSE_SPORTS, SPORTS_MAP } from 'constants/tags';
-import { groupBy, orderBy, uniqBy } from 'lodash';
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
-import { CombinedMarketsContractData, SGPItem, SportMarketInfo, SportMarkets } from 'types/markets';
-import { Network } from 'enums/network';
-import { bigNumberFormatter, localStore, getDefaultDecimalsForNetwork } from 'thales-utils';
-import { fixDuplicatedTeamName } from 'utils/formatters/string';
-import networkConnector from 'utils/networkConnector';
-import { convertPriceImpactToBonus, getIsOneSideMarket, getMarketAddressesFromSportMarketArray } from 'utils/markets';
-import { filterMarketsByTagsArray, insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
+import { API_ROUTES } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
+import { ENETPULSE_SPORTS, SPORTS_MAP } from 'constants/tags';
 import { BetType, GlobalFiltersEnum } from 'enums/markets';
+import { Network } from 'enums/network';
+import { groupBy, orderBy, uniqBy } from 'lodash';
+import { UseQueryOptions, useQuery } from 'react-query';
+import thalesData from 'thales-data';
+import { bigNumberFormatter, getDefaultDecimalsForNetwork, localStore } from 'thales-utils';
+import { CombinedMarketsContractData, SGPItem, SportMarketInfo, SportMarkets } from 'types/markets';
+import { filterMarketsByTagsArray, insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
+import { fixDuplicatedTeamName } from 'utils/formatters/string';
+import { convertPriceImpactToBonus, getIsOneSideMarket, getMarketAddressesFromSportMarketArray } from 'utils/markets';
+import networkConnector from 'utils/networkConnector';
 
 const BATCH_SIZE = 100;
 const BATCH_SIZE_BASE = 50;
@@ -175,43 +179,43 @@ const useSportMarketsQuery = (
             let markets: SportMarkets = [];
             try {
                 const today = new Date();
+                today.setUTCHours(0, 0, 0, 0);
                 // thales-data takes timestamp argument in seconds
-                const minMaturityDate = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
+
+                const minMaturityDate = Math.round(
+                    new Date(today.getTime() - 7 * ONE_DAY_IN_MILLISECONDS).getTime() / 1000
+                ); // show history for 7 days in the past (update: set hours to midnight, because of the cache keys)
                 const todaysDate = Math.round(today.getTime() / 1000);
 
                 switch (globalFilter) {
                     case GlobalFiltersEnum.OpenMarkets:
-                        markets = await thalesData.sportMarkets.markets({
-                            isOpen: true,
-                            isCanceled: false,
-                            isPaused: false,
-                            network: networkId,
-                            minMaturityDate: todaysDate,
-                        });
+                        const openMarketsResponse = await axios.get(
+                            `${generalConfig.API_URL}/${API_ROUTES.MarketsList}/${networkId}?min-maturity=${todaysDate}&include=open&exclude=canceled,paused`
+                        );
+                        markets = openMarketsResponse?.data ? openMarketsResponse.data : [];
                         break;
                     case GlobalFiltersEnum.ResolvedMarkets:
-                        markets = await thalesData.sportMarkets.markets({
-                            isOpen: false,
-                            isCanceled: false,
-                            network: networkId,
-                            minMaturityDate,
-                        });
+                        const resolvedMarketsResponse = await axios.get(
+                            `${generalConfig.API_URL}/${API_ROUTES.MarketsList}/${networkId}?min-maturity=${minMaturityDate}&exclude=open,canceled`
+                        );
+                        markets = resolvedMarketsResponse?.data ? resolvedMarketsResponse.data : [];
                         break;
                     case GlobalFiltersEnum.Canceled:
-                        const [canceledMarkets, pausedMarkets] = await Promise.all([
-                            thalesData.sportMarkets.markets({
-                                isOpen: false,
-                                isCanceled: true,
-                                network: networkId,
-                                minMaturityDate,
-                            }),
-                            thalesData.sportMarkets.markets({
-                                isPaused: true,
-                                network: networkId,
-                                minMaturityDate,
-                            }),
+                        const [canceledMarketsResponse, pausedMarketsResponse] = await Promise.all([
+                            axios.get(
+                                `${generalConfig.API_URL}/${API_ROUTES.MarketsList}/${networkId}?min-maturity=${minMaturityDate}&include=canceled&exclude=open`
+                            ),
+                            axios.get(
+                                `${generalConfig.API_URL}/${API_ROUTES.MarketsList}/${networkId}?min-maturity=${minMaturityDate}&include=paused`
+                            ),
                         ]);
-                        markets = uniqBy([...canceledMarkets, ...pausedMarkets], 'address');
+                        markets = uniqBy(
+                            [
+                                ...(canceledMarketsResponse?.data ? canceledMarketsResponse.data : []),
+                                ...(pausedMarketsResponse?.data ? pausedMarketsResponse.data : []),
+                            ],
+                            'address'
+                        );
                         break;
                     case GlobalFiltersEnum.PendingMarkets:
                         markets = await thalesData.sportMarkets.markets({

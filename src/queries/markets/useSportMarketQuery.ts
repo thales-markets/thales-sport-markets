@@ -1,7 +1,9 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
 import { bigNumberFormatter, getDefaultDecimalsForNetwork } from 'thales-utils';
 import { SportMarketInfo } from 'types/markets';
 import { insertCombinedMarketsIntoArrayOFMarkets } from 'utils/combinedMarkets';
@@ -19,16 +21,19 @@ const useSportMarketQuery = (
             try {
                 const { sportPositionalMarketDataContract } = networkConnector;
 
-                const [parentMarketFromGraph, childMarkets] = await Promise.all([
-                    thalesData.sportMarkets.markets({
-                        network: networkId,
-                        market: marketAddress,
-                    }),
-                    thalesData.sportMarkets.markets({
-                        network: networkId,
-                        parentMarket: marketAddress,
-                    }),
+                const [parentMarketFromGraphResponse, childMarketsResponse] = await Promise.all([
+                    axios.get(
+                        `${generalConfig.API_URL}/${API_ROUTES.MarketsList}/${networkId}?market=${marketAddress}`
+                    ),
+                    axios.get(
+                        `${generalConfig.API_URL}/${API_ROUTES.MarketsList}/${networkId}?parent-market=${marketAddress}`
+                    ),
                 ]);
+
+                const parentMarketFromGraph = parentMarketFromGraphResponse?.data
+                    ? parentMarketFromGraphResponse.data
+                    : [];
+                const childMarkets = childMarketsResponse?.data ? childMarketsResponse.data : [];
 
                 const parentMarket = parentMarketFromGraph ? parentMarketFromGraph[0] : undefined;
                 const marketAddresses = getMarketAddressesFromSportMarketArray([parentMarket]);

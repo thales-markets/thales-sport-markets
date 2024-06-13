@@ -74,8 +74,7 @@ export const API_ROUTES = {
     Parlays: 'v1/sport-markets/transactions/parlays',
     ClaimTxes: 'v1/sport-markets/transactions/claim',
 
-    MarketsList: 'v1/sport-markets/markets/list',
-    RangeMarketsList: 'v1/sport-markets/markets/ranged',
+    MarketsList: 'v1/sport-markets/markets',
 
     Referral: 'v1/sport-markets/referral',
     ReferralTransactions: 'v1/sport-markets/referral/transactions',
