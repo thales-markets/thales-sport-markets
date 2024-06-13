@@ -119,6 +119,7 @@ type TicketProps = {
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
     oddsChanged: boolean;
     acceptOddChanges: (changed: boolean) => void;
+    onSuccess?: () => void;
 };
 
 const TicketErrorMessage = {
@@ -128,7 +129,13 @@ const TicketErrorMessage = {
 
 const SLIPPAGE_PERCENTAGES = [0.5, 1, 2];
 
-const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, oddsChanged, acceptOddChanges }) => {
+const Ticket: React.FC<TicketProps> = ({
+    markets,
+    setMarketsOutOfLiquidity,
+    oddsChanged,
+    acceptOddChanges,
+    onSuccess,
+}) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -651,6 +658,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                             onClose: () => {
                                 if (!keepSelection) dispatch(removeAll());
                                 onModalClose();
+                                onSuccess && onSuccess();
                             },
                             isTicketLost: false,
                             isTicketResolved: false,
@@ -712,6 +720,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                                         onClose: () => {
                                             if (!keepSelection) dispatch(removeAll());
                                             onModalClose();
+                                            onSuccess && onSuccess();
                                         },
                                         isTicketLost: false,
                                         isTicketResolved: false,

@@ -26,7 +26,11 @@ import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 
-const Parlay: React.FC = () => {
+type ParlayProps = {
+    onSuccess?: () => void;
+};
+
+const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);
@@ -183,6 +187,7 @@ const Parlay: React.FC = () => {
                             setAcceptOdds(true);
                             setOddsChanged(changed);
                         }}
+                        onSuccess={onSuccess}
                     />
                 </>
             ) : (

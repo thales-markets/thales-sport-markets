@@ -79,7 +79,7 @@ export const FirstExpandedSection = styled(FlexDivColumnCentered)`
 
 export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     border: ${(props) => (props.highlighted ? `1px solid ${props.theme.borderColor.senary}` : 'none ')};
-    border-radius: 15px;
+    border-radius: 8px;
     height: 32px;
     padding: 0 10px;
     & > div {
@@ -91,7 +91,7 @@ export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     @media (max-width: 767px) {
         height: initial;
         margin-bottom: 8px;
-        padding: 0;
+        padding: 0 2px;
     }
 `;
 

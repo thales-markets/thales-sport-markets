@@ -1,16 +1,15 @@
+import BannerCarousel from 'components/BannerCarousel';
+import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
+import { ProfileTab } from 'enums/ui';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
 import { getIsWalletConnected } from 'redux/modules/wallet';
 import styled from 'styled-components';
+import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { buildHref, navigateTo } from 'utils/routes';
-import { getQueryStringVal } from 'utils/useQueryParams';
-import BannerCarousel from '../../../../components/BannerCarousel';
-import SPAAnchor from '../../../../components/SPAAnchor';
-import { getIsMobile } from '../../../../redux/modules/app';
-import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
-import { navItems } from '../../components/NavigationBar/NavigationBar';
 import SearchField from '../../components/SearchField';
 import UserVaults from '../../components/UserVaults';
 import NavigationBar from '../NavigationBar';
@@ -18,13 +17,15 @@ import OpenClaimableTickets from '../OpenClaimableTickets';
 import TicketTransactions from '../TicketTransactions';
 import UserStatsV2 from '../UserStatsV2';
 
-const MyTickets: React.FC = () => {
+type MyTicketsProps = {
+    selectedTab: ProfileTab;
+    setSelectedTab: (tab: ProfileTab) => void;
+};
+
+const MyTickets: React.FC<MyTicketsProps> = ({ selectedTab, setSelectedTab }) => {
     const { t } = useTranslation();
-    const navItemFromQuery = getQueryStringVal('nav-item');
     const isMobile = useSelector(getIsMobile);
     const isWalletConnected = useSelector(getIsWalletConnected);
-
-    const [navItem, setNavItem] = useState<number>(navItemFromQuery ? Number(navItemFromQuery) : 1);
     const [searchText, setSearchText] = useState<string>('');
 
     useEffect(() => {
@@ -45,21 +46,19 @@ const MyTickets: React.FC = () => {
                                 {t('profile.back')}
                             </ButtonContainer>
                         </SPAAnchor>
-                        {!isMobile && (
-                            <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />
-                        )}
+                        {!isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
                         <SearchField
-                            disabled={navItems[2].id == navItem}
+                            disabled={selectedTab == ProfileTab.LP}
                             customPlaceholder={t('profile.search-field')}
                             text={searchText}
                             handleChange={(value) => setSearchText(value)}
                         />
                     </Header>
-                    {isMobile && <NavigationBar itemSelected={navItem} onSelectItem={(index) => setNavItem(index)} />}
+                    {isMobile && <NavigationBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
                 </NavigationWrapper>
-                {navItems[0].id == navItem && <OpenClaimableTickets searchText={searchText} />}
-                {navItems[1].id == navItem && <TicketTransactions searchText={searchText} />}
-                {navItems[2].id == navItem && <UserVaults />}
+                {selectedTab == ProfileTab.OPEN_CLAIMABLE && <OpenClaimableTickets searchText={searchText} />}
+                {selectedTab == ProfileTab.TRANSACTION_HISTORY && <TicketTransactions searchText={searchText} />}
+                {selectedTab == ProfileTab.LP && <UserVaults />}
             </MainContainer>
             <RightSidebarContainer>
                 <UserStatsV2 />
