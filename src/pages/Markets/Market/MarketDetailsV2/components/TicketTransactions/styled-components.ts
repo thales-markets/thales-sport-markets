@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div<{ isOnSelectedMarket?: boolean; isOpen: boolean }>`
     max-height: ${(props) => (props.isOnSelectedMarket ? '100vh' : '441px')};
-    height: ${(props) => (props.isOpen ? '100vh' : '120px')};
+    height: ${(props) => (props.isOnSelectedMarket && !props.isOpen ? '120px' : '100vh')};
     overflow: hidden;
     margin: ${(props) =>
         !props.isOnSelectedMarket ? '20px 0px' : props.isOpen ? '20px 5px 120px 5px' : '20px 5px 20px 5px'};
