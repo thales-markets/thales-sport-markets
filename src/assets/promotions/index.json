@@ -22,6 +22,50 @@
         }
     },
     {
+        "title": "Win 20,000 OP during EURO 2024 and Copa America",
+        "description": "Earn 20,000 OP in volume-based rewards in just one month during Euro 2024 & Copa America on Overtime V1 and V2.",
+        "startDate": 1718357249,
+        "endDate": 1721035649,
+        "promotionId": "euro-2024-copa-america",
+        "promotionUrl": "/promotions/euro-2024-copa-america",
+        "backgroundImageUrl": "/promotions/ucl-small-new.webp",
+        "callToActionButton": "How to earn",
+        "availableOnNetworks": [10],
+        "article": {
+            "coverImageUrl": "/promotions/ucl-big.webp",
+            "headerHtml": "<h1><span><span><span>20,000 OP during EURO 2024 and Copa America are up for grabs!</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "<p> <span> <span> <span>Earn 20,000 OP in volume-based rewards during two international soccer tournaments: Euro 2024 & Copa America. </span></span></span><span><span><span>Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/overtime-euro-24-and-copa-america' target='_blank'><span><span><span><u> Dune dashboard.</u></span></span></span></a><spa><span></span></span></p>",
+                "ctaButtonLink": "/markets",
+                "ctaButtonLabel": "Play now",
+                "forceChangeNetworkOnClick": "optimism_mainnet"
+            },
+            "contentHtml": "<p> <span> <span> <span>There’s just something special about international football (or soccer, depending on where you’re from) in the summer. That’s why Overtime has decided to add to that adrenaline-pumping feeling by giving you 20,000 OP in volume-based rewards during Copa America and EURO 2024! <br> <br>As always, volume-based simply means the higher your wagering volume, the higher your share of the winnings. However, this time both your volume on Overtime and the newly released</strong> </span> </span> </span> <a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets&showActive=true' target='_blank'> <span> <span> <span> <strong> <u>Overtime V2 beta</u> </strong> </span> </span> </span></a>counts towards your score. Have fun trying out live markets, a completely new UI, and a bunch of cool other stuff! <br><br> The most insane part about all of this is that you can combine these rewards with all the other promotions taking place on Overtime. <br> <br>We're handing out 1,000 ARB and 1,000 OP every week for the best parlays, 5,000 OP across all Thales Protocol products every week, and much more. There's also an additional bonus in store for you for using Overtime V2 (more details on the promotions page). </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
+        }
+    },
+    {
+        "title": "Win 20,000 ARB in NHL and 30,000 ARB in MLB markets",
+        "description": "Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.",
+        "startDate": 1702236692,
+        "endDate": 1730549376,
+        "promotionId": "mlb-nhl-rewards",
+        "promotionUrl": "/promotions/mlb-nhl-rewards",
+        "backgroundImageUrl": "/promotions/mlb-nhl-small.webp",
+        "callToActionButton": "Play now",
+        "availableOnNetworks": [42161],
+        "article": {
+            "coverImageUrl": "/promotions/mlb-nhl-big.webp",
+            "headerHtml": "<h1><span><span><span>Win 20,000 ARB in NHL and 30,000 ARB in MLB markets</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "<p> <span> <span> <span>Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.</span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-mlb-campaign' target='_blank'> <span> <span> <span> <strong> <u>MLB dashboard.</u> </strong> </span> </span> </span> </a> and <a href='https://dune.com/leifu/overtime-nhl-campaign' target='_blank'> <span> <span> <span> <strong> <u>NHL dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
+                "ctaButtonLink": "/markets?lang=en&sport=Baseball&globalFilter=OpenMarkets&showActive=true&tag=MLB",
+                "ctaButtonLabel": "Play now",
+                "forceChangeNetworkOnClick": "arbitrum_mainnet"
+            },
+            "contentHtml": " <p> <span> <span> <span>User incentives on Overtime are getting more ridiculous by the day! If you are a fan of the NHL and MLB, prepare for great news: you can win 20,000 ARB and 30,000 ARB in each league respectively until the end of the season.</span> </span> </span> </p> <p> <span> <span> <span>The rewards are distributed pro rata, meaning the top wallets will share the prize pool based on how much volume they’ve generated.</span> </span> </span> </p> <p> <span> <span> <span>The MLB and NHL join the <a href='https://www.overtimemarkets.xyz/promotions/big-leagues' target='_blank'><u>NBA and NFL</u></a> on the list of US-based leagues with incredible additional rewards for users. But that’s not even remotely close to being the entire promo offering on Overtime!<br> </span> </span> </p> <p> <span> <span> <span> <strong>But that’s not even remotely close to being the entire promo offering on Overtime!</strong> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
+        }
+    },
+    {
         "title": "Win 45,000 ARB + 50,000 THALES during March Madness!",
         "description": "Compete for 30,000 ARB pro rata rewards and 5,000 ARB March Madness prediction bracket rewards. You’ll receive an amazing 50,000 THALES and 10,000 ARB if you get a perfect bracket! ",
         "startDate": 1710751230,
@@ -177,31 +221,9 @@
         }
     },
     {
-        "title": "Win 20,000 OP during EURO 2024 and Copa America",
-        "description": "Earn 20,000 OP in volume-based rewards in just one month during Euro 2024 & Copa America on Overtime V1 and V2.",
-        "startDate": 1718357249,
-        "endDate": 1721035649,
-        "promotionId": "euro-2024-copa-america",
-        "promotionUrl": "/promotions/euro-2024-copa-america",
-        "backgroundImageUrl": "/promotions/ucl-small-new.webp",
-        "callToActionButton": "How to earn",
-        "availableOnNetworks": [10],
-        "article": {
-            "coverImageUrl": "/promotions/ucl-big.webp",
-            "headerHtml": "<h1><span><span><span>20,000 OP during EURO 2024 and Copa America are up for grabs!</span></span></span></h1>",
-            "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>Earn 20,000 OP in volume-based rewards during two international soccer tournaments: Euro 2024 & Copa America. </p>",
-                "ctaButtonLink": "/markets",
-                "ctaButtonLabel": "Play now",
-                "forceChangeNetworkOnClick": "optimism_mainnet"
-            },
-            "contentHtml": "<p> <span> <span> <span>There’s just something special about international football (or soccer, depending on where you’re from) in the summer. That’s why Overtime has decided to add to that adrenaline-pumping feeling by giving you 20,000 OP in volume-based rewards during Copa America and EURO 2024! <br> <br>As always, volume-based simply means the higher your wagering volume, the higher your share of the winnings. However, this time both your volume on Overtime and the newly released</strong> </span> </span> </span> <a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets&showActive=true' target='_blank'> <span> <span> <span> <strong> <u>Overtime V2 beta</u> </strong> </span> </span> </span></a>counts towards your score. Have fun trying out live markets, a completely new UI, and a bunch of cool other stuff! <br><br> The most insane part about all of this is that you can combine these rewards with all the other promotions taking place on Overtime. <br> <br>We're handing out 1,000 ARB and 1,000 OP every week for the best parlays, 5,000 OP across all Thales Protocol products every week, and much more. There's also an additional bonus in store for you for using Overtime V2 (more details on the promotions page). </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
-        }
-    },
-    {
         "title": "Use Overtime V2 and earn $THALES vouchers",
         "description": "Overtime V2 beta is here. To celebrate, we’re giving $THALES vouchers to the top 20 Live Market users by Live Market volume.",
-        "startDate": 1718357249,
+        "startDate": 1718187817,
         "endDate": 1721035649,
         "promotionId": "overtime-v2-release",
         "promotionUrl": "/promotions/overtime-v2-release",
@@ -218,28 +240,6 @@
                 "forceChangeNetworkOnClick": "optimism_mainnet"
             },
             "contentHtml": " <p> <span> <span> <span>After hours of development, Overtime V2 is finally ready for you to test out! A well-oiled, merkle-tree-driven, world-changing, fully onchain mean machine is raring to go. <br> <br>But that’s not all - we’ve decided to give the top 20 users with the biggest V2 Live Market volume from now until July 15 a 100 $THALES voucher each. You can access V2 beta </strong> </span> </span> </span> <a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets&showActive=true' target='_blank'> <span> <span> <span> <strong><u>using this link.</u></strong> </span> </span></a> Have fun, earn rewards, and step into the new era of Overtime. <br><br>You should also make sure to combine these rewards with all the other promotions taking place on Overtime. <br> <br>We're handing out 1,000 ARB and 1,000 OP every week for the best parlays, 5,000 OP across all Thales Protocol products every week, and much more.</span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
-        }
-    },
-    {
-        "title": "Win 20,000 ARB in NHL and 30,000 ARB in MLB markets",
-        "description": "Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.",
-        "startDate": 1702236692,
-        "endDate": 1730549376,
-        "promotionId": "mlb-nhl-rewards",
-        "promotionUrl": "/promotions/mlb-nhl-rewards",
-        "backgroundImageUrl": "/promotions/mlb-nhl-small.webp",
-        "callToActionButton": "Play now",
-        "availableOnNetworks": [42161],
-        "article": {
-            "coverImageUrl": "/promotions/mlb-nhl-big.webp",
-            "headerHtml": "<h1><span><span><span>Win 20,000 ARB in NHL and 30,000 ARB in MLB markets</span></span></span></h1>",
-            "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.</span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-mlb-campaign' target='_blank'> <span> <span> <span> <strong> <u>MLB dashboard.</u> </strong> </span> </span> </span> </a> and <a href='https://dune.com/leifu/overtime-nhl-campaign' target='_blank'> <span> <span> <span> <strong> <u>NHL dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
-                "ctaButtonLink": "/markets?lang=en&sport=Baseball&globalFilter=OpenMarkets&showActive=true&tag=MLB",
-                "ctaButtonLabel": "Play now",
-                "forceChangeNetworkOnClick": "arbitrum_mainnet"
-            },
-            "contentHtml": " <p> <span> <span> <span>User incentives on Overtime are getting more ridiculous by the day! If you are a fan of the NHL and MLB, prepare for great news: you can win 20,000 ARB and 30,000 ARB in each league respectively until the end of the season.</span> </span> </span> </p> <p> <span> <span> <span>The rewards are distributed pro rata, meaning the top wallets will share the prize pool based on how much volume they’ve generated.</span> </span> </span> </p> <p> <span> <span> <span>The MLB and NHL join the <a href='https://www.overtimemarkets.xyz/promotions/big-leagues' target='_blank'><u>NBA and NFL</u></a> on the list of US-based leagues with incredible additional rewards for users. But that’s not even remotely close to being the entire promo offering on Overtime!<br> </span> </span> </p> <p> <span> <span> <span> <strong>But that’s not even remotely close to being the entire promo offering on Overtime!</strong> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
         }
     },
     {
