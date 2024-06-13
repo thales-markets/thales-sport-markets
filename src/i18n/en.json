@@ -452,6 +452,7 @@
             "interrupted": "Interrupted",
             "loss": "Loss",
             "won": "Won",
+            "live-trading-paused": "Live trading paused",
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",

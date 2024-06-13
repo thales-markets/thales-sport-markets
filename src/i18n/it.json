@@ -529,7 +529,8 @@
                 "winner-0": "{{team}} vincerà la partita {{matchResolve}}"
             },
             "type-tooltip": {
-                "11055": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato"
+                "11055": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato",
+                "touchdowns": "I touchdown di ricezione, corsa, ritorno del punt, ritorno del calcio, difensivi e di intercettazione vengono conteggiati ai fini del risultato"
             },
             "odds-live-limitation-message": "Le posizioni dal vivo sono consentite solo come single",
             "live": "Vivere",
@@ -542,7 +543,8 @@
             "rain-delay": "Ritardo pioggia",
             "open": "Aprire",
             "won": "Vinto",
-            "loss": "Perdita"
+            "loss": "Perdita",
+            "live-trading-paused": "Il trading dal vivo è stato sospeso"
         },
         "market-details": {
             "price": "Price",
@@ -594,7 +596,10 @@
                 "same-event-participant": "È supportato un solo partecipante per evento. Impossibile aggiungere {{addedParticipant}} perché {{existingParticipant}} è già in Parlay",
                 "already-added-combined-positions": "Non è possibile combinare posizioni dello stesso mercato con posizioni combinate",
                 "same-game-different-player-props": "Non supportato per combinare diverse categorie di oggetti di scena del giocatore",
-                "player-props-and-other-positions": "Non è supportata la combinazione delle posizioni degli oggetti scenici dei giocatori con altre posizioni dello stesso mercato"
+                "player-props-and-other-positions": "Non è supportata la combinazione delle posizioni degli oggetti scenici dei giocatori con altre posizioni dello stesso mercato",
+                "same-player-different-types": "Non è supportato combinare diverse categorie per lo stesso giocatore ({{player}})",
+                "player-props-combining-not-enabled": "La combinazione dei suggerimenti dei giocatori per {{league}} non è supportata",
+                "other-types-with-player-props": "Non è supportato combinare oggetti di scena del giocatore con altri tipi dello stesso gioco"
             },
             "empty-title": "Nessuna posizione",
             "payout": "Totale ricevuto",
@@ -646,7 +651,12 @@
                 "enter-value": "Inserisci il valore",
                 "label": "Accetta lo scambio se le probabilità scendono di:",
                 "tooltip": "Il trasferimento non verrà effettuato se il tasso del ponte si sposta in modo sfavorevole di oltre questa percentuale al momento dell'esecuzione del trasferimento."
-            }
+            },
+            "odds-changed-description": "Le probabilità sono cambiate. Accetta le modifiche per poter acquistare.",
+            "accept-odds-changes": "Accetta le modifiche alle quote",
+            "thales-bonus-info": "Usa THALES e ottieni l'1% di bonus per ogni gioco.",
+            "thales-bonus-tooltip": "Gli utenti che effettuano scambi con THALES riceveranno l'1% di pagamenti extra per ogni gioco presente nel loro ticket (già calcolato in Quota totale e Pagamento).",
+            "odds-changed-error": "Le quote sono cambiate durante l'evasione dell'ordine. Prova ad aumentare lo slittamento."
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {
@@ -678,7 +688,8 @@
         "superbowl-incentive": "10.000 ARB IN INCENTIVI",
         "incentivized-tooltip-uefa": "Un totale enorme di {{rewards}} sarà distribuito per le competizioni UEFA. Solo il volume sulla rete Arbitrum verrà calcolato ai fini dei premi! Controlla maggiori dettagli <detailsLink>qui</detailsLink>.",
         "incentivized-tooltip-nhl": "Un totale enorme di {{rewards}} verrà distribuito per il resto della stagione NHL, compresi i playoff. Solo il volume sulla rete Arbitrum verrà calcolato ai fini dei premi! Controlla maggiori dettagli <detailsLink>qui</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "Un totale enorme di {{rewards}} verrà distribuito per il resto della stagione di {{league}}, compresi i playoff. Solo il volume sulla rete Arbitrum verrà calcolato ai fini dei premi! Controlla maggiori dettagli <detailsLink>qui</detailsLink>."
+        "incentivized-tooltip-nhl-mlb": "Un totale enorme di {{rewards}} verrà distribuito per il resto della stagione di {{league}}, compresi i playoff. Solo il volume sulla rete Arbitrum verrà calcolato ai fini dei premi! Controlla maggiori dettagli <detailsLink>qui</detailsLink>.",
+        "incentivized-tooltip-euro-copa": "Un totale enorme di {{rewards}} sarà distribuito per le competizioni Euro 2024 e Copa America. Controlla maggiori dettagli <detailsLink>qui</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -766,7 +777,8 @@
             "canceled-tooltip": "I mercati annullati possono essere rivendicati 2 ore dopo la risoluzione del mercato.",
             "transaction-pending": "Transazione in sospeso",
             "voucher-claim-success": "Buono richiesto con successo",
-            "no-vouchers": "Non hai alcun buono da richiedere"
+            "no-vouchers": "Non hai alcun buono da richiedere",
+            "no-lp-transactions": "Non hai transazioni LP"
         },
         "table": {
             "id": "Id",
@@ -1133,7 +1145,8 @@
         "start-tour": "Inizia il giro"
     },
     "banner": {
-        "arb-distribution-message": "La distribuzione ARB è iniziata. Guadagna token ARB utilizzando gli straordinari. Scopri i dettagli qui."
+        "arb-distribution-message": "La distribuzione ARB è iniziata. Guadagna token ARB utilizzando gli straordinari. Scopri i dettagli qui.",
+        "v1-text": "<highlight>V2</highlight>: questa è la versione beta V2 di Overtime. Per tornare alla V1, <highlight>fai clic qui</highlight>."
     },
     "promotions": {
         "nav-items": {
