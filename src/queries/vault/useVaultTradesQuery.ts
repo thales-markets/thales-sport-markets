@@ -1,21 +1,23 @@
-import { useQuery, UseQueryOptions } from 'react-query';
-import thalesData from 'thales-data';
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { API_ROUTES } from 'constants/routes';
 import { Network } from 'enums/network';
-import { VaultTrades, VaultTrade } from 'types/vault';
-import { getEtherscanTxLink } from 'thales-utils';
-import { convertFinalResultToResultType } from 'utils/markets';
 import { VaultTradeStatus } from 'enums/vault';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { getEtherscanTxLink } from 'thales-utils';
+import { VaultTrade, VaultTrades } from 'types/vault';
+import { convertFinalResultToResultType } from 'utils/markets';
 
 const useVaultTradesQuery = (vaultAddress: string, networkId: Network, options?: UseQueryOptions<VaultTrades>) => {
     return useQuery<VaultTrades>(
         QUERY_KEYS.Vault.Trades(vaultAddress, networkId),
         async () => {
             try {
-                const vaultTrades = await thalesData.sportMarkets.vaultTransactions({
-                    network: networkId,
-                    vault: vaultAddress,
-                });
+                const response = await axios.get(
+                    `${generalConfig.API_URL}/${API_ROUTES.VaultsTransactions}/${networkId}?vault=${vaultAddress}`
+                );
+                const vaultTrades = response?.data ? response.data : [];
 
                 return vaultTrades.map((trade: VaultTrade) => {
                     const game = `${trade.wholeMarket.homeTeam} - ${trade.wholeMarket.awayTeam}`;
