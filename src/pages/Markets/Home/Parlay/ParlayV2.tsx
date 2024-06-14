@@ -94,7 +94,10 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
             );
             const ticketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
-                    liveSportOpenMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
+                    liveSportOpenMarkets.some(
+                        (market: SportMarket) =>
+                            market.odds.some((odd) => odd != 0) && isSameMarket(market, ticketPosition)
+                    )
                 )
                 .map((ticketPosition) => {
                     const openMarket: SportMarket = liveSportOpenMarkets.filter((market: SportMarket) =>
