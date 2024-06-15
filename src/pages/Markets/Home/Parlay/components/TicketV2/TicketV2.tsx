@@ -375,13 +375,13 @@ const Ticket: React.FC<TicketProps> = ({
                                       coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
                                   ),
                         ]);
-                        setBuyInAmountInDefaultCollateral(
-                            collateralHasLp
-                                ? minimumReceivedForBuyInAmount
-                                : coinFormatter(minimumReceivedForBuyInAmount, networkId)
-                        );
 
-                        return {};
+                        const minimumReceivedForBuyInAmountInDefaultCollateral = collateralHasLp
+                            ? minimumReceivedForBuyInAmount
+                            : coinFormatter(minimumReceivedForBuyInAmount, networkId);
+                        setBuyInAmountInDefaultCollateral(minimumReceivedForBuyInAmountInDefaultCollateral);
+
+                        return { buyInAmountInDefaultCollateral: minimumReceivedForBuyInAmountInDefaultCollateral };
                     } else {
                         const [parlayAmmQuote] = await Promise.all([
                             getSportsAMMV2QuoteMethod(
@@ -471,9 +471,10 @@ const Ticket: React.FC<TicketProps> = ({
     const isValidProfit: boolean = useMemo(() => {
         return (
             sportsAmmData?.maxSupportedAmount !== undefined &&
-            payout - Number(buyInAmountInDefaultCollateral) > sportsAmmData?.maxSupportedAmount
+            Number(buyInAmountInDefaultCollateral) / Number(totalQuote) - Number(buyInAmountInDefaultCollateral) >
+                sportsAmmData?.maxSupportedAmount
         );
-    }, [sportsAmmData?.maxSupportedAmount, payout, buyInAmountInDefaultCollateral]);
+    }, [sportsAmmData?.maxSupportedAmount, buyInAmountInDefaultCollateral, totalQuote]);
 
     useEffect(() => {
         if (
@@ -662,7 +663,7 @@ const Ticket: React.FC<TicketProps> = ({
                             },
                             isTicketLost: false,
                             isTicketResolved: false,
-                            collateral: selectedCollateral,
+                            collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                             isLive: false,
                         };
                         setShareTicketModalData(modalData);
@@ -724,7 +725,7 @@ const Ticket: React.FC<TicketProps> = ({
                                         },
                                         isTicketLost: false,
                                         isTicketResolved: false,
-                                        collateral: selectedCollateral,
+                                        collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                                         isLive: true,
                                     };
                                     setShareTicketModalData(modalData);
@@ -858,7 +859,10 @@ const Ticket: React.FC<TicketProps> = ({
 
                 if (!parlayAmmQuote.error) {
                     if (markets[0]?.live) {
-                        setPayout((1 / totalQuote) * Number(buyInAmount));
+                        setPayout(
+                            (1 / totalQuote) *
+                                Number(collateralHasLp ? buyInAmount : parlayAmmQuote.buyInAmountInDefaultCollateral)
+                        );
                     } else {
                         const payout = coinFormatter(
                             parlayAmmQuote.payout,
@@ -948,7 +952,7 @@ const Ticket: React.FC<TicketProps> = ({
             onClose: onModalClose,
             isTicketLost: false,
             isTicketResolved: false,
-            collateral: selectedCollateral,
+            collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
             isLive: !!markets[0].live,
         };
         setShareTicketModalData(modalData);
