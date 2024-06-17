@@ -154,10 +154,7 @@ const Ticket: React.FC<TicketProps> = ({
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
     const liveBetSlippage = useSelector(getLiveBetSlippage);
-    const selectedCollateralIndex =
-        isLiveTicket && getCollateral(networkId, ticketPayment.selectedCollateralIndex) === CRYPTO_CURRENCY_MAP.ETH
-            ? 0
-            : ticketPayment.selectedCollateralIndex;
+    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
     const buyInAmount = ticketPayment.amountToBuy;
 
     const [payout, setPayout] = useState(0);
@@ -577,7 +574,13 @@ const Ticket: React.FC<TicketProps> = ({
     };
 
     const handleSubmit = async () => {
-        const { sportsAMMV2Contract, signer, liveTradingProcessorContract, sportsAMMDataContract } = networkConnector;
+        const {
+            sportsAMMV2Contract,
+            signer,
+            liveTradingProcessorContract,
+            sportsAMMDataContract,
+            multipleCollateral,
+        } = networkConnector;
 
         // TODO: separate logic for regular and live markets
         if (
@@ -609,16 +612,25 @@ const Ticket: React.FC<TicketProps> = ({
                     const liveTradeDataPosition = tradeData[0].position;
                     const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
 
-                    tx = await getLiveTradingProcessorTransaction(
-                        collateralAddress,
-                        sportsAMMV2ContractWithSigner,
-                        tradeData,
-                        parsedBuyInAmount,
-                        liveTotalQuote,
-                        referralId,
-                        additionalSlippage,
-                        isAA
-                    );
+                    if (isEth && multipleCollateral?.WETH) {
+                        const WETHContractWithSigner = multipleCollateral.WETH.connect(signer);
+
+                        const wrapTx = await WETHContractWithSigner.deposit({ value: parsedBuyInAmount });
+                        const wrapTxResult = await wrapTx.wait();
+
+                        if (wrapTxResult && wrapTxResult.transactionHash) {
+                            tx = await getLiveTradingProcessorTransaction(
+                                collateralAddress,
+                                sportsAMMV2ContractWithSigner,
+                                tradeData,
+                                parsedBuyInAmount,
+                                liveTotalQuote,
+                                referralId,
+                                additionalSlippage,
+                                isAA
+                            );
+                        }
+                    }
                 } else {
                     tx = await getSportsAMMV2Transaction(
                         collateralAddress,
@@ -635,7 +647,7 @@ const Ticket: React.FC<TicketProps> = ({
                     );
                 }
 
-                const txResult = isAA ? tx : await tx.wait();
+                const txResult = isAA ? tx : await tx?.wait();
 
                 if (txResult && txResult.transactionHash) {
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
@@ -841,7 +853,7 @@ const Ticket: React.FC<TicketProps> = ({
 
         return (
             <Button disabled={submitDisabled} onClick={async () => handleSubmit()} {...defaultButtonProps}>
-                {t(`common.buy-side`)}
+                {isLiveTicket && isEth ? t(`common.wrap-and-buy`) : t(`common.buy-side`)}
             </Button>
         );
     };
@@ -1135,9 +1147,7 @@ const Ticket: React.FC<TicketProps> = ({
                         placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                         currencyComponent={
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId).filter((collateral) =>
-                                    isLiveTicket ? collateral !== CRYPTO_CURRENCY_MAP.ETH : true
-                                )}
+                                collateralArray={getCollaterals(networkId)}
                                 selectedItem={selectedCollateralIndex}
                                 onChangeCollateral={() => {
                                     setCollateralAmount('');

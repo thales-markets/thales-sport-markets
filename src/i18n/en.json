@@ -5,6 +5,7 @@
         "settings": "Settings",
         "winner": "Winner",
         "buy-side": "BUY",
+        "wrap-and-buy": "Wrap ETH and Buy",
         "sell-side": "SELL",
         "days-of-week": {
             "mon": "mon",
