@@ -429,13 +429,14 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMV2Contract && multipleCollateral && signer) {
+            const collateralToAllow = isLiveTicket && isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral;
             const collateralContractWithSigner = isDefaultCollateral
                 ? sUSDContract?.connect(signer)
-                : multipleCollateral[selectedCollateral]?.connect(signer);
+                : multipleCollateral[collateralToAllow]?.connect(signer);
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = coinParser(Number(buyInAmount).toString(), networkId, selectedCollateral);
+                    const parsedTicketPrice = coinParser(Number(buyInAmount).toString(), networkId, collateralToAllow);
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
@@ -463,6 +464,7 @@ const Ticket: React.FC<TicketProps> = ({
         selectedCollateral,
         isEth,
         isDefaultCollateral,
+        isLiveTicket,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
