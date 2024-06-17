@@ -785,7 +785,7 @@ export const PaginationWrapper = styled(TablePagination)`
     .MuiTablePagination-toolbar {
         min-height: 48px;
         @media (max-width: 767px) {
-            min-height: 38px;
+            min-height: 48px;
         }
     }
     .MuiToolbar-root {
@@ -822,7 +822,7 @@ export const PaginationWrapper = styled(TablePagination)`
         margin-left: 10px;
     }
     .MuiIconButton-root {
-        padding: 0 10px;
+        padding: 5px 10px;
     }
 `;
 

@@ -31,6 +31,7 @@
     font-size: 14px !important;
     padding-top: 4px !important;
     padding-bottom: 4px !important;
+    min-height: auto !important;
 }
 
 .MuiListItem-gutters {
