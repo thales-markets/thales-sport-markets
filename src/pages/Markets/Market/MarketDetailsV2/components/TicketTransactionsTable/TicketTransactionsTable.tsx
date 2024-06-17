@@ -18,6 +18,7 @@ import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
+import { PaginationWrapper } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import {
     ExpandedRowWrapper,
     ExternalLink,
@@ -52,6 +53,7 @@ type TicketTransactionsTableProps = {
     market?: SportMarket;
     tableHeight?: string;
     isLoading: boolean;
+    ticketsPerPage?: number;
 };
 
 const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
@@ -59,6 +61,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     market,
     tableHeight,
     isLoading,
+    ticketsPerPage,
 }) => {
     const { t } = useTranslation();
     const language = i18n.language;
@@ -92,6 +95,19 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         setShareTicketModalData(modalData);
         setShowShareTicketModal(true);
     };
+
+    const [page, setPage] = useState(0);
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const [rowsPerPage, setRowsPerPage] = useState(ticketsPerPage || 10);
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(Number(event.target.value));
+        setPage(0);
+    };
+
+    // useEffect(() => setPage(0), [searchText, period]);
 
     return (
         <>
@@ -211,6 +227,9 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         },
                     ],
                 }}
+                onSortByChanged={() => setPage(0)}
+                currentPage={page}
+                rowsPerPage={rowsPerPage}
                 isLoading={isLoading}
                 data={ticketTransactions}
                 noResultsMessage={t('market.table.no-results')}
@@ -246,6 +265,17 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     );
                 }}
             ></Table>
+            {!isLoading && ticketTransactions.length > 0 && (
+                <PaginationWrapper
+                    rowsPerPageOptions={[10, 20, 50, 100]}
+                    count={ticketTransactions.length}
+                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            )}
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2
                     markets={shareTicketModalData.markets}
