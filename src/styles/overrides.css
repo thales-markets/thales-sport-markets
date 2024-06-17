@@ -27,6 +27,17 @@
     background-color: #1e2134 !important;
 }
 
+.MuiMenuItem-root {
+    font-size: 14px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+.MuiListItem-gutters {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
 @media (max-width: 512px) {
     .MuiDialog-paper {
         margin: 10px !important;
@@ -54,5 +65,5 @@
     left: 4px;
     top: -1px;
     width: 2px;
-    height: 10px;   
+    height: 10px;
 }
