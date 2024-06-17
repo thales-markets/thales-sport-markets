@@ -1,11 +1,12 @@
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-utils';
 import { UserStats } from 'types/markets';
+import { getCollateralByAddress, isLpSupported, isStableCurrency } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
-import { CRYPTO_CURRENCY_MAP } from '../../constants/currency';
-import { getCollateralByAddress, isLpSupported, isStableCurrency } from '../../utils/collaterals';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
 const useUsersStatsV2Query = (
@@ -19,8 +20,8 @@ const useUsersStatsV2Query = (
             const { sportsAMMDataContract, priceFeedContract } = networkConnector;
             if (sportsAMMDataContract && priceFeedContract) {
                 const [activeTickets, resolvedTickets, currencies, rates] = await Promise.all([
-                    sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress),
-                    sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress),
+                    sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress, 0, BATCH_SIZE),
+                    sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress, 0, BATCH_SIZE),
                     priceFeedContract.getCurrencies(),
                     priceFeedContract.getRates(),
                 ]);
