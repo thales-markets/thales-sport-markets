@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { generalConfig, noCacheConfig } from 'config/general';
+import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
@@ -7,7 +9,6 @@ import { Ticket } from 'types/markets';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
 import { mapTicket } from 'utils/tickets';
-import { generalConfig, noCacheConfig } from '../../config/general';
 
 export const useGameTicketsQuery = (
     gameId: string,
@@ -21,7 +22,7 @@ export const useGameTicketsQuery = (
                 const { sportsAMMDataContract } = networkConnector;
                 if (sportsAMMDataContract) {
                     const [tickets, gamesInfoResponse, playersInfoResponse, liveScoresResponse] = await Promise.all([
-                        sportsAMMDataContract.getTicketsDataPerGame(gameId),
+                        sportsAMMDataContract.getTicketsDataPerGame(gameId, 0, BATCH_SIZE),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
