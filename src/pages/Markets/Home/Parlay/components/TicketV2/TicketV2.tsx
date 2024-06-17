@@ -630,6 +630,17 @@ const Ticket: React.FC<TicketProps> = ({
                                 isAA
                             );
                         }
+                    } else {
+                        tx = await getLiveTradingProcessorTransaction(
+                            collateralAddress,
+                            sportsAMMV2ContractWithSigner,
+                            tradeData,
+                            parsedBuyInAmount,
+                            liveTotalQuote,
+                            referralId,
+                            additionalSlippage,
+                            isAA
+                        );
                     }
                 } else {
                     tx = await getSportsAMMV2Transaction(
