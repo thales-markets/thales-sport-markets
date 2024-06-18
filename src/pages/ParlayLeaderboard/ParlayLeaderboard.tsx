@@ -1,9 +1,11 @@
+import SPAAnchor from 'components/SPAAnchor';
 import Search from 'components/Search';
 import SelectInput from 'components/SelectInput';
 import Table from 'components/Table';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
+import { LINKS } from 'constants/links';
 import {
     PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
@@ -20,6 +22,7 @@ import { t } from 'i18next';
 import { getParlayRow } from 'pages/Profile/components/TransactionsHistory/components/ParlayTransactions/ParlayTransactions';
 import { PaginationWrapper } from 'pages/Quiz/styled-components';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -52,8 +55,6 @@ import {
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
 import { formatParlayOdds } from 'utils/parlay';
-import SPAAnchor from '../../components/SPAAnchor';
-import useExchangeRatesQuery, { Rates } from '../../queries/rates/useExchangeRatesQuery';
 
 const ParlayLeaderboard: React.FC = () => {
     const { t } = useTranslation();
@@ -439,11 +440,16 @@ const ParlayLeaderboard: React.FC = () => {
                     );
                 }}
                 additionalCell={(row) => (
-                    <TagV2Container>
-                        <SPAAnchor href={getEtherscanAddressLink(networkId, row.original.id)}>
-                            <TagV2>{row.original.isV2 ? 'v2' : 'v1'}</TagV2>
-                        </SPAAnchor>
-                    </TagV2Container>
+                    <Tooltip
+                        overlay={t('parlay-leaderboard.v2-tooltip')}
+                        component={
+                            <TagV2Container>
+                                <SPAAnchor href={`${LINKS.V2}tickets/${row.original.id}`}>
+                                    <TagV2>{row.original.isV2 ? 'v2' : 'v1'}</TagV2>
+                                </SPAAnchor>
+                            </TagV2Container>
+                        }
+                    />
                 )}
                 onSortByChanged={() => setPage(0)}
                 currentPage={page}
