@@ -154,7 +154,11 @@ export const getTicketMarketStatus = (market: TicketMarket) => {
         if (market.isPlayerPropsMarket) {
             return market.homeScore;
         }
-        return `${market.homeScore} : ${market.awayScore}`;
+        return market.leagueId === League.UFC
+            ? Number(market.homeScore) > 0
+                ? 'W - L'
+                : 'L - W'
+            : `${market.homeScore} - ${market.awayScore}`;
     }
     if (market.maturityDate < new Date()) {
         return t('markets.market-card.pending');
