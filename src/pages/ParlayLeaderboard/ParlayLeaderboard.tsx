@@ -52,6 +52,7 @@ import {
     syncPositionsAndMarketsPerContractOrderInParlay,
 } from 'utils/markets';
 import { formatParlayOdds } from 'utils/parlay';
+import SPAAnchor from '../../components/SPAAnchor';
 import useExchangeRatesQuery, { Rates } from '../../queries/rates/useExchangeRatesQuery';
 
 const ParlayLeaderboard: React.FC = () => {
@@ -341,14 +342,20 @@ const ParlayLeaderboard: React.FC = () => {
                         accessor: 'numberOfPositions',
                         Header: <>{t('parlay-leaderboard.sidebar.positions')}</>,
                         Cell: (cellProps: any) => {
-                            const parlay = syncPositionsAndMarketsPerContractOrderInParlay(
-                                cellProps.row.original as ParlayMarket
-                            );
-                            const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
-                            const numberOfMarketsModifiedWithCombinedPositions =
-                                combinedMarkets.length > 0
-                                    ? parlay.sportMarkets.length - combinedMarkets.length
-                                    : parlay.sportMarkets.length;
+                            let numberOfMarketsModifiedWithCombinedPositions = 0;
+
+                            if (cellProps.row.original.isV2) {
+                                numberOfMarketsModifiedWithCombinedPositions = cellProps.row.original.numberOfPositions;
+                            } else {
+                                const parlay = syncPositionsAndMarketsPerContractOrderInParlay(
+                                    cellProps.row.original as ParlayMarket
+                                );
+                                const combinedMarkets = extractCombinedMarketsFromParlayMarketType(parlay);
+                                numberOfMarketsModifiedWithCombinedPositions =
+                                    combinedMarkets.length > 0
+                                        ? parlay.sportMarkets.length - combinedMarkets.length
+                                        : parlay.sportMarkets.length;
+                            }
                             return (
                                 <FlexCenter>
                                     <TableText>{numberOfMarketsModifiedWithCombinedPositions}</TableText>
@@ -391,6 +398,7 @@ const ParlayLeaderboard: React.FC = () => {
                 ]}
                 noResultsMessage={t('parlay-leaderboard.no-parlays')}
                 stickyRow={stickyRow}
+                hideExpandedRow={(row) => row.original.isV2}
                 expandedRow={(row) => {
                     const parlay = syncPositionsAndMarketsPerContractOrderInParlay(row.original as ParlayMarket);
 
@@ -430,6 +438,13 @@ const ParlayLeaderboard: React.FC = () => {
                         </ExpandedRowWrapper>
                     );
                 }}
+                additionalCell={(row) => (
+                    <TagV2Container>
+                        <SPAAnchor href={getEtherscanAddressLink(networkId, row.original.id)}>
+                            <TagV2>{row.original.isV2 ? 'v2' : 'v1'}</TagV2>
+                        </SPAAnchor>
+                    </TagV2Container>
+                )}
                 onSortByChanged={() => setPage(0)}
                 currentPage={page}
                 rowsPerPage={rowsPerPage}
@@ -767,6 +782,25 @@ const AddressLink = styled.a`
     &:hover {
         color: ${(props) => props.theme.textColor.quaternary};
     }
+`;
+
+const TagV2Container = styled.div`
+    margin-top: 10px;
+`;
+
+const TagV2 = styled.span`
+    color: ${(props) => props.theme.textColor.tertiary};
+    background-color: #3fffff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 13px;
+    text-align: center;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    border-radius: 5px;
+    padding: 2px 2px;
+    height: fit-content;
+    cursor: pointer;
 `;
 
 export const getRewardsArray = (networkId: Network, period: number): number[] => {
