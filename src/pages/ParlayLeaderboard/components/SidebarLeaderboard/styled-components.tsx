@@ -1,14 +1,14 @@
-import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
+import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import { ReactComponent as ThalesLogo } from 'assets/images/thales-logo-small-white.svg';
 import styled from 'styled-components';
 import {
     FlexDiv,
     FlexDivCentered,
     FlexDivColumn,
+    FlexDivColumnCentered,
     FlexDivRow,
     FlexDivRowCentered,
-    FlexDivColumnCentered,
 } from 'styles/common';
 
 export const LeaderboardWrapper = styled(FlexDiv)`
@@ -165,4 +165,24 @@ export const NoResultContainer = styled(FlexDivCentered)`
     font-size: 12px;
     min-height: 50px;
     text-align: center;
+`;
+
+export const TagV2Container = styled.div`
+    margin-top: -2px;
+    margin-right: 2px;
+`;
+
+export const TagV2 = styled.span`
+    color: ${(props) => props.theme.textColor.tertiary};
+    background-color: #3fffff;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 13px;
+    text-align: center;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    border-radius: 5px;
+    padding: 2px 2px;
+    height: fit-content;
+    cursor: pointer;
 `;

@@ -150,7 +150,12 @@ export type ParlayMarket = {
 
 export type ParlayMarketWithQuotes = ParlayMarket & { quotes: number[] };
 
-export type ParlayMarketWithRank = ParlayMarket & { rank: number; numberOfPositions: number; points: number };
+export type ParlayMarketWithRank = ParlayMarket & {
+    rank: number;
+    numberOfPositions: number;
+    points: number;
+    isV2: boolean;
+};
 export type ParlayMarketWithRound = ParlayMarket & { round: number };
 
 type PositionNameType = 'HOME' | 'AWAY' | 'DRAW';

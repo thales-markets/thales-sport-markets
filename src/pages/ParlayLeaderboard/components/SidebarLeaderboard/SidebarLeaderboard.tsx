@@ -1,7 +1,9 @@
 import PositionSymbol from 'components/PositionSymbol';
 import SPAAnchor from 'components/SPAAnchor';
 import SimpleLoader from 'components/SimpleLoader';
+import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
+import { LINKS } from 'constants/links';
 import { PARLAY_LEADERBOARD_WEEKLY_START_DATE } from 'constants/markets';
 import { SIDEBAR_NUMBER_OF_TOP_USERS } from 'constants/quiz';
 import ROUTES from 'constants/routes';
@@ -68,6 +70,8 @@ import {
     ParlayRowResult,
     ParlayRowTeam,
     Rank,
+    TagV2,
+    TagV2Container,
     Title,
     TitleLabel,
 } from './styled-components';
@@ -160,13 +164,27 @@ const SidebarLeaderboard: React.FC = () => {
                                                 )})`}
                                             </DataLabel>
                                         </ColumnWrapper>
-                                        <ArrowIcon
-                                            className={
-                                                expandedRowIndex === index
-                                                    ? 'icon icon--arrow-up'
-                                                    : 'icon icon--arrow-down'
-                                            }
-                                        />
+
+                                        {parlay.isV2 ? (
+                                            <Tooltip
+                                                overlay={t('parlay-leaderboard.v2-tooltip')}
+                                                component={
+                                                    <TagV2Container>
+                                                        <SPAAnchor href={`${LINKS.V2}tickets/${parlay.id}`}>
+                                                            <TagV2>v2</TagV2>
+                                                        </SPAAnchor>
+                                                    </TagV2Container>
+                                                }
+                                            />
+                                        ) : (
+                                            <ArrowIcon
+                                                className={
+                                                    expandedRowIndex === index
+                                                        ? 'icon icon--arrow-up'
+                                                        : 'icon icon--arrow-down'
+                                                }
+                                            />
+                                        )}
                                     </LeaderboardRow>
                                     {expandedRowIndex === index &&
                                         getExpandedRowComponent(
