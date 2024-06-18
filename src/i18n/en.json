@@ -6,6 +6,7 @@
         "winner": "Winner",
         "buy-side": "BUY",
         "wrap-and-buy": "Wrap ETH and Buy",
+        "wrap-eth-tooltip": "Your ETH is first wrapped into WETH and then passed to the contract",
         "sell-side": "SELL",
         "days-of-week": {
             "mon": "mon",

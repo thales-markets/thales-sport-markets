@@ -155,24 +155,18 @@ const LiquidityPool: React.FC = () => {
         }
     );
 
-    useEffect(() => {
-        if (multipleCollateralBalanceQuery.isSuccess && multipleCollateralBalanceQuery.data !== undefined) {
-            setPaymentTokenBalance(
-                Number(
-                    multipleCollateralBalanceQuery.data[
-                        collateral === CRYPTO_CURRENCY_MAP.WETH && selectedCollateralIndex === 1
-                            ? CRYPTO_CURRENCY_MAP.ETH
-                            : collateral
-                    ]
-                )
-            );
-        }
-    }, [
-        multipleCollateralBalanceQuery.isSuccess,
-        multipleCollateralBalanceQuery.data,
+    const ethSelected = useMemo(() => collateral === CRYPTO_CURRENCY_MAP.WETH && selectedCollateralIndex === 1, [
         collateral,
         selectedCollateralIndex,
     ]);
+
+    useEffect(() => {
+        if (multipleCollateralBalanceQuery.isSuccess && multipleCollateralBalanceQuery.data !== undefined) {
+            setPaymentTokenBalance(
+                Number(multipleCollateralBalanceQuery.data[ethSelected ? CRYPTO_CURRENCY_MAP.ETH : collateral])
+            );
+        }
+    }, [multipleCollateralBalanceQuery.isSuccess, multipleCollateralBalanceQuery.data, collateral, ethSelected]);
 
     useEffect(() => {
         if (liquidityPoolDataQuery.isSuccess && liquidityPoolDataQuery.data) {
@@ -529,22 +523,54 @@ const LiquidityPool: React.FC = () => {
             );
         }
         if (!hasAllowance) {
-            return (
-                <Button {...defaultButtonProps} disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
-                    {!isAllowing
-                        ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
-                        : t('common.enable-wallet-access.approve-progress-label', {
-                              currencyKey: collateral,
-                          })}
-                </Button>
-            );
+            if (ethSelected) {
+                return (
+                    <Tooltip
+                        overlay={t('common.wrap-eth-tooltip')}
+                        component={
+                            <Button
+                                {...defaultButtonProps}
+                                disabled={isAllowing}
+                                onClick={() => setOpenApprovalModal(true)}
+                            >
+                                {!isAllowing
+                                    ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
+                                    : t('common.enable-wallet-access.approve-progress-label', {
+                                          currencyKey: collateral,
+                                      })}
+                            </Button>
+                        }
+                    ></Tooltip>
+                );
+            } else {
+                return (
+                    <Button {...defaultButtonProps} disabled={isAllowing} onClick={() => setOpenApprovalModal(true)}>
+                        {!isAllowing
+                            ? t('common.enable-wallet-access.approve-label', { currencyKey: collateral })
+                            : t('common.enable-wallet-access.approve-progress-label', {
+                                  currencyKey: collateral,
+                              })}
+                    </Button>
+                );
+            }
         }
-        return (
+        return !ethSelected ? (
             <Button {...defaultButtonProps} disabled={isDepositButtonDisabled} onClick={handleDeposit}>
                 {!isSubmitting
                     ? t('liquidity-pool.button.deposit-label')
                     : t('liquidity-pool.button.deposit-progress-label')}
             </Button>
+        ) : (
+            <Tooltip
+                overlay={t('common.wrap-eth-tooltip')}
+                component={
+                    <Button {...defaultButtonProps} disabled={isDepositButtonDisabled} onClick={handleDeposit}>
+                        {!isSubmitting
+                            ? t('liquidity-pool.button.deposit-label')
+                            : t('liquidity-pool.button.deposit-progress-label')}
+                    </Button>
+                }
+            ></Tooltip>
         );
     };
 
@@ -723,9 +749,7 @@ const LiquidityPool: React.FC = () => {
                                         }
                                         validationPlacement="bottom"
                                         balance={formatCurrencyWithKey(
-                                            collateral === CRYPTO_CURRENCY_MAP.WETH && selectedCollateralIndex === 1
-                                                ? CRYPTO_CURRENCY_MAP.ETH
-                                                : collateral,
+                                            ethSelected ? CRYPTO_CURRENCY_MAP.ETH : collateral,
                                             paymentTokenBalance
                                         )}
                                     />

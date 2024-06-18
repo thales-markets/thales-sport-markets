@@ -864,9 +864,28 @@ const Ticket: React.FC<TicketProps> = ({
             );
         }
 
+        if (isLiveTicket && isEth) {
+            return (
+                <>
+                    <Tooltip
+                        overlay={t('common.wrap-eth-tooltip')}
+                        component={
+                            <Button
+                                disabled={submitDisabled}
+                                onClick={async () => handleSubmit()}
+                                {...defaultButtonProps}
+                            >
+                                {t(`common.wrap-and-buy`)}
+                            </Button>
+                        }
+                    ></Tooltip>
+                </>
+            );
+        }
+
         return (
             <Button disabled={submitDisabled} onClick={async () => handleSubmit()} {...defaultButtonProps}>
-                {isLiveTicket && isEth ? t(`common.wrap-and-buy`) : t(`common.buy-side`)}
+                {t(`common.buy-side`)}
             </Button>
         );
     };
