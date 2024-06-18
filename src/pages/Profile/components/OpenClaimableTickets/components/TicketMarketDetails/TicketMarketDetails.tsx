@@ -1,6 +1,8 @@
 import MatchLogosV2 from 'components/MatchLogosV2';
 import SPAAnchor from 'components/SPAAnchor';
-import { Sport } from 'enums/sports';
+import { GameStatusKey } from 'constants/markets';
+import { GameStatus } from 'enums/markets';
+import { League, Sport } from 'enums/sports';
 import i18n from 'i18n';
 import { t } from 'i18next';
 import React from 'react';
@@ -17,8 +19,6 @@ import { getPositionTextV2, getTeamNameV2, getTitleText, showGameScore, showLive
 import { buildMarketLink } from 'utils/routes';
 import { getLeaguePeriodType, getLeagueSport } from 'utils/sports';
 import { getOrdinalNumberLabel } from 'utils/ui';
-import { GameStatusKey } from '../../../../../../constants/markets';
-import { GameStatus } from '../../../../../../enums/markets';
 import {
     MarketTypeInfo,
     MatchInfo,
@@ -56,12 +56,32 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
         showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
             <>
                 <ScoreContainer>
-                    <TeamScoreLabel isResolved={market.isResolved}>{scoreData.homeScore}</TeamScoreLabel>
-                    <TeamScoreLabel isResolved={market.isResolved}>{scoreData.awayScore}</TeamScoreLabel>
+                    <TeamScoreLabel isResolved={market.isResolved}>
+                        {market.leagueId == League.UFC
+                            ? Number(scoreData.homeScore) > 0
+                                ? 'W'
+                                : 'L'
+                            : scoreData.homeScore}
+                    </TeamScoreLabel>
+                    <TeamScoreLabel isResolved={market.isResolved}>
+                        {market.leagueId == League.UFC
+                            ? Number(scoreData.awayScore) > 0
+                                ? 'W'
+                                : 'L'
+                            : scoreData.awayScore}
+                    </TeamScoreLabel>
                 </ScoreContainer>
+                {!isMobile && (market.isResolved || market.isGameFinished) && market.leagueId === League.UFC && (
+                    <ScoreContainer>
+                        <TeamScoreLabel className="period" isResolved={market.isResolved}>
+                            {`(R${Number(scoreData.homeScore) > 0 ? scoreData.homeScore : scoreData.awayScore})`}
+                        </TeamScoreLabel>
+                    </ScoreContainer>
+                )}
                 {!isMobile &&
                     (market.isResolved || market.isGameFinished) &&
                     leagueSport !== Sport.CRICKET &&
+                    market.leagueId !== League.UFC &&
                     scoreData.homeScoreByPeriod.map((_, index) => {
                         if (leagueSport === Sport.SOCCER && index === 1) {
                             return null;
