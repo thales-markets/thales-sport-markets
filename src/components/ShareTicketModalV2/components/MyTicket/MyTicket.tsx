@@ -86,9 +86,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     <PayoutRow>
                         <Square isLost={isTicketLost} isResolved={isTicketResolved} />
                         <PayoutLabel isLost={isTicketLost} isResolved={isTicketResolved}>
-                            {isTicketResolved
-                                ? t('markets.parlay.payout')
-                                : t('markets.parlay.share-ticket.potential-payout')}
+                            {t('markets.parlay.payout')}
                         </PayoutLabel>
                         <Square isLost={isTicketLost} isResolved={isTicketResolved} />
                     </PayoutRow>

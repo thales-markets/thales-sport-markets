@@ -34,6 +34,7 @@ import RouterProvider from './Provider/RouterProvider/RouterProvider';
 // const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
+const Ticket = lazy(() => import('pages/Ticket'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
@@ -165,6 +166,15 @@ const App = () => {
                     <RouterProvider>
                         <Router history={history}>
                             <Switch>
+                                <Route
+                                    exact
+                                    path={ROUTES.Ticket}
+                                    render={(routeProps) => (
+                                        <DappLayout>
+                                            <Ticket {...routeProps} />
+                                        </DappLayout>
+                                    )}
+                                />
                                 <Route
                                     exact
                                     path={ROUTES.Markets.Market}
