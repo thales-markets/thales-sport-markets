@@ -18,8 +18,43 @@ type ButtonProps = {
     children?: any;
 };
 
-const Button: React.FC<ButtonProps> = ({ children, ...rest }) => {
-    return <Wrapper {...rest}>{children}</Wrapper>;
+const Button: React.FC<ButtonProps> = ({
+    width,
+    height,
+    padding,
+    textColor,
+    backgroundColor,
+    borderColor,
+    margin,
+    onClick,
+    disabled,
+    additionalStyles,
+    fontSize,
+    fontWeight,
+    lineHeight,
+    children,
+    ...rest
+}) => {
+    return (
+        <Wrapper
+            width={width}
+            height={height}
+            padding={padding}
+            margin={margin}
+            textColor={textColor}
+            backgroundColor={backgroundColor}
+            borderColor={borderColor}
+            onClick={onClick}
+            disabled={disabled}
+            fontSize={fontSize}
+            fontWeight={fontWeight}
+            lineHeight={lineHeight}
+            style={additionalStyles}
+            {...rest}
+        >
+            {children}
+        </Wrapper>
+    );
 };
 
 const Wrapper = styled.button<{
