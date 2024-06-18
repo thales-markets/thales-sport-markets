@@ -22,7 +22,7 @@ const useLiquidityPoolUserTransactionsQuery = (
 
                 return liquidityPoolUserTransactions.map((tx: LiquidityPoolUserTransaction) => ({
                     ...tx,
-                    amount: coinFormatter(tx.amount, networkId, collateral),
+                    amount: tx.amount ? coinFormatter(tx.amount, networkId, collateral) : 0,
                 }));
             } catch (e) {
                 console.log(e);
