@@ -1037,6 +1037,7 @@
         "no-parlays": "No winning parlays registered in the period yet.",
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
         "warning2": "Users that have covered 50% or more of potential combinations of their winning tickets will be disqualified.",
+        "v2-tooltip": "View parlay on V2",
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
@@ -1058,7 +1059,7 @@
         "ticket-info": {
             "title": "Parlay leaderboard",
             "points-label": "Points",
-            "points-tooltip": "Calculated total points with bonuses for parlay leaderboard. Points are derived by multiplying the total odds of the parlay with cube (3rd) root of the buy-in and then adding 10% bonus for each game on the ticket.",
+            "points-tooltip": "Calculated total points with bonuses for parlay leaderboard. Points are derived by multiplying the total odds of the parlay with square root of the buy-in and then adding 10% bonus for each game on the ticket.",
             "rank-label": "Rank",
             "rank-tooltip": "Tentative ranking based on current state of the leaderboard. Final ranking are known at round's end. Rounds are weekly Wednesday to Wednesday.",
             "rewards-label": "Rewards",

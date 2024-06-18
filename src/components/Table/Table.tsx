@@ -34,7 +34,9 @@ type TableProps = {
     rowsPerPage?: number;
     tableHeight?: string;
     expandedRow?: (row: Row<any>) => JSX.Element;
+    hideExpandedRow?: (row: Row<any>) => boolean;
     stickyRow?: JSX.Element;
+    additionalCell?: (row: Row<any>) => JSX.Element;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -55,8 +57,10 @@ const Table: React.FC<TableProps> = ({
     currentPage,
     rowsPerPage,
     expandedRow,
+    hideExpandedRow,
     stickyRow,
     tableHeight,
+    additionalCell,
 }) => {
     const { t } = useTranslation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,7 +154,7 @@ const Table: React.FC<TableProps> = ({
 
                             return (
                                 <ExpandableRow key={rowIndex}>
-                                    {expandedRow ? (
+                                    {expandedRow && !(hideExpandedRow && hideExpandedRow(row)) ? (
                                         <ExpandableRowReact
                                             row={row}
                                             tableRowCellStyles={tableRowCellStyles}
@@ -185,6 +189,7 @@ const Table: React.FC<TableProps> = ({
                                                     </TableCell>
                                                 );
                                             })}
+                                            {additionalCell && additionalCell(row)}
                                         </TableRow>
                                     )}
                                 </ExpandableRow>
