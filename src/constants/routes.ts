@@ -19,6 +19,7 @@ const ROUTES = {
         Home: '/promotions',
         Promotion: '/promotions/:promotionId',
     },
+    Ticket: '/tickets/:ticketAddress',
 };
 
 export const PAGE_NAME_TO_META_DATA_KEYS: {
