@@ -1,7 +1,9 @@
+import { CACHE_PREFIX_KEYS, WAIT_PERIOD_AFTER_CACHE_INVALIDATION_IN_SECONDS } from 'constants/cache';
 import QUERY_KEYS from 'constants/queryKeys';
+import { Network } from 'enums/network';
 import { QueryClient } from 'react-query';
 import { LiquidityPoolType } from 'types/liquidityPool';
-import { Network } from 'enums/network';
+import { getCacheKey, invalidateCache, wait } from './cache';
 
 type QueryConnector = {
     queryClient: QueryClient;
@@ -17,13 +19,24 @@ const queryConnector: QueryConnector = {
     },
 };
 
-export const refetchBalances = (walletAddress: string, networkId: Network) => {
+export const refetchBalances = async (walletAddress: string, networkId: Network) => {
+    await invalidateCache([getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Vouchers, [networkId, walletAddress])]);
+
+    await wait(WAIT_PERIOD_AFTER_CACHE_INVALIDATION_IN_SECONDS);
+
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.GetsUSDWalletBalance(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucher(walletAddress, networkId));
 };
 
-export const refetchAfterClaim = (walletAddress: string, networkId: Network) => {
+export const refetchAfterClaim = async (walletAddress: string, networkId: Network) => {
+    await invalidateCache([
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress]),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Parlay, [networkId, walletAddress]),
+    ]);
+
+    await wait(WAIT_PERIOD_AFTER_CACHE_INVALIDATION_IN_SECONDS);
+
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ParlayMarkets(networkId, walletAddress));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountPositions(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ClaimableCount(walletAddress, networkId));
@@ -41,11 +54,21 @@ export const refetchVaultData = (vaultAddress: string, walletAddress: string, ne
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.UserTransactions(vaultAddress, networkId));
 };
 
-export const refetchLiquidityPoolData = (
+export const refetchLiquidityPoolData = async (
     walletAddress: string,
     networkId: Network,
     liquidityPoolType: LiquidityPoolType
 ) => {
+    await invalidateCache([
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.LiquidityPoolTransactions, [
+            networkId,
+            liquidityPoolType,
+            walletAddress,
+        ]),
+    ]);
+
+    await wait(WAIT_PERIOD_AFTER_CACHE_INVALIDATION_IN_SECONDS);
+
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.Data(networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.ParlayData(networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.LiquidityPool.ParlayUserData(walletAddress, networkId));
