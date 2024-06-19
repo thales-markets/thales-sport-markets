@@ -450,7 +450,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             };
             if (isWalletConnected && buyInAmount) {
-                isEth ? setHasAllowance(true) : getAllowance();
+                isEth && !isLiveTicket ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -543,7 +543,9 @@ const Ticket: React.FC<TicketProps> = ({
             try {
                 const collateralContractWithSigner = isDefaultCollateral
                     ? sUSDContract?.connect(signer)
-                    : multipleCollateral[selectedCollateral]?.connect(signer);
+                    : multipleCollateral[isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral]?.connect(
+                          signer
+                      );
 
                 const addressToApprove = sportsAMMV2Contract.address;
                 let txResult;
@@ -848,9 +850,28 @@ const Ticket: React.FC<TicketProps> = ({
                 </Button>
             );
         }
-
         // Show Approve only on valid input buy amount
         if (!hasAllowance && buyInAmount && Number(buyInAmount) >= minBuyInAmount) {
+            if (isLiveTicket && isEth) {
+                return (
+                    <Tooltip
+                        overlay={t('common.wrap-eth-tooltip')}
+                        component={
+                            <Button
+                                disabled={submitDisabled}
+                                onClick={() =>
+                                    isParticle
+                                        ? handleAllowance(ethers.constants.MaxUint256)
+                                        : setOpenApprovalModal(true)
+                                }
+                                {...defaultButtonProps}
+                            >
+                                {t('common.wallet.approve')}
+                            </Button>
+                        }
+                    ></Tooltip>
+                );
+            }
             return (
                 <Button
                     disabled={submitDisabled}
@@ -1420,7 +1441,7 @@ const Ticket: React.FC<TicketProps> = ({
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
                     defaultAmount={Number(buyInAmount) * (1 + APPROVAL_BUFFER)}
                     collateralIndex={selectedCollateralIndex}
-                    tokenSymbol={selectedCollateral}
+                    tokenSymbol={isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}
