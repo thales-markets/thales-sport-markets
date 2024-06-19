@@ -94,7 +94,7 @@ const MatchInfo: React.FC<MatchInfoPropsType> = ({ market }) => {
                                 isDraw={
                                     isGameRegularlyResolved &&
                                     market.winningPositions &&
-                                    market.winningPositions.includes(1)
+                                    market.winningPositions.includes(2)
                                 }
                                 awayTeam={true}
                             >
