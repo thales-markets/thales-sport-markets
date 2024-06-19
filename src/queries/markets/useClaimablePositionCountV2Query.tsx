@@ -1,7 +1,8 @@
+import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
-import networkConnector from '../../utils/networkConnector';
+import networkConnector from 'utils/networkConnector';
 
 const useClaimablePositionCountQuery = (
     walletAddress: string,
@@ -15,8 +16,8 @@ const useClaimablePositionCountQuery = (
                 const { sportsAMMDataContract } = networkConnector;
                 if (sportsAMMDataContract) {
                     const [activeTickets, resolvedTickets] = await Promise.all([
-                        sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress),
-                        sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress),
+                        sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress, 0, BATCH_SIZE),
+                        sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress, 0, BATCH_SIZE),
                     ]);
 
                     const tickets = [...activeTickets, ...resolvedTickets];

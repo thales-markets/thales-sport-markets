@@ -152,7 +152,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                     </ResultLabel>
                                     {leagueSport !== Sport.SOCCER &&
                                         leagueSport !== Sport.ESPORTS &&
-                                        leagueSport !== Sport.CRICKET && (
+                                        leagueSport !== Sport.CRICKET &&
+                                        market.leagueId !== League.UFC && (
                                             <PeriodsContainer directionRow={true}>
                                                 {market.homeScoreByPeriod.map((_, index) => {
                                                     return (

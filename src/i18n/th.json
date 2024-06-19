@@ -192,7 +192,9 @@
         },
         "settings": "การตั้งค่า",
         "filters": "ตัวกรอง",
-        "status": "สถานะ"
+        "status": "สถานะ",
+        "wrap-and-buy": "ห่อ ETH แล้วซื้อ",
+        "wrap-eth-tooltip": "ETH ของคุณจะถูกรวมเข้ากับ WETH ก่อนแล้วจึงส่งต่อไปยังสัญญา"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",

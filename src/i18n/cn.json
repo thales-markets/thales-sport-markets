@@ -192,7 +192,9 @@
         },
         "settings": "设置",
         "filters": "筛选器",
-        "status": "地位"
+        "status": "地位",
+        "wrap-and-buy": "包装 ETH 并购买",
+        "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",

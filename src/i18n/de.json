@@ -192,7 +192,9 @@
         },
         "settings": "Einstellungen",
         "filters": "Filter",
-        "status": "Status"
+        "status": "Status",
+        "wrap-and-buy": "ETH verpacken und kaufen",
+        "wrap-eth-tooltip": "Ihr ETH wird zuerst in WETH verpackt und dann an den Vertrag übergeben"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",

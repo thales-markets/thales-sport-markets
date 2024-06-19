@@ -11,6 +11,7 @@ import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
     APPROVAL_BUFFER,
+    BATCH_SIZE,
     HIDE_PARLAY_LEADERBOARD,
     MIN_COLLATERAL_MULTIPLIER,
     PARLAY_LEADERBOARD_MINIMUM_GAMES,
@@ -730,7 +731,9 @@ const Ticket: React.FC<TicketProps> = ({
                                 refetchBalances(walletAddress, networkId);
                                 if (sportsAMMDataContract) {
                                     const userTickets = await sportsAMMDataContract.getActiveTicketsDataPerUser(
-                                        walletAddress.toLowerCase()
+                                        walletAddress.toLowerCase(),
+                                        0,
+                                        BATCH_SIZE
                                     );
                                     const modalData: ShareTicketModalProps = {
                                         markets: [

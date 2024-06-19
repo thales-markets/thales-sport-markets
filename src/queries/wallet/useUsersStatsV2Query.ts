@@ -1,11 +1,14 @@
+import axios from 'axios';
+import { generalConfig } from 'config/general';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-utils';
 import { UserStats } from 'types/markets';
+import { getCollateralByAddress, isLpSupported, isStableCurrency } from 'utils/collaterals';
 import networkConnector from 'utils/networkConnector';
-import { CRYPTO_CURRENCY_MAP } from '../../constants/currency';
-import { getCollateralByAddress, isLpSupported, isStableCurrency } from '../../utils/collaterals';
 import { Rates } from '../rates/useExchangeRatesQuery';
 
 const useUsersStatsV2Query = (
@@ -18,11 +21,12 @@ const useUsersStatsV2Query = (
         async () => {
             const { sportsAMMDataContract, priceFeedContract } = networkConnector;
             if (sportsAMMDataContract && priceFeedContract) {
-                const [activeTickets, resolvedTickets, currencies, rates] = await Promise.all([
-                    sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress),
-                    sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress),
+                const [activeTickets, resolvedTickets, currencies, rates, thalesPriceResponse] = await Promise.all([
+                    sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress, 0, BATCH_SIZE),
+                    sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress, 0, BATCH_SIZE),
                     priceFeedContract.getCurrencies(),
                     priceFeedContract.getRates(),
+                    axios.get(`${generalConfig.API_URL}/token/price`),
                 ]);
 
                 const exchangeRates: Rates = {};
@@ -33,6 +37,7 @@ const useUsersStatsV2Query = (
                         exchangeRates[`W${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }
                 });
+                exchangeRates['THALES'] = Number(thalesPriceResponse.data);
 
                 const tickets = [...activeTickets, ...resolvedTickets];
 
@@ -46,11 +51,12 @@ const useUsersStatsV2Query = (
 
                     const buyInAmount = coinFormatter(ticket.buyInAmount, networkId, collateral);
                     const totalQuote = bigNumberFormatter(ticket.totalQuote);
-                    const payout = buyInAmount / totalQuote;
+                    const buyInAmountInUsd = convertAmount ? buyInAmount * exchangeRates[collateral] : buyInAmount;
+                    const payout = buyInAmountInUsd / totalQuote;
 
-                    volume += convertAmount ? buyInAmount * exchangeRates[collateral] : buyInAmount;
+                    volume += buyInAmountInUsd;
                     if (ticket.isUserTheWinner && payout > highestWin) {
-                        highestWin = convertAmount ? payout * exchangeRates[collateral] : payout;
+                        highestWin = payout;
                     }
                     if (ticket.isUserTheWinner) {
                         lifetimeWins += 1;

@@ -83,7 +83,7 @@ export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20 = [
     50,
 ];
 export const PARLAY_LEADERBOARD_MINIMUM_GAMES = 2;
-export const HIDE_PARLAY_LEADERBOARD = true;
+export const HIDE_PARLAY_LEADERBOARD = false;
 
 export const MEDIUM_ODDS = 0.52;
 
@@ -101,3 +101,5 @@ export const GameStatusKey: Record<GameStatus, string> = {
     [GameStatus.ENETPULSE_INTERRUPTED]: 'interrupted',
     [GameStatus.ENETPULSE_CANCELED]: 'canceled',
 };
+
+export const BATCH_SIZE = 1000;

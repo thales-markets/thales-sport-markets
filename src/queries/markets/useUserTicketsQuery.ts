@@ -1,13 +1,14 @@
 import axios from 'axios';
+import { generalConfig, noCacheConfig } from 'config/general';
+import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { Ticket } from 'types/markets';
-import { generalConfig, noCacheConfig } from '../../config/general';
-import { updateTotalQuoteAndPayout } from '../../utils/marketsV2';
-import networkConnector from '../../utils/networkConnector';
-import { mapTicket } from '../../utils/tickets';
+import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
+import networkConnector from 'utils/networkConnector';
+import { mapTicket } from 'utils/tickets';
 
 export const useUserTicketsQuery = (
     user: string,
@@ -27,8 +28,8 @@ export const useUserTicketsQuery = (
                         playersInfoResponse,
                         liveScoresResponse,
                     ] = await Promise.all([
-                        sportsAMMDataContract.getActiveTicketsDataPerUser(user),
-                        sportsAMMDataContract.getResolvedTicketsDataPerUser(user),
+                        sportsAMMDataContract.getActiveTicketsDataPerUser(user, 0, BATCH_SIZE),
+                        sportsAMMDataContract.getResolvedTicketsDataPerUser(user, 0, BATCH_SIZE),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
                         axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),

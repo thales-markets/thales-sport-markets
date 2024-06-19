@@ -28,4 +28,5 @@ export const LINKS = {
     ThalesStaking: 'https://thalesmarket.io/token',
     ThalesTip99: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-99.md',
     ThalesTip142: 'https://github.com/thales-markets/thales-improvement-proposals/blob/main/TIPs/TIP-142.md',
+    ParlayLeaderboardV1: 'https://www.overtimemarkets.xyz/parlay-leaderboard',
 };

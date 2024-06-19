@@ -1117,7 +1117,9 @@ const LiquidityPool: React.FC = () => {
                                     </WarningContentInfo>
                                 )}
                             </ContentInfoContainer>
-                            <Return liquidityPoolAddress={liquidityPoolAddress} />
+                            {paramCollateral !== LiquidityPoolCollateral.THALES && (
+                                <Return liquidityPoolAddress={liquidityPoolAddress} />
+                            )}
                         </MainContentContainer>
                         <MainContentContainer>
                             {liquidityPoolData && (

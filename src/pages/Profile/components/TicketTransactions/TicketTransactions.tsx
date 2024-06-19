@@ -44,7 +44,14 @@ const TicketTransactions: React.FC<{ searchText?: string }> = ({ searchText }) =
         return userTickets;
     }, [userTicketsQuery.data, userTicketsQuery.isSuccess, searchText, isSearchTextWalletAddress]);
 
-    return <TicketTransactionsTable ticketTransactions={userTickets} isLoading={userTicketsQuery.isLoading} />;
+    return (
+        <TicketTransactionsTable
+            ticketTransactions={userTickets}
+            isLoading={userTicketsQuery.isLoading}
+            tableHeight="auto"
+            ticketsPerPage={20}
+        />
+    );
 };
 
 export default TicketTransactions;

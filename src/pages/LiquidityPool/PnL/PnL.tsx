@@ -37,8 +37,9 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const [liquidityPoolPnls, setLiquidityPoolPnls] = useState<LiquidityPoolPnls>([]);
 
+    // TODO temp disable THALES PnL
     const liquidityPoolPnlsQuery = useLiquidityPoolPnlsQuery(networkId, liquidityPoolAddress, {
-        enabled: isAppReady,
+        enabled: isAppReady && liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47',
     });
 
     useEffect(() => {
@@ -94,22 +95,24 @@ const PnL: React.FC<PnlProps> = ({ lifetimePnl, type, liquidityPoolAddress }) =>
         <Container>
             <Header noData={noData}>
                 <Title>{t(`liquidity-pool.pnl.${type}.title`)}</Title>
-                {type === LiquidityPoolPnlType.CUMULATIVE_PNL && (
-                    <LifetimePnlContainer>
-                        <LifetimePnlLabel>{t('liquidity-pool.pnl.lifetime-pnl')}:</LifetimePnlLabel>
-                        <LifetimePnl
-                            color={
-                                lifetimePnl === 0
-                                    ? theme.status.open
-                                    : lifetimePnl > 0
-                                    ? theme.status.win
-                                    : theme.status.loss
-                            }
-                        >
-                            {formatPercentageWithSign(lifetimePnl)}
-                        </LifetimePnl>
-                    </LifetimePnlContainer>
-                )}
+                {type === LiquidityPoolPnlType.CUMULATIVE_PNL &&
+                    // TODO temp disable THALES PnL
+                    liquidityPoolAddress !== '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47' && (
+                        <LifetimePnlContainer>
+                            <LifetimePnlLabel>{t('liquidity-pool.pnl.lifetime-pnl')}:</LifetimePnlLabel>
+                            <LifetimePnl
+                                color={
+                                    lifetimePnl === 0
+                                        ? theme.status.open
+                                        : lifetimePnl > 0
+                                        ? theme.status.win
+                                        : theme.status.loss
+                                }
+                            >
+                                {formatPercentageWithSign(lifetimePnl)}
+                            </LifetimePnl>
+                        </LifetimePnlContainer>
+                    )}
             </Header>
             {!noData ? (
                 <ChartContainer>

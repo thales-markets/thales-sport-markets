@@ -782,11 +782,25 @@ export const PaginationWrapper = styled(TablePagination)`
     width: 100%;
     height: auto;
     color: ${(props) => props.theme.textColor.primary} !important;
+    .MuiTablePagination-toolbar {
+        min-height: 48px;
+        @media (max-width: 767px) {
+            min-height: 48px;
+        }
+    }
     .MuiToolbar-root {
         padding: 0;
         display: flex;
         .MuiSelect-icon {
             color: ${(props) => props.theme.textColor.primary};
+        }
+        @media (max-width: 767px) {
+            font-size: 12px;
+        }
+    }
+    .MuiTypography-body2 {
+        @media (max-width: 767px) {
+            font-size: 12px;
         }
     }
     .MuiIconButton-root.Mui-disabled {
@@ -801,8 +815,14 @@ export const PaginationWrapper = styled(TablePagination)`
     .MuiTablePagination-selectRoot {
         @media (max-width: 767px) {
             margin-left: 0px;
-            margin-right: 0px;
+            margin-right: 5px;
         }
+    }
+    .MuiTablePagination-actions {
+        margin-left: 10px;
+    }
+    .MuiIconButton-root {
+        padding: 5px 10px;
     }
 `;
 
