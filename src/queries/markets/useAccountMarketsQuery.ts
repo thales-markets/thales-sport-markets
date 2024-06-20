@@ -20,7 +20,7 @@ const useAccountMarketsQuery = (
         async () => {
             try {
                 const response = await axios.get(
-                    `${generalConfig.API_URL}/${API_ROUTES.PositionBalance}/${networkId}?account=${walletAddress}`
+                    `${generalConfig.API_URL}/${API_ROUTES.PositionBalance}/${networkId}?account=${walletAddress}&exclude=claimed`
                 );
 
                 const positionBalances: PositionBalance[] = response?.data ? response.data : [];

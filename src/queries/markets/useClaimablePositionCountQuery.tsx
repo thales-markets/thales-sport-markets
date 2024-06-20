@@ -17,7 +17,7 @@ const useClaimablePositionCountQuery = (
         async () => {
             try {
                 const positionBalanceRequest = axios.get(
-                    `${generalConfig.API_URL}/${API_ROUTES.PositionBalance}/${networkId}?account=${walletAddress}&filter=claimable`
+                    `${generalConfig.API_URL}/${API_ROUTES.PositionBalance}/${networkId}?account=${walletAddress}&include=claimable&exclude=claimed`
                 );
                 const parlaysRequest = axios.get(
                     `${generalConfig.API_URL}/${API_ROUTES.Parlays}/${networkId}?account=${walletAddress}`
