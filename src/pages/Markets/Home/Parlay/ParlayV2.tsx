@@ -1,10 +1,11 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import { SportFilter, StatusFilter } from 'enums/markets';
+import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -25,7 +26,6 @@ import { isSameMarket } from 'utils/marketsV2';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
-
 type ParlayProps = {
     onSuccess?: () => void;
 };
@@ -46,6 +46,8 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
+
+    const previousTicketOdds = useRef<number[]>([]);
 
     const sportsAmmDataQuery = useSportsAmmDataQuery(networkId, {
         enabled: isAppReady,
@@ -92,6 +94,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                 },
                 []
             );
+
             const ticketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
                     liveSportOpenMarkets.some(
@@ -109,8 +112,12 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                         odd: openMarket.odds[ticketPosition.position],
                     };
                 });
+            const ticketOdds = ticketMarkets.map((market) => market.odd);
 
-            setTicketMarkets(ticketMarkets);
+            if (!isEqual(previousTicketOdds.current, ticketOdds)) {
+                setTicketMarkets(ticketMarkets);
+            }
+            previousTicketOdds.current = ticketOdds;
         }
     }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
 
