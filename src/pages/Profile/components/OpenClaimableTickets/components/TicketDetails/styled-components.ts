@@ -203,6 +203,26 @@ export const ClaimContainer = styled(FlexDivColumnNative)`
     }
 `;
 
+export const TwitterWrapper = styled.div`
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+    @media (max-width: 767px) {
+        right: 5px;
+    }
+`;
+
+export const TwitterIcon = styled.i`
+    font-size: 14px;
+    font-weight: 400;
+    color: ${(props) => props.theme.textColor.septenary};
+    cursor: pointer;
+    &:before {
+        font-family: HomepageIconsV2 !important;
+        content: '\\0021';
+    }
+`;
+
 export const additionalClaimButtonStyle: CSSProperties = {
     minWidth: '100px',
     maxWidth: '100px',

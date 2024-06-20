@@ -46,6 +46,8 @@ import {
     TicketInfo,
     TicketMarketsContainer,
     TotalQuoteContainer,
+    TwitterIcon,
+    TwitterWrapper,
     Value,
     WinLabel,
     WinValue,
@@ -149,6 +151,11 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
             }
             setIsSubmitting(false);
         }
+    };
+
+    const onTwitterIconClick = () => {
+        setShareTicketModalData(shareTicketData);
+        setShowShareTicketModal(true);
     };
 
     const shareTicketData = {
@@ -286,6 +293,9 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                         <Label>{t('profile.card.total-quote')}:</Label>
                         <Value>{formatTicketOdds(selectedOddsType, ticket.buyInAmount, ticket.payout)}</Value>
                     </TotalQuoteContainer>
+                    <TwitterWrapper>
+                        <TwitterIcon onClick={() => onTwitterIconClick()} />
+                    </TwitterWrapper>
                 </CollapseFooterContainer>
             </CollapsableContainer>
             {showShareTicketModal && shareTicketModalData && (
