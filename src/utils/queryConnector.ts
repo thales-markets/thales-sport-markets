@@ -23,7 +23,11 @@ export const refetchBalances = async (walletAddress: string, networkId: Network)
     await invalidateCache([
         getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Vouchers, [networkId, walletAddress]),
         getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress]),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress, 'f1']),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress, 'f1f2']),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress, 'f2']),
         getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Parlay, [networkId, walletAddress]),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Transactions, [networkId, walletAddress]),
     ]);
 
     await wait(WAIT_PERIOD_AFTER_CACHE_INVALIDATION_IN_SECONDS);
@@ -31,12 +35,20 @@ export const refetchBalances = async (walletAddress: string, networkId: Network)
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.GetsUSDWalletBalance(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucher(walletAddress, networkId));
+
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ParlayMarkets(networkId, walletAddress));
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountPositions(walletAddress, networkId));
+
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.UserTransactions(walletAddress, networkId));
 };
 
 export const refetchAfterClaim = async (walletAddress: string, networkId: Network) => {
     await invalidateCache([
         getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress]),
         getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Parlay, [networkId, walletAddress]),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress, 'f1']),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress, 'f1f2']),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress, 'f2']),
     ]);
 
     await wait(WAIT_PERIOD_AFTER_CACHE_INVALIDATION_IN_SECONDS);
