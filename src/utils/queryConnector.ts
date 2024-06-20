@@ -62,7 +62,14 @@ export const refetchAfterVoucherClaim = (walletAddress: string, networkId: Netwo
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucherEscrow(walletAddress, networkId));
 };
 
-export const refetchVaultData = (vaultAddress: string, walletAddress: string, networkId: Network) => {
+export const refetchVaultData = async (vaultAddress: string, walletAddress: string, networkId: Network) => {
+    await invalidateCache([
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.VaultTransactions, [networkId, vaultAddress]),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.VaultUserTransactions, [networkId, vaultAddress]),
+    ]);
+
+    await wait(WAIT_PERIOD_AFTER_CACHE_INVALIDATION_IN_SECONDS);
+
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.Data(vaultAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.UserData(vaultAddress, walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Vault.PnL(vaultAddress, networkId));
