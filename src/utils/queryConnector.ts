@@ -20,7 +20,11 @@ const queryConnector: QueryConnector = {
 };
 
 export const refetchBalances = async (walletAddress: string, networkId: Network) => {
-    await invalidateCache([getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Vouchers, [networkId, walletAddress])]);
+    await invalidateCache([
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Vouchers, [networkId, walletAddress]),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.PositionBalance, [networkId, walletAddress]),
+        getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Parlay, [networkId, walletAddress]),
+    ]);
 
     await wait(WAIT_PERIOD_AFTER_CACHE_INVALIDATION_IN_SECONDS);
 
