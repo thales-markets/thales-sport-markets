@@ -192,7 +192,9 @@
         },
         "settings": "Impostazioni",
         "filters": "Filtri",
-        "status": "Stato"
+        "status": "Stato",
+        "wrap-and-buy": "Avvolgi ETH e acquista",
+        "wrap-eth-tooltip": "Il tuo ETH viene prima avvolto in WETH e poi passato al contratto"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",

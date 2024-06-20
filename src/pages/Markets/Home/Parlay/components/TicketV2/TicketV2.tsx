@@ -155,10 +155,7 @@ const Ticket: React.FC<TicketProps> = ({
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
     const liveBetSlippage = useSelector(getLiveBetSlippage);
-    const selectedCollateralIndex =
-        isLiveTicket && getCollateral(networkId, ticketPayment.selectedCollateralIndex) === CRYPTO_CURRENCY_MAP.ETH
-            ? 0
-            : ticketPayment.selectedCollateralIndex;
+    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
     const buyInAmount = ticketPayment.amountToBuy;
 
     const [payout, setPayout] = useState(0);
@@ -433,13 +430,14 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMV2Contract && multipleCollateral && signer) {
+            const collateralToAllow = isLiveTicket && isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral;
             const collateralContractWithSigner = isDefaultCollateral
                 ? sUSDContract?.connect(signer)
-                : multipleCollateral[selectedCollateral]?.connect(signer);
+                : multipleCollateral[collateralToAllow]?.connect(signer);
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = coinParser(Number(buyInAmount).toString(), networkId, selectedCollateral);
+                    const parsedTicketPrice = coinParser(Number(buyInAmount).toString(), networkId, collateralToAllow);
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
@@ -453,7 +451,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             };
             if (isWalletConnected && buyInAmount) {
-                isEth ? setHasAllowance(true) : getAllowance();
+                isEth && !isLiveTicket ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -467,6 +465,7 @@ const Ticket: React.FC<TicketProps> = ({
         selectedCollateral,
         isEth,
         isDefaultCollateral,
+        isLiveTicket,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
@@ -545,7 +544,9 @@ const Ticket: React.FC<TicketProps> = ({
             try {
                 const collateralContractWithSigner = isDefaultCollateral
                     ? sUSDContract?.connect(signer)
-                    : multipleCollateral[selectedCollateral]?.connect(signer);
+                    : multipleCollateral[isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral]?.connect(
+                          signer
+                      );
 
                 const addressToApprove = sportsAMMV2Contract.address;
                 let txResult;
@@ -578,7 +579,13 @@ const Ticket: React.FC<TicketProps> = ({
     };
 
     const handleSubmit = async () => {
-        const { sportsAMMV2Contract, signer, liveTradingProcessorContract, sportsAMMDataContract } = networkConnector;
+        const {
+            sportsAMMV2Contract,
+            signer,
+            liveTradingProcessorContract,
+            sportsAMMDataContract,
+            multipleCollateral,
+        } = networkConnector;
 
         // TODO: separate logic for regular and live markets
         if (
@@ -610,16 +617,36 @@ const Ticket: React.FC<TicketProps> = ({
                     const liveTradeDataPosition = tradeData[0].position;
                     const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
 
-                    tx = await getLiveTradingProcessorTransaction(
-                        collateralAddress,
-                        sportsAMMV2ContractWithSigner,
-                        tradeData,
-                        parsedBuyInAmount,
-                        liveTotalQuote,
-                        referralId,
-                        additionalSlippage,
-                        isAA
-                    );
+                    if (isEth && multipleCollateral?.WETH) {
+                        const WETHContractWithSigner = multipleCollateral.WETH.connect(signer);
+
+                        const wrapTx = await WETHContractWithSigner.deposit({ value: parsedBuyInAmount });
+                        const wrapTxResult = await wrapTx.wait();
+
+                        if (wrapTxResult && wrapTxResult.transactionHash) {
+                            tx = await getLiveTradingProcessorTransaction(
+                                collateralAddress,
+                                sportsAMMV2ContractWithSigner,
+                                tradeData,
+                                parsedBuyInAmount,
+                                liveTotalQuote,
+                                referralId,
+                                additionalSlippage,
+                                isAA
+                            );
+                        }
+                    } else {
+                        tx = await getLiveTradingProcessorTransaction(
+                            collateralAddress,
+                            sportsAMMV2ContractWithSigner,
+                            tradeData,
+                            parsedBuyInAmount,
+                            liveTotalQuote,
+                            referralId,
+                            additionalSlippage,
+                            isAA
+                        );
+                    }
                 } else {
                     tx = await getSportsAMMV2Transaction(
                         collateralAddress,
@@ -636,7 +663,7 @@ const Ticket: React.FC<TicketProps> = ({
                     );
                 }
 
-                const txResult = isAA ? tx : await tx.wait();
+                const txResult = isAA ? tx : await tx?.wait();
 
                 if (txResult && txResult.transactionHash) {
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
@@ -826,9 +853,28 @@ const Ticket: React.FC<TicketProps> = ({
                 </Button>
             );
         }
-
         // Show Approve only on valid input buy amount
         if (!hasAllowance && buyInAmount && Number(buyInAmount) >= minBuyInAmount) {
+            if (isLiveTicket && isEth) {
+                return (
+                    <Tooltip
+                        overlay={t('common.wrap-eth-tooltip')}
+                        component={
+                            <Button
+                                disabled={submitDisabled}
+                                onClick={() =>
+                                    isParticle
+                                        ? handleAllowance(ethers.constants.MaxUint256)
+                                        : setOpenApprovalModal(true)
+                                }
+                                {...defaultButtonProps}
+                            >
+                                {t('common.wallet.approve')}
+                            </Button>
+                        }
+                    ></Tooltip>
+                );
+            }
             return (
                 <Button
                     disabled={submitDisabled}
@@ -839,6 +885,25 @@ const Ticket: React.FC<TicketProps> = ({
                 >
                     {t('common.wallet.approve')}
                 </Button>
+            );
+        }
+
+        if (isLiveTicket && isEth) {
+            return (
+                <>
+                    <Tooltip
+                        overlay={t('common.wrap-eth-tooltip')}
+                        component={
+                            <Button
+                                disabled={submitDisabled}
+                                onClick={async () => handleSubmit()}
+                                {...defaultButtonProps}
+                            >
+                                {t(`common.wrap-and-buy`)}
+                            </Button>
+                        }
+                    ></Tooltip>
+                </>
             );
         }
 
@@ -1138,9 +1203,7 @@ const Ticket: React.FC<TicketProps> = ({
                         placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                         currencyComponent={
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId).filter((collateral) =>
-                                    isLiveTicket ? collateral !== CRYPTO_CURRENCY_MAP.ETH : true
-                                )}
+                                collateralArray={getCollaterals(networkId)}
                                 selectedItem={selectedCollateralIndex}
                                 onChangeCollateral={() => {
                                     setCollateralAmount('');
@@ -1381,7 +1444,7 @@ const Ticket: React.FC<TicketProps> = ({
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
                     defaultAmount={Number(buyInAmount) * (1 + APPROVAL_BUFFER)}
                     collateralIndex={selectedCollateralIndex}
-                    tokenSymbol={selectedCollateral}
+                    tokenSymbol={isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}

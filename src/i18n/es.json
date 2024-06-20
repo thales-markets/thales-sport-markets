@@ -192,7 +192,9 @@
         },
         "settings": "Ajustes",
         "filters": "Filtros",
-        "status": "Estado"
+        "status": "Estado",
+        "wrap-eth-tooltip": "Su ETH primero se incluye en WETH y luego se pasa al contrato.",
+        "wrap-and-buy": "Envuelva ETH y compre"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",

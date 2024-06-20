@@ -192,7 +192,9 @@
         },
         "settings": "Настройки",
         "filters": "Фильтры",
-        "status": "Положение дел"
+        "status": "Положение дел",
+        "wrap-and-buy": "Заверните ETH и купите",
+        "wrap-eth-tooltip": "Ваш ETH сначала оборачивается в WETH, а затем передается в контракт."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",

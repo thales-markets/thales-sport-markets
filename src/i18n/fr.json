@@ -192,7 +192,9 @@
         },
         "settings": "Paramètres",
         "filters": "Filtres",
-        "status": "Statut"
+        "status": "Statut",
+        "wrap-and-buy": "Enveloppez l’ETH et achetez",
+        "wrap-eth-tooltip": "Votre ETH est d'abord enveloppé dans WETH puis transmis au contrat"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
