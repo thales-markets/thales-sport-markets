@@ -224,7 +224,7 @@ export const TwitterWrapper = styled.div`
     position: absolute;
     bottom: 0px;
     right: 5px;
-    @media (max-width: 600px) {
+    @media (max-width: 767px) {
         bottom: -2px;
         right: 2px;
     }
