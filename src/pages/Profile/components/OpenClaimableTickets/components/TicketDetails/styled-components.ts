@@ -76,12 +76,12 @@ export const NumberOfGamesContainer = styled(FlexDivStart)`
     }
 `;
 
-export const InfoContainerColumn = styled(FlexDivColumnNative)`
-    min-width: 100px;
+export const InfoContainerColumn = styled(FlexDivColumnNative)<{ isOpen?: boolean }>`
+    min-width: ${(props) => (props.isOpen ? '120px' : '100px')};
     justify-content: flex-start;
     margin-right: 10px;
     @media (max-width: 767px) {{
-        min-width: 85px;
+        min-width: ${(props) => (props.isOpen ? '90px' : '85px')};
         flex-direction: column;
         margin-left: 0px;
         margin-right: 4px;

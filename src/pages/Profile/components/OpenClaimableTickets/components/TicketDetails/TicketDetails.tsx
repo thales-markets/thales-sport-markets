@@ -211,19 +211,19 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                             <Value>{ticket.numOfMarkets}</Value>
                         </NumberOfGamesContainer>
                     </TicketInfo>
-                    <InfoContainerColumn>
+                    <InfoContainerColumn isOpen={!isClaimable}>
                         <Label>{t('profile.card.ticket-paid')}:</Label>
                         <Value>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Value>
                     </InfoContainerColumn>
                     {isMobile && !isClaimable && (
-                        <InfoContainerColumn>
+                        <InfoContainerColumn isOpen={!isClaimable}>
                             <WinLabel>{t('profile.card.payout')}:</WinLabel>
                             <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                         </InfoContainerColumn>
                     )}
                     {!isMobile && (
                         <>
-                            <InfoContainerColumn>
+                            <InfoContainerColumn isOpen={!isClaimable}>
                                 <WinLabel>{t('profile.card.payout')}:</WinLabel>
                                 <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                             </InfoContainerColumn>

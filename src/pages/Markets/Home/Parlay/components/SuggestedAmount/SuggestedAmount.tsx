@@ -1,14 +1,14 @@
 import { USD_SIGN } from 'constants/currency';
 import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getNetworkId } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import { COLLATERAL_DECIMALS, formatCurrencyWithKey } from 'thales-utils';
-import { getCollateral } from 'utils/collaterals';
+import { getCollateral, getDefaultCollateral } from 'utils/collaterals';
 
 const AMOUNTS = [3, 10, 20, 50, 100];
 
@@ -27,18 +27,23 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
 }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const collateral = getCollateral(networkId, collateralIndex);
+    const collateral = useMemo(() => getCollateral(networkId, collateralIndex), [networkId, collateralIndex]);
+    const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
 
     const convertFromStable = useCallback(
         (value: number) => {
             const rate = exchangeRates?.[collateral];
-            const priceFeedBuffer = 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE;
-            return rate
-                ? Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[collateral]) /
-                      10 ** COLLATERAL_DECIMALS[collateral]
-                : 0;
+            if (collateral == defaultCollateral) {
+                return value;
+            } else {
+                const priceFeedBuffer = 1 - ALTCOIN_CONVERSION_BUFFER_PERCENTAGE;
+                return rate
+                    ? Math.ceil((value / (rate * priceFeedBuffer)) * 10 ** COLLATERAL_DECIMALS[collateral]) /
+                          10 ** COLLATERAL_DECIMALS[collateral]
+                    : 0;
+            }
         },
-        [collateral, exchangeRates]
+        [collateral, defaultCollateral, exchangeRates]
     );
 
     return (
