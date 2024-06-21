@@ -232,36 +232,32 @@ const LiveTag = styled.span<{ readOnly?: boolean }>`
     line-height: 11px;
     padding: ${(props) => (props.readOnly ? '0 10px' : '0 12px')};
     width: fit-content;
-    margin-bottom: 5px;
+    margin-bottom: ${(props) => (props.readOnly ? '4px' : '5px')};
 `;
 
 const MarketPositionContainer = styled(FlexDivColumn)<{ readOnly?: boolean }>`
     display: block;
     width: 100%;
     font-size: ${(props) => (props.readOnly ? '11px' : '13px')};
-    line-height: ${(props) => (props.readOnly ? '13px' : '13px')};
-    @media (max-width: 950px) {
-        font-size: ${(props) => (props.readOnly ? '10px' : '13px')};
-        line-height: ${(props) => (props.readOnly ? '12px' : '13px')};
-    }
+    line-height: ${(props) => (props.readOnly ? '11px' : '13px')};
 `;
 
 const MatchLabel = styled(FlexDivRow)<{ readOnly?: boolean; isLive?: boolean }>`
     font-weight: 600;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: ${(props) => (props.readOnly ? '2px' : '5px')};
+    margin-bottom: ${(props) => (props.readOnly ? '4px' : '5px')};
     text-align: start;
     @media (max-width: 950px) {
-        margin-bottom: ${(props) => (props.readOnly ? (props.isLive ? '2px' : '1px') : '5px')};
+        margin-bottom: ${(props) => (props.readOnly ? (props.isLive ? '4px' : '2px') : '5px')};
     }
 `;
 
 const MarketTypeInfo = styled(FlexDivRow)<{ readOnly?: boolean; isLive?: boolean }>`
     font-weight: 600;
     color: ${(props) => props.theme.textColor.quinary};
-    margin-bottom: ${(props) => (props.readOnly ? '2px' : '5px')};
+    margin-bottom: ${(props) => (props.readOnly ? '4px' : '5px')};
     @media (max-width: 950px) {
-        margin-bottom: ${(props) => (props.readOnly ? (props.isLive ? '2px' : '1px') : '5px')};
+        margin-bottom: ${(props) => (props.readOnly ? (props.isLive ? '4px' : '2px') : '5px')};
     }
 `;
 

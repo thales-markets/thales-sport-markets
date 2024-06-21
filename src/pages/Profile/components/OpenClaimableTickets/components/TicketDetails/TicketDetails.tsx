@@ -173,7 +173,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
             setShowShareTicketModal ? setShowShareTicketModal(false) : null;
         },
         isTicketLost: ticket.isLost,
-        isTicketResolved: ticket.isResolved,
         collateral: ticket.collateral,
         isLive: ticket.isLive,
     };
@@ -306,7 +305,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                     payout={shareTicketModalData.payout}
                     onClose={shareTicketModalData.onClose}
                     isTicketLost={shareTicketModalData.isTicketLost}
-                    isTicketResolved={shareTicketModalData.isTicketResolved}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
                 />
