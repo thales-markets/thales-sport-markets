@@ -158,7 +158,12 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                 if (notOpenedMarkets.length > 0) dispatch(removeAll());
             }
 
-            setTicketMarkets(ticketMarkets);
+            const ticketOdds = ticketMarkets.map((market) => market.odd);
+
+            if (!isEqual(previousTicketOdds.current, ticketOdds)) {
+                setTicketMarkets(ticketMarkets);
+            }
+            previousTicketOdds.current = ticketOdds;
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch, isLiveFilterSelected]);
 
