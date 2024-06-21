@@ -47,7 +47,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
 
-    const previousTicketOdds = useRef<number[]>([]);
+    const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string }[]>([]);
 
     const sportsAmmDataQuery = useSportsAmmDataQuery(networkId, {
         enabled: isAppReady,
@@ -112,7 +112,11 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                         odd: openMarket.odds[ticketPosition.position],
                     };
                 });
-            const ticketOdds = ticketMarkets.map((market) => market.odd);
+            const ticketOdds = ticketMarkets.map((market) => ({
+                odd: market.odd,
+                position: market.position,
+                gameId: market.gameId,
+            }));
 
             if (!isEqual(previousTicketOdds.current, ticketOdds)) {
                 setTicketMarkets(ticketMarkets);
@@ -158,7 +162,16 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                 if (notOpenedMarkets.length > 0) dispatch(removeAll());
             }
 
-            setTicketMarkets(ticketMarkets);
+            const ticketOdds = ticketMarkets.map((market) => ({
+                odd: market.odd,
+                position: market.position,
+                gameId: market.gameId,
+            }));
+
+            if (!isEqual(previousTicketOdds.current, ticketOdds)) {
+                setTicketMarkets(ticketMarkets);
+            }
+            previousTicketOdds.current = ticketOdds;
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch, isLiveFilterSelected]);
 
