@@ -229,8 +229,8 @@ const LiveTag = styled.span<{ readOnly?: boolean }>`
     font-weight: 600;
     font-size: 10px;
     height: 12px;
-    line-height: 12px;
-    padding: ${(props) => (props.readOnly ? '0 12px' : '0 10px')};
+    line-height: 11px;
+    padding: ${(props) => (props.readOnly ? '0 10px' : '0 12px')};
     width: fit-content;
     margin-bottom: 5px;
 `;
