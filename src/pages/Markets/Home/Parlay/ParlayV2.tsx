@@ -161,7 +161,12 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
             {ticketMarkets.length > 0 ? (
                 <>
-                    {!isMobile && <Title>{t('markets.parlay.ticket-slip')}</Title>}
+                    {!isMobile && (
+                        <Title>
+                            {t('markets.parlay.ticket-slip')}
+                            <Count>{ticket.length}</Count>
+                        </Title>
+                    )}
                     <ThalesBonusContainer>
                         <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
                     </ThalesBonusContainer>
@@ -237,6 +242,15 @@ const Title = styled(FlexDivCentered)`
     text-transform: uppercase;
     height: 20px;
     margin-bottom: 10px;
+`;
+
+const Count = styled(FlexDivCentered)`
+    border-radius: 8px;
+    min-width: 20px;
+    color: ${(props) => props.theme.textColor.tertiary};
+    background: ${(props) => props.theme.background.quaternary};
+    padding: 0 5px;
+    margin-left: 6px;
 `;
 
 const ThalesBonusContainer = styled(FlexDivCentered)`
