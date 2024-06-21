@@ -52,7 +52,6 @@ const Ticket: React.FC<TicketProps> = (props) => {
                     paid={lastValidTicket.buyInAmount}
                     payout={lastValidTicket.payout}
                     isTicketLost={lastValidTicket.isLost}
-                    isTicketResolved={lastValidTicket.isResolved}
                     collateral={lastValidTicket.collateral}
                     isLive={lastValidTicket.isLive}
                 />

@@ -4,7 +4,6 @@ import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React from 'react';
 import QRCode from 'react-qr-code';
 import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
@@ -29,7 +28,6 @@ type MyTicketProps = {
     paid: number;
     payout: number;
     isTicketLost: boolean;
-    isTicketResolved: boolean;
     collateral: Coins;
     isLive: boolean;
 };
@@ -40,19 +38,13 @@ const MyTicket: React.FC<MyTicketProps> = ({
     paid,
     payout,
     isTicketLost,
-    isTicketResolved,
     collateral,
     isLive,
 }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const selectedOddsType = useSelector(getOddsType);
 
     const isTicket = !multiSingle;
-
-    const matchInfoStyle = isMobile
-        ? { fontSize: '10px', lineHeight: '12px' }
-        : { fontSize: '11px', lineHeight: '14px' };
 
     const reffererIDQuery = useGetReffererIdQuery(walletAddress || '', { enabled: !!walletAddress });
     const reffererID = reffererIDQuery.isSuccess && reffererIDQuery.data ? reffererIDQuery.data : '';
@@ -84,16 +76,12 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 )}
                 <PayoutWrapper>
                     <PayoutRow>
-                        <Square isLost={isTicketLost} isResolved={isTicketResolved} />
-                        <PayoutLabel isLost={isTicketLost} isResolved={isTicketResolved}>
-                            {t('markets.parlay.payout')}
-                        </PayoutLabel>
-                        <Square isLost={isTicketLost} isResolved={isTicketResolved} />
+                        <Square isLost={isTicketLost} />
+                        <PayoutLabel isLost={isTicketLost}>{t('markets.parlay.payout')}</PayoutLabel>
+                        <Square isLost={isTicketLost} />
                     </PayoutRow>
                     <PayoutRow>
-                        <PayoutValue isLost={isTicketLost} isResolved={isTicketResolved}>
-                            {formatCurrencyWithKey(collateral, payout)}
-                        </PayoutValue>
+                        <PayoutValue isLost={isTicketLost}>{formatCurrencyWithKey(collateral, payout)}</PayoutValue>
                     </PayoutRow>
                 </PayoutWrapper>
             </ContentRow>
@@ -103,12 +91,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     return (
                         <React.Fragment key={index}>
                             <RowMarket>
-                                <MatchInfoV2
-                                    market={market}
-                                    readOnly={true}
-                                    customStyle={matchInfoStyle}
-                                    isLive={isLive}
-                                />
+                                <MatchInfoV2 market={market} readOnly={true} isLive={isLive} />
                             </RowMarket>
                             {markets.length !== index + 1 && <HorizontalDashedLine />}
                         </React.Fragment>
@@ -202,25 +185,25 @@ const PayoutWrapper = styled.div`
 
 const PayoutRow = styled(FlexDivCentered)``;
 
-const PayoutLabel = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
-    font-size: ${(props) => (props.isResolved ? '32' : '18')}px;
-    line-height: ${(props) => (props.isResolved ? '32' : '18')}px;
+const PayoutLabel = styled.span<{ isLost?: boolean }>`
+    font-size: 24px;
+    line-height: 24px;
     font-weight: 400;
     padding: 0 5px;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')};
 `;
 
-const Square = styled.div<{ isLost?: boolean; isResolved?: boolean }>`
-    width: ${(props) => (props.isResolved ? '10' : '8')}px;
-    height: ${(props) => (props.isResolved ? '10' : '8')}px;
+const Square = styled.div<{ isLost?: boolean }>`
+    width: 10px;
+    height: 10px;
     transform: rotate(-45deg);
     background: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
 `;
 
-const PayoutValue = styled.span<{ isLost?: boolean; isResolved?: boolean }>`
-    font-size: ${(props) => (props.isResolved ? '35' : '30')}px;
-    line-height: ${(props) => (props.isResolved ? '37' : '32')}px;
+const PayoutValue = styled.span<{ isLost?: boolean }>`
+    font-size: 30px;
+    line-height: 32px;
     font-weight: 600;
     color: ${(props) => (props.isLost ? props.theme.status.loss : props.theme.status.win)};
     ${(props) => (props.isLost ? `text-decoration: line-through 2px solid ${props.theme.status.loss};` : '')}
