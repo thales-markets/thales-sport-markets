@@ -2,8 +2,10 @@ import Scroll from 'components/Scroll';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
+import { useSelector } from 'react-redux';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { getTicket } from '../../../../../../redux/modules/ticket';
 import { ThemeInterface } from '../../../../../../types/ui';
 import Parlay from '../../ParlayV2';
 
@@ -15,6 +17,7 @@ type TicketMobileModalProps = {
 const TicketMobileModal: React.FC<TicketMobileModalProps> = ({ onClose, isOpen }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
+    const ticket = useSelector(getTicket);
 
     return (
         <ReactModal
@@ -25,7 +28,10 @@ const TicketMobileModal: React.FC<TicketMobileModalProps> = ({ onClose, isOpen }
         >
             <Container>
                 <Header>
-                    <Title>{t('markets.parlay.ticket-slip')}</Title>
+                    <Title>
+                        {t('markets.parlay.ticket-slip')}
+                        <Count>{ticket.length}</Count>
+                    </Title>
                 </Header>
                 <CloseIcon className="icon icon--close" onClick={onClose} />
                 <Scroll height="calc(100vh)">
@@ -58,6 +64,15 @@ const Title = styled(FlexDivCentered)`
     text-transform: uppercase;
     height: 30px;
     margin-top: 8px;
+`;
+
+const Count = styled(FlexDivCentered)`
+    border-radius: 8px;
+    min-width: 20px;
+    color: ${(props) => props.theme.textColor.tertiary};
+    background: ${(props) => props.theme.background.quaternary};
+    padding: 0 5px;
+    margin-left: 6px;
 `;
 
 const CloseIcon = styled.i`
