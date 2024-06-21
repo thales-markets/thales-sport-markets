@@ -114,6 +114,8 @@ const connectors = connectorsForWallets([
             particleWallet({ chains, authType: 'apple' }),
             particleWallet({ chains, authType: 'twitter' }),
             particleWallet({ chains, authType: 'discord' }),
+            particleWallet({ chains, authType: 'email' }),
+            particleWallet({ chains, authType: 'phone' }),
         ],
     },
 ]);
