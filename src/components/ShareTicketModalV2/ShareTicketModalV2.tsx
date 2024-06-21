@@ -21,7 +21,6 @@ export type ShareTicketModalProps = {
     payout: number;
     onClose: () => void;
     isTicketLost: boolean;
-    isTicketResolved: boolean;
     collateral: Coins;
     isLive: boolean;
 };
@@ -37,7 +36,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     payout,
     onClose,
     isTicketLost,
-    isTicketResolved,
     collateral,
     isLive,
 }) => {
@@ -240,7 +238,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     paid={paid}
                     payout={payout}
                     isTicketLost={isTicketLost}
-                    isTicketResolved={isTicketResolved}
                     collateral={collateral}
                     isLive={isLive}
                 />

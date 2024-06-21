@@ -690,7 +690,6 @@ const Ticket: React.FC<TicketProps> = ({
                                 onSuccess && onSuccess();
                             },
                             isTicketLost: false,
-                            isTicketResolved: false,
                             collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                             isLive: false,
                         };
@@ -754,7 +753,6 @@ const Ticket: React.FC<TicketProps> = ({
                                             onSuccess && onSuccess();
                                         },
                                         isTicketLost: false,
-                                        isTicketResolved: false,
                                         collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                                         isLive: true,
                                     };
@@ -1020,7 +1018,6 @@ const Ticket: React.FC<TicketProps> = ({
             payout: payout,
             onClose: onModalClose,
             isTicketLost: false,
-            isTicketResolved: false,
             collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
             isLive: !!markets[0].live,
         };
@@ -1435,7 +1432,6 @@ const Ticket: React.FC<TicketProps> = ({
                     payout={shareTicketModalData.payout}
                     onClose={shareTicketModalData.onClose}
                     isTicketLost={shareTicketModalData.isTicketLost}
-                    isTicketResolved={shareTicketModalData.isTicketResolved}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
                 />
