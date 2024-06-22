@@ -342,7 +342,8 @@ export const showLiveInfo = (status: GameStatus | undefined) => {
         status !== GameStatus.RUNDOWN_CANCELED &&
         status !== GameStatus.RUNDOWN_DELAYED &&
         status !== GameStatus.RUNDOWN_RAIN_DELAY &&
-        status !== GameStatus.RUNDOWN_ABANDONED
+        status !== GameStatus.RUNDOWN_ABANDONED &&
+        status !== GameStatus.STATUS_SCHEDULED
     );
 };
 
@@ -353,6 +354,7 @@ export const showGameScore = (status: GameStatus | undefined) => {
         status !== GameStatus.RUNDOWN_DELAYED &&
         status !== GameStatus.RUNDOWN_RAIN_DELAY &&
         status !== GameStatus.RUNDOWN_ABANDONED &&
+        status !== GameStatus.STATUS_SCHEDULED &&
         status !== GameStatus.ENETPULSE_INTERRUPTED &&
         status !== GameStatus.ENETPULSE_CANCELED
     );

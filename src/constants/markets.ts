@@ -96,6 +96,7 @@ export const GameStatusKey: Record<GameStatus, string> = {
     [GameStatus.RUNDOWN_DELAYED]: 'delayed',
     [GameStatus.RUNDOWN_RAIN_DELAY]: 'rain-delay',
     [GameStatus.RUNDOWN_ABANDONED]: 'abandoned',
+    [GameStatus.STATUS_SCHEDULED]: 'scheduled',
     [GameStatus.RUNDOWN_OVERTIME]: '',
     [GameStatus.ENETPULSE_FINISHED]: '',
     [GameStatus.ENETPULSE_INTERRUPTED]: 'interrupted',
