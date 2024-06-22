@@ -453,6 +453,7 @@
             "abandoned": "Abandoned",
             "interrupted": "Interrupted",
             "scheduled": "Scheduled",
+            "pre-fight": "Pre-fight",
             "loss": "Loss",
             "won": "Won",
             "live-trading-paused": "Live trading paused",
