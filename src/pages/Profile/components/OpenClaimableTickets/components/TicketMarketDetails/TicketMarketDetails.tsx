@@ -144,8 +144,6 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                         {showLiveInfo(liveScore.gameStatus) &&
                             (liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
                                 <TicketMarketStatus>{t('markets.market-card.half-time')}</TicketMarketStatus>
-                            ) : liveScore.gameStatus == GameStatus.RUNDOWN_END_OF_ROUND ? (
-                                <TicketMarketStatus>{t('markets.market-card.end-of-round')}</TicketMarketStatus>
                             ) : (
                                 <MatchPeriodContainer>
                                     <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${

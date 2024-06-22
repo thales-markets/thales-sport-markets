@@ -95,10 +95,6 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
                             <MatchScoreContainer>
                                 {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
                                     <Status color={theme.status.started}>{t('markets.market-card.half-time')}</Status>
-                                ) : liveScore.gameStatus == GameStatus.RUNDOWN_END_OF_ROUND ? (
-                                    <Status color={theme.status.started}>
-                                        {t('markets.market-card.end-of-round')}
-                                    </Status>
                                 ) : (
                                     <MatchPeriodContainer>
                                         <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
