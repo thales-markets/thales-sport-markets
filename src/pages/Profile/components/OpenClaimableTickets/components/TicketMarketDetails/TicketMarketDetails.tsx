@@ -55,23 +55,25 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
     const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
         showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
             <>
-                <ScoreContainer>
-                    <TeamScoreLabel isResolved={market.isResolved}>
-                        {market.leagueId == League.UFC
-                            ? Number(scoreData.homeScore) > 0
-                                ? 'W'
-                                : 'L'
-                            : scoreData.homeScore}
-                    </TeamScoreLabel>
-                    <TeamScoreLabel isResolved={market.isResolved}>
-                        {market.leagueId == League.UFC
-                            ? Number(scoreData.awayScore) > 0
-                                ? 'W'
-                                : 'L'
-                            : scoreData.awayScore}
-                    </TeamScoreLabel>
-                </ScoreContainer>
-                {!isMobile && (market.isResolved || market.isGameFinished) && market.leagueId === League.UFC && (
+                {((market.leagueId === League.UFC && market.isGameFinished) || market.leagueId !== League.UFC) && (
+                    <ScoreContainer>
+                        <TeamScoreLabel isResolved={market.isResolved}>
+                            {market.leagueId == League.UFC
+                                ? Number(scoreData.homeScore) > 0
+                                    ? 'W'
+                                    : 'L'
+                                : scoreData.homeScore}
+                        </TeamScoreLabel>
+                        <TeamScoreLabel isResolved={market.isResolved}>
+                            {market.leagueId == League.UFC
+                                ? Number(scoreData.awayScore) > 0
+                                    ? 'W'
+                                    : 'L'
+                                : scoreData.awayScore}
+                        </TeamScoreLabel>
+                    </ScoreContainer>
+                )}
+                {!isMobile && market.leagueId === League.UFC && market.isGameFinished && (
                     <ScoreContainer>
                         <TeamScoreLabel className="period" isResolved={market.isResolved}>
                             {`(R${Number(scoreData.homeScore) > 0 ? scoreData.homeScore : scoreData.awayScore})`}
@@ -79,6 +81,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                     </ScoreContainer>
                 )}
                 {!isMobile &&
+                    // TODO check logic because of 0:0 results when isResolved == true, but isGameFinished == false
                     (market.isResolved || market.isGameFinished) &&
                     leagueSport !== Sport.CRICKET &&
                     market.leagueId !== League.UFC &&
@@ -141,6 +144,8 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
                         {showLiveInfo(liveScore.gameStatus) &&
                             (liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
                                 <TicketMarketStatus>{t('markets.market-card.half-time')}</TicketMarketStatus>
+                            ) : liveScore.gameStatus == GameStatus.RUNDOWN_END_OF_ROUND ? (
+                                <TicketMarketStatus>{t('markets.market-card.end-of-round')}</TicketMarketStatus>
                             ) : (
                                 <MatchPeriodContainer>
                                     <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
