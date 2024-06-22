@@ -200,8 +200,6 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                             <PeriodsContainer>
                                                 {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
                                                     <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
-                                                ) : liveScore.gameStatus == GameStatus.RUNDOWN_END_OF_ROUND ? (
-                                                    <InfoLabel>{t('markets.market-card.end-of-round')}</InfoLabel>
                                                 ) : (
                                                     <>
                                                         <InfoLabel>
