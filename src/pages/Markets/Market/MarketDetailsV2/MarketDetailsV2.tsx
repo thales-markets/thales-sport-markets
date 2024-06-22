@@ -112,7 +112,8 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                     <Status backgroundColor={market.isCancelled ? theme.status.canceled : theme.background.secondary}>
                         {market.isCancelled ? (
                             t('markets.market-card.canceled')
-                        ) : market.isResolved || market.isGameFinished ? (
+                        ) : // TODO check logic because of 0:0 results when isResolved == true, but isGameFinished == false
+                        market.isResolved || market.isGameFinished ? (
                             showGameScore(market.gameStatus) || !market.gameStatus ? (
                                 <ResultContainer>
                                     <ResultLabel>
@@ -181,22 +182,26 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                             liveScore ? (
                                 showGameScore(liveScore.gameStatus) || !liveScore.gameStatus ? (
                                     <ResultContainer>
-                                        <ResultLabel>
-                                            {liveScore.homeScore + ' - ' + liveScore.awayScore}{' '}
-                                            {leagueSport === Sport.SOCCER && liveScore.period == 2 && (
-                                                <InfoLabel className="football">
-                                                    {' (' +
-                                                        liveScore.homeScoreByPeriod[0] +
-                                                        ' - ' +
-                                                        liveScore.awayScoreByPeriod[0] +
-                                                        ')'}
-                                                </InfoLabel>
-                                            )}
-                                        </ResultLabel>
+                                        {market.leagueId !== League.UFC && (
+                                            <ResultLabel>
+                                                {liveScore.homeScore + ' - ' + liveScore.awayScore}{' '}
+                                                {leagueSport === Sport.SOCCER && liveScore.period == 2 && (
+                                                    <InfoLabel className="football">
+                                                        {' (' +
+                                                            liveScore.homeScoreByPeriod[0] +
+                                                            ' - ' +
+                                                            liveScore.awayScoreByPeriod[0] +
+                                                            ')'}
+                                                    </InfoLabel>
+                                                )}
+                                            </ResultLabel>
+                                        )}
                                         {showLiveInfo(liveScore.gameStatus) && (
                                             <PeriodsContainer>
                                                 {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
                                                     <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
+                                                ) : liveScore.gameStatus == GameStatus.RUNDOWN_END_OF_ROUND ? (
+                                                    <InfoLabel>{t('markets.market-card.end-of-round')}</InfoLabel>
                                                 ) : (
                                                     <>
                                                         <InfoLabel>

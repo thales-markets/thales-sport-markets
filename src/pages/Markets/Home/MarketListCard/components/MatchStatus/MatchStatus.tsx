@@ -32,23 +32,25 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
     const getScoreComponent = (scoreData: SportMarket | SportMarketScore) =>
         showGameScore(scoreData.gameStatus) || !scoreData.gameStatus ? (
             <FlexDivRow>
-                <ScoreContainer>
-                    <TeamScoreLabel isResolved={market.isResolved}>
-                        {market.leagueId == League.UFC
-                            ? Number(scoreData.homeScore) > 0
-                                ? 'W'
-                                : 'L'
-                            : scoreData.homeScore}
-                    </TeamScoreLabel>
-                    <TeamScoreLabel isResolved={market.isResolved}>
-                        {market.leagueId == League.UFC
-                            ? Number(scoreData.awayScore) > 0
-                                ? 'W'
-                                : 'L'
-                            : scoreData.awayScore}
-                    </TeamScoreLabel>
-                </ScoreContainer>
-                {market.leagueId === League.UFC && (
+                {((market.leagueId === League.UFC && market.isGameFinished) || market.leagueId !== League.UFC) && (
+                    <ScoreContainer>
+                        <TeamScoreLabel isResolved={market.isResolved}>
+                            {market.leagueId == League.UFC
+                                ? Number(scoreData.homeScore) > 0
+                                    ? 'W'
+                                    : 'L'
+                                : scoreData.homeScore}
+                        </TeamScoreLabel>
+                        <TeamScoreLabel isResolved={market.isResolved}>
+                            {market.leagueId == League.UFC
+                                ? Number(scoreData.awayScore) > 0
+                                    ? 'W'
+                                    : 'L'
+                                : scoreData.awayScore}
+                        </TeamScoreLabel>
+                    </ScoreContainer>
+                )}
+                {market.leagueId === League.UFC && market.isGameFinished && (
                     <ScoreContainer>
                         <TeamScoreLabel className="period" isResolved={market.isResolved}>
                             {`(R${Number(scoreData.homeScore) > 0 ? scoreData.homeScore : scoreData.awayScore})`}
@@ -83,15 +85,20 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
         <Container>
             {market.isCancelled ? (
                 <Status color={theme.status.canceled}>{t('markets.market-card.canceled')}</Status>
-            ) : market.isResolved || market.isGameFinished ? (
+            ) : // TODO check logic because of 0:0 results when isResolved == true, but isGameFinished == false
+            market.isResolved || market.isGameFinished ? (
                 <>{getScoreComponent(market)}</>
             ) : isPendingResolution ? (
                 liveScore ? (
                     <>
                         {showLiveInfo(liveScore.gameStatus) && (
-                            <FlexDivRow>
+                            <MatchScoreContainer>
                                 {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
                                     <Status color={theme.status.started}>{t('markets.market-card.half-time')}</Status>
+                                ) : liveScore.gameStatus == GameStatus.RUNDOWN_END_OF_ROUND ? (
+                                    <Status color={theme.status.started}>
+                                        {t('markets.market-card.end-of-round')}
+                                    </Status>
                                 ) : (
                                     <MatchPeriodContainer>
                                         <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
@@ -107,7 +114,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
                                         </FlexDivCentered>
                                     </MatchPeriodContainer>
                                 )}
-                            </FlexDivRow>
+                            </MatchScoreContainer>
                         )}
                         {getScoreComponent(liveScore)}
                     </>
@@ -134,6 +141,10 @@ const Status = styled.span<{ color: string }>`
     color: ${(props) => props.color};
     align-self: center;
     justify-content: space-evenly;
+`;
+
+const MatchScoreContainer = styled(FlexDivRow)`
+    align-items: center;
 `;
 
 const MatchPeriodContainer = styled(FlexDivColumnCentered)`
