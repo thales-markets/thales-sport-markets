@@ -20,7 +20,7 @@ const queryConnector: QueryConnector = {
 };
 
 export const refetchBalances = async (walletAddress: string, networkId: Network) => {
-    await wait(2);
+    await wait(3);
 
     await invalidateCache([
         getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Vouchers, [networkId, walletAddress]),
@@ -32,11 +32,13 @@ export const refetchBalances = async (walletAddress: string, networkId: Network)
         getCacheKey(CACHE_PREFIX_KEYS.SportsMarkets.Transactions, [networkId, walletAddress]),
     ]);
 
-    await wait(WAIT_PERIOD_AFTER_CACHE_INVALIDATION_IN_SECONDS);
+    await wait(6);
 
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.GetsUSDWalletBalance(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkId));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Wallet.OvertimeVoucher(walletAddress, networkId));
+
+    await wait(5);
 
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.ParlayMarkets(networkId, walletAddress));
     queryConnector.queryClient.invalidateQueries(QUERY_KEYS.AccountPositions(walletAddress, networkId));
