@@ -54,10 +54,13 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import {
+    DEFAULT_CURRENCY_DECIMALS,
+    LONG_CURRENCY_DECIMALS,
     bigNumberFormatter,
     ceilNumberToDecimals,
     coinFormatter,
     coinParser,
+    floorNumberToDecimals,
     formatCurrency,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
@@ -75,6 +78,7 @@ import {
     getCollaterals,
     getDefaultCollateral,
     isLpSupported,
+    isStableCurrency,
 } from 'utils/collaterals';
 import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
@@ -215,6 +219,7 @@ const Ticket: React.FC<TicketProps> = ({
             ),
         [networkId, selectedCollateralIndex, isEth]
     );
+    const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const collateralHasLp = isLpSupported(selectedCollateral);
 
@@ -535,6 +540,11 @@ const Ticket: React.FC<TicketProps> = ({
         },
         [dispatch]
     );
+
+    const setMaxAmount = (value: string | number) => {
+        const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+        setCollateralAmount(floorNumberToDecimals(Number(value), decimals));
+    };
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
@@ -1213,7 +1223,7 @@ const Ticket: React.FC<TicketProps> = ({
                             />
                         }
                         balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
-                        onMaxButton={() => setCollateralAmount(paymentTokenBalance)}
+                        onMaxButton={() => setMaxAmount(paymentTokenBalance)}
                     />
                 </AmountToBuyContainer>
             </InputContainer>

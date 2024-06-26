@@ -8,6 +8,7 @@ export const MIN_COLLATERAL_MULTIPLIER = 1.01;
 export const APPROVAL_BUFFER = 0.01;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
+export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
 
 export const INCENTIVIZED_LEAGUES: Record<number, any> = {
     [League.UEFA_EURO]: {
