@@ -1,7 +1,7 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL, INCENTIVIZED_UEFA } from 'constants/markets';
+import { INCENTIVIZED_EURO_COPA, INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL } from 'constants/markets';
 import { Network } from 'enums/network';
 import React from 'react';
 import { Trans } from 'react-i18next';
@@ -147,30 +147,30 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                 }
                                             ></Tooltip>
                                         )}
-                                    {INCENTIVIZED_UEFA.ids.includes(tag.id) &&
-                                        new Date() > INCENTIVIZED_UEFA.startDate &&
-                                        new Date() < INCENTIVIZED_UEFA.endDate && (
+                                    {INCENTIVIZED_EURO_COPA.ids.includes(tag.id) &&
+                                        new Date() > INCENTIVIZED_EURO_COPA.startDate &&
+                                        new Date() < INCENTIVIZED_EURO_COPA.endDate && (
                                             <Tooltip
                                                 overlay={
                                                     <Trans
-                                                        i18nKey="markets.incentivized-tooltip-uefa"
+                                                        i18nKey="markets.incentivized-tooltip-euro-copa"
                                                         components={{
                                                             detailsLink: (
                                                                 <a
-                                                                    href={INCENTIVIZED_UEFA.link}
+                                                                    href={INCENTIVIZED_EURO_COPA.link}
                                                                     target="_blank"
                                                                     rel="noreferrer"
                                                                 />
                                                             ),
                                                         }}
                                                         values={{
-                                                            rewards: INCENTIVIZED_UEFA.arbRewards,
+                                                            rewards: INCENTIVIZED_EURO_COPA.opRewards,
                                                         }}
                                                     />
                                                 }
                                                 component={
                                                     <IncentivizedLeague>
-                                                        {getNetworkLogo(NetworkId.Arbitrum)}
+                                                        {getNetworkLogo(NetworkId.OptimismMainnet)}
                                                     </IncentivizedLeague>
                                                 }
                                             ></Tooltip>

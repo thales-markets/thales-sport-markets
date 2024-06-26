@@ -1,7 +1,7 @@
 import React from 'react';
+import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FlexDivEnd } from 'styles/common';
-import ReactModal from 'react-modal';
 
 type MobileModalProps = {
     shouldCloseOnOverlayClick?: boolean;
@@ -16,7 +16,7 @@ const customStyles = {
         left: '50%',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-50%',
+        marginRight: '-48%',
         transform: 'translate(-50%, -50%)',
         padding: '0px',
         background: 'transparent',

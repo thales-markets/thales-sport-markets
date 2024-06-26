@@ -18,9 +18,10 @@ import { FlexDivColumn } from 'styles/common';
 import { isAndroid, isMetamask } from 'thales-utils';
 import { isMobile } from 'utils/device';
 import { setReferralId } from 'utils/referral';
+import BannerV2 from '../../components/BannerV2';
+import V2Modal from '../../components/V2Modal';
 import DappFooter from './DappFooter';
 import DappHeader from './DappHeader';
-import ElectionsBanner from 'components/Banner/Banner';
 
 const DappLayout: React.FC = ({ children }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -73,7 +74,8 @@ const DappLayout: React.FC = ({ children }) => {
         <>
             {isAppReady ? (
                 <Background>
-                    <ElectionsBanner />
+                    <BannerV2 />
+                    {/* <Banner /> */}
                     <Wrapper>
                         <MetaData />
                         <DappHeader />
@@ -81,6 +83,7 @@ const DappLayout: React.FC = ({ children }) => {
                         <DappFooter />
                     </Wrapper>
                     <ToastContainer theme={'colored'} />
+                    <V2Modal />
                 </Background>
             ) : (
                 <Loader />

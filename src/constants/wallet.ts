@@ -10,6 +10,8 @@ export const SUPPORTED_PARTICAL_CONNECTORS: ParticalTypes[] = [
     ParticalTypes.DISCORD,
     ParticalTypes.GITHUB,
     ParticalTypes.APPLE,
+    ParticalTypes.EMAIL,
+    ParticalTypes.PHONE,
 ];
 
 export const HOSTED_WALLETS_ICONS: { walletId: HostedWallets; image: string }[] = [

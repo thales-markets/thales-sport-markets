@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import SPAAnchor from '../SPAAnchor';
 
-const ElectionsBanner: React.FC = () => {
+const Banner: React.FC = () => {
     const { t } = useTranslation();
     return (
         <SPAAnchor href={'https://www.overtimemarkets.xyz/promotions'}>
@@ -17,7 +17,6 @@ const ElectionsBanner: React.FC = () => {
 
 const Container = styled(FlexDiv)`
     position: relative;
-    top: 0;
     width: 100%;
     align-items: center;
     justify-content: center;
@@ -44,4 +43,4 @@ const Label = styled.span`
     }
 `;
 
-export default ElectionsBanner;
+export default Banner;

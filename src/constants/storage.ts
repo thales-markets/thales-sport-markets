@@ -22,4 +22,5 @@ export const LOCAL_STORAGE_KEYS = {
     COLLATERAL_INDEX: 'collateralIndex',
     SGP_FEES: 'sgpFees',
     KEEP_SELECTION: 'keepSelection',
+    SHOW_V2_MODAL: 'showV2Modal',
 };

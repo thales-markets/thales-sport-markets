@@ -24,13 +24,13 @@ export const INCENTIVIZED_LEAGUE = {
     arbRewards: '20,000 ARB',
 };
 
-export const INCENTIVIZED_UEFA = {
-    ids: [9016, 9017, 19216],
-    startDate: new Date(Date.UTC(2024, 1, 13, 0, 0, 0)),
-    endDate: new Date(Date.UTC(2024, 5, 1, 23, 59, 59)),
-    link: 'https://dune.com/leifu/overtime-uefa-competitions-13-feb-25-may-24',
-    opRewards: '',
-    arbRewards: '20,000 ARB',
+export const INCENTIVIZED_EURO_COPA = {
+    ids: [9044, 9050],
+    startDate: new Date(Date.UTC(2024, 5, 5, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 6, 14, 23, 59, 59)),
+    link: 'https://medium.com/@OvertimeMarkets.xyz/euro-2024-copa-america-reward-program-709efad25c38',
+    opRewards: '20,000 OP',
+    arbRewards: '',
 };
 
 export const INCENTIVIZED_NHL = {
