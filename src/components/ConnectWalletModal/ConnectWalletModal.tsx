@@ -35,7 +35,7 @@ const defaultStyle = {
         borderRadius: '15px',
         marginRight: '-48%',
         transform: 'translate(-50%, -50%)',
-        overflow: 'none',
+        overflow: 'auto',
         height: 'auto',
     },
     overlay: {
