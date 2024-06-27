@@ -80,4 +80,6 @@ export const Colors = {
 
     TORY_BLUE: '#3C498A',
     TORY_BLUE_LIGHT: '#4E5FB1',
+
+    PICTON_BLUE: '#3FD1FF',
 };
