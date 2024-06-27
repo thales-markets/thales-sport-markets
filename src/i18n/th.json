@@ -547,7 +547,13 @@
             "open": "เปิด",
             "won": "วอน",
             "loss": "การสูญเสีย",
-            "live-trading-paused": "การซื้อขายสดหยุดชั่วคราว"
+            "live-trading-paused": "การซื้อขายสดหยุดชั่วคราว",
+            "pre-fight": "ก่อนการต่อสู้",
+            "scheduled": "กำหนดเวลาแล้ว",
+            "end-of-round": "จบรอบ",
+            "fighters-introduction": "การแนะนำนักสู้",
+            "fighters-walking": "นักสู้เดิน",
+            "end-of-fight": "สิ้นสุดการต่อสู้"
         },
         "market-details": {
             "price": "ราคา",
