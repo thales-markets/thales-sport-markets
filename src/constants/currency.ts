@@ -92,3 +92,17 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     ARB: 18,
     THALES: 18,
 };
+
+export const COLLATERAL_ICONS_CLASS_NAMES: Record<Coins, string> = {
+    sUSD: 'currency-icon currency-icon--susd',
+    DAI: 'currency-icon currency-icon--dai',
+    USDCe: 'currency-icon currency-icon--usdce',
+    USDC: 'currency-icon currency-icon--usdc',
+    USDbC: 'currency-icon currency-icon--usdbc',
+    USDT: 'currency-icon currency-icon--usdt',
+    OP: 'currency-icon currency-icon--op',
+    WETH: 'currency-icon currency-icon--weth',
+    ETH: 'currency-icon currency-icon--eth',
+    ARB: 'currency-icon currency-icon--arb',
+    THALES: 'currency-icon currency-icon--thales',
+};
