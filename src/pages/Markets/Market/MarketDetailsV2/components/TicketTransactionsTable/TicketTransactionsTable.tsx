@@ -90,6 +90,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             isTicketLost: ticket.isLost,
             collateral: ticket.collateral,
             isLive: ticket.isLive,
+            applyPayoutMultiplier: false,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(true);
@@ -285,6 +286,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     isTicketLost={shareTicketModalData.isTicketLost}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                 />
             )}
         </>

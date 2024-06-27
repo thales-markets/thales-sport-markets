@@ -204,6 +204,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                                             setOddsChanged={setOddsChanged}
                                             acceptOdds={acceptOdds}
                                             setAcceptOdds={setAcceptOdds}
+                                            applyPayoutMultiplier={true}
                                         />
                                     </RowMarket>
                                 );

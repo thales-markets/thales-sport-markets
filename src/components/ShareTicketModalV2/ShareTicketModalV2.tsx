@@ -23,6 +23,7 @@ export type ShareTicketModalProps = {
     isTicketLost: boolean;
     collateral: Coins;
     isLive: boolean;
+    applyPayoutMultiplier: boolean;
 };
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
@@ -38,6 +39,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     isTicketLost,
     collateral,
     isLive,
+    applyPayoutMultiplier,
 }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
@@ -240,6 +242,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     isTicketLost={isTicketLost}
                     collateral={collateral}
                     isLive={isLive}
+                    applyPayoutMultiplier={applyPayoutMultiplier}
                 />
 
                 <TwitterShare disabled={isLoading} onClick={onTwitterShareClick}>

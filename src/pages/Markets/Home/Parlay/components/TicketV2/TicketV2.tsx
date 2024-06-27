@@ -703,6 +703,7 @@ const Ticket: React.FC<TicketProps> = ({
                             isTicketLost: false,
                             collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                             isLive: false,
+                            applyPayoutMultiplier: true,
                         };
                         setShareTicketModalData(modalData);
                         setShowShareTicketModal(true);
@@ -769,6 +770,7 @@ const Ticket: React.FC<TicketProps> = ({
                                         isTicketLost: false,
                                         collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                                         isLive: true,
+                                        applyPayoutMultiplier: false,
                                     };
                                     setShareTicketModalData(modalData);
                                     setShowShareTicketModal(true);
@@ -1034,6 +1036,7 @@ const Ticket: React.FC<TicketProps> = ({
             isTicketLost: false,
             collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
             isLive: !!markets[0].live,
+            applyPayoutMultiplier: true,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(!twitterShareDisabled);
@@ -1448,6 +1451,7 @@ const Ticket: React.FC<TicketProps> = ({
                     isTicketLost={shareTicketModalData.isTicketLost}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                 />
             )}
             {openApprovalModal && (
