@@ -330,6 +330,7 @@
     "profile": {
         "stats": {
             "profile-data": "Profile data",
+            "free-bet": "Free bet",
             "total-volume": "Total volume",
             "trades": "Trades",
             "highest-win": "Highest win",
