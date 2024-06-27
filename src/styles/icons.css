@@ -432,3 +432,7 @@
 .icon--google:before {
     content: '\011A';
 }
+
+.icon--gift:before {
+    content: '\00FB';
+}
