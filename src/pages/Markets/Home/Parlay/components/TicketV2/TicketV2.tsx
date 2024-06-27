@@ -54,10 +54,13 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import {
+    DEFAULT_CURRENCY_DECIMALS,
+    LONG_CURRENCY_DECIMALS,
     bigNumberFormatter,
     ceilNumberToDecimals,
     coinFormatter,
     coinParser,
+    floorNumberToDecimals,
     formatCurrency,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
@@ -75,6 +78,7 @@ import {
     getCollaterals,
     getDefaultCollateral,
     isLpSupported,
+    isStableCurrency,
 } from 'utils/collaterals';
 import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
@@ -215,6 +219,7 @@ const Ticket: React.FC<TicketProps> = ({
             ),
         [networkId, selectedCollateralIndex, isEth]
     );
+    const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const collateralHasLp = isLpSupported(selectedCollateral);
 
@@ -536,6 +541,11 @@ const Ticket: React.FC<TicketProps> = ({
         [dispatch]
     );
 
+    const setMaxAmount = (value: string | number) => {
+        const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+        setCollateralAmount(floorNumberToDecimals(Number(value), decimals));
+    };
+
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMV2Contract && multipleCollateral && signer) {
@@ -584,6 +594,7 @@ const Ticket: React.FC<TicketProps> = ({
             signer,
             liveTradingProcessorContract,
             sportsAMMDataContract,
+            sportsAMMV2ManagerContract,
             multipleCollateral,
         } = networkConnector;
 
@@ -728,10 +739,13 @@ const Ticket: React.FC<TicketProps> = ({
                                 console.log('filfill end time:', new Date(Date.now()));
                                 console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
-                                if (sportsAMMDataContract) {
+                                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
+                                    const numOfActiveTicketsPerUser = await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(
+                                        walletAddress
+                                    );
                                     const userTickets = await sportsAMMDataContract.getActiveTicketsDataPerUser(
                                         walletAddress.toLowerCase(),
-                                        0,
+                                        Number(numOfActiveTicketsPerUser) - 1,
                                         BATCH_SIZE
                                     );
                                     const modalData: ShareTicketModalProps = {
@@ -1213,7 +1227,7 @@ const Ticket: React.FC<TicketProps> = ({
                             />
                         }
                         balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
-                        onMaxButton={() => setCollateralAmount(paymentTokenBalance)}
+                        onMaxButton={() => setMaxAmount(paymentTokenBalance)}
                     />
                 </AmountToBuyContainer>
             </InputContainer>
