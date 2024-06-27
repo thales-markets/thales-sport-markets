@@ -27,6 +27,7 @@ type MatchInfoProps = {
     acceptOdds?: boolean;
     setAcceptOdds?: (accept: boolean) => void;
     isLive?: boolean;
+    applyPayoutMultiplier: boolean;
 };
 
 const MatchInfo: React.FC<MatchInfoProps> = ({
@@ -37,6 +38,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     acceptOdds,
     setAcceptOdds,
     isLive,
+    applyPayoutMultiplier,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -133,7 +135,10 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                     <Odd>
                         <OddChangeUp id="odd-change-up" />
                         <OddChangeDown id="odd-change-down" />
-                        {formatMarketOdds(selectedOddsType, market.odd * getAddedPayoutMultiplier(selectedCollateral))}
+                        {formatMarketOdds(
+                            selectedOddsType,
+                            market.odd * (applyPayoutMultiplier ? getAddedPayoutMultiplier(selectedCollateral) : 1)
+                        )}
                     </Odd>
                 </PositionInfo>
             </MarketPositionContainer>
