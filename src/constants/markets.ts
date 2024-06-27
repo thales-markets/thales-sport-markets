@@ -109,4 +109,4 @@ export const GameStatusKey: Record<GameStatus, string> = {
     [GameStatus.ENETPULSE_CANCELED]: 'canceled',
 };
 
-export const BATCH_SIZE = 1000;
+export const BATCH_SIZE = 25;

@@ -594,6 +594,7 @@ const Ticket: React.FC<TicketProps> = ({
             signer,
             liveTradingProcessorContract,
             sportsAMMDataContract,
+            sportsAMMV2ManagerContract,
             multipleCollateral,
         } = networkConnector;
 
@@ -738,10 +739,13 @@ const Ticket: React.FC<TicketProps> = ({
                                 console.log('filfill end time:', new Date(Date.now()));
                                 console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
-                                if (sportsAMMDataContract) {
+                                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
+                                    const numOfActiveTicketsPerUser = await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(
+                                        walletAddress
+                                    );
                                     const userTickets = await sportsAMMDataContract.getActiveTicketsDataPerUser(
                                         walletAddress.toLowerCase(),
-                                        0,
+                                        Number(numOfActiveTicketsPerUser) - 1,
                                         BATCH_SIZE
                                     );
                                     const modalData: ShareTicketModalProps = {

@@ -4,7 +4,7 @@ import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { UseQueryOptions, useQuery } from 'react-query';
 import { Ticket } from 'types/markets';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
@@ -19,14 +19,26 @@ export const useGameTicketsQuery = (
         QUERY_KEYS.GameTickets(networkId, gameId),
         async () => {
             try {
-                const { sportsAMMDataContract } = networkConnector;
-                if (sportsAMMDataContract) {
-                    const [tickets, gamesInfoResponse, playersInfoResponse, liveScoresResponse] = await Promise.all([
-                        sportsAMMDataContract.getTicketsDataPerGame(gameId, 0, BATCH_SIZE),
-                        axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
-                        axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
-                        axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
-                    ]);
+                const { sportsAMMDataContract, sportsAMMV2ManagerContract } = networkConnector;
+                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
+                    const numOfActiveTicketsPerGame = await sportsAMMV2ManagerContract.numOfTicketsPerGame(gameId);
+                    const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerGame) / BATCH_SIZE) + 1;
+
+                    const promises = [];
+                    for (let i = 0; i < numberOfActiveBatches; i++) {
+                        promises.push(sportsAMMDataContract.getTicketsDataPerGame(gameId, i * BATCH_SIZE, BATCH_SIZE));
+                    }
+                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig));
+                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig));
+                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig));
+
+                    const promisesResult = await Promise.all(promises);
+                    const promisesLength = promises.length;
+
+                    const tickets = promisesResult.slice(0, promisesLength - 3).flat(1);
+                    const gamesInfoResponse = promisesResult[promisesLength - 3];
+                    const playersInfoResponse = promisesResult[promisesLength - 2];
+                    const liveScoresResponse = promisesResult[promisesLength - 1];
 
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
                         mapTicket(

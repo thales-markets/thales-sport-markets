@@ -66,8 +66,6 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
             {AMOUNTS.map((amount, index) => {
                 const buyAmount = convertFromStable(amount);
 
-                console.log(insertedAmount, buyAmount);
-
                 return (
                     <AmountContainer
                         key={`amount-${index}`}

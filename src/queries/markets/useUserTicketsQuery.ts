@@ -4,7 +4,7 @@ import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { orderBy } from 'lodash';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { UseQueryOptions, useQuery } from 'react-query';
 import { Ticket } from 'types/markets';
 import { updateTotalQuoteAndPayout } from 'utils/marketsV2';
 import networkConnector from 'utils/networkConnector';
@@ -19,23 +19,38 @@ export const useUserTicketsQuery = (
         QUERY_KEYS.UserTickets(networkId, user),
         async () => {
             try {
-                const { sportsAMMDataContract } = networkConnector;
-                if (sportsAMMDataContract) {
-                    const [
-                        activeTickets,
-                        resolvedTickets,
-                        gamesInfoResponse,
-                        playersInfoResponse,
-                        liveScoresResponse,
-                    ] = await Promise.all([
-                        sportsAMMDataContract.getActiveTicketsDataPerUser(user, 0, BATCH_SIZE),
-                        sportsAMMDataContract.getResolvedTicketsDataPerUser(user, 0, BATCH_SIZE),
-                        axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),
-                        axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig),
-                        axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig),
+                const { sportsAMMDataContract, sportsAMMV2ManagerContract } = networkConnector;
+                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
+                    const [numOfActiveTicketsPerUser, numOfResolvedTicketsPerUser] = await Promise.all([
+                        sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(user),
+                        sportsAMMV2ManagerContract.numOfResolvedTicketsPerUser(user),
                     ]);
 
-                    const tickets = [...activeTickets, ...resolvedTickets];
+                    const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerUser) / BATCH_SIZE) + 1;
+                    const numberOfResolvedBatches = Math.trunc(Number(numOfResolvedTicketsPerUser) / BATCH_SIZE) + 1;
+
+                    const promises = [];
+                    for (let i = 0; i < numberOfActiveBatches; i++) {
+                        promises.push(
+                            sportsAMMDataContract.getActiveTicketsDataPerUser(user, i * BATCH_SIZE, BATCH_SIZE)
+                        );
+                    }
+                    for (let i = 0; i < numberOfResolvedBatches; i++) {
+                        promises.push(
+                            sportsAMMDataContract.getResolvedTicketsDataPerUser(user, i * BATCH_SIZE, BATCH_SIZE)
+                        );
+                    }
+                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig));
+                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/players-info`, noCacheConfig));
+                    promises.push(axios.get(`${generalConfig.API_URL}/overtime-v2/live-scores`, noCacheConfig));
+
+                    const promisesResult = await Promise.all(promises);
+                    const promisesLength = promises.length;
+
+                    const tickets = promisesResult.slice(0, promisesLength - 3).flat(1);
+                    const gamesInfoResponse = promisesResult[promisesLength - 3];
+                    const playersInfoResponse = promisesResult[promisesLength - 2];
+                    const liveScoresResponse = promisesResult[promisesLength - 1];
 
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
                         mapTicket(
