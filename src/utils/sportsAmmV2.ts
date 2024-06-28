@@ -10,12 +10,14 @@ export const getSportsAMMV2Transaction: any = async (
     isEth: boolean,
     networkId: Network,
     sportsAMMV2Contract: ethers.Contract,
+    freeBetHolderContract: ethers.Contract,
     tradeData: TradeData[],
     buyInAmount: BigNumber,
     expectedQuote: BigNumber,
     referral?: string | null,
     additionalSlippage?: BigNumber,
-    isAA?: boolean
+    isAA?: boolean,
+    isFreeBet?: boolean
 ): Promise<any> => {
     let finalEstimation = null;
     const referralAddress = referral || ZERO_ADDRESS;
@@ -44,6 +46,17 @@ export const getSportsAMMV2Transaction: any = async (
             );
 
             finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+        }
+
+        if (isFreeBet && freeBetHolderContract) {
+            return freeBetHolderContract.trade(
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                collateralAddress
+            );
         }
 
         return sportsAMMV2Contract.trade(

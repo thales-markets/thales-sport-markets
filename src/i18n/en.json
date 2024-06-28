@@ -707,6 +707,8 @@
             "liquidity": "Liquidity",
             "in-wallet": "In wallet",
             "skew": "Skew",
+            "use-free-bet": "Use free bet",
+            "disable-free-bet": "Disable free bet balances",
             "empty-title": "No positions",
             "empty-description": "Add position, choose a market and make your selection.",
             "accept-odds-changes": "Accept odds changes",
