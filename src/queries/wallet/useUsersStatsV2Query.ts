@@ -47,7 +47,10 @@ const useUsersStatsV2Query = (
                 const promisesResult = await Promise.all(promises);
                 const promisesLength = promises.length;
 
-                const tickets = promisesResult.slice(0, promisesLength - 3).flat(1);
+                const tickets = promisesResult
+                    .slice(0, promisesLength - 3)
+                    .map((allData) => allData.ticketsData)
+                    .flat(1);
                 const currencies = promisesResult[promisesLength - 3];
                 const rates = promisesResult[promisesLength - 2];
                 const thalesPriceResponse = promisesResult[promisesLength - 1];

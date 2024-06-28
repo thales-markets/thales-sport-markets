@@ -47,7 +47,10 @@ export const useUserTicketsQuery = (
                     const promisesResult = await Promise.all(promises);
                     const promisesLength = promises.length;
 
-                    const tickets = promisesResult.slice(0, promisesLength - 3).flat(1);
+                    const tickets = promisesResult
+                        .slice(0, promisesLength - 3)
+                        .map((allData) => allData.ticketsData)
+                        .flat(1);
                     const gamesInfoResponse = promisesResult[promisesLength - 3];
                     const playersInfoResponse = promisesResult[promisesLength - 2];
                     const liveScoresResponse = promisesResult[promisesLength - 1];
