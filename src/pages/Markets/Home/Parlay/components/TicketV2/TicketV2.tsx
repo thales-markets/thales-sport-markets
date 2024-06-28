@@ -753,7 +753,9 @@ const Ticket: React.FC<TicketProps> = ({
                                         markets: [
                                             {
                                                 ...markets[0],
-                                                odd: bigNumberFormatter(userTickets[userTickets.length - 1].totalQuote),
+                                                odd: bigNumberFormatter(
+                                                    userTickets.ticketsData[userTickets.length - 1].totalQuote
+                                                ),
                                             },
                                         ],
                                         multiSingle: false,

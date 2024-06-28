@@ -171,6 +171,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                 </TableText>
                             );
                         },
+                        sortType: (rowA: any, rowB: any) => {
+                            return rowA.original.buyInAmount - rowB.original.buyInAmount;
+                        },
+                        sortDescFirst: true,
                     },
                     {
                         Header: <>{t('profile.table.payout')}</>,
@@ -183,6 +187,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                 </TableText>
                             );
                         },
+                        sortType: (rowA: any, rowB: any) => {
+                            return rowA.original.payout - rowB.original.payout;
+                        },
+                        sortDescFirst: true,
                     },
                     {
                         Header: <>{t('profile.table.status')}</>,
