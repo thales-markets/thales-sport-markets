@@ -4,7 +4,7 @@ import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicket
 import Table from 'components/Table';
 import { OddsType } from 'enums/markets';
 import i18n from 'i18n';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -107,7 +107,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
         setPage(0);
     };
 
-    // useEffect(() => setPage(0), [searchText, period]);
+    useEffect(() => setPage(0), [ticketTransactions.length]);
 
     return (
         <>
