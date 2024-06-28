@@ -49,6 +49,7 @@ export const mapTicket = (
         isOpen: !ticket.resolved && !ticket.isExercisable,
         finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
         isLive: ticket.isLive,
+        isFreeBet: !!ticket.isFreeBet,
 
         sportMarkets: ticket.marketsData.map(
             (market: any, index: number): TicketMarket => {
