@@ -78,6 +78,7 @@ const Table: React.FC<TableProps> = ({
             ...options,
             initialState,
             autoResetSortBy: false,
+            autoResetPage: false,
         },
         useSortBy,
         usePagination

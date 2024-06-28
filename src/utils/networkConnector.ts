@@ -5,6 +5,7 @@ import { Coins } from 'types/tokens';
 import liquidityPoolDataContract from 'utils/contracts/liquidityPoolDataContractV2';
 import sportsAMMDataContract from 'utils/contracts/sportsAMMDataContract';
 import sportsAMMV2Contract from 'utils/contracts/sportsAMMV2Contract';
+import sportsAMMV2ManagerContract from 'utils/contracts/sportsAMMV2ManagerContract';
 import sportsAMMV2RiskManagerContract from 'utils/contracts/sportsAMMV2RiskManagerContract';
 import sUSDContract from 'utils/contracts/sUSDContract';
 import { FIFAFavoriteTeam } from './contracts/FIFAFavoriteTeam';
@@ -35,6 +36,7 @@ type NetworkConnector = {
     liveTradingProcessorContract?: ethers.Contract;
     sportPositionalMarketDataContract?: ethers.Contract;
     freeBetHolderContract?: ethers.Contract;
+    sportsAMMV2ManagerContract?: ethers.Contract;
 };
 
 // @ts-ignore
@@ -68,6 +70,7 @@ const networkConnector: NetworkConnector = {
         this.liveTradingProcessorContract = initializeContract(liveTradingProcessorContract, networkSettings);
         this.sportsAMMV2RiskManagerContract = initializeContract(sportsAMMV2RiskManagerContract, networkSettings);
         this.freeBetHolderContract = initializeContract(freeBetHolder, networkConnector);
+        this.sportsAMMV2ManagerContract = initializeContract(sportsAMMV2ManagerContract, networkSettings);
     },
 };
 

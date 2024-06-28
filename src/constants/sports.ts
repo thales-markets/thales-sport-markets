@@ -631,6 +631,18 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 802,
         hidden: false,
     },
+    [League.SUMMER_OLYMPICS_QUALIFICATION]: {
+        sport: Sport.BASKETBALL,
+        id: League.SUMMER_OLYMPICS_QUALIFICATION,
+        label: 'Summer Olympics Qualification',
+        provider: Provider.ENETPULSE,
+        scoringType: ScoringType.POINTS,
+        matchResolveType: MatchResolveType.OVERTIME,
+        periodType: PeriodType.QUARTER,
+        isDrawAvailable: false,
+        priority: 305,
+        hidden: false,
+    },
     [League.LOL]: {
         sport: Sport.ESPORTS,
         id: League.LOL,
@@ -724,6 +736,7 @@ export const INTERNATIONAL_LEAGUES = [
     League.CONCACAF_NATIONS_LEAGUE,
     League.CONMEBOL_WC_QUALIFICATIONS,
     League.COPA_AMERICA,
+    League.SUMMER_OLYMPICS_QUALIFICATION,
 ];
 
 export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES = [League.NBA];

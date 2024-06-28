@@ -28,7 +28,7 @@ const defaultCustomStyles = {
         padding: '0px',
         background: 'transparent',
         border: 'none',
-        overflow: 'none',
+        overflow: 'auto',
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',

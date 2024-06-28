@@ -8,6 +8,7 @@ export const MIN_COLLATERAL_MULTIPLIER = 1.01;
 export const APPROVAL_BUFFER = 0.01;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
+export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
 
 export const INCENTIVIZED_LEAGUES: Record<number, any> = {
     [League.UEFA_EURO]: {
@@ -108,4 +109,4 @@ export const GameStatusKey: Record<GameStatus, string> = {
     [GameStatus.ENETPULSE_CANCELED]: 'canceled',
 };
 
-export const BATCH_SIZE = 1000;
+export const BATCH_SIZE = 10;

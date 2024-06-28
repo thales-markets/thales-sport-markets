@@ -417,6 +417,18 @@
     content: '\00F7';
 }
 
+.icon--wallet2:before {
+    content: '\00FA';
+}
+
+.icon--gift:before {
+    content: '\00FB';
+}
+
+.icon--profile3:before {
+    content: '\00FC';
+}
+
 .icon--apple:before {
     content: '\010E';
 }

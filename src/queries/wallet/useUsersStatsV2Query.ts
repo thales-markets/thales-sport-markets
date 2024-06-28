@@ -19,15 +19,41 @@ const useUsersStatsV2Query = (
     return useQuery<UserStats | undefined>(
         QUERY_KEYS.Wallet.StatsV2(networkId, walletAddress),
         async () => {
-            const { sportsAMMDataContract, priceFeedContract } = networkConnector;
-            if (sportsAMMDataContract && priceFeedContract) {
-                const [activeTickets, resolvedTickets, currencies, rates, thalesPriceResponse] = await Promise.all([
-                    sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress, 0, BATCH_SIZE),
-                    sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress, 0, BATCH_SIZE),
-                    priceFeedContract.getCurrencies(),
-                    priceFeedContract.getRates(),
-                    axios.get(`${generalConfig.API_URL}/token/price`),
+            const { sportsAMMDataContract, priceFeedContract, sportsAMMV2ManagerContract } = networkConnector;
+            if (sportsAMMDataContract && priceFeedContract && sportsAMMV2ManagerContract) {
+                const [numOfActiveTicketsPerUser, numOfResolvedTicketsPerUser] = await Promise.all([
+                    sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(walletAddress),
+                    sportsAMMV2ManagerContract.numOfResolvedTicketsPerUser(walletAddress),
                 ]);
+
+                const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerUser) / BATCH_SIZE) + 1;
+                const numberOfResolvedBatches = Math.trunc(Number(numOfResolvedTicketsPerUser) / BATCH_SIZE) + 1;
+
+                const promises = [];
+                for (let i = 0; i < numberOfActiveBatches; i++) {
+                    promises.push(
+                        sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress, i * BATCH_SIZE, BATCH_SIZE)
+                    );
+                }
+                for (let i = 0; i < numberOfResolvedBatches; i++) {
+                    promises.push(
+                        sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress, i * BATCH_SIZE, BATCH_SIZE)
+                    );
+                }
+                promises.push(priceFeedContract.getCurrencies());
+                promises.push(priceFeedContract.getRates());
+                promises.push(axios.get(`${generalConfig.API_URL}/token/price`));
+
+                const promisesResult = await Promise.all(promises);
+                const promisesLength = promises.length;
+
+                const tickets = promisesResult
+                    .slice(0, promisesLength - 3)
+                    .map((allData) => allData.ticketsData)
+                    .flat(1);
+                const currencies = promisesResult[promisesLength - 3];
+                const rates = promisesResult[promisesLength - 2];
+                const thalesPriceResponse = promisesResult[promisesLength - 1];
 
                 const exchangeRates: Rates = {};
                 currencies.forEach((currency: string, idx: number) => {
@@ -38,8 +64,6 @@ const useUsersStatsV2Query = (
                     }
                 });
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
-
-                const tickets = [...activeTickets, ...resolvedTickets];
 
                 let volume = 0;
                 let highestWin = 0;

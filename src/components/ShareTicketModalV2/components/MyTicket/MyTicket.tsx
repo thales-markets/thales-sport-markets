@@ -30,6 +30,7 @@ type MyTicketProps = {
     isTicketLost: boolean;
     collateral: Coins;
     isLive: boolean;
+    applyPayoutMultiplier: boolean;
 };
 
 const MyTicket: React.FC<MyTicketProps> = ({
@@ -40,6 +41,7 @@ const MyTicket: React.FC<MyTicketProps> = ({
     isTicketLost,
     collateral,
     isLive,
+    applyPayoutMultiplier,
 }) => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const selectedOddsType = useSelector(getOddsType);
@@ -91,7 +93,12 @@ const MyTicket: React.FC<MyTicketProps> = ({
                     return (
                         <React.Fragment key={index}>
                             <RowMarket>
-                                <MatchInfoV2 market={market} readOnly={true} isLive={isLive} />
+                                <MatchInfoV2
+                                    market={market}
+                                    readOnly={true}
+                                    isLive={isLive}
+                                    applyPayoutMultiplier={applyPayoutMultiplier}
+                                />
                             </RowMarket>
                             {markets.length !== index + 1 && <HorizontalDashedLine />}
                         </React.Fragment>
