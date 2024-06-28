@@ -91,11 +91,12 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     const exchangeRates: Rates | undefined =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : undefined;
 
-    const getExchangeRate = (collateral: Coins) => {
-        if (getDefaultCollateral(networkId) === collateral) {
-            return 1;
+    const defaultCollateral = getDefaultCollateral(networkId);
+    const getValueInUsd = (collateral: Coins, value: number) => {
+        if (defaultCollateral === collateral) {
+            return value;
         }
-        return !!exchangeRates ? exchangeRates[collateral] || 1 : 1;
+        return (!!exchangeRates ? exchangeRates[collateral] || 1 : 1) * value;
     };
 
     const onTwitterIconClick = (ticket: Ticket) => {
@@ -194,7 +195,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                 <Tooltip
                                     overlay={formatCurrencyWithSign(
                                         USD_SIGN,
-                                        getExchangeRate(cellProps.row.original.collateral) * cellProps.cell.value
+                                        getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
                                     )}
                                     component={
                                         <TableText>
@@ -208,9 +209,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                             );
                         },
                         sortType: (rowA: any, rowB: any) => {
-                            const rateA = getExchangeRate(rowA.original.collateral);
-                            const rateB = getExchangeRate(rowB.original.collateral);
-                            return rowA.original.buyInAmount * rateA - rowB.original.buyInAmount * rateB;
+                            return (
+                                getValueInUsd(rowA.original.collateral, rowA.original.buyInAmount) -
+                                getValueInUsd(rowB.original.collateral, rowB.original.buyInAmount)
+                            );
                         },
                         sortDescFirst: true,
                     },
@@ -223,7 +225,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                 <Tooltip
                                     overlay={formatCurrencyWithSign(
                                         USD_SIGN,
-                                        getExchangeRate(cellProps.row.original.collateral) * cellProps.cell.value
+                                        getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
                                     )}
                                     component={
                                         <TableText>
@@ -237,9 +239,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                             );
                         },
                         sortType: (rowA: any, rowB: any) => {
-                            const rateA = getExchangeRate(rowA.original.collateral);
-                            const rateB = getExchangeRate(rowB.original.collateral);
-                            return rowA.original.payout * rateA - rowB.original.payout * rateB;
+                            return (
+                                getValueInUsd(rowA.original.collateral, rowA.original.payout) -
+                                getValueInUsd(rowB.original.collateral, rowB.original.payout)
+                            );
                         },
                         sortDescFirst: true,
                     },
