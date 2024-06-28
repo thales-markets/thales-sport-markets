@@ -210,3 +210,34 @@ export const CurrentResultContainer = styled(FlexDivColumn)<{
         flex-direction: row;
     }
 `;
+
+export const SecondaryResultsWrapper = styled(FlexDivRow)`
+    gap: 5px;
+    justify-content: start;
+    flex-grow: 3;
+    margin-left: 5px;
+    @media (max-width: 950px) {
+        flex-basis: 100%;
+    }
+`;
+
+export const PeriodResultContainer = styled(FlexDivColumn)<{
+    isColumnView: boolean;
+}>`
+    gap: ${(props) => (props.isColumnView ? '3px' : '0px')};
+    color: ${(props) => props.theme.textColor.quinary};
+    flex-grow: 0;
+    @media (max-width: 950px) {
+        flex-direction: row;
+    }
+`;
+
+export const ResultLabel = styled.span<{ isColumnView: boolean; isMarketSelected: boolean }>`
+    font-weight: 600;
+    font-size: 12px;
+    line-height: ${(props) => (props.isColumnView ? '25px' : '18px')};
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: fit-content;
+`;

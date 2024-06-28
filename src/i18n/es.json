@@ -546,7 +546,13 @@
             "won": "Ganado",
             "open": "Abierto",
             "loss": "Pérdida",
-            "live-trading-paused": "Operaciones en vivo pausadas"
+            "live-trading-paused": "Operaciones en vivo pausadas",
+            "scheduled": "Programado",
+            "pre-fight": "Pre-pelea",
+            "end-of-fight": "Fin de la pelea",
+            "end-of-round": "Fin de ronda",
+            "fighters-introduction": "Introducción a los luchadores",
+            "fighters-walking": "Luchadores caminando"
         },
         "market-details": {
             "price": "Precio",
