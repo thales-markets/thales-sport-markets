@@ -1,13 +1,16 @@
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { formatCurrencyWithSign } from 'thales-utils';
 import { Coins } from 'types/tokens';
+import { isStableCurrency } from 'utils/collaterals';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from '../../../../constants/currency';
 import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
 
@@ -16,6 +19,7 @@ const UserStats: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
 
     const userStatsQuery = useUsersStatsV2Query(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
@@ -27,6 +31,19 @@ const UserStats: React.FC = () => {
         freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const getUSDForCollateral = useCallback(
+        (collateral: Coins) =>
+            (freeBetBalances ? freeBetBalances[collateral] : 0) *
+            (isStableCurrency(collateral as Coins) ? 1 : exchangeRates?.[collateral] || 0),
+        [freeBetBalances, exchangeRates]
+    );
 
     return (
         <Wrapper>
@@ -67,7 +84,16 @@ const UserStats: React.FC = () => {
                                         {currencyKey}
                                     </SubLabel>
                                     <SubValue>
-                                        {formatCurrencyWithSign(currencyKey, freeBetBalances[currencyKey])}
+                                        {formatCurrencyWithSign(
+                                            null,
+                                            freeBetBalances ? freeBetBalances[currencyKey] : 0
+                                        )}
+                                        {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
+                                            ? '...'
+                                            : ` (${formatCurrencyWithSign(
+                                                  USD_SIGN,
+                                                  getUSDForCollateral(currencyKey as Coins)
+                                              )})`}
                                     </SubValue>
                                 </Section>
                             ) : (
@@ -119,9 +145,7 @@ const Label = styled.span`
     }
 `;
 
-const SubLabel = styled(Label)`
-    color: ${(props) => props.theme.textColor.octonary};
-`;
+const SubLabel = styled(Label)``;
 
 const Value = styled.span`
     font-weight: 600;
@@ -133,7 +157,7 @@ const Value = styled.span`
 `;
 
 const SubValue = styled(Value)`
-    color: ${(props) => props.theme.textColor.octonary};
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const ProfileIcon = styled.i`
@@ -146,14 +170,12 @@ const ProfileIcon = styled.i`
 
 const SubHeaderIcon = styled.i`
     font-size: 20px;
-    color: ${(props) => props.theme.textColor.octonary};
     margin-right: 4px;
     font-weight: 400;
     text-transform: none;
 `;
 
 const SubHeader = styled(Header)`
-    color: ${(props) => props.theme.textColor.octonary};
     &::after,
     &:before {
         display: inline-block;
@@ -172,7 +194,7 @@ const CurrencyIcon = styled.i`
     margin: 0px 3px;
     font-weight: 400 !important;
     text-transform: none !important;
-    color: ${(props) => props.theme.textColor.octonary};
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 const SectionWrapper = styled.div`
