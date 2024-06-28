@@ -35,6 +35,8 @@ import {
     CollateralSelectorContainer,
     Container,
     ExternalLink,
+    FreeBetIcon,
+    FreeBetWrapper,
     InfoContainerColumn,
     Label,
     LiveIndicatorContainer,
@@ -205,6 +207,11 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                 <LiveIndicatorContainer isLive={ticket.isLive}>
                     {ticket.isLive && <Label>{t('profile.card.live')}</Label>}
                 </LiveIndicatorContainer>
+                {ticket.isFreeBet && (
+                    <FreeBetWrapper>
+                        <FreeBetIcon className={'icon icon--gift'} />
+                    </FreeBetWrapper>
+                )}
                 <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
                     <TicketInfo>
                         <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>

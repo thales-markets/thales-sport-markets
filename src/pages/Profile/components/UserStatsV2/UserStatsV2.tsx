@@ -1,5 +1,6 @@
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -38,11 +39,28 @@ const UserStats: React.FC = () => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
+    const multiCollateralBalancesQuery = useMultipleCollateralBalanceQuery(walletAddress?.toLowerCase(), networkId, {
+        enabled: isWalletConnected,
+    });
+    const multiCollateralBalances =
+        multiCollateralBalancesQuery.isSuccess && multiCollateralBalancesQuery.data
+            ? multiCollateralBalancesQuery.data
+            : undefined;
+
     const getUSDForCollateral = useCallback(
-        (collateral: Coins) =>
-            (freeBetBalances ? freeBetBalances[collateral] : 0) *
-            (isStableCurrency(collateral as Coins) ? 1 : exchangeRates?.[collateral] || 0),
-        [freeBetBalances, exchangeRates]
+        (collateral: Coins, freeBetBalance?: boolean) => {
+            if (freeBetBalance)
+                return (
+                    (freeBetBalances ? freeBetBalances[collateral] : 0) *
+                    (isStableCurrency(collateral as Coins) ? 1 : exchangeRates?.[collateral] || 0)
+                );
+            return (
+                (multiCollateralBalances ? multiCollateralBalances[collateral] : 0) *
+                (isStableCurrency(collateral as Coins) ? 1 : exchangeRates?.[collateral] || 0)
+            );
+        },
+
+        [freeBetBalances, exchangeRates, multiCollateralBalances]
     );
 
     return (
@@ -71,10 +89,12 @@ const UserStats: React.FC = () => {
             </SectionWrapper>
             {isFreeBetExists && (
                 <SectionWrapper>
-                    <SubHeader>
-                        <SubHeaderIcon className="icon icon--gift" />
-                        {t('profile.stats.free-bet')}
-                    </SubHeader>
+                    <SubHeaderWrapper>
+                        <SubHeader>
+                            <SubHeaderIcon className="icon icon--gift" />
+                            {t('profile.stats.free-bet')}
+                        </SubHeader>
+                    </SubHeaderWrapper>
                     {freeBetBalances &&
                         Object.keys(freeBetBalances).map((currencyKey) => {
                             return freeBetBalances[currencyKey] ? (
@@ -87,6 +107,41 @@ const UserStats: React.FC = () => {
                                         {formatCurrencyWithSign(
                                             null,
                                             freeBetBalances ? freeBetBalances[currencyKey] : 0
+                                        )}
+                                        {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
+                                            ? '...'
+                                            : ` (${formatCurrencyWithSign(
+                                                  USD_SIGN,
+                                                  getUSDForCollateral(currencyKey as Coins, true)
+                                              )})`}
+                                    </SubValue>
+                                </Section>
+                            ) : (
+                                <></>
+                            );
+                        })}
+                </SectionWrapper>
+            )}
+            {multiCollateralBalances && (
+                <SectionWrapper>
+                    <SubHeaderWrapper>
+                        <SubHeader>
+                            <SubHeaderIcon className="icon icon--wallet-connected" />
+                            {t('profile.stats.wallet')}
+                        </SubHeader>
+                    </SubHeaderWrapper>
+                    {freeBetBalances &&
+                        Object.keys(multiCollateralBalances).map((currencyKey) => {
+                            return multiCollateralBalances[currencyKey] ? (
+                                <Section>
+                                    <SubLabel>
+                                        <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
+                                        {currencyKey}
+                                    </SubLabel>
+                                    <SubValue>
+                                        {formatCurrencyWithSign(
+                                            null,
+                                            multiCollateralBalances ? multiCollateralBalances[currencyKey] : 0
                                         )}
                                         {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
                                             ? '...'
@@ -145,7 +200,9 @@ const Label = styled.span`
     }
 `;
 
-const SubLabel = styled(Label)``;
+const SubLabel = styled(Label)`
+    font-weight: 400;
+`;
 
 const Value = styled.span`
     font-weight: 600;
@@ -175,23 +232,25 @@ const SubHeaderIcon = styled.i`
     text-transform: none;
 `;
 
-const SubHeader = styled(Header)`
+const SubHeaderWrapper = styled(FlexDivRow)`
     &::after,
     &:before {
         display: inline-block;
         content: '';
         border-top: 2px solid ${(props) => props.theme.borderColor.senary};
-        width: 30%;
-        margin-top: 30px;
-        margin-left: 5px;
-        margin-right: 5px;
+        width: 100%;
+        margin-top: 40px;
         transform: translateY(-1rem);
     }
 `;
 
+const SubHeader = styled(Header)`
+    width: 300px;
+`;
+
 const CurrencyIcon = styled.i`
     font-size: 20px !important;
-    margin: 0px 3px;
+    margin: 0 3px 3px 3px;
     font-weight: 400 !important;
     text-transform: none !important;
     color: ${(props) => props.theme.textColor.quaternary};
