@@ -23,6 +23,7 @@ import {
     ExpandedRowWrapper,
     ExternalLink,
     FirstExpandedSection,
+    FreeBetIcon,
     LastExpandedSection,
     LiveIndicatorContainer,
     LiveLabel,
@@ -197,22 +198,23 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         accessor: 'status',
                         sortable: false,
                         Cell: (cellProps: any) => {
+                            let statusComponent;
                             if (cellProps.row.original.isCancelled) {
-                                return (
+                                statusComponent = (
                                     <StatusWrapper color={theme.status.sold}>
                                         <StatusIcon className={`icon icon--lost`} />
                                         {t('markets.market-card.canceled')}
                                     </StatusWrapper>
                                 );
                             } else if (cellProps.row.original.isUserTheWinner) {
-                                return (
+                                statusComponent = (
                                     <StatusWrapper color={theme.status.win}>
                                         <StatusIcon className={`icon icon--ticket-win`} />
                                         {t('markets.market-card.won')}
                                     </StatusWrapper>
                                 );
                             } else {
-                                return cellProps.row.original.isLost ? (
+                                statusComponent = cellProps.row.original.isLost ? (
                                     <StatusWrapper color={theme.status.loss}>
                                         <StatusIcon className={`icon icon--ticket-loss`} />
                                         {t('markets.market-card.loss')}
@@ -224,6 +226,16 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                                     </StatusWrapper>
                                 );
                             }
+
+                            if (cellProps.row.original.isFreeBet) {
+                                return (
+                                    <>
+                                        <FreeBetIcon className={'icon icon--gift'} />
+                                        {statusComponent}
+                                    </>
+                                );
+                            }
+                            return statusComponent;
                         },
                     },
                 ]}

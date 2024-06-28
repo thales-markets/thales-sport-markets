@@ -253,3 +253,9 @@ export const tableRowStyle: React.CSSProperties = {
     justifyContent: 'center',
     padding: '0',
 };
+
+export const FreeBetIcon = styled.i`
+    font-size: 20px;
+    color: ${(props) => props.theme.textColor.quaternary};
+    margin: 0 3px;
+`;
