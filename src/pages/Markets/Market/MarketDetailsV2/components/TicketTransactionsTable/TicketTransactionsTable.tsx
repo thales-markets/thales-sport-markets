@@ -2,18 +2,29 @@ import SPAAnchor from 'components/SPAAnchor';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Table from 'components/Table';
+import Tooltip from 'components/Tooltip';
+import { USD_SIGN } from 'constants/currency';
 import { OddsType } from 'enums/markets';
 import i18n from 'i18n';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { formatCurrencyWithKey, formatDateWithTime, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import {
+    Coins,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    formatDateWithTime,
+    getEtherscanAddressLink,
+    truncateAddress,
+} from 'thales-utils';
 import { SportMarket, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { getDefaultCollateral } from 'utils/collaterals';
 import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
@@ -69,9 +80,23 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     const isMobile = useSelector(getIsMobile);
     const selectedOddsType = useSelector(getOddsType);
     const networkId = useSelector(getNetworkId);
+    const isAppReady = useSelector(getIsAppReady);
 
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates: Rates | undefined =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : undefined;
+
+    const getExchangeRate = (collateral: Coins) => {
+        if (getDefaultCollateral(networkId) === collateral) {
+            return 1;
+        }
+        return !!exchangeRates ? exchangeRates[collateral] || 1 : 1;
+    };
 
     const onTwitterIconClick = (ticket: Ticket) => {
         ticket.sportMarkets = ticket.sportMarkets.map((sportMarket) => {
@@ -166,13 +191,26 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         sortable: true,
                         Cell: (cellProps: any) => {
                             return (
-                                <TableText>
-                                    {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
-                                </TableText>
+                                <Tooltip
+                                    overlay={formatCurrencyWithSign(
+                                        USD_SIGN,
+                                        getExchangeRate(cellProps.row.original.collateral) * cellProps.cell.value
+                                    )}
+                                    component={
+                                        <TableText>
+                                            {formatCurrencyWithKey(
+                                                cellProps.row.original.collateral,
+                                                cellProps.cell.value
+                                            )}
+                                        </TableText>
+                                    }
+                                />
                             );
                         },
                         sortType: (rowA: any, rowB: any) => {
-                            return rowA.original.buyInAmount - rowB.original.buyInAmount;
+                            const rateA = getExchangeRate(rowA.original.collateral);
+                            const rateB = getExchangeRate(rowB.original.collateral);
+                            return rowA.original.buyInAmount * rateA - rowB.original.buyInAmount * rateB;
                         },
                         sortDescFirst: true,
                     },
@@ -182,13 +220,26 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         sortable: true,
                         Cell: (cellProps: any) => {
                             return (
-                                <TableText>
-                                    {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
-                                </TableText>
+                                <Tooltip
+                                    overlay={formatCurrencyWithSign(
+                                        USD_SIGN,
+                                        getExchangeRate(cellProps.row.original.collateral) * cellProps.cell.value
+                                    )}
+                                    component={
+                                        <TableText>
+                                            {formatCurrencyWithKey(
+                                                cellProps.row.original.collateral,
+                                                cellProps.cell.value
+                                            )}
+                                        </TableText>
+                                    }
+                                />
                             );
                         },
                         sortType: (rowA: any, rowB: any) => {
-                            return rowA.original.payout - rowB.original.payout;
+                            const rateA = getExchangeRate(rowA.original.collateral);
+                            const rateB = getExchangeRate(rowB.original.collateral);
+                            return rowA.original.payout * rateA - rowB.original.payout * rateB;
                         },
                         sortDescFirst: true,
                     },
