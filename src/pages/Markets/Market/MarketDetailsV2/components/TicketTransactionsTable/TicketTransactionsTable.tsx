@@ -144,7 +144,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     color: theme.textColor.secondary,
                 }}
                 tableRowCellStyles={tableRowStyle}
-                columnsDeps={[networkId]}
+                columnsDeps={[networkId, exchangeRates]}
                 columns={[
                     {
                         Header: <>{t('profile.table.time')}</>,
