@@ -330,6 +330,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 101,
         hidden: false,
+        tooltipKey: 'common.football-tooltip',
     },
     [League.EREDIVISIE]: {
         sport: Sport.SOCCER,
