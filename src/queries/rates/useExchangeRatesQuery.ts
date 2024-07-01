@@ -35,6 +35,7 @@ const useExchangeRatesQuery = (networkId: Network, options?: UseQueryOptions<Rat
                         exchangeRates[`W${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }
                 });
+                exchangeRates['THALES-CONTRACT'] = exchangeRates['THALES'];
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
             }
 
