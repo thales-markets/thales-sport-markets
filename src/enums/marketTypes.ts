@@ -167,6 +167,7 @@ export enum MarketTypeGroup {
     SECOND_HALF = '2nd half',
     FIRST_SET = '1st set',
     SECOND_SET = '2nd set',
+    THIRD_SET = '3rd set',
     SETS = 'Sets',
     GAMES = 'Games',
     SGP = 'SGP',
