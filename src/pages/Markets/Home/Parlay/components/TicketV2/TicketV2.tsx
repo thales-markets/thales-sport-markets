@@ -1567,7 +1567,6 @@ const OddsChangedDiv = styled.div`
 
 const FreeBetIcon = styled.i`
     font-size: 15px;
-    margin-left: 3px;
     font-family: OvertimeIconsV2 !important;
     text-transform: none !important;
     margin-right: 3px;
