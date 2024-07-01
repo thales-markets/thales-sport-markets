@@ -44,6 +44,7 @@ import {
     OverviewContainer,
     OverviewWrapper,
     PayoutInLabel,
+    PayoutWrapper,
     TicketIdContainer,
     TicketInfo,
     TicketMarketsContainer,
@@ -207,11 +208,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                 <LiveIndicatorContainer isLive={ticket.isLive}>
                     {ticket.isLive && <Label>{t('profile.card.live')}</Label>}
                 </LiveIndicatorContainer>
-                {ticket.isFreeBet && (
-                    <FreeBetWrapper>
-                        <FreeBetIcon className={'icon icon--gift'} />
-                    </FreeBetWrapper>
-                )}
                 <OverviewContainer onClick={() => setShowDetails(!showDetails)}>
                     <TicketInfo>
                         <ExternalLink href={getEtherscanAddressLink(networkId, ticket.id)} target={'_blank'}>
@@ -230,17 +226,31 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                         <Value>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Value>
                     </InfoContainerColumn>
                     {isMobile && !isClaimable && (
-                        <InfoContainerColumn isOpen={!isClaimable}>
-                            <WinLabel>{t('profile.card.payout')}:</WinLabel>
-                            <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
-                        </InfoContainerColumn>
-                    )}
-                    {!isMobile && (
-                        <>
+                        <PayoutWrapper>
+                            {ticket.isFreeBet && (
+                                <FreeBetWrapper>
+                                    <FreeBetIcon className={'icon icon--gift'} />
+                                </FreeBetWrapper>
+                            )}
                             <InfoContainerColumn isOpen={!isClaimable}>
                                 <WinLabel>{t('profile.card.payout')}:</WinLabel>
                                 <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                             </InfoContainerColumn>
+                        </PayoutWrapper>
+                    )}
+                    {!isMobile && (
+                        <>
+                            <PayoutWrapper>
+                                {ticket.isFreeBet && (
+                                    <FreeBetWrapper>
+                                        <FreeBetIcon className={'icon icon--gift'} />
+                                    </FreeBetWrapper>
+                                )}
+                                <InfoContainerColumn isOpen={!isClaimable}>
+                                    <WinLabel>{t('profile.card.payout')}:</WinLabel>
+                                    <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
+                                </InfoContainerColumn>
+                            </PayoutWrapper>
                             {isClaimable && isMultiCollateralSupported && (
                                 <InfoContainerColumn
                                     onClick={(e) => {
@@ -264,26 +274,33 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                         </>
                     )}
                     {isMobile && isClaimable && (
-                        <ClaimContainer>
-                            <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
-                            {getButton(isMobile)}
-                            {isMultiCollateralSupported && isTicketCollateralDefaultCollateral && (
-                                <CollateralSelectorContainer
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                    }}
-                                >
-                                    <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
-                                    <CollateralSelector
-                                        collateralArray={claimCollateralArray}
-                                        selectedItem={claimCollateralIndex}
-                                        onChangeCollateral={setClaimCollateralIndex}
-                                        preventPaymentCollateralChange
-                                    />
-                                </CollateralSelectorContainer>
+                        <>
+                            <ClaimContainer>
+                                <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
+                                {getButton(isMobile)}
+                                {isMultiCollateralSupported && isTicketCollateralDefaultCollateral && (
+                                    <CollateralSelectorContainer
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                        }}
+                                    >
+                                        <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
+                                        <CollateralSelector
+                                            collateralArray={claimCollateralArray}
+                                            selectedItem={claimCollateralIndex}
+                                            onChangeCollateral={setClaimCollateralIndex}
+                                            preventPaymentCollateralChange
+                                        />
+                                    </CollateralSelectorContainer>
+                                )}
+                            </ClaimContainer>
+                            {ticket.isFreeBet && (
+                                <FreeBetWrapper>
+                                    <FreeBetIcon className={'icon icon--gift'} />
+                                </FreeBetWrapper>
                             )}
-                        </ClaimContainer>
+                        </>
                     )}
                     {isClaimable && !isMobile && getButton(isMobile)}
                     <ArrowIcon className={showDetails ? 'icon icon--caret-up' : 'icon icon--caret-down'} />

@@ -235,10 +235,17 @@ export const additionalClaimButtonStyleMobile: CSSProperties = {
 
 export const FreeBetWrapper = styled(FlexDivRow)`
     align-items: center;
+    margin-right: 5px;
 `;
 
 export const FreeBetIcon = styled.i`
     font-size: 15px;
     font-weight: 400;
     color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+export const PayoutWrapper = styled(FlexDivRow)`
+    align-items: center;
+    justify-content: flex-start;
+    display: relative;
 `;
