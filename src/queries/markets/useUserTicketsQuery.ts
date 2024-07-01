@@ -67,10 +67,6 @@ export const useUserTicketsQuery = (
                     const playersInfoResponse = promisesResult[promisesLength - 2];
                     const liveScoresResponse = promisesResult[promisesLength - 1];
 
-                    // Test
-                    const response = await sportsAMMDataContract.getActiveTicketsDataPerUser(user, 0, 1000);
-                    console.log('response ', response);
-
                     const mappedTickets: Ticket[] = tickets.map((ticket: any) =>
                         mapTicket(
                             ticket,
