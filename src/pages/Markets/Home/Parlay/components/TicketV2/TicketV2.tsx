@@ -271,6 +271,13 @@ const Ticket: React.FC<TicketProps> = ({
         ? !!Object.values(freeBetCollateralBalances).find((balance) => balance)
         : false;
 
+    // Set free bet if user has free bet balance
+    useEffect(() => {
+        if (freeBetBalanceExists) {
+            setIsFreeBetActive(true);
+        }
+    }, [freeBetBalanceExists]);
+
     const sportsAmmData: SportsAmmData | undefined = useMemo(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
             return sportsAmmDataQuery.data;
@@ -1240,6 +1247,24 @@ const Ticket: React.FC<TicketProps> = ({
                 changeAmount={(value) => setCollateralAmount(value)}
             />
             <RowSummary>
+                <RowContainer>
+                    <SummaryLabel>
+                        <FreeBetIcon className="icon icon--gift" />
+                        {t('markets.parlay.use-free-bet')}:
+                    </SummaryLabel>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={isFreeBetActive}
+                            value={isFreeBetActive.toString()}
+                            onChange={(e: any) => {
+                                setIsFreeBetActive(e.target.checked || false);
+                            }}
+                        />
+                    </CheckboxContainer>
+                </RowContainer>
+            </RowSummary>
+            <RowSummary>
                 <SummaryLabel lineHeight={26}>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
             <InputContainer ref={inputRef}>
@@ -1310,14 +1335,6 @@ const Ticket: React.FC<TicketProps> = ({
                     </>
                 )}
             </InfoContainer>
-
-            <InfoContainer>
-                <FreeBetLabel onClick={() => setIsFreeBetActive(!isFreeBetActive)} active={isFreeBetActive}>
-                    {isFreeBetActive ? t('markets.parlay.disable-free-bet') : t('markets.parlay.use-free-bet')}
-                    {!isFreeBetActive && <FreeBetIcon className="icon icon--gift" />}
-                </FreeBetLabel>
-            </InfoContainer>
-
             {isAA && (
                 <GasSummary>
                     <SummaryLabel>
@@ -1548,19 +1565,13 @@ const OddsChangedDiv = styled.div`
     font-size: 12px;
 `;
 
-const FreeBetLabel = styled(FlexDivRow)<{ active: boolean }>`
-    cursor: pointer;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 20px;
-    letter-spacing: 0.025em;
-    align-items: center;
-    color: ${(props) => (props.active ? props.theme.error.textColor.primary : props.theme.textColor.quaternary)};
-`;
-
 const FreeBetIcon = styled.i`
     font-size: 15px;
     margin-left: 3px;
+    font-family: OvertimeIconsV2 !important;
+    text-transform: none !important;
+    margin-right: 3px;
+    color: ${(props) => props.theme.textColor.quaternary} !important;
 `;
 
 export default Ticket;
