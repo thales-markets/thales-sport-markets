@@ -1,6 +1,6 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -17,9 +17,12 @@ import styled from 'styled-components';
 import { formatCurrency, truncateAddress } from 'thales-utils';
 
 import NetworkSwitcher from 'components/NetworkSwitcher';
-import useSUSDWalletBalance from 'queries/wallet/usesUSDWalletBalance';
+import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
+import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { getDefaultCollateral } from 'utils/collaterals';
+import { Coins } from 'types/tokens';
+import { getCollateral, getCollateralIndex } from 'utils/collaterals';
 
 const WalletInfo: React.FC = ({}) => {
     const { t } = useTranslation();
@@ -31,15 +34,53 @@ const WalletInfo: React.FC = ({}) => {
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
+    const ticketPayment = useSelector(getTicketPayment);
 
-    const stableCointBalanceQuery = useSUSDWalletBalance(walletAddress, networkId, {
+    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
+
+    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
-    const stableCoinBalance = useMemo(() => {
-        return stableCointBalanceQuery?.data || 0;
-    }, [stableCointBalanceQuery.data]);
 
-    const walletBalance = stableCoinBalance;
+    const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
+        networkId,
+        selectedCollateralIndex,
+    ]);
+
+    const selectedCollateralBalance =
+        multipleCollateralBalances.data && multipleCollateralBalances.isSuccess
+            ? multipleCollateralBalances.data[selectedCollateral]
+            : 0;
+
+    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+
+    const freeBetCollateralBalances =
+        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery.data
+            : undefined;
+
+    const freeBetNonZeroBalanceKey =
+        freeBetCollateralBalances &&
+        Object.keys(freeBetCollateralBalances).find((key) => freeBetCollateralBalances[key] > 0);
+
+    const freeBetCollateralIndex = freeBetNonZeroBalanceKey
+        ? getCollateralIndex(networkId, freeBetNonZeroBalanceKey as Coins)
+        : undefined;
+
+    const walletBalance = freeBetNonZeroBalanceKey
+        ? freeBetCollateralBalances[freeBetNonZeroBalanceKey]
+        : selectedCollateralBalance;
+
+    useEffect(() => {
+        if (freeBetNonZeroBalanceKey && freeBetCollateralIndex !== undefined) {
+            setPaymentSelectedCollateralIndex({
+                selectedCollateralIndex: freeBetCollateralIndex,
+                networkId: networkId,
+            });
+        }
+    }, [freeBetCollateralIndex, freeBetNonZeroBalanceKey, networkId]);
 
     return (
         <Container walletConnected={isWalletConnected}>
@@ -67,8 +108,16 @@ const WalletInfo: React.FC = ({}) => {
                                 )}
                                 {isWalletConnected && (
                                     <WalletBalanceInfo>
+                                        {freeBetNonZeroBalanceKey && <FreeBetIcon className="icon icon--gift" />}
                                         <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                        <Currency>{getDefaultCollateral(networkId)}</Currency>
+                                        <Currency>
+                                            {getCollateral(
+                                                networkId,
+                                                freeBetCollateralIndex == undefined
+                                                    ? selectedCollateralIndex
+                                                    : freeBetCollateralIndex
+                                            )}
+                                        </Currency>
                                     </WalletBalanceInfo>
                                 )}
                                 <NetworkSwitcher />
@@ -164,6 +213,15 @@ const Text = styled.span`
 const Currency = styled(Text)`
     font-weight: bold;
     margin-left: 2px;
+`;
+
+const FreeBetIcon = styled.i`
+    font-size: 13px;
+    margin-left: 5px;
+    font-family: OvertimeIconsV2 !important;
+    text-transform: none !important;
+    margin-right: 3px;
+    color: ${(props) => props.theme.textColor.quaternary} !important;
 `;
 
 const PARTICLE_WALLET = 'https://wallet.particle.network/';
