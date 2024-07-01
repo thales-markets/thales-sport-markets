@@ -163,11 +163,11 @@
         "displayCountdown": true,
         "promotionId": "wimbledon-2024",
         "promotionUrl": "/promotions/wimbledon-2024",
-        "backgroundImageUrl": "/promotions/rg-2024-small.webp",
+        "backgroundImageUrl": "/promotions/wimbledon-small.webp",
         "callToActionButton": "How to earn",
         "availableOnNetworks": [10],
         "article": {
-            "coverImageUrl": "/promotions/rg-2024-big.webp",
+            "coverImageUrl": "/promotions/wimbledon-big.webp",
             "headerHtml": "<h1><span><span><span>Win 2,000 OP in Pro Rata Awards during Wimbledon 2024</span></span></span></h1>",
             "ctaSection": {
                 "sectionHtml": "Compete for 2,000 OP during Wimbledon 2024 on Overtime V1 and V2, distributed pro rata, meaning higher volume = higher rewards.</span></span></span><span><span><span>Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/overtime-wimbledon-campaign-1-july-14-july-2024' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
