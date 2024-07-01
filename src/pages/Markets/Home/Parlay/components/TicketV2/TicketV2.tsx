@@ -245,9 +245,6 @@ const Ticket: React.FC<TicketProps> = ({
         }
     }, [ammContractsPaused.data, ammContractsPaused.isSuccess]);
 
-    console.log('selectedCollateral ', selectedCollateral);
-    console.log('defaultCollateral ', defaultCollateral);
-
     useEffect(() => {
         if (ammContractsStatusData?.sportsAMM) {
             setIsAMMPaused(true);
@@ -634,7 +631,9 @@ const Ticket: React.FC<TicketProps> = ({
         ) {
             setIsBuying(true);
             const sportsAMMV2ContractWithSigner = markets[0].live
-                ? liveTradingProcessorContract?.connect(signer)
+                ? isFreeBetActive
+                    ? freeBetHolderContract?.connect(signer)
+                    : liveTradingProcessorContract?.connect(signer)
                 : sportsAMMV2Contract?.connect(signer);
             const freeBetContractWithSigner = freeBetHolderContract?.connect(signer);
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
@@ -673,7 +672,8 @@ const Ticket: React.FC<TicketProps> = ({
                                 liveTotalQuote,
                                 referralId,
                                 additionalSlippage,
-                                isAA
+                                isAA,
+                                isFreeBetActive
                             );
                         }
                     } else {
@@ -685,7 +685,8 @@ const Ticket: React.FC<TicketProps> = ({
                             liveTotalQuote,
                             referralId,
                             additionalSlippage,
-                            isAA
+                            isAA,
+                            isFreeBetActive
                         );
                     }
                 } else {
@@ -707,6 +708,8 @@ const Ticket: React.FC<TicketProps> = ({
                 }
 
                 const txResult = isAA ? tx : await tx?.wait();
+
+                console.log('txResult ', txResult);
 
                 if (txResult && txResult.transactionHash) {
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
@@ -745,8 +748,11 @@ const Ticket: React.FC<TicketProps> = ({
                         setCollateralAmount('');
                     } else if (sportsAMMV2ContractWithSigner) {
                         let counter = 0;
-                        const requestId = txResult.events.find((event: any) => event.event === 'LiveTradeRequested')
-                            .args[2];
+                        const requestId = txResult.events.find((event: any) =>
+                            isFreeBetActive
+                                ? event.event == 'FreeBetLiveTradeRequested'
+                                : event.event === 'LiveTradeRequested'
+                        ).args[2];
                         const startTime = Date.now();
                         console.log('filfill start time:', new Date(startTime));
                         const checkFulfilled = async () => {

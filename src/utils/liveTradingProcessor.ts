@@ -12,7 +12,8 @@ export const getLiveTradingProcessorTransaction: any = async (
     expectedQuote: BigNumber,
     referral?: string | null,
     additionalSlippage?: BigNumber,
-    isAA?: boolean
+    isAA?: boolean,
+    isFreeBet?: boolean
 ): Promise<any> => {
     const referralAddress = referral || ZERO_ADDRESS;
     const gameId = convertFromBytes32(tradeData[0].gameId);
@@ -31,6 +32,20 @@ export const getLiveTradingProcessorTransaction: any = async (
             collateralAddress,
         ]);
     } else {
+        if (isFreeBet) {
+            return liveTradingProcessorContract.tradeLive({
+                _gameId: gameId,
+                _sportId: tradeData[0].sportId,
+                _typeId: tradeData[0].typeId,
+                _line: tradeData[0].line,
+                _position: tradeData[0].position,
+                _buyInAmount: sUSDPaid,
+                _expectedQuote: expectedQuote,
+                _additionalSlippage: additionalSlippage,
+                _referrer: referralAddress,
+                _collateral: collateralAddress,
+            });
+        }
         return liveTradingProcessorContract.requestLiveTrade({
             _gameId: gameId,
             _sportId: tradeData[0].sportId,
