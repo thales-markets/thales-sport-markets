@@ -153,7 +153,29 @@
                 "ctaButtonLabel": "Play now"
             },
             "contentHtml": "<p> <span> <span> <span>TENNIS FANS, ARE YOU READY? <span><br><br> <span> <span>From May 25th, all eyes will be on Paris.</span> <br> <br> The 2024 French Open could be one of the most competitive Grand Slam tournaments in recent years. But hat's not all – you can win up to 1,500 OP in rewards by predicting the French Open on Overtime! <br><br>The OP rewards are divided to users based on volume generated. It's really simple - the higher your volume, the more OP rewards you win. </span> </span> </span> <span> <span> <span> <span> <span> <br> </p> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.</span> <span> <span> <span>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on various rewards leaderboards. </span> </span> </span> </p>"
-        }        
+        }
+    },
+    {
+        "title": "Win 2,000 OP in Pro Rata Rewards during Wimbledon 2024",
+        "description": "Compete for 2,000 OP dedicated to Wimbledon 2024 on Overtime V1 and V2 distributed pro rata, meaning higher volume = higher rewards.",
+        "startDate": 1719825673,
+        "endDate": 1720948873,
+        "displayCountdown": true,
+        "promotionId": "wimbledon-2024",
+        "promotionUrl": "/promotions/wimbledon-2024",
+        "backgroundImageUrl": "/promotions/wimbledon-small.webp",
+        "callToActionButton": "How to earn",
+        "availableOnNetworks": [10],
+        "article": {
+            "coverImageUrl": "/promotions/wimbledon-big.webp",
+            "headerHtml": "<h1><span><span><span>Win 2,000 OP in Pro Rata Awards during Wimbledon 2024</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "Compete for 2,000 OP during Wimbledon 2024 on Overtime V1 and V2, distributed pro rata, meaning higher volume = higher rewards.</span></span></span><span><span><span>Track your rewards:&nbsp </span></span></span><a href='https://dune.com/leifu/overtime-wimbledon-campaign-1-july-14-july-2024' target='_blank'><span><span><span><u> Dune dashboard</u></span></span></span></a><spa><span>.</span></span></p>",
+                "ctaButtonLink": "https://v2.overtimemarkets.xyz/?lang=en&sport=Tennis&status=OpenMarkets&showActive=true",
+                "ctaButtonLabel": "Play now"
+            },
+            "contentHtml": " <p> <span> <span> <span>It’s time for Wimbledon! <span> <br> <br> <span> <span> From July 1 - July 14, players will compete for glory in the All England Lawn Club. At the same time, Overtime V1 and V2 users will share 2,000 OP in Wimbledon rewards! <br> <br> As always, the rewards are volume-based, meaning the higher your trading (wagering) volume on both versions of Overtime combined, the higher your rewards. What’s especially exciting is the first-time appearance of </strong> </span> </span> </span> <a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets&showActive=true' target='_blank'> <span> <span> <span> <strong> <u>Overtime V2,</u> </strong> </span> </span> </span></a>including live markets and various new game types never seen before on Overtime!</span> </span> </span> <span> <span> <span> <span> <span> <span>Here are the links for both V1 and V2: </span> </span> <ul> <li> <span> <span> <span><a href='https://www.overtimemarkets.xyz/markets?globalFilter=OpenMarkets&sport=Tennis&lang=en-US&showActive=true'> <u>Overtime V1</u> </a> </span> </span> </span> </li> <li> <span> <span> <span><a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Tennis&status=OpenMarkets&showActive=true'> <u>Overtime V2</u> </a> </span> </span> </span></span> </span> </span> </li></li> </ul> <p> <span> <span> <span> </p> Have fun with the new markets and remember - if you use THALES as collateral on Overtime V2, every match you add to a parlay will increase your winnings by 1% (up to 10%). <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.</span> <span> <span> <span>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on various rewards leaderboards. </span> </span> </span> </p>"
+        }   
     },
     {
         "title": "100,000 OP, 100,000 ARB and 180,000 THALES for all users of NBA, NFL and EPL throughout the season!",
