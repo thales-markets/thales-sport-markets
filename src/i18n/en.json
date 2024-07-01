@@ -676,7 +676,8 @@
             },
             "buttons": {
                 "switch": "Switch",
-                "disconnect": "Disconnect"
+                "disconnect": "Disconnect",
+                "particle-wallet": "Particle Wallet"
             },
             "labels": {
                 "language": "Language"
