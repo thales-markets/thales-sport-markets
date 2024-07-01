@@ -1440,7 +1440,7 @@ const Ticket: React.FC<TicketProps> = ({
                     </FlexDivCentered>
                 </>
             )}
-            {!(oddsChanged && isLiveTicket) && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
+            {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>
