@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import {
-    getIsConnectedViaParticle,
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
@@ -31,7 +30,7 @@ const WalletInfo: React.FC = ({}) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
     const ticketPayment = useSelector(getTicketPayment);
@@ -93,11 +92,7 @@ const WalletInfo: React.FC = ({}) => {
                                     <WalletAddressInfo
                                         isWalletConnected={isWalletConnected}
                                         isClickable={true}
-                                        onClick={
-                                            !isConnectedViaParticle
-                                                ? () => openAccountModal()
-                                                : () => window.open(PARTICLE_WALLET, '_blank')
-                                        }
+                                        onClick={openAccountModal}
                                     >
                                         <Text className="wallet-info">
                                             {isWalletConnected
@@ -223,7 +218,5 @@ const FreeBetIcon = styled.i`
     margin-right: 3px;
     color: ${(props) => props.theme.textColor.quaternary} !important;
 `;
-
-const PARTICLE_WALLET = 'https://wallet.particle.network/';
 
 export default WalletInfo;

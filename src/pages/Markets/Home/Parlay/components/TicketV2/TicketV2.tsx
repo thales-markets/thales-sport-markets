@@ -311,6 +311,7 @@ const Ticket: React.FC<TicketProps> = ({
     const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
     const selectedCollateralCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[selectedCollateral] : 1;
+    const thalesContractCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates['THALES-CONTRACT'] : 1;
 
     const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(networkId, {
         enabled: isAppReady,
@@ -359,9 +360,19 @@ const Ticket: React.FC<TicketProps> = ({
     const ticketLiquidity: number | undefined = useMemo(
         () =>
             ticketLiquidityQuery.isSuccess && ticketLiquidityQuery.data !== undefined
-                ? ticketLiquidityQuery.data
+                ? isThales
+                    ? Math.floor(
+                          (ticketLiquidityQuery.data * selectedCollateralCurrencyRate) / thalesContractCurrencyRate
+                      )
+                    : ticketLiquidityQuery.data
                 : undefined,
-        [ticketLiquidityQuery.isSuccess, ticketLiquidityQuery.data]
+        [
+            ticketLiquidityQuery.isSuccess,
+            ticketLiquidityQuery.data,
+            isThales,
+            selectedCollateralCurrencyRate,
+            thalesContractCurrencyRate,
+        ]
     );
 
     // Clear Ticket when network is changed
@@ -575,7 +586,9 @@ const Ticket: React.FC<TicketProps> = ({
 
     const setMaxAmount = (value: string | number) => {
         const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
-        setCollateralAmount(floorNumberToDecimals(Number(value), decimals));
+        const liquidityInCollateral = (ticketLiquidity || 1) / selectedCollateralCurrencyRate;
+        const amount = liquidityInCollateral > Number(value) ? Number(value) : liquidityInCollateral;
+        setCollateralAmount(floorNumberToDecimals(amount, decimals));
     };
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -804,7 +817,8 @@ const Ticket: React.FC<TicketProps> = ({
                                             {
                                                 ...markets[0],
                                                 odd: bigNumberFormatter(
-                                                    userTickets.ticketsData[userTickets.length - 1].totalQuote
+                                                    userTickets.ticketsData[userTickets.ticketsData.length - 1]
+                                                        .totalQuote
                                                 ),
                                             },
                                         ],
@@ -1508,7 +1522,7 @@ const Ticket: React.FC<TicketProps> = ({
                     </FlexDivCentered>
                 </>
             )}
-            {!(oddsChanged && isLiveTicket) && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
+            {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>

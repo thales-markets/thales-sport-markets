@@ -546,7 +546,13 @@
             "loss": "Verlust",
             "open": "Offen",
             "won": "Gewonnen",
-            "live-trading-paused": "Live-Handel pausiert"
+            "live-trading-paused": "Live-Handel pausiert",
+            "scheduled": "Geplant",
+            "fighters-walking": "Kämpfer zu Fuß",
+            "pre-fight": "Vor dem Kampf",
+            "end-of-fight": "Ende des Kampfes",
+            "fighters-introduction": "Kämpfer Einführung",
+            "end-of-round": "Ende der Runde"
         },
         "market-details": {
             "price": "Preis",

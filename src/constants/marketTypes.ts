@@ -930,8 +930,12 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.SETS]: [
             MarketType.TOTAL2,
             MarketType.SPREAD2,
+            MarketType.FIRST_PERIOD_WINNER,
+            MarketType.SECOND_PERIOD_WINNER,
+            MarketType.THIRD_PERIOD_WINNER,
             MarketType.FIRST_PERIOD_TOTAL,
             MarketType.SECOND_PERIOD_TOTAL,
+            MarketType.THIRD_PERIOD_TOTAL,
         ],
         [MarketTypeGroup.GAMES]: [
             MarketType.TOTAL,
@@ -939,9 +943,11 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.TOTAL_ODD_EVEN,
             MarketType.FIRST_PERIOD_TOTAL,
             MarketType.SECOND_PERIOD_TOTAL,
+            MarketType.THIRD_PERIOD_TOTAL,
         ],
-        [MarketTypeGroup.FIRST_SET]: [MarketType.FIRST_PERIOD_TOTAL],
-        [MarketTypeGroup.SECOND_SET]: [MarketType.SECOND_PERIOD_TOTAL],
+        [MarketTypeGroup.FIRST_SET]: [MarketType.FIRST_PERIOD_WINNER, MarketType.FIRST_PERIOD_TOTAL],
+        [MarketTypeGroup.SECOND_SET]: [MarketType.SECOND_PERIOD_WINNER, MarketType.SECOND_PERIOD_TOTAL],
+        [MarketTypeGroup.THIRD_SET]: [MarketType.THIRD_PERIOD_WINNER, MarketType.THIRD_PERIOD_TOTAL],
     },
     [Sport.FOOTBALL]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,

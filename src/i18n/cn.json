@@ -546,7 +546,13 @@
             "loss": "损失",
             "won": "韩元",
             "open": "打开",
-            "live-trading-paused": "实时交易暂停"
+            "live-trading-paused": "实时交易暂停",
+            "scheduled": "已安排",
+            "end-of-round": "回合结束",
+            "pre-fight": "战前",
+            "fighters-introduction": "戰士介绍",
+            "end-of-fight": "戰鬥結束",
+            "fighters-walking": "战士行走"
         },
         "market-details": {
             "price": "价格",
