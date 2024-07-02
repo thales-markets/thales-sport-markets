@@ -638,9 +638,7 @@ const Ticket: React.FC<TicketProps> = ({
         ) {
             setIsBuying(true);
             const sportsAMMV2ContractWithSigner = markets[0].live
-                ? isFreeBetActive
-                    ? freeBetHolderContract?.connect(signer)
-                    : liveTradingProcessorContract?.connect(signer)
+                ? liveTradingProcessorContract?.connect(signer)
                 : sportsAMMV2Contract?.connect(signer);
             const freeBetContractWithSigner = freeBetHolderContract?.connect(signer);
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
@@ -680,7 +678,8 @@ const Ticket: React.FC<TicketProps> = ({
                                 referralId,
                                 additionalSlippage,
                                 isAA,
-                                isFreeBetActive
+                                false,
+                                undefined
                             );
                         }
                     } else {
@@ -693,7 +692,8 @@ const Ticket: React.FC<TicketProps> = ({
                             referralId,
                             additionalSlippage,
                             isAA,
-                            isFreeBetActive
+                            isFreeBetActive,
+                            freeBetContractWithSigner
                         );
                     }
                 } else {
@@ -715,8 +715,6 @@ const Ticket: React.FC<TicketProps> = ({
                 }
 
                 const txResult = isAA ? tx : await tx?.wait();
-
-                console.log('txResult ', txResult);
 
                 if (txResult && txResult.transactionHash) {
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
