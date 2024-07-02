@@ -546,7 +546,13 @@
             "open": "Aprire",
             "won": "Vinto",
             "loss": "Perdita",
-            "live-trading-paused": "Il trading dal vivo è stato sospeso"
+            "live-trading-paused": "Il trading dal vivo è stato sospeso",
+            "scheduled": "Programmato",
+            "end-of-fight": "Fine del combattimento",
+            "pre-fight": "Pre-combattimento",
+            "end-of-round": "Fine del giro",
+            "fighters-walking": "Combattenti che camminano",
+            "fighters-introduction": "Introduzione ai combattenti"
         },
         "market-details": {
             "price": "Price",

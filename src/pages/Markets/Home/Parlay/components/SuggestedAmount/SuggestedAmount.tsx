@@ -1,5 +1,9 @@
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE, SUSD_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
+import {
+    ALTCOIN_CONVERSION_BUFFER_PERCENTAGE,
+    SUSD_CONVERSION_BUFFER_PERCENTAGE,
+    THALES_CONTRACT_RATE_KEY,
+} from 'constants/markets';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -37,10 +41,11 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const isStableCollateral = isStableCurrency(collateral);
     const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+    const isThales = collateral === CRYPTO_CURRENCY_MAP.THALES;
 
     const convertFromStable = useCallback(
         (value: number) => {
-            const rate = exchangeRates?.[collateral];
+            const rate = exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral];
             if (collateral == defaultCollateral) {
                 return value;
             } else {
@@ -58,7 +63,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
                     : 0;
             }
         },
-        [collateral, decimals, defaultCollateral, exchangeRates]
+        [collateral, decimals, defaultCollateral, exchangeRates, isThales]
     );
 
     return (

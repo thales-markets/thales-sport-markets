@@ -54,6 +54,7 @@ const Ticket: React.FC<TicketProps> = (props) => {
                     isTicketLost={lastValidTicket.isLost}
                     collateral={lastValidTicket.collateral}
                     isLive={lastValidTicket.isLive}
+                    applyPayoutMultiplier={false}
                 />
             ) : (
                 <LoaderContainer>

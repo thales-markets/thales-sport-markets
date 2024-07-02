@@ -546,7 +546,13 @@
             "loss": "Perte",
             "open": "Ouvrir",
             "won": "Gagné",
-            "live-trading-paused": "Le trading en direct est suspendu"
+            "live-trading-paused": "Le trading en direct est suspendu",
+            "pre-fight": "Pré-combat",
+            "fighters-walking": "Combattants marchant",
+            "end-of-fight": "Fin du combat",
+            "scheduled": "Programmé",
+            "fighters-introduction": "Présentation des combattants",
+            "end-of-round": "Fin du tour"
         },
         "market-details": {
             "wallet-info": {

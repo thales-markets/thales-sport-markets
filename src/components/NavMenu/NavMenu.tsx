@@ -21,7 +21,6 @@ import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
-import { useDisconnect } from 'wagmi';
 import {
     CloseIcon,
     FooterContainer,
@@ -44,11 +43,12 @@ type NavMenuProps = {
     skipOutsideClickOnElement?: React.RefObject<HTMLImageElement>;
 };
 
+const PARTICLE_WALLET = 'https://wallet.particle.network/';
+
 const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, skipOutsideClickOnElement }) => {
     const { t } = useTranslation();
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
-    const { disconnect } = useDisconnect();
 
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
@@ -174,14 +174,14 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                                 borderRadius: '5px',
                                 fontSize: '14px',
                                 textTransform: 'capitalize',
+                                padding: '3px 20px',
                             }}
                             height="28px"
                             onClick={() => {
-                                disconnect();
-                                setNavMenuVisibility(false);
+                                window.open(PARTICLE_WALLET, '_blank');
                             }}
                         >
-                            {t('get-started.sign-out')}
+                            {t('markets.nav-menu.buttons.particle-wallet')}
                         </Button>
                     )}
                 </FooterContainer>

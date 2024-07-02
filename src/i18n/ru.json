@@ -546,7 +546,13 @@
             "loss": "Потеря",
             "open": "Открыть",
             "won": "Выиграл",
-            "live-trading-paused": "Реальная торговля приостановлена"
+            "live-trading-paused": "Реальная торговля приостановлена",
+            "fighters-walking": "Истребители идут",
+            "scheduled": "Запланированное",
+            "end-of-round": "Конец раунда",
+            "pre-fight": "Перед боем",
+            "fighters-introduction": "Представление бойцов",
+            "end-of-fight": "Конец боя"
         },
         "market-details": {
             "price": "Price",

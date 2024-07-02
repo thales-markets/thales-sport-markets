@@ -3,6 +3,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
+import { Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -38,6 +39,9 @@ import {
     MatchInfo,
     MatchInfoContainer,
     MatchInfoLabel,
+    PeriodResultContainer,
+    ResultLabel,
+    SecondaryResultsWrapper,
     TeamLogosContainer,
     TeamNameLabel,
     TeamNamesContainer,
@@ -234,20 +238,51 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         )}
                     </TeamNamesContainer>
                     {isGameLive && (
-                        <CurrentResultContainer isColumnView={isColumnView}>
-                            <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
-                                {market.homeScore}
-                            </TeamNameLabel>
-                            {isMobile && (isGameOpen || isGameLive) && (
-                                <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
-                                    {' '}
-                                    -{' '}
-                                </TeamNameLabel>
+                        <>
+                            <CurrentResultContainer isColumnView={isColumnView}>
+                                <ResultLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                    {market.homeScore}
+                                </ResultLabel>
+                                {isMobile && (isGameOpen || isGameLive) && (
+                                    <ResultLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                        {' '}
+                                        -{' '}
+                                    </ResultLabel>
+                                )}
+                                <ResultLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                    {market.awayScore}
+                                </ResultLabel>
+                            </CurrentResultContainer>
+                            {market.sport == Sport.TENNIS && (
+                                <SecondaryResultsWrapper>
+                                    {market.homeScoreByPeriod.map((score: number, index: number) => (
+                                        <PeriodResultContainer key={index} isColumnView={isColumnView}>
+                                            <ResultLabel
+                                                isColumnView={isColumnView}
+                                                isMarketSelected={isMarketSelected}
+                                            >
+                                                {score}
+                                            </ResultLabel>
+                                            {isMobile && (isGameOpen || isGameLive) && (
+                                                <ResultLabel
+                                                    isColumnView={isColumnView}
+                                                    isMarketSelected={isMarketSelected}
+                                                >
+                                                    {' '}
+                                                    -{' '}
+                                                </ResultLabel>
+                                            )}
+                                            <ResultLabel
+                                                isColumnView={isColumnView}
+                                                isMarketSelected={isMarketSelected}
+                                            >
+                                                {market.awayScoreByPeriod[index]}
+                                            </ResultLabel>
+                                        </PeriodResultContainer>
+                                    ))}
+                                </SecondaryResultsWrapper>
                             )}
-                            <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
-                                {market.awayScore}
-                            </TeamNameLabel>
-                        </CurrentResultContainer>
+                        </>
                     )}
                 </TeamsInfoContainer>
             </MatchInfoContainer>

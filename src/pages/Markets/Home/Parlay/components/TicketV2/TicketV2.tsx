@@ -16,6 +16,7 @@ import {
     MIN_COLLATERAL_MULTIPLIER,
     PARLAY_LEADERBOARD_MINIMUM_GAMES,
     PARLAY_LEADERBOARD_WEEKLY_START_DATE,
+    THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
 import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
@@ -279,6 +280,8 @@ const Ticket: React.FC<TicketProps> = ({
     const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
     const selectedCollateralCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[selectedCollateral] : 1;
+    const thalesContractCurrencyRate =
+        exchangeRates && exchangeRates !== null ? exchangeRates[THALES_CONTRACT_RATE_KEY] : 1;
 
     const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(networkId, {
         enabled: isAppReady,
@@ -327,9 +330,19 @@ const Ticket: React.FC<TicketProps> = ({
     const ticketLiquidity: number | undefined = useMemo(
         () =>
             ticketLiquidityQuery.isSuccess && ticketLiquidityQuery.data !== undefined
-                ? ticketLiquidityQuery.data
+                ? isThales
+                    ? Math.floor(
+                          (ticketLiquidityQuery.data * selectedCollateralCurrencyRate) / thalesContractCurrencyRate
+                      )
+                    : ticketLiquidityQuery.data
                 : undefined,
-        [ticketLiquidityQuery.isSuccess, ticketLiquidityQuery.data]
+        [
+            ticketLiquidityQuery.isSuccess,
+            ticketLiquidityQuery.data,
+            isThales,
+            selectedCollateralCurrencyRate,
+            thalesContractCurrencyRate,
+        ]
     );
 
     // Clear Ticket when network is changed
@@ -355,7 +368,11 @@ const Ticket: React.FC<TicketProps> = ({
                     const [minimumNeededForMinUsdAmountValue] = await Promise.all([
                         collateralHasLp
                             ? minBuyInAmountInDefaultCollateral /
-                              (isDefaultCollateral ? 1 : selectedCollateralCurrencyRate)
+                              (isDefaultCollateral
+                                  ? 1
+                                  : isThales
+                                  ? thalesContractCurrencyRate
+                                  : selectedCollateralCurrencyRate)
                             : multiCollateralOnOffRampContract?.getMinimumNeeded(
                                   collateralAddress,
                                   coinParser(minBuyInAmountInDefaultCollateral.toString(), networkId)
@@ -543,7 +560,9 @@ const Ticket: React.FC<TicketProps> = ({
 
     const setMaxAmount = (value: string | number) => {
         const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
-        setCollateralAmount(floorNumberToDecimals(Number(value), decimals));
+        const liquidityInCollateral = (ticketLiquidity || 1) / selectedCollateralCurrencyRate;
+        const amount = liquidityInCollateral > Number(value) ? Number(value) : liquidityInCollateral;
+        setCollateralAmount(floorNumberToDecimals(amount, decimals));
     };
 
     const handleAllowance = async (approveAmount: BigNumber) => {
@@ -703,6 +722,7 @@ const Ticket: React.FC<TicketProps> = ({
                             isTicketLost: false,
                             collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                             isLive: false,
+                            applyPayoutMultiplier: true,
                         };
                         setShareTicketModalData(modalData);
                         setShowShareTicketModal(true);
@@ -752,7 +772,10 @@ const Ticket: React.FC<TicketProps> = ({
                                         markets: [
                                             {
                                                 ...markets[0],
-                                                odd: bigNumberFormatter(userTickets[userTickets.length - 1].totalQuote),
+                                                odd: bigNumberFormatter(
+                                                    userTickets.ticketsData[userTickets.ticketsData.length - 1]
+                                                        .totalQuote
+                                                ),
                                             },
                                         ],
                                         multiSingle: false,
@@ -769,6 +792,7 @@ const Ticket: React.FC<TicketProps> = ({
                                         isTicketLost: false,
                                         collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                                         isLive: true,
+                                        applyPayoutMultiplier: false,
                                     };
                                     setShareTicketModalData(modalData);
                                     setShowShareTicketModal(true);
@@ -1034,6 +1058,7 @@ const Ticket: React.FC<TicketProps> = ({
             isTicketLost: false,
             collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
             isLive: !!markets[0].live,
+            applyPayoutMultiplier: true,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(!twitterShareDisabled);
@@ -1434,7 +1459,7 @@ const Ticket: React.FC<TicketProps> = ({
                     </FlexDivCentered>
                 </>
             )}
-            {!(oddsChanged && isLiveTicket) && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
+            {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>
@@ -1448,6 +1473,7 @@ const Ticket: React.FC<TicketProps> = ({
                     isTicketLost={shareTicketModalData.isTicketLost}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                 />
             )}
             {openApprovalModal && (

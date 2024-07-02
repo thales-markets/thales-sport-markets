@@ -28,7 +28,7 @@ const useClaimablePositionCountQuery = (
                     }
                     const promisesResult = await Promise.all(promises);
 
-                    const tickets = promisesResult.flat(1);
+                    const tickets = promisesResult.map((allData) => allData.ticketsData).flat(1);
 
                     const count = tickets.filter((ticket) => ticket.isUserTheWinner && !ticket.resolved).length;
                     return count;
