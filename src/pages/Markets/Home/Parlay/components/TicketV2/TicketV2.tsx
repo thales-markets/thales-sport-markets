@@ -717,13 +717,20 @@ const Ticket: React.FC<TicketProps> = ({
                 const txResult = isAA ? tx : await tx?.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
-                        props: {
-                            value: Number(buyInAmount),
-                            collateral: selectedCollateral,
-                            networkId,
-                        },
-                    });
+                    PLAUSIBLE.trackEvent(
+                        tradeData[0].live
+                            ? isFreeBetActive
+                                ? PLAUSIBLE_KEYS.freeBetLive
+                                : PLAUSIBLE_KEYS.livePositionBuy
+                            : PLAUSIBLE_KEYS.parlayBuy,
+                        {
+                            props: {
+                                value: Number(buyInAmount),
+                                collateral: selectedCollateral,
+                                networkId,
+                            },
+                        }
+                    );
                     if (!tradeData[0].live) {
                         refetchBalances(walletAddress, networkId);
 
