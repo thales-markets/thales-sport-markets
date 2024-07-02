@@ -16,6 +16,7 @@ import {
     MIN_COLLATERAL_MULTIPLIER,
     PARLAY_LEADERBOARD_MINIMUM_GAMES,
     PARLAY_LEADERBOARD_WEEKLY_START_DATE,
+    THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
 import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
@@ -279,7 +280,8 @@ const Ticket: React.FC<TicketProps> = ({
     const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
     const selectedCollateralCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[selectedCollateral] : 1;
-    const thalesContractCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates['THALES-CONTRACT'] : 1;
+    const thalesContractCurrencyRate =
+        exchangeRates && exchangeRates !== null ? exchangeRates[THALES_CONTRACT_RATE_KEY] : 1;
 
     const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(networkId, {
         enabled: isAppReady,
@@ -366,7 +368,11 @@ const Ticket: React.FC<TicketProps> = ({
                     const [minimumNeededForMinUsdAmountValue] = await Promise.all([
                         collateralHasLp
                             ? minBuyInAmountInDefaultCollateral /
-                              (isDefaultCollateral ? 1 : selectedCollateralCurrencyRate)
+                              (isDefaultCollateral
+                                  ? 1
+                                  : isThales
+                                  ? thalesContractCurrencyRate
+                                  : selectedCollateralCurrencyRate)
                             : multiCollateralOnOffRampContract?.getMinimumNeeded(
                                   collateralAddress,
                                   coinParser(minBuyInAmountInDefaultCollateral.toString(), networkId)
