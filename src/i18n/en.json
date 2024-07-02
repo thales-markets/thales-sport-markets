@@ -770,7 +770,8 @@
         "incentivized-tooltip-uefa": "A whopping total of {{rewards}} will be distributed for the UEFA competitions. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the {{league}} season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "superbowl-incentive": "10,000 ARB IN INCENTIVES",
-        "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>."
+        "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Compete for {{rewards}} during Wimbledon 2024 on Overtime V1 and V2. Check more details <detailsLink>here</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
