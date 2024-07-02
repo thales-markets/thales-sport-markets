@@ -33,6 +33,15 @@ export const INCENTIVIZED_EURO_COPA = {
     arbRewards: '',
 };
 
+export const INCENTIVIZED_WIMBLEDON = {
+    ids: [9153],
+    startDate: new Date(Date.UTC(2024, 6, 1, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 6, 14, 23, 59, 59)),
+    link: 'https://www.overtimemarkets.xyz/promotions/wimbledon-2024',
+    opRewards: '2,000 OP',
+    arbRewards: '',
+};
+
 export const INCENTIVIZED_NHL = {
     ids: [9006],
     startDate: new Date(Date.UTC(2024, 2, 5, 0, 0, 0)),
