@@ -1,7 +1,13 @@
 import { ReactComponent as ArbitrumLogo } from 'assets/images/arbitrum-logo.svg';
 import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_EURO_COPA, INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL } from 'constants/markets';
+import {
+    INCENTIVIZED_EURO_COPA,
+    INCENTIVIZED_LEAGUE,
+    INCENTIVIZED_MLB,
+    INCENTIVIZED_NHL,
+    INCENTIVIZED_WIMBLEDON,
+} from 'constants/markets';
 import { Network } from 'enums/network';
 import React from 'react';
 import { Trans } from 'react-i18next';
@@ -165,6 +171,35 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                                         }}
                                                         values={{
                                                             rewards: INCENTIVIZED_EURO_COPA.opRewards,
+                                                        }}
+                                                    />
+                                                }
+                                                component={
+                                                    <IncentivizedLeague>
+                                                        {getNetworkLogo(NetworkId.OptimismMainnet)}
+                                                    </IncentivizedLeague>
+                                                }
+                                            ></Tooltip>
+                                        )}
+
+                                    {INCENTIVIZED_WIMBLEDON.ids.includes(tag.id) &&
+                                        new Date() > INCENTIVIZED_WIMBLEDON.startDate &&
+                                        new Date() < INCENTIVIZED_WIMBLEDON.endDate && (
+                                            <Tooltip
+                                                overlay={
+                                                    <Trans
+                                                        i18nKey="markets.incentivized-tooltip-wimbledon"
+                                                        components={{
+                                                            detailsLink: (
+                                                                <a
+                                                                    href={INCENTIVIZED_WIMBLEDON.link}
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                />
+                                                            ),
+                                                        }}
+                                                        values={{
+                                                            rewards: INCENTIVIZED_WIMBLEDON.opRewards,
                                                         }}
                                                     />
                                                 }

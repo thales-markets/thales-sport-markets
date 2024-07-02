@@ -3,7 +3,13 @@ import { ReactComponent as OPLogo } from 'assets/images/optimism-logo.svg';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
-import { INCENTIVIZED_EURO_COPA, INCENTIVIZED_LEAGUE, INCENTIVIZED_MLB, INCENTIVIZED_NHL } from 'constants/markets';
+import {
+    INCENTIVIZED_EURO_COPA,
+    INCENTIVIZED_LEAGUE,
+    INCENTIVIZED_MLB,
+    INCENTIVIZED_NHL,
+    INCENTIVIZED_WIMBLEDON,
+} from 'constants/markets';
 import ROUTES from 'constants/routes';
 import { ENETPULSE_SPORTS, JSON_ODDS_SPORTS, SPORTS_TAGS_MAP, SPORT_PERIODS_MAP, TAGS_LIST } from 'constants/tags';
 import { GAME_STATUS } from 'constants/ui';
@@ -293,6 +299,35 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                         }}
                                         values={{
                                             rewards: INCENTIVIZED_EURO_COPA.opRewards,
+                                        }}
+                                    />
+                                }
+                                component={
+                                    <IncentivizedLeague>
+                                        <IncentivizedTitle>{t('market.incentivized-market')}</IncentivizedTitle>
+                                        {getNetworkLogo(NetworkId.OptimismMainnet)}
+                                    </IncentivizedLeague>
+                                }
+                            ></Tooltip>
+                        )}
+                    {INCENTIVIZED_WIMBLEDON.ids.includes(Number(market.tags[0])) &&
+                        new Date() > INCENTIVIZED_WIMBLEDON.startDate &&
+                        new Date() < INCENTIVIZED_WIMBLEDON.endDate && (
+                            <Tooltip
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.incentivized-tooltip-wimbledon"
+                                        components={{
+                                            detailsLink: (
+                                                <a
+                                                    href={INCENTIVIZED_WIMBLEDON.link}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                />
+                                            ),
+                                        }}
+                                        values={{
+                                            rewards: INCENTIVIZED_WIMBLEDON.opRewards,
                                         }}
                                     />
                                 }
