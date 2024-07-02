@@ -125,7 +125,7 @@ const MarketsList: React.FC<MarketsList> = ({ markets, league, language }) => {
                         <Tooltip
                             overlay={
                                 <Trans
-                                    i18nKey="markets.incentivized-tooltip-euro-copa"
+                                    i18nKey="markets.incentivized-tooltip-wimbledon"
                                     components={{
                                         detailsLink: (
                                             <a href={INCENTIVIZED_WIMBLEDON.link} target="_blank" rel="noreferrer" />
