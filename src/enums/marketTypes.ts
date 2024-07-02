@@ -1,6 +1,8 @@
 export enum MarketType {
     // Winner
     WINNER = 0,
+    // Winner without draw
+    DRAW_NO_BET = 10010,
     // Winner with draw - for hockey
     WINNER2 = 10011,
     // Winner (placeholder)
@@ -25,6 +27,11 @@ export enum MarketType {
     SEVENTH_PERIOD_WINNER2 = 10057,
     EIGHTH_PERIOD_WINNER2 = 10058,
     NINTH_PERIOD_WINNER2 = 10059,
+    // Winner without draw period - half for soccer, quarter for basketball
+    FIRST_PERIOD_DRAW_NO_BET = 10121,
+    SECOND_PERIOD_DRAW_NO_BET = 10122,
+    THIRD_PERIOD_DRAW_NO_BET = 10123,
+    FOURTH_PERIOD_DRAW_NO_BET = 10124,
 
     // Spread (handicap)
     SPREAD = 10001,
@@ -162,6 +169,7 @@ export enum MarketTypeGroup {
     TOTALS = 'Totals',
     HANDICAP = 'Handicap',
     DOUBLE_CHANCE = 'Double chance',
+    DRAW_NO_BET = 'Draw no bet',
     BOTH_TEAMS_TO_SCORE = 'Both teams to score',
     FIRST_HALF = '1st half',
     SECOND_HALF = '2nd half',

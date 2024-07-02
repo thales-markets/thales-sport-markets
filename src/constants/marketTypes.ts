@@ -10,6 +10,12 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'winner',
         name: 'Winner',
     },
+    // Winner without draw
+    [MarketType.DRAW_NO_BET]: {
+        id: MarketType.DRAW_NO_BET,
+        key: 'drawNoBet',
+        name: 'Draw no bet',
+    },
     // Winner with draw - for hockey
     [MarketType.WINNER2]: {
         id: MarketType.WINNER2,
@@ -113,6 +119,27 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         id: MarketType.NINTH_PERIOD_WINNER2,
         key: 'ninthPeriodWinner2',
         name: 'Winner 9th',
+    },
+    // Winner without draw period - half for soccer, quarter for basketball
+    [MarketType.FIRST_PERIOD_DRAW_NO_BET]: {
+        id: MarketType.FIRST_PERIOD_DRAW_NO_BET,
+        key: 'firstPeriodDrawNoBet',
+        name: 'Draw no bet 1st',
+    },
+    [MarketType.SECOND_PERIOD_DRAW_NO_BET]: {
+        id: MarketType.SECOND_PERIOD_DRAW_NO_BET,
+        key: 'secondPeriodDrawNoBet',
+        name: 'Draw no bet 2nd',
+    },
+    [MarketType.THIRD_PERIOD_DRAW_NO_BET]: {
+        id: MarketType.THIRD_PERIOD_DRAW_NO_BET,
+        key: 'thirdPeriodDrawNoBet',
+        name: 'Draw no bet 3rd',
+    },
+    [MarketType.FOURTH_PERIOD_DRAW_NO_BET]: {
+        id: MarketType.FOURTH_PERIOD_DRAW_NO_BET,
+        key: 'fourthPeriodDrawNoBet',
+        name: 'Draw no bet 4th',
     },
 
     // Spread (handicap)
@@ -788,6 +815,7 @@ export const COMBINED_POSITIONS_MARKET_TYPES = [
 
 export const WINNER_MARKET_TYPES = [
     MarketType.WINNER,
+    MarketType.DRAW_NO_BET,
     MarketType.WINNER2,
     MarketType.WINNER3,
     MarketType.FIRST_PERIOD_WINNER,
@@ -808,6 +836,10 @@ export const WINNER_MARKET_TYPES = [
     MarketType.SEVENTH_PERIOD_WINNER2,
     MarketType.EIGHTH_PERIOD_WINNER2,
     MarketType.NINTH_PERIOD_WINNER2,
+    MarketType.FIRST_PERIOD_DRAW_NO_BET,
+    MarketType.SECOND_PERIOD_DRAW_NO_BET,
+    MarketType.THIRD_PERIOD_DRAW_NO_BET,
+    MarketType.FOURTH_PERIOD_DRAW_NO_BET,
 ];
 
 export const BOTH_TEAMS_TO_SCORE_MARKET_TYPES = [
@@ -829,6 +861,14 @@ export const DOUBLE_CHANCE_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
 ];
 
+export const DRAW_NO_BET_MARKET_TYPES = [
+    MarketType.DRAW_NO_BET,
+    MarketType.FIRST_PERIOD_DRAW_NO_BET,
+    MarketType.SECOND_PERIOD_DRAW_NO_BET,
+    MarketType.THIRD_PERIOD_DRAW_NO_BET,
+    MarketType.FOURTH_PERIOD_DRAW_NO_BET,
+];
+
 const FIRST_PERIOD_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_WINNER,
     MarketType.FIRST_PERIOD_WINNER2,
@@ -842,6 +882,7 @@ const FIRST_PERIOD_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE,
+    MarketType.FIRST_PERIOD_DRAW_NO_BET,
 ];
 
 const SECOND_PERIOD_MARKET_TYPES = [
@@ -857,6 +898,7 @@ const SECOND_PERIOD_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
+    MarketType.SECOND_PERIOD_DRAW_NO_BET,
 ];
 
 export const HOME_TEAM_MARKET_TYPES = [
@@ -880,6 +922,7 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
         MarketType.SPREAD,
         MarketType.TOTAL,
         MarketType.DOUBLE_CHANCE,
+        MarketType.DRAW_NO_BET,
         MarketType.BOTH_TEAMS_TO_SCORE,
         MarketType.TOTAL_ODD_EVEN,
     ],
@@ -900,6 +943,7 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
         [MarketTypeGroup.DOUBLE_CHANCE]: DOUBLE_CHANCE_MARKET_TYPES,
+        [MarketTypeGroup.DRAW_NO_BET]: DRAW_NO_BET_MARKET_TYPES,
         [MarketTypeGroup.BOTH_TEAMS_TO_SCORE]: BOTH_TEAMS_TO_SCORE_MARKET_TYPES,
         [MarketTypeGroup.FIRST_HALF]: FIRST_PERIOD_MARKET_TYPES,
         [MarketTypeGroup.SECOND_HALF]: SECOND_PERIOD_MARKET_TYPES,
