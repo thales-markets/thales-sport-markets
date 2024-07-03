@@ -440,11 +440,12 @@ const Ticket: React.FC<TicketProps> = ({
             markets,
             collateralHasLp,
             isDefaultCollateral,
+            isThales,
+            thalesContractCurrencyRate,
             selectedCollateralCurrencyRate,
             collateralAddress,
             networkId,
             selectedCollateral,
-            isThales,
             buyInAmount,
         ]
     );
