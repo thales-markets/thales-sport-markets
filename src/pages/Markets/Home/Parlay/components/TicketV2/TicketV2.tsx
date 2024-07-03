@@ -1,3 +1,4 @@
+import axios from 'axios';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
@@ -6,6 +7,7 @@ import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicket
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
+import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getLoadingToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
@@ -733,12 +735,31 @@ const Ticket: React.FC<TicketProps> = ({
                         setCollateralAmount('');
                     } else if (sportsAMMV2ContractWithSigner) {
                         let counter = 0;
+                        let adapterAllowed = false;
                         const requestId = txResult.events.find((event: any) => event.event === 'LiveTradeRequested')
                             .args[2];
                         const startTime = Date.now();
                         console.log('filfill start time:', new Date(startTime));
                         const checkFulfilled = async () => {
                             counter++;
+                            if (!adapterAllowed) {
+                                const adapterResponse = await axios.get(
+                                    `${generalConfig.API_URL}/overtime-v2/live-trading/networks/${networkId}/read-message/request/${requestId}`
+                                );
+
+                                if (!!adapterResponse.data) {
+                                    if (adapterResponse.data.allow) {
+                                        adapterAllowed = true;
+                                        toast.update(toastId, getLoadingToastOptions(adapterResponse.data.message));
+                                    } else {
+                                        setIsBuying(false);
+                                        refetchBalances(walletAddress, networkId);
+                                        toast.update(toastId, getErrorToastOptions(adapterResponse.data.message));
+                                        return;
+                                    }
+                                }
+                            }
+
                             const isFulfilled = await sportsAMMV2ContractWithSigner.requestIdToFulfillAllowed(
                                 requestId
                             );
@@ -748,7 +769,7 @@ const Ticket: React.FC<TicketProps> = ({
                                     refetchBalances(walletAddress, networkId);
                                     toast.update(toastId, getErrorToastOptions(t('markets.parlay.odds-changed-error')));
                                 } else {
-                                    if (counter / 5 === 1) {
+                                    if (counter / 5 === 1 && !adapterAllowed) {
                                         toast.update(
                                             toastId,
                                             getLoadingToastOptions(t('market.toast-message.fulfilling-live-trade'))
