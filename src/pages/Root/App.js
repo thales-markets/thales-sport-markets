@@ -140,7 +140,7 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (window.ethereum) {
+        if (window.ethereum && window.ethereum.on) {
             window.ethereum.on('chainChanged', (chainIdParam) => {
                 const chainId = Number.isInteger(chainIdParam) ? chainIdParam : parseInt(chainIdParam, 16);
 
