@@ -11,15 +11,11 @@ import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { getMatchLabel } from 'utils/marketsV2';
-import { MarketType } from '../../../../enums/marketTypes';
+import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
 import SelectedMarketDetails from '../SelectedMarketDetails';
 
-type SelectedMarketProps = {
-    availableMarketTypes: MarketType[];
-};
-
-const SelectedMarket: React.FC<SelectedMarketProps> = ({ availableMarketTypes }) => {
+const SelectedMarket: React.FC = () => {
     const dispatch = useDispatch();
     const selectedMarket = useSelector(getSelectedMarket);
     const isAppReady = useSelector(getIsAppReady);
@@ -56,7 +52,7 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ availableMarketTypes })
                             />
                             <MatchLabel>{getMatchLabel(lastValidMarket)} </MatchLabel>
                         </MatchInfo>
-                        {isMobile && <Header availableMarketTypes={availableMarketTypes} />}
+                        {isMobile && <Header />}
                     </>
                 )}
                 <CloseIcon
@@ -67,7 +63,10 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ availableMarketTypes })
                 />
             </HeaderContainer>
             {lastValidMarket ? (
-                <SelectedMarketDetails market={lastValidMarket} />
+                <>
+                    <SelectedMarketDetails market={lastValidMarket} />
+                    {isMobile && <TicketTransactions market={lastValidMarket} isOnSelectedMarket />}
+                </>
             ) : (
                 <LoaderContainer>
                     <SimpleLoader />
@@ -124,7 +123,7 @@ const CloseIcon = styled.i`
         right: 0px;
         top: 0px;
         font-size: 18px;
-        padding: 12px 8px 15px 15px;
+        padding: 12px 10px 15px 15px;
     }
 `;
 

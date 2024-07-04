@@ -1,10 +1,11 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import { SportFilter, StatusFilter } from 'enums/markets';
+import { isEqual } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -25,8 +26,11 @@ import { isSameMarket } from 'utils/marketsV2';
 import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
+type ParlayProps = {
+    onSuccess?: () => void;
+};
 
-const Parlay: React.FC = () => {
+const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isAppReady = useSelector(getIsAppReady);
@@ -42,6 +46,8 @@ const Parlay: React.FC = () => {
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
+
+    const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
     const sportsAmmDataQuery = useSportsAmmDataQuery(networkId, {
         enabled: isAppReady,
@@ -78,7 +84,7 @@ const Parlay: React.FC = () => {
 
     useEffect(() => {
         if (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data && isLiveFilterSelected) {
-            const liveSportOpenMarkets = liveSportMarketsQuery.data.reduce(
+            const liveSportOpenMarkets = liveSportMarketsQuery.data.live.reduce(
                 (acc: SportMarket[], market: SportMarket) => {
                     acc.push(market);
                     market.childMarkets.forEach((childMarket: SportMarket) => {
@@ -88,9 +94,13 @@ const Parlay: React.FC = () => {
                 },
                 []
             );
+
             const ticketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
-                    liveSportOpenMarkets.some((market: SportMarket) => isSameMarket(market, ticketPosition))
+                    liveSportOpenMarkets.some(
+                        (market: SportMarket) =>
+                            market.odds.some((odd) => odd != 0) && isSameMarket(market, ticketPosition)
+                    )
                 )
                 .map((ticketPosition) => {
                     const openMarket: SportMarket = liveSportOpenMarkets.filter((market: SportMarket) =>
@@ -102,8 +112,17 @@ const Parlay: React.FC = () => {
                         odd: openMarket.odds[ticketPosition.position],
                     };
                 });
+            const ticketOdds = ticketMarkets.map((market) => ({
+                odd: market.odd,
+                position: market.position,
+                gameId: market.gameId,
+                proof: [],
+            }));
 
-            setTicketMarkets(ticketMarkets);
+            if (!isEqual(previousTicketOdds.current, ticketOdds)) {
+                setTicketMarkets(ticketMarkets);
+                previousTicketOdds.current = ticketOdds;
+            }
         }
     }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
 
@@ -144,7 +163,17 @@ const Parlay: React.FC = () => {
                 if (notOpenedMarkets.length > 0) dispatch(removeAll());
             }
 
-            setTicketMarkets(ticketMarkets);
+            const ticketOdds = ticketMarkets.map((market) => ({
+                odd: market.odd,
+                position: market.position,
+                gameId: market.gameId,
+                proof: market.proof,
+            }));
+
+            if (!isEqual(previousTicketOdds.current, ticketOdds)) {
+                setTicketMarkets(ticketMarkets);
+                previousTicketOdds.current = ticketOdds;
+            }
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch, isLiveFilterSelected]);
 
@@ -154,7 +183,12 @@ const Parlay: React.FC = () => {
         <Container isMobile={isMobile} isWalletConnected={isWalletConnected}>
             {ticketMarkets.length > 0 ? (
                 <>
-                    {!isMobile && <Title>{t('markets.parlay.ticket-slip')}</Title>}
+                    {!isMobile && (
+                        <Title>
+                            {t('markets.parlay.ticket-slip')}
+                            <Count>{ticket.length}</Count>
+                        </Title>
+                    )}
                     <ThalesBonusContainer>
                         <ThalesBonus>{t('markets.parlay.thales-bonus-info')}</ThalesBonus>
                     </ThalesBonusContainer>
@@ -170,6 +204,7 @@ const Parlay: React.FC = () => {
                                             setOddsChanged={setOddsChanged}
                                             acceptOdds={acceptOdds}
                                             setAcceptOdds={setAcceptOdds}
+                                            applyPayoutMultiplier={true}
                                         />
                                     </RowMarket>
                                 );
@@ -183,6 +218,7 @@ const Parlay: React.FC = () => {
                             setAcceptOdds(true);
                             setOddsChanged(changed);
                         }}
+                        onSuccess={onSuccess}
                     />
                 </>
             ) : (
@@ -229,6 +265,15 @@ const Title = styled(FlexDivCentered)`
     text-transform: uppercase;
     height: 20px;
     margin-bottom: 10px;
+`;
+
+const Count = styled(FlexDivCentered)`
+    border-radius: 8px;
+    min-width: 20px;
+    color: ${(props) => props.theme.textColor.tertiary};
+    background: ${(props) => props.theme.background.quaternary};
+    padding: 0 5px;
+    margin-left: 6px;
 `;
 
 const ThalesBonusContainer = styled(FlexDivCentered)`

@@ -9,7 +9,6 @@ import DappLayout from 'layouts/DappLayout';
 import Theme from 'layouts/Theme';
 import Profile from 'pages/Profile';
 import Referral from 'pages/Referral';
-import Wizard from 'pages/Wizard';
 import { Suspense, lazy, useEffect } from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -17,7 +16,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { setAppReady, setMobileState } from 'redux/modules/app';
 import {
-    getIsConnectedViaParticle,
     getNetworkId,
     getSwitchToNetworkId,
     switchToNetworkId,
@@ -36,6 +34,7 @@ import RouterProvider from './Provider/RouterProvider/RouterProvider';
 // const LandingPage = lazy(() => import('pages/LandingPage'));
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
+const Ticket = lazy(() => import('pages/Ticket'));
 const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
@@ -67,7 +66,7 @@ const App = () => {
     const dispatch = useDispatch();
     const networkId = useSelector((state) => getNetworkId(state));
     const switchedToNetworkId = useSelector((state) => getSwitchToNetworkId(state));
-    const isConnectedViaParticle = useSelector((state) => getIsConnectedViaParticle(state));
+    // const isConnectedViaParticle = useSelector((state) => getIsConnectedViaParticle(state));
 
     const { address } = useAccount();
     const provider = useProvider(!address && { chainId: switchedToNetworkId }); // when wallet not connected force chain
@@ -141,7 +140,7 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (window.ethereum) {
+        if (window.ethereum && window.ethereum.on) {
             window.ethereum.on('chainChanged', (chainIdParam) => {
                 const chainId = Number.isInteger(chainIdParam) ? chainIdParam : parseInt(chainIdParam, 16);
 
@@ -167,6 +166,15 @@ const App = () => {
                     <RouterProvider>
                         <Router history={history}>
                             <Switch>
+                                <Route
+                                    exact
+                                    path={ROUTES.Ticket}
+                                    render={(routeProps) => (
+                                        <DappLayout>
+                                            <Ticket {...routeProps} />
+                                        </DappLayout>
+                                    )}
+                                />
                                 <Route
                                     exact
                                     path={ROUTES.Markets.Market}
@@ -217,8 +225,9 @@ const App = () => {
 
                                 <Route exact path={ROUTES.Wizard}>
                                     <DappLayout>
-                                        {isConnectedViaParticle && <GetStarted />}
-                                        {!isConnectedViaParticle && <Wizard />}
+                                        <GetStarted />
+                                        {/* {isConnectedViaParticle && <GetStarted />}
+                                        {!isConnectedViaParticle && <Wizard />} */}
                                     </DappLayout>
                                 </Route>
                                 {isRouteAvailableForNetwork(ROUTES.LiquidityPool, networkId) && (

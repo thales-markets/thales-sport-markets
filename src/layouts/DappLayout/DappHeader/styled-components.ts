@@ -35,8 +35,7 @@ export const LeftContainer = styled(FlexDivRowCentered)`
     padding-right: 15px;
 `;
 
-export const MiddleContainer = styled(FlexDivRowCentered)<{ justifyContent: string }>`
-    justify-content: ${(props) => props.justifyContent};
+export const MiddleContainer = styled(FlexDivRowCentered)`
     width: 100%;
     max-width: 821px;
 `;
@@ -162,6 +161,7 @@ export const MobileButtonWrapper = styled.div`
 `;
 
 export const SettingsContainer = styled(FlexDivRowCentered)`
+    padding-right: 15px;
     position: relative;
     margin: 0 10px;
     cursor: pointer;

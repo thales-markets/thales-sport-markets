@@ -11,10 +11,12 @@ import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
     APPROVAL_BUFFER,
+    BATCH_SIZE,
     HIDE_PARLAY_LEADERBOARD,
     MIN_COLLATERAL_MULTIPLIER,
     PARLAY_LEADERBOARD_MINIMUM_GAMES,
     PARLAY_LEADERBOARD_WEEKLY_START_DATE,
+    THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
 import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
@@ -53,10 +55,13 @@ import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import {
+    DEFAULT_CURRENCY_DECIMALS,
+    LONG_CURRENCY_DECIMALS,
     bigNumberFormatter,
     ceilNumberToDecimals,
     coinFormatter,
     coinParser,
+    floorNumberToDecimals,
     formatCurrency,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
@@ -74,6 +79,7 @@ import {
     getCollaterals,
     getDefaultCollateral,
     isLpSupported,
+    isStableCurrency,
 } from 'utils/collaterals';
 import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
@@ -119,6 +125,7 @@ type TicketProps = {
     setMarketsOutOfLiquidity: (indexes: number[]) => void;
     oddsChanged: boolean;
     acceptOddChanges: (changed: boolean) => void;
+    onSuccess?: () => void;
 };
 
 const TicketErrorMessage = {
@@ -128,7 +135,13 @@ const TicketErrorMessage = {
 
 const SLIPPAGE_PERCENTAGES = [0.5, 1, 2];
 
-const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, oddsChanged, acceptOddChanges }) => {
+const Ticket: React.FC<TicketProps> = ({
+    markets,
+    setMarketsOutOfLiquidity,
+    oddsChanged,
+    acceptOddChanges,
+    onSuccess,
+}) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
@@ -147,10 +160,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
     const liveBetSlippage = useSelector(getLiveBetSlippage);
-    const selectedCollateralIndex =
-        isLiveTicket && getCollateral(networkId, ticketPayment.selectedCollateralIndex) === CRYPTO_CURRENCY_MAP.ETH
-            ? 0
-            : ticketPayment.selectedCollateralIndex;
+    const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
     const buyInAmount = ticketPayment.amountToBuy;
 
     const [payout, setPayout] = useState(0);
@@ -210,6 +220,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
             ),
         [networkId, selectedCollateralIndex, isEth]
     );
+    const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const collateralHasLp = isLpSupported(selectedCollateral);
 
@@ -269,6 +280,8 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
     const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
     const selectedCollateralCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[selectedCollateral] : 1;
+    const thalesContractCurrencyRate =
+        exchangeRates && exchangeRates !== null ? exchangeRates[THALES_CONTRACT_RATE_KEY] : 1;
 
     const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(networkId, {
         enabled: isAppReady,
@@ -317,9 +330,19 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
     const ticketLiquidity: number | undefined = useMemo(
         () =>
             ticketLiquidityQuery.isSuccess && ticketLiquidityQuery.data !== undefined
-                ? ticketLiquidityQuery.data
+                ? isThales
+                    ? Math.floor(
+                          (ticketLiquidityQuery.data * selectedCollateralCurrencyRate) / thalesContractCurrencyRate
+                      )
+                    : ticketLiquidityQuery.data
                 : undefined,
-        [ticketLiquidityQuery.isSuccess, ticketLiquidityQuery.data]
+        [
+            ticketLiquidityQuery.isSuccess,
+            ticketLiquidityQuery.data,
+            isThales,
+            selectedCollateralCurrencyRate,
+            thalesContractCurrencyRate,
+        ]
     );
 
     // Clear Ticket when network is changed
@@ -345,7 +368,11 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     const [minimumNeededForMinUsdAmountValue] = await Promise.all([
                         collateralHasLp
                             ? minBuyInAmountInDefaultCollateral /
-                              (isDefaultCollateral ? 1 : selectedCollateralCurrencyRate)
+                              (isDefaultCollateral
+                                  ? 1
+                                  : isThales
+                                  ? thalesContractCurrencyRate
+                                  : selectedCollateralCurrencyRate)
                             : multiCollateralOnOffRampContract?.getMinimumNeeded(
                                   collateralAddress,
                                   coinParser(minBuyInAmountInDefaultCollateral.toString(), networkId)
@@ -368,13 +395,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                                       coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
                                   ),
                         ]);
-                        setBuyInAmountInDefaultCollateral(
-                            collateralHasLp
-                                ? minimumReceivedForBuyInAmount
-                                : coinFormatter(minimumReceivedForBuyInAmount, networkId)
-                        );
 
-                        return {};
+                        const minimumReceivedForBuyInAmountInDefaultCollateral = collateralHasLp
+                            ? minimumReceivedForBuyInAmount
+                            : coinFormatter(minimumReceivedForBuyInAmount, networkId);
+                        setBuyInAmountInDefaultCollateral(minimumReceivedForBuyInAmountInDefaultCollateral);
+
+                        return { buyInAmountInDefaultCollateral: minimumReceivedForBuyInAmountInDefaultCollateral };
                     } else {
                         const [parlayAmmQuote] = await Promise.all([
                             getSportsAMMV2QuoteMethod(
@@ -413,11 +440,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
             markets,
             collateralHasLp,
             isDefaultCollateral,
+            isThales,
+            thalesContractCurrencyRate,
             selectedCollateralCurrencyRate,
             collateralAddress,
             networkId,
             selectedCollateral,
-            isThales,
             buyInAmount,
         ]
     );
@@ -425,13 +453,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
     useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMV2Contract && multipleCollateral && signer) {
+            const collateralToAllow = isLiveTicket && isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral;
             const collateralContractWithSigner = isDefaultCollateral
                 ? sUSDContract?.connect(signer)
-                : multipleCollateral[selectedCollateral]?.connect(signer);
+                : multipleCollateral[collateralToAllow]?.connect(signer);
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = coinParser(Number(buyInAmount).toString(), networkId, selectedCollateral);
+                    const parsedTicketPrice = coinParser(Number(buyInAmount).toString(), networkId, collateralToAllow);
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
@@ -445,7 +474,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                 }
             };
             if (isWalletConnected && buyInAmount) {
-                isEth ? setHasAllowance(true) : getAllowance();
+                isEth && !isLiveTicket ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -459,14 +488,16 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
         selectedCollateral,
         isEth,
         isDefaultCollateral,
+        isLiveTicket,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
         return (
             sportsAmmData?.maxSupportedAmount !== undefined &&
-            payout - Number(buyInAmountInDefaultCollateral) > sportsAmmData?.maxSupportedAmount
+            Number(buyInAmountInDefaultCollateral) / Number(totalQuote) - Number(buyInAmountInDefaultCollateral) >
+                sportsAmmData?.maxSupportedAmount
         );
-    }, [sportsAmmData?.maxSupportedAmount, payout, buyInAmountInDefaultCollateral]);
+    }, [sportsAmmData?.maxSupportedAmount, buyInAmountInDefaultCollateral, totalQuote]);
 
     useEffect(() => {
         if (
@@ -528,6 +559,13 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
         [dispatch]
     );
 
+    const setMaxAmount = (value: string | number) => {
+        const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
+        const liquidityInCollateral = (ticketLiquidity || 1) / selectedCollateralCurrencyRate;
+        const amount = liquidityInCollateral > Number(value) ? Number(value) : liquidityInCollateral;
+        setCollateralAmount(floorNumberToDecimals(amount, decimals));
+    };
+
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
         if (sportsAMMV2Contract && multipleCollateral && signer) {
@@ -536,7 +574,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
             try {
                 const collateralContractWithSigner = isDefaultCollateral
                     ? sUSDContract?.connect(signer)
-                    : multipleCollateral[selectedCollateral]?.connect(signer);
+                    : multipleCollateral[isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral]?.connect(
+                          signer
+                      );
 
                 const addressToApprove = sportsAMMV2Contract.address;
                 let txResult;
@@ -569,7 +609,14 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
     };
 
     const handleSubmit = async () => {
-        const { sportsAMMV2Contract, signer, liveTradingProcessorContract, sportsAMMDataContract } = networkConnector;
+        const {
+            sportsAMMV2Contract,
+            signer,
+            liveTradingProcessorContract,
+            sportsAMMDataContract,
+            sportsAMMV2ManagerContract,
+            multipleCollateral,
+        } = networkConnector;
 
         // TODO: separate logic for regular and live markets
         if (
@@ -590,7 +637,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
 
                 const tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, selectedCollateral);
-                const parsedTotalQuote = ethers.utils.parseEther(totalQuote.toString());
+                const parsedTotalQuote = ethers.utils.parseEther(floorNumberToDecimals(totalQuote, 18).toString());
                 const additionalSlippage = ethers.utils.parseEther(
                     tradeData[0].live ? liveBetSlippage / 100 + '' : '0.02'
                 );
@@ -601,16 +648,36 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     const liveTradeDataPosition = tradeData[0].position;
                     const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
 
-                    tx = await getLiveTradingProcessorTransaction(
-                        collateralAddress,
-                        sportsAMMV2ContractWithSigner,
-                        tradeData,
-                        parsedBuyInAmount,
-                        liveTotalQuote,
-                        referralId,
-                        additionalSlippage,
-                        isAA
-                    );
+                    if (isEth && multipleCollateral?.WETH) {
+                        const WETHContractWithSigner = multipleCollateral.WETH.connect(signer);
+
+                        const wrapTx = await WETHContractWithSigner.deposit({ value: parsedBuyInAmount });
+                        const wrapTxResult = await wrapTx.wait();
+
+                        if (wrapTxResult && wrapTxResult.transactionHash) {
+                            tx = await getLiveTradingProcessorTransaction(
+                                collateralAddress,
+                                sportsAMMV2ContractWithSigner,
+                                tradeData,
+                                parsedBuyInAmount,
+                                liveTotalQuote,
+                                referralId,
+                                additionalSlippage,
+                                isAA
+                            );
+                        }
+                    } else {
+                        tx = await getLiveTradingProcessorTransaction(
+                            collateralAddress,
+                            sportsAMMV2ContractWithSigner,
+                            tradeData,
+                            parsedBuyInAmount,
+                            liveTotalQuote,
+                            referralId,
+                            additionalSlippage,
+                            isAA
+                        );
+                    }
                 } else {
                     tx = await getSportsAMMV2Transaction(
                         collateralAddress,
@@ -627,7 +694,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     );
                 }
 
-                const txResult = isAA ? tx : await tx.wait();
+                const txResult = isAA ? tx : await tx?.wait();
 
                 if (txResult && txResult.transactionHash) {
                     PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
@@ -639,10 +706,31 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     });
                     if (!tradeData[0].live) {
                         refetchBalances(walletAddress, networkId);
+
+                        const modalData: ShareTicketModalProps = {
+                            markets: [...markets],
+                            multiSingle: false,
+                            paid:
+                                !collateralHasLp || isDefaultCollateral
+                                    ? Number(buyInAmountInDefaultCollateral)
+                                    : Number(buyInAmount),
+                            payout: payout,
+                            onClose: () => {
+                                if (!keepSelection) dispatch(removeAll());
+                                onModalClose();
+                                onSuccess && onSuccess();
+                            },
+                            isTicketLost: false,
+                            collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
+                            isLive: false,
+                            applyPayoutMultiplier: true,
+                        };
+                        setShareTicketModalData(modalData);
+                        setShowShareTicketModal(true);
+
                         toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                         setIsBuying(false);
                         setCollateralAmount('');
-                        if (!keepSelection) dispatch(removeAll());
                     } else if (sportsAMMV2ContractWithSigner) {
                         let counter = 0;
                         const requestId = txResult.events.find((event: any) => event.event === 'LiveTradeRequested')
@@ -672,15 +760,23 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                                 console.log('filfill end time:', new Date(Date.now()));
                                 console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
-                                if (sportsAMMDataContract) {
+                                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
+                                    const numOfActiveTicketsPerUser = await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(
+                                        walletAddress
+                                    );
                                     const userTickets = await sportsAMMDataContract.getActiveTicketsDataPerUser(
-                                        walletAddress.toLowerCase()
+                                        walletAddress.toLowerCase(),
+                                        Number(numOfActiveTicketsPerUser) - 1,
+                                        BATCH_SIZE
                                     );
                                     const modalData: ShareTicketModalProps = {
                                         markets: [
                                             {
                                                 ...markets[0],
-                                                odd: bigNumberFormatter(userTickets[userTickets.length - 1].totalQuote),
+                                                odd: bigNumberFormatter(
+                                                    userTickets.ticketsData[userTickets.ticketsData.length - 1]
+                                                        .totalQuote
+                                                ),
                                             },
                                         ],
                                         multiSingle: false,
@@ -692,11 +788,12 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                                         onClose: () => {
                                             if (!keepSelection) dispatch(removeAll());
                                             onModalClose();
+                                            onSuccess && onSuccess();
                                         },
                                         isTicketLost: false,
-                                        isTicketResolved: false,
-                                        collateral: selectedCollateral,
+                                        collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
                                         isLive: true,
+                                        applyPayoutMultiplier: false,
                                     };
                                     setShareTicketModalData(modalData);
                                     setShowShareTicketModal(true);
@@ -793,9 +890,28 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                 </Button>
             );
         }
-
         // Show Approve only on valid input buy amount
         if (!hasAllowance && buyInAmount && Number(buyInAmount) >= minBuyInAmount) {
+            if (isLiveTicket && isEth) {
+                return (
+                    <Tooltip
+                        overlay={t('common.wrap-eth-tooltip')}
+                        component={
+                            <Button
+                                disabled={submitDisabled}
+                                onClick={() =>
+                                    isParticle
+                                        ? handleAllowance(ethers.constants.MaxUint256)
+                                        : setOpenApprovalModal(true)
+                                }
+                                {...defaultButtonProps}
+                            >
+                                {t('common.wallet.approve')}
+                            </Button>
+                        }
+                    ></Tooltip>
+                );
+            }
             return (
                 <Button
                     disabled={submitDisabled}
@@ -806,6 +922,25 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                 >
                     {t('common.wallet.approve')}
                 </Button>
+            );
+        }
+
+        if (isLiveTicket && isEth) {
+            return (
+                <>
+                    <Tooltip
+                        overlay={t('common.wrap-eth-tooltip')}
+                        component={
+                            <Button
+                                disabled={submitDisabled}
+                                onClick={async () => handleSubmit()}
+                                {...defaultButtonProps}
+                            >
+                                {t(`common.wrap-and-buy`)}
+                            </Button>
+                        }
+                    ></Tooltip>
+                </>
             );
         }
 
@@ -829,7 +964,10 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
 
                 if (!parlayAmmQuote.error) {
                     if (markets[0]?.live) {
-                        setPayout((1 / totalQuote) * Number(buyInAmount));
+                        setPayout(
+                            (1 / totalQuote) *
+                                Number(collateralHasLp ? buyInAmount : parlayAmmQuote.buyInAmountInDefaultCollateral)
+                        );
                     } else {
                         const payout = coinFormatter(
                             parlayAmmQuote.payout,
@@ -919,9 +1057,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
             payout: payout,
             onClose: onModalClose,
             isTicketLost: false,
-            isTicketResolved: false,
-            collateral: selectedCollateral,
+            collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
             isLive: !!markets[0].live,
+            applyPayoutMultiplier: true,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(!twitterShareDisabled);
@@ -1063,7 +1201,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     <RowContainer>
                         <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
                         <SummaryValue fontSize={12}>{formatPercentage(totalBonus.percentage)}</SummaryValue>
-                        <SummaryValue isCurrency={true} isHidden={hidePayout} fontSize={12}>
+                        <SummaryValue isCurrency={true} isHidden={!!hidePayout} fontSize={12}>
                             (
                             {formatCurrencyWithSign('+ ' + USD_SIGN, totalBonus.value * selectedCollateralCurrencyRate)}
                             )
@@ -1103,9 +1241,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                         placeholder={t('liquidity-pool.deposit-amount-placeholder')}
                         currencyComponent={
                             <CollateralSelector
-                                collateralArray={getCollaterals(networkId).filter((collateral) =>
-                                    isLiveTicket ? collateral !== CRYPTO_CURRENCY_MAP.ETH : true
-                                )}
+                                collateralArray={getCollaterals(networkId)}
                                 selectedItem={selectedCollateralIndex}
                                 onChangeCollateral={() => {
                                     setCollateralAmount('');
@@ -1117,7 +1253,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                             />
                         }
                         balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
-                        onMaxButton={() => setCollateralAmount(paymentTokenBalance)}
+                        onMaxButton={() => setMaxAmount(paymentTokenBalance)}
                     />
                 </AmountToBuyContainer>
             </InputContainer>
@@ -1324,7 +1460,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     </FlexDivCentered>
                 </>
             )}
-            {!(oddsChanged && isLiveTicket) && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
+            {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
             <ShareWrapper>
                 <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
             </ShareWrapper>
@@ -1336,9 +1472,9 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     payout={shareTicketModalData.payout}
                     onClose={shareTicketModalData.onClose}
                     isTicketLost={shareTicketModalData.isTicketLost}
-                    isTicketResolved={shareTicketModalData.isTicketResolved}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                 />
             )}
             {openApprovalModal && (
@@ -1346,7 +1482,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, odds
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
                     defaultAmount={Number(buyInAmount) * (1 + APPROVAL_BUFFER)}
                     collateralIndex={selectedCollateralIndex}
-                    tokenSymbol={selectedCollateral}
+                    tokenSymbol={isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral}
                     isAllowing={isAllowing}
                     onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}

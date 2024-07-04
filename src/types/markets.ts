@@ -1,4 +1,5 @@
 import { GameStatus, Position, StatusFilter } from 'enums/markets';
+import { MarketType } from '../enums/marketTypes';
 import { Network } from '../enums/network';
 import { League, Sport } from '../enums/sports';
 import { Coins } from './tokens';
@@ -49,7 +50,7 @@ export type SportMarket = {
     leagueId: League;
     leagueName: string;
     subLeagueId: number;
-    typeId: number;
+    typeId: MarketType;
     type: string;
     maturity: number;
     maturityDate: Date;

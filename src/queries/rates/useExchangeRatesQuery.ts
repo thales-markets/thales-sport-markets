@@ -6,6 +6,7 @@ import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { bigNumberFormatter, parseBytes32String } from 'thales-utils';
 import networkConnector from 'utils/networkConnector';
+import { THALES_CONTRACT_RATE_KEY } from '../../constants/markets';
 
 export type Rates = Record<string, number>;
 
@@ -35,6 +36,7 @@ const useExchangeRatesQuery = (networkId: Network, options?: UseQueryOptions<Rat
                         exchangeRates[`W${currencyName}`] = bigNumberFormatter(rates[idx]);
                     }
                 });
+                exchangeRates[THALES_CONTRACT_RATE_KEY] = exchangeRates['THALES'];
                 exchangeRates['THALES'] = Number(thalesPriceResponse.data);
             }
 

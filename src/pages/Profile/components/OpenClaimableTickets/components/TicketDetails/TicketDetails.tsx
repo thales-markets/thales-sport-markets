@@ -46,6 +46,8 @@ import {
     TicketInfo,
     TicketMarketsContainer,
     TotalQuoteContainer,
+    TwitterIcon,
+    TwitterWrapper,
     Value,
     WinLabel,
     WinValue,
@@ -151,6 +153,11 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
         }
     };
 
+    const onTwitterIconClick = () => {
+        setShareTicketModalData(shareTicketData);
+        setShowShareTicketModal(true);
+    };
+
     const shareTicketData = {
         markets: ticket.sportMarkets.map((sportMarket) => {
             return {
@@ -166,9 +173,9 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
             setShowShareTicketModal ? setShowShareTicketModal(false) : null;
         },
         isTicketLost: ticket.isLost,
-        isTicketResolved: ticket.isResolved,
         collateral: ticket.collateral,
         isLive: ticket.isLive,
+        applyPayoutMultiplier: false,
     };
 
     const getClaimButton = (isMobile: boolean) => (
@@ -211,19 +218,19 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                             <Value>{ticket.numOfMarkets}</Value>
                         </NumberOfGamesContainer>
                     </TicketInfo>
-                    <InfoContainerColumn>
+                    <InfoContainerColumn isOpen={!isClaimable}>
                         <Label>{t('profile.card.ticket-paid')}:</Label>
                         <Value>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Value>
                     </InfoContainerColumn>
                     {isMobile && !isClaimable && (
-                        <InfoContainerColumn>
+                        <InfoContainerColumn isOpen={!isClaimable}>
                             <WinLabel>{t('profile.card.payout')}:</WinLabel>
                             <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                         </InfoContainerColumn>
                     )}
                     {!isMobile && (
                         <>
-                            <InfoContainerColumn>
+                            <InfoContainerColumn isOpen={!isClaimable}>
                                 <WinLabel>{t('profile.card.payout')}:</WinLabel>
                                 <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                             </InfoContainerColumn>
@@ -286,6 +293,9 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                         <Label>{t('profile.card.total-quote')}:</Label>
                         <Value>{formatTicketOdds(selectedOddsType, ticket.buyInAmount, ticket.payout)}</Value>
                     </TotalQuoteContainer>
+                    <TwitterWrapper>
+                        <TwitterIcon onClick={() => onTwitterIconClick()} />
+                    </TwitterWrapper>
                 </CollapseFooterContainer>
             </CollapsableContainer>
             {showShareTicketModal && shareTicketModalData && (
@@ -296,9 +306,9 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                     payout={shareTicketModalData.payout}
                     onClose={shareTicketModalData.onClose}
                     isTicketLost={shareTicketModalData.isTicketLost}
-                    isTicketResolved={shareTicketModalData.isTicketResolved}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                 />
             )}
         </Container>

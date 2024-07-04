@@ -76,12 +76,12 @@ export const NumberOfGamesContainer = styled(FlexDivStart)`
     }
 `;
 
-export const InfoContainerColumn = styled(FlexDivColumnNative)`
-    min-width: 100px;
+export const InfoContainerColumn = styled(FlexDivColumnNative)<{ isOpen?: boolean }>`
+    min-width: ${(props) => (props.isOpen ? '120px' : '100px')};
     justify-content: flex-start;
     margin-right: 10px;
     @media (max-width: 767px) {{
-        min-width: 85px;
+        min-width: ${(props) => (props.isOpen ? '90px' : '85px')};
         flex-direction: column;
         margin-left: 0px;
         margin-right: 4px;
@@ -200,6 +200,26 @@ export const ClaimContainer = styled(FlexDivColumnNative)`
         @media (max-width: 767px) {
             margin-top: 0px;
         }
+    }
+`;
+
+export const TwitterWrapper = styled.div`
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+    @media (max-width: 767px) {
+        right: 5px;
+    }
+`;
+
+export const TwitterIcon = styled.i`
+    font-size: 14px;
+    font-weight: 400;
+    color: ${(props) => props.theme.textColor.septenary};
+    cursor: pointer;
+    &:before {
+        font-family: HomepageIconsV2 !important;
+        content: '\\0021';
     }
 `;
 

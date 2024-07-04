@@ -2,22 +2,34 @@ import SPAAnchor from 'components/SPAAnchor';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
 import Table from 'components/Table';
+import Tooltip from 'components/Tooltip';
+import { USD_SIGN } from 'constants/currency';
 import { OddsType } from 'enums/markets';
 import i18n from 'i18n';
-import React, { useState } from 'react';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
-import { formatCurrencyWithKey, formatDateWithTime, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
+import {
+    Coins,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
+    formatDateWithTime,
+    getEtherscanAddressLink,
+    truncateAddress,
+} from 'thales-utils';
 import { SportMarket, Ticket, TicketMarket } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
+import { getDefaultCollateral } from 'utils/collaterals';
 import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
+import { PaginationWrapper } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import {
     ExpandedRowWrapper,
     ExternalLink,
@@ -52,6 +64,7 @@ type TicketTransactionsTableProps = {
     market?: SportMarket;
     tableHeight?: string;
     isLoading: boolean;
+    ticketsPerPage?: number;
 };
 
 const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
@@ -59,6 +72,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     market,
     tableHeight,
     isLoading,
+    ticketsPerPage,
 }) => {
     const { t } = useTranslation();
     const language = i18n.language;
@@ -66,9 +80,24 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     const isMobile = useSelector(getIsMobile);
     const selectedOddsType = useSelector(getOddsType);
     const networkId = useSelector(getNetworkId);
+    const isAppReady = useSelector(getIsAppReady);
 
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+    const exchangeRates: Rates | undefined =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : undefined;
+
+    const defaultCollateral = getDefaultCollateral(networkId);
+    const getValueInUsd = (collateral: Coins, value: number) => {
+        if (defaultCollateral === collateral) {
+            return value;
+        }
+        return (!!exchangeRates ? exchangeRates[collateral] || 1 : 1) * value;
+    };
 
     const onTwitterIconClick = (ticket: Ticket) => {
         ticket.sportMarkets = ticket.sportMarkets.map((sportMarket) => {
@@ -85,13 +114,26 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             payout: ticket.payout,
             onClose: () => setShowShareTicketModal(false),
             isTicketLost: ticket.isLost,
-            isTicketResolved: !ticket.isOpen,
             collateral: ticket.collateral,
             isLive: ticket.isLive,
+            applyPayoutMultiplier: false,
         };
         setShareTicketModalData(modalData);
         setShowShareTicketModal(true);
     };
+
+    const [page, setPage] = useState(0);
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const [rowsPerPage, setRowsPerPage] = useState(ticketsPerPage || 10);
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(Number(event.target.value));
+        setPage(0);
+    };
+
+    useEffect(() => setPage(0), [ticketTransactions.length]);
 
     return (
         <>
@@ -102,7 +144,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     color: theme.textColor.secondary,
                 }}
                 tableRowCellStyles={tableRowStyle}
-                columnsDeps={[networkId]}
+                columnsDeps={[networkId, exchangeRates]}
                 columns={[
                     {
                         Header: <>{t('profile.table.time')}</>,
@@ -150,11 +192,29 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         sortable: true,
                         Cell: (cellProps: any) => {
                             return (
-                                <TableText>
-                                    {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
-                                </TableText>
+                                <Tooltip
+                                    overlay={formatCurrencyWithSign(
+                                        USD_SIGN,
+                                        getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
+                                    )}
+                                    component={
+                                        <TableText>
+                                            {formatCurrencyWithKey(
+                                                cellProps.row.original.collateral,
+                                                cellProps.cell.value
+                                            )}
+                                        </TableText>
+                                    }
+                                />
                             );
                         },
+                        sortType: (rowA: any, rowB: any) => {
+                            return (
+                                getValueInUsd(rowA.original.collateral, rowA.original.buyInAmount) -
+                                getValueInUsd(rowB.original.collateral, rowB.original.buyInAmount)
+                            );
+                        },
+                        sortDescFirst: true,
                     },
                     {
                         Header: <>{t('profile.table.payout')}</>,
@@ -162,11 +222,29 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         sortable: true,
                         Cell: (cellProps: any) => {
                             return (
-                                <TableText>
-                                    {formatCurrencyWithKey(cellProps.row.original.collateral, cellProps.cell.value)}
-                                </TableText>
+                                <Tooltip
+                                    overlay={formatCurrencyWithSign(
+                                        USD_SIGN,
+                                        getValueInUsd(cellProps.row.original.collateral, cellProps.cell.value)
+                                    )}
+                                    component={
+                                        <TableText>
+                                            {formatCurrencyWithKey(
+                                                cellProps.row.original.collateral,
+                                                cellProps.cell.value
+                                            )}
+                                        </TableText>
+                                    }
+                                />
                             );
                         },
+                        sortType: (rowA: any, rowB: any) => {
+                            return (
+                                getValueInUsd(rowA.original.collateral, rowA.original.payout) -
+                                getValueInUsd(rowB.original.collateral, rowB.original.payout)
+                            );
+                        },
+                        sortDescFirst: true,
                     },
                     {
                         Header: <>{t('profile.table.status')}</>,
@@ -211,6 +289,9 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                         },
                     ],
                 }}
+                onSortByChanged={() => setPage(0)}
+                currentPage={page}
+                rowsPerPage={rowsPerPage}
                 isLoading={isLoading}
                 data={ticketTransactions}
                 noResultsMessage={t('market.table.no-results')}
@@ -246,6 +327,17 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     );
                 }}
             ></Table>
+            {!isLoading && ticketTransactions.length > 0 && (
+                <PaginationWrapper
+                    rowsPerPageOptions={[10, 20, 50, 100]}
+                    count={ticketTransactions.length}
+                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            )}
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2
                     markets={shareTicketModalData.markets}
@@ -254,9 +346,9 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                     payout={shareTicketModalData.payout}
                     onClose={shareTicketModalData.onClose}
                     isTicketLost={shareTicketModalData.isTicketLost}
-                    isTicketResolved={shareTicketModalData.isTicketResolved}
                     collateral={shareTicketModalData.collateral}
                     isLive={shareTicketModalData.isLive}
+                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
                 />
             )}
         </>

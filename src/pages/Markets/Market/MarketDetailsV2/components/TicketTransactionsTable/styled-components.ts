@@ -79,7 +79,7 @@ export const FirstExpandedSection = styled(FlexDivColumnCentered)`
 
 export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     border: ${(props) => (props.highlighted ? `1px solid ${props.theme.borderColor.senary}` : 'none ')};
-    border-radius: 15px;
+    border-radius: 8px;
     height: 32px;
     padding: 0 10px;
     & > div {
@@ -91,7 +91,7 @@ export const TicketRow = styled(FlexDivRowCentered)<{ highlighted?: boolean }>`
     @media (max-width: 767px) {
         height: initial;
         margin-bottom: 8px;
-        padding: 0;
+        padding: 0 2px;
     }
 `;
 
@@ -224,7 +224,7 @@ export const TwitterWrapper = styled.div`
     position: absolute;
     bottom: 0px;
     right: 5px;
-    @media (max-width: 600px) {
+    @media (max-width: 767px) {
         bottom: -2px;
         right: 2px;
     }

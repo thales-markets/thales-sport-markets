@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 
-export const Container = styled(FlexDivColumn)<{ isExpanded: boolean; isMainPageView?: boolean }>`
+export const Container = styled(FlexDivColumn)<{ isExpanded: boolean; isMainPageView?: boolean; noOdds?: boolean }>`
     position: relative;
     padding: ${(props) => (props.isMainPageView ? '0px' : '5px 0px')};
     border-bottom: ${(props) => (!props.isExpanded ? `1px solid ${props.theme.borderColor.primary}` : 'none')};
     margin-bottom: ${(props) => (!props.isExpanded ? `5px` : '0')};
     flex: ${(props) => (props.isMainPageView ? '1' : 'initial')};
+    justify-content: ${(props) => (props.noOdds ? `center` : '')};
     @media (max-width: 950px) {
         padding: ${(props) => (props.isMainPageView ? '10px 0px 0px 0px' : '5px 0px')};
     }
@@ -65,4 +66,12 @@ export const Arrow = styled.i`
     right: 0px;
     margin-right: 2px;
     cursor: pointer;
+`;
+
+export const Message = styled.span`
+    font-size: 12px;
+    line-height: 14px;
+    text-transform: uppercase;
+    text-align: center;
+    color: ${(props) => props.theme.error.textColor.primary};
 `;

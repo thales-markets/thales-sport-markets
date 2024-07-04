@@ -5,6 +5,8 @@
         "settings": "Settings",
         "winner": "Winner",
         "buy-side": "BUY",
+        "wrap-and-buy": "Wrap ETH and Buy",
+        "wrap-eth-tooltip": "Your ETH is first wrapped into WETH and then passed to the contract",
         "sell-side": "SELL",
         "days-of-week": {
             "mon": "mon",
@@ -55,7 +57,7 @@
             "approve-parlay": "Approve ParlayAMM",
             "approve-sports": "Approve SportsAMM",
             "get-usd-progress": "Minting {{amount}}...",
-            "disclaimer": "By Singing Up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Thales DAO protocol <disclaimer>disclaimer</disclaimer>."
+            "disclaimer": "By signing up to Overtimemarkets <terms>Terms of Use</terms> and Privacy Policy you acknowledge that you have read and understand the Thales DAO protocol <disclaimer>disclaimer</disclaimer>."
         },
         "voucher": {
             "remaining-amount": "Remaining amount",
@@ -450,8 +452,15 @@
             "rain-delay": "Rain delay",
             "abandoned": "Abandoned",
             "interrupted": "Interrupted",
+            "scheduled": "Scheduled",
+            "pre-fight": "Pre-fight",
+            "fighters-walking": "Fighters walking",
+            "fighters-introduction": "Fighters introduction",
+            "end-of-round": "End of round",
+            "end-of-fight": "End of fight",
             "loss": "Loss",
             "won": "Won",
+            "live-trading-paused": "Live trading paused",
             "bet-type": {
                 "winner": "Winner",
                 "spread": "Handicap",
@@ -667,7 +676,8 @@
             },
             "buttons": {
                 "switch": "Switch",
-                "disconnect": "Disconnect"
+                "disconnect": "Disconnect",
+                "particle-wallet": "Particle Wallet"
             },
             "labels": {
                 "language": "Language"
@@ -701,7 +711,7 @@
             "empty-description": "Add position, choose a market and make your selection.",
             "accept-odds-changes": "Accept odds changes",
             "odds-changed-description": "Odds changed. Accept changes in order to buy.",
-            "odds-changed-error": "Odds changed while fulfilling the order. Please try again.",
+            "odds-changed-error": "Odds changed while fulfilling the order. Try increasing the slippage.",
             "info": {
                 "min-quote": "Minimal TOTAL QUOTE supported is {{value}}",
                 "max-quote": "Maximal TOTAL QUOTE supported is {{value}}"
@@ -724,7 +734,7 @@
                 "not-supported": "Not supported validation error: {{error}}"
             },
             "share-ticket": {
-                "header": "Web 3 Sport markets on",
+                "header": "Web3 Sport markets on",
                 "parlay": "ticket",
                 "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
@@ -761,7 +771,8 @@
         "incentivized-tooltip-uefa": "A whopping total of {{rewards}} will be distributed for the UEFA competitions. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the {{league}} season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "superbowl-incentive": "10,000 ARB IN INCENTIVES",
-        "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>."
+        "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Compete for {{rewards}} during Wimbledon 2024 on Overtime V1 and V2. Check more details <detailsLink>here</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -989,7 +1000,7 @@
         "ticket-info": {
             "title": "Parlay leaderboard",
             "points-label": "Points",
-            "points-tooltip": "Calculated total points with bonuses for parlay leaderboard. Points are derived by multiplying the total odds of the parlay with cube (3rd) root of the buy-in and then adding 10% bonus for each game on the ticket.",
+            "points-tooltip": "Calculated total points with bonuses for parlay leaderboard. Points are derived by multiplying the total odds of the parlay with square root of the buy-in and then adding 10% bonus for each game on the ticket.",
             "rank-label": "Rank",
             "rank-tooltip": "Tentative ranking based on current state of the leaderboard. Final ranking are known at round's end. Rounds are weekly Wednesday to Wednesday.",
             "rewards-label": "Rewards",

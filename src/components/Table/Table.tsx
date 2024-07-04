@@ -78,6 +78,7 @@ const Table: React.FC<TableProps> = ({
             ...options,
             initialState,
             autoResetSortBy: false,
+            autoResetPage: false,
         },
         useSortBy,
         usePagination
@@ -143,7 +144,7 @@ const Table: React.FC<TableProps> = ({
                 ) : noResultsMessage != null && !data?.length ? (
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
-                    <TableBody {...getTableBodyProps()}>
+                    <TableBody height={tableHeight} {...getTableBodyProps()}>
                         {stickyRow ?? <></>}
                         {(currentPage !== undefined ? page : rows).map((row, rowIndex: any) => {
                             prepareRow(row);
@@ -240,11 +241,15 @@ const ReactTable = styled.div<{ height?: string }>`
     display: flex;
 `;
 
-const TableBody = styled.div`
+const TableBody = styled.div<{ height?: string }>`
     display: flex;
     overflow: auto;
     flex-direction: column;
     width: 100%;
+    padding-right: ${(props) => (props.height ? '10px' : '0')};
+    @media (max-width: 767px) {
+        padding-right: ${(props) => (props.height ? '5px' : '0')};
+    }
 `;
 
 const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean }>`
@@ -374,7 +379,7 @@ const ArrowIcon = styled.i`
     font-size: 9px;
     display: flex;
     align-items: center;
-    margin-right: 6px;
+    margin-right: 5px;
 `;
 
 export default Table;

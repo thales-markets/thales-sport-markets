@@ -10,4 +10,6 @@ export enum ParticalTypes {
     DISCORD = 'discord',
     GITHUB = 'github',
     APPLE = 'apple',
+    EMAIL = 'email',
+    PHONE = 'phone',
 }

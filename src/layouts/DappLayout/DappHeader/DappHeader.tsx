@@ -19,12 +19,12 @@ import { getIsMobile } from 'redux/modules/app';
 import { getMarketSearch, setMarketSearch } from 'redux/modules/market';
 import { getStopPulsing, setOddsType, setStopPulsing } from 'redux/modules/ui';
 import {
+    getIsConnectedViaParticle,
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
     setWalletConnectModalVisibility,
 } from 'redux/modules/wallet';
-import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivEnd } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
@@ -88,19 +88,18 @@ const DappHeader: React.FC = () => {
     const location = useLocation();
     const theme: ThemeInterface = useTheme();
 
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
-    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-
-    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const stopPulsing = useSelector((state: RootState) => getStopPulsing(state));
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const networkId = useSelector(getNetworkId);
+    const isWalletConnected = useSelector(getIsWalletConnected);
+    const walletAddress = useSelector(getWalletAddress) || '';
+    const isConnectedViaParticle = useSelector(getIsConnectedViaParticle);
+    const marketSearch = useSelector(getMarketSearch);
+    const stopPulsing = useSelector(getStopPulsing);
+    const isMobile = useSelector(getIsMobile);
 
     const [currentPulsingCount, setCurrentPulsingCount] = useState<number>(0);
     const [navMenuVisibility, setNavMenuVisibility] = useState<boolean | null>(null);
     const [showSearcHModal, setShowSearchModal] = useState<boolean>(false);
     const [dropdownIsOpen, setDropdownIsOpen] = useState<boolean>(false);
-
-    const marketSearch = useSelector((state: RootState) => getMarketSearch(state));
 
     const isMarketsPage = location.pathname === ROUTES.Home || location.pathname === ROUTES.Markets.Home;
 
@@ -161,9 +160,7 @@ const DappHeader: React.FC = () => {
                         <Logo />
                     </LeftContainer>
 
-                    <MiddleContainer
-                        justifyContent={location.pathname === ROUTES.Wizard ? 'flex-end' : 'space-between'}
-                    >
+                    <MiddleContainer>
                         {/* <SPAAnchor href={buildHref(ROUTES.Referral)}>
                             <ReferAndEarn>{t('common.referral.header-label')}</ReferAndEarn>
                         </SPAAnchor> */}
@@ -173,7 +170,11 @@ const DappHeader: React.FC = () => {
                                 <HeaderLabel>{t('get-started.start-tour')}</HeaderLabel>
                             </SPAAnchor>
                         )} */}
-                        {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
+                        <div>
+                            {location.pathname !== ROUTES.Wizard &&
+                                (isConnectedViaParticle || !isWalletConnected) &&
+                                getGetStartedButton()}
+                        </div>
                         {isMarketsPage && <TimeFilters />}
                         <FlexDiv>
                             {isWalletConnected && <ProfileItem />}
@@ -206,6 +207,7 @@ const DappHeader: React.FC = () => {
                                     </OutsideClickHandler>
                                 )}
                             </SettingsContainer>
+                            <TopUp />
                         </FlexDiv>
                     </MiddleContainer>
 
@@ -262,7 +264,6 @@ const DappHeader: React.FC = () => {
                                 {t('get-started.sign-up')}
                             </Button>
                         )}
-                        <TopUp />
                         <WalletInfo />
                         <MenuIcon ref={menuImageRef} onClick={() => setNavMenuVisibility(true)} />
                         <NavMenu
@@ -380,10 +381,12 @@ const DappHeader: React.FC = () => {
                             </FlexDivEnd>
                         </MobileButtonWrapper>
                     ) : (
-                        <MobileButtonWrapper>
-                            {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
-                            <TopUp />
-                        </MobileButtonWrapper>
+                        isConnectedViaParticle && (
+                            <MobileButtonWrapper>
+                                {location.pathname !== ROUTES.Wizard && getGetStartedButton()}
+                                <TopUp />
+                            </MobileButtonWrapper>
+                        )
                     )}
                 </>
             )}

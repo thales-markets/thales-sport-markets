@@ -342,7 +342,13 @@ export const showLiveInfo = (status: GameStatus | undefined) => {
         status !== GameStatus.RUNDOWN_CANCELED &&
         status !== GameStatus.RUNDOWN_DELAYED &&
         status !== GameStatus.RUNDOWN_RAIN_DELAY &&
-        status !== GameStatus.RUNDOWN_ABANDONED
+        status !== GameStatus.RUNDOWN_ABANDONED &&
+        status !== GameStatus.RUNDOWN_SCHEDULED &&
+        status !== GameStatus.RUNDOWN_PRE_FIGHT &&
+        status !== GameStatus.RUNDOWN_FIGHTERS_WALKING &&
+        status !== GameStatus.RUNDOWN_FIGHTERS_INTRODUCTION &&
+        status !== GameStatus.RUNDOWN_END_OF_ROUND &&
+        status !== GameStatus.RUNDOWN_END_OF_FIGHT
     );
 };
 
@@ -353,7 +359,27 @@ export const showGameScore = (status: GameStatus | undefined) => {
         status !== GameStatus.RUNDOWN_DELAYED &&
         status !== GameStatus.RUNDOWN_RAIN_DELAY &&
         status !== GameStatus.RUNDOWN_ABANDONED &&
+        status !== GameStatus.RUNDOWN_SCHEDULED &&
+        status !== GameStatus.RUNDOWN_PRE_FIGHT &&
+        status !== GameStatus.RUNDOWN_FIGHTERS_WALKING &&
+        status !== GameStatus.RUNDOWN_FIGHTERS_INTRODUCTION &&
+        status !== GameStatus.RUNDOWN_END_OF_ROUND &&
+        status !== GameStatus.RUNDOWN_END_OF_FIGHT &&
         status !== GameStatus.ENETPULSE_INTERRUPTED &&
         status !== GameStatus.ENETPULSE_CANCELED
     );
+};
+
+export const ticketMarketAsTicketPosition = (market: TicketMarket) => {
+    return {
+        gameId: market.gameId,
+        leagueId: market.leagueId,
+        typeId: market.typeId,
+        playerId: market.playerProps.playerId,
+        playerName: market.playerProps.playerName,
+        line: market.line,
+        position: market.position,
+        combinedPositions: market.combinedPositions,
+        live: market.live,
+    } as TicketPosition;
 };

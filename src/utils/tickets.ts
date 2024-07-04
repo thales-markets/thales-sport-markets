@@ -32,7 +32,7 @@ export const mapTicket = (
         collateral,
         account: ticket.ticketOwner,
         buyInAmount: coinFormatter(ticket.buyInAmount, networkId, collateral),
-        fees: coinFormatter(ticket.fees, networkId),
+        fees: coinFormatter(ticket.fees, networkId, collateral),
         totalQuote: bigNumberFormatter(ticket.totalQuote),
         payout: coinFormatter(ticket.buyInAmount, networkId, collateral) / bigNumberFormatter(ticket.totalQuote),
         numOfMarkets: Number(ticket.numOfMarkets),
@@ -56,7 +56,7 @@ export const mapTicket = (
                     ? League.TENNIS_GS
                     : `${market.sportId}`.startsWith('156')
                     ? League.TENNIS_MASTERS
-                    : market.sportId === 701 || market.sportId == 702
+                    : market.sportId === 701 || market.sportId == 702 || market.sportId == 703
                     ? League.UFC
                     : Number(market.sportId);
                 const typeId = Number(market.typeId);
@@ -77,10 +77,8 @@ export const mapTicket = (
                 const awayScore = awayTeam?.score;
                 const awayScoreByPeriod = awayTeam ? awayTeam.scoreByPeriod : [];
 
-                const playerName =
-                    isPlayerProps && playersInfo[market.playerId]
-                        ? playersInfo[market.playerId].playerName
-                        : 'Player Name';
+                const playerInfo = playersInfo[market.playerId];
+                const playerName = isPlayerProps && playerInfo ? playerInfo.playerName : 'Player Name';
 
                 const marketResult = ticket.marketsResult[index];
                 const marketStatus = Number(marketResult.status);
@@ -154,7 +152,13 @@ export const getTicketMarketStatus = (market: TicketMarket) => {
         if (market.isPlayerPropsMarket) {
             return market.homeScore;
         }
-        return `${market.homeScore} : ${market.awayScore}`;
+        return market.homeScore !== undefined
+            ? market.leagueId === League.UFC
+                ? Number(market.homeScore) > 0
+                    ? 'W - L'
+                    : 'L - W'
+                : `${market.homeScore} - ${market.awayScore}`
+            : '';
     }
     if (market.maturityDate < new Date()) {
         return t('markets.market-card.pending');

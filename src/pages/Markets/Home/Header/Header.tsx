@@ -1,9 +1,13 @@
+import Tooltip from 'components/Tooltip';
 import { MarketTypeGroupsBySport, MarketTypesBySportFilter } from 'constants/marketTypes';
 import { MarketType, MarketTypeGroup } from 'enums/marketTypes';
-import React, { useContext, useMemo } from 'react';
+import { uniq } from 'lodash';
+import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
 import {
     getIsThreeWayView,
     getMarketTypeFilter,
@@ -14,9 +18,9 @@ import {
     setMarketTypeFilter,
     setMarketTypeGroupFilter,
 } from 'redux/modules/market';
+import { getNetworkId } from 'redux/modules/wallet';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeName } from 'utils/markets';
-import Tooltip from '../../../../components/Tooltip';
 import {
     ArrowIcon,
     Container,
@@ -66,25 +70,60 @@ const RightArrow: React.FC = () => {
 
 const Header: React.FC<HeaderProps> = ({ availableMarketTypes, market, hideSwitch }) => {
     const dispatch = useDispatch();
+    const isAppReady = useSelector(getIsAppReady);
+    const networkId = useSelector(getNetworkId);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const marketTypeFilter = useSelector(getMarketTypeFilter);
     const marketTypeGroupFilter = useSelector(getMarketTypeGroupFilter);
     const sportFilter = useSelector(getSportFilter);
     const selectedMarket = useSelector(getSelectedMarket);
+    const [lastValidMarket, setLastValidMarket] = useState<SportMarket | undefined>(market);
 
     const marketToCheck = market || selectedMarket;
 
+    const marketQuery = useSportMarketV2Query(selectedMarket?.gameId || '', true, networkId, {
+        enabled: isAppReady && !market && !!selectedMarket,
+    });
+
+    useEffect(() => {
+        if (market) {
+            setLastValidMarket(market);
+        } else if (marketQuery.isSuccess && marketQuery.data) {
+            setLastValidMarket(marketQuery.data);
+        }
+    }, [selectedMarket, marketQuery.isSuccess, marketQuery.data, market]);
+
     const marketTypes = useMemo(() => {
         if (marketToCheck) {
-            return Object.keys(MarketTypeGroupsBySport[marketToCheck.sport] || {}).map((key) => key as MarketTypeGroup);
+            let marketTypeGroups = Object.keys(MarketTypeGroupsBySport[marketToCheck.sport] || {}).map(
+                (key) => key as MarketTypeGroup
+            );
+            if (lastValidMarket) {
+                let marketToCheckAvailableMarketTypes = [lastValidMarket.typeId];
+
+                lastValidMarket.childMarkets.forEach((childMarket: SportMarket) => {
+                    marketToCheckAvailableMarketTypes.push(childMarket.typeId);
+                });
+                marketToCheckAvailableMarketTypes = uniq(marketToCheckAvailableMarketTypes);
+
+                marketTypeGroups = marketTypeGroups.filter((group: MarketTypeGroup) => {
+                    const marketTypes = (MarketTypeGroupsBySport[marketToCheck.sport] || {})[group];
+                    return marketTypes
+                        ? marketTypes.some((marketType: MarketType) =>
+                              marketToCheckAvailableMarketTypes.includes(marketType)
+                          )
+                        : false;
+                });
+            }
+            return marketTypeGroups;
         } else {
             return availableMarketTypes
-                ? availableMarketTypes.filter((marketType) =>
-                      MarketTypesBySportFilter[sportFilter].includes(marketType)
+                ? MarketTypesBySportFilter[sportFilter].filter((marketType) =>
+                      availableMarketTypes.includes(marketType)
                   )
                 : [];
         }
-    }, [sportFilter, availableMarketTypes, marketToCheck]);
+    }, [marketToCheck, lastValidMarket, availableMarketTypes, sportFilter]);
 
     return (
         <Container>

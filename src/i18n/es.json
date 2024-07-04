@@ -192,7 +192,9 @@
         },
         "settings": "Ajustes",
         "filters": "Filtros",
-        "status": "Estado"
+        "status": "Estado",
+        "wrap-eth-tooltip": "Su ETH primero se incluye en WETH y luego se pasa al contrato.",
+        "wrap-and-buy": "Envuelva ETH y compre"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -529,7 +531,8 @@
                 "winner-2": "El partido terminará en empate {{matchResolve}}"
             },
             "type-tooltip": {
-                "11055": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado."
+                "11055": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado.",
+                "touchdowns": "Los touchdowns de recepción, carrera, devolución de despeje, devolución de patada, touchdowns defensivos e intercepciones cuentan para el resultado."
             },
             "odds-live-limitation-message": "Posiciones en vivo solo permitidas como individuales",
             "live": "Vivir",
@@ -542,7 +545,14 @@
             "abandoned": "Abandonado",
             "won": "Ganado",
             "open": "Abierto",
-            "loss": "Pérdida"
+            "loss": "Pérdida",
+            "live-trading-paused": "Operaciones en vivo pausadas",
+            "scheduled": "Programado",
+            "pre-fight": "Pre-pelea",
+            "end-of-fight": "Fin de la pelea",
+            "end-of-round": "Fin de ronda",
+            "fighters-introduction": "Introducción a los luchadores",
+            "fighters-walking": "Luchadores caminando"
         },
         "market-details": {
             "price": "Precio",
@@ -594,7 +604,10 @@
                 "same-event-participant": "Solo se admite un participante por evento. No se puede agregar {{addedParticipant}} porque {{existingParticipant}} ya está en Parlay",
                 "already-added-combined-positions": "No se pueden combinar posiciones del mismo mercado con posiciones combinadas",
                 "player-props-and-other-positions": "No se admite combinar posiciones de accesorios de jugadores con otras posiciones del mismo mercado.",
-                "same-game-different-player-props": "No se admite la combinación de diferentes categorías de accesorios de jugador."
+                "same-game-different-player-props": "No se admite la combinación de diferentes categorías de accesorios de jugador.",
+                "other-types-with-player-props": "No se admite combinar accesorios de jugador con otros tipos del mismo juego.",
+                "player-props-combining-not-enabled": "No se admite la combinación de accesorios de jugadores para {{league}}",
+                "same-player-different-types": "No se admite combinar diferentes categorías para el mismo jugador ({{player}})"
             },
             "payout": "Total recibido",
             "empty-title": "Sin posiciones",
@@ -646,7 +659,12 @@
                 "invalid-value": "valor no válido",
                 "tooltip": "La transferencia no se realizará si la tasa puente se mueve desfavorablemente en más de este porcentaje cuando se ejecuta la transferencia.",
                 "enter-value": "Introducir valor"
-            }
+            },
+            "odds-changed-description": "Las probabilidades cambiaron. Aceptar cambios para poder comprar.",
+            "thales-bonus-tooltip": "Los usuarios que realicen intercambios con THALES obtendrán pagos adicionales del 1 % por cada juego que tengan en su boleto (ya calculado en Cotización total y Pago).",
+            "accept-odds-changes": "Aceptar cambios de probabilidades",
+            "thales-bonus-info": "Utilice THALES y obtenga un bono del 1% por cada juego.",
+            "odds-changed-error": "Las probabilidades cambiaron mientras se cumplía el pedido. Intente aumentar el deslizamiento."
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {
@@ -678,7 +696,8 @@
         "superbowl-incentive": "10.000 ARB EN INCENTIVOS",
         "incentivized-tooltip-uefa": "Se distribuirá un total enorme de {{rewards}} para las competiciones de la UEFA. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
         "incentivized-tooltip-nhl": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la NHL, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la {{league}}, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>."
+        "incentivized-tooltip-nhl-mlb": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la {{league}}, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
+        "incentivized-tooltip-euro-copa": "Se distribuirá un total enorme de {{rewards}} para las competiciones Euro 2024 y Copa América. Consulta más detalles <detailsLink>aquí</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -766,7 +785,8 @@
             "canceled-tooltip": "Los mercados cancelados son reclamables 2 horas después de que se resuelva el mercado.",
             "transaction-pending": "Transacción pendiente",
             "voucher-claim-success": "Cupón reclamado con éxito",
-            "no-vouchers": "No tienes ningún vale para reclamar"
+            "no-vouchers": "No tienes ningún vale para reclamar",
+            "no-lp-transactions": "No tienes ninguna transacción LP"
         },
         "table": {
             "paid": "Pagado",
@@ -1133,7 +1153,8 @@
         "start-tour": "Empezar recorrido"
     },
     "banner": {
-        "arb-distribution-message": "La distribución de ARB ha comenzado. Gana tokens ARB usando horas extras. Echa un vistazo a los detalles aquí."
+        "arb-distribution-message": "La distribución de ARB ha comenzado. Gana tokens ARB usando horas extras. Echa un vistazo a los detalles aquí.",
+        "v1-text": "<highlight>V2</highlight>: Esta es la versión beta V2 de Overtime. Para volver a V1, <highlight>haga clic aquí</highlight>."
     },
     "promotions": {
         "nav-items": {

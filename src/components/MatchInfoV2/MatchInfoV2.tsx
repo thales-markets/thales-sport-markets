@@ -7,7 +7,13 @@ import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { TicketMarket } from 'types/markets';
 import { formatMarketOdds, isWithinSlippage } from 'utils/markets';
-import { getMatchLabel, getPositionTextV2, getTitleText } from 'utils/marketsV2';
+import {
+    getMatchLabel,
+    getPositionTextV2,
+    getTitleText,
+    isSameMarket,
+    ticketMarketAsTicketPosition,
+} from 'utils/marketsV2';
 import { getNetworkId } from '../../redux/modules/wallet';
 import { getCollateral } from '../../utils/collaterals';
 import { getAddedPayoutMultiplier } from '../../utils/tickets';
@@ -16,23 +22,23 @@ import MatchLogosV2 from '../MatchLogosV2';
 type MatchInfoProps = {
     market: TicketMarket;
     readOnly?: boolean;
-    customStyle?: { fontSize?: string; lineHeight?: string };
     showOddUpdates?: boolean;
     setOddsChanged?: (changed: boolean) => void;
     acceptOdds?: boolean;
     setAcceptOdds?: (accept: boolean) => void;
     isLive?: boolean;
+    applyPayoutMultiplier: boolean;
 };
 
 const MatchInfo: React.FC<MatchInfoProps> = ({
     market,
     readOnly,
-    customStyle,
     showOddUpdates,
     setOddsChanged,
     acceptOdds,
     setAcceptOdds,
     isLive,
+    applyPayoutMultiplier,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -61,7 +67,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     useEffect(() => {
         if (showOddUpdates) {
             if (
-                previousMarket.current.gameId === market.gameId &&
+                isSameMarket(previousMarket.current, ticketMarketAsTicketPosition(market)) &&
                 previousMarket.current.position === market.position
             ) {
                 if (market.odd !== previousMarket.current.odd) {
@@ -95,14 +101,22 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
         }
     }, [market, market.odd, liveBetSlippage, showOddUpdates, setOddsChanged]);
 
+    const isLiveTicket = market.live || !!isLive;
+
     return (
         <>
             <LeftContainer>
-                {(market.live || !!isLive) && <LiveTag>{t(`markets.market-card.live`)}</LiveTag>}
-                <MatchLogosV2 market={market} width={'55px'} height={'30px'} />
+                {isLiveTicket && <LiveTag readOnly={readOnly}>{t(`markets.market-card.live`)}</LiveTag>}
+                <MatchLogosV2
+                    market={market}
+                    width={readOnly && isLiveTicket ? '52px' : '55px'}
+                    height={readOnly && isLiveTicket ? '24px' : '30px'}
+                    logoHeight={readOnly && isLiveTicket ? '24px' : undefined}
+                    logoWidth={readOnly && isLiveTicket ? '24px' : undefined}
+                />
             </LeftContainer>
-            <MarketPositionContainer fontSize={customStyle?.fontSize} lineHeight={customStyle?.lineHeight}>
-                <MatchLabel readOnly={readOnly}>
+            <MarketPositionContainer readOnly={readOnly}>
+                <MatchLabel readOnly={readOnly} isLive={isLiveTicket}>
                     {matchLabel}
                     {!readOnly && (
                         <CloseIcon
@@ -113,13 +127,18 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                         />
                     )}
                 </MatchLabel>
-                <MarketTypeInfo readOnly={readOnly}>{getTitleText(market)}</MarketTypeInfo>
+                <MarketTypeInfo readOnly={readOnly} isLive={isLiveTicket}>
+                    {getTitleText(market)}
+                </MarketTypeInfo>
                 <PositionInfo>
                     <PositionText>{positionText}</PositionText>
                     <Odd>
                         <OddChangeUp id="odd-change-up" />
                         <OddChangeDown id="odd-change-down" />
-                        {formatMarketOdds(selectedOddsType, market.odd * getAddedPayoutMultiplier(selectedCollateral))}
+                        {formatMarketOdds(
+                            selectedOddsType,
+                            market.odd * (applyPayoutMultiplier ? getAddedPayoutMultiplier(selectedCollateral) : 1)
+                        )}
                     </Odd>
                 </PositionInfo>
             </MarketPositionContainer>
@@ -208,37 +227,43 @@ const LeftContainer = styled(FlexDivColumn)`
     justify-content: center;
 `;
 
-const LiveTag = styled.span`
+const LiveTag = styled.span<{ readOnly?: boolean }>`
     background: ${(props) => props.theme.status.live};
     color: ${(props) => props.theme.textColor.primary};
     border-radius: 3px;
     font-weight: 600;
     font-size: 10px;
     height: 12px;
-    line-height: 12px;
-    padding: 0 12px;
+    line-height: 11px;
+    padding: ${(props) => (props.readOnly ? '0 10px' : '0 12px')};
     width: fit-content;
-    margin-bottom: 5px;
+    margin-bottom: ${(props) => (props.readOnly ? '4px' : '5px')};
 `;
 
-const MarketPositionContainer = styled(FlexDivColumn)<{ fontSize?: string; lineHeight?: string }>`
+const MarketPositionContainer = styled(FlexDivColumn)<{ readOnly?: boolean }>`
     display: block;
     width: 100%;
-    font-size: ${(props) => (props.fontSize ? props.fontSize : '13px')};
-    line-height: ${(props) => (props.lineHeight ? props.lineHeight : '13px')};
+    font-size: ${(props) => (props.readOnly ? '11px' : '13px')};
+    line-height: ${(props) => (props.readOnly ? '11px' : '13px')};
 `;
 
-const MatchLabel = styled(FlexDivRow)<{ readOnly?: boolean }>`
+const MatchLabel = styled(FlexDivRow)<{ readOnly?: boolean; isLive?: boolean }>`
     font-weight: 600;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: ${(props) => (props.readOnly ? 0 : '5px')};
+    margin-bottom: ${(props) => (props.readOnly ? '4px' : '5px')};
     text-align: start;
+    @media (max-width: 950px) {
+        margin-bottom: ${(props) => (props.readOnly ? (props.isLive ? '4px' : '2px') : '5px')};
+    }
 `;
 
-const MarketTypeInfo = styled(FlexDivRow)<{ readOnly?: boolean }>`
+const MarketTypeInfo = styled(FlexDivRow)<{ readOnly?: boolean; isLive?: boolean }>`
     font-weight: 600;
     color: ${(props) => props.theme.textColor.quinary};
-    margin-bottom: ${(props) => (props.readOnly ? 0 : '5px')};
+    margin-bottom: ${(props) => (props.readOnly ? '4px' : '5px')};
+    @media (max-width: 950px) {
+        margin-bottom: ${(props) => (props.readOnly ? (props.isLive ? '4px' : '2px') : '5px')};
+    }
 `;
 
 const PositionInfo = styled(FlexDivRow)`

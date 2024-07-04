@@ -155,6 +155,7 @@ export const MatchPeriodLabel = styled.span`
 export const ScoreContainer = styled(FlexDivColumn)`
     margin-left: 5px;
     flex: initial;
+    justify-content: center;
 `;
 
 export const TeamScoreLabel = styled.span<{ isResolved?: boolean }>`

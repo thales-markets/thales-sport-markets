@@ -33,6 +33,7 @@ const Button: React.FC<ButtonProps> = ({
     fontWeight,
     lineHeight,
     children,
+    ...rest
 }) => {
     return (
         <Wrapper
@@ -49,6 +50,7 @@ const Button: React.FC<ButtonProps> = ({
             fontWeight={fontWeight}
             lineHeight={lineHeight}
             style={additionalStyles}
+            {...rest}
         >
             {children}
         </Wrapper>

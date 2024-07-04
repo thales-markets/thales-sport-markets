@@ -1,7 +1,8 @@
+import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { useQuery, UseQueryOptions } from 'react-query';
-import networkConnector from '../../utils/networkConnector';
+import networkConnector from 'utils/networkConnector';
 
 const useClaimablePositionCountQuery = (
     walletAddress: string,
@@ -12,14 +13,22 @@ const useClaimablePositionCountQuery = (
         QUERY_KEYS.ClaimableCountV2(walletAddress, networkId),
         async () => {
             try {
-                const { sportsAMMDataContract } = networkConnector;
-                if (sportsAMMDataContract) {
-                    const [activeTickets, resolvedTickets] = await Promise.all([
-                        sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress),
-                        sportsAMMDataContract.getResolvedTicketsDataPerUser(walletAddress),
-                    ]);
+                const { sportsAMMDataContract, sportsAMMV2ManagerContract } = networkConnector;
+                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
+                    const numOfActiveTicketsPerUser = await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(
+                        walletAddress
+                    );
+                    const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerUser) / BATCH_SIZE) + 1;
 
-                    const tickets = [...activeTickets, ...resolvedTickets];
+                    const promises = [];
+                    for (let i = 0; i < numberOfActiveBatches; i++) {
+                        promises.push(
+                            sportsAMMDataContract.getActiveTicketsDataPerUser(walletAddress, i * BATCH_SIZE, BATCH_SIZE)
+                        );
+                    }
+                    const promisesResult = await Promise.all(promises);
+
+                    const tickets = promisesResult.map((allData) => allData.ticketsData).flat(1);
 
                     const count = tickets.filter((ticket) => ticket.isUserTheWinner && !ticket.resolved).length;
                     return count;

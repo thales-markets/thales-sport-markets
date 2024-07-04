@@ -21,7 +21,7 @@ const UserStats: React.FC = () => {
     return (
         <Wrapper>
             <Header>
-                <ProfileIcon className="icon icon--profile2" />
+                <ProfileIcon className="icon icon--profile3" />
                 {t('profile.stats.profile-data')}
             </Header>
             <Section>
@@ -92,7 +92,7 @@ const Value = styled.span`
 
 const ProfileIcon = styled.i`
     font-size: 20px;
-    margin-right: 8px;
+    margin-right: 4px;
     font-weight: 400;
     text-transform: none;
     color: ${(props) => props.theme.textColor.septenary};

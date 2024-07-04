@@ -8,6 +8,7 @@ export const MIN_COLLATERAL_MULTIPLIER = 1.01;
 export const APPROVAL_BUFFER = 0.01;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
+export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
 
 export const INCENTIVIZED_LEAGUES: Record<number, any> = {
     [League.UEFA_EURO]: {
@@ -29,6 +30,17 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
         availableOnNetworks: [Network.OptimismMainnet],
         rewards: {
             [Network.OptimismMainnet]: '20,000 OP',
+        },
+        showOnAllNetworks: Network.OptimismMainnet,
+    },
+    [League.TENNIS_GS]: {
+        startDate: new Date(Date.UTC(2024, 6, 1, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 6, 14, 23, 59, 59)),
+        link: 'https://www.overtimemarkets.xyz/promotions/wimbledon-2024',
+        tooltipKey: 'markets.incentivized-tooltip-wimbledon',
+        availableOnNetworks: [Network.OptimismMainnet],
+        rewards: {
+            [Network.OptimismMainnet]: '2,000 OP',
         },
         showOnAllNetworks: Network.OptimismMainnet,
     },
@@ -83,7 +95,7 @@ export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20 = [
     50,
 ];
 export const PARLAY_LEADERBOARD_MINIMUM_GAMES = 2;
-export const HIDE_PARLAY_LEADERBOARD = true;
+export const HIDE_PARLAY_LEADERBOARD = false;
 
 export const MEDIUM_ODDS = 0.52;
 
@@ -96,8 +108,18 @@ export const GameStatusKey: Record<GameStatus, string> = {
     [GameStatus.RUNDOWN_DELAYED]: 'delayed',
     [GameStatus.RUNDOWN_RAIN_DELAY]: 'rain-delay',
     [GameStatus.RUNDOWN_ABANDONED]: 'abandoned',
+    [GameStatus.RUNDOWN_SCHEDULED]: 'scheduled',
+    [GameStatus.RUNDOWN_PRE_FIGHT]: 'pre-fight',
+    [GameStatus.RUNDOWN_FIGHTERS_WALKING]: 'fighters-walking',
+    [GameStatus.RUNDOWN_FIGHTERS_INTRODUCTION]: 'fighters-introduction',
+    [GameStatus.RUNDOWN_END_OF_ROUND]: 'end-of-round',
+    [GameStatus.RUNDOWN_END_OF_FIGHT]: 'end-of-fight',
     [GameStatus.RUNDOWN_OVERTIME]: '',
     [GameStatus.ENETPULSE_FINISHED]: '',
     [GameStatus.ENETPULSE_INTERRUPTED]: 'interrupted',
     [GameStatus.ENETPULSE_CANCELED]: 'canceled',
 };
+
+export const BATCH_SIZE = 10;
+
+export const THALES_CONTRACT_RATE_KEY = 'THALES-CONTRACT';

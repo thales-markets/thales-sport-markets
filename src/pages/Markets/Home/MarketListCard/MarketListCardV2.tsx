@@ -3,6 +3,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
+import { Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -38,6 +39,9 @@ import {
     MatchInfo,
     MatchInfoContainer,
     MatchInfoLabel,
+    PeriodResultContainer,
+    ResultLabel,
+    SecondaryResultsWrapper,
     TeamLogosContainer,
     TeamNameLabel,
     TeamNamesContainer,
@@ -115,7 +119,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
 
     const areOddsValid = market.odds.some((odd) => isOddValid(odd));
 
-    const hideGame = isGameLive ? !areOddsValid : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
+    const hideGame = isGameLive ? false : isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
     const isColumnView =
         !isGameLive && marketTypeFilter === undefined && isThreeWayView && !isMarketSelected && isGameOpen && !isMobile;
     const isTwoPositionalMarket = market.odds.length === 2;
@@ -234,20 +238,51 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                         )}
                     </TeamNamesContainer>
                     {isGameLive && (
-                        <CurrentResultContainer isColumnView={isColumnView}>
-                            <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
-                                {market.homeScore}
-                            </TeamNameLabel>
-                            {isMobile && (isGameOpen || isGameLive) && (
-                                <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
-                                    {' '}
-                                    -{' '}
-                                </TeamNameLabel>
+                        <>
+                            <CurrentResultContainer isColumnView={isColumnView}>
+                                <ResultLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                    {market.homeScore}
+                                </ResultLabel>
+                                {isMobile && (isGameOpen || isGameLive) && (
+                                    <ResultLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                        {' '}
+                                        -{' '}
+                                    </ResultLabel>
+                                )}
+                                <ResultLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
+                                    {market.awayScore}
+                                </ResultLabel>
+                            </CurrentResultContainer>
+                            {market.sport == Sport.TENNIS && (
+                                <SecondaryResultsWrapper>
+                                    {market.homeScoreByPeriod.map((score: number, index: number) => (
+                                        <PeriodResultContainer key={index} isColumnView={isColumnView}>
+                                            <ResultLabel
+                                                isColumnView={isColumnView}
+                                                isMarketSelected={isMarketSelected}
+                                            >
+                                                {score}
+                                            </ResultLabel>
+                                            {isMobile && (isGameOpen || isGameLive) && (
+                                                <ResultLabel
+                                                    isColumnView={isColumnView}
+                                                    isMarketSelected={isMarketSelected}
+                                                >
+                                                    {' '}
+                                                    -{' '}
+                                                </ResultLabel>
+                                            )}
+                                            <ResultLabel
+                                                isColumnView={isColumnView}
+                                                isMarketSelected={isMarketSelected}
+                                            >
+                                                {market.awayScoreByPeriod[index]}
+                                            </ResultLabel>
+                                        </PeriodResultContainer>
+                                    ))}
+                                </SecondaryResultsWrapper>
                             )}
-                            <TeamNameLabel isColumnView={isColumnView} isMarketSelected={isMarketSelected}>
-                                {market.awayScore}
-                            </TeamNameLabel>
-                        </CurrentResultContainer>
+                        </>
                     )}
                 </TeamsInfoContainer>
             </MatchInfoContainer>
@@ -258,6 +293,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             markets={[market]}
                             marketType={MarketType.WINNER}
                             isGameOpen={isGameLive}
+                            isGameLive={isGameLive}
                             isMainPageView
                             isColumnView={isColumnView}
                         />
@@ -318,47 +354,7 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             )}
                         </>
                     ) : (
-                        <>
-                            {/* {isGameRegularlyResolved || market.isGameFinished ? (
-                                <ResultWrapper>
-                                    <ResultLabel>
-                                        {!market.isOneSideMarket ? `${t('markets.market-card.result')}:` : ''}
-                                    </ResultLabel>
-                                    <ResultContainer>
-                                        <Result>
-                                            {market.isOneSideMarket
-                                                ? market.homeScore == 1
-                                                    ? t('markets.market-card.race-winner')
-                                                    : t('markets.market-card.no-win')
-                                                : Number(market.leagueId) != League.UFC
-                                                ? `${market.homeScore} - ${market.awayScore}`
-                                                : ''}
-                                            {Number(market.leagueId) == League.UFC ? (
-                                                <>
-                                                    {Number(market.homeScore) > 0
-                                                        ? `W - L (R${market.homeScore})`
-                                                        : `L - W (R${market.awayScore})`}
-                                                </>
-                                            ) : (
-                                                ''
-                                            )}
-                                        </Result>
-                                        {getLeagueSport(market.leagueId) === Sport.SOCCER && (
-                                            <Result>
-                                                {market.homeScoreByPeriod.length > 0 &&
-                                                    market.awayScoreByPeriod.length > 0 &&
-                                                    ' (' +
-                                                        market.homeScoreByPeriod[0] +
-                                                        ' - ' +
-                                                        market.awayScoreByPeriod[0] +
-                                                        ')'}
-                                            </Result>
-                                        )}
-                                    </ResultContainer>
-                                </ResultWrapper>
-                            ) : ( */}
-                            <MatchStatus market={market} />
-                        </>
+                        <MatchStatus market={market} />
                     )}
                 </>
             )}

@@ -38,7 +38,7 @@ const useSportsMarketsV2Query = (
                 const gamesInfo = gamesInfoResponse.data;
                 const liveScores = liveScoresResponse.data;
 
-                marketsCache[statusFilter] = markets.map((market: any) => {
+                const mappedMarkets = markets.map((market: any) => {
                     const gameInfo = gamesInfo[market.gameId];
                     const liveScore = liveScores[market.gameId];
 
@@ -78,6 +78,10 @@ const useSportsMarketsV2Query = (
                         liveScore,
                     };
                 });
+
+                marketsCache[statusFilter] = mappedMarkets;
+
+                return { ...marketsCache, [statusFilter]: mappedMarkets };
             } catch (e) {
                 console.log(e);
             }

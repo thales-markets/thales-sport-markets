@@ -212,7 +212,7 @@ const Home: React.FC = () => {
                   };
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
 
         const filteredMarkets = (sportFilter === SportFilter.Live
             ? allLiveMarkets
@@ -367,7 +367,7 @@ const Home: React.FC = () => {
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data : [];
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
 
         const groupedMarkets = groupBy(liveSportMarkets, (market) => market.leagueId);
 
@@ -658,13 +658,11 @@ const Home: React.FC = () => {
                                                 shouldCloseOnOverlayClick={false}
                                                 style={getCustomModalStyles(theme, '10')}
                                             >
-                                                <SelectedMarket availableMarketTypes={availableMarketTypes} />{' '}
+                                                <SelectedMarket />
                                             </ReactModal>
                                         ) : (
                                             isMarketSelected &&
-                                            statusFilter === StatusFilter.OPEN_MARKETS && (
-                                                <SelectedMarket availableMarketTypes={availableMarketTypes} />
-                                            )
+                                            statusFilter === StatusFilter.OPEN_MARKETS && <SelectedMarket />
                                         )}
                                     </FlexDivRow>
                                 </>

@@ -35,7 +35,7 @@ const defaultStyle = {
         borderRadius: '15px',
         marginRight: '-48%',
         transform: 'translate(-50%, -50%)',
-        overflow: 'none',
+        overflow: 'auto',
         height: 'auto',
     },
     overlay: {
@@ -137,6 +137,20 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                                 {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
                                     const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
                                     if (index > 2 && index < 5 && connector && connector?.ready) {
+                                        return (
+                                            <Button key={index} onClick={() => handleConnect(connector)}>
+                                                <SocialIcon className={getClassNameForParticalLogin(item)} />
+                                                {item}
+                                            </Button>
+                                        );
+                                    }
+                                })}
+                            </SocialButtonsWrapper>
+                            <SocialButtonsWrapper>
+                                {SUPPORTED_PARTICAL_CONNECTORS.map((item, index) => {
+                                    const connector = getSpecificConnectorFromConnectorsArray(connectors, item, true);
+                                    console.log(connector, connector?.ready, index);
+                                    if (index > 4 && index < 7 && connector && connector?.ready) {
                                         return (
                                             <Button key={index} onClick={() => handleConnect(connector)}>
                                                 <SocialIcon className={getClassNameForParticalLogin(item)} />

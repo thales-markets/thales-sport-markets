@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import {
-    getIsConnectedViaParticle,
     getIsWalletConnected,
     getNetworkId,
     getWalletAddress,
@@ -28,7 +27,7 @@ const WalletInfo: React.FC = ({}) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
-    const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const connectWalletModalVisibility = useSelector((state: RootState) => getWalletConnectModalVisibility(state));
 
@@ -52,15 +51,11 @@ const WalletInfo: React.FC = ({}) => {
                                     <WalletAddressInfo
                                         isWalletConnected={isWalletConnected}
                                         isClickable={true}
-                                        onClick={
-                                            !isConnectedViaParticle
-                                                ? () => openAccountModal()
-                                                : () => window.open(PARTICLE_WALLET, '_blank')
-                                        }
+                                        onClick={openAccountModal}
                                     >
                                         <Text className="wallet-info">
                                             {isWalletConnected
-                                                ? truncateAddress(walletAddress, 4, 4)
+                                                ? truncateAddress(walletAddress, 5, 5)
                                                 : t('common.wallet.connect-your-wallet')}
                                         </Text>
                                     </WalletAddressInfo>
@@ -122,7 +117,6 @@ const Wrapper = styled.div<{ displayPadding?: boolean }>`
 `;
 
 const WalletAddressInfo = styled.div<{ isWalletConnected: boolean; isClickable?: boolean }>`
-    padding-right: 10px;
     justify-content: center;
     cursor: ${(props) => (props.isClickable ? 'pointer' : 'default')};
     height: 100%;
@@ -166,7 +160,5 @@ const Currency = styled(Text)`
     font-weight: bold;
     margin-left: 2px;
 `;
-
-const PARTICLE_WALLET = 'https://wallet.particle.network/';
 
 export default WalletInfo;
