@@ -721,6 +721,18 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         priority: 1102,
         hidden: false,
     },
+    [League.LIGA_MX]: {
+        sport: Sport.SOCCER,
+        id: League.LIGA_MX,
+        label: 'Liga MX',
+        provider: Provider.ENETPULSE,
+        scoringType: ScoringType.GOALS,
+        matchResolveType: MatchResolveType.REGULAR,
+        periodType: PeriodType.HALF,
+        isDrawAvailable: true,
+        priority: 150,
+        hidden: false,
+    },
 };
 
 export const BOXING_LEAGUES = [League.BOXING, League.NON_TITLE_BOXING];
