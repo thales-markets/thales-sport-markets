@@ -25,10 +25,13 @@ const useSportsMarketsV2Query = (
         async () => {
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
+                const today = new Date();
+                // APU takes timestamp argument in seconds
+                const minMaturity = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
 
                 const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
-                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true`,
+                        `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/?status=${status}&ungroup=true&minMaturity=${minMaturity}`,
                         noCacheConfig
                     ),
                     axios.get(`${generalConfig.API_URL}/overtime-v2/games-info`, noCacheConfig),

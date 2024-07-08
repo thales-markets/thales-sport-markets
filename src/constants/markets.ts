@@ -33,6 +33,17 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
         },
         showOnAllNetworks: Network.OptimismMainnet,
     },
+    [League.TENNIS_GS]: {
+        startDate: new Date(Date.UTC(2024, 6, 1, 0, 0, 0)),
+        endDate: new Date(Date.UTC(2024, 6, 14, 23, 59, 59)),
+        link: 'https://www.overtimemarkets.xyz/promotions/wimbledon-2024',
+        tooltipKey: 'markets.incentivized-tooltip-wimbledon',
+        availableOnNetworks: [Network.OptimismMainnet],
+        rewards: {
+            [Network.OptimismMainnet]: '2,000 OP',
+        },
+        showOnAllNetworks: Network.OptimismMainnet,
+    },
 };
 
 export const PARLAY_LEADERBOARD_WEEKLY_START_DATE = new Date(2024, 1, 14, 0, 0, 0);
@@ -110,3 +121,5 @@ export const GameStatusKey: Record<GameStatus, string> = {
 };
 
 export const BATCH_SIZE = 10;
+
+export const THALES_CONTRACT_RATE_KEY = 'THALES-CONTRACT';

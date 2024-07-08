@@ -92,7 +92,8 @@ export const isPeriodMarket = (marketType: MarketType) => {
         `${marketType}`.startsWith('1008') ||
         `${marketType}`.startsWith('1010') ||
         `${marketType}`.startsWith('1011') ||
-        `${marketType}`.startsWith('1021')
+        `${marketType}`.startsWith('1021') ||
+        `${marketType}`.startsWith('1012')
     );
 };
 

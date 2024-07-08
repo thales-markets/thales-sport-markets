@@ -48,6 +48,7 @@ export enum League {
     TENNIS_GS = 153,
     TENNIS_MASTERS = 156,
     GERMANY_CUP = 209,
+    LIGA_MX = 230,
     BRAZIL_1 = 268,
     UEFA_EURO_U21 = 288,
     FIFA_WORLD_CUP_U20 = 296,
