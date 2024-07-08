@@ -30,6 +30,16 @@ const useClaimablePositionCountQuery = (
 
                     const tickets = promisesResult.map((allData) => allData.ticketsData).flat(1);
 
+                    // Extract free bet tickets
+                    const freeBetTickets = promisesResult
+                        .map((allData) => allData.freeBetsData)
+                        .flat(1)
+                        .map((ticket) => {
+                            return { ...ticket, isFreeBet: true };
+                        });
+
+                    tickets.push(...freeBetTickets);
+
                     const count = tickets.filter((ticket) => ticket.isUserTheWinner && !ticket.resolved).length;
                     return count;
                 }
