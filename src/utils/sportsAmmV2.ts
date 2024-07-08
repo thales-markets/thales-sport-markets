@@ -33,6 +33,30 @@ export const getSportsAMMV2Transaction: any = async (
             isEth,
         ]);
     } else {
+        if (isFreeBet && freeBetHolderContract) {
+            const estimation = await freeBetHolderContract.estimateGas.trade(
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                { value: 0 }
+            );
+
+            finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
+
+            return freeBetHolderContract.trade(
+                tradeData,
+                buyInAmount,
+                expectedQuote,
+                additionalSlippage,
+                referralAddress,
+                collateralAddress,
+                { value: 0, gasLimit: finalEstimation }
+            );
+        }
+
         if (networkId === Network.OptimismMainnet) {
             const estimation = await sportsAMMV2Contract.estimateGas.trade(
                 tradeData,
@@ -46,17 +70,6 @@ export const getSportsAMMV2Transaction: any = async (
             );
 
             finalEstimation = Math.ceil(Number(estimation) * GAS_ESTIMATION_BUFFER); // using Math.celi as gasLimit is accepting only integer.
-        }
-
-        if (isFreeBet && freeBetHolderContract) {
-            return freeBetHolderContract.trade(
-                tradeData,
-                buyInAmount,
-                expectedQuote,
-                additionalSlippage,
-                referralAddress,
-                collateralAddress
-            );
         }
 
         return sportsAMMV2Contract.trade(

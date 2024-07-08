@@ -476,7 +476,18 @@ const Ticket: React.FC<TicketProps> = ({
     );
 
     useEffect(() => {
-        const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
+        const {
+            sportsAMMV2Contract,
+            sUSDContract,
+            signer,
+            multipleCollateral,
+            freeBetHolderContract,
+        } = networkConnector;
+
+        if (isFreeBetActive && freeBetHolderContract && isWalletConnected) {
+            setHasAllowance(true);
+            return;
+        }
         if (sportsAMMV2Contract && multipleCollateral && signer) {
             const collateralToAllow = isLiveTicket && isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral;
             const collateralContractWithSigner = isDefaultCollateral
@@ -514,6 +525,7 @@ const Ticket: React.FC<TicketProps> = ({
         isEth,
         isDefaultCollateral,
         isLiveTicket,
+        isFreeBetActive,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
