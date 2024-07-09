@@ -1,4 +1,6 @@
 import { COLLATERALS, CRYPTO_CURRENCY_MAP, STABLE_COINS } from 'constants/currency';
+import _ from 'lodash';
+import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import { SupportedNetwork } from 'types/network';
 import { Coins } from 'types/tokens';
 import multipleCollateral from './contracts/multipleCollateralContract';
@@ -41,4 +43,28 @@ export const isLpSupported = (currencyKey: Coins) => {
         currencyKey === CRYPTO_CURRENCY_MAP.ETH ||
         currencyKey === CRYPTO_CURRENCY_MAP.THALES
     );
+};
+
+export const mapMultiCollateralBalances = (
+    data: any,
+    exchangeRates: Rates | null,
+    networkId: SupportedNetwork
+): Array<{ index: number; collateralKey: Coins; balance: number; balanceDollarValue: number }> | undefined => {
+    if (!data) return;
+    return Object.keys(data).map((key) => {
+        return {
+            index: getCollateralIndex(networkId, key as Coins),
+            balance: data[key as string] as number,
+            balanceDollarValue:
+                (data[key] ? data[key] : 0) * (isStableCurrency(key as Coins) ? 1 : exchangeRates?.[key] || 0),
+            collateralKey: key as Coins,
+        };
+    });
+};
+
+export const getMaxCollateralDollarValue = (
+    data: Array<{ index: number; collateralKey: string; balance: number; balanceDollarValue: number }>
+) => {
+    const maxItem = _.maxBy(data, 'balanceDollarValue');
+    return maxItem;
 };

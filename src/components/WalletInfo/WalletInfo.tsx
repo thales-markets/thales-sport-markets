@@ -1,6 +1,6 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -18,10 +18,9 @@ import { formatCurrency, truncateAddress } from 'thales-utils';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import { getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
+import { getTicketPayment } from 'redux/modules/ticket';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { Coins } from 'types/tokens';
-import { getCollateral, getCollateralIndex } from 'utils/collaterals';
+import { getCollateral } from 'utils/collaterals';
 
 const WalletInfo: React.FC = ({}) => {
     const { t } = useTranslation();
@@ -37,19 +36,21 @@ const WalletInfo: React.FC = ({}) => {
 
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
-    const multipleCollateralBalances = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
+    const multipleCollateralBalancesQuery = useMultipleCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
+
+    const multiCollateralBalances =
+        multipleCollateralBalancesQuery?.isSuccess && multipleCollateralBalancesQuery?.data
+            ? multipleCollateralBalancesQuery.data
+            : undefined;
 
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
         selectedCollateralIndex,
     ]);
 
-    const selectedCollateralBalance =
-        multipleCollateralBalances.data && multipleCollateralBalances.isSuccess
-            ? multipleCollateralBalances.data[selectedCollateral]
-            : 0;
+    const selectedCollateralBalance = multiCollateralBalances ? multiCollateralBalances[selectedCollateral] : 0;
 
     const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
@@ -57,29 +58,20 @@ const WalletInfo: React.FC = ({}) => {
 
     const freeBetCollateralBalances =
         freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
-            ? freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery?.data
             : undefined;
 
-    const freeBetNonZeroBalanceKey =
+    const isFreeBetExistsInWallet =
         freeBetCollateralBalances &&
-        Object.keys(freeBetCollateralBalances).find((key) => freeBetCollateralBalances[key] > 0);
+        Object.keys(freeBetCollateralBalances).find((key) => freeBetCollateralBalances[key] > 0)
+            ? true
+            : false;
 
-    const freeBetCollateralIndex = freeBetNonZeroBalanceKey
-        ? getCollateralIndex(networkId, freeBetNonZeroBalanceKey as Coins)
-        : undefined;
+    const selectedCollateralBalanceFreeBet = freeBetCollateralBalances
+        ? freeBetCollateralBalances[selectedCollateral]
+        : 0;
 
-    const walletBalance = freeBetNonZeroBalanceKey
-        ? freeBetCollateralBalances[freeBetNonZeroBalanceKey]
-        : selectedCollateralBalance;
-
-    useEffect(() => {
-        if (freeBetNonZeroBalanceKey && freeBetCollateralIndex !== undefined) {
-            setPaymentSelectedCollateralIndex({
-                selectedCollateralIndex: freeBetCollateralIndex,
-                networkId: networkId,
-            });
-        }
-    }, [freeBetCollateralIndex, freeBetNonZeroBalanceKey, networkId]);
+    const walletBalance = isFreeBetExistsInWallet ? selectedCollateralBalanceFreeBet : selectedCollateralBalance;
 
     return (
         <Container walletConnected={isWalletConnected}>
@@ -103,16 +95,9 @@ const WalletInfo: React.FC = ({}) => {
                                 )}
                                 {isWalletConnected && (
                                     <WalletBalanceInfo>
-                                        {freeBetNonZeroBalanceKey && <FreeBetIcon className="icon icon--gift" />}
+                                        {isFreeBetExistsInWallet && <FreeBetIcon className="icon icon--gift" />}
                                         <Text>{formatCurrency(walletBalance, 2)}</Text>
-                                        <Currency>
-                                            {getCollateral(
-                                                networkId,
-                                                freeBetCollateralIndex == undefined
-                                                    ? selectedCollateralIndex
-                                                    : freeBetCollateralIndex
-                                            )}
-                                        </Currency>
+                                        <Currency>{getCollateral(networkId, selectedCollateralIndex)}</Currency>
                                     </WalletBalanceInfo>
                                 )}
                                 <NetworkSwitcher />

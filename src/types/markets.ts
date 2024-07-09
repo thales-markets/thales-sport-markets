@@ -15,6 +15,7 @@ export type ParlayPayment = {
     selectedCollateralIndex: number;
     amountToBuy: number | string;
     networkId: Network;
+    forceChangeCollateral: boolean;
 };
 
 export type LeaderboardPoints = {

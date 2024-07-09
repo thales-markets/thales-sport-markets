@@ -44,6 +44,7 @@ import {
     removeAll,
     setLiveBetSlippage,
     setPaymentAmountToBuy,
+    setPaymentSelectedCollateralIndex,
 } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import {
@@ -81,8 +82,10 @@ import {
     getCollateralIndex,
     getCollaterals,
     getDefaultCollateral,
+    getMaxCollateralDollarValue,
     isLpSupported,
     isStableCurrency,
+    mapMultiCollateralBalances,
 } from 'utils/collaterals';
 import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
@@ -261,6 +264,12 @@ const Ticket: React.FC<TicketProps> = ({
         enabled: isAppReady && isWalletConnected,
     });
 
+    const multipleCollateralBalancesData = useMemo(() => {
+        return multipleCollateralBalances?.isSuccess && multipleCollateralBalances?.data
+            ? multipleCollateralBalances.data
+            : [];
+    }, [multipleCollateralBalances]);
+
     const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
@@ -328,6 +337,42 @@ const Ticket: React.FC<TicketProps> = ({
                 : 10,
         [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
+
+    useEffect(() => {
+        if (!freeBetBalanceExists) return;
+
+        const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+
+        const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
+
+        const isSelectedCollateralBalanceLowerThanMinimumBuyAmount =
+            selectedCollateralItem && selectedCollateralItem.balanceDollarValue < 3;
+
+        if (!balanceList) return;
+        const maxBalanceItem = getMaxCollateralDollarValue(balanceList);
+
+        if (
+            maxBalanceItem &&
+            (!ticketPayment.forceChangeCollateral || isSelectedCollateralBalanceLowerThanMinimumBuyAmount)
+        ) {
+            dispatch(
+                setPaymentSelectedCollateralIndex({
+                    selectedCollateralIndex: maxBalanceItem.index,
+                    networkId: networkId,
+                })
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        dispatch,
+        exchangeRates,
+        freeBetBalanceExists,
+        freeBetCollateralBalances,
+        minBuyInAmount,
+        multipleCollateralBalancesData,
+        networkId,
+        ticketPayment.forceChangeCollateral,
+    ]);
 
     useEffect(() => {
         setMinBuyInAmountInDefaultCollateral(sportsAmmData?.minBuyInAmount || 0);
@@ -1305,24 +1350,26 @@ const Ticket: React.FC<TicketProps> = ({
                 collateralIndex={selectedCollateralIndex}
                 changeAmount={(value) => setCollateralAmount(value)}
             />
-            <RowSummary>
-                <RowContainer>
-                    <SummaryLabel>
-                        <FreeBetIcon className="icon icon--gift" />
-                        {t('markets.parlay.use-free-bet')}:
-                    </SummaryLabel>
-                    <CheckboxContainer>
-                        <Checkbox
-                            disabled={false}
-                            checked={isFreeBetActive}
-                            value={isFreeBetActive.toString()}
-                            onChange={(e: any) => {
-                                setIsFreeBetActive(e.target.checked || false);
-                            }}
-                        />
-                    </CheckboxContainer>
-                </RowContainer>
-            </RowSummary>
+            {freeBetBalanceExists && (
+                <RowSummary>
+                    <RowContainer>
+                        <SummaryLabel>
+                            <FreeBetIcon className="icon icon--gift" />
+                            {t('markets.parlay.use-free-bet')}:
+                        </SummaryLabel>
+                        <CheckboxContainer>
+                            <Checkbox
+                                disabled={false}
+                                checked={isFreeBetActive}
+                                value={isFreeBetActive.toString()}
+                                onChange={(e: any) => {
+                                    setIsFreeBetActive(e.target.checked || false);
+                                }}
+                            />
+                        </CheckboxContainer>
+                    </RowContainer>
+                </RowSummary>
+            )}
             <RowSummary>
                 <SummaryLabel lineHeight={26}>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
