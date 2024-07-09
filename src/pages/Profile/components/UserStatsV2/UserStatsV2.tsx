@@ -98,7 +98,7 @@ const UserStats: React.FC = () => {
                     {freeBetBalances &&
                         Object.keys(freeBetBalances).map((currencyKey) => {
                             return freeBetBalances[currencyKey] ? (
-                                <Section>
+                                <Section key={`${currencyKey}-freebet`}>
                                     <SubLabel>
                                         <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
                                         {currencyKey}
@@ -133,7 +133,7 @@ const UserStats: React.FC = () => {
                     {freeBetBalances &&
                         Object.keys(multiCollateralBalances).map((currencyKey) => {
                             return multiCollateralBalances[currencyKey] ? (
-                                <Section>
+                                <Section key={`${currencyKey}`}>
                                     <SubLabel>
                                         <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
                                         {currencyKey}
