@@ -421,6 +421,9 @@
         "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit.",
         "back": "Back",
         "send-free-bet": "Send free bet",
+        "free-bet": {
+            "claim-btn": "Claim amount will be reduced by buy in amount, which will transfer to your free bet balance."
+        },
         "free-bet-modal": {
             "title": "Send free bet",
             "enter-wallet-address": "Enter wallet address",

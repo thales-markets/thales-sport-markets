@@ -2,6 +2,7 @@ import Button from 'components/Button/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
 import React, { useMemo, useState } from 'react';
@@ -38,6 +39,7 @@ import {
     FreeBetIcon,
     FreeBetWrapper,
     InfoContainerColumn,
+    InfoIcon,
     Label,
     LiveIndicatorContainer,
     NumberOfGamesContainer,
@@ -181,22 +183,44 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
         applyPayoutMultiplier: false,
     };
 
-    const getClaimButton = (isMobile: boolean) => (
-        <Button
-            disabled={isSubmitting}
-            additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
-            padding="2px 5px"
-            fontSize={isMobile ? '9px' : '15px'}
-            height={isMobile ? '19px' : '24px'}
-            onClick={(e: any) => {
-                e.preventDefault();
-                e.stopPropagation();
-                claimTicket(ticket.id);
-            }}
-        >
-            {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
-        </Button>
-    );
+    const getClaimButton = (isMobile: boolean) => {
+        return ticket.isFreeBet ? (
+            <Tooltip
+                overlay={t('profile.free-bet.claim-btn')}
+                component={
+                    <Button
+                        disabled={isSubmitting}
+                        additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
+                        padding="2px 5px"
+                        fontSize={isMobile ? '9px' : '15px'}
+                        height={isMobile ? '19px' : '24px'}
+                        onClick={(e: any) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            claimTicket(ticket.id);
+                        }}
+                    >
+                        {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
+                    </Button>
+                }
+            />
+        ) : (
+            <Button
+                disabled={isSubmitting}
+                additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
+                padding="2px 5px"
+                fontSize={isMobile ? '9px' : '15px'}
+                height={isMobile ? '19px' : '24px'}
+                onClick={(e: any) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    claimTicket(ticket.id);
+                }}
+            >
+                {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
+            </Button>
+        );
+    };
 
     const getButton = (isMobile: boolean) => {
         return getClaimButton(isMobile);
@@ -244,6 +268,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                                 {ticket.isFreeBet && (
                                     <FreeBetWrapper>
                                         <FreeBetIcon className={'icon icon--gift'} />
+                                        <Tooltip
+                                            overlay={t('profile.free-bet.claim-btn')}
+                                            component={<InfoIcon className={'icon icon--warning'} />}
+                                        />
                                     </FreeBetWrapper>
                                 )}
                                 <InfoContainerColumn isOpen={!isClaimable}>
