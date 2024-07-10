@@ -11,7 +11,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getIsWalletConnected,
     getNetworkId,
@@ -41,6 +41,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [amount, setAmount] = useState<number | string>('');
     const [validationMessage, setValidationMessage] = useState<string>('');
@@ -259,7 +260,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             title={t('profile.free-bet-modal.title')}
             onClose={() => onClose()}
             shouldCloseOnOverlayClick={false}
-            customStyle={{ overlay: { zIndex: 2000 }, content: { height: '500px' } }}
+            customStyle={{ overlay: { zIndex: 2000 }, content: { height: '500px', width: isMobile ? '90%' : '' } }}
         >
             <Container>
                 <InputContainer ref={inputRef}>

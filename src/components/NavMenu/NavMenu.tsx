@@ -167,8 +167,10 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                 </ItemsContainer>
                 <FooterContainer>
                     <Button
-                        backgroundColor={theme.button.background.quinary}
-                        textColor={theme.button.textColor.primary}
+                        borderColor={theme.button.borderColor.secondary}
+                        backgroundColor="transparent"
+                        textColor={theme.button.textColor.quaternary}
+                        width="100%"
                         onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
                     >
                         {t('profile.send-free-bet')}
