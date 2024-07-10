@@ -70,3 +70,21 @@ export const getMaxCollateralDollarValue = (
     const maxItem = _.maxBy(data, 'balanceDollarValue');
     return maxItem;
 };
+
+export const sortCollateralBalances = (
+    data: any,
+    exchangeRates: Rates | null,
+    networkId: SupportedNetwork,
+    orderBy: 'asc' | 'desc'
+) => {
+    const newObject = {} as any;
+
+    const mappedData = mapMultiCollateralBalances(data, exchangeRates, networkId);
+
+    const sortedData = _.orderBy(mappedData, 'balanceDollarValue', orderBy);
+
+    sortedData.forEach((item) => {
+        newObject[item.collateralKey] = item.balance;
+    });
+    return newObject;
+};

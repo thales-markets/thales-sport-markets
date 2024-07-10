@@ -2,7 +2,7 @@ import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuer
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -11,7 +11,7 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { formatCurrencyWithSign } from 'thales-utils';
 import { Coins } from 'types/tokens';
-import { isStableCurrency } from 'utils/collaterals';
+import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from '../../../../constants/currency';
 import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
 
@@ -64,6 +64,18 @@ const UserStats: React.FC = () => {
         [freeBetBalances, exchangeRates, multiCollateralBalances]
     );
 
+    const freeBetCollateralsSorted = useMemo(() => {
+        const sortedBalances = sortCollateralBalances(freeBetBalances, exchangeRates, networkId, 'desc');
+
+        return sortedBalances;
+    }, [exchangeRates, freeBetBalances, networkId]);
+
+    const multiCollateralsSorted = useMemo(() => {
+        const sortedBalances = sortCollateralBalances(multiCollateralBalances, exchangeRates, networkId, 'desc');
+
+        return sortedBalances;
+    }, [exchangeRates, multiCollateralBalances, networkId]);
+
     return (
         <Wrapper>
             <SectionWrapper>
@@ -97,7 +109,7 @@ const UserStats: React.FC = () => {
                         </SubHeader>
                     </SubHeaderWrapper>
                     {freeBetBalances &&
-                        Object.keys(freeBetBalances).map((currencyKey) => {
+                        Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
                             return freeBetBalances[currencyKey] ? (
                                 <Section key={`${currencyKey}-freebet`}>
                                     <SubLabel>
@@ -132,7 +144,7 @@ const UserStats: React.FC = () => {
                         </SubHeader>
                     </SubHeaderWrapper>
                     {freeBetBalances &&
-                        Object.keys(multiCollateralBalances).map((currencyKey) => {
+                        Object.keys(multiCollateralsSorted).map((currencyKey) => {
                             return multiCollateralBalances[currencyKey] ? (
                                 <Section key={`${currencyKey}`}>
                                     <SubLabel>
