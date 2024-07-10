@@ -80,8 +80,15 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     }, [multipleCollateralBalances, selectedCollateral]);
 
     const isButtonDisabled = useMemo(() => {
-        return inProgress || isAllowing || !amount || !fundWalletAddress;
-    }, [amount, fundWalletAddress, inProgress, isAllowing]);
+        return (
+            inProgress ||
+            isAllowing ||
+            !amount ||
+            !fundWalletAddress ||
+            !!validationMessage ||
+            !!fundWalletValidationMessage
+        );
+    }, [amount, fundWalletAddress, fundWalletValidationMessage, inProgress, isAllowing, validationMessage]);
 
     useEffect(() => {
         const { signer, multipleCollateral } = networkConnector;
@@ -120,12 +127,11 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     }, [fundWalletAddress, t]);
 
     useEffect(() => {
-        if (Number(amount) > 0) {
-            setValidationMessage('');
-        } else {
-            setValidationMessage(t('profile.free-bet-modal.invalid-amount'));
-        }
-    }, [amount, t]);
+        if (Number(amount) > selectedCollateralBalance)
+            return setValidationMessage(t('profile.free-bet-modal.invalid-amount'));
+        if (!amount) return setValidationMessage(t('profile.free-bet-modal.invalid-amount'));
+        return setValidationMessage('');
+    }, [amount, selectedCollateralBalance, t]);
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { signer, multipleCollateral } = networkConnector;
@@ -196,6 +202,10 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             );
         }
 
+        if (Number(amount) > selectedCollateralBalance) {
+            return <Button disabled={true}>{t('profile.free-bet-modal.insufficient-balance')}</Button>;
+        }
+
         return (
             <Button disabled={isButtonDisabled} onClick={() => handleSubmit()}>
                 {inProgress ? t('profile.free-bet-modal.funding') : t('profile.free-bet-modal.fund')}
@@ -259,7 +269,8 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                         }}
                         showValidation={inputRefVisible && !!validationMessage}
                         validationMessage={validationMessage}
-                        inputFontWeight="600"
+                        inputFontWeight="400"
+                        inputFontSize="12px"
                         inputPadding="5px 10px"
                         margin="20px 0px 0px 0px"
                         borderColor={theme.input.borderColor.tertiary}
@@ -291,7 +302,8 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                         inputType="text"
                         onChange={(e) => setFundWalletAddress(e.target.value)}
                         borderColor={theme.input.borderColor.tertiary}
-                        inputFontWeight="600"
+                        inputFontWeight="400"
+                        inputFontSize="12px"
                         inputPadding="5px 10px"
                         margin="20px 0px 20px 0px"
                         placeholder={t('profile.free-bet-modal.enter-wallet-address')}

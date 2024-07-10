@@ -434,7 +434,8 @@
             "funding": "Funding...",
             "fund-successful": "Fund successful",
             "invalid-wallet-address": "Invalid wallet address",
-            "invalid-amount": "Invalid amount"
+            "invalid-amount": "Invalid amount",
+            "insufficient-balance": "Insufficient balance"
         }
     },
     "markets": {
