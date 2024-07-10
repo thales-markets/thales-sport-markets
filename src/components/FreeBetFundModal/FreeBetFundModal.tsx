@@ -184,6 +184,10 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             );
         }
 
+        if (Number(amount) > selectedCollateralBalance) {
+            return <Button disabled={true}>{t('profile.free-bet-modal.insufficient-balance')}</Button>;
+        }
+
         if (!hasAllowance) {
             return (
                 <Button onClick={() => setOpenApprovalModal(true)}>
@@ -200,10 +204,6 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                     })}
                 </Button>
             );
-        }
-
-        if (Number(amount) > selectedCollateralBalance) {
-            return <Button disabled={true}>{t('profile.free-bet-modal.insufficient-balance')}</Button>;
         }
 
         return (
