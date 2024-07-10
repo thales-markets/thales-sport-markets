@@ -244,6 +244,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                         )
                     );
                     setInProgress(false);
+                    onClose();
                 }
             } catch (e) {
                 console.log(e);
