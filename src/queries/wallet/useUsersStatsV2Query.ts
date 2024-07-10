@@ -68,6 +68,7 @@ const useUsersStatsV2Query = (
                 let volume = 0;
                 let highestWin = 0;
                 let lifetimeWins = 0;
+                let pnl = 0;
                 for (let index = 0; index < tickets.length; index++) {
                     const ticket = tickets[index];
                     const collateral = getCollateralByAddress(ticket.collateral, networkId);
@@ -84,6 +85,10 @@ const useUsersStatsV2Query = (
                     }
                     if (ticket.isUserTheWinner) {
                         lifetimeWins += 1;
+                        pnl += payout - buyInAmountInUsd;
+                    }
+                    if (ticket.isLost) {
+                        pnl -= buyInAmountInUsd;
                     }
                 }
 
@@ -93,6 +98,7 @@ const useUsersStatsV2Query = (
                     trades: tickets.length,
                     highestWin,
                     lifetimeWins,
+                    pnl,
                 };
             }
 

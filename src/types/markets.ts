@@ -173,6 +173,7 @@ export type UserStats = {
     trades: number;
     highestWin: number;
     lifetimeWins: number;
+    pnl: number;
 };
 
 export type Team = {
