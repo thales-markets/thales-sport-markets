@@ -93,7 +93,8 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
                     <>
                         {showLiveInfo(liveScore.gameStatus) && (
                             <MatchScoreContainer>
-                                {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
+                                {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ||
+                                liveScore.gameStatus == GameStatus.OPTICODDS_HALF ? (
                                     <Status color={theme.status.started}>{t('markets.market-card.half-time')}</Status>
                                 ) : (
                                     <MatchPeriodContainer>
