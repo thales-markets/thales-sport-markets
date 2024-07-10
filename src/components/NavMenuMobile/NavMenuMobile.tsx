@@ -152,17 +152,19 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             </SPAAnchor>
                         );
                     })}
+                    <ButtonWrapper>
+                        <Button
+                            borderColor={theme.button.borderColor.secondary}
+                            backgroundColor="transparent"
+                            textColor={theme.button.textColor.quaternary}
+                            width="100%"
+                            onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
+                        >
+                            {t('profile.send-free-bet')}
+                        </Button>
+                    </ButtonWrapper>
                 </ItemsContainer>
-                <ButtonWrapper>
-                    <Button
-                        borderColor={theme.button.borderColor.secondary}
-                        backgroundColor="transparent"
-                        textColor={theme.button.textColor.quaternary}
-                        onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
-                    >
-                        {t('profile.send-free-bet')}
-                    </Button>
-                </ButtonWrapper>
+
                 <FooterContainer>
                     <CloseIcon onClick={() => setNavMenuVisibility(false)} />
                 </FooterContainer>
