@@ -334,7 +334,7 @@ export const updateTotalQuoteAndPayout = (tickets: Ticket[]): Ticket[] => {
     return modifiedTickets;
 };
 
-export const showLiveInfo = (status: GameStatus | undefined) => {
+export const showLiveInfo = (status: GameStatus | undefined, period: number | undefined) => {
     return (
         status !== GameStatus.RUNDOWN_FINAL &&
         status !== GameStatus.RUNDOWN_FULL_TIME &&
@@ -352,7 +352,8 @@ export const showLiveInfo = (status: GameStatus | undefined) => {
         status !== GameStatus.OPTICODDS_COMPLETED &&
         status !== GameStatus.OPTICODDS_CANCELLED &&
         status !== GameStatus.OPTICODDS_DELAYED &&
-        status !== GameStatus.OPTICODDS_SUSPENDED
+        status !== GameStatus.OPTICODDS_SUSPENDED &&
+        !Number.isNaN(Number(period))
     );
 };
 

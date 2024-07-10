@@ -91,7 +91,7 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
             ) : isPendingResolution ? (
                 liveScore ? (
                     <>
-                        {showLiveInfo(liveScore.gameStatus) && (
+                        {showLiveInfo(liveScore.gameStatus, liveScore.period) && (
                             <MatchScoreContainer>
                                 {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ||
                                 liveScore.gameStatus == GameStatus.OPTICODDS_HALF ? (

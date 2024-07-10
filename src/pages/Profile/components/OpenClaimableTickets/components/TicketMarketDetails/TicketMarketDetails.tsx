@@ -141,7 +141,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean }> =
             ) : isPendingResolution || isLive ? (
                 liveScore ? (
                     <MatchScoreContainer>
-                        {showLiveInfo(liveScore.gameStatus) &&
+                        {showLiveInfo(liveScore.gameStatus, liveScore.period) &&
                             (liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ||
                             liveScore.gameStatus == GameStatus.OPTICODDS_HALF ? (
                                 <TicketMarketStatus>{t('markets.market-card.half-time')}</TicketMarketStatus>
