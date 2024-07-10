@@ -419,7 +419,20 @@
         "claiming-voucher": "Claiming...",
         "search-field": "Search wallet",
         "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit.",
-        "back": "Back"
+        "back": "Back",
+        "send-free-bet": "Send free bet",
+        "free-bet-modal": {
+            "title": "Send free bet",
+            "enter-wallet-address": "Enter wallet address",
+            "enter-amount": "Enter amount",
+            "approve-success": "Successfully approved",
+            "transaction-pending": "Transaction pending",
+            "fund": "Send free bet",
+            "funding": "Funding...",
+            "fund-successful": "Fund successful",
+            "invalid-wallet-address": "Invalid wallet address",
+            "invalid-amount": "Invalid amount"
+        }
     },
     "markets": {
         "market-card": {

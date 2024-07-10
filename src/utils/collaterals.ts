@@ -1,4 +1,4 @@
-import { COLLATERALS, CRYPTO_CURRENCY_MAP, STABLE_COINS } from 'constants/currency';
+import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS } from 'constants/currency';
 import _ from 'lodash';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
 import { SupportedNetwork } from 'types/network';
@@ -11,6 +11,8 @@ export const getCollateral = (networkId: SupportedNetwork, index: number, collat
     (collaterals || COLLATERALS[networkId])[index];
 
 export const getCollaterals = (networkId: SupportedNetwork) => COLLATERALS[networkId];
+
+export const getFreeBetCollaterals = (networkId: SupportedNetwork) => FREE_BET_COLLATERALS[networkId];
 
 export const getCollateralIndex = (networkId: SupportedNetwork, currencyKey: Coins, collaterals?: Coins[]) =>
     (collaterals || getCollaterals(networkId)).indexOf(currencyKey);
