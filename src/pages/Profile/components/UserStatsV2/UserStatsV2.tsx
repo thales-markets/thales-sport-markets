@@ -1,33 +1,27 @@
-import Button from 'components/Button';
-import FreeBetFundModal from 'components/FreeBetFundModal';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
 import { getIsWalletConnected, getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { formatCurrencyWithSign } from 'thales-utils';
 import { Coins } from 'types/tokens';
-import { ThemeInterface } from 'types/ui';
 import { isStableCurrency } from 'utils/collaterals';
 import { COLLATERAL_ICONS_CLASS_NAMES, USD_SIGN } from '../../../../constants/currency';
 import { FlexDivColumn, FlexDivRow } from '../../../../styles/common';
 
 const UserStats: React.FC = () => {
     const { t } = useTranslation();
-    const theme: ThemeInterface = useTheme();
 
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
-
-    const [openFreeBetModal, setOpenFreeBetModal] = useState<boolean>(false);
 
     const userStatsQuery = useUsersStatsV2Query(walletAddress.toLowerCase(), networkId, { enabled: isWalletConnected });
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
@@ -164,16 +158,6 @@ const UserStats: React.FC = () => {
                         })}
                 </SectionWrapper>
             )}
-            <ButtonContainer>
-                <Button
-                    backgroundColor={theme.button.background.quinary}
-                    textColor={theme.button.textColor.primary}
-                    onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
-                >
-                    {t('profile.send-free-bet')}
-                </Button>
-            </ButtonContainer>
-            {openFreeBetModal && <FreeBetFundModal onClose={() => setOpenFreeBetModal(false)} />}
         </Wrapper>
     );
 };
@@ -275,12 +259,6 @@ const CurrencyIcon = styled.i`
 
 const SectionWrapper = styled.div`
     width: 100%;
-`;
-
-const ButtonContainer = styled(FlexDivRow)`
-    margin-top: 20px;
-    align-items: center;
-    justify-content: center;
 `;
 
 export default UserStats;
