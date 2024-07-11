@@ -353,7 +353,9 @@ export const showLiveInfo = (status: GameStatus | undefined, period: number | un
         status !== GameStatus.OPTICODDS_CANCELLED &&
         status !== GameStatus.OPTICODDS_DELAYED &&
         status !== GameStatus.OPTICODDS_SUSPENDED &&
-        !Number.isNaN(Number(period))
+        (!Number.isNaN(Number(period)) ||
+            status === GameStatus.RUNDOWN_HALF_TIME ||
+            status === GameStatus.OPTICODDS_HALF)
     );
 };
 
