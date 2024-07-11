@@ -588,6 +588,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'homeruns',
         name: 'Home runs',
     },
+    [MarketType.PLAYER_PROPS_BASES]: {
+        id: MarketType.PLAYER_PROPS_BASES,
+        key: 'bases',
+        name: 'Bases',
+    },
     [MarketType.PLAYER_PROPS_PASSING_YARDS]: {
         id: MarketType.PLAYER_PROPS_PASSING_YARDS,
         key: 'passingYards',
@@ -697,6 +702,7 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
 
 export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_HOMERUNS,
+    MarketType.PLAYER_PROPS_BASES,
     MarketType.PLAYER_PROPS_STRIKEOUTS,
     MarketType.PLAYER_PROPS_PASSING_YARDS,
     MarketType.PLAYER_PROPS_PASSING_TOUCHDOWNS,
