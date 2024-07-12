@@ -790,22 +790,23 @@ const Ticket: React.FC<TicketProps> = ({
                                         Number(numOfActiveTicketsPerUser) - 1,
                                         BATCH_SIZE
                                     );
+                                    const lastTicket = userTickets.ticketsData[userTickets.ticketsData.length - 1];
+                                    const lastTicketPaid =
+                                        !collateralHasLp || isDefaultCollateral
+                                            ? coinFormatter(lastTicket.buyInAmount, networkId)
+                                            : Number(buyInAmount);
+                                    const lastTicketPayout = lastTicketPaid / bigNumberFormatter(lastTicket.totalQuote);
+
                                     const modalData: ShareTicketModalProps = {
                                         markets: [
                                             {
                                                 ...markets[0],
-                                                odd: bigNumberFormatter(
-                                                    userTickets.ticketsData[userTickets.ticketsData.length - 1]
-                                                        .totalQuote
-                                                ),
+                                                odd: bigNumberFormatter(lastTicket.totalQuote),
                                             },
                                         ],
                                         multiSingle: false,
-                                        paid:
-                                            !collateralHasLp || isDefaultCollateral
-                                                ? Number(buyInAmountInDefaultCollateral)
-                                                : Number(buyInAmount),
-                                        payout: payout,
+                                        paid: lastTicketPaid,
+                                        payout: lastTicketPayout,
                                         onClose: () => {
                                             if (!keepSelection) dispatch(removeAll());
                                             onModalClose();
