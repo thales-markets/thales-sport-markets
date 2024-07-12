@@ -7,6 +7,13 @@ export enum MarketType {
     WINNER2 = 10011,
     // Winner (placeholder)
     WINNER3 = 10012,
+    // Who will score first
+    FIRST_SCORE = 10019,
+    // Who will score last
+    LAST_SCORE = 10020,
+    // Clean sheet per team
+    CLEAN_SHEET_HOME_TEAM = 10141,
+    CLEAN_SHEET_AWAY_TEAM = 10142,
     // Winner period - half for soccer, quarter for basketball
     FIRST_PERIOD_WINNER = 10021,
     SECOND_PERIOD_WINNER = 10022,
@@ -138,6 +145,13 @@ export enum MarketType {
     HALFTIME_FULLTIME = 10006,
     GOALS = 10007,
     HALFTIME_FULLTIME_GOALS = 10008,
+
+    // Who will qualify for the next round
+    WHO_WILL_QUALIFY = 10130,
+    // Will there be overtime in the game
+    WILL_THERE_BE_OVERTIME = 10131,
+    // No runs in the first inning
+    FIRST_INNING_NO_RUNS = 10132,
 
     // Player props
     PLAYER_PROPS_HOMERUNS = 11010,

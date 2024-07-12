@@ -16,9 +16,11 @@ import {
     isHomeTeamMarket,
     isOneSideMarket,
     isOneSidePlayerPropsMarket,
+    isOtherYesNoMarket,
     isPeriod2Market,
     isPeriodMarket,
     isPlayerPropsMarket,
+    isScoreMarket,
     isSpreadMarket,
     isTotalMarket,
     isTotalOddEvenMarket,
@@ -33,13 +35,15 @@ const getSimplePositionText = (
     line: number,
     homeTeam: string,
     awayTeam: string,
+    leagueId: League,
     extendedText?: boolean
 ) => {
     if (
         isOneSideMarket(marketType) ||
         isOneSidePlayerPropsMarket(marketType) ||
         isYesNoPlayerPropsMarket(marketType) ||
-        isBothsTeamsToScoreMarket(marketType)
+        isBothsTeamsToScoreMarket(marketType) ||
+        isOtherYesNoMarket(marketType)
     ) {
         return position === 0 ? 'Yes' : 'No';
     }
@@ -62,7 +66,14 @@ const getSimplePositionText = (
             : position === 1
             ? `${homeTeam} or ${awayTeam}`
             : `${awayTeam} or Draw`;
-    if (isWinnerMarket(marketType)) return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
+    if (isWinnerMarket(marketType)) {
+        return position === 0 ? homeTeam : position === 1 ? awayTeam : 'Draw';
+    }
+    if (isScoreMarket(marketType)) {
+        const scoringType = getLeagueScoringType(leagueId);
+        const sufix = scoringType.length > 1 ? ` ${scoringType.slice(0, scoringType.length - 1)}` : scoringType;
+        return position === 0 ? homeTeam : position === 1 ? awayTeam : `No ${sufix}`;
+    }
 
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
 };
@@ -82,6 +93,7 @@ const getCombinedPositionsText = (market: SportMarket, position: number) => {
             position1.line,
             market.homeTeam,
             market.awayTeam,
+            market.leagueId,
             true
         )}/${getSimplePositionText(
             position2.typeId,
@@ -89,6 +101,7 @@ const getCombinedPositionsText = (market: SportMarket, position: number) => {
             position2.line,
             market.homeTeam,
             market.awayTeam,
+            market.leagueId,
             true
         )}`;
     }
@@ -100,6 +113,7 @@ const getCombinedPositionsText = (market: SportMarket, position: number) => {
             position1.line,
             market.homeTeam,
             market.awayTeam,
+            market.leagueId,
             true
         )} & ${getSimplePositionText(
             position2.typeId,
@@ -107,6 +121,7 @@ const getCombinedPositionsText = (market: SportMarket, position: number) => {
             position2.line,
             market.homeTeam,
             market.awayTeam,
+            market.leagueId,
             true
         )}`;
     }
@@ -115,7 +130,15 @@ const getCombinedPositionsText = (market: SportMarket, position: number) => {
 export const getPositionTextV2 = (market: SportMarket, position: number, extendedText?: boolean) => {
     return isCombinedPositionsMarket(market.typeId)
         ? getCombinedPositionsText(market, position)
-        : getSimplePositionText(market.typeId, position, market.line, market.homeTeam, market.awayTeam, extendedText);
+        : getSimplePositionText(
+              market.typeId,
+              position,
+              market.line,
+              market.homeTeam,
+              market.awayTeam,
+              market.leagueId,
+              extendedText
+          );
 };
 
 export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
@@ -144,6 +167,10 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
     }
     if (isAwayTeamMarket(marketType)) {
         sufix = `${sufix} (${market.awayTeam})`;
+    }
+    if (isScoreMarket(marketType)) {
+        const scoringType = getLeagueScoringType(market.leagueId);
+        sufix = scoringType.length > 1 ? ` ${scoringType.slice(0, scoringType.length - 1)}` : scoringType;
     }
 
     return marketTypeName ? `${marketTypeName}${sufix}` : `${marketType}`;

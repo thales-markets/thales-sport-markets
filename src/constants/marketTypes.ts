@@ -34,6 +34,29 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'firstPeriodWinner',
         name: 'Winner 1st',
     },
+    // Who will score first
+    [MarketType.FIRST_SCORE]: {
+        id: MarketType.FIRST_SCORE,
+        key: 'firstScore',
+        name: 'First',
+    },
+    // Who will score last
+    [MarketType.LAST_SCORE]: {
+        id: MarketType.LAST_SCORE,
+        key: 'lastScore',
+        name: 'Last',
+    },
+    // Clean sheet per team
+    [MarketType.CLEAN_SHEET_HOME_TEAM]: {
+        id: MarketType.CLEAN_SHEET_HOME_TEAM,
+        key: 'cleanSheetHomeTeam',
+        name: 'Clean sheet',
+    },
+    [MarketType.CLEAN_SHEET_AWAY_TEAM]: {
+        id: MarketType.CLEAN_SHEET_AWAY_TEAM,
+        key: 'cleanSheetAwayTeam',
+        name: 'Clean sheet',
+    },
     [MarketType.SECOND_PERIOD_WINNER]: {
         id: MarketType.SECOND_PERIOD_WINNER,
         key: 'secondPeriodWinner',
@@ -577,6 +600,25 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         name: 'Half-time/Full-time + Goals',
     },
 
+    // Who will qualify for the next round
+    [MarketType.WHO_WILL_QUALIFY]: {
+        id: MarketType.WHO_WILL_QUALIFY,
+        key: 'whoWillQualify',
+        name: 'Who will qualify for the next round',
+    },
+    // Will there be overtime in the game
+    [MarketType.WILL_THERE_BE_OVERTIME]: {
+        id: MarketType.WILL_THERE_BE_OVERTIME,
+        key: 'willThereBeOvertime',
+        name: 'Will there be overtime in the game',
+    },
+    // Will there be overtime in the game
+    [MarketType.FIRST_INNING_NO_RUNS]: {
+        id: MarketType.FIRST_INNING_NO_RUNS,
+        key: 'firstInningNoRuns',
+        name: ' No runs in the first inning',
+    },
+
     // Player props
     [MarketType.PLAYER_PROPS_STRIKEOUTS]: {
         id: MarketType.PLAYER_PROPS_STRIKEOUTS,
@@ -846,6 +888,7 @@ export const WINNER_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_DRAW_NO_BET,
     MarketType.THIRD_PERIOD_DRAW_NO_BET,
     MarketType.FOURTH_PERIOD_DRAW_NO_BET,
+    MarketType.WHO_WILL_QUALIFY,
 ];
 
 export const BOTH_TEAMS_TO_SCORE_MARKET_TYPES = [
@@ -911,12 +954,23 @@ export const HOME_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
+    MarketType.CLEAN_SHEET_HOME_TEAM,
 ];
 
 export const AWAY_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_AWAY_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
+    MarketType.CLEAN_SHEET_AWAY_TEAM,
+];
+
+export const SCORE_MARKET_TYPES = [MarketType.FIRST_SCORE, MarketType.LAST_SCORE];
+
+export const OTHER_YES_NO_MARKET_TYPES = [
+    MarketType.CLEAN_SHEET_HOME_TEAM,
+    MarketType.CLEAN_SHEET_AWAY_TEAM,
+    MarketType.WILL_THERE_BE_OVERTIME,
+    MarketType.FIRST_INNING_NO_RUNS,
 ];
 
 export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
