@@ -616,7 +616,7 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.FIRST_INNING_NO_RUNS]: {
         id: MarketType.FIRST_INNING_NO_RUNS,
         key: 'firstInningNoRuns',
-        name: ' No runs in the first inning',
+        name: 'No runs in the first inning',
     },
 
     // Player props
