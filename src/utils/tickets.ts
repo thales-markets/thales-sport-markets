@@ -4,10 +4,12 @@ import { OddsType } from 'enums/markets';
 import { t } from 'i18next';
 import { Coins, bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
+import { SupportedNetwork } from 'types/network';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
+import freeBetHolder from './contracts/freeBetHolder';
 import {
     formatMarketOdds,
     isOneSideMarket,
@@ -49,7 +51,11 @@ export const mapTicket = (
         isOpen: !ticket.resolved && !ticket.isExercisable,
         finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
         isLive: ticket.isLive,
-        isFreeBet: !!ticket.isFreeBet,
+        isFreeBet:
+            !!ticket.isFreeBet ||
+            (freeBetHolder.addresses[networkId as SupportedNetwork]
+                ? ticket.ticketOwner == freeBetHolder.addresses[networkId as SupportedNetwork]
+                : false),
 
         sportMarkets: ticket.marketsData.map(
             (market: any, index: number): TicketMarket => {
