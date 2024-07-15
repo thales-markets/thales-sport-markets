@@ -1349,7 +1349,13 @@ const Ticket: React.FC<TicketProps> = ({
                     <RowContainer>
                         <SummaryLabel>
                             <FreeBetIcon className="icon icon--gift" />
-                            {t('markets.parlay.use-free-bet')}:
+                            {t('markets.parlay.use-free-bet')}
+                            <Tooltip
+                                overlay={<>{t('profile.free-bet.claim-btn')}</>}
+                                iconFontSize={14}
+                                marginLeft={3}
+                            />
+                            :
                         </SummaryLabel>
                         <CheckboxContainer>
                             <Checkbox
