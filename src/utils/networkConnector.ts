@@ -34,7 +34,6 @@ type NetworkConnector = {
     sportsAMMV2Contract?: ethers.Contract;
     sportsAMMV2RiskManagerContract?: ethers.Contract;
     liveTradingProcessorContract?: ethers.Contract;
-    sportPositionalMarketDataContract?: ethers.Contract;
     freeBetHolderContract?: ethers.Contract;
     sportsAMMV2ManagerContract?: ethers.Contract;
 };

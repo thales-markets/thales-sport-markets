@@ -530,15 +530,9 @@ const Ticket: React.FC<TicketProps> = ({
     );
 
     useEffect(() => {
-        const {
-            sportsAMMV2Contract,
-            sUSDContract,
-            signer,
-            multipleCollateral,
-            freeBetHolderContract,
-        } = networkConnector;
+        const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
 
-        if (isFreeBetActive && freeBetHolderContract && isWalletConnected) {
+        if (isFreeBetActive && isWalletConnected) {
             setHasAllowance(true);
             return;
         }
