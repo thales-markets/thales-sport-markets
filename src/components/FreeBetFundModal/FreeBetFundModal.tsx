@@ -69,9 +69,6 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             : [];
     }, [multipleCollateralBalancesQuery.data, multipleCollateralBalancesQuery?.isSuccess]);
 
-    console.log('validationMessage ', validationMessage);
-    console.log('fundWalletValidationMessage ', fundWalletValidationMessage);
-
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
         enabled: isAppReady,
     });
@@ -257,8 +254,6 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             }
         }
     };
-
-    console.log('inputRefVisible ', inputRefVisible);
 
     return (
         <Modal
