@@ -130,7 +130,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
 
     useEffect(() => {
         if (amount && Number(amount) > selectedCollateralBalance)
-            return setValidationMessage(t('profile.free-bet-modal.invalid-amount'));
+            return setValidationMessage(t('profile.free-bet-modal.no-funds'));
         return setValidationMessage('');
     }, [amount, selectedCollateralBalance, t]);
 

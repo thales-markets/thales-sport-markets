@@ -435,6 +435,7 @@
             "fund-successful": "Fund successful",
             "invalid-wallet-address": "Invalid wallet address",
             "invalid-amount": "Invalid amount",
+            "no-funds": "Please ensure your wallet has enough funds",
             "insufficient-balance": "Insufficient balance"
         }
     },
