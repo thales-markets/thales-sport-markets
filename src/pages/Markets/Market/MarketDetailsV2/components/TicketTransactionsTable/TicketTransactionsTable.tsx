@@ -284,7 +284,10 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                             if (cellProps.row.original.isFreeBet) {
                                 return (
                                     <>
-                                        <FreeBetIcon className={'icon icon--gift'} />
+                                        <Tooltip
+                                            overlay={t('profile.free-bet.claim-btn')}
+                                            component={<FreeBetIcon className={'icon icon--gift'} />}
+                                        />
                                         {statusComponent}
                                     </>
                                 );

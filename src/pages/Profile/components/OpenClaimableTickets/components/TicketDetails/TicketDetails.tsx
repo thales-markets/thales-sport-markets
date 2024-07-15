@@ -39,7 +39,6 @@ import {
     FreeBetIcon,
     FreeBetWrapper,
     InfoContainerColumn,
-    InfoIcon,
     Label,
     LiveIndicatorContainer,
     NumberOfGamesContainer,
@@ -267,11 +266,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                             <PayoutWrapper>
                                 {ticket.isFreeBet && (
                                     <FreeBetWrapper>
-                                        <FreeBetIcon className={'icon icon--gift'} />
                                         {ticket.isClaimable && (
                                             <Tooltip
                                                 overlay={t('profile.free-bet.claim-btn')}
-                                                component={<InfoIcon className={'icon icon--warning'} />}
+                                                component={<FreeBetIcon className={'icon icon--gift'} />}
                                             />
                                         )}
                                     </FreeBetWrapper>

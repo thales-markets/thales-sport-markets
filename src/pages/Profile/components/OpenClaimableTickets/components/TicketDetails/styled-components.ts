@@ -244,10 +244,6 @@ export const FreeBetIcon = styled.i`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
 
-export const InfoIcon = styled(FreeBetIcon)`
-    margin-left: 5px;
-`;
-
 export const PayoutWrapper = styled(FlexDivRow)`
     align-items: center;
     justify-content: flex-start;
