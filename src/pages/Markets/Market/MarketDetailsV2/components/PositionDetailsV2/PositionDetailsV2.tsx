@@ -89,6 +89,11 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
                         position: position,
                         combinedPositions: market.combinedPositions,
                         live: market.live,
+                        isOneSideMarket: market.isOneSideMarket,
+                        isPlayerPropsMarket: market.isPlayerPropsMarket,
+                        homeTeam: market.homeTeam,
+                        awayTeam: market.awayTeam,
+                        playerProps: market.playerProps,
                     };
 
                     if (

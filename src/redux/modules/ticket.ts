@@ -119,7 +119,7 @@ const ticketSlice = createSlice({
         setMaxTicketSize: (state, action: PayloadAction<number>) => {
             state.maxTicketSize = action.payload;
         },
-        removeFromTicket: (state, action: PayloadAction<SportMarket>) => {
+        removeFromTicket: (state, action: PayloadAction<SportMarket | TicketPosition>) => {
             state.ticket = state.ticket.filter((market) => !isSameMarket(action.payload, market));
 
             if (state.ticket.length === 0) {
