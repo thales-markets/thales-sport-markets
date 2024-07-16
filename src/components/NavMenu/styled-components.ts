@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
-import { FlexDivColumnNative, FlexDivRow } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnNative, FlexDivRow } from 'styles/common';
 
 const WrapperAnimation = (props: any) => keyframes`
     0% {
@@ -112,9 +112,9 @@ export const NavIcon = styled.i<{ active?: boolean }>`
     color: ${(props) => (props.active ? `${props.theme.textColor.quaternary}` : `${props.theme.textColor.primary}`)};
 `;
 
-export const FooterContainer = styled(FlexDivRow)`
+export const FooterContainer = styled(FlexDivColumn)`
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 `;
 
 export const Network = styled(FlexDivRow)`
