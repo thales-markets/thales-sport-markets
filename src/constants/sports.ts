@@ -40,7 +40,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         scoringType: ScoringType.POINTS,
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.INNING,
-        isDrawAvailable: false,
+        isDrawAvailable: true,
         priority: 401,
         hidden: false,
     },

@@ -196,9 +196,10 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                                 )}
                                             </ResultLabel>
                                         )}
-                                        {showLiveInfo(liveScore.gameStatus) && (
+                                        {showLiveInfo(liveScore.gameStatus, liveScore.period) && (
                                             <PeriodsContainer>
-                                                {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
+                                                {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ||
+                                                liveScore.gameStatus == GameStatus.OPTICODDS_HALF ? (
                                                     <InfoLabel>{t('markets.market-card.half-time')}</InfoLabel>
                                                 ) : (
                                                     <>

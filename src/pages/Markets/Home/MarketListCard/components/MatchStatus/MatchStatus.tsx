@@ -91,10 +91,13 @@ const MatchStatus: React.FC<MatchStatusProps> = ({ market }) => {
             ) : isPendingResolution ? (
                 liveScore ? (
                     <>
-                        {showLiveInfo(liveScore.gameStatus) && (
+                        {showLiveInfo(liveScore.gameStatus, liveScore.period) && (
                             <MatchScoreContainer>
-                                {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ? (
-                                    <Status color={theme.status.started}>{t('markets.market-card.half-time')}</Status>
+                                {liveScore.gameStatus == GameStatus.RUNDOWN_HALF_TIME ||
+                                liveScore.gameStatus == GameStatus.OPTICODDS_HALF ? (
+                                    <Status color={theme.status.started} marginBottom="12px" marginRight="10px">
+                                        {t('markets.market-card.half-time')}
+                                    </Status>
                                 ) : (
                                     <MatchPeriodContainer>
                                         <MatchPeriodLabel>{`${getOrdinalNumberLabel(Number(liveScore.period))}${
@@ -131,12 +134,14 @@ const Container = styled(FlexDiv)`
     align-items: flex-end;
 `;
 
-const Status = styled.span<{ color: string }>`
+const Status = styled.span<{ color: string; marginBottom?: string; marginRight?: string }>`
     font-size: 12px;
     text-transform: uppercase;
     color: ${(props) => props.color};
     align-self: center;
     justify-content: space-evenly;
+    margin-bottom: ${(props) => props.marginBottom || ''};
+    margin-right: ${(props) => props.marginRight || ''};
 `;
 
 const MatchScoreContainer = styled(FlexDivRow)`
