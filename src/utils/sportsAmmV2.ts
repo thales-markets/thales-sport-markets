@@ -40,7 +40,7 @@ export const getSportsAMMV2Transaction: any = async (
                 expectedQuote,
                 additionalSlippage,
                 referralAddress,
-                isDefaultCollateral ? ZERO_ADDRESS : collateralAddress,
+                collateralAddress,
                 { value: 0 }
             );
 
