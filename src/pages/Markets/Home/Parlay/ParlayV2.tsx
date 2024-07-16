@@ -10,20 +10,12 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getSportFilter } from 'redux/modules/market';
-import {
-    getHasTicketError,
-    getTicket,
-    removeAll,
-    resetTicketError,
-    setMaxTicketSize,
-    setPaymentSelectedCollateralIndex,
-} from 'redux/modules/ticket';
+import { getHasTicketError, getTicket, removeAll, resetTicketError, setMaxTicketSize } from 'redux/modules/ticket';
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket, TicketMarket } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
-import { getDefaultCollateralIndexForNetworkId } from 'utils/network';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
 type ParlayProps = {
@@ -60,15 +52,6 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(networkId, isLiveFilterSelected, {
         enabled: isAppReady,
     });
-
-    useEffect(() => {
-        dispatch(
-            setPaymentSelectedCollateralIndex({
-                selectedCollateralIndex: getDefaultCollateralIndexForNetworkId(networkId),
-                networkId: networkId,
-            })
-        );
-    }, [networkId, dispatch]);
 
     useEffect(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {

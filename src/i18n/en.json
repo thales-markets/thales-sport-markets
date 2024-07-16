@@ -330,8 +330,10 @@
     "profile": {
         "stats": {
             "profile-data": "Profile data",
+            "free-bet": "Free bet",
             "total-volume": "Total volume",
             "trades": "Trades",
+            "wallet": "Wallet",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins"
         },
@@ -417,7 +419,25 @@
         "claiming-voucher": "Claiming...",
         "search-field": "Search wallet",
         "winnings-are-forfeit": "*Winnings not claimed within {{amount}} days of a market being resolved are forfeit.",
-        "back": "Back"
+        "back": "Back",
+        "send-free-bet": "Send free bet",
+        "free-bet": {
+            "claim-btn": "Claim amount will be reduced by buy-in amount, which will transfer to your free bet balance."
+        },
+        "free-bet-modal": {
+            "title": "Send free bet",
+            "enter-wallet-address": "Enter wallet address",
+            "enter-amount": "Enter amount",
+            "approve-success": "Successfully approved",
+            "transaction-pending": "Transaction pending",
+            "fund": "Send free bet",
+            "funding": "Funding...",
+            "fund-successful": "Fund successful",
+            "invalid-wallet-address": "Invalid wallet address",
+            "invalid-amount": "Invalid amount",
+            "no-funds": "Please ensure your wallet has enough funds",
+            "insufficient-balance": "Insufficient balance"
+        }
     },
     "markets": {
         "market-card": {
@@ -708,6 +728,8 @@
             "liquidity": "Liquidity",
             "in-wallet": "In wallet",
             "skew": "Skew",
+            "use-free-bet": "Use free bet",
+            "disable-free-bet": "Disable free bet balances",
             "empty-title": "No positions",
             "empty-description": "Add position, choose a market and make your selection.",
             "accept-odds-changes": "Accept odds changes",

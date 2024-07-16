@@ -150,3 +150,9 @@ export const WalletWrapper = styled(FlexDiv)`
     justify-self: center;
     margin-top: 15px;
 `;
+
+export const ButtonWrapper = styled(FlexDiv)`
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0px;
+`;
