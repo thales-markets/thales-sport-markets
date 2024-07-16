@@ -1,4 +1,5 @@
 import Button from 'components/Button';
+import FreeBetFundModal from 'components/FreeBetFundModal';
 import LanguageSelector from 'components/LanguageSelector';
 import SPAAnchor from 'components/SPAAnchor';
 import { LINKS } from 'constants/links';
@@ -10,7 +11,7 @@ import {
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
@@ -53,6 +54,8 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const isConnectedViaParticle = useSelector((state: RootState) => getIsConnectedViaParticle(state));
+
+    const [openFreeBetModal, setOpenFreeBetModal] = useState<boolean>(false);
 
     useEffect(() => {
         // Discord Widget bot: move with nav menu
@@ -163,6 +166,17 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                     })}
                 </ItemsContainer>
                 <FooterContainer>
+                    <Button
+                        borderColor={theme.button.borderColor.secondary}
+                        backgroundColor="transparent"
+                        textColor={theme.button.textColor.quaternary}
+                        width="100%"
+                        margin={isConnectedViaParticle ? '0 0 5px 0' : ''}
+                        onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
+                    >
+                        {t('profile.send-free-bet')}
+                    </Button>
+                    {openFreeBetModal && <FreeBetFundModal onClose={() => setOpenFreeBetModal(false)} />}
                     {isConnectedViaParticle && (
                         <Button
                             backgroundColor={theme.button.background.quaternary}

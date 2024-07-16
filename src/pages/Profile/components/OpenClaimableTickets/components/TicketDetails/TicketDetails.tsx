@@ -2,6 +2,7 @@ import Button from 'components/Button/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
+import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';
 import React, { useMemo, useState } from 'react';
@@ -35,6 +36,8 @@ import {
     CollateralSelectorContainer,
     Container,
     ExternalLink,
+    FreeBetIcon,
+    FreeBetWrapper,
     InfoContainerColumn,
     Label,
     LiveIndicatorContainer,
@@ -42,6 +45,7 @@ import {
     OverviewContainer,
     OverviewWrapper,
     PayoutInLabel,
+    PayoutWrapper,
     TicketIdContainer,
     TicketInfo,
     TicketMarketsContainer,
@@ -178,22 +182,44 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
         applyPayoutMultiplier: false,
     };
 
-    const getClaimButton = (isMobile: boolean) => (
-        <Button
-            disabled={isSubmitting}
-            additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
-            padding="2px 5px"
-            fontSize={isMobile ? '9px' : '15px'}
-            height={isMobile ? '19px' : '24px'}
-            onClick={(e: any) => {
-                e.preventDefault();
-                e.stopPropagation();
-                claimTicket(ticket.id);
-            }}
-        >
-            {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
-        </Button>
-    );
+    const getClaimButton = (isMobile: boolean) => {
+        return ticket.isFreeBet ? (
+            <Tooltip
+                overlay={t('profile.free-bet.claim-btn')}
+                component={
+                    <Button
+                        disabled={isSubmitting}
+                        additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
+                        padding="2px 5px"
+                        fontSize={isMobile ? '9px' : '15px'}
+                        height={isMobile ? '19px' : '24px'}
+                        onClick={(e: any) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            claimTicket(ticket.id);
+                        }}
+                    >
+                        {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
+                    </Button>
+                }
+            />
+        ) : (
+            <Button
+                disabled={isSubmitting}
+                additionalStyles={isMobile ? additionalClaimButtonStyleMobile : additionalClaimButtonStyle}
+                padding="2px 5px"
+                fontSize={isMobile ? '9px' : '15px'}
+                height={isMobile ? '19px' : '24px'}
+                onClick={(e: any) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    claimTicket(ticket.id);
+                }}
+            >
+                {isSubmitting ? t('profile.card.claim-progress') : t('profile.card.claim')}
+            </Button>
+        );
+    };
 
     const getButton = (isMobile: boolean) => {
         return getClaimButton(isMobile);
@@ -223,17 +249,36 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                         <Value>{formatCurrencyWithKey(ticket.collateral, ticket.buyInAmount)}</Value>
                     </InfoContainerColumn>
                     {isMobile && !isClaimable && (
-                        <InfoContainerColumn isOpen={!isClaimable}>
-                            <WinLabel>{t('profile.card.payout')}:</WinLabel>
-                            <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
-                        </InfoContainerColumn>
-                    )}
-                    {!isMobile && (
-                        <>
+                        <PayoutWrapper>
+                            {ticket.isFreeBet && (
+                                <FreeBetWrapper>
+                                    <FreeBetIcon className={'icon icon--gift'} />
+                                </FreeBetWrapper>
+                            )}
                             <InfoContainerColumn isOpen={!isClaimable}>
                                 <WinLabel>{t('profile.card.payout')}:</WinLabel>
                                 <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                             </InfoContainerColumn>
+                        </PayoutWrapper>
+                    )}
+                    {!isMobile && (
+                        <>
+                            <PayoutWrapper>
+                                {ticket.isFreeBet && (
+                                    <FreeBetWrapper>
+                                        {ticket.isClaimable && (
+                                            <Tooltip
+                                                overlay={t('profile.free-bet.claim-btn')}
+                                                component={<FreeBetIcon className={'icon icon--gift'} />}
+                                            />
+                                        )}
+                                    </FreeBetWrapper>
+                                )}
+                                <InfoContainerColumn isOpen={!isClaimable}>
+                                    <WinLabel>{t('profile.card.payout')}:</WinLabel>
+                                    <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
+                                </InfoContainerColumn>
+                            </PayoutWrapper>
                             {isClaimable && isMultiCollateralSupported && (
                                 <InfoContainerColumn
                                     onClick={(e) => {
@@ -257,26 +302,33 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                         </>
                     )}
                     {isMobile && isClaimable && (
-                        <ClaimContainer>
-                            <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
-                            {getButton(isMobile)}
-                            {isMultiCollateralSupported && isTicketCollateralDefaultCollateral && (
-                                <CollateralSelectorContainer
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                    }}
-                                >
-                                    <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
-                                    <CollateralSelector
-                                        collateralArray={claimCollateralArray}
-                                        selectedItem={claimCollateralIndex}
-                                        onChangeCollateral={setClaimCollateralIndex}
-                                        preventPaymentCollateralChange
-                                    />
-                                </CollateralSelectorContainer>
+                        <>
+                            <ClaimContainer>
+                                <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
+                                {getButton(isMobile)}
+                                {isMultiCollateralSupported && isTicketCollateralDefaultCollateral && (
+                                    <CollateralSelectorContainer
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                        }}
+                                    >
+                                        <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
+                                        <CollateralSelector
+                                            collateralArray={claimCollateralArray}
+                                            selectedItem={claimCollateralIndex}
+                                            onChangeCollateral={setClaimCollateralIndex}
+                                            preventPaymentCollateralChange
+                                        />
+                                    </CollateralSelectorContainer>
+                                )}
+                            </ClaimContainer>
+                            {ticket.isFreeBet && (
+                                <FreeBetWrapper>
+                                    <FreeBetIcon className={'icon icon--gift'} />
+                                </FreeBetWrapper>
                             )}
-                        </ClaimContainer>
+                        </>
                     )}
                     {isClaimable && !isMobile && getButton(isMobile)}
                     <ArrowIcon className={showDetails ? 'icon icon--caret-up' : 'icon icon--caret-down'} />

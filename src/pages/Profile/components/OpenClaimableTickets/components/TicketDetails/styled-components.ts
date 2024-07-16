@@ -80,7 +80,7 @@ export const InfoContainerColumn = styled(FlexDivColumnNative)<{ isOpen?: boolea
     min-width: ${(props) => (props.isOpen ? '120px' : '100px')};
     justify-content: flex-start;
     margin-right: 10px;
-    @media (max-width: 767px) {{
+    @media (max-width: 767px) {
         min-width: ${(props) => (props.isOpen ? '90px' : '85px')};
         flex-direction: column;
         margin-left: 0px;
@@ -232,3 +232,20 @@ export const additionalClaimButtonStyleMobile: CSSProperties = {
     minWidth: '65px',
     maxWidth: '80px',
 };
+
+export const FreeBetWrapper = styled(FlexDivRow)`
+    align-items: center;
+    margin-right: 5px;
+`;
+
+export const FreeBetIcon = styled.i`
+    font-size: 15px;
+    font-weight: 400;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+export const PayoutWrapper = styled(FlexDivRow)`
+    align-items: center;
+    justify-content: flex-start;
+    display: relative;
+`;

@@ -38,6 +38,7 @@ type NumericInputProps = {
     validationPlacement?: string;
     borderColor?: string;
     containerWidth?: string;
+    validationTooltipZIndex?: number;
 };
 
 const INVALID_CHARS = ['-', '+', 'e'];
@@ -72,6 +73,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
     validationPlacement,
     borderColor,
     containerWidth,
+    validationTooltipZIndex,
     ...rest
 }) => {
     const { t } = useTranslation();
@@ -114,6 +116,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
                 title={showValidation ? validationMessage || '' : ''}
                 placement={validationPlacement || 'top'}
                 arrow={true}
+                PopperProps={{ style: { zIndex: validationTooltipZIndex ? validationTooltipZIndex : '' } }}
             >
                 <StyledInput
                     readOnly={readonly}

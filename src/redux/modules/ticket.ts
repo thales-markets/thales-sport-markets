@@ -22,11 +22,13 @@ const getDefaultPayment = (): ParlayPayment => {
     const lsSelectedCollateralIndex = localStore.get(
         `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${Network.OptimismMainnet}`
     );
+    const lsForceCollateralChange = localStore.get(LOCAL_STORAGE_KEYS.COLLATERAL_CHANGED);
 
     return {
         selectedCollateralIndex: lsSelectedCollateralIndex !== undefined ? (lsSelectedCollateralIndex as number) : 0,
         amountToBuy: '',
         networkId: Network.OptimismMainnet,
+        forceChangeCollateral: lsForceCollateralChange !== undefined ? (lsForceCollateralChange as boolean) : false,
     };
 };
 
@@ -139,7 +141,7 @@ const ticketSlice = createSlice({
         },
         setPaymentSelectedCollateralIndex: (
             state,
-            action: PayloadAction<{ selectedCollateralIndex: number; networkId: Network }>
+            action: PayloadAction<{ selectedCollateralIndex: number; networkId: Network; forcedChange?: boolean }>
         ) => {
             state.payment = {
                 ...state.payment,
@@ -150,6 +152,10 @@ const ticketSlice = createSlice({
                 `${LOCAL_STORAGE_KEYS.COLLATERAL_INDEX}${state.payment.networkId}`,
                 state.payment.selectedCollateralIndex
             );
+            if (action.payload.forcedChange) {
+                state.payment.forceChangeCollateral = true;
+                localStore.set(LOCAL_STORAGE_KEYS.COLLATERAL_CHANGED, true);
+            }
         },
         setPaymentAmountToBuy: (state, action: PayloadAction<number | string>) => {
             state.payment = { ...state.payment, amountToBuy: action.payload };

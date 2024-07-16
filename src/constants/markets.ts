@@ -118,6 +118,13 @@ export const GameStatusKey: Record<GameStatus, string> = {
     [GameStatus.ENETPULSE_FINISHED]: '',
     [GameStatus.ENETPULSE_INTERRUPTED]: 'interrupted',
     [GameStatus.ENETPULSE_CANCELED]: 'canceled',
+    [GameStatus.OPTICODDS_LIVE]: '',
+    [GameStatus.OPTICODDS_HALF]: 'half-time',
+    [GameStatus.OPTICODDS_UNPLAYED]: '',
+    [GameStatus.OPTICODDS_COMPLETED]: '',
+    [GameStatus.OPTICODDS_CANCELLED]: 'canceled',
+    [GameStatus.OPTICODDS_SUSPENDED]: 'suspended',
+    [GameStatus.OPTICODDS_DELAYED]: 'delayed',
 };
 
 export const BATCH_SIZE = 10;

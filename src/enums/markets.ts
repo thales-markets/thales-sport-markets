@@ -60,6 +60,13 @@ export enum GameStatus {
     ENETPULSE_FINISHED = 'finished',
     ENETPULSE_INTERRUPTED = 'interrupted',
     ENETPULSE_CANCELED = 'cancelled',
+    OPTICODDS_LIVE = 'Live',
+    OPTICODDS_HALF = 'Half',
+    OPTICODDS_UNPLAYED = 'Unplayed',
+    OPTICODDS_COMPLETED = 'Completed',
+    OPTICODDS_CANCELLED = 'Cancelled',
+    OPTICODDS_SUSPENDED = 'Suspended',
+    OPTICODDS_DELAYED = 'Delayed',
 }
 
 export enum TicketErrorCode {

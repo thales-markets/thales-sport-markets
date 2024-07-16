@@ -30,6 +30,7 @@ import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQ
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -43,6 +44,7 @@ import {
     removeAll,
     setLiveBetSlippage,
     setPaymentAmountToBuy,
+    setPaymentSelectedCollateralIndex,
 } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
 import {
@@ -80,8 +82,10 @@ import {
     getCollateralIndex,
     getCollaterals,
     getDefaultCollateral,
+    getMaxCollateralDollarValue,
     isLpSupported,
     isStableCurrency,
+    mapMultiCollateralBalances,
 } from 'utils/collaterals';
 import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
@@ -178,6 +182,7 @@ const Ticket: React.FC<TicketProps> = ({
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextBuyInAmount, setTooltipTextBuyInAmount] = useState<string>('');
+    const [isFreeBetActive, setIsFreeBetActive] = useState<boolean>(false);
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
@@ -259,6 +264,32 @@ const Ticket: React.FC<TicketProps> = ({
         enabled: isAppReady && isWalletConnected,
     });
 
+    const multipleCollateralBalancesData = useMemo(() => {
+        return multipleCollateralBalances?.isSuccess && multipleCollateralBalances?.data
+            ? multipleCollateralBalances.data
+            : [];
+    }, [multipleCollateralBalances]);
+
+    const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress, networkId, {
+        enabled: isAppReady && isWalletConnected,
+    });
+
+    const freeBetCollateralBalances =
+        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery.data
+            : undefined;
+
+    const freeBetBalanceExists = freeBetCollateralBalances
+        ? !!Object.values(freeBetCollateralBalances).find((balance) => balance)
+        : false;
+
+    // Set free bet if user has free bet balance
+    useEffect(() => {
+        if (freeBetBalanceExists) {
+            setIsFreeBetActive(true);
+        }
+    }, [freeBetBalanceExists]);
+
     const sportsAmmData: SportsAmmData | undefined = useMemo(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
             return sportsAmmDataQuery.data;
@@ -267,11 +298,21 @@ const Ticket: React.FC<TicketProps> = ({
     }, [sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
     const paymentTokenBalance: number = useMemo(() => {
+        if (isFreeBetActive && freeBetBalanceExists && freeBetCollateralBalances) {
+            return freeBetCollateralBalances[selectedCollateral];
+        }
         if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
             return multipleCollateralBalances.data[selectedCollateral];
         }
         return 0;
-    }, [multipleCollateralBalances.data, multipleCollateralBalances.isSuccess, selectedCollateral]);
+    }, [
+        freeBetBalanceExists,
+        freeBetCollateralBalances,
+        isFreeBetActive,
+        multipleCollateralBalances.data,
+        multipleCollateralBalances.isSuccess,
+        selectedCollateral,
+    ]);
 
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
         enabled: isAppReady,
@@ -296,6 +337,42 @@ const Ticket: React.FC<TicketProps> = ({
                 : 10,
         [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
+
+    useEffect(() => {
+        if (!freeBetBalanceExists) return;
+
+        const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+
+        const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
+
+        const isSelectedCollateralBalanceLowerThanMinimumBuyAmount =
+            selectedCollateralItem && selectedCollateralItem.balanceDollarValue < 3;
+
+        if (!balanceList) return;
+        const maxBalanceItem = getMaxCollateralDollarValue(balanceList);
+
+        if (
+            maxBalanceItem &&
+            (!ticketPayment.forceChangeCollateral || isSelectedCollateralBalanceLowerThanMinimumBuyAmount)
+        ) {
+            dispatch(
+                setPaymentSelectedCollateralIndex({
+                    selectedCollateralIndex: maxBalanceItem.index,
+                    networkId: networkId,
+                })
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        dispatch,
+        exchangeRates,
+        freeBetBalanceExists,
+        freeBetCollateralBalances,
+        minBuyInAmount,
+        multipleCollateralBalancesData,
+        networkId,
+        ticketPayment.forceChangeCollateral,
+    ]);
 
     useEffect(() => {
         setMinBuyInAmountInDefaultCollateral(sportsAmmData?.minBuyInAmount || 0);
@@ -454,6 +531,11 @@ const Ticket: React.FC<TicketProps> = ({
 
     useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
+
+        if (isFreeBetActive && isWalletConnected) {
+            setHasAllowance(true);
+            return;
+        }
         if (sportsAMMV2Contract && multipleCollateral && signer) {
             const collateralToAllow = isLiveTicket && isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral;
             const collateralContractWithSigner = isDefaultCollateral
@@ -491,6 +573,7 @@ const Ticket: React.FC<TicketProps> = ({
         isEth,
         isDefaultCollateral,
         isLiveTicket,
+        isFreeBetActive,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
@@ -618,6 +701,7 @@ const Ticket: React.FC<TicketProps> = ({
             sportsAMMDataContract,
             sportsAMMV2ManagerContract,
             multipleCollateral,
+            freeBetHolderContract,
         } = networkConnector;
 
         // TODO: separate logic for regular and live markets
@@ -629,6 +713,7 @@ const Ticket: React.FC<TicketProps> = ({
             const sportsAMMV2ContractWithSigner = markets[0].live
                 ? liveTradingProcessorContract?.connect(signer)
                 : sportsAMMV2Contract?.connect(signer);
+            const freeBetContractWithSigner = freeBetHolderContract?.connect(signer);
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
@@ -665,7 +750,9 @@ const Ticket: React.FC<TicketProps> = ({
                                 liveTotalQuote,
                                 referralId,
                                 additionalSlippage,
-                                isAA
+                                isAA,
+                                false,
+                                undefined
                             );
                         }
                     } else {
@@ -677,7 +764,9 @@ const Ticket: React.FC<TicketProps> = ({
                             liveTotalQuote,
                             referralId,
                             additionalSlippage,
-                            isAA
+                            isAA,
+                            isFreeBetActive,
+                            freeBetContractWithSigner
                         );
                     }
                 } else {
@@ -687,25 +776,34 @@ const Ticket: React.FC<TicketProps> = ({
                         isEth,
                         networkId,
                         sportsAMMV2ContractWithSigner,
+                        freeBetContractWithSigner,
                         tradeData,
                         parsedBuyInAmount,
                         parsedTotalQuote,
                         referralId,
                         additionalSlippage,
-                        isAA
+                        isAA,
+                        isFreeBetActive
                     );
                 }
 
                 const txResult = isAA ? tx : await tx?.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.parlayBuy, {
-                        props: {
-                            value: Number(buyInAmount),
-                            collateral: selectedCollateral,
-                            networkId,
-                        },
-                    });
+                    PLAUSIBLE.trackEvent(
+                        tradeData[0].live
+                            ? isFreeBetActive
+                                ? PLAUSIBLE_KEYS.freeBetLive
+                                : PLAUSIBLE_KEYS.livePositionBuy
+                            : PLAUSIBLE_KEYS.parlayBuy,
+                        {
+                            props: {
+                                value: Number(buyInAmount),
+                                collateral: selectedCollateral,
+                                networkId,
+                            },
+                        }
+                    );
                     if (!tradeData[0].live) {
                         refetchBalances(walletAddress, networkId);
 
@@ -736,8 +834,11 @@ const Ticket: React.FC<TicketProps> = ({
                     } else if (sportsAMMV2ContractWithSigner) {
                         let counter = 0;
                         let adapterAllowed = false;
-                        const requestId = txResult.events.find((event: any) => event.event === 'LiveTradeRequested')
-                            .args[2];
+                        const requestId = txResult.events.find((event: any) =>
+                            isFreeBetActive
+                                ? event.event == 'FreeBetLiveTradeRequested'
+                                : event.event === 'LiveTradeRequested'
+                        ).args[2];
                         const startTime = Date.now();
                         console.log('filfill start time:', new Date(startTime));
                         const checkFulfilled = async () => {
@@ -790,22 +891,23 @@ const Ticket: React.FC<TicketProps> = ({
                                         Number(numOfActiveTicketsPerUser) - 1,
                                         BATCH_SIZE
                                     );
+                                    const lastTicket = userTickets.ticketsData[userTickets.ticketsData.length - 1];
+                                    const lastTicketPaid =
+                                        !collateralHasLp || isDefaultCollateral
+                                            ? coinFormatter(lastTicket.buyInAmount, networkId)
+                                            : Number(buyInAmount);
+                                    const lastTicketPayout = lastTicketPaid / bigNumberFormatter(lastTicket.totalQuote);
+
                                     const modalData: ShareTicketModalProps = {
                                         markets: [
                                             {
                                                 ...markets[0],
-                                                odd: bigNumberFormatter(
-                                                    userTickets.ticketsData[userTickets.ticketsData.length - 1]
-                                                        .totalQuote
-                                                ),
+                                                odd: bigNumberFormatter(lastTicket.totalQuote),
                                             },
                                         ],
                                         multiSingle: false,
-                                        paid:
-                                            !collateralHasLp || isDefaultCollateral
-                                                ? Number(buyInAmountInDefaultCollateral)
-                                                : Number(buyInAmount),
-                                        payout: payout,
+                                        paid: lastTicketPaid,
+                                        payout: lastTicketPayout,
                                         onClose: () => {
                                             if (!keepSelection) dispatch(removeAll());
                                             onModalClose();
@@ -1243,6 +1345,32 @@ const Ticket: React.FC<TicketProps> = ({
                 collateralIndex={selectedCollateralIndex}
                 changeAmount={(value) => setCollateralAmount(value)}
             />
+            {freeBetBalanceExists && (
+                <RowSummary>
+                    <RowContainer>
+                        <SummaryLabel>
+                            <FreeBetIcon className="icon icon--gift" />
+                            {t('markets.parlay.use-free-bet')}
+                            <Tooltip
+                                overlay={<>{t('profile.free-bet.claim-btn')}</>}
+                                iconFontSize={14}
+                                marginLeft={3}
+                            />
+                            :
+                        </SummaryLabel>
+                        <CheckboxContainer>
+                            <Checkbox
+                                disabled={false}
+                                checked={isFreeBetActive}
+                                value={isFreeBetActive.toString()}
+                                onChange={(e: any) => {
+                                    setIsFreeBetActive(e.target.checked || false);
+                                }}
+                            />
+                        </CheckboxContainer>
+                    </RowContainer>
+                </RowSummary>
+            )}
             <RowSummary>
                 <SummaryLabel lineHeight={26}>{t('markets.parlay.buy-in')}:</SummaryLabel>
             </RowSummary>
@@ -1268,7 +1396,9 @@ const Ticket: React.FC<TicketProps> = ({
                                     setCollateralAmount('');
                                 }}
                                 isDetailedView
-                                collateralBalances={multipleCollateralBalances.data}
+                                collateralBalances={
+                                    isFreeBetActive ? freeBetCollateralBalances : multipleCollateralBalances.data
+                                }
                                 exchangeRates={exchangeRates}
                                 dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
                             />
@@ -1312,7 +1442,6 @@ const Ticket: React.FC<TicketProps> = ({
                     </>
                 )}
             </InfoContainer>
-
             {isAA && (
                 <GasSummary>
                     <SummaryLabel>
@@ -1541,6 +1670,14 @@ const OddsChangedDiv = styled.div`
     color: ${(props) => props.theme.button.background.septenary};
     padding-top: 10px;
     font-size: 12px;
+`;
+
+const FreeBetIcon = styled.i`
+    font-size: 15px;
+    font-family: OvertimeIconsV2 !important;
+    text-transform: none !important;
+    margin-right: 3px;
+    color: ${(props) => props.theme.textColor.quaternary} !important;
 `;
 
 export default Ticket;

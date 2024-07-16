@@ -109,6 +109,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                                       setPaymentSelectedCollateralIndex({
                                                           selectedCollateralIndex: collateral.index,
                                                           networkId: networkId,
+                                                          forcedChange: true,
                                                       })
                                                   );
                                               }
@@ -159,6 +160,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                                       setPaymentSelectedCollateralIndex({
                                                           selectedCollateralIndex: index,
                                                           networkId: networkId,
+                                                          forcedChange: true,
                                                       })
                                                   );
                                               }

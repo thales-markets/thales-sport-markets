@@ -1,3 +1,5 @@
+import Button from 'components/Button';
+import FreeBetFundModal from 'components/FreeBetFundModal';
 import LanguageSelector from 'components/LanguageSelector';
 import Logo from 'components/Logo';
 import { Separator } from 'components/NavMenu/styled-components';
@@ -12,7 +14,7 @@ import {
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useSelector } from 'react-redux';
@@ -25,6 +27,7 @@ import { ThemeInterface } from 'types/ui';
 import { getNetworkIconClassNameByNetworkId, getNetworkNameByNetworkId } from 'utils/network';
 import { buildHref } from 'utils/routes';
 import {
+    ButtonWrapper,
     CloseIcon,
     FooterContainer,
     HeaderContainer,
@@ -52,6 +55,8 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
+    const [openFreeBetModal, setOpenFreeBetModal] = useState<boolean>(false);
+
     return (
         <OutsideClickHandler onOutsideClick={() => visibility && setNavMenuVisibility(false)}>
             <Wrapper show={visibility}>
@@ -59,6 +64,7 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                     <LogoContainer>
                         <Logo />
                     </LogoContainer>
+
                     <FlexDivCentered>
                         <Network>
                             <NetworkIcon className={getNetworkIconClassNameByNetworkId(networkId)} />
@@ -146,11 +152,24 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                             </SPAAnchor>
                         );
                     })}
+                    <ButtonWrapper>
+                        <Button
+                            borderColor={theme.button.borderColor.secondary}
+                            backgroundColor="transparent"
+                            textColor={theme.button.textColor.quaternary}
+                            width="100%"
+                            onClick={() => setOpenFreeBetModal(!openFreeBetModal)}
+                        >
+                            {t('profile.send-free-bet')}
+                        </Button>
+                    </ButtonWrapper>
                 </ItemsContainer>
+
                 <FooterContainer>
                     <CloseIcon onClick={() => setNavMenuVisibility(false)} />
                 </FooterContainer>
             </Wrapper>
+            {openFreeBetModal && <FreeBetFundModal onClose={() => setOpenFreeBetModal(false)} />}
         </OutsideClickHandler>
     );
 };
