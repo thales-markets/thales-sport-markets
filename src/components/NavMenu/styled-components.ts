@@ -115,7 +115,6 @@ export const NavIcon = styled.i<{ active?: boolean }>`
 export const FooterContainer = styled(FlexDivColumnNative)`
     align-items: center;
     justify-content: flex-end;
-    height: 200px;
 `;
 
 export const Network = styled(FlexDivRow)`
