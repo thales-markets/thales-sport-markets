@@ -181,6 +181,14 @@
     content: '\0069';
 }
 
+.league--paris2024:before {
+    content: '\006C';
+}
+
+.league--olympics:before {
+    content: '\006D';
+}
+
 .icon-homepage--cn:before {
     content: '\004B';
 }
