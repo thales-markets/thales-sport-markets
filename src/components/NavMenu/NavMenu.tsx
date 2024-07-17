@@ -182,8 +182,8 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             backgroundColor={theme.button.background.quaternary}
                             textColor={theme.button.textColor.primary}
                             borderColor={theme.button.borderColor.secondary}
-                            width="140px"
                             fontWeight="400"
+                            width="100%"
                             additionalStyles={{
                                 borderRadius: '5px',
                                 fontSize: '14px',
