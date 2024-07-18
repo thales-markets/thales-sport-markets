@@ -200,24 +200,24 @@
         }
     },
     {
-        "title": "Parlay Competition: Win 1,000 ARB and 1,000 OP Every Week",
-        "description": "Win 1,000 OP or 1,000 ARB every week by being in the top 20 highest-odd parlays on Optimism and Arbitrum respectively. That’s right, going for the craziest winning parlay pays extra on Overtime. Compete with others and prove your knowledge now!",
+        "title": "Parlay Competition: Win 1,000 OP Every Week",
+        "description": "Win 1,000 OP every week by being in the top 20 highest-odd parlays on Optimism. That’s right, going for the craziest winning parlay pays extra on Overtime. Compete with others and prove your knowledge now!",
         "startDate": 1702236692,
         "endDate": 0,
         "promotionId": "parlay-competition",
         "promotionUrl": "/promotions/parlay-competition",
         "backgroundImageUrl": "/promotions/parlay-small.webp",
         "callToActionButton": "How to earn",
-        "availableOnNetworks": [10, 42161],
+        "availableOnNetworks": [10],
         "article": {
             "coverImageUrl": "/promotions/parlay-big.webp",
-            "headerHtml": "<h1><span><span><span>Weekly Parlay Competition: Earn 1,000 ARB and 1,000 OP Every Week</span></span></span></h1>",
+            "headerHtml": "<h1><span><span><span>Parlay Competition: Earn 1,000 OP Every Week</span></span></span></h1>",
             "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>Win 1,000 OP or 1,000 ARB every two weeks by being in the top 20 highest-odd parlays on Optimism and Arbitrum respectively. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://www.overtimemarkets.xyz/parlay-leaderboard' target='_blank'> <span> <span> <span> <strong> <u>Parlay Leaderboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
+                "sectionHtml": "<p> <span> <span> <span>Win 1,000 OP every week by being in the top 20 highest-odd parlays on Optimism. </span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://www.overtimemarkets.xyz/parlay-leaderboard' target='_blank'> <span> <span> <span> <strong> <u>Parlay Leaderboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
                 "ctaButtonLink": "/markets",
                 "ctaButtonLabel": "Play now"
             },
-            "contentHtml": "<p> <span> <span> <span>Overtime has recently revamped its Parlay competition with increased incentives and a better chance for everyone to get a share of the rewards! </span> </span> </span> </p> <p> <span> <span> <span>The Parlay competition will be set in weekly rounds with a total of 1,000 ARB and 1,000 OP. The rewards will distributed to the top 20 winning parlays on respective chains.</span> </span> </span> </p> <p> <span> <span> <span>The Parlay leaderboard will now incorporate a points system, where winning parlays get a boost with more games there are on the ticket and with higher buy-ins. <br><br>The calculation is as follows: <strong>points = parlayOdds * √buyin * (1+0.1*numberOfGames)</strong><br><br>Important: The Overtime team holds the right to disqualify wallets we suspect of gaming the system.</span> </span> </span> </p> <p> <span> <span> <span><strong>Users who have covered 50% or more of potential combinations of their winning tickets will be disqualified.</strong></span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.<br><br>You can use the  <a href='https://www.overtimemarkets.xyz/promotions'><u>promotions page</u></a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards.</span> </span> </span> </p>"
+            "contentHtml": "<p> <span> <span> <span>Overtime has recently revamped its Parlay competition with increased incentives and a better chance for everyone to get a share of the rewards! </span> </span> </span> </p> <p> <span> <span> <span>The Parlay competition will be set in weekly rounds with a total of 1,000 OP. The rewards will distributed to the top 20 winning parlays on Optimism.</span> </span> </span> </p> <p> <span> <span> <span>The Parlay leaderboard will now incorporate a points system, where winning parlays get a boost with more games there are on the ticket and with higher buy-ins. <br><br>The calculation is as follows: <strong>points = parlayOdds * √buyin * (1+0.1*numberOfGames)</strong><br><br>Important: The Overtime team holds the right to disqualify wallets we suspect of gaming the system.</span> </span> </span> </p> <p> <span> <span> <span><strong>Users who have covered 50% or more of potential combinations of their winning tickets will be disqualified.</strong></span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.<br><br>You can use the  <a href='https://www.overtimemarkets.xyz/promotions'><u>promotions page</u></a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards.</span> </span> </span> </p>"
         }
     },
     {
