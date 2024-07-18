@@ -448,3 +448,15 @@
 .icon--gift:before {
     content: '\00FB';
 }
+
+.icon--waterpolo:before {
+    content: '\00FD';
+}
+
+.icon--handball:before {
+    content: '\00FF';
+}
+
+.icon--rugby:before {
+    content: '\0100';
+}
