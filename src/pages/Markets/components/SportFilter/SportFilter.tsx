@@ -94,6 +94,7 @@ const SportIcon = styled.i`
     margin-right: 10px;
     font-weight: 400;
     margin-left: 1px;
+    text-transform: none;
     @media (max-width: 950px) {
         margin-right: 18px;
     }

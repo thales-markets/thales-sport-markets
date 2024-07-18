@@ -17,7 +17,12 @@ export const getTeamImageSource = (team: string, league: League) => {
         : league == League.BRAZIL_1
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : isInternationalLeague(Number(league))
-        ? `/logos/Countries/${team.trim().replaceAll(' U23', '').replaceAll(' ', '-').toLowerCase()}.svg`
+        ? `/logos/Countries/${team
+              .trim()
+              .replaceAll(' 7s', '')
+              .replaceAll(' U23', '')
+              .replaceAll(' ', '-')
+              .toLowerCase()}.svg`
         : league == League.ENGLAND_CUP
         ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FRANCE_CUP
