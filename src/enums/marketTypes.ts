@@ -206,4 +206,5 @@ export enum MarketTypeGroup {
     PLAYER_SHOTS = 'Shots on goal',
     PLAYER_HITS_RECORDED = 'Hits recorded',
     PLAYER_STRIKEOUTS = 'Strikeouts',
+    POINTS = 'Points',
 }

@@ -162,6 +162,16 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
         }`;
     }
 
+    if (
+        (market.leagueId == League.SUMMER_OLYMPICS_VOLEYBALL ||
+            market.leagueId == League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN) &&
+        (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
+    ) {
+        sufix = `${sufix}${
+            marketType === MarketType.TOTAL2 || marketType === MarketType.SPREAD2 ? ' (sets)' : ' (points)'
+        }`;
+    }
+
     if (isHomeTeamMarket(marketType)) {
         sufix = `${sufix} (${market.homeTeam})`;
     }
