@@ -64,6 +64,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     useEffect(() => {
         if (!ticket.length) {
             setOddsChanged(false);
+            setNotOpenedMarkets([]);
         }
     }, [ticket]);
 
@@ -168,6 +169,15 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
             }
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch, isLiveFilterSelected]);
+
+    useEffect(() => {
+        if (ticket[0] && ticket[0].live && !isLiveFilterSelected) {
+            dispatch(removeAll());
+        } else if (ticket[0] && !ticket[0]?.live && isLiveFilterSelected) {
+            dispatch(removeAll());
+        }
+        // eslint-disable-next-line
+    }, [isLiveFilterSelected]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
