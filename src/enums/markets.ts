@@ -24,9 +24,13 @@ export enum SportFilter {
     Fighting = 'Fighting',
     Tennis = 'Tennis',
     eSports = 'eSports',
+    Rugby = 'Rugby',
+    Volleyball = 'Volleyball',
+    Handball = 'Handball',
+    Waterpolo = 'Waterpolo',
     Cricket = 'Cricket',
     // Motosport = 'Motosport',
-    Golf = 'Golf',
+    // Golf = 'Golf',
 }
 
 export enum OddsType {

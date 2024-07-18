@@ -993,8 +993,11 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     [SportFilter.Fighting]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Tennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.eSports]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Rugby]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Volleyball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Handball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Waterpolo]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Cricket]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilter.Golf]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
 };
 
 export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
@@ -1079,6 +1082,18 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+    },
+    [Sport.RUGBY]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
+    },
+    [Sport.VOLLEYBALL]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
+    },
+    [Sport.HANDBALL]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
+    },
+    [Sport.WATERPOLO]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
     },
     [Sport.CRICKET]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
