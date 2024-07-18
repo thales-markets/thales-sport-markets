@@ -1079,7 +1079,7 @@ const Ticket: React.FC<TicketProps> = ({ markets, setMarketsOutOfLiquidity, onBu
                           )} (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
-            {networkId !== Network.Base && (
+            {networkId !== Network.Base && networkId !== Network.Arbitrum && (
                 <>
                     <HorizontalLine />
                     <RowSummary>
