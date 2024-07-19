@@ -2,7 +2,9 @@ import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import Modal from 'components/Modal';
+import Checkbox from 'components/fields/Checkbox/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
+import TextArea from 'components/fields/TextArea';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { BigNumber, ethers } from 'ethers';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
@@ -20,7 +22,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { coinParser, formatCurrencyWithKey } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetCollaterals } from 'utils/collaterals';
@@ -52,6 +54,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const [fundWalletAddress, setFundWalletAddress] = useState<string>('');
     const [fundWalletValidationMessage, setFundWalletValidationMessage] = useState<string>('');
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
+    const [isFundBatch, setIsFundBatch] = useState<boolean>(false);
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
@@ -260,7 +263,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             title={t('profile.free-bet-modal.title')}
             onClose={() => onClose()}
             shouldCloseOnOverlayClick={false}
-            customStyle={{ overlay: { zIndex: 2000 }, content: { height: '500px', width: isMobile ? '90%' : '' } }}
+            customStyle={{ overlay: { zIndex: 2000 }, content: { minHeight: '500px', width: isMobile ? '90%' : '' } }}
         >
             <Container>
                 <InputContainer ref={inputRef}>
@@ -269,6 +272,11 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                         onChange={(e) => {
                             setAmount(e.target.value);
                         }}
+                        label={
+                            isFundBatch
+                                ? t('profile.free-bet-modal.enter-amount-per-user')
+                                : t('profile.free-bet-modal.enter-amount')
+                        }
                         showValidation={inputRefVisible && validationMessage !== ''}
                         validationMessage={validationMessage}
                         inputFontWeight="400"
@@ -297,22 +305,59 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                         validationTooltipZIndex={2004}
                     />
                 </InputContainer>
-                <InputContainer ref={walletAddressInputRef}>
-                    <NumericInput
-                        value={fundWalletAddress}
-                        validationMessage={fundWalletValidationMessage}
-                        showValidation={!!fundWalletValidationMessage && walletAddressInputRefVisible}
-                        inputType="text"
-                        onChange={(e) => setFundWalletAddress(e.target.value)}
-                        borderColor={theme.input.borderColor.tertiary}
-                        inputFontWeight="400"
-                        inputFontSize="12px"
-                        inputPadding="5px 10px"
-                        margin="20px 0px 20px 0px"
-                        placeholder={t('profile.free-bet-modal.enter-wallet-address')}
-                        validationTooltipZIndex={2004}
-                    />
-                </InputContainer>
+                <CheckboxWrapper>
+                    <Label>{t('profile.free-bet-modal.fund-batch')}</Label>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={isFundBatch}
+                            value={isFundBatch.toString()}
+                            onChange={(e: any) => {
+                                setIsFundBatch(e.target.checked || false);
+                            }}
+                        />
+                    </CheckboxContainer>
+                </CheckboxWrapper>
+                {isFundBatch ? (
+                    <InputContainer>
+                        <TextArea
+                            label={
+                                isFundBatch
+                                    ? t('profile.free-bet-modal.enter-wallet-addresses')
+                                    : t('profile.free-bet-modal.enter-wallet-address')
+                            }
+                            value={fundWalletAddress}
+                            validationMessage={fundWalletValidationMessage}
+                            showValidation={!!fundWalletValidationMessage && walletAddressInputRefVisible}
+                            onChange={(e) => setFundWalletAddress(e.target.value)}
+                            borderColor={theme.input.borderColor.tertiary}
+                            margin="10px 0px 10px 0px"
+                            placeholder={t('profile.free-bet-modal.enter-wallet-address')}
+                        />
+                    </InputContainer>
+                ) : (
+                    <InputContainer ref={walletAddressInputRef}>
+                        <NumericInput
+                            label={
+                                isFundBatch
+                                    ? t('profile.free-bet-modal.enter-wallet-addresses')
+                                    : t('profile.free-bet-modal.enter-wallet-address')
+                            }
+                            value={fundWalletAddress}
+                            validationMessage={fundWalletValidationMessage}
+                            showValidation={!!fundWalletValidationMessage && walletAddressInputRefVisible}
+                            inputType="text"
+                            onChange={(e) => setFundWalletAddress(e.target.value)}
+                            borderColor={theme.input.borderColor.tertiary}
+                            inputFontWeight="400"
+                            inputFontSize="12px"
+                            inputPadding="5px 10px"
+                            margin="10px 0px 10px 0px"
+                            placeholder={t('profile.free-bet-modal.enter-wallet-address')}
+                            validationTooltipZIndex={2004}
+                        />
+                    </InputContainer>
+                )}
 
                 <ButtonContainer>{getSubmitButton()}</ButtonContainer>
             </Container>
@@ -343,6 +388,56 @@ const ButtonContainer = styled(FlexDivCentered)`
 
 const InputContainer = styled(FlexDiv)`
     width: 100%;
+`;
+
+const CheckboxWrapper = styled(FlexDivRow)`
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const Label = styled.span`
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.primary};
+    @media (max-width: 950px) {
+        line-height: 24px;
+    }
+    i {
+        color: ${(props) => props.theme.textColor.septenary};
+    }
+`;
+
+const CheckboxContainer = styled.div`
+    margin-left: auto;
+    margin-top: 4px;
+    label {
+        color: ${(props) => props.theme.textColor.secondary};
+        font-size: 12px;
+        line-height: 13px;
+        font-weight: 600;
+        letter-spacing: 0.035em;
+        text-transform: uppercase;
+        padding-top: 18px;
+        padding-left: 18px;
+        input:checked ~ .checkmark {
+            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        }
+    }
+    .checkmark {
+        height: 15px;
+        width: 15px;
+        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        :after {
+            left: 3px;
+            width: 3px;
+            height: 8px;
+            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+            border-width: 0 2px 2px 0;
+        }
+    }
 `;
 
 export default FreeBetFundModal;

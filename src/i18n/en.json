@@ -431,7 +431,9 @@
         "free-bet-modal": {
             "title": "Send free bet",
             "enter-wallet-address": "Enter wallet address",
+            "enter-wallet-addresses": "Enter wallet addresses",
             "enter-amount": "Enter amount",
+            "enter-amount-per-user": "Enter amount per user",
             "approve-success": "Successfully approved",
             "transaction-pending": "Transaction pending",
             "fund": "Send free bet",
@@ -440,6 +442,7 @@
             "invalid-wallet-address": "Invalid wallet address",
             "invalid-amount": "Invalid amount",
             "no-funds": "Please ensure your wallet has enough funds",
+            "fund-batch": "Fund multiple addresses",
             "insufficient-balance": "Insufficient balance"
         }
     },
