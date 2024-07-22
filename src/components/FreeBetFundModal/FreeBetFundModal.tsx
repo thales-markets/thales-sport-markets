@@ -111,8 +111,6 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
         validationMessage,
     ]);
 
-    console.log('isButtonDisabled ', isButtonDisabled);
-
     useEffect(() => {
         if (fundWalletAddress && !ethers.utils.isAddress(fundWalletAddress))
             return setFundWalletValidationMessage(t('profile.free-bet-modal.invalid-wallet-address'));
@@ -212,8 +210,6 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const handleSubmit = async () => {
         const { signer, multipleCollateral, freeBetHolderContract } = networkConnector;
 
-        console.log('Handle submit');
-
         if (signer && multipleCollateral && freeBetHolderContract && (fundWalletAddress || bulkWalletAddresses)) {
             const collateralAddress = getCollateralAddress(
                 networkId,
@@ -261,12 +257,16 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     };
 
     const handleAddressDelete = (walletAddress: string) => {
-        setFundBatchRaw(fundBatchRaw.replace(walletAddress, ''));
+        if (fundBatchRaw.includes(',')) {
+            setFundBatchRaw(fundBatchRaw.replace(`${walletAddress},`, ''));
+        } else {
+            setFundBatchRaw(fundBatchRaw.replace(`${walletAddress}\n`, ''));
+        }
     };
 
     const bulkWalletAddresses = useMemo(() => {
         if (fundBatchRaw) {
-            const splitByNewLine = fundBatchRaw.split(/\r?\n/);
+            const splitByNewLine = fundBatchRaw.includes(',') ? fundBatchRaw.split(',') : fundBatchRaw.split(/\r?\n/);
             if (splitByNewLine.find((item) => !ethers.utils.isAddress(item.trim()))) {
                 setValidationForTextArea(t('profile.free-bet-modal.one-or-more-address-invalid'));
             } else {
