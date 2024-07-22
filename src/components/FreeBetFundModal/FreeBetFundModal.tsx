@@ -8,6 +8,7 @@ import NumericInput from 'components/fields/NumericInput';
 import TextArea from 'components/fields/TextArea';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { BigNumber, ethers } from 'ethers';
+import _ from 'lodash';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -266,7 +267,16 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
 
     const bulkWalletAddresses = useMemo(() => {
         if (fundBatchRaw) {
-            const splitByNewLine = fundBatchRaw.includes(',') ? fundBatchRaw.split(',') : fundBatchRaw.split(/\r?\n/);
+            let splitByNewLine = fundBatchRaw.includes(',') ? fundBatchRaw.split(',') : fundBatchRaw.split(/\r?\n/);
+            splitByNewLine = splitByNewLine.map((item) => item.trim()).filter((item) => item);
+
+            const hasDuplicates = _.uniq(splitByNewLine).length !== splitByNewLine.length;
+
+            if (hasDuplicates) {
+                setValidationForTextArea(t('profile.free-bet-modal.duplicate'));
+                return [];
+            }
+
             if (splitByNewLine.find((item) => !ethers.utils.isAddress(item.trim()))) {
                 setValidationForTextArea(t('profile.free-bet-modal.one-or-more-address-invalid'));
             } else {
@@ -446,7 +456,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             </Container>
             {openApprovalModal && (
                 <ApprovalModal
-                    defaultAmount={amount}
+                    defaultAmount={isFundBatch ? Number(amount) * bulkWalletAddresses.length : amount}
                     collateralIndex={collateralIndex}
                     tokenSymbol={selectedCollateral}
                     isAllowing={isAllowing}

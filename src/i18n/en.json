@@ -441,6 +441,7 @@
             "fund-successful": "Fund successful",
             "invalid-wallet-address": "Invalid wallet address",
             "one-or-more-address-invalid": "One or more entered wallet address is invalid",
+            "duplicate": "Duplicate Wallet Addresses Detected",
             "invalid-amount": "Invalid amount",
             "no-funds": "Please ensure your wallet has enough funds",
             "fund-batch": "Fund multiple addresses",
