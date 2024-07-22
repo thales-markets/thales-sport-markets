@@ -440,10 +440,12 @@
             "funding": "Funding...",
             "fund-successful": "Fund successful",
             "invalid-wallet-address": "Invalid wallet address",
+            "one-or-more-address-invalid": "One or more entered wallet address is invalid",
             "invalid-amount": "Invalid amount",
             "no-funds": "Please ensure your wallet has enough funds",
             "fund-batch": "Fund multiple addresses",
-            "insufficient-balance": "Insufficient balance"
+            "insufficient-balance": "Insufficient balance",
+            "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
         }
     },
     "markets": {

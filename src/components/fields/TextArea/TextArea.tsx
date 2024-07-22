@@ -58,6 +58,7 @@ const TextInput: React.FC<TextAreaInputProps> = ({
                 title={showValidation ? validationMessage || '' : ''}
                 placement={validationPlacement || 'top'}
                 arrow={true}
+                PopperProps={{ style: { zIndex: '2004' } }}
             >
                 <TextAreaInput
                     {...rest}
