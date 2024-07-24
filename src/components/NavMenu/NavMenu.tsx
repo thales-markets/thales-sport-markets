@@ -148,7 +148,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             </SPAAnchor>
                         );
                     })}
-                    {/* <Separator /> */}
+                    <Separator />
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
