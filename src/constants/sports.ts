@@ -361,7 +361,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_SOCCER_WOMEN]: {
         sport: Sport.SOCCER,
         id: League.SUMMER_OLYMPICS_SOCCER_WOMEN,
-        label: 'Olympic Games Women',
+        label: 'Olympic Games Soccer Women',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.GOALS,
@@ -375,7 +375,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         sport: Sport.SOCCER,
         id: League.SUMMER_OLYMPICS_SOCCER,
         logoClass: 'icon-homepage league--paris2024',
-        label: 'Olympic Games',
+        label: 'Olympic Games Soccer',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.GOALS,
         matchResolveType: MatchResolveType.REGULAR,
@@ -529,7 +529,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_HANDBALL_WOMEN]: {
         sport: Sport.HANDBALL,
         id: League.SUMMER_OLYMPICS_HANDBALL_WOMEN,
-        label: 'Olympic Games Women',
+        label: 'Olympic Games Handball Women',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.GOALS,
@@ -542,7 +542,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_HANDBALL]: {
         sport: Sport.HANDBALL,
         id: League.SUMMER_OLYMPICS_HANDBALL,
-        label: 'Olympic Games',
+        label: 'Olympic Games Handball',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.GOALS,
@@ -568,7 +568,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_BASKETBALL]: {
         sport: Sport.BASKETBALL,
         id: League.SUMMER_OLYMPICS_BASKETBALL,
-        label: 'Olympic Games',
+        label: 'Olympic Games Basketball',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.POINTS,
@@ -581,7 +581,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_BASKETBALL_WOMEN]: {
         sport: Sport.BASKETBALL,
         id: League.SUMMER_OLYMPICS_BASKETBALL_WOMEN,
-        label: 'Olympic Games Women',
+        label: 'Olympic Games Basketball Women',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.POINTS,
@@ -646,7 +646,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_WATERPOLO]: {
         sport: Sport.WATERPOLO,
         id: League.SUMMER_OLYMPICS_WATERPOLO,
-        label: 'Olympic Games',
+        label: 'Olympic Games Water Polo',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.GOALS,
@@ -659,7 +659,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN]: {
         sport: Sport.VOLLEYBALL,
         id: League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN,
-        label: 'Olympic Games Women',
+        label: 'Olympic Games Voleyball Women',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.SETS,
@@ -672,7 +672,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_VOLEYBALL]: {
         sport: Sport.VOLLEYBALL,
         id: League.SUMMER_OLYMPICS_VOLEYBALL,
-        label: 'Olympic Games',
+        label: 'Olympic Games Voleyball',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.SETS,
@@ -698,7 +698,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_RUGBY]: {
         sport: Sport.RUGBY,
         id: League.SUMMER_OLYMPICS_RUGBY,
-        label: 'Olympic Games',
+        label: 'Olympic Games Rugby',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.POINTS,
@@ -711,7 +711,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_RUGBY_WOMEN]: {
         sport: Sport.RUGBY,
         id: League.SUMMER_OLYMPICS_RUGBY_WOMEN,
-        label: 'Olympic Games Women',
+        label: 'Olympic Games Rugby Women',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.POINTS,
