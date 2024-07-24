@@ -778,7 +778,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_BASKETBALL_3X3]: {
         sport: Sport.BASKETBALL,
         id: League.SUMMER_OLYMPICS_BASKETBALL_3X3,
-        label: 'Olympic Games 3x3',
+        label: 'Olympic Games Basketball 3x3',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.POINTS,
@@ -791,7 +791,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN]: {
         sport: Sport.BASKETBALL,
         id: League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN,
-        label: 'Olympic Games 3x3 Women',
+        label: 'Olympic Games Basketball 3x3 Women',
         logoClass: 'icon-homepage league--paris2024',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.POINTS,
@@ -961,6 +961,22 @@ export const INTERNATIONAL_LEAGUES = [
     League.CONMEBOL_WC_QUALIFICATIONS,
     League.COPA_AMERICA,
     League.SUMMER_OLYMPICS_QUALIFICATION,
+    League.SUMMER_OLYMPICS_BASKETBALL,
+    League.SUMMER_OLYMPICS_BASKETBALL_WOMEN,
+    League.SUMMER_OLYMPICS_BASKETBALL_3X3,
+    League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN,
+    League.SUMMER_OLYMPICS_SOCCER,
+    League.SUMMER_OLYMPICS_SOCCER_WOMEN,
+    League.SUMMER_OLYMPICS_RUGBY,
+    League.SUMMER_OLYMPICS_RUGBY_WOMEN,
+    League.SUMMER_OLYMPICS_VOLEYBALL,
+    League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN,
+    League.SUMMER_OLYMPICS_HANDBALL,
+    League.SUMMER_OLYMPICS_HANDBALL_WOMEN,
+    League.SUMMER_OLYMPICS_WATERPOLO,
+];
+
+export const OLYMPIC_LEAGUES = [
     League.SUMMER_OLYMPICS_BASKETBALL,
     League.SUMMER_OLYMPICS_BASKETBALL_WOMEN,
     League.SUMMER_OLYMPICS_BASKETBALL_3X3,

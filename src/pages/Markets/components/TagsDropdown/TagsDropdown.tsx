@@ -2,13 +2,14 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
-import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 import { LeagueMap } from '../../../../constants/sports';
+import { SportFilter } from '../../../../enums/markets';
+import { getSportFilter } from '../../../../redux/modules/market';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -35,7 +36,8 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+    const isMobile = useSelector(getIsMobile);
+    const sportFilter = useSelector(getSportFilter);
     const tagFilterIds = tagFilter.map((tag) => tag.id);
 
     return (
@@ -85,6 +87,8 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                 })
                 .map((tag: TagInfo) => {
                     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
+                    const label =
+                        sportFilter === SportFilter.OlympicGames ? tag.label.replace('Olympic Games ', '') : tag.label;
 
                     return (
                         <TagContainer key={tag.id} isMobile={isMobile}>
@@ -106,7 +110,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                     }}
                                 >
                                     <LeagueFlag alt={tag.id.toString()} src={getLeagueFlagSource(tag.id)} />
-                                    <Label isMobile={isMobile}>{tag.label}</Label>
+                                    <Label isMobile={isMobile}>{label}</Label>
                                     <IncentivizedLeague league={tag.id} onlyLogo />
                                 </LabelContainer>
                             </LeftContainer>
