@@ -282,7 +282,8 @@
                 "cricket": "Cricket",
                 "boxing": "Boxing",
                 "golf": "Golf",
-                "soon": "More sports coming soon!"
+                "soon": "More sports coming soon!",
+                "olympicgames": "Olympic games"
             },
             "all": "All",
             "datepicker": {

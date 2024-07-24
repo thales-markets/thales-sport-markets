@@ -976,6 +976,7 @@ export const OTHER_YES_NO_MARKET_TYPES = [
 export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     [SportFilter.Live]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Favourites]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.OlympicGames]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.All]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Soccer]: [
         MarketType.WINNER,
