@@ -211,6 +211,7 @@ export const isMotosport = (tag: number) => MOTOSPORT_TAGS.includes(tag);
 export const isGolf = (tag: number) => GOLF_TAGS.includes(tag);
 
 export const isParlayWon = (parlayMarket: ParlayMarket) =>
+    parlayMarket.positions.length > 0 &&
     parlayMarket.positions.every(
         (position) =>
             convertPositionNameToPosition(position.side) ===
