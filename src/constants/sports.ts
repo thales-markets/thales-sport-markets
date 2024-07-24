@@ -368,7 +368,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        priority: 106,
+        priority: 102,
         hidden: false,
     },
     [League.SUMMER_OLYMPICS_SOCCER]: {
@@ -381,7 +381,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        priority: 106,
+        priority: 102,
         hidden: false,
     },
     [League.FIFA_WC_WOMEN]: {

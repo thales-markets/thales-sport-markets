@@ -10,6 +10,18 @@ export const APPROVAL_BUFFER = 0.01;
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
 export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
 
+const OLYMPICS_REWARDS = {
+    startDate: new Date(Date.UTC(2024, 6, 24, 0, 0, 0)),
+    endDate: new Date(Date.UTC(2024, 7, 11, 23, 59, 59)),
+    link: 'https://v2.overtimemarkets.xyz/promotions/olympics-2024',
+    tooltipKey: 'markets.incentivized-tooltip-olympics',
+    availableOnNetworks: [Network.OptimismMainnet],
+    rewards: {
+        [Network.OptimismMainnet]: '2,000 OP',
+    },
+    showOnAllNetworks: Network.OptimismMainnet,
+};
+
 export const INCENTIVIZED_LEAGUES: Record<number, any> = {
     [League.UEFA_EURO]: {
         startDate: new Date(Date.UTC(2024, 5, 5, 0, 0, 0)),
@@ -44,6 +56,19 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
         },
         showOnAllNetworks: Network.OptimismMainnet,
     },
+    [League.SUMMER_OLYMPICS_SOCCER]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_SOCCER_WOMEN]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_BASKETBALL]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_BASKETBALL_WOMEN]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_VOLEYBALL]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_HANDBALL]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_HANDBALL_WOMEN]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_WATERPOLO]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_RUGBY]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_RUGBY_WOMEN]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_BASKETBALL_3X3]: OLYMPICS_REWARDS,
+    [League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN]: OLYMPICS_REWARDS,
 };
 
 export const PARLAY_LEADERBOARD_WEEKLY_START_DATE = new Date(2024, 1, 14, 0, 0, 0);
