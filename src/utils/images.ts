@@ -6,7 +6,7 @@ import { getLeagueLabel, isInternationalLeague } from './sports';
 
 export const getTeamImageSource = (team: string, league: League) => {
     const leagueLabel = getLeagueLabel(league);
-    return league == League.TENNIS_GS || league == League.TENNIS_MASTERS
+    return league == League.TENNIS_GS || league == League.TENNIS_MASTERS || league == League.SUMMER_OLYMPICS_TENNIS
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FORMULA1 || league == League.MOTOGP
         ? `/logos/${leagueLabel}/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
