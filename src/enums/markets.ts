@@ -24,6 +24,7 @@ export enum SportFilter {
     Hockey = 'Hockey',
     Fighting = 'Fighting',
     Tennis = 'Tennis',
+    TableTennis = 'TableTennis',
     eSports = 'eSports',
     Rugby = 'Rugby',
     Volleyball = 'Volleyball',

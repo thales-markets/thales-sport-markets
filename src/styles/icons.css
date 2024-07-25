@@ -460,3 +460,7 @@
 .icon--rugby:before {
     content: '\0100';
 }
+
+.icon--tabletennis:before {
+    content: '\0101';
+}

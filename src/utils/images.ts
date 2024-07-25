@@ -162,6 +162,12 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.SUMMER_OLYMPICS_HANDBALL:
         case League.SUMMER_OLYMPICS_HANDBALL_WOMEN:
         case League.SUMMER_OLYMPICS_WATERPOLO:
+        case League.SUMMER_OLYMPICS_BEACH_VOLEYBALL:
+        case League.SUMMER_OLYMPICS_BEACH_VOLEYBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_HOCKEY:
+        case League.SUMMER_OLYMPICS_HOCKEY_WOMEN:
+        case League.SUMMER_OLYMPICS_TENNIS:
+        case League.SUMMER_OLYMPICS_TABLE_TENNIS:
             return `/logos/Countries/paris2024.png`;
         default:
             return `/logos/Countries/world.svg`;
