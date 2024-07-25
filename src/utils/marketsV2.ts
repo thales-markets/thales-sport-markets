@@ -154,7 +154,9 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
         : '';
 
     if (
-        (market.leagueId == League.TENNIS_GS || market.leagueId == League.TENNIS_MASTERS) &&
+        (market.leagueId == League.TENNIS_GS ||
+            market.leagueId == League.TENNIS_MASTERS ||
+            market.leagueId == League.SUMMER_OLYMPICS_TENNIS) &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${
