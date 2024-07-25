@@ -15,6 +15,7 @@ export enum SortDirection {
 export enum SportFilter {
     Live = 'Live',
     Favourites = 'Favourites',
+    OlympicGames = 'OlympicGames',
     All = 'All',
     Soccer = 'Soccer',
     Football = 'Football',
@@ -23,10 +24,15 @@ export enum SportFilter {
     Hockey = 'Hockey',
     Fighting = 'Fighting',
     Tennis = 'Tennis',
+    TableTennis = 'TableTennis',
     eSports = 'eSports',
+    Rugby = 'Rugby',
+    Volleyball = 'Volleyball',
+    Handball = 'Handball',
+    Waterpolo = 'Waterpolo',
     Cricket = 'Cricket',
     // Motosport = 'Motosport',
-    Golf = 'Golf',
+    // Golf = 'Golf',
 }
 
 export enum OddsType {

@@ -6,7 +6,7 @@ import { getLeagueLabel, isInternationalLeague } from './sports';
 
 export const getTeamImageSource = (team: string, league: League) => {
     const leagueLabel = getLeagueLabel(league);
-    return league == League.TENNIS_GS || league == League.TENNIS_MASTERS
+    return league == League.TENNIS_GS || league == League.TENNIS_MASTERS || league == League.SUMMER_OLYMPICS_TENNIS
         ? `/logos/Tennis/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FORMULA1 || league == League.MOTOGP
         ? `/logos/${leagueLabel}/${fixOneSideMarketCompetitorName(team).replaceAll(' ', '-').toLowerCase()}.webp`
@@ -17,7 +17,12 @@ export const getTeamImageSource = (team: string, league: League) => {
         : league == League.BRAZIL_1
         ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : isInternationalLeague(Number(league))
-        ? `/logos/Countries/${team.trim().replaceAll(' ', '-').toLowerCase()}.svg`
+        ? `/logos/Countries/${team
+              .trim()
+              .replaceAll(' 7s', '')
+              .replaceAll(' U23', '')
+              .replaceAll(' ', '-')
+              .toLowerCase()}.svg`
         : league == League.ENGLAND_CUP
         ? `/logos/EPL/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.FRANCE_CUP
@@ -145,16 +150,24 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.ITALY_CUP:
             return `/logos/Countries/italy.svg`;
         case League.SUMMER_OLYMPICS_BASKETBALL:
-            return `/logos/Countries/paris2024.png`;
         case League.SUMMER_OLYMPICS_BASKETBALL_WOMEN:
-            return `/logos/Countries/paris2024.png`;
         case League.SUMMER_OLYMPICS_BASKETBALL_3X3:
-            return `/logos/Countries/paris2024.png`;
         case League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN:
-            return `/logos/Countries/paris2024.png`;
         case League.SUMMER_OLYMPICS_SOCCER:
-            return `/logos/Countries/paris2024.png`;
         case League.SUMMER_OLYMPICS_SOCCER_WOMEN:
+        case League.SUMMER_OLYMPICS_RUGBY:
+        case League.SUMMER_OLYMPICS_RUGBY_WOMEN:
+        case League.SUMMER_OLYMPICS_VOLEYBALL:
+        case League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_HANDBALL:
+        case League.SUMMER_OLYMPICS_HANDBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_WATERPOLO:
+        case League.SUMMER_OLYMPICS_BEACH_VOLEYBALL:
+        case League.SUMMER_OLYMPICS_BEACH_VOLEYBALL_WOMEN:
+        case League.SUMMER_OLYMPICS_HOCKEY:
+        case League.SUMMER_OLYMPICS_HOCKEY_WOMEN:
+        case League.SUMMER_OLYMPICS_TENNIS:
+        case League.SUMMER_OLYMPICS_TABLE_TENNIS:
             return `/logos/Countries/paris2024.png`;
         default:
             return `/logos/Countries/world.svg`;

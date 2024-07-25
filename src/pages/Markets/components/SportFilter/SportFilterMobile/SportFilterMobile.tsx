@@ -99,9 +99,15 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({ tagsList, setAvai
                                 ) : (
                                     <FlexDivColumnCentered>
                                         <SportIcon
-                                            className={`icon icon--${
-                                                filterItem == SportFilter.All ? 'logo' : filterItem.toLowerCase()
-                                            }`}
+                                            className={
+                                                filterItem == SportFilter.OlympicGames
+                                                    ? 'icon-homepage league--olympics'
+                                                    : `icon icon--${
+                                                          filterItem == SportFilter.All
+                                                              ? 'logo'
+                                                              : filterItem.toLowerCase()
+                                                      }`
+                                            }
                                         />
                                     </FlexDivColumnCentered>
                                 )}

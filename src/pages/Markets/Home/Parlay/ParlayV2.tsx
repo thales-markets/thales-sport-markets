@@ -1,4 +1,5 @@
 import { ReactComponent as ParlayEmptyIcon } from 'assets/images/parlay-empty.svg';
+import MatchInfoNotOpenedV2 from 'components/MatchInfoNotOpenedV2';
 import MatchInfoV2 from 'components/MatchInfoV2';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { isEqual } from 'lodash';
@@ -14,7 +15,7 @@ import { getHasTicketError, getTicket, removeAll, resetTicketError, setMaxTicket
 import { getIsWalletConnected, getNetworkId } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
-import { SportMarket, TicketMarket } from 'types/markets';
+import { SportMarket, TicketMarket, TicketPosition } from 'types/markets';
 import { isSameMarket } from 'utils/marketsV2';
 import TicketV2 from './components/TicketV2';
 import ValidationModal from './components/ValidationModal';
@@ -35,6 +36,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const isLiveFilterSelected = sportFilter == SportFilter.Live;
 
     const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
+    const [notOpenedMarkets, setNotOpenedMarkets] = useState<TicketPosition[]>([]);
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
@@ -62,6 +64,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     useEffect(() => {
         if (!ticket.length) {
             setOddsChanged(false);
+            setNotOpenedMarkets([]);
         }
     }, [ticket]);
 
@@ -137,13 +140,20 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                     };
                 });
 
-            // if market is not opened anymore remove it
             if (ticket.length > ticketMarkets.length) {
-                const notOpenedMarkets = ticket.filter((ticketPosition) =>
-                    sportOpenMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
-                );
-
-                if (notOpenedMarkets.length > 0) dispatch(removeAll());
+                const notOpenedMarkets = ticket.filter((ticketPosition) => {
+                    const marketNotOpened = sportOpenMarkets.every(
+                        (market: SportMarket) => !isSameMarket(market, ticketPosition)
+                    );
+                    return marketNotOpened;
+                });
+                if (notOpenedMarkets.length > 0 && notOpenedMarkets.some((market) => !market.playerProps)) {
+                    dispatch(removeAll());
+                } else {
+                    setNotOpenedMarkets(notOpenedMarkets);
+                }
+            } else {
+                setNotOpenedMarkets([]);
             }
 
             const ticketOdds = ticketMarkets.map((market) => ({
@@ -159,6 +169,15 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
             }
         }
     }, [sportMarketsQuery.isSuccess, sportMarketsQuery.data, ticket, dispatch, isLiveFilterSelected]);
+
+    useEffect(() => {
+        if (ticket[0] && ticket[0].live && !isLiveFilterSelected) {
+            dispatch(removeAll());
+        } else if (ticket[0] && !ticket[0]?.live && isLiveFilterSelected) {
+            dispatch(removeAll());
+        }
+        // eslint-disable-next-line
+    }, [isLiveFilterSelected]);
 
     const onCloseValidationModal = useCallback(() => dispatch(resetTicketError()), [dispatch]);
 
@@ -192,6 +211,21 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                                     </RowMarket>
                                 );
                             })}
+                        {notOpenedMarkets.length > 0 &&
+                            notOpenedMarkets.map((market, index) => {
+                                return (
+                                    <RowMarket key={index} outOfLiquidity={false} notOpened={true}>
+                                        <MatchInfoNotOpenedV2
+                                            market={market}
+                                            showOddUpdates
+                                            setOddsChanged={setOddsChanged}
+                                            acceptOdds={acceptOdds}
+                                            setAcceptOdds={setAcceptOdds}
+                                            applyPayoutMultiplier={true}
+                                        />
+                                    </RowMarket>
+                                );
+                            })}
                     </ListContainer>
                     <TicketV2
                         markets={ticketMarkets}
@@ -202,6 +236,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                             setOddsChanged(changed);
                         }}
                         onSuccess={onSuccess}
+                        submitButtonDisabled={!!notOpenedMarkets.length}
                     />
                 </>
             ) : (
@@ -303,7 +338,7 @@ const ThalesBonus = styled.span`
 
 const ListContainer = styled(FlexDivColumn)``;
 
-const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
+const RowMarket = styled.div<{ outOfLiquidity: boolean; notOpened?: boolean }>`
     display: flex;
     position: relative;
     // height: 45px;
@@ -311,7 +346,11 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
     text-align: center;
     padding: ${(props) => (props.outOfLiquidity ? '6px 8px' : '8px 10px')};
     background: ${(props) =>
-        props.outOfLiquidity ? props.theme.background.quinary : props.theme.background.secondary};
+        props.outOfLiquidity
+            ? props.theme.background.quinary
+            : props.notOpened
+            ? props.theme.error.borderColor.primary
+            : props.theme.background.secondary};
     ${(props) => (props.outOfLiquidity ? `border: 2px solid ${props.theme.status.loss};` : '')}
     margin-bottom: 11px;
     :first-child {
@@ -335,8 +374,12 @@ const RowMarket = styled.div<{ outOfLiquidity: boolean }>`
                     circle,
                     transparent,
                     transparent 50%,
-                    ${(props) => props.theme.background.secondary} 50%,
-                    ${(props) => props.theme.background.secondary} 100%
+                    ${(props) =>
+                            props.notOpened ? props.theme.error.borderColor.primary : props.theme.background.secondary}
+                        50%,
+                    ${(props) =>
+                            props.notOpened ? props.theme.error.borderColor.primary : props.theme.background.secondary}
+                        100%
                 )
                 0px -6px / 0.7rem 0.7rem repeat-x;
         }

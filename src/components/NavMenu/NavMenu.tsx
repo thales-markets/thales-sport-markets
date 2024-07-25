@@ -148,7 +148,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             </SPAAnchor>
                         );
                     })}
-                    {/* <Separator /> */}
+                    <Separator />
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
@@ -182,8 +182,8 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                             backgroundColor={theme.button.background.quaternary}
                             textColor={theme.button.textColor.primary}
                             borderColor={theme.button.borderColor.secondary}
-                            width="140px"
                             fontWeight="400"
+                            width="100%"
                             additionalStyles={{
                                 borderRadius: '5px',
                                 fontSize: '14px',

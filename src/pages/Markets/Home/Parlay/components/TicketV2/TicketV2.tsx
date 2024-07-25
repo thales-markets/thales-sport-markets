@@ -132,6 +132,7 @@ type TicketProps = {
     oddsChanged: boolean;
     acceptOddChanges: (changed: boolean) => void;
     onSuccess?: () => void;
+    submitButtonDisabled?: boolean;
 };
 
 const TicketErrorMessage = {
@@ -147,6 +148,7 @@ const Ticket: React.FC<TicketProps> = ({
     oddsChanged,
     acceptOddChanges,
     onSuccess,
+    submitButtonDisabled,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
@@ -845,7 +847,7 @@ const Ticket: React.FC<TicketProps> = ({
                             counter++;
                             if (!adapterAllowed) {
                                 const adapterResponse = await axios.get(
-                                    `${generalConfig.API_URL}/overtime-v2/live-trading/networks/${networkId}/read-message/request/${requestId}`
+                                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-trading/read-message/request/${requestId}`
                                 );
 
                                 if (!!adapterResponse.data) {
@@ -1068,7 +1070,11 @@ const Ticket: React.FC<TicketProps> = ({
         }
 
         return (
-            <Button disabled={submitDisabled} onClick={async () => handleSubmit()} {...defaultButtonProps}>
+            <Button
+                disabled={submitDisabled || submitButtonDisabled}
+                onClick={async () => handleSubmit()}
+                {...defaultButtonProps}
+            >
                 {t(`common.buy-side`)}
             </Button>
         );

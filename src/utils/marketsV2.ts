@@ -154,11 +154,23 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
         : '';
 
     if (
-        (market.leagueId == League.TENNIS_GS || market.leagueId == League.TENNIS_MASTERS) &&
+        (market.leagueId == League.TENNIS_GS ||
+            market.leagueId == League.TENNIS_MASTERS ||
+            market.leagueId == League.SUMMER_OLYMPICS_TENNIS) &&
         (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
     ) {
         sufix = `${sufix}${
             marketType === MarketType.TOTAL2 || marketType === MarketType.SPREAD2 ? ' (sets)' : ' (games)'
+        }`;
+    }
+
+    if (
+        (market.leagueId == League.SUMMER_OLYMPICS_VOLEYBALL ||
+            market.leagueId == League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN) &&
+        (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
+    ) {
+        sufix = `${sufix}${
+            marketType === MarketType.TOTAL2 || marketType === MarketType.SPREAD2 ? ' (sets)' : ' (points)'
         }`;
     }
 
@@ -269,18 +281,18 @@ export const getOddTooltipTextV2 = (position: Position, market: SportMarket) =>
         ? getCombinedPositionsOddTooltipText(position, market)
         : getTooltipText(market.typeId, position, market.line, market);
 
-export const getTeamNameV2 = (market: SportMarket, position?: Position) => {
+export const getTeamNameV2 = (market: SportMarket | TicketPosition, position?: Position) => {
     if (market.isOneSideMarket) return fixOneSideMarketCompetitorName(market.homeTeam);
     if (market.isPlayerPropsMarket) return market.playerProps.playerName;
     return position === Position.HOME ? market.homeTeam : market.awayTeam;
 };
 
-export const getMatchLabel = (market: SportMarket) =>
+export const getMatchLabel = (market: SportMarket | TicketPosition) =>
     `${getTeamNameV2(market, 0)}${
         !market.isOneSideMarket && !market.isPlayerPropsMarket ? ` - ${getTeamNameV2(market, 1)}` : ''
     }`;
 
-const areSameCombinedPositions = (market: SportMarket, ticketPosition: TicketPosition) => {
+const areSameCombinedPositions = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition) => {
     for (let i = 0; i < market.combinedPositions.length; i++) {
         for (let j = 0; j < market.combinedPositions[i].length; j++) {
             const marketCombinedPosition = market.combinedPositions[i][j];
@@ -301,7 +313,7 @@ const areSameCombinedPositions = (market: SportMarket, ticketPosition: TicketPos
     return true;
 };
 
-export const isSameMarket = (market: SportMarket, ticketPosition: TicketPosition) =>
+export const isSameMarket = (market: SportMarket | TicketPosition, ticketPosition: TicketPosition) =>
     market.gameId === ticketPosition.gameId &&
     market.leagueId === ticketPosition.leagueId &&
     market.typeId === ticketPosition.typeId &&

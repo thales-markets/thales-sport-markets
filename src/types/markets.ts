@@ -107,6 +107,11 @@ export type TicketPosition = {
     line: number;
     position: number;
     combinedPositions: CombinedPositions[];
+    isOneSideMarket: boolean;
+    isPlayerPropsMarket: boolean;
+    homeTeam: string;
+    awayTeam: string;
+    playerProps: PlayerProps;
     live?: boolean;
 };
 
