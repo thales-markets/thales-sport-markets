@@ -920,13 +920,9 @@ export const DRAW_NO_BET_MARKET_TYPES = [
 
 const FIRST_PERIOD_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_WINNER,
-    MarketType.FIRST_PERIOD_WINNER2,
     MarketType.FIRST_PERIOD_TOTAL,
-    MarketType.FIRST_PERIOD_TOTAL2,
     MarketType.FIRST_PERIOD_SPREAD,
-    MarketType.FIRST_PERIOD_SPREAD2,
     MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN,
-    MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
     MarketType.FIRST_PERIOD_DOUBLE_CHANCE,
     MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
@@ -936,18 +932,32 @@ const FIRST_PERIOD_MARKET_TYPES = [
 
 const SECOND_PERIOD_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_WINNER,
-    MarketType.SECOND_PERIOD_WINNER2,
     MarketType.SECOND_PERIOD_TOTAL,
-    MarketType.SECOND_PERIOD_TOTAL2,
     MarketType.SECOND_PERIOD_SPREAD,
-    MarketType.SECOND_PERIOD_SPREAD2,
     MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN,
-    MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN,
     MarketType.SECOND_PERIOD_DOUBLE_CHANCE,
     MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
     MarketType.SECOND_PERIOD_DRAW_NO_BET,
+];
+
+const THIRD_PERIOD_MARKET_TYPES = [
+    MarketType.THIRD_PERIOD_WINNER,
+    MarketType.THIRD_PERIOD_TOTAL,
+    MarketType.THIRD_PERIOD_SPREAD,
+    MarketType.THIRD_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.THIRD_PERIOD_BOTH_TEAMS_TO_SCORE,
+    MarketType.THIRD_PERIOD_DRAW_NO_BET,
+];
+
+const FOURTH_PERIOD_MARKET_TYPES = [
+    MarketType.FOURTH_PERIOD_WINNER,
+    MarketType.FOURTH_PERIOD_TOTAL,
+    MarketType.FOURTH_PERIOD_SPREAD,
+    MarketType.FOURTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.FOURTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+    MarketType.FOURTH_PERIOD_DRAW_NO_BET,
 ];
 
 export const HOME_TEAM_MARKET_TYPES = [
@@ -988,11 +998,12 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
         MarketType.TOTAL_ODD_EVEN,
     ],
     [SportFilter.Football]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilter.Basketball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Basketball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL, MarketType.TOTAL_ODD_EVEN],
     [SportFilter.Baseball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Hockey]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Fighting]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Tennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.TableTennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.eSports]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Rugby]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Volleyball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
@@ -1024,6 +1035,40 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
+        [MarketTypeGroup.QUARTERS]: [
+            MarketType.FIRST_PERIOD_WINNER,
+            MarketType.SECOND_PERIOD_WINNER,
+            MarketType.THIRD_PERIOD_WINNER,
+            MarketType.FOURTH_PERIOD_WINNER,
+            MarketType.FIRST_PERIOD_TOTAL,
+            MarketType.SECOND_PERIOD_TOTAL,
+            MarketType.THIRD_PERIOD_TOTAL,
+            MarketType.FOURTH_PERIOD_TOTAL,
+            MarketType.FIRST_PERIOD_SPREAD,
+            MarketType.SECOND_PERIOD_SPREAD,
+            MarketType.THIRD_PERIOD_SPREAD,
+            MarketType.FOURTH_PERIOD_SPREAD,
+            MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN,
+            MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN,
+            MarketType.THIRD_PERIOD_TOTAL_ODD_EVEN,
+            MarketType.FOURTH_PERIOD_TOTAL_ODD_EVEN,
+        ],
+        [MarketTypeGroup.FIRST_QUARTER]: FIRST_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.SECOND_QUARTER]: SECOND_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.THIRD_QUARTER]: THIRD_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.FOURTH_QUARTER]: FOURTH_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.FIRST_HALF]: [
+            MarketType.FIRST_PERIOD_WINNER2,
+            MarketType.FIRST_PERIOD_TOTAL2,
+            MarketType.FIRST_PERIOD_SPREAD2,
+            MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
+        ],
+        [MarketTypeGroup.SECOND_HALF]: [
+            MarketType.SECOND_PERIOD_WINNER2,
+            MarketType.SECOND_PERIOD_TOTAL2,
+            MarketType.SECOND_PERIOD_SPREAD2,
+            MarketType.SECOND_PERIOD_TOTAL2_ODD_EVEN,
+        ],
         [MarketTypeGroup.PLAYER_PROPS]: PLAYER_PROPS_MARKET_TYPES,
         [MarketTypeGroup.PLAYER_POINTS]: [MarketType.PLAYER_PROPS_POINTS],
         [MarketTypeGroup.PLAYER_REBOUNDS]: [MarketType.PLAYER_PROPS_REBOUNDS],
@@ -1063,6 +1108,9 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.FIRST_SET]: [MarketType.FIRST_PERIOD_WINNER, MarketType.FIRST_PERIOD_TOTAL],
         [MarketTypeGroup.SECOND_SET]: [MarketType.SECOND_PERIOD_WINNER, MarketType.SECOND_PERIOD_TOTAL],
         [MarketTypeGroup.THIRD_SET]: [MarketType.THIRD_PERIOD_WINNER, MarketType.THIRD_PERIOD_TOTAL],
+    },
+    [Sport.TABLE_TENNIS]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
     },
     [Sport.FOOTBALL]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
@@ -1129,6 +1177,8 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
         [MarketTypeGroup.DOUBLE_CHANCE]: DOUBLE_CHANCE_MARKET_TYPES,
         [MarketTypeGroup.DRAW_NO_BET]: DRAW_NO_BET_MARKET_TYPES,
+        [MarketTypeGroup.FIRST_HALF]: FIRST_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.SECOND_HALF]: SECOND_PERIOD_MARKET_TYPES,
     },
     [Sport.WATERPOLO]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,

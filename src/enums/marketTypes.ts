@@ -207,4 +207,10 @@ export enum MarketTypeGroup {
     PLAYER_HITS_RECORDED = 'Hits recorded',
     PLAYER_STRIKEOUTS = 'Strikeouts',
     POINTS = 'Points',
+    QUARTERS = 'Quarters',
+    FIRST_QUARTER = '1st quarter',
+    SECOND_QUARTER = '2nd quarter',
+    THIRD_QUARTER = '3rd quarter',
+    FOURTH_QUARTER = '4th quarter',
+    Halves = 'Halves',
 }
