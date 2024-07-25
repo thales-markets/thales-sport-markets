@@ -847,7 +847,7 @@ const Ticket: React.FC<TicketProps> = ({
                             counter++;
                             if (!adapterAllowed) {
                                 const adapterResponse = await axios.get(
-                                    `${generalConfig.API_URL}/overtime-v2/live-trading/networks/${networkId}/read-message/request/${requestId}`
+                                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/live-trading/read-message/request/${requestId}`
                                 );
 
                                 if (!!adapterResponse.data) {
