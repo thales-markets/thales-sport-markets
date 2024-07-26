@@ -33,6 +33,8 @@ import {
     PositionText,
     Wrong,
 } from './styled-components';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { Coins } from 'thales-utils';
 
 type MatchInfoProps = {
     market: TicketMarket;
@@ -43,6 +45,7 @@ type MatchInfoProps = {
     setAcceptOdds?: (accept: boolean) => void;
     isLive?: boolean;
     applyPayoutMultiplier: boolean;
+    useThalesCollateral?: boolean;
 };
 
 const MatchInfo: React.FC<MatchInfoProps> = ({
@@ -54,6 +57,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
     setAcceptOdds,
     isLive,
     applyPayoutMultiplier,
+    useThalesCollateral,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -152,7 +156,14 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                         <OddChangeDown id="odd-change-down" />
                         {formatMarketOdds(
                             selectedOddsType,
-                            market.odd * (applyPayoutMultiplier ? getAddedPayoutMultiplier(selectedCollateral) : 1)
+                            market.odd *
+                                (applyPayoutMultiplier
+                                    ? getAddedPayoutMultiplier(
+                                          useThalesCollateral
+                                              ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
+                                              : selectedCollateral
+                                      )
+                                    : 1)
                         )}
                     </Odd>
                 </PositionInfo>

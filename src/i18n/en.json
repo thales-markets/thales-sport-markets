@@ -717,6 +717,9 @@
             "persist-games": "Keep selection after submit",
             "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
             "thales-bonus-tooltip": "Users placing trades with THALES will get 1% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
+            "swap-thales": "Swap to THALES for better quote",
+            "swap-thales-tooltip": "TODO",
+            "swap-thales-receive": "Minimum receive",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
@@ -784,6 +787,7 @@
             },
             "slippage": {
                 "slippage": "Slippage",
+                "swap-thales": "Swap slippage",
                 "label": "Accept trade if odds drop by:",
                 "enter-value": "Enter value",
                 "invalid-value": "Invalid value",

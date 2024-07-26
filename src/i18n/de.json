@@ -277,7 +277,11 @@
                 "boxing": "Boxen",
                 "fighting": "Kampfsport",
                 "golf": "Golf",
-                "live": "Live"
+                "live": "Live",
+                "waterpolo": "Wasser Polo",
+                "rugby": "Rugby",
+                "volleyball": "Volleyball",
+                "handball": "Handball"
             },
             "all": "Alle",
             "datepicker": {
@@ -552,7 +556,9 @@
             "pre-fight": "Vor dem Kampf",
             "end-of-fight": "Ende des Kampfes",
             "fighters-introduction": "Kämpfer Einführung",
-            "end-of-round": "Ende der Runde"
+            "end-of-round": "Ende der Runde",
+            "not-available-for-trading": "Nicht zum Handel verfügbar",
+            "suspended": "Ausgesetzt"
         },
         "market-details": {
             "price": "Preis",
@@ -658,13 +664,19 @@
                 "label": "Akzeptieren Sie den Handel, wenn die Quoten um Folgendes sinken:",
                 "slippage": "Schlupf",
                 "enter-value": "Wert eingeben",
-                "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert."
+                "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert.",
+                "swap-thales": "Swap-Slippage"
             },
             "accept-odds-changes": "Quotenänderungen akzeptieren",
             "thales-bonus-tooltip": "Benutzer, die mit THALES handeln, erhalten 1 % zusätzliche Auszahlungen für jedes Spiel auf ihrem Ticket (bereits im Gesamtangebot und der Auszahlung berechnet).",
             "thales-bonus-info": "Nutzen Sie THALES und erhalten Sie 1 % Bonus für jedes Spiel.",
             "odds-changed-error": "Die Quoten haben sich während der Auftragserfüllung geändert. Versuchen Sie, den Slippage zu erhöhen.",
-            "odds-changed-description": "Quoten haben sich geändert. Akzeptieren Sie die Änderungen, um zu kaufen."
+            "odds-changed-description": "Quoten haben sich geändert. Akzeptieren Sie die Änderungen, um zu kaufen.",
+            "swap-thales-tooltip": "ALLE",
+            "use-free-bet": "Gratiswette nutzen",
+            "disable-free-bet": "Kostenlose Wettguthaben deaktivieren",
+            "swap-thales-receive": "Mindestempfang",
+            "swap-thales": "Wechseln Sie zu THALES für ein besseres Angebot"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -684,7 +696,8 @@
             },
             "buttons": {
                 "switch": "Schalter",
-                "disconnect": "Trennen"
+                "disconnect": "Trennen",
+                "particle-wallet": "Partikel-Geldbörse"
             },
             "labels": {
                 "language": "Sprache"
@@ -698,7 +711,9 @@
         "incentivized-tooltip-uefa": "Für die UEFA-Wettbewerbe wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-nhl": "Für den Rest der NHL-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "Für den Rest der {{league}}-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} ausgeschüttet. Nur das Volumen im Arbitrum-Netzwerk wird für die Belohnungen angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
-        "incentivized-tooltip-euro-copa": "Für die EM 2024 und die Copa America werden satte {{rewards}} vergeben. Weitere Details finden Sie <detailsLink>hier</detailsLink>."
+        "incentivized-tooltip-euro-copa": "Für die EM 2024 und die Copa America werden satte {{rewards}} vergeben. Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-olympics": "Verdienen Sie während der Olympischen Spiele {{rewards}} in volumenbasierten Prämien. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Kämpfen Sie während Wimbledon 2024 in den Verlängerungen V1 und V2 um {{rewards}}. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>."
     },
     "rewards": {
         "header": "Preise",
@@ -821,7 +836,9 @@
             "highest-win": "Höchster Gewinn",
             "lifetime-wins": "Lebenslange Gewinne",
             "in-vaults": "In Vaults",
-            "profile-data": "Profildaten"
+            "profile-data": "Profildaten",
+            "wallet": "Geldbörse",
+            "free-bet": "Kostenlose Wette"
         },
         "lp-title": "Liquiditätspool",
         "in-lp": "Liquidität bereitgestellt",
@@ -846,7 +863,25 @@
         },
         "lp": "LP",
         "back": "Zurück",
-        "go-to": "Gehe zu"
+        "go-to": "Gehe zu",
+        "free-bet": {
+            "claim-btn": "Der Anspruchsbetrag wird um den Buy-In-Betrag reduziert, der auf Ihr Gratiswettenguthaben übertragen wird."
+        },
+        "free-bet-modal": {
+            "approve-success": "Erfolgreich genehmigt",
+            "funding": "Finanzierung...",
+            "enter-amount": "Menge eingeben",
+            "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet über ausreichend Guthaben verfügt",
+            "title": "Gratiswette senden",
+            "fund": "Gratiswette senden",
+            "transaction-pending": "Transaktion ausstehend",
+            "invalid-amount": "ungültige Menge",
+            "insufficient-balance": "Mangelhaftes Gleichgewicht",
+            "enter-wallet-address": "Wallet-Adresse eingeben",
+            "fund-successful": "Fonds erfolgreich",
+            "invalid-wallet-address": "Ungültige Wallet-Adresse"
+        },
+        "send-free-bet": "Gratiswette senden"
     },
     "referral": {
         "generate-link": "Link generieren",
