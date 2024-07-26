@@ -217,6 +217,9 @@ export enum MarketTypeGroup {
     PLAYER_SHOTS = 'Shots on goal',
     PLAYER_HITS_RECORDED = 'Hits recorded',
     PLAYER_STRIKEOUTS = 'Strikeouts',
+    PLAYER_HOMERUNS = 'Home runs',
+    PLAYER_BASES = 'Bases',
+    PLAYER_HITS_ALLOWED = 'Hits allowed',
     POINTS = 'Points',
     QUARTERS = 'Quarters',
     FIRST_QUARTER = '1st quarter',
@@ -227,4 +230,7 @@ export enum MarketTypeGroup {
     WINNING_METHOD = 'Winning method',
     FIGHT_PROPS = 'Fight props',
     ROUND_PROPS = 'Round props',
+    INNINGS = 'Innings',
+    FIRST_INNING = '1st inning',
+    FIRST_FIVE_INNINGS = '1st 5 innings',
 }

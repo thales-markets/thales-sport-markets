@@ -203,7 +203,9 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
     let sufix = isPeriodMarket(marketType)
         ? ` ${getLeaguePeriodType(market.leagueId)}`
         : isPeriod2Market(marketType)
-        ? ' half'
+        ? market.leagueId == League.MLB
+            ? ' half (1st 5 innings)'
+            : ' half'
         : '';
 
     if (

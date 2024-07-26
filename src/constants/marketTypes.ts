@@ -610,9 +610,10 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.WILL_THERE_BE_OVERTIME]: {
         id: MarketType.WILL_THERE_BE_OVERTIME,
         key: 'willThereBeOvertime',
-        name: 'Will there be overtime in the game',
+        name: 'Overtime',
+        description: 'Will there be overtime in the game',
     },
-    // Will there be overtime in the game
+    // No runs in the first inning
     [MarketType.FIRST_INNING_NO_RUNS]: {
         id: MarketType.FIRST_INNING_NO_RUNS,
         key: 'firstInningNoRuns',
@@ -1007,6 +1008,53 @@ const FOURTH_PERIOD_MARKET_TYPES = [
     MarketType.FOURTH_PERIOD_DRAW_NO_BET,
 ];
 
+const FIFTH_PERIOD_MARKET_TYPES = [
+    MarketType.FIFTH_PERIOD_WINNER,
+    MarketType.FIFTH_PERIOD_TOTAL,
+    MarketType.FIFTH_PERIOD_SPREAD,
+    MarketType.FIFTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const SIXTH_PERIOD_MARKET_TYPES = [
+    MarketType.SIXTH_PERIOD_WINNER,
+    MarketType.SIXTH_PERIOD_TOTAL,
+    MarketType.SIXTH_PERIOD_SPREAD,
+    MarketType.SIXTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const SEVENTH_PERIOD_MARKET_TYPES = [
+    MarketType.SEVENTH_PERIOD_WINNER,
+    MarketType.SEVENTH_PERIOD_TOTAL,
+    MarketType.SEVENTH_PERIOD_SPREAD,
+    MarketType.SEVENTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const EIGHTH_PERIOD_MARKET_TYPES = [
+    MarketType.EIGHTH_PERIOD_WINNER,
+    MarketType.EIGHTH_PERIOD_TOTAL,
+    MarketType.EIGHTH_PERIOD_SPREAD,
+    MarketType.EIGHTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const NINTH_PERIOD_MARKET_TYPES = [
+    MarketType.NINTH_PERIOD_WINNER,
+    MarketType.NINTH_PERIOD_TOTAL,
+    MarketType.NINTH_PERIOD_SPREAD,
+    MarketType.NINTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const FIRST_PERIOD_MARKET_TYPES2 = [
+    MarketType.FIRST_PERIOD_WINNER2,
+    MarketType.FIRST_PERIOD_TOTAL2,
+    MarketType.FIRST_PERIOD_SPREAD2,
+    MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
+];
+
 export const HOME_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
@@ -1055,7 +1103,7 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     ],
     [SportFilter.Football]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Basketball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL, MarketType.TOTAL_ODD_EVEN],
-    [SportFilter.Baseball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Baseball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL, MarketType.WILL_THERE_BE_OVERTIME],
     [SportFilter.Hockey]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Fighting]: [
         MarketType.WINNER,
@@ -1100,22 +1148,10 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
         [MarketTypeGroup.QUARTERS]: [
-            MarketType.FIRST_PERIOD_WINNER,
-            MarketType.SECOND_PERIOD_WINNER,
-            MarketType.THIRD_PERIOD_WINNER,
-            MarketType.FOURTH_PERIOD_WINNER,
-            MarketType.FIRST_PERIOD_TOTAL,
-            MarketType.SECOND_PERIOD_TOTAL,
-            MarketType.THIRD_PERIOD_TOTAL,
-            MarketType.FOURTH_PERIOD_TOTAL,
-            MarketType.FIRST_PERIOD_SPREAD,
-            MarketType.SECOND_PERIOD_SPREAD,
-            MarketType.THIRD_PERIOD_SPREAD,
-            MarketType.FOURTH_PERIOD_SPREAD,
-            MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN,
-            MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN,
-            MarketType.THIRD_PERIOD_TOTAL_ODD_EVEN,
-            MarketType.FOURTH_PERIOD_TOTAL_ODD_EVEN,
+            ...FIRST_PERIOD_MARKET_TYPES,
+            ...SECOND_PERIOD_MARKET_TYPES,
+            ...THIRD_PERIOD_MARKET_TYPES,
+            ...FOURTH_PERIOD_MARKET_TYPES,
         ],
         [MarketTypeGroup.FIRST_QUARTER]: FIRST_PERIOD_MARKET_TYPES,
         [MarketTypeGroup.SECOND_QUARTER]: SECOND_PERIOD_MARKET_TYPES,
@@ -1194,9 +1230,26 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
+        [MarketTypeGroup.FIRST_INNING]: FIRST_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.FIRST_FIVE_INNINGS]: FIRST_PERIOD_MARKET_TYPES2,
+        [MarketTypeGroup.INNINGS]: [
+            ...FIRST_PERIOD_MARKET_TYPES,
+            ...SECOND_PERIOD_MARKET_TYPES,
+            ...THIRD_PERIOD_MARKET_TYPES,
+            ...FOURTH_PERIOD_MARKET_TYPES,
+            ...FIFTH_PERIOD_MARKET_TYPES,
+            ...SIXTH_PERIOD_MARKET_TYPES,
+            ...SEVENTH_PERIOD_MARKET_TYPES,
+            ...EIGHTH_PERIOD_MARKET_TYPES,
+            ...NINTH_PERIOD_MARKET_TYPES,
+        ],
         [MarketTypeGroup.PLAYER_PROPS]: PLAYER_PROPS_MARKET_TYPES,
         [MarketTypeGroup.PLAYER_HITS_RECORDED]: [MarketType.PLAYER_PROPS_HITS_RECORDED],
         [MarketTypeGroup.PLAYER_STRIKEOUTS]: [MarketType.PLAYER_PROPS_STRIKEOUTS],
+        [MarketTypeGroup.PLAYER_HOMERUNS]: [MarketType.PLAYER_PROPS_HOMERUNS],
+        [MarketTypeGroup.PLAYER_BASES]: [MarketType.PLAYER_PROPS_BASES],
+        [MarketTypeGroup.PLAYER_HITS_ALLOWED]: [MarketType.PLAYER_PROPS_PITCHER_HITS_ALLOWED],
     },
     [Sport.HOCKEY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
