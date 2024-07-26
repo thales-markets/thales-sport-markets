@@ -740,6 +740,51 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'blocks',
         name: 'Blocks',
     },
+
+    // UFC market types
+    [MarketType.WINNING_ROUND]: {
+        id: MarketType.WINNING_ROUND,
+        key: 'winningRound',
+        name: 'Winning round',
+    },
+    [MarketType.GO_THE_DISTANCE]: {
+        id: MarketType.GO_THE_DISTANCE,
+        key: 'goTheDistance',
+        name: 'Go the distance',
+    },
+    [MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE]: {
+        id: MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
+        key: 'willFightEndInFirstMinute',
+        name: 'First minute finish',
+        description: 'Will the fight end in the first minute',
+    },
+    [MarketType.WILL_POINT_BE_DEDUCTED]: {
+        id: MarketType.WILL_POINT_BE_DEDUCTED,
+        key: 'willPointBeDeducted',
+        name: 'Point to be deducted',
+        description: 'Will point be deducted',
+    },
+    [MarketType.ENDING_METHOD]: {
+        id: MarketType.ENDING_METHOD,
+        key: 'endingMethod',
+        name: 'Ending method',
+    },
+    [MarketType.METHOD_OF_VICTORY]: {
+        id: MarketType.METHOD_OF_VICTORY,
+        key: 'methodOfVictory',
+        name: 'Method of victory',
+    },
+    // UFC player props market types
+    [MarketType.PLAYER_PROPS_UFC_TAKEDOWNS]: {
+        id: MarketType.PLAYER_PROPS_UFC_TAKEDOWNS,
+        key: 'takedowns',
+        name: 'Takedowns',
+    },
+    [MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES]: {
+        id: MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES,
+        key: 'significantStrikes',
+        name: 'Significant strikes',
+    },
 };
 
 export const PLAYER_PROPS_MARKET_TYPES = [
@@ -766,6 +811,8 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
     MarketType.PLAYER_PROPS_3PTS_MADE,
     MarketType.PLAYER_PROPS_BLOCKS,
+    MarketType.PLAYER_PROPS_UFC_TAKEDOWNS,
+    MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
@@ -981,6 +1028,15 @@ export const OTHER_YES_NO_MARKET_TYPES = [
     MarketType.CLEAN_SHEET_AWAY_TEAM,
     MarketType.WILL_THERE_BE_OVERTIME,
     MarketType.FIRST_INNING_NO_RUNS,
+    MarketType.GO_THE_DISTANCE,
+    MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
+    MarketType.WILL_POINT_BE_DEDUCTED,
+];
+
+export const UFC_SPECIFIC_MARKET_TYPES = [
+    MarketType.WINNING_ROUND,
+    MarketType.ENDING_METHOD,
+    MarketType.METHOD_OF_VICTORY,
 ];
 
 export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
@@ -1001,7 +1057,15 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     [SportFilter.Basketball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL, MarketType.TOTAL_ODD_EVEN],
     [SportFilter.Baseball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Hockey]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilter.Fighting]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Fighting]: [
+        MarketType.WINNER,
+        MarketType.SPREAD,
+        MarketType.TOTAL,
+        MarketType.SPREAD2,
+        MarketType.GO_THE_DISTANCE,
+        MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
+        MarketType.WILL_POINT_BE_DEDUCTED,
+    ],
     [SportFilter.Tennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.TableTennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.eSports]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
@@ -1081,6 +1145,16 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
     [Sport.FIGHTING]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
+        [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.WINNING_METHOD]: [MarketType.METHOD_OF_VICTORY],
+        [MarketTypeGroup.FIGHT_PROPS]: [
+            MarketType.GO_THE_DISTANCE,
+            MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
+            MarketType.WILL_POINT_BE_DEDUCTED,
+            MarketType.PLAYER_PROPS_UFC_TAKEDOWNS,
+            MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES,
+        ],
+        [MarketTypeGroup.ROUND_PROPS]: [MarketType.WINNING_ROUND],
     },
     [Sport.TENNIS]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,

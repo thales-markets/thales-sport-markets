@@ -24,10 +24,59 @@ import {
     isSpreadMarket,
     isTotalMarket,
     isTotalOddEvenMarket,
+    isUfcSpecificMarket,
     isWinnerMarket,
     isYesNoPlayerPropsMarket,
 } from './markets';
 import { getLeagueMatchResolveType, getLeaguePeriodType, getLeagueScoringType } from './sports';
+
+const getUfcSpecificPositionText = (marketType: number, position: number, homeTeam: string, awayTeam: string) => {
+    if (marketType === MarketType.WINNING_ROUND) {
+        switch (position) {
+            case 0:
+                return 'Draw';
+            case 1:
+                return 'By decision';
+            default:
+                return `Round ${position - 1}`;
+        }
+    }
+    if (marketType === MarketType.ENDING_METHOD) {
+        switch (position) {
+            case 0:
+                return 'Draw';
+            case 1:
+                return 'By decision';
+            case 2:
+                return 'KO/TKO/DQ';
+            case 3:
+                return 'Submission';
+            default:
+                return '';
+        }
+    }
+    if (marketType === MarketType.METHOD_OF_VICTORY) {
+        switch (position) {
+            case 0:
+                return 'Draw';
+            case 1:
+                return `${homeTeam} (Decision)`;
+            case 2:
+                return `${homeTeam} (KO/TKO/DQ)`;
+            case 3:
+                return `${homeTeam} (Submission)`;
+            case 4:
+                return `${awayTeam} (Decision)`;
+            case 5:
+                return `${awayTeam} (KO/TKO/DQ)`;
+            case 6:
+                return `${awayTeam} (Submission)`;
+            default:
+                return '';
+        }
+    }
+    return '';
+};
 
 const getSimplePositionText = (
     marketType: number,
@@ -73,6 +122,10 @@ const getSimplePositionText = (
         const scoringType = getLeagueScoringType(leagueId);
         const sufix = scoringType.length > 1 ? ` ${scoringType.slice(0, scoringType.length - 1)}` : scoringType;
         return position === 0 ? homeTeam : position === 1 ? awayTeam : `No ${sufix}`;
+    }
+
+    if (isUfcSpecificMarket(marketType)) {
+        return getUfcSpecificPositionText(marketType, position, homeTeam, awayTeam);
     }
 
     return position === 0 ? '1' : position === 1 ? '2' : 'X';
@@ -171,6 +224,15 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
     ) {
         sufix = `${sufix}${
             marketType === MarketType.TOTAL2 || marketType === MarketType.SPREAD2 ? ' (sets)' : ' (points)'
+        }`;
+    }
+
+    if (
+        market.leagueId == League.UFC &&
+        (isTotalMarket(marketType) || isTotalOddEvenMarket(marketType) || isSpreadMarket(marketType))
+    ) {
+        sufix = `${sufix}${
+            marketType === MarketType.TOTAL2 || marketType === MarketType.SPREAD2 ? ' (points)' : ' (rounds)'
         }`;
     }
 

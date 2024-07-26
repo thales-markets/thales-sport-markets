@@ -177,6 +177,17 @@ export enum MarketType {
     PLAYER_PROPS_LAST_TOUCHDOWN = 11056,
     PLAYER_PROPS_3PTS_MADE = 11038,
     PLAYER_PROPS_BLOCKS = 11098,
+
+    // UFC market types
+    WINNING_ROUND = 10151,
+    GO_THE_DISTANCE = 10154,
+    WILL_FIGHT_END_IN_FIRST_MINUTE = 10155,
+    WILL_POINT_BE_DEDUCTED = 10156,
+    ENDING_METHOD = 10157,
+    METHOD_OF_VICTORY = 10158,
+    // UFC player props market types
+    PLAYER_PROPS_UFC_TAKEDOWNS = 11200,
+    PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES = 11201,
 }
 
 export enum MarketTypeGroup {
@@ -212,5 +223,8 @@ export enum MarketTypeGroup {
     SECOND_QUARTER = '2nd quarter',
     THIRD_QUARTER = '3rd quarter',
     FOURTH_QUARTER = '4th quarter',
-    Halves = 'Halves',
+    HALVES = 'Halves',
+    WINNING_METHOD = 'Winning method',
+    FIGHT_PROPS = 'Fight props',
+    ROUND_PROPS = 'Round props',
 }
