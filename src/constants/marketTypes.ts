@@ -775,15 +775,15 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         name: 'Method of victory',
     },
     // UFC player props market types
-    [MarketType.PLAYER_PROPS_UFC_TAKEDOWNS]: {
-        id: MarketType.PLAYER_PROPS_UFC_TAKEDOWNS,
-        key: 'takedowns',
-        name: 'Takedowns',
+    [MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED]: {
+        id: MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED,
+        key: 'takedownsLanded',
+        name: 'Takedowns landed',
     },
-    [MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES]: {
-        id: MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES,
-        key: 'significantStrikes',
-        name: 'Significant strikes',
+    [MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED]: {
+        id: MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED,
+        key: 'significantStrikesLanded',
+        name: 'Significant strikes landed',
     },
 };
 
@@ -811,8 +811,8 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
     MarketType.PLAYER_PROPS_3PTS_MADE,
     MarketType.PLAYER_PROPS_BLOCKS,
-    MarketType.PLAYER_PROPS_UFC_TAKEDOWNS,
-    MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES,
+    MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED,
+    MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
@@ -1151,8 +1151,8 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
             MarketType.GO_THE_DISTANCE,
             MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
             MarketType.WILL_POINT_BE_DEDUCTED,
-            MarketType.PLAYER_PROPS_UFC_TAKEDOWNS,
-            MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES,
+            MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED,
+            MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED,
         ],
         [MarketTypeGroup.ROUND_PROPS]: [MarketType.WINNING_ROUND],
     },
