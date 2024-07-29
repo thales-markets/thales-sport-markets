@@ -19,15 +19,37 @@ const useUsersStatsV2Query = (
     return useQuery<UserStats | undefined>(
         QUERY_KEYS.Wallet.StatsV2(networkId, walletAddress),
         async () => {
-            const { sportsAMMDataContract, priceFeedContract, sportsAMMV2ManagerContract } = networkConnector;
-            if (sportsAMMDataContract && priceFeedContract && sportsAMMV2ManagerContract) {
-                const [numOfActiveTicketsPerUser, numOfResolvedTicketsPerUser] = await Promise.all([
+            const {
+                sportsAMMDataContract,
+                priceFeedContract,
+                sportsAMMV2ManagerContract,
+                freeBetHolderContract,
+            } = networkConnector;
+            if (sportsAMMDataContract && priceFeedContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
+                const [
+                    numOfActiveTicketsPerUser,
+                    numOfResolvedTicketsPerUser,
+                    numOfActiveFreeBetTicketsPerUser,
+                    numOfResolvedFreeBetTicketsPerUser,
+                ] = await Promise.all([
                     sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(walletAddress),
                     sportsAMMV2ManagerContract.numOfResolvedTicketsPerUser(walletAddress),
+                    freeBetHolderContract.numOfActiveTicketsPerUser(walletAddress),
+                    freeBetHolderContract.numOfResolvedTicketsPerUser(walletAddress),
                 ]);
 
-                const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerUser) / BATCH_SIZE) + 1;
-                const numberOfResolvedBatches = Math.trunc(Number(numOfResolvedTicketsPerUser) / BATCH_SIZE) + 1;
+                const numberOfActiveBatches =
+                    Math.trunc(
+                        (Number(numOfActiveTicketsPerUser) > Number(numOfActiveFreeBetTicketsPerUser)
+                            ? Number(numOfActiveTicketsPerUser)
+                            : Number(numOfActiveFreeBetTicketsPerUser)) / BATCH_SIZE
+                    ) + 1;
+                const numberOfResolvedBatches =
+                    Math.trunc(
+                        (Number(numOfResolvedTicketsPerUser) > Number(numOfResolvedFreeBetTicketsPerUser)
+                            ? Number(numOfResolvedTicketsPerUser)
+                            : Number(numOfResolvedFreeBetTicketsPerUser)) / BATCH_SIZE
+                    ) + 1;
 
                 const promises = [];
                 for (let i = 0; i < numberOfActiveBatches; i++) {
