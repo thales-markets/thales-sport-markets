@@ -13,12 +13,18 @@ const useClaimablePositionCountQuery = (
         QUERY_KEYS.ClaimableCountV2(walletAddress, networkId),
         async () => {
             try {
-                const { sportsAMMDataContract, sportsAMMV2ManagerContract } = networkConnector;
-                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
-                    const numOfActiveTicketsPerUser = await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(
-                        walletAddress
-                    );
-                    const numberOfActiveBatches = Math.trunc(Number(numOfActiveTicketsPerUser) / BATCH_SIZE) + 1;
+                const { sportsAMMDataContract, sportsAMMV2ManagerContract, freeBetHolderContract } = networkConnector;
+                if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
+                    const [numOfActiveTicketsPerUser, numOfActiveFreeBetTicketsPerUser] = await Promise.all([
+                        sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(walletAddress),
+                        freeBetHolderContract.numOfActiveTicketsPerUser(walletAddress),
+                    ]);
+                    const numberOfActiveBatches =
+                        Math.trunc(
+                            (Number(numOfActiveTicketsPerUser) > Number(numOfActiveFreeBetTicketsPerUser)
+                                ? Number(numOfActiveTicketsPerUser)
+                                : Number(numOfActiveFreeBetTicketsPerUser)) / BATCH_SIZE
+                        ) + 1;
 
                     const promises = [];
                     for (let i = 0; i < numberOfActiveBatches; i++) {

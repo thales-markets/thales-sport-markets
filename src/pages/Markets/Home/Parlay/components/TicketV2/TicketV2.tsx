@@ -884,16 +884,18 @@ const Ticket: React.FC<TicketProps> = ({
                                 console.log('filfill end time:', new Date(Date.now()));
                                 console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
-                                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
-                                    const numOfActiveTicketsPerUser = await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(
-                                        walletAddress
-                                    );
+                                if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
+                                    const numOfActiveTicketsPerUser = isFreeBetActive
+                                        ? await freeBetHolderContract.numOfActiveTicketsPerUser(walletAddress)
+                                        : await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(walletAddress);
                                     const userTickets = await sportsAMMDataContract.getActiveTicketsDataPerUser(
                                         walletAddress.toLowerCase(),
                                         Number(numOfActiveTicketsPerUser) - 1,
                                         BATCH_SIZE
                                     );
-                                    const lastTicket = userTickets.ticketsData[userTickets.ticketsData.length - 1];
+                                    const lastTicket = isFreeBetActive
+                                        ? userTickets.freeBetsData[userTickets.freeBetsData.length - 1]
+                                        : userTickets.ticketsData[userTickets.ticketsData.length - 1];
                                     const lastTicketPaid =
                                         !collateralHasLp || isDefaultCollateral
                                             ? coinFormatter(lastTicket.buyInAmount, networkId)
