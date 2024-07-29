@@ -39,7 +39,7 @@ const BungeePlugin: React.FC = () => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
-    const apiKey = process.env.REACT_APP_BUNGEE_API_KEY || '';
+    const apiKey = import.meta.env.VITE_APP_BUNGEE_API_KEY || '';
     if (!apiKey) {
         console.error('Bungee API_KEY not found!');
     }

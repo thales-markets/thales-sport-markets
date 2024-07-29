@@ -19,7 +19,7 @@ import { checkAllowance, getNetworkNameByNetworkId } from './network';
 import networkConnector from './networkConnector';
 
 // const ERC20SVM = '0x000000D50C68705bd6897B2d17c7de32FB519fDA'; // session validation module for erc20 transfers
-const OVERTIMEVM = process.env.REACT_APP_OVERTIME_VALIDATION_MODULE; // overtime session validation module on Optimism
+const OVERTIMEVM = import.meta.env.VITE_APP_OVERTIME_VALIDATION_MODULE; // overtime session validation module on Optimism
 export const ETH_PAYMASTER = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'; // used for paying gas in ETH by AA
 
 export const executeBiconomyTransaction = async (

@@ -10,7 +10,7 @@ type FieldValidationMessageProps = {
     state?: string;
 };
 
-const ifIpfsDeployment = process.env.REACT_APP_IPFS_DEPLOYMENT === 'true';
+const ifIpfsDeployment = import.meta.env.VITE_APP_IPFS_DEPLOYMENT === 'true';
 
 const SPAAnchor: React.FC<FieldValidationMessageProps> = ({ onClick, children, href, style, className, state }) => {
     return (

@@ -43,7 +43,7 @@ type RpcProvider = {
 };
 
 const STALL_TIMEOUT = 2000;
-const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
+const projectId = import.meta.env.VITE_APP_WALLET_CONNECT_PROJECT_ID || '';
 
 const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
     [Network.OptimismMainnet]: {
@@ -57,9 +57,9 @@ const CHAIN_TO_RPC_PROVIDER_NETWORK_NAME: Record<number, RpcProvider> = {
 };
 
 const CHAIN_TO_RPC_PROVIDER_URL: Record<number, string | undefined> = {
-    [Network.OptimismMainnet]: process.env.REACT_APP_OPTIMISM_RPC_URL,
-    [Network.Arbitrum]: process.env.REACT_APP_ARBITRUM_RPC_URL,
-    [Network.Base]: process.env.REACT_APP_BASE_RPC_URL,
+    [Network.OptimismMainnet]: import.meta.env.VITE_APP_OPTIMISM_RPC_URL,
+    [Network.Arbitrum]: import.meta.env.VITE_APP_ARBITRUM_RPC_URL,
+    [Network.Base]: import.meta.env.VITE_APP_BASE_RPC_URL,
 };
 
 const theme = getDefaultTheme();
@@ -76,12 +76,14 @@ const { chains, provider } = configureChains(
                     http: rpcProvider
                         ? rpcProvider
                         : chain.id === Network.OptimismSepolia
-                        ? `https://optimism-sepolia.blastapi.io/${process.env.REACT_APP_BLAST_PROJECT_ID}`
-                        : process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' && chain.id === Network.Base
+                        ? `https://optimism-sepolia.blastapi.io/${import.meta.env.VITE_APP_BLAST_PROJECT_ID}`
+                        : import.meta.env.VITE_APP_PRIMARY_PROVIDER_ID === 'INFURA' && chain.id === Network.Base
                         ? // For Base use Ankr when Infura is primary as Infura doesn't support it
-                          `https://rpc.ankr.com/base/${process.env.REACT_APP_ANKR_PROJECT_ID}`
+                          `https://rpc.ankr.com/base/${import.meta.env.VITE_APP_ANKR_PROJECT_ID}`
                         : !!chainnodeNetworkName
-                        ? `https://${chainnodeNetworkName}.chainnodes.org/${process.env.REACT_APP_CHAINNODE_PROJECT_ID}`
+                        ? `https://${chainnodeNetworkName}.chainnodes.org/${
+                              import.meta.env.VITE_APP_CHAINNODE_PROJECT_ID
+                          }`
                         : chain.rpcUrls.default.http[0],
                 };
             },
@@ -89,9 +91,9 @@ const { chains, provider } = configureChains(
             priority: 1,
         }),
         infuraProvider({
-            apiKey: process.env.REACT_APP_INFURA_PROJECT_ID || '',
+            apiKey: import.meta.env.VITE_APP_INFURA_PROJECT_ID || '',
             stallTimeout: STALL_TIMEOUT,
-            priority: process.env.REACT_APP_PRIMARY_PROVIDER_ID === 'INFURA' ? 0 : 2,
+            priority: import.meta.env.VITE_APP_PRIMARY_PROVIDER_ID === 'INFURA' ? 0 : 2,
         }),
         publicProvider({ stallTimeout: STALL_TIMEOUT, priority: 5 }),
     ]

@@ -44,9 +44,9 @@ const Promotions = lazy(() => import('pages/Promotions/Home'));
 const Promotion = lazy(() => import('pages/Promotions/Promotion'));
 
 const particle = new ParticleNetwork({
-    projectId: process.env.REACT_APP_PARTICLE_PROJECT_ID,
-    clientKey: process.env.REACT_APP_CLIENT_KEY,
-    appId: process.env.REACT_APP_PARTICLE_APP_ID,
+    projectId: import.meta.env.VITE_APP_PARTICLE_PROJECT_ID,
+    clientKey: import.meta.env.VITE_APP_CLIENT_KEY,
+    appId: import.meta.env.VITE_APP_PARTICLE_APP_ID,
     chainName: 'optimism',
     chainId: 10,
     wallet: {

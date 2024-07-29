@@ -144,7 +144,7 @@ const Deposit: React.FC = () => {
         setSelectedTokenFromQuery(index.toString());
     };
 
-    const apiKey = process.env.REACT_APP_ONRAMPER_KEY || '';
+    const apiKey = import.meta.env.VITE_APP_ONRAMPER_KEY || '';
 
     const onramperUrl = useMemo(() => {
         return getOnRamperUrl(apiKey, walletAddress, networkId, selectedToken);
