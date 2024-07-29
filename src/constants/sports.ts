@@ -91,7 +91,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         label: 'UFC',
         logo: '/logos/leagueLogos/ufc.webp',
         logoClass: 'icon-homepage league--ufc',
-        provider: Provider.RUNDOWN,
+        provider: Provider.OPTICODDS,
         scoringType: ScoringType.ROUNDS,
         matchResolveType: MatchResolveType.EMPTY,
         periodType: PeriodType.ROUND,
