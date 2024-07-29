@@ -985,6 +985,18 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         hidden: false,
         tooltipKey: 'common.football-tooltip',
     },
+    [League.US_ELECTION]: {
+        sport: Sport.POLITICS,
+        id: League.US_ELECTION,
+        label: 'US Election 2024',
+        provider: Provider.EMPTY,
+        scoringType: ScoringType.EMPTY,
+        matchResolveType: MatchResolveType.EMPTY,
+        periodType: PeriodType.EMPTY,
+        isDrawAvailable: false,
+        priority: 1701,
+        hidden: false,
+    },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
         id: League.GOLF_H2H,
