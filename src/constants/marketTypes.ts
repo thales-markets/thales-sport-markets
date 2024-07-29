@@ -1129,6 +1129,7 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     ],
     [SportFilter.Waterpolo]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Cricket]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Politics]: [MarketType.WINNER],
 };
 
 export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
@@ -1345,6 +1346,9 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
     [Sport.MOTOSPORT]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
+    },
+    [Sport.POLITICS]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
     },
     [Sport.EMPTY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
