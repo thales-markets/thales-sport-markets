@@ -1,3 +1,4 @@
+import { ReactComponent as UsElectionHeader } from 'assets/images/us-election.svg';
 import MatchLogosV2 from 'components/MatchLogosV2';
 import SimpleLoader from 'components/SimpleLoader';
 import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
@@ -11,6 +12,7 @@ import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatShortDateWithTime } from 'thales-utils';
 import { SportMarket } from 'types/markets';
 import { getMatchLabel } from 'utils/marketsV2';
+import { League } from '../../../../enums/sports';
 import TicketTransactions from '../../Market/MarketDetailsV2/components/TicketTransactions';
 import Header from '../Header';
 import SelectedMarketDetails from '../SelectedMarketDetails';
@@ -52,6 +54,7 @@ const SelectedMarket: React.FC = () => {
                             />
                             <MatchLabel>{getMatchLabel(lastValidMarket)} </MatchLabel>
                         </MatchInfo>
+                        {lastValidMarket.leagueId === League.US_ELECTION && <StyledUsElectionHeader />}
                         {isMobile && <Header />}
                     </>
                 )}
@@ -154,6 +157,13 @@ const MatchInfoLabel = styled.label`
 
 const MatchLabel = styled(FlexDivRow)`
     color: ${(props) => props.theme.textColor.primary};
+`;
+
+const StyledUsElectionHeader = styled(UsElectionHeader)`
+    padding: 0 60px;
+    @media (max-width: 950px) {
+        padding: 0 40px;
+    }
 `;
 
 export default SelectedMarket;
