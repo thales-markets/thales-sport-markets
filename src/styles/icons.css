@@ -5,6 +5,10 @@
     font-size: 20px;
 }
 
+.icon--politics:before {
+    content: '\002E';
+}
+
 .icon--stats:before {
     content: '\002F';
 }
@@ -307,10 +311,6 @@
 
 .icon--base:before {
     content: '\00C0';
-}
-
-.icon--politics:before {
-    content: '\00D2';
 }
 
 .icon--clear:before {
