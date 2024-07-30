@@ -140,11 +140,7 @@ const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
     getLeagueIsDrawAvailable(leagueId) && isDrawAvailableMarket(marketType);
 
 export const getPositionOrder = (leagueId: number, marketType: MarketType, position: number) =>
-    getIsDrawAvailable(leagueId, marketType)
-        ? `${position == 0 ? 1 : position == 1 ? 3 : 2}`
-        : marketType === MarketType.US_ELECTION_WINNING_PARTY
-        ? `${position == 0 ? 3 : position == 1 ? 1 : 2}`
-        : undefined;
+    getIsDrawAvailable(leagueId, marketType) ? `${position == 0 ? 1 : position == 1 ? 3 : 2}` : undefined;
 
 export const getMarketTypeName = (marketType: MarketType) => {
     const marketTypeInfo = MarketTypeMap[marketType];
