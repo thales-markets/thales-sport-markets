@@ -786,6 +786,48 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'significantStrikesLanded',
         name: 'Significant strikes landed',
     },
+
+    // US election market types
+    [MarketType.US_ELECTION_POPULAR_VOTE_WINNER]: {
+        id: MarketType.US_ELECTION_POPULAR_VOTE_WINNER,
+        key: 'popularVoteWinner',
+        name: 'Popular vote winner',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY,
+        key: 'winningParty',
+        name: 'Winning party',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_ARIZONA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_ARIZONA,
+        key: 'winningPartyArizona',
+        name: 'Winning party Arizona',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_GEORGIA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_GEORGIA,
+        key: 'winningPartyGeorgia',
+        name: 'Winning party Georgia',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_MICHIGAN]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_MICHIGAN,
+        key: 'winningPartyMichigan',
+        name: 'Winning party Michigan',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_NEVADA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_NEVADA,
+        key: 'winningPartyNevada',
+        name: 'Winning party Nevada',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA,
+        key: 'winningPartyPennsylvania',
+        name: 'Winning party Pennsylvania',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
+        key: 'winningPartyWinsconsin',
+        name: 'Winning party Winsconsin',
+    },
 };
 
 export const PLAYER_PROPS_MARKET_TYPES = [
@@ -1129,7 +1171,11 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     ],
     [SportFilter.Waterpolo]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Cricket]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilter.Politics]: [MarketType.WINNER],
+    [SportFilter.Politics]: [
+        MarketType.WINNER,
+        MarketType.US_ELECTION_POPULAR_VOTE_WINNER,
+        MarketType.US_ELECTION_WINNING_PARTY,
+    ],
 };
 
 export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
@@ -1349,6 +1395,16 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
     },
     [Sport.POLITICS]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
+        [MarketTypeGroup.POPULAR_VOTE_WINNER]: [MarketType.US_ELECTION_POPULAR_VOTE_WINNER],
+        [MarketTypeGroup.WINNING_PARTY]: [MarketType.US_ELECTION_WINNING_PARTY],
+        [MarketTypeGroup.WINNING_PARTY_STATE]: [
+            MarketType.US_ELECTION_WINNING_PARTY_ARIZONA,
+            MarketType.US_ELECTION_WINNING_PARTY_GEORGIA,
+            MarketType.US_ELECTION_WINNING_PARTY_MICHIGAN,
+            MarketType.US_ELECTION_WINNING_PARTY_NEVADA,
+            MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA,
+            MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
+        ],
     },
     [Sport.EMPTY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
