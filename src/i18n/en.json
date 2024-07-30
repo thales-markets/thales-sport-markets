@@ -179,6 +179,7 @@
         "fifa-tooltip": "FIFA World Cup markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "iihf-tooltip": "IIHF World Championship markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "football-tooltip": "Markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
+        "election-tooltip": "The resolution source will be the Associated Press, Fox News, and NBC. These markets will resolve once all three sources call the race for the same candidate. If all three sources haven’t called the race for the same candidate by 11th of November, all bets will be voided.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",

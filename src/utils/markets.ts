@@ -43,7 +43,7 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
 };
 
 export const isOneSideMarket = (league: number) =>
-    getLeagueSport(league) === Sport.MOTOSPORT || league == League.GOLF_WINNER || league == League.GOLF_WINNER;
+    getLeagueSport(league) === Sport.MOTOSPORT || league == League.GOLF_WINNER || league == League.US_ELECTION;
 
 export const isPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);

@@ -35,7 +35,7 @@ export const getTeamImageSource = (team: string, league: League) => {
         : league == League.GERMANY_CUP
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.US_ELECTION
-        ? `/logos/countries/united-states-of-america.svg`
+        ? `/logos/Countries/united-states-of-america.svg`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`;
 };
 

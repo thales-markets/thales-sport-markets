@@ -996,6 +996,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: false,
         priority: 1701,
         hidden: false,
+        tooltipKey: 'common.election-tooltip',
     },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
