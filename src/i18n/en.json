@@ -877,7 +877,7 @@
         "no-result": "There are no results for this table",
         "earned": "Earned",
         "header": "Create referral links",
-        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>0.5% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
+        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>1% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
         "nav-items": {
             "all-transactions": "All transactions",
             "see-result-by-trader": "See result by trader",
