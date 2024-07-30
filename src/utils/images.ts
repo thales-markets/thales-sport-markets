@@ -33,6 +33,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.GERMANY_CUP
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.US_ELECTION
+        ? `/logos/countries/united-states-of-america.svg`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`;
 };
 
@@ -92,6 +94,8 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.WNBA:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.MLS:
+            return `/logos/Countries/united-states-of-america.svg`;
+        case League.US_ELECTION:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
             return `/logos/Countries/england.svg`;

@@ -85,8 +85,18 @@ const getSimplePositionText = (
     homeTeam: string,
     awayTeam: string,
     leagueId: League,
-    extendedText?: boolean
+    extendedText?: boolean,
+    positionNames?: string[]
 ) => {
+    if (positionNames && positionNames[position]) {
+        const text = positionNames[position]
+            .replace('_', ' ')
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+        return marketType >= MarketType.US_ELECTION_WINNING_PARTY_ARIZONA &&
+            marketType <= MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN
+            ? text.split(' ')[1]
+            : text;
+    }
     if (
         isOneSideMarket(marketType) ||
         isOneSidePlayerPropsMarket(marketType) ||
@@ -190,7 +200,8 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
               market.homeTeam,
               market.awayTeam,
               market.leagueId,
-              extendedText
+              extendedText,
+              market.positionNames
           );
 };
 

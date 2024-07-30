@@ -309,6 +309,10 @@
     content: '\00C0';
 }
 
+.icon--politics:before {
+    content: '\00D2';
+}
+
 .icon--clear:before {
     content: '\00D4';
 }
