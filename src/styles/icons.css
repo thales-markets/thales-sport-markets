@@ -464,3 +464,7 @@
 .icon--tabletennis:before {
     content: '\0101';
 }
+
+.icon--lock:before {
+    content: '\0121';
+}

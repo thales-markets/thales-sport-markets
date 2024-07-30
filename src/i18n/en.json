@@ -1181,5 +1181,17 @@
         "starts-in": "starts in",
         "ends-in": "ends in",
         "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
+    },
+    "overdrop": {
+        "overdrop-home": {
+            "daily-streak": "Daily streak xp boost",
+            "twitter-share": "Twitter share xp boost",
+            "twitter-xp-boost-resets": "Twitter xp boost resets in",
+            "level": "Level",
+            "xp": "xp",
+            "next-level": "Next level",
+            "total-xp-multiplier": "Total XP multiplier",
+            "social-multiplier": "Social XP multiplier"
+        }
     }
 }

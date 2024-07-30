@@ -169,4 +169,23 @@ export default {
         selected: Colors.BLUE,
         unselected: Colors.WHITE,
     },
+    overdrop: {
+        background: {
+            tertiary: 'rgba(60, 73, 138, 0.15)',
+        },
+        textColor: {
+            primary: Colors.YELLOW,
+            secondary: Colors.NAVY_BLUE_DARK,
+            tertiary: Colors.CHINESE_BLUE,
+        },
+        borderColor: {
+            primary: Colors.JONQUIL,
+        },
+        badge: {
+            background: {
+                primary: Colors.JONQUIL,
+                secondary: 'rgb(21, 27, 54, 0.3)',
+            },
+        },
+    },
 };
