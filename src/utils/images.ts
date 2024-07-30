@@ -21,6 +21,7 @@ export const getTeamImageSource = (team: string, league: League) => {
               .trim()
               .replaceAll(' 7s', '')
               .replaceAll(' U23', '')
+              .replaceAll(' 3x3', '')
               .replaceAll(' ', '-')
               .toLowerCase()}.svg`
         : league == League.ENGLAND_CUP
