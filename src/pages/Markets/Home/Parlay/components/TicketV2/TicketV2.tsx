@@ -370,7 +370,6 @@ const Ticket: React.FC<TicketProps> = ({
         exchangeRates,
         freeBetBalanceExists,
         freeBetCollateralBalances,
-        minBuyInAmount,
         multipleCollateralBalancesData,
         networkId,
         ticketPayment.forceChangeCollateral,
