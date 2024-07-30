@@ -5,7 +5,7 @@ const freeBetHolder = {
         [Network.OptimismMainnet]: '0x8D18e68563d53be97c2ED791CA4354911F16A54B',
         [Network.Arbitrum]: '',
         [Network.Base]: '',
-        [Network.OptimismSepolia]: '',
+        [Network.OptimismSepolia]: '0x97687d195A4296223ebCce238890b28Ba54cfD46',
     },
     abi: [
         {
