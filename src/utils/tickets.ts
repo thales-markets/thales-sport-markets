@@ -5,6 +5,7 @@ import { t } from 'i18next';
 import { Coins, bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
+import electionPositionNames from '../assets/json/electionPositionNames.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
@@ -90,6 +91,9 @@ export const mapTicket = (
                 const marketResult = ticket.marketsResult[index];
                 const marketStatus = Number(marketResult.status);
 
+                const positionNames =
+                    leagueId === League.US_ELECTION ? (electionPositionNames as any)[typeId] : undefined;
+
                 return {
                     gameId: market.gameId,
                     sport: getLeagueSport(leagueId),
@@ -143,6 +147,7 @@ export const mapTicket = (
                     isGameFinished: gameInfo?.isGameFinished,
                     gameStatus: gameInfo?.gameStatus,
                     liveScore,
+                    positionNames,
                 };
             }
         ),

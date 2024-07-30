@@ -610,9 +610,10 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
     [MarketType.WILL_THERE_BE_OVERTIME]: {
         id: MarketType.WILL_THERE_BE_OVERTIME,
         key: 'willThereBeOvertime',
-        name: 'Will there be overtime in the game',
+        name: 'Overtime',
+        description: 'Will there be overtime in the game',
     },
-    // Will there be overtime in the game
+    // No runs in the first inning
     [MarketType.FIRST_INNING_NO_RUNS]: {
         id: MarketType.FIRST_INNING_NO_RUNS,
         key: 'firstInningNoRuns',
@@ -740,6 +741,93 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'blocks',
         name: 'Blocks',
     },
+
+    // UFC market types
+    [MarketType.WINNING_ROUND]: {
+        id: MarketType.WINNING_ROUND,
+        key: 'winningRound',
+        name: 'Winning round',
+    },
+    [MarketType.GO_THE_DISTANCE]: {
+        id: MarketType.GO_THE_DISTANCE,
+        key: 'goTheDistance',
+        name: 'Go the distance',
+    },
+    [MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE]: {
+        id: MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
+        key: 'willFightEndInFirstMinute',
+        name: 'First minute finish',
+        description: 'Will the fight end in the first minute',
+    },
+    [MarketType.WILL_POINT_BE_DEDUCTED]: {
+        id: MarketType.WILL_POINT_BE_DEDUCTED,
+        key: 'willPointBeDeducted',
+        name: 'Point to be deducted',
+        description: 'Will point be deducted',
+    },
+    [MarketType.ENDING_METHOD]: {
+        id: MarketType.ENDING_METHOD,
+        key: 'endingMethod',
+        name: 'Ending method',
+    },
+    [MarketType.METHOD_OF_VICTORY]: {
+        id: MarketType.METHOD_OF_VICTORY,
+        key: 'methodOfVictory',
+        name: 'Method of victory',
+    },
+    // UFC player props market types
+    [MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED]: {
+        id: MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED,
+        key: 'takedownsLanded',
+        name: 'Takedowns landed',
+    },
+    [MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED]: {
+        id: MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED,
+        key: 'significantStrikesLanded',
+        name: 'Significant strikes landed',
+    },
+
+    // US election market types
+    [MarketType.US_ELECTION_POPULAR_VOTE_WINNER]: {
+        id: MarketType.US_ELECTION_POPULAR_VOTE_WINNER,
+        key: 'popularVoteWinner',
+        name: 'Popular vote winner',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY,
+        key: 'winningParty',
+        name: 'Winning party',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_ARIZONA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_ARIZONA,
+        key: 'winningPartyArizona',
+        name: 'Winning party Arizona',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_GEORGIA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_GEORGIA,
+        key: 'winningPartyGeorgia',
+        name: 'Winning party Georgia',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_MICHIGAN]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_MICHIGAN,
+        key: 'winningPartyMichigan',
+        name: 'Winning party Michigan',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_NEVADA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_NEVADA,
+        key: 'winningPartyNevada',
+        name: 'Winning party Nevada',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA,
+        key: 'winningPartyPennsylvania',
+        name: 'Winning party Pennsylvania',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
+        key: 'winningPartyWinsconsin',
+        name: 'Winning party Winsconsin',
+    },
 };
 
 export const PLAYER_PROPS_MARKET_TYPES = [
@@ -766,6 +854,8 @@ export const PLAYER_PROPS_MARKET_TYPES = [
     MarketType.PLAYER_PROPS_LAST_TOUCHDOWN,
     MarketType.PLAYER_PROPS_3PTS_MADE,
     MarketType.PLAYER_PROPS_BLOCKS,
+    MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED,
+    MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED,
 ];
 
 export const ONE_SIDE_PLAYER_PROPS_MARKET_TYPES = [
@@ -960,6 +1050,53 @@ const FOURTH_PERIOD_MARKET_TYPES = [
     MarketType.FOURTH_PERIOD_DRAW_NO_BET,
 ];
 
+const FIFTH_PERIOD_MARKET_TYPES = [
+    MarketType.FIFTH_PERIOD_WINNER,
+    MarketType.FIFTH_PERIOD_TOTAL,
+    MarketType.FIFTH_PERIOD_SPREAD,
+    MarketType.FIFTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.FIFTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const SIXTH_PERIOD_MARKET_TYPES = [
+    MarketType.SIXTH_PERIOD_WINNER,
+    MarketType.SIXTH_PERIOD_TOTAL,
+    MarketType.SIXTH_PERIOD_SPREAD,
+    MarketType.SIXTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.SIXTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const SEVENTH_PERIOD_MARKET_TYPES = [
+    MarketType.SEVENTH_PERIOD_WINNER,
+    MarketType.SEVENTH_PERIOD_TOTAL,
+    MarketType.SEVENTH_PERIOD_SPREAD,
+    MarketType.SEVENTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.SEVENTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const EIGHTH_PERIOD_MARKET_TYPES = [
+    MarketType.EIGHTH_PERIOD_WINNER,
+    MarketType.EIGHTH_PERIOD_TOTAL,
+    MarketType.EIGHTH_PERIOD_SPREAD,
+    MarketType.EIGHTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.EIGHTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const NINTH_PERIOD_MARKET_TYPES = [
+    MarketType.NINTH_PERIOD_WINNER,
+    MarketType.NINTH_PERIOD_TOTAL,
+    MarketType.NINTH_PERIOD_SPREAD,
+    MarketType.NINTH_PERIOD_TOTAL_ODD_EVEN,
+    MarketType.NINTH_PERIOD_BOTH_TEAMS_TO_SCORE,
+];
+
+const FIRST_PERIOD_MARKET_TYPES2 = [
+    MarketType.FIRST_PERIOD_WINNER2,
+    MarketType.FIRST_PERIOD_TOTAL2,
+    MarketType.FIRST_PERIOD_SPREAD2,
+    MarketType.FIRST_PERIOD_TOTAL2_ODD_EVEN,
+];
+
 export const HOME_TEAM_MARKET_TYPES = [
     MarketType.TOTAL_HOME_TEAM,
     MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
@@ -981,6 +1118,15 @@ export const OTHER_YES_NO_MARKET_TYPES = [
     MarketType.CLEAN_SHEET_AWAY_TEAM,
     MarketType.WILL_THERE_BE_OVERTIME,
     MarketType.FIRST_INNING_NO_RUNS,
+    MarketType.GO_THE_DISTANCE,
+    MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
+    MarketType.WILL_POINT_BE_DEDUCTED,
+];
+
+export const UFC_SPECIFIC_MARKET_TYPES = [
+    MarketType.WINNING_ROUND,
+    MarketType.ENDING_METHOD,
+    MarketType.METHOD_OF_VICTORY,
 ];
 
 export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
@@ -999,9 +1145,17 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     ],
     [SportFilter.Football]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Basketball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL, MarketType.TOTAL_ODD_EVEN],
-    [SportFilter.Baseball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Baseball]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL, MarketType.WILL_THERE_BE_OVERTIME],
     [SportFilter.Hockey]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilter.Fighting]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Fighting]: [
+        MarketType.WINNER,
+        MarketType.SPREAD,
+        MarketType.TOTAL,
+        MarketType.SPREAD2,
+        MarketType.GO_THE_DISTANCE,
+        MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
+        MarketType.WILL_POINT_BE_DEDUCTED,
+    ],
     [SportFilter.Tennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.TableTennis]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.eSports]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
@@ -1017,6 +1171,11 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     ],
     [SportFilter.Waterpolo]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Cricket]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Politics]: [
+        MarketType.WINNER,
+        MarketType.US_ELECTION_POPULAR_VOTE_WINNER,
+        MarketType.US_ELECTION_WINNING_PARTY,
+    ],
 };
 
 export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
@@ -1036,22 +1195,10 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
         [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
         [MarketTypeGroup.QUARTERS]: [
-            MarketType.FIRST_PERIOD_WINNER,
-            MarketType.SECOND_PERIOD_WINNER,
-            MarketType.THIRD_PERIOD_WINNER,
-            MarketType.FOURTH_PERIOD_WINNER,
-            MarketType.FIRST_PERIOD_TOTAL,
-            MarketType.SECOND_PERIOD_TOTAL,
-            MarketType.THIRD_PERIOD_TOTAL,
-            MarketType.FOURTH_PERIOD_TOTAL,
-            MarketType.FIRST_PERIOD_SPREAD,
-            MarketType.SECOND_PERIOD_SPREAD,
-            MarketType.THIRD_PERIOD_SPREAD,
-            MarketType.FOURTH_PERIOD_SPREAD,
-            MarketType.FIRST_PERIOD_TOTAL_ODD_EVEN,
-            MarketType.SECOND_PERIOD_TOTAL_ODD_EVEN,
-            MarketType.THIRD_PERIOD_TOTAL_ODD_EVEN,
-            MarketType.FOURTH_PERIOD_TOTAL_ODD_EVEN,
+            ...FIRST_PERIOD_MARKET_TYPES,
+            ...SECOND_PERIOD_MARKET_TYPES,
+            ...THIRD_PERIOD_MARKET_TYPES,
+            ...FOURTH_PERIOD_MARKET_TYPES,
         ],
         [MarketTypeGroup.FIRST_QUARTER]: FIRST_PERIOD_MARKET_TYPES,
         [MarketTypeGroup.SECOND_QUARTER]: SECOND_PERIOD_MARKET_TYPES,
@@ -1081,6 +1228,16 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
     [Sport.FIGHTING]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
+        [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.WINNING_METHOD]: [MarketType.METHOD_OF_VICTORY],
+        [MarketTypeGroup.FIGHT_PROPS]: [
+            MarketType.GO_THE_DISTANCE,
+            MarketType.WILL_FIGHT_END_IN_FIRST_MINUTE,
+            MarketType.WILL_POINT_BE_DEDUCTED,
+            MarketType.PLAYER_PROPS_UFC_TAKEDOWNS_LANDED,
+            MarketType.PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED,
+        ],
+        [MarketTypeGroup.ROUND_PROPS]: [MarketType.WINNING_ROUND],
     },
     [Sport.TENNIS]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
@@ -1111,6 +1268,30 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
     },
     [Sport.TABLE_TENNIS]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
+        [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
+        [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
+        [MarketTypeGroup.SETS]: [
+            MarketType.TOTAL2,
+            MarketType.SPREAD2,
+            MarketType.FIRST_PERIOD_WINNER,
+            MarketType.SECOND_PERIOD_WINNER,
+            MarketType.THIRD_PERIOD_WINNER,
+            MarketType.FIRST_PERIOD_TOTAL,
+            MarketType.SECOND_PERIOD_TOTAL,
+            MarketType.THIRD_PERIOD_TOTAL,
+        ],
+        [MarketTypeGroup.POINTS]: [
+            MarketType.TOTAL,
+            MarketType.SPREAD,
+            MarketType.TOTAL_ODD_EVEN,
+            MarketType.FIRST_PERIOD_TOTAL,
+            MarketType.SECOND_PERIOD_TOTAL,
+            MarketType.THIRD_PERIOD_TOTAL,
+        ],
+        [MarketTypeGroup.FIRST_SET]: [MarketType.FIRST_PERIOD_WINNER, MarketType.FIRST_PERIOD_TOTAL],
+        [MarketTypeGroup.SECOND_SET]: [MarketType.SECOND_PERIOD_WINNER, MarketType.SECOND_PERIOD_TOTAL],
+        [MarketTypeGroup.THIRD_SET]: [MarketType.THIRD_PERIOD_WINNER, MarketType.THIRD_PERIOD_TOTAL],
     },
     [Sport.FOOTBALL]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
@@ -1120,9 +1301,26 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
         [MarketTypeGroup.HANDICAP]: SPREAD_MARKET_TYPES,
+        [MarketTypeGroup.SGP]: [MarketType.WINNER_TOTAL],
+        [MarketTypeGroup.FIRST_INNING]: FIRST_PERIOD_MARKET_TYPES,
+        [MarketTypeGroup.FIRST_FIVE_INNINGS]: FIRST_PERIOD_MARKET_TYPES2,
+        [MarketTypeGroup.INNINGS]: [
+            ...FIRST_PERIOD_MARKET_TYPES,
+            ...SECOND_PERIOD_MARKET_TYPES,
+            ...THIRD_PERIOD_MARKET_TYPES,
+            ...FOURTH_PERIOD_MARKET_TYPES,
+            ...FIFTH_PERIOD_MARKET_TYPES,
+            ...SIXTH_PERIOD_MARKET_TYPES,
+            ...SEVENTH_PERIOD_MARKET_TYPES,
+            ...EIGHTH_PERIOD_MARKET_TYPES,
+            ...NINTH_PERIOD_MARKET_TYPES,
+        ],
         [MarketTypeGroup.PLAYER_PROPS]: PLAYER_PROPS_MARKET_TYPES,
         [MarketTypeGroup.PLAYER_HITS_RECORDED]: [MarketType.PLAYER_PROPS_HITS_RECORDED],
         [MarketTypeGroup.PLAYER_STRIKEOUTS]: [MarketType.PLAYER_PROPS_STRIKEOUTS],
+        [MarketTypeGroup.PLAYER_HOMERUNS]: [MarketType.PLAYER_PROPS_HOMERUNS],
+        [MarketTypeGroup.PLAYER_BASES]: [MarketType.PLAYER_PROPS_BASES],
+        [MarketTypeGroup.PLAYER_HITS_ALLOWED]: [MarketType.PLAYER_PROPS_PITCHER_HITS_ALLOWED],
     },
     [Sport.HOCKEY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
@@ -1194,6 +1392,19 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
     [Sport.MOTOSPORT]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
+    },
+    [Sport.POLITICS]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
+        [MarketTypeGroup.POPULAR_VOTE_WINNER]: [MarketType.US_ELECTION_POPULAR_VOTE_WINNER],
+        [MarketTypeGroup.WINNING_PARTY]: [MarketType.US_ELECTION_WINNING_PARTY],
+        [MarketTypeGroup.WINNING_PARTY_STATE]: [
+            MarketType.US_ELECTION_WINNING_PARTY_ARIZONA,
+            MarketType.US_ELECTION_WINNING_PARTY_GEORGIA,
+            MarketType.US_ELECTION_WINNING_PARTY_MICHIGAN,
+            MarketType.US_ELECTION_WINNING_PARTY_NEVADA,
+            MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA,
+            MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
+        ],
     },
     [Sport.EMPTY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,

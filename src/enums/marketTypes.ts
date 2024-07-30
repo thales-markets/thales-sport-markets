@@ -177,6 +177,27 @@ export enum MarketType {
     PLAYER_PROPS_LAST_TOUCHDOWN = 11056,
     PLAYER_PROPS_3PTS_MADE = 11038,
     PLAYER_PROPS_BLOCKS = 11098,
+
+    // UFC market types
+    WINNING_ROUND = 10151,
+    GO_THE_DISTANCE = 10154,
+    WILL_FIGHT_END_IN_FIRST_MINUTE = 10155,
+    WILL_POINT_BE_DEDUCTED = 10156,
+    ENDING_METHOD = 10157,
+    METHOD_OF_VICTORY = 10158,
+    // UFC player props market types
+    PLAYER_PROPS_UFC_TAKEDOWNS_LANDED = 11200,
+    PLAYER_PROPS_UFC_SIGNIFICANT_STRIKES_LANDED = 11201,
+
+    // US election market types
+    US_ELECTION_POPULAR_VOTE_WINNER = 10900,
+    US_ELECTION_WINNING_PARTY = 10901,
+    US_ELECTION_WINNING_PARTY_ARIZONA = 10902,
+    US_ELECTION_WINNING_PARTY_GEORGIA = 10903,
+    US_ELECTION_WINNING_PARTY_MICHIGAN = 10904,
+    US_ELECTION_WINNING_PARTY_NEVADA = 10905,
+    US_ELECTION_WINNING_PARTY_PENNSYLVANIA = 10906,
+    US_ELECTION_WINNING_PARTY_WINSCONSIN = 10907,
 }
 
 export enum MarketTypeGroup {
@@ -206,11 +227,23 @@ export enum MarketTypeGroup {
     PLAYER_SHOTS = 'Shots on goal',
     PLAYER_HITS_RECORDED = 'Hits recorded',
     PLAYER_STRIKEOUTS = 'Strikeouts',
+    PLAYER_HOMERUNS = 'Home runs',
+    PLAYER_BASES = 'Bases',
+    PLAYER_HITS_ALLOWED = 'Hits allowed',
     POINTS = 'Points',
     QUARTERS = 'Quarters',
     FIRST_QUARTER = '1st quarter',
     SECOND_QUARTER = '2nd quarter',
     THIRD_QUARTER = '3rd quarter',
     FOURTH_QUARTER = '4th quarter',
-    Halves = 'Halves',
+    HALVES = 'Halves',
+    WINNING_METHOD = 'Winning method',
+    FIGHT_PROPS = 'Fight props',
+    ROUND_PROPS = 'Round props',
+    INNINGS = 'Innings',
+    FIRST_INNING = '1st inning',
+    FIRST_FIVE_INNINGS = '1st 5 innings',
+    POPULAR_VOTE_WINNER = 'Popular vote winner',
+    WINNING_PARTY = 'Winning party',
+    WINNING_PARTY_STATE = 'Winning party (states)',
 }

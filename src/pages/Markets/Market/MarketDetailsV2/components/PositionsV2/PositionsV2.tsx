@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { getMarketTypeTooltipKey } from 'utils/markets';
 import { getSubtitleText, getTitleText, isOddValid } from 'utils/marketsV2';
+import { League } from '../../../../../../enums/sports';
 import { getGridMinMaxPercentage } from '../../../../../../utils/ui';
 import PositionDetailsV2 from '../PositionDetailsV2';
 import {
@@ -103,6 +104,12 @@ const Positions: React.FC<PositionsProps> = ({
                         </SubTitleContainer>
                     )}
                     {sortedMarkets.map((market, index) => {
+                        const odds =
+                            isMainPageView &&
+                            market.typeId === MarketType.WINNER &&
+                            market.leagueId === League.US_ELECTION
+                                ? market.odds.slice(0, 2)
+                                : market.odds;
                         return (
                             <ContentWrapper key={index}>
                                 {market.isPlayerPropsMarket && (
@@ -114,7 +121,7 @@ const Positions: React.FC<PositionsProps> = ({
                                     gridMinMaxPercentage={getGridMinMaxPercentage(market, isMobile)}
                                     isColumnView={isColumnView}
                                 >
-                                    {market.odds.map((_, index) => (
+                                    {odds.map((_, index) => (
                                         <PositionDetailsV2
                                             key={index}
                                             market={market}

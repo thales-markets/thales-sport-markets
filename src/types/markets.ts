@@ -86,6 +86,7 @@ export type SportMarket = {
     isGameFinished?: boolean;
     gameStatus?: GameStatus;
     liveScore?: SportMarketScore;
+    positionNames?: string[];
 };
 
 export type SportMarkets = SportMarket[];
