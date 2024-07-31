@@ -99,6 +99,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.US_ELECTION:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
+        case League.ENGLAND_CHAMPIONSHIP:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
             return `/logos/Countries/france.svg`;
