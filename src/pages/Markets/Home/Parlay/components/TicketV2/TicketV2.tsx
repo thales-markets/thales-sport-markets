@@ -497,13 +497,13 @@ const Ticket: React.FC<TicketProps> = ({
                     );
 
                     if (markets[0]?.live) {
-                        // TODO: check when using swap to THALES
                         const [minimumReceivedForBuyInAmount] = await Promise.all([
                             collateralHasLp
-                                ? buyInAmountForQuote * (isDefaultCollateral ? 1 : selectedCollateralCurrencyRate)
+                                ? buyInAmountForQuote *
+                                  (isDefaultCollateral && !swapToThales ? 1 : selectedCollateralCurrencyRate)
                                 : multiCollateralOnOffRampContract?.getMinimumReceived(
-                                      collateralAddress,
-                                      coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
+                                      swapToThales ? thalesCollateralAddress : collateralAddress,
+                                      coinParser(buyInAmountForQuote.toString(), networkId, usedCollateralForBuy)
                                   ),
                         ]);
 
@@ -902,7 +902,7 @@ const Ticket: React.FC<TicketProps> = ({
                 if (swapTxHash) {
                     step = BuyTicketStep.APPROVE_BUY;
                     setBuyStep(step);
-                    await delay(1000); // wait for THALES balance to increase
+                    await delay(3000); // wait for THALES balance to increase
                 }
             } catch (e) {
                 console.log('Swap tx failed', e);
@@ -1074,9 +1074,6 @@ const Ticket: React.FC<TicketProps> = ({
                 const txResult = isAA ? tx : await tx?.wait();
 
                 if (txResult && txResult.transactionHash) {
-                    setBuyStep(BuyTicketStep.COMPLETED);
-                    setOpenBuyStepsModal(false);
-
                     PLAUSIBLE.trackEvent(
                         tradeData[0].live
                             ? isFreeBetActive
@@ -1114,6 +1111,9 @@ const Ticket: React.FC<TicketProps> = ({
                         };
                         setShareTicketModalData(modalData);
                         setShowShareTicketModal(true);
+
+                        setBuyStep(BuyTicketStep.COMPLETED);
+                        setOpenBuyStepsModal(false);
 
                         toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                         setIsBuying(false);
@@ -1210,6 +1210,10 @@ const Ticket: React.FC<TicketProps> = ({
                                     setShareTicketModalData(modalData);
                                     setShowShareTicketModal(true);
                                 }
+
+                                setBuyStep(BuyTicketStep.COMPLETED);
+                                setOpenBuyStepsModal(false);
+
                                 toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                                 setIsBuying(false);
                                 setCollateralAmount('');
