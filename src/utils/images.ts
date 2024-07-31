@@ -99,6 +99,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.US_ELECTION:
             return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
+        case League.ENGLAND_CHAMPIONSHIP:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
             return `/logos/Countries/france.svg`;
@@ -125,22 +126,15 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.LIGA_MX:
             return `/logos/Countries/mexico.svg`;
         case League.UEFA_CL:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_EL:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_EURO:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_EURO_U21:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_NATIONS_LEAGUE:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_CONFERENCE_LEAGUE:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_CHAMPIONS_LEAGUE_QUALIFICATION:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_EUROPA_LEAGUE_QUALIFICATION:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION:
+        case League.UEFA_SUPER_CUP:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
             return `/logos/Countries/europe.svg`;
