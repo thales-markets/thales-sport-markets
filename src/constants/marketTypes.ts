@@ -828,6 +828,11 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'winningPartyWinsconsin',
         name: 'Winning party Winsconsin',
     },
+    [MarketType.CORRECT_SCORE]: {
+        id: MarketType.CORRECT_SCORE,
+        key: 'correctScore',
+        name: 'Correct score',
+    },
 };
 
 export const PLAYER_PROPS_MARKET_TYPES = [
