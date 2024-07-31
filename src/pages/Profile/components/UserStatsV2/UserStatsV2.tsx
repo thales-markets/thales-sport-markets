@@ -130,7 +130,7 @@ const UserStats: React.FC = () => {
                                     </SubValue>
                                 </Section>
                             ) : (
-                                <></>
+                                <Fragment key={`${currencyKey}-freebet`} />
                             );
                         })}
                 </SectionWrapper>
