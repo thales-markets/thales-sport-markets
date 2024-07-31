@@ -380,7 +380,6 @@ const Ticket: React.FC<TicketProps> = ({
             selectedCollateralItem && selectedCollateralItem.balanceDollarValue < 3;
 
         const maxBalanceItem = getMaxCollateralDollarValue(balanceList);
-        console.log(maxBalanceItem);
 
         if (
             maxBalanceItem &&
@@ -589,6 +588,7 @@ const Ticket: React.FC<TicketProps> = ({
             const getSwapQuote = async () => {
                 let quote = await getQuote(networkId, swapToThalesParams);
                 if (!quote) {
+                    // retry due to rate limit
                     await delay(1200);
                     quote = await getQuote(networkId, swapToThalesParams);
                 }
@@ -640,14 +640,24 @@ const Ticket: React.FC<TicketProps> = ({
             getSwapAllowance();
         }
         if (sportsAMMV2Contract && multipleCollateral && signer) {
-            const collateralToAllow = isLiveTicket && isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral;
-            const collateralContractWithSigner = isDefaultCollateral
-                ? sUSDContract?.connect(signer)
-                : multipleCollateral[collateralToAllow]?.connect(signer);
+            const collateralToAllow = swapToThales
+                ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
+                : isLiveTicket && isEth
+                ? (CRYPTO_CURRENCY_MAP.WETH as Coins)
+                : selectedCollateral;
+
+            const collateralContractWithSigner =
+                isDefaultCollateral && !swapToThales
+                    ? sUSDContract?.connect(signer)
+                    : multipleCollateral[collateralToAllow]?.connect(signer);
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = coinParser(Number(buyInAmount).toString(), networkId, collateralToAllow);
+                    const parsedTicketPrice = coinParser(
+                        (swapToThales ? swapThalesMinReceive : Number(buyInAmount)).toString(),
+                        networkId,
+                        collateralToAllow
+                    );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
@@ -661,7 +671,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             };
             if (isWalletConnected && buyInAmount) {
-                isEth && !isLiveTicket ? setHasAllowance(true) : getAllowance();
+                isEth && !isLiveTicket && !swapToThales ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -678,6 +688,7 @@ const Ticket: React.FC<TicketProps> = ({
         isLiveTicket,
         isFreeBetActive,
         swapToThales,
+        swapThalesMinReceive,
         swapToThalesParams.src,
     ]);
 
@@ -765,6 +776,7 @@ const Ticket: React.FC<TicketProps> = ({
         setCollateralAmount(floorNumberToDecimals(amount, decimals));
     };
 
+    // TODO: remove
     const handleSwapAllowance = async (approveAmount: BigNumber) => {
         if (swapToThales && !hasSwapAllowance) {
             setIsAllowing(true);
@@ -838,34 +850,54 @@ const Ticket: React.FC<TicketProps> = ({
 
         const { sportsAMMV2Contract, multipleCollateral, signer } = networkConnector;
 
-        if (step === BuyTicketStep.APPROVE_SWAP && !hasSwapAllowance && swapThalesMinReceive >= minBuyInAmount) {
-            const approveAmount = coinParser(Number(buyInAmount).toString(), networkId, selectedCollateral);
-            const approveSwapTransaction = await buildTxForApproveTradeWithRouter(
-                networkId,
-                walletAddress as Address,
-                swapToThalesParams.src,
-                approveAmount.toString()
-            );
-            try {
-                const approveTxHash = await sendTransaction(approveSwapTransaction);
+        if (step === BuyTicketStep.APPROVE_SWAP) {
+            if (!hasSwapAllowance && swapThalesMinReceive >= minBuyInAmount) {
+                const approveAmount = coinParser(Number(buyInAmount).toString(), networkId, selectedCollateral);
+                let approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
+                    networkId,
+                    walletAddress as Address,
+                    swapToThalesParams.src,
+                    approveAmount.toString()
+                );
 
-                if (approveTxHash) {
-                    step = BuyTicketStep.SWAP;
-                    setBuyStep(step);
-                    await delay(1000); // wait for 1inch API to read correct approval
+                // retry once
+                if (!approveSwapRawTransaction) {
+                    await delay(1200);
+                    approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
+                        networkId,
+                        walletAddress as Address,
+                        swapToThalesParams.src,
+                        approveAmount.toString()
+                    );
                 }
-            } catch (e) {
-                console.log('Approve swap failed', e);
+
+                try {
+                    const approveTxHash = await sendTransaction(approveSwapRawTransaction);
+
+                    if (approveTxHash) {
+                        step = BuyTicketStep.SWAP;
+                        setBuyStep(step);
+                        await delay(1000); // wait for 1inch API to read correct approval
+                    }
+                } catch (e) {
+                    console.log('Approve swap failed', e);
+                }
+            } else {
+                step = BuyTicketStep.SWAP;
+                setBuyStep(step);
             }
-        } else {
-            step = BuyTicketStep.SWAP;
-            setBuyStep(step);
         }
 
         if (step === BuyTicketStep.SWAP) {
             try {
-                const swapTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
-                const swapTxHash = swapTransaction ? await sendTransaction(swapTransaction) : undefined;
+                let swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+                // retry once
+                if (!swapRawTransaction) {
+                    await delay(1200);
+                    swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+                }
+
+                const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
 
                 if (swapTxHash) {
                     step = BuyTicketStep.APPROVE_BUY;
@@ -1975,7 +2007,7 @@ const Ticket: React.FC<TicketProps> = ({
                     collateralIndex={selectedCollateralIndex}
                     tokenSymbol={isEth && !swapToThales ? CRYPTO_CURRENCY_MAP.WETH : usedCollateralForBuy}
                     isAllowing={isAllowing}
-                    onSubmit={swapToThales && !hasSwapAllowance ? handleSwapAllowance : handleAllowance}
+                    onSubmit={swapToThales && !hasSwapAllowance ? handleSwapAllowance : handleAllowance} // TODO: remove handleSwapAllowance
                     onClose={() => setOpenApprovalModal(false)}
                 />
             )}

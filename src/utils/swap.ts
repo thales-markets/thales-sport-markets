@@ -95,7 +95,7 @@ export const buildTxForApproveTradeWithRouter = async (
         };
     } catch (e) {
         console.log(e);
-        return {};
+        return undefined;
     }
 };
 
