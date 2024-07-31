@@ -1019,7 +1019,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        priority: 103,
+        priority: 102,
         hidden: false,
         tooltipKey: 'common.football-tooltip',
     },
