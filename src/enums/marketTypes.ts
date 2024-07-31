@@ -201,6 +201,15 @@ export enum MarketType {
 
     // Correct score
     CORRECT_SCORE = 10100,
+
+    // Total exact per team
+    TOTAL_EXACT_HOME_TEAM = 10143,
+    TOTAL_EXACT_AWAY_TEAM = 10144,
+    // Total exact per team - half for soccer
+    FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM = 10145,
+    FIRST_PERIOD_TOTAL_EXACT_AWAY_TEAM = 10146,
+    SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM = 10147,
+    SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM = 10148,
 }
 
 export enum MarketTypeGroup {
