@@ -196,7 +196,8 @@
         "status": "Stato",
         "wrap-and-buy": "Avvolgi ETH e acquista",
         "wrap-eth-tooltip": "Il tuo ETH viene prima avvolto in WETH e poi passato al contratto",
-        "try-again": "Riprova"
+        "try-again": "Riprova",
+        "election-tooltip": "La fonte della risoluzione sarà Associated Press, Fox News e NBC. Questi mercati si risolveranno una volta che tutte e tre le fonti indicheranno la corsa per lo stesso candidato. Se tutte e tre le fonti non avranno indetto la corsa per lo stesso candidato entro l'11 novembre, tutte le scommesse verranno annullate."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -283,7 +284,10 @@
                 "handball": "Palla a mano",
                 "volleyball": "Pallavolo",
                 "rugby": "Rugby",
-                "waterpolo": "Pallanuoto"
+                "waterpolo": "Pallanuoto",
+                "olympicgames": "Giochi Olimpici",
+                "tabletennis": "Ping-pong",
+                "politics": "Politica"
             },
             "all": "All",
             "datepicker": {
@@ -882,7 +886,13 @@
             "no-funds": "Assicurati che il tuo portafoglio disponga di fondi sufficienti",
             "invalid-amount": "importo non valido",
             "enter-amount": "Inserire l'importo",
-            "transaction-pending": "Transazione in sospeso"
+            "transaction-pending": "Transazione in sospeso",
+            "enter-amount-per-user": "Inserisci l'importo per utente",
+            "fund-batch": "Finanzia più indirizzi",
+            "total-amount-batch": "L'importo totale sarà {{ amount }} multiplo per {{ count }} indirizzo/i del portafoglio.",
+            "duplicate": "Rilevati indirizzi di portafoglio duplicati",
+            "enter-wallet-addresses": "Inserisci gli indirizzi del portafoglio",
+            "one-or-more-address-invalid": "Uno o più indirizzi di portafoglio inseriti non sono validi"
         },
         "send-free-bet": "Invia scommessa gratuita"
     },

@@ -317,9 +317,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     // Set free bet if user has free bet balance
     useEffect(() => {
-        if (freeBetBalanceExists) {
-            setIsFreeBetActive(true);
-        }
+        setIsFreeBetActive(freeBetBalanceExists);
     }, [freeBetBalanceExists]);
 
     const sportsAmmData: SportsAmmData | undefined = useMemo(() => {
@@ -382,6 +380,7 @@ const Ticket: React.FC<TicketProps> = ({
             selectedCollateralItem && selectedCollateralItem.balanceDollarValue < 3;
 
         const maxBalanceItem = getMaxCollateralDollarValue(balanceList);
+        console.log(maxBalanceItem);
 
         if (
             maxBalanceItem &&
@@ -391,7 +390,7 @@ const Ticket: React.FC<TicketProps> = ({
             dispatch(
                 setPaymentSelectedCollateralIndex({
                     selectedCollateralIndex: maxBalanceItem.index,
-                    networkId: networkId,
+                    networkId,
                 })
             );
         }

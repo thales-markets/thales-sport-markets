@@ -196,7 +196,8 @@
         "status": "Estado",
         "wrap-eth-tooltip": "Su ETH primero se incluye en WETH y luego se pasa al contrato.",
         "wrap-and-buy": "Envuelva ETH y compre",
-        "try-again": "Intentar otra vez"
+        "try-again": "Intentar otra vez",
+        "election-tooltip": "La fuente de resolución será Associated Press, Fox News y NBC. Estos mercados se resolverán una vez que las tres fuentes convoquen la carrera para el mismo candidato. Si las tres fuentes no han convocado la carrera para el mismo candidato antes del 11 de noviembre, se anularán todas las apuestas."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -283,7 +284,10 @@
                 "handball": "Balonmano",
                 "waterpolo": "Polo acuático",
                 "rugby": "Rugby",
-                "volleyball": "Vóleibol"
+                "volleyball": "Vóleibol",
+                "tabletennis": "Tenis de mesa",
+                "politics": "Política",
+                "olympicgames": "Juegos olímpicos"
             },
             "all": "Todo",
             "datepicker": {
@@ -882,7 +886,13 @@
             "approve-success": "Aprobado exitosamente",
             "enter-amount": "Ingrese la cantidad",
             "fund-successful": "Fondo exitoso",
-            "enter-wallet-address": "Ingrese la dirección de la billetera"
+            "enter-wallet-address": "Ingrese la dirección de la billetera",
+            "enter-wallet-addresses": "Ingrese direcciones de billetera",
+            "one-or-more-address-invalid": "Una o más direcciones de billetera ingresadas no son válidas",
+            "enter-amount-per-user": "Ingrese el monto por usuario",
+            "total-amount-batch": "El monto total será {{ amount }} múltiplo de {{ count }} dirección(es) de billetera.",
+            "duplicate": "Direcciones de billetera duplicadas detectadas",
+            "fund-batch": "Financiar varias direcciones"
         },
         "send-free-bet": "Enviar apuesta gratis"
     },

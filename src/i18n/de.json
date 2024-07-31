@@ -196,7 +196,8 @@
         "status": "Status",
         "wrap-and-buy": "ETH verpacken und kaufen",
         "wrap-eth-tooltip": "Ihr ETH wird zuerst in WETH verpackt und dann an den Vertrag übergeben",
-        "try-again": "Versuchen Sie es erneut"
+        "try-again": "Versuchen Sie es erneut",
+        "election-tooltip": "Die Entscheidungsquellen sind Associated Press, Fox News und NBC. Diese Märkte werden entschieden, sobald alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen. Wenn bis zum 11. November nicht alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen, werden alle Wetten ungültig."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -283,7 +284,10 @@
                 "waterpolo": "Wasser Polo",
                 "rugby": "Rugby",
                 "volleyball": "Volleyball",
-                "handball": "Handball"
+                "handball": "Handball",
+                "tabletennis": "Tischtennis",
+                "olympicgames": "Olympische Spiele",
+                "politics": "Politik"
             },
             "all": "Alle",
             "datepicker": {
@@ -887,7 +891,13 @@
             "insufficient-balance": "Mangelhaftes Gleichgewicht",
             "enter-wallet-address": "Wallet-Adresse eingeben",
             "fund-successful": "Fonds erfolgreich",
-            "invalid-wallet-address": "Ungültige Wallet-Adresse"
+            "invalid-wallet-address": "Ungültige Wallet-Adresse",
+            "fund-batch": "Mehrere Adressen finanzieren",
+            "enter-wallet-addresses": "Wallet-Adressen eingeben",
+            "duplicate": "Doppelte Wallet-Adressen erkannt",
+            "enter-amount-per-user": "Geben Sie den Betrag pro Benutzer ein",
+            "total-amount-batch": "Der Gesamtbetrag beträgt {{ amount }} multipliziert mit {{ count }} Wallet-Adresse(n).",
+            "one-or-more-address-invalid": "Eine oder mehrere eingegebene Wallet-Adressen sind ungültig"
         },
         "send-free-bet": "Gratiswette senden"
     },

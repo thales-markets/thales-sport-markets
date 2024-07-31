@@ -196,7 +196,8 @@
         "status": "สถานะ",
         "wrap-and-buy": "ห่อ ETH แล้วซื้อ",
         "wrap-eth-tooltip": "ETH ของคุณจะถูกรวมเข้ากับ WETH ก่อนแล้วจึงส่งต่อไปยังสัญญา",
-        "try-again": "ลองอีกครั้ง"
+        "try-again": "ลองอีกครั้ง",
+        "election-tooltip": "แหล่งที่มาของการแก้ปัญหาคือ Associated Press, Fox News และ NBC ตลาดเหล่านี้จะคลี่คลายเมื่อแหล่งข่าวทั้งสามแหล่งเรียกร้องให้มีการแข่งขันสำหรับผู้สมัครคนเดียวกัน หากแหล่งข้อมูลทั้งสามแห่งไม่เรียกการแข่งขันสำหรับผู้สมัครคนเดียวกันภายในวันที่ 11 พฤศจิกายน การเดิมพันทั้งหมดจะเป็นโมฆะ"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -283,7 +284,10 @@
                 "handball": "แฮนด์บอล",
                 "volleyball": "วอลเลย์บอล",
                 "rugby": "รักบี้",
-                "waterpolo": "โปโลน้ำ"
+                "waterpolo": "โปโลน้ำ",
+                "politics": "การเมือง",
+                "olympicgames": "กีฬาโอลิมปิก",
+                "tabletennis": "ปิงปอง"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
@@ -883,7 +887,13 @@
             "enter-wallet-address": "ป้อนที่อยู่กระเป๋าสตางค์",
             "insufficient-balance": "ยอดคงเหลือไม่เพียงพอ",
             "enter-amount": "ใส่จำนวนเงิน",
-            "funding": "เงินทุน..."
+            "funding": "เงินทุน...",
+            "total-amount-batch": "จำนวนเงินทั้งหมดจะเท่ากับ {{ amount }} คูณด้วยที่อยู่กระเป๋าสตางค์ {{ count }} รายการ",
+            "one-or-more-address-invalid": "ที่อยู่กระเป๋าเงินที่ป้อนอย่างน้อยหนึ่งรายการไม่ถูกต้อง",
+            "enter-amount-per-user": "ป้อนจำนวนเงินต่อผู้ใช้",
+            "fund-batch": "กองทุนที่อยู่หลายแห่ง",
+            "enter-wallet-addresses": "ป้อนที่อยู่กระเป๋าเงิน",
+            "duplicate": "ตรวจพบที่อยู่กระเป๋าเงินที่ซ้ำกัน"
         },
         "send-free-bet": "ส่งเดิมพันฟรี"
     },

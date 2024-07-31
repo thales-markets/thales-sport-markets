@@ -196,7 +196,8 @@
         "status": "地位",
         "wrap-and-buy": "包装 ETH 并购买",
         "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约",
-        "try-again": "再试一次"
+        "try-again": "再试一次",
+        "election-tooltip": "解决来源将是美联社、福克斯新闻和 NBC。一旦所有三个来源都宣布同一位候选人获胜，这些市场就会解决。如果所有三个来源在 11 月 11 日之前都没有宣布同一位候选人获胜，则所有投注将作废。"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -283,7 +284,10 @@
                 "volleyball": "排球",
                 "handball": "手球",
                 "rugby": "橄榄球",
-                "waterpolo": "水球"
+                "waterpolo": "水球",
+                "olympicgames": "奥运会",
+                "tabletennis": "乒乓球",
+                "politics": "政治"
             },
             "all": "所有",
             "datepicker": {
@@ -883,7 +887,13 @@
             "enter-amount": "输入金额",
             "approve-success": "成功批准",
             "no-funds": "请确保你的钱包有足够的资金",
-            "fund": "发送免费投注"
+            "fund": "发送免费投注",
+            "total-amount-batch": "总金额将是 {{ amount }} 乘以 {{ count }} 个钱包地址。",
+            "enter-wallet-addresses": "输入钱包地址",
+            "fund-batch": "资助多个地址",
+            "duplicate": "检测到重复的钱包地址",
+            "one-or-more-address-invalid": "输入的一个或多个钱包地址无效",
+            "enter-amount-per-user": "输入每个用户的金额"
         },
         "send-free-bet": "发送免费投注"
     },

@@ -196,7 +196,8 @@
         "status": "Statut",
         "wrap-and-buy": "Enveloppez l’ETH et achetez",
         "wrap-eth-tooltip": "Votre ETH est d'abord enveloppé dans WETH puis transmis au contrat",
-        "try-again": "Essayer à nouveau"
+        "try-again": "Essayer à nouveau",
+        "election-tooltip": "La source de résolution sera Associated Press, Fox News et NBC. Ces marchés se résoudront une fois que les trois sources auront annoncé la course pour le même candidat. Si les trois sources n’ont pas annoncé la course pour le même candidat avant le 11 novembre, tous les paris seront annulés."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
@@ -282,7 +283,10 @@
                 "handball": "Handball",
                 "waterpolo": "Water polo",
                 "rugby": "Le rugby",
-                "volleyball": "Volley-ball"
+                "volleyball": "Volley-ball",
+                "olympicgames": "Jeux olympiques",
+                "tabletennis": "Tennis de table",
+                "politics": "Politique"
             },
             "all": "Tous",
             "datepicker": {
@@ -883,7 +887,13 @@
             "transaction-pending": "Transaction en attente",
             "enter-amount": "Entrer le montant",
             "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
-            "insufficient-balance": "Solde insuffisant"
+            "insufficient-balance": "Solde insuffisant",
+            "enter-wallet-addresses": "Entrez les adresses de portefeuille",
+            "one-or-more-address-invalid": "Une ou plusieurs adresses de portefeuille saisies ne sont pas valides",
+            "enter-amount-per-user": "Entrez le montant par utilisateur",
+            "fund-batch": "Financer plusieurs adresses",
+            "duplicate": "Adresses de portefeuille en double détectées",
+            "total-amount-batch": "Le montant total sera de {{ amount }} multiple de {{ count }} adresse(s) de portefeuille."
         },
         "send-free-bet": "Envoyer un pari gratuit"
     },
