@@ -67,7 +67,8 @@
             "to-label": "ถึง",
             "balance-label": "ยอดเงิน: {{amount}}",
             "swap-label": "แลกเปลี่ยน",
-            "swap-progress-label": "กำลังดำเนินการแลกเปลี่ยน…"
+            "swap-progress-label": "กำลังดำเนินการแลกเปลี่ยน…",
+            "approve": "อนุมัติการแลกเปลี่ยน"
         },
         "enable-wallet-access": {
             "approve-label": "อนุมัติ {{currencyKey}}",
@@ -194,7 +195,8 @@
         "filters": "ตัวกรอง",
         "status": "สถานะ",
         "wrap-and-buy": "ห่อ ETH แล้วซื้อ",
-        "wrap-eth-tooltip": "ETH ของคุณจะถูกรวมเข้ากับ WETH ก่อนแล้วจึงส่งต่อไปยังสัญญา"
+        "wrap-eth-tooltip": "ETH ของคุณจะถูกรวมเข้ากับ WETH ก่อนแล้วจึงส่งต่อไปยังสัญญา",
+        "try-again": "ลองอีกครั้ง"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -678,7 +680,13 @@
             "swap-thales-tooltip": "ทั้งหมด",
             "swap-thales": "สลับไปที่ THALES เพื่อการเสนอราคาที่ดีกว่า",
             "disable-free-bet": "ปิดการใช้งานยอดเดิมพันฟรี",
-            "swap-thales-receive": "รับขั้นต่ำ"
+            "swap-thales-receive": "รับขั้นต่ำ",
+            "buy-steps": {
+                "approve-swap": "อนุมัติการแลกเปลี่ยนเป็น {{currencyKey}}",
+                "approve-buy": "อนุมัติการซื้อด้วย {{currencyKey}}",
+                "swap": "สลับเป็น {{currencyKey}}",
+                "buy": "ซื้อด้วย {{currencyKey}}"
+            }
         },
         "nav-menu": {
             "items": {

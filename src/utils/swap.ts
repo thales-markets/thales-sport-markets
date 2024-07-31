@@ -2,14 +2,13 @@ import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { Network } from 'enums/network';
 import { BigNumber, BigNumberish } from 'ethers';
+import { coinFormatter } from 'thales-utils';
 import { SupportedNetwork } from 'types/network';
 import { SwapParams } from 'types/swap';
 import { Coins } from 'types/tokens';
 import { Address } from 'viem';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 import networkConnector from './networkConnector';
-import { delay } from './timer';
-import { coinFormatter } from 'thales-utils';
 
 export const getSwapParams = (
     networkId: SupportedNetwork,
@@ -39,12 +38,17 @@ const apiRequestUrl = (networkId: Network, methodName: string, queryParams: any)
 export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams) => {
     const url = apiRequestUrl(networkId, '/quote', { ...swapParams });
 
-    const response = await fetch(url);
-    const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '' });
+    try {
+        const response = await fetch(url);
+        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '' });
 
-    return responseBody.dstAmount
-        ? coinFormatter(responseBody.dstAmount, networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
-        : 0;
+        return responseBody.dstAmount
+            ? coinFormatter(responseBody.dstAmount, networkId, CRYPTO_CURRENCY_MAP.THALES as Coins)
+            : 0;
+    } catch (e) {
+        console.log(e);
+        return 0;
+    }
 };
 
 export const checkSwapAllowance = async (
@@ -57,10 +61,10 @@ export const checkSwapAllowance = async (
 
     try {
         const response = await fetch(url);
-        const data = await response.json();
+        const data = response.ok ? await response.json() : { allowance: 0 };
         return BigNumber.from(data.allowance).gte(amount);
-    } catch (err: any) {
-        console.log(err);
+    } catch (e) {
+        console.log(e);
         return false;
     }
 };
@@ -73,21 +77,26 @@ export const buildTxForApproveTradeWithRouter = async (
 ) => {
     const url = apiRequestUrl(networkId, '/approve/transaction', amount ? { tokenAddress, amount } : { tokenAddress });
 
-    const response = await fetch(url);
-    const rawTransaction = await response.json();
+    try {
+        const response = await fetch(url);
+        const rawTransaction = await response.json();
 
-    const gasLimit = Number(
-        await networkConnector.signer?.estimateGas({
+        const gasLimit = Number(
+            await networkConnector.signer?.estimateGas({
+                ...rawTransaction,
+                from: walletAddress,
+            })
+        );
+
+        return {
             ...rawTransaction,
+            gas: gasLimit,
             from: walletAddress,
-        })
-    );
-
-    return {
-        ...rawTransaction,
-        gas: gasLimit,
-        from: walletAddress,
-    };
+        };
+    } catch (e) {
+        console.log(e);
+        return {};
+    }
 };
 
 // Fetch the swap transaction details from the API (returns { dstAmount, tx })
@@ -97,10 +106,15 @@ export const buildTxForSwap = async (
 ): Promise<{ dstAmount: BigNumberish; tx: string }> => {
     const url = apiRequestUrl(networkId, '/swap', swapParams);
 
-    const response = await fetch(url);
-    const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '', tx: '' });
+    try {
+        const response = await fetch(url);
+        const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '', tx: '' });
 
-    return responseBody;
+        return responseBody;
+    } catch (e) {
+        console.log(e);
+        return Promise.resolve({ dstAmount: '', tx: '' });
+    }
 };
 
 // Send a transaction, return its hash
@@ -115,38 +129,8 @@ export const sendTransaction = async (transaction: any) => {
             params: [transaction],
         });
     } catch (e) {
-        console.log(e);
+        console.log(e, transaction);
     }
 
     return txHash;
-};
-
-// TODO: delete
-export const handleSwap = async (
-    networkId: SupportedNetwork,
-    walletAddress: Address,
-    buyIn: BigNumber,
-    tokenAddress: Address
-) => {
-    if (multipleCollateralContract) {
-        const swapParams = getSwapParams(networkId, walletAddress, buyIn, tokenAddress);
-
-        const swapAllowance = await checkSwapAllowance(networkId, walletAddress, swapParams.src, buyIn);
-        await delay(1000); // rate limit
-
-        if (!swapAllowance) {
-            const approveSwapTransaction = await buildTxForApproveTradeWithRouter(
-                networkId,
-                walletAddress,
-                swapParams.src,
-                buyIn.toString()
-            );
-            const approveTxHash = await sendTransaction(approveSwapTransaction);
-            console.log('Approve tx hash: ', approveTxHash);
-        }
-
-        const swapTransaction = (await buildTxForSwap(networkId, swapParams)).tx;
-        const swapTxHash = swapTransaction ? await sendTransaction(swapTransaction) : undefined;
-        console.log('Swap tx hash: ', swapTxHash);
-    }
 };

@@ -67,7 +67,8 @@
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Swap",
-            "swap-progress-label": "Swapping in progress..."
+            "swap-progress-label": "Swapping in progress...",
+            "approve": "Одобрить обмен"
         },
         "enable-wallet-access": {
             "approve-label": "Approve {{currencyKey}}",
@@ -194,7 +195,8 @@
         "filters": "Фильтры",
         "status": "Положение дел",
         "wrap-and-buy": "Заверните ETH и купите",
-        "wrap-eth-tooltip": "Ваш ETH сначала оборачивается в WETH, а затем передается в контракт."
+        "wrap-eth-tooltip": "Ваш ETH сначала оборачивается в WETH, а затем передается в контракт.",
+        "try-again": "Попробуйте еще раз"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -676,7 +678,13 @@
             "use-free-bet": "Используйте бесплатную ставку",
             "swap-thales": "Поменяйтесь на THALES, чтобы получить лучшее предложение.",
             "swap-thales-receive": "Минимальное получение",
-            "disable-free-bet": "Отключить баланс бесплатных ставок"
+            "disable-free-bet": "Отключить баланс бесплатных ставок",
+            "buy-steps": {
+                "approve-buy": "Одобрить покупку с помощью {{currencyKey}}",
+                "swap": "Обмен на {{currencyKey}}",
+                "approve-swap": "Одобрить обмен на {{currencyKey}}",
+                "buy": "Купить с помощью {{currencyKey}}"
+            }
         },
         "discounted-per": "Со скидкой согласно",
         "nav-menu": {

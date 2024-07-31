@@ -55,7 +55,8 @@
             "to-label": "À",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Échange",
-            "swap-progress-label": "Échange en cours..."
+            "swap-progress-label": "Échange en cours...",
+            "approve": "Approuver l'échange"
         },
         "enable-wallet-access": {
             "approve-label": "Autoriser {{currencyKey}}",
@@ -194,7 +195,8 @@
         "filters": "Filtres",
         "status": "Statut",
         "wrap-and-buy": "Enveloppez l’ETH et achetez",
-        "wrap-eth-tooltip": "Votre ETH est d'abord enveloppé dans WETH puis transmis au contrat"
+        "wrap-eth-tooltip": "Votre ETH est d'abord enveloppé dans WETH puis transmis au contrat",
+        "try-again": "Essayer à nouveau"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
@@ -676,7 +678,13 @@
             "use-free-bet": "Utiliser le pari gratuit",
             "swap-thales": "Échangez chez THALES pour un meilleur devis",
             "swap-thales-receive": "Réception minimale",
-            "disable-free-bet": "Désactiver les soldes de paris gratuits"
+            "disable-free-bet": "Désactiver les soldes de paris gratuits",
+            "buy-steps": {
+                "swap": "Passer à {{currencyKey}}",
+                "approve-buy": "Approuver l'achat avec {{currencyKey}}",
+                "buy": "Achetez avec {{currencyKey}}",
+                "approve-swap": "Approuver l'échange vers {{currencyKey}}"
+            }
         },
         "discounted-per": "Remise selon",
         "nav-menu": {

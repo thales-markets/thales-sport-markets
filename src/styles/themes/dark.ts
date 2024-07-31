@@ -83,6 +83,11 @@ export default {
             secondary: Colors.WHITE,
         },
     },
+    success: {
+        textColor: {
+            primary: Colors.GREEN,
+        },
+    },
     error: {
         background: {
             primary: Colors.NAVY_BLUE,

@@ -76,7 +76,8 @@
             "to-label": "目标",
             "balance-label": "钱包余额: {{amount}}",
             "swap-label": "兑换",
-            "swap-progress-label": "兑换进行中..."
+            "swap-progress-label": "兑换进行中...",
+            "approve": "同意掉期"
         },
         "enable-wallet-access": {
             "approve-label": "批准 {{currencyKey}}",
@@ -194,7 +195,8 @@
         "filters": "筛选器",
         "status": "地位",
         "wrap-and-buy": "包装 ETH 并购买",
-        "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约"
+        "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约",
+        "try-again": "再试一次"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -676,7 +678,13 @@
             "use-free-bet": "使用免费投注",
             "swap-thales-tooltip": "全部",
             "disable-free-bet": "禁用免费投注余额",
-            "swap-thales-receive": "最低接收"
+            "swap-thales-receive": "最低接收",
+            "buy-steps": {
+                "buy": "使用 {{currencyKey}} 购买",
+                "approve-swap": "批准兑换为 {{currencyKey}}",
+                "swap": "兑换为 {{currencyKey}}",
+                "approve-buy": "使用 {{currencyKey}} 批准购买"
+            }
         },
         "discounted-per": "折扣按",
         "nav-menu": {

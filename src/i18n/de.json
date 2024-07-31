@@ -76,7 +76,8 @@
             "to-label": "Zu",
             "balance-label": "Guthaben: {{amount}}",
             "swap-label": "Tauschen",
-            "swap-progress-label": "Tausch wird fertig gestellt..."
+            "swap-progress-label": "Tausch wird fertig gestellt...",
+            "approve": "Tausch genehmigen"
         },
         "enable-wallet-access": {
             "approve-label": "{{currencyKey}} genehmigen",
@@ -194,7 +195,8 @@
         "filters": "Filter",
         "status": "Status",
         "wrap-and-buy": "ETH verpacken und kaufen",
-        "wrap-eth-tooltip": "Ihr ETH wird zuerst in WETH verpackt und dann an den Vertrag übergeben"
+        "wrap-eth-tooltip": "Ihr ETH wird zuerst in WETH verpackt und dann an den Vertrag übergeben",
+        "try-again": "Versuchen Sie es erneut"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -676,7 +678,13 @@
             "use-free-bet": "Gratiswette nutzen",
             "disable-free-bet": "Kostenlose Wettguthaben deaktivieren",
             "swap-thales-receive": "Mindestempfang",
-            "swap-thales": "Wechseln Sie zu THALES für ein besseres Angebot"
+            "swap-thales": "Wechseln Sie zu THALES für ein besseres Angebot",
+            "buy-steps": {
+                "approve-swap": "Tausch zu {{currencyKey}} genehmigen",
+                "approve-buy": "Kauf mit {{currencyKey}} genehmigen",
+                "buy": "Kaufen mit {{currencyKey}}",
+                "swap": "Wechseln zu {{currencyKey}}"
+            }
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {

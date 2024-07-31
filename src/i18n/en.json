@@ -102,6 +102,7 @@
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Swap",
+            "approve": "Approve swap",
             "swap-progress-label": "Swapping in progress..."
         },
         "enable-wallet-access": {
@@ -161,6 +162,7 @@
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
+        "try-again": "Try again",
         "select-date": "Select date...",
         "tags-placeholder": "Search tags...",
         "remove-tag-tooltip": "Click to remove tag",
@@ -792,6 +794,12 @@
                 "enter-value": "Enter value",
                 "invalid-value": "Invalid value",
                 "tooltip": "The transfer won’t go through if the bridge rate moves unfavorably by more than this percentage when the transfer is executed."
+            },
+            "buy-steps": {
+                "approve-swap": "Approve swap to {{currencyKey}}",
+                "swap": "Swap to {{currencyKey}}",
+                "approve-buy": "Approve buy with {{currencyKey}}",
+                "buy": "Buy with {{currencyKey}}"
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
@@ -877,7 +885,7 @@
         "no-result": "There are no results for this table",
         "earned": "Earned",
         "header": "Create referral links",
-        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>1% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
+        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>0.5% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
         "nav-items": {
             "all-transactions": "All transactions",
             "see-result-by-trader": "See result by trader",

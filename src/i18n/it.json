@@ -67,7 +67,8 @@
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Swap",
-            "swap-progress-label": "Swapping in progress..."
+            "swap-progress-label": "Swapping in progress...",
+            "approve": "Approva lo scambio"
         },
         "enable-wallet-access": {
             "approve-label": "Approve {{currencyKey}}",
@@ -194,7 +195,8 @@
         "filters": "Filtri",
         "status": "Stato",
         "wrap-and-buy": "Avvolgi ETH e acquista",
-        "wrap-eth-tooltip": "Il tuo ETH viene prima avvolto in WETH e poi passato al contratto"
+        "wrap-eth-tooltip": "Il tuo ETH viene prima avvolto in WETH e poi passato al contratto",
+        "try-again": "Riprova"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -676,7 +678,13 @@
             "swap-thales-tooltip": "TUTTO",
             "swap-thales": "Passa a THALES per un preventivo migliore",
             "disable-free-bet": "Disabilita i saldi delle scommesse gratuite",
-            "use-free-bet": "Usa la scommessa gratuita"
+            "use-free-bet": "Usa la scommessa gratuita",
+            "buy-steps": {
+                "approve-swap": "Approva lo scambio con {{currencyKey}}",
+                "approve-buy": "Approva l'acquisto con {{currencyKey}}",
+                "buy": "Acquista con {{currencyKey}}",
+                "swap": "Scambia in {{currencyKey}}"
+            }
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {
