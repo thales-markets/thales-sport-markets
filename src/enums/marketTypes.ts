@@ -198,6 +198,9 @@ export enum MarketType {
     US_ELECTION_WINNING_PARTY_NEVADA = 10905,
     US_ELECTION_WINNING_PARTY_PENNSYLVANIA = 10906,
     US_ELECTION_WINNING_PARTY_WINSCONSIN = 10907,
+
+    // Correct score
+    CORRECT_SCORE = 10100,
 }
 
 export enum MarketTypeGroup {
