@@ -5,6 +5,10 @@
     font-size: 20px;
 }
 
+.icon--politics:before {
+    content: '\002E';
+}
+
 .icon--stats:before {
     content: '\002F';
 }
@@ -459,4 +463,8 @@
 
 .icon--rugby:before {
     content: '\0100';
+}
+
+.icon--tabletennis:before {
+    content: '\0101';
 }

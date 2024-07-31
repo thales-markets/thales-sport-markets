@@ -11,6 +11,7 @@ import {
     SPREAD_MARKET_TYPES,
     TOTAL_MARKET_TYPES,
     TOTAL_ODD_EVEN_MARKET_TYPES,
+    UFC_SPECIFIC_MARKET_TYPES,
     WINNER_MARKET_TYPES,
     YES_NO_PLAYER_PROPS_MARKET_TYPES,
 } from 'constants/marketTypes';
@@ -42,7 +43,7 @@ export const formatMarketOdds = (oddsType: OddsType, odds: number | undefined) =
 };
 
 export const isOneSideMarket = (league: number) =>
-    getLeagueSport(league) === Sport.MOTOSPORT || league == League.GOLF_WINNER;
+    getLeagueSport(league) === Sport.MOTOSPORT || league == League.GOLF_WINNER || league == League.US_ELECTION;
 
 export const isPlayerPropsMarket = (marketType: MarketType) => {
     return PLAYER_PROPS_MARKET_TYPES.includes(marketType);
@@ -129,6 +130,10 @@ export const isScoreMarket = (marketType: MarketType) => {
 
 export const isOtherYesNoMarket = (marketType: MarketType) => {
     return OTHER_YES_NO_MARKET_TYPES.includes(marketType);
+};
+
+export const isUfcSpecificMarket = (marketType: MarketType) => {
+    return UFC_SPECIFIC_MARKET_TYPES.includes(marketType);
 };
 
 const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>

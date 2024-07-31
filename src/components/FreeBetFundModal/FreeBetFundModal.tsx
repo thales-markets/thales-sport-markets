@@ -1,10 +1,14 @@
+import { Chip } from '@material-ui/core';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import Modal from 'components/Modal';
+import Checkbox from 'components/fields/Checkbox/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
+import TextArea from 'components/fields/TextArea';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { BigNumber, ethers } from 'ethers';
+import _ from 'lodash';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -20,7 +24,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { coinParser, formatCurrencyWithKey } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetCollaterals } from 'utils/collaterals';
@@ -52,6 +56,10 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const [fundWalletAddress, setFundWalletAddress] = useState<string>('');
     const [fundWalletValidationMessage, setFundWalletValidationMessage] = useState<string>('');
     const [openApprovalModal, setOpenApprovalModal] = useState<boolean>(false);
+
+    const [isFundBatch, setIsFundBatch] = useState<boolean>(false);
+    const [fundBatchRaw, setFundBatchRaw] = useState<string>('');
+    const [validationForTextArea, setValidationForTextArea] = useState<string>('');
 
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
@@ -88,39 +96,21 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             inProgress ||
             isAllowing ||
             !amount ||
-            !fundWalletAddress ||
-            !!validationMessage ||
-            !!fundWalletValidationMessage
+            (!isFundBatch && (!fundWalletAddress || !!fundWalletValidationMessage)) ||
+            (isFundBatch && (!fundBatchRaw || !!validationForTextArea)) ||
+            !!validationMessage
         );
-    }, [amount, fundWalletAddress, fundWalletValidationMessage, inProgress, isAllowing, validationMessage]);
-
-    useEffect(() => {
-        const { signer, multipleCollateral } = networkConnector;
-
-        const freeBetHolderContractAddress = freeBetHolder && freeBetHolder?.addresses[networkId];
-
-        if (signer && multipleCollateral && freeBetHolderContractAddress) {
-            const collateralContractWithSigner = multipleCollateral[selectedCollateral]?.connect(signer);
-
-            const getAllowance = async () => {
-                try {
-                    const parsedAmount = coinParser(Number(amount).toString(), networkId, selectedCollateral);
-                    const allowance = await checkAllowance(
-                        parsedAmount,
-                        collateralContractWithSigner,
-                        walletAddress,
-                        freeBetHolderContractAddress
-                    );
-                    setAllowance(allowance);
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-            if (isWalletConnected) {
-                getAllowance();
-            }
-        }
-    }, [walletAddress, isWalletConnected, hasAllowance, amount, isAllowing, networkId, selectedCollateral]);
+    }, [
+        amount,
+        fundBatchRaw,
+        fundWalletAddress,
+        fundWalletValidationMessage,
+        inProgress,
+        isAllowing,
+        isFundBatch,
+        validationForTextArea,
+        validationMessage,
+    ]);
 
     useEffect(() => {
         if (fundWalletAddress && !ethers.utils.isAddress(fundWalletAddress))
@@ -189,6 +179,10 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             return <Button disabled={true}>{t('profile.free-bet-modal.insufficient-balance')}</Button>;
         }
 
+        if (isFundBatch && Number(amount) * bulkWalletAddresses.length > selectedCollateralBalance) {
+            return <Button disabled={true}>{t('profile.free-bet-modal.insufficient-balance')}</Button>;
+        }
+
         if (!hasAllowance) {
             return (
                 <Button onClick={() => setOpenApprovalModal(true)}>
@@ -217,7 +211,7 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
     const handleSubmit = async () => {
         const { signer, multipleCollateral, freeBetHolderContract } = networkConnector;
 
-        if (signer && multipleCollateral && freeBetHolderContract && fundWalletAddress) {
+        if (signer && multipleCollateral && freeBetHolderContract && (fundWalletAddress || bulkWalletAddresses)) {
             const collateralAddress = getCollateralAddress(
                 networkId,
                 getCollateralIndex(networkId, selectedCollateral)
@@ -229,13 +223,21 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
             const amountFormatted = coinParser(amount.toString(), networkId, selectedCollateral);
 
             try {
-                const tx = (await freeBetHolderContractWithSigner?.fund(
-                    fundWalletAddress,
-                    collateralAddress,
-                    amountFormatted
-                )) as ethers.ContractTransaction;
+                const tx = isFundBatch
+                    ? ((await freeBetHolderContractWithSigner?.fundBatch(
+                          bulkWalletAddresses,
+                          collateralAddress,
+                          amountFormatted
+                      )) as ethers.ContractTransaction)
+                    : ((await freeBetHolderContractWithSigner?.fund(
+                          fundWalletAddress,
+                          collateralAddress,
+                          amountFormatted
+                      )) as ethers.ContractTransaction);
                 setOpenApprovalModal(false);
                 const txResult = await tx.wait();
+
+                console.log('txResult ', txResult);
 
                 if (txResult && txResult.transactionHash) {
                     toast.update(
@@ -255,20 +257,110 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
         }
     };
 
+    const handleAddressDelete = (walletAddress: string) => {
+        if (fundBatchRaw.includes(',')) {
+            setFundBatchRaw(fundBatchRaw.replace(`${walletAddress},`, ''));
+        } else {
+            setFundBatchRaw(fundBatchRaw.replace(`${walletAddress}\n`, ''));
+        }
+    };
+
+    const bulkWalletAddresses = useMemo(() => {
+        if (fundBatchRaw) {
+            let splitByNewLine = fundBatchRaw.includes(',') ? fundBatchRaw.split(',') : fundBatchRaw.split(/\r?\n/);
+            splitByNewLine = splitByNewLine.map((item) => item.trim()).filter((item) => item);
+
+            const hasDuplicates = _.uniq(splitByNewLine).length !== splitByNewLine.length;
+
+            if (hasDuplicates) {
+                setValidationForTextArea(t('profile.free-bet-modal.duplicate'));
+                return [];
+            }
+
+            if (splitByNewLine.find((item) => !ethers.utils.isAddress(item.trim()))) {
+                setValidationForTextArea(t('profile.free-bet-modal.one-or-more-address-invalid'));
+            } else {
+                setValidationForTextArea('');
+            }
+            return splitByNewLine
+                .filter((item) => item.trim() !== '' && ethers.utils.isAddress(item.trim()))
+                .map((item) => item.trim());
+        }
+        return [];
+    }, [fundBatchRaw, t]);
+
+    useEffect(() => {
+        const { signer, multipleCollateral } = networkConnector;
+
+        const freeBetHolderContractAddress = freeBetHolder && freeBetHolder?.addresses[networkId];
+
+        if (signer && multipleCollateral && freeBetHolderContractAddress) {
+            const collateralContractWithSigner = multipleCollateral[selectedCollateral]?.connect(signer);
+
+            const getAllowance = async () => {
+                const amountForCheck = isFundBatch ? Number(amount) * bulkWalletAddresses.length : Number(amount);
+
+                try {
+                    const parsedAmount = coinParser(Number(amountForCheck).toString(), networkId, selectedCollateral);
+                    const allowance = await checkAllowance(
+                        parsedAmount,
+                        collateralContractWithSigner,
+                        walletAddress,
+                        freeBetHolderContractAddress
+                    );
+                    setAllowance(allowance);
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+            if (isWalletConnected) {
+                getAllowance();
+            }
+        }
+    }, [
+        walletAddress,
+        isWalletConnected,
+        hasAllowance,
+        amount,
+        isAllowing,
+        networkId,
+        selectedCollateral,
+        isFundBatch,
+        bulkWalletAddresses.length,
+    ]);
+
     return (
         <Modal
             title={t('profile.free-bet-modal.title')}
             onClose={() => onClose()}
             shouldCloseOnOverlayClick={false}
-            customStyle={{ overlay: { zIndex: 2000 }, content: { height: '500px', width: isMobile ? '90%' : '' } }}
+            customStyle={{ overlay: { zIndex: 2000 }, content: { minHeight: '500px', width: isMobile ? '90%' : '' } }}
         >
             <Container>
+                <CheckboxWrapper>
+                    <Label>{t('profile.free-bet-modal.fund-batch')}</Label>
+                    <CheckboxContainer>
+                        <Checkbox
+                            disabled={false}
+                            checked={isFundBatch}
+                            value={isFundBatch.toString()}
+                            onChange={(e: any) => {
+                                setIsFundBatch(e.target.checked || false);
+                            }}
+                        />
+                    </CheckboxContainer>
+                </CheckboxWrapper>
                 <InputContainer ref={inputRef}>
                     <NumericInput
                         value={amount}
                         onChange={(e) => {
                             setAmount(e.target.value);
                         }}
+                        label={
+                            isFundBatch
+                                ? t('profile.free-bet-modal.enter-amount-per-user')
+                                : t('profile.free-bet-modal.enter-amount')
+                        }
                         showValidation={inputRefVisible && validationMessage !== ''}
                         validationMessage={validationMessage}
                         inputFontWeight="400"
@@ -297,28 +389,74 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                         validationTooltipZIndex={2004}
                     />
                 </InputContainer>
-                <InputContainer ref={walletAddressInputRef}>
-                    <NumericInput
-                        value={fundWalletAddress}
-                        validationMessage={fundWalletValidationMessage}
-                        showValidation={!!fundWalletValidationMessage && walletAddressInputRefVisible}
-                        inputType="text"
-                        onChange={(e) => setFundWalletAddress(e.target.value)}
-                        borderColor={theme.input.borderColor.tertiary}
-                        inputFontWeight="400"
-                        inputFontSize="12px"
-                        inputPadding="5px 10px"
-                        margin="20px 0px 20px 0px"
-                        placeholder={t('profile.free-bet-modal.enter-wallet-address')}
-                        validationTooltipZIndex={2004}
-                    />
-                </InputContainer>
-
+                {isFundBatch && Number(amount) > 0 && bulkWalletAddresses.length > 0 && (
+                    <Notice>
+                        {t('profile.free-bet-modal.total-amount-batch', {
+                            count: bulkWalletAddresses.length,
+                            amount: formatCurrencyWithKey(selectedCollateral, amount),
+                        })}
+                    </Notice>
+                )}
+                {isFundBatch ? (
+                    <InputContainer ref={walletAddressInputRef}>
+                        <TextArea
+                            label={
+                                isFundBatch
+                                    ? t('profile.free-bet-modal.enter-wallet-addresses')
+                                    : t('profile.free-bet-modal.enter-wallet-address')
+                            }
+                            value={fundBatchRaw}
+                            inputFontSize="12px"
+                            height="150px"
+                            validationMessage={validationForTextArea}
+                            showValidation={!!validationForTextArea && walletAddressInputRefVisible}
+                            onChange={(e) => setFundBatchRaw(e.target.value)}
+                            borderColor={theme.input.borderColor.tertiary}
+                            margin="10px 0px 10px 0px"
+                            placeholder={t('profile.free-bet-modal.enter-wallet-address')}
+                        />
+                    </InputContainer>
+                ) : (
+                    <InputContainer ref={walletAddressInputRef}>
+                        <NumericInput
+                            label={
+                                isFundBatch
+                                    ? t('profile.free-bet-modal.enter-wallet-addresses')
+                                    : t('profile.free-bet-modal.enter-wallet-address')
+                            }
+                            value={fundWalletAddress}
+                            validationMessage={fundWalletValidationMessage}
+                            showValidation={!!fundWalletValidationMessage && walletAddressInputRefVisible}
+                            inputType="text"
+                            onChange={(e) => setFundWalletAddress(e.target.value)}
+                            borderColor={theme.input.borderColor.tertiary}
+                            inputFontWeight="400"
+                            inputFontSize="12px"
+                            inputPadding="5px 10px"
+                            margin="10px 0px 10px 0px"
+                            placeholder={t('profile.free-bet-modal.enter-wallet-address')}
+                            validationTooltipZIndex={2004}
+                        />
+                    </InputContainer>
+                )}
+                {isFundBatch && bulkWalletAddresses.length > 0 && (
+                    <WalletAddressesWrapper>
+                        {bulkWalletAddresses.map((item, index) => {
+                            return (
+                                <Chip
+                                    key={index}
+                                    label={`${item.slice(0, 7)}...`}
+                                    onDelete={() => handleAddressDelete(item)}
+                                />
+                            );
+                        })}
+                    </WalletAddressesWrapper>
+                )}
                 <ButtonContainer>{getSubmitButton()}</ButtonContainer>
             </Container>
             {openApprovalModal && (
                 <ApprovalModal
-                    defaultAmount={amount}
+                    defaultAmount={isFundBatch ? Number(amount) * bulkWalletAddresses.length : amount}
                     collateralIndex={collateralIndex}
                     tokenSymbol={selectedCollateral}
                     isAllowing={isAllowing}
@@ -343,6 +481,70 @@ const ButtonContainer = styled(FlexDivCentered)`
 
 const InputContainer = styled(FlexDiv)`
     width: 100%;
+`;
+
+const CheckboxWrapper = styled(FlexDivRow)`
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const Label = styled.span`
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.primary};
+    @media (max-width: 950px) {
+        line-height: 24px;
+    }
+    i {
+        color: ${(props) => props.theme.textColor.septenary};
+    }
+`;
+
+const WalletAddressesWrapper = styled(FlexDivRow)`
+    flex-wrap: wrap;
+    max-height: 200px;
+    min-height: 80px;
+    overflow-y: auto;
+    justify-content: flex-start;
+`;
+
+const CheckboxContainer = styled.div`
+    margin-left: auto;
+    margin-top: 4px;
+    label {
+        color: ${(props) => props.theme.textColor.secondary};
+        font-size: 12px;
+        line-height: 13px;
+        font-weight: 600;
+        letter-spacing: 0.035em;
+        text-transform: uppercase;
+        padding-top: 18px;
+        padding-left: 18px;
+        input:checked ~ .checkmark {
+            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        }
+    }
+    .checkmark {
+        height: 15px;
+        width: 15px;
+        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        :after {
+            left: 3px;
+            width: 3px;
+            height: 8px;
+            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+            border-width: 0 2px 2px 0;
+        }
+    }
+`;
+
+const Notice = styled.span`
+    margin-top: 3px;
+    color: ${(props) => props.theme.textColor.primary};
+    font-size: 11px;
 `;
 
 export default FreeBetFundModal;

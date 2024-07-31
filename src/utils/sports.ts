@@ -3,6 +3,7 @@ import {
     BOXING_LEAGUES,
     INTERNATIONAL_LEAGUES,
     LeagueMap,
+    OLYMPIC_LEAGUES,
     PLAYER_PROPS_COMBINING_ENABLED_LEAGUES,
 } from '../constants/sports';
 
@@ -51,6 +52,8 @@ export const isBoxingLeague = (league: League) => {
 };
 
 export const isInternationalLeague = (league: League) => INTERNATIONAL_LEAGUES.includes(league);
+
+export const isOlympicLeague = (league: League) => OLYMPIC_LEAGUES.includes(league);
 
 export const isPlayerPropsCombiningEnabled = (league: League) => {
     return PLAYER_PROPS_COMBINING_ENABLED_LEAGUES.includes(league);
