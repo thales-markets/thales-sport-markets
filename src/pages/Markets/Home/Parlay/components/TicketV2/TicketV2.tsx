@@ -902,6 +902,7 @@ const Ticket: React.FC<TicketProps> = ({
                 if (swapTxHash) {
                     step = BuyTicketStep.APPROVE_BUY;
                     setBuyStep(step);
+                    await delay(1000); // wait for THALES balance to increase
                 }
             } catch (e) {
                 console.log('Swap tx failed', e);
@@ -978,7 +979,7 @@ const Ticket: React.FC<TicketProps> = ({
             setIsBuying(true);
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
-            let step = BuyTicketStep.APPROVE_SWAP;
+            let step = buyStep;
             if (swapToThales) {
                 setOpenBuyStepsModal(true);
                 step = await handleBuyWithThalesSteps(step);
@@ -1074,6 +1075,8 @@ const Ticket: React.FC<TicketProps> = ({
 
                 if (txResult && txResult.transactionHash) {
                     setBuyStep(BuyTicketStep.COMPLETED);
+                    setOpenBuyStepsModal(false);
+
                     PLAUSIBLE.trackEvent(
                         tradeData[0].live
                             ? isFreeBetActive
@@ -1222,8 +1225,6 @@ const Ticket: React.FC<TicketProps> = ({
                 toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                 console.log('Error ', e);
             }
-
-            setOpenBuyStepsModal(false);
         }
     };
 
