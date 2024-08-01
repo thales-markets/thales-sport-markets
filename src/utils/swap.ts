@@ -9,6 +9,7 @@ import { Coins } from 'types/tokens';
 import { Address } from 'viem';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 import networkConnector from './networkConnector';
+import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
 
 export const getSwapParams = (
     networkId: SupportedNetwork,
@@ -16,12 +17,14 @@ export const getSwapParams = (
     buyIn: BigNumber,
     tokenAddress: Address
 ): SwapParams => {
+    const src = tokenAddress === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : tokenAddress;
+
     return {
-        src: tokenAddress,
+        src,
         dst: multipleCollateralContract[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[networkId] as Address, // THALES address
         amount: buyIn.toString(),
         from: walletAddress,
-        slippage: 3,
+        slippage: 1,
         disableEstimate: false,
         allowPartialFill: false,
     };
@@ -118,9 +121,12 @@ export const buildTxForSwap = async (
 };
 
 // Send a transaction, return its hash
-export const sendTransaction = async (rawTransaction: any, isParticle: boolean) => {
+export const sendTransaction = async (rawTransaction: any, isParticle: boolean, isEth?: boolean) => {
     if (isParticle) {
         delete rawTransaction.value;
+    }
+    if (isEth) {
+        rawTransaction.value = BigNumber.from(rawTransaction.value).toHexString().replace('0x', '');
     }
 
     let txHash = '';

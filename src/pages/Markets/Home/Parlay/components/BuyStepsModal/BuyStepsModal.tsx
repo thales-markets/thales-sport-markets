@@ -8,15 +8,17 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { defaultButtonProps } from '../styled-components';
+import { Coins } from 'thales-utils';
 
 type BuyStepsModalProps = {
     step: BuyTicketStep;
     isFailed: boolean;
+    currencyKey: Coins;
     onSubmit: () => void;
     onClose: () => void;
 };
 
-const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, onSubmit, onClose }) => {
+const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyKey, onSubmit, onClose }) => {
     const { t } = useTranslation();
 
     const getLoader = () => (
@@ -29,16 +31,19 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, onSubmit,
     const getFailureMark = () => <FailureMark className="icon icon--wrong" />;
 
     const statusFailedOrInProgress = isFailed ? getFailureMark() : getLoader();
+    const isEth = currencyKey === CRYPTO_CURRENCY_MAP.ETH;
 
     return (
         <Modal title={''} onClose={onClose} shouldCloseOnOverlayClick={false}>
             <Container>
-                <FlexDivRow>
-                    <Text>
-                        {t('markets.parlay.buy-steps.approve-swap', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}:
-                    </Text>
-                    {step === BuyTicketStep.APPROVE_SWAP ? statusFailedOrInProgress : getCheckmark()}
-                </FlexDivRow>
+                {!isEth && (
+                    <FlexDivRow>
+                        <Text>
+                            {t('markets.parlay.buy-steps.approve-swap', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}:
+                        </Text>
+                        {step === BuyTicketStep.APPROVE_SWAP ? statusFailedOrInProgress : getCheckmark()}
+                    </FlexDivRow>
+                )}
                 <FlexDivRow>
                     <Text>{t('markets.parlay.buy-steps.swap', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}:</Text>
                     {step === BuyTicketStep.SWAP
@@ -66,11 +71,13 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, onSubmit,
                         : ''}
                 </FlexDivRow>
 
-                <FlexDivCentered>
-                    <Button disabled={!isFailed} onClick={onSubmit} {...defaultButtonProps} width="150px">
-                        {t('common.try-again')}
-                    </Button>
-                </FlexDivCentered>
+                {isFailed && (
+                    <FlexDivCentered>
+                        <Button onClick={onSubmit} {...defaultButtonProps} width="150px">
+                            {t('common.try-again')}
+                        </Button>
+                    </FlexDivCentered>
+                )}
             </Container>
         </Modal>
     );
