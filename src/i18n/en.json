@@ -1198,6 +1198,22 @@
             "next-level": "Next level",
             "total-xp-multiplier": "Total XP multiplier",
             "social-multiplier": "Social XP multiplier"
+        },
+        "leveling-tree": {
+            "explainer": {
+                "xp-explained": "XP Explained",
+                "xp-explained-content": "Season long campaign where users accrue XP until the end of sports season by driving <bold>volume on Overtime</bold> with <bold>multipliers</bold> based on various dynamic metrics and goals.<br/><br/>After the campaign ends, all users will share <highlight>100k OP</highlight> and <highlight>150k ARB</highlight> pro rata based on XP <br><br>While the campaign lasts users will have one off rewards on specific XP LEVELS",
+                "base-xp-accrual": "Base XP Accrual",
+                "base-xp-content": "<bold>1 base XP = 1 $</bold> of volume<br/><br/>After <bold>28 days</bold> in a row of <bold>volume >10$</bold> you have reached <bold>MAX base multiplier</bold><br/><br/>Every missed day of volume below 10$ drops your base <bold>XP by -0.1</bold>",
+                "daily-bonus": "Daily bonus",
+                "parlay-xp": "PARLAY XP BONUS (one off per parlay)",
+                "positions-thales": "Position WITH THALES BONUS (one off per bet)",
+                "days": "days",
+                "games-in-parlay": "games in parlay",
+                "position-thales-content": "Use <bold>THALES</bold> as collateral and you <bold>gain bonus 10% per BASE XP per $</bold> for that specific trade",
+                "twitter-share-bonus": "twitter share bonus (once per day)",
+                "twitter-content": "Share your Overtime <bold>Flex Card</bold> from today's bet <bold>on Twitter: bonus 10% per BASE XP per $</bold> for the rest of the day"
+            }
         }
     }
 }

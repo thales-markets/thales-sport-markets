@@ -4,10 +4,9 @@ import UserStatsV2 from 'pages/Profile/components/UserStatsV2';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
-import BadgeOverview from './components/BadgeOverview';
-import DailyRecap from './components/DailyRecap';
 import Navigation from './components/Navigation';
-import XPOverview from './components/XPOverview';
+import LevelingTree from './pages/LevelingTree';
+import OverdropHome from './pages/OverdropHome';
 
 const Overdrop: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState<OverdropTab>(OverdropTab.OVERDROP_HOME);
@@ -19,11 +18,8 @@ const Overdrop: React.FC = () => {
             </LeftSidebarContainer>
             <MainContainer>
                 <Navigation selectedTab={selectedTab} setSelectedTab={(tab: OverdropTab) => setSelectedTab(tab)} />
-                <XPOverview />
-                <LevelDetailsWrapper>
-                    <DailyRecap />
-                    <BadgeOverview />
-                </LevelDetailsWrapper>
+                {selectedTab == OverdropTab.OVERDROP_HOME && <OverdropHome />}
+                {selectedTab == OverdropTab.LEVELING_TREE && <LevelingTree />}
             </MainContainer>
             <RightSidebarContainer>
                 <UserStatsV2 />
@@ -76,14 +72,6 @@ const MainContainer = styled(FlexDivColumn)`
         margin: 0;
         width: 100%;
     }
-`;
-
-const LevelDetailsWrapper = styled(FlexDivRow)`
-    margin-top: 40px;
-    flex: 1 1 20%;
-    gap: 10px;
-    max-height: 320px;
-    align-items: flex-start;
 `;
 
 export default Overdrop;

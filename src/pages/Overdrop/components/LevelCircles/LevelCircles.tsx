@@ -51,17 +51,18 @@ const Circle = styled(FlexDivColumnCentered)<{ active: boolean }>`
     background-color: ${(props) =>
         props?.active ? props.theme.overdrop.textColor.primary : props.theme.overdrop.background.quaternary};
     border-radius: 50%;
-    width: 23px;
-    min-height: 23px;
-    font-size: 13.5px;
+    width: 20px;
+    min-height: 20px;
+    font-size: 11px;
     font-weight: 900;
     justify-content: center;
     margin: 5px 2px;
+    text-align: center;
 `;
 
 const LabelAbove = styled.span`
     color: ${(props) => props.theme.textColor.primary};
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     font-style: normal;
     text-align: center;

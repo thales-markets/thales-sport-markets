@@ -87,4 +87,5 @@ export const Colors = {
     CHINESE_BLUE: '#3C498A',
     JONQUIL: '#F8C913',
     METALIC_BLUE: '#3D467F',
+    SMOKEY_TOPAZ: '#7C3810',
 };

@@ -174,12 +174,14 @@ export default {
             secondary: '#F1BA2099',
             tertiary: 'rgba(60, 73, 138, 0.15)',
             quaternary: Colors.METALIC_BLUE,
+            active: Colors.NAVY_BLUE_DARK,
         },
         textColor: {
             primary: Colors.YELLOW,
             secondary: Colors.NAVY_BLUE_DARK,
             tertiary: Colors.CHINESE_BLUE,
             quaternary: Colors.NAVY_BLUE_EXTRA_DARK,
+            inactive: Colors.NAVY_BLUE_LIGHT,
         },
         borderColor: {
             primary: Colors.JONQUIL,
@@ -188,6 +190,9 @@ export default {
             background: {
                 primary: Colors.JONQUIL,
                 secondary: 'rgb(21, 27, 54, 0.3)',
+            },
+            textColor: {
+                primary: Colors.SMOKEY_TOPAZ,
             },
         },
     },
