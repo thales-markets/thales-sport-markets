@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import LevelCircles from '../LevelCircles';
 
 const DailyRecap: React.FC = () => {
     const { t } = useTranslation();
@@ -11,10 +12,12 @@ const DailyRecap: React.FC = () => {
             <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
                 <Value>{'+50%'}</Value>
+                <LevelCircles levels={[2, 3, 4, 5, 6, 7]} currentLevel={6} />
             </ItemContainer>
             <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.twitter-share')}</Label>
                 <Value>{'+10%'}</Value>
+                <LevelCircles levels={[1, 2, 3, 4]} currentLevel={4} />
             </ItemContainer>
             <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
@@ -33,7 +36,10 @@ const Wrapper = styled(FlexDivColumn)`
         linear-gradient(40deg, rgba(92, 68, 44, 1) 0%, rgba(23, 25, 42, 1) 50%, rgba(92, 68, 44, 1) 100%) border-box;
 `;
 
-const ItemContainer = styled(FlexDivColumn)``;
+const ItemContainer = styled(FlexDivColumnCentered)`
+    justify-content: center;
+    text-align: center;
+`;
 
 const Label = styled.span`
     font-size: 12px;

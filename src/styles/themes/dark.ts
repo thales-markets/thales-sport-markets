@@ -171,12 +171,15 @@ export default {
     },
     overdrop: {
         background: {
+            secondary: '#F1BA2099',
             tertiary: 'rgba(60, 73, 138, 0.15)',
+            quaternary: Colors.METALIC_BLUE,
         },
         textColor: {
             primary: Colors.YELLOW,
             secondary: Colors.NAVY_BLUE_DARK,
             tertiary: Colors.CHINESE_BLUE,
+            quaternary: Colors.NAVY_BLUE_EXTRA_DARK,
         },
         borderColor: {
             primary: Colors.JONQUIL,

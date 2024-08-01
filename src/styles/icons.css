@@ -468,3 +468,15 @@
 .icon--lock:before {
     content: '\0121';
 }
+
+.icon--controller:before {
+    content: '\011D';
+}
+
+.icon--calculator:before {
+    content: '\0120';
+}
+
+.icon--book:before {
+    content: '\011E';
+}

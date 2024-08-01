@@ -1183,6 +1183,12 @@
         "no-promotions": "Oops! It looks like there are no promotions available at the moment for given filter."
     },
     "overdrop": {
+        "navigation-menu": {
+            "home": "Overdrop home",
+            "xp-calculation": "XP Calculation",
+            "leveling-tree": "Leveling tree",
+            "leaderboard": "Leaderboard"
+        },
         "overdrop-home": {
             "daily-streak": "Daily streak xp boost",
             "twitter-share": "Twitter share xp boost",

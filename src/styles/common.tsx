@@ -86,4 +86,5 @@ export const Colors = {
     METALIC_YELLOW: '#FBCD0F',
     CHINESE_BLUE: '#3C498A',
     JONQUIL: '#F8C913',
+    METALIC_BLUE: '#3D467F',
 };

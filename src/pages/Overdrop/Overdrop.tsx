@@ -1,19 +1,24 @@
 import BannerCarousel from 'components/BannerCarousel';
+import { OverdropTab } from 'enums/ui';
 import UserStatsV2 from 'pages/Profile/components/UserStatsV2';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import BadgeOverview from './components/BadgeOverview';
 import DailyRecap from './components/DailyRecap';
+import Navigation from './components/Navigation';
 import XPOverview from './components/XPOverview';
 
 const Overdrop: React.FC = () => {
+    const [selectedTab, setSelectedTab] = useState<OverdropTab>(OverdropTab.OVERDROP_HOME);
+
     return (
         <RowContainer>
             <LeftSidebarContainer>
                 <BannerCarousel />
             </LeftSidebarContainer>
             <MainContainer>
+                <Navigation selectedTab={selectedTab} setSelectedTab={(tab: OverdropTab) => setSelectedTab(tab)} />
                 <XPOverview />
                 <LevelDetailsWrapper>
                     <DailyRecap />
