@@ -22,6 +22,7 @@ import {
 } from 'constants/markets';
 import { differenceInDays, secondsToMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
+import { BuyTicketStep } from 'enums/tickets';
 import { BigNumber, ethers } from 'ethers';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
 import useInterval from 'hooks/useInterval';
@@ -112,6 +113,7 @@ import { delay } from 'utils/timer';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import { Address } from 'viem';
 import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
+import BuyStepsModal from '../BuyStepsModal';
 import SuggestedAmount from '../SuggestedAmount';
 import {
     AmountToBuyContainer,
@@ -139,8 +141,6 @@ import {
     XButton,
     defaultButtonProps,
 } from '../styled-components';
-import { BuyTicketStep } from 'enums/tickets';
-import BuyStepsModal from '../BuyStepsModal';
 
 type TicketProps = {
     markets: TicketMarket[];
@@ -489,12 +489,13 @@ const Ticket: React.FC<TicketProps> = ({
                               ),
                     ]);
 
-                    setMinBuyInAmount(
+                    const minBuyin =
                         (collateralHasLp
                             ? minimumNeededForMinUsdAmountValue
                             : coinFormatter(minimumNeededForMinUsdAmountValue, networkId, usedCollateralForBuy)) *
-                            (isDefaultCollateral && !swapToThales ? 1 : MIN_COLLATERAL_MULTIPLIER)
-                    );
+                        (isDefaultCollateral && !swapToThales ? 1 : MIN_COLLATERAL_MULTIPLIER);
+
+                    setMinBuyInAmount(roundNumberToDecimals(minBuyin, 18));
 
                     if (markets[0]?.live) {
                         const [minimumReceivedForBuyInAmount] = await Promise.all([
@@ -557,7 +558,6 @@ const Ticket: React.FC<TicketProps> = ({
             selectedCollateralCurrencyRate,
             collateralAddress,
             networkId,
-            selectedCollateral,
             buyInAmount,
             swapToThales,
             swapThalesMinReceive,
@@ -776,7 +776,7 @@ const Ticket: React.FC<TicketProps> = ({
         setCollateralAmount(floorNumberToDecimals(amount, decimals));
     };
 
-    // TODO: remove
+    // TODO: remove if not using approval modal
     const handleSwapAllowance = async (approveAmount: BigNumber) => {
         if (swapToThales && !hasSwapAllowance) {
             setIsAllowing(true);
@@ -789,7 +789,7 @@ const Ticket: React.FC<TicketProps> = ({
                 approveAmount.toString()
             );
             try {
-                const approveTxHash = await sendTransaction(approveSwapTransaction);
+                const approveTxHash = await sendTransaction(approveSwapTransaction, isParticle);
 
                 if (approveTxHash) {
                     toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
@@ -872,7 +872,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
 
                 try {
-                    const approveTxHash = await sendTransaction(approveSwapRawTransaction);
+                    const approveTxHash = await sendTransaction(approveSwapRawTransaction, isParticle);
 
                     if (approveTxHash) {
                         step = BuyTicketStep.SWAP;
@@ -897,7 +897,9 @@ const Ticket: React.FC<TicketProps> = ({
                     swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
                 }
 
-                const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
+                const swapTxHash = swapRawTransaction
+                    ? await sendTransaction(swapRawTransaction, isParticle)
+                    : undefined;
 
                 if (swapTxHash) {
                     step = BuyTicketStep.APPROVE_BUY;
@@ -939,7 +941,6 @@ const Ticket: React.FC<TicketProps> = ({
                                 addressToApprove,
                                 approveAmount
                             )) as ethers.ContractTransaction;
-                            setOpenApprovalModal(false);
                             txResult = await tx.wait();
                         }
 

@@ -118,18 +118,20 @@ export const buildTxForSwap = async (
 };
 
 // Send a transaction, return its hash
-export const sendTransaction = async (transaction: any) => {
-    // TODO: check signer for different connections
-    console.log(networkConnector.signer?.provider);
+export const sendTransaction = async (rawTransaction: any, isParticle: boolean) => {
+    if (isParticle) {
+        delete rawTransaction.value;
+    }
 
     let txHash = '';
     try {
         txHash = await (networkConnector.signer?.provider as any).provider.request({
             method: 'eth_sendTransaction',
-            params: [transaction],
+            params: [rawTransaction],
         });
     } catch (e) {
-        console.log(e, transaction);
+        console.log(e);
+        console.log('params:', rawTransaction);
     }
 
     return txHash;
