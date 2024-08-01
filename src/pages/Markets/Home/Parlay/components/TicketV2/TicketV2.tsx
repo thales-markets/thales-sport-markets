@@ -776,32 +776,6 @@ const Ticket: React.FC<TicketProps> = ({
         setCollateralAmount(floorNumberToDecimals(amount, decimals));
     };
 
-    // TODO: remove if not using approval modal
-    const handleSwapAllowance = async (approveAmount: BigNumber) => {
-        if (swapToThales && !hasSwapAllowance) {
-            setIsAllowing(true);
-            const id = toast.loading(t('market.toast-message.transaction-pending'));
-
-            const approveSwapTransaction = await buildTxForApproveTradeWithRouter(
-                networkId,
-                walletAddress as Address,
-                swapToThalesParams.src,
-                approveAmount.toString()
-            );
-            try {
-                const approveTxHash = await sendTransaction(approveSwapTransaction, isParticle);
-
-                if (approveTxHash) {
-                    toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
-                }
-            } catch (e) {
-                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
-            }
-
-            setIsAllowing(false);
-        }
-    };
-
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
 
@@ -921,12 +895,6 @@ const Ticket: React.FC<TicketProps> = ({
 
                         const addressToApprove = sportsAMMV2Contract.address;
                         const approveAmount = ethers.constants.MaxUint256;
-                        // TODO: if not approve all
-                        // const approveAmount = coinParser(
-                        //     (swapThalesMinReceive * (1 + APPROVAL_BUFFER)).toString(),
-                        //     networkId,
-                        //     CRYPTO_CURRENCY_MAP.THALES as Coins
-                        // );
 
                         let txResult;
                         if (isAA) {
@@ -2009,11 +1977,11 @@ const Ticket: React.FC<TicketProps> = ({
             {openApprovalModal && (
                 <ApprovalModal
                     // ADDING 1% TO ENSURE TRANSACTIONS PASSES DUE TO CALCULATION DEVIATIONS
-                    defaultAmount={Number(buyInAmount) * (1 + (swapToThales ? 0 : APPROVAL_BUFFER))}
+                    defaultAmount={Number(buyInAmount) * (1 + APPROVAL_BUFFER)}
                     collateralIndex={selectedCollateralIndex}
-                    tokenSymbol={isEth && !swapToThales ? CRYPTO_CURRENCY_MAP.WETH : usedCollateralForBuy}
+                    tokenSymbol={isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral}
                     isAllowing={isAllowing}
-                    onSubmit={swapToThales && !hasSwapAllowance ? handleSwapAllowance : handleAllowance} // TODO: remove handleSwapAllowance
+                    onSubmit={handleAllowance}
                     onClose={() => setOpenApprovalModal(false)}
                 />
             )}
