@@ -856,7 +856,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
 
                 try {
-                    const approveTxHash = await sendTransaction(approveSwapRawTransaction, isParticle);
+                    const approveTxHash = await sendTransaction(approveSwapRawTransaction);
 
                     if (approveTxHash) {
                         step = BuyTicketStep.SWAP;
@@ -881,9 +881,7 @@ const Ticket: React.FC<TicketProps> = ({
                     swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
                 }
 
-                const swapTxHash = swapRawTransaction
-                    ? await sendTransaction(swapRawTransaction, isParticle, isEth)
-                    : undefined;
+                const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
 
                 if (swapTxHash) {
                     step = BuyTicketStep.APPROVE_BUY;

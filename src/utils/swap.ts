@@ -121,13 +121,8 @@ export const buildTxForSwap = async (
 };
 
 // Send a transaction, return its hash
-export const sendTransaction = async (rawTransaction: any, isParticle: boolean, isEth?: boolean) => {
-    if (isEth) {
-        const value = BigNumber.from(rawTransaction.value);
-        rawTransaction.value = isParticle ? value.toHexString() : value.toHexString().replace('0x', '');
-    } else if (isParticle) {
-        delete rawTransaction.value;
-    }
+export const sendTransaction = async (rawTransaction: any) => {
+    rawTransaction.value = BigNumber.from(rawTransaction.value).toHexString();
 
     let txHash = '';
     try {
