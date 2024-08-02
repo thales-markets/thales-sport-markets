@@ -619,6 +619,11 @@ const Ticket: React.FC<TicketProps> = ({
         !isThales && swapToThales && buyInAmount ? secondsToMilliseconds(7) : null
     );
 
+    // Reset buy step when collateral is changed
+    useEffect(() => {
+        setBuyStep(BuyTicketStep.APPROVE_SWAP);
+    }, [selectedCollateral]);
+
     // Check allowance
     useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
