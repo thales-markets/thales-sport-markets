@@ -834,42 +834,44 @@ const Ticket: React.FC<TicketProps> = ({
 
         const { sportsAMMV2Contract, multipleCollateral, signer } = networkConnector;
 
-        if (step === BuyTicketStep.APPROVE_SWAP) {
-            if (!isEth && !hasSwapAllowance && swapThalesMinReceive >= minBuyInAmount) {
-                const approveAmount = coinParser(Number(buyInAmount).toString(), networkId, selectedCollateral);
-                let approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
+        if (!isEth && !hasSwapAllowance && swapThalesMinReceive >= minBuyInAmount) {
+            if (step !== BuyTicketStep.APPROVE_SWAP) {
+                setBuyStep(BuyTicketStep.APPROVE_SWAP);
+            }
+
+            const approveAmount = coinParser(Number(buyInAmount).toString(), networkId, selectedCollateral);
+            let approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
+                networkId,
+                walletAddress as Address,
+                swapToThalesParams.src,
+                approveAmount.toString()
+            );
+
+            // retry once
+            if (!approveSwapRawTransaction) {
+                await delay(1200);
+                approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
                     networkId,
                     walletAddress as Address,
                     swapToThalesParams.src,
                     approveAmount.toString()
                 );
-
-                // retry once
-                if (!approveSwapRawTransaction) {
-                    await delay(1200);
-                    approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
-                        networkId,
-                        walletAddress as Address,
-                        swapToThalesParams.src,
-                        approveAmount.toString()
-                    );
-                }
-
-                try {
-                    const approveTxHash = await sendTransaction(approveSwapRawTransaction);
-
-                    if (approveTxHash) {
-                        step = BuyTicketStep.SWAP;
-                        setBuyStep(step);
-                        await delay(1000); // wait for 1inch API to read correct approval
-                    }
-                } catch (e) {
-                    console.log('Approve swap failed', e);
-                }
-            } else {
-                step = BuyTicketStep.SWAP;
-                setBuyStep(step);
             }
+
+            try {
+                const approveTxHash = await sendTransaction(approveSwapRawTransaction);
+
+                if (approveTxHash) {
+                    step = BuyTicketStep.SWAP;
+                    setBuyStep(step);
+                    await delay(1000); // wait for 1inch API to read correct approval
+                }
+            } catch (e) {
+                console.log('Approve swap failed', e);
+            }
+        } else {
+            step = BuyTicketStep.SWAP;
+            setBuyStep(step);
         }
 
         if (step === BuyTicketStep.SWAP) {
