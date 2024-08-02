@@ -1,4 +1,5 @@
 import burger from 'assets/images/burger.svg';
+import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
@@ -63,6 +64,12 @@ export const MenuIcon = styled.img.attrs({ src: burger })`
     height: 25px;
     width: 35px;
     filter: invert(39%) sepia(9%) saturate(1318%) hue-rotate(199deg) brightness(71%) contrast(88%);
+`;
+
+export const OverdropIcon = styled.img.attrs({ src: overdrop })`
+    height: 75px;
+    cursor: pointer;
+    margin-right: 20px;
 `;
 
 export const WrapperMobile = styled(FlexDivRow)`
