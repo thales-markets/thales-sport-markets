@@ -370,6 +370,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 102,
         hidden: false,
+        tooltipKey: 'common.football-tooltip',
     },
     [League.SUMMER_OLYMPICS_SOCCER]: {
         sport: Sport.SOCCER,
@@ -383,6 +384,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         isDrawAvailable: true,
         priority: 102,
         hidden: false,
+        tooltipKey: 'common.football-tooltip',
     },
     [League.FIFA_WC_WOMEN]: {
         sport: Sport.SOCCER,
