@@ -53,10 +53,7 @@ export const mapTicket = (
         finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
         isLive: ticket.isLive,
         isFreeBet:
-            !!ticket.isFreeBet ||
-            (freeBetHolder.addresses[networkId as SupportedNetwork]
-                ? ticket.ticketOwner == freeBetHolder.addresses[networkId as SupportedNetwork]
-                : false),
+            ticket.ticketOwner.toLowerCase() == freeBetHolder.addresses[networkId as SupportedNetwork].toLowerCase(),
 
         sportMarkets: ticket.marketsData.map(
             (market: any, index: number): TicketMarket => {

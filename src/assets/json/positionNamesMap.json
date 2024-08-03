@@ -52,10 +52,70 @@
         "away_team_4_3",
         "other"
     ],
-    "10143": ["team_0", "team_1", "team_2", "team_3", "team_4", "team_5", "team_3+", "team_4+", "team_5+"],
-    "10144": ["team_0", "team_1", "team_2", "team_3", "team_4", "team_5", "team_3+", "team_4+", "team_5+"],
-    "10145": ["team_0", "team_1", "team_2", "team_3", "team_4", "team_5", "team_3+", "team_4+", "team_5+"],
-    "10146": ["team_0", "team_1", "team_2", "team_3", "team_4", "team_5", "team_3+", "team_4+", "team_5+"],
-    "10147": ["team_0", "team_1", "team_2", "team_3", "team_4", "team_5", "team_3+", "team_4+", "team_5+"],
-    "10148": ["team_0", "team_1", "team_2", "team_3", "team_4", "team_5", "team_3+", "team_4+", "team_5+"]
+    "10143": [
+        "home_team_0",
+        "home_team_1",
+        "home_team_2",
+        "home_team_3",
+        "home_team_4",
+        "home_team_5",
+        "home_team_3+",
+        "home_team_4+",
+        "home_team_5+"
+    ],
+    "10144": [
+        "away_team_0",
+        "away_team_1",
+        "away_team_2",
+        "away_team_3",
+        "away_team_4",
+        "away_team_5",
+        "away_team_3+",
+        "away_team_4+",
+        "away_team_5+"
+    ],
+    "10145": [
+        "first_period_home_team_0",
+        "first_period_home_team_1",
+        "first_period_home_team_2",
+        "first_period_home_team_3",
+        "first_period_home_team_4",
+        "first_period_home_team_5",
+        "first_period_home_team_3+",
+        "first_period_home_team_4+",
+        "first_period_home_team_5+"
+    ],
+    "10146": [
+        "first_period_away_team_0",
+        "first_period_away_team_1",
+        "first_period_away_team_2",
+        "first_period_away_team_3",
+        "first_period_away_team_4",
+        "first_period_away_team_5",
+        "first_period_away_team_3+",
+        "first_period_away_team_4+",
+        "first_period_away_team_5+"
+    ],
+    "10147": [
+        "second_period_home_team_0",
+        "second_period_home_team_1",
+        "second_period_home_team_2",
+        "second_period_home_team_3",
+        "second_period_home_team_4",
+        "second_period_home_team_5",
+        "second_period_home_team_3+",
+        "second_period_home_team_4+",
+        "second_period_home_team_5+"
+    ],
+    "10148": [
+        "second_period_away_team_0",
+        "second_period_away_team_1",
+        "second_period_away_team_2",
+        "second_period_away_team_3",
+        "second_period_away_team_4",
+        "second_period_away_team_5",
+        "second_period_away_team_3+",
+        "second_period_away_team_4+",
+        "second_period_away_team_5+"
+    ]
 }
