@@ -22,6 +22,7 @@ import {
     isPlayerPropsMarket,
     isScoreMarket,
     isSpreadMarket,
+    isTotalExactMarket,
     isTotalMarket,
     isTotalOddEvenMarket,
     isUfcSpecificMarket,
@@ -114,11 +115,7 @@ const getSimplePositionText = (
                 : text;
         return text;
     }
-    if (
-        (marketType === MarketType.TOTAL_EXACT_HOME_TEAM || marketType === MarketType.TOTAL_EXACT_AWAY_TEAM) &&
-        positionNames &&
-        positionNames[position]
-    ) {
+    if (isTotalExactMarket(marketType) && positionNames && positionNames[position]) {
         const text =
             position < positionNames.length - 3
                 ? positionNames[position].slice(positionNames[position].length - 1)
@@ -235,6 +232,7 @@ export const getPositionTextV2 = (market: SportMarket, position: number, extende
 
 export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
     const marketType = market.typeId as MarketType;
+    const scoringType = getLeagueScoringType(market.leagueId);
     const marketTypeDescription = getMarketTypeDescription(marketType);
     const marketTypeName =
         useDescription && marketTypeDescription ? marketTypeDescription : getMarketTypeName(marketType);
@@ -286,16 +284,11 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
         }`;
     }
 
-    const scoringType = getLeagueScoringType(market.leagueId);
     if (isHomeTeamMarket(marketType)) {
-        sufix = `${sufix}${marketType === MarketType.TOTAL_EXACT_HOME_TEAM ? ` ${scoringType}` : ''} (${
-            market.homeTeam
-        })`;
+        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${market.homeTeam})`;
     }
     if (isAwayTeamMarket(marketType)) {
-        sufix = `${sufix}${marketType === MarketType.TOTAL_EXACT_AWAY_TEAM ? ` ${scoringType}` : ''} (${
-            market.awayTeam
-        })`;
+        sufix = `${sufix}${isTotalExactMarket(marketType) ? ` ${scoringType}` : ''} (${market.awayTeam})`;
     }
     if (isScoreMarket(marketType)) {
         sufix = scoringType.length > 1 ? ` ${scoringType.slice(0, scoringType.length - 1)}` : scoringType;
