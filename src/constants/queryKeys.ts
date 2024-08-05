@@ -145,6 +145,9 @@ const QUERY_KEYS = {
         ExchangeRates: (networkId: Network) => ['rates', 'exchangeRates', networkId],
     },
     Promotions: (branchName: string) => [branchName, 'promotions'],
+    Overdrop: {
+        UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
+    },
 };
 
 export default QUERY_KEYS;
