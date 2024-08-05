@@ -1200,6 +1200,7 @@
             "social-multiplier": "Social XP multiplier"
         },
         "leveling-tree": {
+            "heading": "The overdrop farming league",
             "explainer": {
                 "xp-explained": "XP Explained",
                 "xp-explained-content": "Season long campaign where users accrue XP until the end of sports season by driving <bold>volume on Overtime</bold> with <bold>multipliers</bold> based on various dynamic metrics and goals.<br/><br/>After the campaign ends, all users will share <highlight>100k OP</highlight> and <highlight>150k ARB</highlight> pro rata based on XP <br><br>While the campaign lasts users will have one off rewards on specific XP LEVELS",
