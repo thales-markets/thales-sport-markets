@@ -1,5 +1,5 @@
 import burger from 'assets/images/burger.svg';
-import overdrop from 'assets/images/overdrop/overdrop-nav.webp';
+import overdrop from 'assets/images/overdrop/overdrop-nav.png';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 
