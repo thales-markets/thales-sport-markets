@@ -28,8 +28,8 @@ const SimpleLoader: React.FC<{ size?: number; strokeWidth?: number }> = ({ size,
 
 const Wrapper = styled(FlexDivCentered)<{ size?: number }>`
     position: absolute;
-    left: calc(50% - ${(props) => (props.size ? props.size / 2 : DEFAULT_SIZE) + OVAL_PADDING}px);
-    top: calc(50% - ${(props) => (props.size ? props.size / 2 : DEFAULT_SIZE) + OVAL_PADDING}px);
+    left: calc(50% - ${(props) => (props.size ? props.size : DEFAULT_SIZE) / 2 + OVAL_PADDING}px);
+    top: calc(50% - ${(props) => (props.size ? props.size : DEFAULT_SIZE) / 2 + OVAL_PADDING}px);
 `;
 
 export default SimpleLoader;

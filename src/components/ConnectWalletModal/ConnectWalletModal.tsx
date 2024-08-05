@@ -96,7 +96,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
             <CloseIconContainer>
                 <CloseIcon onClick={onClose} />
             </CloseIconContainer>
-            {!isLoading && (
+            {!isLoading && false && (
                 <>
                     <HeaderContainer>
                         <Header>{t('common.wallet.connect-wallet-modal-title')}</Header>
@@ -196,7 +196,7 @@ const ConnectWalletModal: React.FC<ConnectWalletModalProps> = ({ isOpen, onClose
                     </FooterContainer>
                 </>
             )}
-            {isLoading && (
+            {(isLoading || true) && (
                 <LoaderContainer>
                     <SimpleLoader />
                 </LoaderContainer>
@@ -359,9 +359,8 @@ const Button = styled(FlexDivCentered)<{ oneButtoninRow?: boolean; active?: bool
 `;
 
 const LoaderContainer = styled.div`
-    height: 180px !important;
-    width: 80px;
-    overflow: none;
+    position: relative;
+    min-height: 200px;
 `;
 
 export default ConnectWalletModal;
