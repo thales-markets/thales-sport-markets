@@ -100,7 +100,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM หยุดชั่วคราว",
-            "invalid-amount-max": "จำนวนเงินต้องไม่เกิน {{max}}"
+            "invalid-amount-max": "จำนวนเงินต้องไม่เกิน {{max}}",
+            "swap-quote-low": "ราคา Swap ต่ำเกินไป (รับ: {{quote}}, ขั้นต่ำรับ {{minQuote}})! กรุณาลองอีกครั้ง..."
         },
         "time-remaining": {
             "ended": "เสร็จสิ้น",

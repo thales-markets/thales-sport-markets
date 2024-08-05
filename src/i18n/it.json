@@ -100,7 +100,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM In pausa",
-            "invalid-amount-max": "L'importo non può essere superiore a {{max}}"
+            "invalid-amount-max": "L'importo non può essere superiore a {{max}}",
+            "swap-quote-low": "La quota di scambio è troppo bassa (ricevi: {{quote}}, ricevi minimo {{minQuote}})! Per favore riprova..."
         },
         "time-remaining": {
             "ended": "ended",

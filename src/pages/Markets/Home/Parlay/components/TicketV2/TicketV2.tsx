@@ -14,6 +14,7 @@ import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import {
     APPROVAL_BUFFER,
     BATCH_SIZE,
+    COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
     HIDE_PARLAY_LEADERBOARD,
     MIN_COLLATERAL_MULTIPLIER,
     PARLAY_LEADERBOARD_MINIMUM_GAMES,
@@ -97,7 +98,7 @@ import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { refetchBalances } from 'utils/queryConnector';
+import { refetchBalances, refetchCoingeckoRates } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {
@@ -142,6 +143,7 @@ import {
     defaultButtonProps,
 } from '../styled-components';
 import Toggle from 'components/Toggle';
+import useCoingeckoRatesQuery from 'queries/rates/useCoingeckoRatesQuery';
 
 type TicketProps = {
     markets: TicketMarket[];
@@ -352,6 +354,18 @@ const Ticket: React.FC<TicketProps> = ({
     });
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const coingeckoRatesQuery = useCoingeckoRatesQuery({
+        enabled: isAppReady,
+    });
+    const coingeckoThalesMinRecive = useMemo(() => {
+        const coingeckoThalesAmount =
+            coingeckoRatesQuery.isSuccess && coingeckoRatesQuery.data[CRYPTO_CURRENCY_MAP.THALES as Coins]
+                ? (Number(buyInAmount) * coingeckoRatesQuery.data[selectedCollateral]) /
+                  coingeckoRatesQuery.data[CRYPTO_CURRENCY_MAP.THALES as Coins]
+                : 0;
+        return coingeckoThalesAmount * (1 - COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE);
+    }, [coingeckoRatesQuery, selectedCollateral, buyInAmount]);
 
     const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
     const selectedCollateralCurrencyRate =
@@ -958,6 +972,22 @@ const Ticket: React.FC<TicketProps> = ({
 
             let step = buyStep;
             if (swapToThales) {
+                await refetchCoingeckoRates();
+                if (swappedThalesToReceive && swappedThalesToReceive < coingeckoThalesMinRecive) {
+                    await delay(800);
+                    toast.update(
+                        toastId,
+                        getErrorToastOptions(
+                            t('common.errors.swap-quote-low', {
+                                quote: formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, swappedThalesToReceive),
+                                minQuote: formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, coingeckoThalesMinRecive),
+                            })
+                        )
+                    );
+                    setIsBuying(false);
+                    return;
+                }
+
                 setOpenBuyStepsModal(true);
                 step = await handleBuyWithThalesSteps(step);
 

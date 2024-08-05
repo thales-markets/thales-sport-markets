@@ -135,7 +135,8 @@
             "enter-percentage": "Enter percentage",
             "single-amm-paused": "AMM Paused",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
-            "invalid-amount-max": "The amount cannot be higher than {{max}}"
+            "invalid-amount-max": "The amount cannot be higher than {{max}}",
+            "swap-quote-low": "Swap quote is too low (receive: {{quote}}, min receive {{minQuote}})! Please try again..."
         },
         "time-remaining": {
             "ended": "ended",

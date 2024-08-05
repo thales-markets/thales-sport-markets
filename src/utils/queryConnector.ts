@@ -38,4 +38,7 @@ export const refetchLiquidityPoolData = (walletAddress: string, networkId: Netwo
     );
 };
 
+export const refetchCoingeckoRates = () =>
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Rates.CoingeckoRates());
+
 export default queryConnector;

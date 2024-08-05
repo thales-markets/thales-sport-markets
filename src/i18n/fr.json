@@ -88,7 +88,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM suspendu",
-            "invalid-amount-max": "Le montant ne peut pas être supérieur à {{max}}"
+            "invalid-amount-max": "Le montant ne peut pas être supérieur à {{max}}",
+            "swap-quote-low": "Le devis de swap est trop bas (recevoir : {{quote}}, minimum de recevoir {{minQuote}}) ! Veuillez réessayer..."
         },
         "time-remaining": {
             "ended": "terminé",

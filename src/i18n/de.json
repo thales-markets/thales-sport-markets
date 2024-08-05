@@ -109,7 +109,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM angehalten",
-            "invalid-amount-max": "Der Betrag darf nicht höher sein als {{max}}"
+            "invalid-amount-max": "Der Betrag darf nicht höher sein als {{max}}",
+            "swap-quote-low": "Swap-Kurs ist zu niedrig (Empfang: {{quote}}, Mindestempfang {{minQuote}})! Bitte versuchen Sie es erneut..."
         },
         "time-remaining": {
             "ended": "zu Ende",

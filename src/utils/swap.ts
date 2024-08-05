@@ -24,7 +24,7 @@ export const getSwapParams = (
         dst: multipleCollateralContract[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[networkId] as Address, // THALES address
         amount: buyIn.toString(),
         from: walletAddress,
-        slippage: 1,
+        slippage: 1, // 1%
         disableEstimate: false,
         allowPartialFill: false,
     };

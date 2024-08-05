@@ -100,7 +100,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "АММ приостановлено",
-            "invalid-amount-max": "Сумма не может превышать {{max}}"
+            "invalid-amount-max": "Сумма не может превышать {{max}}",
+            "swap-quote-low": "Котировка свопа слишком низкая (получите: {{quote}}, мин. получите {{minQuote}})! Пожалуйста, попробуйте еще раз..."
         },
         "time-remaining": {
             "ended": "ended",
