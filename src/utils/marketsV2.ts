@@ -88,7 +88,7 @@ const getSimplePositionText = (
     extendedText?: boolean,
     positionNames?: string[]
 ) => {
-    if (positionNames && positionNames[position]) {
+    if (leagueId === League.US_ELECTION && positionNames && positionNames[position]) {
         const text = positionNames[position]
             .replace('_', ' ')
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
@@ -96,6 +96,34 @@ const getSimplePositionText = (
             marketType <= MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN
             ? text.split(' ')[1]
             : text;
+    }
+    if (marketType === MarketType.CORRECT_SCORE && positionNames && positionNames[position]) {
+        let text = (position < positionNames.length - 1
+            ? positionNames[position].slice(positionNames[position].length - 3)
+            : positionNames[position]
+        )
+            .replace('_', ':')
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+        text =
+            position < 5
+                ? `Draw ${text}`
+                : position < 15
+                ? `${homeTeam} ${text}`
+                : position < 25
+                ? `${awayTeam} ${text}`
+                : text;
+        return text;
+    }
+    if (
+        (marketType === MarketType.TOTAL_EXACT_HOME_TEAM || marketType === MarketType.TOTAL_EXACT_AWAY_TEAM) &&
+        positionNames &&
+        positionNames[position]
+    ) {
+        const text =
+            position < positionNames.length - 3
+                ? positionNames[position].slice(positionNames[position].length - 1)
+                : positionNames[position].slice(positionNames[position].length - 2);
+        return text;
     }
     if (
         isOneSideMarket(marketType) ||
@@ -258,14 +286,18 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
         }`;
     }
 
+    const scoringType = getLeagueScoringType(market.leagueId);
     if (isHomeTeamMarket(marketType)) {
-        sufix = `${sufix} (${market.homeTeam})`;
+        sufix = `${sufix}${marketType === MarketType.TOTAL_EXACT_HOME_TEAM ? ` ${scoringType}` : ''} (${
+            market.homeTeam
+        })`;
     }
     if (isAwayTeamMarket(marketType)) {
-        sufix = `${sufix} (${market.awayTeam})`;
+        sufix = `${sufix}${marketType === MarketType.TOTAL_EXACT_AWAY_TEAM ? ` ${scoringType}` : ''} (${
+            market.awayTeam
+        })`;
     }
     if (isScoreMarket(marketType)) {
-        const scoringType = getLeagueScoringType(market.leagueId);
         sufix = scoringType.length > 1 ? ` ${scoringType.slice(0, scoringType.length - 1)}` : scoringType;
     }
 

@@ -5,7 +5,7 @@ import { t } from 'i18next';
 import { Coins, bigNumberFormatter, coinFormatter, formatDateWithTime } from 'thales-utils';
 import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
-import electionPositionNames from '../assets/json/electionPositionNames.json';
+import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
@@ -53,10 +53,7 @@ export const mapTicket = (
         finalPayout: coinFormatter(ticket.finalPayout, networkId, collateral),
         isLive: ticket.isLive,
         isFreeBet:
-            !!ticket.isFreeBet ||
-            (freeBetHolder.addresses[networkId as SupportedNetwork]
-                ? ticket.ticketOwner == freeBetHolder.addresses[networkId as SupportedNetwork]
-                : false),
+            ticket.ticketOwner.toLowerCase() == freeBetHolder.addresses[networkId as SupportedNetwork].toLowerCase(),
 
         sportMarkets: ticket.marketsData.map(
             (market: any, index: number): TicketMarket => {
@@ -91,8 +88,7 @@ export const mapTicket = (
                 const marketResult = ticket.marketsResult[index];
                 const marketStatus = Number(marketResult.status);
 
-                const positionNames =
-                    leagueId === League.US_ELECTION ? (electionPositionNames as any)[typeId] : undefined;
+                const positionNames = (positionNamesMap as any)[typeId];
 
                 return {
                     gameId: market.gameId,
