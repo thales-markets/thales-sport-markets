@@ -39,13 +39,19 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
                 {!isEth && (
                     <FlexDivRow>
                         <Text>
-                            {t('markets.parlay.buy-steps.approve-swap', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}:
+                            {t('markets.parlay.buy-steps.approve-swap', {
+                                src: currencyKey,
+                                dst: CRYPTO_CURRENCY_MAP.THALES,
+                            })}
+                            :
                         </Text>
                         {step === BuyTicketStep.APPROVE_SWAP ? statusFailedOrInProgress : getCheckmark()}
                     </FlexDivRow>
                 )}
                 <FlexDivRow>
-                    <Text>{t('markets.parlay.buy-steps.swap', { currencyKey: CRYPTO_CURRENCY_MAP.THALES })}:</Text>
+                    <Text>
+                        {t('markets.parlay.buy-steps.swap', { src: currencyKey, dst: CRYPTO_CURRENCY_MAP.THALES })}:
+                    </Text>
                     {step === BuyTicketStep.SWAP
                         ? statusFailedOrInProgress
                         : step > BuyTicketStep.SWAP

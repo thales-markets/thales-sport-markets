@@ -729,9 +729,8 @@
             "persist-games": "Keep selection after submit",
             "keep-selection-tooltip": "By default, the parlay builder is reset after successful submission. Tick this if you want to keep current context after submission.",
             "thales-bonus-tooltip": "Users placing trades with THALES will get 1% extra payouts for each game they have in their ticket (already calculated in Total quote and Payout).",
-            "swap-thales": "Swap to THALES for better quote",
-            "swap-thales-tooltip": "TODO",
-            "swap-thales-receive": "Minimum receive",
+            "swap-thales": "Use THALES for better odds",
+            "swap-thales-tooltip": "<bold>Boost your winnings with THALES!</bold> With just a simple click, you can automatically swap to THALES and enjoy improved betting quotes instantly! Payout is in THALES.",
             "clear": "Clear all",
             "buy-in": "Buy-in",
             "parlay-fee": "Parlay fee",
@@ -806,8 +805,8 @@
                 "tooltip": "The transfer won’t go through if the bridge rate moves unfavorably by more than this percentage when the transfer is executed."
             },
             "buy-steps": {
-                "approve-swap": "Approve swap to {{currencyKey}}",
-                "swap": "Swap to {{currencyKey}}",
+                "approve-swap": "Approve swap {{src}} to {{dst}}",
+                "swap": "Swap {{src}} to {{dst}}",
                 "approve-buy": "Approve buy with {{currencyKey}}",
                 "buy": "Buy with {{currencyKey}}"
             }

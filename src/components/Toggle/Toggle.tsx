@@ -23,6 +23,7 @@ type SwitchProps = {
     dotBackground?: string;
     dotBorder?: string;
     dotGradient?: boolean;
+    dotMargin?: string;
     label?: LabelProps;
     shadow?: boolean;
     margin?: string;
@@ -46,6 +47,7 @@ type CircleProps = {
     background?: string;
     backgroundGradient?: boolean;
     dotBorder?: string;
+    dotMargin?: string;
 };
 
 const defaultSwitchHeight = 28;
@@ -64,6 +66,7 @@ const Toggle: React.FC<SwitchProps> = ({
     dotBackground,
     dotBorder,
     dotGradient,
+    dotMargin,
     label,
     shadow,
     margin,
@@ -92,6 +95,7 @@ const Toggle: React.FC<SwitchProps> = ({
                     background={dotBackground}
                     backgroundGradient={dotGradient}
                     dotBorder={dotBorder}
+                    dotMargin={dotMargin}
                 />
             </SwitchContainer>
             {label?.secondLabel && (
@@ -132,6 +136,7 @@ const SwitchContainer = styled.div<SwitchContainerProps>`
     border-style: solid;
     border-color: ${(props: any) => (props.borderColor ? props.borderColor : props.theme.borderColor.primary)};
     border-radius: 30px;
+    ${(props: any) => (props.background ? `background-color: ${props.background};` : '')}
     width: ${(props: any) => (props.width ? props.width : defaultSwitchHeight * 2.18 + 'px')};
     height: ${(props: any) => (props.height ? props.height : defaultSwitchHeight + 'px')};
     ${(props) => (props.shadow ? `box-shadow: ${props.theme.shadow.toggle};` : '')}
@@ -147,7 +152,10 @@ const Circle = styled.div<CircleProps>`
             ? `background-color: ${props.background}`
             : `background-color: ${props.theme.background.tertiary}`};
     border: ${(props: any) => (props.dotBorder ? props.dotBorder : '')};
-    ${(props: any) => (props.active ? `right: 5px;` : `left: 5px;`)};
+    ${(props: any) =>
+        props.active
+            ? `right: ${props.dotMargin ? props.dotMargin : '5px'};`
+            : `left: ${props.dotMargin ? props.dotMargin : '5px'};`};
 `;
 
 export default Toggle;

@@ -36,7 +36,7 @@ import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuer
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -60,7 +60,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { BoldContent, FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
 import {
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
@@ -141,6 +141,7 @@ import {
     XButton,
     defaultButtonProps,
 } from '../styled-components';
+import Toggle from 'components/Toggle';
 
 type TicketProps = {
     markets: TicketMarket[];
@@ -220,7 +221,7 @@ const Ticket: React.FC<TicketProps> = ({
     const [slippageDropdownOpen, setSlippageDropdownOpen] = useState(false);
 
     const [swapToThales, setSwapToThales] = useState(false);
-    const [swapThalesMinReceive, setSwapThalesMinReceive] = useState(0);
+    const [swappedThalesToReceive, setSwappedThalesToReceive] = useState(0);
     const [swapQuote, setSwapQuote] = useState(0);
     const [hasSwapAllowance, setHasSwapAllowance] = useState(false);
     const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
@@ -529,7 +530,7 @@ const Ticket: React.FC<TicketProps> = ({
 
                         setBuyInAmountInDefaultCollateral(
                             isThales || swapToThales
-                                ? (swapToThales ? swapThalesMinReceive : Number(buyInAmount)) *
+                                ? (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) *
                                       selectedCollateralCurrencyRate
                                 : coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
                         );
@@ -562,7 +563,7 @@ const Ticket: React.FC<TicketProps> = ({
             networkId,
             buyInAmount,
             swapToThales,
-            swapThalesMinReceive,
+            swappedThalesToReceive,
             usedCollateralForBuy,
             thalesCollateralAddress,
         ]
@@ -584,7 +585,7 @@ const Ticket: React.FC<TicketProps> = ({
         if (isThales) {
             setSwapToThales(false);
             setUseThalesCollateral(false);
-            setSwapThalesMinReceive(0);
+            setSwappedThalesToReceive(0);
             setSwapQuote(0);
         } else if (swapToThales && buyInAmount) {
             const getSwapQuote = async () => {
@@ -594,16 +595,14 @@ const Ticket: React.FC<TicketProps> = ({
                     await delay(1200);
                     quote = await getQuote(networkId, swapToThalesParams);
                 }
-                if (quote) {
-                    const minReceive = roundNumberToDecimals(quote * ((100 - swapToThalesParams.slippage) / 100));
-                    setSwapThalesMinReceive(minReceive);
-                    setSwapQuote(minReceive / Number(buyInAmount));
-                }
+
+                setSwappedThalesToReceive(quote);
+                setSwapQuote(quote / Number(buyInAmount));
             };
 
             getSwapQuote();
         } else {
-            setSwapThalesMinReceive(0);
+            setSwappedThalesToReceive(0);
             setSwapQuote(0);
         }
     }, [swapToThales, buyInAmount, networkId, swapToThalesParams, isThales, setUseThalesCollateral]);
@@ -612,9 +611,8 @@ const Ticket: React.FC<TicketProps> = ({
     useInterval(
         async () => {
             const quote = await getQuote(networkId, swapToThalesParams);
-            const minReceive = roundNumberToDecimals(quote * ((100 - swapToThalesParams.slippage) / 100));
-            setSwapThalesMinReceive(minReceive);
-            setSwapQuote(minReceive / Number(buyInAmount));
+            setSwappedThalesToReceive(quote);
+            setSwapQuote(quote / Number(buyInAmount));
         },
         !isThales && swapToThales && buyInAmount ? secondsToMilliseconds(7) : null
     );
@@ -661,7 +659,7 @@ const Ticket: React.FC<TicketProps> = ({
             const getAllowance = async () => {
                 try {
                     const parsedTicketPrice = coinParser(
-                        (swapToThales ? swapThalesMinReceive : Number(buyInAmount)).toString(),
+                        (swapToThales ? swappedThalesToReceive : Number(buyInAmount)).toString(),
                         networkId,
                         collateralToAllow
                     );
@@ -695,7 +693,7 @@ const Ticket: React.FC<TicketProps> = ({
         isLiveTicket,
         isFreeBetActive,
         swapToThales,
-        swapThalesMinReceive,
+        swappedThalesToReceive,
         swapToThalesParams.src,
     ]);
 
@@ -720,7 +718,7 @@ const Ticket: React.FC<TicketProps> = ({
             setTooltipTextBuyInAmount(t('markets.parlay.validation.availability'));
         } else if (
             Number(buyInAmount) &&
-            (swapToThales ? swapQuote && swapThalesMinReceive < minBuyInAmount : Number(buyInAmount) < minBuyInAmount)
+            (swapToThales ? swapQuote && swappedThalesToReceive < minBuyInAmount : Number(buyInAmount) < minBuyInAmount)
         ) {
             const minBuyin = minBuyInAmount / (swapToThales ? swapQuote : 1);
             const decimals = getPrecision(minBuyin);
@@ -766,7 +764,7 @@ const Ticket: React.FC<TicketProps> = ({
         t,
         ticketLiquidity,
         swapToThales,
-        swapThalesMinReceive,
+        swappedThalesToReceive,
         selectedCollateralCurrencyRate,
         swapQuote,
         isBuying,
@@ -834,7 +832,7 @@ const Ticket: React.FC<TicketProps> = ({
 
         const { sportsAMMV2Contract, multipleCollateral, signer } = networkConnector;
 
-        if (!isEth && !hasSwapAllowance && swapThalesMinReceive >= minBuyInAmount) {
+        if (!isEth && !hasSwapAllowance && swappedThalesToReceive >= minBuyInAmount) {
             if (step !== BuyTicketStep.APPROVE_SWAP) {
                 setBuyStep(BuyTicketStep.APPROVE_SWAP);
             }
@@ -983,7 +981,7 @@ const Ticket: React.FC<TicketProps> = ({
 
                 const tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(
-                    (swapToThales ? swapThalesMinReceive : buyInAmount).toString(),
+                    (swapToThales ? swappedThalesToReceive : buyInAmount).toString(),
                     networkId,
                     usedCollateralForBuy
                 );
@@ -1077,7 +1075,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 !collateralHasLp || (isDefaultCollateral && !swapToThales)
                                     ? Number(buyInAmountInDefaultCollateral)
                                     : swapToThales
-                                    ? swapThalesMinReceive
+                                    ? swappedThalesToReceive
                                     : Number(buyInAmount),
                             payout: payout,
                             onClose: () => {
@@ -1166,7 +1164,7 @@ const Ticket: React.FC<TicketProps> = ({
                                         !collateralHasLp || (isDefaultCollateral && !swapToThales)
                                             ? coinFormatter(lastTicket.buyInAmount, networkId)
                                             : swapToThales
-                                            ? swapThalesMinReceive
+                                            ? swappedThalesToReceive
                                             : Number(buyInAmount);
                                     const lastTicketPayout = lastTicketPaid / bigNumberFormatter(lastTicket.totalQuote);
 
@@ -1225,7 +1223,7 @@ const Ticket: React.FC<TicketProps> = ({
         // Minimum buyIn
         if (
             !Number(buyInAmount) ||
-            (swapToThales ? swapThalesMinReceive : Number(buyInAmount)) < minBuyInAmount ||
+            (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) < minBuyInAmount ||
             isBuying ||
             isAllowing
         ) {
@@ -1269,7 +1267,7 @@ const Ticket: React.FC<TicketProps> = ({
         oddsChanged,
         markets,
         isLiveTicket,
-        swapThalesMinReceive,
+        swappedThalesToReceive,
         swapToThales,
     ]);
 
@@ -1372,7 +1370,7 @@ const Ticket: React.FC<TicketProps> = ({
             const { sportsAMMV2Contract } = networkConnector;
             if (sportsAMMV2Contract && Number(buyInAmount) > 0 && minBuyInAmountInDefaultCollateral) {
                 const parlayAmmQuote = await fetchTicketAmmQuote(
-                    swapToThales ? swapThalesMinReceive : Number(buyInAmount)
+                    swapToThales ? swappedThalesToReceive : Number(buyInAmount)
                 );
 
                 if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
@@ -1384,7 +1382,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 Number(
                                     collateralHasLp
                                         ? swapToThales
-                                            ? swapThalesMinReceive
+                                            ? swappedThalesToReceive
                                             : buyInAmount
                                         : parlayAmmQuote.buyInAmountInDefaultCollateral
                                 )
@@ -1448,7 +1446,7 @@ const Ticket: React.FC<TicketProps> = ({
         collateralHasLp,
         selectedCollateral,
         totalQuote,
-        swapThalesMinReceive,
+        swappedThalesToReceive,
         swapToThales,
     ]);
 
@@ -1467,7 +1465,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const hidePayout =
         Number(buyInAmount) <= 0 ||
-        (swapToThales ? swapThalesMinReceive : Number(buyInAmount)) < minBuyInAmount ||
+        (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) < minBuyInAmount ||
         payout === 0 ||
         // hide when validation tooltip exists except in case of invalid profit and not enough funds
         (tooltipTextBuyInAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance) ||
@@ -1491,7 +1489,7 @@ const Ticket: React.FC<TicketProps> = ({
                 !collateralHasLp || (isDefaultCollateral && !swapToThales)
                     ? Number(buyInAmountInDefaultCollateral)
                     : swapToThales
-                    ? swapThalesMinReceive
+                    ? swappedThalesToReceive
                     : Number(buyInAmount),
             payout: payout,
             onClose: onModalClose,
@@ -1727,50 +1725,41 @@ const Ticket: React.FC<TicketProps> = ({
             {!isThales && (
                 <RowSummary>
                     <RowContainer>
-                        <SummaryLabel>
+                        <SummaryLabel isBonus>
                             {t('markets.parlay.swap-thales')}
                             <Tooltip
-                                overlay={<>{t(`markets.parlay.swap-thales-tooltip`)}</>}
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.parlay.swap-thales-tooltip"
+                                        components={{
+                                            bold: <BoldContent />,
+                                        }}
+                                    />
+                                }
                                 iconFontSize={14}
                                 marginLeft={3}
                             />
                             :
                         </SummaryLabel>
-                        <CheckboxContainer>
-                            <Checkbox
-                                disabled={false}
-                                checked={swapToThales}
-                                value={swapToThales.toString()}
-                                onChange={(e: any) => {
-                                    const isSwapToThales = e.target.checked || false;
-                                    setSwapToThales(isSwapToThales);
-                                    setUseThalesCollateral(isSwapToThales);
-                                }}
-                            />
-                        </CheckboxContainer>
                     </RowContainer>
+                    <ToggleContainer>
+                        <Toggle
+                            active={swapToThales}
+                            width="44px"
+                            height="20px"
+                            background={theme.borderColor.tertiary}
+                            borderColor={theme.borderColor.tertiary}
+                            dotSize="14px"
+                            dotBackground={theme.background.quinary}
+                            dotMargin="3px"
+                            handleClick={() => {
+                                setSwapToThales(!swapToThales);
+                                setUseThalesCollateral(!swapToThales);
+                            }}
+                        />
+                    </ToggleContainer>
                 </RowSummary>
             )}
-            {swapToThales && (
-                <>
-                    <InfoContainer>
-                        <InfoWrapper>
-                            <InfoLabel>{t('markets.parlay.swap-thales-receive')}:</InfoLabel>
-                            <InfoValue>
-                                {swapThalesMinReceive
-                                    ? formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, swapThalesMinReceive)
-                                    : '-'}
-                            </InfoValue>
-                        </InfoWrapper>
-                        <InfoWrapper>
-                            <InfoLabel>{t('markets.parlay.slippage.swap-thales')}:</InfoLabel>
-                            <InfoValue>{formatPercentage(swapToThalesParams.slippage / 100)}</InfoValue>
-                        </InfoWrapper>
-                    </InfoContainer>
-                    <HorizontalLine />
-                </>
-            )}
-
             <InfoContainer>
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.liquidity')}:</InfoLabel>
@@ -1824,7 +1813,7 @@ const Ticket: React.FC<TicketProps> = ({
                         ? formatCurrencyWithSign(USD_SIGN, Number(buyInAmount) + gas)
                         : `${formatCurrencyWithKey(
                               usedCollateralForBuy,
-                              (swapToThales ? swapThalesMinReceive : Number(buyInAmount)) + gas
+                              (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) + gas
                           )} (${formatCurrencyWithSign(USD_SIGN, Number(buyInAmountInDefaultCollateral) + gas)})`}
                 </SummaryValue>
             </RowSummary>
@@ -1850,7 +1839,7 @@ const Ticket: React.FC<TicketProps> = ({
                               collateralHasLp && (!isDefaultCollateral || swapToThales)
                                   ? formatCurrencyWithKey(
                                         usedCollateralForBuy,
-                                        payout - (swapToThales ? swapThalesMinReceive : Number(buyInAmount)) - gas
+                                        payout - (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) - gas
                                     )
                                   : formatCurrencyWithSign(
                                         USD_SIGN,
@@ -2055,5 +2044,7 @@ const FreeBetIcon = styled.i`
     margin-right: 3px;
     color: ${(props) => props.theme.textColor.quaternary} !important;
 `;
+
+const ToggleContainer = styled(FlexDiv)``;
 
 export default Ticket;
