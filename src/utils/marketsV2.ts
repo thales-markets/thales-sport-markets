@@ -115,11 +115,7 @@ const getSimplePositionText = (
                 : text;
         return text;
     }
-    if (
-        (marketType === MarketType.TOTAL_EXACT_HOME_TEAM || marketType === MarketType.TOTAL_EXACT_AWAY_TEAM) &&
-        positionNames &&
-        positionNames[position]
-    ) {
+    if (isTotalExactMarket(marketType) && positionNames && positionNames[position]) {
         const text =
             position < positionNames.length - 3
                 ? positionNames[position].slice(positionNames[position].length - 1)
