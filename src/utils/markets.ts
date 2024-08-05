@@ -9,6 +9,7 @@ import {
     PLAYER_PROPS_MARKET_TYPES,
     SCORE_MARKET_TYPES,
     SPREAD_MARKET_TYPES,
+    TOTAL_EXACT_MARKET_TYPES,
     TOTAL_MARKET_TYPES,
     TOTAL_ODD_EVEN_MARKET_TYPES,
     UFC_SPECIFIC_MARKET_TYPES,
@@ -103,7 +104,9 @@ export const isPeriodMarket = (marketType: MarketType) => {
             marketType <= MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM) ||
         (marketType >= MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM &&
             marketType <= MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM) ||
-        (marketType >= MarketType.FIRST_PERIOD_DRAW_NO_BET && marketType <= MarketType.FOURTH_PERIOD_DRAW_NO_BET)
+        (marketType >= MarketType.FIRST_PERIOD_DRAW_NO_BET && marketType <= MarketType.FOURTH_PERIOD_DRAW_NO_BET) ||
+        (marketType >= MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM &&
+            marketType <= MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM)
     );
 };
 
@@ -134,6 +137,10 @@ export const isOtherYesNoMarket = (marketType: MarketType) => {
 
 export const isUfcSpecificMarket = (marketType: MarketType) => {
     return UFC_SPECIFIC_MARKET_TYPES.includes(marketType);
+};
+
+export const isTotalExactMarket = (marketType: MarketType) => {
+    return TOTAL_EXACT_MARKET_TYPES.includes(marketType);
 };
 
 const getIsDrawAvailable = (leagueId: number, marketType: MarketType) =>
