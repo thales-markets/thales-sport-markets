@@ -66,19 +66,8 @@ export const useUserTicketsQuery = (
 
                     const tickets = promisesResult
                         .slice(0, promisesLength - 3)
-                        .map((allData) => allData.ticketsData)
+                        .map((allData) => [...allData.ticketsData, ...allData.freeBetsData])
                         .flat(1);
-
-                    // Add free bets tickets
-                    const freeBetTickets = promisesResult
-                        .slice(0, promisesLength - 3)
-                        .map((allData) => allData.freeBetsData)
-                        .flat(1)
-                        .map((ticket) => {
-                            return { ...ticket, isFreeBet: true };
-                        });
-
-                    tickets.push(...freeBetTickets);
 
                     const gamesInfoResponse = promisesResult[promisesLength - 3];
                     const playersInfoResponse = promisesResult[promisesLength - 2];
