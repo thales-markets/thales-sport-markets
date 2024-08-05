@@ -103,7 +103,9 @@ export const isPeriodMarket = (marketType: MarketType) => {
             marketType <= MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM) ||
         (marketType >= MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM &&
             marketType <= MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM) ||
-        (marketType >= MarketType.FIRST_PERIOD_DRAW_NO_BET && marketType <= MarketType.FOURTH_PERIOD_DRAW_NO_BET)
+        (marketType >= MarketType.FIRST_PERIOD_DRAW_NO_BET && marketType <= MarketType.FOURTH_PERIOD_DRAW_NO_BET) ||
+        (marketType >= MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM &&
+            marketType <= MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM)
     );
 };
 
