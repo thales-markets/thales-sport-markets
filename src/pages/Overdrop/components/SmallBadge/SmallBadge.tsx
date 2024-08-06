@@ -1,7 +1,9 @@
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import { formatPoints } from 'utils/overdrop';
 
 type SmallBadgeProps = {
     level: number;
@@ -11,6 +13,7 @@ type SmallBadgeProps = {
 };
 
 const SmallBadge: React.FC<SmallBadgeProps> = ({ level, requiredPointsForLevel, levelName, reached }) => {
+    const { t } = useTranslation();
     const levelItem = OVERDROP_LEVELS.find((item) => item.level == level);
 
     return (
@@ -24,8 +27,8 @@ const SmallBadge: React.FC<SmallBadgeProps> = ({ level, requiredPointsForLevel, 
                     </DisabledLevelWrapper>
                 )}
             </BadgeWrapper>
-            <PointsLabel active={reached}>{`${requiredPointsForLevel} XP`}</PointsLabel>
-            <Label active={reached}>{'LEVEL'}</Label>
+            <PointsLabel active={reached}>{`${formatPoints(requiredPointsForLevel)}`}</PointsLabel>
+            <Label active={reached}>{t('overdrop.overdrop-home.level')}</Label>
             <Level active={reached}>{level}</Level>
         </Wrapper>
     );
@@ -34,7 +37,7 @@ const SmallBadge: React.FC<SmallBadgeProps> = ({ level, requiredPointsForLevel, 
 const Wrapper = styled(FlexDivColumn)`
     align-items: center;
     justify-content: center;
-    height: 150px;
+    height: 200px;
     margin: 0 5px;
 `;
 
@@ -52,7 +55,7 @@ const PointsLabel = styled(Label)`
 `;
 
 const Level = styled(Label)`
-    font-size: 25.038px;
+    font-size: 25px;
     font-weight: 800;
 `;
 
@@ -78,7 +81,7 @@ const Badge = styled.img<{ active?: boolean }>`
 
 const DisabledLevelWrapper = styled(FlexDivColumnCentered)`
     position: absolute;
-    top: 5px;
+    top: 20px;
     left: 0;
     width: 86px;
     height: 86px;

@@ -27,6 +27,9 @@ const ProgressLine: React.FC<ProgressLineProps> = ({ progress, currentPoints, ne
 
 const Wrapper = styled(FlexDivRow)`
     align-items: center;
+    @media (max-width: 767px) {
+        margin-top: 10px;
+    }
 `;
 
 const LevelWrapper = styled(FlexDivColumn)`
@@ -34,25 +37,35 @@ const LevelWrapper = styled(FlexDivColumn)`
 `;
 
 const Label = styled.span`
-    font-size: 17.252px;
+    font-size: 17px;
     font-weight: 500;
     line-height: 80%;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
+    @media (max-width: 767px) {
+        font-size: 12px;
+    }
 `;
 
 const Level = styled(Label)`
-    font-size: 32.347px;
+    font-size: 32px;
     font-weight: 800;
     margin-top: 7px;
+    @media (max-width: 767px) {
+        font-size: 20px;
+    }
 `;
 
 const ProgressLineWrapper = styled(FlexDiv)`
     margin-left: 10px;
     width: 80%;
-    border-radius: 28.753px;
+    border-radius: 28px;
     background-color: ${(props) => props.theme.background.senary};
-    height: 26.666px;
+    height: 26px;
+    @media (max-width: 767px) {
+        width: 100%;
+        height: 13px;
+    }
 `;
 
 const Progress = styled(FlexDiv)<{ progress: number }>`
@@ -61,11 +74,14 @@ const Progress = styled(FlexDiv)<{ progress: number }>`
     align-items: center;
     background-color: ${(props) => props.theme.overdrop.textColor.primary};
     color: ${(props) => props.theme.overdrop.textColor.secondary};
-    font-size: 12.46px;
-    border-radius: 28.753px;
+    font-size: 12px;
+    border-radius: 28px;
     font-weight: 900;
     text-transform: uppercase;
     text-align: right !important;
+    @media (max-width: 767px) {
+        font-size: 8px;
+    }
 `;
 
 const DetailedPoints = styled.span`

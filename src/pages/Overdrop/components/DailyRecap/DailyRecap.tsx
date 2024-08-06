@@ -15,9 +15,13 @@ const DailyRecap: React.FC = () => {
                 <LevelCircles levels={[2, 3, 4, 5, 6, 7]} currentLevel={6} />
             </ItemContainer>
             <ItemContainer>
+                <Label>{t('overdrop.overdrop-home.weekly-streak')}</Label>
+                <Value>{'+50%'}</Value>
+                <LevelCircles levels={[1, 2, 3, 4]} currentLevel={4} />
+            </ItemContainer>
+            <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.twitter-share')}</Label>
                 <Value>{'+10%'}</Value>
-                <LevelCircles levels={[1, 2, 3, 4]} currentLevel={4} />
             </ItemContainer>
             <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
@@ -34,11 +38,19 @@ const Wrapper = styled(FlexDivColumn)`
     border-radius: 6px;
     background: linear-gradient(${(props) => props.theme.background.quinary} 0 0) padding-box,
         linear-gradient(40deg, rgba(92, 68, 44, 1) 0%, rgba(23, 25, 42, 1) 50%, rgba(92, 68, 44, 1) 100%) border-box;
+    @media (max-width: 767px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
 `;
 
 const ItemContainer = styled(FlexDivColumnCentered)`
     justify-content: center;
     text-align: center;
+    margin-bottom: 10px;
+    @media (max-width: 767px) {
+        min-width: 200px;
+    }
 `;
 
 const Label = styled.span`

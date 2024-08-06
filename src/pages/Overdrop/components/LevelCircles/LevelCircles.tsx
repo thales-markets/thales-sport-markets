@@ -37,6 +37,7 @@ const LevelCircles: React.FC<LevelCirclesTypes> = ({
 };
 
 const Wrapper = styled(FlexDivRowCentered)<{ wrapperMargin?: string }>`
+    justify-content: space-around;
     margin: ${(props) => (props.wrapperMargin ? props.wrapperMargin : '5px 0px')};
 `;
 
@@ -44,6 +45,7 @@ const LevelWrapper = styled(FlexDivColumnCentered)<{ wrapperMargin?: string }>`
     margin: 5px 0px;
     align-items: center;
     justify-content: center;
+    max-width: 23px;
 `;
 
 const Circle = styled(FlexDivColumnCentered)<{ active: boolean }>`

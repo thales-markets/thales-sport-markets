@@ -1,22 +1,30 @@
 import Tooltip from 'components/Tooltip';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
+import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import SmallBadge from '../SmallBadge/SmallBadge';
 
-const NUMBER_OF_CARDS = 6;
-
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [currentStep, setCurrentStep] = useState<number>(0);
+    const [numberOfCars, setNumberOfCards] = useState<number>(6);
+
+    useEffect(() => {
+        if (isMobile) setNumberOfCards(4);
+        setNumberOfCards(6);
+    }, [isMobile]);
 
     const handleOnNext = () => {
-        if (currentStep + 1 + NUMBER_OF_CARDS == OVERDROP_LEVELS.length + 1) return;
+        if (currentStep + 1 + numberOfCars == OVERDROP_LEVELS.length + 1) return;
         setCurrentStep(currentStep + 1);
     };
 
@@ -29,7 +37,7 @@ const BadgeOverview: React.FC = () => {
         <Wrapper>
             <BadgeWrapper>
                 <Arrow className={'icon-homepage icon--arrow-left'} onClick={() => handleOnPrevious()} />
-                {OVERDROP_LEVELS.slice(currentStep, currentStep + NUMBER_OF_CARDS).map((item, index) => {
+                {OVERDROP_LEVELS.slice(currentStep, currentStep + numberOfCars).map((item, index) => {
                     return (
                         <SmallBadge
                             key={index}

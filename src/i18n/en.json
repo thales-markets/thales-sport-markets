@@ -1190,7 +1190,9 @@
             "leaderboard": "Leaderboard"
         },
         "overdrop-home": {
+            "my-total-xp": "My Total XP",
             "daily-streak": "Daily streak xp boost",
+            "weekly-streak": "Weekly streak XP boost",
             "twitter-share": "Twitter share xp boost",
             "twitter-xp-boost-resets": "Twitter xp boost resets in",
             "level": "Level",
