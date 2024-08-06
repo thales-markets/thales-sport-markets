@@ -1215,6 +1215,16 @@
                 "twitter-share-bonus": "twitter share bonus (once per day)",
                 "twitter-content": "Share your Overtime <bold>Flex Card</bold> from today's bet <bold>on Twitter: bonus 10% per BASE XP per $</bold> for the rest of the day"
             }
+        },
+        "xp-details": {
+            "days-in-row": "Days in a row",
+            "daily-multiplier": "Daily multiplier",
+            "shared-flex": "Shared flex card",
+            "twitter-multiplier": "Twitter multiplier",
+            "total-bonus": "Total bonus",
+            "active-xp-bonus": "Active xp bonus",
+            "xp-history": "XP History",
+            "paragraph": "Use THALES as a collateral for additional 10% bonus, create parlays for up to 100% bonus and check for special promotion games."
         }
     }
 }

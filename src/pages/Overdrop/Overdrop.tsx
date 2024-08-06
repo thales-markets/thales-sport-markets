@@ -7,6 +7,7 @@ import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import Navigation from './components/Navigation';
 import LevelingTree from './pages/LevelingTree';
 import OverdropHome from './pages/OverdropHome';
+import XPDetails from './pages/XPDetails/XPDetails';
 
 const Overdrop: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState<OverdropTab>(OverdropTab.OVERDROP_HOME);
@@ -19,6 +20,7 @@ const Overdrop: React.FC = () => {
             <MainContainer>
                 <Navigation selectedTab={selectedTab} setSelectedTab={(tab: OverdropTab) => setSelectedTab(tab)} />
                 {selectedTab == OverdropTab.OVERDROP_HOME && <OverdropHome />}
+                {selectedTab == OverdropTab.XP_CALCULATOR && <XPDetails />}
                 {selectedTab == OverdropTab.LEVELING_TREE && <LevelingTree />}
             </MainContainer>
             <RightSidebarContainer>
