@@ -1,13 +1,15 @@
-import TestBadge from 'assets/images/overdrop/test.png';
+import { OVERDROP_LEVELS } from 'constants/overdrop';
 import React from 'react';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import ProgressLine from '../ProgressLine';
 
 const XPOverview: React.FC = () => {
+    const levelItem = OVERDROP_LEVELS.find((item) => item.level == 6);
+
     return (
         <Wrapper>
-            <Badge src={TestBadge} />
+            <Badge src={levelItem ? levelItem.largeBadge : ''} />
             <ProgressOverviewWrapper>
                 <InfoWrapper>
                     <InfoItem>

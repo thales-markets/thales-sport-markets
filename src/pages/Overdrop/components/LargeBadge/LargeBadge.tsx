@@ -1,6 +1,6 @@
-import BadgeLarge from 'assets/images/overdrop/testLargeBadge.png';
 import ThalesAmountImage from 'assets/images/overdrop/thales_voucher.png';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { OVERDROP_LEVELS } from 'constants/overdrop';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -25,9 +25,11 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
 }) => {
     const { t } = useTranslation();
 
+    const levelItem = OVERDROP_LEVELS.find((item) => item.level == level);
+
     return (
         <Wrapper active={reached}>
-            <BadgeImage active={reached} src={BadgeLarge} />
+            <BadgeImage active={reached} src={levelItem ? levelItem.largeBadge : ''} />
             {!reached && (
                 <LockWrapper>
                     <Icon className="icon icon--lock" />
