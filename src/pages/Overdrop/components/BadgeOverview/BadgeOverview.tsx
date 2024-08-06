@@ -1,11 +1,14 @@
+import Tooltip from 'components/Tooltip';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { ThemeInterface } from 'types/ui';
 import SmallBadge from '../SmallBadge/SmallBadge';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
+    const theme: ThemeInterface = useTheme();
 
     return (
         <Wrapper>
@@ -16,30 +19,79 @@ const BadgeOverview: React.FC = () => {
                 <SmallBadge level={7} requiredPointsForLevel={10000} levelName="professional" reached={false} />
             </BadgeWrapper>
             <DetailsWrapper>
-                <ItemWrapper>
-                    <Label>{t('overdrop.overdrop-home.level')}</Label>
-                    <Value>{'#6 Semi-Pro'}</Value>
-                </ItemWrapper>
-                <ItemWrapper>
-                    <Label>{t('overdrop.overdrop-home.xp')}</Label>
-                    <Value>{'7374 XP'}</Value>
-                </ItemWrapper>
-                <ItemWrapper>
-                    <Label>{t('overdrop.overdrop-home.next-level')}</Label>
-                    <Value>{'3759 XP to lvl 7'}</Value>
-                </ItemWrapper>
-                <ItemWrapper>
-                    <Label>{t('overdrop.overdrop-home.level')}</Label>
-                    <Value>{'#6 Semi-Pro'}</Value>
-                </ItemWrapper>
-                <ItemWrapper>
-                    <Label>{t('overdrop.overdrop-home.total-xp-multiplier')}</Label>
-                    <Value>{'x 2.1'}</Value>
-                </ItemWrapper>
-                <ItemWrapper>
-                    <Label>{t('overdrop.overdrop-home.level')}</Label>
-                    <Value>{'#6 Semi-Pro'}</Value>
-                </ItemWrapper>
+                <ItemContainer>
+                    <ItemWrapper>
+                        <Label>{t('overdrop.overdrop-home.level')}</Label>
+                        <Value>{'#6 Semi-Pro'}</Value>
+                    </ItemWrapper>
+                    <Tooltip
+                        iconColor={theme.textColor.septenary}
+                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                        iconFontSize={14}
+                        marginLeft={2}
+                    />
+                </ItemContainer>
+
+                <ItemContainer>
+                    <ItemWrapper>
+                        <Label>{t('overdrop.overdrop-home.xp')}</Label>
+                        <Value>{'7374 XP'}</Value>
+                    </ItemWrapper>
+                    <Tooltip
+                        iconColor={theme.textColor.septenary}
+                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                        iconFontSize={14}
+                        marginLeft={2}
+                    />
+                </ItemContainer>
+                <ItemContainer>
+                    <ItemWrapper>
+                        <Label>{t('overdrop.overdrop-home.next-level')}</Label>
+                        <Value>{'3759 XP to lvl 7'}</Value>
+                    </ItemWrapper>
+                    <Tooltip
+                        iconColor={theme.textColor.septenary}
+                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                        iconFontSize={14}
+                        marginLeft={2}
+                    />
+                </ItemContainer>
+                <ItemContainer>
+                    <ItemWrapper>
+                        <Label>{t('overdrop.overdrop-home.level')}</Label>
+                        <Value>{'#6 Semi-Pro'}</Value>
+                    </ItemWrapper>
+                    <Tooltip
+                        iconColor={theme.textColor.septenary}
+                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                        iconFontSize={14}
+                        marginLeft={2}
+                    />
+                </ItemContainer>
+                <ItemContainer>
+                    <ItemWrapper>
+                        <Label>{t('overdrop.overdrop-home.total-xp-multiplier')}</Label>
+                        <Value>{'x 2.1'}</Value>
+                    </ItemWrapper>
+                    <Tooltip
+                        iconColor={theme.textColor.septenary}
+                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                        iconFontSize={14}
+                        marginLeft={2}
+                    />
+                </ItemContainer>
+                <ItemContainer>
+                    <ItemWrapper>
+                        <Label>{t('overdrop.overdrop-home.level')}</Label>
+                        <Value>{'#6 Semi-Pro'}</Value>
+                    </ItemWrapper>
+                    <Tooltip
+                        iconColor={theme.textColor.septenary}
+                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
+                        iconFontSize={14}
+                        marginLeft={2}
+                    />
+                </ItemContainer>
             </DetailsWrapper>
         </Wrapper>
     );
@@ -60,7 +112,12 @@ const DetailsWrapper = styled(FlexDivColumn)`
     margin-top: 20px;
 `;
 
+const ItemContainer = styled(FlexDivRow)`
+    align-items: center;
+`;
+
 const ItemWrapper = styled(FlexDivRow)`
+    width: 100%;
     padding: 4px 10px;
     margin-bottom: 5px;
     background-color: ${(props) => props.theme.overdrop.background.tertiary};
@@ -80,5 +137,11 @@ const Value = styled.span`
     text-transform: uppercase;
     color: ${(props) => props.theme.overdrop.textColor.primary};
 `;
+
+// const TooltipIcon = styled.i`
+//     color: ${(props) => props.theme.textColor.septenary};
+//     font-size: 15px;
+//     margin-left: 4px;
+// `;
 
 export default BadgeOverview;
