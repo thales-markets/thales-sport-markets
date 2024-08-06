@@ -69,9 +69,9 @@ export const displayGameClock = (market: SportMarket): boolean => {
 export const displayGamePeriod = (market: SportMarket): string => {
     return market.gamePeriod == null || market.gamePeriod == undefined
         ? ''
-        : market.gamePeriod.toLowerCase() === 'half'
+        : `${market.gamePeriod}`.toLowerCase() === 'half'
         ? `${t('markets.market-card.half-time')}`
-        : `${getOrdinalNumberLabel(Number(market.gamePeriod[0]))} ${t(
+        : `${getOrdinalNumberLabel(Number(`${market.gamePeriod}`[0]))} ${t(
               `markets.market-card.${getLeaguePeriodType(Number(market.leagueId))}`
           )}`;
 };
