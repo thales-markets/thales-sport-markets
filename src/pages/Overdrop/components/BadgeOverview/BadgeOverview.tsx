@@ -1,22 +1,46 @@
 import Tooltip from 'components/Tooltip';
-import React from 'react';
+import { OVERDROP_LEVELS } from 'constants/overdrop';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { ThemeInterface } from 'types/ui';
 import SmallBadge from '../SmallBadge/SmallBadge';
 
+const NUMBER_OF_CARDS = 6;
+
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
 
+    const [currentStep, setCurrentStep] = useState<number>(0);
+
+    const handleOnNext = () => {
+        if (currentStep + 1 + NUMBER_OF_CARDS == OVERDROP_LEVELS.length + 1) return;
+        setCurrentStep(currentStep + 1);
+    };
+
+    const handleOnPrevious = () => {
+        if (currentStep - 1 <= -1) return;
+        setCurrentStep(currentStep - 1);
+    };
+
     return (
         <Wrapper>
             <BadgeWrapper>
-                <SmallBadge level={4} requiredPointsForLevel={1000} levelName="challenger" reached={true} />
-                <SmallBadge level={5} requiredPointsForLevel={2500} levelName="competitor" reached={true} />
-                <SmallBadge level={6} requiredPointsForLevel={5000} levelName="semi-pro" reached={true} />
-                <SmallBadge level={7} requiredPointsForLevel={10000} levelName="professional" reached={false} />
+                <Arrow className={'icon-homepage icon--arrow-left'} onClick={() => handleOnPrevious()} />
+                {OVERDROP_LEVELS.slice(currentStep, currentStep + NUMBER_OF_CARDS).map((item, index) => {
+                    return (
+                        <SmallBadge
+                            key={index}
+                            level={item.level}
+                            requiredPointsForLevel={item.minimumPoints}
+                            levelName={item.levelName}
+                            reached={item.level < 7}
+                        />
+                    );
+                })}
+                <Arrow className={'icon-homepage icon--arrow-right'} onClick={() => handleOnNext()} />
             </BadgeWrapper>
             <DetailsWrapper>
                 <ItemContainer>
@@ -138,10 +162,10 @@ const Value = styled.span`
     color: ${(props) => props.theme.overdrop.textColor.primary};
 `;
 
-// const TooltipIcon = styled.i`
-//     color: ${(props) => props.theme.textColor.septenary};
-//     font-size: 15px;
-//     margin-left: 4px;
-// `;
+const Arrow = styled.i`
+    color: ${(props) => props.theme.button.background.senary};
+    font-size: 18px;
+    cursor: pointer;
+`;
 
 export default BadgeOverview;

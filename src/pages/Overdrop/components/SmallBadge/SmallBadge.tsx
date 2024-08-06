@@ -60,6 +60,8 @@ const LevelName = styled.span<{ active?: boolean }>`
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
+    text-align: center;
+    word-wrap: break-word;
     color: ${(props) => (props.active ? props.theme.textColor.primary : props.theme.overdrop.textColor.tertiary)};
 `;
 
