@@ -1,4 +1,4 @@
-import TestBadge from 'assets/images/overdrop/test.png';
+import { OVERDROP_LEVELS } from 'constants/overdrop';
 import React from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
@@ -11,11 +11,13 @@ type SmallBadgeProps = {
 };
 
 const SmallBadge: React.FC<SmallBadgeProps> = ({ level, requiredPointsForLevel, levelName, reached }) => {
+    const levelItem = OVERDROP_LEVELS.find((item) => item.level == level);
+
     return (
         <Wrapper>
             <LevelName active={reached}>{levelName}</LevelName>
             <BadgeWrapper>
-                <Badge src={TestBadge} active={reached} />
+                <Badge src={levelItem ? levelItem.smallBadge : ''} active={reached} />
                 {!reached && (
                     <DisabledLevelWrapper>
                         <Icon className="icon icon--lock" />

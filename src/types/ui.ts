@@ -53,5 +53,7 @@ export type OverdropLevel = {
     levelName: string;
     level: number;
     minimumPoints: number;
+    smallBadge: string;
+    largeBadge: string;
     voucherAmount?: number;
 };
