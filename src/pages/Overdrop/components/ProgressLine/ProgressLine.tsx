@@ -7,20 +7,29 @@ type ProgressLineProps = {
     currentPoints: number;
     nextLevelPoints: number;
     level: number;
+    hideLevelLabel?: boolean;
 };
 
-const ProgressLine: React.FC<ProgressLineProps> = ({ progress, currentPoints, nextLevelPoints, level }) => {
+const ProgressLine: React.FC<ProgressLineProps> = ({
+    progress,
+    currentPoints,
+    nextLevelPoints,
+    level,
+    hideLevelLabel,
+}) => {
     return (
         <Wrapper>
-            <ProgressLineWrapper>
+            <ProgressLineWrapper levelLabelHidden={hideLevelLabel}>
                 <Progress progress={progress}>
                     <DetailedPoints>{`${currentPoints} XP / ${nextLevelPoints} XP`}</DetailedPoints>
                 </Progress>
             </ProgressLineWrapper>
-            <LevelWrapper>
-                <Label>{'Level'}</Label>
-                <Level>{level}</Level>
-            </LevelWrapper>
+            {!hideLevelLabel && (
+                <LevelWrapper>
+                    <Label>{'Level'}</Label>
+                    <Level>{level}</Level>
+                </LevelWrapper>
+            )}
         </Wrapper>
     );
 };
@@ -47,12 +56,12 @@ const Level = styled(Label)`
     margin-top: 7px;
 `;
 
-const ProgressLineWrapper = styled(FlexDiv)`
+const ProgressLineWrapper = styled(FlexDiv)<{ levelLabelHidden?: boolean }>`
     margin-left: 10px;
-    width: 80%;
+    width: ${(props) => (props.levelLabelHidden ? '100%' : '80%')};
     border-radius: 28.753px;
     background-color: ${(props) => props.theme.background.senary};
-    height: 26.666px;
+    height: ${(props) => (props.levelLabelHidden ? '18px' : '26.666px')};
 `;
 
 const Progress = styled(FlexDiv)<{ progress: number }>`

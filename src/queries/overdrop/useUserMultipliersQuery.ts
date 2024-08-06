@@ -2,23 +2,19 @@ import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { useQuery, UseQueryOptions } from 'react-query';
+import { OverdropMultiplier } from 'types/overdrop';
 
-type AMMContractsPausedData = { dailymultiplier: number; weeklyMultiplier: number };
-
-const useGetUserMultipliersQuery = (walletAddress: string, options?: UseQueryOptions<AMMContractsPausedData>) => {
-    return useQuery<AMMContractsPausedData>(
+const useUserMultipliersQuery = (walletAddress: string, options?: UseQueryOptions<OverdropMultiplier[]>) => {
+    return useQuery<OverdropMultiplier[]>(
         QUERY_KEYS.Overdrop.UserMultipliers(walletAddress),
         async () => {
             try {
                 const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/user-multipliers/${walletAddress}`);
 
-                return response.data;
+                return Object.keys(response.data).map((key) => ({ multiplier: response.data[key], name: key }));
             } catch (e) {
-                console.log(e);
-                return {
-                    dailymultiplier: 0,
-                    weeklyMultiplier: 0,
-                };
+                console.error(e);
+                return [];
             }
         },
         {
@@ -27,4 +23,4 @@ const useGetUserMultipliersQuery = (walletAddress: string, options?: UseQueryOpt
     );
 };
 
-export default useGetUserMultipliersQuery;
+export default useUserMultipliersQuery;

@@ -24,11 +24,14 @@ import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
+import ProgressLine from 'pages/Overdrop/components/ProgressLine';
+import { Circle } from 'pages/Overdrop/components/styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
+import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -57,7 +60,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import {
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
@@ -73,6 +76,7 @@ import {
     getPrecision,
 } from 'thales-utils';
 import { LeaderboardPoints, SportsAmmData, TicketMarket } from 'types/markets';
+import { OverdropMultiplier } from 'types/overdrop';
 import { Coins } from 'types/tokens';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
@@ -92,6 +96,7 @@ import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
+import { formatPoints, getMultiplierLabel } from 'utils/overdrop';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
@@ -101,6 +106,7 @@ import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeader
 import SuggestedAmount from '../SuggestedAmount';
 import {
     AmountToBuyContainer,
+    Arrow,
     CheckboxContainer,
     ClearLabel,
     GasSummary,
@@ -111,6 +117,17 @@ import {
     InfoValue,
     InfoWrapper,
     InputContainer,
+    OverdropLabel,
+    OverdropRowSummary,
+    OverdropSummary,
+    OverdropSummarySubheader,
+    OverdropSummarySubtitle,
+    OverdropSummarySubvalue,
+    OverdropSummaryTitle,
+    OverdropTotal,
+    OverdropTotalsRow,
+    OverdropTotalsTitle,
+    OverdropValue,
     RowContainer,
     RowSummary,
     SettingsIcon,
@@ -185,6 +202,7 @@ const Ticket: React.FC<TicketProps> = ({
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextBuyInAmount, setTooltipTextBuyInAmount] = useState<string>('');
     const [isFreeBetActive, setIsFreeBetActive] = useState<boolean>(false);
+    const [isOverdropSummaryOpen, setIsOverdropSummaryOpen] = useState<boolean>(false);
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
@@ -202,6 +220,8 @@ const Ticket: React.FC<TicketProps> = ({
     const [slippageDropdownOpen, setSlippageDropdownOpen] = useState<boolean>(false);
 
     const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
+
+    const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isAppReady && isWalletConnected });
 
     const query = useParlayLeaderboardQuery(networkId, latestPeriodWeekly, {
         enabled: isAppReady && !HIDE_PARLAY_LEADERBOARD,
@@ -242,6 +262,38 @@ const Ticket: React.FC<TicketProps> = ({
             mountedRef.current = false;
         };
     }, []);
+
+    const overdropMultipliers: OverdropMultiplier[] = useMemo(() => {
+        const parlayMultiplier = {
+            name: 'parlayMultiplier',
+            label: 'Games in parlay',
+            multiplier: (markets.length - 1) * 10,
+        };
+        const thalesMultiplier = {
+            name: 'thalesMultiplier',
+            label: 'THALES used',
+            multiplier: isThales ? 20 : 0,
+        };
+        return [
+            ...(userMultipliersQuery.isSuccess
+                ? userMultipliersQuery.data.map((multiplier) => ({
+                      ...multiplier,
+                      label: getMultiplierLabel(multiplier),
+                  }))
+                : []),
+            parlayMultiplier,
+            thalesMultiplier,
+        ];
+    }, [userMultipliersQuery.data, userMultipliersQuery.isSuccess, markets, isThales]);
+
+    const overdropTotalXP = useMemo(() => {
+        if (!buyInAmountInDefaultCollateral) {
+            return 0;
+        }
+
+        const totalMultiplier = overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0);
+        return buyInAmountInDefaultCollateral * (1 + totalMultiplier / 100);
+    }, [overdropMultipliers, buyInAmountInDefaultCollateral]);
 
     const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
         enabled: isAppReady,
@@ -1599,6 +1651,82 @@ const Ticket: React.FC<TicketProps> = ({
                     </CheckboxContainer>
                 </RowContainer>
             </RowSummary>
+            <OverdropRowSummary margin="10px 0 0 0">
+                <OverdropRowSummary
+                    isClickable
+                    onClick={() => {
+                        setIsOverdropSummaryOpen(true);
+                    }}
+                >
+                    <OverdropLabel>{t('markets.parlay.overdrop.overdrop-xp')}</OverdropLabel>
+                    <OverdropValue>
+                        {`~${formatPoints(overdropTotalXP)}`}
+                        <Arrow className={'icon icon--caret-up'} />
+                    </OverdropValue>
+                </OverdropRowSummary>
+
+                {isOverdropSummaryOpen && (
+                    <OverdropSummary>
+                        <OverdropSummaryTitle>{t('markets.parlay.overdrop.overdrop-xp-overview')}</OverdropSummaryTitle>
+                        <OverdropRowSummary margin="0 20px">
+                            <OverdropSummarySubtitle>{t('markets.parlay.overdrop.base-xp')}</OverdropSummarySubtitle>
+                            <OverdropSummarySubvalue>{`${
+                                (formatCurrency(buyInAmountInDefaultCollateral), 0)
+                            } XP`}</OverdropSummarySubvalue>
+                        </OverdropRowSummary>
+                        <OverdropRowSummary margin="20px 20px">
+                            <OverdropSummarySubheader>
+                                {t('markets.parlay.overdrop.active-boost')}
+                            </OverdropSummarySubheader>
+                            <OverdropSummarySubheader>
+                                {t('markets.parlay.overdrop.bonus-applied')}
+                            </OverdropSummarySubheader>
+                        </OverdropRowSummary>
+                        {overdropMultipliers.map((multiplier) => (
+                            <OverdropRowSummary margin="20px 20px" key={multiplier.name}>
+                                <FlexDivCentered>
+                                    <Circle active={true} />
+                                    <OverdropSummarySubtitle>{multiplier.label}</OverdropSummarySubtitle>
+                                </FlexDivCentered>
+                                <OverdropSummarySubvalue>+{multiplier.multiplier}%</OverdropSummarySubvalue>
+                            </OverdropRowSummary>
+                        ))}
+                        <div>
+                            <ProgressLine
+                                progress={65}
+                                currentPoints={7374}
+                                nextLevelPoints={8000}
+                                level={6}
+                                hideLevelLabel
+                            />
+                        </div>
+                        <OverdropTotalsRow>
+                            <FlexDivColumnCentered gap={10}>
+                                <OverdropTotalsTitle>{t('markets.parlay.overdrop.total-xp-boost')}</OverdropTotalsTitle>
+                                <OverdropTotal isBoost>
+                                    +{overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0)}%
+                                </OverdropTotal>
+                            </FlexDivColumnCentered>
+                            <FlexDivColumnCentered gap={10}>
+                                <OverdropTotalsTitle>
+                                    {t('markets.parlay.overdrop.total-xp-earned')}
+                                </OverdropTotalsTitle>
+                                <OverdropTotal>+{formatPoints(overdropTotalXP)}</OverdropTotal>
+                            </FlexDivColumnCentered>
+                        </OverdropTotalsRow>
+                        <OverdropRowSummary
+                            isClickable
+                            onClick={() => {
+                                setIsOverdropSummaryOpen(false);
+                            }}
+                        >
+                            <OverdropValue>
+                                <Arrow className={'icon icon--caret-down'} />
+                            </OverdropValue>
+                        </OverdropRowSummary>
+                    </OverdropSummary>
+                )}
+            </OverdropRowSummary>
             {!isBuying && oddsChanged && (
                 <>
                     <FlexDivCentered>

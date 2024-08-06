@@ -88,4 +88,5 @@ export const Colors = {
     JONQUIL: '#F8C913',
     METALIC_BLUE: '#3D467F',
     SMOKEY_TOPAZ: '#7C3810',
+    OVERDROP_GREEN: '#82EB9F',
 };
