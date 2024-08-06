@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { Circle } from '../styled-components';
 
 type LevelCirclesTypes = {
     levels: number[];
@@ -46,20 +47,6 @@ const LevelWrapper = styled(FlexDivColumnCentered)<{ wrapperMargin?: string }>`
     align-items: center;
     justify-content: center;
     max-width: 23px;
-`;
-
-const Circle = styled(FlexDivColumnCentered)<{ active: boolean }>`
-    color: ${(props) => props.theme.overdrop.textColor.quaternary};
-    background-color: ${(props) =>
-        props?.active ? props.theme.overdrop.textColor.primary : props.theme.overdrop.background.quaternary};
-    border-radius: 50%;
-    width: 20px;
-    min-height: 20px;
-    font-size: 11px;
-    font-weight: 900;
-    justify-content: center;
-    margin: 5px 2px;
-    text-align: center;
 `;
 
 const LabelAbove = styled.span`

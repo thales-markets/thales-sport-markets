@@ -181,6 +181,8 @@ export default {
             secondary: Colors.NAVY_BLUE_DARK,
             tertiary: Colors.CHINESE_BLUE,
             quaternary: Colors.NAVY_BLUE_EXTRA_DARK,
+            quinary: Colors.TORY_BLUE_LIGHT,
+            senary: Colors.OVERDROP_GREEN,
             inactive: Colors.NAVY_BLUE_LIGHT,
         },
         borderColor: {

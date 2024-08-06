@@ -307,3 +307,105 @@ export const SlippageDropdownContainer = styled.div`
     z-index: 1000;
     right: 0;
 `;
+
+export const OverdropRowSummary = styled(RowSummary)<{ margin?: string; isClickable?: boolean }>`
+    position: relative;
+    margin: ${(props) => props.margin || 'inherit'};
+    justify-content: space-between;
+    ${(props) => (props.isClickable ? 'cursor: pointer;width: 100%;' : '')}
+`;
+
+export const OverdropLabel = styled.span`
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    @media (max-width: 950px) {
+        line-height: 24px;
+    }
+`;
+
+export const OverdropValue = styled.span`
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 20px;
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    margin-left: auto;
+    i {
+        color: ${(props) => props.theme.textColor.septenary};
+    }
+`;
+
+export const OverdropSummary = styled.div`
+    z-index: 10000;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: ${(props) => props.theme.overdrop.background.active};
+    box-shadow: 0px -10px 28.7px 30px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+`;
+
+export const OverdropSummaryTitle = styled(FlexDivCentered)`
+    height: 60px;
+    text-align: center;
+    font-size: 20px;
+    color: ${(props) => props.theme.overdrop.textColor.quinary};
+`;
+
+export const Arrow = styled.i`
+    font-size: 16px;
+    margin-left: 10px;
+    text-transform: none;
+    font-weight: 400;
+    color: ${(props) => props.theme.textColor.secondary};
+    @media (max-width: 767px) {
+        font-size: 10px;
+        margin-left: 8px;
+    }
+`;
+
+export const OverdropSummarySubtitle = styled.span`
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+`;
+
+export const OverdropSummarySubvalue = styled.span`
+    font-size: 29px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+`;
+
+export const OverdropSummarySubheader = styled.span`
+    color: ${(props) => props.theme.overdrop.textColor.quinary};
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+`;
+
+export const OverdropTotalsRow = styled(FlexDiv)`
+    margin: 20px 20px 0 20px;
+    justify-content: space-around;
+`;
+
+export const OverdropTotalsTitle = styled.div`
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+`;
+
+export const OverdropTotal = styled.div<{ isBoost?: boolean }>`
+    text-align: center;
+    font-size: 29px;
+    font-weight: 600;
+    color: ${(props) =>
+        props.isBoost ? props.theme.overdrop.textColor.primary : props.theme.overdrop.textColor.senary};
+    text-transform: uppercase;
+`;
