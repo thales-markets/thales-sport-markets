@@ -71,7 +71,7 @@ export const displayGamePeriod = (market: SportMarket): string => {
         ? ''
         : `${market.gamePeriod}`.toLowerCase() === 'half'
         ? `${t('markets.market-card.half-time')}`
-        : `${getOrdinalNumberLabel(Number(market.gamePeriod[0]))} ${t(
+        : `${getOrdinalNumberLabel(Number(`${market.gamePeriod}`[0]))} ${t(
               `markets.market-card.${getLeaguePeriodType(Number(market.leagueId))}`
           )}`;
 };
