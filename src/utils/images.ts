@@ -34,6 +34,8 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.GERMANY_CUP
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.BRAZIL_CUP
+        ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.US_ELECTION
         ? `/logos/Countries/united-states-of-america.svg`
         : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`;
@@ -122,6 +124,7 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.SAUDI_PROFESSIONAL_LEAGUE:
             return `/logos/Countries/saudi-arabia.svg`;
         case League.BRAZIL_1:
+        case League.BRAZIL_CUP:
             return `/logos/Countries/brazil.svg`;
         case League.LIGA_MX:
             return `/logos/Countries/mexico.svg`;
