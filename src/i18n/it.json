@@ -194,7 +194,8 @@
         "filters": "Filtri",
         "status": "Stato",
         "wrap-and-buy": "Avvolgi ETH e acquista",
-        "wrap-eth-tooltip": "Il tuo ETH viene prima avvolto in WETH e poi passato al contratto"
+        "wrap-eth-tooltip": "Il tuo ETH viene prima avvolto in WETH e poi passato al contratto",
+        "election-tooltip": "La fonte della risoluzione sarà Associated Press, Fox News e NBC. Questi mercati si risolveranno una volta che tutte e tre le fonti indicheranno la corsa per lo stesso candidato. Se tutte e tre le fonti non avranno indetto la corsa per lo stesso candidato entro l'11 novembre, tutte le scommesse verranno annullate."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -277,7 +278,14 @@
                 "boxing": "Boxe",
                 "fighting": "MMA",
                 "golf": "Golf",
-                "live": "Vivere"
+                "live": "Vivere",
+                "politics": "Politica",
+                "olympicgames": "Giochi Olimpici",
+                "rugby": "Rugby",
+                "tabletennis": "Ping-pong",
+                "handball": "Palla a mano",
+                "volleyball": "Pallavolo",
+                "waterpolo": "Pallanuoto"
             },
             "all": "All",
             "datepicker": {
@@ -552,7 +560,9 @@
             "pre-fight": "Pre-combattimento",
             "end-of-round": "Fine del giro",
             "fighters-walking": "Combattenti che camminano",
-            "fighters-introduction": "Introduzione ai combattenti"
+            "fighters-introduction": "Introduzione ai combattenti",
+            "not-available-for-trading": "Non disponibile per la negoziazione",
+            "suspended": "Sospeso"
         },
         "market-details": {
             "price": "Price",
@@ -664,7 +674,9 @@
             "accept-odds-changes": "Accetta le modifiche alle quote",
             "thales-bonus-info": "Usa THALES e ottieni l'1% di bonus per ogni gioco.",
             "thales-bonus-tooltip": "Gli utenti che effettuano scambi con THALES riceveranno l'1% di pagamenti extra per ogni gioco presente nel loro ticket (già calcolato in Quota totale e Pagamento).",
-            "odds-changed-error": "Le quote sono cambiate durante l'evasione dell'ordine. Prova ad aumentare lo slittamento."
+            "odds-changed-error": "Le quote sono cambiate durante l'evasione dell'ordine. Prova ad aumentare lo slittamento.",
+            "use-free-bet": "Usa la scommessa gratuita",
+            "disable-free-bet": "Disabilita i saldi delle scommesse gratuite"
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {
@@ -683,7 +695,8 @@
             },
             "buttons": {
                 "switch": "Interruttore",
-                "disconnect": "Disconnetti"
+                "disconnect": "Disconnetti",
+                "particle-wallet": "Portafoglio di particelle"
             },
             "labels": {
                 "language": "Lingua"
@@ -697,7 +710,9 @@
         "incentivized-tooltip-uefa": "Un totale enorme di {{rewards}} sarà distribuito per le competizioni UEFA. Solo il volume sulla rete Arbitrum verrà calcolato ai fini dei premi! Controlla maggiori dettagli <detailsLink>qui</detailsLink>.",
         "incentivized-tooltip-nhl": "Un totale enorme di {{rewards}} verrà distribuito per il resto della stagione NHL, compresi i playoff. Solo il volume sulla rete Arbitrum verrà calcolato ai fini dei premi! Controlla maggiori dettagli <detailsLink>qui</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "Un totale enorme di {{rewards}} verrà distribuito per il resto della stagione di {{league}}, compresi i playoff. Solo il volume sulla rete Arbitrum verrà calcolato ai fini dei premi! Controlla maggiori dettagli <detailsLink>qui</detailsLink>.",
-        "incentivized-tooltip-euro-copa": "Un totale enorme di {{rewards}} sarà distribuito per le competizioni Euro 2024 e Copa America. Controlla maggiori dettagli <detailsLink>qui</detailsLink>."
+        "incentivized-tooltip-euro-copa": "Un totale enorme di {{rewards}} sarà distribuito per le competizioni Euro 2024 e Copa America. Controlla maggiori dettagli <detailsLink>qui</detailsLink>.",
+        "incentivized-tooltip-olympics": "Guadagna {{rewards}} in premi basati sul volume durante le Olimpiadi. Controlla maggiori dettagli <detailsLink>qui</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Competi per {{rewards}} durante Wimbledon 2024 negli Overtime V1 e V2. Controlla maggiori dettagli <detailsLink>qui</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -819,7 +834,9 @@
             "trades": "Trades",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
-            "profile-data": "Dati del profilo"
+            "profile-data": "Dati del profilo",
+            "wallet": "Portafoglio",
+            "free-bet": "Scommessa gratuita"
         },
         "in-lp": "Liquidità fornita",
         "lp-title": "Pool di liquidità",
@@ -841,7 +858,31 @@
         },
         "lp": "LP",
         "back": "Indietro",
-        "go-to": "Vai a"
+        "go-to": "Vai a",
+        "free-bet": {
+            "claim-btn": "L'importo richiesto verrà ridotto dell'importo del buy-in, che verrà trasferito sul saldo della scommessa gratuita."
+        },
+        "free-bet-modal": {
+            "funding": "Finanziamenti...",
+            "fund-successful": "Fondo di successo",
+            "enter-wallet-addresses": "Inserisci gli indirizzi del portafoglio",
+            "invalid-amount": "importo non valido",
+            "insufficient-balance": "Equilibrio insufficiente",
+            "fund": "Invia scommessa gratuita",
+            "invalid-wallet-address": "Indirizzo del portafoglio non valido",
+            "enter-amount": "Inserire l'importo",
+            "fund-batch": "Finanzia più indirizzi",
+            "duplicate": "Rilevati indirizzi di portafoglio duplicati",
+            "one-or-more-address-invalid": "Uno o più indirizzi di portafoglio inseriti non sono validi",
+            "title": "Invia scommessa gratuita",
+            "transaction-pending": "Transazione in sospeso",
+            "no-funds": "Assicurati che il tuo portafoglio disponga di fondi sufficienti",
+            "enter-wallet-address": "Inserisci l'indirizzo del portafoglio",
+            "approve-success": "Approvato con successo",
+            "enter-amount-per-user": "Inserisci l'importo per utente",
+            "total-amount-batch": "L'importo totale sarà {{ amount }} multiplo per {{ count }} indirizzo/i del portafoglio."
+        },
+        "send-free-bet": "Invia scommessa gratuita"
     },
     "referral": {
         "nav-items": {

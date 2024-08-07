@@ -194,7 +194,8 @@
         "filters": "筛选器",
         "status": "地位",
         "wrap-and-buy": "包装 ETH 并购买",
-        "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约"
+        "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约",
+        "election-tooltip": "解决来源将是美联社、福克斯新闻和 NBC。一旦所有三个来源都宣布同一位候选人获胜，这些市场就会解决。如果所有三个来源在 11 月 11 日之前都没有宣布同一位候选人获胜，则所有投注将作废。"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -277,7 +278,14 @@
                 "fighting": "格斗运动",
                 "boxing": "拳击",
                 "golf": "高尔夫球",
-                "live": "居住"
+                "live": "居住",
+                "rugby": "橄榄球",
+                "handball": "手球",
+                "waterpolo": "水球",
+                "tabletennis": "乒乓球",
+                "volleyball": "排球",
+                "olympicgames": "奥运会",
+                "politics": "政治"
             },
             "all": "所有",
             "datepicker": {
@@ -552,7 +560,9 @@
             "pre-fight": "战前",
             "fighters-introduction": "戰士介绍",
             "end-of-fight": "戰鬥結束",
-            "fighters-walking": "战士行走"
+            "fighters-walking": "战士行走",
+            "not-available-for-trading": "不可交易",
+            "suspended": "暂停"
         },
         "market-details": {
             "price": "价格",
@@ -664,7 +674,9 @@
             "odds-changed-error": "订单执行过程中赔率发生变化。请尝试增加滑点。",
             "thales-bonus-info": "使用 THALES，每场游戏可获得 1% 的奖励。",
             "accept-odds-changes": "接受赔率变化",
-            "thales-bonus-tooltip": "与 THALES 进行交易的用户将为其票中的每场游戏获得 1% 的额外支出（已在总报价和支出中计算）。"
+            "thales-bonus-tooltip": "与 THALES 进行交易的用户将为其票中的每场游戏获得 1% 的额外支出（已在总报价和支出中计算）。",
+            "use-free-bet": "使用免费投注",
+            "disable-free-bet": "禁用免费投注余额"
         },
         "discounted-per": "折扣按",
         "nav-menu": {
@@ -683,7 +695,8 @@
             },
             "buttons": {
                 "disconnect": "断开",
-                "switch": "转变"
+                "switch": "转变",
+                "particle-wallet": "粒子钱包"
             },
             "labels": {
                 "language": "语言"
@@ -698,7 +711,9 @@
         "incentivized-tooltip-nhl": "NHL 赛季剩余时间（包括季后赛）将发放总计高达 {{rewards}} 的奖励。只有 Arbitrum 网络上的交易量才会计算奖励！查看更多详细信息<detailsLink>此处</detailsLink>。",
         "incentivized-tooltip-mm": "在疯狂三月期间赢得 45,000 ARB + 50,000 THALES。更多详细信息<detailsLink>此处</detailsLink>。",
         "incentivized-tooltip-nhl-mlb": "总计高达 {{rewards}} 的奖励将分发给 {{league}} 赛季的剩余比赛，包括季后赛。只有 Arbitrum 网络上的交易量才会计入奖励！查看<detailsLink>此处</detailsLink>了解更多详情。",
-        "incentivized-tooltip-euro-copa": "2024 年欧洲杯和美洲杯比赛将发放总计高达 {{rewards}} 的奖励。查看<detailsLink>此处</detailsLink>了解更多详情。"
+        "incentivized-tooltip-euro-copa": "2024 年欧洲杯和美洲杯比赛将发放总计高达 {{rewards}} 的奖励。查看<detailsLink>此处</detailsLink>了解更多详情。",
+        "incentivized-tooltip-olympics": "奥运会期间，可获得 {{rewards}} 的基于数量的奖励。查看<detailsLink>此处</detailsLink>的更多详细信息。",
+        "incentivized-tooltip-wimbledon": "在 2024 年温布尔登网球公开赛加时赛 V1 和 V2 期间争夺 {{rewards}}。查看<detailsLink>此处</detailsLink>的更多详细信息。"
     },
     "rewards": {
         "header": "奖励",
@@ -820,7 +835,9 @@
             "trades": "Trades",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
-            "profile-data": "个人资料"
+            "profile-data": "个人资料",
+            "wallet": "钱包",
+            "free-bet": "免费投注"
         },
         "lp-title": "流动资金池",
         "go-to-lp": "去LP",
@@ -842,7 +859,31 @@
         },
         "lp": "LP",
         "back": "后退",
-        "go-to": "去"
+        "go-to": "去",
+        "free-bet": {
+            "claim-btn": "索赔金额将减少买入金额，并转入您的免费投注余额。"
+        },
+        "free-bet-modal": {
+            "duplicate": "检测到重复的钱包地址",
+            "enter-wallet-addresses": "输入钱包地址",
+            "invalid-wallet-address": "钱包地址无效",
+            "fund-batch": "资助多个地址",
+            "funding": "资金...",
+            "fund": "发送免费投注",
+            "approve-success": "成功批准",
+            "transaction-pending": "交易待处理",
+            "enter-wallet-address": "输入钱包地址",
+            "enter-amount-per-user": "输入每个用户的金额",
+            "no-funds": "请确保你的钱包有足够的资金",
+            "title": "发送免费投注",
+            "enter-amount": "输入金额",
+            "total-amount-batch": "总金额将是 {{ amount }} 乘以 {{ count }} 个钱包地址。",
+            "invalid-amount": "金额无效",
+            "insufficient-balance": "余额不足",
+            "fund-successful": "基金成功",
+            "one-or-more-address-invalid": "输入的一个或多个钱包地址无效"
+        },
+        "send-free-bet": "发送免费投注"
     },
     "referral": {
         "generate-link": "生成链接",
