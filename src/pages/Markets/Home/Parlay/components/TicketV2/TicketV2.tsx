@@ -386,7 +386,7 @@ const Ticket: React.FC<TicketProps> = ({
     );
 
     useEffect(() => {
-        if (!freeBetBalanceExists) return;
+        if (!isFreeBetActive) return;
 
         const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
         if (!balanceList) return;
@@ -410,15 +410,16 @@ const Ticket: React.FC<TicketProps> = ({
                 })
             );
         }
+        // When chainging collateral from dropdown this should not be triggered
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         dispatch,
         exchangeRates,
-        freeBetBalanceExists,
+        isFreeBetActive,
         freeBetCollateralBalances,
         multipleCollateralBalancesData,
         networkId,
         ticketPayment.forceChangeCollateral,
-        selectedCollateral,
     ]);
 
     useEffect(() => {
