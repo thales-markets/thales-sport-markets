@@ -51,6 +51,7 @@ const Wrapper = styled(FlexDiv)`
     flex-direction: row;
     margin-top: 15px;
     margin-bottom: 25px;
+    align-items: center;
     @media (max-width: 575px) {
         margin-top: 10px;
         margin-bottom: 15px;
@@ -60,7 +61,7 @@ const Wrapper = styled(FlexDiv)`
 const NavItem = styled(FlexDiv)<{ active?: boolean }>`
     align-items: center;
     color: ${(props) => (props?.active ? props.theme.overdrop.textColor.primary : props.theme.textColor.primary)};
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 600;
     text-align: left;
     text-transform: uppercase;
@@ -73,6 +74,8 @@ const NavIcon = styled.i<{ active?: boolean }>`
     color: ${(props) => (props?.active ? props.theme.overdrop.textColor.primary : props.theme.textColor.primary)};
     font-size: 17px;
     margin-right: 3px;
+    font-weight: 300;
+    text-transform: none !important;
 `;
 
 export default Navigation;
