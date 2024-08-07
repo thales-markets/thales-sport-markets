@@ -45,7 +45,6 @@ const Wrapper = styled(FlexDivRowCentered)<{ wrapperMargin?: string }>`
 const LevelWrapper = styled(FlexDivColumnCentered)<{ wrapperMargin?: string }>`
     margin: 5px 0px;
     align-items: center;
-    justify-content: center;
     max-width: 23px;
 `;
 
@@ -61,6 +60,7 @@ const LabelBelow = styled.span<{ active: boolean }>`
     color: ${(props) =>
         props.active ? props.theme.overdrop.textColor.primary : props.theme.overdrop.background.quaternary};
     font-size: 9px;
+    margin-top: 3px;
     font-style: normal;
     font-weight: 800;
     text-align: center;
