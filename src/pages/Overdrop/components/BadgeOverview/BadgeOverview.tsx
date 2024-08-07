@@ -1,4 +1,3 @@
-import Tooltip from 'components/Tooltip';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -7,16 +6,15 @@ import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
-import { OverdropLevel, ThemeInterface } from 'types/ui';
-import { getCurrentLevelByPoints } from 'utils/overdrop';
+import { OverdropLevel } from 'types/ui';
+import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints } from 'utils/overdrop';
 import SmallBadge from '../SmallBadge/SmallBadge';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
-    const theme: ThemeInterface = useTheme();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [currentStep, setCurrentStep] = useState<number>(0);
@@ -39,6 +37,13 @@ const BadgeOverview: React.FC = () => {
     const levelItem: OverdropLevel | undefined = useMemo(() => {
         if (userData) {
             const levelItem = getCurrentLevelByPoints(userData.points);
+            return levelItem;
+        }
+    }, [userData]);
+
+    const nextLevelItem: OverdropLevel | undefined = useMemo(() => {
+        if (userData) {
+            const levelItem = getNextLevelItemByPoints(userData.points);
             return levelItem;
         }
     }, [userData]);
@@ -77,86 +82,29 @@ const BadgeOverview: React.FC = () => {
             </BadgeWrapper>
             <DetailsWrapper>
                 <ItemContainer>
-                    <ItemWrapper>
-                        <Label>{t('overdrop.overdrop-home.level')}</Label>
-                        <Value>{'#6 Semi-Pro'}</Value>
-                    </ItemWrapper>
-                    <Tooltip
-                        iconColor={theme.textColor.septenary}
-                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                        iconFontSize={14}
-                        marginLeft={2}
-                    />
-                </ItemContainer>
-
-                <ItemContainer>
-                    <ItemWrapper>
-                        <Label>{t('overdrop.overdrop-home.xp')}</Label>
-                        <Value>{'7374 XP'}</Value>
-                    </ItemWrapper>
-                    <Tooltip
-                        iconColor={theme.textColor.septenary}
-                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                        iconFontSize={14}
-                        marginLeft={2}
-                    />
+                    <Label>{t('overdrop.overdrop-home.current-rewards')}</Label>
+                    <ValueWrapper>
+                        <Value>{`13.870,21 OP`}</Value>
+                        <Icon className="icon icon--op" />
+                        <ValueSecondary>{'= USD 9,167.42'}</ValueSecondary>
+                    </ValueWrapper>
+                    <ValueWrapper>
+                        <Value>{`6.742,32 ARB`}</Value>
+                        <Icon className="icon icon--arb" />
+                        <ValueSecondary>{'= USD 9,167.42'}</ValueSecondary>
+                    </ValueWrapper>
                 </ItemContainer>
                 <ItemContainer>
-                    <ItemWrapper>
-                        <Label>{t('overdrop.overdrop-home.next-level')}</Label>
-                        <Value>{'3759 XP to lvl 7'}</Value>
-                    </ItemWrapper>
-                    <Tooltip
-                        iconColor={theme.textColor.septenary}
-                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                        iconFontSize={14}
-                        marginLeft={2}
-                    />
-                </ItemContainer>
-                <ItemContainer>
-                    <ItemWrapper>
-                        <Label>{t('overdrop.overdrop-home.level')}</Label>
-                        <Value>{'#6 Semi-Pro'}</Value>
-                    </ItemWrapper>
-                    <Tooltip
-                        iconColor={theme.textColor.septenary}
-                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                        iconFontSize={14}
-                        marginLeft={2}
-                    />
-                </ItemContainer>
-                <ItemContainer>
-                    <ItemWrapper>
-                        <Label>{t('overdrop.overdrop-home.total-xp-multiplier')}</Label>
-                        <Value>{'x 2.1'}</Value>
-                    </ItemWrapper>
-                    <Tooltip
-                        iconColor={theme.textColor.septenary}
-                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                        iconFontSize={14}
-                        marginLeft={2}
-                    />
-                </ItemContainer>
-                <ItemContainer>
-                    <ItemWrapper>
-                        <Label>{t('overdrop.overdrop-home.level')}</Label>
-                        <Value>{'#6 Semi-Pro'}</Value>
-                    </ItemWrapper>
-                    <Tooltip
-                        iconColor={theme.textColor.septenary}
-                        overlay={t(`liquidity-pool.estimated-amount-tooltip`)}
-                        iconFontSize={14}
-                        marginLeft={2}
-                    />
+                    <Label>{t('overdrop.overdrop-home.next-thales-rewards-at')}</Label>
+                    <ValueWrapper>
+                        <ValueSecondary>
+                            {nextLevelItem
+                                ? `${formatPoints(nextLevelItem?.minimumPoints)} @ LVL ${nextLevelItem?.level}`
+                                : ''}
+                        </ValueSecondary>
+                    </ValueWrapper>
                 </ItemContainer>
             </DetailsWrapper>
-            <CurrentRewardsLabel>{t('overdrop.overdrop-home.current-rewards')}</CurrentRewardsLabel>
-            <Rewards>
-                {`13.870,21 OP`}
-                <Icon className="icon icon--op" />
-                {`6.742,32 ARB`}
-                <Icon className="icon icon--arb" />
-            </Rewards>
         </Wrapper>
     );
 };
@@ -171,57 +119,40 @@ const BadgeWrapper = styled(FlexDivRow)`
     justify-content: space-between;
 `;
 
-const DetailsWrapper = styled(FlexDivColumn)`
+const DetailsWrapper = styled(FlexDivRow)`
     width: 100%;
     margin-top: 20px;
+    margin-left: 10px;
 `;
 
-const ItemContainer = styled(FlexDivRow)`
-    align-items: center;
+const ItemContainer = styled(FlexDivColumn)`
+    max-width: 50%;
+    align-items: flex-start;
+    justify-content: flex-start;
 `;
 
-const ItemWrapper = styled(FlexDivRow)`
-    width: 100%;
-    padding: 4px 10px;
-    margin-bottom: 5px;
-    background-color: ${(props) => props.theme.overdrop.background.tertiary};
-`;
+const ValueWrapper = styled(FlexDivRow)``;
 
 const Label = styled.span`
-    font-size: 13.5px;
-    font-weight: 400;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 110%;
+    margin-bottom: 5px;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
 `;
 
-const Value = styled.span`
-    text-align: right;
-    font-size: 13.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
+const Value = styled(Label)``;
+
+const ValueSecondary = styled(Label)`
+    font-weight: 400;
+    color: ${(props) => props.theme.textColor.septenary};
 `;
 
 const Arrow = styled.i`
     color: ${(props) => props.theme.button.background.senary};
     font-size: 18px;
     cursor: pointer;
-`;
-
-const CurrentRewardsLabel = styled.span`
-    margin-top: 16px;
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 110%;
-    color: ${(props) => props.theme.textColor.primary};
-    text-transform: uppercase;
-`;
-
-const Rewards = styled.span`
-    margin-top: 10px;
-    font-size: 13px;
-    font-weight: 700;
-    color: ${(props) => props.theme.textColor.primary};
 `;
 
 const Icon = styled.i`
