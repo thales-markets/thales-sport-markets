@@ -575,7 +575,7 @@
             "positions": "职位",
             "odds": "赔率"
         },
-        "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.97美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于97%，该选择就不会有流动性。",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "total-quote": "总报价",
             "skew": "偏斜",
