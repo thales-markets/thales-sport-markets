@@ -1,13 +1,47 @@
-import { OVERDROP_LEVELS } from 'constants/overdrop';
-import React from 'react';
+import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { OverdropUserData } from 'types/overdrop';
+import { OverdropLevel } from 'types/ui';
+import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints, getProgressLevel } from 'utils/overdrop';
 import ProgressLine from '../ProgressLine';
 
 const XPOverview: React.FC = () => {
     const { t } = useTranslation();
-    const levelItem = OVERDROP_LEVELS.find((item) => item.level == 6);
+
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+
+    const userDataQuery = useUserDataQuery(walletAddress, {
+        enabled: !!isAppReady,
+    });
+
+    const userData: OverdropUserData | undefined = useMemo(() => {
+        if (userDataQuery?.isSuccess && userDataQuery?.data) {
+            return userDataQuery.data;
+        }
+        return;
+    }, [userDataQuery.data, userDataQuery?.isSuccess]);
+
+    const levelItem: OverdropLevel | undefined = useMemo(() => {
+        if (userData) {
+            const levelItem = getCurrentLevelByPoints(userData.points);
+            return levelItem;
+        }
+    }, [userData]);
+
+    const nextLevelItem: OverdropLevel | undefined = useMemo(() => {
+        if (userData) {
+            const levelItem = getNextLevelItemByPoints(userData.points);
+            return levelItem;
+        }
+    }, [userData]);
 
     return (
         <Wrapper>
@@ -20,10 +54,21 @@ const XPOverview: React.FC = () => {
                     </InfoItem>
                     <InfoItemTotal>
                         <Label>{t('overdrop.overdrop-home.my-total-xp')}</Label>
-                        <TotalValue>{'87,432.28 XP'}</TotalValue>
+                        <TotalValue>{userData ? formatPoints(userData?.points) : ''}</TotalValue>
                     </InfoItemTotal>
                 </InfoWrapper>
-                <ProgressLine progress={65} currentPoints={7374} nextLevelPoints={8000} level={6} />
+                {levelItem && nextLevelItem && (
+                    <ProgressLine
+                        progress={
+                            userData && nextLevelItem
+                                ? getProgressLevel(userData.points, nextLevelItem.minimumPoints)
+                                : 0
+                        }
+                        currentPoints={userData?.points || 0}
+                        nextLevelPoints={nextLevelItem?.minimumPoints}
+                        level={levelItem?.level}
+                    />
+                )}
             </ProgressOverviewWrapper>
         </Wrapper>
     );

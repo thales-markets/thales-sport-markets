@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { formatPoints } from 'utils/overdrop';
 
 type ProgressLineProps = {
     progress: number;
@@ -21,7 +22,9 @@ const ProgressLine: React.FC<ProgressLineProps> = ({
         <Wrapper>
             <ProgressLineWrapper levelLabelHidden={hideLevelLabel}>
                 <Progress progress={progress}>
-                    <DetailedPoints>{`${currentPoints} XP / ${nextLevelPoints} XP`}</DetailedPoints>
+                    <DetailedPoints>{`${formatPoints(currentPoints)} / ${formatPoints(
+                        nextLevelPoints
+                    )}`}</DetailedPoints>
                 </Progress>
             </ProgressLineWrapper>
             {!hideLevelLabel && (
