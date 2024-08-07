@@ -97,7 +97,7 @@ export const mapTicket = (
                     subLeagueId: Number(market.sportId),
                     leagueName: '',
                     typeId: typeId,
-                    type: type.key,
+                    type: type ? type.key : '',
                     maturity: Number(market.maturity) * 1000,
                     maturityDate: new Date(market.maturity * 1000),
                     homeTeam: homeTeamName,
