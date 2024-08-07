@@ -17,21 +17,23 @@ export const getMultiplierLabel = (multiplier: OverdropMultiplier) => {
 };
 
 export const getCurrentLevelByPoints = (points: number) => {
-    const levelItem = OVERDROP_LEVELS.find(
-        (item, index) => item.minimumPoints > points && OVERDROP_LEVELS[index - 1]?.minimumPoints < points
-    );
+    const levelItem = OVERDROP_LEVELS.find((item, index) => {
+        if (item.minimumPoints > points && !OVERDROP_LEVELS[index - 1]) return item;
+        if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
+    });
 
     if (levelItem) return levelItem;
 };
 
 export const getNextLevelItemByPoints = (points: number) => {
-    const currentLevelItemIndex = OVERDROP_LEVELS.findIndex(
-        (item, index) => item.minimumPoints > points && OVERDROP_LEVELS[index - 1]?.minimumPoints < points
-    );
+    const currentLevelItemIndex = OVERDROP_LEVELS.findIndex((item, index) => {
+        if (item.minimumPoints > points && !OVERDROP_LEVELS[index - 1]) return item;
+        if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
+    });
 
     if (currentLevelItemIndex == -1) return OVERDROP_LEVELS[0];
 
-    return OVERDROP_LEVELS[currentLevelItemIndex + 1];
+    return OVERDROP_LEVELS[currentLevelItemIndex];
 };
 
 export const getProgressLevel = (currentPoints: number, nextLevelPoints: number) => {

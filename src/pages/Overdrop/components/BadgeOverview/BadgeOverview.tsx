@@ -1,13 +1,17 @@
 import Tooltip from 'components/Tooltip';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
-import React, { useEffect, useState } from 'react';
+import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
+import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
-import { ThemeInterface } from 'types/ui';
+import { OverdropUserData } from 'types/overdrop';
+import { OverdropLevel, ThemeInterface } from 'types/ui';
+import { getCurrentLevelByPoints } from 'utils/overdrop';
 import SmallBadge from '../SmallBadge/SmallBadge';
 
 const BadgeOverview: React.FC = () => {
@@ -16,7 +20,28 @@ const BadgeOverview: React.FC = () => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [currentStep, setCurrentStep] = useState<number>(0);
-    const [numberOfCars, setNumberOfCards] = useState<number>(6);
+    const [numberOfCards, setNumberOfCards] = useState<number>(6);
+
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+
+    const userDataQuery = useUserDataQuery(walletAddress, {
+        enabled: !!isAppReady,
+    });
+
+    const userData: OverdropUserData | undefined = useMemo(() => {
+        if (userDataQuery?.isSuccess && userDataQuery?.data) {
+            return userDataQuery.data;
+        }
+        return;
+    }, [userDataQuery.data, userDataQuery?.isSuccess]);
+
+    const levelItem: OverdropLevel | undefined = useMemo(() => {
+        if (userData) {
+            const levelItem = getCurrentLevelByPoints(userData.points);
+            return levelItem;
+        }
+    }, [userData]);
 
     useEffect(() => {
         if (isMobile) setNumberOfCards(4);
@@ -24,7 +49,7 @@ const BadgeOverview: React.FC = () => {
     }, [isMobile]);
 
     const handleOnNext = () => {
-        if (currentStep + 1 + numberOfCars == OVERDROP_LEVELS.length + 1) return;
+        if (currentStep + 1 + numberOfCards == OVERDROP_LEVELS.length + 1) return;
         setCurrentStep(currentStep + 1);
     };
 
@@ -37,14 +62,14 @@ const BadgeOverview: React.FC = () => {
         <Wrapper>
             <BadgeWrapper>
                 <Arrow className={'icon-homepage icon--arrow-left'} onClick={() => handleOnPrevious()} />
-                {OVERDROP_LEVELS.slice(currentStep, currentStep + numberOfCars).map((item, index) => {
+                {OVERDROP_LEVELS.slice(currentStep, currentStep + numberOfCards).map((item, index) => {
                     return (
                         <SmallBadge
                             key={index}
                             level={item.level}
                             requiredPointsForLevel={item.minimumPoints}
                             levelName={item.levelName}
-                            reached={item.level < 7}
+                            reached={levelItem ? item.level < levelItem.level : false}
                         />
                     );
                 })}
