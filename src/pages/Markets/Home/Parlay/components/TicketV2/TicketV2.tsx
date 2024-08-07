@@ -96,7 +96,7 @@ import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { formatPoints, getMultiplierIcon, getMultiplierLabel } from 'utils/overdrop';
+import { formatPoints, getMultiplierIcon, getMultiplierLabel, getParlayMultiplier } from 'utils/overdrop';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
@@ -267,13 +267,13 @@ const Ticket: React.FC<TicketProps> = ({
         const parlayMultiplier = {
             name: 'parlayMultiplier',
             label: 'Games in parlay',
-            multiplier: (markets.length - 1) * 10,
+            multiplier: getParlayMultiplier(markets.length - 1),
             icon: <>{markets.length - 1}</>,
         };
         const thalesMultiplier = {
             name: 'thalesMultiplier',
             label: 'THALES used',
-            multiplier: isThales ? 20 : 0,
+            multiplier: isThales ? 10 : 0,
             icon: <OverdropIcon className="icon icon--thales-logo" />,
         };
         return [

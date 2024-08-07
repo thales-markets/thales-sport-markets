@@ -33,6 +33,20 @@ export const getMultiplierIcon = (multiplier: OverdropMultiplier) => {
     return <></>;
 };
 
+export const getParlayMultiplier = (numberOfMarkets: number) => {
+    let parlayMultiplier = 0;
+    for (let index = 1; index < numberOfMarkets; index++) {
+        if (index < 5) {
+            parlayMultiplier = parlayMultiplier + 10;
+        } else if (index >= 5 && index < 10) {
+            parlayMultiplier = parlayMultiplier + 20;
+        } else {
+            parlayMultiplier = parlayMultiplier + 30;
+        }
+    }
+    return parlayMultiplier;
+};
+
 export const getCurrentLevelByPoints = (points: number) => {
     const levelItem = OVERDROP_LEVELS.find((item, index) => {
         if (item.minimumPoints > points && !OVERDROP_LEVELS[index - 1]) return item;
