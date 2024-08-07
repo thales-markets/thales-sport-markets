@@ -267,7 +267,7 @@ const Ticket: React.FC<TicketProps> = ({
         const parlayMultiplier = {
             name: 'parlayMultiplier',
             label: 'Games in parlay',
-            multiplier: getParlayMultiplier(markets.length - 1),
+            multiplier: getParlayMultiplier(markets.length),
             icon: <>{markets.length - 1}</>,
         };
         const thalesMultiplier = {
