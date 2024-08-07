@@ -1,4 +1,5 @@
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { OverdropMultiplier } from 'types/overdrop';
 
@@ -13,7 +14,23 @@ export const getMultiplierLabel = (multiplier: OverdropMultiplier) => {
     if (multiplier.name === 'weeklyMultiplier') {
         return 'Weeks in a row';
     }
+    if (multiplier.name === 'twitterMultiplier') {
+        return 'Twitter share';
+    }
     return '';
+};
+
+export const getMultiplierIcon = (multiplier: OverdropMultiplier) => {
+    if (multiplier.name === 'dailyMultiplier') {
+        return <>{multiplier.multiplier / 10}</>;
+    }
+    if (multiplier.name === 'weeklyMultiplier') {
+        return <>{multiplier.multiplier / 10}</>;
+    }
+    if (multiplier.name === 'twitterMultiplier') {
+        return <OverdropIcon className="icon icon--x-twitter" />;
+    }
+    return <></>;
 };
 
 export const getCurrentLevelByPoints = (points: number) => {

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 import { useQuery, UseQueryOptions } from 'react-query';
 import { OverdropMultiplier } from 'types/overdrop';
 
@@ -14,7 +15,26 @@ const useUserMultipliersQuery = (walletAddress: string, options?: UseQueryOption
                 return Object.keys(response.data).map((key) => ({ multiplier: response.data[key], name: key }));
             } catch (e) {
                 console.error(e);
-                return [];
+                return [
+                    {
+                        name: 'dailyMultiplier',
+                        label: 'Days in a row',
+                        multiplier: 0,
+                        icon: <>0</>,
+                    },
+                    {
+                        name: 'weeklyMultiplier',
+                        label: 'Weeks in a row',
+                        multiplier: 0,
+                        icon: <>0</>,
+                    },
+                    {
+                        name: 'twitterMultiplier',
+                        label: 'Twitter share',
+                        multiplier: 0,
+                        icon: <OverdropIcon className="icon icon--x-twitter" />,
+                    },
+                ];
             }
         },
         {

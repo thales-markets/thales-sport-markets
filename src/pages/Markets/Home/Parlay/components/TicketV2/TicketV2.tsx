@@ -25,7 +25,7 @@ import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import ProgressLine from 'pages/Overdrop/components/ProgressLine';
-import { Circle } from 'pages/Overdrop/components/styled-components';
+import { Circle, OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
@@ -96,7 +96,7 @@ import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { formatPoints, getMultiplierLabel } from 'utils/overdrop';
+import { formatPoints, getMultiplierIcon, getMultiplierLabel } from 'utils/overdrop';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
@@ -268,19 +268,41 @@ const Ticket: React.FC<TicketProps> = ({
             name: 'parlayMultiplier',
             label: 'Games in parlay',
             multiplier: (markets.length - 1) * 10,
+            icon: <>{markets.length - 1}</>,
         };
         const thalesMultiplier = {
             name: 'thalesMultiplier',
             label: 'THALES used',
             multiplier: isThales ? 20 : 0,
+            icon: <OverdropIcon className="icon icon--thales-logo" />,
         };
         return [
             ...(userMultipliersQuery.isSuccess
                 ? userMultipliersQuery.data.map((multiplier) => ({
                       ...multiplier,
                       label: getMultiplierLabel(multiplier),
+                      icon: getMultiplierIcon(multiplier),
                   }))
-                : []),
+                : [
+                      {
+                          name: 'dailyMultiplier',
+                          label: 'Days in a row',
+                          multiplier: 0,
+                          icon: <>0</>,
+                      },
+                      {
+                          name: 'weeklyMultiplier',
+                          label: 'Weeks in a row',
+                          multiplier: 0,
+                          icon: <>0</>,
+                      },
+                      {
+                          name: 'twitterMultiplier',
+                          label: 'Twitter share',
+                          multiplier: 0,
+                          icon: <OverdropIcon className="icon icon--x-twitter" />,
+                      },
+                  ]),
             parlayMultiplier,
             thalesMultiplier,
         ];
@@ -1685,7 +1707,7 @@ const Ticket: React.FC<TicketProps> = ({
                         {overdropMultipliers.map((multiplier) => (
                             <OverdropRowSummary margin="20px 20px" key={multiplier.name}>
                                 <FlexDivCentered>
-                                    <Circle active={true} />
+                                    <Circle active={true}>{multiplier.icon}</Circle>
                                     <OverdropSummarySubtitle>{multiplier.label}</OverdropSummarySubtitle>
                                 </FlexDivCentered>
                                 <OverdropSummarySubvalue>+{multiplier.multiplier}%</OverdropSummarySubvalue>
