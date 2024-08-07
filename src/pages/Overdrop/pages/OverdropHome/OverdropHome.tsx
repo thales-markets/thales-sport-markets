@@ -27,7 +27,6 @@ const LevelDetailsWrapper = styled(FlexDivRow)<{ isMobile: boolean }>`
     flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
     flex: 1 1 20%;
     gap: 10px;
-    align-items: flex-end;
     justify-content: center;
 `;
 
