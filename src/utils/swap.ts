@@ -63,7 +63,7 @@ export const checkSwapAllowance = async (
     const url = apiRequestUrl(networkId, '/approve/allowance', { tokenAddress, walletAddress });
 
     try {
-        const response = await fetch(url);
+        const response = await fetch(url, { cache: 'no-cache' });
         const data = response.ok ? await response.json() : { allowance: 0 };
         return BigNumber.from(data.allowance).gte(amount);
     } catch (e) {
