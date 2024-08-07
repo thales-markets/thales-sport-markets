@@ -268,7 +268,7 @@ const Ticket: React.FC<TicketProps> = ({
             name: 'parlayMultiplier',
             label: 'Games in parlay',
             multiplier: getParlayMultiplier(markets.length),
-            icon: <>{markets.length - 1}</>,
+            icon: <>{markets.length}</>,
         };
         const thalesMultiplier = {
             name: 'thalesMultiplier',
@@ -307,15 +307,6 @@ const Ticket: React.FC<TicketProps> = ({
             thalesMultiplier,
         ];
     }, [userMultipliersQuery.data, userMultipliersQuery.isSuccess, markets, isThales]);
-
-    const overdropTotalXP = useMemo(() => {
-        if (!buyInAmountInDefaultCollateral) {
-            return 0;
-        }
-
-        const totalMultiplier = overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0);
-        return buyInAmountInDefaultCollateral * (1 + totalMultiplier / 100);
-    }, [overdropMultipliers, buyInAmountInDefaultCollateral]);
 
     const ammContractsPaused = useAMMContractsPausedQuery(networkId, {
         enabled: isAppReady,
@@ -499,6 +490,15 @@ const Ticket: React.FC<TicketProps> = ({
             thalesContractCurrencyRate,
         ]
     );
+
+    const overdropTotalXP = useMemo(() => {
+        if (!buyInAmountInDefaultCollateral) {
+            return 0;
+        }
+        const basePoints = buyInAmountInDefaultCollateral * (2 - totalQuote);
+        const totalMultiplier = overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0);
+        return basePoints * (1 + totalMultiplier / 100);
+    }, [overdropMultipliers, buyInAmountInDefaultCollateral, totalQuote]);
 
     // Clear Ticket when network is changed
     const isMounted = useRef(false);
@@ -1692,9 +1692,9 @@ const Ticket: React.FC<TicketProps> = ({
                         <OverdropSummaryTitle>{t('markets.parlay.overdrop.overdrop-xp-overview')}</OverdropSummaryTitle>
                         <OverdropRowSummary margin="0 20px">
                             <OverdropSummarySubtitle>{t('markets.parlay.overdrop.base-xp')}</OverdropSummarySubtitle>
-                            <OverdropSummarySubvalue>{`${
-                                (formatCurrency(buyInAmountInDefaultCollateral), 0)
-                            } XP`}</OverdropSummarySubvalue>
+                            <OverdropSummarySubvalue>{`${formatCurrency(
+                                buyInAmountInDefaultCollateral * (2 - totalQuote)
+                            )} XP`}</OverdropSummarySubvalue>
                         </OverdropRowSummary>
                         <OverdropRowSummary margin="20px 20px">
                             <OverdropSummarySubheader>
