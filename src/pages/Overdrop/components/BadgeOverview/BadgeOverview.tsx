@@ -125,6 +125,13 @@ const BadgeOverview: React.FC = () => {
                     />
                 </ItemContainer>
             </DetailsWrapper>
+            <CurrentRewardsLabel>{t('overdrop.overdrop-home.current-rewards')}</CurrentRewardsLabel>
+            <Rewards>
+                {`13.870,21 OP`}
+                <Icon className="icon icon--op" />
+                {`6.742,32 ARB`}
+                <Icon className="icon icon--arb" />
+            </Rewards>
         </Wrapper>
     );
 };
@@ -174,6 +181,29 @@ const Arrow = styled.i`
     color: ${(props) => props.theme.button.background.senary};
     font-size: 18px;
     cursor: pointer;
+`;
+
+const CurrentRewardsLabel = styled.span`
+    margin-top: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 110%;
+    color: ${(props) => props.theme.textColor.primary};
+    text-transform: uppercase;
+`;
+
+const Rewards = styled.span`
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: ${(props) => props.theme.textColor.primary};
+`;
+
+const Icon = styled.i`
+    font-size: 15px;
+    font-weight: 300;
+    margin: 0 3px;
+    color: ${(props) => props.theme.textColor.primary};
 `;
 
 export default BadgeOverview;

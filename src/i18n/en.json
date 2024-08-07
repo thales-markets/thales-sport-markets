@@ -1208,7 +1208,8 @@
             "xp": "xp",
             "next-level": "Next level",
             "total-xp-multiplier": "Total XP multiplier",
-            "social-multiplier": "Social XP multiplier"
+            "social-multiplier": "Social XP multiplier",
+            "current-rewards": "Current estimated rewards"
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",

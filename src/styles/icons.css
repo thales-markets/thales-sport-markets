@@ -480,3 +480,7 @@
 .icon--book:before {
     content: '\011E';
 }
+
+.icon--x:before {
+    content: '\011F';
+}
