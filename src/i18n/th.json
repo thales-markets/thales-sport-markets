@@ -576,7 +576,7 @@
             "positions": "ตำแหน่ง",
             "odds": "อัตราต่อรอง"
         },
-        "zero-odds-tooltip": "Sports AMM จะเสนอสภาพคล่องในช่วงราคา $0.05 ถึง $0.95 เท่านั้น หมายความว่าหากอัตราต่อรองสำหรับโพสิชั่นนั้นน้อยกว่า 5% หรือมากกว่า 95% โพสิชั่นนั้นจะไม่มีสภาพคล่อง",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "discounted-per": "ลดราคาตาม",
         "parlay": {
             "validation": {

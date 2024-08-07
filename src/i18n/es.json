@@ -575,7 +575,7 @@
             "positions": "Posiciones",
             "odds": "Posibilidades"
         },
-        "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "pay-with": "Pagar con",
             "total-quote": "Cotización total",
