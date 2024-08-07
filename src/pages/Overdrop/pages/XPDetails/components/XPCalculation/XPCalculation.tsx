@@ -20,7 +20,7 @@ const XPCalculation: React.FC = () => {
             <BoxWrapper>
                 <BoxLabel>{t('overdrop.xp-details.shared-flex')}</BoxLabel>
                 <Box>
-                    <Badge>{<Icon className="icon icon--x" />}</Badge>
+                    <Badge>{<Icon className="icon icon--x-twitter" />}</Badge>
                     <MainLabel>{t('overdrop.xp-details.twitter-multiplier')}</MainLabel>
                     <Value>{'+10%'}</Value>
                 </Box>
@@ -100,6 +100,8 @@ const Badge = styled(FlexDivCentered)`
 
 const Icon = styled.i`
     font-size: 13px;
+    text-transform: none;
+    font-weight: 300;
 `;
 
 export default XPCalculation;
