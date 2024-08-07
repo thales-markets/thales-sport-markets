@@ -92,6 +92,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({ step, isFailed, currencyK
 const Container = styled(FlexDivColumnCentered)`
     width: 300px;
     gap: 20px;
+    margin: 0 30px;
     @media (max-width: 575px) {
         width: auto;
     }

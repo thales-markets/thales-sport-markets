@@ -624,9 +624,11 @@ const Ticket: React.FC<TicketProps> = ({
     // Refresh swap THALES quote on 7s
     useInterval(
         async () => {
-            const quote = await getQuote(networkId, swapToThalesParams);
-            setSwappedThalesToReceive(quote);
-            setSwapQuote(quote / Number(buyInAmount));
+            if (!isBuying) {
+                const quote = await getQuote(networkId, swapToThalesParams);
+                setSwappedThalesToReceive(quote);
+                setSwapQuote(quote / Number(buyInAmount));
+            }
         },
         !isThales && swapToThales && buyInAmount ? secondsToMilliseconds(7) : null
     );
@@ -636,15 +638,9 @@ const Ticket: React.FC<TicketProps> = ({
         setBuyStep(BuyTicketStep.APPROVE_SWAP);
     }, [selectedCollateral]);
 
-    // Check allowance
+    // Check swap allowance
     useEffect(() => {
-        const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
-
-        if (isFreeBetActive && isWalletConnected) {
-            setHasAllowance(true);
-            return;
-        }
-        if (swapToThales) {
+        if (isWalletConnected && swapToThales) {
             const getSwapAllowance = async () => {
                 const allowance = await checkSwapAllowance(
                     networkId,
@@ -657,6 +653,25 @@ const Ticket: React.FC<TicketProps> = ({
             };
 
             getSwapAllowance();
+        }
+    }, [
+        walletAddress,
+        isWalletConnected,
+        buyInAmount,
+        networkId,
+        selectedCollateral,
+        swapToThales,
+        swapToThalesParams.src,
+        isBuying,
+    ]);
+
+    // Check allowance
+    useEffect(() => {
+        const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
+
+        if (isFreeBetActive && isWalletConnected) {
+            setHasAllowance(true);
+            return;
         }
         if (sportsAMMV2Contract && multipleCollateral && signer) {
             const collateralToAllow = swapToThales
@@ -851,7 +866,11 @@ const Ticket: React.FC<TicketProps> = ({
                 setBuyStep(BuyTicketStep.APPROVE_SWAP);
             }
 
-            const approveAmount = coinParser(Number(buyInAmount).toString(), networkId, selectedCollateral);
+            const approveAmount = coinParser(
+                (Number(buyInAmount) * (1 + APPROVAL_BUFFER)).toString(),
+                networkId,
+                selectedCollateral
+            );
             let approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
                 networkId,
                 walletAddress as Address,
@@ -1777,10 +1796,11 @@ const Ticket: React.FC<TicketProps> = ({
                             active={swapToThales}
                             width="44px"
                             height="20px"
-                            background={theme.borderColor.tertiary}
-                            borderColor={theme.borderColor.tertiary}
+                            background={swapToThales ? theme.borderColor.tertiary : undefined}
+                            borderColor={swapToThales ? theme.borderColor.tertiary : theme.borderColor.senary}
+                            borderWidth={swapToThales ? '0px' : undefined}
                             dotSize="14px"
-                            dotBackground={theme.background.quinary}
+                            dotBackground={theme.background.senary}
                             dotMargin="3px"
                             handleClick={() => {
                                 setSwapToThales(!swapToThales);
