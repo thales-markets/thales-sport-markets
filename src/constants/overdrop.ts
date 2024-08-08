@@ -45,7 +45,7 @@ import test from '../assets/images/overdrop/test.png';
 
 export const OVERDROP_LEVELS: OverdropLevel[] = [
     {
-        levelName: 'Rookie',
+        levelName: 'Uninitiated',
         level: 0,
         minimumPoints: 0,
         smallBadge: test,
