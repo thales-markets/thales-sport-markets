@@ -237,7 +237,11 @@ export const getTitleText = (market: SportMarket, useDescription?: boolean) => {
     const scoringType = getLeagueScoringType(market.leagueId);
     const marketTypeDescription = getMarketTypeDescription(marketType);
     const marketTypeName =
-        useDescription && marketTypeDescription ? marketTypeDescription : getMarketTypeName(marketType);
+        useDescription && marketTypeDescription
+            ? marketTypeDescription
+            : market.leagueId === League.UEFA_SUPER_CUP && marketType === MarketType.WHO_WILL_QUALIFY
+            ? 'To win the cup'
+            : getMarketTypeName(marketType);
 
     let sufix = isPeriodMarket(marketType)
         ? ` ${getLeaguePeriodType(market.leagueId)}`
