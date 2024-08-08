@@ -1,8 +1,10 @@
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLiveBetSlippage, getTicketPayment, removeFromTicket } from 'redux/modules/ticket';
 import { getOddsType } from 'redux/modules/ui';
+import { Coins } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import { formatMarketOdds, isWithinSlippage } from 'utils/markets';
 import {
@@ -10,6 +12,7 @@ import {
     getPositionTextV2,
     getTitleText,
     isSameMarket,
+    sportMarketAsSerializable,
     ticketMarketAsTicketPosition,
 } from 'utils/marketsV2';
 import { getNetworkId } from '../../redux/modules/wallet';
@@ -33,8 +36,6 @@ import {
     PositionText,
     Wrong,
 } from './styled-components';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
-import { Coins } from 'thales-utils';
 
 type MatchInfoProps = {
     market: TicketMarket;
@@ -141,7 +142,8 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                         <CloseIcon
                             className="icon icon--close"
                             onClick={() => {
-                                dispatch(removeFromTicket(market));
+                                const serializableMarket = sportMarketAsSerializable(market);
+                                dispatch(removeFromTicket(serializableMarket));
                             }}
                         />
                     )}
