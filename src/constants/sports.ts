@@ -782,7 +782,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
     [League.CSGO]: {
         sport: Sport.ESPORTS,
         id: League.CSGO,
-        label: 'CS GO',
+        label: 'CS2',
         logoClass: 'icon-homepage league--csgo',
         scoringType: ScoringType.ROUNDS,
         matchResolveType: MatchResolveType.EMPTY,

@@ -194,7 +194,8 @@
         "filters": "Filter",
         "status": "Status",
         "wrap-and-buy": "ETH verpacken und kaufen",
-        "wrap-eth-tooltip": "Ihr ETH wird zuerst in WETH verpackt und dann an den Vertrag übergeben"
+        "wrap-eth-tooltip": "Ihr ETH wird zuerst in WETH verpackt und dann an den Vertrag übergeben",
+        "election-tooltip": "Die Entscheidungsquellen sind Associated Press, Fox News und NBC. Diese Märkte werden entschieden, sobald alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen. Wenn bis zum 11. November nicht alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen, werden alle Wetten ungültig."
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALLE RECHTE VORBEHALTEN.",
@@ -277,7 +278,14 @@
                 "boxing": "Boxen",
                 "fighting": "Kampfsport",
                 "golf": "Golf",
-                "live": "Live"
+                "live": "Live",
+                "politics": "Politik",
+                "olympicgames": "Olympische Spiele",
+                "handball": "Handball",
+                "volleyball": "Volleyball",
+                "rugby": "Rugby",
+                "tabletennis": "Tischtennis",
+                "waterpolo": "Wasser Polo"
             },
             "all": "Alle",
             "datepicker": {
@@ -552,7 +560,9 @@
             "pre-fight": "Vor dem Kampf",
             "end-of-fight": "Ende des Kampfes",
             "fighters-introduction": "Kämpfer Einführung",
-            "end-of-round": "Ende der Runde"
+            "end-of-round": "Ende der Runde",
+            "suspended": "Ausgesetzt",
+            "not-available-for-trading": "Nicht zum Handel verfügbar"
         },
         "market-details": {
             "price": "Preis",
@@ -575,7 +585,7 @@
             "positions": "Positionen",
             "odds": "Chancen"
         },
-        "zero-odds-tooltip": "Sports AMM bietet nur Liquidität in der Preisspanne von $0,05 bis $0,95. Dies bedeutet, dass wenn die Quoten für eine Position weniger als 5% oder mehr als 95% betragen, diese Position keine Liquidität hat.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "available": "Verfügbar",
             "total-quote": "Gesamtangebot",
@@ -664,7 +674,9 @@
             "thales-bonus-tooltip": "Benutzer, die mit THALES handeln, erhalten 1 % zusätzliche Auszahlungen für jedes Spiel auf ihrem Ticket (bereits im Gesamtangebot und der Auszahlung berechnet).",
             "thales-bonus-info": "Nutzen Sie THALES und erhalten Sie 1 % Bonus für jedes Spiel.",
             "odds-changed-error": "Die Quoten haben sich während der Auftragserfüllung geändert. Versuchen Sie, den Slippage zu erhöhen.",
-            "odds-changed-description": "Quoten haben sich geändert. Akzeptieren Sie die Änderungen, um zu kaufen."
+            "odds-changed-description": "Quoten haben sich geändert. Akzeptieren Sie die Änderungen, um zu kaufen.",
+            "use-free-bet": "Gratiswette nutzen",
+            "disable-free-bet": "Kostenlose Wettguthaben deaktivieren"
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -684,7 +696,8 @@
             },
             "buttons": {
                 "switch": "Schalter",
-                "disconnect": "Trennen"
+                "disconnect": "Trennen",
+                "particle-wallet": "Partikel-Geldbörse"
             },
             "labels": {
                 "language": "Sprache"
@@ -698,7 +711,9 @@
         "incentivized-tooltip-uefa": "Für die UEFA-Wettbewerbe wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-nhl": "Für den Rest der NHL-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "Für den Rest der {{league}}-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} ausgeschüttet. Nur das Volumen im Arbitrum-Netzwerk wird für die Belohnungen angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
-        "incentivized-tooltip-euro-copa": "Für die EM 2024 und die Copa America werden satte {{rewards}} vergeben. Weitere Details finden Sie <detailsLink>hier</detailsLink>."
+        "incentivized-tooltip-euro-copa": "Für die EM 2024 und die Copa America werden satte {{rewards}} vergeben. Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Kämpfen Sie während Wimbledon 2024 in den Verlängerungen V1 und V2 um {{rewards}}. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-olympics": "Verdienen Sie während der Olympischen Spiele {{rewards}} in volumenbasierten Prämien. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>."
     },
     "rewards": {
         "header": "Preise",
@@ -821,7 +836,9 @@
             "highest-win": "Höchster Gewinn",
             "lifetime-wins": "Lebenslange Gewinne",
             "in-vaults": "In Vaults",
-            "profile-data": "Profildaten"
+            "profile-data": "Profildaten",
+            "wallet": "Geldbörse",
+            "free-bet": "Kostenlose Wette"
         },
         "lp-title": "Liquiditätspool",
         "in-lp": "Liquidität bereitgestellt",
@@ -846,7 +863,31 @@
         },
         "lp": "LP",
         "back": "Zurück",
-        "go-to": "Gehe zu"
+        "go-to": "Gehe zu",
+        "free-bet": {
+            "claim-btn": "Der Anspruchsbetrag wird um den Buy-In-Betrag reduziert, der auf Ihr Gratiswettenguthaben übertragen wird."
+        },
+        "free-bet-modal": {
+            "enter-wallet-address": "Wallet-Adresse eingeben",
+            "enter-amount-per-user": "Geben Sie den Betrag pro Benutzer ein",
+            "duplicate": "Doppelte Wallet-Adressen erkannt",
+            "enter-wallet-addresses": "Wallet-Adressen eingeben",
+            "invalid-amount": "ungültige Menge",
+            "insufficient-balance": "Mangelhaftes Gleichgewicht",
+            "one-or-more-address-invalid": "Eine oder mehrere eingegebene Wallet-Adressen sind ungültig",
+            "enter-amount": "Menge eingeben",
+            "funding": "Finanzierung...",
+            "fund-batch": "Mehrere Adressen finanzieren",
+            "invalid-wallet-address": "Ungültige Wallet-Adresse",
+            "title": "Gratiswette senden",
+            "fund-successful": "Fonds erfolgreich",
+            "transaction-pending": "Transaktion ausstehend",
+            "total-amount-batch": "Der Gesamtbetrag beträgt {{ amount }} multipliziert mit {{ count }} Wallet-Adresse(n).",
+            "fund": "Gratiswette senden",
+            "approve-success": "Erfolgreich genehmigt",
+            "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet über ausreichend Guthaben verfügt"
+        },
+        "send-free-bet": "Gratiswette senden"
     },
     "referral": {
         "generate-link": "Link generieren",
