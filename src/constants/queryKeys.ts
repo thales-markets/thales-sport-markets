@@ -148,6 +148,7 @@ const QUERY_KEYS = {
     Overdrop: {
         UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
         UserData: (walletAddress: string) => ['userData', walletAddress],
+        UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],
     },
 };
 

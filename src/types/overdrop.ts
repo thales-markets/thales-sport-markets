@@ -9,3 +9,9 @@ export type OverdropUserData = {
     points: number;
     volume: number;
 };
+
+export type OverdropXPHistory = {
+    timestamp: number;
+    points: number;
+    txHash: string;
+};
