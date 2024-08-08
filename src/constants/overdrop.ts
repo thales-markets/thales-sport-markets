@@ -1,6 +1,7 @@
 import { OverdropLevel } from 'types/ui';
 
 import Level1Small from '../assets/images/overdrop/smallBadges/1.webp';
+import Level10Small from '../assets/images/overdrop/smallBadges/10.webp';
 import Level11Small from '../assets/images/overdrop/smallBadges/11.webp';
 import Level12Small from '../assets/images/overdrop/smallBadges/12.webp';
 import Level13Small from '../assets/images/overdrop/smallBadges/13.webp';
@@ -21,6 +22,7 @@ import Level8Small from '../assets/images/overdrop/smallBadges/8.webp';
 import Level9Small from '../assets/images/overdrop/smallBadges/9.webp';
 
 import Level1Large from '../assets/images/overdrop/largeBadges/1.webp';
+import Level10Large from '../assets/images/overdrop/largeBadges/10.webp';
 import Level11Large from '../assets/images/overdrop/largeBadges/11.webp';
 import Level12Large from '../assets/images/overdrop/largeBadges/12.webp';
 import Level13Large from '../assets/images/overdrop/largeBadges/13.webp';
@@ -112,8 +114,8 @@ export const OVERDROP_LEVELS: OverdropLevel[] = [
         level: 10,
         minimumPoints: 80000,
         voucherAmount: 1000,
-        smallBadge: Level9Small,
-        largeBadge: Level9Large,
+        smallBadge: Level10Small,
+        largeBadge: Level10Large,
     },
     {
         levelName: 'Hall of Famer',
