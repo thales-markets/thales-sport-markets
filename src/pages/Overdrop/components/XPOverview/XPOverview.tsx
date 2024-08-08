@@ -36,36 +36,39 @@ const XPOverview: React.FC = () => {
         }
     }, [userData]);
 
-    const nextLevelItem: OverdropLevel | undefined = useMemo(() => {
-        if (userData) {
-            const levelItem = getNextLevelItemByPoints(userData.points);
-            return levelItem;
-        }
+    const nextLevelItem: OverdropLevel = useMemo(() => {
+        return getNextLevelItemByPoints(userData?.points);
     }, [userData]);
+
+    const isLevelZero = levelItem == undefined;
 
     return (
         <Wrapper>
-            <Badge src={levelItem ? levelItem.largeBadge : ''} />
+            <Badge src={levelItem ? levelItem.largeBadge : nextLevelItem?.largeBadge} disabled={isLevelZero} />
             <ProgressOverviewWrapper>
                 <InfoWrapper>
                     <InfoItem>
-                        <Label>{levelItem?.levelName}</Label>
+                        <Label>{levelItem?.levelName ? levelItem?.levelName : '-'}</Label>
                         <Value>{'#420'}</Value>
                     </InfoItem>
                     <InfoItemTotal>
                         <Label>{t('overdrop.overdrop-home.my-total-xp')}</Label>
-                        <TotalValue>{userData ? formatPoints(userData?.points) : ''}</TotalValue>
+                        <TotalValue>{formatPoints(userData?.points ? userData?.points : 0)}</TotalValue>
                     </InfoItemTotal>
                 </InfoWrapper>
                 {levelItem && nextLevelItem && (
                     <ProgressLine
                         progress={
                             userData && nextLevelItem
-                                ? getProgressLevel(userData.points, nextLevelItem.minimumPoints)
+                                ? getProgressLevel(
+                                      userData.points,
+                                      levelItem.minimumPoints,
+                                      nextLevelItem.minimumPoints
+                                  )
                                 : 0
                         }
                         currentPoints={userData?.points || 0}
-                        nextLevelPoints={nextLevelItem?.minimumPoints}
+                        nextLevelMinimumPoints={nextLevelItem?.minimumPoints || 0}
                         level={levelItem?.level}
                     />
                 )}
@@ -151,9 +154,10 @@ const TotalValue = styled.span<{ highlight?: boolean }>`
     }
 `;
 
-const Badge = styled.img`
+const Badge = styled.img<{ disabled?: boolean }>`
     width: 190px;
     height: 190px;
+    opacity: ${(props) => (props.disabled ? '0.3' : '1')};
     @media (max-width: 767px) {
         width: 170px;
         height: 170px;

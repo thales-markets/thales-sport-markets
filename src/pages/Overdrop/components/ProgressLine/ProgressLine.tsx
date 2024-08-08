@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatPoints } from 'utils/overdrop';
@@ -6,7 +7,7 @@ import { formatPoints } from 'utils/overdrop';
 type ProgressLineProps = {
     progress: number;
     currentPoints: number;
-    nextLevelPoints: number;
+    nextLevelMinimumPoints: number;
     level: number;
     hideLevelLabel?: boolean;
 };
@@ -14,22 +15,24 @@ type ProgressLineProps = {
 const ProgressLine: React.FC<ProgressLineProps> = ({
     progress,
     currentPoints,
-    nextLevelPoints,
+    nextLevelMinimumPoints,
     level,
     hideLevelLabel,
 }) => {
+    const { t } = useTranslation();
+
     return (
         <Wrapper>
             <ProgressLineWrapper levelLabelHidden={hideLevelLabel}>
                 <Progress progress={progress}>
                     <DetailedPoints>{`${formatPoints(currentPoints)} / ${formatPoints(
-                        nextLevelPoints
+                        nextLevelMinimumPoints
                     )}`}</DetailedPoints>
                 </Progress>
             </ProgressLineWrapper>
             {!hideLevelLabel && (
                 <LevelWrapper>
-                    <Label>{'Level'}</Label>
+                    <Label>{t('overdrop.overdrop-home.level')}</Label>
                     <Level>{level}</Level>
                 </LevelWrapper>
             )}

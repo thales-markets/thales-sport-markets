@@ -56,7 +56,8 @@ export const getCurrentLevelByPoints = (points: number) => {
     if (levelItem) return levelItem;
 };
 
-export const getNextLevelItemByPoints = (points: number) => {
+export const getNextLevelItemByPoints = (points?: number) => {
+    if (!points) return OVERDROP_LEVELS[0];
     const currentLevelItemIndex = OVERDROP_LEVELS.findIndex((item, index) => {
         if (item.minimumPoints > points && !OVERDROP_LEVELS[index - 1]) return item;
         if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
@@ -67,8 +68,12 @@ export const getNextLevelItemByPoints = (points: number) => {
     return OVERDROP_LEVELS[currentLevelItemIndex];
 };
 
-export const getProgressLevel = (currentPoints: number, nextLevelPoints: number) => {
-    return (currentPoints / nextLevelPoints) * 100;
+export const getProgressLevel = (
+    currentPoints: number,
+    currentLevelMinimumPoints: number,
+    nextLevelMinimumPoints: number
+) => {
+    return ((currentPoints - currentLevelMinimumPoints) / (nextLevelMinimumPoints - currentLevelMinimumPoints)) * 100;
 };
 
 export const getMultiplierValueFromQuery = (data: OverdropMultiplier[] | undefined, multiplierType: MultiplierType) => {
