@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import XPCalculation from './components/XPCalculation';
+import XPHistoryTable from './components/XPHistoryTable';
 
 const XPDetails: React.FC = () => {
     const { t } = useTranslation();
@@ -14,6 +15,7 @@ const XPDetails: React.FC = () => {
                 <XPCalculation />
             </CalculationWrapper>
             <Heading>{t('overdrop.xp-details.xp-history')}</Heading>
+            <XPHistoryTable />
         </>
     );
 };
