@@ -36,5 +36,5 @@ export const LINKS = {
     Profile: {
         Voucher: 'https://docs.overtimemarkets.xyz/decentralized-sports-markets/nft-vouchers',
     },
-    V2: 'https://overtimemarkets.xyz/',
+    V2: 'https://v2.overtimemarkets.xyz/',
 };
