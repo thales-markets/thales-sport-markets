@@ -20,17 +20,19 @@ import {
     PARLAY_LEADERBOARD_WEEKLY_START_DATE,
     THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
+import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
-import ProgressLine from 'pages/Overdrop/components/ProgressLine';
+import CurrentLevelProgressLine from 'pages/Overdrop/components/CurrentLevelProgressLine';
 import { Circle, OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
+import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
@@ -76,9 +78,9 @@ import {
     getPrecision,
 } from 'thales-utils';
 import { LeaderboardPoints, SportsAmmData, TicketMarket } from 'types/markets';
-import { OverdropMultiplier } from 'types/overdrop';
+import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { Coins } from 'types/tokens';
-import { ThemeInterface } from 'types/ui';
+import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
 import {
     getCollateral,
@@ -96,7 +98,13 @@ import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { formatPoints, getMultiplierIcon, getMultiplierLabel, getParlayMultiplier } from 'utils/overdrop';
+import {
+    formatPoints,
+    getCurrentLevelByPoints,
+    getMultiplierIcon,
+    getMultiplierLabel,
+    getParlayMultiplier,
+} from 'utils/overdrop';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
@@ -117,7 +125,9 @@ import {
     InfoValue,
     InfoWrapper,
     InputContainer,
+    LeftLevel,
     OverdropLabel,
+    OverdropProgressWrapper,
     OverdropRowSummary,
     OverdropSummary,
     OverdropSummarySubheader,
@@ -128,6 +138,7 @@ import {
     OverdropTotalsRow,
     OverdropTotalsTitle,
     OverdropValue,
+    RightLevel,
     RowContainer,
     RowSummary,
     SettingsIcon,
@@ -404,6 +415,25 @@ const Ticket: React.FC<TicketProps> = ({
                 : 10,
         [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
+
+    const userDataQuery = useUserDataQuery(walletAddress, {
+        enabled: !!isAppReady,
+    });
+
+    const userData: OverdropUserData | undefined = useMemo(() => {
+        if (userDataQuery?.isSuccess && userDataQuery?.data) {
+            return userDataQuery.data;
+        }
+        return;
+    }, [userDataQuery.data, userDataQuery?.isSuccess]);
+
+    const levelItem: OverdropLevel = useMemo(() => {
+        if (userData) {
+            const levelItem = getCurrentLevelByPoints(userData.points);
+            return levelItem;
+        }
+        return OVERDROP_LEVELS[0];
+    }, [userData]);
 
     useEffect(() => {
         if (!freeBetBalanceExists) return;
@@ -1713,15 +1743,15 @@ const Ticket: React.FC<TicketProps> = ({
                                 <OverdropSummarySubvalue>+{multiplier.multiplier}%</OverdropSummarySubvalue>
                             </OverdropRowSummary>
                         ))}
-                        <div>
-                            <ProgressLine
-                                progress={65}
-                                currentPoints={7374}
-                                nextLevelMinimumPoints={8000}
-                                level={6}
+                        <OverdropProgressWrapper>
+                            <LeftLevel>{levelItem.level}</LeftLevel>
+                            <CurrentLevelProgressLine
+                                progressUpdateXP={overdropTotalXP}
                                 hideLevelLabel
+                                showNumbersOnly
                             />
-                        </div>
+                            <RightLevel>{levelItem.level + 1}</RightLevel>
+                        </OverdropProgressWrapper>
                         <OverdropTotalsRow>
                             <FlexDivColumnCentered gap={10}>
                                 <OverdropTotalsTitle>{t('markets.parlay.overdrop.total-xp-boost')}</OverdropTotalsTitle>

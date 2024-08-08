@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { formatCurrency } from 'thales-utils';
 import { formatPoints } from 'utils/overdrop';
 
 type ProgressLineProps = {
@@ -9,25 +10,34 @@ type ProgressLineProps = {
     currentPoints: number;
     nextLevelMinimumPoints: number;
     level: number;
+    progressUpdate?: number;
     hideLevelLabel?: boolean;
+    showNumbersOnly?: boolean;
 };
 
 const ProgressLine: React.FC<ProgressLineProps> = ({
     progress,
+    progressUpdate,
     currentPoints,
     nextLevelMinimumPoints,
     level,
     hideLevelLabel,
+    showNumbersOnly,
 }) => {
     const { t } = useTranslation();
 
     return (
         <Wrapper>
             <ProgressLineWrapper levelLabelHidden={hideLevelLabel}>
+                {!!progressUpdate && <ProgressUpdate progress={progress + progressUpdate} />}
                 <Progress progress={progress}>
-                    <DetailedPoints>{`${formatPoints(currentPoints)} / ${formatPoints(
-                        nextLevelMinimumPoints
-                    )}`}</DetailedPoints>
+                    <DetailedPoints progress={progress}>{`${
+                        showNumbersOnly ? formatCurrency(currentPoints, undefined, true) : formatPoints(currentPoints)
+                    } / ${
+                        showNumbersOnly
+                            ? formatCurrency(nextLevelMinimumPoints, undefined, true)
+                            : formatPoints(nextLevelMinimumPoints)
+                    }`}</DetailedPoints>
                 </Progress>
             </ProgressLineWrapper>
             {!hideLevelLabel && (
@@ -85,6 +95,7 @@ const ProgressLineWrapper = styled(FlexDiv)<{ levelLabelHidden?: boolean }>`
 `;
 
 const Progress = styled(FlexDiv)<{ progress: number }>`
+    z-index: 1;
     width: ${(props) => props.progress}%;
     height: 100%;
     align-items: center;
@@ -100,7 +111,26 @@ const Progress = styled(FlexDiv)<{ progress: number }>`
     }
 `;
 
-const DetailedPoints = styled.span`
+const ProgressUpdate = styled(FlexDiv)<{ progress: number }>`
+    z-index: 0;
+    position: absolute;
+    width: ${(props) => props.progress}%;
+    height: 100%;
+    align-items: center;
+    background-color: ${(props) => props.theme.overdrop.textColor.senary};
+    color: ${(props) => props.theme.overdrop.textColor.secondary};
+    font-size: 12px;
+    border-radius: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: right !important;
+    @media (max-width: 767px) {
+        font-size: 8px;
+    }
+`;
+
+const DetailedPoints = styled.span<{ progress: number }>`
+    font-size: ${(props) => (props.progress < 13 ? 7 : props.progress < 20 ? 10 : 12)}px;
     width: 100%;
     text-align: right;
     margin-right: 10px;

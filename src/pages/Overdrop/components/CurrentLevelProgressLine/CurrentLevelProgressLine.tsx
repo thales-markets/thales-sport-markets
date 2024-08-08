@@ -10,7 +10,17 @@ import { OverdropLevel } from 'types/ui';
 import { getCurrentLevelByPoints, getNextLevelItemByPoints, getProgressLevel } from 'utils/overdrop';
 import ProgressLine from '../ProgressLine';
 
-const CurrentLevelProgressLine: React.FC = () => {
+type CurrentLevelProgressLineProps = {
+    hideLevelLabel?: boolean;
+    showNumbersOnly?: boolean;
+    progressUpdateXP?: number;
+};
+
+const CurrentLevelProgressLine: React.FC<CurrentLevelProgressLineProps> = ({
+    hideLevelLabel,
+    showNumbersOnly,
+    progressUpdateXP,
+}) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
@@ -37,16 +47,29 @@ const CurrentLevelProgressLine: React.FC = () => {
         return getNextLevelItemByPoints(userData?.points);
     }, [userData]);
 
+    const progress =
+        userData && nextLevelItem
+            ? getProgressLevel(userData.points, levelItem.minimumPoints, nextLevelItem.minimumPoints)
+            : 0;
+
+    const progressUpdate =
+        userData && nextLevelItem
+            ? getProgressLevel(
+                  userData.points + (progressUpdateXP || 0),
+                  levelItem.minimumPoints,
+                  nextLevelItem.minimumPoints
+              )
+            : 0;
+
     return (
         <ProgressLine
-            progress={
-                userData && nextLevelItem
-                    ? getProgressLevel(userData.points, levelItem.minimumPoints, nextLevelItem.minimumPoints)
-                    : 0
-            }
+            progressUpdate={progressUpdate - progress}
+            progress={progress}
             currentPoints={userData?.points || 0}
             nextLevelMinimumPoints={nextLevelItem?.minimumPoints || 0}
             level={levelItem?.level}
+            hideLevelLabel={hideLevelLabel}
+            showNumbersOnly={showNumbersOnly}
         />
     );
 };

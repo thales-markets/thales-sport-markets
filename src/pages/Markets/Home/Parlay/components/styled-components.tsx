@@ -409,3 +409,33 @@ export const OverdropTotal = styled.div<{ isBoost?: boolean }>`
         props.isBoost ? props.theme.overdrop.textColor.primary : props.theme.overdrop.textColor.senary};
     text-transform: uppercase;
 `;
+
+export const OverdropProgressWrapper = styled.div`
+    position: relative;
+    margin-left: 10px;
+    margin-right: 20px;
+`;
+
+export const LeftLevel = styled.div`
+    color: ${(props) => props.theme.overdrop.textColor.primary};
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: -5px;
+    top: 0;
+    bottom: 0;
+`;
+
+export const RightLevel = styled.div`
+    color: ${(props) => props.theme.background.senary};
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: -12px;
+    top: 0;
+    bottom: 0;
+`;
