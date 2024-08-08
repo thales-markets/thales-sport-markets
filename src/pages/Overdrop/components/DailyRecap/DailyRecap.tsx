@@ -7,6 +7,8 @@ import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import { MultiplierType } from 'types/overdrop';
+import { getMultiplierValueFromQuery } from 'utils/overdrop';
 import LevelCircles from '../LevelCircles';
 
 const DailyRecap: React.FC = () => {
@@ -26,30 +28,27 @@ const DailyRecap: React.FC = () => {
         return;
     }, [userMultipliersQuery.data, userMultipliersQuery?.isSuccess]);
 
-    const dailyMultiplier = userMultipliers?.find((item) => item.name == 'dailyMultiplier');
-    const weeklyMultiplier = userMultipliers?.find((item) => item.name == 'weeklyMultiplier');
-
     return (
         <Wrapper>
             <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
-                <Value>{dailyMultiplier ? `+${dailyMultiplier.multiplier}%` : '0%'}</Value>
+                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
                 <LevelCircles
                     levels={[2, 3, 4, 5, 6, 7]}
-                    currentLevel={dailyMultiplier ? dailyMultiplier.multiplier / 10 : 0}
+                    currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
                 />
             </ItemContainer>
             <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.weekly-streak')}</Label>
-                <Value>{weeklyMultiplier ? `+${weeklyMultiplier.multiplier}%` : '0%'}</Value>
+                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
                 <LevelCircles
                     levels={[1, 2, 3, 4]}
-                    currentLevel={weeklyMultiplier ? weeklyMultiplier.multiplier / 10 : 0}
+                    currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}
                 />
             </ItemContainer>
             <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.twitter-share')}</Label>
-                <Value>{'+10%'}</Value>
+                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
             </ItemContainer>
             <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
