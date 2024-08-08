@@ -73,7 +73,7 @@ const Explainer: React.FC = () => {
 };
 
 const Wrapper = styled(FlexDivColumn)`
-    min-width: 25%;
+    min-width: 30%;
     padding: 12px 9px 33px 12px;
     border: 3px solid transparent;
     border-radius: 6px;
