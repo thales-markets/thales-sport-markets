@@ -78,3 +78,8 @@
     src: local('Inter'), url(../assets/fonts/Inter/Inter-VariableFont_slntwght.ttf) format('truetype');
     font-weight: 100 900;
 }
+
+@font-face {
+    font-family: 'ThalesSidebarIcons';
+    src: local('ThalesSidebarIcons'), url(../assets/fonts/ThalesSidebarIcons/ThalesSidebarIcons.ttf) format('truetype');
+}
