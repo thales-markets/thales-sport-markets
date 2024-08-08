@@ -41,7 +41,7 @@ const LevelRecap: React.FC = () => {
         <Wrapper>
             <Heading>{t('overdrop.leveling-tree.heading')}</Heading>
             <BadgeWrapper>
-                {OVERDROP_LEVELS.map((item, index) => {
+                {OVERDROP_LEVELS.slice(1).map((item, index) => {
                     return (
                         <LargeBadge
                             key={`${index}-level`}
