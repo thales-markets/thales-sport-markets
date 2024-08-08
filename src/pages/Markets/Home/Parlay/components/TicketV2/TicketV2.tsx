@@ -4,6 +4,7 @@ import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
+import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
@@ -33,6 +34,7 @@ import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProc
 import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
+import useCoingeckoRatesQuery from 'queries/rates/useCoingeckoRatesQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -43,9 +45,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import {
+    getIsFreeBetDisabledByUser,
     getLiveBetSlippage,
     getTicketPayment,
     removeAll,
+    setIsFreeBetDisabledByUser,
     setLiveBetSlippage,
     setPaymentAmountToBuy,
     setPaymentSelectedCollateralIndex,
@@ -98,7 +102,7 @@ import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { refetchBalances, refetchCoingeckoRates } from 'utils/queryConnector';
+import { refetchBalances, refetchCoingeckoRates, refetchFreeBetBalance } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import {
@@ -142,8 +146,6 @@ import {
     XButton,
     defaultButtonProps,
 } from '../styled-components';
-import Toggle from 'components/Toggle';
-import useCoingeckoRatesQuery from 'queries/rates/useCoingeckoRatesQuery';
 
 type TicketProps = {
     markets: TicketMarket[];
@@ -189,6 +191,7 @@ const Ticket: React.FC<TicketProps> = ({
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
     const liveBetSlippage = useSelector(getLiveBetSlippage);
+    const isFreeBetDisabledByUser = useSelector(getIsFreeBetDisabledByUser);
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
     const buyInAmount = ticketPayment.amountToBuy;
 
@@ -205,12 +208,15 @@ const Ticket: React.FC<TicketProps> = ({
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
     const [tooltipTextBuyInAmount, setTooltipTextBuyInAmount] = useState('');
-    const [isFreeBetActive, setIsFreeBetActive] = useState(false);
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
     const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
+
+    const [isFreeBetActive, setIsFreeBetActive] = useState(false);
+    const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
+    const [checkFreeBetBalance, setCheckFreeBetBalance] = useState(false);
 
     const [gas, setGas] = useState(0);
     const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
@@ -301,12 +307,6 @@ const Ticket: React.FC<TicketProps> = ({
         enabled: isAppReady && isWalletConnected,
     });
 
-    const multipleCollateralBalancesData = useMemo(() => {
-        return multipleCollateralBalances?.isSuccess && multipleCollateralBalances?.data
-            ? multipleCollateralBalances.data
-            : [];
-    }, [multipleCollateralBalances]);
-
     const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
@@ -319,11 +319,6 @@ const Ticket: React.FC<TicketProps> = ({
     const freeBetBalanceExists = freeBetCollateralBalances
         ? !!Object.values(freeBetCollateralBalances).find((balance) => balance)
         : false;
-
-    // Set free bet if user has free bet balance
-    useEffect(() => {
-        setIsFreeBetActive(freeBetBalanceExists);
-    }, [freeBetBalanceExists]);
 
     const sportsAmmData: SportsAmmData | undefined = useMemo(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
@@ -385,41 +380,96 @@ const Ticket: React.FC<TicketProps> = ({
         [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
 
+    const resetFreeBet = useCallback(() => {
+        setIsFreeBetInitialized(false);
+        setIsFreeBetActive(false);
+        setCheckFreeBetBalance(false);
+    }, []);
+
+    // Reset free bet
     useEffect(() => {
-        if (!isFreeBetActive) return;
+        resetFreeBet();
+    }, [walletAddress, resetFreeBet]);
 
-        const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
-        if (!balanceList) return;
+    // Select initially Free Bet if exists at least min for buy
+    useEffect(() => {
+        if (!freeBetBalanceExists) {
+            resetFreeBet();
+        } else if (!isFreeBetDisabledByUser && !isFreeBetInitialized && minBuyInAmountInDefaultCollateral) {
+            const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+            if (!balanceList) return;
 
-        const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
+            const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
 
-        const isSelectedCollateralBalanceLowerThanMinimumBuyAmount =
-            selectedCollateralItem && selectedCollateralItem.balanceDollarValue < 3;
+            const isSelectedCollateralBalanceLowerThanMin =
+                selectedCollateralItem && selectedCollateralItem.balanceDollarValue < minBuyInAmountInDefaultCollateral;
 
-        const maxBalanceItem = getMaxCollateralDollarValue(balanceList);
-
-        if (
-            maxBalanceItem &&
-            selectedCollateral !== maxBalanceItem.collateralKey &&
-            (!ticketPayment.forceChangeCollateral || isSelectedCollateralBalanceLowerThanMinimumBuyAmount)
-        ) {
-            dispatch(
-                setPaymentSelectedCollateralIndex({
-                    selectedCollateralIndex: maxBalanceItem.index,
-                    networkId,
-                })
-            );
+            if (isSelectedCollateralBalanceLowerThanMin) {
+                setIsFreeBetActive(false);
+            } else if (!isFreeBetActive) {
+                setIsFreeBetActive(true);
+            }
+            setCheckFreeBetBalance(true);
+            setIsFreeBetInitialized(true);
         }
-        // When chainging collateral from dropdown this should not be triggered
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        resetFreeBet,
+        freeBetCollateralBalances,
+        exchangeRates,
+        networkId,
+        selectedCollateral,
+        freeBetBalanceExists,
+        minBuyInAmountInDefaultCollateral,
+        isFreeBetActive,
+        isFreeBetInitialized,
+        isFreeBetDisabledByUser,
+    ]);
+
+    // Select max balance collateral for Free Bet
+    useEffect(() => {
+        if (checkFreeBetBalance && minBuyInAmountInDefaultCollateral) {
+            const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+            if (!balanceList) return;
+
+            const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
+
+            const isSelectedCollateralBalanceLowerThanMin =
+                selectedCollateralItem && selectedCollateralItem.balanceDollarValue < minBuyInAmountInDefaultCollateral;
+
+            const maxBalanceItem = getMaxCollateralDollarValue(balanceList);
+            const isMaxBalanceLowerThanMin =
+                maxBalanceItem && maxBalanceItem.balanceDollarValue < minBuyInAmountInDefaultCollateral;
+
+            if (
+                maxBalanceItem &&
+                !isMaxBalanceLowerThanMin &&
+                selectedCollateral !== maxBalanceItem.collateralKey &&
+                (!ticketPayment.forceChangeCollateral || isSelectedCollateralBalanceLowerThanMin)
+            ) {
+                dispatch(
+                    setPaymentSelectedCollateralIndex({
+                        selectedCollateralIndex: maxBalanceItem.index,
+                        networkId,
+                    })
+                );
+                if (!isFreeBetDisabledByUser) {
+                    setIsFreeBetActive(true);
+                }
+            }
+            setCheckFreeBetBalance(false);
+        }
     }, [
         dispatch,
         exchangeRates,
         isFreeBetActive,
         freeBetCollateralBalances,
-        multipleCollateralBalancesData,
+        freeBetBalanceExists,
+        minBuyInAmountInDefaultCollateral,
+        selectedCollateral,
         networkId,
         ticketPayment.forceChangeCollateral,
+        checkFreeBetBalance,
+        isFreeBetDisabledByUser,
     ]);
 
     useEffect(() => {
@@ -1253,6 +1303,11 @@ const Ticket: React.FC<TicketProps> = ({
                         toast.update(toastId, getLoadingToastOptions(t('market.toast-message.live-trade-requested')));
                         setTimeout(checkFulfilled, 2000);
                     }
+
+                    if (isFreeBetActive) {
+                        refetchFreeBetBalance(walletAddress, networkId);
+                        setIsFreeBetInitialized(false);
+                    }
                 }
             } catch (e) {
                 setIsBuying(false);
@@ -1728,7 +1783,12 @@ const Ticket: React.FC<TicketProps> = ({
                                 checked={isFreeBetActive}
                                 value={isFreeBetActive.toString()}
                                 onChange={(e: any) => {
-                                    setIsFreeBetActive(e.target.checked || false);
+                                    const isChecked = e.target.checked || false;
+                                    setIsFreeBetActive(isChecked);
+                                    dispatch(setIsFreeBetDisabledByUser(!isChecked));
+                                    if (isChecked) {
+                                        setCheckFreeBetBalance(true);
+                                    }
                                 }}
                             />
                         </CheckboxContainer>

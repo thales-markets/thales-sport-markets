@@ -45,8 +45,8 @@ type TicketSliceState = {
     ticket: TicketPosition[];
     payment: ParlayPayment;
     maxTicketSize: number;
-    isMultiSingle: boolean;
     liveBetSlippage: number;
+    isFreeBetDisabledByUser: boolean;
     error: { code: TicketErrorCode; data: string };
 };
 
@@ -54,9 +54,9 @@ const initialState: TicketSliceState = {
     ticket: getDefaultTicket(),
     payment: getDefaultPayment(),
     maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
-    isMultiSingle: false,
-    error: getDefaultError(),
     liveBetSlippage: getDefaultLiveSlippage(),
+    isFreeBetDisabledByUser: false,
+    error: getDefaultError(),
 };
 
 const ticketSlice = createSlice({
@@ -167,6 +167,9 @@ const ticketSlice = createSlice({
         setPaymentAmountToBuy: (state, action: PayloadAction<number | string>) => {
             state.payment = { ...state.payment, amountToBuy: action.payload };
         },
+        setIsFreeBetDisabledByUser: (state, action: PayloadAction<boolean>) => {
+            state.isFreeBetDisabledByUser = action.payload;
+        },
         resetTicketError: (state) => {
             state.error = getDefaultError();
         },
@@ -182,12 +185,14 @@ export const {
     resetTicketError,
     setMaxTicketSize,
     setLiveBetSlippage,
+    setIsFreeBetDisabledByUser,
 } = ticketSlice.actions;
 
 const getTicketState = (state: RootState) => state[sliceName];
 export const getTicket = (state: RootState) => getTicketState(state).ticket;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
 export const getLiveBetSlippage = (state: RootState) => getTicketState(state).liveBetSlippage;
+export const getIsFreeBetDisabledByUser = (state: RootState) => getTicketState(state).isFreeBetDisabledByUser;
 export const getTicketError = (state: RootState) => getTicketState(state).error;
 export const getHasTicketError = createSelector(getTicketError, (error) => error.code != TicketErrorCode.NO_ERROS);
 
