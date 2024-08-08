@@ -11,7 +11,7 @@ const BannerV2: React.FC = () => {
                     i18nKey={'banner.v2-text'}
                     components={{
                         bold: <Bold />,
-                        v2Link: <Link href="https://v2.overtimemarkets.xyz/" />,
+                        v2Link: <Link href="https://overtimemarkets.xyz/" />,
                         detailsLink: (
                             <Link href="https://medium.com/@OvertimeMarkets.xyz/overtime-v2-is-coming-to-public-beta-e2109ee4d348" />
                         ),
@@ -27,19 +27,19 @@ const Container = styled(FlexDiv)`
     align-items: center;
     justify-content: center;
     color: ${(props) => props.theme.textColor.primary};
-    background: linear-gradient(89.94deg, #8f32d8 1.79%, #d70c61 99.65%);
-    min-height: 25px;
+    background: ${(props) => props.theme.error.textColor.primary};
+    min-height: 30px;
     z-index: 102;
     text-align: center;
-    padding: 2px 5px;
+    padding: 5px 5px;
     @media screen and (max-width: 767px) {
         min-height: 20px;
     }
 `;
 
 const Label = styled.span`
-    font-size: 14px;
-    line-height: 16px;
+    font-size: 16px;
+    line-height: 18px;
     font-weight: 400;
     @media screen and (max-width: 767px) {
         font-size: 12px;

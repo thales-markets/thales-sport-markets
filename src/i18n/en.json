@@ -1198,7 +1198,7 @@
     },
     "banner": {
         "arb-distribution-message": "Win more than $280,000 in bonus earnings on Overtime! Click here to find out how",
-        "v2-text": "<bold>Overtime V2</bold> beta is here! <v2Link>Click here</v2Link> to try out the new UI, live markets & much more. Check out the V2 launch details <detailsLink>here</detailsLink>."
+        "v2-text": "<bold>Overtime V1 is officially deprecated now!</bold> If you are a SportsAMM and/or ParlayAMM liquidity provider on Overtime V1 or you have deposits in Overtime V1 vaults, we kindly request that you signal a withdrawal so that your deposits does not sit idle in the legacy pools/vaults. <v2Link>Click here</v2Link> to try out V2 with the new UI, live markets & much more."
     },
     "promotions": {
         "title": "Promotions and Incentives",

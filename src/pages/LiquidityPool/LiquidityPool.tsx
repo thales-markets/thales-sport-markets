@@ -41,6 +41,7 @@ import networkConnector from 'utils/networkConnector';
 import { refetchLiquidityPoolData } from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import { delay } from 'utils/timer';
+import { DeprecatedContainer } from '../Vault/styled-components';
 import PnL from './PnL';
 import Return from './Return';
 import Transactions from './Transactions';
@@ -577,6 +578,7 @@ const LiquidityPool: React.FC = () => {
                 />
             </ToggleContainer>
             <Title>{t('liquidity-pool.title')}</Title>
+            <DeprecatedContainer>{t(`vault.deprecated-info`)}</DeprecatedContainer>
             {liquidityPoolData && (
                 <Container>
                     <ContentContainer>
