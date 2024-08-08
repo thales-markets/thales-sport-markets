@@ -16,3 +16,11 @@ export type OverdropXPHistory = {
     points: number;
     txHash: string;
 };
+
+export type LeaderboardRow = OverdropUserData & {
+    rank: number;
+    reards: {
+        op: number;
+        arb: number;
+    };
+};
