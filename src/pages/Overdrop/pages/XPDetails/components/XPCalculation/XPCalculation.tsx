@@ -1,19 +1,57 @@
-import React from 'react';
+import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getIsAppReady } from 'redux/modules/app';
+import { getWalletAddress } from 'redux/modules/wallet';
+import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { MultiplierType } from 'types/overdrop';
+import { getMultiplierValueFromQuery } from 'utils/overdrop';
 
 const XPCalculation: React.FC = () => {
     const { t } = useTranslation();
+
+    const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+
+    const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
+        enabled: !!isAppReady,
+    });
+
+    const userMultipliers = useMemo(() => {
+        if (userMultipliersQuery?.isSuccess && userMultipliersQuery?.data) {
+            return userMultipliersQuery.data;
+        }
+        return;
+    }, [userMultipliersQuery.data, userMultipliersQuery?.isSuccess]);
+
+    const sumOfMultipliers = useMemo(() => {
+        return (
+            getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) +
+            getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) +
+            getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)
+        );
+    }, [userMultipliers]);
 
     return (
         <Wrapper>
             <BoxWrapper>
                 <BoxLabel>{t('overdrop.xp-details.days-in-row')}</BoxLabel>
                 <Box>
-                    <Badge>{'3'}</Badge>
+                    <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}</Badge>
                     <MainLabel>{t('overdrop.xp-details.daily-multiplier')}</MainLabel>
-                    <Value>{'+30%'}</Value>
+                    <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
+                </Box>
+            </BoxWrapper>
+            <Signs>{'+'}</Signs>
+            <BoxWrapper>
+                <BoxLabel>{t('overdrop.xp-details.days-in-row')}</BoxLabel>
+                <Box>
+                    <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}</Badge>
+                    <MainLabel>{t('overdrop.xp-details.weekly-multiplier')}</MainLabel>
+                    <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
                 </Box>
             </BoxWrapper>
             <Signs>{'+'}</Signs>
@@ -22,13 +60,13 @@ const XPCalculation: React.FC = () => {
                 <Box>
                     <Badge>{<Icon className="icon icon--x-twitter" />}</Badge>
                     <MainLabel>{t('overdrop.xp-details.twitter-multiplier')}</MainLabel>
-                    <Value>{'+10%'}</Value>
+                    <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
                 </Box>
             </BoxWrapper>
             <Signs>{'='}</Signs>
             <BoxWrapper>
                 <MainLabel>{t('overdrop.xp-details.total-bonus')}</MainLabel>
-                <HighlightedValue>{'+40%'}</HighlightedValue>
+                <HighlightedValue>{`+${sumOfMultipliers}%`}</HighlightedValue>
             </BoxWrapper>
         </Wrapper>
     );

@@ -1232,6 +1232,7 @@
         "xp-details": {
             "days-in-row": "Days in a row",
             "daily-multiplier": "Daily multiplier",
+            "weekly-multiplier": "Weekly multiplier",
             "shared-flex": "Shared flex card",
             "twitter-multiplier": "Twitter multiplier",
             "total-bonus": "Total bonus",

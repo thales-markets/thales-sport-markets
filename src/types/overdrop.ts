@@ -16,3 +16,9 @@ export type OverdropXPHistory = {
     points: number;
     txHash: string;
 };
+
+export enum MultiplierType {
+    DAILY = 'dailyMultiplier',
+    WEEKLY = 'weeklyMultiplier',
+    TWITTER = 'twitterMultiplier',
+}

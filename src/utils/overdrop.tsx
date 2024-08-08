@@ -1,7 +1,7 @@
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import { formatCurrencyWithKey } from 'thales-utils';
-import { OverdropMultiplier } from 'types/overdrop';
+import { MultiplierType, OverdropMultiplier } from 'types/overdrop';
 
 export const formatPoints = (amount: number) => {
     return formatCurrencyWithKey('XP', amount, undefined, true);
@@ -69,4 +69,9 @@ export const getNextLevelItemByPoints = (points: number) => {
 
 export const getProgressLevel = (currentPoints: number, nextLevelPoints: number) => {
     return (currentPoints / nextLevelPoints) * 100;
+};
+
+export const getMultiplierValueFromQuery = (data: OverdropMultiplier[] | undefined, multiplierType: MultiplierType) => {
+    const multiplierItem = data?.find((item) => item.name == multiplierType);
+    return multiplierItem?.multiplier ? multiplierItem.multiplier : 0;
 };
