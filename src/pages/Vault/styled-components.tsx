@@ -35,8 +35,11 @@ export const DeprecatedContainer = styled(FlexDiv)`
     align-items: center;
     justify-content: center;
     font-size: 20px;
+    padding: 5px 10px;
+    text-align: center;
     @media (max-width: 767px) {
         font-size: 16px;
+        margin-top: 10px;
     }
 `;
 
