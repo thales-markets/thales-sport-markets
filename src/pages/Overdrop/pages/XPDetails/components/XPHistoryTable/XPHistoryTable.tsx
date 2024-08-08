@@ -36,7 +36,7 @@ const XPHistoryTable: React.FC = () => {
                         Header: <>{t('overdrop.xp-details.date-time')}</>,
                         accessor: 'timestamp',
                         Cell: (cellProps: CellProps<OverdropXPHistory, OverdropXPHistory['timestamp']>) => (
-                            <p>{formatTxTimestamp(cellProps.cell.value)}</p>
+                            <p>{cellProps.cell.value && formatTxTimestamp(cellProps.cell.value)}</p>
                         ),
                         width: 150,
                         sortable: true,

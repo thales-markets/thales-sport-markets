@@ -6,4 +6,5 @@ export const tableHeaderStyle: React.CSSProperties = {
 export const tableRowStyle: React.CSSProperties = {
     justifyContent: 'center',
     padding: '10px 0',
+    flexDirection: 'column',
 };

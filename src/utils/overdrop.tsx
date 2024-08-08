@@ -46,9 +46,11 @@ export const getParlayMultiplier = (numberOfMarkets: number) => {
 };
 
 export const getCurrentLevelByPoints = (points: number) => {
+    if (points < OVERDROP_LEVELS[1].minimumPoints) {
+        return OVERDROP_LEVELS[0];
+    }
     const levelItem = OVERDROP_LEVELS.find((item, index) => {
-        if (item.minimumPoints < points && index == 0) return item;
-        if (item.minimumPoints > points && index != 0 && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
+        if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
     });
 
     if (levelItem) return levelItem;
