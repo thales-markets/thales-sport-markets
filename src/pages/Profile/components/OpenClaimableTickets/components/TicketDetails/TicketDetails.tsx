@@ -116,7 +116,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                 if (isAA) {
                     txResult =
                         isClaimCollateralDefaultCollateral ||
-                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
+                        ticket.isFreeBet
                             ? await executeBiconomyTransaction(
                                   claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
@@ -132,7 +133,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                 } else {
                     const tx =
                         isClaimCollateralDefaultCollateral ||
-                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
+                        ticket.isFreeBet
                             ? await sportsAMMV2ContractWithSigner.exerciseTicket(ticketAddress)
                             : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
                                   ticketAddress,
