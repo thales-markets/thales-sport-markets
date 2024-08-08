@@ -21,12 +21,10 @@ export const getMultiplierLabel = (multiplier: OverdropMultiplier) => {
 };
 
 export const getMultiplierIcon = (multiplier: OverdropMultiplier) => {
-    if (multiplier.name === 'dailyMultiplier') {
-        return <>{multiplier.multiplier / 10 + 1}</>;
+    if (multiplier.name === 'dailyMultiplier' || multiplier.name === 'weeklyMultiplier') {
+        return <>{multiplier.multiplier === 0 ? 0 : multiplier.multiplier / 10 + 1}</>;
     }
-    if (multiplier.name === 'weeklyMultiplier') {
-        return <>{multiplier.multiplier / 10 + 1}</>;
-    }
+
     if (multiplier.name === 'twitterMultiplier') {
         return <OverdropIcon className="icon icon--x-twitter" />;
     }

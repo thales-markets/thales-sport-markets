@@ -1717,7 +1717,7 @@ const Ticket: React.FC<TicketProps> = ({
                             <ProgressLine
                                 progress={65}
                                 currentPoints={7374}
-                                nextLevelPoints={8000}
+                                nextLevelMinimumPoints={8000}
                                 level={6}
                                 hideLevelLabel
                             />
