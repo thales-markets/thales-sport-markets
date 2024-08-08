@@ -289,6 +289,10 @@
     content: '\0081';
 }
 
+.icon--thales-logo::before {
+    content: '\0083';
+}
+
 .icon--brackets::before {
     content: '\0086';
 }

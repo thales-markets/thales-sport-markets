@@ -2,6 +2,7 @@ export type OverdropMultiplier = {
     multiplier: number;
     name: string;
     label?: string;
+    icon?: JSX.Element;
 };
 
 export type OverdropUserData = {
