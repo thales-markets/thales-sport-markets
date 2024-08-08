@@ -1,10 +1,14 @@
 [
     {
-        "image": "v2.jpg",
-        "url": "https://v2.overtimemarkets.xyz/"
+        "image": "side-banner-oly.png",
+        "url": "https://dune.com/leifu/overtime-v2-olympic-games-paris-2024"
     },
     {
-        "image": "euro.jpg",
-        "url": "https://medium.com/@OvertimeMarkets.xyz/euro-2024-copa-america-reward-program-709efad25c38"
+        "image": "elections.png",
+        "url": "https://v2.overtimemarkets.xyz/?sport=Politics&status=OpenMarkets&showActive=true&tag=US+Election+2024"
+    },
+    {
+        "image": "v2.jpg",
+        "url": "https://v2.overtimemarkets.xyz/"
     }
 ]
