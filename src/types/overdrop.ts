@@ -24,3 +24,9 @@ export type LeaderboardRow = OverdropUserData & {
         arb: number;
     };
 };
+
+export enum MultiplierType {
+    DAILY = 'dailyMultiplier',
+    WEEKLY = 'weeklyMultiplier',
+    TWITTER = 'twitterMultiplier',
+}

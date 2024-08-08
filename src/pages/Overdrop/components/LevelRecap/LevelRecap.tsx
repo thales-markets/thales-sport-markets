@@ -47,7 +47,7 @@ const LevelRecap: React.FC = () => {
                             key={`${index}-level`}
                             requiredPointsForLevel={item.minimumPoints}
                             level={item.level}
-                            reached={levelItem ? item.level < levelItem.level : false}
+                            reached={levelItem ? item.level <= levelItem.level : false}
                             levelName={item.levelName}
                             voucherAmount={item.voucherAmount}
                         />

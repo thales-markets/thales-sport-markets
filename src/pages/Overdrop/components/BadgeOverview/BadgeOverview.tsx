@@ -74,7 +74,7 @@ const BadgeOverview: React.FC = () => {
                             level={item.level}
                             requiredPointsForLevel={item.minimumPoints}
                             levelName={item.levelName}
-                            reached={levelItem ? item.level < levelItem.level : false}
+                            reached={levelItem ? item.level <= levelItem.level : false}
                         />
                     );
                 })}

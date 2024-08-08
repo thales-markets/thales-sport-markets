@@ -1,7 +1,7 @@
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import { formatCurrencyWithKey } from 'thales-utils';
-import { OverdropMultiplier } from 'types/overdrop';
+import { MultiplierType, OverdropMultiplier } from 'types/overdrop';
 
 export const formatPoints = (amount: number) => {
     return formatCurrencyWithKey('XP', amount, undefined, true);
@@ -49,14 +49,15 @@ export const getParlayMultiplier = (numberOfMarkets: number) => {
 
 export const getCurrentLevelByPoints = (points: number) => {
     const levelItem = OVERDROP_LEVELS.find((item, index) => {
-        if (item.minimumPoints > points && !OVERDROP_LEVELS[index - 1]) return item;
+        if (item.minimumPoints < points && index == 0) return item;
         if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
     });
 
     if (levelItem) return levelItem;
 };
 
-export const getNextLevelItemByPoints = (points: number) => {
+export const getNextLevelItemByPoints = (points?: number) => {
+    if (!points) return OVERDROP_LEVELS[0];
     const currentLevelItemIndex = OVERDROP_LEVELS.findIndex((item, index) => {
         if (item.minimumPoints > points && !OVERDROP_LEVELS[index - 1]) return item;
         if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
@@ -67,6 +68,15 @@ export const getNextLevelItemByPoints = (points: number) => {
     return OVERDROP_LEVELS[currentLevelItemIndex];
 };
 
-export const getProgressLevel = (currentPoints: number, nextLevelPoints: number) => {
-    return (currentPoints / nextLevelPoints) * 100;
+export const getProgressLevel = (
+    currentPoints: number,
+    currentLevelMinimumPoints: number,
+    nextLevelMinimumPoints: number
+) => {
+    return ((currentPoints - currentLevelMinimumPoints) / (nextLevelMinimumPoints - currentLevelMinimumPoints)) * 100;
+};
+
+export const getMultiplierValueFromQuery = (data: OverdropMultiplier[] | undefined, multiplierType: MultiplierType) => {
+    const multiplierItem = data?.find((item) => item.name == multiplierType);
+    return multiplierItem?.multiplier ? multiplierItem.multiplier : 0;
 };
