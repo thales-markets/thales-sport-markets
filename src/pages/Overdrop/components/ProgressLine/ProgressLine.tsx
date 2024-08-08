@@ -29,9 +29,9 @@ const ProgressLine: React.FC<ProgressLineProps> = ({
     return (
         <Wrapper>
             <ProgressLineWrapper levelLabelHidden={hideLevelLabel}>
-                {!!progressUpdate && <ProgressUpdate progress={progress + progressUpdate} />}
-                <Progress progress={progress}>
-                    <DetailedPoints progress={progress}>{`${
+                {!!progressUpdate && <ProgressUpdate progress={Math.min(progress + progressUpdate, 100)} />}
+                <Progress progress={Math.min(progress, 100)}>
+                    <DetailedPoints progress={Math.min(progress, 100)}>{`${
                         showNumbersOnly ? formatCurrency(currentPoints, undefined, true) : formatPoints(currentPoints)
                     } / ${
                         showNumbersOnly
