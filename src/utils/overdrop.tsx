@@ -52,6 +52,8 @@ export const getCurrentLevelByPoints = (points: number) => {
     });
 
     if (levelItem) return levelItem;
+
+    return OVERDROP_LEVELS[0];
 };
 
 export const getNextLevelItemByPoints = (points?: number) => {
