@@ -276,7 +276,13 @@
                 "boxing": "Boxe",
                 "fighting": "Sports de combat",
                 "golf": "Le golf",
-                "live": "En direct"
+                "live": "En direct",
+                "olympicgames": "Jeux olympiques",
+                "volleyball": "Volley-ball",
+                "waterpolo": "Water polo",
+                "tabletennis": "Tennis de table",
+                "handball": "Handball",
+                "rugby": "Le rugby"
             },
             "all": "Tous",
             "datepicker": {
@@ -552,7 +558,9 @@
             "end-of-fight": "Fin du combat",
             "scheduled": "Programmé",
             "fighters-introduction": "Présentation des combattants",
-            "end-of-round": "Fin du tour"
+            "end-of-round": "Fin du tour",
+            "not-available-for-trading": "Non disponible pour le trading",
+            "suspended": "Suspendu"
         },
         "market-details": {
             "wallet-info": {
@@ -664,7 +672,18 @@
             "thales-bonus-info": "Utilisez THALES et obtenez 1% de bonus pour chaque partie.",
             "odds-changed-description": "Les chances ont changé. Acceptez les modifications pour acheter.",
             "odds-changed-error": "Les chances ont changé lors de l'exécution de la commande. Essayez d'augmenter le glissement.",
-            "thales-bonus-tooltip": "Les utilisateurs effectuant des transactions avec THALES recevront 1 % de paiements supplémentaires pour chaque jeu qu'ils ont dans leur ticket (déjà calculé dans le devis total et le paiement)."
+            "thales-bonus-tooltip": "Les utilisateurs effectuant des transactions avec THALES recevront 1 % de paiements supplémentaires pour chaque jeu qu'ils ont dans leur ticket (déjà calculé dans le devis total et le paiement).",
+            "overdrop": {
+                "total-xp-boost": "Augmentation totale de l'XP",
+                "bonus-applied": "Bonus appliqué",
+                "active-boost": "Boost actif",
+                "total-xp-earned": "XP total gagné",
+                "overdrop-xp-overview": "Présentation d'Overdrop XP",
+                "overdrop-xp": "XP de dépassement",
+                "base-xp": "XP de base"
+            },
+            "disable-free-bet": "Désactiver les soldes de paris gratuits",
+            "use-free-bet": "Utiliser le pari gratuit"
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -683,7 +702,8 @@
             },
             "buttons": {
                 "disconnect": "Déconnecter",
-                "switch": "Changer"
+                "switch": "Changer",
+                "particle-wallet": "Portefeuille de particules"
             },
             "labels": {
                 "get-started": "Commencer",
@@ -698,7 +718,9 @@
         "incentivized-tooltip-uefa": "Un total énorme de {{rewards}} sera distribué pour les compétitions de l'UEFA. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
         "incentivized-tooltip-nhl": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de la LNH, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de {{league}}, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
-        "incentivized-tooltip-euro-copa": "Un total énorme de {{rewards}} sera distribué pour les compétitions Euro 2024 et Copa America. Vérifiez plus de détails <detailsLink>ici</detailsLink>."
+        "incentivized-tooltip-euro-copa": "Un total énorme de {{rewards}} sera distribué pour les compétitions Euro 2024 et Copa America. Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
+        "incentivized-tooltip-olympics": "Gagnez {{rewards}} en récompenses basées sur le volume pendant les Jeux olympiques. Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Participez aux Overtime V1 et V2 de Wimbledon 2024 pour gagner des {{rewards}}. Pour plus de détails, cliquez ici <detailsLink>."
     },
     "rewards": {
         "table": {
@@ -820,7 +842,9 @@
             "trades": "Trades",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
-            "profile-data": "Données de profil"
+            "profile-data": "Données de profil",
+            "wallet": "Portefeuille",
+            "free-bet": "Pari gratuit"
         },
         "in-lp": "Liquidité fournie",
         "go-to-lp": "Aller à LP",
@@ -842,7 +866,25 @@
         },
         "lp": "LP",
         "back": "Dos",
-        "go-to": "Aller à"
+        "go-to": "Aller à",
+        "free-bet": {
+            "claim-btn": "Le montant de la réclamation sera réduit du montant du buy-in, qui sera transféré sur votre solde de pari gratuit."
+        },
+        "free-bet-modal": {
+            "insufficient-balance": "Solde insuffisant",
+            "fund-successful": "Fonds réussi",
+            "invalid-amount": "Montant invalide",
+            "enter-amount": "Entrer le montant",
+            "enter-wallet-address": "Entrez l'adresse du portefeuille",
+            "invalid-wallet-address": "Adresse de portefeuille invalide",
+            "approve-success": "Approuvé avec succès",
+            "funding": "Financement...",
+            "fund": "Envoyer un pari gratuit",
+            "transaction-pending": "Transaction en attente",
+            "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
+            "title": "Envoyer un pari gratuit"
+        },
+        "send-free-bet": "Envoyer un pari gratuit"
     },
     "referral": {
         "generate-link": "Générer un lien",
@@ -1172,5 +1214,69 @@
         "starts-in": "commence dans",
         "to-label": "à",
         "no-promotions": "Oops! Il semble qu’aucune promotion ne soit disponible pour le moment pour un filtre donné."
+    },
+    "overdrop": {
+        "navigation-menu": {
+            "home": "Maison en trop",
+            "leveling-tree": "Arbre de nivellement",
+            "xp-calculation": "Calcul d'XP",
+            "leaderboard": "Classement"
+        },
+        "overdrop-home": {
+            "next-level": "Niveau suivant",
+            "total-xp-multiplier": "Multiplicateur d'XP total",
+            "my-total-xp": "Mon XP total",
+            "twitter-xp-boost-resets": "Twitter XP Boost se réinitialise dans",
+            "level": "Niveau",
+            "daily-streak": "Boost d'XP par séquence quotidienne",
+            "next-thales-rewards-at": "Prochaines récompenses Thales à",
+            "twitter-share": "Twitter partage XP boost",
+            "current-rewards": "Récompenses estimées actuelles",
+            "social-multiplier": "Multiplicateur d'XP social",
+            "weekly-streak": "Boost d'XP par séquence hebdomadaire",
+            "xp": "xp"
+        },
+        "leveling-tree": {
+            "explainer": {
+                "days": "jours",
+                "xp-explained": "XP expliqué",
+                "daily-bonus": "Bonus quotidien",
+                "xp-explained-content": "Campagne d&#39;une saison où les utilisateurs accumulent de l&#39;XP jusqu&#39;à la fin de la saison sportive en conduisant<bold> volume sur les heures supplémentaires</bold> avec<bold> multiplicateurs</bold> basé sur diverses mesures et objectifs dynamiques.<br/><br/> Une fois la campagne terminée, tous les utilisateurs partageront<highlight> 100 000 PO</highlight> et<highlight> 150 000 $AR</highlight> au prorata basé sur XP<br><br> Pendant la durée de la campagne, les utilisateurs recevront des récompenses uniques sur des NIVEAUX XP spécifiques.",
+                "base-xp-accrual": "Accumulation d'XP de base",
+                "twitter-share-bonus": "bonus de partage Twitter (une fois par jour)",
+                "twitter-content": "Partagez votre <bold>Flex Card</bold> d'heures supplémentaires du pari d'aujourd'hui <bold>sur Twitter : bonus de 10 % par BASE XP par $</bold> pour le reste de la journée",
+                "base-xp-content": "<bold>1 XP de base = 1 $</bold> de volumes<br/><br/> Après<bold> 28 jours</bold> dans une rangée de<bold> volume &gt;10$</bold> vous avez atteint<bold> Multiplicateur de base MAX</bold><br/><br/> Chaque jour manqué de volume inférieur à 10$ fait baisser votre base<bold> XP de -0,1</bold>",
+                "parlay-xp": "BONUS PARLAY XP (une réduction par parlay)",
+                "positions-thales": "Position AVEC BONUS THALES (une réduction par pari)",
+                "games-in-parlay": "jeux en parlay",
+                "position-thales-content": "Utilisez <bold>THALES</bold> comme garantie et vous <bold>obtiendrez un bonus de 10 % par BASE XP par $</bold> pour cette transaction spécifique"
+            },
+            "heading": "La ligue agricole overdrop"
+        },
+        "xp-details": {
+            "weekly-multiplier": "Multiplicateur hebdomadaire",
+            "shared-flex": "Carte flexible partagée",
+            "no-results": "Aucun résultat",
+            "daily-multiplier": "Multiplicateur quotidien",
+            "total-bonus": "Bonus total",
+            "twitter-multiplier": "Multiplicateur Twitter",
+            "xp-history": "Historique XP",
+            "date-time": "Dates | Temps",
+            "active-xp-bonus": "Bonus d'XP actif",
+            "days-in-row": "Jours d'affilée",
+            "received": "Reçu",
+            "paragraph": "Utilisez THALES comme garantie pour un bonus supplémentaire de 10 %, créez des parlays jusqu'à 100 % de bonus et recherchez des jeux promotionnels spéciaux.",
+            "tx-link": "Lien TX"
+        },
+        "leaderboard": {
+            "table": {
+                "address": "Adresse",
+                "total-volume": "Volume total",
+                "rank": "Rang",
+                "level": "Niveau",
+                "total-xp": "Total de points d'XP",
+                "rewards": "Montant de la récompense"
+            }
+        }
     }
 }

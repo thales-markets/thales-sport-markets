@@ -146,6 +146,7 @@ const QUERY_KEYS = {
     },
     Promotions: (branchName: string) => [branchName, 'promotions'],
     Overdrop: {
+        Leaderboard: () => ['leaderboard'],
         UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
         UserData: (walletAddress: string) => ['userData', walletAddress],
         UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],

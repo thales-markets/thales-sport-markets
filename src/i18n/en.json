@@ -1243,6 +1243,16 @@
             "date-time": "Date | Time",
             "received": "Received",
             "tx-link": "TX link"
+        },
+        "leaderboard": {
+            "table": {
+                "address": "Address",
+                "rank": "Rank",
+                "level": "Level",
+                "total-xp": "Total XP Points",
+                "total-volume": "Total volume",
+                "rewards": "Reward amount"
+            }
         }
     }
 }

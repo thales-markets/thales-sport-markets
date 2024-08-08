@@ -277,7 +277,13 @@
                 "fighting": "ดกีฬาต่อสู้",
                 "boxing": "มวย",
                 "golf": "กอล์ฟ",
-                "live": "สด"
+                "live": "สด",
+                "volleyball": "วอลเลย์บอล",
+                "waterpolo": "โปโลน้ำ",
+                "handball": "แฮนด์บอล",
+                "rugby": "รักบี้",
+                "olympicgames": "กีฬาโอลิมปิก",
+                "tabletennis": "ปิงปอง"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
@@ -553,7 +559,9 @@
             "end-of-round": "จบรอบ",
             "fighters-introduction": "การแนะนำนักสู้",
             "fighters-walking": "นักสู้เดิน",
-            "end-of-fight": "สิ้นสุดการต่อสู้"
+            "end-of-fight": "สิ้นสุดการต่อสู้",
+            "not-available-for-trading": "ไม่สามารถซื้อขายได้",
+            "suspended": "ถูกระงับ"
         },
         "market-details": {
             "price": "ราคา",
@@ -666,7 +674,18 @@
             "odds-changed-description": "อัตราต่อรองเปลี่ยนไป ยอมรับการเปลี่ยนแปลงเพื่อซื้อ",
             "odds-changed-error": "อัตราต่อรองเปลี่ยนแปลงขณะดำเนินการตามคำสั่งซื้อ ลองเพิ่มความคลาดเคลื่อน",
             "thales-bonus-tooltip": "ผู้ใช้ที่ทำการซื้อขายกับ THALES จะได้รับการจ่ายเงินเพิ่ม 1% สำหรับแต่ละเกมที่พวกเขามีอยู่ในตั๋ว (คำนวณแล้วในใบเสนอราคารวมและการจ่ายเงิน)",
-            "accept-odds-changes": "ยอมรับการเปลี่ยนแปลงอัตราต่อรอง"
+            "accept-odds-changes": "ยอมรับการเปลี่ยนแปลงอัตราต่อรอง",
+            "overdrop": {
+                "overdrop-xp-overview": "ภาพรวม Overdrop XP",
+                "total-xp-boost": "เพิ่ม XP ทั้งหมด",
+                "overdrop-xp": "โอเวอร์ดรอป XP",
+                "base-xp": "ฐาน XP",
+                "total-xp-earned": "XP ทั้งหมดที่ได้รับ",
+                "active-boost": "บูสต์ที่ใช้งานอยู่",
+                "bonus-applied": "ใช้โบนัสแล้ว"
+            },
+            "use-free-bet": "ใช้เดิมพันฟรี",
+            "disable-free-bet": "ปิดการใช้งานยอดเดิมพันฟรี"
         },
         "nav-menu": {
             "items": {
@@ -684,7 +703,8 @@
             },
             "buttons": {
                 "switch": "สวิตช์",
-                "disconnect": "ตัดการเชื่อมต่อ"
+                "disconnect": "ตัดการเชื่อมต่อ",
+                "particle-wallet": "กระเป๋าเงินอนุภาค"
             },
             "labels": {
                 "language": "ภาษา"
@@ -698,7 +718,9 @@
         "incentivized-tooltip-uefa": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายสำหรับการแข่งขันยูฟ่า เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
         "incentivized-tooltip-nhl": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในช่วงที่เหลือของฤดูกาล NHL รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
         "incentivized-tooltip-nhl-mlb": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายให้กับช่วงที่เหลือของฤดูกาล {{league}} รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
-        "incentivized-tooltip-euro-copa": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายสำหรับการแข่งขันยูโร 2024 และโคปาอเมริกา ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
+        "incentivized-tooltip-euro-copa": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายสำหรับการแข่งขันยูโร 2024 และโคปาอเมริกา ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
+        "incentivized-tooltip-wimbledon": "แข่งขันเพื่อชิง {{rewards}} ระหว่างวิมเบิลดัน 2024 ในช่วงต่อเวลา V1 และ V2 ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
+        "incentivized-tooltip-olympics": "รับ {{rewards}} เป็นรางวัลตามปริมาณระหว่างการแข่งขันกีฬาโอลิมปิก ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
     },
     "rewards": {
         "header": "รางวัล",
@@ -820,7 +842,9 @@
             "trades": "Trades",
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
-            "profile-data": "ข้อมูลโปรไฟล์"
+            "profile-data": "ข้อมูลโปรไฟล์",
+            "wallet": "กระเป๋าสตางค์",
+            "free-bet": "เดิมพันฟรี"
         },
         "lp-title": "สระว่ายน้ำสภาพคล่อง",
         "go-to-lp": "ไปที่หจก",
@@ -842,7 +866,25 @@
         },
         "lp": "ห้างหุ้นส่วนจำกัด",
         "back": "กลับ",
-        "go-to": "ไปที่"
+        "go-to": "ไปที่",
+        "free-bet": {
+            "claim-btn": "จำนวนเงินที่เรียกร้องจะลดลงตามจำนวนการซื้อ ซึ่งจะโอนไปยังยอดเดิมพันฟรีของคุณ"
+        },
+        "free-bet-modal": {
+            "fund": "ส่งเดิมพันฟรี",
+            "title": "ส่งเดิมพันฟรี",
+            "fund-successful": "กองทุนสำเร็จแล้ว",
+            "invalid-wallet-address": "ที่อยู่กระเป๋าเงินไม่ถูกต้อง",
+            "approve-success": "อนุมัติเรียบร้อยแล้ว",
+            "enter-amount": "ใส่จำนวนเงิน",
+            "insufficient-balance": "ยอดคงเหลือไม่เพียงพอ",
+            "no-funds": "โปรดตรวจสอบว่ากระเป๋าเงินของคุณมีเงินเพียงพอ",
+            "invalid-amount": "จำนวนเงินไม่ถูกต้อง",
+            "transaction-pending": "การทำธุรกรรมที่รอดำเนินการ",
+            "enter-wallet-address": "ป้อนที่อยู่กระเป๋าสตางค์",
+            "funding": "การระดมทุน..."
+        },
+        "send-free-bet": "ส่งเดิมพันฟรี"
     },
     "referral": {
         "generate-link": "สร้างลิงค์",
@@ -1172,5 +1214,69 @@
         "to-label": "ถึง",
         "starts-in": "เริ่มใน",
         "no-promotions": "อ๊ะ! ดูเหมือนว่าไม่มีโปรโมชั่นสำหรับตัวกรองที่ระบุในขณะนี้"
+    },
+    "overdrop": {
+        "navigation-menu": {
+            "home": "โอเวอร์ดรอปบ้าน",
+            "leaderboard": "ลีดเดอร์บอร์ด",
+            "leveling-tree": "การปรับระดับต้นไม้",
+            "xp-calculation": "การคำนวณ XP"
+        },
+        "overdrop-home": {
+            "next-thales-rewards-at": "Next Thales รับรางวัลที่",
+            "daily-streak": "เพิ่ม xp ต่อเนื่องรายวัน",
+            "total-xp-multiplier": "ตัวคูณ XP ทั้งหมด",
+            "level": "ระดับ",
+            "next-level": "ระดับถัดไป",
+            "twitter-xp-boost-resets": "บูสต์ XP ของ Twitter จะรีเซ็ตใน",
+            "xp": "เอ็กซ์พี",
+            "my-total-xp": "XP ทั้งหมดของฉัน",
+            "weekly-streak": "เพิ่ม XP ต่อเนื่องรายสัปดาห์",
+            "current-rewards": "รางวัลโดยประมาณในปัจจุบัน",
+            "twitter-share": "Twitter แชร์ XP เพิ่ม",
+            "social-multiplier": "ตัวคูณ XP ทางสังคม"
+        },
+        "leveling-tree": {
+            "explainer": {
+                "daily-bonus": "โบนัสประจำวัน",
+                "base-xp-content": "<bold>1 XP ฐาน = 1 $</bold> ของปริมาณ<br/><br/> หลังจาก<bold> 28 วัน</bold> ในแถวของ<bold> ปริมาณ &gt;10$</bold> คุณมาถึงแล้ว<bold> ตัวคูณฐาน MAX</bold><br/><br/> ทุกวันที่พลาดไปของปริมาณที่ต่ำกว่า 10$ จะทำให้ฐานของคุณลดลง<bold> XP คูณ -0.1</bold>",
+                "positions-thales": "ตำแหน่งพร้อมโบนัส Thales (หนึ่งครั้งต่อการเดิมพัน)",
+                "games-in-parlay": "เกมในพาร์เลย์",
+                "parlay-xp": "โบนัส PARLAY XP (หนึ่งครั้งต่อพาร์เลย์)",
+                "days": "วัน",
+                "base-xp-accrual": "การสะสม XP พื้นฐาน",
+                "xp-explained-content": "แคมเปญระยะยาวที่ผู้ใช้สะสม XP จนกระทั่งสิ้นสุดฤดูกาลกีฬาด้วยการขับรถ<bold> ปริมาณการต่อเวลา</bold> กับ<bold> ตัวคูณ</bold> ขึ้นอยู่กับตัวชี้วัดและเป้าหมายแบบไดนามิกต่างๆ<br/><br/> หลังจากสิ้นสุดแคมเปญ ผู้ใช้ทุกคนจะแชร์<highlight> 100,000 โอพี</highlight> และ<highlight> 150,000 ARB</highlight> สัดส่วนขึ้นอยู่กับ XP<br><br> ในขณะที่แคมเปญคงอยู่ ผู้ใช้จะได้รับรางวัลหนึ่งรางวัลในระดับ XP ที่กำหนด",
+                "twitter-share-bonus": "โบนัสการแชร์ทวิตเตอร์ (ครั้งเดียวต่อวัน)",
+                "position-thales-content": "ใช้ <bold>THALES</bold> เป็นหลักประกัน และคุณ <bold>ได้รับโบนัส 10% ต่อ BASE XP ต่อ $</bold> สำหรับการซื้อขายนั้น ๆ",
+                "xp-explained": "XP อธิบายแล้ว",
+                "twitter-content": "แบ่งปันค่าล่วงเวลาของคุณ <bold>Flex Card</bold> จากการเดิมพันวันนี้ <bold>บน Twitter: โบนัส 10% ต่อ BASE XP ต่อ $</bold> ในช่วงที่เหลือของวัน"
+            },
+            "heading": "ลีกเกษตรกรรมโอเวอร์ดรอป"
+        },
+        "xp-details": {
+            "total-bonus": "โบนัสรวม",
+            "paragraph": "ใช้ THALES เป็นหลักประกันเพื่อรับโบนัสเพิ่มเติม 10% สร้างพาร์เลย์เพื่อรับโบนัสสูงถึง 100% และตรวจสอบเกมโปรโมชั่นพิเศษ",
+            "no-results": "ไม่มีผลลัพธ์",
+            "weekly-multiplier": "ตัวคูณรายสัปดาห์",
+            "date-time": "วันที่ | เวลา",
+            "xp-history": "ประวัติประสบการณ์",
+            "active-xp-bonus": "โบนัส xp ที่ใช้งานอยู่",
+            "received": "ได้รับ",
+            "shared-flex": "บัตรเฟล็กซ์แบบแชร์",
+            "daily-multiplier": "ตัวคูณรายวัน",
+            "days-in-row": "วันติดต่อกัน",
+            "twitter-multiplier": "ตัวคูณทวิตเตอร์",
+            "tx-link": "ลิงค์เท็กซัส"
+        },
+        "leaderboard": {
+            "table": {
+                "rewards": "จำนวนรางวัล",
+                "rank": "อันดับ",
+                "level": "ระดับ",
+                "address": "ที่อยู่",
+                "total-volume": "ปริมาณรวม",
+                "total-xp": "คะแนน XP ทั้งหมด"
+            }
+        }
     }
 }

@@ -17,6 +17,14 @@ export type OverdropXPHistory = {
     txHash: string;
 };
 
+export type LeaderboardRow = OverdropUserData & {
+    rank: number;
+    reards: {
+        op: number;
+        arb: number;
+    };
+};
+
 export enum MultiplierType {
     DAILY = 'dailyMultiplier',
     WEEKLY = 'weeklyMultiplier',
