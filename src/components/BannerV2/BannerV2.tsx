@@ -11,7 +11,7 @@ const BannerV2: React.FC = () => {
                     i18nKey={'banner.v2-text'}
                     components={{
                         bold: <Bold />,
-                        v2Link: <Link href="https://v2.overtimemarkets.xyz/" />,
+                        v2Link: <Link href="https://overtimemarkets.xyz/" />,
                         detailsLink: (
                             <Link href="https://medium.com/@OvertimeMarkets.xyz/overtime-v2-is-coming-to-public-beta-e2109ee4d348" />
                         ),

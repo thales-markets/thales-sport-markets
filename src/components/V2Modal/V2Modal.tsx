@@ -20,7 +20,7 @@ const OddsSelectorModal: React.FC = () => {
         >
             <Container>
                 <CloseIcon onClick={() => setShowV2Modal(false)} />
-                <SPAAnchor href={'https://v2.overtimemarkets.xyz/'} onClick={() => setShowV2Modal(false)}>
+                <SPAAnchor href={'https://overtimemarkets.xyz/'} onClick={() => setShowV2Modal(false)}>
                     <Image src={isMobile ? 'v2-popup-mobile.png' : 'v2-popup.png'} />
                 </SPAAnchor>
             </Container>
