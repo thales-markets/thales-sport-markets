@@ -70,9 +70,6 @@ export const getProgressLevel = (
     currentLevelMinimumPoints: number,
     nextLevelMinimumPoints: number
 ) => {
-    console.log('currentPoints ', currentPoints);
-    console.log('currentLevelMinimumPoints ', currentLevelMinimumPoints);
-    console.log('nextLevelMinimumPoints ', nextLevelMinimumPoints);
     return ((currentPoints - currentLevelMinimumPoints) / (nextLevelMinimumPoints - currentLevelMinimumPoints)) * 100;
 };
 
