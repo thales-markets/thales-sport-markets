@@ -62,8 +62,8 @@ const Leaderboard: React.FC = () => {
                     <StickyCell>{formatCurrency(data.points)}</StickyCell>
                     <StickyCell>{formatCurrency(data.volume)}</StickyCell>
                     <StickyCell>
-                        <div>{formatCurrency(data.rewards.op)}OP</div>
-                        <div>{formatCurrency(data.rewards.arb)}ARB</div>
+                        <div>{formatCurrency(data.rewards.op)} OP</div>
+                        <div>{formatCurrency(data.rewards.arb)} ARB</div>
                     </StickyCell>
                 </StickyContrainer>
             </StickyRow>
@@ -150,8 +150,8 @@ const Leaderboard: React.FC = () => {
                         Cell: (cellProps: any) => {
                             return (
                                 <>
-                                    <div>{formatCurrency(cellProps.cell.value.op)}OP</div>
-                                    <div>{formatCurrency(cellProps.cell.value.arb)}ARB</div>
+                                    <div>{formatCurrency(cellProps.cell.value.op)} OP</div>
+                                    <div>{formatCurrency(cellProps.cell.value.arb)} ARB</div>
                                 </>
                             );
                         },
