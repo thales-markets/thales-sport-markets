@@ -8,6 +8,7 @@
         "wrap-and-buy": "Wrap ETH and Buy",
         "wrap-eth-tooltip": "Your ETH is first wrapped into WETH and then passed to the contract",
         "sell-side": "SELL",
+        "submit": "Submit",
         "days-of-week": {
             "mon": "mon",
             "tue": "tue",
@@ -764,6 +765,7 @@
                 "not-supported": "Not supported validation error: {{error}}"
             },
             "share-ticket": {
+                "label": "Share for Twitter bonus",
                 "header": "Web3 Sport markets on",
                 "parlay": "ticket",
                 "potential-payout": "Potential payout",
@@ -778,7 +780,10 @@
                     "view-details": "Detailed",
                     "view-simple": "Simple",
                     "usd-amount": "USD amount"
-                }
+                },
+                "submit-url": "Submit your tweet URL for Overdrop boost",
+                "verifying-tweet": "Verifying tweet",
+                "network-error": "Network error, check browser console for more info"
             },
             "toggle-parlay": {
                 "multi-single": "Multi single",
