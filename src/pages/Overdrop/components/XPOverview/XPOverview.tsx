@@ -9,8 +9,8 @@ import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
-import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints, getProgressLevel } from 'utils/overdrop';
-import ProgressLine from '../ProgressLine';
+import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints } from 'utils/overdrop';
+import CurrentLevelProgressLine from '../CurrentLevelProgressLine';
 
 const XPOverview: React.FC = () => {
     const { t } = useTranslation();
@@ -56,22 +56,7 @@ const XPOverview: React.FC = () => {
                         <TotalValue>{formatPoints(userData?.points ? userData?.points : 0)}</TotalValue>
                     </InfoItemTotal>
                 </InfoWrapper>
-                {levelItem && nextLevelItem && (
-                    <ProgressLine
-                        progress={
-                            userData && nextLevelItem
-                                ? getProgressLevel(
-                                      userData.points,
-                                      levelItem.minimumPoints,
-                                      nextLevelItem.minimumPoints
-                                  )
-                                : 0
-                        }
-                        currentPoints={userData?.points || 0}
-                        nextLevelMinimumPoints={nextLevelItem?.minimumPoints || 0}
-                        level={levelItem?.level}
-                    />
-                )}
+                <CurrentLevelProgressLine />
             </ProgressOverviewWrapper>
         </Wrapper>
     );

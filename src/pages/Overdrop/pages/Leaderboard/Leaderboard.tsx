@@ -52,6 +52,15 @@ const Leaderboard: React.FC = () => {
                 tableRowCellStyles={tableRowStyle}
                 columns={[
                     {
+                        accessor: 'level.smallBadge',
+                        sortable: false,
+                        Cell: (cellProps: any) => {
+                            return <img style={{ width: '50px' }} src={cellProps.cell.value} />;
+                        },
+                        width: '50px',
+                        maxWidth: 50,
+                    },
+                    {
                         Header: <>{t('overdrop.leaderboard.table.address')}</>,
                         accessor: 'address',
                         sortable: false,
@@ -70,6 +79,8 @@ const Leaderboard: React.FC = () => {
                         Cell: (cellProps: any) => {
                             return <div>#{cellProps.cell.value}</div>;
                         },
+                        width: '50px',
+                        maxWidth: 50,
                     },
                     {
                         Header: <>{t('overdrop.leaderboard.table.level')}</>,
@@ -107,10 +118,10 @@ const Leaderboard: React.FC = () => {
                         sortable: true,
                         Cell: (cellProps: any) => {
                             return (
-                                <div>
-                                    {formatCurrency(cellProps.cell.value.op)} +
-                                    {formatCurrency(cellProps.cell.value.arb)}
-                                </div>
+                                <>
+                                    <div>{formatCurrency(cellProps.cell.value.op)}OP</div>
+                                    <div>{formatCurrency(cellProps.cell.value.arb)}ARB</div>
+                                </>
                             );
                         },
                         sortDescFirst: true,

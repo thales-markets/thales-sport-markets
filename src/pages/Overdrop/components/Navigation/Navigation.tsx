@@ -48,7 +48,7 @@ const Navigation: React.FC<NavigationProps> = ({ selectedTab, setSelectedTab }) 
 
 const Wrapper = styled(FlexDiv)`
     width: 100%;
-    flex-direction: row;
+    justify-content: space-between;
     margin-top: 15px;
     margin-bottom: 25px;
     align-items: center;
@@ -66,7 +66,6 @@ const NavItem = styled(FlexDiv)<{ active?: boolean }>`
     text-align: left;
     text-transform: uppercase;
     padding-bottom: 10px;
-    padding-right: 40px;
     cursor: pointer;
 `;
 

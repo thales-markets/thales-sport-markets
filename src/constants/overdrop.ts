@@ -41,8 +41,16 @@ import Level6Large from '../assets/images/overdrop/largeBadges/6.webp';
 import Level7Large from '../assets/images/overdrop/largeBadges/7.webp';
 import Level8Large from '../assets/images/overdrop/largeBadges/8.webp';
 import Level9Large from '../assets/images/overdrop/largeBadges/9.webp';
+import test from '../assets/images/overdrop/test.png';
 
 export const OVERDROP_LEVELS: OverdropLevel[] = [
+    {
+        levelName: 'Uninitiated',
+        level: 0,
+        minimumPoints: 0,
+        smallBadge: test,
+        largeBadge: test,
+    },
     {
         levelName: 'Rookie',
         level: 1,
