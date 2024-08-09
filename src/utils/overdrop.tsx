@@ -46,18 +46,17 @@ export const getParlayMultiplier = (numberOfMarkets: number) => {
 };
 
 export const getCurrentLevelByPoints = (points: number) => {
-    const levelItem = OVERDROP_LEVELS.find((item, index) => {
-        if (item.minimumPoints < points && index == 0) return item;
-        if (item.minimumPoints > points && index != 0 && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
+    const levelItemIndex = OVERDROP_LEVELS.findIndex((item, index) => {
+        if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
     });
 
-    if (levelItem) return levelItem;
+    if (levelItemIndex !== -1) return OVERDROP_LEVELS[levelItemIndex - 1];
+    if (OVERDROP_LEVELS[0].minimumPoints < points) return OVERDROP_LEVELS[0];
 };
 
 export const getNextLevelItemByPoints = (points?: number) => {
     if (!points) return OVERDROP_LEVELS[0];
     const currentLevelItemIndex = OVERDROP_LEVELS.findIndex((item, index) => {
-        if (item.minimumPoints > points && !OVERDROP_LEVELS[index - 1]) return item;
         if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
     });
 
@@ -71,6 +70,9 @@ export const getProgressLevel = (
     currentLevelMinimumPoints: number,
     nextLevelMinimumPoints: number
 ) => {
+    console.log('currentPoints ', currentPoints);
+    console.log('currentLevelMinimumPoints ', currentLevelMinimumPoints);
+    console.log('nextLevelMinimumPoints ', nextLevelMinimumPoints);
     return ((currentPoints - currentLevelMinimumPoints) / (nextLevelMinimumPoints - currentLevelMinimumPoints)) * 100;
 };
 
