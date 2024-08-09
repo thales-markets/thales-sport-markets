@@ -5,15 +5,18 @@ import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboard
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
+import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
+import { FlexDiv } from 'styles/common';
 import { formatCurrency, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { getCurrentLevelByPoints } from 'utils/overdrop';
-import { tableHeaderStyle, tableRowStyle } from './styled-components';
+import { Badge, StickyCell, StickyContrainer, StickyRow, tableHeaderStyle, tableRowStyle } from './styled-components';
 
 const Leaderboard: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
 
     const leaderboardQuery = useOverdropLeaderboardQuery({ enabled: isAppReady });
 
@@ -40,6 +43,33 @@ const Leaderboard: React.FC = () => {
 
     useEffect(() => setPage(0), [leaderboard.length]);
 
+    const stickyRow = useMemo(() => {
+        const data = leaderboard.find((row) => row.address.toLowerCase() == walletAddress?.toLowerCase());
+        if (!data) return undefined;
+        return (
+            <StickyRow>
+                <StickyContrainer>
+                    <StickyCell width="50px">
+                        <Badge src={data.level.smallBadge} />
+                    </StickyCell>
+                    <StickyCell>{truncateAddress(data.address)}</StickyCell>
+                    <StickyCell style={{ minWidth: '50px' }} width="50px">
+                        #{data.rank}
+                    </StickyCell>
+                    <StickyCell>
+                        #{data.level.level} {data.level.levelName}
+                    </StickyCell>
+                    <StickyCell>{formatCurrency(data.points)}</StickyCell>
+                    <StickyCell>{formatCurrency(data.volume)}</StickyCell>
+                    <StickyCell>
+                        <div>{formatCurrency(data.rewards.op)}OP</div>
+                        <div>{formatCurrency(data.rewards.arb)}ARB</div>
+                    </StickyCell>
+                </StickyContrainer>
+            </StickyRow>
+        );
+    }, [leaderboard, walletAddress]);
+
     return (
         <div>
             <Table
@@ -50,12 +80,13 @@ const Leaderboard: React.FC = () => {
                     backgroundColor: theme.overdrop.background.quinary,
                 }}
                 tableRowCellStyles={tableRowStyle}
+                stickyRow={stickyRow}
                 columns={[
                     {
                         accessor: 'level.smallBadge',
                         sortable: false,
                         Cell: (cellProps: any) => {
-                            return <img style={{ width: '50px' }} src={cellProps.cell.value} />;
+                            return <Badge style={{ width: '45px' }} src={cellProps.cell.value} />;
                         },
                         width: '50px',
                         maxWidth: 50,
@@ -143,15 +174,17 @@ const Leaderboard: React.FC = () => {
                 noResultsMessage={t('market.table.no-results')}
             ></Table>
             {!leaderboardQuery.isLoading && leaderboard.length > 0 && (
-                <PaginationWrapper
-                    rowsPerPageOptions={[10, 20, 50, 100]}
-                    count={leaderboard.length}
-                    labelRowsPerPage={t(`common.pagination.rows-per-page`)}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                <FlexDiv>
+                    <PaginationWrapper
+                        rowsPerPageOptions={[10, 20, 50, 100]}
+                        count={leaderboard.length}
+                        labelRowsPerPage={t(`common.pagination.rows-per-page`)}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </FlexDiv>
             )}
         </div>
     );
