@@ -116,7 +116,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                 if (isAA) {
                     txResult =
                         isClaimCollateralDefaultCollateral ||
-                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
+                        ticket.isFreeBet
                             ? await executeBiconomyTransaction(
                                   claimCollateralAddress,
                                   sportsAMMV2ContractWithSigner,
@@ -132,7 +133,8 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                 } else {
                     const tx =
                         isClaimCollateralDefaultCollateral ||
-                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                        (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
+                        ticket.isFreeBet
                             ? await sportsAMMV2ContractWithSigner.exerciseTicket(ticketAddress)
                             : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
                                   ticketAddress,
@@ -279,7 +281,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                                     <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                                 </InfoContainerColumn>
                             </PayoutWrapper>
-                            {isClaimable && isMultiCollateralSupported && (
+                            {isClaimable && isMultiCollateralSupported && !ticket.isFreeBet && (
                                 <InfoContainerColumn
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -306,22 +308,24 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                             <ClaimContainer>
                                 <WinValue>{formatCurrencyWithKey(ticket.collateral, ticket.payout)}</WinValue>
                                 {getButton(isMobile)}
-                                {isMultiCollateralSupported && isTicketCollateralDefaultCollateral && (
-                                    <CollateralSelectorContainer
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                        }}
-                                    >
-                                        <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
-                                        <CollateralSelector
-                                            collateralArray={claimCollateralArray}
-                                            selectedItem={claimCollateralIndex}
-                                            onChangeCollateral={setClaimCollateralIndex}
-                                            preventPaymentCollateralChange
-                                        />
-                                    </CollateralSelectorContainer>
-                                )}
+                                {isMultiCollateralSupported &&
+                                    isTicketCollateralDefaultCollateral &&
+                                    !ticket.isFreeBet && (
+                                        <CollateralSelectorContainer
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                            }}
+                                        >
+                                            <PayoutInLabel>{t('profile.card.payout-in')}:</PayoutInLabel>
+                                            <CollateralSelector
+                                                collateralArray={claimCollateralArray}
+                                                selectedItem={claimCollateralIndex}
+                                                onChangeCollateral={setClaimCollateralIndex}
+                                                preventPaymentCollateralChange
+                                            />
+                                        </CollateralSelectorContainer>
+                                    )}
                             </ClaimContainer>
                             {ticket.isFreeBet && (
                                 <FreeBetWrapper>

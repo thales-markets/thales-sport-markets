@@ -7,13 +7,13 @@ export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 export const MIN_COLLATERAL_MULTIPLIER = 1.01;
 export const APPROVAL_BUFFER = 0.01;
 
-export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.02; // 2%
+export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.025; // 2%
 export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
 
 const OLYMPICS_REWARDS = {
     startDate: new Date(Date.UTC(2024, 6, 24, 0, 0, 0)),
     endDate: new Date(Date.UTC(2024, 7, 11, 23, 59, 59)),
-    link: 'https://v2.overtimemarkets.xyz/promotions/olympics-2024',
+    link: 'https://overtimemarkets.xyz/promotions/olympics-2024',
     tooltipKey: 'markets.incentivized-tooltip-olympics',
     availableOnNetworks: [Network.OptimismMainnet],
     rewards: {

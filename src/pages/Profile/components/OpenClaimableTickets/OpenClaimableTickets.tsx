@@ -117,14 +117,14 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
 
             if (userTicketsByStatus.claimable.length) {
                 if (sportsAMMV2Contract) {
-                    userTicketsByStatus.claimable.forEach(async (market) => {
+                    userTicketsByStatus.claimable.forEach(async (ticket) => {
                         transactions.push(
                             new Promise(async (resolve, reject) => {
                                 const id = toast.loading(t('market.toast-message.transaction-pending'));
 
                                 try {
-                                    const ticketCollateralHasLp = isLpSupported(market.collateral);
-                                    const isTicketCollateralDefaultCollateral = market.collateral === defaultCollateral;
+                                    const ticketCollateralHasLp = isLpSupported(ticket.collateral);
+                                    const isTicketCollateralDefaultCollateral = ticket.collateral === defaultCollateral;
                                     const isClaimCollateralDefaultCollateral = claimCollateral === defaultCollateral;
 
                                     let txResult;
@@ -132,26 +132,28 @@ const OpenClaimableTickets: React.FC<{ searchText?: string }> = ({ searchText })
                                     if (isAA) {
                                         txResult =
                                             isClaimCollateralDefaultCollateral ||
-                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
+                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
+                                            ticket.isFreeBet
                                                 ? await executeBiconomyTransaction(
                                                       claimCollateralAddress,
                                                       sportsAMMV2ContractWithSigner,
                                                       'exerciseTicket',
-                                                      [market.id]
+                                                      [ticket.id]
                                                   )
                                                 : await executeBiconomyTransaction(
                                                       claimCollateralAddress,
                                                       sportsAMMV2ContractWithSigner,
                                                       'exerciseTicketOffRamp',
-                                                      [market.id, claimCollateralAddress, isEth]
+                                                      [ticket.id, claimCollateralAddress, isEth]
                                                   );
                                     } else {
                                         const tx =
                                             isClaimCollateralDefaultCollateral ||
-                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral)
-                                                ? await sportsAMMV2ContractWithSigner.exerciseTicket(market.id)
+                                            (ticketCollateralHasLp && !isTicketCollateralDefaultCollateral) ||
+                                            ticket.isFreeBet
+                                                ? await sportsAMMV2ContractWithSigner.exerciseTicket(ticket.id)
                                                 : await sportsAMMV2ContractWithSigner.exerciseTicketOffRamp(
-                                                      market.id,
+                                                      ticket.id,
                                                       claimCollateralAddress,
                                                       isEth
                                                   );

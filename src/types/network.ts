@@ -31,6 +31,5 @@ export type SupportedNetwork = Exclude<
     | Network.ZkSyncSepolia
     | Network.ZkSync
     | Network.BlastSepolia
-    | Network.Arbitrum
     | Network.Base
 >;

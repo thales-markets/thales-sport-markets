@@ -2,8 +2,8 @@ import { Network } from 'enums/network';
 
 const paymentTokenContract = {
     addresses: {
-        [Network.OptimismMainnet]: '0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9',
-        [Network.Arbitrum]: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+        [Network.OptimismMainnet]: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+        [Network.Arbitrum]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
         [Network.Base]: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
         [Network.OptimismSepolia]: '',
     },
