@@ -21,13 +21,13 @@ export const RowContainer = styled(FlexDiv)`
     width: 100%;
 `;
 
-export const SummaryLabel = styled.span<{ alignRight?: boolean; lineHeight?: number }>`
+export const SummaryLabel = styled.span<{ alignRight?: boolean; lineHeight?: number; isBonus?: boolean }>`
     font-weight: 400;
     font-size: 12px;
     line-height: ${(props) => props.lineHeight || 20}px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: ${(props) => props.theme.textColor.quaternary};
+    color: ${(props) => (props.isBonus ? props.theme.status.win : props.theme.textColor.quaternary)};
     ${(props) => (props.alignRight ? `margin-left: auto;` : '')}
     @media (max-width: 950px) {
         line-height: 24px;

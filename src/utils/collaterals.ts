@@ -65,7 +65,7 @@ export const mapMultiCollateralBalances = (
 };
 
 export const getMaxCollateralDollarValue = (
-    data: Array<{ index: number; collateralKey: string; balance: number; balanceDollarValue: number }>
+    data: Array<{ index: number; collateralKey: Coins; balance: number; balanceDollarValue: number }>
 ) => {
     const maxItem = _.maxBy(data, 'balanceDollarValue');
     return maxItem;

@@ -3,9 +3,9 @@ import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { TicketErrorCode } from 'enums/markets';
 import { Network } from 'enums/network';
 import { localStore } from 'thales-utils';
-import { ParlayPayment, SportMarket, TicketPosition } from 'types/markets';
+import { ParlayPayment, SerializableSportMarket, TicketPosition } from 'types/markets';
 import { isPlayerPropsMarket } from '../../utils/markets';
-import { isSameMarket } from '../../utils/marketsV2';
+import { isSameMarket, serializableSportMarketAsSportMarket } from '../../utils/marketsV2';
 import { getLeagueLabel, isPlayerPropsCombiningEnabled } from '../../utils/sports';
 import { RootState } from '../rootReducer';
 
@@ -45,8 +45,8 @@ type TicketSliceState = {
     ticket: TicketPosition[];
     payment: ParlayPayment;
     maxTicketSize: number;
-    isMultiSingle: boolean;
     liveBetSlippage: number;
+    isFreeBetDisabledByUser: boolean;
     error: { code: TicketErrorCode; data: string };
 };
 
@@ -54,9 +54,9 @@ const initialState: TicketSliceState = {
     ticket: getDefaultTicket(),
     payment: getDefaultPayment(),
     maxTicketSize: DEFAULT_MAX_TICKET_SIZE,
-    isMultiSingle: false,
-    error: getDefaultError(),
     liveBetSlippage: getDefaultLiveSlippage(),
+    isFreeBetDisabledByUser: false,
+    error: getDefaultError(),
 };
 
 const ticketSlice = createSlice({
@@ -119,8 +119,15 @@ const ticketSlice = createSlice({
         setMaxTicketSize: (state, action: PayloadAction<number>) => {
             state.maxTicketSize = action.payload;
         },
-        removeFromTicket: (state, action: PayloadAction<SportMarket | TicketPosition>) => {
-            state.ticket = state.ticket.filter((market) => !isSameMarket(action.payload, market));
+        removeFromTicket: (state, action: PayloadAction<SerializableSportMarket | TicketPosition>) => {
+            let payload;
+            if (action.payload.hasOwnProperty('maturity')) {
+                payload = serializableSportMarketAsSportMarket(action.payload as SerializableSportMarket);
+            } else {
+                payload = action.payload as TicketPosition;
+            }
+
+            state.ticket = state.ticket.filter((market) => !isSameMarket(payload, market));
 
             if (state.ticket.length === 0) {
                 state.payment.amountToBuy = getDefaultPayment().amountToBuy;
@@ -160,6 +167,9 @@ const ticketSlice = createSlice({
         setPaymentAmountToBuy: (state, action: PayloadAction<number | string>) => {
             state.payment = { ...state.payment, amountToBuy: action.payload };
         },
+        setIsFreeBetDisabledByUser: (state, action: PayloadAction<boolean>) => {
+            state.isFreeBetDisabledByUser = action.payload;
+        },
         resetTicketError: (state) => {
             state.error = getDefaultError();
         },
@@ -175,12 +185,14 @@ export const {
     resetTicketError,
     setMaxTicketSize,
     setLiveBetSlippage,
+    setIsFreeBetDisabledByUser,
 } = ticketSlice.actions;
 
 const getTicketState = (state: RootState) => state[sliceName];
 export const getTicket = (state: RootState) => getTicketState(state).ticket;
 export const getTicketPayment = (state: RootState) => getTicketState(state).payment;
 export const getLiveBetSlippage = (state: RootState) => getTicketState(state).liveBetSlippage;
+export const getIsFreeBetDisabledByUser = (state: RootState) => getTicketState(state).isFreeBetDisabledByUser;
 export const getTicketError = (state: RootState) => getTicketState(state).error;
 export const getHasTicketError = createSelector(getTicketError, (error) => error.code != TicketErrorCode.NO_ERROS);
 

@@ -3,6 +3,7 @@ import { Chain } from 'wagmi';
 import { NetworkParams, SupportedNetwork } from '../types/network';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const NATIVE_TOKEN_ADDRES = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
