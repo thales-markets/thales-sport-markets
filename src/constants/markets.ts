@@ -13,7 +13,7 @@ export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
 const OLYMPICS_REWARDS = {
     startDate: new Date(Date.UTC(2024, 6, 24, 0, 0, 0)),
     endDate: new Date(Date.UTC(2024, 7, 11, 23, 59, 59)),
-    link: 'https://v2.overtimemarkets.xyz/promotions/olympics-2024',
+    link: 'https://overtimemarkets.xyz/promotions/olympics-2024',
     tooltipKey: 'markets.incentivized-tooltip-olympics',
     availableOnNetworks: [Network.OptimismMainnet],
     rewards: {

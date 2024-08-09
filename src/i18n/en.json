@@ -1172,7 +1172,7 @@
         }
     },
     "banner": {
-        "v1-text": "<highlight>V2</highlight>: This is the V2 beta version of Overtime. To switch back to V1, <highlight>click here</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "title": "Promotions and Incentives",

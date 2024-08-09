@@ -1196,7 +1196,7 @@
     },
     "banner": {
         "arb-distribution-message": "การกระจาย ARB ได้เริ่มต้นแล้ว รับโทเค็น ARB โดยใช้การต่อเวลา ชำระเงินรายละเอียดได้ที่นี่",
-        "v1-text": "<highlight>V2</highlight>: นี่คือการต่อเวลาเวอร์ชันเบต้า V2 หากต้องการเปลี่ยนกลับเป็น V1 <highlight>คลิกที่นี่</highlight>"
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {

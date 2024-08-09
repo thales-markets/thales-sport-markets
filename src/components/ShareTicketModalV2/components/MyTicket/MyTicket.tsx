@@ -59,14 +59,14 @@ const MyTicket: React.FC<MyTicketProps> = ({
                 {!isTicket && (
                     <Header isTicket={isTicket}>
                         {t('markets.parlay.share-ticket.header')}
-                        <BoldContent>{' v2.overtimemarkets.xyz'}</BoldContent>
+                        <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
                     </Header>
                 )}
             </ContentRow>
             {isTicket && (
                 <Header isTicket={isTicket}>
                     {t('markets.parlay.share-ticket.header')}
-                    <BoldContent>{' v2.overtimemarkets.xyz'}</BoldContent>
+                    <BoldContent>{' overtimemarkets.xyz'}</BoldContent>
                 </Header>
             )}
             <ContentRow margin={'3px 0'}>

@@ -1196,7 +1196,7 @@
     },
     "banner": {
         "arb-distribution-message": "La distribution d'ARB a commencé. Gagnez des jetons ARB en utilisant les heures supplémentaires. Consultez les détails ici.",
-        "v1-text": "<highlight>V2</highlight> : Il s'agit de la version bêta V2 d'Overtime. Pour revenir à la V1, <highlight>cliquez ici</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {

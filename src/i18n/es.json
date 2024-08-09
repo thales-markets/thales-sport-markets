@@ -1195,7 +1195,7 @@
     },
     "banner": {
         "arb-distribution-message": "La distribución de ARB ha comenzado. Gana tokens ARB usando horas extras. Echa un vistazo a los detalles aquí.",
-        "v1-text": "<highlight>V2</highlight>: Esta es la versión beta V2 de Overtime. Para volver a V1, <highlight>haga clic aquí</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
