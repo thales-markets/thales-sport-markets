@@ -48,3 +48,10 @@ export const Badge = styled.img`
     width: 55px;
     margin-left: -7px;
 `;
+
+export const AddressContainer = styled.div`
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+`;

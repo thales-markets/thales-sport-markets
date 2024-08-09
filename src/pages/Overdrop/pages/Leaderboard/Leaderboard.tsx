@@ -1,3 +1,4 @@
+import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { t } from 'i18next';
 import { PaginationWrapper } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
@@ -5,18 +6,27 @@ import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboard
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getWalletAddress } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
 import { FlexDiv } from 'styles/common';
-import { formatCurrency, truncateAddress } from 'thales-utils';
+import { formatCurrency, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { getCurrentLevelByPoints } from 'utils/overdrop';
-import { Badge, StickyCell, StickyContrainer, StickyRow, tableHeaderStyle, tableRowStyle } from './styled-components';
+import {
+    AddressContainer,
+    Badge,
+    StickyCell,
+    StickyContrainer,
+    StickyRow,
+    tableHeaderStyle,
+    tableRowStyle,
+} from './styled-components';
 
 const Leaderboard: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const leaderboardQuery = useOverdropLeaderboardQuery({ enabled: isAppReady });
 
@@ -52,7 +62,13 @@ const Leaderboard: React.FC = () => {
                     <StickyCell width="50px">
                         <Badge src={data.level.smallBadge} />
                     </StickyCell>
-                    <StickyCell>{truncateAddress(data.address)}</StickyCell>
+                    <StickyCell>
+                        <AddressContainer>
+                            <SPAAnchor href={getEtherscanAddressLink(networkId, data.address)}>
+                                {truncateAddress(data.address)}
+                            </SPAAnchor>
+                        </AddressContainer>
+                    </StickyCell>
                     <StickyCell style={{ minWidth: '50px' }} width="50px">
                         #{data.rank}
                     </StickyCell>
@@ -68,7 +84,7 @@ const Leaderboard: React.FC = () => {
                 </StickyContrainer>
             </StickyRow>
         );
-    }, [leaderboard, walletAddress]);
+    }, [leaderboard, networkId, walletAddress]);
 
     return (
         <div>
@@ -98,7 +114,11 @@ const Leaderboard: React.FC = () => {
                         Cell: (cellProps: any) => {
                             return (
                                 <>
-                                    <div>{truncateAddress(cellProps.cell.value)}</div>
+                                    <AddressContainer>
+                                        <SPAAnchor href={getEtherscanAddressLink(networkId, cellProps.cell.value)}>
+                                            {truncateAddress(cellProps.cell.value)}
+                                        </SPAAnchor>
+                                    </AddressContainer>
                                 </>
                             );
                         },
