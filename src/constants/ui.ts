@@ -3,6 +3,7 @@ import { Theme } from 'enums/ui';
 import darkTheme from 'styles/themes/dark';
 import { NavMenuItem, ThemeInterface } from 'types/ui';
 import ROUTES from './routes';
+import { LINKS } from './links';
 
 export const ThemeMap: Record<Theme, ThemeInterface> = {
     [Theme.DARK]: darkTheme,
@@ -59,6 +60,13 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
         name: 'promotions',
         route: ROUTES.Promotions.Home,
         supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia],
+    },
+    {
+        i18label: 'markets.nav-menu.items.speed-markets',
+        iconClass: 'sidebar-icon sidebar-icon--speed-markets',
+        name: 'speed-markets',
+        route: LINKS.SpeedMarkets,
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum],
     },
 ];
 

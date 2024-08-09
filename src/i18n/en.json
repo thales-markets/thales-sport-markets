@@ -708,7 +708,8 @@
                 "fee-rebates": "Fee rebates",
                 "become-affiliate": "Become affiliate",
                 "liquidity-pool": "Provide Liquidity",
-                "promotions": "Promotions"
+                "promotions": "Promotions",
+                "speed-markets": "Trade crypto"
             },
             "buttons": {
                 "switch": "Switch",
