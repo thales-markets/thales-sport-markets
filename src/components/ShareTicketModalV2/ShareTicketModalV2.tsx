@@ -9,10 +9,16 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { TicketMarket } from 'types/markets';
 import MyTicket from './components/MyTicket';
+import { Input } from 'components/fields/common';
+import Button from 'components/Button';
+import { getWalletAddress } from 'redux/modules/wallet';
+
+import axios from 'axios';
+import { generalConfig } from 'config/general';
 
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
@@ -41,11 +47,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     isLive,
     applyPayoutMultiplier,
 }) => {
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
     const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
+    const [tweetUrl, setTweetUrl] = useState('');
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -180,7 +188,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                             window.open(twitterLinkWithStatusMessage);
                         }, defaultToastOptions.autoClose);
                     }
-                    onClose();
                 } catch (e) {
                     console.log(e);
                     setIsLoading(false);
@@ -188,7 +195,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 }
             }
         },
-        [isLoading, isMobile, useDownloadImage, onClose]
+        [isLoading, isMobile, useDownloadImage]
     );
 
     const onTwitterShareClick = () => {
@@ -218,6 +225,28 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         }
         onClose();
     };
+
+    const onSubmit = useCallback(async () => {
+        const toastTwitter = toast.loading(t('markets.parlay.share-ticket.verifying-tweet'));
+        setIsLoading(true);
+        try {
+            const response = await axios.post(`${generalConfig.OVERDROP_API_URL}/user-twitter`, {
+                walletAddress,
+                tweetUrl,
+            });
+            setIsLoading(false);
+            if (response.data.success) {
+                toast.update(toastTwitter, getSuccessToastOptions(response.data.status));
+                onClose();
+            } else {
+                toast.update(toastTwitter, getErrorToastOptions(response.data.error));
+            }
+        } catch (e) {
+            console.log(e);
+            toast.update(toastTwitter, getErrorToastOptions(t('markets.parlay.share-ticket.network-error')));
+            setIsLoading(false);
+        }
+    }, [walletAddress, tweetUrl, onClose]);
 
     return (
         <ReactModal
@@ -249,6 +278,19 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     <TwitterIcon disabled={isLoading} fontSize={'22px'} />
                     <TwitterShareLabel>{t('markets.parlay.share-ticket.share')}</TwitterShareLabel>
                 </TwitterShare>
+
+                <ShareWrapper>
+                    <SubmitLabel>{t('markets.parlay.share-ticket.submit-url')}</SubmitLabel>
+                    <Input
+                        height="32px"
+                        disabled={isLoading}
+                        value={tweetUrl}
+                        onChange={(e) => setTweetUrl(e.target.value)}
+                    />
+                    <Button height="32px" disabled={isLoading} margin="8px 0" onClick={onSubmit}>
+                        {t('common.submit')}
+                    </Button>
+                </ShareWrapper>
             </Container>
         </ReactModal>
     );
@@ -316,6 +358,23 @@ const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: 
         font-family: HomepageIconsV2 !important;
         content: '\\0021';
     }
+`;
+
+const ShareWrapper = styled(FlexDivColumn)`
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0px;
+    bottom: -60px;
+`;
+
+const SubmitLabel = styled.span`
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export default React.memo(ShareTicketModal);
