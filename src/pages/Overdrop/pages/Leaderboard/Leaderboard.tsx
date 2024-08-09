@@ -45,7 +45,7 @@ const Leaderboard: React.FC = () => {
         setPage(newPage);
     };
 
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(20);
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(Number(event.target.value));
         setPage(0);
