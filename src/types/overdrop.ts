@@ -9,6 +9,11 @@ export type OverdropUserData = {
     address: string;
     points: number;
     volume: number;
+    rewards: {
+        op: number;
+        arb: number;
+    };
+    rank: number;
 };
 
 export type OverdropXPHistory = {

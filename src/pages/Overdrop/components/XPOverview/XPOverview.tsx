@@ -49,7 +49,7 @@ const XPOverview: React.FC = () => {
                 <InfoWrapper>
                     <InfoItem>
                         <Label>{levelItem?.levelName ? levelItem?.levelName : '-'}</Label>
-                        <Value>{'#420'}</Value>
+                        <Value>{userData ? `#${userData.rank}` : '#-'}</Value>
                     </InfoItem>
                     <InfoItemTotal>
                         <Label>{t('overdrop.overdrop-home.my-total-xp')}</Label>

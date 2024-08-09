@@ -1,13 +1,16 @@
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
+import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getWalletAddress } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
 import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints } from 'utils/overdrop';
@@ -22,6 +25,7 @@ const BadgeOverview: React.FC = () => {
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const userDataQuery = useUserDataQuery(walletAddress, {
         enabled: !!isAppReady,
@@ -47,6 +51,13 @@ const BadgeOverview: React.FC = () => {
             return levelItem;
         }
     }, [userData]);
+
+    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
+        enabled: isAppReady,
+    });
+
+    const exchangeRates: Rates | null =
+        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     useEffect(() => {
         if (isMobile) setNumberOfCards(4);
@@ -84,14 +95,40 @@ const BadgeOverview: React.FC = () => {
                 <ItemContainer>
                     <Label>{t('overdrop.overdrop-home.current-rewards')}</Label>
                     <ValueWrapper>
-                        <Value>{`13.870,21 OP`}</Value>
+                        <Value>
+                            {formatCurrencyWithKey(
+                                CRYPTO_CURRENCY_MAP.OP,
+                                userData?.rewards?.op ? userData.rewards.op : 0
+                            )}
+                        </Value>
                         <Icon className="icon icon--op" />
-                        <ValueSecondary>{'= USD 9,167.42'}</ValueSecondary>
+                        <ValueSecondary>
+                            {exchangeRates && userData
+                                ? `= ${formatCurrencyWithSign(
+                                      '$',
+                                      exchangeRates[CRYPTO_CURRENCY_MAP.OP] * userData.rewards.op,
+                                      2
+                                  )}`
+                                : 'N/A'}
+                        </ValueSecondary>
                     </ValueWrapper>
                     <ValueWrapper>
-                        <Value>{`6.742,32 ARB`}</Value>
+                        <Value>
+                            {formatCurrencyWithKey(
+                                CRYPTO_CURRENCY_MAP.ARB,
+                                userData?.rewards?.arb ? userData.rewards.arb : 0
+                            )}
+                        </Value>
                         <Icon className="icon icon--arb" />
-                        <ValueSecondary>{'= USD 9,167.42'}</ValueSecondary>
+                        <ValueSecondary>
+                            {exchangeRates && userData
+                                ? `= ${formatCurrencyWithSign(
+                                      '$',
+                                      exchangeRates[CRYPTO_CURRENCY_MAP.ARB] * userData.rewards.arb,
+                                      2
+                                  )}`
+                                : 'N/A'}
+                        </ValueSecondary>
                     </ValueWrapper>
                 </ItemContainer>
                 <ItemContainer>
