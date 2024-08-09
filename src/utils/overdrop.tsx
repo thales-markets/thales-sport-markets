@@ -52,6 +52,7 @@ export const getCurrentLevelByPoints = (points: number) => {
 
     if (levelItemIndex !== -1) return OVERDROP_LEVELS[levelItemIndex - 1];
     if (OVERDROP_LEVELS[0].minimumPoints < points) return OVERDROP_LEVELS[0];
+    return OVERDROP_LEVELS[0];
 };
 
 export const getNextLevelItemByPoints = (points?: number) => {
