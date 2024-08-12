@@ -34,7 +34,6 @@ export const buildReffererLink = (reffererID: string) => {
 export const getMetaRouteItem = (pathName: string) => {
     if (pathName.includes(ROUTES.Markets.Home + '/')) return MetaRoutes.SingleMarket;
     if (pathName.includes(ROUTES.Markets.Home)) return MetaRoutes.Markets;
-    if (pathName.includes(ROUTES.ParlayLiquidityPool)) return MetaRoutes.ParlayLeaderboard;
     if (pathName.includes(ROUTES.Referral)) return MetaRoutes.Referral;
     if (pathName.includes(ROUTES.Profile)) return MetaRoutes.Profile;
     if (pathName.includes(ROUTES.LiquidityPool)) return MetaRoutes.LiquidityPool;

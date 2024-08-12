@@ -809,7 +809,7 @@
         "incentivized-tooltip-tennis": "A total of {{rewards}} will be distributed during the Australian Open. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "A whopping total of {{rewards}} will be distributed for the NFL Superbowl. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-uefa": "A whopping total of {{rewards}} will be distributed for the UEFA competitions. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the {{league}} season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the MLB season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "superbowl-incentive": "10,000 ARB IN INCENTIVES",
         "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-wimbledon": "Compete for {{rewards}} during Wimbledon 2024 on Overtime V1 and V2. Check more details <detailsLink>here</detailsLink>.",
@@ -1174,7 +1174,7 @@
         }
     },
     "banner": {
-        "v1-text": "<highlight>V2</highlight>: This is the V2 beta version of Overtime. To switch back to V1, <highlight>click here</highlight>."
+        "v1-text": "<highlight>Welcome to Overtime V2!</highlight> If you are looking for the legacy V1 version, <highlight>click here</highlight>."
     },
     "promotions": {
         "title": "Promotions and Incentives",

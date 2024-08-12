@@ -15,7 +15,7 @@ export const NAV_MENU_FIRST_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--profile2',
         name: 'profile',
         route: ROUTES.Profile,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
 ];
 
@@ -25,14 +25,14 @@ export const NAV_MENU_SECOND_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--logo',
         name: 'markets',
         route: ROUTES.Markets.Home,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
     {
         i18label: 'markets.nav-menu.items.liquidity-pool',
         iconClass: 'icon icon--liquidity-pool',
         name: 'liquidity-pool',
         route: ROUTES.LiquidityPool,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
 ];
 
@@ -49,7 +49,7 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--affiliate',
         name: 'become-affiliate',
         route: ROUTES.Referral,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
 ];
 
@@ -59,7 +59,7 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
         iconClass: 'icon icon--promotions',
         name: 'promotions',
         route: ROUTES.Promotions.Home,
-        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia],
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.OptimismSepolia],
     },
 ];
 

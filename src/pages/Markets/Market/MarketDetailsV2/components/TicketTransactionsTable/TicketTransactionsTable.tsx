@@ -1,3 +1,4 @@
+import PaginationWrapper from 'components/PaginationWrapper';
 import SPAAnchor from 'components/SPAAnchor';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
@@ -29,7 +30,6 @@ import { formatMarketOdds } from 'utils/markets';
 import { getPositionTextV2, getTeamNameV2, getTitleText } from 'utils/marketsV2';
 import { buildMarketLink } from 'utils/routes';
 import { formatTicketOdds, getTicketMarketOdd, getTicketMarketStatus } from 'utils/tickets';
-import { PaginationWrapper } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import {
     ExpandedRowWrapper,
     ExternalLink,

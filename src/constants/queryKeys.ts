@@ -13,7 +13,6 @@ const QUERY_KEYS = {
     Ticket: (networkId: Network, ticketAddress: string) => ['gameTickets', networkId, ticketAddress],
     GameTickets: (networkId: Network, gameId: string) => ['gameTickets', networkId, gameId],
     UserTickets: (networkId: Network, user: string) => ['userTickets', networkId, user],
-    ParlayLeaderboard: (networkId: Network, period: number) => ['parlayLeaderboard', period, networkId],
     SportMarkets: (statusFilter: StatusFilter, networkId: Network) => ['sportMarkets', statusFilter, networkId],
     SportMarketsV2: (statusFilter: StatusFilter, networkId: Network) => ['sportMarketsV2', statusFilter, networkId],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
