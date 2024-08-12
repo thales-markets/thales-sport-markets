@@ -65,7 +65,7 @@ const MainContainer = styled(FlexDivColumn)`
     width: 100%;
     max-width: 806px;
     flex-grow: 1;
-    margin: 0 25px;
+    margin: 0px 25px;
     @media (max-width: 1499px) {
         margin: 0 12px;
     }

@@ -175,6 +175,7 @@ export default {
             tertiary: 'rgba(60, 73, 138, 0.15)',
             quaternary: Colors.METALIC_BLUE,
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,
+            senary: Colors.LIGHTNING_YELLOW,
             active: Colors.NAVY_BLUE_DARK,
             progressBar: Colors.YELLOW,
         },
