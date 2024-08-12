@@ -950,7 +950,7 @@ const Ticket: React.FC<TicketProps> = ({
             }
         }
 
-        if (!hasAllowance) {
+        if (step > BuyTicketStep.SWAP && !hasAllowance) {
             step = BuyTicketStep.APPROVE_BUY;
             setBuyStep(step);
         }
