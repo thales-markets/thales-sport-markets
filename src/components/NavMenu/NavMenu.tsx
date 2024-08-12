@@ -5,6 +5,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import {
+    NAV_MENU_FIFTH_SECTION,
     NAV_MENU_FIRST_SECTION,
     NAV_MENU_FOURTH_SECTION,
     NAV_MENU_SECOND_SECTION,
@@ -150,6 +151,22 @@ const NavMenu: React.FC<NavMenuProps> = ({ visibility, setNavMenuVisibility, ski
                     })}
                     <Separator />
                     {NAV_MENU_FOURTH_SECTION.map((item, index) => {
+                        if (!item.supportedNetworks.includes(networkId)) return;
+                        return (
+                            <SPAAnchor key={index} href={buildHref(item.route)}>
+                                <ItemContainer
+                                    key={index}
+                                    active={location.pathname === item.route}
+                                    onClick={() => setNavMenuVisibility(null)}
+                                >
+                                    <NavIcon className={item.iconClass} active={location.pathname === item.route} />
+                                    <NavLabel>{t(item.i18label)}</NavLabel>
+                                </ItemContainer>
+                            </SPAAnchor>
+                        );
+                    })}
+                    <Separator />
+                    {NAV_MENU_FIFTH_SECTION.map((item, index) => {
                         if (!item.supportedNetworks.includes(networkId)) return;
                         return (
                             <SPAAnchor key={index} href={buildHref(item.route)}>

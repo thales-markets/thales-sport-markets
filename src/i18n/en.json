@@ -709,7 +709,8 @@
                 "become-affiliate": "Become affiliate",
                 "liquidity-pool": "Provide Liquidity",
                 "promotions": "Promotions",
-                "speed-markets": "Trade crypto"
+                "speed-markets": "Speed markets",
+                "digital-options": "Digital options"
             },
             "buttons": {
                 "switch": "Switch",

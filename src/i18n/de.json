@@ -693,7 +693,8 @@
                 "vaults": "Gewölbe",
                 "liquidity-pool": "Liquidität bereitstellen",
                 "promotions": "Werbeaktionen",
-                "speed-markets": "Krypto handeln"
+                "speed-markets": "Krypto handeln",
+                "digital-options": "Digitale Optionen"
             },
             "buttons": {
                 "switch": "Schalter",

@@ -61,11 +61,21 @@ export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
         route: ROUTES.Promotions.Home,
         supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia],
     },
+];
+
+export const NAV_MENU_FIFTH_SECTION: NavMenuItem[] = [
     {
         i18label: 'markets.nav-menu.items.speed-markets',
         iconClass: 'sidebar-icon sidebar-icon--speed-markets',
         name: 'speed-markets',
         route: LINKS.SpeedMarkets,
+        supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum],
+    },
+    {
+        i18label: 'markets.nav-menu.items.digital-options',
+        iconClass: 'sidebar-icon sidebar-icon--markets',
+        name: 'digital-options',
+        route: LINKS.Thales,
         supportedNetworks: [Network.OptimismMainnet, Network.OptimismSepolia, Network.Arbitrum],
     },
 ];
@@ -75,6 +85,7 @@ export const NAV_MENU: NavMenuItem[] = [
     NAV_MENU_SECOND_SECTION,
     NAV_MENU_THIRD_SECTION,
     NAV_MENU_FOURTH_SECTION,
+    NAV_MENU_FIFTH_SECTION,
 ].flat();
 
 export const PROMOTION_SANITIZE_PROPS = {
