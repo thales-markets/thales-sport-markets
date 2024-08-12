@@ -268,12 +268,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({ ticket, claimCollateralIn
                             <PayoutWrapper>
                                 {ticket.isFreeBet && (
                                     <FreeBetWrapper>
-                                        {ticket.isClaimable && (
-                                            <Tooltip
-                                                overlay={t('profile.free-bet.claim-btn')}
-                                                component={<FreeBetIcon className={'icon icon--gift'} />}
-                                            />
-                                        )}
+                                        <Tooltip
+                                            overlay={t('profile.free-bet.claim-btn')}
+                                            component={<FreeBetIcon className={'icon icon--gift'} />}
+                                        />
                                     </FreeBetWrapper>
                                 )}
                                 <InfoContainerColumn isOpen={!isClaimable}>
