@@ -912,8 +912,14 @@ const Ticket: React.FC<TicketProps> = ({
 
         const { sportsAMMV2Contract, multipleCollateral, signer } = networkConnector;
 
+        // Validation for min buy-in while modal is open
+        if (swappedThalesToReceive && swappedThalesToReceive < minBuyInAmount) {
+            setOpenBuyStepsModal(false);
+            return step;
+        }
+
         if (step <= BuyTicketStep.SWAP) {
-            if (!isEth && !hasSwapAllowance && swappedThalesToReceive >= minBuyInAmount) {
+            if (!isEth && !hasSwapAllowance) {
                 if (step !== BuyTicketStep.APPROVE_SWAP) {
                     setBuyStep(BuyTicketStep.APPROVE_SWAP);
                 }
