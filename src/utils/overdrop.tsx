@@ -88,7 +88,8 @@ export const getNextThalesRewardLevel = (points?: number) => {
     if (levelItemsWithVoucher[levelItemsWithVoucher.length - 1].minimumPoints < points) return;
 
     const levelItemIndex = levelItemsWithVoucher.findIndex((item, index) => {
-        if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
+        if (item?.minimumPoints > points && !OVERDROP_LEVELS[index - 1]) return item;
+        if (item?.minimumPoints > points && OVERDROP_LEVELS[index - 1]?.minimumPoints < points) return item;
     });
 
     if (levelItemIndex == -1) return levelItemsWithVoucher[0];
