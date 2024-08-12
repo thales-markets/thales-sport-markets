@@ -5,9 +5,9 @@ import {
     THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
 import { Rates } from 'queries/rates/useExchangeRatesQuery';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getNetworkId } from 'redux/modules/wallet';
+import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
@@ -16,9 +16,13 @@ import {
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
     ceilNumberToDecimals,
+    coinParser,
     formatCurrencyWithKey,
 } from 'thales-utils';
-import { getCollateral, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
+import { getCollateral, getCollateralAddress, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
+import { getQuote, getSwapParams } from 'utils/swap';
+import { delay } from 'utils/timer';
+import { Address } from 'viem';
 
 const AMOUNTS = [3, 10, 20, 50, 100];
 
@@ -27,6 +31,7 @@ type SuggestedAmountProps = {
     changeAmount: (value: number | string) => void;
     exchangeRates: Rates | null;
     insertedAmount: number | string;
+    useThalesCollateral: boolean;
 };
 
 const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
@@ -34,8 +39,12 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     changeAmount,
     exchangeRates,
     insertedAmount,
+    useThalesCollateral,
 }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+
+    const [conversioRateUsingSwap, setConversioRateUsingSwap] = useState(0);
 
     const collateral = useMemo(() => getCollateral(networkId, collateralIndex), [networkId, collateralIndex]);
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
@@ -43,9 +52,54 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const decimals = isStableCollateral ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
     const isThales = collateral === CRYPTO_CURRENCY_MAP.THALES;
 
+    const collateralAddress = useMemo(() => getCollateralAddress(networkId, collateralIndex), [
+        networkId,
+        collateralIndex,
+    ]);
+
+    const swapOneToThalesParams = useMemo(
+        () =>
+            getSwapParams(
+                networkId,
+                walletAddress as Address,
+                coinParser('1', networkId, collateral),
+                collateralAddress as Address
+            ),
+        [collateralAddress, networkId, collateral, walletAddress]
+    );
+
+    // Get rate when using swap to THALES
+    useEffect(() => {
+        const getSwapQuoteForOneCoin = async () => {
+            if (useThalesCollateral) {
+                if (!conversioRateUsingSwap) {
+                    await delay(1000); // due to rate limit
+                    let quoteForOne = await getQuote(networkId, swapOneToThalesParams);
+
+                    if (!quoteForOne) {
+                        // retry due to rate limit
+                        await delay(1200);
+                        quoteForOne = await getQuote(networkId, swapOneToThalesParams);
+                    }
+
+                    setConversioRateUsingSwap(
+                        quoteForOne && exchangeRates ? quoteForOne * exchangeRates[THALES_CONTRACT_RATE_KEY] : 0
+                    );
+                }
+            } else {
+                setConversioRateUsingSwap(0);
+            }
+        };
+
+        getSwapQuoteForOneCoin();
+    }, [useThalesCollateral, networkId, swapOneToThalesParams, exchangeRates, conversioRateUsingSwap]);
+
     const convertFromStable = useCallback(
         (value: number) => {
-            const rate = exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral];
+            const rate = conversioRateUsingSwap
+                ? conversioRateUsingSwap
+                : exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral];
+
             if (collateral == defaultCollateral) {
                 return value;
             } else {
@@ -63,7 +117,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
                     : 0;
             }
         },
-        [collateral, decimals, defaultCollateral, exchangeRates, isThales]
+        [collateral, decimals, defaultCollateral, exchangeRates, isThales, conversioRateUsingSwap]
     );
 
     return (

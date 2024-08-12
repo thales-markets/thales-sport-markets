@@ -774,7 +774,6 @@ const Ticket: React.FC<TicketProps> = ({
         isFreeBetActive,
         swapToThales,
         swappedThalesToReceive,
-        swapToThalesParams.src,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
@@ -1780,6 +1779,7 @@ const Ticket: React.FC<TicketProps> = ({
                 exchangeRates={exchangeRates}
                 collateralIndex={selectedCollateralIndex}
                 changeAmount={(value) => setCollateralAmount(value)}
+                useThalesCollateral={swapToThales}
             />
             {freeBetBalanceExists && (
                 <RowSummary>
