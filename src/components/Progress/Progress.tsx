@@ -58,6 +58,9 @@ const TextBelow = styled(FlexDiv)`
     text-transform: uppercase;
     align-items: center;
     justify-content: center;
+    @media (max-width: 767px) {
+        font-size: 9px;
+    }
 `;
 
 export default Progress;

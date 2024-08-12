@@ -34,4 +34,5 @@ export enum MultiplierType {
     DAILY = 'dailyMultiplier',
     WEEKLY = 'weeklyMultiplier',
     TWITTER = 'twitterMultiplier',
+    LOYALTY = 'loyaltyMultiplier',
 }

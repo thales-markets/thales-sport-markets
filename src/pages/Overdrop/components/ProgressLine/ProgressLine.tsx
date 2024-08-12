@@ -107,6 +107,9 @@ const ProgressLineWrapper = styled(FlexDiv)<{ levelLabelHidden?: boolean }>`
     width: ${(props) => (props.levelLabelHidden ? '100%' : '80%')};
     background-color: ${(props) => props.theme.background.senary};
     height: ${(props) => (props.levelLabelHidden ? '18px' : '26px')};
+    @media (max-width: 767px) {
+        margin-left: 0px;
+    }
 `;
 
 const ProgressUpdate = styled(FlexDiv)<{ progress: number }>`

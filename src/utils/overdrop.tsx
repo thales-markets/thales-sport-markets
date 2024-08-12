@@ -1,10 +1,14 @@
+import { ONE_HUNDRED_K, ONE_MILLION } from 'constants/defaults';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
-import { formatCurrencyWithKey } from 'thales-utils';
+import { floorNumberToDecimals, formatCurrencyWithKey } from 'thales-utils';
 import { MultiplierType, OverdropMultiplier } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
 
 export const formatPoints = (amount: number) => {
+    if (amount > 9 * ONE_HUNDRED_K) {
+        return `${floorNumberToDecimals(amount / ONE_MILLION)}M XP`;
+    }
     return formatCurrencyWithKey('XP', amount, undefined, true);
 };
 

@@ -17,6 +17,9 @@ const Wrapper = styled(FlexDivRow)`
     flex-basis: 200px;
     gap: 10px;
     align-items: flex-start;
+    @media (max-width: 767px) {
+        flex-direction: column;
+    }
 `;
 
 export default LevelingTree;
