@@ -180,6 +180,7 @@
         "fifa-tooltip": "FIFA World Cup markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "iihf-tooltip": "IIHF World Championship markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
         "football-tooltip": "Markets results are based on regulation results, should they go to overtime the regulation result is the one the market will resolve at.",
+        "election-tooltip": "The resolution source will be the Associated Press, Fox News, and NBC. These markets will resolve once all three sources call the race for the same candidate. If all three sources haven’t called the race for the same candidate by 11th of November, all bets will be voided.",
         "top-bet-type-title": "Will {{driver}} finish the {{race}} race in the {{betType}} drivers?",
         "top3": "TOP 3",
         "top5": "TOP 5",
@@ -224,7 +225,7 @@
         "grid-view": "Grid",
         "list-view": "List",
         "skew-tooltip": "Skew Impact is the amount of premium added to a position price based on current risk the AMM incurs from this specific market.",
-        "number-of-rounds": "Total number of rounds",
+        "number-of-rounds": "Round",
         "toast-message": {
             "transaction-pending": "Transaction pending",
             "swap-success": "Successfully swapped {{ currencyKey }}",
@@ -285,7 +286,8 @@
                 "golf": "Golf",
                 "soon": "More sports coming soon!",
                 "olympicgames": "Olympic games",
-                "tabletennis": "Table tennis"
+                "tabletennis": "Table tennis",
+                "politics": "Politics"
             },
             "all": "All",
             "datepicker": {
@@ -434,16 +436,22 @@
         "free-bet-modal": {
             "title": "Send free bet",
             "enter-wallet-address": "Enter wallet address",
+            "enter-wallet-addresses": "Enter wallet addresses",
             "enter-amount": "Enter amount",
+            "enter-amount-per-user": "Enter amount per user",
             "approve-success": "Successfully approved",
             "transaction-pending": "Transaction pending",
             "fund": "Send free bet",
             "funding": "Funding...",
             "fund-successful": "Fund successful",
             "invalid-wallet-address": "Invalid wallet address",
+            "one-or-more-address-invalid": "One or more entered wallet address is invalid",
+            "duplicate": "Duplicate Wallet Addresses Detected",
             "invalid-amount": "Invalid amount",
             "no-funds": "Please ensure your wallet has enough funds",
-            "insufficient-balance": "Insufficient balance"
+            "fund-batch": "Fund multiple addresses",
+            "insufficient-balance": "Insufficient balance",
+            "total-amount-batch": "Total amount will be {{ amount }} multiple by {{ count }} wallet address(es)."
         }
     },
     "markets": {
@@ -701,7 +709,9 @@
                 "fee-rebates": "Fee rebates",
                 "become-affiliate": "Become affiliate",
                 "liquidity-pool": "Provide Liquidity",
-                "promotions": "Promotions"
+                "promotions": "Promotions",
+                "speed-markets": "Speed markets",
+                "digital-options": "Digital options"
             },
             "buttons": {
                 "switch": "Switch",
@@ -806,14 +816,14 @@
                 "total-xp-earned": "Total XP Earned"
             }
         },
-        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "discounted-per": "Discounted as per",
         "incentivized-tooltip": "Triple Thrill: EPL, NFL, and NBA Rewards. A whopping total of 90k OP, 90k ARB, and 180k THALES will be distributed across the three leagues, with each league having its own dedicated 30k OP or ARB + 30k THALES bucket per chain. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-markets": "INCENTIVIZED MARKETS",
         "incentivized-tooltip-tennis": "A total of {{rewards}} will be distributed during the Australian Open. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-nfl-playoffs": "A whopping total of {{rewards}} will be distributed for the NFL Superbowl. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-uefa": "A whopping total of {{rewards}} will be distributed for the UEFA competitions. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
-        "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the {{league}} season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
+        "incentivized-tooltip-nhl-mlb": "A whopping total of {{rewards}} will be distributed for the rest of the MLB season, including the playoffs. Only volume on Arbitrum network will be calculated towards rewards! Check more details <detailsLink>here</detailsLink>.",
         "superbowl-incentive": "10,000 ARB IN INCENTIVES",
         "incentivized-tooltip-euro-copa": "A whopping total of {{rewards}} will be distributed for the Euro 2024 and Copa America competitions. Check more details <detailsLink>here</detailsLink>.",
         "incentivized-tooltip-wimbledon": "Compete for {{rewards}} during Wimbledon 2024 on Overtime V1 and V2. Check more details <detailsLink>here</detailsLink>.",
@@ -1178,7 +1188,7 @@
         }
     },
     "banner": {
-        "v1-text": "<highlight>V2</highlight>: This is the V2 beta version of Overtime. To switch back to V1, <highlight>click here</highlight>."
+        "v1-text": "<highlight>Welcome to Overtime V2!</highlight> If you are looking for the legacy V1 version, <highlight>click here</highlight>."
     },
     "promotions": {
         "title": "Promotions and Incentives",

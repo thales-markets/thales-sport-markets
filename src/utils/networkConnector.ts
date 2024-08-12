@@ -68,7 +68,7 @@ const networkConnector: NetworkConnector = {
         this.sportsAMMV2Contract = initializeContract(sportsAMMV2Contract, networkSettings);
         this.liveTradingProcessorContract = initializeContract(liveTradingProcessorContract, networkSettings);
         this.sportsAMMV2RiskManagerContract = initializeContract(sportsAMMV2RiskManagerContract, networkSettings);
-        this.freeBetHolderContract = initializeContract(freeBetHolder, networkConnector);
+        this.freeBetHolderContract = initializeContract(freeBetHolder, networkSettings);
         this.sportsAMMV2ManagerContract = initializeContract(sportsAMMV2ManagerContract, networkSettings);
     },
 };

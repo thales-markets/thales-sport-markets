@@ -194,7 +194,9 @@
         "filters": "Filtres",
         "status": "Statut",
         "wrap-and-buy": "Enveloppez l’ETH et achetez",
-        "wrap-eth-tooltip": "Votre ETH est d'abord enveloppé dans WETH puis transmis au contrat"
+        "wrap-eth-tooltip": "Votre ETH est d'abord enveloppé dans WETH puis transmis au contrat",
+        "election-tooltip": "La source de résolution sera Associated Press, Fox News et NBC. Ces marchés se résoudront une fois que les trois sources auront annoncé la course pour le même candidat. Si les trois sources n’ont pas annoncé la course pour le même candidat avant le 11 novembre, tous les paris seront annulés.",
+        "submit": "Soumettre"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime - TOUS DROITS RÉSERVÉS.",
@@ -277,12 +279,13 @@
                 "fighting": "Sports de combat",
                 "golf": "Le golf",
                 "live": "En direct",
-                "olympicgames": "Jeux olympiques",
                 "volleyball": "Volley-ball",
                 "waterpolo": "Water polo",
+                "rugby": "Le rugby",
                 "tabletennis": "Tennis de table",
                 "handball": "Handball",
-                "rugby": "Le rugby"
+                "politics": "Politique",
+                "olympicgames": "Jeux olympiques"
             },
             "all": "Tous",
             "datepicker": {
@@ -333,7 +336,7 @@
         "back": "Retour",
         "apply-filters": "Appliquer des filtres",
         "incentivized-market": "MARCHÉ INCITATIF",
-        "number-of-rounds": "Nombre total de tours"
+        "number-of-rounds": "Rond"
     },
     "markets": {
         "market-card": {
@@ -559,8 +562,8 @@
             "scheduled": "Programmé",
             "fighters-introduction": "Présentation des combattants",
             "end-of-round": "Fin du tour",
-            "not-available-for-trading": "Non disponible pour le trading",
-            "suspended": "Suspendu"
+            "suspended": "Suspendu",
+            "not-available-for-trading": "Non disponible pour le trading"
         },
         "market-details": {
             "wallet-info": {
@@ -583,7 +586,7 @@
             "positions": "Postes",
             "odds": "Chances"
         },
-        "zero-odds-tooltip": "Le Sport AMM ne propose des liquidités que dans la fourchette de prix de 0,05 $ à 0,95 $. Cela signifie que si les cotes d'une position sont inférieures à 5 % ou supérieures à 95 %, cette position n'aura pas de liquidité.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "skew": "Fausser",
             "available": "Disponible",
@@ -644,7 +647,11 @@
                 "potential-payout": "Paiement potentiel",
                 "referral": "Lien de référence",
                 "header": "Web 3 Sport commercialise sur",
-                "positions": "Nombre de postes"
+                "positions": "Nombre de postes",
+                "label": "Bonus Partager pour Twitter",
+                "submit-url": "Soumettez l'URL de votre tweet pour bénéficier du boost Overdrop",
+                "network-error": "Erreur réseau, consultez la console du navigateur pour plus d'informations",
+                "verifying-tweet": "Vérification du tweet"
             },
             "buy-in": "Adhésion",
             "total-bonus": "Prime totale",
@@ -698,7 +705,9 @@
                 "fee-rebates": "Remises sur les frais",
                 "fifa-campaign": "Campagne Zebro FIFA",
                 "liquidity-pool": "Fournir des liquidités",
-                "promotions": "Promotions"
+                "promotions": "Promotions",
+                "speed-markets": "Échangez des cryptomonnaies",
+                "digital-options": "Options numériques"
             },
             "buttons": {
                 "disconnect": "Déconnecter",
@@ -720,7 +729,7 @@
         "incentivized-tooltip-nhl-mlb": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de {{league}}, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
         "incentivized-tooltip-euro-copa": "Un total énorme de {{rewards}} sera distribué pour les compétitions Euro 2024 et Copa America. Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
         "incentivized-tooltip-olympics": "Gagnez {{rewards}} en récompenses basées sur le volume pendant les Jeux olympiques. Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
-        "incentivized-tooltip-wimbledon": "Participez aux Overtime V1 et V2 de Wimbledon 2024 pour gagner des {{rewards}}. Pour plus de détails, cliquez ici <detailsLink>."
+        "incentivized-tooltip-wimbledon": "Participez à des {{rewards}} lors de Wimbledon 2024 en prolongation V1 et V2. Vérifiez plus de détails <detailsLink>ici</detailsLink>."
     },
     "rewards": {
         "table": {
@@ -882,7 +891,13 @@
             "fund": "Envoyer un pari gratuit",
             "transaction-pending": "Transaction en attente",
             "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
-            "title": "Envoyer un pari gratuit"
+            "title": "Envoyer un pari gratuit",
+            "fund-batch": "Financer plusieurs adresses",
+            "enter-amount-per-user": "Entrez le montant par utilisateur",
+            "enter-wallet-addresses": "Entrez les adresses de portefeuille",
+            "one-or-more-address-invalid": "Une ou plusieurs adresses de portefeuille saisies ne sont pas valides",
+            "total-amount-batch": "Le montant total sera de {{ amount }} multiple de {{ count }} adresse(s) de portefeuille.",
+            "duplicate": "Adresses de portefeuille en double détectées"
         },
         "send-free-bet": "Envoyer un pari gratuit"
     },
@@ -1197,7 +1212,7 @@
     },
     "banner": {
         "arb-distribution-message": "La distribution d'ARB a commencé. Gagnez des jetons ARB en utilisant les heures supplémentaires. Consultez les détails ici.",
-        "v1-text": "<highlight>V2</highlight> : Il s'agit de la version bêta V2 d'Overtime. Pour revenir à la V1, <highlight>cliquez ici</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1234,7 +1249,8 @@
             "current-rewards": "Récompenses estimées actuelles",
             "social-multiplier": "Multiplicateur d'XP social",
             "weekly-streak": "Boost d'XP par séquence hebdomadaire",
-            "xp": "xp"
+            "xp": "xp",
+            "loyalty-boost": "Augmentation de la fidélité"
         },
         "leveling-tree": {
             "explainer": {
@@ -1266,7 +1282,8 @@
             "days-in-row": "Jours d'affilée",
             "received": "Reçu",
             "paragraph": "Utilisez THALES comme garantie pour un bonus supplémentaire de 10 %, créez des parlays jusqu'à 100 % de bonus et recherchez des jeux promotionnels spéciaux.",
-            "tx-link": "Lien TX"
+            "tx-link": "Lien TX",
+            "loyalty-multiplier": "Multiplicateur de fidélité"
         },
         "leaderboard": {
             "table": {

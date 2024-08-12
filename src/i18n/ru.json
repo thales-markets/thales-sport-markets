@@ -194,7 +194,9 @@
         "filters": "Фильтры",
         "status": "Положение дел",
         "wrap-and-buy": "Заверните ETH и купите",
-        "wrap-eth-tooltip": "Ваш ETH сначала оборачивается в WETH, а затем передается в контракт."
+        "wrap-eth-tooltip": "Ваш ETH сначала оборачивается в WETH, а затем передается в контракт.",
+        "election-tooltip": "Источником резолюции будут Associated Press, Fox News и NBC. Эти рынки исчезнут, как только все три источника объявят гонку за одного и того же кандидата. Если все три источника не объявят гонку за одного и того же кандидата до 11 ноября, все ставки будут аннулированы.",
+        "submit": "Представлять на рассмотрение"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -278,12 +280,13 @@
                 "boxing": "Заниматься боксом",
                 "golf": "Гольф",
                 "live": "Жить",
-                "volleyball": "Волейбол",
-                "rugby": "Регби",
-                "tabletennis": "Настольный теннис",
-                "handball": "Гандбол",
                 "waterpolo": "Водное поло",
-                "olympicgames": "Олимпийские игры"
+                "olympicgames": "Олимпийские игры",
+                "rugby": "Регби",
+                "volleyball": "Волейбол",
+                "handball": "Гандбол",
+                "tabletennis": "Настольный теннис",
+                "politics": "Политика"
             },
             "all": "All",
             "datepicker": {
@@ -333,7 +336,7 @@
         "back": "Назад",
         "apply-filters": "Применить фильтры",
         "incentivized-market": "СТИМУЛИРОВАННЫЙ РЫНОК",
-        "number-of-rounds": "Общее количество раундов"
+        "number-of-rounds": "Круглый"
     },
     "markets": {
         "market-card": {
@@ -583,7 +586,7 @@
             "positions": "Позиции",
             "odds": "Шансы"
         },
-        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "skew": "перекос",
             "total-quote": "Общая котировка",
@@ -644,7 +647,11 @@
                 "header": "Web 3 Спортивные рынки на",
                 "referral": "Реферальная ссылка",
                 "potential-payout": "Возможная выплата",
-                "positions": "Количество позиций"
+                "positions": "Количество позиций",
+                "label": "Поделиться на Twitter и получить бонус",
+                "submit-url": "Отправьте URL вашего твита для повышения Overdrop",
+                "verifying-tweet": "Проверка твита",
+                "network-error": "Ошибка сети, проверьте консоль браузера для получения дополнительной информации"
             },
             "buy-in": "Купить в",
             "total-bonus": "Общий бонус",
@@ -698,7 +705,9 @@
                 "fee-rebates": "Комиссионные скидки",
                 "fifa-campaign": "Кампания Зебро ФИФА",
                 "liquidity-pool": "Обеспечить ликвидность",
-                "promotions": "Акции"
+                "promotions": "Акции",
+                "speed-markets": "Торгуйте криптовалютой",
+                "digital-options": "Цифровые опции"
             },
             "buttons": {
                 "disconnect": "Отключить",
@@ -720,7 +729,7 @@
         "incentivized-tooltip-nhl-mlb": "Огромная сумма {{rewards}} будет распределена до конца сезона {{league}}, включая плей-офф. В вознаграждение будет засчитываться только объем в сети Arbitrum! Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
         "incentivized-tooltip-euro-copa": "Огромная сумма {{rewards}} будет распределена на соревнованиях Евро-2024 и Кубка Америки. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
         "incentivized-tooltip-olympics": "Заработайте {{rewards}} в виде наград за объем во время Олимпийских игр. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
-        "incentivized-tooltip-wimbledon": "Соревнуйтесь за {{rewards}} во время Уимблдона 2024 года в сверхурочных версиях V1 и V2. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>."
+        "incentivized-tooltip-wimbledon": "Соревнуйтесь за {{rewards}} во время Уимблдона 2024 года в сверхурочных версиях 1 и 2. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -843,8 +852,8 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "profile-data": "Данные профиля",
-            "free-bet": "Бесплатная ставка",
-            "wallet": "Кошелек"
+            "wallet": "Кошелек",
+            "free-bet": "Бесплатная ставка"
         },
         "lp-title": "Пул ликвидности",
         "in-lp": "Предоставляемая ликвидность",
@@ -882,7 +891,13 @@
             "transaction-pending": "Транзакция ожидает рассмотрения",
             "funding": "Финансирование...",
             "no-funds": "Пожалуйста, убедитесь, что в вашем кошельке достаточно средств",
-            "fund": "Отправить бесплатную ставку"
+            "fund": "Отправить бесплатную ставку",
+            "total-amount-batch": "Общая сумма будет равна {{ amount }}, умноженной на {{ count }} адрес(а) кошелька.",
+            "fund-batch": "Финансируйте несколько адресов",
+            "one-or-more-address-invalid": "Один или несколько введенных адресов кошелька недействительны.",
+            "duplicate": "Обнаружены повторяющиеся адреса кошельков",
+            "enter-amount-per-user": "Введите сумму на пользователя",
+            "enter-wallet-addresses": "Введите адреса кошельков"
         },
         "send-free-bet": "Отправить бесплатную ставку"
     },
@@ -1197,7 +1212,7 @@
     },
     "banner": {
         "arb-distribution-message": "Распространение ARB началось. Зарабатывайте токены ARB, используя сверхурочную работу. Подробности уточняйте здесь.",
-        "v1-text": "<highlight>V2</highlight>: это бета-версия Overtime V2. Чтобы вернуться к версии 1, <highlight>нажмите здесь</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1234,7 +1249,8 @@
             "daily-streak": "Ежедневное повышение опыта",
             "xp": "опыт",
             "next-thales-rewards-at": "Следующие награды Thales на",
-            "current-rewards": "Текущее предполагаемое вознаграждение"
+            "current-rewards": "Текущее предполагаемое вознаграждение",
+            "loyalty-boost": "Повышение лояльности"
         },
         "leveling-tree": {
             "explainer": {
@@ -1266,7 +1282,8 @@
             "date-time": "Дата | Время",
             "active-xp-bonus": "Активный бонус опыта",
             "weekly-multiplier": "Еженедельный множитель",
-            "tx-link": "Ссылка на Техас"
+            "tx-link": "Ссылка на Техас",
+            "loyalty-multiplier": "Множитель лояльности"
         },
         "leaderboard": {
             "table": {

@@ -194,7 +194,9 @@
         "filters": "Filtros",
         "status": "Estado",
         "wrap-eth-tooltip": "Su ETH primero se incluye en WETH y luego se pasa al contrato.",
-        "wrap-and-buy": "Envuelva ETH y compre"
+        "wrap-and-buy": "Envuelva ETH y compre",
+        "election-tooltip": "La fuente de resolución será Associated Press, Fox News y NBC. Estos mercados se resolverán una vez que las tres fuentes convoquen la carrera para el mismo candidato. Si las tres fuentes no han convocado la carrera para el mismo candidato antes del 11 de noviembre, se anularán todas las apuestas.",
+        "submit": "Entregar"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV TODOS LOS DERECHOS RESERVADOS.",
@@ -278,12 +280,13 @@
                 "boxing": "Boxeo",
                 "golf": "Golf",
                 "live": "Vivir",
-                "waterpolo": "Polo acuático",
-                "volleyball": "Vóleibol",
+                "olympicgames": "Juegos olímpicos",
+                "rugby": "Rugby",
                 "tabletennis": "Tenis de mesa",
                 "handball": "Balonmano",
-                "rugby": "Rugby",
-                "olympicgames": "Juegos olímpicos"
+                "politics": "Política",
+                "volleyball": "Vóleibol",
+                "waterpolo": "Polo acuático"
             },
             "all": "Todo",
             "datepicker": {
@@ -333,7 +336,7 @@
         "back": "atrás",
         "apply-filters": "Aplicar filtros",
         "incentivized-market": "MERCADO INCENTIVIZADO",
-        "number-of-rounds": "Número total de rondas"
+        "number-of-rounds": "Redondo"
     },
     "markets": {
         "market-card": {
@@ -559,8 +562,8 @@
             "end-of-round": "Fin de ronda",
             "fighters-introduction": "Introducción a los luchadores",
             "fighters-walking": "Luchadores caminando",
-            "suspended": "Suspendido",
-            "not-available-for-trading": "No disponible para negociar"
+            "not-available-for-trading": "No disponible para negociar",
+            "suspended": "Suspendido"
         },
         "market-details": {
             "price": "Precio",
@@ -583,7 +586,7 @@
             "positions": "Posiciones",
             "odds": "Posibilidades"
         },
-        "zero-odds-tooltip": "El AMM de deportes sólo ofrece liquidez si el rango de precios ofrecido es entre 0.05 y 0.95 USD. Esto significa que si las probabilidades de una posición son menores a 5% o mayores a 95%, esa posición no tendrá liquidez.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "pay-with": "Pagar con",
             "total-quote": "Cotización total",
@@ -644,7 +647,11 @@
                 "share": "Cuota",
                 "loser": "Perdedor",
                 "potential-payout": "Pago potencial",
-                "positions": "Número de posiciones"
+                "positions": "Número de posiciones",
+                "label": "Bono por compartir en Twitter",
+                "submit-url": "Envía la URL de tu tweet para impulsar Overdrop",
+                "network-error": "Error de red, verifique la consola del navegador para obtener más información",
+                "verifying-tweet": "Verificando tweet"
             },
             "buy-in": "Aceptacion",
             "total-bonus": "bono total",
@@ -698,7 +705,9 @@
                 "fee-rebates": "Reembolsos de tarifas",
                 "fifa-campaign": "Campaña Zebro FIFA",
                 "liquidity-pool": "Proporcionar Liquidez",
-                "promotions": "Promociones"
+                "promotions": "Promociones",
+                "speed-markets": "Comercio de criptomonedas",
+                "digital-options": "Opciones digitales"
             },
             "buttons": {
                 "disconnect": "Desconectar",
@@ -719,7 +728,7 @@
         "incentivized-tooltip-nhl-mlb": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la {{league}}, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
         "incentivized-tooltip-euro-copa": "Se distribuirá un total enorme de {{rewards}} para las competiciones Euro 2024 y Copa América. Consulta más detalles <detailsLink>aquí</detailsLink>.",
         "incentivized-tooltip-wimbledon": "Compite por {{rewards}} durante Wimbledon 2024 en Overtime V1 y V2. Consulte más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-olympics": "Gane {{rewards}} en recompensas basadas en volumen durante los Juegos Olímpicos. Consulte más detalles <detailsLink>aquí</detailsLink>."
+        "incentivized-tooltip-olympics": "Gane {{rewards}} en recompensas basadas en volumen durante los Juegos Olímpicos. Consulta más detalles <detailsLink>aquí</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -842,8 +851,8 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "profile-data": "Datos de perfil",
-            "free-bet": "apuesta gratis",
-            "wallet": "Billetera"
+            "wallet": "Billetera",
+            "free-bet": "apuesta gratis"
         },
         "in-lp": "Liquidez proporcionada",
         "go-to-lp": "Ir a LP",
@@ -881,7 +890,13 @@
             "invalid-wallet-address": "Dirección de billetera no válida",
             "title": "Enviar apuesta gratis",
             "no-funds": "Asegúrese de que su billetera tenga fondos suficientes",
-            "fund-successful": "Fondo exitoso"
+            "fund-successful": "Fondo exitoso",
+            "enter-wallet-addresses": "Ingrese direcciones de billetera",
+            "duplicate": "Direcciones de billetera duplicadas detectadas",
+            "one-or-more-address-invalid": "Una o más direcciones de billetera ingresadas no son válidas",
+            "total-amount-batch": "El monto total será {{ amount }} múltiplo de {{ count }} dirección(es) de billetera.",
+            "fund-batch": "Financiar varias direcciones",
+            "enter-amount-per-user": "Ingrese el monto por usuario"
         },
         "send-free-bet": "Enviar apuesta gratis"
     },
@@ -1196,7 +1211,7 @@
     },
     "banner": {
         "arb-distribution-message": "La distribución de ARB ha comenzado. Gana tokens ARB usando horas extras. Echa un vistazo a los detalles aquí.",
-        "v1-text": "<highlight>V2</highlight>: Esta es la versión beta V2 de Overtime. Para volver a V1, <highlight>haga clic aquí</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1233,7 +1248,8 @@
             "my-total-xp": "Mi XP total",
             "next-level": "Siguiente nivel",
             "weekly-streak": "Aumento de XP de racha semanal",
-            "total-xp-multiplier": "Multiplicador de XP total"
+            "total-xp-multiplier": "Multiplicador de XP total",
+            "loyalty-boost": "Aumento de la fidelidad"
         },
         "leveling-tree": {
             "explainer": {
@@ -1265,7 +1281,8 @@
             "active-xp-bonus": "Bonificación de XP activa",
             "twitter-multiplier": "Multiplicador de Twitter",
             "no-results": "No hay resultados",
-            "date-time": "Fecha | Tiempo"
+            "date-time": "Fecha | Tiempo",
+            "loyalty-multiplier": "Multiplicador de lealtad"
         },
         "leaderboard": {
             "table": {

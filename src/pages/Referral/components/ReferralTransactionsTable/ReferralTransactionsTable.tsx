@@ -1,3 +1,4 @@
+import PaginationWrapper from 'components/PaginationWrapper';
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
 import React, { useState } from 'react';
@@ -10,7 +11,6 @@ import { useTheme } from 'styled-components';
 import { formatCurrencyWithSign, formatDateWithTime, truncateAddress } from 'thales-utils';
 import { ReferralTransaction } from 'types/referral';
 import { ThemeInterface } from 'types/ui';
-import { PaginationWrapper } from '../../../ParlayLeaderboard/ParlayLeaderboard';
 import { TableHeaderStyle, TableHeaderStyleMobile } from '../TradersTable/TradersTable';
 
 type ReferralTransactionsTableProps = {

@@ -194,7 +194,9 @@
         "filters": "筛选器",
         "status": "地位",
         "wrap-and-buy": "包装 ETH 并购买",
-        "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约"
+        "wrap-eth-tooltip": "你的 ETH 首先被包装成 WETH，然后传递给合约",
+        "election-tooltip": "解决来源将是美联社、福克斯新闻和 NBC。一旦所有三个来源都宣布同一位候选人获胜，这些市场就会解决。如果所有三个来源在 11 月 11 日之前都没有宣布同一位候选人获胜，则所有投注将作废。",
+        "submit": "提交"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV 保留所有权利.",
@@ -279,11 +281,12 @@
                 "golf": "高尔夫球",
                 "live": "居住",
                 "rugby": "橄榄球",
-                "volleyball": "排球",
-                "waterpolo": "水球",
                 "handball": "手球",
+                "waterpolo": "水球",
+                "tabletennis": "乒乓球",
+                "volleyball": "排球",
                 "olympicgames": "奥运会",
-                "tabletennis": "乒乓球"
+                "politics": "政治"
             },
             "all": "所有",
             "datepicker": {
@@ -333,7 +336,7 @@
         "back": "后退",
         "apply-filters": "应用过滤器",
         "incentivized-market": "激励市场",
-        "number-of-rounds": "总轮数"
+        "number-of-rounds": "圆形的"
     },
     "markets": {
         "market-card": {
@@ -583,7 +586,7 @@
             "positions": "职位",
             "odds": "赔率"
         },
-        "zero-odds-tooltip": "Sports AMM 仅提供0.05美元至0.95美元价格范围内的流动性，这意味着，如果一个投注选择的赔率低于5%或者高于95%，该选择就不会有流动性。",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "total-quote": "总报价",
             "skew": "偏斜",
@@ -644,7 +647,11 @@
                 "winner": "优胜者",
                 "potential-payout": "潜在支出",
                 "total-quote": "总报价",
-                "positions": "职位数量"
+                "positions": "职位数量",
+                "label": "分享 Twitter 奖励",
+                "verifying-tweet": "验证推文",
+                "submit-url": "提交你的推文 URL 以获得 Overdrop 奖励",
+                "network-error": "网络错误，请检查浏览器控制台以获取更多信息"
             },
             "buy-in": "买入",
             "total-bonus": "总奖金",
@@ -698,7 +705,9 @@
                 "fifa-campaign": "斑马FIFA活动",
                 "fee-rebates": "费用回扣",
                 "liquidity-pool": "提供流动性",
-                "promotions": "促销活动"
+                "promotions": "促销活动",
+                "speed-markets": "交易加密货币",
+                "digital-options": "数字选项"
             },
             "buttons": {
                 "disconnect": "断开",
@@ -719,8 +728,8 @@
         "incentivized-tooltip-mm": "在疯狂三月期间赢得 45,000 ARB + 50,000 THALES。更多详细信息<detailsLink>此处</detailsLink>。",
         "incentivized-tooltip-nhl-mlb": "总计高达 {{rewards}} 的奖励将分发给 {{league}} 赛季的剩余比赛，包括季后赛。只有 Arbitrum 网络上的交易量才会计入奖励！查看<detailsLink>此处</detailsLink>了解更多详情。",
         "incentivized-tooltip-euro-copa": "2024 年欧洲杯和美洲杯比赛将发放总计高达 {{rewards}} 的奖励。查看<detailsLink>此处</detailsLink>了解更多详情。",
-        "incentivized-tooltip-wimbledon": "在 2024 年温布尔登网球公开赛加时赛 V1 和 V2 期间争夺 {{rewards}}。查看<detailsLink>此处</detailsLink>了解更多详情。",
-        "incentivized-tooltip-olympics": "奥运会期间，可获得 {{rewards}} 的基于数量的奖励。查看<detailsLink>此处</detailsLink>的更多详细信息。"
+        "incentivized-tooltip-olympics": "奥运会期间，可获得 {{rewards}} 的基于数量的奖励。查看<detailsLink>此处</detailsLink>的更多详细信息。",
+        "incentivized-tooltip-wimbledon": "在 2024 年温布尔登网球公开赛加时赛 V1 和 V2 期间争夺 {{rewards}}。查看<detailsLink>此处</detailsLink>的更多详细信息。"
     },
     "rewards": {
         "header": "奖励",
@@ -882,7 +891,13 @@
             "enter-wallet-address": "输入钱包地址",
             "approve-success": "成功批准",
             "transaction-pending": "交易待处理",
-            "funding": "资金..."
+            "funding": "资金...",
+            "duplicate": "检测到重复的钱包地址",
+            "enter-wallet-addresses": "输入钱包地址",
+            "fund-batch": "资助多个地址",
+            "enter-amount-per-user": "输入每个用户的金额",
+            "total-amount-batch": "总金额将是 {{ amount }} 乘以 {{ count }} 个钱包地址。",
+            "one-or-more-address-invalid": "输入的一个或多个钱包地址无效"
         },
         "send-free-bet": "发送免费投注"
     },
@@ -1197,7 +1212,7 @@
     },
     "banner": {
         "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。",
-        "v1-text": "<highlight>V2</highlight>：这是 Overtime 的 V2 测试版。要切换回 V1，请<highlight>单击此处</highlight>。"
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1234,7 +1249,8 @@
             "total-xp-multiplier": "总 XP 倍数",
             "twitter-share": "Twitter 分享经验值提升",
             "social-multiplier": "社交经验值乘数",
-            "twitter-xp-boost-resets": "Twitter xp boost 重置于"
+            "twitter-xp-boost-resets": "Twitter xp boost 重置于",
+            "loyalty-boost": "提高忠诚度"
         },
         "leveling-tree": {
             "explainer": {
@@ -1266,7 +1282,8 @@
             "twitter-multiplier": "Twitter 倍增器",
             "tx-link": "TX 链接",
             "days-in-row": "在连续几天",
-            "no-results": "没有结果"
+            "no-results": "没有结果",
+            "loyalty-multiplier": "忠诚度倍增器"
         },
         "leaderboard": {
             "table": {

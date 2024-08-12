@@ -11,6 +11,7 @@ import { getMarketTypeGroupFilter, setMarketTypeGroupFilter } from 'redux/module
 import { useTheme } from 'styled-components';
 import { SportMarket } from 'types/markets';
 import { isOddValid } from 'utils/marketsV2';
+import { League } from '../../../../enums/sports';
 import { ThemeInterface } from '../../../../types/ui';
 import PositionsV2 from '../../Market/MarketDetailsV2/components/PositionsV2';
 import { NoMarketsContainer, NoMarketsLabel, Wrapper } from './styled-components';
@@ -70,7 +71,7 @@ const SelectedMarket: React.FC<SelectedMarketProps> = ({ market }) => {
     const hideGame = isGameOpen && !areOddsValid && !areChildMarketsOddsValid;
 
     return (
-        <Scroll height={`calc(100vh - ${isMobile ? 0 : 194}px)`}>
+        <Scroll height={`calc(100vh - ${isMobile ? 0 : market.leagueId === League.US_ELECTION ? 280 : 194}px)`}>
             <Wrapper hideGame={hideGame}>
                 {numberOfMarkets === 0 ? (
                     <NoMarketsContainer>

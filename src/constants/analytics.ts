@@ -1,7 +1,7 @@
 import Plausible from 'plausible-tracker';
 
 export const PLAUSIBLE = Plausible({
-    domain: 'v2.overtimemarkets.xyz',
+    domain: 'overtimemarkets.xyz',
     trackLocalhost: true,
     apiHost: 'https://analytics-v2.thalesmarket.io',
 });

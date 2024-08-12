@@ -194,7 +194,9 @@
         "filters": "Filtri",
         "status": "Stato",
         "wrap-and-buy": "Avvolgi ETH e acquista",
-        "wrap-eth-tooltip": "Il tuo ETH viene prima avvolto in WETH e poi passato al contratto"
+        "wrap-eth-tooltip": "Il tuo ETH viene prima avvolto in WETH e poi passato al contratto",
+        "election-tooltip": "La fonte della risoluzione sarà Associated Press, Fox News e NBC. Questi mercati si risolveranno una volta che tutte e tre le fonti indicheranno la corsa per lo stesso candidato. Se tutte e tre le fonti non avranno indetto la corsa per lo stesso candidato entro l'11 novembre, tutte le scommesse verranno annullate.",
+        "submit": "Invia"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -278,12 +280,13 @@
                 "fighting": "MMA",
                 "golf": "Golf",
                 "live": "Vivere",
+                "politics": "Politica",
+                "olympicgames": "Giochi Olimpici",
                 "rugby": "Rugby",
-                "handball": "Palla a mano",
                 "tabletennis": "Ping-pong",
-                "waterpolo": "Pallanuoto",
+                "handball": "Palla a mano",
                 "volleyball": "Pallavolo",
-                "olympicgames": "Giochi Olimpici"
+                "waterpolo": "Pallanuoto"
             },
             "all": "All",
             "datepicker": {
@@ -333,7 +336,7 @@
         "back": "Di ritorno",
         "apply-filters": "Applicare filtri",
         "incentivized-market": "MERCATO INCENTIVATO",
-        "number-of-rounds": "Numero totale di round"
+        "number-of-rounds": "Girare"
     },
     "markets": {
         "market-card": {
@@ -583,7 +586,7 @@
             "positions": "Posizioni",
             "odds": "Probabilità"
         },
-        "zero-odds-tooltip": "Sports AMM only offers liquidity in the price range of $0.05 to $0.95. Effectively this means that if the odds for a position are less than 5% or more than 95%, that position wont have liquidity.",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "parlay": {
             "potential-profit": "Potenziale profitto",
             "skew": "Storto",
@@ -644,7 +647,11 @@
                 "potential-payout": "Potenziale pagamento",
                 "loser": "Perdente",
                 "referral": "Link di riferimento",
-                "positions": "Numero di posizioni"
+                "positions": "Numero di posizioni",
+                "network-error": "Errore di rete, controlla la console del browser per maggiori informazioni",
+                "label": "Condividi per il bonus di Twitter",
+                "verifying-tweet": "Verifica del tweet",
+                "submit-url": "Invia l'URL del tuo tweet per il potenziamento di Overdrop"
             },
             "buy-in": "Consenso",
             "total-bonus": "Bonus totale",
@@ -698,7 +705,9 @@
                 "fifa-campaign": "Campagna Zebro FIFA",
                 "fee-rebates": "Riduzioni sulle commissioni",
                 "liquidity-pool": "Fornire liquidità",
-                "promotions": "Promozioni"
+                "promotions": "Promozioni",
+                "speed-markets": "Fai trading di criptovalute",
+                "digital-options": "Opzioni digitali"
             },
             "buttons": {
                 "switch": "Interruttore",
@@ -881,7 +890,13 @@
             "approve-success": "Approvato con successo",
             "invalid-amount": "importo non valido",
             "enter-amount": "Inserire l'importo",
-            "insufficient-balance": "Equilibrio insufficiente"
+            "insufficient-balance": "Equilibrio insufficiente",
+            "enter-wallet-addresses": "Inserisci gli indirizzi del portafoglio",
+            "fund-batch": "Finanzia più indirizzi",
+            "duplicate": "Rilevati indirizzi di portafoglio duplicati",
+            "one-or-more-address-invalid": "Uno o più indirizzi di portafoglio inseriti non sono validi",
+            "enter-amount-per-user": "Inserisci l'importo per utente",
+            "total-amount-batch": "L'importo totale sarà {{ amount }} multiplo per {{ count }} indirizzo/i del portafoglio."
         },
         "send-free-bet": "Invia scommessa gratuita"
     },
@@ -1196,7 +1211,7 @@
     },
     "banner": {
         "arb-distribution-message": "La distribuzione ARB è iniziata. Guadagna token ARB utilizzando gli straordinari. Scopri i dettagli qui.",
-        "v1-text": "<highlight>V2</highlight>: questa è la versione beta V2 di Overtime. Per tornare alla V1, <highlight>fai clic qui</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1233,7 +1248,8 @@
             "my-total-xp": "I miei XP totali",
             "daily-streak": "Aumento XP di serie giornaliere",
             "twitter-xp-boost-resets": "Il boost di Twitter xp si ripristina",
-            "weekly-streak": "Aumento XP consecutivi settimanali"
+            "weekly-streak": "Aumento XP consecutivi settimanali",
+            "loyalty-boost": "Aumento della fedeltà"
         },
         "leveling-tree": {
             "explainer": {
@@ -1265,7 +1281,8 @@
             "paragraph": "Usa THALES come garanzia per un bonus aggiuntivo del 10%, crea parlay per un bonus fino al 100% e controlla i giochi con promozioni speciali.",
             "days-in-row": "Giorni di fila",
             "daily-multiplier": "Moltiplicatore giornaliero",
-            "active-xp-bonus": "Bonus XP attivo"
+            "active-xp-bonus": "Bonus XP attivo",
+            "loyalty-multiplier": "Moltiplicatore di fedeltà"
         },
         "leaderboard": {
             "table": {

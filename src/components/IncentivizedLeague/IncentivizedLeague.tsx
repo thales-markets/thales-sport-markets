@@ -33,7 +33,7 @@ const IncentivizedLeague: React.FC<IncentivizedLeagueProps> = ({ league, maturit
             {incentivizedLeague &&
                 date > incentivizedLeague.startDate &&
                 date < incentivizedLeague.endDate &&
-                (incentivizedLeague.availableOnNetworks.includes[networkId] ||
+                (incentivizedLeague.availableOnNetworks.includes(networkId) ||
                     !!incentivizedLeague.showOnAllNetworks) && (
                     <Tooltip
                         overlay={

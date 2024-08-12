@@ -29,13 +29,7 @@ const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onCli
                         style={isMobile ? liveBlinkStyleMobile : liveBlinkStyle}
                     />
                 ) : (
-                    <SportIcon
-                        className={
-                            sport == SportFilter.OlympicGames
-                                ? 'icon-homepage league--olympics'
-                                : `icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`
-                        }
-                    />
+                    <SportIcon className={`icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`} />
                 )}
                 <Label>{children}</Label>
             </LeftContainer>

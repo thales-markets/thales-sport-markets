@@ -1,7 +1,6 @@
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { t } from 'i18next';
-import { PaginationWrapper } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -16,6 +15,7 @@ import { getCurrentLevelByPoints } from 'utils/overdrop';
 import {
     AddressContainer,
     Badge,
+    PaginationWrapper,
     StickyCell,
     StickyContrainer,
     StickyRow,

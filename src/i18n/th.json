@@ -194,7 +194,9 @@
         "filters": "ตัวกรอง",
         "status": "สถานะ",
         "wrap-and-buy": "ห่อ ETH แล้วซื้อ",
-        "wrap-eth-tooltip": "ETH ของคุณจะถูกรวมเข้ากับ WETH ก่อนแล้วจึงส่งต่อไปยังสัญญา"
+        "wrap-eth-tooltip": "ETH ของคุณจะถูกรวมเข้ากับ WETH ก่อนแล้วจึงส่งต่อไปยังสัญญา",
+        "election-tooltip": "แหล่งที่มาของการแก้ปัญหาคือ Associated Press, Fox News และ NBC ตลาดเหล่านี้จะคลี่คลายเมื่อแหล่งข่าวทั้งสามแหล่งเรียกร้องให้มีการแข่งขันสำหรับผู้สมัครคนเดียวกัน หากแหล่งข้อมูลทั้งสามแห่งไม่เรียกการแข่งขันสำหรับผู้สมัครคนเดียวกันภายในวันที่ 11 พฤศจิกายน การเดิมพันทั้งหมดจะเป็นโมฆะ",
+        "submit": "ส่ง"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} eXoticV ALL RIGHTS RESERVED.",
@@ -278,12 +280,13 @@
                 "boxing": "มวย",
                 "golf": "กอล์ฟ",
                 "live": "สด",
-                "volleyball": "วอลเลย์บอล",
+                "tabletennis": "ปิงปอง",
                 "waterpolo": "โปโลน้ำ",
                 "handball": "แฮนด์บอล",
                 "rugby": "รักบี้",
-                "olympicgames": "กีฬาโอลิมปิก",
-                "tabletennis": "ปิงปอง"
+                "volleyball": "วอลเลย์บอล",
+                "politics": "การเมือง",
+                "olympicgames": "กีฬาโอลิมปิก"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
@@ -333,7 +336,7 @@
         "back": "กลับ",
         "apply-filters": "ใช้ตัวกรอง",
         "incentivized-market": "ตลาดที่มีแรงจูงใจ",
-        "number-of-rounds": "จำนวนรอบทั้งหมด"
+        "number-of-rounds": "กลม"
     },
     "markets": {
         "market-card": {
@@ -560,8 +563,8 @@
             "fighters-introduction": "การแนะนำนักสู้",
             "fighters-walking": "นักสู้เดิน",
             "end-of-fight": "สิ้นสุดการต่อสู้",
-            "not-available-for-trading": "ไม่สามารถซื้อขายได้",
-            "suspended": "ถูกระงับ"
+            "suspended": "ถูกระงับ",
+            "not-available-for-trading": "ไม่สามารถซื้อขายได้"
         },
         "market-details": {
             "price": "ราคา",
@@ -584,7 +587,7 @@
             "positions": "ตำแหน่ง",
             "odds": "อัตราต่อรอง"
         },
-        "zero-odds-tooltip": "Sports AMM จะเสนอสภาพคล่องในช่วงราคา $0.05 ถึง $0.95 เท่านั้น หมายความว่าหากอัตราต่อรองสำหรับโพสิชั่นนั้นน้อยกว่า 5% หรือมากกว่า 95% โพสิชั่นนั้นจะไม่มีสภาพคล่อง",
+        "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",
         "discounted-per": "ลดราคาตาม",
         "parlay": {
             "validation": {
@@ -646,7 +649,11 @@
                 "total-quote": "ใบเสนอราคาทั้งหมด",
                 "referral": "ลิงค์อ้างอิง",
                 "winner": "ผู้ชนะ",
-                "positions": "จำนวนตำแหน่ง"
+                "positions": "จำนวนตำแหน่ง",
+                "submit-url": "ส่ง URL ทวีตของคุณเพื่อรับการสนับสนุนจาก Overdrop",
+                "verifying-tweet": "การตรวจสอบทวีต",
+                "label": "โบนัสแบ่งปันสำหรับ Twitter",
+                "network-error": "ข้อผิดพลาดของเครือข่าย ตรวจสอบคอนโซลเบราว์เซอร์เพื่อดูข้อมูลเพิ่มเติม"
             },
             "buy-in": "ซื้อใน",
             "total-bonus": "โบนัสรวม",
@@ -699,7 +706,9 @@
                 "fee-rebates": "ส่วนลดค่าธรรมเนียม",
                 "fifa-campaign": "แคมเปญ Zebro FIFA",
                 "liquidity-pool": "ให้สภาพคล่อง",
-                "promotions": "โปรโมชั่น"
+                "promotions": "โปรโมชั่น",
+                "speed-markets": "ซื้อขายสกุลเงินดิจิตอล",
+                "digital-options": "ตัวเลือกดิจิตอล"
             },
             "buttons": {
                 "switch": "สวิตช์",
@@ -719,8 +728,8 @@
         "incentivized-tooltip-nhl": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในช่วงที่เหลือของฤดูกาล NHL รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
         "incentivized-tooltip-nhl-mlb": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายให้กับช่วงที่เหลือของฤดูกาล {{league}} รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
         "incentivized-tooltip-euro-copa": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายสำหรับการแข่งขันยูโร 2024 และโคปาอเมริกา ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
-        "incentivized-tooltip-wimbledon": "แข่งขันเพื่อชิง {{rewards}} ระหว่างวิมเบิลดัน 2024 ในช่วงต่อเวลา V1 และ V2 ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
-        "incentivized-tooltip-olympics": "รับ {{rewards}} เป็นรางวัลตามปริมาณระหว่างการแข่งขันกีฬาโอลิมปิก ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
+        "incentivized-tooltip-olympics": "รับ {{rewards}} เป็นรางวัลตามปริมาณระหว่างการแข่งขันกีฬาโอลิมปิก ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
+        "incentivized-tooltip-wimbledon": "แข่งขันเพื่อชิง {{rewards}} ระหว่างวิมเบิลดัน 2024 ในช่วงต่อเวลา V1 และ V2 ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
     },
     "rewards": {
         "header": "รางวัล",
@@ -843,8 +852,8 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "profile-data": "ข้อมูลโปรไฟล์",
-            "wallet": "กระเป๋าสตางค์",
-            "free-bet": "เดิมพันฟรี"
+            "free-bet": "เดิมพันฟรี",
+            "wallet": "กระเป๋าสตางค์"
         },
         "lp-title": "สระว่ายน้ำสภาพคล่อง",
         "go-to-lp": "ไปที่หจก",
@@ -882,7 +891,13 @@
             "invalid-amount": "จำนวนเงินไม่ถูกต้อง",
             "transaction-pending": "การทำธุรกรรมที่รอดำเนินการ",
             "enter-wallet-address": "ป้อนที่อยู่กระเป๋าสตางค์",
-            "funding": "การระดมทุน..."
+            "funding": "การระดมทุน...",
+            "one-or-more-address-invalid": "ที่อยู่กระเป๋าเงินที่ป้อนอย่างน้อยหนึ่งรายการไม่ถูกต้อง",
+            "enter-wallet-addresses": "ป้อนที่อยู่กระเป๋าเงิน",
+            "fund-batch": "กองทุนที่อยู่หลายแห่ง",
+            "enter-amount-per-user": "ป้อนจำนวนเงินต่อผู้ใช้",
+            "duplicate": "ตรวจพบที่อยู่กระเป๋าเงินที่ซ้ำกัน",
+            "total-amount-batch": "จำนวนเงินทั้งหมดจะเท่ากับ {{ amount }} คูณด้วยที่อยู่กระเป๋าสตางค์ {{ count }} รายการ"
         },
         "send-free-bet": "ส่งเดิมพันฟรี"
     },
@@ -1197,7 +1212,7 @@
     },
     "banner": {
         "arb-distribution-message": "การกระจาย ARB ได้เริ่มต้นแล้ว รับโทเค็น ARB โดยใช้การต่อเวลา ชำระเงินรายละเอียดได้ที่นี่",
-        "v1-text": "<highlight>V2</highlight>: นี่คือการต่อเวลาเวอร์ชันเบต้า V2 หากต้องการเปลี่ยนกลับเป็น V1 <highlight>คลิกที่นี่</highlight>"
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {
@@ -1234,7 +1249,8 @@
             "weekly-streak": "เพิ่ม XP ต่อเนื่องรายสัปดาห์",
             "current-rewards": "รางวัลโดยประมาณในปัจจุบัน",
             "twitter-share": "Twitter แชร์ XP เพิ่ม",
-            "social-multiplier": "ตัวคูณ XP ทางสังคม"
+            "social-multiplier": "ตัวคูณ XP ทางสังคม",
+            "loyalty-boost": "เพิ่มความภักดี"
         },
         "leveling-tree": {
             "explainer": {
@@ -1266,7 +1282,8 @@
             "daily-multiplier": "ตัวคูณรายวัน",
             "days-in-row": "วันติดต่อกัน",
             "twitter-multiplier": "ตัวคูณทวิตเตอร์",
-            "tx-link": "ลิงค์เท็กซัส"
+            "tx-link": "ลิงค์เท็กซัส",
+            "loyalty-multiplier": "ตัวคูณความภักดี"
         },
         "leaderboard": {
             "table": {

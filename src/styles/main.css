@@ -140,6 +140,7 @@ table {
 @import './icons.css';
 @import './homepage-icons.css';
 @import './currencies.css';
+@import './thales-sidebar-icons.css';
 
 * {
     box-sizing: border-box;
