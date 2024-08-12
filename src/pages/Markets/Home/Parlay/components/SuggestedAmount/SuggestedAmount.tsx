@@ -21,7 +21,6 @@ import {
 } from 'thales-utils';
 import { getCollateral, getCollateralAddress, getDefaultCollateral, isStableCurrency } from 'utils/collaterals';
 import { getQuote, getSwapParams } from 'utils/swap';
-import { delay } from 'utils/timer';
 import { Address } from 'viem';
 
 const AMOUNTS = [3, 10, 20, 50, 100];
@@ -73,14 +72,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
         const getSwapQuoteForOneCoin = async () => {
             if (useThalesCollateral) {
                 if (!conversioRateUsingSwap) {
-                    await delay(1000); // due to rate limit
-                    let quoteForOne = await getQuote(networkId, swapOneToThalesParams);
-
-                    if (!quoteForOne) {
-                        // retry due to rate limit
-                        await delay(1200);
-                        quoteForOne = await getQuote(networkId, swapOneToThalesParams);
-                    }
+                    const quoteForOne = await getQuote(networkId, swapOneToThalesParams);
 
                     setConversioRateUsingSwap(
                         quoteForOne && exchangeRates ? quoteForOne * exchangeRates[THALES_CONTRACT_RATE_KEY] : 0

@@ -654,12 +654,7 @@ const Ticket: React.FC<TicketProps> = ({
             setSwapQuote(0);
         } else if (swapToThales && buyInAmount) {
             const getSwapQuote = async () => {
-                let quote = await getQuote(networkId, swapToThalesParams);
-                if (!quote) {
-                    // retry due to rate limit
-                    await delay(1200);
-                    quote = await getQuote(networkId, swapToThalesParams);
-                }
+                const quote = await getQuote(networkId, swapToThalesParams);
 
                 setSwappedThalesToReceive(quote);
                 setSwapQuote(quote / Number(buyInAmount));

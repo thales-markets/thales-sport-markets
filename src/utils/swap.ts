@@ -10,6 +10,7 @@ import { Address } from 'viem';
 import multipleCollateralContract from './contracts/multipleCollateralContract';
 import networkConnector from './networkConnector';
 import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
+import { delay } from './timer';
 
 export const getSwapParams = (
     networkId: SupportedNetwork,
@@ -38,11 +39,20 @@ const apiRequestUrl = (networkId: Network, methodName: string, queryParams: any)
     );
 };
 
+const MAX_RETRY_COUNT = 10;
+
 export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams) => {
     const url = apiRequestUrl(networkId, '/quote', { ...swapParams });
 
     try {
-        const response = await fetch(url);
+        let retryCount = 0;
+        let response = await fetch(url);
+
+        while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
+            await delay(1200);
+            response = await fetch(url);
+            retryCount++;
+        }
         const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '' });
 
         return responseBody.dstAmount
@@ -63,7 +73,15 @@ export const checkSwapAllowance = async (
     const url = apiRequestUrl(networkId, '/approve/allowance', { tokenAddress, walletAddress });
 
     try {
-        const response = await fetch(url, { cache: 'no-cache' });
+        let retryCount = 0;
+        let response = await fetch(url, { cache: 'no-cache' });
+
+        while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
+            await delay(2400);
+            response = await fetch(url);
+            retryCount++;
+        }
+
         const data = response.ok ? await response.json() : { allowance: 0 };
         return BigNumber.from(data.allowance).gte(amount);
     } catch (e) {
