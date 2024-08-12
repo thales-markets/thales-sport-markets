@@ -549,7 +549,9 @@ export const ticketMarketAsTicketPosition = (market: TicketMarket) => {
 };
 
 export const sportMarketAsSerializable = (market: SportMarket): SerializableSportMarket => {
-    const serializableChildMarkets = market.childMarkets.map((childMarket) => _.omit(childMarket, 'maturityDate'));
+    const serializableChildMarkets = market.childMarkets
+        ? market.childMarkets.map((childMarket) => _.omit(childMarket, 'maturityDate'))
+        : market.childMarkets;
     const serializableMarket = {
         ..._.omit(market, 'maturityDate'),
         childMarkets: serializableChildMarkets,
@@ -558,10 +560,12 @@ export const sportMarketAsSerializable = (market: SportMarket): SerializableSpor
 };
 
 export const serializableSportMarketAsSportMarket = (market: SerializableSportMarket): SportMarket => {
-    const childMarkets = market.childMarkets.map((childMarket) => ({
-        ...childMarket,
-        maturityDate: new Date(secondsToMilliseconds(childMarket.maturity)),
-    }));
+    const childMarkets = market.childMarkets
+        ? market.childMarkets.map((childMarket) => ({
+              ...childMarket,
+              maturityDate: new Date(secondsToMilliseconds(childMarket.maturity)),
+          }))
+        : market.childMarkets;
     const sportMarket = {
         ...market,
         maturityDate: new Date(secondsToMilliseconds(market.maturity)),
