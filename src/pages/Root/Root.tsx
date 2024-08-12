@@ -26,7 +26,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { getDefaultTheme } from 'redux/modules/ui';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { optimism } from 'wagmi/dist/chains';
+import { arbitrum, optimism } from 'wagmi/dist/chains';
 import { infuraProvider } from 'wagmi/dist/providers/infura';
 import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
 import { publicProvider } from 'wagmi/dist/providers/public';
@@ -50,7 +50,7 @@ const theme = getDefaultTheme();
 const customTheme = merge(darkTheme(), { colors: { modalBackground: ThemeMap[theme].background.primary } });
 
 const { chains, provider } = configureChains(
-    [optimism, optimismSepolia],
+    [optimism, arbitrum, optimismSepolia],
     [
         jsonRpcProvider({
             rpc: (chain) => {

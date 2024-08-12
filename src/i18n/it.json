@@ -704,7 +704,9 @@
                 "fifa-campaign": "Campagna Zebro FIFA",
                 "fee-rebates": "Riduzioni sulle commissioni",
                 "liquidity-pool": "Fornire liquidità",
-                "promotions": "Promozioni"
+                "promotions": "Promozioni",
+                "speed-markets": "Fai trading di criptovalute",
+                "digital-options": "Opzioni digitali"
             },
             "buttons": {
                 "switch": "Interruttore",
@@ -1208,7 +1210,7 @@
     },
     "banner": {
         "arb-distribution-message": "La distribuzione ARB è iniziata. Guadagna token ARB utilizzando gli straordinari. Scopri i dettagli qui.",
-        "v1-text": "<highlight>V2</highlight>: questa è la versione beta V2 di Overtime. Per tornare alla V1, <highlight>fai clic qui</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {

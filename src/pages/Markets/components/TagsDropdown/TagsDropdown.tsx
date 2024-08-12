@@ -8,8 +8,6 @@ import { TagInfo, Tags } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 import { LeagueMap } from '../../../../constants/sports';
-import { SportFilter } from '../../../../enums/markets';
-import { getSportFilter } from '../../../../redux/modules/market';
 
 type TagsDropdownProps = {
     open: boolean;
@@ -37,7 +35,6 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMobile = useSelector(getIsMobile);
-    const sportFilter = useSelector(getSportFilter);
     const tagFilterIds = tagFilter.map((tag) => tag.id);
 
     return (
@@ -87,8 +84,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                 })
                 .map((tag: TagInfo) => {
                     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
-                    const label =
-                        sportFilter === SportFilter.OlympicGames ? tag.label.replace('Olympic Games ', '') : tag.label;
+                    const label = tag.label;
 
                     return (
                         <TagContainer key={tag.id} isMobile={isMobile}>

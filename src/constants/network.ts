@@ -7,14 +7,14 @@ export const NATIVE_TOKEN_ADDRES = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
-    // [Network.Arbitrum]: 'ARBITRUM-ONE',
+    [Network.Arbitrum]: 'ARBITRUM-ONE',
     // [Network.Base]: 'BASE',
     [Network.OptimismSepolia]: 'SEPOLIA-OPTIMISM',
 };
 
 export const SUPPORTED_NETWORKS_NAMES: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISM MAINNET',
-    // [Network.Arbitrum]: 'ARBITRUM ONE',
+    [Network.Arbitrum]: 'ARBITRUM ONE',
     // [Network.Base]: 'BASE',
     [Network.OptimismSepolia]: 'OPTIMISM SEPOLIA',
 };
@@ -40,21 +40,21 @@ export const SUPPORTED_NETWORKS_PARAMS: Record<number, NetworkParams> = {
         },
         order: 1,
     },
-    // [Network.Arbitrum]: {
-    //     chainId: '0xA4B1',
-    //     chainName: 'Arbitrum One',
-    //     shortChainName: 'Arbitrum',
-    //     chainKey: 'arbitrum_mainnet',
-    //     iconClassName: 'icon icon--arb',
-    //     rpcUrls: ['https://arb1.arbitrum.io/rpc'],
-    //     blockExplorerUrls: ['https://arbiscan.io/'],
-    //     iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
-    //     nativeCurrency: {
-    //         symbol: 'ETH',
-    //         decimals: 18,
-    //     },
-    //     order: 2,
-    // },
+    [Network.Arbitrum]: {
+        chainId: '0xA4B1',
+        chainName: 'Arbitrum One',
+        shortChainName: 'Arbitrum',
+        chainKey: 'arbitrum_mainnet',
+        iconClassName: 'icon icon--arb',
+        rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+        blockExplorerUrls: ['https://arbiscan.io/'],
+        iconUrls: ['https://optimism.io/images/metamask_icon.svg', 'https://optimism.io/images/metamask_icon.png'],
+        nativeCurrency: {
+            symbol: 'ETH',
+            decimals: 18,
+        },
+        order: 2,
+    },
     // [Network.Base]: {
     //     chainId: '0x2105',
     //     chainName: 'Base Mainnet',

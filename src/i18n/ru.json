@@ -704,7 +704,9 @@
                 "fee-rebates": "Комиссионные скидки",
                 "fifa-campaign": "Кампания Зебро ФИФА",
                 "liquidity-pool": "Обеспечить ликвидность",
-                "promotions": "Акции"
+                "promotions": "Акции",
+                "speed-markets": "Торгуйте криптовалютой",
+                "digital-options": "Цифровые опции"
             },
             "buttons": {
                 "disconnect": "Отключить",
@@ -1209,7 +1211,7 @@
     },
     "banner": {
         "arb-distribution-message": "Распространение ARB началось. Зарабатывайте токены ARB, используя сверхурочную работу. Подробности уточняйте здесь.",
-        "v1-text": "<highlight>V2</highlight>: это бета-версия Overtime V2. Чтобы вернуться к версии 1, <highlight>нажмите здесь</highlight>."
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {

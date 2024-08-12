@@ -16,13 +16,10 @@ import {
     APPROVAL_BUFFER,
     BATCH_SIZE,
     COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
-    HIDE_PARLAY_LEADERBOARD,
     MIN_COLLATERAL_MULTIPLIER,
-    PARLAY_LEADERBOARD_MINIMUM_GAMES,
-    PARLAY_LEADERBOARD_WEEKLY_START_DATE,
     THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
-import { differenceInDays, secondsToMilliseconds } from 'date-fns';
+import { secondsToMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { BuyTicketStep } from 'enums/tickets';
 import { BigNumber, ethers } from 'ethers';
@@ -31,7 +28,6 @@ import useInterval from 'hooks/useInterval';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
-import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
 import useCoingeckoRatesQuery from 'queries/rates/useCoingeckoRatesQuery';
@@ -65,7 +61,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { BoldContent, FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { BoldContent, FlexDiv, FlexDivCentered } from 'styles/common';
 import {
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
@@ -74,14 +70,13 @@ import {
     coinFormatter,
     coinParser,
     floorNumberToDecimals,
-    formatCurrency,
     formatCurrencyWithKey,
     formatCurrencyWithSign,
     formatPercentage,
     getPrecision,
     roundNumberToDecimals,
 } from 'thales-utils';
-import { LeaderboardPoints, SportsAmmData, TicketMarket } from 'types/markets';
+import { SportsAmmData, TicketMarket } from 'types/markets';
 import { Coins } from 'types/tokens';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
@@ -117,7 +112,6 @@ import { getAddedPayoutMultiplier } from 'utils/tickets';
 import { delay } from 'utils/timer';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import { Address } from 'viem';
-import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import BuyStepsModal from '../BuyStepsModal';
 import SuggestedAmount from '../SuggestedAmount';
 import {
@@ -219,13 +213,6 @@ const Ticket: React.FC<TicketProps> = ({
     const [checkFreeBetBalance, setCheckFreeBetBalance] = useState(false);
 
     const [gas, setGas] = useState(0);
-    const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
-        basicPoints: 0,
-        points: 0,
-        buyinBonus: 0,
-        numberOfGamesBonus: 0,
-    });
-    const [currentLeaderboardRank, setCurrentLeaderboardRank] = useState(0);
     const [slippageDropdownOpen, setSlippageDropdownOpen] = useState(false);
 
     const [swapToThales, setSwapToThales] = useState(false);
@@ -234,19 +221,6 @@ const Ticket: React.FC<TicketProps> = ({
     const [hasSwapAllowance, setHasSwapAllowance] = useState(false);
     const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
     const [openBuyStepsModal, setOpenBuyStepsModal] = useState(false);
-
-    const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
-
-    const query = useParlayLeaderboardQuery(networkId, latestPeriodWeekly, {
-        enabled: isAppReady && !HIDE_PARLAY_LEADERBOARD,
-    });
-
-    const parlaysData = useMemo(() => {
-        return query.isSuccess ? query.data : [];
-    }, [query.isSuccess, query.data]);
-
-    const rewards = getRewardsArray(networkId);
-    const rewardsCurrency = getRewardsCurrency(networkId);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
@@ -273,8 +247,6 @@ const Ticket: React.FC<TicketProps> = ({
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const collateralHasLp = isLpSupported(usedCollateralForBuy);
-
-    const isMinimumParlayGames = markets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES;
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -362,7 +334,6 @@ const Ticket: React.FC<TicketProps> = ({
         return coingeckoThalesAmount * (1 - COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE);
     }, [coingeckoRatesQuery, selectedCollateral, buyInAmount]);
 
-    const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
     const selectedCollateralCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[usedCollateralForBuy] : 1;
     const thalesContractCurrencyRate =
@@ -1679,58 +1650,6 @@ const Ticket: React.FC<TicketProps> = ({
         buyInAmount,
     ]);
 
-    useEffect(() => {
-        if (buyInAmountInDefaultCollateral > 0 && totalQuote > 0 && !HIDE_PARLAY_LEADERBOARD) {
-            const buyInPow = Math.pow(buyInAmountInDefaultCollateral, 1 / 2);
-            const minBuyInPow = 1;
-
-            const basicPoints = 1 / totalQuote;
-            const points = (1 / totalQuote) * (1 + 0.1 * markets.length) * buyInPow;
-            const buyinBonus = buyInPow - minBuyInPow;
-            const numberOfGamesBonus = 0.1 * markets.length;
-            setLeaderBoardPoints({
-                basicPoints,
-                points,
-                buyinBonus,
-                numberOfGamesBonus,
-            });
-
-            const current = !!parlaysData ? parlaysData.findIndex((data) => data.points < points) : 0;
-            if (parlaysData.length === 0) {
-                setCurrentLeaderboardRank(1);
-            } else {
-                if (current === -1) {
-                    setCurrentLeaderboardRank(parlaysData.length + 1);
-                } else {
-                    setCurrentLeaderboardRank(current + 1);
-                }
-            }
-        }
-    }, [buyInAmountInDefaultCollateral, totalQuote, markets.length, parlaysData]);
-
-    const getPointsTooltip = () => (
-        <TooltipContainer>
-            <TooltipInfoContianer>
-                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.basic-points-label`)}:</TooltipInfoLabel>
-                <TooltipInfo>{formatCurrency(leaderboardPoints.basicPoints)}</TooltipInfo>
-            </TooltipInfoContianer>
-            <TooltipInfoContianer>
-                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.buy-in-bonus-label`)}:</TooltipInfoLabel>
-                <TooltipBonusInfo>{`+${formatPercentage(leaderboardPoints.buyinBonus, 0)}`}</TooltipBonusInfo>
-            </TooltipInfoContianer>
-            <TooltipInfoContianer>
-                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.number-of-games-bonus-label`)}:</TooltipInfoLabel>
-                <TooltipBonusInfo>{`+${formatPercentage(leaderboardPoints.numberOfGamesBonus, 0)}`}</TooltipBonusInfo>
-            </TooltipInfoContianer>
-            <TooltipFooter>
-                <TooltipInfoContianer>
-                    <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.total-points-label`)}:</TooltipInfoLabel>
-                    <TooltipInfo>{formatCurrency(leaderboardPoints.points)}</TooltipInfo>
-                </TooltipInfoContianer>
-            </TooltipFooter>
-        </TooltipContainer>
-    );
-
     return (
         <>
             <RowSummary columnDirection={true}>
@@ -1972,81 +1891,6 @@ const Ticket: React.FC<TicketProps> = ({
                 </SummaryValue>
             </RowSummary>
 
-            {!HIDE_PARLAY_LEADERBOARD && (
-                <>
-                    <HorizontalLine />
-                    <RowSummary>
-                        <SummaryLabel>{t(`parlay-leaderboard.ticket-info.title`)}:</SummaryLabel>
-                    </RowSummary>
-                    <RowSummary>
-                        <SummaryLabel>
-                            {t(`parlay-leaderboard.ticket-info.points-label`)}
-                            <Tooltip
-                                overlay={<>{t(`parlay-leaderboard.ticket-info.points-tooltip`)}</>}
-                                iconFontSize={14}
-                                marginLeft={3}
-                            />
-                            :
-                        </SummaryLabel>
-                        <SummaryValue isCollateralInfo={true}>
-                            {hidePayout || !isMinimumParlayGames ? (
-                                '-'
-                            ) : (
-                                <>
-                                    {`${formatCurrency(leaderboardPoints.basicPoints)}`}
-                                    <SummaryValue isInfo={true}>{` + ${formatPercentage(
-                                        leaderboardPoints.buyinBonus,
-                                        0
-                                    )} + ${formatPercentage(leaderboardPoints.numberOfGamesBonus, 0)}`}</SummaryValue>
-                                    {` = ${formatCurrency(leaderboardPoints.points)}`}
-                                    <Tooltip overlay={getPointsTooltip()} iconFontSize={14} marginLeft={3} />
-                                </>
-                            )}
-                        </SummaryValue>
-                    </RowSummary>
-                    <RowSummary>
-                        <SummaryLabel>
-                            {t(`parlay-leaderboard.ticket-info.rank-label`)}
-                            <Tooltip
-                                overlay={<>{t(`parlay-leaderboard.ticket-info.rank-tooltip`)}</>}
-                                iconFontSize={14}
-                                marginLeft={3}
-                            />
-                            :
-                        </SummaryLabel>
-                        <SummaryValue isCollateralInfo={true}>
-                            {hidePayout || !isMinimumParlayGames ? '-' : <>{`${currentLeaderboardRank}.`}</>}
-                        </SummaryValue>
-                    </RowSummary>
-                    <RowSummary>
-                        <SummaryLabel>
-                            {t(`parlay-leaderboard.ticket-info.rewards-label`)}
-                            <Tooltip
-                                overlay={<>{t(`parlay-leaderboard.ticket-info.rewards-tooltip`)}</>}
-                                iconFontSize={14}
-                                marginLeft={3}
-                            />
-                            :
-                        </SummaryLabel>
-                        <SummaryValue isCollateralInfo={true}>
-                            {hidePayout || !isMinimumParlayGames ? (
-                                '-'
-                            ) : (
-                                <>
-                                    {`${
-                                        rewards[currentLeaderboardRank - 1] || 0
-                                    } ${rewardsCurrency} (${formatCurrencyWithSign(
-                                        USD_SIGN,
-                                        (rewards[currentLeaderboardRank - 1] || 0) * rewardCurrencyRate,
-                                        0
-                                    )})`}
-                                </>
-                            )}
-                        </SummaryValue>
-                    </RowSummary>
-                </>
-            )}
-
             <HorizontalLine />
             <RowSummary>
                 <RowContainer>
@@ -2129,30 +1973,6 @@ const Ticket: React.FC<TicketProps> = ({
         </>
     );
 };
-
-const TooltipContainer = styled(FlexDivColumn)``;
-
-const TooltipText = styled.span``;
-
-const TooltipFooter = styled(FlexDivRow)`
-    border-top: 1px solid ${(props) => props.theme.background.secondary};
-    margin-top: 10px;
-    padding-top: 8px;
-`;
-
-const TooltipInfoContianer = styled(FlexDiv)``;
-
-const TooltipInfoLabel = styled(TooltipText)`
-    margin-right: 4px;
-`;
-
-const TooltipInfo = styled(TooltipText)`
-    font-weight: 600;
-`;
-
-const TooltipBonusInfo = styled(TooltipInfo)`
-    color: ${(props) => props.theme.status.win};
-`;
 
 const OddsChangedDiv = styled.div`
     color: ${(props) => props.theme.button.background.septenary};

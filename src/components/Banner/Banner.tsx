@@ -6,7 +6,7 @@ import SPAAnchor from '../SPAAnchor';
 
 const Banner: React.FC = () => {
     return (
-        <SPAAnchor href={'https://www.overtimemarkets.xyz/'}>
+        <SPAAnchor href={'https://v1.overtimemarkets.xyz/'}>
             <Container>
                 <Label>
                     <Trans
