@@ -25,7 +25,7 @@ import {
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { coinParser, formatCurrencyWithKey } from 'thales-utils';
+import { coinParser, floorNumberToDecimals, formatCurrencyWithKey, getPrecision } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
 import { getCollateral, getCollateralAddress, getCollateralIndex, getFreeBetCollaterals } from 'utils/collaterals';
 import freeBetHolder from 'utils/contracts/freeBetHolder';
@@ -385,7 +385,14 @@ const FreeBetFundModal: React.FC<FreeBetFundModalProps> = ({ onClose }) => {
                             />
                         }
                         balance={formatCurrencyWithKey(selectedCollateral, selectedCollateralBalance)}
-                        onMaxButton={() => setAmount(selectedCollateralBalance)}
+                        onMaxButton={() => {
+                            setAmount(
+                                floorNumberToDecimals(
+                                    selectedCollateralBalance,
+                                    getPrecision(selectedCollateralBalance)
+                                )
+                            );
+                        }}
                         validationTooltipZIndex={2004}
                     />
                 </InputContainer>

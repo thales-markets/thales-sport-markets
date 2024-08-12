@@ -692,7 +692,8 @@
                 "fee-rebates": "ส่วนลดค่าธรรมเนียม",
                 "fifa-campaign": "แคมเปญ Zebro FIFA",
                 "liquidity-pool": "ให้สภาพคล่อง",
-                "promotions": "โปรโมชั่น"
+                "promotions": "โปรโมชั่น",
+                "speed-markets": "ซื้อขายสกุลเงินดิจิตอล"
             },
             "buttons": {
                 "switch": "สวิตช์",

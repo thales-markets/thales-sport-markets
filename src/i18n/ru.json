@@ -691,7 +691,8 @@
                 "fee-rebates": "Комиссионные скидки",
                 "fifa-campaign": "Кампания Зебро ФИФА",
                 "liquidity-pool": "Обеспечить ликвидность",
-                "promotions": "Акции"
+                "promotions": "Акции",
+                "speed-markets": "Торгуйте криптовалютой"
             },
             "buttons": {
                 "disconnect": "Отключить",
