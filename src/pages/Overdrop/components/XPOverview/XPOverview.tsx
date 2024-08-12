@@ -2,7 +2,7 @@ import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
@@ -17,6 +17,7 @@ const XPOverview: React.FC = () => {
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const userDataQuery = useUserDataQuery(walletAddress, {
         enabled: !!isAppReady,
@@ -52,11 +53,12 @@ const XPOverview: React.FC = () => {
                         <Value>{userData ? `#${userData.rank}` : '#-'}</Value>
                     </InfoItem>
                     <InfoItemTotal>
-                        <Label>{t('overdrop.overdrop-home.my-total-xp')}</Label>
+                        {!isMobile && <Label>{t('overdrop.overdrop-home.my-total-xp')}</Label>}
+                        {isMobile && <Label>{`${t('overdrop.overdrop-home.level')} ${levelItem?.level}`}</Label>}
                         <TotalValue>{formatPoints(userData?.points ? userData?.points : 0)}</TotalValue>
                     </InfoItemTotal>
                 </InfoWrapper>
-                <CurrentLevelProgressLine />
+                <CurrentLevelProgressLine hideLevelLabel={isMobile} />
             </ProgressOverviewWrapper>
         </Wrapper>
     );
@@ -74,7 +76,7 @@ const Wrapper = styled(FlexDiv)`
     align-items: center;
     height: 120px;
     @media (max-width: 767px) {
-        height: 115px;
+        height: 150px;
         padding: 8px;
     }
 `;
@@ -133,7 +135,7 @@ const TotalValue = styled.span<{ highlight?: boolean }>`
     line-height: 20px;
     color: ${(props) => (props.highlight ? props.theme.textColor.primary : props.theme.textColor.primary)};
     @media (max-width: 767px) {
-        font-size: 27px;
+        font-size: 22px;
         color: ${(props) => props.theme.overdrop.textColor.primary};
         font-weight: 700;
     }
@@ -144,8 +146,8 @@ const Badge = styled.img<{ disabled?: boolean }>`
     height: 190px;
     opacity: ${(props) => (props.disabled ? '0.3' : '1')};
     @media (max-width: 767px) {
-        width: 170px;
-        height: 170px;
+        width: 150px;
+        height: 150px;
     }
 `;
 

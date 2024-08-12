@@ -177,12 +177,20 @@ const DetailsWrapper = styled(FlexDivRow)`
     width: 100%;
     margin-top: 20px;
     margin-left: 10px;
+    @media (max-width: 767px) {
+        flex-direction: column;
+        margin-left: 0px;
+        padding: 0px 10px;
+    }
 `;
 
 const ItemContainer = styled(FlexDivColumn)`
     max-width: 50%;
     align-items: flex-start;
     justify-content: flex-start;
+    @media (max-width: 767px) {
+        min-width: 100%;
+    }
 `;
 
 const ValueWrapper = styled(FlexDivRow)``;
