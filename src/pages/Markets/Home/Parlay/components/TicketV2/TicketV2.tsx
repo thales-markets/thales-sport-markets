@@ -985,6 +985,11 @@ const Ticket: React.FC<TicketProps> = ({
             }
         }
 
+        if (!hasAllowance) {
+            step = BuyTicketStep.APPROVE_BUY;
+            setBuyStep(step);
+        }
+
         if (step === BuyTicketStep.APPROVE_BUY) {
             if (!hasAllowance) {
                 if (sportsAMMV2Contract && multipleCollateral && signer) {
