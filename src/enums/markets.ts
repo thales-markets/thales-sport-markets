@@ -15,7 +15,6 @@ export enum SortDirection {
 export enum SportFilter {
     Live = 'Live',
     Favourites = 'Favourites',
-    OlympicGames = 'OlympicGames',
     All = 'All',
     Soccer = 'Soccer',
     Football = 'Football',
