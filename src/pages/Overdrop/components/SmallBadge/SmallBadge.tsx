@@ -48,6 +48,7 @@ const Label = styled.span<{ active?: boolean }>`
     text-transform: uppercase;
     color: ${(props) =>
         props.active ? props.theme.overdrop.textColor.primary : props.theme.overdrop.textColor.tertiary};
+    white-space: pre;
 `;
 
 const PointsLabel = styled(Label)`
@@ -65,6 +66,7 @@ const LevelName = styled.span<{ active?: boolean }>`
     text-transform: uppercase;
     text-align: center;
     word-wrap: break-word;
+    white-space: pre;
     color: ${(props) => (props.active ? props.theme.textColor.primary : props.theme.overdrop.textColor.tertiary)};
 `;
 

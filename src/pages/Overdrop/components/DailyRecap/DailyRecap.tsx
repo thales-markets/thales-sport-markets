@@ -47,9 +47,14 @@ const DailyRecap: React.FC = () => {
                 />
             </ItemContainer>
             <ItemContainer>
+                <Label>{t('overdrop.overdrop-home.loyalty-boost')}</Label>
+                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
+            </ItemContainer>
+            <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.twitter-share')}</Label>
                 <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
             </ItemContainer>
+
             <ItemContainer>
                 <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
                 <Value>{'08:30:55'}</Value>
