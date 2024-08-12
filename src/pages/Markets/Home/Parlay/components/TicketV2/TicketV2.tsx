@@ -675,7 +675,7 @@ const Ticket: React.FC<TicketProps> = ({
     // Refresh swap THALES quote on 7s
     useInterval(
         async () => {
-            if (!isBuying) {
+            if (!openBuyStepsModal) {
                 const quote = await getQuote(networkId, swapToThalesParams);
                 setSwappedThalesToReceive(quote);
                 setSwapQuote(quote / Number(buyInAmount));
