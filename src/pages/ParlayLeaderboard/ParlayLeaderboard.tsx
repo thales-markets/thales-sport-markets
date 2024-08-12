@@ -50,11 +50,6 @@
 
 import { TablePagination } from '@material-ui/core';
 import styled from 'styled-components';
-import {
-    PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
-    PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
-} from '../../constants/markets';
-import { Network } from '../../enums/network';
 
 const ParlayLeaderboard: React.FC = () => {
     // const { t } = useTranslation();
@@ -759,22 +754,11 @@ const ParlayLeaderboard: React.FC = () => {
 //     }
 // `;
 
-export const getRewardsArray = (networkId: Network): number[] => {
-    if (networkId == Network.Arbitrum) return PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20;
-    return PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20;
-};
-
 // const getRewardsAmount = (networkId: Network) => {
 //     if (networkId == Network.Arbitrum) return '2,500 ARB';
 //     if (networkId == Network.OptimismMainnet) return '500 OP';
 //     return '1,000 THALES';
 // };
-
-export const getRewardsCurrency = (networkId: Network) => {
-    if (networkId == Network.Arbitrum) return 'ARB';
-    if (networkId == Network.OptimismMainnet) return 'OP';
-    return 'THALES';
-};
 
 export const PaginationWrapper = styled(TablePagination)`
     border: none !important;

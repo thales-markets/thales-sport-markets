@@ -77,57 +77,6 @@ export const INCENTIVIZED_LEAGUES: Record<number, any> = {
     [League.SUMMER_OLYMPICS_TABLE_TENNIS]: OLYMPICS_REWARDS,
 };
 
-export const PARLAY_LEADERBOARD_WEEKLY_START_DATE = new Date(2024, 1, 14, 0, 0, 0);
-// export const PARLAY_LEADERBOARD_WEEKLY_START_DATE_UTC = new Date(Date.UTC(2024, 1, 14, 0, 0, 0));
-
-export const PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20 = [
-    100,
-    75,
-    50,
-    35,
-    30,
-    25,
-    25,
-    20,
-    20,
-    20,
-    10,
-    10,
-    10,
-    10,
-    10,
-    10,
-    10,
-    10,
-    10,
-    10,
-];
-
-export const PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20 = [
-    350,
-    275,
-    225,
-    175,
-    150,
-    140,
-    130,
-    120,
-    110,
-    100,
-    95,
-    90,
-    85,
-    80,
-    75,
-    70,
-    65,
-    60,
-    55,
-    50,
-];
-export const PARLAY_LEADERBOARD_MINIMUM_GAMES = 2;
-export const HIDE_PARLAY_LEADERBOARD = false;
-
 export const MEDIUM_ODDS = 0.52;
 
 export const GameStatusKey: Record<GameStatus, string> = {
