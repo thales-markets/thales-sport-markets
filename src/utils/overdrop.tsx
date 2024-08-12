@@ -2,6 +2,7 @@ import { OVERDROP_LEVELS } from 'constants/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { MultiplierType, OverdropMultiplier } from 'types/overdrop';
+import { OverdropLevel } from 'types/ui';
 
 export const formatPoints = (amount: number) => {
     return formatCurrencyWithKey('XP', amount, undefined, true);
@@ -77,4 +78,20 @@ export const getProgressLevel = (
 export const getMultiplierValueFromQuery = (data: OverdropMultiplier[] | undefined, multiplierType: MultiplierType) => {
     const multiplierItem = data?.find((item) => item.name == multiplierType);
     return multiplierItem?.multiplier ? multiplierItem.multiplier : 0;
+};
+
+export const getNextThalesRewardLevel = (points?: number) => {
+    const levelItemsWithVoucher = OVERDROP_LEVELS.filter((item) => item.voucherAmount);
+
+    if (!points) return levelItemsWithVoucher[0] as OverdropLevel;
+
+    if (levelItemsWithVoucher[levelItemsWithVoucher.length - 1].minimumPoints < points) return;
+
+    const levelItemIndex = levelItemsWithVoucher.findIndex((item, index) => {
+        if (item.minimumPoints > points && OVERDROP_LEVELS[index - 1].minimumPoints < points) return item;
+    });
+
+    if (levelItemIndex == -1) return levelItemsWithVoucher[0];
+
+    return levelItemsWithVoucher[levelItemIndex] ? levelItemsWithVoucher[levelItemIndex] : undefined;
 };
