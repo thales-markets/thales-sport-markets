@@ -626,9 +626,6 @@ const Home: React.FC = () => {
                             {getSportFilters()}
                         </SportFiltersContainer>
                     </Scroll>
-                    {/* <Suspense fallback={<Loader />}>
-                        {networkId !== Network.Base && networkId !== Network.OptimismSepolia && <SidebarLeaderboard />}
-                    </Suspense> */}
                 </LeftSidebarContainer>
 
                 {/* MAIN PART */}
