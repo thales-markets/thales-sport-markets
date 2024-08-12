@@ -16,11 +16,7 @@ type CurrentLevelProgressLineProps = {
     progressUpdateXP?: number;
 };
 
-const CurrentLevelProgressLine: React.FC<CurrentLevelProgressLineProps> = ({
-    hideLevelLabel,
-    showNumbersOnly,
-    progressUpdateXP,
-}) => {
+const CurrentLevelProgressLine: React.FC<CurrentLevelProgressLineProps> = ({ hideLevelLabel, progressUpdateXP }) => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
 
@@ -69,7 +65,6 @@ const CurrentLevelProgressLine: React.FC<CurrentLevelProgressLineProps> = ({
             nextLevelMinimumPoints={nextLevelItem?.minimumPoints || 0}
             level={levelItem?.level}
             hideLevelLabel={hideLevelLabel}
-            showNumbersOnly={showNumbersOnly}
         />
     );
 };

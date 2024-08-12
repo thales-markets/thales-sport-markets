@@ -4,6 +4,7 @@ import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 
 type ProgressProps = {
     progress: number;
+    progressUpdate?: number;
     width?: string;
     height?: string;
     backgroundColor?: string;
@@ -13,6 +14,7 @@ type ProgressProps = {
 
 const Progress: React.FC<ProgressProps> = ({
     progress,
+    progressUpdate,
     width,
     height,
     backgroundColor,
@@ -22,6 +24,7 @@ const Progress: React.FC<ProgressProps> = ({
     return (
         <Wrapper>
             <ProgressLineWrapper backgroundColor={backgroundColor} width={width} height={height}>
+                {!!progressUpdate && <ProgressUpdate progress={Math.min(progress + progressUpdate, 100)} />}
                 <ProgressLine progress={progress} color={progressLineColor} height={height} />
             </ProgressLineWrapper>
             <TextBelow>{textBelow}</TextBelow>
@@ -30,26 +33,32 @@ const Progress: React.FC<ProgressProps> = ({
 };
 
 const Wrapper = styled(FlexDivColumn)`
+    position: relative;
     min-width: 100%;
     min-height: auto;
 `;
 
 const ProgressLineWrapper = styled(FlexDiv)<{ backgroundColor?: string; height?: string; width?: string }>`
     border-radius: 28px;
-    height: ${(props) => (props.height ? props.height : '27px')};
+    height: ${(props) => (props.height ? props.height : '100%')};
     min-width: ${(props) => (props.width ? props.width : '100%')};
     background-color: ${(props) => (props.backgroundColor ? props.backgroundColor : props.theme.background.senary)};
     align-items: center;
 `;
 
 const ProgressLine = styled(FlexDivRow)<{ progress: number; color?: string; height?: string }>`
+    z-index: 1;
     border-radius: 28px;
     min-width: ${(props) => `${props.progress}%`};
-    height: ${(props) => (props.height ? props.height : '27px')};
+    height: ${(props) => (props.height ? props.height : '100%')};
     background-color: ${(props) => (props.color ? props.color : props.theme.overdrop.background.progressBar)};
 `;
 
 const TextBelow = styled(FlexDiv)`
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -18px;
     min-width: 100%;
     text-align: center;
     font-size: 12px;
@@ -60,6 +69,24 @@ const TextBelow = styled(FlexDiv)`
     justify-content: center;
     @media (max-width: 767px) {
         font-size: 9px;
+    }
+`;
+
+const ProgressUpdate = styled(FlexDiv)<{ progress: number }>`
+    z-index: 0;
+    position: absolute;
+    width: ${(props) => props.progress}%;
+    height: 100%;
+    align-items: center;
+    background-color: ${(props) => props.theme.overdrop.textColor.senary};
+    color: ${(props) => props.theme.overdrop.textColor.secondary};
+    font-size: 12px;
+    border-radius: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: right !important;
+    @media (max-width: 767px) {
+        font-size: 8px;
     }
 `;
 

@@ -17,7 +17,7 @@ import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import CurrentLevelProgressLine from 'pages/Overdrop/components/CurrentLevelProgressLine';
-import { Circle, OverdropIcon } from 'pages/Overdrop/components/styled-components';
+import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
@@ -52,7 +52,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
+import { FlexDivCentered } from 'styles/common';
 import {
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
@@ -106,6 +106,7 @@ import {
     Arrow,
     CheckboxContainer,
     ClearLabel,
+    CurrentLevelProgressLineContainer,
     GasSummary,
     HorizontalLine,
     InfoContainer,
@@ -119,13 +120,6 @@ import {
     OverdropProgressWrapper,
     OverdropRowSummary,
     OverdropSummary,
-    OverdropSummarySubheader,
-    OverdropSummarySubtitle,
-    OverdropSummarySubvalue,
-    OverdropSummaryTitle,
-    OverdropTotal,
-    OverdropTotalsRow,
-    OverdropTotalsTitle,
     OverdropValue,
     RightLevel,
     RowContainer,
@@ -1327,6 +1321,10 @@ const Ticket: React.FC<TicketProps> = ({
         buyInAmount,
     ]);
 
+    const overdropTotalBoost = useMemo(() => overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0), [
+        overdropMultipliers,
+    ]);
+
     return (
         <>
             <RowSummary columnDirection={true}>
@@ -1544,82 +1542,57 @@ const Ticket: React.FC<TicketProps> = ({
                     </CheckboxContainer>
                 </RowContainer>
             </RowSummary>
-            <OverdropRowSummary margin="10px 0 0 0">
+            <OverdropRowSummary margin={isOverdropSummaryOpen ? '5px 0' : '5px 0 0 0'}>
                 <OverdropRowSummary
                     isClickable
                     onClick={() => {
-                        setIsOverdropSummaryOpen(true);
+                        setIsOverdropSummaryOpen(!isOverdropSummaryOpen);
                     }}
                 >
                     <OverdropLabel>{t('markets.parlay.overdrop.overdrop-xp')}</OverdropLabel>
                     <OverdropValue>
-                        {`~${formatPoints(overdropTotalXP)}`}
-                        <Arrow className={'icon icon--caret-up'} />
+                        {!isOverdropSummaryOpen && `${formatPoints(overdropTotalXP)} (${overdropTotalBoost}% boost)`}
+                        <Arrow className={!isOverdropSummaryOpen ? 'icon icon--caret-down' : 'icon icon--caret-up'} />
                     </OverdropValue>
                 </OverdropRowSummary>
-
-                {isOverdropSummaryOpen && (
-                    <OverdropSummary>
-                        <OverdropSummaryTitle>{t('markets.parlay.overdrop.overdrop-xp-overview')}</OverdropSummaryTitle>
-                        <OverdropRowSummary margin="0 20px">
-                            <OverdropSummarySubtitle>{t('markets.parlay.overdrop.base-xp')}</OverdropSummarySubtitle>
-                            <OverdropSummarySubvalue>{`${formatCurrency(
-                                buyInAmountInDefaultCollateral * (2 - totalQuote)
-                            )} XP`}</OverdropSummarySubvalue>
+            </OverdropRowSummary>
+            {isOverdropSummaryOpen && (
+                <OverdropSummary>
+                    <OverdropRowSummary>
+                        <OverdropLabel>{t('markets.parlay.overdrop.base-xp')}</OverdropLabel>
+                        <OverdropValue>{`${formatCurrency(
+                            buyInAmountInDefaultCollateral * (2 - totalQuote)
+                        )} XP`}</OverdropValue>
+                    </OverdropRowSummary>
+                    <HorizontalLine />
+                    {overdropMultipliers.map((multiplier) => (
+                        <OverdropRowSummary key={multiplier.name}>
+                            <OverdropLabel>{multiplier.label}</OverdropLabel>
+                            <OverdropValue>+{multiplier.multiplier}%</OverdropValue>
                         </OverdropRowSummary>
-                        <OverdropRowSummary margin="20px 20px">
-                            <OverdropSummarySubheader>
-                                {t('markets.parlay.overdrop.active-boost')}
-                            </OverdropSummarySubheader>
-                            <OverdropSummarySubheader>
-                                {t('markets.parlay.overdrop.bonus-applied')}
-                            </OverdropSummarySubheader>
-                        </OverdropRowSummary>
-                        {overdropMultipliers.map((multiplier) => (
-                            <OverdropRowSummary margin="20px 20px" key={multiplier.name}>
-                                <FlexDivCentered>
-                                    <Circle active={true}>{multiplier.icon}</Circle>
-                                    <OverdropSummarySubtitle>{multiplier.label}</OverdropSummarySubtitle>
-                                </FlexDivCentered>
-                                <OverdropSummarySubvalue>+{multiplier.multiplier}%</OverdropSummarySubvalue>
-                            </OverdropRowSummary>
-                        ))}
-                        <OverdropProgressWrapper>
-                            <LeftLevel>{levelItem.level}</LeftLevel>
+                    ))}
+                    <HorizontalLine />
+                    <OverdropRowSummary>
+                        <OverdropLabel>{t('markets.parlay.overdrop.total-xp-boost')}</OverdropLabel>
+                        <OverdropValue>+{overdropTotalBoost}%</OverdropValue>
+                    </OverdropRowSummary>
+                    <OverdropRowSummary>
+                        <OverdropLabel>{t('markets.parlay.overdrop.total-xp-earned')}</OverdropLabel>
+                        <OverdropValue>+{formatPoints(overdropTotalXP)}</OverdropValue>
+                    </OverdropRowSummary>
+                    <OverdropProgressWrapper>
+                        <LeftLevel>{levelItem.level}</LeftLevel>
+                        <CurrentLevelProgressLineContainer>
                             <CurrentLevelProgressLine
                                 progressUpdateXP={overdropTotalXP}
                                 hideLevelLabel
                                 showNumbersOnly
                             />
-                            <RightLevel>{levelItem.level + 1}</RightLevel>
-                        </OverdropProgressWrapper>
-                        <OverdropTotalsRow>
-                            <FlexDivColumnCentered gap={10}>
-                                <OverdropTotalsTitle>{t('markets.parlay.overdrop.total-xp-boost')}</OverdropTotalsTitle>
-                                <OverdropTotal isBoost>
-                                    +{overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0)}%
-                                </OverdropTotal>
-                            </FlexDivColumnCentered>
-                            <FlexDivColumnCentered gap={10}>
-                                <OverdropTotalsTitle>
-                                    {t('markets.parlay.overdrop.total-xp-earned')}
-                                </OverdropTotalsTitle>
-                                <OverdropTotal>+{formatPoints(overdropTotalXP)}</OverdropTotal>
-                            </FlexDivColumnCentered>
-                        </OverdropTotalsRow>
-                        <OverdropRowSummary
-                            isClickable
-                            onClick={() => {
-                                setIsOverdropSummaryOpen(false);
-                            }}
-                        >
-                            <OverdropValue>
-                                <Arrow className={'icon icon--caret-down'} />
-                            </OverdropValue>
-                        </OverdropRowSummary>
-                    </OverdropSummary>
-                )}
-            </OverdropRowSummary>
+                        </CurrentLevelProgressLineContainer>
+                        <RightLevel>{levelItem.level + 1}</RightLevel>
+                    </OverdropProgressWrapper>
+                </OverdropSummary>
+            )}
             {!isBuying && oddsChanged && (
                 <>
                     <FlexDivCentered>

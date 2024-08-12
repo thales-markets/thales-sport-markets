@@ -331,6 +331,7 @@ export const OverdropLabel = styled.span`
 export const OverdropValue = styled.span`
     font-weight: 600;
     font-size: 11px;
+    text-transform: uppercase;
     line-height: 20px;
     color: ${(props) => props.theme.overdrop.textColor.primary};
     margin-left: auto;
@@ -340,12 +341,7 @@ export const OverdropValue = styled.span`
 `;
 
 export const OverdropSummary = styled.div`
-    z-index: 10000;
-    position: absolute;
-    bottom: 0;
     width: 100%;
-    background-color: ${(props) => props.theme.overdrop.background.active};
-    box-shadow: 0px -10px 28.7px 30px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
 `;
 
@@ -415,6 +411,12 @@ export const OverdropProgressWrapper = styled.div`
     position: relative;
     margin-left: 10px;
     margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+`;
+
+export const CurrentLevelProgressLineContainer = styled.div`
+    margin-left: 10px;
 `;
 
 export const LeftLevel = styled.div`
