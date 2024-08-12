@@ -176,6 +176,7 @@ export default {
             quaternary: Colors.METALIC_BLUE,
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,
             active: Colors.NAVY_BLUE_DARK,
+            progressBar: Colors.YELLOW,
         },
         textColor: {
             primary: Colors.YELLOW,

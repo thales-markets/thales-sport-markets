@@ -1,3 +1,4 @@
+import Progress from 'components/Progress';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
@@ -9,11 +10,11 @@ import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
-import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints } from 'utils/overdrop';
+import { formatPoints, getCurrentLevelByPoints, getNextThalesRewardLevel, getProgressLevel } from 'utils/overdrop';
 import SmallBadge from '../SmallBadge/SmallBadge';
 
 const BadgeOverview: React.FC = () => {
@@ -45,11 +46,12 @@ const BadgeOverview: React.FC = () => {
         }
     }, [userData]);
 
-    const nextLevelItem: OverdropLevel | undefined = useMemo(() => {
+    const nextThalesRewardLevel: OverdropLevel | undefined = useMemo(() => {
         if (userData) {
-            const levelItem = getNextLevelItemByPoints(userData.points);
+            const levelItem = getNextThalesRewardLevel(userData?.points);
             return levelItem;
         }
+        return;
     }, [userData]);
 
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
@@ -135,11 +137,26 @@ const BadgeOverview: React.FC = () => {
                     <Label>{t('overdrop.overdrop-home.next-thales-rewards-at')}</Label>
                     <ValueWrapper>
                         <ValueSecondary>
-                            {nextLevelItem
-                                ? `${formatPoints(nextLevelItem?.minimumPoints)} @ LVL ${nextLevelItem?.level}`
+                            {nextThalesRewardLevel
+                                ? `${formatPoints(nextThalesRewardLevel?.minimumPoints)} @ LVL ${
+                                      nextThalesRewardLevel?.level
+                                  }`
                                 : ''}
                         </ValueSecondary>
                     </ValueWrapper>
+                    {userData?.points && levelItem && nextThalesRewardLevel && (
+                        <ProgressContainer>
+                            <Progress
+                                progress={getProgressLevel(
+                                    userData?.points,
+                                    levelItem?.minimumPoints,
+                                    nextThalesRewardLevel?.minimumPoints
+                                )}
+                                width="100%"
+                                height="18px"
+                            />
+                        </ProgressContainer>
+                    )}
                 </ItemContainer>
             </DetailsWrapper>
         </Wrapper>
@@ -197,6 +214,10 @@ const Icon = styled.i`
     font-weight: 300;
     margin: 0 3px;
     color: ${(props) => props.theme.textColor.primary};
+`;
+
+const ProgressContainer = styled(FlexDiv)`
+    min-width: 100%;
 `;
 
 export default BadgeOverview;

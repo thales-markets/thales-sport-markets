@@ -1,3 +1,4 @@
+import Progress from 'components/Progress';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -28,18 +29,25 @@ const ProgressLine: React.FC<ProgressLineProps> = ({
 
     return (
         <Wrapper>
-            <ProgressLineWrapper levelLabelHidden={hideLevelLabel}>
-                {!!progressUpdate && <ProgressUpdate progress={Math.min(progress + progressUpdate, 100)} />}
-                <Progress progress={Math.min(progress, 100)}>
-                    <DetailedPoints progress={Math.min(progress, 100)}>{`${
-                        showNumbersOnly ? formatCurrency(currentPoints, undefined, true) : formatPoints(currentPoints)
-                    } / ${
-                        showNumbersOnly
-                            ? formatCurrency(nextLevelMinimumPoints, undefined, true)
-                            : formatPoints(nextLevelMinimumPoints)
-                    }`}</DetailedPoints>
-                </Progress>
-            </ProgressLineWrapper>
+            <ProgressContainer>
+                <ProgressLineWrapper levelLabelHidden={hideLevelLabel}>
+                    {!!progressUpdate && <ProgressUpdate progress={Math.min(progress + progressUpdate, 100)} />}
+                    <Progress
+                        progress={progress}
+                        textBelow={`${
+                            showNumbersOnly
+                                ? formatCurrency(currentPoints, undefined, true)
+                                : formatPoints(currentPoints)
+                        } / ${
+                            showNumbersOnly
+                                ? formatCurrency(nextLevelMinimumPoints, undefined, true)
+                                : formatPoints(nextLevelMinimumPoints)
+                        }`}
+                    />
+                    <DetailedPoints progress={Math.min(progress, 100)}></DetailedPoints>
+                </ProgressLineWrapper>
+            </ProgressContainer>
+
             {!hideLevelLabel && (
                 <LevelWrapper>
                     <Label>{t('overdrop.overdrop-home.level')}</Label>
@@ -52,6 +60,7 @@ const ProgressLine: React.FC<ProgressLineProps> = ({
 
 const Wrapper = styled(FlexDivRow)`
     align-items: center;
+    width: 100%;
     @media (max-width: 767px) {
         margin-top: 10px;
     }
@@ -59,6 +68,7 @@ const Wrapper = styled(FlexDivRow)`
 
 const LevelWrapper = styled(FlexDivColumn)`
     align-items: center;
+    max-width: 20%;
 `;
 
 const Label = styled.span`
@@ -81,10 +91,15 @@ const Level = styled(Label)`
     }
 `;
 
+const ProgressContainer = styled(FlexDivColumn)`
+    width: 100%;
+`;
+
 const ProgressLineWrapper = styled(FlexDiv)<{ levelLabelHidden?: boolean }>`
     margin-left: 10px;
     border-radius: 28px;
     background-color: ${(props) => props.theme.background.senary};
+    min-width: 100%;
     @media (max-width: 767px) {
         width: 100%;
         height: 13px;
@@ -92,23 +107,6 @@ const ProgressLineWrapper = styled(FlexDiv)<{ levelLabelHidden?: boolean }>`
     width: ${(props) => (props.levelLabelHidden ? '100%' : '80%')};
     background-color: ${(props) => props.theme.background.senary};
     height: ${(props) => (props.levelLabelHidden ? '18px' : '26px')};
-`;
-
-const Progress = styled(FlexDiv)<{ progress: number }>`
-    z-index: 1;
-    width: ${(props) => props.progress}%;
-    height: 100%;
-    align-items: center;
-    background-color: ${(props) => props.theme.overdrop.textColor.primary};
-    color: ${(props) => props.theme.overdrop.textColor.secondary};
-    font-size: 12px;
-    border-radius: 28px;
-    font-weight: 900;
-    text-transform: uppercase;
-    text-align: right !important;
-    @media (max-width: 767px) {
-        font-size: 8px;
-    }
 `;
 
 const ProgressUpdate = styled(FlexDiv)<{ progress: number }>`
