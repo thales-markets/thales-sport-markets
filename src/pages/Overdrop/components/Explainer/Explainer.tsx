@@ -11,13 +11,10 @@ const Explainer: React.FC = () => {
     const [showMore, setShowMore] = useState<boolean>(false);
 
     return (
-        <Wrapper>
+        <Wrapper onClick={() => setShowMore(!showMore)}>
             <Label>{t('overdrop.leveling-tree.explainer.xp-explained')}</Label>
 
-            <Arrow
-                className={`icon ${showMore ? 'icon--arrow-up' : 'icon--arrow-down'}`}
-                onClick={() => setShowMore(!showMore)}
-            />
+            <Arrow className={`icon ${showMore ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
 
             {showMore && (
                 <>
