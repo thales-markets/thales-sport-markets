@@ -85,7 +85,8 @@ const Navigation: React.FC<NavigationProps> = ({ selectedTab, setSelectedTab }) 
 const Wrapper = styled(FlexDiv)`
     width: 100%;
     justify-content: space-between;
-    margin: 10px 0;
+    margin-top: 10px;
+    margin-bottom: 20px;
     align-items: center;
     @media (max-width: 950px) {
         margin-top: 10px;
@@ -99,10 +100,9 @@ const MobileWrapper = styled(FlexDivRow)`
     background-color: ${(props) => props.theme.overdrop.background.senary};
     border-radius: 35px;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin: 0px 20px;
-    padding: 5px;
+    justify-content: space-around;
+    width: calc(100% - 10px);
+    padding: 8px;
     z-index: 10;
 `;
 
@@ -113,11 +113,8 @@ const NavItem = styled(FlexDiv)<{ active?: boolean }>`
     font-weight: 600;
     text-align: left;
     text-transform: uppercase;
-    padding-bottom: 10px;
     cursor: pointer;
     @media (max-width: 950px) {
-        min-width: 50px;
-        width: 20%;
         text-align: center;
         align-items: center;
         justify-content: center;
