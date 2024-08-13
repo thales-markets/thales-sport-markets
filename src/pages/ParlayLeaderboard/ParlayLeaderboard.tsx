@@ -10,11 +10,10 @@ import {
     PARLAY_LEADERBOARD_ARBITRUM_REWARDS_TOP_20,
     PARLAY_LEADERBOARD_OPTIMISM_REWARDS_TOP_20,
     PARLAY_LEADERBOARD_UNIQUE_REWARDS_TOP_20,
-    PARLAY_LEADERBOARD_WEEKLY_START_DATE,
     PARLAY_LEADERBOARD_WEEKLY_START_DATE_UTC,
     START_PERIOD_UNIQUE_REWARDS,
 } from 'constants/markets';
-import { addDays, differenceInDays, subMilliseconds } from 'date-fns';
+import { addDays, subMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { Network } from 'enums/network';
 import i18n from 'i18n';
@@ -32,7 +31,7 @@ import { getOddsType } from 'redux/modules/ui';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumn, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivRow, FlexDivRowCentered, FlexDivStart } from 'styles/common';
 import {
     formatCurrency,
     formatCurrencyWithKey,
@@ -70,7 +69,7 @@ const ParlayLeaderboard: React.FC = () => {
 
     const periodOptions: Array<{ value: number; label: string }> = [];
 
-    const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
+    const latestPeriodWeekly = 25;
 
     for (let index = 0; index <= latestPeriodWeekly; index++) {
         periodOptions.push({
@@ -228,6 +227,7 @@ const ParlayLeaderboard: React.FC = () => {
                 </Description>
                 <Warning>{t('parlay-leaderboard.warning')}</Warning>
                 <Warning>{t('parlay-leaderboard.warning2')}</Warning>
+                <DeprecatedContainer>{t('parlay-leaderboard.deprecated-info')}</DeprecatedContainer>
                 <LeaderboardHeader>
                     <PeriodContainer>
                         <SelectContainer>
@@ -807,6 +807,23 @@ const TagV2 = styled.span`
     padding: 2px 2px;
     height: fit-content;
     cursor: pointer;
+`;
+
+export const DeprecatedContainer = styled(FlexDiv)`
+    width: 100%;
+    background-color: ${(props) => props.theme.background.tertiary};
+    border-radius: 10px;
+    min-height: 30px;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    padding: 5px 10px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    @media (max-width: 767px) {
+        font-size: 14px;
+    }
 `;
 
 export const getRewardsArray = (networkId: Network, period: number): number[] => {

@@ -1039,6 +1039,7 @@
         "warning": "*Overtime team holds the right to disqualify wallets we suspect of gaming the system.",
         "warning2": "Users that have covered 50% or more of potential combinations of their winning tickets will be disqualified.",
         "v2-tooltip": "View parlay on V2",
+        "deprecated-info": "Period 26 is the last one with Parlay Leaderboard incentives. Stay tuned for the new incentives soon!",
         "sidebar": {
             "title-parlay": "Parlay",
             "title-leaderboard": "Leaderboard",
