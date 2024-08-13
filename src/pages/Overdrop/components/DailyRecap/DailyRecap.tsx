@@ -29,47 +29,53 @@ const DailyRecap: React.FC = () => {
     }, [userMultipliersQuery.data, userMultipliersQuery?.isSuccess]);
 
     return (
-        <Wrapper>
-            <ItemContainer>
-                <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
-                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
-                <LevelCircles
-                    levels={[2, 3, 4, 5, 6, 7]}
-                    currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
-                />
-            </ItemContainer>
-            <ItemContainer>
-                <Label>{t('overdrop.overdrop-home.weekly-streak')}</Label>
-                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
-                <LevelCircles
-                    levels={[1, 2, 3, 4]}
-                    currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}
-                />
-            </ItemContainer>
-            <ItemContainer>
-                <Label>{t('overdrop.overdrop-home.loyalty-boost')}</Label>
-                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
-            </ItemContainer>
-            <ItemContainer>
-                <Label>{t('overdrop.overdrop-home.twitter-share')}</Label>
-                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
-            </ItemContainer>
+        <GradientBorder>
+            <Wrapper>
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
+                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
+                    <LevelCircles
+                        levels={[2, 3, 4, 5, 6, 7]}
+                        currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
+                    />
+                </ItemContainer>
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.weekly-streak')}</Label>
+                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
+                    <LevelCircles
+                        levels={[1, 2, 3, 4]}
+                        currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}
+                    />
+                </ItemContainer>
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.loyalty-boost')}</Label>
+                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
+                </ItemContainer>
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.twitter-share')}</Label>
+                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
+                </ItemContainer>
 
-            <ItemContainer>
-                <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
-                <Value>{'08:30:55'}</Value>
-            </ItemContainer>
-        </Wrapper>
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
+                    <Value>{'08:30:55'}</Value>
+                </ItemContainer>
+            </Wrapper>
+        </GradientBorder>
     );
 };
+
+const GradientBorder = styled.div`
+    border-radius: 6px;
+    background: ${(props) => props.theme.overdrop.borderColor.secondary};
+    padding: 2px;
+`;
 
 const Wrapper = styled(FlexDivColumn)`
     height: fit-content;
     padding: 11px 20px;
-    border: 3px solid transparent;
+    background: ${(props) => props.theme.background.quinary};
     border-radius: 6px;
-    background: linear-gradient(${(props) => props.theme.background.quinary} 0 0) padding-box,
-        linear-gradient(40deg, rgba(92, 68, 44, 1) 0%, rgba(23, 25, 42, 1) 50%, rgba(92, 68, 44, 1) 100%) border-box;
     @media (max-width: 767px) {
         flex-direction: row;
         flex-wrap: wrap;

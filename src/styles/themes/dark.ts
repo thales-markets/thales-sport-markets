@@ -190,6 +190,7 @@ export default {
         },
         borderColor: {
             primary: Colors.JONQUIL,
+            secondary: `linear-gradient(160deg, #4e5fb1, #dba111)`,
         },
         badge: {
             background: {
