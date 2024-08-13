@@ -27,7 +27,6 @@ export const StickyRow = styled.div`
 `;
 
 export const StickyRowCardContainer = styled.div`
-    margin-top: 20px;
     [role='row'] {
         background-color: ${(props) => props.theme.overdrop.textColor.primary};
     }
@@ -119,6 +118,9 @@ export const PaginationWrapper = styled(TablePagination)`
 
 export const TableContainer = styled.div`
     @media (max-width: 767px) {
+        & > div > div {
+            padding-top: 20px;
+        }
         [role='row'] {
             padding: 10px 0px;
             margin-left: 20px;
