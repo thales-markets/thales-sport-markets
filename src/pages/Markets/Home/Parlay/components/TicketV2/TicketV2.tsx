@@ -1691,7 +1691,6 @@ const Ticket: React.FC<TicketProps> = ({
                 exchangeRates={exchangeRates}
                 collateralIndex={selectedCollateralIndex}
                 changeAmount={(value) => setCollateralAmount(value)}
-                useThalesCollateral={swapToThales}
             />
             {freeBetBalanceExists && (
                 <RowSummary>

@@ -95,6 +95,8 @@ const Container = styled(FlexDivColumnCentered)`
     margin: 0 30px;
     @media (max-width: 575px) {
         width: auto;
+        min-width: 300px;
+        margin: 0 5px;
     }
 `;
 
