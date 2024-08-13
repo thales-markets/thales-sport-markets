@@ -51,7 +51,7 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
 };
 
 const Wrapper = styled(FlexDivColumn)<{ active?: boolean }>`
-    min-width: 122px;
+    min-width: 110px;
     margin-top: 40px;
     border: 3px solid transparent;
     border-radius: 6px;
@@ -64,6 +64,7 @@ const Wrapper = styled(FlexDivColumn)<{ active?: boolean }>`
     align-items: center;
     position: relative;
     padding: 70px 0px 10px 0px;
+    flex: 1 0 19%;
 `;
 
 const BadgeImage = styled.img<{ active?: boolean }>`
