@@ -25,7 +25,7 @@ const OverdropHome: React.FC = () => {
 };
 
 const LevelDetailsWrapper = styled(FlexDivRow)<{ isMobile: boolean }>`
-    margin-top: 40px;
+    margin-top: ${(props) => (props.isMobile ? '16px' : '40px')};
     flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
     gap: 10px;
     justify-content: center;
