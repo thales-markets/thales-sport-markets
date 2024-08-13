@@ -16,6 +16,7 @@ import { OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
 import { formatPoints, getCurrentLevelByPoints, getNextThalesRewardLevel, getProgressLevel } from 'utils/overdrop';
 import SmallBadge from '../SmallBadge/SmallBadge';
+import { useSwipeable } from 'react-swipeable';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
@@ -76,9 +77,14 @@ const BadgeOverview: React.FC = () => {
         setCurrentStep(currentStep - 1);
     };
 
+    const handlers = useSwipeable({
+        onSwipedRight: () => handleOnPrevious(),
+        onSwipedLeft: () => handleOnNext(),
+    });
+
     return (
         <Wrapper>
-            <BadgeWrapper>
+            <BadgeWrapper {...handlers}>
                 <Arrow className={'icon-homepage icon--arrow-left'} onClick={() => handleOnPrevious()} />
                 {OVERDROP_LEVELS.slice(currentStep, currentStep + numberOfCards).map((item, index) => {
                     return (
