@@ -52,6 +52,7 @@ const ProgressLine = styled(FlexDivRow)<{ progress: number; color?: string; heig
     min-width: ${(props) => `${props.progress}%`};
     height: ${(props) => (props.height ? props.height : '100%')};
     background-color: ${(props) => (props.color ? props.color : props.theme.overdrop.background.progressBar)};
+    box-shadow: 0px 0px 10px 1px #ff4307;
 `;
 
 const TextBelow = styled(FlexDiv)`
