@@ -37,6 +37,9 @@ const RowContainer = styled(FlexDivRow)`
     flex: 1 1 0%;
     flex-direction: row;
     justify-content: center;
+    @media (max-width: 767px) {
+        padding-top: 20px;
+    }
 `;
 
 const SidebarContainer = styled(FlexDivColumn)`
