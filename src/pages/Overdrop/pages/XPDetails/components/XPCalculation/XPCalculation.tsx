@@ -136,7 +136,7 @@ const Wrapper = styled(FlexDivRow)`
     justify-content: center;
     align-items: center;
     margin: 25px 0px;
-    gap: 20px 16px;
+    width: 100%;
 `;
 
 const MobileWrapper = styled(FlexDivColumnCentered)`

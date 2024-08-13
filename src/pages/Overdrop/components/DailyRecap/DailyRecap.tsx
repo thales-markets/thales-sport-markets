@@ -65,7 +65,7 @@ const DailyRecap: React.FC = () => {
 
 const Wrapper = styled(FlexDivColumn)`
     height: fit-content;
-    padding: 11px 30px;
+    padding: 11px 20px;
     border: 3px solid transparent;
     border-radius: 6px;
     background: linear-gradient(${(props) => props.theme.background.quinary} 0 0) padding-box,

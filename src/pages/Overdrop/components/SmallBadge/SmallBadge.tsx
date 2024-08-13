@@ -38,7 +38,7 @@ const Wrapper = styled(FlexDivColumn)`
     align-items: center;
     justify-content: center;
     height: 200px;
-    margin: 0 5px;
+    margin: 0 4px;
 `;
 
 const Label = styled.span<{ active?: boolean }>`
@@ -75,8 +75,8 @@ const BadgeWrapper = styled(FlexDivColumnCentered)`
 `;
 
 const Badge = styled.img<{ active?: boolean }>`
-    width: 86px;
-    height: 86px;
+    width: 80px;
+    height: 80px;
     margin: 5px 0px;
     opacity: ${(props) => (props.active ? '1' : '0.2')};
 `;
@@ -85,8 +85,8 @@ const DisabledLevelWrapper = styled(FlexDivColumnCentered)`
     position: absolute;
     top: 20px;
     left: 0;
-    width: 86px;
-    height: 86px;
+    width: 74px;
+    height: 74px;
     background-color: ${(props) => props.theme.overdrop.badge.background.secondary};
     border: 3px solid ${(props) => props.theme.overdrop.borderColor.primary};
     border-radius: 50%;
