@@ -766,8 +766,13 @@ const Ticket: React.FC<TicketProps> = ({
             Number(buyInAmount) &&
             (swapToThales ? swapQuote && swappedThalesToReceive < minBuyInAmount : Number(buyInAmount) < minBuyInAmount)
         ) {
-            const minBuyin = minBuyInAmount / (swapToThales ? swapQuote : 1);
+            let minBuyin = minBuyInAmount / (swapToThales ? swapQuote : 1);
+            minBuyin =
+                swapToThales && isDefaultCollateral && minBuyin < minBuyInAmountInDefaultCollateral
+                    ? minBuyInAmountInDefaultCollateral
+                    : minBuyin;
             const decimals = getPrecision(minBuyin);
+
             setTooltipTextBuyInAmount(
                 t('markets.parlay.validation.min-amount', {
                     min: `${formatCurrencyWithKey(
@@ -1692,6 +1697,11 @@ const Ticket: React.FC<TicketProps> = ({
                 exchangeRates={exchangeRates}
                 collateralIndex={selectedCollateralIndex}
                 changeAmount={(value) => setCollateralAmount(value)}
+                minAmount={
+                    swapToThales && swapQuote
+                        ? ceilNumberToDecimals(minBuyInAmount / swapQuote, getPrecision(minBuyInAmount / swapQuote))
+                        : undefined
+                }
             />
             {freeBetBalanceExists && (
                 <RowSummary>
