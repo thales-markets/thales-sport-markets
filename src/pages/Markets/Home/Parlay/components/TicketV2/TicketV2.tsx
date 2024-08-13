@@ -641,7 +641,7 @@ const Ticket: React.FC<TicketProps> = ({
     // Refresh swap THALES quote on 7s
     useInterval(
         async () => {
-            if (!openBuyStepsModal) {
+            if (!openBuyStepsModal && !tooltipTextBuyInAmount) {
                 const quote = await getQuote(networkId, swapToThalesParams);
                 setSwappedThalesToReceive(quote);
                 setSwapQuote(quote / Number(buyInAmount));
@@ -657,8 +657,9 @@ const Ticket: React.FC<TicketProps> = ({
 
     // Check swap allowance
     useEffect(() => {
-        if (isWalletConnected && swapToThales) {
+        if (isWalletConnected && swapToThales && buyInAmount) {
             const getSwapAllowance = async () => {
+                await delay(1800); // due to rate limit
                 const allowance = await checkSwapAllowance(
                     networkId,
                     walletAddress as Address,
