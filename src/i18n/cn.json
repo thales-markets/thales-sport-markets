@@ -691,7 +691,9 @@
                 "fifa-campaign": "斑马FIFA活动",
                 "fee-rebates": "费用回扣",
                 "liquidity-pool": "提供流动性",
-                "promotions": "促销活动"
+                "promotions": "促销活动",
+                "speed-markets": "交易加密货币",
+                "digital-options": "数字选项"
             },
             "buttons": {
                 "disconnect": "断开",
@@ -1196,7 +1198,7 @@
     },
     "banner": {
         "arb-distribution-message": "ARB 分发已开始。通过加班赚取 ARB 代币。从这里获得更多信息。",
-        "v1-text": "<highlight>V2</highlight>：这是 Overtime 的 V2 测试版。要切换回 V1，请<highlight>单击此处</highlight>。"
+        "v1-text": "<highlight>V2</highlight>: This is the V2 version of Overtime. To switch back to deprecated V1, <highlight>click here</highlight>."
     },
     "promotions": {
         "nav-items": {

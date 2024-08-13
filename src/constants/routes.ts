@@ -33,10 +33,6 @@ export const PAGE_NAME_TO_META_DATA_KEYS: {
         title: 'seo.markets.title',
         description: 'seo.markets.description',
     },
-    [MetaRoutes.ParlayLeaderboard]: {
-        title: 'seo.parlay-leaderboard.title',
-        description: 'seo.parlay-leaderboard.description',
-    },
     [MetaRoutes.Referral]: {
         title: 'seo.referral.title',
         description: 'seo.referral.description',

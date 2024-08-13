@@ -281,7 +281,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 102,
-        hidden: false,
+        hidden: true,
     },
     [League.COPA_LIBERTADORES]: {
         sport: Sport.SOCCER,
@@ -305,7 +305,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 101,
-        hidden: false,
+        hidden: true,
         tooltipKey: 'common.football-tooltip',
     },
     [League.EREDIVISIE]: {
@@ -342,7 +342,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 102,
-        hidden: false,
+        hidden: true,
         tooltipKey: 'common.football-tooltip',
     },
     [League.SUMMER_OLYMPICS_SOCCER]: {
@@ -355,7 +355,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 102,
-        hidden: false,
+        hidden: true,
         tooltipKey: 'common.football-tooltip',
     },
     [League.FIFA_WC_WOMEN]: {
@@ -367,7 +367,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 112,
-        hidden: false,
+        hidden: true,
         tooltipKey: 'common.football-tooltip',
     },
     [League.ENGLAND_CUP]: {
@@ -453,7 +453,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.SET,
         isDrawAvailable: false,
         priority: 700,
-        hidden: false,
+        hidden: true,
         tooltipKey: 'common.tennis-tooltip',
     },
     [League.GERMANY_CUP]: {
@@ -498,7 +498,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 111,
-        hidden: false,
+        hidden: true,
         tooltipKey: 'common.football-tooltip',
     },
     [League.FIFA_WORLD_CUP_U20]: {
@@ -511,7 +511,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 110,
-        hidden: false,
+        hidden: true,
         tooltipKey: 'common.fifa-tooltip',
     },
     [League.SUMMER_OLYMPICS_HANDBALL_WOMEN]: {
@@ -524,7 +524,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 1402,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_HANDBALL]: {
         sport: Sport.HANDBALL,
@@ -536,7 +536,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 1401,
-        hidden: false,
+        hidden: true,
     },
     [League.EUROLEAGUE]: {
         sport: Sport.BASKETBALL,
@@ -560,7 +560,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
         priority: 305,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_BASKETBALL_WOMEN]: {
         sport: Sport.BASKETBALL,
@@ -572,7 +572,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
         priority: 305,
-        hidden: false,
+        hidden: true,
     },
     [League.FIBA_WORLD_CUP]: {
         sport: Sport.BASKETBALL,
@@ -583,7 +583,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
         priority: 300,
-        hidden: false,
+        hidden: true,
     },
     [League.FORMULA1]: {
         sport: Sport.MOTOSPORT,
@@ -608,7 +608,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.SET,
         isDrawAvailable: false,
         priority: 1304,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_BEACH_VOLEYBALL]: {
         sport: Sport.VOLLEYBALL,
@@ -620,7 +620,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.SET,
         isDrawAvailable: false,
         priority: 1303,
-        hidden: false,
+        hidden: true,
     },
     [League.MOTOGP]: {
         sport: Sport.MOTOSPORT,
@@ -633,7 +633,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.EMPTY,
         isDrawAvailable: false,
         priority: 1002,
-        hidden: false,
+        hidden: true,
     },
     [League.SAUDI_PROFESSIONAL_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -656,7 +656,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.QUARTER,
         isDrawAvailable: true,
         priority: 1501,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN]: {
         sport: Sport.VOLLEYBALL,
@@ -668,7 +668,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.SET,
         isDrawAvailable: false,
         priority: 1302,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_VOLEYBALL]: {
         sport: Sport.VOLLEYBALL,
@@ -680,7 +680,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.SET,
         isDrawAvailable: false,
         priority: 1301,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_TABLE_TENNIS]: {
         sport: Sport.TABLE_TENNIS,
@@ -691,7 +691,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.SET,
         isDrawAvailable: false,
         priority: 1601,
-        hidden: false,
+        hidden: true,
     },
     [League.BOXING]: {
         sport: Sport.FIGHTING,
@@ -715,7 +715,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 1201,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_RUGBY_WOMEN]: {
         sport: Sport.RUGBY,
@@ -727,7 +727,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         priority: 1202,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_HOCKEY_WOMEN]: {
         sport: Sport.HOCKEY,
@@ -739,7 +739,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.PERIOD,
         isDrawAvailable: true,
         priority: 504,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_HOCKEY]: {
         sport: Sport.HOCKEY,
@@ -751,7 +751,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.PERIOD,
         isDrawAvailable: true,
         priority: 503,
-        hidden: false,
+        hidden: true,
     },
     [League.UEFA_NATIONS_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -813,7 +813,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
         priority: 306,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN]: {
         sport: Sport.BASKETBALL,
@@ -825,7 +825,7 @@ export const LeagueMap: Record<League, LeagueInfo> = {
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
         priority: 306,
-        hidden: false,
+        hidden: true,
     },
     [League.SUMMER_OLYMPICS_QUALIFICATION]: {
         sport: Sport.BASKETBALL,
