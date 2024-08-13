@@ -135,7 +135,8 @@ const VoucherAmount = styled.span`
     margin-left: 30px;
     padding-top: 3px;
     text-align: center;
-    font-size: 11px;
+    font-size: 10px;
+    white-space: pre;
     font-weight: 800;
     color: ${(props) => props.theme.overdrop.badge.textColor.primary};
 `;

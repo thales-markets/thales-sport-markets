@@ -165,6 +165,7 @@ const BadgeOverview: React.FC = () => {
 
 const Wrapper = styled(FlexDivColumn)`
     align-items: center;
+    justify-content: space-around;
     flex-grow: 4;
 `;
 
@@ -188,6 +189,7 @@ const ItemContainer = styled(FlexDivColumn)`
     max-width: 50%;
     align-items: flex-start;
     justify-content: flex-start;
+    gap: 4px;
     @media (max-width: 767px) {
         min-width: 100%;
     }
@@ -207,7 +209,7 @@ const Label = styled.span`
 const Value = styled(Label)``;
 
 const ValueSecondary = styled(Label)`
-    font-weight: 400;
+    font-weight: 600;
     color: ${(props) => props.theme.textColor.septenary};
 `;
 

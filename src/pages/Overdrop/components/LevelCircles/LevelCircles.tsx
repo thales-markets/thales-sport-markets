@@ -22,7 +22,7 @@ const LevelCircles: React.FC<LevelCirclesTypes> = ({
         <Wrapper wrapperMargin={wrapperMargin}>
             {levels.map((item, index) => {
                 return (
-                    <LevelWrapper key={index}>
+                    <LevelWrapper key={index} active={item <= currentLevel}>
                         {!!additionalLabelsForLevels && !!additionalLabelsForLevels[index] && (
                             <LabelAbove>{additionalLabelsForLevels[index]}</LabelAbove>
                         )}
@@ -42,10 +42,29 @@ const Wrapper = styled(FlexDivRowCentered)<{ wrapperMargin?: string }>`
     margin: ${(props) => (props.wrapperMargin ? props.wrapperMargin : '5px 0px')};
 `;
 
-const LevelWrapper = styled(FlexDivColumnCentered)<{ wrapperMargin?: string }>`
+const LevelWrapper = styled(FlexDivColumnCentered)<{ wrapperMargin?: string; active?: boolean }>`
+    position: relative;
     margin: 5px 0px;
     align-items: center;
     max-width: 23px;
+    &:after {
+        ${(props) =>
+            props.active
+                ? `
+        content: ' ';
+        width: 50%;
+        height: 16px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        filter: blur(25px);
+        background-color: #f1ba20;
+  
+    `
+                : ''}
+    }
 `;
 
 const LabelAbove = styled.span`

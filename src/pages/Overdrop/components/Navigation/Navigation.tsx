@@ -85,8 +85,7 @@ const Navigation: React.FC<NavigationProps> = ({ selectedTab, setSelectedTab }) 
 const Wrapper = styled(FlexDiv)`
     width: 100%;
     justify-content: space-between;
-    margin-top: 15px;
-    margin-bottom: 25px;
+    margin: 10px 0;
     align-items: center;
     @media (max-width: 950px) {
         margin-top: 10px;

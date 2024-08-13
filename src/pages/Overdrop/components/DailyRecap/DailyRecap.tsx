@@ -65,7 +65,7 @@ const DailyRecap: React.FC = () => {
 
 const Wrapper = styled(FlexDivColumn)`
     height: fit-content;
-    padding: 30px 19px;
+    padding: 11px 30px;
     border: 3px solid transparent;
     border-radius: 6px;
     background: linear-gradient(${(props) => props.theme.background.quinary} 0 0) padding-box,
@@ -98,6 +98,19 @@ const Value = styled.span`
     font-weight: 700;
     text-transform: uppercase;
     color: ${(props) => props.theme.overdrop.textColor.primary};
+    position: relative;
+    &:after {
+        content: ' ';
+        width: 50%;
+        height: 16px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        filter: blur(25px);
+        background-color: #f1ba20;
+    }
 `;
 
 export default DailyRecap;
