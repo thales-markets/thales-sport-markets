@@ -44,8 +44,8 @@
         }
     },
     {
-        "title": "Win 20,000 ARB in NHL and 30,000 ARB in MLB markets",
-        "description": "Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.",
+        "title": "Win 30,000 ARB in MLB markets",
+        "description": "Compete for 30,000 ARB in rewards for the MLB until the end of the season. Higher volume = higher rewards.",
         "startDate": 1702236692,
         "endDate": 1730549376,
         "promotionId": "mlb-nhl-rewards",
@@ -55,14 +55,14 @@
         "availableOnNetworks": [42161],
         "article": {
             "coverImageUrl": "/promotions/mlb-nhl-big.webp",
-            "headerHtml": "<h1><span><span><span>Win 20,000 ARB in NHL and 30,000 ARB in MLB markets</span></span></span></h1>",
+            "headerHtml": "<h1><span><span><span>Win 30,000 ARB in MLB markets</span></span></span></h1>",
             "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>Compete for 20,000 ARB and 30,000 ARB in rewards for the NHL and MLB until the end of the season. Higher volume = higher rewards.</span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-mlb-campaign' target='_blank'> <span> <span> <span> <strong> <u>MLB dashboard.</u> </strong> </span> </span> </span> </a> and <a href='https://dune.com/leifu/overtime-nhl-campaign' target='_blank'> <span> <span> <span> <strong> <u>NHL dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
+                "sectionHtml": "<p> <span> <span> <span>Compete for 30,000 ARB in rewards for the MLB until the end of the season. Higher volume = higher rewards.</span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-mlb-campaign' target='_blank'> <span> <span> <span> <strong> <u>MLB dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
                 "ctaButtonLink": "/markets?lang=en&sport=Baseball&globalFilter=OpenMarkets&showActive=true&tag=MLB",
                 "ctaButtonLabel": "Play now",
                 "forceChangeNetworkOnClick": "arbitrum_mainnet"
             },
-            "contentHtml": " <p> <span> <span> <span>User incentives on Overtime are getting more ridiculous by the day! If you are a fan of the NHL and MLB, prepare for great news: you can win 20,000 ARB and 30,000 ARB in each league respectively until the end of the season.</span> </span> </span> </p> <p> <span> <span> <span>The rewards are distributed pro rata, meaning the top wallets will share the prize pool based on how much volume they’ve generated.</span> </span> </span> </p> <p> <span> <span> <span>The MLB and NHL join the <a href='https://www.overtimemarkets.xyz/promotions/big-leagues' target='_blank'><u>NBA and NFL</u></a> on the list of US-based leagues with incredible additional rewards for users. But that’s not even remotely close to being the entire promo offering on Overtime!<br> </span> </span> </p> <p> <span> <span> <span> <strong>But that’s not even remotely close to being the entire promo offering on Overtime!</strong> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
+            "contentHtml": " <p> <span> <span> <span>User incentives on Overtime are getting more ridiculous by the day! If you are a fan of the MLB, prepare for great news: you can win 30,000 ARB in volume-based rewards.</span> </span> </span> </p> <p> <span> <span> <span>The rewards are distributed pro rata, meaning the top wallets will share the prize pool based on how much volume they’ve generated.</span> </span> </span> </p> <p> <span> <span> <span>The MLB is another US-based league with incredible additional rewards for user. But that’s not even remotely close to being the entire promo offering on Overtime! <br> </span> </span> </p> <p> <span> <span> <span> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
         }
     },
     {
