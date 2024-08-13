@@ -1,5 +1,6 @@
 import BadgeOverview from 'pages/Overdrop/components/BadgeOverview';
 import DailyRecap from 'pages/Overdrop/components/DailyRecap';
+import OverdropBanner from 'pages/Overdrop/components/OverdropBanner';
 import XPOverview from 'pages/Overdrop/components/XPOverview';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -13,6 +14,7 @@ const OverdropHome: React.FC = () => {
 
     return (
         <Wrapper>
+            <OverdropBanner />
             <XPOverview />
             <LevelDetailsWrapper isMobile={isMobile}>
                 <DailyRecap />
@@ -25,11 +27,14 @@ const OverdropHome: React.FC = () => {
 const LevelDetailsWrapper = styled(FlexDivRow)<{ isMobile: boolean }>`
     margin-top: 40px;
     flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
-    flex: 1 1 20%;
     gap: 10px;
     justify-content: center;
 `;
 
-const Wrapper = styled(FlexDivColumn)``;
+const Wrapper = styled(FlexDivColumn)`
+    @media (max-width: 767px) {
+        padding-top: 20px;
+    }
+`;
 
 export default OverdropHome;
