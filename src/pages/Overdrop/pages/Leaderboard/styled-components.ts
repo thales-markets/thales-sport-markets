@@ -26,7 +26,17 @@ export const StickyRow = styled.div`
     color: black;
 `;
 
-export const StickyContrainer = styled.div`
+export const StickyRowCardContainer = styled.div`
+    margin-top: 20px;
+    [role='row'] {
+        background-color: ${(props) => props.theme.overdrop.textColor.primary};
+    }
+    [role='row'] > div > div {
+        color: black !important;
+    }
+`;
+
+export const StickyContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -104,5 +114,23 @@ export const PaginationWrapper = styled(TablePagination)`
     }
     .MuiIconButton-root {
         padding: 5px 10px;
+    }
+`;
+
+export const TableContainer = styled.div`
+    @media (max-width: 767px) {
+        [role='row'] {
+            padding: 10px 0px;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        [id='level.smallBadgeHeader'] {
+            display: none;
+        }
+        [id='level.smallBadge'] {
+            position: absolute;
+            top: -38px;
+            left: -15px;
+        }
     }
 `;
