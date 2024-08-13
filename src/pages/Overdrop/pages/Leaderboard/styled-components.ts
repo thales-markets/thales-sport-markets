@@ -131,6 +131,7 @@ export const TableContainer = styled.div`
             position: absolute;
             top: -38px;
             left: -15px;
+            justify-content: inherit;
         }
     }
 `;

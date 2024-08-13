@@ -71,7 +71,7 @@ const Leaderboard: React.FC = () => {
                     </TableRowMobile>
                     <TableRowMobile>
                         <TableCell id={'addressHeader'}>{t('overdrop.leaderboard.table.address')}</TableCell>
-                        <TableCell id={'address'}>
+                        <TableCell isCard id={'address'}>
                             <AddressContainer>
                                 <SPAAnchor href={getEtherscanAddressLink(networkId, data.address)}>
                                     {truncateAddress(data.address)}
@@ -81,13 +81,13 @@ const Leaderboard: React.FC = () => {
                     </TableRowMobile>
                     <TableRowMobile>
                         <TableCell id={'rankHeader'}>{t('overdrop.leaderboard.table.rank')}</TableCell>
-                        <TableCell id={'rank'}>
+                        <TableCell isCard id={'rank'}>
                             <div>#{data.rank}</div>
                         </TableCell>
                     </TableRowMobile>
                     <TableRowMobile>
                         <TableCell id={'levelHeader'}>{t('overdrop.leaderboard.table.level')}</TableCell>
-                        <TableCell id={'level'}>
+                        <TableCell isCard id={'level'}>
                             <div>
                                 #{data.level.level} {data.level.levelName}
                             </div>
@@ -95,19 +95,19 @@ const Leaderboard: React.FC = () => {
                     </TableRowMobile>
                     <TableRowMobile>
                         <TableCell id={'pointsHeader'}>{t('overdrop.leaderboard.table.total-xp')}</TableCell>
-                        <TableCell id={'points'}>
+                        <TableCell isCard id={'points'}>
                             <div>{formatCurrency(data.points)}</div>
                         </TableCell>
                     </TableRowMobile>
                     <TableRowMobile>
                         <TableCell id={'volumeHeader'}>{t('overdrop.leaderboard.table.total-volume')}</TableCell>
-                        <TableCell id={'volume'}>
+                        <TableCell isCard id={'volume'}>
                             <div>{formatCurrency(data.volume)}</div>
                         </TableCell>
                     </TableRowMobile>
                     <TableRowMobile>
                         <TableCell id={'rewardsHeader'}>{t('overdrop.leaderboard.table.rewards')}</TableCell>
-                        <TableCell id={'rewards'}>
+                        <TableCell isCard id={'rewards'}>
                             <div>{formatCurrency(data.rewards.op)} OP</div>
                             <div>{formatCurrency(data.rewards.arb)} ARB</div>
                         </TableCell>

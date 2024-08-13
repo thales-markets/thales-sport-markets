@@ -189,7 +189,11 @@ const Table: React.FC<TableProps> = ({
                                                         >
                                                             {cell.render('Header')}
                                                         </TableCell>
-                                                        <TableCell id={cell.column.id} {...cell.getCellProps()}>
+                                                        <TableCell
+                                                            isCard={mobileCards}
+                                                            id={cell.column.id}
+                                                            {...cell.getCellProps()}
+                                                        >
                                                             {cell.render('Cell')}
                                                         </TableCell>
                                                     </TableRowMobile>
@@ -298,11 +302,16 @@ const TableRowHead = styled(TableRow)`
     border-bottom: none;
 `;
 
-export const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string; minWidth?: number }>`
+export const TableCell = styled(FlexDivCentered)<{
+    width?: number | string;
+    id: string;
+    minWidth?: number;
+    isCard?: boolean;
+}>`
     flex: 1;
     max-width: ${(props) => (props.width ? props.width : 'initial')};
     min-width: ${(props) => (props.minWidth ? `${props.minWidth}px` : '0px')};
-    justify-content: ${(props) => CellAlignment[props.id] || 'left'};
+    justify-content: ${(props) => (props.isCard ? 'right' : CellAlignment[props.id] || 'left')};
     &:first-child {
         padding-left: 18px;
     }
@@ -398,12 +407,6 @@ const CellAlignment: Record<string, string> = {
     points: 'center',
     rewards: 'center',
     finishTime: 'center',
-    address: 'right',
-    rank: 'right',
-    level: 'right',
-    points: 'right',
-    volume: 'right',
-    rewards: 'right',
 };
 
 const ExpandableRow = styled.div`
