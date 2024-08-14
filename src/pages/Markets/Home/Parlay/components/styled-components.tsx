@@ -319,24 +319,24 @@ export const OverdropRowSummary = styled(RowSummary)<{ margin?: string; isClicka
     ${(props) => (props.isClickable ? 'cursor: pointer;' : '')}
 `;
 
-export const OverdropLabel = styled.span`
+export const OverdropLabel = styled.span<{ color?: string }>`
     font-weight: 400;
     font-size: 12px;
     line-height: 20px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
+    color: ${(props) => props.color || props.theme.overdrop.textColor.primary};
     @media (max-width: 950px) {
         line-height: 24px;
     }
 `;
 
-export const OverdropValue = styled.span`
+export const OverdropValue = styled.span<{ color?: string }>`
     font-weight: 600;
     font-size: 11px;
     text-transform: uppercase;
     line-height: 20px;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
+    color: ${(props) => props.color || props.theme.overdrop.textColor.primary};
     margin-left: auto;
     i {
         color: ${(props) => props.theme.textColor.septenary};

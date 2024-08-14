@@ -36,4 +36,16 @@ export enum MultiplierType {
     WEEKLY = 'weeklyMultiplier',
     TWITTER = 'twitterMultiplier',
     LOYALTY = 'loyaltyMultiplier',
+    GAME = 'gameMultiplier',
 }
+
+export enum GameMultiplierType {
+    DAILY = 'daily',
+    WEEKLY = 'weekly',
+}
+
+export type GameMultiplier = {
+    gameId: `0x${string}`;
+    multiplier: string;
+    type: GameMultiplierType;
+};

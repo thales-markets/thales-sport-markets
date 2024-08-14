@@ -22,6 +22,7 @@ import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQue
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
+import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
@@ -487,6 +488,16 @@ const Ticket: React.FC<TicketProps> = ({
         const totalMultiplier = overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0);
         return basePoints * (1 + totalMultiplier / 100);
     }, [overdropMultipliers, buyInAmountInDefaultCollateral, totalQuote]);
+
+    const gameMultipliersQuery = useGameMultipliersQuery({
+        enabled: isAppReady,
+    });
+
+    const overdropGameMultipliersInThisTicket = useMemo(() => {
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
+        return gameMultipliers.filter((multiplier) => markets.find((market) => multiplier.gameId === market.gameId));
+    }, [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess, markets]);
 
     // Clear Ticket when network is changed
     const isMounted = useRef(false);
@@ -1320,9 +1331,19 @@ const Ticket: React.FC<TicketProps> = ({
         buyInAmount,
     ]);
 
-    const overdropTotalBoost = useMemo(() => overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0), [
-        overdropMultipliers,
-    ]);
+    const overdropTotalBoost = useMemo(
+        () =>
+            [...overdropMultipliers, ...overdropGameMultipliersInThisTicket].reduce(
+                (prev, curr) => prev + Number(curr.multiplier),
+                0
+            ),
+        [overdropGameMultipliersInThisTicket, overdropMultipliers]
+    );
+
+    const overdropBoostedGamesTotalBoost = useMemo(
+        () => overdropGameMultipliersInThisTicket.reduce((prev, curr) => prev + Number(curr.multiplier), 0),
+        [overdropGameMultipliersInThisTicket]
+    );
 
     return (
         <>
@@ -1579,14 +1600,24 @@ const Ticket: React.FC<TicketProps> = ({
                             <OverdropValue>+{multiplier.multiplier}%</OverdropValue>
                         </OverdropRowSummary>
                     ))}
+                    {overdropGameMultipliersInThisTicket && (
+                        <OverdropRowSummary>
+                            <OverdropLabel>Boosted games</OverdropLabel>
+                            <OverdropValue>+{overdropBoostedGamesTotalBoost}%</OverdropValue>
+                        </OverdropRowSummary>
+                    )}
                     <HorizontalLine />
                     <OverdropRowSummary>
                         <OverdropLabel>{t('markets.parlay.overdrop.total-xp-boost')}</OverdropLabel>
                         <OverdropValue>+{overdropTotalBoost}%</OverdropValue>
                     </OverdropRowSummary>
                     <OverdropRowSummary>
-                        <OverdropLabel>{t('markets.parlay.overdrop.total-xp-earned')}</OverdropLabel>
-                        <OverdropValue>+{formatPoints(overdropTotalXP)}</OverdropValue>
+                        <OverdropLabel color={theme.overdrop.textColor.senary}>
+                            {t('markets.parlay.overdrop.total-xp-earned')}
+                        </OverdropLabel>
+                        <OverdropValue color={theme.overdrop.textColor.senary}>
+                            +{formatPoints(overdropTotalXP)}
+                        </OverdropValue>
                     </OverdropRowSummary>
                     <OverdropProgressWrapper>
                         <LeftLevel>LVL {levelItem.level}</LeftLevel>

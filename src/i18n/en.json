@@ -263,6 +263,7 @@
                 "tooltip": "Markets resolved more than 7 days ago"
             },
             "sport": {
+                "boosted": "Overdrop boosted",
                 "live": "Live",
                 "all": "All sports",
                 "favourites": "Favourites",

@@ -15,6 +15,7 @@ import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
+import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -199,6 +200,10 @@ const Home: React.FC = () => {
         enabled: isAppReady,
     });
 
+    const gameMultipliersQuery = useGameMultipliersQuery({
+        enabled: isAppReady,
+    });
+
     const finalMarkets = useMemo(() => {
         const allMarkets: MarketsCache =
             sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
@@ -213,6 +218,9 @@ const Home: React.FC = () => {
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
             liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
 
         const filteredMarkets = (sportFilter === SportFilter.Live
             ? allLiveMarkets
@@ -247,13 +255,19 @@ const Home: React.FC = () => {
             }
 
             if (sportFilter !== SportFilter.All) {
-                if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
-                    if (((market.sport as unknown) as SportFilter) !== sportFilter) {
+                if (sportFilter === SportFilter.Boosted) {
+                    if (!gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId)) {
                         return false;
                     }
                 } else {
-                    if (sportFilter == SportFilter.Favourites) {
-                        if (!favouriteLeagues.map((league) => league.id).includes(market.leagueId)) return false;
+                    if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
+                        if (((market.sport as unknown) as SportFilter) !== sportFilter) {
+                            return false;
+                        }
+                    } else {
+                        if (sportFilter == SportFilter.Favourites) {
+                            if (!favouriteLeagues.map((league) => league.id).includes(market.leagueId)) return false;
+                        }
                     }
                 }
             }
@@ -298,6 +312,8 @@ const Home: React.FC = () => {
         sportMarketsQueryNew.data,
         liveSportMarketsQuery.isSuccess,
         liveSportMarketsQuery.data,
+        gameMultipliersQuery.isSuccess,
+        gameMultipliersQuery.data,
         sportFilter,
         statusFilter,
         marketSearch,
@@ -382,6 +398,24 @@ const Home: React.FC = () => {
         Object.values(SportFilter);
         return liveMarketsCountPerTag;
     }, [liveSportMarketsQuery]);
+
+    const boostedMarketsCount = useMemo(() => {
+        const openSportMarkets: SportMarkets =
+            openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
+                ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
+                : [];
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
+
+        return openSportMarkets.filter((openMarket) =>
+            gameMultipliers.find((multiplier) => multiplier.gameId === openMarket.gameId)
+        ).length;
+    }, [
+        gameMultipliersQuery.data,
+        gameMultipliersQuery.isSuccess,
+        openSportMarketsQuery.data,
+        openSportMarketsQuery.isSuccess,
+    ]);
 
     const liveMarketsCountPerSport = useMemo(() => {
         const liveMarketsCount: any = {};
@@ -513,7 +547,9 @@ const Home: React.FC = () => {
                             }}
                             sport={filterItem}
                             sportCount={
-                                filterItem == SportFilter.Live
+                                filterItem === SportFilter.Boosted
+                                    ? boostedMarketsCount
+                                    : filterItem == SportFilter.Live
                                     ? liveMarketsCountPerSport[filterItem]
                                     : openMarketsCountPerSport[filterItem]
                             }
