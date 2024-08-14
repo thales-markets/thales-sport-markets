@@ -35,7 +35,7 @@ const DailyRecap: React.FC = () => {
                     <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
                     <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
                     <LevelCircles
-                        levels={[2, 3, 4, 5, 6, 7]}
+                        levels={[1, 2, 3, 4, 5, 6, 7]}
                         currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
                     />
                 </ItemContainer>
@@ -73,7 +73,7 @@ const GradientBorder = styled.div`
 
 const Wrapper = styled(FlexDivColumn)`
     height: fit-content;
-    padding: 11px 20px;
+    padding: 11px 10px;
     background: ${(props) => props.theme.background.quinary};
     border-radius: 6px;
     @media (max-width: 767px) {
