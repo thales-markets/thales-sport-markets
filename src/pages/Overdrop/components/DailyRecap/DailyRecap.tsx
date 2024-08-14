@@ -10,6 +10,16 @@ import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 import { MultiplierType } from 'types/overdrop';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
 import LevelCircles from '../LevelCircles';
+import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
+import { intervalToDuration } from 'date-fns';
+import { formattedDurationFull } from 'utils/formatters/date';
+import { t } from 'i18next';
+
+const dateTimeTranslationMap = {
+    'days-short': t('common.time-remaining.days-short'),
+    'hours-short': t('common.time-remaining.hours-short'),
+    'minutes-short': t('common.time-remaining.minutes-short'),
+};
 
 const DailyRecap: React.FC = () => {
     const { t } = useTranslation();
@@ -21,12 +31,21 @@ const DailyRecap: React.FC = () => {
         enabled: !!isAppReady,
     });
 
-    const userMultipliers = useMemo(() => {
-        if (userMultipliersQuery?.isSuccess && userMultipliersQuery?.data) {
-            return userMultipliersQuery.data;
+    const userDataQuery = useUserDataQuery(walletAddress, {
+        enabled: !!isAppReady,
+    });
+
+    const userMultipliers =
+        userMultipliersQuery.isSuccess && userMultipliersQuery.data ? userMultipliersQuery.data : undefined;
+    const userData = userDataQuery.isSuccess && userDataQuery.data ? userDataQuery.data : undefined;
+
+    const duration = useMemo(() => {
+        if (userData && userData.lastTwitterActivity) {
+            const duration = intervalToDuration({ start: userData.lastTwitterActivity, end: Date.now() });
+
+            return formattedDurationFull(duration, dateTimeTranslationMap);
         }
-        return;
-    }, [userMultipliersQuery.data, userMultipliersQuery?.isSuccess]);
+    }, [userData]);
 
     return (
         <GradientBorder>
@@ -58,7 +77,7 @@ const DailyRecap: React.FC = () => {
 
                 <ItemContainer>
                     <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
-                    <Value>{'08:30:55'}</Value>
+                    <Value>{duration}</Value>
                 </ItemContainer>
             </Wrapper>
         </GradientBorder>

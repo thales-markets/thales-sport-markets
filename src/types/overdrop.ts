@@ -14,6 +14,7 @@ export type OverdropUserData = {
         arb: number;
     };
     rank: number;
+    lastTwitterActivity: number;
 };
 
 export type OverdropXPHistory = {
