@@ -84,6 +84,8 @@ const Explainer: React.FC = () => {
 };
 
 const Wrapper = styled(FlexDivColumn)`
+    cursor: pointer;
+    flex: none;
     position: relative;
     min-width: 30%;
     padding: 6px 16px;

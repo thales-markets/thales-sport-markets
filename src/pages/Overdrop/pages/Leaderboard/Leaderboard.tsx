@@ -1,3 +1,4 @@
+import PaginationWrapper from 'components/PaginationWrapper';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { TableCell, TableRow, TableRowMobile } from 'components/Table/Table';
@@ -17,7 +18,6 @@ import { getCurrentLevelByPoints } from 'utils/overdrop';
 import {
     AddressContainer,
     Badge,
-    PaginationWrapper,
     SearchFieldContainer,
     StickyCell,
     StickyContainer,

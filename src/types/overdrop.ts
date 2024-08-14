@@ -1,3 +1,5 @@
+import { Network } from 'enums/network';
+
 export type OverdropMultiplier = {
     multiplier: number;
     name: string;
@@ -21,6 +23,7 @@ export type OverdropXPHistory = {
     timestamp: number;
     points: number;
     txHash: string;
+    network: Network;
 };
 
 export type LeaderboardRow = OverdropUserData & {
