@@ -74,6 +74,7 @@ const TextBelow = styled(FlexDiv)`
 `;
 
 const ProgressUpdate = styled(FlexDiv)<{ progress: number }>`
+    box-shadow: 0px 0px 10px 1px ${(props) => props.theme.overdrop.textColor.senary};
     z-index: 0;
     position: absolute;
     width: ${(props) => props.progress}%;

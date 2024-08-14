@@ -312,10 +312,11 @@ export const SlippageDropdownContainer = styled.div`
 `;
 
 export const OverdropRowSummary = styled(RowSummary)<{ margin?: string; isClickable?: boolean }>`
+    width: 100%;
     position: relative;
     margin: ${(props) => props.margin || 'inherit'};
     justify-content: space-between;
-    ${(props) => (props.isClickable ? 'cursor: pointer;width: 100%;' : '')}
+    ${(props) => (props.isClickable ? 'cursor: pointer;' : '')}
 `;
 
 export const OverdropLabel = styled.span`
@@ -422,25 +423,23 @@ export const CurrentLevelProgressLineContainer = styled.div`
 `;
 
 export const LeftLevel = styled.div`
-    color: ${(props) => props.theme.overdrop.textColor.primary};
-    font-size: 18px;
-    font-weight: bold;
+    color: ${(props) => props.theme.textColor.septenary};
+    font-size: 13px;
     display: flex;
     align-items: center;
     position: absolute;
     left: -5px;
     top: 0;
-    bottom: 0;
+    bottom: -33px;
 `;
 
 export const RightLevel = styled.div`
-    color: ${(props) => props.theme.background.senary};
-    font-size: 18px;
-    font-weight: bold;
+    color: ${(props) => props.theme.textColor.septenary};
+    font-size: 13px;
     display: flex;
     align-items: center;
     position: absolute;
     right: -12px;
     top: 0;
-    bottom: 0;
+    bottom: -33px;
 `;

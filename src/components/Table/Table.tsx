@@ -2,7 +2,9 @@ import SimpleLoader from 'components/SimpleLoader';
 import { SortDirection } from 'enums/markets';
 import React, { CSSProperties, DependencyList, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Cell, Column, Row, usePagination, useSortBy, useTable } from 'react-table';
+import { getIsMobile } from 'redux/modules/app';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivCentered } from 'styles/common';
 
@@ -35,6 +37,7 @@ type TableProps = {
     tableHeight?: string;
     expandedRow?: (row: Row<any>) => JSX.Element;
     stickyRow?: JSX.Element;
+    mobileCards?: boolean;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -57,8 +60,12 @@ const Table: React.FC<TableProps> = ({
     expandedRow,
     stickyRow,
     tableHeight,
+    mobileCards,
 }) => {
     const { t } = useTranslation();
+
+    const isMobile = useSelector(getIsMobile);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const memoizedColumns = useMemo(() => columns, [...columnsDeps, t]);
     const {
@@ -103,39 +110,44 @@ const Table: React.FC<TableProps> = ({
 
     return (
         <>
-            {headerGroups.map((headerGroup, headerGroupIndex: any) => (
-                <TableRowHead style={tableRowHeadStyles} {...headerGroup.getHeaderGroupProps()} key={headerGroupIndex}>
-                    {headerGroup.headers.map((column: any, headerIndex: any) => (
-                        <TableCellHead
-                            {...column.getHeaderProps(column.sortable ? column.getSortByToggleProps() : undefined)}
-                            cssProp={column.headStyle}
-                            key={headerIndex}
-                            style={
-                                column.sortable
-                                    ? { cursor: 'pointer', ...tableHeadCellStyles }
-                                    : { ...tableHeadCellStyles }
-                            }
-                            width={column.width}
-                            id={column.id}
-                        >
-                            <HeaderTitle cssProp={column.headTitleStyle}>{column.render('Header')}</HeaderTitle>
-                            {column.sortable && (
-                                <SortIconContainer>
-                                    {column.isSorted ? (
-                                        column.isSortedDesc ? (
-                                            <SortIcon selected sortDirection={SortDirection.DESC} />
+            {!(isMobile && mobileCards) &&
+                headerGroups.map((headerGroup, headerGroupIndex: any) => (
+                    <TableRowHead
+                        style={tableRowHeadStyles}
+                        {...headerGroup.getHeaderGroupProps()}
+                        key={headerGroupIndex}
+                    >
+                        {headerGroup.headers.map((column: any, headerIndex: any) => (
+                            <TableCellHead
+                                {...column.getHeaderProps(column.sortable ? column.getSortByToggleProps() : undefined)}
+                                cssProp={column.headStyle}
+                                key={headerIndex}
+                                style={
+                                    column.sortable
+                                        ? { cursor: 'pointer', ...tableHeadCellStyles }
+                                        : { ...tableHeadCellStyles }
+                                }
+                                width={column.width}
+                                id={column.id}
+                            >
+                                <HeaderTitle cssProp={column.headTitleStyle}>{column.render('Header')}</HeaderTitle>
+                                {column.sortable && (
+                                    <SortIconContainer>
+                                        {column.isSorted ? (
+                                            column.isSortedDesc ? (
+                                                <SortIcon selected sortDirection={SortDirection.DESC} />
+                                            ) : (
+                                                <SortIcon selected sortDirection={SortDirection.ASC} />
+                                            )
                                         ) : (
-                                            <SortIcon selected sortDirection={SortDirection.ASC} />
-                                        )
-                                    ) : (
-                                        <SortIcon selected={false} sortDirection={SortDirection.NONE} />
-                                    )}
-                                </SortIconContainer>
-                            )}
-                        </TableCellHead>
-                    ))}
-                </TableRowHead>
-            ))}
+                                            <SortIcon selected={false} sortDirection={SortDirection.NONE} />
+                                        )}
+                                    </SortIconContainer>
+                                )}
+                            </TableCellHead>
+                        ))}
+                    </TableRowHead>
+                ))}
             <ReactTable height={tableHeight} {...getTableProps()}>
                 {isLoading ? (
                     <LoaderContainer>
@@ -162,13 +174,30 @@ const Table: React.FC<TableProps> = ({
                                         </ExpandableRowReact>
                                     ) : (
                                         <TableRow
+                                            isCard={isMobile && mobileCards}
                                             style={tableRowStyles}
                                             {...row.getRowProps()}
                                             cursorPointer={!!onTableRowClick}
                                             onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
                                         >
                                             {row.cells.map((cell, cellIndex: any) => {
-                                                return (
+                                                return isMobile && mobileCards ? (
+                                                    <TableRowMobile key={`mrm${rowIndex}${cellIndex}`}>
+                                                        <TableCell
+                                                            id={cell.column.id + 'Header'}
+                                                            {...cell.getCellProps()}
+                                                        >
+                                                            {cell.render('Header')}
+                                                        </TableCell>
+                                                        <TableCell
+                                                            isCard={mobileCards}
+                                                            id={cell.column.id}
+                                                            {...cell.getCellProps()}
+                                                        >
+                                                            {cell.render('Cell')}
+                                                        </TableCell>
+                                                    </TableRowMobile>
+                                                ) : (
                                                     <TableCell
                                                         style={tableRowCellStyles}
                                                         {...cell.getCellProps()}
@@ -252,14 +281,18 @@ const TableBody = styled.div<{ height?: string }>`
     }
 `;
 
-const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean }>`
+export const TableRow = styled(FlexDiv)<{ cursorPointer?: boolean; isCard?: boolean }>`
+    flex-direction: ${(props) => (props.isCard ? 'column' : '')};
     cursor: ${(props) => (props.cursorPointer ? 'pointer' : 'default')};
     min-height: 38px;
     font-weight: 600;
     font-size: 12px;
     line-height: 100%;
     letter-spacing: 0.25px;
-    border-bottom: 2px dashed ${(props) => props.theme.borderColor.senary};
+    border-bottom: 2px dashed ${(props) => !props.isCard && props.theme.borderColor.senary};
+    ${(props) =>
+        props.isCard &&
+        `border: 1px solid #7983a9; border-radius: 8px; & > div:last-child {justify-content: flex-end;}`};
 `;
 
 const TableRowHead = styled(TableRow)`
@@ -269,11 +302,16 @@ const TableRowHead = styled(TableRow)`
     border-bottom: none;
 `;
 
-const TableCell = styled(FlexDivCentered)<{ width?: number | string; id: string; minWidth?: number }>`
+export const TableCell = styled(FlexDivCentered)<{
+    width?: number | string;
+    id: string;
+    minWidth?: number;
+    isCard?: boolean;
+}>`
     flex: 1;
     max-width: ${(props) => (props.width ? props.width : 'initial')};
     min-width: ${(props) => (props.minWidth ? `${props.minWidth}px` : '0px')};
-    justify-content: ${(props) => CellAlignment[props.id] || 'left'};
+    justify-content: ${(props) => (props.isCard ? 'right' : CellAlignment[props.id] || 'left')};
     &:first-child {
         padding-left: 18px;
     }
@@ -380,6 +418,26 @@ const ArrowIcon = styled.i`
     display: flex;
     align-items: center;
     margin-right: 5px;
+`;
+
+export const TableRowMobile = styled.div<{ isSticky?: boolean }>`
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 0 10px;
+
+    ${TableCell} {
+        height: auto;
+        margin: 6px 0px;
+        width: 100%;
+        :first-child {
+            justify-content: flex-start;
+            color: ${(props) =>
+                props.isSticky ? props.theme.overdrop.textColor.tertiary : props.theme.overdrop.textColor.tertiary};
+            text-transform: uppercase;
+        }
+    }
 `;
 
 export default Table;

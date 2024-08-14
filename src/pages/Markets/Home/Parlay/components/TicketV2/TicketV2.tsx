@@ -321,7 +321,6 @@ const Ticket: React.FC<TicketProps> = ({
     const freeBetBalanceExists = freeBetCollateralBalances
         ? !!Object.values(freeBetCollateralBalances).find((balance) => balance)
         : false;
-
     // Set free bet if user has free bet balance
     useEffect(() => {
         if (freeBetBalanceExists) {
@@ -1544,15 +1543,24 @@ const Ticket: React.FC<TicketProps> = ({
             </RowSummary>
             <OverdropRowSummary margin={isOverdropSummaryOpen ? '5px 0' : '5px 0 0 0'}>
                 <OverdropRowSummary
-                    isClickable
+                    isClickable={!isFreeBetActive}
                     onClick={() => {
-                        setIsOverdropSummaryOpen(!isOverdropSummaryOpen);
+                        if (!isFreeBetActive) {
+                            setIsOverdropSummaryOpen(!isOverdropSummaryOpen);
+                        }
                     }}
                 >
                     <OverdropLabel>{t('markets.parlay.overdrop.overdrop-xp')}</OverdropLabel>
                     <OverdropValue>
-                        {!isOverdropSummaryOpen && `${formatPoints(overdropTotalXP)} (${overdropTotalBoost}% boost)`}
-                        <Arrow className={!isOverdropSummaryOpen ? 'icon icon--caret-down' : 'icon icon--caret-up'} />
+                        {!isOverdropSummaryOpen &&
+                            (isFreeBetActive
+                                ? `Free bets not eligible`
+                                : `${formatPoints(overdropTotalXP)} (${overdropTotalBoost}% boost)`)}
+                        {!isFreeBetActive && (
+                            <Arrow
+                                className={!isOverdropSummaryOpen ? 'icon icon--caret-down' : 'icon icon--caret-up'}
+                            />
+                        )}
                     </OverdropValue>
                 </OverdropRowSummary>
             </OverdropRowSummary>
@@ -1581,7 +1589,7 @@ const Ticket: React.FC<TicketProps> = ({
                         <OverdropValue>+{formatPoints(overdropTotalXP)}</OverdropValue>
                     </OverdropRowSummary>
                     <OverdropProgressWrapper>
-                        <LeftLevel>{levelItem.level}</LeftLevel>
+                        <LeftLevel>LVL {levelItem.level}</LeftLevel>
                         <CurrentLevelProgressLineContainer>
                             <CurrentLevelProgressLine
                                 progressUpdateXP={overdropTotalXP}
@@ -1589,7 +1597,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 showNumbersOnly
                             />
                         </CurrentLevelProgressLineContainer>
-                        <RightLevel>{levelItem.level + 1}</RightLevel>
+                        <RightLevel>LVL {levelItem.level + 1}</RightLevel>
                     </OverdropProgressWrapper>
                 </OverdropSummary>
             )}

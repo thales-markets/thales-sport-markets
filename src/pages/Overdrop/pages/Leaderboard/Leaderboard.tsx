@@ -1,10 +1,11 @@
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
+import { TableCell, TableRow, TableRowMobile } from 'components/Table/Table';
 import { t } from 'i18next';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
@@ -17,8 +18,10 @@ import {
     Badge,
     PaginationWrapper,
     StickyCell,
-    StickyContrainer,
+    StickyContainer,
     StickyRow,
+    StickyRowCardContainer,
+    TableContainer,
     tableHeaderStyle,
     tableRowStyle,
 } from './styled-components';
@@ -27,6 +30,7 @@ const Leaderboard: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isMobile = useSelector(getIsMobile);
 
     const leaderboardQuery = useOverdropLeaderboardQuery({ enabled: isAppReady });
 
@@ -56,9 +60,63 @@ const Leaderboard: React.FC = () => {
     const stickyRow = useMemo(() => {
         const data = leaderboard.find((row) => row.address.toLowerCase() == walletAddress?.toLowerCase());
         if (!data) return undefined;
-        return (
+        return isMobile ? (
+            <StickyRowCardContainer>
+                <TableRow isCard role="row">
+                    <TableRowMobile>
+                        <TableCell id={'level.smallBadgeHeader'}></TableCell>
+                        <TableCell id={'level.smallBadge'}>
+                            <Badge style={{ width: '45px' }} src={data.level.smallBadge} />
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'addressHeader'}>{t('overdrop.leaderboard.table.address')}</TableCell>
+                        <TableCell isCard id={'address'}>
+                            <AddressContainer>
+                                <SPAAnchor href={getEtherscanAddressLink(networkId, data.address)}>
+                                    {truncateAddress(data.address)}
+                                </SPAAnchor>
+                            </AddressContainer>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'rankHeader'}>{t('overdrop.leaderboard.table.rank')}</TableCell>
+                        <TableCell isCard id={'rank'}>
+                            <div>#{data.rank}</div>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'levelHeader'}>{t('overdrop.leaderboard.table.level')}</TableCell>
+                        <TableCell isCard id={'level'}>
+                            <div>
+                                #{data.level.level} {data.level.levelName}
+                            </div>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'pointsHeader'}>{t('overdrop.leaderboard.table.total-xp')}</TableCell>
+                        <TableCell isCard id={'points'}>
+                            <div>{formatCurrency(data.points)}</div>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'volumeHeader'}>{t('overdrop.leaderboard.table.total-volume')}</TableCell>
+                        <TableCell isCard id={'volume'}>
+                            <div>{formatCurrency(data.volume)}</div>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'rewardsHeader'}>{t('overdrop.leaderboard.table.rewards')}</TableCell>
+                        <TableCell isCard id={'rewards'}>
+                            <div>{formatCurrency(data.rewards.op)} OP</div>
+                            <div>{formatCurrency(data.rewards.arb)} ARB</div>
+                        </TableCell>
+                    </TableRowMobile>
+                </TableRow>
+            </StickyRowCardContainer>
+        ) : (
             <StickyRow>
-                <StickyContrainer>
+                <StickyContainer>
                     <StickyCell width="50px">
                         <Badge src={data.level.smallBadge} />
                     </StickyCell>
@@ -81,14 +139,15 @@ const Leaderboard: React.FC = () => {
                         <div>{formatCurrency(data.rewards.op)} OP</div>
                         <div>{formatCurrency(data.rewards.arb)} ARB</div>
                     </StickyCell>
-                </StickyContrainer>
+                </StickyContainer>
             </StickyRow>
         );
-    }, [leaderboard, networkId, walletAddress]);
+    }, [isMobile, leaderboard, networkId, walletAddress]);
 
     return (
-        <div>
+        <TableContainer>
             <Table
+                mobileCards
                 tableHeight="auto"
                 tableHeadCellStyles={{
                     ...tableHeaderStyle,
@@ -206,7 +265,7 @@ const Leaderboard: React.FC = () => {
                     />
                 </FlexDiv>
             )}
-        </div>
+        </TableContainer>
     );
 };
 
