@@ -66,13 +66,19 @@ const TopUp: React.FC = () => {
                     <>
                         {showLowBalanceAlert && (
                             <TopUpButtonContainer>
-                                <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
+                                <SPAAnchor
+                                    style={{ marginRight: '5px', display: 'flex', alignItems: 'center' }}
+                                    href={buildHref(ROUTES.Deposit)}
+                                >
                                     <TopUpButton>{t('my-portfolio.top-up-eth')}</TopUpButton>
                                 </SPAAnchor>
                             </TopUpButtonContainer>
                         )}
                         {!showLowBalanceAlert && (
-                            <SPAAnchor style={{ marginRight: '5px' }} href={buildHref(ROUTES.Deposit)}>
+                            <SPAAnchor
+                                style={{ marginRight: '5px', display: 'flex', alignItems: 'center' }}
+                                href={buildHref(ROUTES.Deposit)}
+                            >
                                 <Button
                                     backgroundColor={theme.button.background.quaternary}
                                     textColor={theme.button.textColor.primary}
@@ -95,7 +101,10 @@ const TopUp: React.FC = () => {
                             </SPAAnchor>
                         )}
                         {!showLowBalanceAlert && (
-                            <SPAAnchor style={{ width: '100%' }} href={buildHref(ROUTES.Deposit)}>
+                            <SPAAnchor
+                                style={{ width: '100%', display: 'flex', alignItems: 'center' }}
+                                href={buildHref(ROUTES.Deposit)}
+                            >
                                 <Button
                                     backgroundColor={theme.button.background.quaternary}
                                     textColor={theme.button.textColor.primary}
