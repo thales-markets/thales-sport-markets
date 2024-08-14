@@ -19,6 +19,7 @@ import { getWalletAddress } from 'redux/modules/wallet';
 
 import axios from 'axios';
 import { generalConfig } from 'config/general';
+import { refetchOverdropMultipliers } from 'utils/queryConnector';
 
 export type ShareTicketModalProps = {
     markets: TicketMarket[];
@@ -33,6 +34,13 @@ export type ShareTicketModalProps = {
 };
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
+const TWITTER_MESSAGES_TEXT = [
+    `I just placed this bet on @OvertimeMarkets! %0ATry it yourself on ${LINKS.Overtime}`,
+    `This is my @OvertimeMarkets bet. Let's get it! %0ATry it yourself on ${LINKS.Overtime}`,
+    `Just flexing my @OvertimeMarkets bet! %0ATake a shot yourself at ${LINKS.Overtime}`,
+    `Peep my @OvertimeMarkets onchain bet! %0ATry your luck as well on ${LINKS.Overtime}`,
+];
+
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
 const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${PARLAY_IMAGE_NAME}>`;
 
@@ -142,7 +150,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
                     const twitterLinkWithStatusMessage =
                         LINKS.TwitterTweetStatus +
-                        LINKS.Overtime +
+                        TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)] +
                         (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
 
                     // Mobile requires user action in order to open new window, it can't open in async call, so adding <a>
@@ -212,8 +220,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
                 // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
                 // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
-                setTimeout(() => {
-                    saveImageAndOpenTwitter(id);
+                setTimeout(async () => {
+                    await saveImageAndOpenTwitter(id);
+                    setIsLoading(false);
                 }, 300);
             }
         }
@@ -227,24 +236,27 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     };
 
     const onSubmit = useCallback(async () => {
-        const toastTwitter = toast.loading(t('markets.parlay.share-ticket.verifying-tweet'));
-        setIsLoading(true);
-        try {
-            const response = await axios.post(`${generalConfig.OVERDROP_API_URL}/user-twitter`, {
-                walletAddress,
-                tweetUrl,
-            });
-            setIsLoading(false);
-            if (response.data.success) {
-                toast.update(toastTwitter, getSuccessToastOptions(response.data.status));
-                onClose();
-            } else {
-                toast.update(toastTwitter, getErrorToastOptions(response.data.error));
+        if (walletAddress) {
+            const toastTwitter = toast.loading(t('markets.parlay.share-ticket.verifying-tweet'));
+            setIsLoading(true);
+            try {
+                const response = await axios.post(`${generalConfig.OVERDROP_API_URL}/user-twitter`, {
+                    walletAddress,
+                    tweetUrl,
+                });
+                setIsLoading(false);
+                if (response.data.success) {
+                    toast.update(toastTwitter, getSuccessToastOptions(response.data.status));
+                    refetchOverdropMultipliers(walletAddress);
+                    onClose();
+                } else {
+                    toast.update(toastTwitter, getErrorToastOptions(response.data.error));
+                }
+            } catch (e) {
+                console.log(e);
+                toast.update(toastTwitter, getErrorToastOptions(t('markets.parlay.share-ticket.network-error')));
+                setIsLoading(false);
             }
-        } catch (e) {
-            console.log(e);
-            toast.update(toastTwitter, getErrorToastOptions(t('markets.parlay.share-ticket.network-error')));
-            setIsLoading(false);
         }
     }, [walletAddress, tweetUrl, onClose]);
 

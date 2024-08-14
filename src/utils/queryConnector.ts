@@ -38,4 +38,8 @@ export const refetchLiquidityPoolData = (walletAddress: string, networkId: Netwo
     );
 };
 
+export const refetchOverdropMultipliers = (walletAddress: string) => {
+    queryConnector.queryClient.invalidateQueries(QUERY_KEYS.Overdrop.UserMultipliers(walletAddress));
+};
+
 export default queryConnector;
