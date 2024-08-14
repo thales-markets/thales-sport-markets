@@ -69,6 +69,10 @@
     content: '\003D';
 }
 
+.icon--swag::before {
+    content: '\003e';
+}
+
 .icon--golf::before {
     content: '\003F';
 }
