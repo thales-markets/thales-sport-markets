@@ -1,5 +1,6 @@
 import { TablePagination } from '@material-ui/core';
 import styled from 'styled-components';
+import { FlexDivEnd } from 'styles/common';
 
 export const tableHeaderStyle: React.CSSProperties = {
     textAlign: 'center',
@@ -134,6 +135,30 @@ export const TableContainer = styled.div`
             top: -38px;
             left: -15px;
             justify-content: inherit;
+        }
+    }
+`;
+
+export const SearchFieldContainer = styled(FlexDivEnd)`
+    padding-right: 10px;
+    margin-bottom: 10px;
+    input {
+        border: 1px solid rgb(78, 95, 177);
+        color: rgb(78, 95, 177);
+        border-radius: 20px;
+    }
+    input::placeholder {
+        color: rgb(78, 95, 177);
+    }
+    input:focus {
+        border: 1px solid rgb(78, 95, 177) !important;
+    }
+    i::before {
+        color: rgb(78, 95, 177);
+    }
+    @media (max-width: 767px) {
+        & > div {
+            padding-top: 0 !important;
         }
     }
 `;
