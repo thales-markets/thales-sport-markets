@@ -153,7 +153,7 @@ const Table: React.FC<TableProps> = ({
                     <LoaderContainer>
                         <SimpleLoader />
                     </LoaderContainer>
-                ) : noResultsMessage != null && !data?.length ? (
+                ) : noResultsMessage != null && !data?.length && !stickyRow ? (
                     <NoResultContainer>{noResultsMessage}</NoResultContainer>
                 ) : (
                     <TableBody height={tableHeight} {...getTableBodyProps()}>

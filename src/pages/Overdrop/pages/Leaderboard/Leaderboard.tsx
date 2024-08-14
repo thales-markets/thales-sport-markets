@@ -2,6 +2,7 @@ import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { TableCell, TableRow, TableRowMobile } from 'components/Table/Table';
 import { t } from 'i18next';
+import SearchField from 'pages/Profile/components/SearchField';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -17,6 +18,7 @@ import {
     AddressContainer,
     Badge,
     PaginationWrapper,
+    SearchFieldContainer,
     StickyCell,
     StickyContainer,
     StickyRow,
@@ -32,6 +34,19 @@ const Leaderboard: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
     const isMobile = useSelector(getIsMobile);
 
+    const theme: ThemeInterface = useTheme();
+
+    const [page, setPage] = useState(0);
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+    const [searchText, setSearchText] = useState<string>('');
+    const [rowsPerPage, setRowsPerPage] = useState(20);
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(Number(event.target.value));
+        setPage(0);
+    };
+
     const leaderboardQuery = useOverdropLeaderboardQuery({ enabled: isAppReady });
 
     const leaderboard = useMemo(
@@ -42,18 +57,10 @@ const Leaderboard: React.FC = () => {
         [leaderboardQuery.isSuccess, leaderboardQuery.data]
     );
 
-    const theme: ThemeInterface = useTheme();
-
-    const [page, setPage] = useState(0);
-    const handleChangePage = (_event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const [rowsPerPage, setRowsPerPage] = useState(20);
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(Number(event.target.value));
-        setPage(0);
-    };
+    const leaderboardFiltered = useMemo(
+        () => leaderboard.filter((row) => row.address.toLowerCase().includes(searchText.toLowerCase())),
+        [leaderboard, searchText]
+    );
 
     useEffect(() => setPage(0), [leaderboard.length]);
 
@@ -146,6 +153,13 @@ const Leaderboard: React.FC = () => {
 
     return (
         <TableContainer>
+            <SearchFieldContainer>
+                <SearchField
+                    customPlaceholder={t('profile.search-field')}
+                    text={searchText}
+                    handleChange={(value) => setSearchText(value)}
+                />
+            </SearchFieldContainer>
             <Table
                 mobileCards
                 tableHeight="auto"
@@ -249,7 +263,7 @@ const Leaderboard: React.FC = () => {
                 currentPage={page}
                 rowsPerPage={rowsPerPage}
                 isLoading={leaderboardQuery.isLoading}
-                data={leaderboard}
+                data={leaderboardFiltered}
                 noResultsMessage={t('market.table.no-results')}
             ></Table>
             {!leaderboardQuery.isLoading && leaderboard.length > 0 && (
