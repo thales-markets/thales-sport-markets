@@ -203,14 +203,16 @@ export const XButton = styled.i<{ margin?: string }>`
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
 
-export const ShareWrapper = styled(FlexDivCentered)`
+export const ShareWrapper = styled(FlexDivCentered)<{ disabled?: boolean }>`
     margin-top: 15px;
     gap: 10px;
+    cursor: pointer;
+    ${(props) => (props.disabled ? `opacity: 0.7;` : '')}
 `;
 
 export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
     font-size: ${(props) => props.fontSize || '20px'};
-    color: ${(props) => props.color || props.theme.textColor.septenary};
+    color: ${(props) => props.theme.textColor.quaternary};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
