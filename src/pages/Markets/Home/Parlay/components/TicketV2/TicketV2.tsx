@@ -31,7 +31,7 @@ import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProc
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
 import useCoingeckoRatesQuery from 'queries/rates/useCoingeckoRatesQuery';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -76,7 +76,7 @@ import {
     getPrecision,
     roundNumberToDecimals,
 } from 'thales-utils';
-import { SportsAmmData, TicketMarket } from 'types/markets';
+import { TicketMarket } from 'types/markets';
 import { Coins } from 'types/tokens';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
@@ -292,7 +292,7 @@ const Ticket: React.FC<TicketProps> = ({
         ? !!Object.values(freeBetCollateralBalances).find((balance) => balance)
         : false;
 
-    const sportsAmmData: SportsAmmData | undefined = useMemo(() => {
+    const sportsAmmData = useMemo(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
             return sportsAmmDataQuery.data;
         }
@@ -319,8 +319,7 @@ const Ticket: React.FC<TicketProps> = ({
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
         enabled: isAppReady,
     });
-    const exchangeRates: Rates | null =
-        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+    const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
     const coingeckoRatesQuery = useCoingeckoRatesQuery({
         enabled: isAppReady,
