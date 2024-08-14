@@ -49,7 +49,7 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     left: 0;
     right: 0;
     ${(props) => (props.show == true ? 'top: 0;' : '')}
-    ${(props) => (props.show == false || props.show == null ? 'top: -640px;' : '')}
+    ${(props) => (props.show == false || props.show == null ? 'top: -700px;' : '')}
     ${(props) => props.show === true && animationOpen};
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.background.secondary};
