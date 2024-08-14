@@ -49,7 +49,7 @@ const XPCalculation: React.FC = () => {
                     </Box>
                 </BoxWrapper>
                 <BoxWrapper>
-                    <BoxLabel>{t('overdrop.xp-details.days-in-row')}</BoxLabel>
+                    <BoxLabel>{t('overdrop.xp-details.weeks-in-row')}</BoxLabel>
                     <Box>
                         <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}</Badge>
                         <MainLabel>{t('overdrop.xp-details.weekly-multiplier')}</MainLabel>
@@ -62,9 +62,9 @@ const XPCalculation: React.FC = () => {
 
             <MobileWrapper>
                 <BoxWrapper>
-                    <BoxLabel>{t('overdrop.xp-details.days-in-row')}</BoxLabel>
+                    <BoxLabel>{t('overdrop.xp-details.loyalty-boost')}</BoxLabel>
                     <Box>
-                        <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY) / 5}</Badge>
+                        <Badge>{<Icon style={{ fontSize: 18 }} className="icon icon--swag" />}</Badge>
                         <MainLabel>{t('overdrop.xp-details.loyalty-multiplier')}</MainLabel>
                         <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
                     </Box>
@@ -98,7 +98,7 @@ const XPCalculation: React.FC = () => {
             </BoxWrapper>
             <Signs>{'+'}</Signs>
             <BoxWrapper>
-                <BoxLabel>{t('overdrop.xp-details.days-in-row')}</BoxLabel>
+                <BoxLabel>{t('overdrop.xp-details.weeks-in-row')}</BoxLabel>
                 <Box>
                     <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}</Badge>
                     <MainLabel>{t('overdrop.xp-details.weekly-multiplier')}</MainLabel>
@@ -107,9 +107,9 @@ const XPCalculation: React.FC = () => {
             </BoxWrapper>
             <Signs>{'+'}</Signs>
             <BoxWrapper>
-                <BoxLabel>{t('overdrop.xp-details.days-in-row')}</BoxLabel>
+                <BoxLabel>{t('overdrop.xp-details.loyalty-boost')}</BoxLabel>
                 <Box>
-                    <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY) / 5}</Badge>
+                    <Badge>{<Icon style={{ fontSize: 16 }} className="icon icon--swag" />}</Badge>
                     <MainLabel>{t('overdrop.xp-details.loyalty-multiplier')}</MainLabel>
                     <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
                 </Box>
