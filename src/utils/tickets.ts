@@ -182,7 +182,7 @@ export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: numbe
 
 export const getTicketMarketOdd = (market: TicketMarket) => (market.isCancelled ? 1 : market.odd);
 
-export const getAddedPayoutMultiplier = (currencyKey: Coins, odds: number) =>
+export const getAddedPayoutOdds = (currencyKey: Coins, odds: number) =>
     currencyKey === CRYPTO_CURRENCY_MAP.THALES
         ? odds / (1 + THALES_ADDED_PAYOUT_PERCENTAGE - THALES_ADDED_PAYOUT_PERCENTAGE * odds)
         : odds;
