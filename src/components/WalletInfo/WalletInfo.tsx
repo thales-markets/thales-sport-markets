@@ -1,6 +1,7 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
+import { COLLATERALS } from 'constants/currency';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
@@ -75,6 +76,19 @@ const WalletInfo: React.FC = ({}) => {
     const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
     const maxBalanceItem = balanceList ? getMaxCollateralDollarValue(balanceList) : undefined;
     const isFreeBet = !isFreeBetDisabledByUser && maxBalanceItem && maxBalanceItem.balance > 0;
+
+    // Invalidate default selectedCollateralIndex
+    useEffect(() => {
+        const maxCollateralIndex = COLLATERALS[networkId].length - 1;
+        if (selectedCollateralIndex > maxCollateralIndex) {
+            dispatch(
+                setPaymentSelectedCollateralIndex({
+                    selectedCollateralIndex: maxCollateralIndex,
+                    networkId,
+                })
+            );
+        }
+    }, [dispatch, networkId, selectedCollateralIndex]);
 
     // Refresh free bet on wallet change
     useEffect(() => {
