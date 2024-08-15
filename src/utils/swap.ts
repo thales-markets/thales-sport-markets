@@ -39,7 +39,7 @@ const apiRequestUrl = (networkId: Network, methodName: string, queryParams: any)
     );
 };
 
-const MAX_RETRY_COUNT = 10;
+const MAX_RETRY_COUNT = 5;
 
 export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams) => {
     const url = apiRequestUrl(networkId, '/quote', { ...swapParams });
