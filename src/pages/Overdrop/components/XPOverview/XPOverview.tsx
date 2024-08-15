@@ -32,28 +32,24 @@ const XPOverview: React.FC = () => {
     }, [userDataQuery.data, userDataQuery?.isSuccess]);
 
     const levelItem: OverdropLevel | undefined = useMemo(() => {
-        if (userData) {
-            const levelItem = getCurrentLevelByPoints(userData.points);
-            return levelItem;
-        }
+        const levelItem = getCurrentLevelByPoints(userData?.points ?? 0);
+        return levelItem;
     }, [userData]);
 
     const nextLevelItem: OverdropLevel = useMemo(() => {
         return getNextLevelItemByPoints(userData?.points);
     }, [userData]);
 
-    const isLevelZero = levelItem == undefined;
-
     return (
         <GradientBorder>
             <Wrapper>
-                <Badge src={levelItem ? levelItem.largeBadge : nextLevelItem?.largeBadge} disabled={isLevelZero} />
+                <Badge src={levelItem ? levelItem.largeBadge : nextLevelItem?.largeBadge} />
                 <ProgressOverviewWrapper>
                     <InfoWrapper>
                         <InfoItem>
                             <Label>{levelItem?.levelName ? levelItem?.levelName : '-'}</Label>
                             <FlexDivCentered>
-                                <Value>{userData ? `#${userData.rank}` : '#-'}</Value>{' '}
+                                <Value>{userData ? `#${userData.rank}` : '-'}</Value>{' '}
                                 <Tooltip
                                     overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>}
                                     iconFontSize={14}
@@ -183,10 +179,9 @@ const TotalValue = styled.span<{ highlight?: boolean }>`
     }
 `;
 
-const Badge = styled.img<{ disabled?: boolean }>`
+const Badge = styled.img`
     width: 190px;
     height: 190px;
-    opacity: ${(props) => (props.disabled ? '0.3' : '1')};
     @media (max-width: 767px) {
         width: 130px;
         height: 130px;

@@ -44,7 +44,7 @@ const BadgeOverview: React.FC = () => {
     const userData: OverdropUserData | undefined =
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
 
-    const levelItem = userData ? getCurrentLevelByPoints(userData.points) : undefined;
+    const levelItem = userData ? getCurrentLevelByPoints(userData.points) : OVERDROP_LEVELS[0];
     const nextThalesRewardLevel = getNextThalesRewardLevel(userData?.points);
 
     useEffect(() => {
