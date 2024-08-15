@@ -168,7 +168,7 @@ const Content = styled.p`
     font-family: ${(props) => props.theme.fontFamily.secondary};
     font-size: 13px;
     line-height: 16px;
-    font-weight: 300;
+    font-weight: 200;
     text-align: left;
     white-space: pre-line;
 `;
