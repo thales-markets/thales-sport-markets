@@ -1,9 +1,14 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import ConnectWalletModal from 'components/ConnectWalletModal';
+import NetworkSwitcher from 'components/NetworkSwitcher';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
+import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
+import { getIsFreeBetDisabledByUser, getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import {
     getIsWalletConnected,
     getNetworkId,
@@ -13,13 +18,8 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { formatCurrencyWithKey, truncateAddress } from 'thales-utils';
-import NetworkSwitcher from 'components/NetworkSwitcher';
-import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
-import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
-import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
-import { getIsFreeBetDisabledByUser, getTicketPayment, setPaymentSelectedCollateralIndex } from 'redux/modules/ticket';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
+import { formatCurrencyWithKey, truncateAddress } from 'thales-utils';
 import { getCollateral, getMaxCollateralDollarValue, mapMultiCollateralBalances } from 'utils/collaterals';
 
 const MIN_BUYIN_DOLLAR = 3;
@@ -83,12 +83,7 @@ const WalletInfo: React.FC = ({}) => {
 
     // Initialize free bet collateral
     useEffect(() => {
-        if (
-            isFreeBet &&
-            !isFreeBetInitialized &&
-            maxBalanceItem.index !== selectedCollateralIndex &&
-            maxBalanceItem.balanceDollarValue >= MIN_BUYIN_DOLLAR
-        ) {
+        if (isFreeBet && !isFreeBetInitialized && maxBalanceItem.balanceDollarValue >= MIN_BUYIN_DOLLAR) {
             dispatch(
                 setPaymentSelectedCollateralIndex({
                     selectedCollateralIndex: maxBalanceItem.index,
