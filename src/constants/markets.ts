@@ -1,6 +1,8 @@
 import { GameStatus, OddsType } from 'enums/markets';
 import { Network } from '../enums/network';
 import { League } from '../enums/sports';
+import { NetworkId } from 'thales-utils';
+import { SupportedNetwork } from 'types/network';
 
 export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 
@@ -9,7 +11,11 @@ export const APPROVAL_BUFFER = 0.01;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.025; // 2%
 export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
-export const COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE = 0.1; // 10%
+export const COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE: Record<SupportedNetwork, number> = {
+    [NetworkId.OptimismMainnet]: 0.03, // 3%
+    [NetworkId.OptimismSepolia]: 0.03,
+    [NetworkId.Arbitrum]: 0.1,
+};
 
 export const INCENTIVIZED_LEAGUES: Record<number, any> = {
     [League.MLB]: {

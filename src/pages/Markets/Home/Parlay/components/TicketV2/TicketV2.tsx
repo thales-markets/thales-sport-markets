@@ -330,8 +330,8 @@ const Ticket: React.FC<TicketProps> = ({
                 ? (Number(buyInAmount) * coingeckoRatesQuery.data[selectedCollateral]) /
                   coingeckoRatesQuery.data[CRYPTO_CURRENCY_MAP.THALES as Coins]
                 : 0;
-        return coingeckoThalesAmount * (1 - COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE);
-    }, [coingeckoRatesQuery, selectedCollateral, buyInAmount]);
+        return coingeckoThalesAmount * (1 - COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE[networkId]);
+    }, [coingeckoRatesQuery, selectedCollateral, buyInAmount, networkId]);
 
     const selectedCollateralCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[usedCollateralForBuy] : 1;
@@ -626,7 +626,7 @@ const Ticket: React.FC<TicketProps> = ({
             const getSwapQuote = async () => {
                 const quote = await getQuote(networkId, swapToThalesParams);
 
-                setSwappedThalesToReceive(quote * (1 - swapToThalesParams.slippage / 100));
+                setSwappedThalesToReceive(quote);
                 setSwapQuote(quote / Number(buyInAmount));
             };
 
@@ -642,7 +642,7 @@ const Ticket: React.FC<TicketProps> = ({
         async () => {
             if (!openBuyStepsModal && !tooltipTextBuyInAmount) {
                 const quote = await getQuote(networkId, swapToThalesParams);
-                setSwappedThalesToReceive(quote * (1 - swapToThalesParams.slippage / 100));
+                setSwappedThalesToReceive(quote);
                 setSwapQuote(quote / Number(buyInAmount));
             }
         },
@@ -943,12 +943,18 @@ const Ticket: React.FC<TicketProps> = ({
                     }
                 }
 
+                const balanceBefore = multipleCollateralBalances.data[CRYPTO_CURRENCY_MAP.THALES as Coins];
                 const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
 
                 if (swapTxHash) {
                     step = BuyTicketStep.APPROVE_BUY;
                     setBuyStep(step);
+
                     await delay(3000); // wait for THALES balance to increase
+                    const balanceAfter = bigNumberFormatter(
+                        await multipleCollateral?.[CRYPTO_CURRENCY_MAP.THALES as Coins]?.balanceOf(walletAddress)
+                    );
+                    setSwappedThalesToReceive(balanceAfter - balanceBefore);
                 }
             } catch (e) {
                 console.log('Swap tx failed', e);

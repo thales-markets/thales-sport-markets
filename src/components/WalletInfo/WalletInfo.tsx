@@ -79,7 +79,7 @@ const WalletInfo: React.FC = ({}) => {
     // Refresh free bet on wallet change
     useEffect(() => {
         setIsFreeBetInitialized(false);
-    }, [walletAddress]);
+    }, [walletAddress, networkId]);
 
     // Initialize free bet collateral
     useEffect(() => {
