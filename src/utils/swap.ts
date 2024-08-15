@@ -136,7 +136,15 @@ export const buildTxForSwap = async (
     const url = apiRequestUrl(networkId, '/swap', swapParams);
 
     try {
-        const response = await fetch(url);
+        let response = await fetch(url);
+
+        let retryCount = 0;
+        while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
+            await delay(2000);
+            response = await fetch(url);
+            retryCount++;
+        }
+
         const responseBody = response.ok ? await response.json() : Promise.resolve({ dstAmount: '', tx: '' });
 
         return responseBody;

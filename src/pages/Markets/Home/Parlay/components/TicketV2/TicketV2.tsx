@@ -658,7 +658,6 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         if (isWalletConnected && swapToThales && buyInAmount) {
             const getSwapAllowance = async () => {
-                await delay(1800); // due to rate limit
                 const allowance = await checkSwapAllowance(
                     networkId,
                     walletAddress as Address,
@@ -891,6 +890,7 @@ const Ticket: React.FC<TicketProps> = ({
         if (step <= BuyTicketStep.SWAP) {
             if (!isEth && !hasSwapAllowance) {
                 if (step !== BuyTicketStep.APPROVE_SWAP) {
+                    step = BuyTicketStep.APPROVE_SWAP;
                     setBuyStep(BuyTicketStep.APPROVE_SWAP);
                 }
 
@@ -925,9 +925,9 @@ const Ticket: React.FC<TicketProps> = ({
 
         if (step === BuyTicketStep.SWAP) {
             try {
-                let swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+                const swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
 
-                // retry once
+                // check allowance again
                 if (!swapRawTransaction) {
                     await delay(1800);
                     const hasRefreshedAllowance = await checkSwapAllowance(
@@ -936,8 +936,9 @@ const Ticket: React.FC<TicketProps> = ({
                         swapToThalesParams.src,
                         coinParser(buyInAmount.toString(), networkId, selectedCollateral)
                     );
-                    if (hasRefreshedAllowance) {
-                        swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+                    if (!hasRefreshedAllowance) {
+                        step = BuyTicketStep.APPROVE_SWAP;
+                        setBuyStep(step);
                     }
                 }
 
