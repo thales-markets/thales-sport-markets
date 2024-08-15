@@ -35,7 +35,6 @@ import RouterProvider from './Provider/RouterProvider/RouterProvider';
 const Markets = lazy(() => import('pages/Markets/Home'));
 const Market = lazy(() => import('pages/Markets/Market'));
 const Ticket = lazy(() => import('pages/Ticket'));
-const ParlayLeaderboard = lazy(() => import('pages/ParlayLeaderboard'));
 const LiquidityPool = lazy(() => import('pages/LiquidityPool'));
 const Deposit = lazy(() => import('pages/AARelatedPages/Deposit'));
 const Withdraw = lazy(() => import('pages/AARelatedPages/Withdraw'));
@@ -190,13 +189,6 @@ const App = () => {
                                         <Markets />
                                     </DappLayout>
                                 </Route>
-                                {isRouteAvailableForNetwork(ROUTES.Leaderboard, networkId) && (
-                                    <Route exact path={ROUTES.Leaderboard}>
-                                        <DappLayout>
-                                            <ParlayLeaderboard />
-                                        </DappLayout>
-                                    </Route>
-                                )}
                                 {isRouteAvailableForNetwork(ROUTES.Profile, networkId) && (
                                     <Route exact path={ROUTES.Profile}>
                                         <DappLayout>

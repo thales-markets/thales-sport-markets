@@ -3,7 +3,7 @@ import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
@@ -13,47 +13,27 @@ import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
 import { OverdropUserData } from 'types/overdrop';
-import { OverdropLevel } from 'types/ui';
 import { formatPoints, getCurrentLevelByPoints, getNextThalesRewardLevel, getProgressLevel } from 'utils/overdrop';
 import SmallBadge from '../SmallBadge/SmallBadge';
+import { useSwipeable } from 'react-swipeable';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
-
-    const [currentStep, setCurrentStep] = useState<number>(0);
-    const [numberOfCards, setNumberOfCards] = useState<number>(6);
-
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
+    const [currentStep, setCurrentStep] = useState<number>(0);
+    const [numberOfCards, setNumberOfCards] = useState<number>(isMobile ? 3 : 6);
+
+    useEffect(() => {
+        isMobile ? setNumberOfCards(4) : setNumberOfCards(6);
+    }, [isMobile]);
+
     const userDataQuery = useUserDataQuery(walletAddress, {
         enabled: !!isAppReady,
     });
-
-    const userData: OverdropUserData | undefined = useMemo(() => {
-        if (userDataQuery?.isSuccess && userDataQuery?.data) {
-            return userDataQuery.data;
-        }
-        return;
-    }, [userDataQuery.data, userDataQuery?.isSuccess]);
-
-    const levelItem: OverdropLevel | undefined = useMemo(() => {
-        if (userData) {
-            const levelItem = getCurrentLevelByPoints(userData.points);
-            return levelItem;
-        }
-    }, [userData]);
-
-    const nextThalesRewardLevel: OverdropLevel | undefined = useMemo(() => {
-        if (userData) {
-            const levelItem = getNextThalesRewardLevel(userData?.points);
-            return levelItem;
-        }
-        return;
-    }, [userData]);
-
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
         enabled: isAppReady,
     });
@@ -61,10 +41,21 @@ const BadgeOverview: React.FC = () => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
+    const userData: OverdropUserData | undefined =
+        userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
+
+    const levelItem = userData ? getCurrentLevelByPoints(userData.points) : undefined;
+    const nextThalesRewardLevel = getNextThalesRewardLevel(userData?.points);
+
     useEffect(() => {
-        if (isMobile) setNumberOfCards(4);
-        setNumberOfCards(6);
-    }, [isMobile]);
+        if (levelItem) {
+            if (levelItem.level > numberOfCards) {
+                setCurrentStep(levelItem.level - (isMobile ? 1 : 2));
+            } else {
+                setCurrentStep(levelItem.level - 2 > 0 ? levelItem.level - (isMobile ? 1 : 2) : 0);
+            }
+        }
+    }, [levelItem, numberOfCards, isMobile]);
 
     const handleOnNext = () => {
         if (currentStep + 1 + numberOfCards == OVERDROP_LEVELS.length + 1) return;
@@ -76,9 +67,14 @@ const BadgeOverview: React.FC = () => {
         setCurrentStep(currentStep - 1);
     };
 
+    const handlers = useSwipeable({
+        onSwipedRight: () => handleOnPrevious(),
+        onSwipedLeft: () => handleOnNext(),
+    });
+
     return (
         <Wrapper>
-            <BadgeWrapper>
+            <BadgeWrapper {...handlers}>
                 <Arrow className={'icon-homepage icon--arrow-left'} onClick={() => handleOnPrevious()} />
                 {OVERDROP_LEVELS.slice(currentStep, currentStep + numberOfCards).map((item, index) => {
                     return (
@@ -140,20 +136,24 @@ const BadgeOverview: React.FC = () => {
                             {nextThalesRewardLevel
                                 ? `${formatPoints(nextThalesRewardLevel?.minimumPoints)} @ LVL ${
                                       nextThalesRewardLevel?.level
-                                  }`
+                                  }  (${formatCurrencyWithKey(
+                                      'THALES',
+                                      nextThalesRewardLevel?.voucherAmount ?? 0,
+                                      0,
+                                      true
+                                  )})`
                                 : ''}
                         </ValueSecondary>
                     </ValueWrapper>
                     {userData?.points && levelItem && nextThalesRewardLevel && (
                         <ProgressContainer>
                             <Progress
-                                progress={getProgressLevel(
-                                    userData?.points,
-                                    levelItem?.minimumPoints,
-                                    nextThalesRewardLevel?.minimumPoints
-                                )}
+                                progress={getProgressLevel(userData?.points, 0, nextThalesRewardLevel?.minimumPoints)}
                                 width="100%"
                                 height="18px"
+                                textBelow={`${formatPoints(userData?.points)} / ${formatPoints(
+                                    nextThalesRewardLevel?.minimumPoints
+                                )}(lvl${levelItem.level + 1})`}
                             />
                         </ProgressContainer>
                     )}
@@ -165,7 +165,11 @@ const BadgeOverview: React.FC = () => {
 
 const Wrapper = styled(FlexDivColumn)`
     align-items: center;
+    justify-content: space-around;
     flex-grow: 4;
+    @media (max-width: 767px) {
+        margin-top: 10px;
+    }
 `;
 
 const BadgeWrapper = styled(FlexDivRow)`
@@ -188,8 +192,10 @@ const ItemContainer = styled(FlexDivColumn)`
     max-width: 50%;
     align-items: flex-start;
     justify-content: flex-start;
+    gap: 4px;
     @media (max-width: 767px) {
         min-width: 100%;
+        margin-top: 10px;
     }
 `;
 
@@ -202,12 +208,13 @@ const Label = styled.span`
     margin-bottom: 5px;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
+    white-space: pre;
 `;
 
 const Value = styled(Label)``;
 
 const ValueSecondary = styled(Label)`
-    font-weight: 400;
+    font-weight: 600;
     color: ${(props) => props.theme.textColor.septenary};
 `;
 

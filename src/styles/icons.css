@@ -5,6 +5,10 @@
     font-size: 20px;
 }
 
+.icon--politics:before {
+    content: '\002E';
+}
+
 .icon--stats:before {
     content: '\002F';
 }
@@ -63,6 +67,10 @@
 
 .icon--esports::before {
     content: '\003D';
+}
+
+.icon--swag::before {
+    content: '\003e';
 }
 
 .icon--golf::before {

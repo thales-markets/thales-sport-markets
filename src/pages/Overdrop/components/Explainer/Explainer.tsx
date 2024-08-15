@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
-import { RootState } from 'redux/rootReducer';
+
 import styled from 'styled-components';
 import { FlexDivColumn } from 'styles/common';
 import LevelCircles from '../LevelCircles';
@@ -10,27 +8,14 @@ import LevelCircles from '../LevelCircles';
 const Explainer: React.FC = () => {
     const { t } = useTranslation();
 
-    const isMobile = useSelector((state: RootState) => getIsMobile(state));
-
     const [showMore, setShowMore] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (isMobile) {
-            setShowMore(false);
-        } else {
-            setShowMore(true);
-        }
-    }, [isMobile]);
-
     return (
-        <Wrapper>
+        <Wrapper onClick={() => setShowMore(!showMore)}>
             <Label>{t('overdrop.leveling-tree.explainer.xp-explained')}</Label>
-            {isMobile && (
-                <Arrow
-                    className={`icon ${showMore ? 'icon--arrow-up' : 'icon--arrow-down'}`}
-                    onClick={() => setShowMore(!showMore)}
-                />
-            )}
+
+            <Arrow className={`icon ${showMore ? 'icon--arrow-up' : 'icon--arrow-down'}`} />
+
             {showMore && (
                 <>
                     <Content>
@@ -99,10 +84,13 @@ const Explainer: React.FC = () => {
 };
 
 const Wrapper = styled(FlexDivColumn)`
+    cursor: pointer;
+    flex: none;
     position: relative;
     min-width: 30%;
-    padding: 12px 9px 12px 12px;
+    padding: 6px 16px;
     border: 3px solid transparent;
+    margin-bottom: 20px;
     border-radius: 6px;
     background: linear-gradient(${(props) => props.theme.overdrop.background.active} 0 0) padding-box,
         linear-gradient(40deg, rgba(92, 68, 44, 1) 0%, rgba(23, 25, 42, 1) 50%, rgba(92, 68, 44, 1) 100%) border-box;

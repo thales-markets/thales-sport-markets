@@ -10,6 +10,16 @@ import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 import { MultiplierType } from 'types/overdrop';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
 import LevelCircles from '../LevelCircles';
+import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
+import { intervalToDuration } from 'date-fns';
+import { formattedDurationFull } from 'utils/formatters/date';
+import { t } from 'i18next';
+
+const dateTimeTranslationMap = {
+    'days-short': t('common.time-remaining.days-short'),
+    'hours-short': t('common.time-remaining.hours-short'),
+    'minutes-short': t('common.time-remaining.minutes-short'),
+};
 
 const DailyRecap: React.FC = () => {
     const { t } = useTranslation();
@@ -21,50 +31,78 @@ const DailyRecap: React.FC = () => {
         enabled: !!isAppReady,
     });
 
-    const userMultipliers = useMemo(() => {
-        if (userMultipliersQuery?.isSuccess && userMultipliersQuery?.data) {
-            return userMultipliersQuery.data;
+    const userDataQuery = useUserDataQuery(walletAddress, {
+        enabled: !!isAppReady,
+    });
+
+    const userMultipliers =
+        userMultipliersQuery.isSuccess && userMultipliersQuery.data ? userMultipliersQuery.data : undefined;
+    const userData = userDataQuery.isSuccess && userDataQuery.data ? userDataQuery.data : undefined;
+
+    const duration = useMemo(() => {
+        if (userData && userData.lastTwitterActivity) {
+            const duration = intervalToDuration({ start: userData.lastTwitterActivity, end: Date.now() });
+            if (duration && duration.days) {
+                if (duration.days >= 3) return 0;
+            }
+            const resetsIn = intervalToDuration({
+                start: Date.now(),
+                end: userData.lastTwitterActivity + 3 * 24 * 60 * 60 * 1000,
+            });
+
+            return formattedDurationFull(resetsIn, dateTimeTranslationMap);
         }
-        return;
-    }, [userMultipliersQuery.data, userMultipliersQuery?.isSuccess]);
+        return '--:--';
+    }, [userData]);
 
     return (
-        <Wrapper>
-            <ItemContainer>
-                <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
-                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
-                <LevelCircles
-                    levels={[2, 3, 4, 5, 6, 7]}
-                    currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
-                />
-            </ItemContainer>
-            <ItemContainer>
-                <Label>{t('overdrop.overdrop-home.weekly-streak')}</Label>
-                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
-                <LevelCircles
-                    levels={[1, 2, 3, 4]}
-                    currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}
-                />
-            </ItemContainer>
-            <ItemContainer>
-                <Label>{t('overdrop.overdrop-home.twitter-share')}</Label>
-                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
-            </ItemContainer>
-            <ItemContainer>
-                <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
-                <Value>{'08:30:55'}</Value>
-            </ItemContainer>
-        </Wrapper>
+        <GradientBorder>
+            <Wrapper>
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
+                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
+                    <LevelCircles
+                        levels={[1, 2, 3, 4, 5, 6, 7]}
+                        currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
+                    />
+                </ItemContainer>
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.weekly-streak')}</Label>
+                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
+                    <LevelCircles
+                        levels={[1, 2, 3, 4]}
+                        currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}
+                    />
+                </ItemContainer>
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.loyalty-boost')}</Label>
+                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
+                </ItemContainer>
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.twitter-share')}</Label>
+                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
+                </ItemContainer>
+
+                <ItemContainer>
+                    <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
+                    <Value>{duration}</Value>
+                </ItemContainer>
+            </Wrapper>
+        </GradientBorder>
     );
 };
 
+const GradientBorder = styled.div`
+    border-radius: 6px;
+    background: ${(props) => props.theme.overdrop.borderColor.secondary};
+    padding: 2px;
+`;
+
 const Wrapper = styled(FlexDivColumn)`
     height: fit-content;
-    padding: 30px 19px;
-    border: 3px solid transparent;
+    padding: 11px 10px;
+    background: ${(props) => props.theme.overdrop.background.active};
     border-radius: 6px;
-    background: linear-gradient(${(props) => props.theme.background.quinary} 0 0) padding-box,
-        linear-gradient(40deg, rgba(92, 68, 44, 1) 0%, rgba(23, 25, 42, 1) 50%, rgba(92, 68, 44, 1) 100%) border-box;
     @media (max-width: 767px) {
         flex-direction: row;
         flex-wrap: wrap;
@@ -85,7 +123,7 @@ const Label = styled.span`
     font-weight: 600;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 `;
 
 const Value = styled.span`
@@ -93,6 +131,7 @@ const Value = styled.span`
     font-weight: 700;
     text-transform: uppercase;
     color: ${(props) => props.theme.overdrop.textColor.primary};
+    position: relative;
 `;
 
 export default DailyRecap;

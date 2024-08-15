@@ -22,6 +22,9 @@ export const getMultiplierLabel = (multiplier: OverdropMultiplier) => {
     if (multiplier.name === 'twitterMultiplier') {
         return 'Twitter share';
     }
+    if (multiplier.name === 'loyaltyMultiplier') {
+        return 'Loyalty';
+    }
     return '';
 };
 

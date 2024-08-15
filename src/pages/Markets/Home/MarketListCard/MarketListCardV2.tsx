@@ -3,12 +3,13 @@ import SPAAnchor from 'components/SPAAnchor';
 import TimeRemaining from 'components/TimeRemaining';
 import Tooltip from 'components/Tooltip';
 import { MarketType } from 'enums/marketTypes';
-import { Sport } from 'enums/sports';
+import { League, Sport } from 'enums/sports';
 import Lottie from 'lottie-react';
+import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import {
     getIsMarketSelected,
     getIsThreeWayView,
@@ -39,6 +40,8 @@ import {
     MatchInfo,
     MatchInfoContainer,
     MatchInfoLabel,
+    OverdropCircle,
+    OverdropCircleContainer,
     PeriodResultContainer,
     ResultLabel,
     SecondaryResultsWrapper,
@@ -59,6 +62,8 @@ type MarketRowCardProps = {
 const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+
+    const isAppReady = useSelector(getIsAppReady);
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isThreeWayView = useSelector(getIsThreeWayView);
     const selectedMarket = useSelector(getSelectedMarket);
@@ -79,7 +84,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     const isGameLive = !!market.live;
 
     const spreadMarket = useMemo(() => {
-        const spreadMarkets = market.childMarkets.filter((childMarket) => childMarket.typeId === MarketType.SPREAD);
+        const spreadMarkets = market.childMarkets.filter((childMarket) =>
+            childMarket.leagueId === League.US_ELECTION
+                ? childMarket.typeId === MarketType.US_ELECTION_POPULAR_VOTE_WINNER
+                : childMarket.typeId === MarketType.SPREAD
+        );
 
         return spreadMarkets.length > 0
             ? spreadMarkets.reduce(function (prev, curr) {
@@ -89,7 +98,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     }, [market.childMarkets]);
 
     const totalMarket = useMemo(() => {
-        const totalMarkets = market.childMarkets.filter((childMarket) => childMarket.typeId === MarketType.TOTAL);
+        const totalMarkets = market.childMarkets.filter((childMarket) =>
+            childMarket.leagueId === League.US_ELECTION
+                ? childMarket.typeId === MarketType.US_ELECTION_WINNING_PARTY
+                : childMarket.typeId === MarketType.TOTAL
+        );
 
         return totalMarkets.length > 0
             ? totalMarkets.reduce(function (prev, curr) {
@@ -136,6 +149,16 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
     }
 
     const leagueTooltipKey = getLeagueTooltipKey(market.leagueId);
+
+    const gameMultipliersQuery = useGameMultipliersQuery({
+        enabled: isAppReady,
+    });
+
+    const overdropGameMultiplier = useMemo(() => {
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
+        return gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId);
+    }, [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess, market.gameId]);
 
     const getMainContainerContent = () => (
         <MainContainer isGameOpen={isGameOpen || isGameLive}>
@@ -311,7 +334,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {isColumnView && !isMobile && spreadMarket && (
                                 <PositionsV2
                                     markets={[spreadMarket]}
-                                    marketType={MarketType.SPREAD}
+                                    marketType={
+                                        market.leagueId === League.US_ELECTION
+                                            ? MarketType.US_ELECTION_POPULAR_VOTE_WINNER
+                                            : MarketType.SPREAD
+                                    }
                                     isGameOpen={isGameOpen}
                                     isMainPageView
                                     isColumnView={isColumnView}
@@ -320,7 +347,11 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                             {isColumnView && !isMobile && totalMarket && (
                                 <PositionsV2
                                     markets={[totalMarket]}
-                                    marketType={MarketType.TOTAL}
+                                    marketType={
+                                        market.leagueId === League.US_ELECTION
+                                            ? MarketType.US_ELECTION_WINNING_PARTY
+                                            : MarketType.TOTAL
+                                    }
                                     isGameOpen={isGameOpen}
                                     isMainPageView
                                     isColumnView={isColumnView}
@@ -336,7 +367,12 @@ const MarketListCard: React.FC<MarketRowCardProps> = ({ market, language }) => {
                                     {!isMobile && <Arrow className={'icon icon--arrow-down'} />}
                                 </MarketsCountWrapper>
                             )}
-
+                            {!!overdropGameMultiplier && (
+                                <OverdropCircleContainer>
+                                    <OverdropCircle active />
+                                    <span>Overdrop boosted ({overdropGameMultiplier.multiplier}%)</span>
+                                </OverdropCircleContainer>
+                            )}
                             {!isMobile && (
                                 <SPAAnchor
                                     href={buildMarketLink(

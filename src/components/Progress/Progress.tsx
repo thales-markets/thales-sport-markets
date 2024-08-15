@@ -4,6 +4,7 @@ import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 
 type ProgressProps = {
     progress: number;
+    progressUpdate?: number;
     width?: string;
     height?: string;
     backgroundColor?: string;
@@ -13,6 +14,7 @@ type ProgressProps = {
 
 const Progress: React.FC<ProgressProps> = ({
     progress,
+    progressUpdate,
     width,
     height,
     backgroundColor,
@@ -22,44 +24,76 @@ const Progress: React.FC<ProgressProps> = ({
     return (
         <Wrapper>
             <ProgressLineWrapper backgroundColor={backgroundColor} width={width} height={height}>
+                {!!progressUpdate && <ProgressUpdate progress={Math.min(progress + progressUpdate, 100)} />}
                 <ProgressLine progress={progress} color={progressLineColor} height={height} />
+                <TextBelow>{textBelow}</TextBelow>
             </ProgressLineWrapper>
-            <TextBelow>{textBelow}</TextBelow>
         </Wrapper>
     );
 };
 
 const Wrapper = styled(FlexDivColumn)`
+    position: relative;
     min-width: 100%;
     min-height: auto;
 `;
 
 const ProgressLineWrapper = styled(FlexDiv)<{ backgroundColor?: string; height?: string; width?: string }>`
+    position: relative;
     border-radius: 28px;
-    height: ${(props) => (props.height ? props.height : '27px')};
+    height: ${(props) => (props.height ? props.height : '100%')};
     min-width: ${(props) => (props.width ? props.width : '100%')};
-    background-color: ${(props) => (props.backgroundColor ? props.backgroundColor : props.theme.background.senary)};
+    background-color: ${(props) =>
+        props.backgroundColor ? props.backgroundColor : props.theme.overdrop.textColor.tertiary};
     align-items: center;
 `;
 
 const ProgressLine = styled(FlexDivRow)<{ progress: number; color?: string; height?: string }>`
+    z-index: 1;
     border-radius: 28px;
     min-width: ${(props) => `${props.progress}%`};
-    height: ${(props) => (props.height ? props.height : '27px')};
+    height: ${(props) => (props.height ? props.height : '100%')};
     background-color: ${(props) => (props.color ? props.color : props.theme.overdrop.background.progressBar)};
+    box-shadow: 0px 0px 10px 1px #ff4307;
 `;
 
 const TextBelow = styled(FlexDiv)`
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
     min-width: 100%;
     text-align: center;
     font-size: 12px;
-    margin-top: 5px;
     font-weight: 900;
     text-transform: uppercase;
-    align-items: center;
-    justify-content: center;
+    color: ${(props) => props.theme.overdrop.textColor.secondary};
+
+    z-index: 10;
     @media (max-width: 767px) {
         font-size: 9px;
+    }
+`;
+
+const ProgressUpdate = styled(FlexDiv)<{ progress: number }>`
+    box-shadow: 0px 0px 10px 1px ${(props) => props.theme.overdrop.textColor.senary};
+    z-index: 0;
+    position: absolute;
+    width: ${(props) => props.progress}%;
+    height: 100%;
+    align-items: center;
+    background-color: ${(props) => props.theme.overdrop.textColor.senary};
+    color: ${(props) => props.theme.overdrop.textColor.secondary};
+    font-size: 12px;
+    border-radius: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: right !important;
+    @media (max-width: 767px) {
+        font-size: 8px;
     }
 `;
 

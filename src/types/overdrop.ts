@@ -1,3 +1,5 @@
+import { Network } from 'enums/network';
+
 export type OverdropMultiplier = {
     multiplier: number;
     name: string;
@@ -14,12 +16,14 @@ export type OverdropUserData = {
         arb: number;
     };
     rank: number;
+    lastTwitterActivity: number;
 };
 
 export type OverdropXPHistory = {
     timestamp: number;
     points: number;
     txHash: string;
+    network: Network;
 };
 
 export type LeaderboardRow = OverdropUserData & {
@@ -34,6 +38,8 @@ export enum MultiplierType {
     DAILY = 'dailyMultiplier',
     WEEKLY = 'weeklyMultiplier',
     TWITTER = 'twitterMultiplier',
+    LOYALTY = 'loyaltyMultiplier',
+    GAME = 'gameMultiplier',
 }
 
 export enum ModalTypes {
@@ -41,3 +47,13 @@ export enum ModalTypes {
     LEVEL_UP,
     DAILY_STREAK,
 }
+export enum GameMultiplierType {
+    DAILY = 'daily',
+    WEEKLY = 'weekly',
+}
+
+export type GameMultiplier = {
+    gameId: `0x${string}`;
+    multiplier: string;
+    type: GameMultiplierType;
+};

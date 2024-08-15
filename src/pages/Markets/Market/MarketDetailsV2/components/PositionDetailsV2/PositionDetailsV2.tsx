@@ -53,7 +53,7 @@ const PositionDetails: React.FC<PositionDetailsProps> = ({ market, position, isM
     const isGameOpen = !market.isResolved && !market.isCancelled && !market.isPaused && !isGameStarted;
 
     const odd = market.odds[position];
-    const noOdd = !odd || odd == 0;
+    const noOdd = !odd || odd == 0 || odd > 0.97;
     const disabledPosition = noOdd || (!isGameOpen && !isGameLive);
 
     const showOdd = isGameOpen || isGameLive;

@@ -786,6 +786,87 @@ export const MarketTypeMap: Record<MarketType, MarketTypeInfo> = {
         key: 'significantStrikesLanded',
         name: 'Significant strikes landed',
     },
+
+    // US election market types
+    [MarketType.US_ELECTION_POPULAR_VOTE_WINNER]: {
+        id: MarketType.US_ELECTION_POPULAR_VOTE_WINNER,
+        key: 'popularVoteWinner',
+        name: 'Popular vote winner',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY,
+        key: 'winningParty',
+        name: 'Winning party',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_ARIZONA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_ARIZONA,
+        key: 'winningPartyArizona',
+        name: 'Winning party Arizona',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_GEORGIA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_GEORGIA,
+        key: 'winningPartyGeorgia',
+        name: 'Winning party Georgia',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_MICHIGAN]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_MICHIGAN,
+        key: 'winningPartyMichigan',
+        name: 'Winning party Michigan',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_NEVADA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_NEVADA,
+        key: 'winningPartyNevada',
+        name: 'Winning party Nevada',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA,
+        key: 'winningPartyPennsylvania',
+        name: 'Winning party Pennsylvania',
+    },
+    [MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN]: {
+        id: MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
+        key: 'winningPartyWinsconsin',
+        name: 'Winning party Winsconsin',
+    },
+    [MarketType.CORRECT_SCORE]: {
+        id: MarketType.CORRECT_SCORE,
+        key: 'correctScore',
+        name: 'Correct score',
+    },
+
+    // Total exact per team
+    [MarketType.TOTAL_EXACT_HOME_TEAM]: {
+        id: MarketType.TOTAL_EXACT_HOME_TEAM,
+        key: 'exactTotalHomeTeam',
+        name: 'Exact total',
+    },
+    [MarketType.TOTAL_EXACT_AWAY_TEAM]: {
+        id: MarketType.TOTAL_EXACT_AWAY_TEAM,
+        key: 'exactTotalAwayTeam',
+        name: 'Exact total',
+    },
+
+    // Total exact per team - half for soccer
+    [MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
+        key: 'firstPeriodExactTotalHomeTeam',
+        name: 'Exact total 1st',
+    },
+    [MarketType.FIRST_PERIOD_TOTAL_EXACT_AWAY_TEAM]: {
+        id: MarketType.FIRST_PERIOD_TOTAL_EXACT_AWAY_TEAM,
+        key: 'firstPeriodExactTotalAwayTeam',
+        name: 'Exact total 1st',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM,
+        key: 'secondPeriodExactTotalHomeTeam',
+        name: 'Exact total 2nd',
+    },
+    [MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM]: {
+        id: MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM,
+        key: 'secondPeriodExactTotalAwayTeam',
+        name: 'Exact total 2nd',
+    },
 };
 
 export const PLAYER_PROPS_MARKET_TYPES = [
@@ -976,6 +1057,8 @@ const FIRST_PERIOD_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.FIRST_PERIOD_BOTH_TEAMS_TO_SCORE,
     MarketType.FIRST_PERIOD_DRAW_NO_BET,
+    MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
 ];
 
 const SECOND_PERIOD_MARKET_TYPES = [
@@ -988,6 +1071,8 @@ const SECOND_PERIOD_MARKET_TYPES = [
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_BOTH_TEAMS_TO_SCORE,
     MarketType.SECOND_PERIOD_DRAW_NO_BET,
+    MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM,
 ];
 
 const THIRD_PERIOD_MARKET_TYPES = [
@@ -1060,6 +1145,9 @@ export const HOME_TEAM_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL_HOME_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_HOME_TEAM,
     MarketType.CLEAN_SHEET_HOME_TEAM,
+    MarketType.TOTAL_EXACT_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM,
 ];
 
 export const AWAY_TEAM_MARKET_TYPES = [
@@ -1067,9 +1155,21 @@ export const AWAY_TEAM_MARKET_TYPES = [
     MarketType.FIRST_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.SECOND_PERIOD_TOTAL_AWAY_TEAM,
     MarketType.CLEAN_SHEET_AWAY_TEAM,
+    MarketType.TOTAL_EXACT_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_EXACT_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM,
 ];
 
 export const SCORE_MARKET_TYPES = [MarketType.FIRST_SCORE, MarketType.LAST_SCORE];
+
+export const TOTAL_EXACT_MARKET_TYPES = [
+    MarketType.TOTAL_EXACT_HOME_TEAM,
+    MarketType.TOTAL_EXACT_AWAY_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_EXACT_HOME_TEAM,
+    MarketType.FIRST_PERIOD_TOTAL_EXACT_AWAY_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_EXACT_HOME_TEAM,
+    MarketType.SECOND_PERIOD_TOTAL_EXACT_AWAY_TEAM,
+];
 
 export const OTHER_YES_NO_MARKET_TYPES = [
     MarketType.CLEAN_SHEET_HOME_TEAM,
@@ -1088,9 +1188,9 @@ export const UFC_SPECIFIC_MARKET_TYPES = [
 ];
 
 export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
+    [SportFilter.Boosted]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Live]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Favourites]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
-    [SportFilter.OlympicGames]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.All]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Soccer]: [
         MarketType.WINNER,
@@ -1129,6 +1229,11 @@ export const MarketTypesBySportFilter: Record<SportFilter, MarketType[]> = {
     ],
     [SportFilter.Waterpolo]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
     [SportFilter.Cricket]: [MarketType.WINNER, MarketType.SPREAD, MarketType.TOTAL],
+    [SportFilter.Politics]: [
+        MarketType.WINNER,
+        MarketType.US_ELECTION_POPULAR_VOTE_WINNER,
+        MarketType.US_ELECTION_WINNING_PARTY,
+    ],
 };
 
 export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGroup, MarketType[]>>> = {
@@ -1345,6 +1450,19 @@ export const MarketTypeGroupsBySport: Record<Sport, Partial<Record<MarketTypeGro
     [Sport.MOTOSPORT]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
         [MarketTypeGroup.TOTALS]: [...TOTAL_MARKET_TYPES, ...TOTAL_ODD_EVEN_MARKET_TYPES],
+    },
+    [Sport.POLITICS]: {
+        [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,
+        [MarketTypeGroup.POPULAR_VOTE_WINNER]: [MarketType.US_ELECTION_POPULAR_VOTE_WINNER],
+        [MarketTypeGroup.WINNING_PARTY]: [MarketType.US_ELECTION_WINNING_PARTY],
+        [MarketTypeGroup.WINNING_PARTY_STATE]: [
+            MarketType.US_ELECTION_WINNING_PARTY_ARIZONA,
+            MarketType.US_ELECTION_WINNING_PARTY_GEORGIA,
+            MarketType.US_ELECTION_WINNING_PARTY_MICHIGAN,
+            MarketType.US_ELECTION_WINNING_PARTY_NEVADA,
+            MarketType.US_ELECTION_WINNING_PARTY_PENNSYLVANIA,
+            MarketType.US_ELECTION_WINNING_PARTY_WINSCONSIN,
+        ],
     },
     [Sport.EMPTY]: {
         [MarketTypeGroup.WINNER]: WINNER_MARKET_TYPES,

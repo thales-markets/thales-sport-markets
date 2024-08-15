@@ -1,7 +1,7 @@
 import { Colors } from 'styles/common';
 
 export default {
-    fontFamily: { primary: "'Inter' !important", secondary: '', tertiary: '' },
+    fontFamily: { primary: "'Inter' !important", secondary: "'Roboto' !important", tertiary: '' },
     background: {
         primary: Colors.NAVY_BLUE_EXTRA_DARK,
         secondary: Colors.NAVY_BLUE,
@@ -192,6 +192,7 @@ export default {
         },
         borderColor: {
             primary: Colors.JONQUIL,
+            secondary: `linear-gradient(160deg, #4e5fb1, #dba111)`,
         },
         badge: {
             background: {

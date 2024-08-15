@@ -203,14 +203,16 @@ export const XButton = styled.i<{ margin?: string }>`
     ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
 `;
 
-export const ShareWrapper = styled(FlexDivCentered)`
+export const ShareWrapper = styled(FlexDivCentered)<{ disabled?: boolean }>`
     margin-top: 15px;
     gap: 10px;
+    cursor: pointer;
+    ${(props) => (props.disabled ? `opacity: 0.7;` : '')}
 `;
 
 export const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
     font-size: ${(props) => props.fontSize || '20px'};
-    color: ${(props) => props.color || props.theme.textColor.septenary};
+    color: ${(props) => props.theme.textColor.quaternary};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
@@ -310,29 +312,31 @@ export const SlippageDropdownContainer = styled.div`
 `;
 
 export const OverdropRowSummary = styled(RowSummary)<{ margin?: string; isClickable?: boolean }>`
+    width: 100%;
     position: relative;
     margin: ${(props) => props.margin || 'inherit'};
     justify-content: space-between;
-    ${(props) => (props.isClickable ? 'cursor: pointer;width: 100%;' : '')}
+    ${(props) => (props.isClickable ? 'cursor: pointer;' : '')}
 `;
 
-export const OverdropLabel = styled.span`
+export const OverdropLabel = styled.span<{ color?: string }>`
     font-weight: 400;
     font-size: 12px;
     line-height: 20px;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
+    color: ${(props) => props.color || props.theme.overdrop.textColor.primary};
     @media (max-width: 950px) {
         line-height: 24px;
     }
 `;
 
-export const OverdropValue = styled.span`
+export const OverdropValue = styled.span<{ color?: string }>`
     font-weight: 600;
     font-size: 11px;
+    text-transform: uppercase;
     line-height: 20px;
-    color: ${(props) => props.theme.overdrop.textColor.primary};
+    color: ${(props) => props.color || props.theme.overdrop.textColor.primary};
     margin-left: auto;
     i {
         color: ${(props) => props.theme.textColor.septenary};
@@ -340,12 +344,7 @@ export const OverdropValue = styled.span`
 `;
 
 export const OverdropSummary = styled.div`
-    z-index: 10000;
-    position: absolute;
-    bottom: 0;
     width: 100%;
-    background-color: ${(props) => props.theme.overdrop.background.active};
-    box-shadow: 0px -10px 28.7px 30px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
 `;
 
@@ -415,28 +414,32 @@ export const OverdropProgressWrapper = styled.div`
     position: relative;
     margin-left: 10px;
     margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+`;
+
+export const CurrentLevelProgressLineContainer = styled.div`
+    margin-left: 10px;
 `;
 
 export const LeftLevel = styled.div`
-    color: ${(props) => props.theme.overdrop.textColor.primary};
-    font-size: 18px;
-    font-weight: bold;
+    color: ${(props) => props.theme.textColor.septenary};
+    font-size: 13px;
     display: flex;
     align-items: center;
     position: absolute;
     left: -5px;
     top: 0;
-    bottom: 0;
+    bottom: -33px;
 `;
 
 export const RightLevel = styled.div`
-    color: ${(props) => props.theme.background.senary};
-    font-size: 18px;
-    font-weight: bold;
+    color: ${(props) => props.theme.textColor.septenary};
+    font-size: 13px;
     display: flex;
     align-items: center;
     position: absolute;
     right: -12px;
     top: 0;
-    bottom: 0;
+    bottom: -33px;
 `;

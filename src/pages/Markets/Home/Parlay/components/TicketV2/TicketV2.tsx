@@ -11,27 +11,18 @@ import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getLoadingToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import {
-    APPROVAL_BUFFER,
-    BATCH_SIZE,
-    HIDE_PARLAY_LEADERBOARD,
-    MIN_COLLATERAL_MULTIPLIER,
-    PARLAY_LEADERBOARD_MINIMUM_GAMES,
-    PARLAY_LEADERBOARD_WEEKLY_START_DATE,
-    THALES_CONTRACT_RATE_KEY,
-} from 'constants/markets';
+import { APPROVAL_BUFFER, BATCH_SIZE, MIN_COLLATERAL_MULTIPLIER, THALES_CONTRACT_RATE_KEY } from 'constants/markets';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
-import { differenceInDays } from 'date-fns';
 import { OddsType } from 'enums/markets';
 import { BigNumber, ethers } from 'ethers';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import CurrentLevelProgressLine from 'pages/Overdrop/components/CurrentLevelProgressLine';
-import { Circle, OverdropIcon } from 'pages/Overdrop/components/styled-components';
+import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
-import { useParlayLeaderboardQuery } from 'queries/markets/useParlayLeaderboardQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
+import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
@@ -62,7 +53,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv, FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { FlexDivCentered } from 'styles/common';
 import {
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
@@ -77,7 +68,7 @@ import {
     formatPercentage,
     getPrecision,
 } from 'thales-utils';
-import { LeaderboardPoints, SportsAmmData, TicketMarket } from 'types/markets';
+import { SportsAmmData, TicketMarket } from 'types/markets';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { Coins } from 'types/tokens';
 import { OverdropLevel, ThemeInterface } from 'types/ui';
@@ -110,13 +101,13 @@ import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
 import { getAddedPayoutMultiplier } from 'utils/tickets';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
-import { getRewardsArray, getRewardsCurrency } from '../../../../../ParlayLeaderboard/ParlayLeaderboard';
 import SuggestedAmount from '../SuggestedAmount';
 import {
     AmountToBuyContainer,
     Arrow,
     CheckboxContainer,
     ClearLabel,
+    CurrentLevelProgressLineContainer,
     GasSummary,
     HorizontalLine,
     InfoContainer,
@@ -130,13 +121,6 @@ import {
     OverdropProgressWrapper,
     OverdropRowSummary,
     OverdropSummary,
-    OverdropSummarySubheader,
-    OverdropSummarySubtitle,
-    OverdropSummarySubvalue,
-    OverdropSummaryTitle,
-    OverdropTotal,
-    OverdropTotalsRow,
-    OverdropTotalsTitle,
     OverdropValue,
     RightLevel,
     RowContainer,
@@ -221,29 +205,9 @@ const Ticket: React.FC<TicketProps> = ({
     const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
 
     const [gas, setGas] = useState(0);
-    const [leaderboardPoints, setLeaderBoardPoints] = useState<LeaderboardPoints>({
-        basicPoints: 0,
-        points: 0,
-        buyinBonus: 0,
-        numberOfGamesBonus: 0,
-    });
-    const [currentLeaderboardRank, setCurrentLeaderboardRank] = useState<number>(0);
     const [slippageDropdownOpen, setSlippageDropdownOpen] = useState<boolean>(false);
 
-    const latestPeriodWeekly = Math.trunc(differenceInDays(new Date(), PARLAY_LEADERBOARD_WEEKLY_START_DATE) / 7);
-
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, { enabled: isAppReady && isWalletConnected });
-
-    const query = useParlayLeaderboardQuery(networkId, latestPeriodWeekly, {
-        enabled: isAppReady && !HIDE_PARLAY_LEADERBOARD,
-    });
-
-    const parlaysData = useMemo(() => {
-        return query.isSuccess ? query.data : [];
-    }, [query.isSuccess, query.data]);
-
-    const rewards = getRewardsArray(networkId);
-    const rewardsCurrency = getRewardsCurrency(networkId);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
@@ -263,8 +227,6 @@ const Ticket: React.FC<TicketProps> = ({
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
     const collateralHasLp = isLpSupported(selectedCollateral);
-
-    const isMinimumParlayGames = markets.length >= PARLAY_LEADERBOARD_MINIMUM_GAMES;
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -360,7 +322,6 @@ const Ticket: React.FC<TicketProps> = ({
     const freeBetBalanceExists = freeBetCollateralBalances
         ? !!Object.values(freeBetCollateralBalances).find((balance) => balance)
         : false;
-
     // Set free bet if user has free bet balance
     useEffect(() => {
         if (freeBetBalanceExists) {
@@ -398,7 +359,6 @@ const Ticket: React.FC<TicketProps> = ({
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const rewardCurrencyRate = exchangeRates && exchangeRates !== null ? exchangeRates[rewardsCurrency] : 0;
     const selectedCollateralCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[selectedCollateral] : 1;
     const thalesContractCurrencyRate =
@@ -465,7 +425,6 @@ const Ticket: React.FC<TicketProps> = ({
         exchangeRates,
         freeBetBalanceExists,
         freeBetCollateralBalances,
-        minBuyInAmount,
         multipleCollateralBalancesData,
         networkId,
         ticketPayment.forceChangeCollateral,
@@ -529,6 +488,16 @@ const Ticket: React.FC<TicketProps> = ({
         const totalMultiplier = overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0);
         return basePoints * (1 + totalMultiplier / 100);
     }, [overdropMultipliers, buyInAmountInDefaultCollateral, totalQuote]);
+
+    const gameMultipliersQuery = useGameMultipliersQuery({
+        enabled: isAppReady,
+    });
+
+    const overdropGameMultipliersInThisTicket = useMemo(() => {
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
+        return gameMultipliers.filter((multiplier) => markets.find((market) => multiplier.gameId === market.gameId));
+    }, [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess, markets]);
 
     // Clear Ticket when network is changed
     const isMounted = useRef(false);
@@ -988,16 +957,18 @@ const Ticket: React.FC<TicketProps> = ({
                                 console.log('filfill end time:', new Date(Date.now()));
                                 console.log('fulfill duration', (Date.now() - startTime) / 1000, 'seconds');
                                 refetchBalances(walletAddress, networkId);
-                                if (sportsAMMDataContract && sportsAMMV2ManagerContract) {
-                                    const numOfActiveTicketsPerUser = await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(
-                                        walletAddress
-                                    );
+                                if (sportsAMMDataContract && sportsAMMV2ManagerContract && freeBetHolderContract) {
+                                    const numOfActiveTicketsPerUser = isFreeBetActive
+                                        ? await freeBetHolderContract.numOfActiveTicketsPerUser(walletAddress)
+                                        : await sportsAMMV2ManagerContract.numOfActiveTicketsPerUser(walletAddress);
                                     const userTickets = await sportsAMMDataContract.getActiveTicketsDataPerUser(
                                         walletAddress.toLowerCase(),
                                         Number(numOfActiveTicketsPerUser) - 1,
                                         BATCH_SIZE
                                     );
-                                    const lastTicket = userTickets.ticketsData[userTickets.ticketsData.length - 1];
+                                    const lastTicket = isFreeBetActive
+                                        ? userTickets.freeBetsData[userTickets.freeBetsData.length - 1]
+                                        : userTickets.ticketsData[userTickets.ticketsData.length - 1];
                                     const lastTicketPaid =
                                         !collateralHasLp || isDefaultCollateral
                                             ? coinFormatter(lastTicket.buyInAmount, networkId)
@@ -1360,56 +1331,18 @@ const Ticket: React.FC<TicketProps> = ({
         buyInAmount,
     ]);
 
-    useEffect(() => {
-        if (buyInAmountInDefaultCollateral > 0 && totalQuote > 0 && !HIDE_PARLAY_LEADERBOARD) {
-            const buyInPow = Math.pow(buyInAmountInDefaultCollateral, 1 / 2);
-            const minBuyInPow = 1;
+    const overdropTotalBoost = useMemo(
+        () =>
+            [...overdropMultipliers, ...overdropGameMultipliersInThisTicket].reduce(
+                (prev, curr) => prev + Number(curr.multiplier),
+                0
+            ),
+        [overdropGameMultipliersInThisTicket, overdropMultipliers]
+    );
 
-            const basicPoints = 1 / totalQuote;
-            const points = (1 / totalQuote) * (1 + 0.1 * markets.length) * buyInPow;
-            const buyinBonus = buyInPow - minBuyInPow;
-            const numberOfGamesBonus = 0.1 * markets.length;
-            setLeaderBoardPoints({
-                basicPoints,
-                points,
-                buyinBonus,
-                numberOfGamesBonus,
-            });
-
-            const current = !!parlaysData ? parlaysData.findIndex((data) => data.points < points) : 0;
-            if (parlaysData.length === 0) {
-                setCurrentLeaderboardRank(1);
-            } else {
-                if (current === -1) {
-                    setCurrentLeaderboardRank(parlaysData.length + 1);
-                } else {
-                    setCurrentLeaderboardRank(current + 1);
-                }
-            }
-        }
-    }, [buyInAmountInDefaultCollateral, totalQuote, markets.length, parlaysData]);
-
-    const getPointsTooltip = () => (
-        <TooltipContainer>
-            <TooltipInfoContianer>
-                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.basic-points-label`)}:</TooltipInfoLabel>
-                <TooltipInfo>{formatCurrency(leaderboardPoints.basicPoints)}</TooltipInfo>
-            </TooltipInfoContianer>
-            <TooltipInfoContianer>
-                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.buy-in-bonus-label`)}:</TooltipInfoLabel>
-                <TooltipBonusInfo>{`+${formatPercentage(leaderboardPoints.buyinBonus, 0)}`}</TooltipBonusInfo>
-            </TooltipInfoContianer>
-            <TooltipInfoContianer>
-                <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.number-of-games-bonus-label`)}:</TooltipInfoLabel>
-                <TooltipBonusInfo>{`+${formatPercentage(leaderboardPoints.numberOfGamesBonus, 0)}`}</TooltipBonusInfo>
-            </TooltipInfoContianer>
-            <TooltipFooter>
-                <TooltipInfoContianer>
-                    <TooltipInfoLabel>{t(`parlay-leaderboard.ticket-info.total-points-label`)}:</TooltipInfoLabel>
-                    <TooltipInfo>{formatCurrency(leaderboardPoints.points)}</TooltipInfo>
-                </TooltipInfoContianer>
-            </TooltipFooter>
-        </TooltipContainer>
+    const overdropBoostedGamesTotalBoost = useMemo(
+        () => overdropGameMultipliersInThisTicket.reduce((prev, curr) => prev + Number(curr.multiplier), 0),
+        [overdropGameMultipliersInThisTicket]
     );
 
     return (
@@ -1604,80 +1537,6 @@ const Ticket: React.FC<TicketProps> = ({
                           } (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
-            {!HIDE_PARLAY_LEADERBOARD && (
-                <>
-                    <HorizontalLine />
-                    <RowSummary>
-                        <SummaryLabel>{t(`parlay-leaderboard.ticket-info.title`)}:</SummaryLabel>
-                    </RowSummary>
-                    <RowSummary>
-                        <SummaryLabel>
-                            {t(`parlay-leaderboard.ticket-info.points-label`)}
-                            <Tooltip
-                                overlay={<>{t(`parlay-leaderboard.ticket-info.points-tooltip`)}</>}
-                                iconFontSize={14}
-                                marginLeft={3}
-                            />
-                            :
-                        </SummaryLabel>
-                        <SummaryValue isCollateralInfo={true}>
-                            {hidePayout || !isMinimumParlayGames ? (
-                                '-'
-                            ) : (
-                                <>
-                                    {`${formatCurrency(leaderboardPoints.basicPoints)}`}
-                                    <SummaryValue isInfo={true}>{` + ${formatPercentage(
-                                        leaderboardPoints.buyinBonus,
-                                        0
-                                    )} + ${formatPercentage(leaderboardPoints.numberOfGamesBonus, 0)}`}</SummaryValue>
-                                    {` = ${formatCurrency(leaderboardPoints.points)}`}
-                                    <Tooltip overlay={getPointsTooltip()} iconFontSize={14} marginLeft={3} />
-                                </>
-                            )}
-                        </SummaryValue>
-                    </RowSummary>
-                    <RowSummary>
-                        <SummaryLabel>
-                            {t(`parlay-leaderboard.ticket-info.rank-label`)}
-                            <Tooltip
-                                overlay={<>{t(`parlay-leaderboard.ticket-info.rank-tooltip`)}</>}
-                                iconFontSize={14}
-                                marginLeft={3}
-                            />
-                            :
-                        </SummaryLabel>
-                        <SummaryValue isCollateralInfo={true}>
-                            {hidePayout || !isMinimumParlayGames ? '-' : <>{`${currentLeaderboardRank}.`}</>}
-                        </SummaryValue>
-                    </RowSummary>
-                    <RowSummary>
-                        <SummaryLabel>
-                            {t(`parlay-leaderboard.ticket-info.rewards-label`)}
-                            <Tooltip
-                                overlay={<>{t(`parlay-leaderboard.ticket-info.rewards-tooltip`)}</>}
-                                iconFontSize={14}
-                                marginLeft={3}
-                            />
-                            :
-                        </SummaryLabel>
-                        <SummaryValue isCollateralInfo={true}>
-                            {hidePayout || !isMinimumParlayGames ? (
-                                '-'
-                            ) : (
-                                <>
-                                    {`${
-                                        rewards[currentLeaderboardRank - 1] || 0
-                                    } ${rewardsCurrency} (${formatCurrencyWithSign(
-                                        USD_SIGN,
-                                        (rewards[currentLeaderboardRank - 1] || 0) * rewardCurrencyRate,
-                                        0
-                                    )})`}
-                                </>
-                            )}
-                        </SummaryValue>
-                    </RowSummary>
-                </>
-            )}
             <HorizontalLine />
             <RowSummary>
                 <RowContainer>
@@ -1703,82 +1562,76 @@ const Ticket: React.FC<TicketProps> = ({
                     </CheckboxContainer>
                 </RowContainer>
             </RowSummary>
-            <OverdropRowSummary margin="10px 0 0 0">
+            <OverdropRowSummary margin={isOverdropSummaryOpen ? '5px 0' : '5px 0 0 0'}>
                 <OverdropRowSummary
-                    isClickable
+                    isClickable={!isFreeBetActive}
                     onClick={() => {
-                        setIsOverdropSummaryOpen(true);
+                        if (!isFreeBetActive) {
+                            setIsOverdropSummaryOpen(!isOverdropSummaryOpen);
+                        }
                     }}
                 >
                     <OverdropLabel>{t('markets.parlay.overdrop.overdrop-xp')}</OverdropLabel>
                     <OverdropValue>
-                        {`~${formatPoints(overdropTotalXP)}`}
-                        <Arrow className={'icon icon--caret-up'} />
+                        {!isOverdropSummaryOpen &&
+                            (isFreeBetActive
+                                ? `Free bets not eligible`
+                                : `${formatPoints(overdropTotalXP)} (${overdropTotalBoost}% boost)`)}
+                        {!isFreeBetActive && (
+                            <Arrow
+                                className={!isOverdropSummaryOpen ? 'icon icon--caret-down' : 'icon icon--caret-up'}
+                            />
+                        )}
                     </OverdropValue>
                 </OverdropRowSummary>
-
-                {isOverdropSummaryOpen && (
-                    <OverdropSummary>
-                        <OverdropSummaryTitle>{t('markets.parlay.overdrop.overdrop-xp-overview')}</OverdropSummaryTitle>
-                        <OverdropRowSummary margin="0 20px">
-                            <OverdropSummarySubtitle>{t('markets.parlay.overdrop.base-xp')}</OverdropSummarySubtitle>
-                            <OverdropSummarySubvalue>{`${formatCurrency(
-                                buyInAmountInDefaultCollateral * (2 - totalQuote)
-                            )} XP`}</OverdropSummarySubvalue>
+            </OverdropRowSummary>
+            {isOverdropSummaryOpen && (
+                <OverdropSummary>
+                    <OverdropRowSummary>
+                        <OverdropLabel>{t('markets.parlay.overdrop.base-xp')}</OverdropLabel>
+                        <OverdropValue>{`${formatCurrency(
+                            buyInAmountInDefaultCollateral * (2 - totalQuote)
+                        )} XP`}</OverdropValue>
+                    </OverdropRowSummary>
+                    <HorizontalLine />
+                    {overdropMultipliers.map((multiplier) => (
+                        <OverdropRowSummary key={multiplier.name}>
+                            <OverdropLabel>{multiplier.label}</OverdropLabel>
+                            <OverdropValue>+{multiplier.multiplier}%</OverdropValue>
                         </OverdropRowSummary>
-                        <OverdropRowSummary margin="20px 20px">
-                            <OverdropSummarySubheader>
-                                {t('markets.parlay.overdrop.active-boost')}
-                            </OverdropSummarySubheader>
-                            <OverdropSummarySubheader>
-                                {t('markets.parlay.overdrop.bonus-applied')}
-                            </OverdropSummarySubheader>
+                    ))}
+                    {overdropGameMultipliersInThisTicket && (
+                        <OverdropRowSummary>
+                            <OverdropLabel>Boosted games</OverdropLabel>
+                            <OverdropValue>+{overdropBoostedGamesTotalBoost}%</OverdropValue>
                         </OverdropRowSummary>
-                        {overdropMultipliers.map((multiplier) => (
-                            <OverdropRowSummary margin="20px 20px" key={multiplier.name}>
-                                <FlexDivCentered>
-                                    <Circle active={true}>{multiplier.icon}</Circle>
-                                    <OverdropSummarySubtitle>{multiplier.label}</OverdropSummarySubtitle>
-                                </FlexDivCentered>
-                                <OverdropSummarySubvalue>+{multiplier.multiplier}%</OverdropSummarySubvalue>
-                            </OverdropRowSummary>
-                        ))}
-                        <OverdropProgressWrapper>
-                            <LeftLevel>{levelItem.level}</LeftLevel>
+                    )}
+                    <HorizontalLine />
+                    <OverdropRowSummary>
+                        <OverdropLabel>{t('markets.parlay.overdrop.total-xp-boost')}</OverdropLabel>
+                        <OverdropValue>+{overdropTotalBoost}%</OverdropValue>
+                    </OverdropRowSummary>
+                    <OverdropRowSummary>
+                        <OverdropLabel color={theme.overdrop.textColor.senary}>
+                            {t('markets.parlay.overdrop.total-xp-earned')}
+                        </OverdropLabel>
+                        <OverdropValue color={theme.overdrop.textColor.senary}>
+                            +{formatPoints(overdropTotalXP)}
+                        </OverdropValue>
+                    </OverdropRowSummary>
+                    <OverdropProgressWrapper>
+                        <LeftLevel>LVL {levelItem.level}</LeftLevel>
+                        <CurrentLevelProgressLineContainer>
                             <CurrentLevelProgressLine
                                 progressUpdateXP={overdropTotalXP}
                                 hideLevelLabel
                                 showNumbersOnly
                             />
-                            <RightLevel>{levelItem.level + 1}</RightLevel>
-                        </OverdropProgressWrapper>
-                        <OverdropTotalsRow>
-                            <FlexDivColumnCentered gap={10}>
-                                <OverdropTotalsTitle>{t('markets.parlay.overdrop.total-xp-boost')}</OverdropTotalsTitle>
-                                <OverdropTotal isBoost>
-                                    +{overdropMultipliers.reduce((prev, curr) => prev + curr.multiplier, 0)}%
-                                </OverdropTotal>
-                            </FlexDivColumnCentered>
-                            <FlexDivColumnCentered gap={10}>
-                                <OverdropTotalsTitle>
-                                    {t('markets.parlay.overdrop.total-xp-earned')}
-                                </OverdropTotalsTitle>
-                                <OverdropTotal>+{formatPoints(overdropTotalXP)}</OverdropTotal>
-                            </FlexDivColumnCentered>
-                        </OverdropTotalsRow>
-                        <OverdropRowSummary
-                            isClickable
-                            onClick={() => {
-                                setIsOverdropSummaryOpen(false);
-                            }}
-                        >
-                            <OverdropValue>
-                                <Arrow className={'icon icon--caret-down'} />
-                            </OverdropValue>
-                        </OverdropRowSummary>
-                    </OverdropSummary>
-                )}
-            </OverdropRowSummary>
+                        </CurrentLevelProgressLineContainer>
+                        <RightLevel>LVL {levelItem.level + 1}</RightLevel>
+                    </OverdropProgressWrapper>
+                </OverdropSummary>
+            )}
             {!isBuying && oddsChanged && (
                 <>
                     <FlexDivCentered>
@@ -1797,9 +1650,9 @@ const Ticket: React.FC<TicketProps> = ({
                 </>
             )}
             {!oddsChanged && <FlexDivCentered>{getSubmitButton()}</FlexDivCentered>}
-            <ShareWrapper>
+            <ShareWrapper disabled={twitterShareDisabled} onClick={onTwitterIconClick}>
                 <SummaryLabel>{t('markets.parlay.share-ticket.label')}</SummaryLabel>
-                <TwitterIcon disabled={twitterShareDisabled} onClick={onTwitterIconClick} />
+                <TwitterIcon />
             </ShareWrapper>
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2
@@ -1828,30 +1681,6 @@ const Ticket: React.FC<TicketProps> = ({
         </>
     );
 };
-
-const TooltipContainer = styled(FlexDivColumn)``;
-
-const TooltipText = styled.span``;
-
-const TooltipFooter = styled(FlexDivRow)`
-    border-top: 1px solid ${(props) => props.theme.background.secondary};
-    margin-top: 10px;
-    padding-top: 8px;
-`;
-
-const TooltipInfoContianer = styled(FlexDiv)``;
-
-const TooltipInfoLabel = styled(TooltipText)`
-    margin-right: 4px;
-`;
-
-const TooltipInfo = styled(TooltipText)`
-    font-weight: 600;
-`;
-
-const TooltipBonusInfo = styled(TooltipInfo)`
-    color: ${(props) => props.theme.status.win};
-`;
 
 const OddsChangedDiv = styled.div`
     color: ${(props) => props.theme.button.background.septenary};

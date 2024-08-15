@@ -67,6 +67,7 @@ const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>
     align-items: center;
     position: relative;
     padding: 70px 0px 10px 0px;
+    flex: 1 0 19%;
 `;
 
 const BadgeImage = styled.img<{ active?: boolean }>`
@@ -124,6 +125,7 @@ const ThalesAmount = styled(FlexDiv)`
     position: absolute;
     bottom: -25px;
     background-image: url(${ThalesAmountImage});
+    background-repeat: no-repeat;
     width: 100%;
     height: 50px;
     background-size: contain;
@@ -138,7 +140,8 @@ const VoucherAmount = styled.span`
     margin-left: 30px;
     padding-top: 3px;
     text-align: center;
-    font-size: 11px;
+    font-size: 10px;
+    white-space: pre;
     font-weight: 800;
     color: ${(props) => props.theme.overdrop.badge.textColor.primary};
 `;

@@ -1,11 +1,13 @@
+import PaginationWrapper from 'components/PaginationWrapper';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
+import { TableCell, TableRow, TableRowMobile } from 'components/Table/Table';
 import { t } from 'i18next';
-import { PaginationWrapper } from 'pages/ParlayLeaderboard/ParlayLeaderboard';
+import SearchField from 'pages/Profile/components/SearchField';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { useTheme } from 'styled-components';
@@ -16,9 +18,12 @@ import { getCurrentLevelByPoints } from 'utils/overdrop';
 import {
     AddressContainer,
     Badge,
+    SearchFieldContainer,
     StickyCell,
-    StickyContrainer,
+    StickyContainer,
     StickyRow,
+    StickyRowCardContainer,
+    TableContainer,
     tableHeaderStyle,
     tableRowStyle,
 } from './styled-components';
@@ -27,6 +32,20 @@ const Leaderboard: React.FC = () => {
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state));
     const networkId = useSelector((state: RootState) => getNetworkId(state));
+    const isMobile = useSelector(getIsMobile);
+
+    const theme: ThemeInterface = useTheme();
+
+    const [page, setPage] = useState(0);
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+    const [searchText, setSearchText] = useState<string>('');
+    const [rowsPerPage, setRowsPerPage] = useState(20);
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(Number(event.target.value));
+        setPage(0);
+    };
 
     const leaderboardQuery = useOverdropLeaderboardQuery({ enabled: isAppReady });
 
@@ -38,27 +57,73 @@ const Leaderboard: React.FC = () => {
         [leaderboardQuery.isSuccess, leaderboardQuery.data]
     );
 
-    const theme: ThemeInterface = useTheme();
-
-    const [page, setPage] = useState(0);
-    const handleChangePage = (_event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const [rowsPerPage, setRowsPerPage] = useState(20);
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(Number(event.target.value));
-        setPage(0);
-    };
+    const leaderboardFiltered = useMemo(
+        () => leaderboard.filter((row) => row.address.toLowerCase().includes(searchText.toLowerCase())),
+        [leaderboard, searchText]
+    );
 
     useEffect(() => setPage(0), [leaderboard.length]);
 
     const stickyRow = useMemo(() => {
         const data = leaderboard.find((row) => row.address.toLowerCase() == walletAddress?.toLowerCase());
         if (!data) return undefined;
-        return (
+        return isMobile ? (
+            <StickyRowCardContainer>
+                <TableRow isCard role="row">
+                    <TableRowMobile>
+                        <TableCell id={'level.smallBadgeHeader'}></TableCell>
+                        <TableCell id={'level.smallBadge'}>
+                            <Badge style={{ width: '45px' }} src={data.level.smallBadge} />
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'addressHeader'}>{t('overdrop.leaderboard.table.address')}</TableCell>
+                        <TableCell isCard id={'address'}>
+                            <AddressContainer>
+                                <SPAAnchor href={getEtherscanAddressLink(networkId, data.address)}>
+                                    {truncateAddress(data.address)}
+                                </SPAAnchor>
+                            </AddressContainer>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'rankHeader'}>{t('overdrop.leaderboard.table.rank')}</TableCell>
+                        <TableCell isCard id={'rank'}>
+                            <div>#{data.rank}</div>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'levelHeader'}>{t('overdrop.leaderboard.table.level')}</TableCell>
+                        <TableCell isCard id={'level'}>
+                            <div>
+                                #{data.level.level} {data.level.levelName}
+                            </div>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'pointsHeader'}>{t('overdrop.leaderboard.table.total-xp')}</TableCell>
+                        <TableCell isCard id={'points'}>
+                            <div>{formatCurrency(data.points)}</div>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'volumeHeader'}>{t('overdrop.leaderboard.table.total-volume')}</TableCell>
+                        <TableCell isCard id={'volume'}>
+                            <div>{formatCurrency(data.volume)}</div>
+                        </TableCell>
+                    </TableRowMobile>
+                    <TableRowMobile>
+                        <TableCell id={'rewardsHeader'}>{t('overdrop.leaderboard.table.rewards')}</TableCell>
+                        <TableCell isCard id={'rewards'}>
+                            <div>{formatCurrency(data.rewards.op)} OP</div>
+                            <div>{formatCurrency(data.rewards.arb)} ARB</div>
+                        </TableCell>
+                    </TableRowMobile>
+                </TableRow>
+            </StickyRowCardContainer>
+        ) : (
             <StickyRow>
-                <StickyContrainer>
+                <StickyContainer>
                     <StickyCell width="50px">
                         <Badge src={data.level.smallBadge} />
                     </StickyCell>
@@ -81,14 +146,22 @@ const Leaderboard: React.FC = () => {
                         <div>{formatCurrency(data.rewards.op)} OP</div>
                         <div>{formatCurrency(data.rewards.arb)} ARB</div>
                     </StickyCell>
-                </StickyContrainer>
+                </StickyContainer>
             </StickyRow>
         );
-    }, [leaderboard, networkId, walletAddress]);
+    }, [isMobile, leaderboard, networkId, walletAddress]);
 
     return (
-        <div>
+        <TableContainer>
+            <SearchFieldContainer>
+                <SearchField
+                    customPlaceholder={t('profile.search-field')}
+                    text={searchText}
+                    handleChange={(value) => setSearchText(value)}
+                />
+            </SearchFieldContainer>
             <Table
+                mobileCards
                 tableHeight="auto"
                 tableHeadCellStyles={{
                     ...tableHeaderStyle,
@@ -190,7 +263,7 @@ const Leaderboard: React.FC = () => {
                 currentPage={page}
                 rowsPerPage={rowsPerPage}
                 isLoading={leaderboardQuery.isLoading}
-                data={leaderboard}
+                data={leaderboardFiltered}
                 noResultsMessage={t('market.table.no-results')}
             ></Table>
             {!leaderboardQuery.isLoading && leaderboard.length > 0 && (
@@ -206,7 +279,7 @@ const Leaderboard: React.FC = () => {
                     />
                 </FlexDiv>
             )}
-        </div>
+        </TableContainer>
     );
 };
 

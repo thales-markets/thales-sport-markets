@@ -2,11 +2,11 @@ import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsAppReady } from 'redux/modules/app';
+import { getIsAppReady, getIsMobile } from 'redux/modules/app';
 import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivRow } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { MultiplierType } from 'types/overdrop';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
 
@@ -15,6 +15,7 @@ const XPCalculation: React.FC = () => {
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     const userMultipliersQuery = useUserMultipliersQuery(walletAddress, {
         enabled: !!isAppReady,
@@ -31,37 +32,112 @@ const XPCalculation: React.FC = () => {
         return (
             getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) +
             getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) +
-            getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)
+            getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER) +
+            getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)
         );
     }, [userMultipliers]);
 
-    return (
+    return isMobile ? (
+        <Wrapper>
+            <MobileWrapper>
+                <BoxWrapper>
+                    <BoxLabel>{t('overdrop.xp-details.days-in-row')}</BoxLabel>
+                    <GradientBorder>
+                        <Box>
+                            <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}</Badge>
+                            <MainLabel>{t('overdrop.xp-details.daily-multiplier')}</MainLabel>
+                            <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
+                        </Box>
+                    </GradientBorder>
+                </BoxWrapper>
+                <BoxWrapper>
+                    <BoxLabel>{t('overdrop.xp-details.weeks-in-row')}</BoxLabel>
+                    <GradientBorder>
+                        <Box>
+                            <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}</Badge>
+                            <MainLabel>{t('overdrop.xp-details.weekly-multiplier')}</MainLabel>
+                            <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
+                        </Box>
+                    </GradientBorder>
+                </BoxWrapper>
+            </MobileWrapper>
+
+            <Signs>{'+'}</Signs>
+
+            <MobileWrapper>
+                <BoxWrapper>
+                    <BoxLabel>{t('overdrop.xp-details.loyalty-boost')}</BoxLabel>
+                    <GradientBorder>
+                        <Box>
+                            <Badge>{<Icon style={{ fontSize: 18 }} className="icon icon--swag" />}</Badge>
+                            <MainLabel>{t('overdrop.xp-details.loyalty-multiplier')}</MainLabel>
+                            <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
+                        </Box>
+                    </GradientBorder>
+                </BoxWrapper>
+                <BoxWrapper>
+                    <BoxLabel>{t('overdrop.xp-details.shared-flex')}</BoxLabel>
+                    <GradientBorder>
+                        <Box>
+                            <Badge>{<Icon className="icon icon--x-twitter" />}</Badge>
+                            <MainLabel>{t('overdrop.xp-details.twitter-multiplier')}</MainLabel>
+                            <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
+                        </Box>
+                    </GradientBorder>
+                </BoxWrapper>
+            </MobileWrapper>
+
+            <Signs>{'='}</Signs>
+
+            <BoxWrapper>
+                <MainLabel>{t('overdrop.xp-details.total-bonus')}</MainLabel>
+                <HighlightedValue>{`+${sumOfMultipliers}%`}</HighlightedValue>
+            </BoxWrapper>
+        </Wrapper>
+    ) : (
         <Wrapper>
             <BoxWrapper>
                 <BoxLabel>{t('overdrop.xp-details.days-in-row')}</BoxLabel>
-                <Box>
-                    <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}</Badge>
-                    <MainLabel>{t('overdrop.xp-details.daily-multiplier')}</MainLabel>
-                    <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
-                </Box>
+                <GradientBorder>
+                    <Box>
+                        <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}</Badge>
+                        <MainLabel>{t('overdrop.xp-details.daily-multiplier')}</MainLabel>
+                        <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
+                    </Box>
+                </GradientBorder>
             </BoxWrapper>
             <Signs>{'+'}</Signs>
             <BoxWrapper>
-                <BoxLabel>{t('overdrop.xp-details.days-in-row')}</BoxLabel>
-                <Box>
-                    <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}</Badge>
-                    <MainLabel>{t('overdrop.xp-details.weekly-multiplier')}</MainLabel>
-                    <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
-                </Box>
+                <BoxLabel>{t('overdrop.xp-details.weeks-in-row')}</BoxLabel>
+                <GradientBorder>
+                    <Box>
+                        <Badge>{getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}</Badge>
+                        <MainLabel>{t('overdrop.xp-details.weekly-multiplier')}</MainLabel>
+                        <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
+                    </Box>
+                </GradientBorder>
+            </BoxWrapper>
+            <Signs>{'+'}</Signs>
+            <BoxWrapper>
+                <BoxLabel>{t('overdrop.xp-details.loyalty-boost')}</BoxLabel>
+                <GradientBorder>
+                    <Box>
+                        <Badge>{<Icon style={{ fontSize: 16 }} className="icon icon--swag" />}</Badge>
+                        <MainLabel>{t('overdrop.xp-details.loyalty-multiplier')}</MainLabel>
+                        <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
+                    </Box>
+                </GradientBorder>
             </BoxWrapper>
             <Signs>{'+'}</Signs>
             <BoxWrapper>
                 <BoxLabel>{t('overdrop.xp-details.shared-flex')}</BoxLabel>
-                <Box>
-                    <Badge>{<Icon className="icon icon--x-twitter" />}</Badge>
-                    <MainLabel>{t('overdrop.xp-details.twitter-multiplier')}</MainLabel>
-                    <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
-                </Box>
+                <GradientBorder>
+                    <Box>
+                        <Badge>{<Icon className="icon icon--x-twitter" />}</Badge>
+                        <MainLabel>{t('overdrop.xp-details.twitter-multiplier')}</MainLabel>
+                        <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
+                    </Box>
+                </GradientBorder>
             </BoxWrapper>
             <Signs>{'='}</Signs>
             <BoxWrapper>
@@ -76,12 +152,23 @@ const Wrapper = styled(FlexDivRow)`
     justify-content: center;
     align-items: center;
     margin: 25px 0px;
-    width: 50%;
+    width: 100%;
+`;
+
+const MobileWrapper = styled(FlexDivColumnCentered)`
+    gap: 16px;
 `;
 
 const BoxWrapper = styled(FlexDivColumn)`
+    border-radius: 6px;
     align-items: center;
     justify-content: center;
+`;
+
+const GradientBorder = styled.div`
+    border-radius: 6px;
+    background: ${(props) => props.theme.overdrop.borderColor.secondary};
+    padding: 2px;
 `;
 
 const Box = styled(FlexDivColumn)`
@@ -91,9 +178,7 @@ const Box = styled(FlexDivColumn)`
     border-radius: 6.5px;
     padding: 7px 14px;
     width: 100px;
-    border: 2px solid transparent;
-    background: linear-gradient(${(props) => props.theme.overdrop.background.active} 0 0) padding-box,
-        linear-gradient(40deg, rgba(92, 68, 44, 1) 0%, rgba(23, 25, 42, 1) 50%, rgba(92, 68, 44, 1) 100%) border-box;
+    background: ${(props) => props.theme.overdrop.background.active};
 `;
 
 const MainLabel = styled.span`

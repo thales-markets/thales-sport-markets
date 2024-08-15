@@ -8,7 +8,6 @@ type LevelCirclesTypes = {
     currentLevel: number;
     additionalLabelsForLevels?: string[];
     displayLevelNumberInsideCircle?: boolean;
-    wrapperMargin?: string;
 };
 
 const LevelCircles: React.FC<LevelCirclesTypes> = ({
@@ -16,10 +15,9 @@ const LevelCircles: React.FC<LevelCirclesTypes> = ({
     currentLevel,
     additionalLabelsForLevels,
     displayLevelNumberInsideCircle,
-    wrapperMargin,
 }) => {
     return (
-        <Wrapper wrapperMargin={wrapperMargin}>
+        <Wrapper>
             {levels.map((item, index) => {
                 return (
                     <LevelWrapper key={index}>
@@ -37,12 +35,13 @@ const LevelCircles: React.FC<LevelCirclesTypes> = ({
     );
 };
 
-const Wrapper = styled(FlexDivRowCentered)<{ wrapperMargin?: string }>`
-    justify-content: space-around;
-    margin: ${(props) => (props.wrapperMargin ? props.wrapperMargin : '5px 0px')};
+const Wrapper = styled(FlexDivRowCentered)`
+    justify-content: center;
+    gap: 8px;
 `;
 
-const LevelWrapper = styled(FlexDivColumnCentered)<{ wrapperMargin?: string }>`
+const LevelWrapper = styled(FlexDivColumnCentered)`
+    position: relative;
     margin: 5px 0px;
     align-items: center;
     max-width: 23px;

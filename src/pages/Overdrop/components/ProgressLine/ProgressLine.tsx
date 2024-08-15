@@ -9,40 +9,44 @@ import { formatPoints } from 'utils/overdrop';
 type ProgressLineProps = {
     progress: number;
     currentPoints: number;
+    currentLevelMinimum: number;
     nextLevelMinimumPoints: number;
     level: number;
     progressUpdate?: number;
     hideLevelLabel?: boolean;
     showNumbersOnly?: boolean;
+    height?: string;
 };
 
 const ProgressLine: React.FC<ProgressLineProps> = ({
     progress,
     progressUpdate,
     currentPoints,
+    currentLevelMinimum,
     nextLevelMinimumPoints,
     level,
     hideLevelLabel,
     showNumbersOnly,
+    height,
 }) => {
     const { t } = useTranslation();
 
     return (
         <Wrapper>
             <ProgressContainer>
-                <ProgressLineWrapper levelLabelHidden={hideLevelLabel}>
-                    {!!progressUpdate && <ProgressUpdate progress={Math.min(progress + progressUpdate, 100)} />}
+                <ProgressLineWrapper height={height} levelLabelHidden={hideLevelLabel}>
                     <Progress
+                        progressUpdate={progressUpdate}
                         progress={progress}
                         textBelow={`${
                             showNumbersOnly
                                 ? formatCurrency(currentPoints, undefined, true)
-                                : formatPoints(currentPoints)
+                                : formatPoints(currentPoints - currentLevelMinimum)
                         } / ${
                             showNumbersOnly
                                 ? formatCurrency(nextLevelMinimumPoints, undefined, true)
-                                : formatPoints(nextLevelMinimumPoints)
-                        }`}
+                                : formatPoints(nextLevelMinimumPoints - currentLevelMinimum)
+                        }(lvl${level + 1})`}
                     />
                     <DetailedPoints progress={Math.min(progress, 100)}></DetailedPoints>
                 </ProgressLineWrapper>
@@ -95,8 +99,7 @@ const ProgressContainer = styled(FlexDivColumn)`
     width: 100%;
 `;
 
-const ProgressLineWrapper = styled(FlexDiv)<{ levelLabelHidden?: boolean }>`
-    margin-left: 10px;
+const ProgressLineWrapper = styled(FlexDiv)<{ levelLabelHidden?: boolean; height?: string }>`
     border-radius: 28px;
     background-color: ${(props) => props.theme.background.senary};
     min-width: 100%;
@@ -106,27 +109,9 @@ const ProgressLineWrapper = styled(FlexDiv)<{ levelLabelHidden?: boolean }>`
     }
     width: ${(props) => (props.levelLabelHidden ? '100%' : '80%')};
     background-color: ${(props) => props.theme.background.senary};
-    height: ${(props) => (props.levelLabelHidden ? '18px' : '26px')};
+    height: ${(props) => props.height ?? '12px'};
     @media (max-width: 767px) {
         margin-left: 0px;
-    }
-`;
-
-const ProgressUpdate = styled(FlexDiv)<{ progress: number }>`
-    z-index: 0;
-    position: absolute;
-    width: ${(props) => props.progress}%;
-    height: 100%;
-    align-items: center;
-    background-color: ${(props) => props.theme.overdrop.textColor.senary};
-    color: ${(props) => props.theme.overdrop.textColor.secondary};
-    font-size: 12px;
-    border-radius: 28px;
-    font-weight: 900;
-    text-transform: uppercase;
-    text-align: right !important;
-    @media (max-width: 767px) {
-        font-size: 8px;
     }
 `;
 

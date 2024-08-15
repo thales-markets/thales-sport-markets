@@ -29,6 +29,12 @@ const useUserMultipliersQuery = (walletAddress: string, options?: UseQueryOption
                         icon: <>0</>,
                     },
                     {
+                        name: 'loyaltyMultiplier',
+                        label: 'Loyalty boost',
+                        multiplier: 0,
+                        icon: <>0</>,
+                    },
+                    {
                         name: 'twitterMultiplier',
                         label: 'Twitter share',
                         multiplier: 0,

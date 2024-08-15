@@ -15,6 +15,7 @@ export enum Sport {
     CRICKET = 'Cricket',
     MOTOSPORT = 'Motosport',
     GOLF = 'Golf',
+    POLITICS = 'Politics',
     EMPTY = '',
 }
 
@@ -94,6 +95,10 @@ export enum League {
     UEFA_CHAMPIONS_LEAGUE_QUALIFICATION = 10611,
     UEFA_EUROPA_LEAGUE_QUALIFICATION = 10613,
     UEFA_CONFERENCE_LEAGUE_QUALIFICATION = 10615,
+    US_ELECTION = 20000,
+    UEFA_SUPER_CUP = 20001,
+    BRAZIL_CUP = 20002,
+    ENGLAND_CHAMPIONSHIP = 20011,
     GOLF_H2H = 100021,
     GOLF_WINNER = 100121,
 }
@@ -127,4 +132,5 @@ export enum Provider {
     ENETPULSE = 'enetpulse',
     JSONODDS = 'jsonOdds',
     OPTICODDS = 'opticOdds',
+    EMPTY = '',
 }

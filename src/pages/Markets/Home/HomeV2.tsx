@@ -15,6 +15,7 @@ import i18n from 'i18n';
 import { groupBy, orderBy } from 'lodash';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
+import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
@@ -49,7 +50,7 @@ import { BOXING_LEAGUES, LeagueMap } from '../../../constants/sports';
 import { MarketType } from '../../../enums/marketTypes';
 import { Sport } from '../../../enums/sports';
 import TimeFilters from '../../../layouts/DappLayout/DappHeader/components/TimeFilters';
-import { getSportLeagueIds, isBoxingLeague, isOlympicLeague } from '../../../utils/sports';
+import { getSportLeagueIds, isBoxingLeague } from '../../../utils/sports';
 import FilterTagsMobile from '../components/FilterTagsMobile';
 import SportFilterMobile from '../components/SportFilter/SportFilterMobile';
 import SportTags from '../components/SportTags';
@@ -97,21 +98,6 @@ const Home: React.FC = () => {
         () =>
             orderBy(
                 Object.values(LeagueMap).filter((tag) => !tag.hidden),
-                ['priority', 'label'],
-                ['asc', 'asc']
-            ).map((tag) => {
-                return {
-                    id: tag.id,
-                    label: tag.label,
-                };
-            }),
-        []
-    );
-
-    const olympicTagsList: Tags = useMemo(
-        () =>
-            orderBy(
-                Object.values(LeagueMap).filter((tag) => !tag.hidden && isOlympicLeague(tag.id)),
                 ['priority', 'label'],
                 ['asc', 'asc']
             ).map((tag) => {
@@ -190,11 +176,7 @@ const Home: React.FC = () => {
 
             selectedLanguage == '' ? setSelectedLanguage(i18n.language) : '';
 
-            if (
-                sportFilter == SportFilter.Favourites ||
-                sportFilter == SportFilter.Live ||
-                sportFilter == SportFilter.OlympicGames
-            ) {
+            if (sportFilter == SportFilter.Favourites || sportFilter == SportFilter.Live) {
                 setAvailableTags(tagsList);
             } else {
                 const tagsPerSport = getSportLeagueIds((sportFilter as unknown) as Sport);
@@ -218,6 +200,10 @@ const Home: React.FC = () => {
         enabled: isAppReady,
     });
 
+    const gameMultipliersQuery = useGameMultipliersQuery({
+        enabled: isAppReady,
+    });
+
     const finalMarkets = useMemo(() => {
         const allMarkets: MarketsCache =
             sportMarketsQueryNew.isSuccess && sportMarketsQueryNew.data
@@ -232,6 +218,9 @@ const Home: React.FC = () => {
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
             liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : [];
+
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
 
         const filteredMarkets = (sportFilter === SportFilter.Live
             ? allLiveMarkets
@@ -266,19 +255,19 @@ const Home: React.FC = () => {
             }
 
             if (sportFilter !== SportFilter.All) {
-                if (
-                    sportFilter != SportFilter.Favourites &&
-                    sportFilter != SportFilter.Live &&
-                    sportFilter != SportFilter.OlympicGames
-                ) {
-                    if (((market.sport as unknown) as SportFilter) !== sportFilter) {
+                if (sportFilter === SportFilter.Boosted) {
+                    if (!gameMultipliers.find((multiplier) => multiplier.gameId === market.gameId)) {
                         return false;
                     }
                 } else {
-                    if (sportFilter == SportFilter.Favourites) {
-                        if (!favouriteLeagues.map((league) => league.id).includes(market.leagueId)) return false;
-                    } else if (sportFilter == SportFilter.OlympicGames) {
-                        if (!olympicTagsList.map((league) => league.id).includes(market.leagueId)) return false;
+                    if (sportFilter != SportFilter.Favourites && sportFilter != SportFilter.Live) {
+                        if (((market.sport as unknown) as SportFilter) !== sportFilter) {
+                            return false;
+                        }
+                    } else {
+                        if (sportFilter == SportFilter.Favourites) {
+                            if (!favouriteLeagues.map((league) => league.id).includes(market.leagueId)) return false;
+                        }
                     }
                 }
             }
@@ -323,6 +312,8 @@ const Home: React.FC = () => {
         sportMarketsQueryNew.data,
         liveSportMarketsQuery.isSuccess,
         liveSportMarketsQuery.data,
+        gameMultipliersQuery.isSuccess,
+        gameMultipliersQuery.data,
         sportFilter,
         statusFilter,
         marketSearch,
@@ -330,7 +321,6 @@ const Home: React.FC = () => {
         datePeriodFilter,
         marketTypeFilter,
         favouriteLeagues,
-        olympicTagsList,
     ]);
 
     const marketsLoading =
@@ -340,10 +330,7 @@ const Home: React.FC = () => {
         if (sportFilter == SportFilter.Favourites) {
             setAvailableTags(favouriteLeagues);
         }
-        if (sportFilter == SportFilter.OlympicGames) {
-            setAvailableTags(olympicTagsList);
-        }
-    }, [favouriteLeagues, olympicTagsList, sportFilter, showActive]);
+    }, [favouriteLeagues, sportFilter, showActive]);
 
     const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, networkId, {
         enabled: isAppReady,
@@ -390,14 +377,9 @@ const Home: React.FC = () => {
             favouriteCount += openMarketsCountPerTag[tag.id] || 0;
         });
         openMarketsCount[SportFilter.Favourites] = favouriteCount;
-        let olympicGamesCount = 0;
-        olympicTagsList.forEach((tag: TagInfo) => {
-            olympicGamesCount += openMarketsCountPerTag[tag.id] || 0;
-        });
-        openMarketsCount[SportFilter.OlympicGames] = olympicGamesCount;
 
         return openMarketsCount;
-    }, [favouriteLeagues, olympicTagsList, openMarketsCountPerTag]);
+    }, [favouriteLeagues, openMarketsCountPerTag]);
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveSportMarkets: SportMarkets =
@@ -417,6 +399,24 @@ const Home: React.FC = () => {
         return liveMarketsCountPerTag;
     }, [liveSportMarketsQuery]);
 
+    const boostedMarketsCount = useMemo(() => {
+        const openSportMarkets: SportMarkets =
+            openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
+                ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
+                : [];
+        const gameMultipliers =
+            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
+
+        return openSportMarkets.filter((openMarket) =>
+            gameMultipliers.find((multiplier) => multiplier.gameId === openMarket.gameId)
+        ).length;
+    }, [
+        gameMultipliersQuery.data,
+        gameMultipliersQuery.isSuccess,
+        openSportMarketsQuery.data,
+        openSportMarketsQuery.isSuccess,
+    ]);
+
     const liveMarketsCountPerSport = useMemo(() => {
         const liveMarketsCount: any = {};
         let totalCount = 0;
@@ -431,14 +431,9 @@ const Home: React.FC = () => {
             favouriteCount += liveMarketsCountPerTag[tag.id] || 0;
         });
         liveMarketsCount[SportFilter.Favourites] = favouriteCount;
-        let olympicGamesCount = 0;
-        olympicTagsList.forEach((tag: TagInfo) => {
-            olympicGamesCount += liveMarketsCountPerTag[tag.id] || 0;
-        });
-        liveMarketsCount[SportFilter.OlympicGames] = olympicGamesCount;
 
         return liveMarketsCount;
-    }, [liveMarketsCountPerTag, favouriteLeagues, olympicTagsList]);
+    }, [liveMarketsCountPerTag, favouriteLeagues]);
 
     const resetFilters = useCallback(() => {
         dispatch(setStatusFilter(StatusFilter.OPEN_MARKETS));
@@ -552,7 +547,9 @@ const Home: React.FC = () => {
                             }}
                             sport={filterItem}
                             sportCount={
-                                filterItem == SportFilter.Live
+                                filterItem === SportFilter.Boosted
+                                    ? boostedMarketsCount
+                                    : filterItem == SportFilter.Live
                                     ? liveMarketsCountPerSport[filterItem]
                                     : openMarketsCountPerSport[filterItem]
                             }
@@ -626,9 +623,6 @@ const Home: React.FC = () => {
                             {getSportFilters()}
                         </SportFiltersContainer>
                     </Scroll>
-                    {/* <Suspense fallback={<Loader />}>
-                        {networkId !== Network.Base && networkId !== Network.OptimismSepolia && <SidebarLeaderboard />}
-                    </Suspense> */}
                 </LeftSidebarContainer>
 
                 {/* MAIN PART */}

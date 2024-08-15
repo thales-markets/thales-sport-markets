@@ -21,6 +21,7 @@ export const getTeamImageSource = (team: string, league: League) => {
               .trim()
               .replaceAll(' 7s', '')
               .replaceAll(' U23', '')
+              .replaceAll(' 3x3', '')
               .replaceAll(' ', '-')
               .toLowerCase()}.svg`
         : league == League.ENGLAND_CUP
@@ -33,7 +34,11 @@ export const getTeamImageSource = (team: string, league: League) => {
         ? `/logos/Serie A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
         : league == League.GERMANY_CUP
         ? `/logos/Bundesliga/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
-        : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`;
+        : league == League.BRAZIL_CUP
+        ? `/logos/Brazil-Serie-A/${team.trim().replaceAll(' ', '-').toLowerCase()}.webp`
+        : league == League.US_ELECTION
+        ? `/logos/Countries/united-states-of-america.svg`
+        : `/logos/${leagueLabel}/${team.trim().replaceAll(' ', '-').replaceAll('/', '-').toLowerCase()}.webp`;
 };
 
 const OVERTIME_LOGO = '/logos/overtime-logo.png';
@@ -93,7 +98,10 @@ export const getLeagueFlagSource = (tagId: number | any) => {
             return `/logos/Countries/united-states-of-america.svg`;
         case League.MLS:
             return `/logos/Countries/united-states-of-america.svg`;
+        case League.US_ELECTION:
+            return `/logos/Countries/united-states-of-america.svg`;
         case League.EPL:
+        case League.ENGLAND_CHAMPIONSHIP:
             return `/logos/Countries/england.svg`;
         case League.LIGUE_ONE:
             return `/logos/Countries/france.svg`;
@@ -116,26 +124,20 @@ export const getLeagueFlagSource = (tagId: number | any) => {
         case League.SAUDI_PROFESSIONAL_LEAGUE:
             return `/logos/Countries/saudi-arabia.svg`;
         case League.BRAZIL_1:
+        case League.BRAZIL_CUP:
             return `/logos/Countries/brazil.svg`;
         case League.LIGA_MX:
             return `/logos/Countries/mexico.svg`;
         case League.UEFA_CL:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_EL:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_EURO:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_EURO_U21:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_NATIONS_LEAGUE:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_CONFERENCE_LEAGUE:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_CHAMPIONS_LEAGUE_QUALIFICATION:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_EUROPA_LEAGUE_QUALIFICATION:
-            return `/logos/Countries/europe.svg`;
         case League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION:
+        case League.UEFA_SUPER_CUP:
             return `/logos/Countries/europe.svg`;
         case League.EUROLEAGUE:
             return `/logos/Countries/europe.svg`;
