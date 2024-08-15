@@ -52,6 +52,7 @@ const DailyRecap: React.FC = () => {
 
             return formattedDurationFull(resetsIn, dateTimeTranslationMap);
         }
+        return '--:--';
     }, [userData]);
 
     return (
@@ -100,7 +101,7 @@ const GradientBorder = styled.div`
 const Wrapper = styled(FlexDivColumn)`
     height: fit-content;
     padding: 11px 10px;
-    background: ${(props) => props.theme.background.quinary};
+    background: ${(props) => props.theme.overdrop.background.active};
     border-radius: 6px;
     @media (max-width: 767px) {
         flex-direction: row;
@@ -122,7 +123,7 @@ const Label = styled.span`
     font-weight: 600;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 `;
 
 const Value = styled.span`
@@ -131,18 +132,6 @@ const Value = styled.span`
     text-transform: uppercase;
     color: ${(props) => props.theme.overdrop.textColor.primary};
     position: relative;
-    &:after {
-        content: ' ';
-        width: 50%;
-        height: 16px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        filter: blur(25px);
-        background-color: #f1ba20;
-    }
 `;
 
 export default DailyRecap;
