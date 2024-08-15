@@ -35,3 +35,9 @@ export enum MultiplierType {
     WEEKLY = 'weeklyMultiplier',
     TWITTER = 'twitterMultiplier',
 }
+
+export enum ModalTypes {
+    WELCOME,
+    LEVEL_UP,
+    DAILY_STREAK,
+}
