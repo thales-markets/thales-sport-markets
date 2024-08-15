@@ -360,13 +360,19 @@ const Ticket: React.FC<TicketProps> = ({
             value: 0,
         };
         if (isThales) {
-            const multiplier = getAddedPayoutMultiplier(selectedCollateral, 1);
-            const percentage = Math.pow(1 / multiplier, markets.length);
+            const quote = markets.reduce(
+                (partialQuote, market) =>
+                    partialQuote *
+                    (market.odd > 0 ? getAddedPayoutMultiplier(selectedCollateral, market.odd) : market.odd),
+                1
+            );
+            const basicQuote = markets.reduce((partialQuote, market) => partialQuote * market.odd, 1);
+            const percentage = basicQuote / quote;
             bonus.percentage = percentage - 1;
             bonus.value = Number(payout) - Number(payout) / percentage;
         }
         return bonus;
-    }, [isThales, selectedCollateral, markets.length, payout]);
+    }, [isThales, markets, payout, selectedCollateral]);
 
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
         enabled: isAppReady,
