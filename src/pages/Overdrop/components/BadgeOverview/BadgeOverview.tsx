@@ -55,7 +55,7 @@ const BadgeOverview: React.FC = () => {
                 setCurrentStep(levelItem.level - 2 > 0 ? levelItem.level - (isMobile ? 1 : 2) : 0);
             }
         }
-    }, [levelItem, numberOfCards]);
+    }, [levelItem, numberOfCards, isMobile]);
 
     const handleOnNext = () => {
         if (currentStep + 1 + numberOfCards == OVERDROP_LEVELS.length + 1) return;
@@ -136,7 +136,7 @@ const BadgeOverview: React.FC = () => {
                             {nextThalesRewardLevel
                                 ? `${formatPoints(nextThalesRewardLevel?.minimumPoints)} @ LVL ${
                                       nextThalesRewardLevel?.level
-                                  }`
+                                  } `
                                 : ''}
                         </ValueSecondary>
                     </ValueWrapper>
