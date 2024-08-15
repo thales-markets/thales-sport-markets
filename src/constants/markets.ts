@@ -9,7 +9,7 @@ export const APPROVAL_BUFFER = 0.01;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.025; // 2%
 export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
-export const COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE = 0.03; // 3%
+export const COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE = 0.1; // 10%
 
 export const INCENTIVIZED_LEAGUES: Record<number, any> = {
     [League.MLB]: {

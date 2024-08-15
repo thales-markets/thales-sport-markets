@@ -626,7 +626,7 @@ const Ticket: React.FC<TicketProps> = ({
             const getSwapQuote = async () => {
                 const quote = await getQuote(networkId, swapToThalesParams);
 
-                setSwappedThalesToReceive(quote);
+                setSwappedThalesToReceive(quote * (1 - swapToThalesParams.slippage / 100));
                 setSwapQuote(quote / Number(buyInAmount));
             };
 
@@ -642,7 +642,7 @@ const Ticket: React.FC<TicketProps> = ({
         async () => {
             if (!openBuyStepsModal && !tooltipTextBuyInAmount) {
                 const quote = await getQuote(networkId, swapToThalesParams);
-                setSwappedThalesToReceive(quote);
+                setSwappedThalesToReceive(quote * (1 - swapToThalesParams.slippage / 100));
                 setSwapQuote(quote / Number(buyInAmount));
             }
         },
@@ -739,6 +739,7 @@ const Ticket: React.FC<TicketProps> = ({
         isFreeBetActive,
         swapToThales,
         swappedThalesToReceive,
+        isBuying,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
