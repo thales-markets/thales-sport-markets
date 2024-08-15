@@ -99,7 +99,7 @@ const CloseIcon = styled.i`
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\0031';
-        color: ${(props) => props.theme.textColor.primary};
+        color: ${(props) => props.theme.overdrop.textColor.primary};
     }
 `;
 
