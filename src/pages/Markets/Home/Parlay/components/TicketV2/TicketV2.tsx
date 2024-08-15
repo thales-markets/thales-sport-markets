@@ -921,9 +921,9 @@ const Ticket: React.FC<TicketProps> = ({
                     const approveTxHash = await sendTransaction(approveSwapRawTransaction);
 
                     if (approveTxHash) {
+                        await delay(3000); // wait for 1inch API to read correct approval
                         step = BuyTicketStep.SWAP;
                         setBuyStep(step);
-                        await delay(1000); // wait for 1inch API to read correct approval
                     }
                 } catch (e) {
                     console.log('Approve swap failed', e);
@@ -937,10 +937,19 @@ const Ticket: React.FC<TicketProps> = ({
         if (step === BuyTicketStep.SWAP) {
             try {
                 let swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+
                 // retry once
                 if (!swapRawTransaction) {
-                    await delay(1200);
-                    swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+                    await delay(1500);
+                    const hasRefreshedAllowance = await checkSwapAllowance(
+                        networkId,
+                        walletAddress as Address,
+                        swapToThalesParams.src,
+                        coinParser(buyInAmount.toString(), networkId, selectedCollateral)
+                    );
+                    if (hasRefreshedAllowance) {
+                        swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+                    }
                 }
 
                 const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
