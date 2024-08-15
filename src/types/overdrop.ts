@@ -42,6 +42,11 @@ export enum MultiplierType {
     GAME = 'gameMultiplier',
 }
 
+export enum ModalTypes {
+    WELCOME,
+    LEVEL_UP,
+    DAILY_STREAK,
+}
 export enum GameMultiplierType {
     DAILY = 'daily',
     WEEKLY = 'weekly',

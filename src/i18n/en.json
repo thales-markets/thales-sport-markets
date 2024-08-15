@@ -1274,6 +1274,14 @@
                 "total-volume": "Total volume",
                 "rewards": "Reward amount"
             }
+        },
+        "modal": {
+            "check-out": "Check out overdrop league!",
+            "gain-xp-label": "Gain XP, level up, earn rewards and farm  the airdrop!",
+            "go-to-overdrop": "Go to overdrop",
+            "congratulation": "Congratulation!",
+            "reached-level": "You have reached LEVEL {{ level }} and won {{ amount }} THALES free bet!",
+            "unlocked-level": "You unlocked LEVEL {{ level }}!"
         }
     }
 }

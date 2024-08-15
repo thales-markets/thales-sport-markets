@@ -14,6 +14,7 @@ type LargeBadgeProps = {
     levelName: string;
     reached: boolean;
     voucherAmount?: number;
+    highlight?: boolean;
 };
 
 const LargeBadge: React.FC<LargeBadgeProps> = ({
@@ -22,13 +23,14 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
     levelName,
     reached,
     voucherAmount,
+    highlight,
 }) => {
     const { t } = useTranslation();
 
     const levelItem = OVERDROP_LEVELS.find((item) => item.level == level);
 
     return (
-        <Wrapper active={reached}>
+        <Wrapper active={reached} highlight={highlight}>
             <BadgeImage active={reached} src={levelItem ? levelItem.largeBadge : ''} />
             {!reached && (
                 <LockWrapper>
@@ -50,9 +52,10 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
     );
 };
 
-const Wrapper = styled(FlexDivColumn)<{ active?: boolean }>`
-    min-width: 110px;
+const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>`
+    min-width: 122px;
     margin-top: 40px;
+    margin-bottom: ${(props) => (props.highlight ? '50px' : '')};
     border: 3px solid transparent;
     border-radius: 6px;
     background: linear-gradient(

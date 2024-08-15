@@ -1,4 +1,5 @@
 import LevelRecap from 'pages/Overdrop/components/LevelRecap';
+// import LevelUpModal from 'pages/Overdrop/components/LevelUpModal';
 import React from 'react';
 import styled from 'styled-components';
 import { FlexDivRow } from 'styles/common';
@@ -7,6 +8,7 @@ const LevelingTree: React.FC = () => {
     return (
         <Wrapper>
             <LevelRecap />
+            {/* <LevelUpModal currentLevel={4} /> */}
         </Wrapper>
     );
 };

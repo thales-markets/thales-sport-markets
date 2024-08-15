@@ -176,6 +176,7 @@ export default {
             quaternary: Colors.METALIC_BLUE,
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,
             senary: Colors.LIGHTNING_YELLOW,
+            septenary: Colors.METALIC_YELLOW,
             active: Colors.NAVY_BLUE_DARK,
             progressBar: Colors.YELLOW,
         },
@@ -186,6 +187,7 @@ export default {
             quaternary: Colors.NAVY_BLUE_EXTRA_DARK,
             quinary: Colors.TORY_BLUE_LIGHT,
             senary: Colors.OVERDROP_GREEN,
+            septenary: Colors.METALIC_YELLOW,
             inactive: Colors.NAVY_BLUE_LIGHT,
         },
         borderColor: {
@@ -199,6 +201,14 @@ export default {
             },
             textColor: {
                 primary: Colors.SMOKEY_TOPAZ,
+            },
+        },
+        button: {
+            textColor: {
+                primary: Colors.NAVY_BLUE,
+            },
+            background: {
+                primary: Colors.METALIC_YELLOW,
             },
         },
     },
