@@ -1,32 +1,16 @@
-import Modal from 'components/Modal';
 import React from 'react';
 
-import ModalBackgroundImage from 'assets/images/overdrop/welcome-modal-background.png';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
+import { ModalTypes } from 'types/overdrop';
+import BaseModal from '../BaseModal';
 
-const MainModal: React.FC = () => {
+const WelcomeModal: React.FC = () => {
     const { t } = useTranslation();
 
     return (
-        <Modal
-            title={''}
-            onClose={() => console.log('Test')}
-            shouldCloseOnOverlayClick={false}
-            removeWrapperBackground={true}
-            customStyle={{
-                overlay: { zIndex: 2000 },
-                content: {
-                    backgroundImage: `url(${ModalBackgroundImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center center',
-                    backgroundRepeat: 'no-repeat',
-                    borderRadius: '4px',
-                    padding: '10px',
-                },
-            }}
-        >
+        <BaseModal onClose={() => console.log('Test')} type={ModalTypes.WELCOME}>
             <Wrapper>
                 <TextWrapper>
                     <Header>{t('overdrop.modal.check-out')}</Header>
@@ -34,7 +18,7 @@ const MainModal: React.FC = () => {
                 </TextWrapper>
                 <Button>{t('overdrop.modal.go-to-overdrop')}</Button>
             </Wrapper>
-        </Modal>
+        </BaseModal>
     );
 };
 
@@ -42,6 +26,7 @@ const Wrapper = styled(FlexDivColumn)`
     font-family: 'Roboto' !important;
     align-items: center;
     justify-content: center;
+    padding: 15px 20px 30px 20px;
 `;
 
 const TextWrapper = styled(FlexDivColumn)`
@@ -76,4 +61,4 @@ const Button = styled(FlexDiv)`
     cursor: pointer;
 `;
 
-export default MainModal;
+export default WelcomeModal;

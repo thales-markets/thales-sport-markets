@@ -1,3 +1,5 @@
+import ModalBackground from 'assets/images/overdrop/modal-background.png';
+import WelcomeModalBackground from 'assets/images/overdrop/welcome-modal-background.png';
 import React from 'react';
 import ReactModal from 'react-modal';
 import styled, { CSSProperties } from 'styled-components';
@@ -27,6 +29,10 @@ const defaultCustomStyles = {
         padding: '0px',
         border: 'none',
         overflow: 'auto',
+        borderRadius: '9px',
+        backgroundImage: `url(${ModalBackground})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -35,8 +41,6 @@ const defaultCustomStyles = {
 };
 
 const BaseModal: React.FC<ModalProps> = ({ type, onClose, children, mobileStyle }) => {
-    console.log('type ', type);
-
     const customStyle = {
         overlay: { ...defaultCustomStyles.overlay },
         content: {
@@ -46,7 +50,7 @@ const BaseModal: React.FC<ModalProps> = ({ type, onClose, children, mobileStyle 
 
     return (
         <ReactModal isOpen onRequestClose={onClose} shouldCloseOnOverlayClick={true} style={customStyle}>
-            <Container mobileStyle={mobileStyle?.container}>
+            <Container mobileStyle={mobileStyle?.container} type={type}>
                 <Header mobileStyle={mobileStyle?.header}>
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
                 </Header>
@@ -56,12 +60,19 @@ const BaseModal: React.FC<ModalProps> = ({ type, onClose, children, mobileStyle 
     );
 };
 
-const Container = styled.div<{ mobileStyle?: CSSProperties; removeBackground?: boolean }>`
+const Container = styled.div<{ mobileStyle?: CSSProperties; removeBackground?: boolean; type: ModalTypes }>`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     padding: 0px;
-    border-radius: 5px;
-    background: linear-gradient(${(props) => props.theme.overdrop.background.active} 0 0) padding-box,
-        linear-gradient(40deg, rgba(92, 68, 44, 1) 0%, rgba(23, 25, 42, 1) 50%, rgba(92, 68, 44, 1) 100%) border-box;
+    border-radius: 9px;
+    ${(props) => (props.type == ModalTypes.LEVEL_UP ? `background-color: ${props.theme.background.primary};` : '')}
+    ${(props) => (props.type == ModalTypes.LEVEL_UP ? `background-image: url(${ModalBackground});` : '')}
+    ${(props) => (props.type == ModalTypes.WELCOME ? `background-image: url(${WelcomeModalBackground});` : '')}
+    ${(props) => (props.type == ModalTypes.WELCOME ? `background-color: none;` : '')}
+    background-size: cover;
+    background-repeat: no-repeat;
+    ${(props) => (props.type == ModalTypes.LEVEL_UP ? `` : '')}
+    ${(props) => (props.type == ModalTypes.LEVEL_UP ? `` : '')}
+    
     @media (max-width: 575px) {
         ${(props) =>
             props.mobileStyle ? convertCssToStyledProperties(props.mobileStyle) : 'padding: 20px 15px 30px 15px;'}
