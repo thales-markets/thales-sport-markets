@@ -67,7 +67,7 @@ const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>
     align-items: center;
     position: relative;
     padding: 70px 0px 10px 0px;
-    flex: 1 0 19%;
+    flex: 1 0 18%;
 `;
 
 const BadgeImage = styled.img<{ active?: boolean }>`

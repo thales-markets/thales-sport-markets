@@ -40,20 +40,95 @@ const LevelRecap: React.FC = () => {
     return (
         <Wrapper>
             <Heading>{t('overdrop.leveling-tree.heading')}</Heading>
-            <BadgeWrapper>
-                {OVERDROP_LEVELS.slice(1).map((item, index) => {
-                    return (
-                        <LargeBadge
-                            key={`${index}-level`}
-                            requiredPointsForLevel={item.minimumPoints}
-                            level={item.level}
-                            reached={levelItem ? item.level <= levelItem.level : false}
-                            levelName={item.levelName}
-                            voucherAmount={item.voucherAmount}
-                        />
-                    );
-                })}
-            </BadgeWrapper>
+            <BadgeContainer>
+                <LoyaltyBoost>5% Loyalty Boost</LoyaltyBoost>
+                <BadgeWrapper>
+                    {OVERDROP_LEVELS.slice(1, 6).map((item, index) => {
+                        return (
+                            <LargeBadge
+                                key={`${index + 1}-level`}
+                                requiredPointsForLevel={item.minimumPoints}
+                                level={item.level}
+                                reached={levelItem ? item.level <= levelItem.level : false}
+                                levelName={item.levelName}
+                                voucherAmount={item.voucherAmount}
+                            />
+                        );
+                    })}
+                </BadgeWrapper>
+            </BadgeContainer>
+            <BadgeContainer>
+                <LoyaltyBoost>10% Loyalty Boost</LoyaltyBoost>
+                <BadgeWrapper>
+                    {OVERDROP_LEVELS.slice(6, 11).map((item, index) => {
+                        return (
+                            <LargeBadge
+                                key={`${index + 6}-level`}
+                                requiredPointsForLevel={item.minimumPoints}
+                                level={item.level}
+                                reached={levelItem ? item.level <= levelItem.level : false}
+                                levelName={item.levelName}
+                                voucherAmount={item.voucherAmount}
+                            />
+                        );
+                    })}
+                </BadgeWrapper>
+            </BadgeContainer>
+            <BadgeContainer>
+                <LoyaltyBoost>15% Loyalty Boost</LoyaltyBoost>
+                <BadgeWrapper>
+                    {OVERDROP_LEVELS.slice(11, 16).map((item, index) => {
+                        return (
+                            <LargeBadge
+                                key={`${index + 11}-level`}
+                                requiredPointsForLevel={item.minimumPoints}
+                                level={item.level}
+                                reached={levelItem ? item.level <= levelItem.level : false}
+                                levelName={item.levelName}
+                                voucherAmount={item.voucherAmount}
+                            />
+                        );
+                    })}
+                </BadgeWrapper>
+            </BadgeContainer>
+
+            <LastRowWrapper>
+                <LastContainer>
+                    <LoyaltyBoost>20% Loyalty Boost</LoyaltyBoost>
+                    <BadgeWrapper fullWidth>
+                        {OVERDROP_LEVELS.slice(16, 20).map((item, index) => {
+                            return (
+                                <LargeBadge
+                                    key={`${index + 19}-level`}
+                                    requiredPointsForLevel={item.minimumPoints}
+                                    level={item.level}
+                                    reached={levelItem ? item.level <= levelItem.level : false}
+                                    levelName={item.levelName}
+                                    voucherAmount={item.voucherAmount}
+                                />
+                            );
+                        })}
+                    </BadgeWrapper>
+                </LastContainer>
+                <LastContainer>
+                    <LoyaltyBoost>25% Loyalty Boost</LoyaltyBoost>
+
+                    <BadgeWrapper>
+                        {OVERDROP_LEVELS.slice(20).map((item, index) => {
+                            return (
+                                <LargeBadge
+                                    key={`${index}-level`}
+                                    requiredPointsForLevel={item.minimumPoints}
+                                    level={item.level}
+                                    reached={levelItem ? item.level <= levelItem.level : false}
+                                    levelName={item.levelName}
+                                    voucherAmount={item.voucherAmount}
+                                />
+                            );
+                        })}
+                    </BadgeWrapper>
+                </LastContainer>
+            </LastRowWrapper>
         </Wrapper>
     );
 };
@@ -62,11 +137,64 @@ const Wrapper = styled(FlexDivColumn)`
     flex-grow: 4;
     justify-content: center;
     align-items: center;
+    gap: 28px;
+    width: 100%;
 `;
 
-const BadgeWrapper = styled(FlexDivRowCentered)`
-    flex-wrap: wrap;
+const BadgeContainer = styled.div`
+    width: 100%;
+`;
+
+const LastContainer = styled.div`
+    width: 100%;
+    flex: 1;
+`;
+
+const LoyaltyBoost = styled.div`
+    height: 35px;
+    width: 100%;
+    background-color: ${(props) => props.theme.overdrop.background.senary};
+    color: ${(props) => props.theme.overdrop.textColor.secondary};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 6px;
+    &:before {
+        content: ' ';
+        position: absolute;
+        background-color: ${(props) => props.theme.overdrop.background.quinary};
+        bottom: -26px;
+        right: -4px;
+        height: 30px;
+        width: 50%;
+        transform: rotate(-7deg);
+    }
+    &:after {
+        content: ' ';
+        position: absolute;
+        background-color: ${(props) => props.theme.overdrop.background.quinary};
+        bottom: -26px;
+        left: -4px;
+        height: 30px;
+        width: 50%;
+        transform: rotate(7deg);
+    }
+`;
+
+const BadgeWrapper = styled(FlexDivRowCentered)<{ fullWidth?: boolean }>`
+    flex-flow: ${(props) => (props.fullWidth ? 'nowrap' : 'row wrap')};
     gap: 10px;
+    width: ${(props) => (props.fullWidth ? '100%' : '')};
+`;
+
+const LastRowWrapper = styled(FlexDivRowCentered)`
+    width: 100%;
+    gap: 10px;
+
+    ${LastContainer}:first-child {
+        flex: 4;
+    }
 `;
 
 const Heading = styled.h1`
