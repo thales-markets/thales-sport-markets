@@ -1770,7 +1770,7 @@ const Ticket: React.FC<TicketProps> = ({
                     />
                 </AmountToBuyContainer>
             </InputContainer>
-            {!isThales && (
+            {!isThales && !isFreeBetActive && (
                 <RowSummary>
                     <RowContainer>
                         <SummaryLabel isBonus>
