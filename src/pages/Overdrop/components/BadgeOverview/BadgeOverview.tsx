@@ -136,7 +136,12 @@ const BadgeOverview: React.FC = () => {
                             {nextThalesRewardLevel
                                 ? `${formatPoints(nextThalesRewardLevel?.minimumPoints)} @ LVL ${
                                       nextThalesRewardLevel?.level
-                                  } `
+                                  }  (${formatCurrencyWithKey(
+                                      'THALES',
+                                      nextThalesRewardLevel?.voucherAmount ?? 0,
+                                      0,
+                                      true
+                                  )})`
                                 : ''}
                         </ValueSecondary>
                     </ValueWrapper>
@@ -203,6 +208,7 @@ const Label = styled.span`
     margin-bottom: 5px;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
+    white-space: pre;
 `;
 
 const Value = styled(Label)``;
