@@ -899,23 +899,12 @@ const Ticket: React.FC<TicketProps> = ({
                     networkId,
                     selectedCollateral
                 );
-                let approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
+                const approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
                     networkId,
                     walletAddress as Address,
                     swapToThalesParams.src,
                     approveAmount.toString()
                 );
-
-                // retry once
-                if (!approveSwapRawTransaction) {
-                    await delay(1800);
-                    approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
-                        networkId,
-                        walletAddress as Address,
-                        swapToThalesParams.src,
-                        approveAmount.toString()
-                    );
-                }
 
                 try {
                     const approveTxHash = await sendTransaction(approveSwapRawTransaction);

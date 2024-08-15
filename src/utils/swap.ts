@@ -45,9 +45,9 @@ export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapPara
     const url = apiRequestUrl(networkId, '/quote', { ...swapParams });
 
     try {
-        let retryCount = 0;
         let response = await fetch(url);
 
+        let retryCount = 0;
         while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
             await delay(1200);
             response = await fetch(url);
@@ -73,9 +73,9 @@ export const checkSwapAllowance = async (
     const url = apiRequestUrl(networkId, '/approve/allowance', { tokenAddress, walletAddress });
 
     try {
-        let retryCount = 0;
         let response = await fetch(url, { cache: 'no-cache' });
 
+        let retryCount = 0;
         while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
             await delay(2400);
             response = await fetch(url);
@@ -99,7 +99,15 @@ export const buildTxForApproveTradeWithRouter = async (
     const url = apiRequestUrl(networkId, '/approve/transaction', amount ? { tokenAddress, amount } : { tokenAddress });
 
     try {
-        const response = await fetch(url);
+        let response = await fetch(url);
+
+        let retryCount = 0;
+        while (response.status === 429 && retryCount < MAX_RETRY_COUNT) {
+            await delay(2000);
+            response = await fetch(url);
+            retryCount++;
+        }
+
         const rawTransaction = await response.json();
 
         const gasLimit = Number(
