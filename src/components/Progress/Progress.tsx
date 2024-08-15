@@ -26,8 +26,8 @@ const Progress: React.FC<ProgressProps> = ({
             <ProgressLineWrapper backgroundColor={backgroundColor} width={width} height={height}>
                 {!!progressUpdate && <ProgressUpdate progress={Math.min(progress + progressUpdate, 100)} />}
                 <ProgressLine progress={progress} color={progressLineColor} height={height} />
+                <TextBelow>{textBelow}</TextBelow>
             </ProgressLineWrapper>
-            <TextBelow>{textBelow}</TextBelow>
         </Wrapper>
     );
 };
@@ -39,10 +39,12 @@ const Wrapper = styled(FlexDivColumn)`
 `;
 
 const ProgressLineWrapper = styled(FlexDiv)<{ backgroundColor?: string; height?: string; width?: string }>`
+    position: relative;
     border-radius: 28px;
     height: ${(props) => (props.height ? props.height : '100%')};
     min-width: ${(props) => (props.width ? props.width : '100%')};
-    background-color: ${(props) => (props.backgroundColor ? props.backgroundColor : props.theme.background.senary)};
+    background-color: ${(props) =>
+        props.backgroundColor ? props.backgroundColor : props.theme.overdrop.textColor.tertiary};
     align-items: center;
 `;
 
@@ -56,18 +58,21 @@ const ProgressLine = styled(FlexDivRow)<{ progress: number; color?: string; heig
 `;
 
 const TextBelow = styled(FlexDiv)`
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -18px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
     min-width: 100%;
     text-align: center;
     font-size: 12px;
-    margin-top: 5px;
     font-weight: 900;
     text-transform: uppercase;
-    align-items: center;
-    justify-content: center;
+    color: ${(props) => props.theme.overdrop.textColor.secondary};
+
+    z-index: 10;
     @media (max-width: 767px) {
         font-size: 9px;
     }
