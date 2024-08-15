@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Circle } from '../styled-components';
@@ -8,6 +8,7 @@ type LevelCirclesTypes = {
     currentLevel: number;
     additionalLabelsForLevels?: string[];
     displayLevelNumberInsideCircle?: boolean;
+    additionalStyles?: CSSProperties;
 };
 
 const LevelCircles: React.FC<LevelCirclesTypes> = ({
@@ -15,9 +16,10 @@ const LevelCircles: React.FC<LevelCirclesTypes> = ({
     currentLevel,
     additionalLabelsForLevels,
     displayLevelNumberInsideCircle,
+    additionalStyles,
 }) => {
     return (
-        <Wrapper>
+        <Wrapper style={additionalStyles}>
             {levels.map((item, index) => {
                 return (
                     <LevelWrapper key={index}>
@@ -38,6 +40,7 @@ const LevelCircles: React.FC<LevelCirclesTypes> = ({
 const Wrapper = styled(FlexDivRowCentered)`
     justify-content: center;
     gap: 8px;
+    flex-wrap: wrap;
 `;
 
 const LevelWrapper = styled(FlexDivColumnCentered)`

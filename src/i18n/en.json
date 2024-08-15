@@ -776,7 +776,7 @@
                 "not-supported": "Not supported validation error: {{error}}"
             },
             "share-ticket": {
-                "label": "Share for Twitter bonus",
+                "label": "Share for Twitter boost",
                 "header": "Web3 Sport markets on",
                 "parlay": "ticket",
                 "potential-payout": "Potential payout",
@@ -812,7 +812,7 @@
                 "overdrop-xp-overview": "Overdrop XP overview",
                 "base-xp": "Base XP",
                 "active-boost": "Active boost",
-                "bonus-applied": "Bonus applied",
+                "bonus-applied": "Boost applied",
                 "total-xp-boost": "Total XP Boost",
                 "total-xp-earned": "Total XP Earned"
             }
@@ -1234,17 +1234,25 @@
             "heading": "The overdrop farming league",
             "explainer": {
                 "xp-explained": "XP Explained",
-                "xp-explained-content": "Season long campaign where users accrue XP until the end of sports season by driving <bold>volume on Overtime</bold> with <bold>multipliers</bold> based on various dynamic metrics and goals.<br/><br/>After the campaign ends, all users will share <highlight>100k OP</highlight> and <highlight>150k ARB</highlight> pro rata based on XP <br><br>While the campaign lasts users will have one off rewards on specific XP LEVELS",
-                "base-xp-accrual": "Base XP Accrual",
-                "base-xp-content": "<bold>1 base XP = 1 $</bold> of volume<br/><br/>After <bold>28 days</bold> in a row of <bold>volume >10$</bold> you have reached <bold>MAX base multiplier</bold><br/><br/>Every missed day of volume below 10$ drops your base <bold>XP by -0.1</bold>",
-                "daily-bonus": "Daily bonus",
-                "parlay-xp": "PARLAY XP BONUS (one off per parlay)",
-                "positions-thales": "Position WITH THALES BONUS (one off per bet)",
+                "xp-explained-content": "<bold>Overdrop</bold> is a season-long league where users accrue XP on Overtime by placing bets. The higher the buy-in and odds of the bet, the more XP the bet earns. Users can also <bold>gain additional XP boosts</bold> through various achievements that can speed up their XP progress. \n\nThe league will run <bold>until June 2025</bold> and it will have rewards for all participants <bold>in the form of airdrops, free bets and many more!</bold> \n\nAfter the Overdrop League ends in June 2025, all users with accrued XP will be rewarded their share of <highlight>100,000 OP</highlight> and <highlight>200,000 ARB</highlight> tokens proportionally. You can take a look at your estimated rewards at any point on the leaderboard page. \n\nAdditionally, users will be able to reach <bold>XP levels</bold> that carry special rewards! You can read more about <bold>XP levels</bold> here.",
+                "base-xp-accrual": "Base XP",
+                "base-xp-content": "The base calculation for how much XP your bet gains you is calculated via the following formula: \n\n <highlight>Base XP = Buy In Amount * (2 - Normalized Odds )</highlight> \n\n - <bold>Buy In Amount:</bold> the amount of $ that you placed as a Buy In on the respective bet.\n\n - <bold>Normalized Odds:</bold> Odds of your bet shown in the format of Normalized Probability between 0 and 1. For example, Decimal Odds of 1.60 is 0.625 in  Normalized Odds format.\n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are.",
+                "xp-boost": "XP Boosts",
+                "xp-boost-content": "There are several ways to further boost the amount of your XP accrual per bet by having boosts from <bold>daily bet streaks, weekly bet streaks, amount of games in parlay, using THALES token as collateral,  flexing your bets on twitter and reaching XP levels for loyalty boosts!</bold>",
+                "daily-bonus": "Daily boost",
+                "weekly-boost": "Weekly boost",
+                "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.",
+                "parlay-xp": "PARLAY XP BOOST (one off per parlay)",
+                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay!",
+                "positions-thales": "Position WITH THALES BOOST (one off per bet)",
                 "days": "days",
+                "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold>",
                 "games-in-parlay": "games in parlay",
-                "position-thales-content": "Use <bold>THALES</bold> as collateral and you <bold>gain bonus 10% per BASE XP per $</bold> for that specific trade",
-                "twitter-share-bonus": "twitter share bonus (once per day)",
-                "twitter-content": "Share your Overtime <bold>Flex Card</bold> from today's bet <bold>on Twitter: bonus 10% per BASE XP per $</bold> for the rest of the day"
+                "position-thales-content": "All bets executed with  <bold>THALES</bold> as collateral will have <bold>+10% boost</bold> on baseline XP accrual for that specific bet!",
+                "twitter-share-bonus": "twitter share boost",
+                "twitter-content": "If you share your Overtime bet on Twitter in the form of a <bold>Flex Card</bold>, you will activate a <bold>3 day long Twitter Flex Boost of +10%.</bold>  This specific boost is valid for all trades executed within those 72 hours. <bold>After the 72 hours</bold> have elapsed, the boost expires and you can activate it again by sharing a new flex card on Twitter under the same conditions.",
+                "loyalty-boost": "Loyalty boost",
+                "loyalty-boost-content": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP accrual, depending on your level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level. You reach max Loyalty XP boost of 25% when you reach Level 20 (GOAT) with having accrued 5,000,000 XP points. You can see the XP levels breakdown on the LEVELING TREE page."
             }
         },
         "xp-details": {
@@ -1256,10 +1264,10 @@
             "loyalty-boost": "Loyalty boost",
             "shared-flex": "Shared flex card",
             "twitter-multiplier": "Twitter multiplier",
-            "total-bonus": "Total bonus",
-            "active-xp-bonus": "Active xp bonus",
+            "total-bonus": "Total boost",
+            "active-xp-bonus": "Active xp boost",
             "xp-history": "XP History",
-            "paragraph": "Use THALES as a collateral for additional 10% bonus, create parlays for up to 100% bonus and check for special promotion games.",
+            "paragraph": "Check your currently active XP boosts below. Additional XP boosts are available on a per-bet basis when using THALES as collateral and/or increasing the number of games in a parlay.",
             "no-results": "No results",
             "date-time": "Date | Time",
             "received": "Received",
