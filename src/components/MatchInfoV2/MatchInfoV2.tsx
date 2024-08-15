@@ -152,7 +152,9 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                         <OddChangeDown id="odd-change-down" />
                         {formatMarketOdds(
                             selectedOddsType,
-                            market.odd * (applyPayoutMultiplier ? getAddedPayoutMultiplier(selectedCollateral) : 1)
+                            applyPayoutMultiplier
+                                ? getAddedPayoutMultiplier(selectedCollateral, market.odd)
+                                : market.odd
                         )}
                     </Odd>
                 </PositionInfo>

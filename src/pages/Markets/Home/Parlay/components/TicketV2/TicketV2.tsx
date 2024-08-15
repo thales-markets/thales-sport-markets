@@ -347,7 +347,7 @@ const Ticket: React.FC<TicketProps> = ({
     const totalQuote = useMemo(() => {
         const quote = markets.reduce(
             (partialQuote, market) =>
-                partialQuote * (market.odd > 0 ? market.odd * getAddedPayoutMultiplier(selectedCollateral) : 1),
+                partialQuote * (market.odd > 0 ? getAddedPayoutMultiplier(selectedCollateral, market.odd) : market.odd),
             1
         );
         const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
@@ -360,7 +360,7 @@ const Ticket: React.FC<TicketProps> = ({
             value: 0,
         };
         if (isThales) {
-            const multiplier = getAddedPayoutMultiplier(selectedCollateral);
+            const multiplier = getAddedPayoutMultiplier(selectedCollateral, 1);
             const percentage = Math.pow(1 / multiplier, markets.length);
             bonus.percentage = percentage - 1;
             bonus.value = Number(payout) - Number(payout) / percentage;

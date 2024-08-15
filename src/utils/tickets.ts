@@ -7,6 +7,7 @@ import { CombinedPosition, Team, Ticket, TicketMarket } from 'types/markets';
 import { SupportedNetwork } from 'types/network';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
+import { THALES_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
 import { League } from '../enums/sports';
 import { TicketMarketStatus } from '../enums/tickets';
 import { getCollateralByAddress } from './collaterals';
@@ -181,4 +182,7 @@ export const formatTicketOdds = (oddsType: OddsType, paid: number, payout: numbe
 
 export const getTicketMarketOdd = (market: TicketMarket) => (market.isCancelled ? 1 : market.odd);
 
-export const getAddedPayoutMultiplier = (currencyKey: Coins) => (currencyKey === CRYPTO_CURRENCY_MAP.THALES ? 0.99 : 1);
+export const getAddedPayoutMultiplier = (currencyKey: Coins, odds: number) =>
+    currencyKey === CRYPTO_CURRENCY_MAP.THALES
+        ? odds / (1 + THALES_ADDED_PAYOUT_PERCENTAGE - THALES_ADDED_PAYOUT_PERCENTAGE * odds)
+        : odds;
