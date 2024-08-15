@@ -1216,6 +1216,7 @@
         },
         "overdrop-home": {
             "my-total-xp": "My Total XP",
+            "rank-tooltip": "Your current rank in Overdrop League. Check leaderboard tab for more info.",
             "daily-streak": "Daily streak xp boost",
             "weekly-streak": "Weekly streak XP boost",
             "twitter-share": "Twitter share xp boost",

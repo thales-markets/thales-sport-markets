@@ -39,6 +39,9 @@ const Wrapper = styled(FlexDivColumn)`
     justify-content: center;
     height: 200px;
     margin: 0 4px;
+    @media (max-width: 767px) {
+        height: 180px;
+    }
 `;
 
 const Label = styled.span<{ active?: boolean }>`
@@ -79,6 +82,10 @@ const Badge = styled.img<{ active?: boolean }>`
     height: 80px;
     margin: 5px 0px;
     opacity: ${(props) => (props.active ? '1' : '0.2')};
+    @media (max-width: 400px) {
+        width: 70px;
+        height: 70px;
+    }
 `;
 
 const DisabledLevelWrapper = styled(FlexDivColumnCentered)`
@@ -91,6 +98,10 @@ const DisabledLevelWrapper = styled(FlexDivColumnCentered)`
     border: 3px solid ${(props) => props.theme.overdrop.borderColor.primary};
     border-radius: 50%;
     text-align: center;
+    @media (max-width: 400px) {
+        width: 66px;
+        height: 66px;
+    }
 `;
 
 const Icon = styled.i`

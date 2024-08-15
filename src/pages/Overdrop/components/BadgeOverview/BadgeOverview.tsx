@@ -25,11 +25,10 @@ const BadgeOverview: React.FC = () => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const [currentStep, setCurrentStep] = useState<number>(0);
-    const [numberOfCards, setNumberOfCards] = useState<number>(6);
+    const [numberOfCards, setNumberOfCards] = useState<number>(isMobile ? 3 : 6);
 
     useEffect(() => {
-        if (isMobile) setNumberOfCards(4);
-        setNumberOfCards(6);
+        isMobile ? setNumberOfCards(4) : setNumberOfCards(6);
     }, [isMobile]);
 
     const userDataQuery = useUserDataQuery(walletAddress, {
@@ -51,10 +50,9 @@ const BadgeOverview: React.FC = () => {
     useEffect(() => {
         if (levelItem) {
             if (levelItem.level > numberOfCards) {
-                console.log('come on: ', levelItem.level);
-                setCurrentStep(levelItem.level - 2);
+                setCurrentStep(levelItem.level - (isMobile ? 1 : 2));
             } else {
-                setCurrentStep(levelItem.level - 2 > 0 ? levelItem.level - 2 : 0);
+                setCurrentStep(levelItem.level - 2 > 0 ? levelItem.level - (isMobile ? 1 : 2) : 0);
             }
         }
     }, [levelItem, numberOfCards]);
@@ -145,13 +143,12 @@ const BadgeOverview: React.FC = () => {
                     {userData?.points && levelItem && nextThalesRewardLevel && (
                         <ProgressContainer>
                             <Progress
-                                progress={getProgressLevel(
-                                    userData?.points,
-                                    levelItem?.minimumPoints,
-                                    nextThalesRewardLevel?.minimumPoints
-                                )}
+                                progress={getProgressLevel(userData?.points, 0, nextThalesRewardLevel?.minimumPoints)}
                                 width="100%"
                                 height="18px"
+                                textBelow={`${formatPoints(userData?.points)} / ${formatPoints(
+                                    nextThalesRewardLevel?.minimumPoints
+                                )}(lvl${levelItem.level + 1})`}
                             />
                         </ProgressContainer>
                     )}
@@ -165,6 +162,9 @@ const Wrapper = styled(FlexDivColumn)`
     align-items: center;
     justify-content: space-around;
     flex-grow: 4;
+    @media (max-width: 767px) {
+        margin-top: 10px;
+    }
 `;
 
 const BadgeWrapper = styled(FlexDivRow)`
@@ -190,6 +190,7 @@ const ItemContainer = styled(FlexDivColumn)`
     gap: 4px;
     @media (max-width: 767px) {
         min-width: 100%;
+        margin-top: 10px;
     }
 `;
 

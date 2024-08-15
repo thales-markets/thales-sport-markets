@@ -122,6 +122,7 @@ const ThalesAmount = styled(FlexDiv)`
     position: absolute;
     bottom: -25px;
     background-image: url(${ThalesAmountImage});
+    background-repeat: no-repeat;
     width: 100%;
     height: 50px;
     background-size: contain;
