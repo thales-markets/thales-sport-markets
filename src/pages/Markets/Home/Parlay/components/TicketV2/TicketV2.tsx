@@ -908,7 +908,7 @@ const Ticket: React.FC<TicketProps> = ({
 
                 // retry once
                 if (!approveSwapRawTransaction) {
-                    await delay(1200);
+                    await delay(1800);
                     approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
                         networkId,
                         walletAddress as Address,
@@ -940,7 +940,7 @@ const Ticket: React.FC<TicketProps> = ({
 
                 // retry once
                 if (!swapRawTransaction) {
-                    await delay(1500);
+                    await delay(1800);
                     const hasRefreshedAllowance = await checkSwapAllowance(
                         networkId,
                         walletAddress as Address,
