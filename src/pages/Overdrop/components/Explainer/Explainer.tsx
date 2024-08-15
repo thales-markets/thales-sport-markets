@@ -54,6 +54,7 @@ const Explainer: React.FC = () => {
                         displayLevelNumberInsideCircle={true}
                         additionalLabelsForLevels={['5%', '10%', '15%', '20%', '25%', '30%', '35%']}
                         currentLevel={7}
+                        additionalStyles={{ justifyContent: 'flex-start' }}
                     />
                     <Content>
                         <Trans
@@ -69,6 +70,7 @@ const Explainer: React.FC = () => {
                         displayLevelNumberInsideCircle={true}
                         additionalLabelsForLevels={['5%', '10%', '15%', '20%']}
                         currentLevel={4}
+                        additionalStyles={{ justifyContent: 'flex-start' }}
                     />
                     <Content>
                         <Trans
@@ -98,7 +100,7 @@ const Explainer: React.FC = () => {
                             '260%',
                             '290%',
                         ]}
-                        additionalStyles={{ flexWrap: 'wrap', gap: 14 }}
+                        additionalStyles={{ flexWrap: 'wrap', gap: '0 14px', justifyContent: 'flex-start' }}
                         currentLevel={15}
                     />
                     <Content>
