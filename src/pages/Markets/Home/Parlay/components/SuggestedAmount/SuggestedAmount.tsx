@@ -27,6 +27,7 @@ type SuggestedAmountProps = {
     changeAmount: (value: number | string) => void;
     exchangeRates: Rates | null;
     insertedAmount: number | string;
+    minAmount?: number;
 };
 
 const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
@@ -34,6 +35,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     changeAmount,
     exchangeRates,
     insertedAmount,
+    minAmount,
 }) => {
     const networkId = useSelector((state: RootState) => getNetworkId(state));
 
@@ -46,6 +48,7 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     const convertFromStable = useCallback(
         (value: number) => {
             const rate = exchangeRates?.[isThales ? THALES_CONTRACT_RATE_KEY : collateral];
+
             if (collateral == defaultCollateral) {
                 return value;
             } else {
@@ -69,7 +72,8 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     return (
         <Container>
             {AMOUNTS.map((amount, index) => {
-                const buyAmount = convertFromStable(amount);
+                const convertedAmount = convertFromStable(amount);
+                const buyAmount = minAmount && index === 0 && minAmount > convertedAmount ? minAmount : convertedAmount;
 
                 return (
                     <AmountContainer

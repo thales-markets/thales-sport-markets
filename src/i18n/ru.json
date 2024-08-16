@@ -67,7 +67,8 @@
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Swap",
-            "swap-progress-label": "Swapping in progress..."
+            "swap-progress-label": "Swapping in progress...",
+            "approve": "Одобрить обмен"
         },
         "enable-wallet-access": {
             "approve-label": "Approve {{currencyKey}}",
@@ -99,7 +100,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "АММ приостановлено",
-            "invalid-amount-max": "Сумма не может превышать {{max}}"
+            "invalid-amount-max": "Сумма не может превышать {{max}}",
+            "swap-quote-low": "Котировка свопа слишком низкая (получите: {{quote}}, мин. получите {{minQuote}})! Пожалуйста, попробуйте еще раз..."
         },
         "time-remaining": {
             "ended": "ended",
@@ -195,6 +197,7 @@
         "status": "Положение дел",
         "wrap-and-buy": "Заверните ETH и купите",
         "wrap-eth-tooltip": "Ваш ETH сначала оборачивается в WETH, а затем передается в контракт.",
+        "try-again": "Попробуйте еще раз",
         "election-tooltip": "Источником резолюции будут Associated Press, Fox News и NBC. Эти рынки исчезнут, как только все три источника объявят гонку за одного и того же кандидата. Если все три источника не объявят гонку за одного и того же кандидата до 11 ноября, все ставки будут аннулированы."
     },
     "footer": {
@@ -279,13 +282,13 @@
                 "boxing": "Заниматься боксом",
                 "golf": "Гольф",
                 "live": "Жить",
-                "waterpolo": "Водное поло",
-                "olympicgames": "Олимпийские игры",
-                "rugby": "Регби",
                 "volleyball": "Волейбол",
                 "handball": "Гандбол",
-                "tabletennis": "Настольный теннис",
-                "politics": "Политика"
+                "rugby": "Регби",
+                "waterpolo": "Водное поло",
+                "olympicgames": "Олимпийские игры",
+                "politics": "Политика",
+                "tabletennis": "Настольный теннис"
             },
             "all": "All",
             "datepicker": {
@@ -561,8 +564,8 @@
             "pre-fight": "Перед боем",
             "fighters-introduction": "Представление бойцов",
             "end-of-fight": "Конец боя",
-            "not-available-for-trading": "Не доступен для торговли",
-            "suspended": "Приостановленный"
+            "suspended": "Приостановленный",
+            "not-available-for-trading": "Не доступен для торговли"
         },
         "market-details": {
             "price": "Price",
@@ -668,15 +671,25 @@
                 "slippage": "проскальзывание",
                 "enter-value": "Введите значение",
                 "label": "Примите обмен, если коэффициенты упадут на:",
-                "tooltip": "Перевод не состоится, если при выполнении перевода ставка моста изменится в неблагоприятную сторону более чем на этот процент."
+                "tooltip": "Перевод не состоится, если при выполнении перевода ставка моста изменится в неблагоприятную сторону более чем на этот процент.",
+                "swap-thales": "Проскальзывание свопа"
             },
             "accept-odds-changes": "Принять изменения коэффициентов",
             "odds-changed-description": "Коэффициенты изменились. Примите изменения, чтобы купить.",
             "odds-changed-error": "Коэффициенты менялись при выполнении заказа. Попробуйте увеличить проскальзывание.",
             "thales-bonus-tooltip": "Пользователи, совершающие сделки с THALES, получат дополнительные выплаты в размере 2 % за каждую игру, указанную в их билете (уже рассчитано в разделе «Общая котировка» и «Выплата»).",
             "thales-bonus-info": "Используйте THALES и получайте бонус 2% за каждую игру.",
+            "swap-thales-tooltip": "ВСЕ",
+            "use-free-bet": "Используйте бесплатную ставку",
+            "swap-thales": "Поменяйтесь на THALES, чтобы получить лучшее предложение.",
+            "swap-thales-receive": "Минимальное получение",
             "disable-free-bet": "Отключить баланс бесплатных ставок",
-            "use-free-bet": "Использовать бесплатную ставку"
+            "buy-steps": {
+                "approve-buy": "Одобрить покупку с помощью {{currencyKey}}",
+                "swap": "Обмен на {{currencyKey}}",
+                "approve-swap": "Одобрить обмен на {{currencyKey}}",
+                "buy": "Купить с помощью {{currencyKey}}"
+            }
         },
         "discounted-per": "Со скидкой согласно",
         "nav-menu": {
@@ -715,7 +728,7 @@
         "incentivized-tooltip-nhl-mlb": "Огромная сумма {{rewards}} будет распределена до конца сезона {{league}}, включая плей-офф. В вознаграждение будет засчитываться только объем в сети Arbitrum! Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
         "incentivized-tooltip-euro-copa": "Огромная сумма {{rewards}} будет распределена на соревнованиях Евро-2024 и Кубка Америки. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
         "incentivized-tooltip-olympics": "Заработайте {{rewards}} в виде наград за объем во время Олимпийских игр. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>.",
-        "incentivized-tooltip-wimbledon": "Соревнуйтесь за {{rewards}} во время Уимблдона 2024 года в сверхурочных версиях 1 и 2. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>."
+        "incentivized-tooltip-wimbledon": "Соревнуйтесь за {{rewards}} во время Уимблдона 2024 года в сверхурочных версиях V1 и V2. Более подробную информацию можно найти <detailsLink>здесь</detailsLink>."
     },
     "rewards": {
         "header": "Rewards",
@@ -838,8 +851,8 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "profile-data": "Данные профиля",
-            "wallet": "Кошелек",
-            "free-bet": "Бесплатная ставка"
+            "free-bet": "Бесплатная ставка",
+            "wallet": "Кошелек"
         },
         "lp-title": "Пул ликвидности",
         "in-lp": "Предоставляемая ликвидность",
@@ -866,24 +879,24 @@
             "claim-btn": "Сумма претензии будет уменьшена на сумму бай-ина, которая будет переведена на ваш баланс бесплатных ставок."
         },
         "free-bet-modal": {
-            "insufficient-balance": "Недостаточный баланс",
             "approve-success": "Успешно одобрено",
-            "fund": "Отправить бесплатную ставку",
-            "total-amount-batch": "Общая сумма будет равна {{ amount }}, умноженной на {{ count }} адрес(а) кошелька.",
+            "no-funds": "Пожалуйста, убедитесь, что в вашем кошельке достаточно средств",
+            "funding": "Финансирование...",
             "title": "Отправить бесплатную ставку",
             "invalid-wallet-address": "Неверный адрес кошелька",
-            "enter-amount": "Введите сумму",
-            "fund-batch": "Финансируйте несколько адресов",
-            "no-funds": "Пожалуйста, убедитесь, что в вашем кошельке достаточно средств",
-            "one-or-more-address-invalid": "Один или несколько введенных адресов кошелька недействительны.",
-            "fund-successful": "Фонд успешен",
             "invalid-amount": "Недопустимая сумма",
-            "duplicate": "Обнаружены повторяющиеся адреса кошельков",
-            "enter-amount-per-user": "Введите сумму на пользователя",
-            "enter-wallet-address": "Введите адрес кошелька",
             "transaction-pending": "Транзакция ожидает рассмотрения",
+            "insufficient-balance": "Недостаточный баланс",
+            "enter-wallet-address": "Введите адрес кошелька",
+            "enter-amount": "Введите сумму",
+            "fund": "Отправить бесплатную ставку",
+            "fund-successful": "Фонд успешен",
+            "duplicate": "Обнаружены повторяющиеся адреса кошельков",
+            "one-or-more-address-invalid": "Один или несколько введенных адресов кошелька недействительны.",
             "enter-wallet-addresses": "Введите адреса кошельков",
-            "funding": "Финансирование..."
+            "total-amount-batch": "Общая сумма будет равна {{ amount }}, умноженной на {{ count }} адрес(а) кошелька.",
+            "enter-amount-per-user": "Введите сумму на пользователя",
+            "fund-batch": "Финансируйте несколько адресов"
         },
         "send-free-bet": "Отправить бесплатную ставку"
     },

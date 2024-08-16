@@ -76,7 +76,8 @@
             "to-label": "Recibo",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Intercambiar",
-            "swap-progress-label": "Intercambio en progreso..."
+            "swap-progress-label": "Intercambio en progreso...",
+            "approve": "Aprobar intercambio"
         },
         "enable-wallet-access": {
             "approve-label": "Aprobar {{currencyKey}}",
@@ -108,7 +109,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM en pausa",
-            "invalid-amount-max": "La cantidad no puede ser superior a {{max}}"
+            "invalid-amount-max": "La cantidad no puede ser superior a {{max}}",
+            "swap-quote-low": "¡La cotización de swap es demasiado baja (recibir: {{quote}}, recibir mínimo {{minQuote}})! Inténtalo de nuevo..."
         },
         "time-remaining": {
             "ended": "finalizado",
@@ -195,6 +197,7 @@
         "status": "Estado",
         "wrap-eth-tooltip": "Su ETH primero se incluye en WETH y luego se pasa al contrato.",
         "wrap-and-buy": "Envuelva ETH y compre",
+        "try-again": "Intentar otra vez",
         "election-tooltip": "La fuente de resolución será Associated Press, Fox News y NBC. Estos mercados se resolverán una vez que las tres fuentes convoquen la carrera para el mismo candidato. Si las tres fuentes no han convocado la carrera para el mismo candidato antes del 11 de noviembre, se anularán todas las apuestas."
     },
     "footer": {
@@ -279,13 +282,13 @@
                 "boxing": "Boxeo",
                 "golf": "Golf",
                 "live": "Vivir",
-                "olympicgames": "Juegos olímpicos",
-                "rugby": "Rugby",
-                "tabletennis": "Tenis de mesa",
                 "handball": "Balonmano",
-                "politics": "Política",
+                "waterpolo": "Polo acuático",
+                "rugby": "Rugby",
                 "volleyball": "Vóleibol",
-                "waterpolo": "Polo acuático"
+                "tabletennis": "Tenis de mesa",
+                "politics": "Política",
+                "olympicgames": "Juegos olímpicos"
             },
             "all": "Todo",
             "datepicker": {
@@ -561,8 +564,8 @@
             "end-of-round": "Fin de ronda",
             "fighters-introduction": "Introducción a los luchadores",
             "fighters-walking": "Luchadores caminando",
-            "not-available-for-trading": "No disponible para negociar",
-            "suspended": "Suspendido"
+            "suspended": "Suspendido",
+            "not-available-for-trading": "No disponible para negociar"
         },
         "market-details": {
             "price": "Precio",
@@ -668,15 +671,25 @@
                 "slippage": "deslizamiento",
                 "invalid-value": "valor no válido",
                 "tooltip": "La transferencia no se realizará si la tasa puente se mueve desfavorablemente en más de este porcentaje cuando se ejecuta la transferencia.",
-                "enter-value": "Introducir valor"
+                "enter-value": "Introducir valor",
+                "swap-thales": "Deslizamiento de intercambio"
             },
             "odds-changed-description": "Las probabilidades cambiaron. Aceptar cambios para poder comprar.",
             "thales-bonus-tooltip": "Los usuarios que realicen intercambios con THALES obtendrán pagos adicionales del 2 % por cada juego que tengan en su boleto (ya calculado en Cotización total y Pago).",
             "accept-odds-changes": "Aceptar cambios de probabilidades",
             "thales-bonus-info": "Utilice THALES y obtenga un bono del 2% por cada juego.",
             "odds-changed-error": "Las probabilidades cambiaron mientras se cumplía el pedido. Intente aumentar el deslizamiento.",
+            "disable-free-bet": "Desactivar saldos de apuestas gratis",
+            "swap-thales": "Cambie a THALES para obtener una mejor cotización",
             "use-free-bet": "Usar apuesta gratis",
-            "disable-free-bet": "Desactivar saldos de apuestas gratis"
+            "swap-thales-receive": "Recepción mínima",
+            "swap-thales-tooltip": "TODO",
+            "buy-steps": {
+                "buy": "Compre con {{currencyKey}}",
+                "approve-swap": "Aprobar el cambio a {{currencyKey}}",
+                "swap": "Cambiar a {{currencyKey}}",
+                "approve-buy": "Aprobar compra con {{currencyKey}}"
+            }
         },
         "discounted-per": "Con descuento según",
         "nav-menu": {
@@ -714,7 +727,7 @@
         "incentivized-tooltip-nhl-mlb": "Se distribuirá un total enorme de {{rewards}} durante el resto de la temporada de la {{league}}, incluidos los playoffs. ¡Solo el volumen en la red Arbitrum se calculará para las recompensas! Consulta más detalles <detailsLink>aquí</detailsLink>.",
         "incentivized-tooltip-euro-copa": "Se distribuirá un total enorme de {{rewards}} para las competiciones Euro 2024 y Copa América. Consulta más detalles <detailsLink>aquí</detailsLink>.",
         "incentivized-tooltip-wimbledon": "Compite por {{rewards}} durante Wimbledon 2024 en Overtime V1 y V2. Consulte más detalles <detailsLink>aquí</detailsLink>.",
-        "incentivized-tooltip-olympics": "Gane {{rewards}} en recompensas basadas en volumen durante los Juegos Olímpicos. Consulta más detalles <detailsLink>aquí</detailsLink>."
+        "incentivized-tooltip-olympics": "Gane {{rewards}} en recompensas basadas en volumen durante los Juegos Olímpicos. Consulte más detalles <detailsLink>aquí</detailsLink>."
     },
     "rewards": {
         "header": "Recompensas",
@@ -865,24 +878,24 @@
             "claim-btn": "El importe reclamado se reducirá según el importe de la entrada, que se transferirá a su saldo de apuesta gratuita."
         },
         "free-bet-modal": {
-            "transaction-pending": "Transacción pendiente",
             "invalid-wallet-address": "Dirección de billetera no válida",
-            "insufficient-balance": "Saldo insuficiente",
-            "enter-wallet-addresses": "Ingrese direcciones de billetera",
+            "transaction-pending": "Transacción pendiente",
             "fund": "Enviar apuesta gratis",
-            "fund-successful": "Fondo exitoso",
-            "duplicate": "Direcciones de billetera duplicadas detectadas",
-            "enter-amount": "Ingrese la cantidad",
-            "one-or-more-address-invalid": "Una o más direcciones de billetera ingresadas no son válidas",
             "invalid-amount": "Monto invalido",
+            "insufficient-balance": "Saldo insuficiente",
             "no-funds": "Asegúrese de que su billetera tenga fondos suficientes",
-            "total-amount-batch": "El monto total será {{ amount }} múltiplo de {{ count }} dirección(es) de billetera.",
-            "funding": "Fondos...",
-            "fund-batch": "Financiar varias direcciones",
-            "enter-wallet-address": "Ingrese la dirección de la billetera",
             "title": "Enviar apuesta gratis",
+            "funding": "Fondos...",
+            "approve-success": "Aprobado exitosamente",
+            "enter-amount": "Ingrese la cantidad",
+            "fund-successful": "Fondo exitoso",
+            "enter-wallet-address": "Ingrese la dirección de la billetera",
+            "enter-wallet-addresses": "Ingrese direcciones de billetera",
+            "one-or-more-address-invalid": "Una o más direcciones de billetera ingresadas no son válidas",
             "enter-amount-per-user": "Ingrese el monto por usuario",
-            "approve-success": "Aprobado exitosamente"
+            "total-amount-batch": "El monto total será {{ amount }} múltiplo de {{ count }} dirección(es) de billetera.",
+            "duplicate": "Direcciones de billetera duplicadas detectadas",
+            "fund-batch": "Financiar varias direcciones"
         },
         "send-free-bet": "Enviar apuesta gratis"
     },
