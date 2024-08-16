@@ -6,7 +6,7 @@ import { localStore } from 'thales-utils';
 import { ParlayPayment, SportMarket, TicketPosition } from 'types/markets';
 import { isPlayerPropsMarket } from '../../utils/markets';
 import { isSameMarket } from '../../utils/marketsV2';
-import { getLeagueLabel, isPlayerPropsCombiningEnabled } from '../../utils/sports';
+import { isPlayerPropsCombiningEnabled } from '../../utils/sports';
 import { RootState } from '../rootReducer';
 
 const sliceName = 'ticket';
@@ -82,17 +82,23 @@ const ticketSlice = createSlice({
                 const isExistingPositionPP = isPlayerPropsMarket(existingPosition.typeId);
                 const isNewPositionPP = isPlayerPropsMarket(action.payload.typeId);
 
-                if ((isExistingPositionPP && !isNewPositionPP) || (!isExistingPositionPP && isNewPositionPP)) {
+                // it is not supported to combine player props with other types from the same game (if player props combining enabled)
+                if (
+                    ((isExistingPositionPP && !isNewPositionPP) || (!isExistingPositionPP && isNewPositionPP)) &&
+                    isPlayerPropsCombiningEnabled(action.payload.leagueId)
+                ) {
                     state.error.code = TicketErrorCode.OTHER_TYPES_WITH_PLAYER_PROPS;
-                } else if (isExistingPositionPP && isNewPositionPP) {
+                } else if (
+                    isExistingPositionPP &&
+                    isNewPositionPP &&
+                    isPlayerPropsCombiningEnabled(action.payload.leagueId)
+                ) {
                     const playerAlreadyOnTicketIndex = state.ticket.findIndex(
                         (el) => el.playerId === action.payload.playerId && action.payload.playerId > 0
                     );
 
-                    if (!isPlayerPropsCombiningEnabled(action.payload.leagueId)) {
-                        state.error.code = TicketErrorCode.PLAYER_PROPS_COMBINING_NOT_ENABLED;
-                        state.error.data = getLeagueLabel(action.payload.leagueId);
-                    } else if (playerAlreadyOnTicketIndex > -1) {
+                    if (playerAlreadyOnTicketIndex > -1) {
+                        // it is not supported to combine different categories for the same player
                         if (state.ticket[playerAlreadyOnTicketIndex].typeId !== action.payload.typeId) {
                             state.error.code = TicketErrorCode.SAME_PLAYER_DIFFERENT_TYPES;
                             state.error.data = action.payload.playerName;
@@ -104,6 +110,7 @@ const ticketSlice = createSlice({
                         if (state.ticket.length < state.maxTicketSize) {
                             state.ticket.push(action.payload);
                         } else {
+                            // the maximum number of positions on the ticket exceeded
                             state.error.code = TicketErrorCode.MAX_MATCHES;
                             state.error.data = state.maxTicketSize.toString();
                         }

@@ -676,9 +676,9 @@
                 "enter-value": "Introducir valor"
             },
             "odds-changed-description": "Las probabilidades cambiaron. Aceptar cambios para poder comprar.",
-            "thales-bonus-tooltip": "Los usuarios que realicen intercambios con THALES obtendrán pagos adicionales del 1 % por cada juego que tengan en su boleto (ya calculado en Cotización total y Pago).",
+            "thales-bonus-tooltip": "Los usuarios que realicen intercambios con THALES obtendrán pagos adicionales del 2 % por cada juego que tengan en su boleto (ya calculado en Cotización total y Pago).",
             "accept-odds-changes": "Aceptar cambios de probabilidades",
-            "thales-bonus-info": "Utilice THALES y obtenga un bono del 1% por cada juego.",
+            "thales-bonus-info": "Utilice THALES y obtenga un bono del 2% por cada juego.",
             "odds-changed-error": "Las probabilidades cambiaron mientras se cumplía el pedido. Intente aumentar el deslizamiento.",
             "overdrop": {
                 "overdrop-xp-overview": "Descripción general de Overdrop XP",
