@@ -43,13 +43,20 @@ const ModalWrapper: React.FC = () => {
     useEffect(() => {
         if (userData && userMultipliers) {
             const levelItem = getCurrentLevelByPoints(userData.points);
-            if (overdropUIState.currentLevel !== levelItem.level && levelItem.level !== 0) return setLevelChanged(true);
+            if (overdropUIState.currentLevel !== levelItem.level && levelItem.level !== 0) {
+                setLevelChanged(true);
+                setShowLevelUpModal(true);
+                return;
+            }
             if (
                 overdropUIState.dailyMultiplier !==
                     getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) &&
                 getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) !== 0
-            )
-                return setDailyMultiplierChanged(true);
+            ) {
+                setDailyMultiplierChanged(true);
+                setShowDailyMultiplierModal(true);
+                return;
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userData, userMultipliers]);
