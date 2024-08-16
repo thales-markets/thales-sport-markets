@@ -675,10 +675,10 @@
                 "swap-thales": "Glissement d'échange"
             },
             "accept-odds-changes": "Accepter les changements de cotes",
-            "thales-bonus-info": "Utilisez THALES et obtenez 1% de bonus pour chaque partie.",
+            "thales-bonus-info": "Utilisez THALES et obtenez 2% de bonus pour chaque partie.",
             "odds-changed-description": "Les chances ont changé. Acceptez les modifications pour acheter.",
             "odds-changed-error": "Les chances ont changé lors de l'exécution de la commande. Essayez d'augmenter le glissement.",
-            "thales-bonus-tooltip": "Les utilisateurs effectuant des transactions avec THALES recevront 1 % de paiements supplémentaires pour chaque jeu qu'ils ont dans leur ticket (déjà calculé dans le devis total et le paiement).",
+            "thales-bonus-tooltip": "Les utilisateurs effectuant des transactions avec THALES recevront 2 % de paiements supplémentaires pour chaque jeu qu'ils ont dans leur ticket (déjà calculé dans le devis total et le paiement).",
             "swap-thales-tooltip": "TOUS",
             "use-free-bet": "Utiliser le pari gratuit",
             "swap-thales": "Échangez chez THALES pour un meilleur devis",

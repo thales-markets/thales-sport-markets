@@ -17,7 +17,7 @@ import {
 } from 'utils/marketsV2';
 import { getNetworkId } from '../../redux/modules/wallet';
 import { getCollateral } from '../../utils/collaterals';
-import { getAddedPayoutMultiplier } from '../../utils/tickets';
+import { getAddedPayoutOdds } from '../../utils/tickets';
 import MatchLogosV2 from '../MatchLogosV2';
 import {
     Canceled,
@@ -158,14 +158,12 @@ const MatchInfo: React.FC<MatchInfoProps> = ({
                         <OddChangeDown id="odd-change-down" />
                         {formatMarketOdds(
                             selectedOddsType,
-                            market.odd *
-                                (applyPayoutMultiplier
-                                    ? getAddedPayoutMultiplier(
-                                          useThalesCollateral
-                                              ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
-                                              : selectedCollateral
-                                      )
-                                    : 1)
+                            applyPayoutMultiplier
+                                ? getAddedPayoutOdds(
+                                      useThalesCollateral ? (CRYPTO_CURRENCY_MAP.THALES as Coins) : selectedCollateral,
+                                      market.odd
+                                  )
+                                : market.odd
                         )}
                     </Odd>
                 </PositionInfo>
