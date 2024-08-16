@@ -4,7 +4,7 @@ import { GameStatus, Position } from 'enums/markets';
 import { League } from 'enums/sports';
 import { ethers } from 'ethers';
 import i18n from 'i18n';
-import { SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
+import { SerializableSportMarket, SportMarket, Ticket, TicketMarket, TicketPosition, TradeData } from 'types/markets';
 import { fixOneSideMarketCompetitorName } from './formatters/string';
 import {
     getMarketTypeDescription,
@@ -30,6 +30,8 @@ import {
     isYesNoPlayerPropsMarket,
 } from './markets';
 import { getLeagueMatchResolveType, getLeaguePeriodType, getLeagueScoringType } from './sports';
+import _ from 'lodash';
+import { secondsToMilliseconds } from 'date-fns';
 
 const getUfcSpecificPositionText = (marketType: number, position: number, homeTeam: string, awayTeam: string) => {
     if (marketType === MarketType.WINNING_ROUND) {
@@ -544,4 +546,31 @@ export const ticketMarketAsTicketPosition = (market: TicketMarket) => {
         combinedPositions: market.combinedPositions,
         live: market.live,
     } as TicketPosition;
+};
+
+export const sportMarketAsSerializable = (market: SportMarket): SerializableSportMarket => {
+    const serializableChildMarkets = market.childMarkets
+        ? market.childMarkets.map((childMarket) => _.omit(childMarket, 'maturityDate'))
+        : market.childMarkets;
+    const serializableMarket = {
+        ..._.omit(market, 'maturityDate'),
+        childMarkets: serializableChildMarkets,
+    };
+    return serializableMarket;
+};
+
+export const serializableSportMarketAsSportMarket = (market: SerializableSportMarket): SportMarket => {
+    const childMarkets = market.childMarkets
+        ? market.childMarkets.map((childMarket) => ({
+              ...childMarket,
+              maturityDate: new Date(secondsToMilliseconds(childMarket.maturity)),
+          }))
+        : market.childMarkets;
+    const sportMarket = {
+        ...market,
+        maturityDate: new Date(secondsToMilliseconds(market.maturity)),
+        childMarkets,
+    } as SportMarket;
+
+    return sportMarket;
 };

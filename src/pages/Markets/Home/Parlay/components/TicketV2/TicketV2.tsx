@@ -4,6 +4,7 @@ import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import ShareTicketModalV2 from 'components/ShareTicketModalV2';
 import { ShareTicketModalProps } from 'components/ShareTicketModalV2/ShareTicketModalV2';
+import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
@@ -11,27 +12,41 @@ import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getLoadingToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
-import { APPROVAL_BUFFER, BATCH_SIZE, MIN_COLLATERAL_MULTIPLIER, THALES_CONTRACT_RATE_KEY } from 'constants/markets';
+import {
+    APPROVAL_BUFFER,
+    BATCH_SIZE,
+    COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
+    MIN_COLLATERAL_MULTIPLIER,
+    SWAP_APPROVAL_BUFFER,
+    THALES_CONTRACT_RATE_KEY,
+} from 'constants/markets';
+import { secondsToMilliseconds } from 'date-fns';
 import { OddsType } from 'enums/markets';
+import { BuyTicketStep } from 'enums/tickets';
 import { BigNumber, ethers } from 'ethers';
+import useDebouncedEffect from 'hooks/useDebouncedEffect';
+import useInterval from 'hooks/useInterval';
 import Slippage from 'pages/Markets/Home/Parlay/components/Slippage';
 import useAMMContractsPausedQuery from 'queries/markets/useAMMContractsPausedQuery';
 import useLiveTradingProcessorDataQuery from 'queries/markets/useLiveTradingProcessorDataQuery';
 import useSportsAmmDataQuery from 'queries/markets/useSportsAmmDataQuery';
 import useTicketLiquidityQuery from 'queries/markets/useTicketLiquidityQuery';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
+import useCoingeckoRatesQuery from 'queries/rates/useCoingeckoRatesQuery';
+import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsAppReady } from 'redux/modules/app';
 import {
+    getIsFreeBetDisabledByUser,
     getLiveBetSlippage,
     getTicketPayment,
     removeAll,
+    setIsFreeBetDisabledByUser,
     setLiveBetSlippage,
     setPaymentAmountToBuy,
     setPaymentSelectedCollateralIndex,
@@ -47,7 +62,7 @@ import {
 } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered } from 'styles/common';
+import { BoldContent, FlexDiv, FlexDivCentered } from 'styles/common';
 import {
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
@@ -60,8 +75,9 @@ import {
     formatCurrencyWithSign,
     formatPercentage,
     getPrecision,
+    roundNumberToDecimals,
 } from 'thales-utils';
-import { SportsAmmData, TicketMarket } from 'types/markets';
+import { TicketMarket } from 'types/markets';
 import { Coins } from 'types/tokens';
 import { ThemeInterface } from 'types/ui';
 import { executeBiconomyTransaction, getGasFeesForTx } from 'utils/biconomy';
@@ -76,16 +92,28 @@ import {
     isStableCurrency,
     mapMultiCollateralBalances,
 } from 'utils/collaterals';
+import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import { getLiveTradingProcessorTransaction } from 'utils/liveTradingProcessor';
 import { formatMarketOdds } from 'utils/markets';
 import { getTradeData } from 'utils/marketsV2';
 import { checkAllowance } from 'utils/network';
 import networkConnector from 'utils/networkConnector';
-import { refetchBalances } from 'utils/queryConnector';
+import { refetchBalances, refetchCoingeckoRates, refetchFreeBetBalance } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
+import {
+    buildTxForApproveTradeWithRouter,
+    buildTxForSwap,
+    checkSwapAllowance,
+    getQuote,
+    getSwapParams,
+    sendTransaction,
+} from 'utils/swap';
 import { getAddedPayoutOdds } from 'utils/tickets';
+import { delay } from 'utils/timer';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
+import { Address } from 'viem';
+import BuyStepsModal from '../BuyStepsModal';
 import SuggestedAmount from '../SuggestedAmount';
 import {
     AmountToBuyContainer,
@@ -121,6 +149,7 @@ type TicketProps = {
     acceptOddChanges: (changed: boolean) => void;
     onSuccess?: () => void;
     submitButtonDisabled?: boolean;
+    setUseThalesCollateral: (useThales: boolean) => void;
 };
 
 const TicketErrorMessage = {
@@ -137,6 +166,7 @@ const Ticket: React.FC<TicketProps> = ({
     acceptOddChanges,
     onSuccess,
     submitButtonDisabled,
+    setUseThalesCollateral,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
@@ -156,13 +186,14 @@ const Ticket: React.FC<TicketProps> = ({
     const selectedOddsType = useSelector(getOddsType);
     const ticketPayment = useSelector(getTicketPayment);
     const liveBetSlippage = useSelector(getLiveBetSlippage);
+    const isFreeBetDisabledByUser = useSelector(getIsFreeBetDisabledByUser);
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
     const buyInAmount = ticketPayment.amountToBuy;
 
     const [payout, setPayout] = useState(0);
-    const [buyInAmountInDefaultCollateral, setBuyInAmountInDefaultCollateral] = useState<number>(0);
-    const [minBuyInAmountInDefaultCollateral, setMinBuyInAmountInDefaultCollateral] = useState<number>(0);
-    const [minBuyInAmount, setMinBuyInAmount] = useState<number>(0);
+    const [buyInAmountInDefaultCollateral, setBuyInAmountInDefaultCollateral] = useState(0);
+    const [minBuyInAmountInDefaultCollateral, setMinBuyInAmountInDefaultCollateral] = useState(0);
+    const [minBuyInAmount, setMinBuyInAmount] = useState(0);
     const [finalQuotes, setFinalQuotes] = useState<number[]>([]);
 
     const [isAMMPaused, setIsAMMPaused] = useState(false);
@@ -171,35 +202,52 @@ const Ticket: React.FC<TicketProps> = ({
     const [isFetching, setIsFetching] = useState(false);
     const [isAllowing, setIsAllowing] = useState(false);
     const [isBuying, setIsBuying] = useState(false);
-    const [tooltipTextBuyInAmount, setTooltipTextBuyInAmount] = useState<string>('');
-    const [isFreeBetActive, setIsFreeBetActive] = useState<boolean>(false);
+    const [tooltipTextBuyInAmount, setTooltipTextBuyInAmount] = useState('');
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
     const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
     const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
 
+    const [isFreeBetActive, setIsFreeBetActive] = useState(false);
+    const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
+    const [checkFreeBetBalance, setCheckFreeBetBalance] = useState(false);
+
     const [gas, setGas] = useState(0);
-    const [slippageDropdownOpen, setSlippageDropdownOpen] = useState<boolean>(false);
+    const [slippageDropdownOpen, setSlippageDropdownOpen] = useState(false);
+
+    const [swapToThales, setSwapToThales] = useState(false);
+    const [swappedThalesToReceive, setSwappedThalesToReceive] = useState(0);
+    const [swapQuote, setSwapQuote] = useState(0);
+    const [hasSwapAllowance, setHasSwapAllowance] = useState(false);
+    const [buyStep, setBuyStep] = useState(BuyTicketStep.APPROVE_SWAP);
+    const [openBuyStepsModal, setOpenBuyStepsModal] = useState(false);
 
     const defaultCollateral = useMemo(() => getDefaultCollateral(networkId), [networkId]);
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
         networkId,
         selectedCollateralIndex,
     ]);
+    const usedCollateralForBuy = useMemo(
+        () => (swapToThales ? (CRYPTO_CURRENCY_MAP.THALES as Coins) : selectedCollateral),
+        [swapToThales, selectedCollateral]
+    );
     const isEth = selectedCollateral === CRYPTO_CURRENCY_MAP.ETH;
     const isThales = selectedCollateral === CRYPTO_CURRENCY_MAP.THALES;
     const collateralAddress = useMemo(
         () =>
             getCollateralAddress(
                 networkId,
-                isEth ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateralIndex
+                isEth && !swapToThales
+                    ? getCollateralIndex(networkId, CRYPTO_CURRENCY_MAP.WETH as Coins)
+                    : selectedCollateralIndex
             ),
-        [networkId, selectedCollateralIndex, isEth]
+        [networkId, selectedCollateralIndex, isEth, swapToThales]
     );
+    const thalesCollateralAddress = multipleCollateral[CRYPTO_CURRENCY_MAP.THALES as Coins].addresses[networkId];
     const isStableCollateral = isStableCurrency(selectedCollateral);
     const isDefaultCollateral = selectedCollateral === defaultCollateral;
-    const collateralHasLp = isLpSupported(selectedCollateral);
+    const collateralHasLp = isLpSupported(usedCollateralForBuy);
 
     // Used for cancelling the subscription and asynchronous tasks in a useEffect
     const mountedRef = useRef(true);
@@ -232,12 +280,6 @@ const Ticket: React.FC<TicketProps> = ({
         enabled: isAppReady && isWalletConnected,
     });
 
-    const multipleCollateralBalancesData = useMemo(() => {
-        return multipleCollateralBalances?.isSuccess && multipleCollateralBalances?.data
-            ? multipleCollateralBalances.data
-            : [];
-    }, [multipleCollateralBalances]);
-
     const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(walletAddress, networkId, {
         enabled: isAppReady && isWalletConnected,
     });
@@ -251,14 +293,7 @@ const Ticket: React.FC<TicketProps> = ({
         ? !!Object.values(freeBetCollateralBalances).find((balance) => balance)
         : false;
 
-    // Set free bet if user has free bet balance
-    useEffect(() => {
-        if (freeBetBalanceExists) {
-            setIsFreeBetActive(true);
-        }
-    }, [freeBetBalanceExists]);
-
-    const sportsAmmData: SportsAmmData | undefined = useMemo(() => {
+    const sportsAmmData = useMemo(() => {
         if (sportsAmmDataQuery.isSuccess && sportsAmmDataQuery.data) {
             return sportsAmmDataQuery.data;
         }
@@ -285,11 +320,22 @@ const Ticket: React.FC<TicketProps> = ({
     const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
         enabled: isAppReady,
     });
-    const exchangeRates: Rates | null =
-        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+    const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+
+    const coingeckoRatesQuery = useCoingeckoRatesQuery({
+        enabled: isAppReady,
+    });
+    const coingeckoThalesMinRecive = useMemo(() => {
+        const coingeckoThalesAmount =
+            coingeckoRatesQuery.isSuccess && coingeckoRatesQuery.data[CRYPTO_CURRENCY_MAP.THALES as Coins]
+                ? (Number(buyInAmount) * coingeckoRatesQuery.data[selectedCollateral]) /
+                  coingeckoRatesQuery.data[CRYPTO_CURRENCY_MAP.THALES as Coins]
+                : 0;
+        return coingeckoThalesAmount * (1 - COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE[networkId]);
+    }, [coingeckoRatesQuery, selectedCollateral, buyInAmount, networkId]);
 
     const selectedCollateralCurrencyRate =
-        exchangeRates && exchangeRates !== null ? exchangeRates[selectedCollateral] : 1;
+        exchangeRates && exchangeRates !== null ? exchangeRates[usedCollateralForBuy] : 1;
     const thalesContractCurrencyRate =
         exchangeRates && exchangeRates !== null ? exchangeRates[THALES_CONTRACT_RATE_KEY] : 1;
 
@@ -305,39 +351,96 @@ const Ticket: React.FC<TicketProps> = ({
         [liveTradingProcessorDataQuery.isSuccess, liveTradingProcessorDataQuery.data]
     );
 
+    const resetFreeBet = useCallback(() => {
+        setIsFreeBetInitialized(false);
+        setIsFreeBetActive(false);
+        setCheckFreeBetBalance(false);
+    }, []);
+
+    // Reset free bet
     useEffect(() => {
-        if (!freeBetBalanceExists) return;
+        resetFreeBet();
+    }, [walletAddress, resetFreeBet]);
 
-        const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+    // Select initially Free Bet if exists at least min for buy
+    useEffect(() => {
+        if (!freeBetBalanceExists) {
+            resetFreeBet();
+        } else if (!isFreeBetDisabledByUser && !isFreeBetInitialized && minBuyInAmountInDefaultCollateral) {
+            const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+            if (!balanceList) return;
 
-        const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
+            const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
 
-        const isSelectedCollateralBalanceLowerThanMinimumBuyAmount =
-            selectedCollateralItem && selectedCollateralItem.balanceDollarValue < 3;
+            const isSelectedCollateralBalanceLowerThanMin =
+                selectedCollateralItem && selectedCollateralItem.balanceDollarValue < minBuyInAmountInDefaultCollateral;
 
-        if (!balanceList) return;
-        const maxBalanceItem = getMaxCollateralDollarValue(balanceList);
-
-        if (
-            maxBalanceItem &&
-            (!ticketPayment.forceChangeCollateral || isSelectedCollateralBalanceLowerThanMinimumBuyAmount)
-        ) {
-            dispatch(
-                setPaymentSelectedCollateralIndex({
-                    selectedCollateralIndex: maxBalanceItem.index,
-                    networkId: networkId,
-                })
-            );
+            if (isSelectedCollateralBalanceLowerThanMin) {
+                setIsFreeBetActive(false);
+            } else if (!isFreeBetActive) {
+                setIsFreeBetActive(true);
+            }
+            setCheckFreeBetBalance(true);
+            setIsFreeBetInitialized(true);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        resetFreeBet,
+        freeBetCollateralBalances,
+        exchangeRates,
+        networkId,
+        selectedCollateral,
+        freeBetBalanceExists,
+        minBuyInAmountInDefaultCollateral,
+        isFreeBetActive,
+        isFreeBetInitialized,
+        isFreeBetDisabledByUser,
+    ]);
+
+    // Select max balance collateral for Free Bet
+    useEffect(() => {
+        if (checkFreeBetBalance && minBuyInAmountInDefaultCollateral) {
+            const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+            if (!balanceList) return;
+
+            const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
+
+            const isSelectedCollateralBalanceLowerThanMin =
+                selectedCollateralItem && selectedCollateralItem.balanceDollarValue < minBuyInAmountInDefaultCollateral;
+
+            const maxBalanceItem = getMaxCollateralDollarValue(balanceList);
+            const isMaxBalanceLowerThanMin =
+                maxBalanceItem && maxBalanceItem.balanceDollarValue < minBuyInAmountInDefaultCollateral;
+
+            if (
+                maxBalanceItem &&
+                !isMaxBalanceLowerThanMin &&
+                selectedCollateral !== maxBalanceItem.collateralKey &&
+                (!ticketPayment.forceChangeCollateral || isSelectedCollateralBalanceLowerThanMin)
+            ) {
+                dispatch(
+                    setPaymentSelectedCollateralIndex({
+                        selectedCollateralIndex: maxBalanceItem.index,
+                        networkId,
+                    })
+                );
+                if (!isFreeBetDisabledByUser) {
+                    setIsFreeBetActive(true);
+                }
+            }
+            setCheckFreeBetBalance(false);
+        }
     }, [
         dispatch,
         exchangeRates,
-        freeBetBalanceExists,
+        isFreeBetActive,
         freeBetCollateralBalances,
-        multipleCollateralBalancesData,
+        freeBetBalanceExists,
+        minBuyInAmountInDefaultCollateral,
+        selectedCollateral,
         networkId,
         ticketPayment.forceChangeCollateral,
+        checkFreeBetBalance,
+        isFreeBetDisabledByUser,
     ]);
 
     useEffect(() => {
@@ -347,25 +450,27 @@ const Ticket: React.FC<TicketProps> = ({
     const totalQuote = useMemo(() => {
         const quote = markets.reduce(
             (partialQuote, market) =>
-                partialQuote * (market.odd > 0 ? getAddedPayoutOdds(selectedCollateral, market.odd) : market.odd),
+                partialQuote * (market.odd > 0 ? getAddedPayoutOdds(usedCollateralForBuy, market.odd) : market.odd),
             1
         );
         const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
         return quote < maxSupportedOdds ? maxSupportedOdds : quote;
-    }, [markets, sportsAmmData?.maxSupportedOdds, selectedCollateral]);
+    }, [markets, sportsAmmData?.maxSupportedOdds, usedCollateralForBuy]);
 
     const totalBonus = useMemo(() => {
         const bonus = {
             percentage: 0,
             value: 0,
         };
-        if (isThales) {
+        if (isThales || swapToThales) {
             const { quote, basicQuote } = markets.reduce(
                 (partialQuote, market) => {
                     return {
                         quote:
                             partialQuote.quote *
-                            (market.odd > 0 ? getAddedPayoutOdds(selectedCollateral, market.odd) : market.odd),
+                            (market.odd > 0
+                                ? getAddedPayoutOdds(CRYPTO_CURRENCY_MAP.THALES as Coins, market.odd)
+                                : market.odd),
                         basicQuote: partialQuote.basicQuote * market.odd,
                     };
                 },
@@ -379,7 +484,7 @@ const Ticket: React.FC<TicketProps> = ({
             bonus.value = Number(payout) - Number(payout) / percentage;
         }
         return bonus;
-    }, [isThales, markets, payout, selectedCollateral]);
+    }, [isThales, markets, payout, swapToThales]);
 
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
         enabled: isAppReady,
@@ -388,7 +493,7 @@ const Ticket: React.FC<TicketProps> = ({
     const ticketLiquidity: number | undefined = useMemo(
         () =>
             ticketLiquidityQuery.isSuccess && ticketLiquidityQuery.data !== undefined
-                ? isThales
+                ? isThales || swapToThales
                     ? Math.floor(
                           (ticketLiquidityQuery.data * selectedCollateralCurrencyRate) / thalesContractCurrencyRate
                       )
@@ -400,6 +505,7 @@ const Ticket: React.FC<TicketProps> = ({
             isThales,
             selectedCollateralCurrencyRate,
             thalesContractCurrencyRate,
+            swapToThales,
         ]
     );
 
@@ -426,10 +532,10 @@ const Ticket: React.FC<TicketProps> = ({
                     const [minimumNeededForMinUsdAmountValue] = await Promise.all([
                         collateralHasLp
                             ? minBuyInAmountInDefaultCollateral /
-                              (isDefaultCollateral
-                                  ? 1
-                                  : isThales
+                              (isThales || swapToThales
                                   ? thalesContractCurrencyRate
+                                  : isDefaultCollateral
+                                  ? 1
                                   : selectedCollateralCurrencyRate)
                             : multiCollateralOnOffRampContract?.getMinimumNeeded(
                                   collateralAddress,
@@ -437,20 +543,22 @@ const Ticket: React.FC<TicketProps> = ({
                               ),
                     ]);
 
-                    setMinBuyInAmount(
+                    const minBuyin =
                         (collateralHasLp
                             ? minimumNeededForMinUsdAmountValue
-                            : coinFormatter(minimumNeededForMinUsdAmountValue, networkId, selectedCollateral)) *
-                            (isDefaultCollateral ? 1 : MIN_COLLATERAL_MULTIPLIER)
-                    );
+                            : coinFormatter(minimumNeededForMinUsdAmountValue, networkId, usedCollateralForBuy)) *
+                        (isDefaultCollateral && !swapToThales ? 1 : MIN_COLLATERAL_MULTIPLIER);
+
+                    setMinBuyInAmount(roundNumberToDecimals(minBuyin, 18));
 
                     if (markets[0]?.live) {
                         const [minimumReceivedForBuyInAmount] = await Promise.all([
                             collateralHasLp
-                                ? buyInAmountForQuote * (isDefaultCollateral ? 1 : selectedCollateralCurrencyRate)
+                                ? buyInAmountForQuote *
+                                  (isDefaultCollateral && !swapToThales ? 1 : selectedCollateralCurrencyRate)
                                 : multiCollateralOnOffRampContract?.getMinimumReceived(
-                                      collateralAddress,
-                                      coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
+                                      swapToThales ? thalesCollateralAddress : collateralAddress,
+                                      coinParser(buyInAmountForQuote.toString(), networkId, usedCollateralForBuy)
                                   ),
                         ]);
 
@@ -463,17 +571,18 @@ const Ticket: React.FC<TicketProps> = ({
                     } else {
                         const [parlayAmmQuote] = await Promise.all([
                             getSportsAMMV2QuoteMethod(
-                                collateralAddress,
-                                isDefaultCollateral,
+                                swapToThales ? thalesCollateralAddress : collateralAddress,
+                                isDefaultCollateral && !swapToThales,
                                 sportsAMMV2Contract,
                                 tradeData,
-                                coinParser(buyInAmountForQuote.toString(), networkId, selectedCollateral)
+                                coinParser(buyInAmountForQuote.toString(), networkId, usedCollateralForBuy)
                             ),
                         ]);
 
                         setBuyInAmountInDefaultCollateral(
-                            isThales
-                                ? Number(buyInAmount) * selectedCollateralCurrencyRate
+                            isThales || swapToThales
+                                ? (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) *
+                                      selectedCollateralCurrencyRate
                                 : coinFormatter(parlayAmmQuote.buyInAmountInDefaultCollateral, networkId)
                         );
 
@@ -503,11 +612,92 @@ const Ticket: React.FC<TicketProps> = ({
             selectedCollateralCurrencyRate,
             collateralAddress,
             networkId,
-            selectedCollateral,
             buyInAmount,
+            swapToThales,
+            swappedThalesToReceive,
+            usedCollateralForBuy,
+            thalesCollateralAddress,
         ]
     );
 
+    const swapToThalesParams = useMemo(
+        () =>
+            getSwapParams(
+                networkId,
+                walletAddress as Address,
+                coinParser(buyInAmount.toString(), networkId, selectedCollateral),
+                collateralAddress as Address
+            ),
+        [buyInAmount, collateralAddress, networkId, selectedCollateral, walletAddress]
+    );
+
+    // Set THALES swap receive
+    useDebouncedEffect(() => {
+        if (isThales) {
+            setSwapToThales(false);
+            setUseThalesCollateral(false);
+            setSwappedThalesToReceive(0);
+            setSwapQuote(0);
+        } else if (swapToThales && buyInAmount) {
+            const getSwapQuote = async () => {
+                const quote = await getQuote(networkId, swapToThalesParams);
+
+                setSwappedThalesToReceive(quote);
+                setSwapQuote(quote / Number(buyInAmount));
+            };
+
+            getSwapQuote();
+        } else {
+            setSwappedThalesToReceive(0);
+            setSwapQuote(0);
+        }
+    }, [swapToThales, buyInAmount, networkId, swapToThalesParams, isThales, setUseThalesCollateral]);
+
+    // Refresh swap THALES quote on 7s
+    useInterval(
+        async () => {
+            if (!openBuyStepsModal && !tooltipTextBuyInAmount) {
+                const quote = await getQuote(networkId, swapToThalesParams);
+                setSwappedThalesToReceive(quote);
+                setSwapQuote(quote / Number(buyInAmount));
+            }
+        },
+        !isThales && swapToThales && buyInAmount ? secondsToMilliseconds(7) : null
+    );
+
+    // Reset buy step when collateral is changed
+    useEffect(() => {
+        setBuyStep(BuyTicketStep.APPROVE_SWAP);
+    }, [selectedCollateral]);
+
+    // Check swap allowance
+    useEffect(() => {
+        if (isWalletConnected && swapToThales && buyInAmount) {
+            const getSwapAllowance = async () => {
+                const allowance = await checkSwapAllowance(
+                    networkId,
+                    walletAddress as Address,
+                    swapToThalesParams.src,
+                    coinParser(buyInAmount.toString(), networkId, selectedCollateral)
+                );
+
+                setHasSwapAllowance(allowance);
+            };
+
+            getSwapAllowance();
+        }
+    }, [
+        walletAddress,
+        isWalletConnected,
+        buyInAmount,
+        networkId,
+        selectedCollateral,
+        swapToThales,
+        swapToThalesParams.src,
+        isBuying,
+    ]);
+
+    // Check allowance
     useEffect(() => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
 
@@ -516,14 +706,24 @@ const Ticket: React.FC<TicketProps> = ({
             return;
         }
         if (sportsAMMV2Contract && multipleCollateral && signer) {
-            const collateralToAllow = isLiveTicket && isEth ? (CRYPTO_CURRENCY_MAP.WETH as Coins) : selectedCollateral;
-            const collateralContractWithSigner = isDefaultCollateral
-                ? sUSDContract?.connect(signer)
-                : multipleCollateral[collateralToAllow]?.connect(signer);
+            const collateralToAllow = swapToThales
+                ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
+                : isLiveTicket && isEth
+                ? (CRYPTO_CURRENCY_MAP.WETH as Coins)
+                : selectedCollateral;
+
+            const collateralContractWithSigner =
+                isDefaultCollateral && !swapToThales
+                    ? sUSDContract?.connect(signer)
+                    : multipleCollateral[collateralToAllow]?.connect(signer);
 
             const getAllowance = async () => {
                 try {
-                    const parsedTicketPrice = coinParser(Number(buyInAmount).toString(), networkId, collateralToAllow);
+                    const parsedTicketPrice = coinParser(
+                        (swapToThales ? swappedThalesToReceive : Number(buyInAmount)).toString(),
+                        networkId,
+                        collateralToAllow
+                    );
                     const allowance = await checkAllowance(
                         parsedTicketPrice,
                         collateralContractWithSigner,
@@ -537,7 +737,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
             };
             if (isWalletConnected && buyInAmount) {
-                isEth && !isLiveTicket ? setHasAllowance(true) : getAllowance();
+                isEth && !isLiveTicket && !swapToThales ? setHasAllowance(true) : getAllowance();
             }
         }
     }, [
@@ -553,6 +753,9 @@ const Ticket: React.FC<TicketProps> = ({
         isDefaultCollateral,
         isLiveTicket,
         isFreeBetActive,
+        swapToThales,
+        swappedThalesToReceive,
+        isBuying,
     ]);
 
     const isValidProfit: boolean = useMemo(() => {
@@ -563,7 +766,10 @@ const Ticket: React.FC<TicketProps> = ({
         );
     }, [sportsAmmData?.maxSupportedAmount, buyInAmountInDefaultCollateral, totalQuote]);
 
+    // Validations
     useEffect(() => {
+        if (isBuying) return;
+
         if (
             (Number(buyInAmount) && finalQuotes.some((quote) => quote === 0)) ||
             (Number(buyInAmountInDefaultCollateral) &&
@@ -571,13 +777,22 @@ const Ticket: React.FC<TicketProps> = ({
                 Number(buyInAmountInDefaultCollateral) > ticketLiquidity)
         ) {
             setTooltipTextBuyInAmount(t('markets.parlay.validation.availability'));
-        } else if (Number(buyInAmount) && Number(buyInAmount) < minBuyInAmount) {
-            const decimals = getPrecision(minBuyInAmount);
+        } else if (
+            Number(buyInAmount) &&
+            (swapToThales ? swapQuote && swappedThalesToReceive < minBuyInAmount : Number(buyInAmount) < minBuyInAmount)
+        ) {
+            let minBuyin = minBuyInAmount / (swapToThales ? swapQuote : 1);
+            minBuyin =
+                swapToThales && isDefaultCollateral && minBuyin < minBuyInAmountInDefaultCollateral
+                    ? minBuyInAmountInDefaultCollateral
+                    : minBuyin;
+            const decimals = getPrecision(minBuyin);
+
             setTooltipTextBuyInAmount(
                 t('markets.parlay.validation.min-amount', {
                     min: `${formatCurrencyWithKey(
                         selectedCollateral,
-                        ceilNumberToDecimals(minBuyInAmount, decimals),
+                        ceilNumberToDecimals(minBuyin, decimals),
                         decimals
                     )}${
                         isDefaultCollateral
@@ -614,6 +829,11 @@ const Ticket: React.FC<TicketProps> = ({
         sportsAmmData?.maxSupportedAmount,
         t,
         ticketLiquidity,
+        swapToThales,
+        swappedThalesToReceive,
+        selectedCollateralCurrencyRate,
+        swapQuote,
+        isBuying,
     ]);
 
     const setCollateralAmount = useCallback(
@@ -632,6 +852,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const handleAllowance = async (approveAmount: BigNumber) => {
         const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
+
         if (sportsAMMV2Contract && multipleCollateral && signer) {
             setIsAllowing(true);
             const id = toast.loading(t('market.toast-message.transaction-pending'));
@@ -672,6 +893,141 @@ const Ticket: React.FC<TicketProps> = ({
         }
     };
 
+    const handleBuyWithThalesSteps = async (
+        initialStep: BuyTicketStep
+    ): Promise<{ step: BuyTicketStep; thalesAmount: number }> => {
+        let step = initialStep;
+        let thalesAmount = swappedThalesToReceive;
+
+        const { sportsAMMV2Contract, multipleCollateral, signer } = networkConnector;
+
+        // Validation for min buy-in while modal is open
+        if (swappedThalesToReceive && swappedThalesToReceive < minBuyInAmount) {
+            setOpenBuyStepsModal(false);
+            return { step, thalesAmount };
+        }
+
+        if (step <= BuyTicketStep.SWAP) {
+            if (!isEth && !hasSwapAllowance) {
+                if (step !== BuyTicketStep.APPROVE_SWAP) {
+                    step = BuyTicketStep.APPROVE_SWAP;
+                    setBuyStep(BuyTicketStep.APPROVE_SWAP);
+                }
+
+                const approveAmount = coinParser(
+                    (Number(buyInAmount) * (1 + SWAP_APPROVAL_BUFFER)).toString(),
+                    networkId,
+                    selectedCollateral
+                );
+                const approveSwapRawTransaction = await buildTxForApproveTradeWithRouter(
+                    networkId,
+                    walletAddress as Address,
+                    swapToThalesParams.src,
+                    approveAmount.toString()
+                );
+
+                try {
+                    const approveTxHash = await sendTransaction(approveSwapRawTransaction);
+
+                    if (approveTxHash) {
+                        await delay(3000); // wait for 1inch API to read correct approval
+                        step = BuyTicketStep.SWAP;
+                        setBuyStep(step);
+                    }
+                } catch (e) {
+                    console.log('Approve swap failed', e);
+                }
+            } else {
+                step = BuyTicketStep.SWAP;
+                setBuyStep(step);
+            }
+        }
+
+        if (step === BuyTicketStep.SWAP) {
+            try {
+                const swapRawTransaction = (await buildTxForSwap(networkId, swapToThalesParams)).tx;
+
+                // check allowance again
+                if (!swapRawTransaction) {
+                    await delay(1800);
+                    const hasRefreshedAllowance = await checkSwapAllowance(
+                        networkId,
+                        walletAddress as Address,
+                        swapToThalesParams.src,
+                        coinParser(buyInAmount.toString(), networkId, selectedCollateral)
+                    );
+                    if (!hasRefreshedAllowance) {
+                        step = BuyTicketStep.APPROVE_SWAP;
+                        setBuyStep(step);
+                    }
+                }
+
+                const balanceBefore = multipleCollateralBalances.data[CRYPTO_CURRENCY_MAP.THALES as Coins];
+                const swapTxHash = swapRawTransaction ? await sendTransaction(swapRawTransaction) : undefined;
+
+                if (swapTxHash) {
+                    step = BuyTicketStep.APPROVE_BUY;
+                    setBuyStep(step);
+
+                    await delay(3000); // wait for THALES balance to increase
+                    const balanceAfter = bigNumberFormatter(
+                        await multipleCollateral?.[CRYPTO_CURRENCY_MAP.THALES as Coins]?.balanceOf(walletAddress)
+                    );
+                    thalesAmount = balanceAfter - balanceBefore;
+                    setSwappedThalesToReceive(thalesAmount);
+                }
+            } catch (e) {
+                console.log('Swap tx failed', e);
+            }
+        }
+
+        if (step >= BuyTicketStep.APPROVE_BUY) {
+            if (!hasAllowance) {
+                step = BuyTicketStep.APPROVE_BUY;
+                setBuyStep(step);
+
+                if (sportsAMMV2Contract && multipleCollateral && signer) {
+                    try {
+                        const collateralContractWithSigner = multipleCollateral[
+                            CRYPTO_CURRENCY_MAP.THALES as Coins
+                        ]?.connect(signer);
+
+                        const addressToApprove = sportsAMMV2Contract.address;
+                        const approveAmount = ethers.constants.MaxUint256;
+
+                        let txResult;
+                        if (isAA) {
+                            txResult = await executeBiconomyTransaction(
+                                collateralContractWithSigner?.address ?? '',
+                                collateralContractWithSigner,
+                                'approve',
+                                [addressToApprove, approveAmount]
+                            );
+                        } else {
+                            const tx = (await collateralContractWithSigner?.approve(
+                                addressToApprove,
+                                approveAmount
+                            )) as ethers.ContractTransaction;
+                            txResult = await tx.wait();
+                        }
+
+                        if (txResult && txResult.transactionHash) {
+                            step = BuyTicketStep.BUY;
+                            setBuyStep(step);
+                        }
+                    } catch (e) {
+                        console.log('Approve buy failed', e);
+                    }
+                }
+            } else {
+                step = BuyTicketStep.BUY;
+                setBuyStep(step);
+            }
+        }
+
+        return { step, thalesAmount };
+    };
+
     const handleSubmit = async () => {
         const {
             sportsAMMV2Contract,
@@ -689,11 +1045,45 @@ const Ticket: React.FC<TicketProps> = ({
             signer
         ) {
             setIsBuying(true);
+            const toastId = toast.loading(t('market.toast-message.transaction-pending'));
+
+            let step = buyStep;
+            let thalesAmount = swappedThalesToReceive;
+            if (swapToThales) {
+                await refetchCoingeckoRates();
+                if (
+                    step <= BuyTicketStep.SWAP &&
+                    swappedThalesToReceive &&
+                    swappedThalesToReceive < coingeckoThalesMinRecive
+                ) {
+                    await delay(800);
+                    toast.update(
+                        toastId,
+                        getErrorToastOptions(
+                            t('common.errors.swap-quote-low', {
+                                quote: formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, swappedThalesToReceive),
+                                minQuote: formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.THALES, coingeckoThalesMinRecive),
+                            })
+                        )
+                    );
+                    setIsBuying(false);
+                    return;
+                }
+
+                setOpenBuyStepsModal(true);
+                ({ step, thalesAmount } = await handleBuyWithThalesSteps(step));
+
+                if (step !== BuyTicketStep.BUY) {
+                    toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
+                    setIsBuying(false);
+                    return;
+                }
+            }
+
             const sportsAMMV2ContractWithSigner = markets[0].live
                 ? liveTradingProcessorContract?.connect(signer)
                 : sportsAMMV2Contract?.connect(signer);
             const freeBetContractWithSigner = freeBetHolderContract?.connect(signer);
-            const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
             try {
                 const referralId =
@@ -702,7 +1092,11 @@ const Ticket: React.FC<TicketProps> = ({
                         : null;
 
                 const tradeData = getTradeData(markets);
-                const parsedBuyInAmount = coinParser(buyInAmount.toString(), networkId, selectedCollateral);
+                const parsedBuyInAmount = coinParser(
+                    (swapToThales ? thalesAmount : buyInAmount).toString(),
+                    networkId,
+                    usedCollateralForBuy
+                );
                 const parsedTotalQuote = ethers.utils.parseEther(floorNumberToDecimals(totalQuote, 18).toString());
                 const additionalSlippage = ethers.utils.parseEther(
                     tradeData[0].live ? liveBetSlippage / 100 + '' : '0.02'
@@ -714,7 +1108,7 @@ const Ticket: React.FC<TicketProps> = ({
                     const liveTradeDataPosition = tradeData[0].position;
                     const liveTotalQuote = liveTradeDataOdds[liveTradeDataPosition];
 
-                    if (isEth && multipleCollateral?.WETH) {
+                    if (isEth && multipleCollateral?.WETH && !swapToThales) {
                         const WETHContractWithSigner = multipleCollateral.WETH.connect(signer);
 
                         const wrapTx = await WETHContractWithSigner.deposit({ value: parsedBuyInAmount });
@@ -736,7 +1130,7 @@ const Ticket: React.FC<TicketProps> = ({
                         }
                     } else {
                         tx = await getLiveTradingProcessorTransaction(
-                            collateralAddress,
+                            swapToThales ? thalesCollateralAddress : collateralAddress,
                             sportsAMMV2ContractWithSigner,
                             tradeData,
                             parsedBuyInAmount,
@@ -750,9 +1144,9 @@ const Ticket: React.FC<TicketProps> = ({
                     }
                 } else {
                     tx = await getSportsAMMV2Transaction(
-                        collateralAddress,
-                        isDefaultCollateral,
-                        isEth,
+                        swapToThales ? thalesCollateralAddress : collateralAddress,
+                        isDefaultCollateral && !swapToThales,
+                        isEth && !swapToThales,
                         networkId,
                         sportsAMMV2ContractWithSigner,
                         freeBetContractWithSigner,
@@ -790,8 +1184,10 @@ const Ticket: React.FC<TicketProps> = ({
                             markets: [...markets],
                             multiSingle: false,
                             paid:
-                                !collateralHasLp || isDefaultCollateral
+                                !collateralHasLp || (isDefaultCollateral && !swapToThales)
                                     ? Number(buyInAmountInDefaultCollateral)
+                                    : swapToThales
+                                    ? swappedThalesToReceive
                                     : Number(buyInAmount),
                             payout: payout,
                             onClose: () => {
@@ -800,12 +1196,15 @@ const Ticket: React.FC<TicketProps> = ({
                                 onSuccess && onSuccess();
                             },
                             isTicketLost: false,
-                            collateral: collateralHasLp ? selectedCollateral : defaultCollateral,
+                            collateral: collateralHasLp ? usedCollateralForBuy : defaultCollateral,
                             isLive: false,
                             applyPayoutMultiplier: true,
                         };
                         setShareTicketModalData(modalData);
                         setShowShareTicketModal(true);
+
+                        setBuyStep(BuyTicketStep.COMPLETED);
+                        setOpenBuyStepsModal(false);
 
                         toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                         setIsBuying(false);
@@ -874,8 +1273,10 @@ const Ticket: React.FC<TicketProps> = ({
                                         ? userTickets.freeBetsData[userTickets.freeBetsData.length - 1]
                                         : userTickets.ticketsData[userTickets.ticketsData.length - 1];
                                     const lastTicketPaid =
-                                        !collateralHasLp || isDefaultCollateral
+                                        !collateralHasLp || (isDefaultCollateral && !swapToThales)
                                             ? coinFormatter(lastTicket.buyInAmount, networkId)
+                                            : swapToThales
+                                            ? swappedThalesToReceive
                                             : Number(buyInAmount);
                                     const lastTicketPayout = lastTicketPaid / bigNumberFormatter(lastTicket.totalQuote);
 
@@ -902,6 +1303,10 @@ const Ticket: React.FC<TicketProps> = ({
                                     setShareTicketModalData(modalData);
                                     setShowShareTicketModal(true);
                                 }
+
+                                setBuyStep(BuyTicketStep.COMPLETED);
+                                setOpenBuyStepsModal(false);
+
                                 toast.update(toastId, getSuccessToastOptions(t('market.toast-message.buy-success')));
                                 setIsBuying(false);
                                 setCollateralAmount('');
@@ -909,6 +1314,11 @@ const Ticket: React.FC<TicketProps> = ({
                         };
                         toast.update(toastId, getLoadingToastOptions(t('market.toast-message.live-trade-requested')));
                         setTimeout(checkFulfilled, 2000);
+                    }
+
+                    if (isFreeBetActive) {
+                        refetchFreeBetBalance(walletAddress, networkId);
+                        setIsFreeBetInitialized(false);
                     }
                 }
             } catch (e) {
@@ -920,20 +1330,26 @@ const Ticket: React.FC<TicketProps> = ({
         }
     };
 
+    // Button validations
     useEffect(() => {
         if (isAMMPaused) {
             setSubmitDisabled(true);
             return;
         }
 
-        // Minimum of sUSD
-        if (!Number(buyInAmount) || Number(buyInAmount) < minBuyInAmount || isBuying || isAllowing) {
+        // Minimum buyIn
+        if (
+            !Number(buyInAmount) ||
+            (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) < minBuyInAmount ||
+            isBuying ||
+            isAllowing
+        ) {
             setSubmitDisabled(true);
             return;
         }
 
         // Enable Approve if it hasn't allowance
-        if (!hasAllowance) {
+        if (!hasAllowance && !swapToThales) {
             setSubmitDisabled(false);
             return;
         }
@@ -957,6 +1373,7 @@ const Ticket: React.FC<TicketProps> = ({
         isBuying,
         isAllowing,
         hasAllowance,
+        hasSwapAllowance,
         paymentTokenBalance,
         totalQuote,
         tooltipTextBuyInAmount,
@@ -967,6 +1384,8 @@ const Ticket: React.FC<TicketProps> = ({
         oddsChanged,
         markets,
         isLiveTicket,
+        swappedThalesToReceive,
+        swapToThales,
     ]);
 
     const getSubmitButton = () => {
@@ -994,8 +1413,9 @@ const Ticket: React.FC<TicketProps> = ({
                 </Button>
             );
         }
+
         // Show Approve only on valid input buy amount
-        if (!hasAllowance && buyInAmount && Number(buyInAmount) >= minBuyInAmount) {
+        if (!swapToThales && !hasAllowance && buyInAmount && Number(buyInAmount) >= minBuyInAmount) {
             if (isLiveTicket && isEth) {
                 return (
                     <Tooltip
@@ -1029,7 +1449,7 @@ const Ticket: React.FC<TicketProps> = ({
             );
         }
 
-        if (isLiveTicket && isEth) {
+        if (!swapToThales && isLiveTicket && isEth) {
             return (
                 <>
                     <Tooltip
@@ -1066,7 +1486,9 @@ const Ticket: React.FC<TicketProps> = ({
             setIsFetching(true);
             const { sportsAMMV2Contract } = networkConnector;
             if (sportsAMMV2Contract && Number(buyInAmount) > 0 && minBuyInAmountInDefaultCollateral) {
-                const parlayAmmQuote = await fetchTicketAmmQuote(Number(buyInAmount));
+                const parlayAmmQuote = await fetchTicketAmmQuote(
+                    swapToThales ? swappedThalesToReceive : Number(buyInAmount)
+                );
 
                 if (!mountedRef.current || !isSubscribed || !parlayAmmQuote) return null;
 
@@ -1074,17 +1496,35 @@ const Ticket: React.FC<TicketProps> = ({
                     if (markets[0]?.live) {
                         setPayout(
                             (1 / totalQuote) *
-                                Number(collateralHasLp ? buyInAmount : parlayAmmQuote.buyInAmountInDefaultCollateral)
+                                Number(
+                                    collateralHasLp
+                                        ? swapToThales
+                                            ? swappedThalesToReceive
+                                            : buyInAmount
+                                        : parlayAmmQuote.buyInAmountInDefaultCollateral
+                                )
                         );
                     } else {
                         const payout = coinFormatter(
                             parlayAmmQuote.payout,
                             networkId,
-                            collateralHasLp ? selectedCollateral : undefined
+                            collateralHasLp
+                                ? swapToThales
+                                    ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
+                                    : selectedCollateral
+                                : undefined
                         );
                         setPayout(payout);
                         const amountsToBuy: number[] = (parlayAmmQuote.amountsToBuy || []).map((quote: BigNumber) =>
-                            coinFormatter(quote, networkId, collateralHasLp ? selectedCollateral : undefined)
+                            coinFormatter(
+                                quote,
+                                networkId,
+                                collateralHasLp
+                                    ? swapToThales
+                                        ? (CRYPTO_CURRENCY_MAP.THALES as Coins)
+                                        : selectedCollateral
+                                    : undefined
+                            )
                         );
                         // Update markets (using order index) which are out of liquidity
                         const marketsOutOfLiquidity = amountsToBuy
@@ -1123,6 +1563,8 @@ const Ticket: React.FC<TicketProps> = ({
         collateralHasLp,
         selectedCollateral,
         totalQuote,
+        swappedThalesToReceive,
+        swapToThales,
     ]);
 
     const inputRef = useRef<HTMLDivElement>(null);
@@ -1140,7 +1582,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const hidePayout =
         Number(buyInAmount) <= 0 ||
-        Number(buyInAmount) < minBuyInAmount ||
+        (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) < minBuyInAmount ||
         payout === 0 ||
         // hide when validation tooltip exists except in case of invalid profit and not enough funds
         (tooltipTextBuyInAmount && !isValidProfit && Number(buyInAmount) < paymentTokenBalance) ||
@@ -1161,7 +1603,11 @@ const Ticket: React.FC<TicketProps> = ({
             markets: [...markets],
             multiSingle: false,
             paid:
-                !collateralHasLp || isDefaultCollateral ? Number(buyInAmountInDefaultCollateral) : Number(buyInAmount),
+                !collateralHasLp || (isDefaultCollateral && !swapToThales)
+                    ? Number(buyInAmountInDefaultCollateral)
+                    : swapToThales
+                    ? swappedThalesToReceive
+                    : Number(buyInAmount),
             payout: payout,
             onClose: onModalClose,
             isTicketLost: false,
@@ -1176,9 +1622,7 @@ const Ticket: React.FC<TicketProps> = ({
     useEffect(() => {
         const setGasFee = async () => {
             const { sportsAMMV2Contract, sUSDContract, signer, multipleCollateral } = networkConnector;
-            if (!signer) return;
-            if (!multipleCollateral) return;
-            if (!sportsAMMV2Contract) return;
+            if (!signer || !multipleCollateral || !sportsAMMV2Contract) return;
 
             const referralId =
                 walletAddress && getReferralId()?.toLowerCase() !== walletAddress.toLowerCase()
@@ -1189,6 +1633,7 @@ const Ticket: React.FC<TicketProps> = ({
             const parsedTotalQuote = ethers.utils.parseEther(totalQuote.toString());
             const additionalSlippage = ethers.utils.parseEther('0.02');
 
+            // TODO: check swap to THALES
             if (!hasAllowance) {
                 const collateralContractWithSigner = isDefaultCollateral
                     ? sUSDContract?.connect(signer)
@@ -1253,14 +1698,15 @@ const Ticket: React.FC<TicketProps> = ({
                         <XButton margin={'0 0 4px 5px'} className={`icon icon--clear`} />
                     </ClearLabel>
                 </RowContainer>
-                {isThales && (
+                {(isThales || swapToThales) && (
                     <RowContainer>
                         <SummaryLabel>{t('markets.parlay.total-bonus')}:</SummaryLabel>
                         <SummaryValue fontSize={12}>{formatPercentage(totalBonus.percentage)}</SummaryValue>
                         <SummaryValue isCurrency={true} isHidden={!!hidePayout} fontSize={12}>
-                            (
-                            {formatCurrencyWithSign('+ ' + USD_SIGN, totalBonus.value * selectedCollateralCurrencyRate)}
-                            )
+                            {`(${formatCurrencyWithSign(
+                                '+ ' + USD_SIGN,
+                                totalBonus.value * selectedCollateralCurrencyRate
+                            )})`}
                         </SummaryValue>
                         <SummaryLabel>
                             <Tooltip
@@ -1277,6 +1723,11 @@ const Ticket: React.FC<TicketProps> = ({
                 exchangeRates={exchangeRates}
                 collateralIndex={selectedCollateralIndex}
                 changeAmount={(value) => setCollateralAmount(value)}
+                minAmount={
+                    swapToThales && swapQuote
+                        ? ceilNumberToDecimals(minBuyInAmount / swapQuote, getPrecision(minBuyInAmount / swapQuote))
+                        : undefined
+                }
             />
             {freeBetBalanceExists && (
                 <RowSummary>
@@ -1297,7 +1748,12 @@ const Ticket: React.FC<TicketProps> = ({
                                 checked={isFreeBetActive}
                                 value={isFreeBetActive.toString()}
                                 onChange={(e: any) => {
-                                    setIsFreeBetActive(e.target.checked || false);
+                                    const isChecked = e.target.checked || false;
+                                    setIsFreeBetActive(isChecked);
+                                    dispatch(setIsFreeBetDisabledByUser(!isChecked));
+                                    if (isChecked) {
+                                        setCheckFreeBetBalance(true);
+                                    }
                                 }}
                             />
                         </CheckboxContainer>
@@ -1341,7 +1797,45 @@ const Ticket: React.FC<TicketProps> = ({
                     />
                 </AmountToBuyContainer>
             </InputContainer>
-
+            {!isThales && !isFreeBetActive && (
+                <RowSummary>
+                    <RowContainer>
+                        <SummaryLabel isBonus>
+                            {t('markets.parlay.swap-thales')}
+                            <Tooltip
+                                overlay={
+                                    <Trans
+                                        i18nKey="markets.parlay.swap-thales-tooltip"
+                                        components={{
+                                            bold: <BoldContent />,
+                                        }}
+                                    />
+                                }
+                                iconFontSize={14}
+                                marginLeft={3}
+                            />
+                            :
+                        </SummaryLabel>
+                    </RowContainer>
+                    <ToggleContainer>
+                        <Toggle
+                            active={swapToThales}
+                            width="44px"
+                            height="20px"
+                            background={swapToThales ? theme.borderColor.tertiary : undefined}
+                            borderColor={swapToThales ? theme.borderColor.tertiary : theme.borderColor.senary}
+                            borderWidth={swapToThales ? '0px' : undefined}
+                            dotSize="14px"
+                            dotBackground={theme.background.senary}
+                            dotMargin="3px"
+                            handleClick={() => {
+                                setSwapToThales(!swapToThales);
+                                setUseThalesCollateral(!swapToThales);
+                            }}
+                        />
+                    </ToggleContainer>
+                </RowSummary>
+            )}
             <InfoContainer>
                 <InfoWrapper>
                     <InfoLabel>{t('markets.parlay.liquidity')}:</InfoLabel>
@@ -1391,11 +1885,11 @@ const Ticket: React.FC<TicketProps> = ({
                 <SummaryValue isInfo={true}>
                     {hidePayout
                         ? '-'
-                        : isDefaultCollateral
+                        : isDefaultCollateral && !swapToThales
                         ? formatCurrencyWithSign(USD_SIGN, Number(buyInAmount) + gas)
                         : `${formatCurrencyWithKey(
-                              selectedCollateral,
-                              Number(buyInAmount) + gas
+                              usedCollateralForBuy,
+                              (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) + gas
                           )} (${formatCurrencyWithSign(USD_SIGN, Number(buyInAmountInDefaultCollateral) + gas)})`}
                 </SummaryValue>
             </RowSummary>
@@ -1404,9 +1898,9 @@ const Ticket: React.FC<TicketProps> = ({
                 <SummaryValue isInfo={true}>
                     {hidePayout
                         ? '-'
-                        : !collateralHasLp || isDefaultCollateral
+                        : !collateralHasLp || (isDefaultCollateral && !swapToThales)
                         ? formatCurrencyWithSign(USD_SIGN, payout)
-                        : `${formatCurrencyWithKey(selectedCollateral, payout)} (${formatCurrencyWithSign(
+                        : `${formatCurrencyWithKey(usedCollateralForBuy, payout)} (${formatCurrencyWithSign(
                               USD_SIGN,
                               Number(buyInAmountInDefaultCollateral) / Number(totalQuote)
                           )})`}
@@ -1418,8 +1912,11 @@ const Ticket: React.FC<TicketProps> = ({
                     {hidePayout
                         ? '-'
                         : `${
-                              collateralHasLp && !isDefaultCollateral
-                                  ? formatCurrencyWithKey(selectedCollateral, payout - Number(buyInAmount) - gas)
+                              collateralHasLp && (!isDefaultCollateral || swapToThales)
+                                  ? formatCurrencyWithKey(
+                                        usedCollateralForBuy,
+                                        payout - (swapToThales ? swappedThalesToReceive : Number(buyInAmount)) - gas
+                                    )
                                   : formatCurrencyWithSign(
                                         USD_SIGN,
                                         payout - Number(buyInAmountInDefaultCollateral) - gas
@@ -1427,6 +1924,7 @@ const Ticket: React.FC<TicketProps> = ({
                           } (${formatPercentage(profitPercentage)})`}
                 </SummaryValue>
             </RowSummary>
+
             <HorizontalLine />
             <RowSummary>
                 <RowContainer>
@@ -1497,6 +1995,15 @@ const Ticket: React.FC<TicketProps> = ({
                     onClose={() => setOpenApprovalModal(false)}
                 />
             )}
+            {openBuyStepsModal && (
+                <BuyStepsModal
+                    step={buyStep}
+                    isFailed={!isBuying}
+                    currencyKey={selectedCollateral}
+                    onSubmit={handleSubmit}
+                    onClose={() => setOpenBuyStepsModal(false)}
+                />
+            )}
         </>
     );
 };
@@ -1514,5 +2021,7 @@ const FreeBetIcon = styled.i`
     margin-right: 3px;
     color: ${(props) => props.theme.textColor.quaternary} !important;
 `;
+
+const ToggleContainer = styled(FlexDiv)``;
 
 export default Ticket;

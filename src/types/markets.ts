@@ -89,6 +89,17 @@ export type SportMarket = {
     positionNames?: string[];
 };
 
+type OmitDistributive<T, K extends PropertyKey> = T extends any
+    ? T extends object
+        ? Id<OmitRecursively<T, K>>
+        : T
+    : never;
+type Id<T> = {} & { [P in keyof T]: T[P] };
+type OmitRecursively<T, K extends PropertyKey> = Omit<{ [P in keyof T]: OmitDistributive<T[P], K> }, K>;
+
+// Omit all non-serializable values from SportMarket (maturityDate)
+export type SerializableSportMarket = OmitRecursively<SportMarket, 'maturityDate'>;
+
 export type SportMarkets = SportMarket[];
 
 export type MarketsCache = {
