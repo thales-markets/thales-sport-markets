@@ -467,7 +467,9 @@ const Ticket: React.FC<TicketProps> = ({
                     return {
                         quote:
                             partialQuote.quote *
-                            (market.odd > 0 ? getAddedPayoutOdds(CRYPTO_CURRENCY_MAP.THALES as Coins, market.odd) : market.odd),
+                            (market.odd > 0
+                                ? getAddedPayoutOdds(CRYPTO_CURRENCY_MAP.THALES as Coins, market.odd)
+                                : market.odd),
                         basicQuote: partialQuote.basicQuote * market.odd,
                     };
                 },
