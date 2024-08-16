@@ -11,11 +11,12 @@ import LargeBadge from '../LargeBadge';
 
 type LevelUpModalProps = {
     currentLevel: number;
+    onClose: () => void;
 };
 
 const NUMBER_OF_CARDS = 3;
 
-const LevelUpModal: React.FC<LevelUpModalProps> = ({ currentLevel }) => {
+const LevelUpModal: React.FC<LevelUpModalProps> = ({ currentLevel, onClose }) => {
     const { t } = useTranslation();
 
     const [currentStep, setCurrentStep] = useState<number>(currentLevel - 1);
@@ -33,7 +34,7 @@ const LevelUpModal: React.FC<LevelUpModalProps> = ({ currentLevel }) => {
     const levelItem = OVERDROP_LEVELS.find((item) => item.level == currentLevel) as OverdropLevel;
 
     return (
-        <BaseModal type={ModalTypes.LEVEL_UP} onClose={() => console.log('Test')}>
+        <BaseModal type={ModalTypes.LEVEL_UP} onClose={() => onClose()}>
             <Wrapper>
                 <TextWrapper>
                     <Header>{t('overdrop.modal.congratulation')}</Header>

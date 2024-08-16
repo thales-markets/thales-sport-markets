@@ -6,11 +6,15 @@ import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { ModalTypes } from 'types/overdrop';
 import BaseModal from '../BaseModal';
 
-const WelcomeModal: React.FC = () => {
+type WelcomeModalProps = {
+    onClose: () => void;
+};
+
+const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
 
     return (
-        <BaseModal onClose={() => console.log('Test')} type={ModalTypes.WELCOME}>
+        <BaseModal onClose={() => onClose()} type={ModalTypes.WELCOME}>
             <Wrapper>
                 <TextWrapper>
                     <Header>{t('overdrop.modal.check-out')}</Header>

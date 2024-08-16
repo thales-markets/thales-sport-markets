@@ -11,15 +11,16 @@ import LevelCircles from '../LevelCircles';
 type DailyModalProps = {
     dayStreak: number;
     percentage: number;
+    onClose: () => void;
 };
 
-const DailyModal: React.FC<DailyModalProps> = ({ dayStreak, percentage }) => {
+const DailyModal: React.FC<DailyModalProps> = ({ dayStreak, percentage, onClose }) => {
     const { t } = useTranslation();
 
     const [preventShowingModal, setPreventShowingModal] = useState<boolean>(false);
 
     return (
-        <BaseModal onClose={() => console.log('Test')} type={ModalTypes.DAILY_STREAK}>
+        <BaseModal onClose={() => onClose()} type={ModalTypes.DAILY_STREAK}>
             <Wrapper>
                 <TextWrapper>
                     <Header>{t('overdrop.modal.you-are-rocking')}</Header>

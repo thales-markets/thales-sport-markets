@@ -57,3 +57,10 @@ export type GameMultiplier = {
     multiplier: string;
     type: GameMultiplierType;
 };
+
+export type OverdropUIState = {
+    dailyMultiplier: number;
+    currentLevel: number;
+    welcomeModalFlag: boolean;
+    preventShowingDailyModal: boolean;
+};
