@@ -672,8 +672,8 @@
             },
             "odds-changed-description": "Le probabilità sono cambiate. Accetta le modifiche per poter acquistare.",
             "accept-odds-changes": "Accetta le modifiche alle quote",
-            "thales-bonus-info": "Usa THALES e ottieni l'1% di bonus per ogni gioco.",
-            "thales-bonus-tooltip": "Gli utenti che effettuano scambi con THALES riceveranno l'1% di pagamenti extra per ogni gioco presente nel loro ticket (già calcolato in Quota totale e Pagamento).",
+            "thales-bonus-info": "Usa THALES e ottieni l'2% di bonus per ogni gioco.",
+            "thales-bonus-tooltip": "Gli utenti che effettuano scambi con THALES riceveranno l'2% di pagamenti extra per ogni gioco presente nel loro ticket (già calcolato in Quota totale e Pagamento).",
             "odds-changed-error": "Le quote sono cambiate durante l'evasione dell'ordine. Prova ad aumentare lo slittamento.",
             "use-free-bet": "Usa la scommessa gratuita",
             "disable-free-bet": "Disabilita i saldi delle scommesse gratuite"
