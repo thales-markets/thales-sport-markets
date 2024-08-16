@@ -75,7 +75,8 @@ const WalletInfo: React.FC = ({}) => {
 
     const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
     const maxBalanceItem = balanceList ? getMaxCollateralDollarValue(balanceList) : undefined;
-    const isFreeBet = !isFreeBetDisabledByUser && maxBalanceItem && maxBalanceItem.balance > 0;
+    const isFreeBet =
+        !isFreeBetDisabledByUser && maxBalanceItem && maxBalanceItem.balanceDollarValue >= MIN_BUYIN_DOLLAR;
 
     // Invalidate default selectedCollateralIndex
     useEffect(() => {
