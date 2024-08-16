@@ -84,7 +84,7 @@ import networkConnector from 'utils/networkConnector';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
 import { getSportsAMMV2QuoteMethod, getSportsAMMV2Transaction } from 'utils/sportsAmmV2';
-import { getAddedPayoutMultiplier } from 'utils/tickets';
+import { getAddedPayoutOdds } from 'utils/tickets';
 import { getKeepSelectionFromStorage, setKeepSelectionToStorage } from 'utils/ui';
 import SuggestedAmount from '../SuggestedAmount';
 import {
@@ -347,7 +347,7 @@ const Ticket: React.FC<TicketProps> = ({
     const totalQuote = useMemo(() => {
         const quote = markets.reduce(
             (partialQuote, market) =>
-                partialQuote * (market.odd > 0 ? market.odd * getAddedPayoutMultiplier(selectedCollateral) : 1),
+                partialQuote * (market.odd > 0 ? getAddedPayoutOdds(selectedCollateral, market.odd) : market.odd),
             1
         );
         const maxSupportedOdds = sportsAmmData?.maxSupportedOdds || 1;
@@ -360,13 +360,26 @@ const Ticket: React.FC<TicketProps> = ({
             value: 0,
         };
         if (isThales) {
-            const multiplier = getAddedPayoutMultiplier(selectedCollateral);
-            const percentage = Math.pow(1 / multiplier, markets.length);
+            const { quote, basicQuote } = markets.reduce(
+                (partialQuote, market) => {
+                    return {
+                        quote:
+                            partialQuote.quote *
+                            (market.odd > 0 ? getAddedPayoutOdds(selectedCollateral, market.odd) : market.odd),
+                        basicQuote: partialQuote.basicQuote * market.odd,
+                    };
+                },
+                {
+                    quote: 1,
+                    basicQuote: 1,
+                }
+            );
+            const percentage = basicQuote / quote;
             bonus.percentage = percentage - 1;
             bonus.value = Number(payout) - Number(payout) / percentage;
         }
         return bonus;
-    }, [isThales, selectedCollateral, markets.length, payout]);
+    }, [isThales, markets, payout, selectedCollateral]);
 
     const ticketLiquidityQuery = useTicketLiquidityQuery(markets, networkId, {
         enabled: isAppReady,

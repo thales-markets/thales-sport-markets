@@ -671,8 +671,8 @@
                 "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert."
             },
             "accept-odds-changes": "Quotenänderungen akzeptieren",
-            "thales-bonus-tooltip": "Benutzer, die mit THALES handeln, erhalten 1 % zusätzliche Auszahlungen für jedes Spiel auf ihrem Ticket (bereits im Gesamtangebot und der Auszahlung berechnet).",
-            "thales-bonus-info": "Nutzen Sie THALES und erhalten Sie 1 % Bonus für jedes Spiel.",
+            "thales-bonus-tooltip": "Benutzer, die mit THALES handeln, erhalten 2 % zusätzliche Auszahlungen für jedes Spiel auf ihrem Ticket (bereits im Gesamtangebot und der Auszahlung berechnet).",
+            "thales-bonus-info": "Nutzen Sie THALES und erhalten Sie 2 % Bonus für jedes Spiel.",
             "odds-changed-error": "Die Quoten haben sich während der Auftragserfüllung geändert. Versuchen Sie, den Slippage zu erhöhen.",
             "odds-changed-description": "Quoten haben sich geändert. Akzeptieren Sie die Änderungen, um zu kaufen.",
             "use-free-bet": "Gratiswette nutzen",

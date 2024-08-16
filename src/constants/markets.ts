@@ -56,3 +56,5 @@ export const GameStatusKey: Record<GameStatus, string> = {
 export const BATCH_SIZE = 10;
 
 export const THALES_CONTRACT_RATE_KEY = 'THALES-CONTRACT';
+
+export const THALES_ADDED_PAYOUT_PERCENTAGE = 0.02;

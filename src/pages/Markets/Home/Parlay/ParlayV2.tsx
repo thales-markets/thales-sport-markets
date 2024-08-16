@@ -320,7 +320,7 @@ const ThalesBonus = styled.span`
             width: 0;
         }
         to {
-            width: 270px;
+            width: 320px;
         }
     }
 
