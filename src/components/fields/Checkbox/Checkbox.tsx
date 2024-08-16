@@ -8,11 +8,23 @@ type CheckboxProps = {
     disabled?: boolean;
     checked: boolean;
     label?: string;
+    checkboxSize?: string;
+    labelFontSize?: string;
 };
 
-const Checkbox: React.FC<CheckboxProps> = ({ value, onChange, className, disabled, checked, label, ...rest }) => {
+const Checkbox: React.FC<CheckboxProps> = ({
+    value,
+    onChange,
+    className,
+    disabled,
+    checked,
+    label,
+    checkboxSize,
+    labelFontSize,
+    ...rest
+}) => {
     return (
-        <Container className={`${className} ${disabled ? 'disabled' : ''}`}>
+        <Container className={`${className} ${disabled ? 'disabled' : ''}`} fontSize={labelFontSize}>
             {label}
             <Input
                 {...rest}
@@ -23,7 +35,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ value, onChange, className, disable
                 className={className}
                 disabled={disabled}
             />
-            <Checkmark className="checkmark" />
+            <Checkmark className="checkmark" checkboxSize={checkboxSize} />
         </Container>
     );
 };
@@ -36,14 +48,14 @@ const Input = styled.input`
     width: 0;
 `;
 
-const Container = styled.label`
+const Container = styled.label<{ fontSize?: string }>`
     display: block;
     position: relative;
     padding-left: 25px;
     cursor: pointer;
     font-family: ${(props) => props.theme.fontFamily.primary};
     font-style: normal;
-    font-size: 18px;
+    font-size: ${(props) => (props.fontSize ? props.fontSize : '18px')};
     line-height: 20px;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.primary};
@@ -66,12 +78,12 @@ const Container = styled.label`
     white-space: nowrap;
 `;
 
-const Checkmark = styled.span`
+const Checkmark = styled.span<{ checkboxSize?: string }>`
     position: absolute;
     top: 0;
     left: 0;
-    height: 19px;
-    width: 19px;
+    height: ${(props) => (props?.checkboxSize ? props.checkboxSize : '19px')};
+    width: ${(props) => (props?.checkboxSize ? props.checkboxSize : '19px')};
     border: 2px solid ${(props) => props.theme.borderColor.secondary};
     background-color: transparent;
     border-radius: 3px;

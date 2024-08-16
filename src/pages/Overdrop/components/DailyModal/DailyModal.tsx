@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import Checkbox from 'components/fields/Checkbox';
 import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { ModalTypes } from 'types/overdrop';
 import BaseModal from '../BaseModal';
 import LevelCircles from '../LevelCircles';
 
-const DailyModal: React.FC = () => {
+type DailyModalProps = {
+    dayStreak: number;
+    percentage: number;
+};
+
+const DailyModal: React.FC<DailyModalProps> = ({ dayStreak, percentage }) => {
     const { t } = useTranslation();
+
+    const [preventShowingModal, setPreventShowingModal] = useState<boolean>(false);
 
     return (
         <BaseModal onClose={() => console.log('Test')} type={ModalTypes.DAILY_STREAK}>
@@ -18,16 +26,16 @@ const DailyModal: React.FC = () => {
                     <SubHeader>
                         <Trans
                             i18nKey={'overdrop.modal.day-streak'}
-                            values={{ days: 4 }}
+                            values={{ days: dayStreak }}
                             components={{ bold: <DayBold />, br: <br /> }}
                         />
                     </SubHeader>
                 </TextWrapper>
                 <DetailsWrapper>
                     <Label>{t('overdrop.modal.active-daily-streak')}</Label>
-                    <Percentage>{'20%'}</Percentage>
+                    <Percentage>{`${percentage}%`}</Percentage>
                     <LevelCircles
-                        currentLevel={4}
+                        currentLevel={dayStreak}
                         levels={[1, 2, 3, 4, 5, 6, 7]}
                         customCircleSize={'30px'}
                         customGap="12px"
@@ -35,6 +43,16 @@ const DailyModal: React.FC = () => {
                         displayLevelNumberInsideCircle={true}
                         additionalLabelsForLevels={['5%', '10%', '15%', '20%', '25%', '30%', '35%']}
                     />
+                    <CheckboxWrapper>
+                        <Checkbox
+                            disabled={false}
+                            checked={preventShowingModal}
+                            value={preventShowingModal.toString()}
+                            onChange={(e: any) => setPreventShowingModal(e.target.checked || false)}
+                            label={t('overdrop.modal.dont-show-this')}
+                            labelFontSize="10px"
+                        />
+                    </CheckboxWrapper>
                 </DetailsWrapper>
             </Wrapper>
         </BaseModal>
@@ -95,6 +113,12 @@ const Percentage = styled.span`
     color: ${(props) => props.theme.overdrop.textColor.septenary};
     font-size: 31px;
     font-weight: 700;
+    margin-top: 10px;
+`;
+
+const CheckboxWrapper = styled(FlexDiv)`
+    align-items: center;
+    justify-content: flex-start;
     margin: 10px 0px;
 `;
 
