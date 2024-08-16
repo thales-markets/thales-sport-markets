@@ -1,4 +1,5 @@
 import ModalBackground from 'assets/images/overdrop/modal-background.png';
+import Trophy from 'assets/images/overdrop/trophy.webp';
 import WelcomeModalBackground from 'assets/images/overdrop/welcome-modal-background.png';
 import React from 'react';
 import ReactModal from 'react-modal';
@@ -55,6 +56,7 @@ const BaseModal: React.FC<ModalProps> = ({ type, onClose, children, mobileStyle 
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
                 </Header>
                 {children}
+                {type == ModalTypes.DAILY_STREAK && <TrophyImage src={Trophy} />}
             </Container>
         </ReactModal>
     );
@@ -63,9 +65,13 @@ const BaseModal: React.FC<ModalProps> = ({ type, onClose, children, mobileStyle 
 const Container = styled.div<{ mobileStyle?: CSSProperties; removeBackground?: boolean; type: ModalTypes }>`
     border: 1px solid ${(props) => props.theme.borderColor.primary};
     padding: 0px;
+    position: relative;
+    overflow: hidden;
     border-radius: 9px;
     ${(props) => (props.type == ModalTypes.LEVEL_UP ? `background-color: ${props.theme.background.primary};` : '')}
     ${(props) => (props.type == ModalTypes.LEVEL_UP ? `background-image: url(${ModalBackground});` : '')}
+    ${(props) => (props.type == ModalTypes.DAILY_STREAK ? `background-color: ${props.theme.background.primary};` : '')}
+    ${(props) => (props.type == ModalTypes.DAILY_STREAK ? `background-image: url(${ModalBackground});` : '')}
     ${(props) => (props.type == ModalTypes.WELCOME ? `background-image: url(${WelcomeModalBackground});` : '')}
     ${(props) => (props.type == ModalTypes.WELCOME ? `background-color: none;` : '')}
     background-size: cover;
@@ -103,4 +109,11 @@ const CloseIcon = styled.i`
     }
 `;
 
+const TrophyImage = styled.img`
+    position: absolute;
+    bottom: -90px;
+    right: -90px;
+    width: 400px;
+    height: 400px;
+`;
 export default BaseModal;

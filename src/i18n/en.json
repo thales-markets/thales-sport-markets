@@ -1281,7 +1281,11 @@
             "go-to-overdrop": "Go to overdrop",
             "congratulation": "Congratulation!",
             "reached-level": "You have reached LEVEL {{ level }} and won {{ amount }} THALES free bet!",
-            "unlocked-level": "You unlocked LEVEL {{ level }}!"
+            "unlocked-level": "You unlocked LEVEL {{ level }}!",
+            "you-are-rocking": "You are rocking it!",
+            "day-streak": "<bold>{{ days }}</bold><br/>day streak!",
+            "active-daily-streak": "Active daily streak xp boost",
+            "dont-show-this": "Don't show this again"
         }
     }
 }
