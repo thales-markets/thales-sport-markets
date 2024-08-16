@@ -17,6 +17,7 @@ import {
     BATCH_SIZE,
     COINGECKO_SWAP_TO_THALES_QUOTE_SLIPPAGE,
     MIN_COLLATERAL_MULTIPLIER,
+    SWAP_APPROVAL_BUFFER,
     THALES_CONTRACT_RATE_KEY,
 } from 'constants/markets';
 import { secondsToMilliseconds } from 'date-fns';
@@ -892,15 +893,18 @@ const Ticket: React.FC<TicketProps> = ({
         }
     };
 
-    const handleBuyWithThalesSteps = async (initialStep: BuyTicketStep) => {
+    const handleBuyWithThalesSteps = async (
+        initialStep: BuyTicketStep
+    ): Promise<{ step: BuyTicketStep; thalesAmount: number }> => {
         let step = initialStep;
+        let thalesAmount = swappedThalesToReceive;
 
         const { sportsAMMV2Contract, multipleCollateral, signer } = networkConnector;
 
         // Validation for min buy-in while modal is open
         if (swappedThalesToReceive && swappedThalesToReceive < minBuyInAmount) {
             setOpenBuyStepsModal(false);
-            return step;
+            return { step, thalesAmount };
         }
 
         if (step <= BuyTicketStep.SWAP) {
@@ -911,7 +915,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
 
                 const approveAmount = coinParser(
-                    (Number(buyInAmount) * (1 + APPROVAL_BUFFER)).toString(),
+                    (Number(buyInAmount) * (1 + SWAP_APPROVAL_BUFFER)).toString(),
                     networkId,
                     selectedCollateral
                 );
@@ -969,7 +973,8 @@ const Ticket: React.FC<TicketProps> = ({
                     const balanceAfter = bigNumberFormatter(
                         await multipleCollateral?.[CRYPTO_CURRENCY_MAP.THALES as Coins]?.balanceOf(walletAddress)
                     );
-                    setSwappedThalesToReceive(balanceAfter - balanceBefore);
+                    thalesAmount = balanceAfter - balanceBefore;
+                    setSwappedThalesToReceive(thalesAmount);
                 }
             } catch (e) {
                 console.log('Swap tx failed', e);
@@ -1020,7 +1025,7 @@ const Ticket: React.FC<TicketProps> = ({
             }
         }
 
-        return step;
+        return { step, thalesAmount };
     };
 
     const handleSubmit = async () => {
@@ -1043,6 +1048,7 @@ const Ticket: React.FC<TicketProps> = ({
             const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
             let step = buyStep;
+            let thalesAmount = swappedThalesToReceive;
             if (swapToThales) {
                 await refetchCoingeckoRates();
                 if (
@@ -1065,7 +1071,7 @@ const Ticket: React.FC<TicketProps> = ({
                 }
 
                 setOpenBuyStepsModal(true);
-                step = await handleBuyWithThalesSteps(step);
+                ({ step, thalesAmount } = await handleBuyWithThalesSteps(step));
 
                 if (step !== BuyTicketStep.BUY) {
                     toast.update(toastId, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
@@ -1087,7 +1093,7 @@ const Ticket: React.FC<TicketProps> = ({
 
                 const tradeData = getTradeData(markets);
                 const parsedBuyInAmount = coinParser(
-                    (swapToThales ? swappedThalesToReceive : buyInAmount).toString(),
+                    (swapToThales ? thalesAmount : buyInAmount).toString(),
                     networkId,
                     usedCollateralForBuy
                 );

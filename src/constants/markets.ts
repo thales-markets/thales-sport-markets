@@ -8,6 +8,7 @@ export const ODDS_TYPES = [OddsType.AMERICAN, OddsType.AMM, OddsType.DECIMAL];
 
 export const MIN_COLLATERAL_MULTIPLIER = 1.01;
 export const APPROVAL_BUFFER = 0.01;
+export const SWAP_APPROVAL_BUFFER = 0.03;
 
 export const ALTCOIN_CONVERSION_BUFFER_PERCENTAGE = 0.025; // 2%
 export const SUSD_CONVERSION_BUFFER_PERCENTAGE = 0.03; // 3%
