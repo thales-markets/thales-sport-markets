@@ -3,10 +3,10 @@ import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getOverdropUIState, setOverdropState } from 'redux/modules/ui';
-import { getWalletAddress } from 'redux/modules/wallet';
+import { getOverdropUIState, setDefaultOverdropState, setOverdropState } from 'redux/modules/ui';
+import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
-import { MultiplierType, OverdropUserData } from 'types/overdrop';
+import { MultiplierType, OverdropUIState, OverdropUserData } from 'types/overdrop';
 import { getCurrentLevelByPoints, getMultiplierValueFromQuery } from 'utils/overdrop';
 import DailyModal from '../DailyModal';
 import LevelUpModal from '../LevelUpModal';
@@ -17,11 +17,14 @@ const ModalWrapper: React.FC = () => {
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
+    const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const overdropUIState = useSelector((state: RootState) => getOverdropUIState(state));
 
     const [levelChanged, setLevelChanged] = useState<boolean>(false);
     const [dailyMultiplierChanged, setDailyMultiplierChanged] = useState<boolean>(false);
     const [showWelcomeModal, setShowWelcomeModal] = useState<boolean>(false);
+
+    const [overdropStateByWallet, setOverdropStateByWallet] = useState<OverdropUIState | undefined>(undefined);
 
     const [showLevelUpModal, setShowLevelUpModal] = useState<boolean>(false);
     const [showDailyMultiplierModal, setShowDailyMultiplierModal] = useState<boolean>(false);
@@ -40,16 +43,55 @@ const ModalWrapper: React.FC = () => {
     const userMultipliers =
         userMultipliersQuery.isSuccess && userMultipliersQuery.data ? userMultipliersQuery.data : undefined;
 
+    // Handle wallet address change
     useEffect(() => {
-        if (userData && userMultipliers) {
+        const overdropStateItem = overdropUIState.find((item) => item.walletAddress == walletAddress);
+
+        if (isWalletConnected) {
+            if (!overdropStateItem) {
+                setOverdropStateByWallet({
+                    walletAddress: walletAddress,
+                    dailyMultiplier: 0,
+                    currentLevel: 0,
+                    welcomeModalFlag: false,
+                    preventShowingDailyModal: false,
+                });
+                dispatch(setDefaultOverdropState({ walletAddress }));
+            } else {
+                setOverdropStateByWallet(overdropStateItem);
+            }
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, walletAddress, isWalletConnected]);
+
+    useEffect(() => {
+        if (userData && userMultipliers && overdropStateByWallet) {
+            const currentLevelItem = getCurrentLevelByPoints(userData?.points);
+
+            if (overdropStateByWallet.welcomeModalFlag == false) setShowWelcomeModal(true);
+            dispatch(
+                setOverdropState({
+                    ...overdropStateByWallet,
+                    welcomeModalFlag: true,
+                    currentLevel: currentLevelItem.level,
+                    dailyMultiplier: getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY),
+                })
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, userData, userMultipliers, overdropStateByWallet]);
+
+    useEffect(() => {
+        if (userData && userMultipliers && overdropStateByWallet) {
             const levelItem = getCurrentLevelByPoints(userData.points);
-            if (overdropUIState.currentLevel !== levelItem.level && levelItem.level !== 0) {
+            if (overdropStateByWallet.currentLevel !== levelItem.level && levelItem.level !== 0) {
                 setLevelChanged(true);
                 setShowLevelUpModal(true);
                 return;
             }
             if (
-                overdropUIState.dailyMultiplier !==
+                overdropStateByWallet.dailyMultiplier !==
                     getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) &&
                 getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) !== 0
             ) {
@@ -59,29 +101,7 @@ const ModalWrapper: React.FC = () => {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userData, userMultipliers]);
-
-    useEffect(() => {
-        if (overdropUIState.welcomeModalFlag == false) {
-            setShowWelcomeModal(true);
-            dispatch(setOverdropState({ ...overdropUIState, welcomeModalFlag: true }));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (userData && userMultipliers) {
-            const currentLevelItem = getCurrentLevelByPoints(userData?.points);
-            dispatch(
-                setOverdropState({
-                    ...overdropUIState,
-                    currentLevel: currentLevelItem.level,
-                    dailyMultiplier: getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY),
-                })
-            );
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, userData, userMultipliers]);
+    }, [userData, userMultipliers, overdropStateByWallet]);
 
     return (
         <>
