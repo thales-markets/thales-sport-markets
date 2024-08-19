@@ -70,6 +70,9 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
     height: 75px;
     cursor: pointer;
     margin-right: 20px;
+    @media (max-width: 576px) {
+        height: 70px;
+    }
 `;
 
 export const WrapperMobile = styled(FlexDivRow)`
@@ -98,6 +101,9 @@ export const LogoContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding-left: 26px;
 `;
 
 export const IconWrapper = styled.div`

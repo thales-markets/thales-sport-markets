@@ -282,7 +282,10 @@ const DappHeader: React.FC = () => {
                 <>
                     <WrapperMobile>
                         <LogoContainer>
-                            <Logo />
+                            <Logo width={150} />
+                            <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                                <OverdropIcon />
+                            </SPAAnchor>
                         </LogoContainer>
                         <SearchIconContainer>
                             <IconWrapper>

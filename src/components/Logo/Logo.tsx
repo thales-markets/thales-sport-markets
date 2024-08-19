@@ -5,10 +5,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { buildHref } from 'utils/routes';
 
-const Logo: React.FC = () => (
+type LogoParams = {
+    width?: number;
+};
+
+const Logo: React.FC<LogoParams> = ({ width }) => (
     <Container>
         <SPAAnchor href={buildHref(ROUTES.Markets.Home)} state={RESET_STATE}>
-            <StyledLogo />
+            <StyledLogo width={width} />
         </SPAAnchor>
     </Container>
 );
