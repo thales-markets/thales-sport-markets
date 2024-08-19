@@ -1,7 +1,7 @@
 import BannerCarousel from 'components/BannerCarousel';
 import { OverdropTab } from 'enums/ui';
 import UserStatsV2 from 'pages/Profile/components/UserStatsV2';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 import Navigation from './components/Navigation';
@@ -9,9 +9,24 @@ import Leaderboard from './pages/Leaderboard';
 import LevelingTree from './pages/LevelingTree';
 import OverdropHome from './pages/OverdropHome';
 import XPDetails from './pages/XPDetails/XPDetails';
+import useQueryParam from 'utils/useQueryParams';
 
 const Overdrop: React.FC = () => {
+    const [selectedTabParam, setSelectedTabParam] = useQueryParam('selected-tab', OverdropTab.OVERDROP_HOME);
     const [selectedTab, setSelectedTab] = useState<OverdropTab>(OverdropTab.OVERDROP_HOME);
+
+    useEffect(() => {
+        if (Object.values(OverdropTab).includes(selectedTabParam.toLowerCase() as OverdropTab)) {
+            setSelectedTab(selectedTabParam.toLowerCase() as OverdropTab);
+        } else {
+            setSelectedTab(OverdropTab.OVERDROP_HOME);
+        }
+    }, [selectedTabParam]);
+
+    const handleTabChange = (tab: OverdropTab) => {
+        setSelectedTab(tab);
+        setSelectedTabParam(tab);
+    };
 
     return (
         <RowContainer>
@@ -19,8 +34,10 @@ const Overdrop: React.FC = () => {
                 <BannerCarousel />
             </LeftSidebarContainer>
             <MainContainer>
-                <Navigation selectedTab={selectedTab} setSelectedTab={(tab: OverdropTab) => setSelectedTab(tab)} />
-                {selectedTab == OverdropTab.OVERDROP_HOME && <OverdropHome />}
+                <Navigation selectedTab={selectedTab} setSelectedTab={(tab: OverdropTab) => handleTabChange(tab)} />
+                {selectedTab == OverdropTab.OVERDROP_HOME && (
+                    <OverdropHome setSelectedTab={(tab: OverdropTab) => handleTabChange(tab)} />
+                )}
                 {selectedTab == OverdropTab.XP_CALCULATOR && <XPDetails />}
                 {selectedTab == OverdropTab.LEVELING_TREE && <LevelingTree />}
                 {selectedTab == OverdropTab.LEADERBOARD && <Leaderboard />}

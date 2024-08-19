@@ -1,3 +1,4 @@
+import { OverdropTab } from 'enums/ui';
 import BadgeOverview from 'pages/Overdrop/components/BadgeOverview';
 import DailyRecap from 'pages/Overdrop/components/DailyRecap';
 import OverdropBanner from 'pages/Overdrop/components/OverdropBanner';
@@ -9,13 +10,17 @@ import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivRow } from 'styles/common';
 
-const OverdropHome: React.FC = () => {
+type OverdropHomeProps = {
+    setSelectedTab: (tab: OverdropTab) => void;
+};
+
+const OverdropHome: React.FC<OverdropHomeProps> = ({ setSelectedTab }) => {
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
 
     return (
         <Wrapper>
             <OverdropBanner />
-            <XPOverview />
+            <XPOverview setSelectedTab={setSelectedTab} />
             <LevelDetailsWrapper isMobile={isMobile}>
                 <DailyRecap />
                 <BadgeOverview />

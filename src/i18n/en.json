@@ -1228,7 +1228,8 @@
             "total-xp-multiplier": "Total XP multiplier",
             "social-multiplier": "Social XP multiplier",
             "current-rewards": "Current estimated rewards",
-            "next-thales-rewards-at": "Next Thales free bet rewards at"
+            "next-thales-rewards-at": "Next Thales free bet rewards at",
+            "rank": "Rank"
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",

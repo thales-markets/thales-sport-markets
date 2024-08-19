@@ -45,7 +45,11 @@ const CurrentLevelProgressLine: React.FC<CurrentLevelProgressLineProps> = ({
     }, [userData]);
 
     const nextLevelItem: OverdropLevel = useMemo(() => {
-        return getNextLevelItemByPoints(userData?.points);
+        if (userData) {
+            return getNextLevelItemByPoints(userData?.points);
+        }
+
+        return OVERDROP_LEVELS[1];
     }, [userData]);
 
     const progress =
