@@ -2,7 +2,7 @@ import React from 'react';
 
 import SPAAnchor from 'components/SPAAnchor';
 import ROUTES from 'constants/routes';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
 import { ModalTypes } from 'types/overdrop';
@@ -19,7 +19,9 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
         <BaseModal onClose={() => onClose()} type={ModalTypes.WELCOME}>
             <Wrapper>
                 <TextWrapper>
-                    <Header>{t('overdrop.modal.check-out')}</Header>
+                    <Header>
+                        <Trans i18nKey="overdrop.modal.check-out" components={{ br: <br /> }} />
+                    </Header>
                     <SubHeader>{t('overdrop.modal.gain-xp-label')}</SubHeader>
                 </TextWrapper>
                 <SPAAnchor href={ROUTES.Overdrop}>
@@ -32,9 +34,12 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
 
 const Wrapper = styled(FlexDivColumn)`
     font-family: 'Roboto' !important;
+    width: 500px;
     align-items: center;
     justify-content: center;
     padding: 15px 20px 30px 20px;
+    @media (max-width: 767px) {
+    }
 `;
 
 const TextWrapper = styled(FlexDivColumn)`

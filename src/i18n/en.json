@@ -1285,7 +1285,7 @@
             }
         },
         "modal": {
-            "check-out": "Check out overdrop league!",
+            "check-out": "Check out<br/>overdrop league!",
             "gain-xp-label": "Gain XP, level up, earn rewards and farm  the airdrop!",
             "go-to-overdrop": "Go to overdrop",
             "congratulation": "Congratulation!",
