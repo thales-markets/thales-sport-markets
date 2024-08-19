@@ -1,5 +1,7 @@
 import React from 'react';
 
+import SPAAnchor from 'components/SPAAnchor';
+import ROUTES from 'constants/routes';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn } from 'styles/common';
@@ -20,7 +22,9 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
                     <Header>{t('overdrop.modal.check-out')}</Header>
                     <SubHeader>{t('overdrop.modal.gain-xp-label')}</SubHeader>
                 </TextWrapper>
-                <Button>{t('overdrop.modal.go-to-overdrop')}</Button>
+                <SPAAnchor href={ROUTES.Overdrop}>
+                    <Button>{t('overdrop.modal.go-to-overdrop')}</Button>
+                </SPAAnchor>
             </Wrapper>
         </BaseModal>
     );
