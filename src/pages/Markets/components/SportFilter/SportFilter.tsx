@@ -30,9 +30,7 @@ const SportFilterDetails: React.FC<SportFilterProps> = ({ selected, sport, onCli
                         style={isMobile ? liveBlinkStyleMobile : liveBlinkStyle}
                     />
                 ) : sport == SportFilter.Boosted ? (
-                    <OverdropCircleContainer>
-                        <OverdropCircle active />
-                    </OverdropCircleContainer>
+                    <SportIcon className={`icon icon--fire`} />
                 ) : (
                     <SportIcon className={`icon icon--${sport == SportFilter.All ? 'logo' : sport.toLowerCase()}`} />
                 )}
