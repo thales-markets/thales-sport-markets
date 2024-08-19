@@ -217,6 +217,7 @@ const Leaderboard: React.FC = () => {
                                 </div>
                             );
                         },
+                        sortInverted: true,
                     },
                     {
                         Header: <>{t('overdrop.leaderboard.table.total-xp')}</>,
@@ -248,6 +249,7 @@ const Leaderboard: React.FC = () => {
                                 </>
                             );
                         },
+                        sortInverted: true,
                         sortDescFirst: true,
                     },
                 ]}
@@ -270,7 +272,7 @@ const Leaderboard: React.FC = () => {
                 <FlexDiv>
                     <PaginationWrapper
                         rowsPerPageOptions={[10, 20, 50, 100]}
-                        count={leaderboard.length}
+                        count={leaderboardFiltered.length}
                         labelRowsPerPage={t(`common.pagination.rows-per-page`)}
                         rowsPerPage={rowsPerPage}
                         page={page}
