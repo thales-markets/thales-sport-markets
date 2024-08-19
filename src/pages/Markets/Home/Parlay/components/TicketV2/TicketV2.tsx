@@ -1615,28 +1615,28 @@ const Ticket: React.FC<TicketProps> = ({
                     <HorizontalLine />
                     {overdropMultipliers.map((multiplier) => (
                         <OverdropRowSummary key={multiplier.name}>
-                            <OverdropLabel>{multiplier.label}</OverdropLabel>
-                            <OverdropValue>
-                                +{multiplier.multiplier}%
+                            <OverdropLabel>
+                                {multiplier.label}{' '}
                                 <Tooltip
                                     overlay={<>{t(`markets.parlay.overdrop.tooltip.${multiplier.tooltip}`)}</>}
                                     iconFontSize={14}
                                     marginLeft={3}
                                 />
-                            </OverdropValue>
+                            </OverdropLabel>
+                            <OverdropValue>+{multiplier.multiplier}%</OverdropValue>
                         </OverdropRowSummary>
                     ))}
                     {overdropGameMultipliersInThisTicket && (
                         <OverdropRowSummary>
-                            <OverdropLabel>Boosted games</OverdropLabel>
-                            <OverdropValue>
-                                +{overdropBoostedGamesTotalBoost}%
+                            <OverdropLabel>
+                                Boosted games{' '}
                                 <Tooltip
                                     overlay={<>{t(`markets.parlay.overdrop.tooltip.promo-boost`)}</>}
                                     iconFontSize={14}
                                     marginLeft={3}
                                 />
-                            </OverdropValue>
+                            </OverdropLabel>
+                            <OverdropValue>+{overdropBoostedGamesTotalBoost}%</OverdropValue>
                         </OverdropRowSummary>
                     )}
                     <HorizontalLine />
