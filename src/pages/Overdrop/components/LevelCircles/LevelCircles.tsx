@@ -55,7 +55,7 @@ const LevelCircles: React.FC<LevelCirclesTypes> = ({
 const Wrapper = styled(FlexDivRowCentered)<{ customGap?: string }>`
     justify-content: center;
     gap: ${(props) => (props.customGap ? props.customGap : '8px')};
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 `;
 
 const LevelWrapper = styled(FlexDivColumnCentered)`

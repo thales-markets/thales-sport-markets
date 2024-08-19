@@ -62,6 +62,7 @@ const DailyRecap: React.FC = () => {
                     <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
                     <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
                     <LevelCircles
+                        additionalStyles={{ flexFlow: 'wrap' }}
                         levels={[1, 2, 3, 4, 5, 6, 7]}
                         currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
                     />
@@ -70,6 +71,7 @@ const DailyRecap: React.FC = () => {
                     <Label>{t('overdrop.overdrop-home.weekly-streak')}</Label>
                     <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
                     <LevelCircles
+                        additionalStyles={{ flexFlow: 'wrap' }}
                         levels={[1, 2, 3, 4]}
                         currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}
                     />

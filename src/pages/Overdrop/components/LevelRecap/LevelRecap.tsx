@@ -186,6 +186,10 @@ const BadgeWrapper = styled(FlexDivRowCentered)<{ fullWidth?: boolean }>`
     flex-flow: ${(props) => (props.fullWidth ? 'nowrap' : 'row wrap')};
     gap: 10px;
     width: ${(props) => (props.fullWidth ? '100%' : '')};
+    align-items: flex-start;
+    @media (max-width: 767px) {
+        flex-flow: wrap;
+    }
 `;
 
 const LastRowWrapper = styled(FlexDivRowCentered)`
@@ -194,6 +198,9 @@ const LastRowWrapper = styled(FlexDivRowCentered)`
 
     ${LastContainer}:first-child {
         flex: 4;
+    }
+    @media (max-width: 767px) {
+        flex-direction: column;
     }
 `;
 
