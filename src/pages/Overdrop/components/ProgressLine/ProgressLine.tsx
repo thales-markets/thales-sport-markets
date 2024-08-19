@@ -3,7 +3,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
-import { formatCurrency } from 'thales-utils';
 import { formatPoints } from 'utils/overdrop';
 
 type ProgressLineProps = {
@@ -14,7 +13,6 @@ type ProgressLineProps = {
     level: number;
     progressUpdate?: number;
     hideLevelLabel?: boolean;
-    showNumbersOnly?: boolean;
     height?: string;
 };
 
@@ -22,11 +20,9 @@ const ProgressLine: React.FC<ProgressLineProps> = ({
     progress,
     progressUpdate,
     currentPoints,
-    currentLevelMinimum,
     nextLevelMinimumPoints,
     level,
     hideLevelLabel,
-    showNumbersOnly,
     height,
 }) => {
     const { t } = useTranslation();
@@ -38,15 +34,7 @@ const ProgressLine: React.FC<ProgressLineProps> = ({
                     <Progress
                         progressUpdate={progressUpdate}
                         progress={progress}
-                        textBelow={`${
-                            showNumbersOnly
-                                ? formatCurrency(currentPoints, undefined, true)
-                                : formatPoints(currentPoints - currentLevelMinimum)
-                        } / ${
-                            showNumbersOnly
-                                ? formatCurrency(nextLevelMinimumPoints, undefined, true)
-                                : formatPoints(nextLevelMinimumPoints - currentLevelMinimum)
-                        }(lvl${level + 1})`}
+                        textBelow={`${formatPoints(currentPoints)} / ${formatPoints(nextLevelMinimumPoints)}`}
                     />
                     <DetailedPoints progress={Math.min(progress, 100)}></DetailedPoints>
                 </ProgressLineWrapper>

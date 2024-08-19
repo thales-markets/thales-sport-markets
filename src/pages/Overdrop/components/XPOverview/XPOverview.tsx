@@ -12,8 +12,13 @@ import { OverdropLevel } from 'types/ui';
 import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints } from 'utils/overdrop';
 import CurrentLevelProgressLine from '../CurrentLevelProgressLine';
 import Tooltip from 'components/Tooltip';
+import { OverdropTab } from 'enums/ui';
 
-const XPOverview: React.FC = () => {
+type XPOverviewProps = {
+    setSelectedTab: (tab: OverdropTab) => void;
+};
+
+const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
     const { t } = useTranslation();
 
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
@@ -46,27 +51,53 @@ const XPOverview: React.FC = () => {
                 <Badge src={levelItem ? levelItem.largeBadge : nextLevelItem?.largeBadge} />
                 <ProgressOverviewWrapper>
                     <InfoWrapper>
-                        <InfoItem>
-                            <Label>{levelItem?.levelName ? levelItem?.levelName : '-'}</Label>
-                            <FlexDivCentered>
-                                <Value>{userData ? `#${userData.rank}` : '-'}</Value>{' '}
-                                <Tooltip
-                                    overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>}
-                                    iconFontSize={14}
-                                    marginLeft={3}
-                                />
-                            </FlexDivCentered>
-                        </InfoItem>
-                        <InfoItemTotal>
-                            {!isMobile && <XpLabel>{t('overdrop.overdrop-home.my-total-xp')}</XpLabel>}
-                            {isMobile && <Label>{`${t('overdrop.overdrop-home.level')} ${levelItem?.level}`}</Label>}
-                            <TotalValue>{formatPoints(userData?.points ? userData?.points : 0)}</TotalValue>
-                        </InfoItemTotal>
                         {!isMobile && (
-                            <LevelWrapper>
-                                <Label>{t('overdrop.overdrop-home.level')}</Label>
-                                <Level>{levelItem?.level}</Level>
-                            </LevelWrapper>
+                            <>
+                                <LevelWrapper>
+                                    <Label>{levelItem?.levelName ? levelItem?.levelName : '-'}</Label>
+                                    <Level>
+                                        {t('overdrop.overdrop-home.level')} {levelItem?.level}
+                                    </Level>
+                                </LevelWrapper>
+                                <InfoItemTotal>
+                                    <XpLabel>{t('overdrop.overdrop-home.my-total-xp')}</XpLabel>
+                                    <TotalValue>{formatPoints(userData?.points ? userData?.points : 0)}</TotalValue>
+                                </InfoItemTotal>
+                                <InfoItem onClick={() => setSelectedTab(OverdropTab.LEADERBOARD)}>
+                                    <Label> {t('overdrop.overdrop-home.rank')} </Label>
+                                    <FlexDivCentered>
+                                        <Value>{userData ? `#${userData.rank}` : '-'}</Value>{' '}
+                                        <Tooltip
+                                            overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>}
+                                            iconFontSize={14}
+                                            marginLeft={3}
+                                        />
+                                    </FlexDivCentered>
+                                </InfoItem>
+                            </>
+                        )}
+                        {isMobile && (
+                            <>
+                                <LevelWrapper>
+                                    <Level>
+                                        {t('overdrop.overdrop-home.level')} {levelItem?.level}
+                                    </Level>
+                                    <InfoItem onClick={() => setSelectedTab(OverdropTab.LEADERBOARD)}>
+                                        <Label> {t('overdrop.overdrop-home.rank')} </Label>
+                                        <FlexDivCentered>
+                                            <Value>{userData ? `#${userData.rank}` : '-'}</Value>{' '}
+                                            <Tooltip
+                                                overlay={<>{t(`overdrop.overdrop-home.rank-tooltip`)}</>}
+                                                iconFontSize={14}
+                                                marginLeft={3}
+                                            />
+                                        </FlexDivCentered>
+                                    </InfoItem>
+                                </LevelWrapper>
+                                <InfoItemTotal>
+                                    <TotalValue>{formatPoints(userData?.points ? userData?.points : 0)}</TotalValue>
+                                </InfoItemTotal>
+                            </>
                         )}
                     </InfoWrapper>
 
@@ -103,26 +134,27 @@ const ProgressOverviewWrapper = styled(FlexDivColumn)`
     gap: 16px;
     height: 100%;
     @media (max-width: 767px) {
-        gap: 4px;
+        gap: 0px;
         align-items: center;
         justify-content: center;
     }
 `;
 
 const InfoWrapper = styled(FlexDivRow)`
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
     @media (max-width: 767px) {
         flex-direction: column;
-        flex-wrap: wrap;
+        align-items: center;
     }
 `;
 
 const InfoItem = styled(FlexDivColumn)`
     flex: 1;
     gap: 8px;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
+    cursor: pointer;
     @media (max-width: 767px) {
         flex-direction: row;
         justify-content: flex-start;
@@ -134,8 +166,10 @@ const InfoItemTotal = styled(FlexDivColumn)`
     gap: 8px;
     align-items: center;
     @media (max-width: 767px) {
+        margin-top: 6px;
         justify-content: center;
         align-items: center;
+        gap: 0;
     }
 `;
 
@@ -189,7 +223,7 @@ const Badge = styled.img`
 `;
 
 const LevelWrapper = styled(FlexDivColumn)`
-    align-items: flex-end;
+    align-items: flex-start;
 `;
 
 const Level = styled(Label)`
@@ -197,6 +231,7 @@ const Level = styled(Label)`
     font-weight: 700;
     margin-top: 8px;
     margin-right: 20px;
+    white-space: pre;
     @media (max-width: 767px) {
         font-size: 20px;
     }

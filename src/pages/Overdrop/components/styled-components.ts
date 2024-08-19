@@ -12,7 +12,6 @@ export const Circle = styled(FlexDivColumnCentered)<{ active: boolean; size?: st
     font-weight: 900;
     justify-content: center;
     text-align: center;
-    margin-right: 5px;
 `;
 
 export const OverdropIcon = styled.i`

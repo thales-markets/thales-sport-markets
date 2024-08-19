@@ -142,7 +142,7 @@ const BadgeOverview: React.FC = () => {
                                 height="18px"
                                 textBelow={`${formatPoints(userData?.points)} / ${formatPoints(
                                     nextThalesRewardLevel?.minimumPoints
-                                )}(lvl${nextThalesRewardLevel.level})`}
+                                )}`}
                             />
                         </ProgressContainer>
                     )}
