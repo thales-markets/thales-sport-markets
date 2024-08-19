@@ -51,7 +51,7 @@ export const Wrapper = styled.div<{ show?: boolean | null }>`
     ${({ show }) => show === false && animationClose};
     background-color: ${(props) => props.theme.background.secondary};
     justify-content: space-between;
-    z-index: 300;
+    z-index: 3000;
     ${(props) => (props.show == true ? `-webkit-box-shadow: ${props.theme.shadow.navBar};` : '')}
     ${(props) => (props.show == true ? `-moz-box-shadow: ${props.theme.shadow.navBar};` : '')}
     padding: 20px 10px;

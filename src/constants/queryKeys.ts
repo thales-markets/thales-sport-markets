@@ -142,6 +142,7 @@ const QUERY_KEYS = {
     CheckPausedAMM: (networkId: Network) => ['checkPausedAMM', networkId],
     Rates: {
         ExchangeRates: (networkId: Network) => ['rates', 'exchangeRates', networkId],
+        CoingeckoRates: () => ['rates', 'coingeckoRates'],
     },
     Promotions: (branchName: string) => [branchName, 'promotions'],
 };

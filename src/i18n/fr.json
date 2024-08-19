@@ -55,7 +55,8 @@
             "to-label": "À",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Échange",
-            "swap-progress-label": "Échange en cours..."
+            "swap-progress-label": "Échange en cours...",
+            "approve": "Approuver l'échange"
         },
         "enable-wallet-access": {
             "approve-label": "Autoriser {{currencyKey}}",
@@ -87,7 +88,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM suspendu",
-            "invalid-amount-max": "Le montant ne peut pas être supérieur à {{max}}"
+            "invalid-amount-max": "Le montant ne peut pas être supérieur à {{max}}",
+            "swap-quote-low": "Le devis de swap est trop bas (recevoir : {{quote}}, minimum de recevoir {{minQuote}}) ! Veuillez réessayer..."
         },
         "time-remaining": {
             "ended": "terminé",
@@ -195,6 +197,7 @@
         "status": "Statut",
         "wrap-and-buy": "Enveloppez l’ETH et achetez",
         "wrap-eth-tooltip": "Votre ETH est d'abord enveloppé dans WETH puis transmis au contrat",
+        "try-again": "Essayer à nouveau",
         "election-tooltip": "La source de résolution sera Associated Press, Fox News et NBC. Ces marchés se résoudront une fois que les trois sources auront annoncé la course pour le même candidat. Si les trois sources n’ont pas annoncé la course pour le même candidat avant le 11 novembre, tous les paris seront annulés."
     },
     "footer": {
@@ -278,13 +281,13 @@
                 "fighting": "Sports de combat",
                 "golf": "Le golf",
                 "live": "En direct",
-                "volleyball": "Volley-ball",
+                "handball": "Handball",
                 "waterpolo": "Water polo",
                 "rugby": "Le rugby",
+                "volleyball": "Volley-ball",
+                "olympicgames": "Jeux olympiques",
                 "tabletennis": "Tennis de table",
-                "handball": "Handball",
-                "politics": "Politique",
-                "olympicgames": "Jeux olympiques"
+                "politics": "Politique"
             },
             "all": "Tous",
             "datepicker": {
@@ -561,8 +564,8 @@
             "scheduled": "Programmé",
             "fighters-introduction": "Présentation des combattants",
             "end-of-round": "Fin du tour",
-            "suspended": "Suspendu",
-            "not-available-for-trading": "Non disponible pour le trading"
+            "not-available-for-trading": "Non disponible pour le trading",
+            "suspended": "Suspendu"
         },
         "market-details": {
             "wallet-info": {
@@ -668,15 +671,25 @@
                 "enter-value": "Entrez la valeur",
                 "invalid-value": "valeur invalide",
                 "tooltip": "Le transfert n’aboutira pas si le taux relais évolue défavorablement de plus de ce pourcentage au moment de l’exécution du transfert.",
-                "label": "Acceptez l'échange si les cotes baissent :"
+                "label": "Acceptez l'échange si les cotes baissent :",
+                "swap-thales": "Glissement d'échange"
             },
             "accept-odds-changes": "Accepter les changements de cotes",
-            "thales-bonus-info": "Utilisez THALES et obtenez 1% de bonus pour chaque partie.",
+            "thales-bonus-info": "Utilisez THALES et obtenez 2% de bonus pour chaque partie.",
             "odds-changed-description": "Les chances ont changé. Acceptez les modifications pour acheter.",
             "odds-changed-error": "Les chances ont changé lors de l'exécution de la commande. Essayez d'augmenter le glissement.",
-            "thales-bonus-tooltip": "Les utilisateurs effectuant des transactions avec THALES recevront 1 % de paiements supplémentaires pour chaque jeu qu'ils ont dans leur ticket (déjà calculé dans le devis total et le paiement).",
+            "thales-bonus-tooltip": "Les utilisateurs effectuant des transactions avec THALES recevront 2 % de paiements supplémentaires pour chaque jeu qu'ils ont dans leur ticket (déjà calculé dans le devis total et le paiement).",
+            "swap-thales-tooltip": "TOUS",
+            "use-free-bet": "Utiliser le pari gratuit",
+            "swap-thales": "Échangez chez THALES pour un meilleur devis",
+            "swap-thales-receive": "Réception minimale",
             "disable-free-bet": "Désactiver les soldes de paris gratuits",
-            "use-free-bet": "Utiliser le pari gratuit"
+            "buy-steps": {
+                "swap": "Passer à {{currencyKey}}",
+                "approve-buy": "Approuver l'achat avec {{currencyKey}}",
+                "buy": "Achetez avec {{currencyKey}}",
+                "approve-swap": "Approuver l'échange vers {{currencyKey}}"
+            }
         },
         "discounted-per": "Remise selon",
         "nav-menu": {
@@ -714,8 +727,8 @@
         "incentivized-tooltip-nhl": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de la LNH, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "Un total énorme de {{rewards}} sera distribué pour le reste de la saison de {{league}}, y compris les séries éliminatoires. Seul le volume sur le réseau Arbitrum sera calculé pour les récompenses ! Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
         "incentivized-tooltip-euro-copa": "Un total énorme de {{rewards}} sera distribué pour les compétitions Euro 2024 et Copa America. Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
-        "incentivized-tooltip-olympics": "Gagnez {{rewards}} en récompenses basées sur le volume pendant les Jeux olympiques. Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
-        "incentivized-tooltip-wimbledon": "Participez à des {{rewards}} lors de Wimbledon 2024 en prolongation V1 et V2. Vérifiez plus de détails <detailsLink>ici</detailsLink>."
+        "incentivized-tooltip-wimbledon": "Participez à des {{rewards}} lors de Wimbledon 2024 en prolongation V1 et V2. Vérifiez plus de détails <detailsLink>ici</detailsLink>.",
+        "incentivized-tooltip-olympics": "Gagnez {{rewards}} en récompenses basées sur le volume pendant les Jeux olympiques. Vérifiez plus de détails <detailsLink>ici</detailsLink>."
     },
     "rewards": {
         "table": {
@@ -866,24 +879,24 @@
             "claim-btn": "Le montant de la réclamation sera réduit du montant du buy-in, qui sera transféré sur votre solde de pari gratuit."
         },
         "free-bet-modal": {
-            "fund-batch": "Financer plusieurs adresses",
-            "approve-success": "Approuvé avec succès",
-            "fund": "Envoyer un pari gratuit",
-            "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
-            "enter-amount-per-user": "Entrez le montant par utilisateur",
+            "enter-wallet-address": "Entrez l'adresse du portefeuille",
+            "funding": "Financement...",
             "invalid-amount": "Montant invalide",
+            "invalid-wallet-address": "Adresse de portefeuille invalide",
+            "fund-successful": "Fonds réussi",
+            "fund": "Envoyer un pari gratuit",
+            "title": "Envoyer un pari gratuit",
+            "approve-success": "Approuvé avec succès",
+            "transaction-pending": "Transaction en attente",
+            "enter-amount": "Entrer le montant",
+            "no-funds": "Veuillez vous assurer que votre portefeuille dispose de suffisamment de fonds",
             "insufficient-balance": "Solde insuffisant",
             "enter-wallet-addresses": "Entrez les adresses de portefeuille",
-            "invalid-wallet-address": "Adresse de portefeuille invalide",
             "one-or-more-address-invalid": "Une ou plusieurs adresses de portefeuille saisies ne sont pas valides",
-            "fund-successful": "Fonds réussi",
-            "total-amount-batch": "Le montant total sera de {{ amount }} multiple de {{ count }} adresse(s) de portefeuille.",
-            "enter-amount": "Entrer le montant",
-            "transaction-pending": "Transaction en attente",
-            "funding": "Financement...",
-            "title": "Envoyer un pari gratuit",
-            "enter-wallet-address": "Entrez l'adresse du portefeuille",
-            "duplicate": "Adresses de portefeuille en double détectées"
+            "enter-amount-per-user": "Entrez le montant par utilisateur",
+            "fund-batch": "Financer plusieurs adresses",
+            "duplicate": "Adresses de portefeuille en double détectées",
+            "total-amount-batch": "Le montant total sera de {{ amount }} multiple de {{ count }} adresse(s) de portefeuille."
         },
         "send-free-bet": "Envoyer un pari gratuit"
     },

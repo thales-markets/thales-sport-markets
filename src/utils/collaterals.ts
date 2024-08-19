@@ -7,8 +7,10 @@ import multipleCollateral from './contracts/multipleCollateralContract';
 
 export const getDefaultCollateral = (networkId: SupportedNetwork) => COLLATERALS[networkId][0];
 
-export const getCollateral = (networkId: SupportedNetwork, index: number, collaterals?: Coins[]) =>
-    (collaterals || COLLATERALS[networkId])[index];
+export const getCollateral = (networkId: SupportedNetwork, index: number, collaterals?: Coins[]) => {
+    const collats = collaterals || COLLATERALS[networkId];
+    return index < collats.length ? collats[index] : collats[0];
+};
 
 export const getCollaterals = (networkId: SupportedNetwork) => COLLATERALS[networkId];
 
@@ -65,7 +67,7 @@ export const mapMultiCollateralBalances = (
 };
 
 export const getMaxCollateralDollarValue = (
-    data: Array<{ index: number; collateralKey: string; balance: number; balanceDollarValue: number }>
+    data: Array<{ index: number; collateralKey: Coins; balance: number; balanceDollarValue: number }>
 ) => {
     const maxItem = _.maxBy(data, 'balanceDollarValue');
     return maxItem;

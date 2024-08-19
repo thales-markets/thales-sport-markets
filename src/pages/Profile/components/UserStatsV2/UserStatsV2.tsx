@@ -2,7 +2,7 @@ import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuer
 import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollateralBalanceQuery';
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import useUsersStatsV2Query from 'queries/wallet/useUsersStatsV2Query';
-import React, { useCallback, useMemo } from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
@@ -134,7 +134,7 @@ const UserStats: React.FC = () => {
                                     </SubValue>
                                 </Section>
                             ) : (
-                                <></>
+                                <Fragment key={`${currencyKey}-freebet`} />
                             );
                         })}
                 </SectionWrapper>
@@ -150,7 +150,7 @@ const UserStats: React.FC = () => {
                     {freeBetBalances &&
                         Object.keys(multiCollateralsSorted).map((currencyKey) => {
                             return multiCollateralBalances[currencyKey] ? (
-                                <Section key={`${currencyKey}`}>
+                                <Section key={currencyKey}>
                                     <SubLabel>
                                         <CurrencyIcon className={COLLATERAL_ICONS_CLASS_NAMES[currencyKey as Coins]} />
                                         {currencyKey}
@@ -169,7 +169,7 @@ const UserStats: React.FC = () => {
                                     </SubValue>
                                 </Section>
                             ) : (
-                                <></>
+                                <Fragment key={currencyKey} />
                             );
                         })}
                 </SectionWrapper>

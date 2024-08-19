@@ -67,7 +67,8 @@
             "to-label": "To",
             "balance-label": "Balance: {{amount}}",
             "swap-label": "Swap",
-            "swap-progress-label": "Swapping in progress..."
+            "swap-progress-label": "Swapping in progress...",
+            "approve": "Approva lo scambio"
         },
         "enable-wallet-access": {
             "approve-label": "Approve {{currencyKey}}",
@@ -99,7 +100,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM In pausa",
-            "invalid-amount-max": "L'importo non può essere superiore a {{max}}"
+            "invalid-amount-max": "L'importo non può essere superiore a {{max}}",
+            "swap-quote-low": "La quota di scambio è troppo bassa (ricevi: {{quote}}, ricevi minimo {{minQuote}})! Per favore riprova..."
         },
         "time-remaining": {
             "ended": "ended",
@@ -195,6 +197,7 @@
         "status": "Stato",
         "wrap-and-buy": "Avvolgi ETH e acquista",
         "wrap-eth-tooltip": "Il tuo ETH viene prima avvolto in WETH e poi passato al contratto",
+        "try-again": "Riprova",
         "election-tooltip": "La fonte della risoluzione sarà Associated Press, Fox News e NBC. Questi mercati si risolveranno una volta che tutte e tre le fonti indicheranno la corsa per lo stesso candidato. Se tutte e tre le fonti non avranno indetto la corsa per lo stesso candidato entro l'11 novembre, tutte le scommesse verranno annullate."
     },
     "footer": {
@@ -279,13 +282,13 @@
                 "fighting": "MMA",
                 "golf": "Golf",
                 "live": "Vivere",
-                "politics": "Politica",
-                "olympicgames": "Giochi Olimpici",
-                "rugby": "Rugby",
-                "tabletennis": "Ping-pong",
                 "handball": "Palla a mano",
                 "volleyball": "Pallavolo",
-                "waterpolo": "Pallanuoto"
+                "rugby": "Rugby",
+                "waterpolo": "Pallanuoto",
+                "olympicgames": "Giochi Olimpici",
+                "tabletennis": "Ping-pong",
+                "politics": "Politica"
             },
             "all": "All",
             "datepicker": {
@@ -668,15 +671,25 @@
                 "invalid-value": "valore non valido",
                 "enter-value": "Inserisci il valore",
                 "label": "Accetta lo scambio se le probabilità scendono di:",
-                "tooltip": "Il trasferimento non verrà effettuato se il tasso del ponte si sposta in modo sfavorevole di oltre questa percentuale al momento dell'esecuzione del trasferimento."
+                "tooltip": "Il trasferimento non verrà effettuato se il tasso del ponte si sposta in modo sfavorevole di oltre questa percentuale al momento dell'esecuzione del trasferimento.",
+                "swap-thales": "Slittamento dello swap"
             },
             "odds-changed-description": "Le probabilità sono cambiate. Accetta le modifiche per poter acquistare.",
             "accept-odds-changes": "Accetta le modifiche alle quote",
-            "thales-bonus-info": "Usa THALES e ottieni l'1% di bonus per ogni gioco.",
-            "thales-bonus-tooltip": "Gli utenti che effettuano scambi con THALES riceveranno l'1% di pagamenti extra per ogni gioco presente nel loro ticket (già calcolato in Quota totale e Pagamento).",
+            "thales-bonus-info": "Usa THALES e ottieni l'2% di bonus per ogni gioco.",
+            "thales-bonus-tooltip": "Gli utenti che effettuano scambi con THALES riceveranno l'2% di pagamenti extra per ogni gioco presente nel loro ticket (già calcolato in Quota totale e Pagamento).",
             "odds-changed-error": "Le quote sono cambiate durante l'evasione dell'ordine. Prova ad aumentare lo slittamento.",
+            "swap-thales-receive": "Ricezione minima",
+            "swap-thales-tooltip": "TUTTO",
+            "swap-thales": "Passa a THALES per un preventivo migliore",
+            "disable-free-bet": "Disabilita i saldi delle scommesse gratuite",
             "use-free-bet": "Usa la scommessa gratuita",
-            "disable-free-bet": "Disabilita i saldi delle scommesse gratuite"
+            "buy-steps": {
+                "approve-swap": "Approva lo scambio con {{currencyKey}}",
+                "approve-buy": "Approva l'acquisto con {{currencyKey}}",
+                "buy": "Acquista con {{currencyKey}}",
+                "swap": "Scambia in {{currencyKey}}"
+            }
         },
         "discounted-per": "Scontato come da",
         "nav-menu": {
@@ -837,8 +850,8 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "profile-data": "Dati del profilo",
-            "wallet": "Portafoglio",
-            "free-bet": "Scommessa gratuita"
+            "free-bet": "Scommessa gratuita",
+            "wallet": "Portafoglio"
         },
         "in-lp": "Liquidità fornita",
         "lp-title": "Pool di liquidità",
@@ -865,24 +878,24 @@
             "claim-btn": "L'importo richiesto verrà ridotto dell'importo del buy-in, che verrà trasferito sul saldo della scommessa gratuita."
         },
         "free-bet-modal": {
-            "funding": "Finanziamenti...",
-            "fund-successful": "Fondo di successo",
-            "enter-wallet-addresses": "Inserisci gli indirizzi del portafoglio",
-            "invalid-amount": "importo non valido",
-            "insufficient-balance": "Equilibrio insufficiente",
-            "fund": "Invia scommessa gratuita",
-            "invalid-wallet-address": "Indirizzo del portafoglio non valido",
-            "enter-amount": "Inserire l'importo",
-            "fund-batch": "Finanzia più indirizzi",
-            "duplicate": "Rilevati indirizzi di portafoglio duplicati",
-            "one-or-more-address-invalid": "Uno o più indirizzi di portafoglio inseriti non sono validi",
             "title": "Invia scommessa gratuita",
-            "transaction-pending": "Transazione in sospeso",
-            "no-funds": "Assicurati che il tuo portafoglio disponga di fondi sufficienti",
             "enter-wallet-address": "Inserisci l'indirizzo del portafoglio",
+            "invalid-wallet-address": "Indirizzo del portafoglio non valido",
             "approve-success": "Approvato con successo",
+            "funding": "Finanziamenti...",
+            "fund": "Invia scommessa gratuita",
+            "insufficient-balance": "Equilibrio insufficiente",
+            "fund-successful": "Fondo di successo",
+            "no-funds": "Assicurati che il tuo portafoglio disponga di fondi sufficienti",
+            "invalid-amount": "importo non valido",
+            "enter-amount": "Inserire l'importo",
+            "transaction-pending": "Transazione in sospeso",
             "enter-amount-per-user": "Inserisci l'importo per utente",
-            "total-amount-batch": "L'importo totale sarà {{ amount }} multiplo per {{ count }} indirizzo/i del portafoglio."
+            "fund-batch": "Finanzia più indirizzi",
+            "total-amount-batch": "L'importo totale sarà {{ amount }} multiplo per {{ count }} indirizzo/i del portafoglio.",
+            "duplicate": "Rilevati indirizzi di portafoglio duplicati",
+            "enter-wallet-addresses": "Inserisci gli indirizzi del portafoglio",
+            "one-or-more-address-invalid": "Uno o più indirizzi di portafoglio inseriti non sono validi"
         },
         "send-free-bet": "Invia scommessa gratuita"
     },

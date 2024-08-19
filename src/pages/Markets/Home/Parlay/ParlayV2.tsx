@@ -40,6 +40,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
     const [outOfLiquidityMarkets, setOutOfLiquidityMarkets] = useState<number[]>([]);
+    const [useThalesCollateral, setUseThalesCollateral] = useState(false);
 
     const previousTicketOdds = useRef<{ position: number; odd: number; gameId: string; proof: string[] }[]>([]);
 
@@ -207,6 +208,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                                             acceptOdds={acceptOdds}
                                             setAcceptOdds={setAcceptOdds}
                                             applyPayoutMultiplier={true}
+                                            useThalesCollateral={useThalesCollateral}
                                         />
                                     </RowMarket>
                                 );
@@ -237,6 +239,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
                         }}
                         onSuccess={onSuccess}
                         submitButtonDisabled={!!notOpenedMarkets.length}
+                        setUseThalesCollateral={setUseThalesCollateral}
                     />
                 </>
             ) : (
@@ -320,7 +323,7 @@ const ThalesBonus = styled.span`
             width: 0;
         }
         to {
-            width: 270px;
+            width: 320px;
         }
     }
 

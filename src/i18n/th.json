@@ -67,7 +67,8 @@
             "to-label": "ถึง",
             "balance-label": "ยอดเงิน: {{amount}}",
             "swap-label": "แลกเปลี่ยน",
-            "swap-progress-label": "กำลังดำเนินการแลกเปลี่ยน…"
+            "swap-progress-label": "กำลังดำเนินการแลกเปลี่ยน…",
+            "approve": "อนุมัติการแลกเปลี่ยน"
         },
         "enable-wallet-access": {
             "approve-label": "อนุมัติ {{currencyKey}}",
@@ -99,7 +100,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM หยุดชั่วคราว",
-            "invalid-amount-max": "จำนวนเงินต้องไม่เกิน {{max}}"
+            "invalid-amount-max": "จำนวนเงินต้องไม่เกิน {{max}}",
+            "swap-quote-low": "ราคา Swap ต่ำเกินไป (รับ: {{quote}}, ขั้นต่ำรับ {{minQuote}})! กรุณาลองอีกครั้ง..."
         },
         "time-remaining": {
             "ended": "เสร็จสิ้น",
@@ -195,6 +197,7 @@
         "status": "สถานะ",
         "wrap-and-buy": "ห่อ ETH แล้วซื้อ",
         "wrap-eth-tooltip": "ETH ของคุณจะถูกรวมเข้ากับ WETH ก่อนแล้วจึงส่งต่อไปยังสัญญา",
+        "try-again": "ลองอีกครั้ง",
         "election-tooltip": "แหล่งที่มาของการแก้ปัญหาคือ Associated Press, Fox News และ NBC ตลาดเหล่านี้จะคลี่คลายเมื่อแหล่งข่าวทั้งสามแหล่งเรียกร้องให้มีการแข่งขันสำหรับผู้สมัครคนเดียวกัน หากแหล่งข้อมูลทั้งสามแห่งไม่เรียกการแข่งขันสำหรับผู้สมัครคนเดียวกันภายในวันที่ 11 พฤศจิกายน การเดิมพันทั้งหมดจะเป็นโมฆะ"
     },
     "footer": {
@@ -279,13 +282,13 @@
                 "boxing": "มวย",
                 "golf": "กอล์ฟ",
                 "live": "สด",
-                "tabletennis": "ปิงปอง",
-                "waterpolo": "โปโลน้ำ",
                 "handball": "แฮนด์บอล",
-                "rugby": "รักบี้",
                 "volleyball": "วอลเลย์บอล",
+                "rugby": "รักบี้",
+                "waterpolo": "โปโลน้ำ",
                 "politics": "การเมือง",
-                "olympicgames": "กีฬาโอลิมปิก"
+                "olympicgames": "กีฬาโอลิมปิก",
+                "tabletennis": "ปิงปอง"
             },
             "datepicker": {
                 "games": "{{numberOfGames}} เกม"
@@ -562,8 +565,8 @@
             "fighters-introduction": "การแนะนำนักสู้",
             "fighters-walking": "นักสู้เดิน",
             "end-of-fight": "สิ้นสุดการต่อสู้",
-            "suspended": "ถูกระงับ",
-            "not-available-for-trading": "ไม่สามารถซื้อขายได้"
+            "not-available-for-trading": "ไม่สามารถซื้อขายได้",
+            "suspended": "ถูกระงับ"
         },
         "market-details": {
             "price": "ราคา",
@@ -670,15 +673,25 @@
                 "label": "ยอมรับการซื้อขายหากอัตราต่อรองลดลงโดย:",
                 "enter-value": "ป้อนค่า",
                 "invalid-value": "ค่าไม่ถูกต้อง",
-                "tooltip": "การถ่ายโอนจะไม่เกิดขึ้นหากอัตราบริดจ์เคลื่อนที่อย่างไม่น่าพึงพอใจมากกว่าเปอร์เซ็นต์นี้เมื่อดำเนินการถ่ายโอน"
+                "tooltip": "การถ่ายโอนจะไม่เกิดขึ้นหากอัตราบริดจ์เคลื่อนที่อย่างไม่น่าพึงพอใจมากกว่าเปอร์เซ็นต์นี้เมื่อดำเนินการถ่ายโอน",
+                "swap-thales": "สลับการเลื่อนหลุด"
             },
-            "thales-bonus-info": "ใช้ THALES และรับโบนัส 1% สำหรับแต่ละเกม",
+            "thales-bonus-info": "ใช้ THALES และรับโบนัส 2% สำหรับแต่ละเกม",
             "odds-changed-description": "อัตราต่อรองเปลี่ยนไป ยอมรับการเปลี่ยนแปลงเพื่อซื้อ",
             "odds-changed-error": "อัตราต่อรองเปลี่ยนแปลงขณะดำเนินการตามคำสั่งซื้อ ลองเพิ่มความคลาดเคลื่อน",
-            "thales-bonus-tooltip": "ผู้ใช้ที่ทำการซื้อขายกับ THALES จะได้รับการจ่ายเงินเพิ่ม 1% สำหรับแต่ละเกมที่พวกเขามีอยู่ในตั๋ว (คำนวณแล้วในใบเสนอราคารวมและการจ่ายเงิน)",
+            "thales-bonus-tooltip": "ผู้ใช้ที่ทำการซื้อขายกับ THALES จะได้รับการจ่ายเงินเพิ่ม 2% สำหรับแต่ละเกมที่พวกเขามีอยู่ในตั๋ว (คำนวณแล้วในใบเสนอราคารวมและการจ่ายเงิน)",
             "accept-odds-changes": "ยอมรับการเปลี่ยนแปลงอัตราต่อรอง",
             "use-free-bet": "ใช้เดิมพันฟรี",
-            "disable-free-bet": "ปิดการใช้งานยอดเดิมพันฟรี"
+            "swap-thales-tooltip": "ทั้งหมด",
+            "swap-thales": "สลับไปที่ THALES เพื่อการเสนอราคาที่ดีกว่า",
+            "disable-free-bet": "ปิดการใช้งานยอดเดิมพันฟรี",
+            "swap-thales-receive": "รับขั้นต่ำ",
+            "buy-steps": {
+                "approve-swap": "อนุมัติการแลกเปลี่ยนเป็น {{currencyKey}}",
+                "approve-buy": "อนุมัติการซื้อด้วย {{currencyKey}}",
+                "swap": "สลับเป็น {{currencyKey}}",
+                "buy": "ซื้อด้วย {{currencyKey}}"
+            }
         },
         "nav-menu": {
             "items": {
@@ -714,8 +727,8 @@
         "incentivized-tooltip-nhl": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายในช่วงที่เหลือของฤดูกาล NHL รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
         "incentivized-tooltip-nhl-mlb": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายให้กับช่วงที่เหลือของฤดูกาล {{league}} รวมถึงรอบตัดเชือกด้วย เฉพาะปริมาณบนเครือข่าย Arbitrum เท่านั้นที่จะถูกคำนวณเพื่อรับรางวัล! ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
         "incentivized-tooltip-euro-copa": "ยอดรวมจำนวน {{rewards}} จะถูกแจกจ่ายสำหรับการแข่งขันยูโร 2024 และโคปาอเมริกา ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
-        "incentivized-tooltip-olympics": "รับ {{rewards}} เป็นรางวัลตามปริมาณระหว่างการแข่งขันกีฬาโอลิมปิก ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
-        "incentivized-tooltip-wimbledon": "แข่งขันเพื่อชิง {{rewards}} ระหว่างวิมเบิลดัน 2024 ในช่วงต่อเวลา V1 และ V2 ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
+        "incentivized-tooltip-wimbledon": "แข่งขันเพื่อชิง {{rewards}} ระหว่างวิมเบิลดัน 2024 ในช่วงต่อเวลา V1 และ V2 ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>",
+        "incentivized-tooltip-olympics": "รับ {{rewards}} เป็นรางวัลตามปริมาณระหว่างการแข่งขันกีฬาโอลิมปิก ตรวจสอบรายละเอียดเพิ่มเติม <detailsLink>ที่นี่</detailsLink>"
     },
     "rewards": {
         "header": "รางวัล",
@@ -838,8 +851,8 @@
             "highest-win": "Highest win",
             "lifetime-wins": "Lifetime wins",
             "profile-data": "ข้อมูลโปรไฟล์",
-            "free-bet": "เดิมพันฟรี",
-            "wallet": "กระเป๋าสตางค์"
+            "wallet": "กระเป๋าสตางค์",
+            "free-bet": "เดิมพันฟรี"
         },
         "lp-title": "สระว่ายน้ำสภาพคล่อง",
         "go-to-lp": "ไปที่หจก",
@@ -866,24 +879,24 @@
             "claim-btn": "จำนวนเงินที่เรียกร้องจะลดลงตามจำนวนการซื้อ ซึ่งจะโอนไปยังยอดเดิมพันฟรีของคุณ"
         },
         "free-bet-modal": {
+            "title": "ส่งเดิมพันฟรี",
+            "invalid-amount": "จำนวนเงินไม่ถูกต้อง",
+            "transaction-pending": "การทำธุรกรรมที่รอดำเนินการ",
+            "fund": "ส่งเดิมพันฟรี",
+            "fund-successful": "กองทุนสำเร็จแล้ว",
+            "invalid-wallet-address": "ที่อยู่กระเป๋าเงินไม่ถูกต้อง",
+            "approve-success": "อนุมัติเรียบร้อยแล้ว",
             "no-funds": "โปรดตรวจสอบให้แน่ใจว่ากระเป๋าเงินของคุณมีเงินเพียงพอ",
             "enter-wallet-address": "ป้อนที่อยู่กระเป๋าสตางค์",
-            "one-or-more-address-invalid": "ที่อยู่กระเป๋าเงินที่ป้อนอย่างน้อยหนึ่งรายการไม่ถูกต้อง",
-            "invalid-amount": "จำนวนเงินไม่ถูกต้อง",
-            "enter-wallet-addresses": "ป้อนที่อยู่กระเป๋าเงิน",
-            "funding": "เงินทุน...",
             "insufficient-balance": "ยอดคงเหลือไม่เพียงพอ",
-            "transaction-pending": "การทำธุรกรรมที่รอดำเนินการ",
-            "fund-batch": "กองทุนที่อยู่หลายแห่ง",
-            "invalid-wallet-address": "ที่อยู่กระเป๋าเงินไม่ถูกต้อง",
-            "fund-successful": "กองทุนสำเร็จแล้ว",
-            "fund": "ส่งเดิมพันฟรี",
             "enter-amount": "ใส่จำนวนเงิน",
+            "funding": "เงินทุน...",
+            "total-amount-batch": "จำนวนเงินทั้งหมดจะเท่ากับ {{ amount }} คูณด้วยที่อยู่กระเป๋าสตางค์ {{ count }} รายการ",
+            "one-or-more-address-invalid": "ที่อยู่กระเป๋าเงินที่ป้อนอย่างน้อยหนึ่งรายการไม่ถูกต้อง",
             "enter-amount-per-user": "ป้อนจำนวนเงินต่อผู้ใช้",
-            "title": "ส่งเดิมพันฟรี",
-            "duplicate": "ตรวจพบที่อยู่กระเป๋าเงินที่ซ้ำกัน",
-            "approve-success": "อนุมัติเรียบร้อยแล้ว",
-            "total-amount-batch": "จำนวนเงินทั้งหมดจะเท่ากับ {{ amount }} คูณด้วยที่อยู่กระเป๋าสตางค์ {{ count }} รายการ"
+            "fund-batch": "กองทุนที่อยู่หลายแห่ง",
+            "enter-wallet-addresses": "ป้อนที่อยู่กระเป๋าเงิน",
+            "duplicate": "ตรวจพบที่อยู่กระเป๋าเงินที่ซ้ำกัน"
         },
         "send-free-bet": "ส่งเดิมพันฟรี"
     },

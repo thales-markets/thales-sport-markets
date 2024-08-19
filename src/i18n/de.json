@@ -76,7 +76,8 @@
             "to-label": "Zu",
             "balance-label": "Guthaben: {{amount}}",
             "swap-label": "Tauschen",
-            "swap-progress-label": "Tausch wird fertig gestellt..."
+            "swap-progress-label": "Tausch wird fertig gestellt...",
+            "approve": "Tausch genehmigen"
         },
         "enable-wallet-access": {
             "approve-label": "{{currencyKey}} genehmigen",
@@ -108,7 +109,8 @@
             "enter-percentage": "Enter percentage",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "single-amm-paused": "AMM angehalten",
-            "invalid-amount-max": "Der Betrag darf nicht höher sein als {{max}}"
+            "invalid-amount-max": "Der Betrag darf nicht höher sein als {{max}}",
+            "swap-quote-low": "Swap-Kurs ist zu niedrig (Empfang: {{quote}}, Mindestempfang {{minQuote}})! Bitte versuchen Sie es erneut..."
         },
         "time-remaining": {
             "ended": "zu Ende",
@@ -195,6 +197,7 @@
         "status": "Status",
         "wrap-and-buy": "ETH verpacken und kaufen",
         "wrap-eth-tooltip": "Ihr ETH wird zuerst in WETH verpackt und dann an den Vertrag übergeben",
+        "try-again": "Versuchen Sie es erneut",
         "election-tooltip": "Die Entscheidungsquellen sind Associated Press, Fox News und NBC. Diese Märkte werden entschieden, sobald alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen. Wenn bis zum 11. November nicht alle drei Quellen den gleichen Kandidaten zum Rennen ausrufen, werden alle Wetten ungültig."
     },
     "footer": {
@@ -279,13 +282,13 @@
                 "fighting": "Kampfsport",
                 "golf": "Golf",
                 "live": "Live",
-                "politics": "Politik",
-                "olympicgames": "Olympische Spiele",
-                "handball": "Handball",
-                "volleyball": "Volleyball",
+                "waterpolo": "Wasser Polo",
                 "rugby": "Rugby",
+                "volleyball": "Volleyball",
+                "handball": "Handball",
                 "tabletennis": "Tischtennis",
-                "waterpolo": "Wasser Polo"
+                "olympicgames": "Olympische Spiele",
+                "politics": "Politik"
             },
             "all": "Alle",
             "datepicker": {
@@ -561,8 +564,8 @@
             "end-of-fight": "Ende des Kampfes",
             "fighters-introduction": "Kämpfer Einführung",
             "end-of-round": "Ende der Runde",
-            "suspended": "Ausgesetzt",
-            "not-available-for-trading": "Nicht zum Handel verfügbar"
+            "not-available-for-trading": "Nicht zum Handel verfügbar",
+            "suspended": "Ausgesetzt"
         },
         "market-details": {
             "price": "Preis",
@@ -668,15 +671,25 @@
                 "label": "Akzeptieren Sie den Handel, wenn die Quoten um Folgendes sinken:",
                 "slippage": "Schlupf",
                 "enter-value": "Wert eingeben",
-                "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert."
+                "tooltip": "Die Überweisung wird nicht durchgeführt, wenn sich der Überbrückungszinssatz zum Zeitpunkt der Ausführung der Überweisung um mehr als diesen Prozentsatz ungünstig verändert.",
+                "swap-thales": "Swap-Slippage"
             },
             "accept-odds-changes": "Quotenänderungen akzeptieren",
-            "thales-bonus-tooltip": "Benutzer, die mit THALES handeln, erhalten 1 % zusätzliche Auszahlungen für jedes Spiel auf ihrem Ticket (bereits im Gesamtangebot und der Auszahlung berechnet).",
-            "thales-bonus-info": "Nutzen Sie THALES und erhalten Sie 1 % Bonus für jedes Spiel.",
+            "thales-bonus-tooltip": "Benutzer, die mit THALES handeln, erhalten 2 % zusätzliche Auszahlungen für jedes Spiel auf ihrem Ticket (bereits im Gesamtangebot und der Auszahlung berechnet).",
+            "thales-bonus-info": "Nutzen Sie THALES und erhalten Sie 2 % Bonus für jedes Spiel.",
             "odds-changed-error": "Die Quoten haben sich während der Auftragserfüllung geändert. Versuchen Sie, den Slippage zu erhöhen.",
             "odds-changed-description": "Quoten haben sich geändert. Akzeptieren Sie die Änderungen, um zu kaufen.",
+            "swap-thales-tooltip": "ALLE",
             "use-free-bet": "Gratiswette nutzen",
-            "disable-free-bet": "Kostenlose Wettguthaben deaktivieren"
+            "disable-free-bet": "Kostenlose Wettguthaben deaktivieren",
+            "swap-thales-receive": "Mindestempfang",
+            "swap-thales": "Wechseln Sie zu THALES für ein besseres Angebot",
+            "buy-steps": {
+                "approve-swap": "Tausch zu {{currencyKey}} genehmigen",
+                "approve-buy": "Kauf mit {{currencyKey}} genehmigen",
+                "buy": "Kaufen mit {{currencyKey}}",
+                "swap": "Wechseln zu {{currencyKey}}"
+            }
         },
         "discounted-per": "Ermäßigt gem",
         "nav-menu": {
@@ -714,8 +727,8 @@
         "incentivized-tooltip-nhl": "Für den Rest der NHL-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} verteilt. Für die Prämien wird nur das Volumen im Arbitrum-Netzwerk angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-nhl-mlb": "Für den Rest der {{league}}-Saison, einschließlich der Playoffs, wird eine satte Summe von {{rewards}} ausgeschüttet. Nur das Volumen im Arbitrum-Netzwerk wird für die Belohnungen angerechnet! Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
         "incentivized-tooltip-euro-copa": "Für die EM 2024 und die Copa America werden satte {{rewards}} vergeben. Weitere Details finden Sie <detailsLink>hier</detailsLink>.",
-        "incentivized-tooltip-wimbledon": "Kämpfen Sie während Wimbledon 2024 in den Verlängerungen V1 und V2 um {{rewards}}. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>.",
-        "incentivized-tooltip-olympics": "Verdienen Sie während der Olympischen Spiele {{rewards}} in volumenbasierten Prämien. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>."
+        "incentivized-tooltip-olympics": "Verdienen Sie während der Olympischen Spiele {{rewards}} in volumenbasierten Prämien. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>.",
+        "incentivized-tooltip-wimbledon": "Kämpfen Sie während Wimbledon 2024 in den Verlängerungen V1 und V2 um {{rewards}}. Weitere Einzelheiten finden Sie <detailsLink>hier</detailsLink>."
     },
     "rewards": {
         "header": "Preise",
@@ -870,24 +883,24 @@
             "claim-btn": "Der Anspruchsbetrag wird um den Buy-In-Betrag reduziert, der auf Ihr Gratiswettenguthaben übertragen wird."
         },
         "free-bet-modal": {
-            "enter-wallet-address": "Wallet-Adresse eingeben",
-            "enter-amount-per-user": "Geben Sie den Betrag pro Benutzer ein",
-            "duplicate": "Doppelte Wallet-Adressen erkannt",
-            "enter-wallet-addresses": "Wallet-Adressen eingeben",
+            "approve-success": "Erfolgreich genehmigt",
+            "funding": "Finanzierung...",
+            "enter-amount": "Menge eingeben",
+            "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet über ausreichend Guthaben verfügt",
+            "title": "Gratiswette senden",
+            "fund": "Gratiswette senden",
+            "transaction-pending": "Transaktion ausstehend",
             "invalid-amount": "ungültige Menge",
             "insufficient-balance": "Mangelhaftes Gleichgewicht",
-            "one-or-more-address-invalid": "Eine oder mehrere eingegebene Wallet-Adressen sind ungültig",
-            "enter-amount": "Menge eingeben",
-            "funding": "Finanzierung...",
-            "fund-batch": "Mehrere Adressen finanzieren",
-            "invalid-wallet-address": "Ungültige Wallet-Adresse",
-            "title": "Gratiswette senden",
+            "enter-wallet-address": "Wallet-Adresse eingeben",
             "fund-successful": "Fonds erfolgreich",
-            "transaction-pending": "Transaktion ausstehend",
+            "invalid-wallet-address": "Ungültige Wallet-Adresse",
+            "fund-batch": "Mehrere Adressen finanzieren",
+            "enter-wallet-addresses": "Wallet-Adressen eingeben",
+            "duplicate": "Doppelte Wallet-Adressen erkannt",
+            "enter-amount-per-user": "Geben Sie den Betrag pro Benutzer ein",
             "total-amount-batch": "Der Gesamtbetrag beträgt {{ amount }} multipliziert mit {{ count }} Wallet-Adresse(n).",
-            "fund": "Gratiswette senden",
-            "approve-success": "Erfolgreich genehmigt",
-            "no-funds": "Bitte stellen Sie sicher, dass Ihr Wallet über ausreichend Guthaben verfügt"
+            "one-or-more-address-invalid": "Eine oder mehrere eingegebene Wallet-Adressen sind ungültig"
         },
         "send-free-bet": "Gratiswette senden"
     },
