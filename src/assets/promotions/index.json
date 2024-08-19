@@ -332,6 +332,27 @@
         }
     },
     {
+        "title": "TEST 2 THALES to boost winnings by 1% for every market added to parlay",
+        "description": "Using THALES as collateral on Overtime boosts your winnings by 1% per match/market added to your parlay. This makes it possible to boost your profits by more than 10%!",
+        "startDate": 1718187817,
+        "endDate": 0,
+        "promotionId": "overtime-v2-thales-boost1",
+        "promotionUrl": "/promotions/test-overtime-v2-thales-boost",
+        "backgroundImageUrl": "/promotions/thales-new.webp",
+        "callToActionButton": "How to earn",
+        "availableOnNetworks": [10, 42161],
+        "article": {
+            "coverImageUrl": "/promotions/thales-stakers.webp",
+            "headerHtml": "<h1><span><span><span>Use THALES to boost winnings by 1% for every market added to parlay</span></span></span></h1>",
+            "ctaSection": {
+                "sectionHtml": "<p> <span> <span> <span>TESTUsing THALES as collateral on Overtime boosts your winnings by 1% per match/market added to your parlay. This makes it possible to boost your profits by more than 15%!</p>",
+                "ctaButtonLink": "https://www.overtimemarkets.xyz/?lang=en&sport=All&status=OpenMarkets&showActive=true",
+                "ctaButtonLabel": "Play now"
+            },
+            "contentHtml": "<p> <span> <span> <span>In parallel with the release of Overtime V2, a native THALES collateral pool with new perks & extra payouts for users was created by the Thales Protocol team. <br> <br>The THALES collateral pool works by boosting your winnings in the following way: Users placing trades in Overtime V2 with THALES get an additional 1% earnings for each game they add to their parlay. <span> <span> <span> <strong> </strong> </span> </span> <br><br>For example, if a user plays just a single game, they will have a 1% increase in the potential payout. If it's a 10-game parlay, we're talking about a 10% bonus payout. <br> <br>Let's say the user has created a 10-game parlay for 50 USD using THALES, with the odds being 20.00 in decimal odds or +1900 in American odds. The potential payout would be $1000 before, but because of using THALES, it's now $1100 USD. Pretty cool, right? <br> <br>When placing a trade using THALES, both the Safebox fee and Performance fee are instantly burned, reducing the total supply of the token. </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
+        }
+    },
+    {
         "title": "Use THALES to boost winnings by 1% for every market added to parlay",
         "description": "Using THALES as collateral on Overtime boosts your winnings by 1% per match/market added to your parlay. This makes it possible to boost your profits by more than 10%!",
         "startDate": 1718187817,
