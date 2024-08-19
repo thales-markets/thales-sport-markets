@@ -95,6 +95,7 @@ import {
     getMultiplierIcon,
     getMultiplierLabel,
     getParlayMultiplier,
+    getTooltipKey,
 } from 'utils/overdrop';
 import { refetchBalances } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -242,12 +243,14 @@ const Ticket: React.FC<TicketProps> = ({
             label: 'Games in parlay',
             multiplier: getParlayMultiplier(markets.length),
             icon: <>{markets.length}</>,
+            tooltip: 'parlay-boost',
         };
         const thalesMultiplier = {
             name: 'thalesMultiplier',
             label: 'THALES used',
             multiplier: isThales ? 10 : 0,
             icon: <OverdropIcon className="icon icon--thales-logo" />,
+            tooltip: 'thales-boost',
         };
         return [
             ...(userMultipliersQuery.isSuccess
@@ -255,6 +258,7 @@ const Ticket: React.FC<TicketProps> = ({
                       ...multiplier,
                       label: getMultiplierLabel(multiplier),
                       icon: getMultiplierIcon(multiplier),
+                      tooltip: getTooltipKey(multiplier),
                   }))
                 : [
                       {
@@ -262,18 +266,21 @@ const Ticket: React.FC<TicketProps> = ({
                           label: 'Days in a row',
                           multiplier: 0,
                           icon: <>0</>,
+                          tooltip: 'daily-boost',
                       },
                       {
                           name: 'weeklyMultiplier',
                           label: 'Weeks in a row',
                           multiplier: 0,
                           icon: <>0</>,
+                          tooltip: 'weekly-boost',
                       },
                       {
                           name: 'twitterMultiplier',
                           label: 'Twitter share',
                           multiplier: 0,
                           icon: <OverdropIcon className="icon icon--x-twitter" />,
+                          tooltip: 'twitter-boost',
                       },
                   ]),
             parlayMultiplier,
@@ -1609,13 +1616,27 @@ const Ticket: React.FC<TicketProps> = ({
                     {overdropMultipliers.map((multiplier) => (
                         <OverdropRowSummary key={multiplier.name}>
                             <OverdropLabel>{multiplier.label}</OverdropLabel>
-                            <OverdropValue>+{multiplier.multiplier}%</OverdropValue>
+                            <OverdropValue>
+                                +{multiplier.multiplier}%
+                                <Tooltip
+                                    overlay={<>{t(`markets.parlay.overdrop.tooltip.${multiplier.tooltip}`)}</>}
+                                    iconFontSize={14}
+                                    marginLeft={3}
+                                />
+                            </OverdropValue>
                         </OverdropRowSummary>
                     ))}
                     {overdropGameMultipliersInThisTicket && (
                         <OverdropRowSummary>
                             <OverdropLabel>Boosted games</OverdropLabel>
-                            <OverdropValue>+{overdropBoostedGamesTotalBoost}%</OverdropValue>
+                            <OverdropValue>
+                                +{overdropBoostedGamesTotalBoost}%
+                                <Tooltip
+                                    overlay={<>{t(`markets.parlay.overdrop.tooltip.promo-boost`)}</>}
+                                    iconFontSize={14}
+                                    marginLeft={3}
+                                />
+                            </OverdropValue>
                         </OverdropRowSummary>
                     )}
                     <HorizontalLine />

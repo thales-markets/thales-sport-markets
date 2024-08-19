@@ -814,7 +814,16 @@
                 "active-boost": "Active boost",
                 "bonus-applied": "Boost applied",
                 "total-xp-boost": "Total XP Boost",
-                "total-xp-earned": "Total XP Earned"
+                "total-xp-earned": "Total XP Earned",
+                "tooltip": {
+                    "daily-boost": "For every day in a row you get 5% boost",
+                    "weekly-boost": "For every week in a row you get 5% boost",
+                    "parlay-boost": "Every game in parlay will boost up your xp",
+                    "thales-boost": "Using thales as collateral will boost your xp by 10%",
+                    "twitter-boost": "If you share your ticket you get additional 10%",
+                    "loyalty-boost": "Check out leveling tree",
+                    "promo-boost": "Game of the week boost"
+                }
             }
         },
         "zero-odds-tooltip": "Sports AMM only offers liquidity for the price below $0.97. Effectively this means that if the odds for a position are more than 97%, that position won't have liquidity.",

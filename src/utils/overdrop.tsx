@@ -28,6 +28,22 @@ export const getMultiplierLabel = (multiplier: OverdropMultiplier) => {
     return '';
 };
 
+export const getTooltipKey = (multiplier: OverdropMultiplier) => {
+    if (multiplier.name === 'dailyMultiplier') {
+        return 'daily-boost';
+    }
+    if (multiplier.name === 'weeklyMultiplier') {
+        return 'weekly-boost';
+    }
+    if (multiplier.name === 'twitterMultiplier') {
+        return 'twitter-boost';
+    }
+    if (multiplier.name === 'loyaltyMultiplier') {
+        return 'loyalty-boost';
+    }
+    return '';
+};
+
 export const getMultiplierIcon = (multiplier: OverdropMultiplier) => {
     if (multiplier.name === 'dailyMultiplier' || multiplier.name === 'weeklyMultiplier') {
         return <>{multiplier.multiplier === 0 ? 0 : multiplier.multiplier / 10 + 1}</>;
