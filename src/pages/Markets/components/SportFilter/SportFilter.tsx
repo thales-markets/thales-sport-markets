@@ -1,7 +1,6 @@
 import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import { SportFilter } from 'enums/markets';
 import Lottie from 'lottie-react';
-import { Circle } from 'pages/Overdrop/components/styled-components';
 import React, { CSSProperties } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
@@ -145,16 +144,5 @@ const liveBlinkStyleMobile: CSSProperties = {
     width: 32,
     margin: '2px 13px 0px -4px',
 };
-
-const OverdropCircleContainer = styled.span`
-    width: 32px;
-`;
-
-const OverdropCircle = styled(Circle)`
-    margin-left: auto;
-    width: 15px;
-    min-height: 15px;
-    margin-right: 13px;
-`;
 
 export default SportFilterDetails;
