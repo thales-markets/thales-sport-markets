@@ -72,6 +72,7 @@ export const OverdropIcon = styled.img.attrs({ src: overdrop })`
     margin-right: 20px;
     @media (max-width: 576px) {
         height: 70px;
+        margin-right: 0;
     }
 `;
 
@@ -103,7 +104,6 @@ export const LogoContainer = styled.div`
     justify-content: center;
     align-items: center;
     gap: 12px;
-    padding-left: 26px;
 `;
 
 export const IconWrapper = styled.div`

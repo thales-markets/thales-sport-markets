@@ -34,7 +34,6 @@ import {
     HeaderContainer,
     ItemContainer,
     ItemsContainer,
-    LogoContainer,
     NavIcon,
     NavLabel,
     Network,
@@ -43,6 +42,7 @@ import {
     WalletWrapper,
     Wrapper,
 } from './styled-components';
+import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 
 type NavMenuMobileProps = {
     visibility?: boolean | null;
@@ -63,7 +63,10 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
             <Wrapper show={visibility}>
                 <HeaderContainer>
                     <LogoContainer>
-                        <Logo />
+                        <Logo width={150} />
+                        <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                            <OverdropIcon />
+                        </SPAAnchor>
                     </LogoContainer>
 
                     <FlexDivCentered>
