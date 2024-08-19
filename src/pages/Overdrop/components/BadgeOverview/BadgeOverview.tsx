@@ -2,12 +2,11 @@ import Progress from 'components/Progress';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import useExchangeRatesQuery, { Rates } from 'queries/rates/useExchangeRatesQuery';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsAppReady, getIsMobile } from 'redux/modules/app';
-import { getNetworkId, getWalletAddress } from 'redux/modules/wallet';
+import { getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import styled from 'styled-components';
 import { FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
@@ -16,13 +15,13 @@ import { OverdropUserData } from 'types/overdrop';
 import { formatPoints, getCurrentLevelByPoints, getNextThalesRewardLevel, getProgressLevel } from 'utils/overdrop';
 import SmallBadge from '../SmallBadge/SmallBadge';
 import { useSwipeable } from 'react-swipeable';
+import useOpAndArbPriceQuery from 'queries/overdrop/useOpAndArbPriceQuery';
 
 const BadgeOverview: React.FC = () => {
     const { t } = useTranslation();
     const isMobile = useSelector((state: RootState) => getIsMobile(state));
     const isAppReady = useSelector((state: RootState) => getIsAppReady(state));
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
-    const networkId = useSelector((state: RootState) => getNetworkId(state));
 
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [numberOfCards, setNumberOfCards] = useState<number>(isMobile ? 3 : 6);
@@ -34,12 +33,10 @@ const BadgeOverview: React.FC = () => {
     const userDataQuery = useUserDataQuery(walletAddress, {
         enabled: !!isAppReady,
     });
-    const exchangeRatesQuery = useExchangeRatesQuery(networkId, {
-        enabled: isAppReady,
-    });
 
-    const exchangeRates: Rates | null =
-        exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
+    const priceQuery = useOpAndArbPriceQuery({ enabled: isAppReady });
+
+    const exchangeRates = priceQuery.isSuccess && priceQuery.data ? priceQuery.data : null;
 
     const userData: OverdropUserData | undefined =
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
@@ -102,11 +99,7 @@ const BadgeOverview: React.FC = () => {
                         <Icon className="icon icon--op" />
                         <ValueSecondary>
                             {exchangeRates && userData
-                                ? `= ${formatCurrencyWithSign(
-                                      '$',
-                                      exchangeRates[CRYPTO_CURRENCY_MAP.OP] * userData.rewards.op,
-                                      2
-                                  )}`
+                                ? `= ${formatCurrencyWithSign('$', exchangeRates.op * userData.rewards.op, 2)}`
                                 : 'N/A'}
                         </ValueSecondary>
                     </ValueWrapper>
@@ -120,11 +113,7 @@ const BadgeOverview: React.FC = () => {
                         <Icon className="icon icon--arb" />
                         <ValueSecondary>
                             {exchangeRates && userData
-                                ? `= ${formatCurrencyWithSign(
-                                      '$',
-                                      exchangeRates[CRYPTO_CURRENCY_MAP.ARB] * userData.rewards.arb,
-                                      2
-                                  )}`
+                                ? `= ${formatCurrencyWithSign('$', exchangeRates.arb * userData.rewards.arb, 2)}`
                                 : 'N/A'}
                         </ValueSecondary>
                     </ValueWrapper>

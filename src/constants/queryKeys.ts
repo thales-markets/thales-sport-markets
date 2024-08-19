@@ -150,6 +150,7 @@ const QUERY_KEYS = {
         UserData: (walletAddress: string) => ['userData', walletAddress],
         UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],
         GameMultipliers: () => ['gameMultipliers'],
+        Price: () => ['price'],
     },
 };
 
