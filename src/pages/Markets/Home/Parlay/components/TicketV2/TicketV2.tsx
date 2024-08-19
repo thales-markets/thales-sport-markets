@@ -1585,11 +1585,10 @@ const Ticket: React.FC<TicketProps> = ({
                     }}
                 >
                     <OverdropLabel>{t('markets.parlay.overdrop.overdrop-xp')}</OverdropLabel>
-                    <OverdropValue>
+                    <OverdropValue color={theme.overdrop.textColor.senary}>
                         {!isOverdropSummaryOpen &&
-                            (isFreeBetActive
-                                ? `Free bets not eligible`
-                                : `${formatPoints(overdropTotalXP)} (${overdropTotalBoost}% boost)`)}
+                            (isFreeBetActive ? `Free bets not eligible` : `${formatPoints(overdropTotalXP)}`)}
+                        {!isOverdropSummaryOpen && <OverdropValue>{` (${overdropTotalBoost}% boost)`}</OverdropValue>}
                         {!isFreeBetActive && (
                             <Arrow
                                 className={!isOverdropSummaryOpen ? 'icon icon--caret-down' : 'icon icon--caret-up'}
