@@ -67,28 +67,6 @@
         }
     },
     {
-        "title": "Win 30,000 ARB in MLB markets test",
-        "description": "Compete for 30,000 ARB in rewards for the MLB until the end of the season. Higher volume = higher rewards.",
-        "startDate": 1702236692,
-        "endDate": 1730549376,
-        "promotionId": "mlb-nhl-rewards",
-        "promotionUrl": "/promotions/mlb-nhl-rewards1",
-        "backgroundImageUrl": "/promotions/mlb-nhl-small.webp",
-        "callToActionButton": "Play now",
-        "availableOnNetworks": [42161],
-        "article": {
-            "coverImageUrl": "/promotions/mlb-nhl-big.webp",
-            "headerHtml": "<h1><span><span><span>Win 30,000 ARB in MLB markets</span></span></span></h1>",
-            "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>Compete for 30,000 ARB in rewards for the MLB until the end of the season. Higher volume = higher rewards.</span> </span> </span> <span> <span> <span> <strong>Track how you’re doing: </strong> </span> </span> </span> <a href='https://dune.com/leifu/overtime-mlb-campaign' target='_blank'> <span> <span> <span> <strong> <u>MLB dashboard.</u> </strong> </span> </span> </span> </a> <span> <span></span> </span> </p>",
-                "ctaButtonLink": "/markets?lang=en&sport=Baseball&globalFilter=OpenMarkets&showActive=true&tag=MLB",
-                "ctaButtonLabel": "Play now",
-                "forceChangeNetworkOnClick": "arbitrum_mainnet"
-            },
-            "contentHtml": " <p> <span> <span> <span>User incentives on Overtime are getting more ridiculous by the day! If you are a fan of the MLB, prepare for great news: you can win 30,000 ARB in volume-based rewards.</span> </span> </span> </p> <p> <span> <span> <span>The rewards are distributed pro rata, meaning the top wallets will share the prize pool based on how much volume they’ve generated.</span> </span> </span> </p> <p> <span> <span> <span>The MLB is another US-based league with incredible additional rewards for user. But that’s not even remotely close to being the entire promo offering on Overtime! <br> </span> </span> </p> <p> <span> <span> <span> </span> </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
-        }
-    },
-    {
         "title": "Win 45,000 ARB + 50,000 THALES during March Madness!",
         "description": "Compete for 30,000 ARB pro rata rewards and 5,000 ARB March Madness prediction bracket rewards. You’ll receive an amazing 50,000 THALES and 10,000 ARB if you get a perfect bracket! ",
         "startDate": 1710751230,
@@ -112,13 +90,13 @@
         }
     },
     {
-        "title": "Welcome to OverDrop: Earn rewards with every action on Overtime",
-        "description": "Compete for 100,000 OP and 150,000 ARB in season rewards on Overtime using the new XP Overdrop system. Every action you perform counts!",
+        "title": "Welcome to Overdrop: Earn rewards with every action on Overtime",
+        "description": "Compete for 100,000 OP and 200,000 ARB in season rewards on Overtime using the new XP Overdrop system. Every action you perform counts!",
         "startDate": 1724161420,
         "endDate": 1748785420,
         "displayCountdown": true,
         "promotionId": "overdrop",
-        "promotionUrl": "/promotions/overdrop-bonus-system",
+        "promotionUrl": "/promotions/overdrop",
         "backgroundImageUrl": "/promotions/mm-small.webp",
         "callToActionButton": "Learn more",
         "availableOnNetworks": [10, 42161],
@@ -126,11 +104,11 @@
             "coverImageUrl": "/promotions/mm-big.webp",
             "headerHtml": "<h1><span><span><span>Welcome to OverDrop: Earn rewards with every action on Overtime",
             "ctaSection": {
-                "sectionHtml": "Compete for 100,000 OP and 150,000 ARB in season rewards on Overtime using the new XP Overdrop system. Every action you perform counts!",
+                "sectionHtml": "Compete for 100,000 OP and 200,000 ARB in season rewards on Overtime using the new XP Overdrop system. Every action you perform counts!",
                 "ctaButtonLink": "/markets",
                 "ctaButtonLabel": "See your Overdrop XP"
             },
-            "contentHtml": "<p> <span> <span> <span>The start of Overdrop marks a new era in incentives on Overtime. Everything you do on the platform counts toward your total XP, and several levels give you a THALES reward for reaching them. In addition, instead of for individual events, sports or leagues, you’ll now get OP and ARB rewards at the end of the season, in June 2025, distributed pro-rata based on your total XP. The total rewards pool for this season is 100,000 OP and 150,000 ARB.<h2>How does Overdrop work?</h2> Overdrop lets you earn rewards and boost your earnings on Overtime by accumulating trading volume, maintaining usage streaks, using THALES as collateral, sharing your parlays on socials, building multi-game parlays, and collecting event- or sports-specific points modifiers! You can level up your way to 33,850 $THALES and unlock many additional perks and bonuses along the way. Track your progress in the new Overdrop XP section of your profile in the navigation. <span> <span> <span> <span> <span> <br> </span> </span> </span> <span> <br>The base calculation for your XP is calculated like this: Base XP = Buy-In Amount * (2 - Normalized Odds). In simpler terms, your wager gets more base XP the higher your buy-in and odds are. <br><br>Buy-In in this case means the amount of $ that you placed as a Buy-In on the respective wager. Normalized Odds mean the odds of your wager shown in the format of a Normalized Probability between 0 and 1. For example, the Decimal Odds expression of 1.60 is 0.625 in the Normalized Odds format. You can boost your XP gains in the following way: </span> <ul> <li> <span> <span> <span>Daily streaks: An additional 5% XP for every consecutive day wagering on OT, up to 35%</span> </span> </span> </li> <li> <span> <span> <span>Weekly streaks: An additional 5% XP for every consecutive week wagering on OT, up to 20%</span> </span> </span> </li> <li> <span> <span> <span>X Flex boost: An additional 10% XP for 3 days after sharing your parlay on X that can be reactivated after the booster expires</span> </span> </span> </li> <li> <span> <span> <span>Parlay boost: Up to 290% in additional XP based on how many games you add to your parlay </span> </span> </span> </li> <li> <span> <span> <span>THALES boost: 10% additional XP for using THALES as collateral for a specific wager/trade</span> </span> </span> </li> <li> <span> <span> <span>Loyalty boost: Up to 25% in permanent additional XP rewarded based on your level</span> </span> </span> </li> </ul> <span> <br>As you level up, you’ll unlock additional free bets in THALES that become exponentially higher the more you play. There’s 33,850 THALES waiting for you this season. You can check out more details about the levels & rewards in this Medium blog. Or you can just head on straight to your Overdrop page and start leveling up. <br><br>Overdrop was built to give you more free stuff in a gamified way that’s unlike anything you’ve seen in traditional sportsbooks. However, it’s a system that will be familiar to many of you and super easy to use. Keep in mind that, as time goes on, we’ll find new ways to give you cool rewards and make your life on Overtime more fun. Feel free to leave any questions you have about Overdrop here or on our Discord. <br></span> <h2> <span> <span> <span>Don't miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.</span> <span> <span> <span>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on various rewards leaderboards. </span> </p>"
+            "contentHtml": "<p> <span> <span> <span>The start of Overdrop marks a new era in incentives on Overtime. Everything you do on the platform counts toward your total XP, and several levels give you a THALES reward for reaching them. In addition, instead of for individual events, sports or leagues, you’ll now get OP and ARB rewards at the end of the season, in June 2025, distributed pro-rata based on your total XP. The total rewards pool for this season is 100,000 OP and 200,000 ARB.<h2>How does Overdrop work?</h2> Overdrop lets you earn rewards and boost your earnings on Overtime by accumulating trading volume, maintaining usage streaks, using THALES as collateral, sharing your parlays on socials, building multi-game parlays, and collecting event- or sports-specific points modifiers! You can level up your way to 33,850 $THALES and unlock many additional perks and bonuses along the way. Track your progress in the new Overdrop XP section of your profile in the navigation. <span> <span> <span> <span> <span> <br> </span> </span> </span> <span> <br>The base calculation for your XP is calculated like this: Base XP = Buy-In Amount * (2 - Normalized Odds). In simpler terms, your wager gets more base XP the higher your buy-in and odds are. <br><br>Buy-In in this case means the amount of $ that you placed as a Buy-In on the respective wager. Normalized Odds mean the odds of your wager shown in the format of a Normalized Probability between 0 and 1. For example, the Decimal Odds expression of 1.60 is 0.625 in the Normalized Odds format. You can boost your XP gains in the following way: </span> <ul> <li> <span> <span> <span>Daily streaks: An additional 5% XP for every consecutive day wagering on OT, up to 35%</span> </span> </span> </li> <li> <span> <span> <span>Weekly streaks: An additional 5% XP for every consecutive week wagering on OT, up to 20%</span> </span> </span> </li> <li> <span> <span> <span>X Flex boost: An additional 10% XP for 3 days after sharing your parlay on X that can be reactivated after the booster expires</span> </span> </span> </li> <li> <span> <span> <span>Parlay boost: Up to 290% in additional XP based on how many games you add to your parlay </span> </span> </span> </li> <li> <span> <span> <span>THALES boost: 10% additional XP for using THALES as collateral for a specific wager/trade</span> </span> </span> </li> <li> <span> <span> <span>Loyalty boost: Up to 25% in permanent additional XP rewarded based on your level</span> </span> </span> </li> </ul> <span> <br>As you level up, you’ll unlock additional free bets in THALES that become exponentially higher the more you play. There’s 33,850 THALES waiting for you this season. You can check out more details about the levels & rewards in this Medium blog. Or you can just head on straight to your Overdrop page and start leveling up. <br><br>Overdrop was built to give you more free stuff in a gamified way that’s unlike anything you’ve seen in traditional sportsbooks. However, it’s a system that will be familiar to many of you and super easy to use. Keep in mind that, as time goes on, we’ll find new ways to give you cool rewards and make your life on Overtime more fun. Feel free to leave any questions you have about Overdrop here or on our Discord. <br></span> <h2> <span> <span> <span>Don't miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.</span> <span> <span> <span>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on various rewards leaderboards. </span> </p>"
         }
     },
     {
@@ -329,27 +307,6 @@
                 "forceChangeNetworkOnClick": "optimism_mainnet"
             },
             "contentHtml": " <p> <span> <span> <span>After hours of development, Overtime V2 is finally ready for you to test out! A well-oiled, merkle-tree-driven, world-changing, fully onchain mean machine is raring to go. <br> <br>But that’s not all - we’ve decided to give the top 20 users with the biggest V2 Live Market volume from now until July 15 a 100 $THALES voucher each. You can access V2 beta </strong> </span> </span> </span> <a href='https://v2.overtimemarkets.xyz/?lang=en&sport=Live&status=OpenMarkets&showActive=true' target='_blank'> <span> <span> <span> <strong><u>using this link.</u></strong> </span> </span></a> Have fun, earn rewards, and step into the new era of Overtime. <br><br>You should also make sure to combine these rewards with all the other promotions taking place on Overtime. <br> <br>We're handing out 1,000 ARB and 1,000 OP every week for the best parlays, 5,000 OP across all Thales Protocol products every week, and much more.</span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
-        }
-    },
-    {
-        "title": "TEST 2 THALES to boost winnings by 1% for every market added to parlay",
-        "description": "Using THALES as collateral on Overtime boosts your winnings by 1% per match/market added to your parlay. This makes it possible to boost your profits by more than 10%!",
-        "startDate": 1718187817,
-        "endDate": 0,
-        "promotionId": "overtime-v2-thales-boost1",
-        "promotionUrl": "/promotions/test-overtime-v2-thales-boost",
-        "backgroundImageUrl": "/promotions/thales-new.webp",
-        "callToActionButton": "How to earn",
-        "availableOnNetworks": [10, 42161],
-        "article": {
-            "coverImageUrl": "/promotions/thales-stakers.webp",
-            "headerHtml": "<h1><span><span><span>Use THALES to boost winnings by 1% for every market added to parlay</span></span></span></h1>",
-            "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>TESTUsing THALES as collateral on Overtime boosts your winnings by 1% per match/market added to your parlay. This makes it possible to boost your profits by more than 15%!</p>",
-                "ctaButtonLink": "https://www.overtimemarkets.xyz/?lang=en&sport=All&status=OpenMarkets&showActive=true",
-                "ctaButtonLabel": "Play now"
-            },
-            "contentHtml": "<p> <span> <span> <span>In parallel with the release of Overtime V2, a native THALES collateral pool with new perks & extra payouts for users was created by the Thales Protocol team. <br> <br>The THALES collateral pool works by boosting your winnings in the following way: Users placing trades in Overtime V2 with THALES get an additional 1% earnings for each game they add to their parlay. <span> <span> <span> <strong> </strong> </span> </span> <br><br>For example, if a user plays just a single game, they will have a 1% increase in the potential payout. If it's a 10-game parlay, we're talking about a 10% bonus payout. <br> <br>Let's say the user has created a 10-game parlay for 50 USD using THALES, with the odds being 20.00 in decimal odds or +1900 in American odds. The potential payout would be $1000 before, but because of using THALES, it's now $1100 USD. Pretty cool, right? <br> <br>When placing a trade using THALES, both the Safebox fee and Performance fee are instantly burned, reducing the total supply of the token. </span> </span> </p> <hr> <h2> <span> <span> <span>Don’t miss out on the other great incentives on Overtime</span> </span> </span> </h2> <p> <span>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions. <br> <br>You can use the <a href='https://www.overtimemarkets.xyz/promotions'> <u>promotions page</u> </a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards. </span> </span> </span> </p>"
         }
     },
     {
