@@ -25,7 +25,7 @@ const Progress: React.FC<ProgressProps> = ({
         <Wrapper>
             <ProgressLineWrapper backgroundColor={backgroundColor} width={width} height={height}>
                 {!!progressUpdate && <ProgressUpdate progress={Math.min(progress + progressUpdate, 100)} />}
-                <ProgressLine progress={progress} color={progressLineColor} height={height} />
+                <ProgressLine progress={isNaN(progress) ? 0 : progress} color={progressLineColor} height={height} />
                 <TextBelow>{textBelow}</TextBelow>
             </ProgressLineWrapper>
         </Wrapper>

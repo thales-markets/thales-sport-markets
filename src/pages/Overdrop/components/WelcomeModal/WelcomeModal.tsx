@@ -24,7 +24,7 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
                     </Header>
                     <SubHeader>{t('overdrop.modal.gain-xp-label')}</SubHeader>
                 </TextWrapper>
-                <SPAAnchor href={ROUTES.Overdrop}>
+                <SPAAnchor onClick={() => onClose()} href={ROUTES.Overdrop}>
                     <Button>{t('overdrop.modal.go-to-overdrop')}</Button>
                 </SPAAnchor>
             </Wrapper>

@@ -10,5 +10,9 @@
     {
         "image": "parlay.png",
         "url": "https://www.overtimemarkets.xyz/parlay-leaderboard"
+    },
+    {
+        "image": "v2.jpg",
+        "url": "https://overtimemarkets.xyz/overdrop"
     }
 ]
