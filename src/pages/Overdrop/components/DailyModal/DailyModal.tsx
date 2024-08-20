@@ -73,6 +73,7 @@ const Wrapper = styled(FlexDivColumn)`
     padding: 15px 20px 30px 20px;
     @media (max-width: 767px) {
         width: 95%;
+        padding: 10px;
     }
 `;
 
@@ -110,6 +111,10 @@ const DetailsWrapper = styled(FlexDivColumn)`
     justify-content: center;
     min-width: 500px;
     text-align: left;
+    @media (max-width: 767px) {
+        align-items: center;
+        min-width: 300px;
+    }
 `;
 
 const Label = styled.span`

@@ -35,6 +35,8 @@ const ModalWrapper: React.FC = () => {
 
     const [overdropStateByWallet, setOverdropStateByWallet] = useState<OverdropUIState | undefined>(undefined);
 
+    const [preventMultipliersModalShowing, setPreventMultipliersModalShowing] = useState<boolean>(false);
+
     const [showLevelUpModal, setShowLevelUpModal] = useState<boolean>(false);
     const [showDailyMultiplierModal, setShowDailyMultiplierModal] = useState<boolean>(false);
 
@@ -60,6 +62,12 @@ const ModalWrapper: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
+
+    // Handle prevent showing multipliers modal
+    useEffect(() => {
+        setPreventMultipliersModalShowing(preventShowingModal);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Handle wallet address change
     useEffect(() => {
@@ -126,7 +134,10 @@ const ModalWrapper: React.FC = () => {
                     currentLevel={getCurrentLevelByPoints(userData?.points).level}
                     onClose={() => setShowLevelUpModal(false)}
                 />
-            ) : dailyMultiplierChanged && userMultipliers && showDailyMultiplierModal && !preventShowingModal ? (
+            ) : dailyMultiplierChanged &&
+              userMultipliers &&
+              showDailyMultiplierModal &&
+              !preventMultipliersModalShowing ? (
                 <DailyModal
                     dayStreak={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
                     percentage={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}

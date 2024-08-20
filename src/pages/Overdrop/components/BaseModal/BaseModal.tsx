@@ -3,6 +3,9 @@ import Trophy from 'assets/images/overdrop/trophy.webp';
 import WelcomeModalBackground from 'assets/images/overdrop/welcome-modal-background.png';
 import React from 'react';
 import ReactModal from 'react-modal';
+import { useSelector } from 'react-redux';
+import { getIsMobile } from 'redux/modules/app';
+import { RootState } from 'redux/rootReducer';
 import styled, { CSSProperties } from 'styled-components';
 import { FlexDivRow } from 'styles/common';
 import { convertCssToStyledProperties } from 'thales-utils';
@@ -42,6 +45,8 @@ const defaultCustomStyles = {
 };
 
 const BaseModal: React.FC<ModalProps> = ({ type, onClose, children, mobileStyle }) => {
+    const isMobile = useSelector((state: RootState) => getIsMobile(state));
+
     const customStyle = {
         overlay: { ...defaultCustomStyles.overlay },
         content: {
@@ -56,7 +61,7 @@ const BaseModal: React.FC<ModalProps> = ({ type, onClose, children, mobileStyle 
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
                 </Header>
                 {children}
-                {type == ModalTypes.DAILY_STREAK && <TrophyImage src={Trophy} />}
+                {type == ModalTypes.DAILY_STREAK && !isMobile && <TrophyImage src={Trophy} />}
             </Container>
         </ReactModal>
     );
