@@ -15,6 +15,7 @@ import {
     NAV_MENU_THIRD_SECTION,
 } from 'constants/ui';
 import { ProfileIconWidget } from 'layouts/DappLayout/DappHeader/components/ProfileItem/ProfileItem';
+import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -42,7 +43,6 @@ import {
     WalletWrapper,
     Wrapper,
 } from './styled-components';
-import { LogoContainer, OverdropIcon } from 'layouts/DappLayout/DappHeader/styled-components';
 
 type NavMenuMobileProps = {
     visibility?: boolean | null;
@@ -64,7 +64,11 @@ const NavMenuMobile: React.FC<NavMenuMobileProps> = ({ visibility, setNavMenuVis
                 <HeaderContainer>
                     <LogoContainer>
                         <Logo width={150} />
-                        <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
+                        <SPAAnchor
+                            onClick={() => setNavMenuVisibility(false)}
+                            style={{ display: 'flex' }}
+                            href={buildHref(ROUTES.Overdrop)}
+                        >
                             <OverdropIcon />
                         </SPAAnchor>
                     </LogoContainer>
