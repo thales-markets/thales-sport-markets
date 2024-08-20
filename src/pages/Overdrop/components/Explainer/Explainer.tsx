@@ -167,7 +167,7 @@ const Wrapper = styled(FlexDivColumn)`
 `;
 
 const Content = styled.p`
-    font-family: ${(props) => props.theme.fontFamily.secondary};
+    font-family: ${(props) => props.theme.fontFamily.primary};
     font-size: 13px;
     line-height: 16px;
     font-weight: 200;

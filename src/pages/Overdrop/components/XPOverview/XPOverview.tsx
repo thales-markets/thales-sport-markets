@@ -60,7 +60,7 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
                                     </Level>
                                 </LevelWrapper>
                                 <InfoItemTotal>
-                                    <XpLabel>{t('overdrop.overdrop-home.my-total-xp')}</XpLabel>
+                                    <Label>{t('overdrop.overdrop-home.my-total-xp')}</Label>
                                     <TotalValue>{formatPoints(userData?.points ? userData?.points : 0)}</TotalValue>
                                 </InfoItemTotal>
                                 <InfoItem onClick={() => setSelectedTab(OverdropTab.LEADERBOARD)}>
@@ -184,11 +184,6 @@ const Label = styled.span`
     }
 `;
 
-const XpLabel = styled(Label)`
-    font-family: ${(props) => props.theme.fontFamily.secondary};
-    font-size: 14px;
-`;
-
 const Value = styled.span<{ highlight?: boolean }>`
     font-weight: 700;
     font-size: 25px;
@@ -200,7 +195,7 @@ const Value = styled.span<{ highlight?: boolean }>`
 `;
 
 const TotalValue = styled.span<{ highlight?: boolean }>`
-    font-family: ${(props) => props.theme.fontFamily.secondary};
+    font-family: ${(props) => props.theme.fontFamily.primary};
     color: ${(props) => props.theme.overdrop.textColor.primary};
     font-size: 27px;
     line-height: 20px;
