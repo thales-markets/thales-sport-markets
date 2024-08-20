@@ -3,7 +3,14 @@ import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsAppReady } from 'redux/modules/app';
-import { getOverdropUIState, setDefaultOverdropState, setOverdropState } from 'redux/modules/ui';
+import {
+    getOverdropPreventShowingModal,
+    getOverdropUIState,
+    getOverdropWelcomeModalFlag,
+    setDefaultOverdropState,
+    setOverdropState,
+    setWelcomeModalVisibility,
+} from 'redux/modules/ui';
 import { getIsWalletConnected, getWalletAddress } from 'redux/modules/wallet';
 import { RootState } from 'redux/rootReducer';
 import { MultiplierType, OverdropUIState, OverdropUserData } from 'types/overdrop';
@@ -19,6 +26,8 @@ const ModalWrapper: React.FC = () => {
     const walletAddress = useSelector((state: RootState) => getWalletAddress(state)) || '';
     const isWalletConnected = useSelector((state: RootState) => getIsWalletConnected(state));
     const overdropUIState = useSelector((state: RootState) => getOverdropUIState(state));
+    const overdropWelcomeModalFlag = useSelector((state: RootState) => getOverdropWelcomeModalFlag(state));
+    const preventShowingModal = useSelector((state: RootState) => getOverdropPreventShowingModal(state));
 
     const [levelChanged, setLevelChanged] = useState<boolean>(false);
     const [dailyMultiplierChanged, setDailyMultiplierChanged] = useState<boolean>(false);
@@ -43,6 +52,15 @@ const ModalWrapper: React.FC = () => {
     const userMultipliers =
         userMultipliersQuery.isSuccess && userMultipliersQuery.data ? userMultipliersQuery.data : undefined;
 
+    // Handle welcome modal visibility
+    useEffect(() => {
+        if (overdropWelcomeModalFlag == false) {
+            setShowWelcomeModal(true);
+            dispatch(setWelcomeModalVisibility({ showWelcomeModal: true }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
+
     // Handle wallet address change
     useEffect(() => {
         const overdropStateItem = overdropUIState.find((item) => item.walletAddress == walletAddress);
@@ -53,8 +71,6 @@ const ModalWrapper: React.FC = () => {
                     walletAddress: walletAddress,
                     dailyMultiplier: 0,
                     currentLevel: 0,
-                    welcomeModalFlag: false,
-                    preventShowingDailyModal: false,
                 });
                 dispatch(setDefaultOverdropState({ walletAddress }));
             } else {
@@ -69,11 +85,9 @@ const ModalWrapper: React.FC = () => {
         if (userData && userMultipliers && overdropStateByWallet) {
             const currentLevelItem = getCurrentLevelByPoints(userData?.points);
 
-            if (overdropStateByWallet.welcomeModalFlag == false) setShowWelcomeModal(true);
             dispatch(
                 setOverdropState({
                     ...overdropStateByWallet,
-                    welcomeModalFlag: true,
                     currentLevel: currentLevelItem.level,
                     dailyMultiplier: getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY),
                 })
@@ -112,7 +126,7 @@ const ModalWrapper: React.FC = () => {
                     currentLevel={getCurrentLevelByPoints(userData?.points).level}
                     onClose={() => setShowLevelUpModal(false)}
                 />
-            ) : dailyMultiplierChanged && userMultipliers && showDailyMultiplierModal ? (
+            ) : dailyMultiplierChanged && userMultipliers && showDailyMultiplierModal && !preventShowingModal ? (
                 <DailyModal
                     dayStreak={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
                     percentage={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}

@@ -39,12 +39,24 @@ const getDefaultOverdropState = (): OverdropUIState[] => {
     return lsOverdropState ? (lsOverdropState as OverdropUIState[]) : [];
 };
 
+const getDefaultValueForOverdropWelcomeModal = (): boolean => {
+    const lsWelcomeModalFlag = localStore.get(LOCAL_STORAGE_KEYS.OVERDROP_WELCOME_MODAL_FLAG);
+    return lsWelcomeModalFlag ? (lsWelcomeModalFlag as boolean) : false;
+};
+
+const getDefaultValueForPreventOverdropModals = (): boolean => {
+    const lsPreventDefaultFlag = localStore.get(LOCAL_STORAGE_KEYS.OVERDROP_PREVENT_DAILY_MODAL);
+    return lsPreventDefaultFlag ? (lsPreventDefaultFlag as boolean) : false;
+};
+
 type UISliceState = {
     theme: Theme;
     oddsType: OddsType;
     stopPulsing: boolean;
     favouriteLeagues: Tags;
     overdropState: OverdropUIState[];
+    overdropWelcomeModal: boolean;
+    overdropPreventMultipliersModal: boolean;
 };
 
 const initialState: UISliceState = {
@@ -53,6 +65,8 @@ const initialState: UISliceState = {
     stopPulsing: getDefaultStopPulsing(),
     favouriteLeagues: getDefaultFavouriteLeagues(),
     overdropState: getDefaultOverdropState(),
+    overdropPreventMultipliersModal: getDefaultValueForPreventOverdropModals(),
+    overdropWelcomeModal: getDefaultValueForOverdropWelcomeModal(),
 };
 
 const uiSlice = createSlice({
@@ -110,11 +124,17 @@ const uiSlice = createSlice({
                     walletAddress: action.payload.walletAddress,
                     dailyMultiplier: 0,
                     currentLevel: 0,
-                    welcomeModalFlag: false,
-                    preventShowingDailyModal: false,
                 });
                 localStore.set(LOCAL_STORAGE_KEYS.OVERDROP_STATE, state.overdropState);
             }
+        },
+        setWelcomeModalVisibility: (state, action: PayloadAction<{ showWelcomeModal: boolean }>) => {
+            state.overdropWelcomeModal = action.payload.showWelcomeModal;
+            localStore.set(LOCAL_STORAGE_KEYS.OVERDROP_WELCOME_MODAL_FLAG, action.payload.showWelcomeModal);
+        },
+        setPreventOverdropModalValue: (state, action: PayloadAction<{ preventFlag: boolean }>) => {
+            state.overdropPreventMultipliersModal = action.payload.preventFlag;
+            localStore.set(LOCAL_STORAGE_KEYS.OVERDROP_PREVENT_DAILY_MODAL, action.payload.preventFlag);
         },
     },
 });
@@ -126,6 +146,8 @@ export const {
     setFavouriteLeague,
     setOverdropState,
     setDefaultOverdropState,
+    setWelcomeModalVisibility,
+    setPreventOverdropModalValue,
 } = uiSlice.actions;
 
 const getUIState = (state: RootState) => state[sliceName];
@@ -134,5 +156,7 @@ export const getOddsType = (state: RootState) => getUIState(state).oddsType;
 export const getStopPulsing = (state: RootState) => getUIState(state).stopPulsing;
 export const getFavouriteLeagues = (state: RootState) => getUIState(state).favouriteLeagues;
 export const getOverdropUIState = (state: RootState) => getUIState(state).overdropState;
+export const getOverdropWelcomeModalFlag = (state: RootState) => getUIState(state).overdropWelcomeModal;
+export const getOverdropPreventShowingModal = (state: RootState) => getUIState(state).overdropPreventMultipliersModal;
 
 export default uiSlice.reducer;

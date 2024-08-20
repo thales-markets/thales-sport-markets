@@ -62,6 +62,4 @@ export type OverdropUIState = {
     walletAddress: string;
     dailyMultiplier: number;
     currentLevel: number;
-    welcomeModalFlag: boolean;
-    preventShowingDailyModal: boolean;
 };
