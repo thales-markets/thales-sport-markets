@@ -110,13 +110,15 @@ const uiSlice = createSlice({
             );
 
             if (overdropStateItemIndex !== -1) {
-                state.overdropState[overdropStateItemIndex] = { ...action.payload };
-                localStore.set(LOCAL_STORAGE_KEYS.OVERDROP_STATE, state.overdropState);
+                state.overdropState[overdropStateItemIndex] = action.payload;
+            } else {
+                state.overdropState.push(action.payload);
             }
+            localStore.set(LOCAL_STORAGE_KEYS.OVERDROP_STATE, state.overdropState);
         },
         setDefaultOverdropState: (state, action: PayloadAction<{ walletAddress: string }>) => {
             const existingOverdropStateItemIndex = state.overdropState.findIndex(
-                (item) => item.walletAddress == action.payload.walletAddress
+                (item) => item.walletAddress?.toLowerCase() == action.payload.walletAddress?.toLowerCase()
             );
 
             if (existingOverdropStateItemIndex == -1) {
