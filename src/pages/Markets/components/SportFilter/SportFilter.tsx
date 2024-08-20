@@ -91,7 +91,7 @@ const Label = styled.div`
     user-select: none;
 `;
 
-const SportIcon = styled.i`
+const SportIcon = styled.i<{ color?: string }>`
     font-size: 22px;
     margin-right: 10px;
     font-weight: 400;
@@ -99,6 +99,9 @@ const SportIcon = styled.i`
     text-transform: none;
     @media (max-width: 950px) {
         margin-right: 18px;
+    }
+    ::before {
+        color: ${(props) => props.color || 'ingerit'};
     }
 `;
 

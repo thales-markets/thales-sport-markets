@@ -75,6 +75,8 @@ const XPHistoryTable: React.FC = () => {
                         width: 150,
                     },
                 ]}
+                currentPage={page}
+                rowsPerPage={rowsPerPage}
                 tableHeight="auto"
                 data={userXPHistory ? userXPHistory : []}
                 isLoading={userXPHistoryQuery.isLoading}
